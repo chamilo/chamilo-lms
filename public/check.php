@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Requirements\SymfonyRequirements;
 
 if (!isset($_SERVER['HTTP_HOST'])) {
@@ -23,9 +25,9 @@ if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
     //exit('This script is only accessible from localhost.');
 }
 
-if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
+if (Container::$container->get(FileHelper::class)->exists($autoloader = __DIR__.'/../../../autoload.php')) {
     require_once $autoloader;
-} elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
+} elseif (Container::$container->get(FileHelper::class)->exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
     require_once $autoloader;
 } else {
     throw new \RuntimeException('Unable to find the Composer autoloader.');

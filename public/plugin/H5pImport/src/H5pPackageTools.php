@@ -6,6 +6,8 @@ namespace Chamilo\PluginBundle\H5pImport\H5pImporter;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Database;
@@ -25,7 +27,7 @@ class H5pPackageTools
         $json = false;
 
         if ($fs->exists($file)) {
-            $contents = file_get_contents($file);
+            $contents = Container::$container->get(FileHelper::class)->read($file);
 
             // Decode the data
             $json = json_decode($contents, $assoc);
@@ -247,7 +249,7 @@ class H5pPackageTools
         foreach (\H5PCore::$styles as $style) {
             $auxAssetPath = 'vendor/h5p/h5p-core/'.$style;
             $assets['css'][] = api_get_path(WEB_PATH).$auxAssetPath;
-            if (!file_exists(api_get_path(SYS_PATH).$auxAssetPath)) {
+            if (!Container::$container->get(FileHelper::class)->exists(api_get_path(SYS_PATH).$auxAssetPath)) {
                 return false;
             }
         }
@@ -257,7 +259,7 @@ class H5pPackageTools
             $auxAssetPath = 'vendor/h5p/h5p-core/'.$script;
             $auxUrl = api_get_path(WEB_PATH).$auxAssetPath;
             $assets['js'][] = $auxUrl;
-            if (!file_exists(api_get_path(SYS_PATH).$auxAssetPath)) {
+            if (!Container::$container->get(FileHelper::class)->exists(api_get_path(SYS_PATH).$auxAssetPath)) {
                 return false;
             }
         }

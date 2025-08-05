@@ -8,6 +8,8 @@ namespace Chamilo\PluginBundle\XApi\Parser;
 
 use Chamilo\CoreBundle\Entity\XApiCmi5Item;
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -17,7 +19,7 @@ class Cmi5Parser extends PackageParser
 {
     public function parse(): XApiToolLaunch
     {
-        $content = file_get_contents($this->filePath);
+        $content = Container::$container->get(FileHelper::class)->read($this->filePath);
         $xml = new Crawler($content);
 
         $courseNode = $xml->filterXPath('//courseStructure/course');

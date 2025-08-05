@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/../global.inc.php';
 
 api_protect_admin_script();
@@ -19,8 +22,8 @@ switch ($action) {
             if (!empty($templateName)) {
                 $templatePath = api_get_path(SYS_CODE_PATH).'template/default/mail/';
                 if (Security::check_abs_path($templatePath.$templateName, $templatePath)) {
-                    if (file_exists($templatePath.$templateName)) {
-                        echo file_get_contents($templatePath.$templateName);
+                    if (Container::$container->get(FileHelper::class)->exists($templatePath.$templateName)) {
+                        echo Container::$container->get(FileHelper::class)->read($templatePath.$templateName);
                     }
                 }
             }

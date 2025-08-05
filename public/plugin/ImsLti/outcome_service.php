@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -53,7 +55,7 @@ if (false === $toolIsFound) {
     exit;
 }
 
-$body = file_get_contents('php://input');
+$body = Container::$container->get(FileHelper::class)->read('php://input');
 $bodyHash = base64_encode(sha1($body, true));
 
 if ($bodyHash !== $authParams['oauth_body_hash']) {

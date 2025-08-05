@@ -11,6 +11,8 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 /**
  * This function displays the form for import of the zip file with qti2.
@@ -320,7 +322,7 @@ function aiken_parse_file(&$exercise_info, $file)
         return 'FileNotFound';
     }
 
-    $text = file_get_contents($file);
+    $text = Container::$container->get(FileHelper::class)->read($file);
     $detect = mb_detect_encoding($text, 'ASCII', true);
     if ('ASCII' === $detect) {
         $data = explode("\n", $text);

@@ -14,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use DocumentManager as ChamiloDocumentManager;
 use Onlyoffice\DocsIntegrationSdk\Manager\Document\DocumentManager;
 
@@ -241,12 +244,12 @@ class OnlyofficeDocumentManager extends DocumentManager
         }
         $filePath = $folderPath.'/'.$fileName;
 
-        if (file_exists($filePath)) {
+        if (Container::$container->get(FileHelper::class)->exists($filePath)) {
             return ['error' => 'fileIsExist'];
         }
 
         if ($fp = @fopen($filePath, 'w')) {
-            $content = file_get_contents($templatePath);
+            $content = Container::$container->get(FileHelper::class)->read($templatePath);
             fputs($fp, $content);
             fclose($fp);
 

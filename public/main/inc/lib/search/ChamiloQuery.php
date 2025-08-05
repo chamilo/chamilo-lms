@@ -4,6 +4,10 @@
 /**
  * Script defining generic functions against a search engine api. Just only if one day the search engine changes.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require 'xapian/XapianQuery.php';
 
 /**
@@ -52,7 +56,7 @@ function chamilo_preprocess_results($results)
         foreach ($results_by_tool as $toolid => $rows) {
             $tool_processor_class = $toolid.'_processor';
             $tool_processor_path = api_get_path(LIBRARY_PATH).'search/tool_processors/'.$tool_processor_class.'.class.php';
-            if (file_exists($tool_processor_path)) {
+            if (Container::$container->get(FileHelper::class)->exists($tool_processor_path)) {
                 require_once $tool_processor_path;
                 $tool_processor = new $tool_processor_class($rows);
                 $processed_results = array_merge($tool_processor->process(), $processed_results);

@@ -1,5 +1,8 @@
 <?php
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Description of Custom Footer.
  *
@@ -33,18 +36,15 @@ class CustomFooterPlugin extends Plugin
     {
         global $_configuration;
 
-        if (file_exists(
-            $_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.png'
+        if (Container::$container->get(FileHelper::class)->exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.png'
         )) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.png';
         }
-        if (file_exists(
-            $_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.jpg'
+        if (Container::$container->get(FileHelper::class)->exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.jpg'
         )) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.jpg';
         }
-        if (file_exists(
-            $_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.gif'
+        if (Container::$container->get(FileHelper::class)->exists($_configuration['root_sys'].'/plugin/customplugin/pix/'.$pixname.'.gif'
         )) {
             return $_configuration['root_web'].'/plugin/customplugin/pix/'.$pixname.'.gif';
         }

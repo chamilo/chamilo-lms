@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 /** @var \NoSearchIndex $plugin */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 $plugin = NoSearchIndex::create();
 $plugin_info = $plugin->get_info();
 
@@ -19,7 +23,7 @@ if ($isPlatformAdmin) {
 
     if ($form && $form->validate()) {
         if (is_writable(api_get_path(SYS_PATH))) {
-            if (!file_exists($originalFile)) {
+            if (!Container::$container->get(FileHelper::class)->exists($originalFile)) {
                 copy($file, $originalFile);
             }
         } else {
@@ -34,39 +38,39 @@ if ($isPlatformAdmin) {
             );
         }
 
-        if (!file_exists($extraContentFile)) {
-            file_put_contents($extraContentFile, '');
+        if (!Container::$container->get(FileHelper::class)->exists($extraContentFile)) {
+            Container::$container->get(FileHelper::class)->write($extraContentFile, '');
         }
 
         $values = $form->getSubmitValues();
 
         $continue = false;
-        if (file_exists($file) && is_readable($file) && is_writable($file) &&
-            file_exists($originalFile) && is_readable($originalFile) && is_writable($originalFile) &&
-            file_exists($extraContentFile) && is_readable($extraContentFile) && is_writable($extraContentFile)
+        if (Container::$container->get(FileHelper::class)->exists($file) && is_readable($file) && is_writable($file) &&
+            Container::$container->get(FileHelper::class)->exists($originalFile) && is_readable($originalFile) && is_writable($originalFile) &&
+            Container::$container->get(FileHelper::class)->exists($extraContentFile) && is_readable($extraContentFile) && is_writable($extraContentFile)
         ) {
             $continue = true;
         }
 
         if ($continue) {
-            $contents = file_get_contents($originalFile);
+            $contents = Container::$container->get(FileHelper::class)->read($originalFile);
             $noFollow = '<meta name="robots" content="noindex" />';
             if (isset($values['tool_enable']) && 'true' == $values['tool_enable']) {
-                $result = file_put_contents($file, $contents."\nDisallow: /\n");
+                $result = Container::$container->get(FileHelper::class)->write($file, $contents."\nDisallow: /\n");
                 $value = '';
-                if (file_exists($extraContentFile)) {
-                    $backup = file_get_contents($extraContentFile);
-                    file_put_contents($extraContentFile, $backup.$noFollow);
+                if (Container::$container->get(FileHelper::class)->exists($extraContentFile)) {
+                    $backup = Container::$container->get(FileHelper::class)->read($extraContentFile);
+                    Container::$container->get(FileHelper::class)->write($extraContentFile, $backup.$noFollow);
                 } else {
-                    $value = file_put_contents($extraContentFile, $noFollow);
+                    $value = Container::$container->get(FileHelper::class)->write($extraContentFile, $noFollow);
                 }
             } else {
-                file_put_contents($file, $contents);
+                Container::$container->get(FileHelper::class)->write($file, $contents);
 
-                if (file_exists($extraContentFile)) {
-                    $backup = file_get_contents($extraContentFile);
+                if (Container::$container->get(FileHelper::class)->exists($extraContentFile)) {
+                    $backup = Container::$container->get(FileHelper::class)->read($extraContentFile);
                     $backup = str_replace($noFollow, '', $backup);
-                    file_put_contents($extraContentFile, $backup);
+                    Container::$container->get(FileHelper::class)->write($extraContentFile, $backup);
                 }
             }
         } else {

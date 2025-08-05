@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -7466,11 +7467,11 @@ class Tracking
                         $full_file_name = $course_dir.'/'.$doc_url;
                         $new_file = $course_dir.'/'.$new_url;
 
-                        if (file_exists($full_file_name)) {
+                        if (Container::$container->get(FileHelper::class)->exists($full_file_name)) {
                             // deleting old assignment
                             $result = copy($full_file_name, $new_file);
                             if ($result) {
-                                unlink($full_file_name);
+                                Container::$container->get(FileHelper::class)->delete($full_file_name);
                                 if (isset($data['id'])) {
                                     $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
                                     if ($debug) {

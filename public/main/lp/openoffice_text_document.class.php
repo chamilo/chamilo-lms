@@ -9,6 +9,10 @@
  * @author  Eric Marguin <eric.marguin@dokeos.com>
  * @license GNU/GPL
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Defines the "OpenOfficeTextDocument" child of class "learnpath".
  */
@@ -45,13 +49,13 @@ class OpenOfficeTextDocument extends OpenofficeDocument
     {
         $_course = api_get_course_info();
         // We get a content where ||page_break|| indicates where the page is broken.
-        if (!file_exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')) {
+        if (!Container::$container->get(FileHelper::class)->exists($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html')) {
             return false;
         }
-        $content = file_get_contents($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
+        $content = Container::$container->get(FileHelper::class)->read($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
 
-        unlink($this->base_work_dir.'/'.$this->file_path);
-        unlink($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
+        Container::$container->get(FileHelper::class)->delete($this->base_work_dir.'/'.$this->file_path);
+        Container::$container->get(FileHelper::class)->delete($this->base_work_dir.'/'.$this->created_dir.'/'.$this->file_name.'.html');
 
         // The file is utf8 encoded and it seems to make problems with special quotes.
         // then we htmlentities that, we replace these quotes and html_entity_decode that in good charset.

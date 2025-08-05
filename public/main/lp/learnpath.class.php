@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\LearningPathEndedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
@@ -5050,10 +5051,6 @@ class learnpath
         $title = disable_dangerous_file($title);
         $filename = $title;
         $tmp_filename = "$filename.$extension";
-        /*$i = 0;
-        while (file_exists($filepath.$tmp_filename.'.'.$extension)) {
-            $tmp_filename = $filename.'_'.++$i;
-        }*/
         $filename = $tmp_filename.'.'.$extension;
 
         if ('html' === $extension) {
@@ -5769,18 +5766,18 @@ class learnpath
         $tmpFileName = $filename;
 
         $i = 0;
-        while (file_exists($filepath.$tmpFileName.'.html')) {
+        while (Container::$container->get(FileHelper::class)->exists($filepath.$tmpFileName.'.html')) {
             $tmpFileName = $filename.'_'.++$i;
         }
 
         $filename = $tmpFileName.'.html';
         $content = stripslashes($content);
 
-        if (file_exists($filepath.$filename)) {
+        if (Container::$container->get(FileHelper::class)->exists($filepath.$filename)) {
             return 0;
         }
 
-        $putContent = file_put_contents($filepath.$filename, $content);
+        $putContent = Container::$container->get(FileHelper::class)->write($filepath.$filename, $content);
 
         if (false === $putContent) {
             return 0;
@@ -8841,7 +8838,7 @@ class learnpath
      */
     private function getFinalItemTemplate()
     {
-        return file_get_contents(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
+        return Container::$container->get(FileHelper::class)->read(api_get_path(SYS_CODE_PATH).'lp/final_item_template/template.html');
     }
 
     /**

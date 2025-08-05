@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -143,7 +144,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
         }
     }
 
-    if (!file_exists($uploadedFile['tmp_name'])) {
+    if (!Container::$container->get(FileHelper::class)->exists($uploadedFile['tmp_name'])) {
         // No file was uploaded.
         if ($show_output) {
             Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
@@ -152,7 +153,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
         return false;
     }
 
-    if (file_exists($uploadedFile['tmp_name'])) {
+    if (Container::$container->get(FileHelper::class)->exists($uploadedFile['tmp_name'])) {
         $filesize = filesize($uploadedFile['tmp_name']);
         if (empty($filesize)) {
             // No file was uploaded.

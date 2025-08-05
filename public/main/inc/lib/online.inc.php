@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 /**
@@ -183,7 +185,7 @@ function online_logout($user_id = null, $logout_redirect = false)
 
         if (is_array($extAuthSource[$firstAuthSource])) {
             $subarray = $extAuthSource[$firstAuthSource];
-            if (!empty($subarray['logout']) && file_exists($subarray['logout'])) {
+            if (!empty($subarray['logout']) && Container::$container->get(FileHelper::class)->exists($subarray['logout'])) {
                 require_once $subarray['logout'];
                 $logout_function = $firstAuthSource.'_logout';
                 if (function_exists($logout_function)) {

@@ -5,6 +5,10 @@
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 $course_plugin = 'Bbb'; //needed in order to load the plugin lang variables
@@ -44,7 +48,7 @@ if ($bbb->pluginEnabled) {
     if ($bbb->isServerConfigured()) {
         if ($bbb->isServerRunning()) {
             if (isset($_GET['launch']) && 1 == $_GET['launch']) {
-                if (file_exists(__DIR__.'/config.vm.php')) {
+                if (Container::$container->get(FileHelper::class)->exists(__DIR__.'/config.vm.php')) {
                     $config = require __DIR__.'/config.vm.php';
                     $vmIsEnabled = true;
                     $host = '';

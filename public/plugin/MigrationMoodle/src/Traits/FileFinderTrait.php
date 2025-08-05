@@ -3,6 +3,9 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Traits;
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Class FileFinderTrait.
  *
@@ -26,7 +29,7 @@ trait FileFinderTrait
 
         $filePath = "$moodleDataPath/filedir/$d1/$d2/$contentHash";
 
-        if (!file_exists($filePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
             throw new \Exception("File $contentHash not found in $moodleDataPath/filedir");
         }
 

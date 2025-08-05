@@ -10,6 +10,9 @@
 /* Plugin config */
 
 // The plugin title.
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 $plugin_info['title'] = 'Show HTML before login';
 // The comments that go with the plugin.
 $plugin_info['comment'] = 'Show a content before loading the login page.';
@@ -42,7 +45,7 @@ $defaults['option1_url'] = api_get_plugin_setting('before_login', 'option1_url')
 $defaults['option2_url'] = api_get_plugin_setting('before_login', 'option2_url');
 
 $plugin_info['templates'] = ['template.tpl'];
-if (file_exists(__DIR__.'/custom.template.tpl')) {
+if (Container::$container->get(FileHelper::class)->exists(__DIR__.'/custom.template.tpl')) {
     $plugin_info['templates'] = ['custom.template.tpl'];
 }
 $form->setDefaults($defaults);

@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Conditional login
  * Used to implement the loading of custom pages
@@ -16,7 +19,7 @@ class ConditionalLogin
     public static function check_conditions($user)
     {
         $file = api_get_path(SYS_CODE_PATH).'auth/conditional_login/conditional_login.php';
-        if (file_exists($file)) {
+        if (Container::$container->get(FileHelper::class)->exists($file)) {
             include_once $file;
             if (isset($login_conditions)) {
                 foreach ($login_conditions as $condition) {

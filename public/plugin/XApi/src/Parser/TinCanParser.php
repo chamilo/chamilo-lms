@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\Parser;
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -16,7 +18,7 @@ class TinCanParser extends PackageParser
 {
     public function parse(): XApiToolLaunch
     {
-        $content = file_get_contents($this->filePath);
+        $content = Container::$container->get(FileHelper::class)->read($this->filePath);
 
         $xml = new Crawler($content);
 

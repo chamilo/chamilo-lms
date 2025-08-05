@@ -8,6 +8,8 @@
 
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 $isGlobal = isset($_GET['global']) ? true : false;
@@ -143,7 +145,7 @@ if ($conferenceManager && $allowToEdit) {
                 false
             );
 
-            if (file_exists(__DIR__.'/config.vm.php')) {
+            if (Container::$container->get(FileHelper::class)->exists(__DIR__.'/config.vm.php')) {
                 require __DIR__.'/../../vendor/autoload.php';
                 require __DIR__.'/lib/vm/AbstractVM.php';
                 require __DIR__.'/lib/vm/VMInterface.php';

@@ -65,7 +65,7 @@ if (isset($_GET['action'])) {
                         true,
                         get_lang('Surveys').'-'.api_get_course_id().'-'.api_get_local_time().'.zip'
                     );
-                    unlink($tempZipFile);
+                    Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->delete($tempZipFile);
                     exit;
                 }*/
             }

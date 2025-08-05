@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 /**
@@ -73,7 +75,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $filePart = "vendor/studio-42/elfinder/js/i18n/elfinder.$iso.js";
             $file = api_get_path(SYS_PATH).$filePart;
             $includeFile = '';
-            if (file_exists($file)) {
+            if (Container::$container->get(FileHelper::class)->exists($file)) {
                 $includeFile = '<script type="text/javascript" src="'.api_get_path(WEB_PATH).$filePart.'"></script>';
                 $language = $iso;
             }

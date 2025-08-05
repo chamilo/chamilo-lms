@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Composer\ScriptHandler;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 $cidReset = true;
 
@@ -36,19 +38,19 @@ if ($form->validate()) {
     }
 
     $file = api_get_path(SYS_PUBLIC_PATH).'build/main.js';
-    if (file_exists($file)) {
-        unlink($file);
+    if (Container::$container->get(FileHelper::class)->exists($file)) {
+        Container::$container->get(FileHelper::class)->delete($file);
     }
     $dir = api_get_path(SYS_PUBLIC_PATH).'build';
     $files = scandir($dir);
     foreach ($files as $file) {
         if (preg_match('/main\..*\.js/', $file)) {
-            unlink($dir.'/'.$file);
+            Container::$container->get(FileHelper::class)->delete($dir.'/'.$file);
         }
     }
 
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-    $htaccess = @file_get_contents($archive_path.'.htaccess');
+    $htaccess = Container::$container->get(FileHelper::class)->read($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
         Display::addFlash(Display::return_message(get_lang('Cleanup of cache and temporary files'), 'error'));
@@ -76,7 +78,7 @@ if ($form->validate()) {
     }
 
     if (!empty($htaccess)) {
-        @file_put_contents($archive_path.'/.htaccess', $htaccess);
+        Container::$container->get(FileHelper::class)->write($archive_path.'/.htaccess', $htaccess);
     }
 
     header('Location: '.api_get_self());

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -6278,7 +6279,7 @@ EOT;
 
             // output the file and remove it
             readfile($zipFilePath);
-            @unlink($zipFilePath);
+            Container::$container->get(FileHelper::class)->delete($zipFilePath);
             exit;
         }
     }

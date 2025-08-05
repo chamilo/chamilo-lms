@@ -1,6 +1,9 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Plugin class for the CustomCertificate plugin.
  *
@@ -143,7 +146,7 @@ class CustomCertificatePlugin extends Plugin
                 // Image manager
                 $pathDestiny = $base.'certificates/'.$certificateId.'/';
 
-                if (!file_exists($pathDestiny)) {
+                if (!Container::$container->get(FileHelper::class)->exists($pathDestiny)) {
                     mkdir($pathDestiny, api_get_permissions_for_new_directories(), true);
                 }
 
@@ -303,8 +306,8 @@ class CustomCertificatePlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
         $sql = "SELECT * FROM $table
-                WHERE 
-                    c_id = $courseId AND 
+                WHERE
+                    c_id = $courseId AND
                     session_id = $sessionId AND
                     access_url_id = $accessUrlId";
         $result = Database::query($sql);

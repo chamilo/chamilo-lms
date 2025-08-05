@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\MailHelper;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
@@ -3775,7 +3776,7 @@ function api_get_themes($getOnlyThemeFromVirtualInstance = false)
         foreach ($themes as $theme) {
             $folder = $theme->getFilename();
             // A theme folder is consider if there's a default.css file
-            if (!file_exists($theme->getPathname().'/default.css')) {
+            if (!Container::$container->get(FileHelper::class)->exists($theme->getPathname().'/default.css')) {
                 continue;
             }
             $name = ucwords(str_replace('_', ' ', $folder));
@@ -3957,13 +3958,13 @@ function rmdirr($dirname, $delete_only_content_in_folder = false, $strict = fals
 {
     $res = true;
     // A sanity check.
-    if (!file_exists($dirname)) {
+    if (!Container::$container->get(FileHelper::class)->exists($dirname)) {
         return false;
     }
     $php_errormsg = '';
     // Simple delete for a file.
     if (is_file($dirname) || is_link($dirname)) {
-        $res = unlink($dirname);
+        $res = Container::$container->get(FileHelper::class)->delete($dirname);
         if (false === $res) {
             error_log(__FILE__.' line '.__LINE__.': '.((bool) ini_get('track_errors') ? $php_errormsg : 'Error not recorded because track_errors is off in your php.ini'), 0);
         }
@@ -4118,7 +4119,7 @@ function copy_folder_course_session(
         $new_pathname .= DIRECTORY_SEPARATOR.$folder;
         $path .= DIRECTORY_SEPARATOR.$folder;
 
-        if (!file_exists($new_pathname)) {
+        if (!Container::$container->get(FileHelper::class)->exists($new_pathname)) {
             $path = Database::escape_string($path);
 
             $sql = "SELECT * FROM $table
@@ -4256,11 +4257,11 @@ function api_parse_info_file($filename)
 {
     $info = [];
 
-    if (!file_exists($filename)) {
+    if (!Container::$container->get(FileHelper::class)->exists($filename)) {
         return $info;
     }
 
-    $data = file_get_contents($filename);
+    $data = Container::$container->get(FileHelper::class)->read($filename);
     if (preg_match_all('
         @^\s*                           # Start at the beginning of a line, ignoring leading whitespace
         ((?:

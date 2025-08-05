@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
@@ -1534,7 +1535,7 @@ class SocialManager extends UserManager
         // Add Jquery Time ago plugin
         //$htmlHeadXtra[] = api_get_asset('jquery-timeago/jquery.timeago.js');
         $timeAgoLocaleDir = $javascriptDir.'jquery-timeago/locales/jquery.timeago.'.$locale.'.js';
-        if (file_exists($timeAgoLocaleDir)) {
+        if (Container::$container->get(FileHelper::class)->exists($timeAgoLocaleDir)) {
             $htmlHeadXtra[] = api_get_js('jquery-timeago/locales/jquery.timeago.'.$locale.'.js');
         }
 

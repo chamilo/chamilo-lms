@@ -87,7 +87,7 @@ switch ($action) {
         $sysFinalFile = api_get_path(SYS_ARCHIVE_PATH)."$pdfName.pdf";
         $webFinalFile = api_get_path(WEB_ARCHIVE_PATH)."$pdfName.pdf";
 
-        if (file_exists($sysFinalFile)) {
+        if (Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->exists($sysFinalFile)) {
             echo $webFinalFile;
         }
         break;

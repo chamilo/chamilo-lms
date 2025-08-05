@@ -4,6 +4,8 @@
 
 exit;
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 
 /**
@@ -23,7 +25,7 @@ $archive_file = str_replace(['..', '/', '\\'], '', $archive_file);
 $extension = null;
 //list($extension) = getextension($archive_file);
 
-if (empty($extension) || !file_exists($archive_path.$archive_file)) {
+if (empty($extension) || !Container::$container->get(FileHelper::class)->exists($archive_path.$archive_file)) {
     exit;
 }
 

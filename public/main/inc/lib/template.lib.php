@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -224,7 +225,7 @@ class Template
 
         $this->loadLegacyParams();
 
-        if (!file_exists($templateFile)) {
+        if (!Container::$container->get(FileHelper::class)->exists($templateFile)) {
             $e = new FileNotFoundException($templateFile);
             echo $e->getMessage();
             exit;
@@ -391,7 +392,7 @@ class Template
         // file, and if not found, go for the same file in the default template
         if ($defaultFolder && 'default' != $defaultFolder) {
             // Avoid missing template error, use the default file.
-            if (file_exists($sysTemplatePath."$defaultFolder/$name")) {
+            if (Container::$container->get(FileHelper::class)->exists($sysTemplatePath."$defaultFolder/$name")) {
                 return "$defaultFolder/$name";
             }
         }

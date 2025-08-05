@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * This class handles the SCORM export of hotpot questions.
  */
@@ -15,7 +18,7 @@ class ScormAnswerHotspot extends Answer
     public function get_js_header()
     {
         $header = '<script>';
-        $header .= file_get_contents(api_get_path(SYS_CODE_PATH).'inc/lib/javascript/hotspot/js/hotspot.js');
+        $header .= Container::$container->get(FileHelper::class)->read(api_get_path(SYS_CODE_PATH).'inc/lib/javascript/hotspot/js/hotspot.js');
         $header .= '</script>';
 
         if ($this->standalone) {

@@ -9,6 +9,8 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CChatConnected;
 use Chamilo\CourseBundle\Entity\CChatConversation;
@@ -490,7 +492,7 @@ class CourseChatUtils
         $remove = 0;
         $content = [];
 
-        if (file_exists($chat_path.$basename_chat.'.log.html')) {
+        if (Container::$container->get(FileHelper::class)->exists($chat_path.$basename_chat.'.log.html')) {
             $content = file($chat_path.$basename_chat.'.log.html');
             $nbr_lines = sizeof($content);
             $remove = $nbr_lines - 100;

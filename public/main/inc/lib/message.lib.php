@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SocialPost;
 use Chamilo\CoreBundle\Entity\SocialPostFeedback;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -1528,7 +1529,7 @@ class MessageManager
         $base = api_get_path(SYS_ARCHIVE_PATH).'mail/';
         $mailq = $base.'mailq';
 
-        if (!file_exists($mailq) || !is_readable($mailq)) {
+        if (!Container::$container->get(FileHelper::class)->exists($mailq) || !is_readable($mailq)) {
             return false;
         }
 

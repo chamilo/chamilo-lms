@@ -9,6 +9,8 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -710,7 +712,7 @@ class BuyCoursesPlugin extends Plugin
             $possiblePath .= $course->getDirectory();
             $possiblePath .= '/course-pic.png';
 
-            if (file_exists($possiblePath)) {
+            if (Container::$container->get(FileHelper::class)->exists($possiblePath)) {
                 $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
             }
             $courseCatalog[] = $courseItem;
@@ -805,7 +807,7 @@ class BuyCoursesPlugin extends Plugin
         $possiblePath .= $course->getDirectory();
         $possiblePath .= '/course-pic.png';
 
-        if (file_exists($possiblePath)) {
+        if (Container::$container->get(FileHelper::class)->exists($possiblePath)) {
             $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
         }
 
@@ -2125,7 +2127,7 @@ class BuyCoursesPlugin extends Plugin
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file = api_get_path(SYS_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$return.'.png';
-            file_put_contents($file, $data);
+            Container::$container->get(FileHelper::class)->write($file, $data);
 
             Database::update(
                 $servicesTable,
@@ -2153,7 +2155,7 @@ class BuyCoursesPlugin extends Plugin
             $img = str_replace(' ', '+', $img);
             $data = base64_decode($img);
             $file = api_get_path(SYS_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$id.'.png';
-            file_put_contents($file, $data);
+            Container::$container->get(FileHelper::class)->write($file, $data);
         }
 
         return Database::update(

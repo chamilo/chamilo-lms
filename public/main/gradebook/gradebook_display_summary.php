@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -129,7 +131,7 @@ switch ($action) {
             }
 
             $tempFile = api_get_path(SYS_ARCHIVE_PATH).uniqid('gradebook_export_all').'.html';
-            file_put_contents($tempFile, $content);
+            Container::$container->get(FileHelper::class)->write($tempFile, $content);
             $pdf->html_to_pdf(
                 $tempFile,
                 null,

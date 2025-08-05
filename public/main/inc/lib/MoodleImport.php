@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Class MoodleImport.
  *
@@ -56,7 +59,7 @@ class MoodleImport
                     throw new Exception(get_lang('ErrorImportingFile'));
                 }
 
-                if (!file_exists($destinationDir.'/moodle_backup.xml')) {
+                if (!Container::$container->get(FileHelper::class)->exists($destinationDir.'/moodle_backup.xml')) {
                     throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
                 }
 
@@ -102,7 +105,7 @@ class MoodleImport
         );
 
         // This process will upload all question resource files
-        $filesXml = @file_get_contents($destinationDir.'/files.xml');
+        $filesXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/files.xml');
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
         $currentResourceFilePath = $destinationDir.'/files/';
         $importedFiles = [];
@@ -157,13 +160,13 @@ class MoodleImport
             }
         }
 
-        $xml = @file_get_contents($destinationDir.'/moodle_backup.xml');
+        $xml = Container::$container->get(FileHelper::class)->read($destinationDir.'/moodle_backup.xml');
         $doc = new DOMDocument();
         $res = @$doc->loadXML($xml);
 
         if (empty($res)) {
             removeDir($destinationDir);
-            unlink($filePath);
+            Container::$container->get(FileHelper::class)->delete($filePath);
 
             throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
         }
@@ -193,7 +196,7 @@ class MoodleImport
                     $catForumValues = [];
                     // Read the current forum module xml.
                     $moduleDir = $currentItem['directory'];
-                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readForumModule($moduleXml);
 
                     // Create a Forum category based on Moodle forum type.
@@ -220,8 +223,8 @@ class MoodleImport
                     // The readingXML functions in this clases do all the mayor work here.
 
                     $moduleDir = $currentItem['directory'];
-                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
-                    $questionsXml = @file_get_contents($destinationDir.'/questions.xml');
+                    $moduleXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $questionsXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/questions.xml');
                     $moduleValues = $this->readQuizModule($moduleXml);
 
                     // At this point we got all the prepared resources from Moodle file
@@ -318,8 +321,8 @@ class MoodleImport
                 case 'resource':
                     // Read the current resource module xml.
                     $moduleDir = $currentItem['directory'];
-                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
-                    $filesXml = @file_get_contents($destinationDir.'/files.xml');
+                    $moduleXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $filesXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/files.xml');
                     $moduleValues = $this->readResourceModule($moduleXml);
                     $mainFileModuleValues = $this->readMainFilesXml(
                         $filesXml,
@@ -360,7 +363,7 @@ class MoodleImport
                 case 'url':
                     // Read the current url module xml.
                     $moduleDir = $currentItem['directory'];
-                    $moduleXml = @file_get_contents($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
+                    $moduleXml = Container::$container->get(FileHelper::class)->read($destinationDir.'/'.$moduleDir.'/'.$moduleName.'.xml');
                     $moduleValues = $this->readUrlModule($moduleXml);
                     $_POST['title'] = $moduleValues['name'];
                     $_POST['url'] = $moduleValues['externalurl'];
@@ -378,7 +381,7 @@ class MoodleImport
         }
 
         removeDir($destinationDir);
-        unlink($filePath);
+        Container::$container->get(FileHelper::class)->delete($filePath);
 
         return true;
     }

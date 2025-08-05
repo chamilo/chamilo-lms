@@ -16,11 +16,13 @@
  */
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 $userId = api_get_user_id();
 
-$body = json_decode(file_get_contents('php://input'), true);
+$body = json_decode(Container::$container->get(FileHelper::class)->read('php://input'), true);
 
 $title = $body['title'];
 $url = $body['url'];

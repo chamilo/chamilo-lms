@@ -1,6 +1,10 @@
 <?php
 
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * The Tour class allows a guided tour in HTML5 of the Chamilo interface.
  *
@@ -103,7 +107,7 @@ class Tour extends Plugin
     public function getTourConfig()
     {
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Tour/';
-        $jsonContent = file_get_contents($pluginPath.'config/tour.json');
+        $jsonContent = Container::$container->get(FileHelper::class)->read($pluginPath.'config/tour.json');
 
         return json_decode($jsonContent, true);
     }

@@ -47,13 +47,6 @@ api_check_php_version();
 ob_implicit_flush();
 Debug::enable();
 
-// Create .env file
-/*$envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
-if (file_exists($envFile)) {
-    echo "Chamilo is already installed. File $envFile exists.";
-    exit;
-}*/
-
 // Defaults settings
 putenv('APP_LOCALE=en_US');
 putenv('APP_ENCRYPT_METHOD="bcrypt"');

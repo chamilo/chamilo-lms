@@ -19,6 +19,8 @@
 //
 // $Id: Root.php,v 1.9 2005/04/23 21:53:49 dufuz Exp $
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 require_once __DIR__.'/../PPS.php';
 
@@ -129,7 +131,7 @@ class OLE_PPS_Root extends OLE_PPS
             fpassthru($this->_FILEH_);
             @fclose($this->_FILEH_);
             // Delete the temporary file.
-            @unlink($this->_tmp_filename);
+            Container::$container->get(FileHelper::class)->delete($this->_tmp_filename);
         } else {
             @fclose($this->_FILEH_);
         }
@@ -311,7 +313,7 @@ class OLE_PPS_Root extends OLE_PPS
                 if (isset($raList[$i]->_PPS_FILE)) {
                     @fclose($raList[$i]->_PPS_FILE);
                     $raList[$i]->_PPS_FILE = null;
-                    @unlink($raList[$i]->_tmp_filename);
+                    Container::$container->get(FileHelper::class)->delete($raList[$i]->_tmp_filename);
                 }
             }
         }

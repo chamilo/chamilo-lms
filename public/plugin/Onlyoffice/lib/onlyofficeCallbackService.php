@@ -14,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Onlyoffice\DocsIntegrationSdk\Service\Callback\CallbackService;
 
 class OnlyofficeCallbackService extends CallbackService
@@ -79,7 +82,7 @@ class OnlyofficeCallbackService extends CallbackService
 
                 return $result;
             }
-            if (($new_data = file_get_contents($downloadUri)) === false) {
+            if (($new_data = Container::$container->get(FileHelper::class)->read($downloadUri)) === false) {
                 $result['error'] = $this->trackResult;
 
                 return $result;

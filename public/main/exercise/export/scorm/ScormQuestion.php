@@ -198,19 +198,15 @@ class ScormQuestion extends Question
         $weight = $this->selectWeighting();
         $js = '
             questions.push('.$this->js_id.');
-            $(function() {     
+            $(function() {
                 if (exerciseInfo.randomAnswers == true) {
-                    $("#question_'.$this->js_id.'").shuffleRows();                    
-                } 
+                    $("#question_'.$this->js_id.'").shuffleRows();
+                }
             });';
         $js .= "\n";
 
         switch ($this->type) {
             case ORAL_EXPRESSION:
-                /*$script = file_get_contents(api_get_path(LIBRARY_PATH) . 'javascript/rtc/RecordRTC.js');
-                $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/recorder.js');
-                $script .= file_get_contents(api_get_path(LIBRARY_PATH) . 'wami-recorder/gui.js');
-                $js .= $script;*/
                 break;
             case HOT_SPOT:
                 //put the max score to 0 to avoid discounting the points of

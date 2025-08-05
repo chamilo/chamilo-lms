@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Class CourseLegalPlugin.
  */
@@ -383,8 +386,8 @@ class CourseLegalPlugin extends Plugin
                 if ($legalData) {
                     if (!empty($legalData['filename'])) {
                         $fileToDelete = $coursePath.'/'.$legalData['filename'];
-                        if (file_exists($fileToDelete)) {
-                            unlink($fileToDelete);
+                        if (Container::$container->get(FileHelper::class)->exists($fileToDelete)) {
+                            Container::$container->get(FileHelper::class)->delete($fileToDelete);
                         }
                     }
                 }
@@ -422,8 +425,8 @@ class CourseLegalPlugin extends Plugin
             );
             if (!empty($legalData['filename'])) {
                 $fileToDelete = $coursePath.'/'.$legalData['filename'];
-                if (file_exists($fileToDelete)) {
-                    unlink($fileToDelete);
+                if (Container::$container->get(FileHelper::class)->exists($fileToDelete)) {
+                    Container::$container->get(FileHelper::class)->delete($fileToDelete);
                 }
             }
         }
@@ -496,7 +499,7 @@ class CourseLegalPlugin extends Plugin
             $coursePath = api_get_path(SYS_COURSE_PATH).$course['directory'].'/CourseLegal';
             $file = $coursePath.'/'.$data['filename'];
 
-            if (file_exists($file)) {
+            if (Container::$container->get(FileHelper::class)->exists($file)) {
                 return Display::url(
                     $data['filename'],
                     api_get_path(WEB_COURSE_PATH).$course['directory'].'/CourseLegal/'.$data['filename'],

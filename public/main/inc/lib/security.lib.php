@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\HTMLPurifier\Filter\AllowIframes;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 /**
@@ -329,7 +331,7 @@ class Security
         static $purifier = [];
         if (!isset($purifier[$user_status])) {
             $cache_dir = api_get_path(SYS_ARCHIVE_PATH).'Serializer';
-            if (!file_exists($cache_dir)) {
+            if (!Container::$container->get(FileHelper::class)->exists($cache_dir)) {
                 $mode = api_get_permissions_for_new_directories();
                 mkdir($cache_dir, $mode);
             }

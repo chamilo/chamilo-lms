@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
@@ -727,7 +728,7 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
     $counter = 0;
     $workDir = ('/' == substr($workDir, -1, 1) ? $workDir : $workDir.'/');
     $checkDirName = $desiredDirName;
-    while (file_exists($workDir.$checkDirName)) {
+    while (Container::$container->get(FileHelper::class)->exists($workDir.$checkDirName)) {
         $counter++;
         $checkDirName = $desiredDirName.$counter;
     }
@@ -841,7 +842,7 @@ function deleteDirWork($id)
         if ('true' == api_get_setting('permanently_remove_deleted_files')) {
             my_delete($work_data_url);
         } else {
-            if (file_exists($work_data_url)) {
+            if (Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->exists($work_data_url)) {
                 rename($work_data_url, $new_dir);
             }
         }*/
@@ -3628,15 +3629,6 @@ function getDocumentTemplateFromWork($workId, $courseInfo, $documentId)
             $docData = $docRepo->find($doc['document_id']);
 
             return $docData;
-
-            /*$fileInfo = pathinfo($docData['path']);
-            if ('html' == $fileInfo['extension']) {
-                if (file_exists($docData['absolute_path']) && is_file($docData['absolute_path'])) {
-                    $docData['file_content'] = file_get_contents($docData['absolute_path']);
-
-                    return $docData;
-                }
-            }*/
         }
     }
 
@@ -4023,7 +4015,7 @@ function deleteCommentFile($id, $courseInfo = [])
 
     /*
     if (isset($workComment['file']) && !empty($workComment['file'])) {
-        if (file_exists($workComment['file_path'])) {
+        if (Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->exists($workComment['file_path'])) {
             $result = my_delete($workComment['file_path']);
             if ($result) {
                 $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
@@ -5353,7 +5345,7 @@ function deleteWorkItem($item_id, Course $course)
                         $extension = pathinfo($work, PATHINFO_EXTENSION);
                         $new_dir = $work.'_DELETED_'.$item_id.'.'.$extension;
 
-                        if (file_exists($currentCourseRepositorySys.'/'.$work)) {
+                        if (Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->exists($currentCourseRepositorySys.'/'.$work)) {
                             rename($currentCourseRepositorySys.'/'.$work, $currentCourseRepositorySys.'/'.$new_dir);
                             $file_deleted = true;
                         }
@@ -6224,7 +6216,7 @@ function downloadAllFilesPerUser($userId, $courseInfo)
         Event::event_download($name.'.zip (folder)');
         if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
             DocumentManager::file_send_for_download($tempZipFile, true, $name);
-            @unlink($tempZipFile);
+            Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->delete($tempZipFile);
             exit;
         }
     }

@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once '../../inc/global.inc.php';
 
 ini_set('soap.wsdl_cache_enabled', 0);
@@ -69,7 +72,7 @@ if (isset($_REQUEST['type']) && 'multi' === $_REQUEST['type']) {
                         '',
                         $filename,
                         $mime,
-                        file_get_contents($LocalWrkUrl)
+                        Container::$container->get(FileHelper::class)->read($LocalWrkUrl)
                     );
                 }
                 /*we associate in the database the document chamilo to the document compilatio*/
@@ -126,7 +129,7 @@ function sendDocument($documentId, $courseInfo)
         $pieces = explode('/', $doc->url);
         $nbPieces = count($pieces);
         $filename = $pieces[$nbPieces - 1];
-        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, file_get_contents($filePath));
+        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, Container::$container->get(FileHelper::class)->read($filePath));
     }
 
     if (Compilatio::isMd5($compilatioId)) {

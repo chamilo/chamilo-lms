@@ -14,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Onlyoffice\DocsIntegrationSdk\Manager\Formats\FormatsManager;
 use Onlyoffice\DocsIntegrationSdk\Util\CommonError;
 
@@ -27,7 +30,7 @@ class OnlyofficeFormatsManager extends FormatsManager
 
     private static function getFormats()
     {
-        $formats = file_get_contents(dirname(__DIR__).
+        $formats = Container::$container->get(FileHelper::class)->read(dirname(__DIR__).
         DIRECTORY_SEPARATOR.
         'vendor'.
         DIRECTORY_SEPARATOR.
@@ -44,7 +47,7 @@ class OnlyofficeFormatsManager extends FormatsManager
         'onlyoffice-docs-formats.txt');
 
         if (empty($formats)) {
-            $formats = file_get_contents(dirname(__DIR__).
+            $formats = Container::$container->get(FileHelper::class)->read(dirname(__DIR__).
             DIRECTORY_SEPARATOR.
             'vendor'.
             DIRECTORY_SEPARATOR.

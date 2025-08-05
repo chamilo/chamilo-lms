@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -55,7 +56,7 @@ class ScormExport
             $handle = opendir($temp_zip_dir);
             while (false !== ($file = readdir($handle))) {
                 if ('.' != $file && '..' != $file) {
-                    unlink("$temp_zip_dir/$file");
+                    Container::$container->get(FileHelper::class)->delete("$temp_zip_dir/$file");
                 }
             }
             closedir($handle);
@@ -299,7 +300,7 @@ class ScormExport
                                     } elseif (empty($file_path)) {
                                         $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
                                         $file_path = str_replace('//', '/', $file_path);
-                                        if (file_exists($file_path)) {
+                                        if (Container::$container->get(FileHelper::class)->exists($file_path)) {
                                             // We get the relative path.
                                             $file_path = substr($file_path, strlen($current_dir));
                                             $zip_files[] = $my_sub_dir.'/'.$file_path;
@@ -373,7 +374,7 @@ class ScormExport
                                         $file_path = api_get_path(SYS_PATH).$abs_img_path_without_subdir;
                                         $abs_path = api_get_path(SYS_PATH).str_replace(api_get_path(WEB_PATH), '', $doc_info[0]);
 
-                                        if (file_exists($file_path)) {
+                                        if (Container::$container->get(FileHelper::class)->exists($file_path)) {
                                             if (false !== strstr($file_path, 'main/default_course_document')) {
                                                 // We get the relative path.
                                                 $pos = strpos($file_path, 'main/default_course_document/');
@@ -564,7 +565,7 @@ class ScormExport
                         $contents = $scormExercise->export();
 
                         $tmp_file_path = $archivePath.$temp_dir_short.'/'.$my_file_path;
-                        $res = file_put_contents($tmp_file_path, $contents);
+                        $res = Container::$container->get(FileHelper::class)->write($tmp_file_path, $contents);
                         if (false === $res) {
                             error_log('Could not write into file '.$tmp_file_path.' '.__FILE__.' '.__LINE__, 0);
                         }
@@ -633,7 +634,7 @@ class ScormExport
                                         } elseif (empty($file_path)) {
                                             $file_path = $_SERVER['DOCUMENT_ROOT'].$abs_path;
                                             $file_path = str_replace('//', '/', $file_path);
-                                            if (file_exists($file_path)) {
+                                            if (Container::$container->get(FileHelper::class)->exists($file_path)) {
                                                 $file_path = substr($file_path, strlen($current_dir));
                                                 // We get the relative path.
                                                 $zip_files[] = $my_sub_dir.'/'.$file_path;
@@ -680,7 +681,7 @@ class ScormExport
                                             );
 
                                             $docSysPath = api_get_path(SYS_COURSE_PATH).$docSysPartPath;
-                                            if (file_exists($docSysPath)) {
+                                            if (Container::$container->get(FileHelper::class)->exists($docSysPath)) {
                                                 $file_path = $docSysPartPathNoCourseCode;
                                                 $zip_files[] = $my_sub_dir.'/'.$file_path;
                                                 $link_updates[$my_file_path][] = [
@@ -798,8 +799,8 @@ class ScormExport
 
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
-                $string = file_get_contents($dest_file);
-                unlink($dest_file);
+                $string = Container::$container->get(FileHelper::class)->read($dest_file);
+                Container::$container->get(FileHelper::class)->delete($dest_file);
                 foreach ($link_updates[$file_path] as $old_new) {
                     // This is an ugly hack that allows .flv files to be found by the flv player that
                     // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
@@ -829,17 +830,17 @@ class ScormExport
                     // Add files inside the HTMLs
                     $new_path = str_replace(api_get_path(REL_COURSE_PATH), '', $old_new['orig']);
                     $destinationFile = $archivePath.$temp_dir_short.'/'.$old_new['dest'];
-                    if (file_exists($sys_course_path.$new_path) && is_file($sys_course_path.$new_path)) {
+                    if (Container::$container->get(FileHelper::class)->exists($sys_course_path.$new_path) && is_file($sys_course_path.$new_path)) {
                         copy(
                             $sys_course_path.$new_path,
                             $destinationFile
                         );
                     }
                 }
-                file_put_contents($dest_file, $string);
+                Container::$container->get(FileHelper::class)->write($dest_file, $string);
             }
 
-            if (file_exists($filePath) && $copyAll) {
+            if (Container::$container->get(FileHelper::class)->exists($filePath) && $copyAll) {
                 $extension = $lp->get_extension($filePath);
                 if (in_array($extension, ['html', 'html'])) {
                     $containerOrigin = dirname($filePath);
@@ -902,8 +903,8 @@ class ScormExport
             copy($main_path.$file_path, $dest_file);
             // Check if the file needs a link update.
             if (in_array($file_path, array_keys($link_updates))) {
-                $string = file_get_contents($dest_file);
-                unlink($dest_file);
+                $string = Container::$container->get(FileHelper::class)->read($dest_file);
+                Container::$container->get(FileHelper::class)->delete($dest_file);
                 foreach ($link_updates[$file_path] as $old_new) {
                     // This is an ugly hack that allows .flv files to be found by the flv player that
                     // will be added in document/main/inc/lib/flv_player/flv_player.swf and that needs
@@ -916,7 +917,7 @@ class ScormExport
                     }
                     $string = str_replace($old_new['orig'], $old_new['dest'], $string);
                 }
-                file_put_contents($dest_file, $string);
+                Container::$container->get(FileHelper::class)->write($dest_file, $string);
             }
         }
 
@@ -931,7 +932,7 @@ class ScormExport
                             <a href="'.$link['url'].'">'.$link['title'].'</a></div>
                             </body>
                             </html>';
-                file_put_contents($archivePath.$temp_dir_short.'/'.$file, $content);
+                Container::$container->get(FileHelper::class)->write($archivePath.$temp_dir_short.'/'.$file, $content);
             }
         }
 
@@ -971,7 +972,7 @@ EOD;
         if (!is_dir($archivePath.$temp_dir_short.'/document')) {
             @mkdir($archivePath.$temp_dir_short.'/document', api_get_permissions_for_new_directories());
         }
-        file_put_contents($archivePath.$temp_dir_short.'/document/non_exportable.html', $file_content);
+        Container::$container->get(FileHelper::class)->write($archivePath.$temp_dir_short.'/document/non_exportable.html', $file_content);
 
         // Add the extra files that go along with a SCORM package.
         $main_code_path = api_get_path(SYS_CODE_PATH).'lp/packaging/';
@@ -982,7 +983,7 @@ EOD;
         // Finalize the imsmanifest structure, add to the zip, then return the zip.
         $manifest = @$xmldoc->saveXML();
         $manifest = api_utf8_decode_xml($manifest); // The manifest gets the system encoding now.
-        file_put_contents($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
+        Container::$container->get(FileHelper::class)->write($archivePath.'/'.$temp_dir_short.'/imsmanifest.xml', $manifest);
         $zip_folder->add(
             $archivePath.'/'.$temp_dir_short,
             PCLZIP_OPT_REMOVE_PATH,
@@ -991,7 +992,7 @@ EOD;
 
         // Clean possible temporary files.
         foreach ($files_cleanup as $file) {
-            $res = unlink($file);
+            $res = Container::$container->get(FileHelper::class)->delete($file);
             if (false === $res) {
                 error_log(
                     'Could not delete temp file '.$file.' '.__FILE__.' '.__LINE__,
@@ -1065,7 +1066,7 @@ EOD;
                 case 'asset':
                 case 'sco':
                     $filePath = $scormPath.'/'.$item->getPath();
-                    if (file_exists($filePath)) {
+                    if (Container::$container->get(FileHelper::class)->exists($filePath)) {
                         $filesToExport[] = [
                             'title' => $item->getTitle(),
                             'path' => $filePath,

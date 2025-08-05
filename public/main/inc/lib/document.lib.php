@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
@@ -285,7 +286,7 @@ class DocumentManager
      */
     public static function smartReadFile($fullFilename, $filename, $contentType = 'application/octet-stream')
     {
-        if (!file_exists($fullFilename)) {
+        if (!Container::$container->get(FileHelper::class)->exists($fullFilename)) {
             header("HTTP/1.1 404 Not Found");
 
             return false;
@@ -428,7 +429,7 @@ class DocumentManager
                     if (isset($lpFixedEncoding) && 'true' === $lpFixedEncoding) {
                         $contentType .= '; charset=UTF-8';
                     } else {
-                        $encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
+                        $encoding = @api_detect_encoding_html(Container::$container->get(FileHelper::class)->read($full_file_name));
                         if (!empty($encoding)) {
                             $contentType .= '; charset='.$encoding;
                         }
@@ -438,7 +439,7 @@ class DocumentManager
                     if (isset($lpFixedEncoding) && 'true' === $lpFixedEncoding) {
                         $contentType .= '; charset=UTF-8';
                     } else {
-                        $encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
+                        $encoding = @api_detect_encoding(strip_tags(Container::$container->get(FileHelper::class)->read($full_file_name)));
                         if (!empty($encoding)) {
                             $contentType .= '; charset='.$encoding;
                         }
@@ -472,7 +473,7 @@ class DocumentManager
             }
 
             if ($fixLinksHttpToHttps) {
-                $content = file_get_contents($full_file_name);
+                $content = Container::$container->get(FileHelper::class)->read($full_file_name);
                 $content = str_replace(
                     ['http%3A%2F%2F', 'http://'],
                     ['https%3A%2F%2F', 'https://'],
@@ -1262,7 +1263,7 @@ class DocumentManager
         $externalStyleFile = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/certificate.css';
         $externalStyle = '';
         if (is_file($externalStyleFile)) {
-            $externalStyle = file_get_contents($externalStyleFile);
+            $externalStyle = Container::$container->get(FileHelper::class)->read($externalStyleFile);
         }
         $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
         $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
@@ -1523,7 +1524,7 @@ class DocumentManager
                     case 'htm':
                     case 'shtml':
                     case 'css':
-                        $file_content = file_get_contents($abs_path);
+                        $file_content = Container::$container->get(FileHelper::class)->read($abs_path);
                         // get an array of attributes from the HTML source
                         $attributes = self::parse_HTML_attributes(
                             $file_content,
@@ -2034,7 +2035,7 @@ class DocumentManager
                     return false;
                 }
                 exec("pdftotext $temp_file -", $output, $ret_val);
-                unlink($temp_file);
+                Container::$container->get(FileHelper::class)->delete($temp_file);
                 break;
             case 'application/msword':
                 exec("catdoc $doc_path", $output, $ret_val);
@@ -2756,7 +2757,7 @@ class DocumentManager
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
         $fileType = 'certificate';
-        $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
+        $templateContent = Container::$container->get(FileHelper::class)->read(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
         $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}'];
         $replace = [$css.$js, $img_dir, $codePath, $default_course_dir];
@@ -2776,7 +2777,7 @@ class DocumentManager
                 );
 
                 if (isset($documentData['absolute_path'])) {
-                    $fileContent = file_get_contents($documentData['absolute_path']);
+                    $fileContent = Container::$container->get(FileHelper::class)->read($documentData['absolute_path']);
                 }
             }
         }
@@ -3372,7 +3373,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         if (!empty($content)) {
             $repo->addFileFromString($document, $title, 'text/html', $content, true);
         } else {
-            if (!empty($realPath) && !is_dir($realPath) && file_exists($realPath)) {
+            if (!empty($realPath) && !is_dir($realPath) && Container::$container->get(FileHelper::class)->exists($realPath)) {
                 $repo->addFileFromPath($document, $title, $realPath);
             }
         }

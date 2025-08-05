@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\PluginBundle\LtiProvider\Entity\Platform;
 use Chamilo\PluginBundle\LtiProvider\Entity\PlatformKey;
 use Chamilo\PluginBundle\LtiProvider\Entity\Result;
@@ -540,7 +542,7 @@ class LtiProviderPlugin extends Plugin
      */
     private function getRequestXmlElement(): ?SimpleXMLElement
     {
-        $request = file_get_contents("php://input");
+        $request = Container::$container->get(FileHelper::class)->read("php://input");
 
         if (empty($request)) {
             return null;

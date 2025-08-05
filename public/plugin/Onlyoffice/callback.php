@@ -16,6 +16,8 @@
  */
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 use Onlyoffice\DocsIntegrationSdk\Models\Callback as OnlyofficeCallback;
 use Onlyoffice\DocsIntegrationSdk\Models\CallbackDocStatus;
@@ -95,7 +97,7 @@ function track(): array
     global $appSettings;
     global $jwtManager;
 
-    $body_stream = file_get_contents('php://input');
+    $body_stream = Container::$container->get(FileHelper::class)->read('php://input');
     if ($body_stream === false) {
         return ['error' => 'Bad Request'];
     }
@@ -132,19 +134,19 @@ function track(): array
         $docPath = urldecode($docPath);
         $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
 
-        if (!file_exists($filePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
             return ['status' => 'error', 'error' => 'File not found'];
         }
 
         $documentKey = basename($docPath);
         if ($data['status'] == 2 || $data['status'] == 3) {
             if (!empty($data['url'])) {
-                $newContent = file_get_contents($data['url']);
+                $newContent = Container::$container->get(FileHelper::class)->read($data['url']);
                 if ($newContent === false) {
                     return ['status' => 'error', 'error' => 'Failed to fetch document'];
                 }
 
-                if (file_put_contents($filePath, $newContent) === false) {
+                if (Container::$container->get(FileHelper::class)->write($filePath, $newContent) === false) {
                     return ['status' => 'error', 'error' => 'Failed to save document'];
                 }
             } else {
@@ -153,7 +155,7 @@ function track(): array
         }
     } elseif (!empty($docId)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
-        if (!$docInfo || !file_exists($docInfo['absolute_path'])) {
+        if (!$docInfo || !Container::$container->get(FileHelper::class)->exists($docInfo['absolute_path'])) {
             return ['status' => 'error', 'error' => 'File not found'];
         }
 
@@ -216,7 +218,7 @@ function download()
     if (!empty($docPath)) {
         $filePath = api_get_path(SYS_COURSE_PATH).urldecode($docPath);
 
-        if (!file_exists($filePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
             return ['status' => 'error', 'error' => 'File not found'];
         }
 
@@ -226,7 +228,7 @@ function download()
         ];
     } elseif (!empty($docId) && !empty($courseCode)) {
         $docInfo = DocumentManager::get_document_data_by_id($docId, $courseCode, false, $sessionId);
-        if (!$docInfo || !file_exists($docInfo['absolute_path'])) {
+        if (!$docInfo || !Container::$container->get(FileHelper::class)->exists($docInfo['absolute_path'])) {
             return ['status' => 'error', 'error' => 'File not found'];
         }
 

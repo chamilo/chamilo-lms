@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 /**
  * Class IndexManager.
@@ -160,7 +161,7 @@ class IndexManager
         }
 
         $html = '';
-        $home_menu = @(string) file_get_contents($this->home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = (string) Container::$container->get(FileHelper::class)->read($this->home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $html = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
         }

@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\ConferenceRecording;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;
@@ -1871,7 +1873,7 @@ class Bbb
      */
     public function redirectToBBB($url)
     {
-        if (file_exists(__DIR__.'/../config.vm.php')) {
+        if (Container::$container->get(FileHelper::class)->exists(__DIR__.'/../config.vm.php')) {
             // Using VM
             echo Display::url($this->plugin->get_lang('ClickToContinue'), $url);
             exit;

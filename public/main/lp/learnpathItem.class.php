@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 
 /**
@@ -218,7 +220,7 @@ class learnpathItem
         // learnpath class which should be aware of any fake.
         // Old structure
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
-        if (file_exists($file)) {
+        if (Container::$container->get(FileHelper::class)->exists($file)) {
             $audio = '/audio/'.$audio;
             $audio = str_replace('//', '/', $audio);
 
@@ -227,7 +229,7 @@ class learnpathItem
 
         $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$audio;
 
-        if (file_exists($file)) {
+        if (Container::$container->get(FileHelper::class)->exists($file)) {
             return $audio;
         }
 
@@ -994,7 +996,7 @@ class learnpathItem
                         ];
 
                         // Parse it for included resources.
-                        $fileContent = file_get_contents($abs_path);
+                        $fileContent = Container::$container->get(FileHelper::class)->read($abs_path);
                         // Get an array of attributes from the HTML source.
                         $attributes = DocumentManager::parse_HTML_attributes(
                             $fileContent,
@@ -1925,7 +1927,7 @@ class learnpathItem
     {
         if (!empty($this->path) and is_file($this->path)) {
             $output = '';
-            $output .= file_get_contents($this->path);
+            $output .= Container::$container->get(FileHelper::class)->read($this->path);
 
             return $output;
         }

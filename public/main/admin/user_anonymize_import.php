@@ -6,6 +6,8 @@
  */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
@@ -42,7 +44,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     $usernameListFileUploaded = $usernameListFile->getValue();
     $usernameListFileUploaded['name'] = api_htmlentities($usernameListFileUploaded['name']);
     $filePath = $usernameListFileUploaded['tmp_name'];
-    if (!file_exists($filePath)) {
+    if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
         throw new Exception(get_lang('CouldNotReadFile').' '.$filePath);
     }
     $submittedUsernames = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);

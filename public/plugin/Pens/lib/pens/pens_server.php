@@ -24,6 +24,10 @@
  * @author Guillaume Viguier-Just <guillaume@viguierjust.com>
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/pens_controller.php';
 require_once __DIR__.'/pens_package_handler.php';
 require_once __DIR__.'/pens_exception.php';
@@ -128,7 +132,7 @@ class PENSServer extends PENSController
                             // Process package
                             $this->processPackage($request, $path_to_package);
                         }
-                        unlink($path_to_package);
+                        Container::$container->get(FileHelper::class)->delete($path_to_package);
                     }
                 } else {
                     // Then, send a success response to the client

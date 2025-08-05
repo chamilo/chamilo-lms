@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 ini_set('memory_limit', '4G');
 ini_set('max_execution_time', 0);
 require_once __DIR__.'/../../../vendor/autoload.php';
@@ -16,9 +19,9 @@ if (isset($_GET['updatePath'])) {
 $response = executeMigration();
 
 $logContent = '';
-if (file_exists($logFile)) {
+if (Container::$container->get(FileHelper::class)->exists($logFile)) {
     chmod($logFile, 0644);
-    $logContent = file_get_contents($logFile);
+    $logContent = Container::$container->get(FileHelper::class)->read($logFile);
 }
 
 if (!$response['status']) {

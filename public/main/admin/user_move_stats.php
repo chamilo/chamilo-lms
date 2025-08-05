@@ -6,6 +6,8 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -524,11 +526,11 @@ if (isset($_REQUEST['load_ajax'])) {
                                 $full_file_name = $course_dir.'/'.$doc_url;
                                 $new_file = $course_dir.'/'.$new_url;
 
-                                if (file_exists($full_file_name)) {
+                                if (Container::$container->get(FileHelper::class)->exists($full_file_name)) {
                                     //deleting old assignment
                                     $result = copy($full_file_name, $new_file);
                                     if ($result) {
-                                        unlink($full_file_name);
+                                        Container::$container->get(FileHelper::class)->delete($full_file_name);
                                         $sql = "DELETE FROM $TBL_STUDENT_PUBLICATION WHERE id= ".$data['id'];
                                         if ($debug) {
                                             var_dump($sql);

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -399,7 +400,7 @@ class AppPlugin
         // Loading the plugin/XXX/index.php file
         $plugin_file = api_get_path(SYS_PLUGIN_PATH)."$plugin_name/index.php";
 
-        if (file_exists($plugin_file)) {
+        if (Container::$container->get(FileHelper::class)->exists($plugin_file)) {
             //Loading the lang variables of the plugin if exists
             self::load_plugin_lang_variables($plugin_name);
 
@@ -462,7 +463,7 @@ class AppPlugin
 
         foreach ($pluginDirs as $dir) {
             $path = $pluginPath . "$dir/plugin.php";
-            if (file_exists($path)) {
+            if (Container::$container->get(FileHelper::class)->exists($path)) {
                 $plugin_file = $path;
                 break;
             }
@@ -562,7 +563,7 @@ class AppPlugin
                 $pluginName = $obj->get_name();
                 $plugin_path = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
-                if (file_exists($plugin_path)) {
+                if (Container::$container->get(FileHelper::class)->exists($plugin_path)) {
                     require $plugin_path;
                     if (isset($plugin_info) && isset($plugin_info['plugin_class']) && $obj->isCoursePlugin) {
                         $obj->course_install($courseId);

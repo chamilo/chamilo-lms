@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -70,7 +71,7 @@ function handleRegions()
     foreach ($installed_plugins as $pluginName) {
         $plugin_info_file = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
-        if (file_exists($plugin_info_file)) {
+        if (Container::$container->get(FileHelper::class)->exists($plugin_info_file)) {
             $plugin_info = [];
             require $plugin_info_file;
             if (isset($_GET['name']) && $_GET['name'] === $pluginName) {
@@ -155,7 +156,7 @@ function handlePlugins()
     foreach ($allPlugins as $pluginName) {
         $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
 
-        if (!file_exists($pluginInfoFile)) {
+        if (!Container::$container->get(FileHelper::class)->exists($pluginInfoFile)) {
             continue;
         }
 
@@ -1000,7 +1001,7 @@ function deleteTemplate($id)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     if (!empty($row['image'])) {
-        @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+        Container::$container->get(FileHelper::class)->delete(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.
@@ -1178,8 +1179,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 if ('header_extra_content' == $row['variable']) {
                     $file = api_get_home_path().'header_extra_content.txt';
                     $value = '';
-                    if (file_exists($file)) {
-                        $value = file_get_contents($file);
+                    if (Container::$container->get(FileHelper::class)->exists($file)) {
+                        $value = Container::$container->get(FileHelper::class)->read($file);
                     }
                     $form->addElement(
                         'textarea',
@@ -1192,8 +1193,8 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 } elseif ('footer_extra_content' == $row['variable']) {
                     $file = api_get_home_path().'footer_extra_content.txt';
                     $value = '';
-                    if (file_exists($file)) {
-                        $value = file_get_contents($file);
+                    if (Container::$container->get(FileHelper::class)->exists($file)) {
+                        $value = Container::$container->get(FileHelper::class)->read($file);
                     }
                     $form->addElement(
                         'textarea',

@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -72,7 +73,7 @@ class ScormExercise
      */
     public function common_js()
     {
-        $js = file_get_contents(api_get_path(SYS_CODE_PATH).'exercise/export/scorm/common.js');
+        $js = Container::$container->get(FileHelper::class)->read(api_get_path(SYS_CODE_PATH).'exercise/export/scorm/common.js');
 
         return $js."\n";
     }

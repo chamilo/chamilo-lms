@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
@@ -382,7 +383,7 @@ switch ($action) {
             exit;
         }
 
-        $jsonInput = file_get_contents('php://input');
+        $jsonInput = Container::$container->get(FileHelper::class)->read('php://input');
         $requestData = json_decode($jsonInput, true);
 
         if (!isset($requestData['lp_data']) || !isset($requestData['course_code'])) {

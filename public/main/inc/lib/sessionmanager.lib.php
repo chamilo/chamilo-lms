@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use ExtraField as ExtraFieldModel;
@@ -6048,7 +6049,7 @@ class SessionManager
         $sessionCounter = 0;
         $sessionList = [];
 
-        $content = file_get_contents($file);
+        $content = Container::$container->get(FileHelper::class)->read($file);
         $content = api_utf8_encode_xml($content);
         $root = @simplexml_load_string($content);
 
@@ -10736,7 +10737,7 @@ class SessionManager
 
                     $csvFilePath = Export::arrayToCsvSimple($csvContent, $csvFileName, true);
 
-                    if ($csvFilePath && file_exists($csvFilePath)) {
+                    if ($csvFilePath && Container::$container->get(FileHelper::class)->exists($csvFilePath)) {
                         $zip->addFile($csvFilePath, $csvFileName);
                     }
                 }
@@ -10747,9 +10748,9 @@ class SessionManager
             exit("Could not close the ZIP file correctly.");
         }
 
-        if (file_exists($tempZipFile)) {
+        if (Container::$container->get(FileHelper::class)->exists($tempZipFile)) {
             DocumentManager::file_send_for_download($tempZipFile, true);
-            unlink($tempZipFile);
+            Container::$container->get(FileHelper::class)->delete($tempZipFile);
         } else {
             exit("The ZIP file was not created correctly.");
         }

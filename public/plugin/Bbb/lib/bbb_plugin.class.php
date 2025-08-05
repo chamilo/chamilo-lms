@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
 use Chamilo\CoreBundle\Entity\ConferenceRecording;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CoreBundle\Entity\Course;
 
@@ -284,7 +285,7 @@ class BbbPlugin extends Plugin
         $url = "{$host}/bigbluebutton/api/deleteRecordings?{$query}&checksum={$checksum}";
 
         // Send the request (silently)
-        @file_get_contents($url);
+        Container::$container->get(FileHelper::class)->read($url);
     }
 
     /**

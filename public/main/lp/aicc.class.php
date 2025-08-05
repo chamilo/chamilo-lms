@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements).
@@ -725,7 +728,7 @@ class aicc extends learnpath
         $null = '';
         $r = $null;
         $sec = $null;
-        $f = @file_get_contents($f);
+        $f = Container::$container->get(FileHelper::class)->read($f);
         $f = api_convert_encoding($f, api_get_system_encoding(), $this->config_encoding);
         $f = preg_split('/\r?\n/', $f);
         for ($i = 0; $i < @count($f); $i++) {
@@ -845,7 +848,7 @@ class aicc extends learnpath
      */
     public function parse_csv_file($f, $delim = ',', $enclosure = '"', $multiples = false)
     {
-        $data = @file_get_contents($f);
+        $data = Container::$container->get(FileHelper::class)->read($f);
         $data = api_convert_encoding($data, api_get_system_encoding(), $this->config_encoding);
         $enclosed = false;
         $fldcount = 0;

@@ -14,6 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
 $plugin = OnlyofficePlugin::create();
@@ -54,7 +58,7 @@ $fileUrl = null;
 
 if ($docPath) {
     $filePath = api_get_path(SYS_COURSE_PATH).$docPath;
-    if (!file_exists($filePath)) {
+    if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
         error_log("ERROR: Original file not found -> ".$filePath);
         exit("Error: Document not found.");
     }
@@ -68,7 +72,7 @@ if ($docPath) {
         $newDocPath = api_get_course_path()."/exercises/onlyoffice/{$exerciseId}/{$questionId}/{$userId}/response_{$exeId}.{$extension}";
         $userFilePath = api_get_path(SYS_COURSE_PATH).$newDocPath;
 
-        if (!file_exists($userFilePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($userFilePath)) {
             if (!is_dir(dirname($userFilePath))) {
                 mkdir(dirname($userFilePath), 0775, true);
             }

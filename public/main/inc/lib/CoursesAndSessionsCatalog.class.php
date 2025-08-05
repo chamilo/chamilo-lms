@@ -1040,7 +1040,7 @@ class CoursesAndSessionsCatalog
     {
         /*$course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
 
-        if (file_exists($course_path.'/course-pic.png')) {
+        if (Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->exists($course_path.'/course-pic.png')) {
             // redimensioned image 85x85
             $courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
         } else {

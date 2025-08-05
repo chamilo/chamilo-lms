@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
  * DashboardManager can be used to manage dashboard
  * author Christian Fasanando <christian1827@gmail.com>.
@@ -42,7 +45,7 @@ class DashboardManager
         // We display all the possible enabled or disabled plugins
         foreach ($possiblePlugins as $testplugin) {
             $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
-            if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
+            if (Container::$container->get(FileHelper::class)->exists($plugin_info_file) && is_readable($plugin_info_file)) {
                 $plugin_info = api_parse_info_file($plugin_info_file);
 
                 // change index to lower case
@@ -219,7 +222,7 @@ class DashboardManager
                         // insert
                         $plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
                         $plugin_info = [];
-                        if (file_exists($plugin_info_file)) {
+                        if (Container::$container->get(FileHelper::class)->exists($plugin_info_file)) {
                             $plugin_info = api_parse_info_file($plugin_info_file);
                         }
 

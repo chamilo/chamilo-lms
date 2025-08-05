@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 
 $cidReset = true;
@@ -200,7 +201,7 @@ $propertiesToJson = Container::getUserToJsonNormalizer()->getPersonalDataToJson(
 if (!empty($_GET['export'])) {
     $filename = md5(mt_rand(0, 1000000)).'.json';
     $path = api_get_path(SYS_ARCHIVE_PATH).$filename;
-    $writeResult = file_put_contents($path, $propertiesToJson);
+    $writeResult = Container::$container->get(FileHelper::class)->write($path, $propertiesToJson);
     if (false !== $writeResult) {
         DocumentManager::file_send_for_download($path, true, $filename);
         exit;

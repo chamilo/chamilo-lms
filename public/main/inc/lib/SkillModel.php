@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLink;
@@ -2389,7 +2390,7 @@ class SkillModel extends Model
             $imageContent = $assetRepo->getAssetContent($skill->getAsset());
         } else {
             $defaultBadge = api_get_path(SYS_PUBLIC_PATH).'img/icons/128/badges-default.png';
-            $imageContent = file_get_contents($defaultBadge);
+            $imageContent = Container::$container->get(FileHelper::class)->read($defaultBadge);
         }
 
         $png = new PNGImageBaker($imageContent);

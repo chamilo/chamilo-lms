@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 /**
@@ -786,7 +788,7 @@ function removeUnusedFiles()
                 WHERE c_id = $course_id AND id ='".$res['id']."'";
         Database::query($sql);
         //delete file from server
-        @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
+        Container::$container->get(FileHelper::class)->delete(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
     }
 }
 
@@ -1346,7 +1348,7 @@ function zip_download($fileList)
     if (false === $result) {
         api_not_allowed(true);
     }
-    @unlink($temp_zip_file);
+    Container::$container->get(FileHelper::class)->delete($temp_zip_file);
     exit;
 }
 

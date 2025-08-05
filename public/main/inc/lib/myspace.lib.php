@@ -4,10 +4,12 @@
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class MySpace.
@@ -3055,8 +3057,8 @@ class MySpace
      */
     public static function parse_xml_data($file)
     {
-        $crawler = new \Symfony\Component\DomCrawler\Crawler();
-        $crawler->addXmlContent(file_get_contents($file));
+        $crawler = new Crawler();
+        $crawler->addXmlContent(Container::$container->get(FileHelper::class)->read($file));
         $crawler = $crawler->filter('Contacts > Contact ');
         $array = [];
         foreach ($crawler as $domElement) {

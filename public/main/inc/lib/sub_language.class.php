@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Doctrine\ORM\Exception\NotSupported;
 
 /**
@@ -131,7 +133,7 @@ class SubLanguageManager
      */
     public static function add_file_in_language_directory($system_path_file)
     {
-        $return_value = @file_put_contents($system_path_file, '<?php'.PHP_EOL);
+        $return_value = Container::$container->get(FileHelper::class)->write($system_path_file, '<?php'.PHP_EOL);
 
         return $return_value;
     }
@@ -150,7 +152,7 @@ class SubLanguageManager
         $return_value = false;
         $new_data = $new_variable.'='.$new_term;
         $resource = @fopen($path_file, "a");
-        if (file_exists($path_file) && $resource) {
+        if (Container::$container->get(FileHelper::class)->exists($path_file) && $resource) {
             if (false === fwrite($resource, $new_data.PHP_EOL)) {
                 //not allow to write
                 $return_value = false;
@@ -190,9 +192,9 @@ class SubLanguageManager
         }
 
         // If the .po file doesn't exist, create it
-        if (!file_exists($poFilePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($poFilePath)) {
             $initialContent = "# Translation file for $subLanguageIsoCode\nmsgid \"\"\nmsgstr \"\"\n";
-            if (false === file_put_contents($poFilePath, $initialContent)) {
+            if (false === Container::$container->get(FileHelper::class)->write($poFilePath, $initialContent)) {
                 error_log("Failed to write the initial content to $poFilePath");
                 return false;
             }
@@ -552,7 +554,7 @@ class SubLanguageManager
         $poFilePath = api_get_path(SYS_PATH) . self::LANGUAGE_TRANS_PATH . $filename;
         $matchedMsgids = [];
 
-        if (file_exists($poFilePath)) {
+        if (Container::$container->get(FileHelper::class)->exists($poFilePath)) {
             $lines = file($poFilePath, FILE_IGNORE_NEW_LINES);
             $currentVariable = null;
 
@@ -582,16 +584,16 @@ class SubLanguageManager
     private static function getTranslationForVariable(string $variable, string $filename, $checkSubLanguagePath = false): string
     {
         $poFilePath = self::getPoFilePath($filename, $checkSubLanguagePath);
-        if (!file_exists($poFilePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($poFilePath)) {
             $shortLanguageCode = self::getShortLanguageCode($filename);
             $poFilePath = self::getPoFilePath($shortLanguageCode . '.po', $checkSubLanguagePath);
 
-            if (!file_exists($poFilePath)) {
+            if (!Container::$container->get(FileHelper::class)->exists($poFilePath)) {
                 return '';
             }
         }
 
-        $content = file_get_contents($poFilePath);
+        $content = Container::$container->get(FileHelper::class)->read($poFilePath);
         $pattern = '/msgid "' . preg_quote($variable, '/') . '"\nmsgstr "(.*?)"/';
         if (preg_match($pattern, $content, $match)) {
             return $match[1];
@@ -626,7 +628,7 @@ class SubLanguageManager
     {
         $filePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  $filename;
 
-        if (!file_exists($filePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
             return ['success' => false, 'error' => 'File does not exist'];
         }
 
@@ -641,7 +643,7 @@ class SubLanguageManager
             }
         }
 
-        $fileContents = file_get_contents($filePath);
+        $fileContents = Container::$container->get(FileHelper::class)->read($filePath);
         if ($fileContents === false) {
             return ['success' => false, 'error' => 'Failed to read file contents'];
         }
@@ -655,7 +657,7 @@ class SubLanguageManager
             $fileContents .= $appendString;
         }
 
-        if (file_put_contents($filePath, $fileContents) === false) {
+        if (Container::$container->get(FileHelper::class)->write($filePath, $fileContents) === false) {
             return ['success' => false, 'error' => 'Failed to write to file'];
         }
 
@@ -679,8 +681,8 @@ class SubLanguageManager
         // Locate and delete the .po file of the sub-language
         $subLanguageIsoCode = $subLanguage->getIsocode();
         $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH .  "messages.$subLanguageIsoCode.po";
-        if (file_exists($poFilePath)) {
-             unlink($poFilePath);
+        if (Container::$container->get(FileHelper::class)->exists($poFilePath)) {
+             Container::$container->get(FileHelper::class)->delete($poFilePath);
         }
 
         $entityManager->remove($subLanguage);
@@ -731,8 +733,8 @@ class SubLanguageManager
         // Path for the .po file you want to remove
         $poFilePath = api_get_path(SYS_PATH) . self::SUBLANGUAGE_TRANS_PATH . "messages.$isoCode.po";
 
-        if (file_exists($poFilePath)) {
-            return unlink($poFilePath);
+        if (Container::$container->get(FileHelper::class)->exists($poFilePath)) {
+            return Container::$container->get(FileHelper::class)->delete($poFilePath);
         }
 
         // File does not exist, consider it a successful removal

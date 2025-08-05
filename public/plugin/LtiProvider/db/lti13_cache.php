@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Packback\Lti1p3\Interfaces\Cache as Lti1p3Cache;
 
 class Lti13Cache implements Lti1p3Cache
@@ -44,9 +46,9 @@ class Lti13Cache implements Lti1p3Cache
 
     private function loadCache()
     {
-        $cache = file_get_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt');
+        $cache = Container::$container->get(FileHelper::class)->read(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt');
         if (empty($cache)) {
-            file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', '{}');
+            Container::$container->get(FileHelper::class)->write(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', '{}');
             $this->cache = [];
         }
         $this->cache = json_decode($cache, true);
@@ -54,6 +56,6 @@ class Lti13Cache implements Lti1p3Cache
 
     private function saveCache()
     {
-        file_put_contents(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', json_encode($this->cache));
+        Container::$container->get(FileHelper::class)->write(api_get_path(SYS_ARCHIVE_PATH).'lti_cache.txt', json_encode($this->cache));
     }
 }

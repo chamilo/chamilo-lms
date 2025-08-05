@@ -2,6 +2,8 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\PluginBundle\Zoom\API\RecordingMeeting;
 use Chamilo\PluginBundle\Zoom\Meeting;
 use Chamilo\PluginBundle\Zoom\MeetingActivity;
@@ -23,7 +25,7 @@ if (api_get_plugin_setting('zoom', 'verificationToken') !== $authorizationHeader
     exit;
 }
 
-$body = file_get_contents('php://input');
+$body = Container::$container->get(FileHelper::class)->read('php://input');
 $decoded = json_decode($body);
 if (is_null($decoded) || !is_object($decoded) || !isset($decoded->event) || !isset($decoded->payload->object)) {
     error_log(sprintf('Did not recognize event notification: %s', $body));

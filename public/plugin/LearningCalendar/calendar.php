@@ -3,6 +3,8 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -17,7 +19,7 @@ $calendarLanguage = 'en';
 if ('en' !== $isoCode) {
     $file = 'bootstrap-year-calendar/js/languages/bootstrap-year-calendar.'.$isoCode.'.js';
     $path = api_get_path(SYS_PUBLIC_PATH).'assets/'.$file;
-    if (file_exists($path)) {
+    if (Container::$container->get(FileHelper::class)->exists($path)) {
         $htmlHeadXtra[] = api_get_asset($file);
         $calendarLanguage = $isoCode;
     }

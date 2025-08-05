@@ -6,6 +6,9 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/config.php';
 
 $pluginPath = api_get_path(SYS_PLUGIN_PATH).'Tour/';
@@ -41,7 +44,7 @@ if ($showTour) {
         'save_ajax' => "{$pluginWebPath}ajax/save.ajax.php",
     ];
 
-    if (file_exists("{$pluginPath}intro.js/introjs-$theme.css")) {
+    if (Container::$container->get(FileHelper::class)->exists("{$pluginPath}intro.js/introjs-$theme.css")) {
         $_template['web_path']['intro_theme_css'] = "{$pluginWebPath}intro.js/introjs-$theme.css";
     }
 }

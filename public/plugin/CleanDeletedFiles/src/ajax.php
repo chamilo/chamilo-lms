@@ -5,6 +5,10 @@
 /**
  * Responses to AJAX calls.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once '../config.php';
 
 api_protect_admin_script();
@@ -20,7 +24,7 @@ switch ($action) {
             exit;
         }
 
-        if (unlink($path)) {
+        if (Container::$container->get(FileHelper::class)->delete($path)) {
             Display::addFlash($plugin->get_lang("DeletedSuccess"), 'success');
             echo json_encode(["status" => "true"]);
         } else {
@@ -38,7 +42,7 @@ switch ($action) {
             if (empty($value)) {
                 continue;
             }
-            unlink($value);
+            Container::$container->get(FileHelper::class)->delete($value);
         }
 
         Display::addFlash($plugin->get_lang("DeletedSuccess"), 'success');

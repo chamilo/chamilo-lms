@@ -4,6 +4,8 @@
 set_time_limit(0);
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
@@ -166,7 +168,7 @@ class FlatViewTable extends SortableTable
         $i = 1;
         // Cache definition
         $cachePath = api_get_path(SYS_ARCHIVE_PATH) . 'chart/';
-        if (!file_exists($cachePath)) {
+        if (!Container::$container->get(FileHelper::class)->exists($cachePath)) {
             mkdir($cachePath, 0755, true);
         }
 
@@ -304,7 +306,7 @@ class FlatViewTable extends SortableTable
                 $imgPath = $cachePath.$chartHash;
                 $myCache->saveFromCache($chartHash, $imgPath);
             }
-            echo '<img src="data:image/png;base64,' . base64_encode(file_get_contents($imgPath)) . '" >';
+            echo '<img src="data:image/png;base64,' . base64_encode(Container::$container->get(FileHelper::class)->read($imgPath)) . '" >';
             if (0 == $i % 2 && 0 != $i) {
                 echo '<br /><br />';
             } else {

@@ -7,6 +7,9 @@ The primary support for NuSOAP is the mailing list:
 nusoap-general@lists.sourceforge.net
 */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 /**
 * caches instances of the wsdl class
 *
@@ -84,15 +87,15 @@ class nusoap_wsdlcache
 		if ($this->obtainMutex($filename, "r")) {
 			// check for expired WSDL that must be removed from the cache
  			if ($this->cache_lifetime > 0) {
-				if (file_exists($filename) && (time() - filemtime($filename) > $this->cache_lifetime)) {
-					unlink($filename);
+				if (Container::$container->get(FileHelper::class)->exists($filename) && (time() - filemtime($filename) > $this->cache_lifetime)) {
+					Container::$container->get(FileHelper::class)->delete($filename);
 					$this->debug("Expired $wsdl ($filename) from cache");
 					$this->releaseMutex($filename);
 					return null;
   				}
 			}
 			// see what there is to return
-			if (!file_exists($filename)) {
+			if (!Container::$container->get(FileHelper::class)->exists($filename)) {
 				$this->debug("$wsdl ($filename) not in cache (1)");
 				$this->releaseMutex($filename);
 				return null;
@@ -189,13 +192,13 @@ class nusoap_wsdlcache
 	*/
 	function remove($wsdl) {
 		$filename = $this->createFilename($wsdl);
-		if (!file_exists($filename)) {
+		if (!Container::$container->get(FileHelper::class)->exists($filename)) {
 			$this->debug("$wsdl ($filename) not in cache to be removed");
 			return false;
 		}
 		// ignore errors obtaining mutex
 		$this->obtainMutex($filename, "w");
-		$ret = unlink($filename);
+		$ret = Container::$container->get(FileHelper::class)->delete($filename);
 		$this->debug("Removed ($ret) $wsdl ($filename) from cache");
 		$this->releaseMutex($filename);
 		return $ret;

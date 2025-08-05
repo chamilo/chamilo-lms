@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -164,7 +166,7 @@ $fileContent = array_map(
 // Generate file
 $fileName = api_get_path(SYS_ARCHIVE_PATH).md5($surveyId.time()).'.txt';
 
-file_put_contents($fileName, $fileContent);
+Container::$container->get(FileHelper::class)->write($fileName, $fileContent);
 
 DocumentManager::file_send_for_download($fileName, true);
 

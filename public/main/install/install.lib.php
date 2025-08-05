@@ -1619,7 +1619,7 @@ function installProfileSettings($installationProfile = '')
         // The php-json extension is not available. Ignore profile.
         return false;
     }
-    $json = file_get_contents($jsonPath);
+    $json = Container::$container->get(\Chamilo\CoreBundle\Helpers\FileHelper::class)->read($jsonPath);
     $params = json_decode($json);
     if (false === $params or null === $params) {
         return false;

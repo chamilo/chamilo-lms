@@ -5,6 +5,8 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 /**
  * Class Diagnoser
@@ -184,7 +186,7 @@ class Diagnoser
             );
         }
 
-        $exists = file_exists(api_get_path(SYS_CODE_PATH).'install');
+        $exists = Container::$container->get(FileHelper::class)->exists(api_get_path(SYS_CODE_PATH).'install');
         $status = $exists ? self::STATUS_WARNING : self::STATUS_OK;
         $array[] = $this->build_setting(
             $status,

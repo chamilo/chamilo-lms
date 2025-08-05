@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -2635,7 +2636,7 @@ class Agenda
             return false;
         }
 
-        $data = file_get_contents($filepath);
+        $data = Container::$container->get(FileHelper::class)->read($filepath);
 
         $trans = [
             'DAILY' => 'daily',

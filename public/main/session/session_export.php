@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 $cidReset = true;
 
@@ -98,18 +100,18 @@ if (isset($_POST['formSent'])) {
                 'Courses',
             ];
         } else {
-            if (!file_exists($archivePath)) {
+            if (!Container::$container->get(FileHelper::class)->exists($archivePath)) {
                 mkdir($archivePath, api_get_permissions_for_new_directories(), true);
             }
 
-            if (!file_exists($archivePath.'index.html')) {
+            if (!Container::$container->get(FileHelper::class)->exists($archivePath.'index.html')) {
                 $fp = fopen($archivePath.'index.html', 'w');
                 fputs($fp, '<html><head></head><body></body></html>');
                 fclose($fp);
             }
 
             $archiveFile = 'export_sessions_'.$session_id.'_'.api_get_local_time().'.'.$file_type;
-            while (file_exists($archivePath.$archiveFile)) {
+            while (Container::$container->get(FileHelper::class)->exists($archivePath.$archiveFile)) {
                 $archiveFile = 'export_users_'.$session_id.'_'.api_get_local_time().'_'.uniqid('').'.'.$file_type;
             }
 

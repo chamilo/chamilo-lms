@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -22,7 +24,7 @@ function removeDir($dir)
     while ($readdir = readdir($opendir)) {
         if ('..' != $readdir && '.' != $readdir) {
             if (is_file($dir.'/'.$readdir)) {
-                if (!@unlink($dir.'/'.$readdir)) {
+                if (!Container::$container->get(FileHelper::class)->delete($dir.'/'.$readdir)) {
                     return false;
                 }
             } elseif (is_dir($dir.'/'.$readdir)) {

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 
 /**
@@ -107,7 +109,7 @@ if (isset($_POST['save_audio'])) {
             $check_file_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$clean_name;
 
             // If the file exists we generate a new name.
-            if (file_exists($check_file_path)) {
+            if (Container::$container->get(FileHelper::class)->exists($check_file_path)) {
                 $filename_components = explode('.', $clean_name);
                 // Gettting the extension of the file.
                 $file_extension = $filename_components[count($filename_components) - 1];

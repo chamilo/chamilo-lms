@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 
@@ -175,7 +177,7 @@ function create_zip()
             if ("." != $file && ".." != $file) {
                 $Diff = (time() - filemtime("$temp_zip_dir/$file")) / 60 / 60; //the "age" of the file in hours
                 if ($Diff > 4) {
-                    unlink("$temp_zip_dir/$file");
+                    Container::$container->get(FileHelper::class)->delete("$temp_zip_dir/$file");
                 }   //delete files older than 4 hours
             }
         }
@@ -196,10 +198,10 @@ function rename_zip($FileZip)
 {
     Event::event_download(('/' == $FileZip['PATH']) ? 'full_export_'.date('Ymd').'.zip (folder)' : basename($FileZip['PATH']).'.zip (folder)');
     $name = ('/' == $FileZip['PATH']) ? 'full_export_'.date('Ymd').'.zip' : basename($FileZip['PATH']).'.zip';
-    if (file_exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)) {
-        unlink($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name);
+    if (Container::$container->get(FileHelper::class)->exists($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name)) {
+        Container::$container->get(FileHelper::class)->delete($FileZip['PATH_TEMP_ARCHIVE'].'/'.$name);
     }
-    if (file_exists($FileZip['TEMP_FILE_ZIP'])) {
+    if (Container::$container->get(FileHelper::class)->exists($FileZip['TEMP_FILE_ZIP'])) {
         rename(
             $FileZip['TEMP_FILE_ZIP'],
             $FileZip['PATH_TEMP_ARCHIVE'].'/'.$name

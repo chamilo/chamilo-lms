@@ -4,7 +4,10 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file.
@@ -423,8 +426,8 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
  */
 function parse_xml_data($file)
 {
-    $crawler = new \Symfony\Component\DomCrawler\Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler = new Crawler();
+    $crawler->addXmlContent(Container::$container->get(FileHelper::class)->read($file));
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {

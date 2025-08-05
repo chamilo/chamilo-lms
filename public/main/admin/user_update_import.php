@@ -7,6 +7,8 @@
  */
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
@@ -247,7 +249,7 @@ function parse_csv_data($file)
 function parse_xml_data($file)
 {
     $crawler = new Crawler();
-    $crawler->addXmlContent(file_get_contents($file));
+    $crawler->addXmlContent(Container::$container->get(FileHelper::class)->read($file));
     $crawler = $crawler->filter('Contacts > Contact ');
     $array = [];
     foreach ($crawler as $domElement) {

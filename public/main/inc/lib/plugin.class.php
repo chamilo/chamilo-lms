@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
@@ -193,7 +194,7 @@ class Plugin
             return '';
         }
         $css = [];
-        $css[] = file_get_contents($path);
+        $css[] = Container::$container->get(FileHelper::class)->read($path);
         $result = implode($css);
 
         return $result;
@@ -978,11 +979,11 @@ class Plugin
         $sysPath = api_get_path(SYS_PLUGIN_PATH).$name;
         $webPath = api_get_path(WEB_PLUGIN_PATH).$name;
 
-        if (file_exists("$sysPath/admin.php")) {
+        if (Container::$container->get(FileHelper::class)->exists("$sysPath/admin.php")) {
             return "$webPath/admin.php";
         }
 
-        if (file_exists("$sysPath/start.php")) {
+        if (Container::$container->get(FileHelper::class)->exists("$sysPath/start.php")) {
             return "$webPath/start.php";
         }
 

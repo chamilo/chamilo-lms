@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin;
 
@@ -35,8 +36,8 @@ switch ($action) {
         $html = '';
         if (!empty($pluginInfo)) {
             $file = api_get_path(SYS_PLUGIN_PATH).$plugin.'/README.md';
-            if (file_exists($file)) {
-                $content = file_get_contents($file);
+            if (Container::$container->get(FileHelper::class)->exists($file)) {
+                $content = Container::$container->get(FileHelper::class)->read($file);
                 $html = MarkdownExtra::defaultTransform($content);
             }
         }

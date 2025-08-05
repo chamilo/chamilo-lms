@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
 use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
@@ -595,7 +597,7 @@ class ImsLtiPlugin extends Plugin
     {
         $publicKey = '';
         if (!empty($tool->getJwksUrl())) {
-            $publicKeySet = json_decode(file_get_contents($tool->getJwksUrl()), true);
+            $publicKeySet = json_decode(Container::$container->get(FileHelper::class)->read($tool->getJwksUrl()), true);
             $pk = [];
             foreach ($publicKeySet['keys'] as $key) {
                 $pk = openssl_pkey_get_details(
@@ -715,7 +717,7 @@ class ImsLtiPlugin extends Plugin
      */
     private function getRequestXmlElement()
     {
-        $request = file_get_contents("php://input");
+        $request = Container::$container->get(FileHelper::class)->read("php://input");
 
         if (empty($request)) {
             return null;

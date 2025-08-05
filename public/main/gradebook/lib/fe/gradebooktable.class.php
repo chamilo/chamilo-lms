@@ -4,6 +4,8 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
@@ -1124,7 +1126,7 @@ class GradebookTable extends SortableTable
 
             // Define a path to store the generated image file
             $cachePath = api_get_path(SYS_ARCHIVE_PATH).'chart/';
-            if (!file_exists($cachePath)) {
+            if (!Container::$container->get(FileHelper::class)->exists($cachePath)) {
                 mkdir($cachePath, 0755, true);
             }
             if (!is_writable($cachePath)) {
@@ -1140,8 +1142,8 @@ class GradebookTable extends SortableTable
             $myCache->saveFromCache($chartHash, $imgSysPath);
 
             // Read the image and encode it as base64 to embed directly into HTML
-            if (file_exists($imgSysPath)) {
-                $base64 = base64_encode(file_get_contents($imgSysPath));
+            if (Container::$container->get(FileHelper::class)->exists($imgSysPath)) {
+                $base64 = base64_encode(Container::$container->get(FileHelper::class)->read($imgSysPath));
 
                 return '<br /><div id="contentArea" style="text-align: center;">
                         <img src="data:image/png;base64,'.$base64.'" />

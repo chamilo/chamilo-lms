@@ -3,6 +3,10 @@
 /**
  * Responses to AJAX calls for course chat.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
+
 require_once __DIR__.'/../global.inc.php';
 
 if (!api_protect_course_script(false)) {
@@ -32,7 +36,7 @@ switch ($_REQUEST['action']) {
 
         $friend = isset($_REQUEST['friend']) ? (int) $_REQUEST['friend'] : 0;
         $filePath = $courseChatUtils->getFileName(true, $friend);
-        $newFileSize = file_exists($filePath) ? filesize($filePath) : 0;
+        $newFileSize = Container::$container->get(FileHelper::class)->exists($filePath) ? filesize($filePath) : 0;
         $oldFileSize = isset($_GET['size']) ? (int) $_GET['size'] : -1;
         $newUsersOnline = $courseChatUtils->countUsersOnline();
         $oldUsersOnline = isset($_GET['users_online']) ? (int) $_GET['users_online'] : 0;
@@ -40,7 +44,7 @@ switch ($_REQUEST['action']) {
         $json = [
             'status' => true,
             'data' => [
-                'oldFileSize' => file_exists($filePath) ? filesize($filePath) : 0,
+                'oldFileSize' => Container::$container->get(FileHelper::class)->exists($filePath) ? filesize($filePath) : 0,
                 'history' => $newFileSize !== $oldFileSize ? $courseChatUtils->readMessages(false, $friend) : null,
                 'usersOnline' => $newUsersOnline,
                 'userList' => $newUsersOnline != $oldUsersOnline ? $courseChatUtils->listUsersOnline() : null,

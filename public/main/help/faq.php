@@ -6,6 +6,8 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
@@ -29,7 +31,7 @@ if (!empty($_GET['edit']) && 'true' == $_GET['edit'] && api_is_platform_admin())
         ['ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300']
     );
     $form->addButtonSave(get_lang('Validate'), 'faq_submit');
-    $faq_content = @(string) file_get_contents(api_get_path(SYS_APP_PATH).'home/faq.html');
+    $faq_content = (string) Container::$container->get(FileHelper::class)->read(api_get_path(SYS_APP_PATH).'home/faq.html');
     $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
     $form->setDefaults(['faq_content' => $faq_content]);
     if ($form->validate()) {
@@ -47,7 +49,7 @@ if (!empty($_GET['edit']) && 'true' == $_GET['edit'] && api_is_platform_admin())
         $form->display();
     }
 } else {
-    $faq_content = @(string) file_get_contents(api_get_path(SYS_APP_PATH).'home/'.$faq_file);
+    $faq_content = (string) Container::$container->get(FileHelper::class)->read(api_get_path(SYS_APP_PATH).'home/'.$faq_file);
     $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
     echo $faq_content;
 }

@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Doctrine\Common\Collections\Criteria;
 
 require_once '../../main/inc/global.inc.php';
@@ -170,9 +171,7 @@ try {
     $fileName = api_replace_dangerous_char($fileName).'.txt';
     $fileData[] = null;
 
-    file_put_contents(
-        api_get_path(SYS_ARCHIVE_PATH).$fileName,
-        implode("\r\n", $fileData)
+    Container::$container->get(FileHelper::class)->write(api_get_path(SYS_ARCHIVE_PATH).$fileName, implode("\r\n", $fileData)
     );
 
     echo Display::toolbarButton(

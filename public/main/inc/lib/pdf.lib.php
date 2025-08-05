@@ -3,6 +3,7 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
@@ -219,7 +220,7 @@ class PDF
         }
 
         if (!is_array($htmlFileArray)) {
-            if (!file_exists($htmlFileArray)) {
+            if (!Container::$container->get(FileHelper::class)->exists($htmlFileArray)) {
                 return false;
             }
             // Converting the string into an array
@@ -279,14 +280,14 @@ class PDF
                 continue;
             }
 
-            if (!file_exists($filePath)) {
+            if (!Container::$container->get(FileHelper::class)->exists($filePath)) {
                 $counter++;
                 continue;
             }
 
             if ($addStyle) {
                 $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-                $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+                $css = Container::$container->get(FileHelper::class)->exists($css_file) ? Container::$container->get(FileHelper::class)->read($css_file) : '';
                 $this->pdf->WriteHTML($css, 1);
             }
 
@@ -304,7 +305,7 @@ class PDF
 
                 $webPath = api_get_path(WEB_PATH);
 
-                $documentHtml = @file_get_contents($filePath);
+                $documentHtml = Container::$container->get(FileHelper::class)->read($filePath);
                 $documentHtml = preg_replace($clean_search, '', $documentHtml);
 
                 $crawler = new Crawler($documentHtml);
@@ -551,13 +552,13 @@ class PDF
             $course_info = api_get_course_info($courseCode);
             // course path
             $store_path = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
-            if (file_exists($store_path)) {
+            if (Container::$container->get(FileHelper::class)->exists($store_path)) {
                 $web_path = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/'.$urlId.'_pdf_watermark.png';
             }
         } else {
             // course path
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
-            if (file_exists($store_path)) {
+            if (Container::$container->get(FileHelper::class)->exists($store_path)) {
                 $web_path = api_get_path(WEB_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
             }
         }
@@ -584,8 +585,8 @@ class PDF
             // course path
             $store_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/'.$urlId.'_pdf_watermark.png';
         }
-        if (file_exists($store_path)) {
-            unlink($store_path);
+        if (Container::$container->get(FileHelper::class)->exists($store_path)) {
+            Container::$container->get(FileHelper::class)->delete($store_path);
 
             return true;
         }
@@ -615,8 +616,8 @@ class PDF
         }
         $course_image = $store_path.'/'.$urlId.'_pdf_watermark.png';
 
-        if (file_exists($course_image)) {
-            @unlink($course_image);
+        if (Container::$container->get(FileHelper::class)->exists($course_image)) {
+            Container::$container->get(FileHelper::class)->delete($course_image);
         }
         $my_image = new Image($source_file);
         $result = $my_image->send_image($course_image, -1, 'png');
@@ -885,7 +886,7 @@ class PDF
 
         $urlWebLetterhead = '#FFFFFF';
         $fullPage = false;
-        if (file_exists($urlPathLetterhead)) {
+        if (Container::$container->get(FileHelper::class)->exists($urlPathLetterhead)) {
             $fullPage = true;
             $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
         }
@@ -947,7 +948,7 @@ class PDF
             }
 
             // It's a reference to a file in the system, do not change it
-            if (file_exists($src)) {
+            if (Container::$container->get(FileHelper::class)->exists($src)) {
                 continue;
             }
 
@@ -988,7 +989,7 @@ class PDF
 
                 // Try with the dirname if exists
                 if ($oldSrcFixed == $src) {
-                    if (file_exists($dirName.'/'.$src)) {
+                    if (Container::$container->get(FileHelper::class)->exists($dirName.'/'.$src)) {
                         $documentPath = '';
                         $oldSrcFixed = $dirName.'/'.$src;
                     }
@@ -998,7 +999,7 @@ class PDF
                     $oldSrcFixed = str_replace('courses/'.$courseInfo['path'].'/document/', '', $src);
                 } else {
                     // Try with the dirname if exists
-                    if (file_exists($dirName.'/'.$src)) {
+                    if (Container::$container->get(FileHelper::class)->exists($dirName.'/'.$src)) {
                         $documentPath = '';
                         $oldSrcFixed = $dirName.'/'.$src;
                     } else {

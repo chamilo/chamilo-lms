@@ -2,6 +2,8 @@
 
 /* See license terms in /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Sonata\Exporter\Handler;
@@ -77,7 +79,7 @@ class Export
 
         if (!$writeOnly) {
             DocumentManager::file_send_for_download($file, true, $filename . '.csv');
-            unlink($file);
+            Container::$container->get(FileHelper::class)->delete($file);
             exit;
         }
 

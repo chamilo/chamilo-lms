@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\FileHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
@@ -172,7 +174,7 @@ if (isset($_POST) && $is_error) {
             $entity = $oScorm->getEntity();
             $manifest = $oScorm->import_local_package($s, $current_dir);
             // The file was treated, it can now be cleaned from the temp dir
-            unlink($s);
+            Container::$container->get(FileHelper::class)->delete($s);
             if (!empty($manifest)) {
                 $oScorm->parse_manifest();
                 $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
@@ -201,7 +203,7 @@ if (isset($_POST) && $is_error) {
             $entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
             // The file was treated, it can now be cleaned from the temp dir
-            unlink($s);
+            Container::$container->get(FileHelper::class)->delete($s);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
@@ -228,7 +230,7 @@ if (isset($_POST) && $is_error) {
         default:
             // There was an error, clean the file from the temp dir
             if (is_file($s)) {
-                unlink($s);
+                Container::$container->get(FileHelper::class)->delete($s);
             }
             Display::addFlash(
                 Display::return_message(get_lang('Unknown package format'), 'warning')

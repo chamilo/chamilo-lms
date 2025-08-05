@@ -240,7 +240,7 @@ class SendEventRemindersCommand extends Command
         $details[] = \sprintf('<p><strong>%s</strong></p>', $event->getTitle());
 
         if ($event->isAllDay()) {
-            $details[] = \sprintf('<p class="small">%s</p>', $this->translator->trans('All Day'));
+            $details[] = \sprintf('<p class="small">%s</p>', $this->translator->trans('All day'));
         } else {
             $details[] = \sprintf(
                 '<p class="small">%s</p>',

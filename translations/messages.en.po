@@ -28636,3 +28636,18 @@ msgstr "New instance of recurring session created"
 
 msgid "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"
 msgstr "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"
+
+msgid "This course is locked. You must complete the prerequisite(s) first."
+msgstr "This course is locked. You must complete the prerequisite(s) first."
+
+msgid "The resource doesn't exist."
+msgstr "The resource doesn't exist."
+
+msgid "The resource doesn't have a node."
+msgstr "The resource doesn't have a node."
+
+msgid "No terms and conditions available for this language."
+msgstr "No terms and conditions available for this language."
+
+msgid "Client"
+msgstr "Client"

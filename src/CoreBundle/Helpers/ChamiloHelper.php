@@ -591,7 +591,7 @@ class ChamiloHelper
 
             foreach ($bossIds as $bossId) {
                 $subject = \sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
-                $content = \sprintf(get_lang('User %s signed the agreement on %s.'), $current['complete_name'], $dateStr);
+                $content = \sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
                 MessageManager::send_message_simple($bossId, $subject, $content, $userId);
             }
         }
@@ -653,7 +653,7 @@ class ChamiloHelper
                 echo '</label>';
             }
 
-            echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">'.get_lang('Accept terms and conditions').'</button></div>';
+            echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">'.get_lang('Accept Terms and Conditions').'</button></div>';
             echo '</form>';
             echo '</div>';
         } else {

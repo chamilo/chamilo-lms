@@ -156,25 +156,23 @@ watch(
 watch(
   () => props.receiversTo,
   (newReceiversTo) => {
-    usersTo.value.push(
-      ...newReceiversTo.map((messageRelUser) => ({
-        name: messageRelUser.fullName,
-        value: messageRelUser["@id"],
-      })),
-    )
+    usersTo.value = newReceiversTo.map((messageRelUser) => ({
+      name: messageRelUser.fullName,
+      value: messageRelUser["@id"],
+    }))
   },
+  { immediate: true },
 )
 
 watch(
   () => props.receiversCc,
   (newReceiversCc) => {
-    usersTo.value.push(
-      ...newReceiversCc.map((messageRelUser) => ({
-        name: messageRelUser.fullName,
-        value: messageRelUser["@id"],
-      })),
-    )
+    usersCc.value = newReceiversCc.map((messageRelUser) => ({
+      name: messageRelUser.fullName,
+      value: messageRelUser["@id"],
+    }))
   },
+  { immediate: true },
 )
 
 async function asyncFind(query) {

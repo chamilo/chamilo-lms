@@ -28618,7 +28618,7 @@ msgid "No terms and conditions available for this language."
 msgstr ""
 
 msgid "Client"
-msgstr "Client"
+msgstr ""
 
 msgid "Hide advanced settings"
 msgstr ""
@@ -28729,7 +28729,7 @@ msgid "Your account has not been activated."
 msgstr ""
 
 msgid "Third parties (GDPR)"
-msgstr "Third parties (GDPR)"
+msgstr ""
 
 msgid "Resources by type"
 msgstr ""
@@ -28765,4 +28765,121 @@ msgid "Sum of hours in subscribed sessions"
 msgstr ""
 
 msgid "Count of available hours"
+msgstr ""
+
+msgid "Go to the session"
+msgstr ""
+
+msgid "Duration (minutes)"
+msgstr ""
+
+msgid "Gradebook options"
+msgstr ""
+
+msgid "Qualify attendance gradebook"
+msgstr ""
+
+msgid "Select gradebook option"
+msgstr ""
+
+msgid "Gradebook column title"
+msgstr ""
+
+msgid "Grade weight"
+msgstr ""
+
+msgid "No invitations or records found"
+msgstr ""
+
+msgid "Accept invitation"
+msgstr ""
+
+msgid "Reject invitation"
+msgstr ""
+
+msgid "Friend added successfully"
+msgstr ""
+
+msgid "Friend request rejected"
+msgstr ""
+
+msgid "We could not retrieve the themes"
+msgstr ""
+
+msgid "Theme title"
+msgstr ""
+
+msgid "A file name is required to save the recorded audio"
+msgstr ""
+
+msgid "We are sorry, your browser does not support using a microphone"
+msgstr ""
+
+msgid "Results for"
+msgstr ""
+
+msgid "Search groups"
+msgstr ""
+
+msgid "Pending group invitations"
+msgstr ""
+
+msgid "Delete skill profile"
+msgstr ""
+
+msgid "Skill profile deleted"
+msgstr ""
+
+msgid "Skill profiles"
+msgstr ""
+
+msgid "No skill profile"
+msgstr ""
+
+msgid "Original assignment"
+msgstr ""
+
+msgid "Student's submission"
+msgstr ""
+
+msgid "Write your comment..."
+msgstr ""
+
+msgid "Not graded yet"
+msgstr ""
+
+msgid "Attach file (optional)"
+msgstr ""
+
+msgid "Please add a comment, a grade or a file"
+msgstr ""
+
+msgid "Score updated successfully"
+msgstr ""
+
+msgid "Comment added successfully"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+msgstr ""
+
+msgid "Are you sure you want to delete the selected items?"
+msgstr ""
+
+msgid "Assignments deleted"
+msgstr ""
+
+msgid "Failed to download package"
+msgstr ""
+
+msgid "Failed to upload corrections"
+msgstr ""
+
+msgid "Edit submission"
+msgstr ""
+
+msgid "Submission updated!"
 msgstr ""

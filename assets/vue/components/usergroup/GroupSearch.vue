@@ -83,7 +83,7 @@ const { user, loadGroup, groupInfo, isLoading } = useSocialInfo()
 const groups = ref([])
 
 const headerTitle = computed(() => {
-  return query.value ? `${t("Results for")} "${query.value}"` : t("Search Groups")
+  return query.value ? `${t("Results for")} "${query.value}"` : t("Search groups")
 })
 
 const handleFormSearch = async () => {

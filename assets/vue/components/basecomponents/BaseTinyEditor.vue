@@ -1,6 +1,12 @@
 <template>
   <div class="field">
-    <FloatLabel>
+    <FloatLabel
+      variant="on"
+      :class="{
+        'input-has-content': modelValue.trim().length > 0,
+        'input-has-focus': isFocused
+      }"
+    >
       <TinyEditor
         :id="editorId"
         v-model="modelValue"
@@ -10,8 +16,7 @@
       <label
         v-if="title"
         :for="editorId"
-        v-text="title"
-      />
+      >{{ title }}</label>
     </FloatLabel>
     <small
       v-if="helpText"
@@ -70,6 +75,7 @@ const props = defineProps({
   },
 })
 
+const isFocused = ref(false)
 const router = useRouter()
 const route = useRoute()
 const parentResourceNodeId = ref(0)
@@ -215,6 +221,12 @@ const editorConfig = computed(() => ({
   ...props.editorConfig,
   file_picker_callback: filePickerCallback,
   setup(editor) {
+    editor.on("focus", () => {
+      isFocused.value = true
+    })
+    editor.on("blur", () => {
+      isFocused.value = false
+    })
     editor.on("GetContent", (e) => {
       if (!e.content.includes("tiny-content")) {
         e.content = `<div class="tiny-content">${e.content}</div>`
@@ -268,3 +280,12 @@ function getUrlForTinyEditor() {
   }).href
 }
 </script>
+<style scoped>
+.input-has-content label,
+.input-has-focus label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-1rem);
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+}
+</style>

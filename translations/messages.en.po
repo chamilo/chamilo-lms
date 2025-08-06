@@ -28798,3 +28798,120 @@ msgstr "Sum of hours in subscribed sessions"
 
 msgid "Count of available hours"
 msgstr "Count of available hours"
+
+msgid "Go to the session"
+msgstr "Go to the session"
+
+msgid "Duration (minutes)"
+msgstr "Duration (minutes)"
+
+msgid "Gradebook options"
+msgstr "Gradebook options"
+
+msgid "Qualify attendance gradebook"
+msgstr "Qualify attendance gradebook"
+
+msgid "Select gradebook option"
+msgstr "Select gradebook option"
+
+msgid "Gradebook column title"
+msgstr "Gradebook column title"
+
+msgid "Grade weight"
+msgstr "Grade weight"
+
+msgid "No invitations or records found"
+msgstr "No invitations or records found"
+
+msgid "Accept invitation"
+msgstr "Accept invitation"
+
+msgid "Reject invitation"
+msgstr "Reject invitation"
+
+msgid "Friend added successfully"
+msgstr "Friend added successfully"
+
+msgid "Friend request rejected"
+msgstr "Friend request rejected"
+
+msgid "We could not retrieve the themes"
+msgstr "We could not retrieve the themes"
+
+msgid "Theme title"
+msgstr "Theme title"
+
+msgid "A file name is required to save the recorded audio"
+msgstr "A file name is required to save the recorded audio"
+
+msgid "We are sorry, your browser does not support using a microphone"
+msgstr "We are sorry, your browser does not support using a microphone"
+
+msgid "Results for"
+msgstr "Results for"
+
+msgid "Search groups"
+msgstr "Search groups"
+
+msgid "Pending group invitations"
+msgstr "Pending group invitations"
+
+msgid "Delete skill profile"
+msgstr "Delete skill profile"
+
+msgid "Skill profile deleted"
+msgstr "Skill profile deleted"
+
+msgid "Skill profiles"
+msgstr "Skill profiles"
+
+msgid "No skill profile"
+msgstr "No skill profile"
+
+msgid "Original assignment"
+msgstr "Original assignment"
+
+msgid "Student's submission"
+msgstr "Student's submission"
+
+msgid "Write your comment..."
+msgstr "Write your comment..."
+
+msgid "Not graded yet"
+msgstr "Not graded yet"
+
+msgid "Attach file (optional)"
+msgstr "Attach file (optional)"
+
+msgid "Please add a comment, a grade or a file"
+msgstr "Please add a comment, a grade or a file"
+
+msgid "Score updated successfully"
+msgstr "Score updated successfully"
+
+msgid "Comment added successfully"
+msgstr "Comment added successfully"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+msgstr "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+
+msgid "Are you sure you want to delete the selected items?"
+msgstr "Are you sure you want to delete the selected items?"
+
+msgid "Assignments deleted"
+msgstr "Assignments deleted"
+
+msgid "Failed to download package"
+msgstr "Failed to download package"
+
+msgid "Failed to upload corrections"
+msgstr "Failed to upload corrections"
+
+msgid "Edit submission"
+msgstr "Edit submission"
+
+msgid "Submission updated!"
+msgstr "Submission updated!"

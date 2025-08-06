@@ -98,7 +98,7 @@ export default {
       const errors = []
       if (!this.$v.item.title.$dirty) return errors
       has(this.violations, "title") && errors.push(this.violations.title)
-      !this.$v.item.title.required && errors.push(this.$t("Field is required"))
+      !this.$v.item.title.required && errors.push(this.$t("Required field"))
 
       return errors
     },

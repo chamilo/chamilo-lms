@@ -106,7 +106,7 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('Translation saved'), 'success')
+        Display::return_message(get_lang('Translation saved.'), 'success')
     );
 
     header("Location: $translateUrl");

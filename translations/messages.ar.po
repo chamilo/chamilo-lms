@@ -21304,7 +21304,7 @@ msgstr "ادارة التشخيص"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "يجب عليك اولا ملأ الحساب لكي يتم تفعيل التحقق من الاحكام والشروط"
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "التشخيص"
 
 msgid "Allow show the user Skype account"

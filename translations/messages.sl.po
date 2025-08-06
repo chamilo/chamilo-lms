@@ -21305,7 +21305,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Profil mora biti ustrezno popolnjen za omogočitev validacije pogojev rabe"
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "Diagnostika"
 
 msgid "Allow show the user Skype account"

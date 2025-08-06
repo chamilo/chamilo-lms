@@ -19464,7 +19464,7 @@ msgid "User certificates can be view by unregistered users."
 msgstr "User certificates can be view by unregistered users."
 
 msgid "Don't forget to select the media files if your resource need it"
-msgstr "Don't forget to select the media files if your resource need it"
+msgstr "Don't forget to select the media files if your resource needs it"
 
 msgid "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
 msgstr "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
@@ -21299,8 +21299,8 @@ msgstr "Diagnosis management"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "You must first fill your profile to enable the terms and conditions validation."
 
-msgid "Diagnostic"
-msgstr "Diagnostic"
+msgid "Diagnosis"
+msgstr "Diagnosis"
 
 msgid "Allow show the user Skype account"
 msgstr "Allow show the user Skype account"
@@ -28783,3 +28783,18 @@ msgstr "Hello %s,<br><br>You are registered on %s.<br>You can access your accoun
 
 msgid "You are registered on %s"
 msgstr "You are registered on %s"
+
+msgid "Learning path categories"
+msgstr "Learning path categories"
+
+msgid "Translation saved."
+msgstr "Translation saved."
+
+msgid "Total available hours"
+msgstr "Total available hours"
+
+msgid "Sum of hours in subscribed sessions"
+msgstr "Sum of hours in subscribed sessions"
+
+msgid "Count of available hours"
+msgstr "Count of available hours"

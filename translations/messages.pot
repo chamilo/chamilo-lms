@@ -21280,7 +21280,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -28750,4 +28750,19 @@ msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account
 msgstr ""
 
 msgid "You are registered on %s"
+msgstr ""
+
+msgid "Learning path categories"
+msgstr ""
+
+msgid "Translation saved."
+msgstr ""
+
+msgid "Total available hours"
+msgstr ""
+
+msgid "Sum of hours in subscribed sessions"
+msgstr ""
+
+msgid "Count of available hours"
 msgstr ""

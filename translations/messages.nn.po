@@ -21291,7 +21291,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

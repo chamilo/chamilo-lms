@@ -21304,7 +21304,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Ha de completar el seu perfil per accedir a la validació del contracte."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

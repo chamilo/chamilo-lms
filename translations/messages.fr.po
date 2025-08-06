@@ -21929,8 +21929,8 @@ msgstr "Gestion des diagnostics"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Vous devez d'abord compléter votre profil pour activer la validation de l'accord légal."
 
-msgid "Diagnostic"
-msgstr "Diagnostique"
+msgid "Diagnosis"
+msgstr "Diagnostic"
 
 msgid "Allow show the user Skype account"
 msgstr "Permettre l'affichage du compte Skype de l'utilisateur"

@@ -21813,7 +21813,7 @@ msgstr ""
 "U moet eerst uw profiel invullen om de validatie van de algemene voorwaarden "
 "mogelijk te maken."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "Diagnostisch"
 
 msgid "Allow show the user Skype account"

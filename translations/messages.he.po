@@ -21304,7 +21304,7 @@ msgstr "ניהול אבחון"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "תחילה עליך למלא את הפרופיל שלך כדי לאפשר את אימות התנאים וההגבלות."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "אבחון"
 
 msgid "Allow show the user Skype account"

@@ -798,7 +798,7 @@ if ($form->validate()) {
             $em->persist($saved);
             $em->flush();
         }
-        Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Saved.'), 'success'));
         header('Location: '.api_get_self().'?user_id='.$userToLoad);
         exit;
     }
@@ -1284,9 +1284,9 @@ if ($numHours < 0) {
     $numHours = 0;
 }
 $headers = [
-    get_lang('Total Available Hours') => $total,
-    get_lang('Sum Hours Sessions Subscribed') => $sumHours,
-    get_lang('Count Hours Available') => $numHours,
+    get_lang('Total available hours') => $total,
+    get_lang('Sum of hours in subscribed sessions') => $sumHours,
+    get_lang('Count of available hours') => $numHours,
 ];
 foreach ($headers as $header => $value) {
     $table->setCellContents($row, 0, $header);

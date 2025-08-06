@@ -32,16 +32,13 @@
           </span>
         </template>
       </AutoComplete>
-      <label
-        v-t="Label"
-        :for="id"
-      />
+      <label :for="id">
+        {{ label }}
+      </label>
     </FloatLabel>
-    <small
-      v-if="isInvalid"
-      v-t="Error message"
-      class="p-error"
-    />
+    <small v-if="isInvalid" class="p-error">
+      {{ t('Error message') }}
+    </small>
   </div>
 </template>
 
@@ -50,6 +47,9 @@ import { onMounted, ref, useSlots } from "vue"
 import FloatLabel from "primevue/floatlabel"
 import AutoComplete from "primevue/autocomplete"
 import BaseIcon from "./BaseIcon.vue"
+import { useI18n } from "vue-i18n"
+
+const { t } = useI18n()
 
 const modelValue = defineModel({
   type: [Array, String],

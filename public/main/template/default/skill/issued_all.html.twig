@@ -25,18 +25,17 @@
                 </div>
 
                 {% if badge.allow_download_export %}
-                    <div class="mt-4 flex justify-center space-x-4">
-                        <p class="text-center">
+                    <div class="mt-4 flex flex-wrap justify-center space-x-4 space-y-4">
+                        <div class="text-center">
                             <a href="{{ badge.personal_badge }}" class="btn btn--primary">
                                 <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                             </a>
-                        </p>
-                        <hr>
-                        <p class="text-center">
+                        </div>
+                        <div class="text-center">
                             <a href="#" class="btn btn--success" id="badge-export-button-{{ badge.issue_info.id }}">
                                 <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                             </a>
-                        </p>
+                        </div>
                     </div>
                     {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
                         <div class="mt-4 text-center">
@@ -127,16 +126,18 @@
                         {% endif %}
                     </div>
                 </div>
-            {% else %}
+            {% elseif badge.issue_info.comments|length > 0 %}
                 <hr class="my-4" />
                 <p class="text-lg font-semibold flex justify-between">
-                    <span>
-                        <em class="fa fa-comment-o fa-fw"></em> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
-                    </span>
-                    <span>
-                        <em class="fa fa-thumbs-o-up fa-fw"></em> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
-                    </span>
-                </p>
+                <span>
+                    <em class="fa fa-comment-o fa-fw"></em>
+                    {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
+                </span>
+                            <span>
+                    <em class="fa fa-thumbs-o-up fa-fw"></em>
+                    {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                </span>
+                        </p>
             {% endif %}
         </div>
     </div>

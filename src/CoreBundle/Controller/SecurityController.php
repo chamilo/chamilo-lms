@@ -54,14 +54,14 @@ class SecurityController extends AbstractController
         TranslatorInterface $translator,
     ): Response {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is "application/json".'));
+            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is <em>application/json</em>.'));
         }
 
         $user = $this->userHelper->getCurrent();
 
         if (User::ACTIVE !== $user->getActive()) {
             if (User::INACTIVE === $user->getActive()) {
-                $message = $translator->trans('Account not activated.');
+                $message = $translator->trans('Your account has not been activated.');
             } else {
                 $message = $translator->trans('Invalid credentials. Please try again or contact support if you continue to experience issues.');
             }

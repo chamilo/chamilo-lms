@@ -28729,3 +28729,57 @@ msgstr "Remove users from URLs with a CSV file"
 
 msgid "Assign users to URLs from CSV"
 msgstr "Assign users to URLs from CSV"
+
+msgid "Template not found."
+msgstr "Template not found."
+
+msgid "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+msgstr "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+
+msgid "An error occurred while creating the course."
+msgstr "An error occurred while creating the course."
+
+msgid "Course created successfully."
+msgstr "Course created successfully."
+
+msgid "Tool not found"
+msgstr "Tool not found"
+
+msgid "Course not found"
+msgstr "Course not found"
+
+msgid "Attendance data and comments saved successfully"
+msgstr "Attendance data and comments saved successfully"
+
+msgid "Your account has expired."
+msgstr "Your account has expired."
+
+msgid "Invalid credentials. Please try again or contact support if you continue to experience issues."
+msgstr "Invalid credentials. Please try again or contact support if you continue to experience issues."
+
+msgid "Your account has not been activated."
+msgstr "Your account has not been activated."
+
+msgid "Third parties (GDPR)"
+msgstr "Third parties (GDPR)"
+
+msgid "Resources by type"
+msgstr "Resources by type"
+
+msgid "File info"
+msgstr "File info"
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "No push notification settings configured."
+msgstr "No push notification settings configured."
+
+msgid "Current user not found."
+msgstr "Current user not found."
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+
+msgid "You are registered on %s"
+msgstr "You are registered on %s"

@@ -115,7 +115,7 @@ class ExportCGlossaryAction
 
         $html = '<h1>'.$translator->trans('Glossary').'</h1>';
         $html .= '<table>';
-        $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Definition').'</th></tr>';
+        $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Term definition').'</th></tr>';
 
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {

@@ -28697,3 +28697,57 @@ msgstr ""
 
 msgid "Assign users to URLs from CSV"
 msgstr ""
+
+msgid "Template not found."
+msgstr ""
+
+msgid "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+msgstr ""
+
+msgid "An error occurred while creating the course."
+msgstr ""
+
+msgid "Course created successfully."
+msgstr ""
+
+msgid "Tool not found"
+msgstr ""
+
+msgid "Course not found"
+msgstr ""
+
+msgid "Attendance data and comments saved successfully"
+msgstr ""
+
+msgid "Your account has expired."
+msgstr ""
+
+msgid "Invalid credentials. Please try again or contact support if you continue to experience issues."
+msgstr ""
+
+msgid "Your account has not been activated."
+msgstr ""
+
+msgid "Third parties (GDPR)"
+msgstr "Third parties (GDPR)"
+
+msgid "Resources by type"
+msgstr ""
+
+msgid "File info"
+msgstr ""
+
+msgid "Page layouts"
+msgstr ""
+
+msgid "No push notification settings configured."
+msgstr ""
+
+msgid "Current user not found."
+msgstr ""
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr ""
+
+msgid "You are registered on %s"
+msgstr ""

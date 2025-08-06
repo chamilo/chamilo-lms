@@ -40,7 +40,7 @@
       </template>
     </Column>
     <Column
-      :header="t('Send date')"
+      :header="t('Sent date')"
       :sortable="true"
       field="sentDate"
     >

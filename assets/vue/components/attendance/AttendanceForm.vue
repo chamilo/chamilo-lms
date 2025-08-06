@@ -24,11 +24,11 @@
       v-model="showAdvancedSettings"
     >
       <div class="flex flex-row mb-4">
-        <label class="font-semibold w-28">{{ t("Gradebook Options") }}:</label>
+        <label class="font-semibold w-28">{{ t("Gradebook options") }}:</label>
         <BaseCheckbox
           id="attendance_qualify_gradebook"
           v-model="formData.qualifyGradebook"
-          :label="t('Qualify Attendance Gradebook')"
+          :label="t('Qualify attendance gradebook')"
           name="attendance_qualify_gradebook"
           @change="toggleGradebookOptions"
         />
@@ -40,18 +40,18 @@
       >
         <BaseSelect
           v-model="formData.gradebookOption"
-          :label="t('Select Gradebook Option')"
+          :label="t('Select gradebook option')"
           :options="gradebookOptions"
         />
 
         <BaseInputText
           v-model="formData.gradebookTitle"
-          :label="t('Gradebook Column Title')"
+          :label="t('Gradebook column title')"
         />
 
         <BaseInputNumber
           v-model="formData.gradeWeight"
-          :label="t('Grade Weight')"
+          :label="t('Grade weight')"
           :min="0"
           :step="0.01"
         />
@@ -67,7 +67,7 @@
         @click="emit('backPressed', route.query)"
       />
       <BaseButton
-        :label="t('Save Attendance')"
+        :label="t('Save')"
         icon="save"
         type="success"
         @click="submitForm"

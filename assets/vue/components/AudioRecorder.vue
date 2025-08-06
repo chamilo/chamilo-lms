@@ -46,7 +46,7 @@
         </audio>
 
         <BaseButton
-          :label="$t('Attach')"
+          :label="$t('Attachment')"
           class="my-1"
           icon="attachment"
           size="small"
@@ -120,7 +120,7 @@ onMounted(() => {
       "Either your browser does not support microphone or your are serving your site from not secure " +
         "context, check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia for more information",
     )
-    microphoneError.value = t("We're sorry, your browser does not support using a microphone")
+    microphoneError.value = t("We are sorry, your browser does not support using a microphone")
   }
 })
 
@@ -153,7 +153,7 @@ async function record() {
         "Permission to use the microphone is not enabled, please enable it in your browser to record audio",
       )
     } else {
-      microphoneError.value = t("We're sorry, your browser does not support using a microphone")
+      microphoneError.value = t("We are sorry, your browser does not support using a microphone")
     }
   }
 }

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\UserCreatedEvent;
 use Chamilo\CoreBundle\Event\UserUpdatedEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
@@ -548,12 +549,21 @@ class UserManager
                     $form->removeElement('pass2');
                     $formData = $form->returnForm();
                     $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
+
+                    /** @var LanguageRepository $langRepo */
+                    $langRepo = Container::$container->get(LanguageRepository::class);
+                    $languageEntity = $langRepo->findOneBy(['isocode' => $user->getLocale()]);
+
+                    $userLanguageName = $languageEntity
+                        ? $languageEntity->getOriginalName()
+                        : $user->getLocale();
+
                     $params = [
-                        'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
-                        'user_added' => $user,
-                        'link' => Display::url($url, $url),
-                        'form' => $formData,
-                        'user_language' => $user->getLocale(),
+                        'complete_name'   => stripslashes(api_get_person_name($firstName, $lastName)),
+                        'user_added'      => $user,
+                        'link'            => Display::url($url, $url),
+                        'form'            => $formData,
+                        'user_language'   => $userLanguageName,
                     ];
                     $emailBody = $tpl->render(
                         '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',

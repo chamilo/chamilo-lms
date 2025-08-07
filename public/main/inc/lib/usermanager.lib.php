@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This library provides functions for user management.
@@ -535,59 +536,64 @@ class UserManager
                     }
                 }
 
+                /** @var TranslatorInterface $translator */
+                $translator = Container::$container->get('translator');
+                $currentTranslatorLang = $translator->getLocale();
+
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();
-                    // variables for the default template
-                    $renderer = FormValidator::getDefaultRenderer();
-                    // Form template
-                    $elementTemplate = ' {label}: {element} <br />';
-                    $renderer->setElementTemplate($elementTemplate);
-                    /** @var FormValidator $form */
-                    $form->freeze(null, $elementTemplate);
-                    $form->removeElement('submit');
-                    $form->removeElement('pass1');
-                    $form->removeElement('pass2');
-                    $formData = $form->returnForm();
-                    $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
+                    foreach ($adminList as $adminId => $adminData) {
+                        $adminLocale = $adminData['locale'];
+                        $translator->setLocale($adminLocale);
+                        $renderer = FormValidator::getDefaultRenderer();
+                        $elementTemplate = ' {label}: {element} <br />';
+                        $renderer->setElementTemplate($elementTemplate);
 
-                    /** @var LanguageRepository $langRepo */
-                    $langRepo = Container::$container->get(LanguageRepository::class);
-                    $languageEntity = $langRepo->findOneBy(['isocode' => $user->getLocale()]);
+                        $form->freeze(null, $elementTemplate);
+                        $form->removeElement('submit');
+                        $form->removeElement('pass1');
+                        $form->removeElement('pass2');
 
-                    $userLanguageName = $languageEntity
-                        ? $languageEntity->getOriginalName()
-                        : $user->getLocale();
+                        foreach ($form->_elements as $element) {
+                            $origLabel = $element->getLabel();
+                            $element->setLabel( get_lang($origLabel, $adminLocale) );
+                        }
 
-                    $params = [
-                        'complete_name'   => stripslashes(api_get_person_name($firstName, $lastName)),
-                        'user_added'      => $user,
-                        'link'            => Display::url($url, $url),
-                        'form'            => $formData,
-                        'user_language'   => $userLanguageName,
-                    ];
-                    $emailBody = $tpl->render(
-                        '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
-                        $params
-                    );
+                        $formData = $form->returnForm();
 
-                    if (!empty($emailBodyTemplate) &&
-                        isset($emailTemplate['content_registration_platform_to_admin.tpl']) &&
-                        !empty($emailTemplate['content_registration_platform_to_admin.tpl'])
-                    ) {
-                        $emailBody = $mailTemplateManager->parseTemplate(
-                            $emailTemplate['content_registration_platform_to_admin.tpl'],
-                            $userInfo
+                        /** @var LanguageRepository $langRepo */
+                        $langRepo = Container::$container->get(LanguageRepository::class);
+                        $languageEntity = $langRepo->findOneBy(['isocode' => $user->getLocale()]);
+                        $userLanguageName = $languageEntity
+                            ? $languageEntity->getOriginalName()
+                            : $user->getLocale();
+
+                        $url = api_get_path(WEB_CODE_PATH)
+                            . 'admin/user_information.php?user_id=' . $user->getId();
+
+                        $params = [
+                            'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
+                            'user_added'    => $user,
+                            'link'          => Display::url($url, $url),
+                            'form'          => $formData,
+                            'user_language' => $userLanguageName,
+                        ];
+
+                        $emailBody = $tpl->render(
+                            '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
+                            $params
                         );
-                    }
 
-                    $subject = get_lang('The user has been added');
-                    foreach ($adminList as $adminId => $data) {
+                        $subject = get_lang('The user has been added', $adminLocale);
+
                         MessageManager::send_message_simple(
                             $adminId,
                             $subject,
                             $emailBody,
                             $userId
                         );
+
+                        $translator->setLocale($currentTranslatorLang);
                     }
                 }
             }
@@ -3807,7 +3813,7 @@ class UserManager
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if (api_get_multiple_access_url()) {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
                     FROM $tbl_url_rel_user as url
                     INNER JOIN $table_admin as admin
                     ON (admin.user_id=url.user_id)
@@ -3815,7 +3821,7 @@ class UserManager
                     ON (u.id=admin.user_id)
                     WHERE access_url_id ='".$access_url_id."'";
         } else {
-            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active
+            $sql = "SELECT admin.user_id, username, firstname, lastname, email, active, locale
                     FROM $table_admin as admin
                     INNER JOIN $table_user u
                     ON (u.id=admin.user_id)";

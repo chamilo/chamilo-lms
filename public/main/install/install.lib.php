@@ -498,7 +498,7 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => gsprintf(get_lang('%s support'), 'Zlib'),
+        'title' => sprintf(get_lang('%s support'), 'Zlib'),
         'url' => 'https://php.net/manual/en/book.zlib.php',
         'status' => checkExtension(
             'zlib',

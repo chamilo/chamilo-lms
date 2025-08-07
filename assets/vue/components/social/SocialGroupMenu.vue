@@ -2,7 +2,7 @@
   <BaseCard class="social-side-menu mt-4">
     <template #header>
       <div class="px-4 py-2 -mb-2 bg-gray-15">
-        <h2 class="text-h5">{{ t("Social Group") }}</h2>
+        <h2 class="text-h5">{{ t("Social group") }}</h2>
       </div>
     </template>
     <hr class="-mt-2 mb-4 -mx-4" />

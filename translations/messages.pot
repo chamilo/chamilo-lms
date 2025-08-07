@@ -29054,3 +29054,87 @@ msgstr ""
 
 msgid "Already answered"
 msgstr ""
+
+msgid "You have left the group successfully"
+msgstr ""
+
+msgid "Your skill ranking"
+msgstr ""
+
+msgid "The comment is required"
+msgstr ""
+
+msgid "All messages here are automatically marked as promoted."
+msgstr ""
+
+msgid "Item 1"
+msgstr ""
+
+msgid "Item 2"
+msgstr ""
+
+msgid "Item 3"
+msgstr ""
+
+msgid "Value 1"
+msgstr ""
+
+msgid "Value 2"
+msgstr ""
+
+msgid "Value 3"
+msgstr ""
+
+msgid "Checkbox 1"
+msgstr ""
+
+msgid "Checkbox 2"
+msgstr ""
+
+msgid "Forms"
+msgstr ""
+
+msgid "Dialogs"
+msgstr ""
+
+msgid "Editable content"
+msgstr ""
+
+msgid "Color updated"
+msgstr ""
+
+msgid "Modify color theme"
+msgstr ""
+
+msgid "Select as current theme"
+msgstr ""
+
+msgid "Save as new theme"
+msgstr ""
+
+msgid "New color theme"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+msgstr ""
+
+msgid "Link saved"
+msgstr ""
+
+msgid "Link is valid"
+msgstr ""
+
+msgid "Link is not valid"
+msgstr ""
+
+msgid "Toggle visibility"
+msgstr ""

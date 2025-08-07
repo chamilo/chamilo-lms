@@ -104,7 +104,7 @@ const maxSubscriptionsDisabled = computed(() => 0 === subscriptionVisibilitySele
     <BaseCheckbox
       id="is_collective"
       v-model="model.collective"
-      :label="t('Is it editable by the invitees?')"
+      :label="t('Event editable by the invitees')"
       name="is_collective"
     />
   </Fieldset>

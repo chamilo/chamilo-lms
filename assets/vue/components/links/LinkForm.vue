@@ -78,7 +78,7 @@
       />
 
       <p class="text-sm text-gray-600">
-        {{ t("This icon will be displayed as a shortcut on the course homepage.") }}
+        {{ t("This icon will show for the link displayed as a tool on the course homepage.") }}
       </p>
       <p class="text-sm text-gray-600">
         {{ t("Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels.") }}

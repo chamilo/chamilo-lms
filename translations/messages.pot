@@ -28638,7 +28638,7 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-msgid "Share with User"
+msgid "Share with user"
 msgstr ""
 
 msgid "Multilingual"
@@ -28981,4 +28981,73 @@ msgid "No result for keyword %s"
 msgstr ""
 
 msgid "Results"
+msgstr ""
+
+msgid "No assignments available"
+msgstr ""
+
+msgid "Please select a target assignment"
+msgstr ""
+
+msgid "Submission moved successfully"
+msgstr ""
+
+msgid "Correction uploaded successfully!"
+msgstr ""
+
+msgid "Invalid submission"
+msgstr ""
+
+msgid "Invalid resource link ID"
+msgstr ""
+
+msgid "Can not change visibility"
+msgstr ""
+
+msgid "Visibility updated successfully!"
+msgstr ""
+
+msgid "No download available"
+msgstr ""
+
+msgid "Are you sure you want to delete this submission?"
+msgstr ""
+
+msgid "Submission deleted successfully!"
+msgstr ""
+
+msgid "Friendly URL"
+msgstr ""
+
+msgid "Definition"
+msgstr ""
+
+msgid "Export format"
+msgstr ""
+
+msgid "Glossary exported"
+msgstr ""
+
+msgid "Could not export glossary"
+msgstr ""
+
+msgid "Terms imported succesfully"
+msgstr ""
+
+msgid "Could not import terms"
+msgstr ""
+
+msgid "Could not fetch glossary term"
+msgstr ""
+
+msgid "Glossary term saved"
+msgstr ""
+
+msgid "Could not create glossary term"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Blocks Palette"
 msgstr ""

@@ -623,6 +623,13 @@ if ('true' === $allowLPReturnLink) {
             'radio',
             'lp_return_link',
             null,
+            get_lang('My sessions'),
+            4
+        ),
+        $form->createElement(
+            'radio',
+            'lp_return_link',
+            null,
             get_lang('Redirect to portal home'),
             3
         ),

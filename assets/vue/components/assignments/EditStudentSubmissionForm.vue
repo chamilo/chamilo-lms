@@ -2,7 +2,7 @@
   <Dialog
     v-model:visible="visible"
     modal
-    :header="t('Edit Submission')"
+    :header="t('Edit submission')"
     :style="{ width: '500px' }"
     @hide="onHide"
   >

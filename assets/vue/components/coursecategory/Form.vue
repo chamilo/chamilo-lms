@@ -10,7 +10,7 @@
           <v-text-field
             v-model="item.title"
             :error-messages="nameErrors"
-            :label="$t('name')"
+            :label="$t('Name')"
             required
             @blur="$v.item.title.$touch()"
             @input="$v.item.title.$touch()"
@@ -25,7 +25,7 @@
           <v-text-field
             v-model="item.code"
             :error-messages="codeErrors"
-            :label="$t('code')"
+            :label="$t('Code')"
             required
             @blur="$v.item.code.$touch()"
             @input="$v.item.code.$touch()"
@@ -79,7 +79,7 @@ export default {
 
       has(this.violations, "title") && errors.push(this.violations.title)
 
-      !this.$v.item.title.required && errors.push(this.$t("Field is required"))
+      !this.$v.item.title.required && errors.push(this.$t("Required field"))
 
       return errors
     },
@@ -90,7 +90,7 @@ export default {
 
       has(this.violations, "code") && errors.push(this.violations.code)
 
-      !this.$v.item.code.required && errors.push(this.$t("Field is required"))
+      !this.$v.item.code.required && errors.push(this.$t("Required field"))
 
       return errors
     },

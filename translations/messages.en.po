@@ -29014,3 +29014,72 @@ msgstr "No result for keyword %s"
 
 msgid "Results"
 msgstr "Results"
+
+msgid "No assignments available"
+msgstr "No assignments available"
+
+msgid "Please select a target assignment"
+msgstr "Please select a target assignment"
+
+msgid "Submission moved successfully"
+msgstr "Submission moved successfully"
+
+msgid "Correction uploaded successfully!"
+msgstr "Correction uploaded successfully!"
+
+msgid "Invalid submission"
+msgstr "Invalid submission"
+
+msgid "Invalid resource link ID"
+msgstr "Invalid resource link ID"
+
+msgid "Can not change visibility"
+msgstr "Can not change visibility"
+
+msgid "Visibility updated successfully!"
+msgstr "Visibility updated successfully!"
+
+msgid "No download available"
+msgstr "No download available"
+
+msgid "Are you sure you want to delete this submission?"
+msgstr "Are you sure you want to delete this submission?"
+
+msgid "Submission deleted successfully!"
+msgstr "Submission deleted successfully!"
+
+msgid "Friendly URL"
+msgstr "Friendly URL"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Export format"
+msgstr "Export format"
+
+msgid "Glossary exported"
+msgstr "Glossary exported"
+
+msgid "Could not export glossary"
+msgstr "Could not export glossary"
+
+msgid "Terms imported succesfully"
+msgstr "Terms imported succesfully"
+
+msgid "Could not import terms"
+msgstr "Could not import terms"
+
+msgid "Could not fetch glossary term"
+msgstr "Could not fetch glossary term"
+
+msgid "Glossary term saved"
+msgstr "Glossary term saved"
+
+msgid "Could not create glossary term"
+msgstr "Could not create glossary term"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Blocks Palette"
+msgstr "Blocks Palette"

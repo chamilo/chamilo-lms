@@ -29083,3 +29083,6 @@ msgstr "Column"
 
 msgid "Blocks Palette"
 msgstr "Blocks Palette"
+
+msgid "Already answered"
+msgstr "Already answered"

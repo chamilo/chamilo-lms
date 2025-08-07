@@ -1132,7 +1132,7 @@ class TestCategory
                 $links .= ' <a
                     href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&id='.$id.'" ';
                 $links .= 'onclick="return confirmDelete(\''.
-                    self::protectJSDialogQuote(get_lang('re you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
+                    self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
                 $links .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
             }
 

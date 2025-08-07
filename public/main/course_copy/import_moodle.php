@@ -41,7 +41,7 @@ if ($form->validate()) {
 
         Display::addFlash(
             Display::return_message(
-                get_lang('Moodle course fileImportedSuccessfully'),
+                get_lang('The Moodle course file has been imported successfully.'),
                 'success'
             )
         );
@@ -53,7 +53,7 @@ if ($form->validate()) {
 }
 
 $template = new Template(get_lang('Import from Moodle'));
-$infoMsg = Display::return_message(get_lang('Import from MoodleInstructions'), 'normal', false);
+$infoMsg = Display::return_message(get_lang('The Moodle import feature might not support all content types from Moodle, given the fact that not all features are the same, and that Moodle and Chamilo both evolve continuously and rapidly. This import feature should be considered a work in progress. Please check https://support.chamilo.org/projects/chamilo-18/wiki/Moodle_import for more information.'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('course_copy/import_moodle.tpl');

@@ -2223,59 +2223,33 @@ class DocumentManager
                $folderId = false,
                $addCloseButton = true,
                $addAudioPreview = false,
-               $filterByExtension = [],
-               $excludeByExtension = [],
-               $filterByFiletype = null
+        array $filterByExtension = [],
+        array $excludeByExtension = [],
+               $filterByFiletype = null,
+        bool $flattenRoot = false
     ) {
         $repo = Container::getDocumentRepository();
         $nodeRepository = $repo->getResourceNodeRepository();
         $move = get_lang('Move');
-        $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size: 16px; width: 16px; height: 16px;" aria-hidden="true" title="'.htmlentities(get_lang('Move')).'"></i>';
+        $icon = '<i class="mdi-cursor-move mdi ch-tool-icon" style="font-size:16px;width:16px;height:16px;" title="'.htmlentities($move).'"></i>';
         $folderIcon = Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL);
+        $fileIcon = '<i class="mdi-file mdi ch-tool-icon" style="font-size:16px;width:16px;height:16px;" aria-hidden="true" title="'
+            . htmlentities(get_lang('File'))
+            . '"></i>';
 
         $lpItemType = ($filterByFiletype === 'video') ? 'video' : 'document';
         $options = [
-            'decorate' => true,
-            'rootOpen' => '<ul id="doc_list" class="list-group lp_resource">',
-            'rootClose' => '</ul>',
-            'childOpen' => function ($child) {
-                $id = $child['id'];
-                $disableDrag = '';
-                if (empty($child['resourceFiles'])) {
-                    $disableDrag = ' disable_drag ';
-                }
-
-                return '<li
-                id="'.$id.'"
-                data-id="'.$id.'"
-                class="'.$disableDrag.' list-group-item nested-'.$child['level'].'"
-            >';
+            'decorate'   => true,
+            'rootOpen'   => '<ul id="doc_list" class="list-group lp_resource">',
+            'rootClose'  => '</ul>',
+            'childOpen'  => function ($child) {
+                return '<li id="'.$child['id'].'" data-id="'.$child['id'].'" class="list-group-item nested-'.$child['level'].'">';
             },
             'childClose' => '</li>',
-            'nodeDecorator' => function ($node) use ($icon, $folderIcon, $lpItemType) {
-                $disableDrag = '';
-                if (empty($node['resourceFiles'])) {
-                    $disableDrag = ' disable_drag ';
-                }
-
-                $link = '<div class="flex flex-row gap-1 h-4 item_data '.$disableDrag.' ">';
-                $file = !empty($node['resourceFiles']) ? current($node['resourceFiles']) : null;
-                $folder = $folderIcon;
-
-                if (!empty($node['resourceFiles'])) {
-                    $link .= '<a class="moved ui-sortable-handle" href="#">';
-                    $link .= $icon;
-                    $link .= '</a>';
-                    $folder = '';
-                }
-
-                $link .= '<a
-                data_id="'.$node['id'].'"
-                data_type="'.$lpItemType.'"
-                class="moved ui-sortable-handle link_with_id"
-            >';
-                $link .= $folder.'&nbsp;';
-                $link .= '</a>';
+            'nodeDecorator' => function ($node) use ($icon, $fileIcon, $lpItemType) {
+                $link  = '<div class="flex flex-row gap-1 h-4 item_data">';
+                $link .= '<a class="moved ui-sortable-handle" href="#">'.$icon.'</a>';
+                $link .= '<a data_id="'.$node['id'].'" data_type="'.$lpItemType.'" class="moved ui-sortable-handle link_with_id">'.$fileIcon.'&nbsp;</a>';
                 $link .= cut(addslashes($node['title']), 150);
                 $link .= '</div>';
 
@@ -2353,9 +2327,16 @@ class DocumentManager
             }
         }
 
-        $query = $qb->getQuery();
+        $items = $qb->getQuery()->getArrayResult();
 
-        return $nodeRepository->buildTree($query->getArrayResult(), $options);
+        if ($flattenRoot) {
+            foreach ($items as &$item) {
+                $item['level'] = 0;
+            }
+            unset($item);
+        }
+
+        return $nodeRepository->buildTree($items, $options);
     }
 
     /**

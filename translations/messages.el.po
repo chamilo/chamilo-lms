@@ -1759,7 +1759,7 @@ msgstr "Προσθέστε σύνδεσμο στη σελίδα προς την 
 msgid "has been deleted"
 msgstr "έχει διαγραφεί"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Διαγράφοντας αυτή την περιοχή, θα διαγραφεί μόνιμα όλο το περιεχόμενό της (έγγραφα, σύνδεσμοι ...) και όλοι οι εκπαιδευόμενοι (δεν θα διαγραφούν όμως από άλλες σειρές μαθημάτων). <p>Θέλετε πράγματι να διαγράψετε την συγκεκριμένη εκπαίδευση;"
 
 msgid "YES"
@@ -6350,16 +6350,13 @@ msgstr "Μαθήματα από την αρχική περίοδο"
 msgid "Courses from the destination session"
 msgstr "Μαθήματα από την περίοδο προορισμού"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Βοήθεια για την αντιγραφή μαθημάτων από περίοδο σε περίοδο"
-
 msgid "Type of copy"
 msgstr "Τύπος αντιγράφου"
 
 msgid "Copy from course in session to another session"
 msgstr "Αντιγραφή από μάθημα μιας περιόδου σε άλλη περίοδο"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Πρέπει να επιλέξετε ένα μάθημα από την αρχική περίοδο"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21304,7 +21301,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

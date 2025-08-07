@@ -1760,7 +1760,7 @@ msgstr "הוסף קישור לדף בדף הבית"
 msgid "has been deleted"
 msgstr "נמחק"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "מחיקת אזור זה תמחק לצמיתות את כל התוכן (מסמכים, קישורים...) שהוא מכיל ותבטל את הרישום של כל חבריו (לא תסיר אותם מקורסים אחרים)."
 
 msgid "YES"
@@ -6351,16 +6351,13 @@ msgstr "קורסים מהמפגש המקורי"
 msgid "Courses from the destination session"
 msgstr "קורסים ממפגש היעד"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "עזרה להעתקה של קורסים ממפגש למפגש"
-
 msgid "Type of copy"
 msgstr "סוג העתקה"
 
 msgid "Copy from course in session to another session"
 msgstr "העתק מקורס במפגש למפגש אחר"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "עליך לבחור קורס מהמפגש המקורי"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21304,7 +21301,7 @@ msgstr "ניהול אבחון"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "תחילה עליך למלא את הפרופיל שלך כדי לאפשר את אימות התנאים וההגבלות."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "אבחון"
 
 msgid "Allow show the user Skype account"

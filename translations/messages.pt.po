@@ -1759,7 +1759,7 @@ msgstr "Adicionar uma ligação para página na página inicial"
 msgid "has been deleted"
 msgstr "foi eliminado"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Ao eliminar esta área, eliminará também de forma permanentemente todos os conteúdos associados (documentos, ligações...) e removerá todos os utilizadores nela registados (não os irá remover de outros cursos onde estejam registados).<p>Deseja realmente eliminar o curso?"
 
 msgid "YES"
@@ -6350,16 +6350,13 @@ msgstr "Cursos da sessão origem"
 msgid "Courses from the destination session"
 msgstr "Cursos da sessão destino"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Ajuda para a cópia de cursos de uma sessão para outra sessão:<br></br>Para copiar cursos entre várias sessões, deverá em primeiro lugar, seleccionar um curso da lista da sessão de origem. Poderá copiar os conteúdos das ferramentas de descrição do curso, documentos, glossário, ligações/links, exercícios e avaliações, de forma directa ou seleccionando os componentes do curso;"
-
 msgid "Type of copy"
 msgstr "Tipo de cópia"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiar do curso em sessão para uma outra sessão"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Deverá seleccionar um curso da sessão origem"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21299,7 +21296,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Primeiro, você deve preencher o seu perfil para permitir a validação termos e condições."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -25054,3 +25051,6 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Foram feitas %s tentativas em questões orais"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Ajuda para a cópia de cursos de uma sessão para outra sessão:<br></br>Para copiar cursos entre várias sessões, deverá em primeiro lugar, seleccionar um curso da lista da sessão de origem. Poderá copiar os conteúdos das ferramentas de descrição do curso, documentos, glossário, ligações/links, exercícios e avaliações, de forma directa ou seleccionando os componentes do curso"

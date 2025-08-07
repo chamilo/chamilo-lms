@@ -623,6 +623,13 @@ if ('true' === $allowLPReturnLink) {
             'radio',
             'lp_return_link',
             null,
+            get_lang('My sessions'),
+            4
+        ),
+        $form->createElement(
+            'radio',
+            'lp_return_link',
+            null,
             get_lang('Redirect to portal home'),
             3
         ),
@@ -857,7 +864,7 @@ $group[] = $form->createElement(
 $group[] = $form->createElement(
     'radio',
     'auto_launch_option',
-    get_lang('Disable all auto-launch options'),
+    get_lang('Disable'),
     get_lang('Disable'),
     'disable_auto_launch'
 );
@@ -895,7 +902,7 @@ if ($enableAiHelpers) {
 
         $form->addPanelOption(
             'ai_helpers',
-            get_lang('AI Helpers'),
+            get_lang('AI helpers'),
             $globalAiGroup,
             ToolIcon::ROBOT,
             false
@@ -904,13 +911,13 @@ if ($enableAiHelpers) {
 }
 
 $button = Display::toolbarButton(
-    get_lang('Configure external tools'),
+    get_lang('External tools (LTI)'),
     $router->generate('chamilo_lti_configure', ['cid' => $courseId]).'?'.api_get_cidreq(),
     'cog',
     'primary'
 );
 $html = [
-    $form->createElement('html', '<p>'.get_lang('LTI intro tool').'</p>'.$button),
+    $form->createElement('html', '<p>'.get_lang('LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level.').'</p>'.$button),
 ];
 
 // Set the default values of the form

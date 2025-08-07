@@ -663,7 +663,7 @@ $table->display();
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 if (!isset($origin) || 'learnpath' !== $origin) {
@@ -910,13 +910,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 $temp[] = implode(', ', $groupsNameListParsed);
 
                 // Status
-                $default_status = get_lang('Student');
+                $default_status = get_lang('Learner');
                 if ((isset($userData['status_rel']) && 1 == $userData['status_rel']) ||
                     (isset($userData['status_session']) && 2 == $userData['status_session'])
                 ) {
-                    $default_status = get_lang('CourseManager');
+                    $default_status = get_lang('Teacher');
                 } elseif (isset($userData['is_tutor']) && 1 == $userData['is_tutor']) {
-                    $default_status = get_lang('Tutor');
+                    $default_status = get_lang('Course tutor');
                 }
 
                 $temp[] = $default_status;

@@ -30,7 +30,7 @@ class GlobalMultipleAnswer extends Question
         /* Mise en variable de Affichage "Reponses" et son icone, "N�", "Vrai", "Reponse" */
         $html = '<table class="table table-striped table-hover">
                 <tr>
-                    <th width="10px">'.get_lang('Number').'</th>
+                    <th width="10px">'.get_lang('number').'</th>
                     <th width="10px">'.get_lang('True').'</th>
                     <th width="50%">'.get_lang('Answer').'</th>
                     <th width="50%">'.get_lang('Comment').'</th>

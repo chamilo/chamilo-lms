@@ -125,7 +125,7 @@ function displayForm()
     $html .= '</div>';
 
     $html .= Display::return_message(
-            get_lang('Copy courseFromSessionToSessionExplanation')
+            get_lang('If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components.')
     );
 
     $html .= '<form name="formulaire" method="post" action="'.api_get_self().'?'.api_get_cidreq().'" >';
@@ -325,7 +325,7 @@ if (('course_select_form' === $action) ||
             //We need only one value
             if (count($arrCourseOrigin) > 1 || count($arrCourseDestination) > 1) {
                 echo Display::return_message(
-                    get_lang('You must select a course from original session'),
+                    get_lang('You must select a course from the original session and select a destination session'),
                     'error'
                 );
             } else {
@@ -344,7 +344,7 @@ if (('course_select_form' === $action) ||
             displayForm();
         } else {
             echo Display::return_message(
-                get_lang('You must select a course from original session'),
+                get_lang('You must select a course from the original session and select a destination session'),
                 'error'
             );
             displayForm();
@@ -390,12 +390,12 @@ if (('course_select_form' === $action) ||
                 'ch-tool-icon',
                 'vertical-align:middle',
                 ICON_SIZE_SMALL,
-                get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin')
+                get_lang('Back').' '.get_lang('To').' '.get_lang('Administration')
             ).
             get_lang('Back').'</a></div>';
     } else {
         echo Display::return_message(
-            get_lang('You must select a course from original session and select a destination session'),
+            get_lang('You must select a course from the original session and select a destination session'),
             'error'
         );
         displayForm();

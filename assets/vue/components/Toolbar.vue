@@ -55,7 +55,7 @@
 
       <PrimeButton
         v-if="handleAdd"
-        :label="$t('New folder')"
+        :label="$t('Add a new folder')"
         class="p-button-outlined"
         icon="mdi mdi-folder-plus"
         @click="addItem"
@@ -63,7 +63,7 @@
 
       <PrimeButton
         v-if="handleAddDocument"
-        :label="$t('New document')"
+        :label="$t('Create a new document')"
         class="p-button-outlined"
         icon="mdi mdi-file-plus"
         @click="addDocument"

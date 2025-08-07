@@ -605,7 +605,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
                 $_GET['delete_before_date'].' 23:59:59'
             );
             echo Display::return_message(
-                sprintf(get_lang('XResults and feedbackCleaned'), $count),
+                sprintf(get_lang('%d results cleaned'), $count),
                 'confirm'
             );
         }

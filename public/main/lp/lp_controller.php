@@ -1044,6 +1044,9 @@ switch ($action) {
                 case 'my_courses':
                     $url = api_get_path(WEB_PATH).'courses';
                     break;
+                case 'my_sessions':
+                    $url = api_get_path(WEB_PATH).'sessions';
+                    break;
                 case 'portal_home':
                     $url = api_get_path(WEB_PATH);
                     break;

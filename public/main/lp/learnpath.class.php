@@ -6336,13 +6336,14 @@ class learnpath
             null,
             null,
             $showInvisibleFiles,
-            true,
+            false,
             false,
             true,
             false,
             [],
             [],
-            ['file', 'folder']
+            ['file', 'folder'],
+            true
         );
 
         $form = new FormValidator(
@@ -6453,7 +6454,8 @@ class learnpath
             false,
             [],
             [],
-            'video'
+            'video',
+            true
         );
 
         return $documentTree ?: get_lang('No videos found');

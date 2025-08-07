@@ -52,7 +52,7 @@ while ($row = Database::fetch_assoc($result_tasks)) {
 }
 echo '</select></div><div>';
 echo '<div class="row">
-        <div class="formw">'.get_lang('Please selectThread').'</div>
+        <div class="formw">'.get_lang('Please select thread').'</div>
     </div>';
 echo '<div class="row"><div class="formw"><select name ="forum_id" id="forum_id">';
 echo '<option value="0"'.($row['colid'] == $rs->work_id ? 'forum_id' : '').'>'.get_lang('Please select').'</option>';

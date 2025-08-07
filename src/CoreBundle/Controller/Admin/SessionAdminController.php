@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -40,7 +41,8 @@ class SessionAdminController extends BaseController
         private readonly CourseRepository $courseRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
-        private readonly UserHelper $userHelper
+        private readonly UserHelper $userHelper,
+        private readonly CCourseDescriptionRepository $courseDescriptionRepository
     ) {}
 
     #[Route('/courses', name: 'chamilo_core_admin_sessionadmin_courses', methods: ['GET'])]
@@ -271,18 +273,32 @@ class SessionAdminController extends BaseController
     #[Route('/courses/{id}', name: 'chamilo_core_admin_sessionadmin_course_view', methods: ['GET'])]
     public function getCourseForSessionAdmin(int $id): JsonResponse
     {
+        /** @var Course $course */
         $course = $this->courseRepository->find($id);
 
         if (!$course) {
             return $this->json(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
         }
 
+        $qb = $this->courseDescriptionRepository->getResourcesByCourse($course);
+        $items = $qb->getQuery()->getResult();
+
+        $descriptions = array_map(static function($d) {
+            return [
+                'title'   => $d->getTitle(),
+                'content' => $d->getContent(),
+            ];
+        }, $items);
+
         return $this->json([
-            'id' => $course->getId(),
-            'title' => $course->getTitle(),
-            'code' => $course->getCode(),
-            'description' => $course->getDescription(),
-            'illustrationUrl' => method_exists($course, 'getIllustrationUrl') ? $course->getIllustrationUrl() : null,
+            'id'              => $course->getId(),
+            'title'           => $course->getTitle(),
+            'code'            => $course->getCode(),
+            'description'     => '',
+            'descriptions'    => $descriptions,
+            'illustrationUrl' => method_exists($course, 'getIllustrationUrl')
+                ? $course->getIllustrationUrl()
+                : null,
         ]);
     }
 

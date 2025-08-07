@@ -1759,7 +1759,7 @@ msgstr "Afegiu un enllaç a la pàgina principal"
 msgid "has been deleted"
 msgstr "ha estat esborrat"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "En esborrar el lloc web d'aquest curs s'esborraran permanentment tots els documents que conté i tots els seus membres deixaran d'estar-hi inscrits. Voleu realment esborrar aquest curs?"
 
 msgid "YES"
@@ -6350,16 +6350,13 @@ msgstr "Cursos  de la sessió d'origen"
 msgid "Courses from the destination session"
 msgstr "Cursos de la sessió de destinació"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Si vols copiar un curs d'una sessió a altre curs d'altra sessió has de seleccionar primer un curs de la llesta cursos d'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs"
-
 msgid "Type of copy"
 msgstr "Tipus de còpia"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiar cursos d'una a altra sessió"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Has de seleccionar un curs de la sessió original"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21304,7 +21301,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Ha de completar el seu perfil per accedir a la validació del contracte."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -25059,3 +25056,6 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Les preguntes orals respostes són: %s"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Si vols copiar un curs d'una sessió a altre curs d'altra sessió has de seleccionar primer un curs de la llesta cursos d'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs"

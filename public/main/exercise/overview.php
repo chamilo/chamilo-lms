@@ -91,7 +91,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 
 if ('mobileapp' === $origin) {
     $actions = '<a href="javascript:window.history.go(-1);">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 
@@ -108,13 +108,13 @@ if ($is_allowed_to_edit) {
         );
     }
     $editLink .= Display::url(
-        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results and feedback and feedback')),
+        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Results and feedback')),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
-        ['title' => get_lang('Results and feedback and feedback')]
+        ['title' => get_lang('Results and feedback')]
     );
 }
 
-$iconExercise = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', null, ICON_SIZE_MEDIUM, get_lang('Exercise'));
+$iconExercise = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon-gradient', null, ICON_SIZE_MEDIUM, get_lang('Test'));
 
 // Exercise name.
 if ('true' === api_get_setting('editor.save_titles_as_html')) {
@@ -168,7 +168,7 @@ $quizCheckButtonEnabled = ('true' === api_get_setting('exercise.quiz_check_butto
 if ($quizCheckButtonEnabled) {
     $btnCheck = Display::button(
             'quiz_check_request_button',
-            Display::getMdiIcon('loading', 'animate-spin hidden').' '.get_lang('TestYourBrowser'),
+            Display::getMdiIcon('loading', 'animate-spin hidden').' '.get_lang('Test your browser'),
             [
                 'type' => 'button',
                 'role' => 'button',
@@ -538,14 +538,14 @@ if ($quizCheckButtonEnabled) {
 
                             if (xhr1IsOk && xhr2IsOk) {
                                 btnTest.removeClass('btn--plain btn--danger').addClass('btn--success');
-                                txtResult.text(\"".get_lang('QuizBrowserCheckOK')."\").addClass('text-success').show();
+                                txtResult.text(\"".get_lang('Your browser has been verified. You can safely proceed.')."\").addClass('text-success').show();
                             } else {
                                 btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
-                                txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
+                                txtResult.text(\"".get_lang('Your browser could not be verified. Please try again, or try another browser or device before starting your test.')."\").addClass('text-error').show();
                             }
                         },
                         function () {
-                            txtResult.text(\"".get_lang('QuizBrowserCheckKO')."\").addClass('text-error').show();
+                            txtResult.text(\"".get_lang('Your browser could not be verified. Please try again, or try another browser or device before starting your test.')."\").addClass('text-error').show();
                             btnTest.removeClass('btn--plain btn--success').addClass('btn--danger');
                         }
                     )

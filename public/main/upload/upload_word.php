@@ -157,7 +157,7 @@ $renderer->setCustomElementTemplate($user_file_template);
 
 $form->addElement('file', 'user_file', Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL));
 if ('true' === api_get_setting('search_enabled')) {
-    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
+    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
     $form->addElement('html', '<br />');
     $form->addElement(
         'html',

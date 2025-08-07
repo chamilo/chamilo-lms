@@ -1751,7 +1751,7 @@ msgstr "Gehitu lotura bat orri nagusian"
 msgid "has been deleted"
 msgstr "ezabatu da"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Area hau ezabatuz gero, barnean duen eduki osoa (dokumentuak, loturak,...) ezabatuko dira behin betiko eta kide guztiak desagertu (ez dira kenduko beste prestakuntza ikastaro batetik)."
 
 msgid "YES"
@@ -6342,16 +6342,13 @@ msgstr "Jatorria saioan duten ikastaroak"
 msgid "Courses from the destination session"
 msgstr "Helburua saioan duten ikastaroak"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Saio baten ikastaroa beste saio baten beste ikastarora kopiatu nahi baduzu, lehenengo eta behin, jatorria saioan duten ikastaro zerrendatik hautatu behar duzu ikastaro bat. Ikastaroaren azalpena, dokumentuak, glosarioa, loturak, ariketak eta ikasgaiak izeneko tresnetatik edukiak kopiatu ditzakezu, zuzenean edo zeharka, ikastaroaren osagaiak hautatuz."
-
 msgid "Type of copy"
 msgstr "Kopia mota"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopiatu ikastaroa saio batetik bestera"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Ikastaro bat hautatu behar duzu jatorrizko saiotik"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21296,7 +21293,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -25051,3 +25048,6 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Erantzun diren ahozko galderak honakoak dira: %s"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Saio baten ikastaroa beste saio baten beste ikastarora kopiatu nahi baduzu, lehenengo eta behin, jatorria saioan duten ikastaro zerrendatik hautatu behar duzu ikastaro bat. Ikastaroaren azalpena, dokumentuak, glosarioa, loturak, ariketak eta ikasgaiak izeneko tresnetatik edukiak kopiatu ditzakezu, zuzenean edo zeharka, ikastaroaren osagaiak hautatuz."

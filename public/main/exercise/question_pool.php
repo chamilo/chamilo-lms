@@ -482,7 +482,7 @@ $form
 $form
     ->addSelect(
         'exerciseId',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $my_exercise_list,
         ['onchange' => 'mark_exercise_id_changed(); submit_form(this);', 'id' => 'exerciseId']
     )
@@ -498,7 +498,7 @@ $form
 $form
     ->addSelect(
     'answerType',
-        get_lang('AnswerType'),
+        get_lang('Answer type'),
     $new_question_list,
         ['onchange' => 'submit_form(this);', 'id' => 'answerType']
     )

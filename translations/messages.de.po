@@ -1809,7 +1809,7 @@ msgstr "Link zu einer  Website auf der Homepage einfügen"
 msgid "has been deleted"
 msgstr "wurde gelöscht"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr ""
 "Wenn der Kurs gelöscht wird, werden auch alle enthaltenen Dokumente und die "
 "Registrierungen der Kursteilnehmer gelöscht. (Kursteilnehmer werden jedoch "
@@ -6403,16 +6403,13 @@ msgstr "Kurse der ursprünglichen Kurs-Session"
 msgid "Courses from the destination session"
 msgstr "Kurse der ausgewählten Kurs-Session"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Hilfe für das Kopieren von Kursen von einer Kurs-Session zur anderen"
-
 msgid "Type of copy"
 msgstr "Typ der Kopie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopieren eines Kurs einer Kurs-Session in eine andere Kurs-Session"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Sie müssen eine Kurs der ursprünglichen Kurs-Session auswählen"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21358,7 +21355,7 @@ msgstr "Diagnosemanagement"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Sie müssen zuerst Ihr Profil ausfüllen, um die Validierung der Bestimmungen und Bedingungen zu ermöglichen."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "Diagnostik"
 
 msgid "Allow show the user Skype account"

@@ -1751,7 +1751,7 @@ msgstr "添加鏈接"
 msgid "has been deleted"
 msgstr "已刪除"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "刪除課程將永久刪除這門課程的所有內容(文檔、鏈接...) 及所有成員的註冊訊息(不會刪除他們在其他課程的註冊訊息)。<P>確定要刪除課程嗎？"
 
 msgid "YES"
@@ -6342,16 +6342,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21291,7 +21288,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

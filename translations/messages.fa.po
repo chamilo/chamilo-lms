@@ -1751,7 +1751,7 @@ msgstr "افزودن پیوندی به سوی این صفحه روی صفحۀ آ
 msgid "has been deleted"
 msgstr "حذف شد"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "آیا واقعاً می خواهید ادامه دهید؟ حذف این درس، حذف تمامی مدارک آن و ابطال ثبت نام تمامی کاربران آن را به دنبال خواهد داشت"
 
 msgid "YES"
@@ -6342,16 +6342,13 @@ msgstr "دروس از جلسه اصلی"
 msgid "Courses from the destination session"
 msgstr "دروس از جلسه مقصد"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "راهنمایی درباره کپی برداری دروس از یک جلسه به جلسه دیگر"
-
 msgid "Type of copy"
 msgstr "نوع کپی"
 
 msgid "Copy from course in session to another session"
 msgstr "کپی برداری از درس این جلسه به جلسه دیگر"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "شما باید یک درس از جلسه اصلی انتخاب کنید"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21291,7 +21288,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

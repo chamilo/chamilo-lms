@@ -1049,7 +1049,7 @@ if (!in_array($origin, ['learnpath', 'embeddable', 'mobileapp'])) {
 if ('mobileapp' == $origin) {
     echo '<div class="actions">';
     echo '<a href="javascript:window.history.go(-1);">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     echo '</div>';
 }
 
@@ -1124,7 +1124,7 @@ if ($limit_time_exists) {
             }
             exit;
         } else {
-            $message_warning = $permission_to_start ? get_lang('Time limit reachedAdmin') : get_lang('The trainer did not allow the test to start yet');
+            $message_warning = $permission_to_start ? get_lang('Time limit reached') : get_lang('The trainer did not allow the test to start yet');
             echo Display::return_message(
                 sprintf(
                     $message_warning,
@@ -1168,7 +1168,7 @@ if ($time_control) {
 if ($showQuestionClock) {
     $icon = Display::getMdiIcon('clock-outline');
     echo '<div class="well" style="text-align: center">
-            '.get_lang('RemainingTimeToFinishQuestion').'
+            '.get_lang('Remaining time to finish question').'
             <div id="question_timer" class="label label-warning"></div>
           </div>';
 }
@@ -1491,7 +1491,7 @@ if ($allowBlockCategory &&
                 success: function(return_value) {
                     if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\');
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved.')).'\');
                 } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
@@ -1517,7 +1517,7 @@ if ($allowBlockCategory &&
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved')).'\' + return_value.savedAnswerMessage);
+                        Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved.')).'\' + return_value.savedAnswerMessage);
 
                     // Show popup
                     if ("check_answers" === url_extra) {
@@ -1533,8 +1533,8 @@ if ($allowBlockCategory &&
                         $("#global-modal .modal-body").load(checkUrl, function() {
                             $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
                             var continueTest = $("<a>",{
-                                text: "'.addslashes(get_lang('ContinueTest')).'",
-                                title: "'.addslashes(get_lang('ContinueTest')).'",
+                                text: "'.addslashes(get_lang('Proceed with the test')).'",
+                                title: "'.addslashes(get_lang('Proceed with the test')).'",
                                 href: "javascript:void(0);",
                                 click: function(){
                                     $(this).attr("disabled", "disabled");
@@ -1544,8 +1544,8 @@ if ($allowBlockCategory &&
                             }).addClass("btn btn--plain").appendTo("#global-modal .modal-body .btn-group");
 
                              $("<a>",{
-                                text: "'.addslashes(get_lang('EndTest')).'",
-                                title: "'.addslashes(get_lang('EndTest')).'",
+                                text: "'.addslashes(get_lang('End test')).'",
+                                title: "'.addslashes(get_lang('End test')).'",
                                 href: "javascript:void(0);",
                                 click: function() {
                                     $(this).attr("disabled", "disabled");
@@ -1686,7 +1686,7 @@ if ($allowBlockCategory &&
 
                 if (1 === $exerciseInSession->getPreventBackwards()) {
                     if (isset($attempt_list[$questionId])) {
-                        echo Display::return_message(get_lang('AlreadyAnswered'));
+                        echo Display::return_message(get_lang('Already answered'));
                         $i++;
                         break;
                     }

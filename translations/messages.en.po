@@ -1755,8 +1755,8 @@ msgstr "Add link to page on Home Page"
 msgid "has been deleted"
 msgstr "has been deleted"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
-msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
+msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 
 msgid "YES"
 msgstr "YES"
@@ -6342,17 +6342,14 @@ msgstr "Courses from the original session"
 msgid "Courses from the destination session"
 msgstr "Courses from the destination session"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Help for the copy of courses from session to session"
-
 msgid "Type of copy"
 msgstr "Type of copy"
 
 msgid "Copy from course in session to another session"
 msgstr "Copy from course in session to another session"
 
-msgid "You must select a course from original session"
-msgstr "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
+msgstr "You must select a course from the original session and select a destination session"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
 msgstr "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6367,7 +6364,7 @@ msgid "Current courses"
 msgstr "Current courses"
 
 msgid "Unaccessible courses"
-msgstr "Unaccessible courses"
+msgstr "Inaccessible courses"
 
 msgid "Edit session courses"
 msgstr "Edit session courses"
@@ -14353,7 +14350,7 @@ msgid "You should write a message"
 msgstr "You should write a message"
 
 msgid "This message is to inform you that has created a new course on platform"
-msgstr "This message is to inform you that has created a new course on platform"
+msgstr "This message is to inform you that a new course has been created on the platform"
 
 msgid "New course created in"
 msgstr "New course created in"
@@ -19464,7 +19461,7 @@ msgid "User certificates can be view by unregistered users."
 msgstr "User certificates can be view by unregistered users."
 
 msgid "Don't forget to select the media files if your resource need it"
-msgstr "Don't forget to select the media files if your resource need it"
+msgstr "Don't forget to select the media files if your resource needs it"
 
 msgid "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
 msgstr "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
@@ -21299,8 +21296,8 @@ msgstr "Diagnosis management"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "You must first fill your profile to enable the terms and conditions validation."
 
-msgid "Diagnostic"
-msgstr "Diagnostic"
+msgid "Diagnosis"
+msgstr "Diagnosis"
 
 msgid "Allow show the user Skype account"
 msgstr "Allow show the user Skype account"
@@ -28684,3 +28681,492 @@ msgstr "Loading..."
 
 msgid "Subscribing..."
 msgstr "Subscribing..."
+
+msgid "You are receiving a copy because you are one of the course coaches"
+msgstr "You are receiving a copy because you are one of the course coaches"
+
+msgid "You are receiving a copy because you are the course coach"
+msgstr "You are receiving a copy because you are the course coach"
+
+msgid "This group is closed."
+msgstr "This group is closed."
+
+msgid "Your request has been received."
+msgstr "Your request has been received."
+
+msgid "Legal consent revoked successfully."
+msgstr "Legal consent revoked successfully."
+
+msgid "User ID not provided"
+msgstr "User ID not provided"
+
+msgid "Terms accepted successfully."
+msgstr "Terms accepted successfully."
+
+msgid "File not found for resource"
+msgstr "File not found for resource"
+
+msgid "Resource not found"
+msgstr "Resource not found"
+
+msgid "No files"
+msgstr "No files"
+
+msgid "Unauthorised access to resource"
+msgstr "Unauthorised access to resource"
+
+msgid "Resource file not found for the given resource node"
+msgstr "Resource file not found for the given resource node"
+
+msgid "You have been enrolled in a new course"
+msgstr "You have been enrolled in a new course"
+
+msgid "Remove users from URLs with a CSV file"
+msgstr "Remove users from URLs with a CSV file"
+
+msgid "Assign users to URLs from CSV"
+msgstr "Assign users to URLs from CSV"
+
+msgid "Template not found."
+msgstr "Template not found."
+
+msgid "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+msgstr "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+
+msgid "An error occurred while creating the course."
+msgstr "An error occurred while creating the course."
+
+msgid "Course created successfully."
+msgstr "Course created successfully."
+
+msgid "Tool not found"
+msgstr "Tool not found"
+
+msgid "Course not found"
+msgstr "Course not found"
+
+msgid "Attendance data and comments saved successfully"
+msgstr "Attendance data and comments saved successfully"
+
+msgid "Your account has expired."
+msgstr "Your account has expired."
+
+msgid "Invalid credentials. Please try again or contact support if you continue to experience issues."
+msgstr "Invalid credentials. Please try again or contact support if you continue to experience issues."
+
+msgid "Your account has not been activated."
+msgstr "Your account has not been activated."
+
+msgid "Third parties (GDPR)"
+msgstr "Third parties (GDPR)"
+
+msgid "Resources by type"
+msgstr "Resources by type"
+
+msgid "File info"
+msgstr "File info"
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "No push notification settings configured."
+msgstr "No push notification settings configured."
+
+msgid "Current user not found."
+msgstr "Current user not found."
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+
+msgid "You are registered on %s"
+msgstr "You are registered on %s"
+
+msgid "Learning path categories"
+msgstr "Learning path categories"
+
+msgid "Translation saved."
+msgstr "Translation saved."
+
+msgid "Total available hours"
+msgstr "Total available hours"
+
+msgid "Sum of hours in subscribed sessions"
+msgstr "Sum of hours in subscribed sessions"
+
+msgid "Count of available hours"
+msgstr "Count of available hours"
+
+msgid "Go to the session"
+msgstr "Go to the session"
+
+msgid "Duration (minutes)"
+msgstr "Duration (minutes)"
+
+msgid "Gradebook options"
+msgstr "Gradebook options"
+
+msgid "Qualify attendance gradebook"
+msgstr "Qualify attendance gradebook"
+
+msgid "Select gradebook option"
+msgstr "Select gradebook option"
+
+msgid "Gradebook column title"
+msgstr "Gradebook column title"
+
+msgid "Grade weight"
+msgstr "Grade weight"
+
+msgid "No invitations or records found"
+msgstr "No invitations or records found"
+
+msgid "Accept invitation"
+msgstr "Accept invitation"
+
+msgid "Reject invitation"
+msgstr "Reject invitation"
+
+msgid "Friend added successfully"
+msgstr "Friend added successfully"
+
+msgid "Friend request rejected"
+msgstr "Friend request rejected"
+
+msgid "We could not retrieve the themes"
+msgstr "We could not retrieve the themes"
+
+msgid "Theme title"
+msgstr "Theme title"
+
+msgid "A file name is required to save the recorded audio"
+msgstr "A file name is required to save the recorded audio"
+
+msgid "We are sorry, your browser does not support using a microphone"
+msgstr "We are sorry, your browser does not support using a microphone"
+
+msgid "Results for"
+msgstr "Results for"
+
+msgid "Search groups"
+msgstr "Search groups"
+
+msgid "Pending group invitations"
+msgstr "Pending group invitations"
+
+msgid "Delete skill profile"
+msgstr "Delete skill profile"
+
+msgid "Skill profile deleted"
+msgstr "Skill profile deleted"
+
+msgid "Skill profiles"
+msgstr "Skill profiles"
+
+msgid "No skill profile"
+msgstr "No skill profile"
+
+msgid "Original assignment"
+msgstr "Original assignment"
+
+msgid "Student's submission"
+msgstr "Student's submission"
+
+msgid "Write your comment..."
+msgstr "Write your comment..."
+
+msgid "Not graded yet"
+msgstr "Not graded yet"
+
+msgid "Attach file (optional)"
+msgstr "Attach file (optional)"
+
+msgid "Please add a comment, a grade or a file"
+msgstr "Please add a comment, a grade or a file"
+
+msgid "Score updated successfully"
+msgstr "Score updated successfully"
+
+msgid "Comment added successfully"
+msgstr "Comment added successfully"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+msgstr "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+
+msgid "Are you sure you want to delete the selected items?"
+msgstr "Are you sure you want to delete the selected items?"
+
+msgid "Assignments deleted"
+msgstr "Assignments deleted"
+
+msgid "Failed to download package"
+msgstr "Failed to download package"
+
+msgid "Failed to upload corrections"
+msgstr "Failed to upload corrections"
+
+msgid "Edit submission"
+msgstr "Edit submission"
+
+msgid "Submission updated!"
+msgstr "Submission updated!"
+
+msgid "Diagnosis of user %s"
+msgstr "Diagnosis of user %s"
+
+msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+msgstr "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+
+msgid "%s support"
+msgstr "%s support"
+
+msgid "This option is not available because this activity is contained by an assessment."
+msgstr "This option is not available because this activity is contained by an assessment."
+
+msgid "Move to thread"
+msgstr "Move to thread"
+
+msgid "Moved."
+msgstr "Moved."
+
+msgid "Score changes history"
+msgstr "Score changes history"
+
+msgid "Sessions"
+msgstr "Sessions"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+
+msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+msgstr "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+
+msgid "Give your course a short and striking title, e.g. Innovation Management"
+msgstr "Give your course a short and striking title, e.g. Innovation Management"
+
+msgid "Untitled survey"
+msgstr "Untitled survey"
+
+msgid "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+msgstr "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+
+msgid "AI helpers"
+msgstr "AI helpers"
+
+msgid "Auto-launch for forums"
+msgstr "Auto-launch for forums"
+
+msgid "E-mail student when he is subscribed to the course"
+msgstr "E-mail student when he is subscribed to the course"
+
+msgid "You're now subscribed."
+msgstr "You're now subscribed."
+
+msgid "You cannot delete the last category"
+msgstr "You cannot delete the last category"
+
+msgid "groups"
+msgstr "groups"
+
+msgid "AI Aiken generator"
+msgstr "AI Aiken generator"
+
+msgid "Apply suggestion"
+msgstr "Apply suggestion"
+
+msgid "Suggested feedback"
+msgstr "Suggested feedback"
+
+msgid "Suggested score"
+msgstr "Suggested score"
+
+msgid "AI suggestion"
+msgstr "AI suggestion"
+
+msgid "Suggest with AI"
+msgstr "Suggest with AI"
+
+msgid "Send all by email"
+msgstr "Send all by email"
+
+msgid "Export all attempts"
+msgstr "Export all attempts"
+
+msgid "All emails sent successfully"
+msgstr "All emails sent successfully"
+
+msgid "Email content logged to error_log"
+msgstr "Email content logged to error_log"
+
+msgid "Adaptive behavior (success/failure)"
+msgstr "Adaptive behavior (success/failure)"
+
+msgid "Error opening XML file"
+msgstr "Error opening XML file"
+
+msgid "Go to resource"
+msgstr "Go to resource"
+
+msgid "No result for keyword %s"
+msgstr "No result for keyword %s"
+
+msgid "Results"
+msgstr "Results"
+
+msgid "No assignments available"
+msgstr "No assignments available"
+
+msgid "Please select a target assignment"
+msgstr "Please select a target assignment"
+
+msgid "Submission moved successfully"
+msgstr "Submission moved successfully"
+
+msgid "Correction uploaded successfully!"
+msgstr "Correction uploaded successfully!"
+
+msgid "Invalid submission"
+msgstr "Invalid submission"
+
+msgid "Invalid resource link ID"
+msgstr "Invalid resource link ID"
+
+msgid "Can not change visibility"
+msgstr "Can not change visibility"
+
+msgid "Visibility updated successfully!"
+msgstr "Visibility updated successfully!"
+
+msgid "No download available"
+msgstr "No download available"
+
+msgid "Are you sure you want to delete this submission?"
+msgstr "Are you sure you want to delete this submission?"
+
+msgid "Submission deleted successfully!"
+msgstr "Submission deleted successfully!"
+
+msgid "Friendly URL"
+msgstr "Friendly URL"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Export format"
+msgstr "Export format"
+
+msgid "Glossary exported"
+msgstr "Glossary exported"
+
+msgid "Could not export glossary"
+msgstr "Could not export glossary"
+
+msgid "Terms imported succesfully"
+msgstr "Terms imported succesfully"
+
+msgid "Could not import terms"
+msgstr "Could not import terms"
+
+msgid "Could not fetch glossary term"
+msgstr "Could not fetch glossary term"
+
+msgid "Glossary term saved"
+msgstr "Glossary term saved"
+
+msgid "Could not create glossary term"
+msgstr "Could not create glossary term"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Blocks Palette"
+msgstr "Blocks Palette"
+
+msgid "Already answered"
+msgstr "Already answered"
+
+msgid "You have left the group successfully"
+msgstr "You have left the group successfully"
+
+msgid "Your skill ranking"
+msgstr "Your skill ranking"
+
+msgid "The comment is required"
+msgstr "The comment is required"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "All messages here are automatically marked as promoted."
+
+msgid "Item 1"
+msgstr "Item 1"
+
+msgid "Item 2"
+msgstr "Item 2"
+
+msgid "Item 3"
+msgstr "Item 3"
+
+msgid "Value 1"
+msgstr "Value 1"
+
+msgid "Value 2"
+msgstr "Value 2"
+
+msgid "Value 3"
+msgstr "Value 3"
+
+msgid "Checkbox 1"
+msgstr "Checkbox 1"
+
+msgid "Checkbox 2"
+msgstr "Checkbox 2"
+
+msgid "Forms"
+msgstr "Forms"
+
+msgid "Dialogs"
+msgstr "Dialogs"
+
+msgid "Editable content"
+msgstr "Editable content"
+
+msgid "Color updated"
+msgstr "Color updated"
+
+msgid "Modify color theme"
+msgstr "Modify color theme"
+
+msgid "Select as current theme"
+msgstr "Select as current theme"
+
+msgid "Save as new theme"
+msgstr "Save as new theme"
+
+msgid "New color theme"
+msgstr "New color theme"
+
+msgid "Filters"
+msgstr "Filters"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+msgstr "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+
+msgid "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+msgstr "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+
+msgid "Link saved"
+msgstr "Link saved"
+
+msgid "Link is valid"
+msgstr "Link is valid"
+
+msgid "Link is not valid"
+msgstr "Link is not valid"
+
+msgid "Toggle visibility"
+msgstr "Toggle visibility"

@@ -213,7 +213,7 @@ if ($isAdaptative && isset($result['correct_answer_id'])) {
 
     if ($answerType !== HOT_SPOT_DELINEATION && isset($result['correct_answer_id'])) {
         $table = new HTML_Table(['class' => 'table data_table']);
-        $table->setCellContents(0, 0, get_lang('YourAnswer'));
+        $table->setCellContents(0, 0, get_lang('Your answer'));
         if ($answerType !== DRAGGABLE) {
             $table->setCellContents(0, 1, get_lang('Comment'));
         }

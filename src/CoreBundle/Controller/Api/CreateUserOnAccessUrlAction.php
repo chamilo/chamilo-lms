@@ -107,13 +107,13 @@ class CreateUserOnAccessUrlAction
             $password = $data->getPassword();
 
             $subject = \sprintf(
-                $this->translator->trans('You are registered to %s'),
+                $this->translator->trans('You are registered on %s'),
                 $platformName
             );
 
             $body = $this->translator->trans(
                 'Hello %s,<br><br>'.
-                'You are registered to %s.<br>'.
+                'You are registered on %s.<br>'.
                 'You can access your account from <a href="%s">here</a>.<br><br>'.
                 'Your login credentials are:<br>'.
                 'Username: <strong>%s</strong><br>'.

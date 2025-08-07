@@ -1752,7 +1752,7 @@ msgstr "Добавить ссылку на домашнюю страницу к�
 msgid "has been deleted"
 msgstr "было удалено"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Удаляя данный сайт, вы удалите все учебные материалы, ссылки, которые он содержит. Кроме того, будет закрыт доступ всем членам курса, которые были на него подписаны (но Вы их не удаляете из других курсов). <p>Вы действительно хотите очистить все пространство курса?"
 
 msgid "YES"
@@ -6343,16 +6343,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21292,7 +21289,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

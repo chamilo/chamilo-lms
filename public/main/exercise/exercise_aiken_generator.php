@@ -25,7 +25,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 
 if (isset($_REQUEST['submit_aiken_generated'])) {
@@ -36,7 +36,7 @@ if (isset($_REQUEST['submit_aiken_generated'])) {
     }
 }
 
-Display::display_header(get_lang('AI Aiken Generator'), 'Exercises');
+Display::display_header(get_lang('AI Aiken generator'), 'Exercises');
 
 // Generate Aiken form directly on this page
 generateAikenForm();

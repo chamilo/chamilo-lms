@@ -129,7 +129,7 @@ class SocialController extends AbstractController
 
         $dataForVue = [
             'terms' => $termsContent,
-            'date_text' => $translator->trans('PublicationDate', [], 'messages', $isoCode).': '.$formattedDate->format('Y-m-d H:i:s'),
+            'date_text' => $translator->trans('Publication date', [], 'messages', $isoCode).': '.$formattedDate->format('Y-m-d H:i:s'),
         ];
 
         return $this->json($dataForVue);
@@ -215,11 +215,11 @@ class SocialController extends AbstractController
             $bossList = array_column($bossList, 'boss_id');
             foreach ($bossList as $bossId) {
                 $subjectEmail = \sprintf(
-                    $translator->trans('User %s signed the agreement'),
+                    $translator->trans('User %s signed the agreement.'),
                     $user->getFullname()
                 );
                 $contentEmail = \sprintf(
-                    $translator->trans('User %s signed the agreement.TheDateY'),
+                    $translator->trans('User %s signed the agreement the %s.'),
                     $user->getFullname(),
                     api_get_local_time()
                 );
@@ -260,7 +260,7 @@ class SocialController extends AbstractController
             $extraFieldValue->delete($value['id']);
         }
 
-        return $this->json(['success' => true, 'message' => $translator->trans('Legal acceptance revoked successfully.')]);
+        return $this->json(['success' => true, 'message' => $translator->trans('Legal consent revoked successfully.')]);
     }
 
     #[Route('/handle-privacy-request', name: 'chamilo_core_social_handle_privacy_request')]
@@ -284,16 +284,21 @@ class SocialController extends AbstractController
             return $this->json(['success' => false, 'message' => 'User not found']);
         }
 
+        $request = $requestStack->getCurrentRequest();
+        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
+        $specificPath = '/main/admin/user_list_consent.php';
+        $link = $baseUrl.$specificPath;
+
         if ('delete_account' === $requestType) {
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
-            $emailSubject = $translator->trans('Request for account deletion');
-            $emailContent = \sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that : ').$explanation, $user->getFullName());
+            $emailSubject = $translator->trans('Request for account removal');
+            $emailContent = \sprintf($translator->trans("User %s asked for the deletion of his/her account, explaining that \"%s\". You can process the request here: %s"), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = \sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that: ').$explanation, $user->getFullName());
+            $emailContent = \sprintf($translator->trans("User %s asked for the removal of his/her consent to our legal terms, explaining that \"%s\". You can process the request here: %s"), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
         } else {
             return $this->json(['success' => false, 'message' => 'Invalid action type']);
         }
@@ -301,12 +306,6 @@ class SocialController extends AbstractController
         UserManager::createDataPrivacyExtraFields();
         UserManager::update_extra_field_value($userId, $fieldToUpdate, 1);
         UserManager::update_extra_field_value($userId, $justificationFieldToUpdate, $explanation);
-
-        $request = $requestStack->getCurrentRequest();
-        $baseUrl = $request->getSchemeAndHttpHost().$request->getBasePath();
-        $specificPath = '/main/admin/user_list_consent.php';
-        $link = $baseUrl.$specificPath;
-        $emailContent .= $translator->trans('Go here : ').'<a href="'.$link.'">'.$link.'</a>';
 
         $emailOfficer = $settingsManager->getSetting('profile.data_protection_officer_email');
         if (!empty($emailOfficer)) {

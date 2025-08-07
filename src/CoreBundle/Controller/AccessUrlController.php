@@ -162,7 +162,7 @@ class AccessUrlController extends AbstractController
 
         return $this->render('@ChamiloCore/AccessUrl/remove_users.html.twig', [
             'report' => $report,
-            'title' => $this->translator->trans('Remove users from URLs from CSV'),
+            'title' => $this->translator->trans('Remove users from URLs with a CSV file'),
         ]);
     }
 

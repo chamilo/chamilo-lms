@@ -227,7 +227,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         'radio',
         'same_file_name_option',
         '',
-        get_lang('What should be done with imported files with the same file name as existing files?Skip'),
+        get_lang('Skip same file name'),
         FILE_SKIP,
         'id="same_file_name_option_1" class="checkbox"'
     );
@@ -235,7 +235,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         'radio',
         'same_file_name_option',
         '',
-        get_lang('What should be done with imported files with the same file name as existing files?Rename'),
+        get_lang('Rename file (eg file.pdf becomes file_1.pdf)'),
         FILE_RENAME,
         'id="same_file_name_option_2" class="checkbox"'
     );
@@ -243,7 +243,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         'radio',
         'same_file_name_option',
         '',
-        get_lang('What should be done with imported files with the same file name as existing files?Overwrite'),
+        get_lang('Overwrite file'),
         FILE_OVERWRITE,
         'id="same_file_name_option_3" class="checkbox"'
     );

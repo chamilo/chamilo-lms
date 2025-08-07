@@ -8,7 +8,7 @@
       >
         <v-text-field
           v-model="item.title"
-          :label="$t('name')"
+          :label="$t('Name')"
           type="text"
         />
       </v-col>

@@ -26,7 +26,7 @@ function validate_data($skills)
     foreach ($skills as $index => $skill) {
         foreach ($mandatory_fields as $field) {
             if (empty($skill[$field])) {
-                $skill['error'] = get_lang(ucfirst($field).'Mandatory');
+                $skill['error'] = get_lang(ucfirst($field).' mandatory');
                 $errors[] = $skill;
             }
         }
@@ -198,7 +198,7 @@ echo $objSkill->getToolBar();
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('CSV import'));
 $group = [];
 $group[] = $form->createElement(
     'radio',

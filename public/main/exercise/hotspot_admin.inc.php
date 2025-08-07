@@ -969,14 +969,14 @@ if (isset($modifyAnswers)) {
 
         <?php if (HOT_SPOT_DELINEATION == $answerType): ?>
             <div class="mt-4">
-                <h4><?php echo get_lang('Adaptive behavior (Success / Failure)'); ?></h4>
+                <h4><?php echo get_lang('Adaptive behavior (success/failure)'); ?></h4>
                 <div class="form-group">
-                    <label for="scenario_success_selector"><?php echo get_lang('On Success'); ?></label>
+                    <label for="scenario_success_selector"><?php echo get_lang('On success'); ?></label>
                     <select class="form-control" name="scenario_success_selector" id="scenario_success_selector">
                         <option value=""><?php echo get_lang('Select destination'); ?></option>
                         <option value="repeat" <?php if ($scenario_success_selector === 'repeat') echo 'selected'; ?>><?php echo get_lang('Repeat question'); ?></option>
                         <option value="-1" <?php if ($scenario_success_selector === '-1') echo 'selected'; ?>><?php echo get_lang('End of test'); ?></option>
-                        <option value="url" <?php if ($scenario_success_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (manual URL)'); ?></option>
+                        <option value="url" <?php if ($scenario_success_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (custom URL)'); ?></option>
                         <?php foreach ($objExercise->selectQuestionList() as $index => $qid):
                             $q = Question::read($qid);
                             $label = "Q$index: ".strip_tags($q->selectTitle()); ?>
@@ -992,12 +992,12 @@ if (isset($modifyAnswers)) {
                 </div>
 
                 <div class="form-group">
-                    <label for="scenario_failure_selector"><?php echo get_lang('On Failure'); ?></label>
+                    <label for="scenario_failure_selector"><?php echo get_lang('On failure'); ?></label>
                     <select class="form-control" name="scenario_failure_selector" id="scenario_failure_selector">
                         <option value=""><?php echo get_lang('Select destination'); ?></option>
                         <option value="repeat" <?php if ($scenario_failure_selector === 'repeat') echo 'selected'; ?>><?php echo get_lang('Repeat question'); ?></option>
                         <option value="-1" <?php if ($scenario_failure_selector === '-1') echo 'selected'; ?>><?php echo get_lang('End of test'); ?></option>
-                        <option value="url" <?php if ($scenario_failure_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (manual URL)'); ?></option>
+                        <option value="url" <?php if ($scenario_failure_selector === 'url') echo 'selected'; ?>><?php echo get_lang('Other (custom URL)'); ?></option>
                         <?php foreach ($objExercise->selectQuestionList() as $index => $qid):
                             $q = Question::read($qid);
                             $label = "Q$index: ".strip_tags($q->selectTitle()); ?>

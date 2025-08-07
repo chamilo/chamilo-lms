@@ -221,7 +221,7 @@ function qti_parse_file($data)
     global $questionTempDir;
 
     if (empty($data)) {
-        Display::addFlash(Display::return_message(get_lang('Error opening question\'s XML file'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Error opening XML file'), 'error'));
 
         return false;
     }
@@ -242,7 +242,7 @@ function qti_parse_file($data)
     if (2 != $qtiMainVersion) {
         Display::addFlash(
             Display::return_message(
-                get_lang('UnsupportedQtiVersion'),
+                get_lang('Unsupported IMS/QTI version.'),
                 'error'
             )
         );

@@ -77,7 +77,7 @@
       class="text-center mt-3"
     >
       <BaseButton
-        :label="t('Search user by geolocalization')"
+        :label="t('By geolocalization')"
         icon="map-search"
         type="primary"
         @click="redirectToGeolocalization"

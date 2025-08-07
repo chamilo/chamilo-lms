@@ -1753,7 +1753,7 @@ msgstr "Įrašyti nuorodą į puslapį tituliniame"
 msgid "has been deleted"
 msgstr "ištrinta"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Šios srities ištrynimas neatstatomai panaikins visą turinį (dokumentus, nuorodas...) išregistruos visus narius (jie liks kitose srityse). Tai taip pat ištrins visus virtualius kursus, susijusius su šia kurso sritimi.<p>Ar tikrai norite ištrinti kursą?"
 
 msgid "YES"
@@ -6344,16 +6344,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -21293,7 +21290,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"

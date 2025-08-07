@@ -10,14 +10,22 @@
       </template>
 
       <template #title>
-        <h2 class="text-xl font-semibold">{{ course.title }}</h2>
-        <p class="text-sm text-gray-500">{{ course.code }}</p>
+        <h2 class="text-2xl font-semibold text-gray-90">{{ course.title }}</h2>
+        <p class="text-sm text-gray-50">{{ course.code }}</p>
+        <hr class="mt-4 border-gray-20" />
       </template>
 
       <template #content>
-        <p class="text-gray-700">
-          {{ course.description || t("No description available") }}
-        </p>
+        <div v-if="course.descriptions?.length" class="space-y-4">
+          <div
+            v-for="(item, idx) in course.descriptions"
+            :key="idx"
+            class="p-4 bg-gray-10 rounded-lg shadow-sm"
+          >
+            <h4 class="font-semibold text-gray-90 mb-2">{{ item.title }}</h4>
+            <div class="text-gray-50" v-html="item.content"></div>
+          </div>
+        </div>
       </template>
     </Card>
 
@@ -218,6 +226,7 @@ const course = ref({
   title: "Loading...",
   code: "",
   description: "",
+  descriptions: [],
   illustrationUrl: null,
 })
 
@@ -237,14 +246,23 @@ const platformSessionAdminAccessAllUrls = computed(
   () => platformConfigStore.getSetting("platform.session_admin_access_to_all_users_on_all_urls") === "true",
 )
 
-loadCourse()
 async function loadCourse() {
   try {
-    course.value = await courseService.findCourseForSessionAdmin(courseId)
+    const data = await courseService.findCourseForSessionAdmin(courseId)
+    course.value = {
+      id: data.id,
+      title: data.title,
+      code: data.code,
+      description: data.description,
+      descriptions: data.descriptions || [],
+      illustrationUrl: data.illustrationUrl,
+    }
   } catch (e) {
     console.error("[RegisterStudent] course load failed:", e)
   }
 }
+
+loadCourse()
 
 const form = ref({ lastname: "", firstname: "", tempId: "" })
 const student = ref(null)

@@ -212,17 +212,23 @@ if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
         Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import')).'</a>';
 
-    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
-        Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
+    if (!empty($my_group_id)) {
+        $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
+            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM,
+                get_lang('CSV export')).'</a>';
 
-    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
-        Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
+        $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
+            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM,
+                get_lang('Excel export')).'</a>';
 
-    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
-        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
+        $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM,
+                get_lang('Export to PDF')).'</a>';
 
-    $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'">'.
-        Display::getMdiIcon('view-dashboard', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Groups overview')).'</a>';
+        $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'">'.
+            Display::getMdiIcon('view-dashboard', 'ch-tool-icon', null, ICON_SIZE_MEDIUM,
+                get_lang('Groups overview')).'</a>';
+    }
 }
 
 $actionsRight = GroupManager::getSearchForm();

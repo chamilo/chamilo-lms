@@ -1745,7 +1745,7 @@ msgstr ""
 msgid "has been deleted"
 msgstr ""
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr ""
 
 msgid "YES"
@@ -6332,16 +6332,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

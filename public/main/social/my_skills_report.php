@@ -141,7 +141,7 @@ if ($isStudent) {
             break;
         case 'filterBySkill':
             $skill = $objSkill->get($selectedSkill);
-            $reportTitle = sprintf(get_lang('LearnersWhoAchievedTheSkillX'), $skill['name']);
+            $reportTitle = sprintf(get_lang('Students who acquired skill %s'), $skill['name']);
             $students = UserManager::getUsersFollowedByUser(
                 $userId,
                 STUDENT,

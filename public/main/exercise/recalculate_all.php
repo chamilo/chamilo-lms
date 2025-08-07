@@ -50,7 +50,7 @@ foreach ($result as $track) {
 
     if (!$trackedExercise) {
         Display::addFlash(
-            Display::return_message(get_lang('BadFormData').'<br>ID: '.$track['id'], 'warning', false)
+            Display::return_message(get_lang('Submit failed: bad form data. Please contact your system administrator.').'<br>ID: '.$track['id'], 'warning', false)
         );
     }
 }

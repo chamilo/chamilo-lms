@@ -1755,8 +1755,8 @@ msgstr "Add link to page on Home Page"
 msgid "has been deleted"
 msgstr "has been deleted"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
-msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
+msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 
 msgid "YES"
 msgstr "YES"
@@ -6342,17 +6342,14 @@ msgstr "Courses from the original session"
 msgid "Courses from the destination session"
 msgstr "Courses from the destination session"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Help for the copy of courses from session to session"
-
 msgid "Type of copy"
 msgstr "Type of copy"
 
 msgid "Copy from course in session to another session"
 msgstr "Copy from course in session to another session"
 
-msgid "You must select a course from original session"
-msgstr "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
+msgstr "You must select a course from the original session and select a destination session"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
 msgstr "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6367,7 +6364,7 @@ msgid "Current courses"
 msgstr "Current courses"
 
 msgid "Unaccessible courses"
-msgstr "Unaccessible courses"
+msgstr "Inaccessible courses"
 
 msgid "Edit session courses"
 msgstr "Edit session courses"
@@ -28915,3 +28912,105 @@ msgstr "Edit submission"
 
 msgid "Submission updated!"
 msgstr "Submission updated!"
+
+msgid "Diagnosis of user %s"
+msgstr "Diagnosis of user %s"
+
+msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+msgstr "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+
+msgid "%s support"
+msgstr "%s support"
+
+msgid "This option is not available because this activity is contained by an assessment."
+msgstr "This option is not available because this activity is contained by an assessment."
+
+msgid "Move to thread"
+msgstr "Move to thread"
+
+msgid "Moved."
+msgstr "Moved."
+
+msgid "Score changes history"
+msgstr "Score changes history"
+
+msgid "Sessions"
+msgstr "Sessions"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+
+msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+msgstr "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+
+msgid "Give your course a short and striking title, e.g. Innovation Management"
+msgstr "Give your course a short and striking title, e.g. Innovation Management"
+
+msgid "Untitled survey"
+msgstr "Untitled survey"
+
+msgid "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+msgstr "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+
+msgid "AI helpers"
+msgstr "AI helpers"
+
+msgid "Auto-launch for forums"
+msgstr "Auto-launch for forums"
+
+msgid "E-mail student when he is subscribed to the course"
+msgstr "E-mail student when he is subscribed to the course"
+
+msgid "You're now subscribed."
+msgstr "You're now subscribed."
+
+msgid "You cannot delete the last category"
+msgstr "You cannot delete the last category"
+
+msgid "groups"
+msgstr "groups"
+
+msgid "AI Aiken generator"
+msgstr "AI Aiken generator"
+
+msgid "Apply suggestion"
+msgstr "Apply suggestion"
+
+msgid "Suggested feedback"
+msgstr "Suggested feedback"
+
+msgid "Suggested score"
+msgstr "Suggested score"
+
+msgid "AI suggestion"
+msgstr "AI suggestion"
+
+msgid "Suggest with AI"
+msgstr "Suggest with AI"
+
+msgid "Send all by email"
+msgstr "Send all by email"
+
+msgid "Export all attempts"
+msgstr "Export all attempts"
+
+msgid "All emails sent successfully"
+msgstr "All emails sent successfully"
+
+msgid "Email content logged to error_log"
+msgstr "Email content logged to error_log"
+
+msgid "Adaptive behavior (success/failure)"
+msgstr "Adaptive behavior (success/failure)"
+
+msgid "Error opening XML file"
+msgstr "Error opening XML file"
+
+msgid "Go to resource"
+msgstr "Go to resource"
+
+msgid "No result for keyword %s"
+msgstr "No result for keyword %s"
+
+msgid "Results"
+msgstr "Results"

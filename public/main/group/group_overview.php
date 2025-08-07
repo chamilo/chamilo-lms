@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
                 }*/
             }
 
-            Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));
+            Display::addFlash(Display::return_message(get_lang('No survey available')));
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq());
             exit;

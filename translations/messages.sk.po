@@ -1759,7 +1759,7 @@ msgstr "Pridať na domovskú stránku odkaz"
 msgid "has been deleted"
 msgstr "bol vymazaný"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Zmazanie tohto kurzu nevratne odstráni všetok obsah ( dokumenty, odkazy) ktorý obsahuje a odhlási všetkých účastníkov (neodstráni ich z ostatných kurzov). Tiež zmaže všetky virtuálne kurzy, prepojené na tento kurz. <p>Naozaj zmazať tento kurz?"
 
 msgid "YES"
@@ -6350,16 +6350,13 @@ msgstr "Kurzy z pôvodného stretnutia"
 msgid "Courses from the destination session"
 msgstr "Kurzy z cieľového stretnutia"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Nápoveda pre kópiu kurzov od stretnutia do stretnutia"
-
 msgid "Type of copy"
 msgstr "Typ kópie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopírovať z kurzu v stretnutí do iného stretnutia"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Musíte vybrať kurz z pôvodného stretnutia"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

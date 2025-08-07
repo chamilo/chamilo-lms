@@ -164,7 +164,7 @@ if ('add' == $action) {
 $javascript = "<script>
 function confirmsend()
 {
-    if (confirm(\"".get_lang('MailingConfirmSend')."\")){
+    if (confirm(\"".get_lang('Send content files to individuals?')."\")){
         return true;
     } else {
         return false;
@@ -185,10 +185,10 @@ function confirmation (name)
 function checkForm (frm)
 {
     if (frm.elements['recipients[]'].selectedIndex < 0){
-        alert(\"".get_lang('NoUserSelected')."\");
+        alert(\"".get_lang('Please select a user to send the file to.')."\");
         return false;
     } else if (frm.file.value == '') {
-        alert(\"".get_lang('NoFileSpecified')."\");
+        alert(\"".get_lang("You didn't specify a file to upload.")."\");
         return false;
     } else {
         return true;

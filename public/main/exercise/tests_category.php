@@ -170,7 +170,7 @@ function edit_category_form($action)
                     $category->modifyCategory();
                     Display::addFlash(Display::return_message(get_lang('Update successful')));
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('Edit categoryError'), 'error'));
+                    Display::addFlash(Display::return_message(get_lang('Could not edit category'), 'error'));
                 }
             }
             Security::clear_token();

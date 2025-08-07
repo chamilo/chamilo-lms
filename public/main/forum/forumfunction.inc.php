@@ -355,15 +355,15 @@ function forumForm(CForum $forum = null, int $lp_id = null): string
     $form->addDateTimePicker(
         'start_time',
         [
-            get_lang('Public access (access authorized to any member of the course)ation date'),
-            get_lang('Public access (access authorized to any member of the course)ation dateComment'),
+            get_lang('Publication date'),
+            get_lang('The forum will be visible starting from this date'),
         ],
         ['id' => 'start_time']
     );
 
     $form->addDateTimePicker(
         'end_time',
-        [get_lang('Closing date'), get_lang('Closing dateComment')],
+        [get_lang('Closing date'), get_lang('Once this date has passed, the forum will be closed')],
         ['id' => 'end_time']
     );
 
@@ -541,7 +541,7 @@ function editForumCategoryForm(CForumCategory $category): string
         'index.php?action=edit_category&'.api_get_cidreq().'&id='.$categoryId
     );
     // Setting the form elements.
-    $form->addElement('header', '', get_lang('Edit forumCategory'));
+    $form->addElement('header', '', get_lang('Edit forum category'));
 
     $form->addElement('hidden', 'action', 'edit_category');
     $form->addElement('hidden', 'forum_category_id');
@@ -958,7 +958,7 @@ function returnVisibleInvisibleIcon(
             }
         }
         $html .= 'action=invisible&content='.$content.'&id='.$id.'">'.
-            Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeInvisible')).'</a>';
+            Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make invisible')).'</a>';
     }
     if (0 == $current_visibility_status) {
         $html .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&';
@@ -2309,7 +2309,7 @@ function newThread(CForum $forum, $form_values = '', $showPreview = true)
             '',
             [
                 get_lang('Thread scored by peers'),
-                get_lang('Thread scored by peersComment'),
+                get_lang('If selected, this option will require each student to qualify at least 2 other students in order to get his score greater than 0 in the gradebook.'),
             ]
         );
         $form->addElement('html', '</div>');
@@ -3494,7 +3494,7 @@ function move_thread_form()
         $values = $form->exportValues();
         if (isset($_POST['forum'])) {
             store_move_thread($values);
-            Display::addFlash(Display::return_message(get_lang('Moved')));
+            Display::addFlash(Display::return_message(get_lang('Moved.')));
         }
     } else {
         return $form->returnForm();
@@ -3527,7 +3527,7 @@ function move_post_form()
     foreach ($threads as $thread) {
         $threads_list[$thread->getIid()] = $thread->getTitle();
     }
-    $form->addSelect('thread', get_lang('Move toThread'), $threads_list);
+    $form->addSelect('thread', get_lang('Move to thread'), $threads_list);
     $form->applyFilter('thread', 'html_filter');
 
     // The OK button
@@ -3809,7 +3809,7 @@ function forum_search()
     $form->addElement('header', '', get_lang('Search in the Forum'));
     $form->addElement('text', 'search_term', get_lang('Search term'), ['autofocus']);
     $form->applyFilter('search_term', 'html_filter');
-    $form->addElement('static', 'search_information', '', get_lang('Search in the Forum information'));
+    $form->addElement('static', 'search_information', '', get_lang('Search in the Forum'));
     $form->addButtonSearch(get_lang('Search'));
 
     // Setting the rules.

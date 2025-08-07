@@ -14,7 +14,7 @@ if ('true' !== api_get_setting('allow_social_tool')) {
 
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('Social network')];
-$interbreadcrumb[] = ['url' => 'promoted_messages.php', 'name' => get_lang('PromotedMessages')];
+$interbreadcrumb[] = ['url' => 'promoted_messages.php', 'name' => get_lang('Promoted messages')];
 
 $social_right_content = '';
 $messageId = $_GET['id'];

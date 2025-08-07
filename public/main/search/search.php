@@ -738,9 +738,9 @@ if ($userForm->validate()) {
     if ($superiorUserList && false === $isPartial) {
         $url = api_get_path(WEB_PATH).'/main/search/load_search.php?user_id='.$userInfo['user_id'];
         $urlContact = api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social';
-        $subject = sprintf(get_lang('Diagnosis From User %s'), $userInfo['complete_name']);
+        $subject = sprintf(get_lang('Diagnosis of user %s'), $userInfo['complete_name']);
         $message = sprintf(
-            get_lang('Diagnosis From User %s lang %s with link %s Contact at %s'),
+            get_lang('Diagnosis of user %s (language: %s) with link %s. Contact at %s'),
             $userInfo['complete_name'],
             $userInfo['language'],
             $url,

@@ -141,7 +141,7 @@ if (isset($_GET['action'])) {
                         $result->set_score($newScore);
                         $result->save();
                     }
-                    Display::addFlash(Display::return_message(get_lang('Saved')));
+                    Display::addFlash(Display::return_message(get_lang('Saved.')));
                     header('Location: '.api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq());
                     exit;
                 }
@@ -465,7 +465,7 @@ if (isset($_GET['export'])) {
                     }
                 } else {
                     if (empty($data['score']) && !is_numeric($data['score'])) {
-                        $result[] = get_lang('The user did not take the exam.Acronym');
+                        $result[] = get_lang('The user did not take the exam.');
                     } else {
                         $result[] = $data['score'];
                     }

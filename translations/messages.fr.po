@@ -1840,7 +1840,7 @@ msgstr "Ajouter un lien sur la page d'accueil"
 msgid "has been deleted"
 msgstr "a été supprimé"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "En supprimant ce cours, vous supprimerez tous les documents qu'il contient et désinscrirez tous les membres qui y sont inscrits. <p>Voulez-vous réellement supprimer ce cours ?"
 
 msgid "YES"
@@ -6542,16 +6542,13 @@ msgstr "Cours de la session d'origine"
 msgid "Courses from the destination session"
 msgstr "Cours de la session de destination"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Aide à la copie de cours de session à session"
-
 msgid "Type of copy"
 msgstr "Type de copie"
 
 msgid "Copy from course in session to another session"
 msgstr "Copie d'un cours d'une session à une autre"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Merci de sélectionner un cours de la session d'origine"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

@@ -226,7 +226,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ('true' === $enabled) {
         $actions_array[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq(),
-            'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('VideoConference')),
+            'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Videoconference')),
         ];
     }
 

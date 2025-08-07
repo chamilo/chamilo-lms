@@ -1762,7 +1762,7 @@ msgstr "Añadir un enlace web en la página principal"
 msgid "has been deleted"
 msgstr "ha sido suprimido"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr ""
 "Si suprime el sitio web de este curso, suprimirá todos los documentos que "
 "contiene y todos sus miembros dejarán de estar inscritos en el mismo. <p>¿ "
@@ -6355,16 +6355,13 @@ msgstr "Cursos de origen de la sesión"
 msgid "Courses from the destination session"
 msgstr "Cursos de destino de la sesión"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Si desea copiar un curso de una sesión a otro curso de otra sesión, primero debe seleccionar un curso de la lista cursos de origen de la sesión. Puedes copiar contenidos de las herramientas descripción del curso, documentos, glosario, enlaces, ejercicios y lecciones, de forma directa o seleccionando los componentes del curso"
-
 msgid "Type of copy"
 msgstr "Tipo de copia"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiar cursos de una sesión a otra"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Debe seleccionar un curso de la lista original y una sesión de la lista de destino"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -29667,3 +29664,6 @@ msgstr ""
 "permanecer anónimo, perderemos la oportunidad de ofrecerle todos los "
 "privilegios de ser un administrador de portal registrado, pero respetaremos "
 "su decisión. Simplemente deje este formulario vacío y haga clic en Siguiente."
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Si desea copiar un curso de una sesión a otro curso de otra sesión, primero debe seleccionar un curso de la lista cursos de origen de la sesión. Puedes copiar contenidos de las herramientas descripción del curso, documentos, glosario, enlaces, ejercicios y lecciones, de forma directa o seleccionando los componentes del curso"

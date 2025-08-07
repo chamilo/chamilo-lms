@@ -1233,9 +1233,9 @@ abstract class Question
         $form->addHtml('<div id="advanced_params_options" style="display:none">');
 
         if (isset($zoomOptions['options'])) {
-            $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
-            $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
-            $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
+            $form->addElement('text', 'imageZoom', get_lang('Image URL'));
+            $form->addElement('text', 'imageWidth', get_lang('px width'));
+            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link');
         }
 
         $form->addHtmlEditor(
@@ -1263,7 +1263,7 @@ abstract class Question
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
                 ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'))
             ) {
-                $form->addCheckBox('mandatory', get_lang('IsMandatory'));
+                $form->addCheckBox('mandatory', get_lang('Mandatory?'));
             }
 
             //global $text;
@@ -1727,7 +1727,7 @@ abstract class Question
         }
 
         if ($exercise->hideComment && HOT_SPOT == $this->type) {
-            $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
+            $header .= Display::return_message(get_lang('Results only available online'));
 
             return $header;
         }

@@ -707,7 +707,7 @@ class EvalForm extends FormValidator
         );
         $this->addFloat(
             'min_score',
-            get_lang('Minimum Score'),
+            get_lang('Minimum score'),
             false,
             [
                 'size' => '4',

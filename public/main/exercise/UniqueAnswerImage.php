@@ -251,7 +251,7 @@ class UniqueAnswerImage extends UniqueAnswer
                                 name="btn_add_img['.$i.']"
                                 type="submit"
                                 id="question_admin_form_btn_add_img['.$i.']">
-                                <em class="fa fa-plus"></em> '.get_lang('AddImageWithZoom').'
+                                <em class="fa fa-plus"></em> '.get_lang('Add image with zoom').'
                             </button>
                         </div>
                         <div class="col-sm-2"></div>

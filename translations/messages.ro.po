@@ -1760,7 +1760,7 @@ msgstr "Adauga un link  web in pagina principală"
 msgid "has been deleted"
 msgstr "a fost șters"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Daca stergeti acest site web a acestui curs, veti sterge toate documentele care contine si toti membrii sai inceteaza sa fie inscrisa in ea. <p>Sunteti sigur ca doriți să eliminați acest curs?"
 
 msgid "YES"
@@ -6351,16 +6351,13 @@ msgstr "Cursuri de origine a sesiunii"
 msgid "Courses from the destination session"
 msgstr "Cursuri de destin a sesiunii"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Pentru a copia un curs de la o sesiune la alta curs într-o altă sesiune, trebuie să selectați mai întâi un curs din lista de cursuri de origine a sesiunii. Puteți copia conținutul din descrierea cursului, documentele, glosar, link-uri, exerciții și lecții, în mod direct sau selectarea componentelor a cursului"
-
 msgid "Type of copy"
 msgstr "Felul de copie"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiati cursuri de la o sesiune la alta"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Trebuie sa selectionati un curs din lista originala si o sesiune din lista de destin"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -25060,3 +25057,6 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Intrebarile orale raspunse sunt: %s"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Pentru a copia un curs de la o sesiune la alta curs într-o altă sesiune, trebuie să selectați mai întâi un curs din lista de cursuri de origine a sesiunii. Puteți copia conținutul din descrierea cursului, documentele, glosar, link-uri, exerciții și lecții, în mod direct sau selectarea componentelor a cursului"

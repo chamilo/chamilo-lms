@@ -1760,7 +1760,7 @@ msgstr "Dodaj povezavo na domačo stran"
 msgid "has been deleted"
 msgstr "je bila odstranjena"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Brisanje spletne strani tega tečaja trajno odstrani vse dokumente, ki jih vsebuje, in izpiše vse njegove študente (ne zbriše jih iz ostalih tečajev).<p>Resnično želiš odstraniti tečaj ?"
 
 msgid "YES"
@@ -6351,16 +6351,13 @@ msgstr "Tečaji iz izhodiščne seje"
 msgid "Courses from the destination session"
 msgstr "Tečaji iz ponorne seje"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Kopiranje tečajev med sejami: razlaga"
-
 msgid "Type of copy"
 msgstr "Vrsta kopije"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopiranje iz tečaja v seji v drugo sejo"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Izbrati morate tečaj iz prvotne seje"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

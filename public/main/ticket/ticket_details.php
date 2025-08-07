@@ -152,13 +152,13 @@ if (isset($_GET['action'])) {
     switch ($action) {
         case 'subscribe':
             TicketManager::subscribeUserToTicket($ticket_id, $user_id);
-            Display::addFlash(Display::return_message(get_lang('Subscribed successfully')));
+            Display::addFlash(Display::return_message(get_lang("You're now subscribed.")));
             header('Location: '.api_get_self().'?ticket_id='.$ticket_id);
             exit;
 
         case 'unsubscribe':
             TicketManager::unsubscribeUserFromTicket($ticket_id, $user_id);
-            Display::addFlash(Display::return_message(get_lang('Unsubscribed successfully')));
+            Display::addFlash(Display::return_message(get_lang("You're now unsubscribed.")));
             header('Location: '.api_get_self().'?ticket_id='.$ticket_id);
             exit;
     }
@@ -339,7 +339,7 @@ if ($allowEdition
 
         TicketManager::sendNotification(
             $ticket_id,
-            get_lang('TicketUpdate successful'),
+            get_lang('Ticket updated'),
             $messageToSend
         );
 
@@ -407,7 +407,7 @@ echo '<table width="100%">
         '#',
         ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
     ).'. '.
-    get_lang('TicketUpdate successful').' '.
+    get_lang('Ticket updated').' '.
     Display::url(
         date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
         '#',
@@ -454,7 +454,7 @@ if (null != $ticket['ticket']['course_url']) {
     if ('true' === api_get_setting('lp.ticket_lp_quiz_info_add')) {
         if (!empty($ticket['ticket']['exercise_url'])) {
             echo '<tr>
-                <td><b>'.get_lang('Exercise').':</b> '.$ticket['ticket']['exercise_url'].' </td>
+                <td><b>'.get_lang('Test').':</b> '.$ticket['ticket']['exercise_url'].' </td>
                 <td></td>
                 <td colspan="2"></td>
               </tr>';
@@ -462,7 +462,7 @@ if (null != $ticket['ticket']['course_url']) {
 
         if (!empty($ticket['ticket']['lp_id'])) {
             echo '<tr>
-                <td><b>'.get_lang('LearningPath').':</b> '.$ticket['ticket']['lp_url'].' </td>
+                <td><b>'.get_lang('Learning path').':</b> '.$ticket['ticket']['lp_url'].' </td>
                 <td></td>
                 <td colspan="2"></td>
               </tr>';

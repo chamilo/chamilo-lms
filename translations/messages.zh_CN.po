@@ -1751,7 +1751,7 @@ msgstr "添加链接"
 msgid "has been deleted"
 msgstr "已删除"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "删除课程将永久删除这门课程的所有内容(文档、链接...) 及所有成员的注册信息(不会删除他们在其他课程的注册信息)。<P>确定要删除课程吗？"
 
 msgid "YES"
@@ -6342,16 +6342,13 @@ msgstr "原讲习班中的课程"
 msgid "Courses from the destination session"
 msgstr "目标讲习班的课程"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "复制讲习班中的课程"
-
 msgid "Type of copy"
 msgstr "复制的方法"
 
 msgid "Copy from course in session to another session"
 msgstr "复制讲习班的课程到另一个班中"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

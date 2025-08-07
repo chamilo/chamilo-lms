@@ -98,7 +98,7 @@ if (!$hideHeaderAndFooter && api_is_course_admin()) {
     $actions = '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'">'.
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->getId().'">'.
-        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyTest')).'</a>';
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 echo Display::page_header(get_lang('Questions to be reviewed'));
@@ -135,7 +135,7 @@ $exerciseActions .= '&nbsp;'.Display::url(
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('UnSelect all'),
+    get_lang('Unselect all'),
     'javascript://',
     ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
 );

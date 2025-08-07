@@ -168,7 +168,7 @@ $table->set_form_actions(['subscribe' => get_lang('Register')], 'user');
 
 if (!empty($_POST['keyword'])) {
     $keyword_name = Security::remove_XSS($_POST['keyword']);
-    echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 Display::display_header($tool_name, 'User');

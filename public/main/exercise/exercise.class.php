@@ -3251,11 +3251,11 @@ class Exercise
         $endTest = false;
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
-                $label = get_lang('ReviewQuestions');
+                $label = get_lang('Review questions');
                 $class = 'btn btn--success';
             } else {
                 $endTest = true;
-                $label = get_lang('End Test');
+                $label = get_lang('End test');
                 $class = 'btn btn--warning';
             }
         } else {
@@ -5720,19 +5720,19 @@ class Exercise
                                     <td><b>'.get_lang('Your answer').'</b></td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>'.get_lang('Overlapping areaping area').'</b></td>
+                                    <td><b>'.get_lang('Overlapping area').'</b></td>
                                     <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
                                     <td class="text-right '.($overlap_color ? 'text-success' : 'text-error').'">'
                                     .$overlap.'</td>
                                 </tr>
                                 <tr>
-                                    <td><b>'.get_lang('Excessive areaive area').'</b></td>
+                                    <td><b>'.get_lang('Excessive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
                                     <td class="text-right '.($excess_color ? 'text-success' : 'text-error').'">'
                                     .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>'.get_lang('Missing area area').'</b></td>
+                                    <td><b>'.get_lang('Missing area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
                                     <td class="text-right '.($missing_color ? 'text-success' : 'text-error').'">'
                                     .$missing.'</td>
@@ -9249,7 +9249,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".
-                                        addslashes(api_htmlentities(get_lang('Are you sure to delete?')))." ".
+                                        addslashes(api_htmlentities(get_lang('Are you sure you want to delete')))." ".
                                         addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                     'href' => $deleteUrl,
                                 ]
@@ -9293,7 +9293,7 @@ class Exercise
                                 $random_number_of_question
                             );
                             $number_of_questions = $nbQuestionsTotal.' ';
-                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('Questions lower case') : get_lang(
+                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('questions') : get_lang(
                                 'Question lower case'
                             );
                             $number_of_questions .= ' - ';
@@ -9500,12 +9500,12 @@ class Exercise
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
                 if (!empty($_GET['keyword'])) {
                     $content .= Display::return_message(
-                        get_lang('No Results for keyword: ').Security::remove_XSS($_GET['keyword']),
+                        sprintf(get_lang('No result for keyword %s'),Security::remove_XSS($_GET['keyword'])),
                         'warning'
                     );
                 } else {
                     $content .= Display::noDataView(
-                        get_lang('Quiz'),
+                        get_lang('Test'),
                         Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_BIG),
                         get_lang('Create a new test'),
                         'exercise_admin.php?'.api_get_cidreq()
@@ -9689,11 +9689,11 @@ class Exercise
                         <tr class="row_odd" >
                             <td>&nbsp;</td>
                             <td><b>'.get_lang('Requirements').'</b></td>
-                            <td><b>'.get_lang('YourAnswer').'</b></td>
+                            <td><b>'.get_lang('Your answer').'</b></td>
                         </tr>
                         <tr class="row_even">
-                            <td><b>'.get_lang('Overlap').'</b></td>
-                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                            <td><b>'.get_lang('Overlapping area').'</b></td>
+                            <td>'.get_lang('Minimum overlap').' '.$threadhold1.'</td>
                             <td>
                                 <div style="color:'.$overlap_color.'">
                                     '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
@@ -9702,7 +9702,7 @@ class Exercise
                         </tr>
                         <tr>
                             <td><b>'.get_lang('Excess').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                            <td>'.get_lang('Maximum excess').' '.$threadhold2.'</td>
                             <td>
                                 <div style="color:'.$excess_color.'">
                                     '.(($final_excess < 0) ? 0 : intval($final_excess)).'
@@ -9711,7 +9711,7 @@ class Exercise
                         </tr>
                         <tr class="row_even">
                             <td><b>'.get_lang('Missing').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                            <td>'.get_lang('Maximum missing').' '.$threadhold3.'</td>
                             <td>
                                 <div style="color:'.$missing_color.'">
                                     '.(($final_missing < 0) ? 0 : intval($final_missing)).'
@@ -9734,12 +9734,12 @@ class Exercise
             }
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
             if ($organs_at_risk_hit > 0) {
-                $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+                $message = '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
+                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('One (or more) area at risk has been hit').'</b></p>';
             } else {
-                $message = '<p>'.get_lang('YourDelineation').'</p>';
+                $message = '<p>'.get_lang('Your delineation :').'</p>';
                 $message .= $table_resume;
-                $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                $message .= '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
             }
             $message .= '<p>'.$comment.'</p>';
             echo $message;*/
@@ -10044,7 +10044,7 @@ class Exercise
         $exerciseId = $exercise_stat_info['exe_exo_id'];
         $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
 
-        $content = Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
+        $content = Display::label(get_lang('Questions without answer'), 'danger');
         $content .= '<div class="clear"></div><br />';
         $table = '';
         $counter = 0;
@@ -10145,7 +10145,7 @@ class Exercise
 
             if (isChecked == 1) {
                 $("#message").addClass("warning-message");
-                $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+                $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
             } else {
                 window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
             }
@@ -10670,7 +10670,7 @@ class Exercise
         }
 
         if (!empty($open_question_list)) {
-            $msg .= '<p><br />'.get_lang('A learner has answered an open questionAre').' :</p>'.
+            $msg .= '<p><br />'.get_lang('A learner has answered an open question').' :</p>'.
                 '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
@@ -10858,9 +10858,9 @@ class Exercise
         );
 
         $warning = sprintf(
-            get_lang('TheSettingXWillChangeToX'),
-            get_lang('FeedbackType'),
-            get_lang('NoFeedback')
+            get_lang("The setting \"%s\" will change to \"%s\""),
+            get_lang('Feedback'),
+            get_lang('Exam (no feedback)')
         );
         $resultDisabledGroup[] = $form->createElement(
             'radio',

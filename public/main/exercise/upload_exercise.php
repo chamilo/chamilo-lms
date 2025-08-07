@@ -572,7 +572,7 @@ function lp_upload_quiz_action_handling()
             }
         }
     }
-    Display::addFlash(Display::return_message(get_lang('FileImported')));
+    Display::addFlash(Display::return_message(get_lang('File imported')));
 
     if (isset($_SESSION['oLP']) && isset($_GET['lp_id'])) {
         $previous = $_SESSION['oLP']->select_previous_item_id();

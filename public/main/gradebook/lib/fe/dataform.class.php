@@ -106,7 +106,7 @@ class DataForm extends FormValidator
     protected function build_import_form()
     {
         $this->addElement('hidden', 'formSent');
-        $this->addElement('header', get_lang('Import marks in an assessment'));
+        $this->addElement('header', get_lang('Import marks'));
         $this->addElement('file', 'import_file', get_lang('URL/URI'));
         $this->addElement(
             'radio',

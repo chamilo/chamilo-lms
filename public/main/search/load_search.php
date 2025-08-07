@@ -47,7 +47,7 @@ switch ($action) {
     case 'unsubscribe_user':
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : '';
         SessionManager::unsubscribe_user_from_session($sessionId, $userToLoad);
-        Display::addFlash(Display::return_message(get_lang('Unsubscribed')));
+        Display::addFlash(Display::return_message(get_lang('User is now unsubscribed')));
         header("Location: ".api_get_self().'?user_id='.$userToLoad.'#session-table');
         break;
 }

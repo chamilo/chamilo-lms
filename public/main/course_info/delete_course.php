@@ -51,7 +51,7 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] 
 } else {
     $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
     $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
-    $message .= '<p>'.get_lang('Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>').'<p>';
+    $message .= '<p>'.get_lang('Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?').'</p>';
     $message .= '<p><span class="form_required">*</span>'
         .get_lang('Course code confirmation')
         .'&nbsp;<input type="text" name="course_code" id="course_code"></p>';
@@ -68,7 +68,7 @@ if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] 
     $message .= '</p>';
     $interbreadcrumb[] = [
         'url' => 'maintenance.php',
-        'name' => get_lang('Maintenance'),
+        'name' => get_lang('Course maintenance'),
     ];
 }
     $htmlHeadXtra[] = '<script>

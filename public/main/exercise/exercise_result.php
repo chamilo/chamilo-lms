@@ -198,7 +198,7 @@ if ('embeddable' === $origin) {
     $pageTop .= showEmbeddableFinishButton();
 } else {
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'normal', false)
+        Display::return_message(get_lang('Saved.'), 'normal', false)
     );
 }
 
@@ -337,7 +337,7 @@ function showEmbeddableFinishButton()
     $html = Display::tag(
         'p',
         Display::toolbarButton(
-            get_lang('GoBackToVideo'),
+            get_lang('Go back to video'),
             '#',
             'undo',
             'warning',

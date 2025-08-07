@@ -106,7 +106,7 @@ if ('true' === $allowTutors) {
     <!-- General properties -->
     <table class="table table-hover table-striped data_table">
     <tr>
-        <td><?php echo get_lang('General coaches'); ?> :</td>
+        <td><?php echo get_lang('General coach'); ?> :</td>
         <td>
             <?php
             foreach ($session->getGeneralCoaches() as $generalCoach) {

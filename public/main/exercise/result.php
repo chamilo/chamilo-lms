@@ -94,7 +94,7 @@ if ($show_headers) {
 
     if ('mobileapp' === $origin) {
         $actions = '<a href="javascript:window.history.go(-1);">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
         echo Display::toolbarAction('toolbar', [$actions]);
     }
 }
@@ -120,7 +120,7 @@ switch ($action) {
         if ($allowExportPdf) {
             $allAnswers = $stats['all_answers_html'];
             @$pdf = new PDF();
-            $title = get_lang('ResponseReport');
+            $title = get_lang('Response report');
             $exerciseTitle = $objExercise->get_formated_title();
             $studentInfo = api_get_user_info($student_id);
             $userHeader = $objExercise->showExerciseResultHeader(
@@ -130,7 +130,7 @@ switch ($action) {
                 false,
                 false
             );
-            $filename = get_lang('Exercise').'_'.$exerciseTitle;
+            $filename = get_lang('Test').'_'.$exerciseTitle;
             $pdf->content_to_pdf("
                     <html><body>
                     <h2 style='text-align: center'>$title</h2>

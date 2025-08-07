@@ -155,7 +155,7 @@ if ($form->validate()) {
         );
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('Test added'), 'success')
+            Display::return_message(get_lang('Exercise added'), 'success')
         );
     }
     $exercise_id = $objExercise->getId();

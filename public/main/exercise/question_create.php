@@ -83,7 +83,7 @@ $form->addButtonCreate(get_lang('Create a question'), 'SubmitCreate a question')
 $form->addRule('exercise', get_lang('Required field'), 'required');
 $form->addRule('exercise', get_lang('You have to select a test'), 'numeric');
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
-$form->addRule('question_type_hidden', get_lang('InvalidQuestion type'), 'validquestiontype');
+$form->addRule('question_type_hidden', get_lang('Invalid question type'), 'validquestiontype');
 
 if ($form->validate()) {
     $values = $form->exportValues();

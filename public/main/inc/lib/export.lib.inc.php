@@ -24,19 +24,36 @@ class Export
     }
 
     /**
-     * Export tabular data to CSV-file.
+     * Export tabular data to a CSV file.
      *
-     * @return mixed csv raw data | false if no data to export | string file path if success in $writeOnly mode
+     * @param array  $data           Data rows as an array of associative arrays
+     * @param string $filename       Base filename without extension
+     * @param bool   $writeOnly      If true returns the file path instead of forcing download
+     * @param string $enclosure      Field enclosure character (default: ")
+     * @param bool   $includeHeader  Whether to output a header row (keys of the first array)
+     *
+     * @return mixed Raw CSV data | false if $data is empty | string file path if $writeOnly = true
      */
-    public static function arrayToCsv(array $data, string $filename = 'export', bool $writeOnly = false, string $enclosure = '"')
-    {
+    public static function arrayToCsv(
+        array  $data,
+        string $filename      = 'export',
+        bool   $writeOnly     = false,
+        string $enclosure     = '"',
+        bool   $includeHeader = true
+    ) {
         if (empty($data)) {
             return false;
         }
 
-        $enclosure = !empty($enclosure) ? $enclosure : '"';
-        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-        $writer = new CsvWriter($filePath, ',', $enclosure, true);
+        $enclosure = $enclosure !== '' ? $enclosure : '"';
+        $filePath  = api_get_path(SYS_ARCHIVE_PATH) . uniqid() . '.csv';
+
+        // define a single-character escape
+        $escapeChar = '\\';
+
+        // CsvWriter signature: __construct($fileName, $delimiter, $enclosure, $escape, $withBOM, $withHeader)
+        // we pass false for BOM, and $includeHeader for header toggle
+        $writer = new CsvWriter($filePath, ',', $enclosure, $escapeChar, false, $includeHeader);
 
         $source = new ArraySourceIterator($data);
         $handler = Handler::create($source, $writer);

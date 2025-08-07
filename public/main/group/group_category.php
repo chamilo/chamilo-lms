@@ -122,8 +122,8 @@ for ($i = 1; $i <= 10; $i++) {
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
 
 $group = [
-    $form->createElement('select', 'groups_per_user', null, $possible_values, ['id' => 'groups_per_user']),
-    $form->createElement('static', null, null, get_lang(' groups')),
+    $form->createElement('select', 'groups_per_user', null, $possible_values, ['id' => 'groups_per_user', 'size' => 3]),
+    $form->createElement('static', null, null, get_lang('groups')),
 ];
 $form->addGroup($group, 'limit_group', get_lang('A user can be member of maximum'), null, false);
 $form->addRule('limit_group', get_lang('The maximum number of groups per user you submitted is invalid. There are now users who are subscribed in more groups than the number you propose.'), 'callback', 'check_groups_per_user');
@@ -240,8 +240,8 @@ if ($allowDocumentGroupAccess) {
     $form->addGroup(
         $group,
         '',
-        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DocumentsAccess')
-        ).'<span>'.get_lang('DocumentsAccess').'</span>',
+        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Document access')
+        ).'<span>'.get_lang('Document access').'</span>',
         null,
         false
     );
@@ -300,7 +300,7 @@ $group = [
     $form->createElement('radio', 'announcements_state', get_lang('Announcements'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
     $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
-    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private between users'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 $form->addGroup(
     $group,

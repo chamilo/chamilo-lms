@@ -1751,7 +1751,7 @@ msgstr "Amestar un enllaz web na páxina d'entamu"
 msgid "has been deleted"
 msgstr "esborróse"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Si esborra'l sitiu web d'esti cursu, va esborrar tolos documentos que tien dientro y tolos sos miembros van quedar ensin matrícula nél. <p> ¿ Ta seguru de que quier esborrar esti cursu ?"
 
 msgid "YES"
@@ -6342,16 +6342,13 @@ msgstr "Cursos d'orixe de la sesión"
 msgid "Courses from the destination session"
 msgstr "Cursos destín de la sesión"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Si quies copiar un cursu d'una sesión a otru cursu d'otra sesión, primero tienes que seleicionar un cursu de la llista de cursos d'orixe de la sesión. Puedes copiar conteníos de les ferramientes descripción del cursu, documentos, glosariu, enllaces, exercicios y leiciones, de forma direuta y seleicionando los componenetes del cursu"
-
 msgid "Type of copy"
 msgstr "Triba de copia"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiar cursos d'una sesión a otra"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Tienes que seleicionar un cursu de la llista orixinal y una sesión de la llista destín"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -25043,3 +25040,6 @@ msgstr ""
 
 msgid "%02d h %02d m %02d s"
 msgstr ""
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Si quies copiar un cursu d'una sesión a otru cursu d'otra sesión, primero tienes que seleicionar un cursu de la llista de cursos d'orixe de la sesión. Puedes copiar conteníos de les ferramientes descripción del cursu, documentos, glosariu, enllaces, exercicios y leiciones, de forma direuta y seleicionando los componenetes del cursu"

@@ -270,7 +270,7 @@ if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tu
     $form->addGroup(
         $group,
         '',
-        [get_lang('Thread scored by peers'), get_lang('Thread scored by peersComment')]
+        [get_lang('Thread scored by peers'), get_lang('If selected, this option will require each student to qualify at least 2 other students in order to get his score greater than 0 in the gradebook.')]
     );
     $form->addElement('html', '</div>');
 }

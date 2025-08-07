@@ -29,7 +29,7 @@ class SurveyLink extends AbstractLink
         $survey = $this->get_survey_data();
 
         if (!$survey instanceof CSurvey) {
-            return get_lang('Untitled Survey');
+            return get_lang('Untitled survey');
         }
 
         return $survey->getCode() . ': ' . self::html_to_text($survey->getTitle());

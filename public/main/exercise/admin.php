@@ -346,7 +346,7 @@ if ($inATest) {
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
-                .get_lang('Warning: This question exists in another tests'),
+                .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
             'warning',
             false
         );
@@ -376,17 +376,17 @@ if ($inATest) {
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
         $alert .= sprintf(
-            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
             $objExercise->random,
             $maxScoreAllQuestions
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
         $alert .= sprintf(
-            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
             $objExercise->random,
             $maxScoreAllQuestions
         );

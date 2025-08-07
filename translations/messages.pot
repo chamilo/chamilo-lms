@@ -1744,7 +1744,7 @@ msgstr ""
 msgid "has been deleted"
 msgstr ""
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr ""
 
 msgid "YES"
@@ -6334,16 +6334,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -28641,7 +28638,7 @@ msgstr ""
 msgid "Draft"
 msgstr ""
 
-msgid "Share with User"
+msgid "Share with user"
 msgstr ""
 
 msgid "Multilingual"
@@ -28882,4 +28879,262 @@ msgid "Edit submission"
 msgstr ""
 
 msgid "Submission updated!"
+msgstr ""
+
+msgid "Diagnosis of user %s"
+msgstr ""
+
+msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+msgstr ""
+
+msgid "%s support"
+msgstr ""
+
+msgid "This option is not available because this activity is contained by an assessment."
+msgstr ""
+
+msgid "Move to thread"
+msgstr ""
+
+msgid "Moved."
+msgstr ""
+
+msgid "Score changes history"
+msgstr ""
+
+msgid "Sessions"
+msgstr ""
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr ""
+
+msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+msgstr ""
+
+msgid "Give your course a short and striking title, e.g. Innovation Management"
+msgstr ""
+
+msgid "Untitled survey"
+msgstr ""
+
+msgid "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+msgstr ""
+
+msgid "AI helpers"
+msgstr ""
+
+msgid "Auto-launch for forums"
+msgstr ""
+
+msgid "E-mail student when he is subscribed to the course"
+msgstr ""
+
+msgid "You're now subscribed."
+msgstr ""
+
+msgid "You cannot delete the last category"
+msgstr ""
+
+msgid "groups"
+msgstr ""
+
+msgid "AI Aiken generator"
+msgstr ""
+
+msgid "Apply suggestion"
+msgstr ""
+
+msgid "Suggested feedback"
+msgstr ""
+
+msgid "Suggested score"
+msgstr ""
+
+msgid "AI suggestion"
+msgstr ""
+
+msgid "Suggest with AI"
+msgstr ""
+
+msgid "Send all by email"
+msgstr ""
+
+msgid "Export all attempts"
+msgstr ""
+
+msgid "All emails sent successfully"
+msgstr ""
+
+msgid "Email content logged to error_log"
+msgstr ""
+
+msgid "Adaptive behavior (success/failure)"
+msgstr ""
+
+msgid "Error opening XML file"
+msgstr ""
+
+msgid "Go to resource"
+msgstr ""
+
+msgid "No result for keyword %s"
+msgstr ""
+
+msgid "Results"
+msgstr ""
+
+msgid "No assignments available"
+msgstr ""
+
+msgid "Please select a target assignment"
+msgstr ""
+
+msgid "Submission moved successfully"
+msgstr ""
+
+msgid "Correction uploaded successfully!"
+msgstr ""
+
+msgid "Invalid submission"
+msgstr ""
+
+msgid "Invalid resource link ID"
+msgstr ""
+
+msgid "Can not change visibility"
+msgstr ""
+
+msgid "Visibility updated successfully!"
+msgstr ""
+
+msgid "No download available"
+msgstr ""
+
+msgid "Are you sure you want to delete this submission?"
+msgstr ""
+
+msgid "Submission deleted successfully!"
+msgstr ""
+
+msgid "Friendly URL"
+msgstr ""
+
+msgid "Definition"
+msgstr ""
+
+msgid "Export format"
+msgstr ""
+
+msgid "Glossary exported"
+msgstr ""
+
+msgid "Could not export glossary"
+msgstr ""
+
+msgid "Terms imported succesfully"
+msgstr ""
+
+msgid "Could not import terms"
+msgstr ""
+
+msgid "Could not fetch glossary term"
+msgstr ""
+
+msgid "Glossary term saved"
+msgstr ""
+
+msgid "Could not create glossary term"
+msgstr ""
+
+msgid "Column"
+msgstr ""
+
+msgid "Blocks Palette"
+msgstr ""
+
+msgid "Already answered"
+msgstr ""
+
+msgid "You have left the group successfully"
+msgstr ""
+
+msgid "Your skill ranking"
+msgstr ""
+
+msgid "The comment is required"
+msgstr ""
+
+msgid "All messages here are automatically marked as promoted."
+msgstr ""
+
+msgid "Item 1"
+msgstr ""
+
+msgid "Item 2"
+msgstr ""
+
+msgid "Item 3"
+msgstr ""
+
+msgid "Value 1"
+msgstr ""
+
+msgid "Value 2"
+msgstr ""
+
+msgid "Value 3"
+msgstr ""
+
+msgid "Checkbox 1"
+msgstr ""
+
+msgid "Checkbox 2"
+msgstr ""
+
+msgid "Forms"
+msgstr ""
+
+msgid "Dialogs"
+msgstr ""
+
+msgid "Editable content"
+msgstr ""
+
+msgid "Color updated"
+msgstr ""
+
+msgid "Modify color theme"
+msgstr ""
+
+msgid "Select as current theme"
+msgstr ""
+
+msgid "Save as new theme"
+msgstr ""
+
+msgid "New color theme"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+msgstr ""
+
+msgid "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+msgstr ""
+
+msgid "Link saved"
+msgstr ""
+
+msgid "Link is valid"
+msgstr ""
+
+msgid "Link is not valid"
+msgstr ""
+
+msgid "Toggle visibility"
 msgstr ""

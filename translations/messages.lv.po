@@ -1752,7 +1752,7 @@ msgstr "Pievienot hipersaiti sākumlapā"
 msgid "has been deleted"
 msgstr "tika izdzēsts"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "zdzēšot šo sadaļu, tiks neatgriezeniski dzēsts viss saturs (dokumenti, saites, ...), un tiks atteikta reģistrācija visiem dalībniekiem (nedzēšot tos no citām sadaļām). Tāpat tiks dzēsti arī visi virtuālie kursi, kas ir saistīti ar šo kursu.<p>Vai Jūs tiešām vēlaties dzēst šo kursu un tā saturu?"
 
 msgid "YES"
@@ -6343,16 +6343,13 @@ msgstr "Kursi oriģinālajā sesijā"
 msgid "Courses from the destination session"
 msgstr "Kursi no galamērķa sesijas"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Palīg instruments kursu iekšējai pārvietošanai / kopēšanai no sesijas uz sesiju"
-
 msgid "Type of copy"
 msgstr "Kopēšanas iespējas"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopēt kursu no vienas sesijas otrā"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

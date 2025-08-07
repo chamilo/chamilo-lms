@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /* For licensing terms, see /license.txt */
@@ -22,6 +23,8 @@ $msgids = parsePotFile($potPath);
 $missing = [];
 
 $dirsToScan = ['assets', 'public', 'src', 'tests'];
+
+$termIndex = 1;
 
 foreach ($dirsToScan as $dir) {
     echo "Scanning subdirectory: $dir\n";
@@ -51,7 +54,8 @@ foreach ($dirsToScan as $dir) {
         foreach ($lines as $num => $line) {
             $terms = extractTermsFromLine($line, $isVue);
             foreach ($terms as $term) {
-                echo "Found \"{$term}\" in {$relPath}:" . ($num + 1) . "\n";
+                echo "[".str_pad($termIndex,5, ' ', STR_PAD_LEFT)."] Found \"{$term}\" in {$path}:" . ($num + 1) . "\n";
+                $termIndex++;
                 if (!isset($msgids[$term])) {
                     echo "\033[31m  Missing in messages.pot\033[0m\n";
                     $missing[$term] = true;
@@ -86,6 +90,7 @@ function parsePotFile(string $filePath): array
 
         if (strpos($line, 'msgid ') === 0) {
             if ($currentMsgid !== null && $currentMsgid !== '') {
+                $currentMsgid = unescape_double($currentMsgid);
                 $msgids[$currentMsgid] = true;
             }
             if (preg_match('/msgid\s+"(.*)"/', $line, $matches)) {
@@ -98,6 +103,7 @@ function parsePotFile(string $filePath): array
             $currentMsgid .= $matches[1];
         } elseif ($currentMsgid !== null && (strpos($line, 'msgstr') === 0 || $line === '')) {
             if ($currentMsgid !== null && $currentMsgid !== '') {
+                $currentMsgid = unescape_double($currentMsgid);
                 $msgids[$currentMsgid] = true;
             }
             $currentMsgid = null;
@@ -107,6 +113,7 @@ function parsePotFile(string $filePath): array
 
     // Handle last one if no empty line at end
     if ($currentMsgid !== null && $currentMsgid !== '') {
+        $currentMsgid = unescape_double($currentMsgid);
         $msgids[$currentMsgid] = true;
     }
 
@@ -120,40 +127,67 @@ function extractTermsFromLine(string $line, bool $isVue): array
     if ($isVue) {
         // 1. v-t="'term'" or v-t='"term"'
         preg_match_all('/\bv-t\s*=\s*(["\'])(.*?)(?<!\\\\)\1/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
 
         // 2. {{ $t("term") }}
         preg_match_all('/\{\{\s*\$t\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)\s*\}\}/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
 
         // 3. :label="$t('term')"
         preg_match_all('/:\w+\s*=\s*["\']\$t\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)["\']/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
 
         // 4. t("term") - exact t(
         preg_match_all('/\bt\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
     } else {
         // get_lang("term")
         preg_match_all('/\bget_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
 
         // trans("term"), ->trans("term"), .trans("term")
         preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
-        foreach ($matches[2] ?? [] as $term) {
-            $terms[] = $term;
-        }
+        addUnescapedTerms($matches, $terms);
     }
 
     return $terms;
+}
+
+function addUnescapedTerms(array $matches, array &$terms): void
+{
+    foreach ($matches[2] ?? [] as $key => $term) {
+        $quote = $matches[1][$key];
+        if ($quote === '"') {
+            $term = unescape_double($term);
+        } else {
+            $term = unescape_single($term);
+        }
+        $terms[] = $term;
+    }
+}
+
+function unescape_double(string $str): string
+{
+    $escapes = [
+        '\\\\' => '\\',
+        '\\"' => '"',
+        "\\'" => "'",
+        '\\n' => "\n",
+        '\\r' => "\r",
+        '\\t' => "\t",
+        '\\v' => "\v",
+        '\\f' => "\f",
+        '\\e' => "\e",
+        '\\$' => '$',
+    ];
+    return strtr($str, $escapes);
+}
+
+function unescape_single(string $str): string
+{
+    $escapes = [
+        '\\\\' => '\\',
+        "\\'" => "'",
+    ];
+    return strtr($str, $escapes);
 }

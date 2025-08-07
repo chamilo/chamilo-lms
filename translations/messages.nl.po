@@ -1777,7 +1777,7 @@ msgstr "Link toevoegen en verbinden met startpagina"
 msgid "has been deleted"
 msgstr "werd verwijderd."
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Wanneer u deze cursus verwijdert, worden alle gegevens (documenten, links...) verwijderd. Eventuele virtuele cursussen gelinkt aan deze cursus worden ook verwijderd.<br /><br />Wenst u deze cursus te verwijderen?"
 
 msgid "YES"
@@ -6376,16 +6376,13 @@ msgstr "Cursussen binnen de originele sessie"
 msgid "Courses from the destination session"
 msgstr "Cursussen van de doelsessie"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Help bij het kopiëren van cursussen van sessie naar sessie"
-
 msgid "Type of copy"
 msgstr "Soort kopie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopieer een cursus binnen een sessie naar een andere sessie"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "U moet een cursus selecteren uit de originele sessie"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

@@ -1760,7 +1760,7 @@ msgstr "إضافة رابط الصفحة على الصفحة الرئيسية"
 msgid "has been deleted"
 msgstr "تم الحذف"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "حذف هذا المجال سوف يحذف كافة المحتوى ( مستندات، روابط . . . ) إنه يتضمن إلغاء تسجيل جميع أعضائها ( لا يزيلها من المجالات الأخرى).إنه أيضاً يحذف أي مقررات إفتراضية ترتبط بهذا المقرر.هل تريد فعلاً حذف مساحة المقرر؟"
 
 msgid "YES"
@@ -6351,16 +6351,13 @@ msgstr "مقررات من الدورة الاصلية"
 msgid "Courses from the destination session"
 msgstr "مقررات من الدورة المقصودة"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "المساعدة في نسخ المقررات من دورة الى دورة"
-
 msgid "Type of copy"
 msgstr "نوع النسخ"
 
 msgid "Copy from course in session to another session"
 msgstr "النسخ من مقرر موجود داخل دورة الى دورة اخرى"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "يجب عليك اختيار مقرر من الدورة الاصلية"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

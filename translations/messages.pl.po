@@ -1752,7 +1752,7 @@ msgstr "Dodaj łącze do strony głównej"
 msgid "has been deleted"
 msgstr "została usunięta"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Skasowanie kursu trwale usunie wszystkie dokumenty kursu i wyrejestruje z kursu wszystkich studentów (nie usunie ich z innych kursów)."
 
 msgid "YES"
@@ -6343,16 +6343,13 @@ msgstr "Kursy z oryginalnej sesji"
 msgid "Courses from the destination session"
 msgstr "Kursy z docelowej sesji"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Pomoc przy kopiowaniu kursów z sesji do sesji"
-
 msgid "Type of copy"
 msgstr "Rodzaj kopii"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopiuj z kursu w sesji do innej sesji"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Musisz wybrać kurs z oryginalnej sesji"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"

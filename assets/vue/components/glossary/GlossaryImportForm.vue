@@ -20,7 +20,7 @@
     <BaseCheckbox
       id="terms-delete-all"
       v-model="replace"
-      :label="t('Delete all terms before import')"
+      :label="t('Delete all terms before import.')"
       name="terms-delete-all"
     />
 

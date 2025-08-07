@@ -110,7 +110,7 @@ const repeatTypeOptions = [
   { label: t("Daily"), value: "daily" },
   { label: t("Weekly"), value: "weekly" },
   { label: t("Bi-weekly"), value: "bi-weekly" },
-  { label: t("Every X days"), value: "every-x-days" },
+  { label: t("Every x days"), value: "every-x-days" },
   { label: t("Monthly, by date"), value: "monthly-by-date" },
 ]
 

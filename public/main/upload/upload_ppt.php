@@ -87,8 +87,8 @@ $options = ChamiloHelper::getDocumentConversionSizes();
 $form->addSelect('slide_size', get_lang('Size of the slides'), $options);
 if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
-    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
-    $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentumentLanguage'));
+    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
+    $form->addSelectLanguage('language', get_lang('Document language for indexation'));
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
     }

@@ -28,7 +28,7 @@ class CalculatedAnswer extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
-        $defaults['answer'] = get_lang('DefaultTextInBlanks');
+        $defaults['answer'] = get_lang("<table cellspacing=\"0\" cellpadding=\"10\" border=\"1\" width=\"720\" style=\"\" height:=\"\">    <tbody>        <tr>            <td colspan=\"2\">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Age</strong></td>            <td width=\"75%\" style=\"\">[25] years old</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Sex</strong></td>            <td style=\"\" text-align:=\"\">[M] (M or F)</td>        </tr>        <tr>            <td style=\"text-align: right;\"><strong>Weight</strong></td>            <td style=\"\" text-align:=\"\">95 Kg</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Height</strong></td>            <td style=\"vertical-align: top;\">1.81 m</td>        </tr>        <tr>            <td style=\"vertical-align: top; text-align: right;\"><strong>Body Mass Index</strong></td>            <td style=\"vertical-align: top;\">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href=\"http://en.wikipedia.org/wiki/Body_mass_index\" onclick=\"window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false\"> Wikipedia article</a>)</td>        </tr>    </tbody></table>");
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
             $preArray = explode('@@', $objAnswer->selectAnswer(1));
@@ -131,7 +131,7 @@ class CalculatedAnswer extends Question
         $form->addRule('answer', get_lang('Please type the text'), 'required');
         $form->addRule(
             'answer',
-            get_lang('Please define at least one blank with square brackets [...]'),
+            get_lang('Please define at least one blank with the selected marker'),
             'regex',
             '/\[.*\]/'
         );
@@ -173,7 +173,7 @@ class CalculatedAnswer extends Question
         $form->addElement('text', 'answerVariations', get_lang('Question variations'));
         $form->addRule(
             'answerVariations',
-            get_lang('GiveQuestion variations'),
+            get_lang('Question variations'),
             'required'
         );
         $form->setDefaults(['answerVariations' => '1']);

@@ -53,15 +53,14 @@ $form->addElement('header', $tool_name);
 $form->addElement('radio', 'file_type', get_lang('Output file type'), 'XML', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV', 'csv');
 $form->addElement('radio', 'file_type', null, 'XLS', 'xls');
-$form->addCheckBox(
-    'addcsvheader',
-    [
-        get_lang('Include header line?'),
-        get_lang(
-            'This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal.'
-        ),
-    ],
-    get_lang('Yes, add the headers')
+$form->addElement('checkbox', 'addcsvheader', get_lang('Include header line?'));
+$form->addElement(
+    'static',
+    null,
+    null,
+    '<div class="form_help">'
+    . get_lang('This will put the field names on the first line. It is necessary when you want to import the file later on in a Chamilo portal.')
+    . '</div>'
 );
 $form->addSelect('course_code', get_lang('Only users from the course'), $courses);
 $form->addSelect('course_session', get_lang('Only users from the courseSession'), $coursesSessions);
@@ -199,7 +198,14 @@ if ($form->validate()) {
             exit;
             break;
         case 'csv':
-            Export::arrayToCsv($data, $filename);
+            $includeHeader = !empty($export['addcsvheader']);
+            Export::arrayToCsv(
+                $data,
+                $filename,
+                false,
+                '"',
+                false
+            );
             exit;
         case 'xls':
             Export::arrayToXls($data, $filename);

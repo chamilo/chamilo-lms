@@ -196,9 +196,35 @@ if ($form->validate()) {
         case 'xml':
             Export::arrayToXml($data, $filename, 'Contact', 'Contacts');
             exit;
-            break;
         case 'csv':
-            $includeHeader = !empty($export['addcsvheader']);
+            $headerNames = [];
+            if (api_get_configuration_value('password_encryption') !== 'none') {
+                $headerNames = ['UserId','LastName','FirstName','Email','UserName','AuthSource','Status','OfficialCode','PhoneNumber','RegistrationDate'];
+            } else {
+                $headerNames = ['UserId','LastName','FirstName','Email','UserName','Password','AuthSource','Status','OfficialCode','PhoneNumber','RegistrationDate'];
+            }
+            foreach ($extra_fields as $extra) {
+                $headerNames[] = $extra[1];
+            }
+
+            $manualHeader = !empty($export['addcsvheader']);
+            $reordered    = [];
+            if ($manualHeader) {
+                $reordered[] = $headerNames;
+            }
+
+            foreach ($data as $index => $rowAssoc) {
+                if ($manualHeader && $index === 0) {
+                    continue;
+                }
+                $row = [];
+                foreach ($headerNames as $col) {
+                    $row[] = $rowAssoc[$col] ?? '';
+                }
+                $reordered[] = $row;
+            }
+
+            $data = $reordered;
             Export::arrayToCsv(
                 $data,
                 $filename,
@@ -210,7 +236,6 @@ if ($form->validate()) {
         case 'xls':
             Export::arrayToXls($data, $filename);
             exit;
-            break;
     }
 }
 

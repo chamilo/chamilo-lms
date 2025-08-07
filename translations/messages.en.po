@@ -29086,3 +29086,87 @@ msgstr "Blocks Palette"
 
 msgid "Already answered"
 msgstr "Already answered"
+
+msgid "You have left the group successfully"
+msgstr "You have left the group successfully"
+
+msgid "Your skill ranking"
+msgstr "Your skill ranking"
+
+msgid "The comment is required"
+msgstr "The comment is required"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "All messages here are automatically marked as promoted."
+
+msgid "Item 1"
+msgstr "Item 1"
+
+msgid "Item 2"
+msgstr "Item 2"
+
+msgid "Item 3"
+msgstr "Item 3"
+
+msgid "Value 1"
+msgstr "Value 1"
+
+msgid "Value 2"
+msgstr "Value 2"
+
+msgid "Value 3"
+msgstr "Value 3"
+
+msgid "Checkbox 1"
+msgstr "Checkbox 1"
+
+msgid "Checkbox 2"
+msgstr "Checkbox 2"
+
+msgid "Forms"
+msgstr "Forms"
+
+msgid "Dialogs"
+msgstr "Dialogs"
+
+msgid "Editable content"
+msgstr "Editable content"
+
+msgid "Color updated"
+msgstr "Color updated"
+
+msgid "Modify color theme"
+msgstr "Modify color theme"
+
+msgid "Select as current theme"
+msgstr "Select as current theme"
+
+msgid "Save as new theme"
+msgstr "Save as new theme"
+
+msgid "New color theme"
+msgstr "New color theme"
+
+msgid "Filters"
+msgstr "Filters"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+msgstr "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+
+msgid "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+msgstr "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+
+msgid "Link saved"
+msgstr "Link saved"
+
+msgid "Link is valid"
+msgstr "Link is valid"
+
+msgid "Link is not valid"
+msgstr "Link is not valid"
+
+msgid "Toggle visibility"
+msgstr "Toggle visibility"

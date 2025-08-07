@@ -141,7 +141,7 @@ switch ($action) {
 
             $doc = new CDocument();
             $doc->setTitle($filename)
-                ->setFiletype('file')
+                ->setFiletype(strpos($mimetype, 'video/') === 0 ? 'video' : 'file')
                 ->setComment('')
                 ->setReadonly(false)
                 ->setCreator(api_get_user_entity())

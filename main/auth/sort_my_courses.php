@@ -2,11 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 $cidReset = true; // Flag forcing the 'current course' reset
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+
+$httpRequest = HttpRequest::createFromGlobals();
 
 $auth = new Auth();
 $user_course_categories = CourseManager::get_user_course_categories(api_get_user_id());
@@ -21,8 +25,11 @@ $authorizedActions = [
     'set_collapsable',
     'unsubscribe',
 ];
-if (in_array(trim($_REQUEST['action']), $authorizedActions)) {
-    $action = trim($_REQUEST['action']);
+
+$action = $httpRequest->query->get('action', $httpRequest->request->get('action', ''));
+
+if (!in_array($action, $authorizedActions)) {
+    $action = '';
 }
 
 $currentUrl = api_get_self();
@@ -33,9 +40,9 @@ $interbreadcrumb[] = [
 ];
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
-if (isset($_POST['submit_change_course_category'])) {
-    $course2EditCategory = Security::remove_XSS($_POST['course_2_edit_category']);
-    $courseCategories = Security::remove_XSS($_POST['course_categories']);
+if ($httpRequest->request->has('submit_change_course_category')) {
+    $course2EditCategory = Security::remove_XSS($httpRequest->request->get('course_2_edit_category'));
+    $courseCategories = Security::remove_XSS($httpRequest->request->get('course_categories'));
     $result = $auth->updateCourseCategory($course2EditCategory, $courseCategories);
     if ($result) {
         Display::addFlash(
@@ -47,11 +54,11 @@ if (isset($_POST['submit_change_course_category'])) {
 }
 
 // We edit course category
-if (isset($_POST['submit_edit_course_category']) &&
-    isset($_POST['title_course_category'])
+if ($httpRequest->request->has('submit_edit_course_category')
+    && $httpRequest->request->has('title_course_category')
 ) {
-    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
-    $categoryId = Security::remove_XSS($_POST['category_id']);
+    $titleCourseCategory = Security::remove_XSS($httpRequest->request->get('title_course_category'));
+    $categoryId = Security::remove_XSS($httpRequest->request->get('category_id'));
     $result = $auth->store_edit_course_category($titleCourseCategory, $categoryId);
     if ($result) {
         Display::addFlash(
@@ -64,11 +71,10 @@ if (isset($_POST['submit_edit_course_category']) &&
 }
 
 // We are creating a new user defined course category (= Create Course Category).
-if (isset($_POST['create_course_category']) &&
-    isset($_POST['title_course_category']) &&
-    strlen(trim($_POST['title_course_category'])) > 0
+if ($httpRequest->request->has('create_course_category')
+    && $titleCourseCategory = $httpRequest->request->get('title_course_category')
 ) {
-    $titleCourseCategory = Security::remove_XSS($_POST['title_course_category']);
+    $titleCourseCategory = Security::remove_XSS($titleCourseCategory);
     $result = $auth->store_course_category($titleCourseCategory);
     if ($result) {
         Display::addFlash(
@@ -87,10 +93,10 @@ if (isset($_POST['create_course_category']) &&
 }
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
-if (isset($_GET['move'])) {
-    $getCourse = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : '';
-    $getMove = Security::remove_XSS($_GET['move']);
-    $getCategory = isset($_GET['category']) ? Security::remove_XSS($_GET['category']) : '';
+if ($getMove = $httpRequest->query->get('move')) {
+    $getCourse = Security::remove_XSS($httpRequest->query->get('course'));
+    $getMove = Security::remove_XSS($getMove);
+    $getCategory = Security::remove_XSS($httpRequest->query->get('category'));;
     if (!empty($getCourse)) {
         $result = $auth->move_course($getMove, $getCourse, $getCategory);
         if ($result) {
@@ -113,7 +119,7 @@ if (isset($_GET['move'])) {
 
 switch ($action) {
     case 'edit_category':
-        $categoryId = isset($_GET['category_id']) ? (int) $_GET['category_id'] : 0;
+        $categoryId = $httpRequest->query->getInt('category_id');
         $categoryInfo = $auth->getUserCourseCategory($categoryId);
         if ($categoryInfo) {
             $categoryName = $categoryInfo['title'];
@@ -129,10 +135,9 @@ switch ($action) {
             $form->display();
         }
         exit;
-        break;
     case 'edit_course_category':
-        $edit_course = (int) $_GET['course_id'];
-        $defaultCategoryId = isset($_GET['category_id']) ? (int) $_GET['category_id'] : 0;
+        $edit_course = $httpRequest->query->getInt('course_id');
+        $defaultCategoryId = $httpRequest->query->getInt('category_id');
         $courseInfo = api_get_course_info_by_id($edit_course);
 
         if (empty($courseInfo)) {
@@ -167,12 +172,10 @@ switch ($action) {
         $form->addButtonSave(get_lang('Save'), 'submit_change_course_category');
         $form->display();
         exit;
-        break;
     case 'deletecoursecategory':
         // we are deleting a course category
-        if (isset($_GET['id'])) {
+        if ($getId = $httpRequest->query->getInt('id')) {
             if (Security::check_token('get')) {
-                $getId = Security::remove_XSS($_GET['id']);
                 $result = $auth->delete_course_category($getId);
                 if ($result) {
                     Display::addFlash(
@@ -183,7 +186,6 @@ switch ($action) {
         }
         header('Location: '.api_get_self());
         exit;
-        break;
     case 'createcoursecategory':
         $form = new FormValidator(
             'create_course_category',
@@ -194,16 +196,15 @@ switch ($action) {
         $form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
         $form->display();
         exit;
-        break;
     case 'set_collapsable':
         if (!api_get_configuration_value('allow_user_course_category_collapsable')) {
             api_not_allowed(true);
         }
 
         $userId = api_get_user_id();
-        $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
-        $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
-        $redirect = isset($_REQUEST['redirect']) ? Security::remove_XSS($_REQUEST['redirect']) : 0;
+        $categoryId = $httpRequest->query->getInt('categoryid', $httpRequest->request->getInt('categoryid'));
+        $option = $httpRequest->query->get('option', $httpRequest->request->getInt('option'));
+        $redirect = $httpRequest->query->get('redirect', $httpRequest->request->get('redirect', ''));
 
         if (empty($userId) || empty($categoryId)) {
             api_not_allowed(true);
@@ -225,7 +226,6 @@ switch ($action) {
         $url = api_get_self();
         header('Location: '.$url);
         exit;
-        break;
 }
 
 function generateUnsubscribeForm(string $courseCode, string $secToken): string
@@ -433,7 +433,9 @@ if (!empty($courses_without_category)) {
             );
         }
         echo '';
-        if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
+        if ($httpRequest->query->has('edit')
+            && $httpRequest->query->get('edit') === $course['code']
+        ) {
             echo Display::return_icon('edit_na.png', get_lang('Edit'), '', 22);
         } else {
             echo Display::url(

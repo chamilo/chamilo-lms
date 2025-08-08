@@ -537,45 +537,25 @@ class UserManager
                 }
 
                 /** @var TranslatorInterface $translator */
-                $translator = Container::$container->get('translator');
-                $currentTranslatorLang = $translator->getLocale();
+                $translator   = Container::$container->get('translator');
+                $currentLocale = $translator->getLocale();
 
                 if ($sendEmailToAllAdmins) {
                     $adminList = self::get_all_administrators();
+                    $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
+
                     foreach ($adminList as $adminId => $adminData) {
-                        $adminLocale = $adminData['locale'];
+                        $adminLocale = $adminData['locale'] ?? 'en_US';
                         $translator->setLocale($adminLocale);
-                        $renderer = FormValidator::getDefaultRenderer();
-                        $elementTemplate = ' {label}: {element} <br />';
-                        $renderer->setElementTemplate($elementTemplate);
 
-                        $form->freeze(null, $elementTemplate);
-                        $form->removeElement('submit');
-                        $form->removeElement('pass1');
-                        $form->removeElement('pass2');
-
-                        foreach ($form->_elements as $element) {
-                            $origLabel = $element->getLabel();
-                            $element->setLabel( get_lang($origLabel, $adminLocale) );
-                        }
-
-                        $formData = $form->returnForm();
-
-                        /** @var LanguageRepository $langRepo */
-                        $langRepo = Container::$container->get(LanguageRepository::class);
-                        $languageEntity = $langRepo->findOneBy(['isocode' => $user->getLocale()]);
-                        $userLanguageName = $languageEntity
-                            ? $languageEntity->getOriginalName()
-                            : $user->getLocale();
-
-                        $url = api_get_path(WEB_CODE_PATH)
-                            . 'admin/user_information.php?user_id=' . $user->getId();
+                        $profileHtml      = self::renderRegistrationProfileHtml($user, $extra ?? [], $adminLocale);
+                        $userLanguageName = self::resolveLanguageName($user->getLocale());
 
                         $params = [
                             'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
                             'user_added'    => $user,
                             'link'          => Display::url($url, $url),
-                            'form'          => $formData,
+                            'form'          => $profileHtml,
                             'user_language' => $userLanguageName,
                         ];
 
@@ -593,7 +573,7 @@ class UserManager
                             $userId
                         );
 
-                        $translator->setLocale($currentTranslatorLang);
+                        $translator->setLocale($currentLocale);
                     }
                 }
             }
@@ -620,6 +600,143 @@ class UserManager
         }
 
         return $userId;
+    }
+
+    /**
+     * Returns the human-readable language name for a given ISO code.
+     *
+     * Accepts ISO 639-1/2 codes (e.g. "en", "es", "eng"). If $iso is null or the
+     * code is unknown, an empty string is returned.
+     *
+     * @param string|null $iso Two- or three-letter ISO 639 language code.
+     * @return string          Language name in English (e.g. "English", "Spanish").
+     */
+    private static function resolveLanguageName(?string $iso): string
+    {
+        if (empty($iso)) {
+            return '';
+        }
+
+        /** @var LanguageRepository $langRepo */
+        $langRepo = Container::$container->get(LanguageRepository::class);
+        $entity   = $langRepo->findOneBy(['isocode' => $iso]);
+
+        return $entity ? $entity->getOriginalName() : $iso;
+    }
+
+    /**
+     * Build the “profile” HTML (core + dynamic extra fields) for the admin email, localized in $adminLocale.
+     *
+     * @param User $user
+     * @param array  $extraParams  Raw POST values from registration (keys: "extra_*").
+     * @param string $adminLocale  e.g. "es_ES", "fr_FR".
+     */
+    private static function renderRegistrationProfileHtml(User $user, array $extraParams, string $adminLocale): string
+    {
+        $statusLabel = ((int) $user->getStatus() === COURSEMANAGER)
+            ? get_lang('Teach courses', $adminLocale)
+            : get_lang('Follow courses', $adminLocale);
+
+        $languageName = $user->getLocale();
+        $langRepo = Container::$container->get(LanguageRepository::class);
+        if ($langRepo && ($lang = $langRepo->findOneBy(['isocode' => $user->getLocale()]))) {
+            $languageName = $lang->getOriginalName();
+        }
+
+        $corePairs = [
+            get_lang('e-mail',        $adminLocale) => (string) $user->getEmail(),
+            get_lang('First name',    $adminLocale) => (string) $user->getFirstname(),
+            get_lang('Last name',     $adminLocale) => (string) $user->getLastname(),
+            get_lang('Username',      $adminLocale) => (string) $user->getUsername(),
+            get_lang('Official code', $adminLocale) => (string) ($user->getOfficialCode() ?? ''),
+            get_lang('Phone',         $adminLocale) => (string) ($user->getPhone() ?? ''),
+            get_lang('User address',  $adminLocale) => (string) ($user->getAddress() ?? ''),
+            get_lang('Language',      $adminLocale) => (string) $languageName,
+            get_lang('What do you want to do?', $adminLocale) => $statusLabel,
+        ];
+
+        if ($user->getDateOfBirth() instanceof \DateTimeInterface) {
+            $corePairs[get_lang('Date of birth', $adminLocale)] = $user->getDateOfBirth()->format('Y-m-d');
+        }
+
+        $efv = new \ExtraFieldValue('user');
+        $ef  = new \ExtraField('user');
+
+        $extraPairs = [];
+        $presentVars = [];
+        $rows = $efv->getAllValuesByItem((int) $user->getId());
+
+        if (is_array($rows)) {
+            foreach ($rows as $row) {
+                $fieldId   = (int)$row['id'];
+                $variable  = (string)$row['variable'];
+                $presentVars[$variable] = true;
+
+                $tr = $efv->get_values_by_handler_and_field_id((int) $user->getId(), $fieldId, true);
+                $val = null;
+
+                if ($tr && array_key_exists('value', $tr)) {
+                    $val = $tr['value'];
+                } else {
+                    $val = $row['value'];
+                }
+
+                $type = (int)$row['value_type'];
+                if ($type === \ExtraField::FIELD_TYPE_CHECKBOX) {
+                    $val = ((string)$val === '1') ? get_lang('Yes', $adminLocale) : get_lang('No', $adminLocale);
+                }
+                if ($type === \ExtraField::FIELD_TYPE_TAG && is_array($val)) {
+                    $val = implode(', ', array_map(fn($t) => is_array($t) ? (string)($t['value'] ?? '') : (string)$t, $val));
+                }
+                if (is_string($val)) {
+                    $val = str_replace(['<br />','<br>','<br/>'], ', ', $val);
+                }
+
+                $label = !empty($row['display_text'])
+                    ? get_lang($row['display_text'], $adminLocale)
+                    : get_lang(ucwords(str_replace('_',' ',$variable)), $adminLocale);
+
+                if ($val !== '' && $val !== null) {
+                    $extraPairs[$label] = (string)$val;
+                }
+            }
+        }
+
+        foreach ($extraParams as $k => $v) {
+            if (strpos($k, 'extra_') !== 0) continue;
+            $variable = substr($k, 6);
+            if (isset($presentVars[$variable])) continue;
+
+            $def = $ef->get_handler_field_info_by_field_variable($variable);
+            $label = $def && !empty($def['display_text'])
+                ? get_lang($def['display_text'], $adminLocale)
+                : get_lang(ucwords(str_replace('_',' ',$variable)), $adminLocale);
+
+            $val = $v;
+            if (is_array($val)) {
+                $val = implode(', ', array_map('strval', $val));
+            } elseif ($val === '1') {
+                $val = get_lang('Yes', $adminLocale);
+            } elseif ($val === '0') {
+                $val = get_lang('No', $adminLocale);
+            }
+
+            if ($val !== '' && $val !== null) {
+                $extraPairs[$label] = (string)$val;
+            }
+        }
+
+        $html = '<div class="form-horizontal">';
+        foreach ($corePairs as $k => $v) {
+            if ($v === '' || $v === null) continue;
+            $html .= '<div>'.$k.': '.\Security::remove_XSS((string)$v).'</div>';
+        }
+        foreach ($extraPairs as $k => $v) {
+            $html .= '<div>'.$k.': '.\Security::remove_XSS((string)$v).'</div>';
+        }
+        $html .= '</div>';
+
+        return $html;
     }
 
     /**

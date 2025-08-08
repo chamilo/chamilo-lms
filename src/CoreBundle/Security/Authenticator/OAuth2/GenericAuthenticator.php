@@ -208,7 +208,7 @@ class GenericAuthenticator extends AbstractAuthenticator
             $responseStatus[DRH] = $drhStatus;
         }
 
-        if ($studentStatus = $providerParams['resource_owner_status_status_field']) {
+        if ($studentStatus = $providerParams['resource_owner_student_status_field']) {
             $responseStatus[STUDENT] = $studentStatus;
         }
 

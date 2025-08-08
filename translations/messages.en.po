@@ -29191,3 +29191,33 @@ msgstr "Video completed!"
 
 msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
 msgstr "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+
+msgid "Unmark favorite"
+msgstr "Unmark favorite"
+
+msgid "Mark favorite"
+msgstr "Mark favorite"
+
+msgid "Register student"
+msgstr "Register student"
+
+msgid "Ends tomorrow"
+msgstr "Ends tomorrow"
+
+msgid "Ends today"
+msgstr "Ends today"
+
+msgid "Write a short and striking course name, For example: Innovation Management"
+msgstr "Write a short and striking course name, For example: Innovation Management"
+
+msgid "Introduction updated successfully!"
+msgstr "Introduction updated successfully!"
+
+msgid "Introduction created successfully!"
+msgstr "Introduction created successfully!"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "No description available"
+msgstr "No description available"

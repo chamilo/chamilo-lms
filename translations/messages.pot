@@ -29138,3 +29138,33 @@ msgstr ""
 
 msgid "Toggle visibility"
 msgstr ""
+
+msgid "Unmark favorite"
+msgstr ""
+
+msgid "Mark favorite"
+msgstr ""
+
+msgid "Register student"
+msgstr ""
+
+msgid "Ends tomorrow"
+msgstr ""
+
+msgid "Ends today"
+msgstr ""
+
+msgid "Write a short and striking course name, For example: Innovation Management"
+msgstr ""
+
+msgid "Introduction updated successfully!"
+msgstr ""
+
+msgid "Introduction created successfully!"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "No description available"
+msgstr ""

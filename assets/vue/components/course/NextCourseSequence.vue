@@ -36,7 +36,7 @@
               <span
                 v-else
                 class="text-red-700 cursor-not-allowed opacity-60"
-                :title="t('Course is locked due to prerequisites')"
+                :title="t('This course is locked. You must complete the prerequisite(s) first.')"
               >
                 {{ course.name }}
               </span>

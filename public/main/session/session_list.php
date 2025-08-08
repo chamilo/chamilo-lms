@@ -409,7 +409,7 @@ $extra_params['multiselect'] = true;
                     }
                 }
             }).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Export courses reports'))); ?>",
+                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Courses reports'))); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');

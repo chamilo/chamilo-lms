@@ -29288,3 +29288,33 @@ msgstr ""
 
 msgid "Uninstall"
 msgstr ""
+
+msgid "Install, activate or deactivate plugins easily."
+msgstr ""
+
+msgid "Manage plugins"
+msgstr ""
+
+msgid "Nothing left to update."
+msgstr ""
+
+msgid "Update database"
+msgstr ""
+
+msgid "Are you sure you want to remove the selected courses from the selected URLs?"
+msgstr ""
+
+msgid "Are you sure you want to add the selected courses to the selected URLs?"
+msgstr ""
+
+msgid "Remove courses from selected URLs"
+msgstr ""
+
+msgid "Add courses to selected URLs"
+msgstr ""
+
+msgid "Select all URLs"
+msgstr ""
+
+msgid "Search URL"
+msgstr ""

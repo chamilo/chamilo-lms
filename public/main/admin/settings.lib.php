@@ -137,7 +137,7 @@ function handlePlugins()
 
     // Header
     echo '<div class="mb-4 flex items-center justify-between">';
-    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage Plugins').'</h2>';
+    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage plugins').'</h2>';
     echo '<p class="text-gray-50 text-sm">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
     echo '</div>';
 

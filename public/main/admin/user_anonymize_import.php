@@ -14,8 +14,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true, null);
 
-$tool_name = get_lang('BulkAnonymizeUsers');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Anonymise users list');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 ini_set('memory_limit', -1);
@@ -24,18 +24,18 @@ Display::display_header($tool_name);
 
 $step1Form = new FormValidator('step1Form');
 
-$usernameListFile = $step1Form->addFile('usernameList', get_lang('UsernameList'));
+$usernameListFile = $step1Form->addFile('usernameList', get_lang('Username list'));
 $step1Form->addButtonUpload(get_lang('Upload'));
 
 $step2Form = new FormValidator('step2Form');
 $usernameTextarea = $step2Form->addTextarea(
     'usersToBeAnonymized',
-    get_lang('UsersAboutToBeAnonymized'),
+    get_lang('Users about to be anonymized:'),
     [
         'readonly' => 1,
     ]
 );
-$anonymizedSessions = $step2Form->addCheckBox('anonymize_sessions', null, get_lang('AnonymizeUserSessions'));
+$anonymizedSessions = $step2Form->addCheckBox('anonymize_sessions', null, get_lang("Anonymize user's sessions"));
 $step2Form->addButtonUpdate(get_lang('Anonymize'));
 
 if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
@@ -43,11 +43,11 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     $usernameListFileUploaded['name'] = api_htmlentities($usernameListFileUploaded['name']);
     $filePath = $usernameListFileUploaded['tmp_name'];
     if (!file_exists($filePath)) {
-        throw new Exception(get_lang('CouldNotReadFile').' '.$filePath);
+        throw new Exception(get_lang('Could not read file.').' '.$filePath);
     }
     $submittedUsernames = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     if (false === $submittedUsernames) {
-        throw new Exception(get_lang('CouldNotReadFileLines').' '.$filePath);
+        throw new Exception(get_lang('Could not read file lines.').' '.$filePath);
     }
 
     $submittedUsernames = array_map('api_htmlentities', $submittedUsernames);
@@ -55,19 +55,19 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
 
     if (empty($submittedUsernames)) {
         printf(
-            '<p>'.get_lang('FileXHasNoData').'</p>',
+            '<p>'.get_lang('File %s is empty or only contains empty lines.').'</p>',
             '<em>'.$usernameListFileUploaded['name'].'</em>'
         );
     } else {
         printf(
-            '<p>'.get_lang('FileXHasYNonEmptyLines').'</p>',
+            '<p>'.get_lang('File %s has %d non-empty lines.').'</p>',
             '<em>'.$usernameListFileUploaded['name'].'</em>',
             count($submittedUsernames)
         );
         $uniqueSubmittedUsernames = array_values(array_unique($submittedUsernames));
         if (count($uniqueSubmittedUsernames) !== count($submittedUsernames)) {
             printf(
-                '<p>'.get_lang('DuplicatesOnlyXUniqueUserNames').'</p>',
+                '<p>'.get_lang('There are duplicates: only %d unique user names were extracted.').'</p>',
                 count($uniqueSubmittedUsernames)
             );
         }
@@ -82,7 +82,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             }
         }
         if (empty($users)) {
-            echo '<p>'.get_lang('NoLineMatchedAnyActualUserName').'</p>';
+            echo '<p>'.get_lang('No line matched any actual user name.').'</p>';
         } else {
             $foundUsernames = [];
             /** @var User $user */
@@ -90,15 +90,15 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
                 $foundUsernames[] = $user->getUsername();
             }
             if (count($users) !== count($uniqueSubmittedUsernames)) {
-                printf('<p>'.get_lang('OnlyXLinesMatchedActualUsers').'</p>', count($users));
+                printf('<p>'.get_lang('Only %d lines matched actual users.').'</p>', count($users));
                 $usernamesNotFound = array_diff($uniqueSubmittedUsernames, $foundUsernames);
                 printf(
-                    '<p>'.get_lang('TheFollowingXLinesDoNotMatchAnyActualUser').'<pre>%s</pre></p>',
+                    '<p>'.get_lang('The following %d line(s) do not match any actual user:').'<pre>%s</pre></p>',
                     count($usernamesNotFound),
                     join("\n", $usernamesNotFound)
                 );
             }
-            printf('<p>'.get_lang('XUsersAreAboutToBeAnonymized').'</p>', count($foundUsernames));
+            printf('<p>'.get_lang('%d users are about to be anonymized :').'</p>', count($foundUsernames));
             $usernameTextarea->setValue(join("\n", $foundUsernames));
             $step2Form->display();
         }
@@ -108,7 +108,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     if (false === $usernames) {
         throw new Exception('preg_split failed');
     }
-    printf('<p>'.get_lang('LoadingXUsers')."</p>\n", count($usernames));
+    printf('<p>'.get_lang('Loading %d users...')."</p>\n", count($usernames));
     $users = UserManager::getRepository()->matching(
         Criteria::create()->where(
             Criteria::expr()->in('username', $usernames)
@@ -116,7 +116,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
     );
     $anonymizedSessionsValue = $anonymizedSessions->getValue();
     if (count($users) === count($usernames)) {
-        printf('<p>'.get_lang('AnonymizingXUsers')."</p>\n", count($users));
+        printf('<p>'.get_lang('Anonymizing %d users...')."</p>\n", count($users));
         $anonymized = [];
         $errors = [];
         $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -136,14 +136,14 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
                                 $sessionId = $session['id'];
                                 $sessionTitle = $session['name'];
                                 $usersCount = SessionManager::get_users_by_session($sessionId, null, true);
-                                echo '<p> '.$sessionTitle.' ('.$sessionId.') - '.get_lang('Students').': '.$usersCount.'</p>';
+                                echo '<p> '.$sessionTitle.' ('.$sessionId.') - '.get_lang('Learners').': '.$usersCount.'</p>';
                                 if (1 === $usersCount) {
                                     $uniqueId = uniqid('anon_session', true);
                                     echo '<p> '.get_lang('Rename').': '.$sessionTitle.' -> '.$uniqueId.'</p>';
                                     $sql = "UPDATE $tableSession SET name = '$uniqueId' WHERE id = $sessionId";
                                     Database::query($sql);
                                 } else {
-                                    echo '<p> '.sprintf(get_lang('SessionXSkipped'), $sessionTitle).'</p>';
+                                    echo '<p> '.sprintf(get_lang('Session %s skipped'), $sessionTitle).'</p>';
                                 }
                             }
                         }
@@ -161,13 +161,13 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             echo "</p>\n";
         }
         if (empty($error)) {
-            printf('<p>'.get_lang('AllXUsersWereAnonymized').'</p>', count($users));
+            printf('<p>'.get_lang('All %d users were anonymized.').'</p>', count($users));
         } else {
             printf(
                 '<p>'
-                .get_lang('OnlyXUsersWereAnonymized')
+                .get_lang('Only %d users were anonymized.')
                 .' '
-                .get_lang('AttemptedAnonymizationOfTheseXUsersFailed')
+                .get_lang('Attempted anonymization of the following %d users failed:')
                 .'<pre>%s</pre></p>',
                 count($users),
                 count($errors),
@@ -176,13 +176,13 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         }
     } else {
         printf(
-            '<p>'.get_lang('InternalInconsistencyXUsersFoundForYUserNames').'</p>',
+            '<p>'.get_lang('Internal inconsistency found : %d users found from %d submitted usernames. Please start over.').'</p>',
             count($users),
             count($usernames)
         );
     }
 } else {
-    echo '<p>'.get_lang('PleaseUploadListOfUsers').'</p>';
+    echo '<p>'.get_lang('Please upload a text file listing the users to be anonymized, one username per line.').'</p>';
     $step1Form->display();
 }
 

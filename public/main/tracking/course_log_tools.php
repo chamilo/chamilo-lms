@@ -302,7 +302,7 @@ if ($showChatReporting) {
         $csv_content[] = [get_lang('Chat'), ''];
         $csv_content[] = [
             sprintf(
-                get_lang('Connections to the chat during last %s days', ''),
+                get_lang('Connections to the chat during last %s days'),
                 '7'
             ),
             $chat_connections_during_last_x_days_by_course,

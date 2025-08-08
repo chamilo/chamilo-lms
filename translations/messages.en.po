@@ -29320,3 +29320,33 @@ msgstr "The uploaded file does not match the selected file type."
 
 msgid "Uninstall"
 msgstr "Uninstall"
+
+msgid "Install, activate or deactivate plugins easily."
+msgstr "Install, activate or deactivate plugins easily."
+
+msgid "Manage plugins"
+msgstr "Manage plugins"
+
+msgid "Nothing left to update."
+msgstr "Nothing left to update."
+
+msgid "Update database"
+msgstr "Update database"
+
+msgid "Are you sure you want to remove the selected courses from the selected URLs?"
+msgstr "Are you sure you want to remove the selected courses from the selected URLs?"
+
+msgid "Are you sure you want to add the selected courses to the selected URLs?"
+msgstr "Are you sure you want to add the selected courses to the selected URLs?"
+
+msgid "Remove courses from selected URLs"
+msgstr "Remove courses from selected URLs"
+
+msgid "Add courses to selected URLs"
+msgstr "Add courses to selected URLs"
+
+msgid "Select all URLs"
+msgstr "Select all URLs"
+
+msgid "Search URL"
+msgstr "Search URL"

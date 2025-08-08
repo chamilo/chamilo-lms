@@ -4352,7 +4352,7 @@ class learnpath
 
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
     {
-        $sureToDelete = trim(get_lang('Are you sure to delete?'));
+        $sureToDelete = trim(get_lang('Are you sure to delete'));
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$this->get_id().'&'.api_get_cidreq();
 
         $content = '
@@ -4533,14 +4533,14 @@ class learnpath
                 });
 
                 $('.lp-btn-associate-forum').on('click', function (e) {
-                    var associate = confirm('".get_lang('ConfirmAssociateForumToLPItem')."');
+                    var associate = confirm('".get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?')."');
                     if (!associate) {
                         e.preventDefault();
                     }
                 });
 
                 $('.lp-btn-dissociate-forum').on('click', function (e) {
-                    var dissociate = confirm('".get_lang('ConfirmDissociateForumToLPItem')."');
+                    var dissociate = confirm('".get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?')."');
                     if (!dissociate) {
                         e.preventDefault();
                     }
@@ -4829,7 +4829,7 @@ class learnpath
 
         /*if ($backToBuild) {
             $back = Display::url(
-                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('GoBack')),
+                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Go back')),
                 "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
             );
         }*/
@@ -5359,7 +5359,7 @@ class learnpath
             Display::getMdiIcon('inbox-full', 'ch-tool-icon-gradient', '', 64, get_lang('Assignments')),
             Display::getMdiIcon('comment-quote', 'ch-tool-icon-gradient', '', 64, get_lang('Forums')),
             Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon-gradient', '', 64, get_lang('Add section')),
-            Display::getMdiIcon('form-dropdown', 'ch-tool-icon-gradient', '', 64, get_lang('Add survey')),
+            Display::getMdiIcon('form-dropdown', 'ch-tool-icon-gradient', '', 64, get_lang('Create survey')),
             Display::getMdiIcon('certificate', 'ch-tool-icon-gradient', '', 64, get_lang('Certificate')),
         ];
         $content = '';
@@ -6458,7 +6458,7 @@ class learnpath
             true
         );
 
-        return $documentTree ?: get_lang('No videos found');
+        return $documentTree ?: get_lang('No video found');
     }
 
     /**
@@ -6555,7 +6555,7 @@ class learnpath
         $return .= '</li>';
 
         $previewIcon = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview'));
-        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Exercise'));
+        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Test'));
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         foreach ($exercises as $exercise) {
@@ -6725,7 +6725,7 @@ class learnpath
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
-            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Student publication'));
+            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Assignments'));
             foreach ($works as $work) {
                 $workId = $work['iid'];
                 $link = Display::url(
@@ -6924,14 +6924,14 @@ class learnpath
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('CreateNewSurvey'));
+        $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('Create survey'));
         $return .= Display::url(
-            get_lang('Create a new survey'),
+            get_lang('Create survey'),
             api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'add',
                 'lp_id' => $this->lp_id,
             ]),
-            ['title' => get_lang('Create a new survey')]
+            ['title' => get_lang('Create survey')]
         );
         $return .= '</li>';
 
@@ -8872,7 +8872,7 @@ class learnpath
         $lpItems = $lpItemRepo->findBy(['lp' => $this->lp_id]);
 
         if (empty($lpItems)) {
-            Display::addFlash(Display::return_message(get_lang('No items found'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('No item found'), 'error'));
             return;
         }
 
@@ -8893,7 +8893,7 @@ class learnpath
             ->getResult();
 
         if (empty($trackExercises)) {
-            Display::addFlash(Display::return_message(get_lang('No exercise attempts found'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('No test attempt found'), 'error'));
             return;
         }
 

@@ -4496,7 +4496,7 @@ msgstr "Цей клас не зараховано на курс"
 msgid "tool"
 msgstr "інструмент"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "кількість елементів"
 
 msgid "Documents and folders"
@@ -6413,10 +6413,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9512,8 +9512,8 @@ msgstr "Жодного посилання не відвідано"
 msgid "No document downloaded"
 msgstr "Жодного документу не скачано"
 
-msgid "clicks"
-msgstr "кліки"
+msgid "%d clicks"
+msgstr "%d кліки"
 
 msgid "Search results"
 msgstr "Результати пошуку"
@@ -9656,7 +9656,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

@@ -4503,8 +4503,8 @@ msgstr "This class isn't subscribed in a course"
 msgid "tool"
 msgstr "tool"
 
-msgid "number of items"
-msgstr "number of items"
+msgid "Number of items"
+msgstr "Number of items"
 
 msgid "Documents and folders"
 msgstr "Documents and folders"
@@ -6420,11 +6420,11 @@ msgstr "Show session data comment"
 msgid "Subscription sessions in the category"
 msgstr "Subscription sessions in the category"
 
-msgid "List of session in the platform"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platform"
+msgstr "List of sessions on the platform"
 
-msgid "List of sesiones in the categories"
-msgstr "List of sesiones in the categories"
+msgid "List of sessions in the categories"
+msgstr "List of sessions in the categories"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
 msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9522,8 +9522,8 @@ msgstr "No link visited"
 msgid "No document downloaded"
 msgstr "No document downloaded"
 
-msgid "clicks"
-msgstr "clicks"
+msgid "%d clicks"
+msgstr "%d clicks"
 
 msgid "Search results"
 msgstr "Search results"
@@ -9666,8 +9666,8 @@ msgstr "hours"
 msgid "minutes"
 msgstr "minutes"
 
-msgid "Documented created"
-msgstr "Documented created"
+msgid "Document created"
+msgstr "Document created"
 
 msgid "The forum has been added"
 msgstr "The forum has been added"
@@ -29170,3 +29170,153 @@ msgstr "Link is not valid"
 
 msgid "Toggle visibility"
 msgstr "Toggle visibility"
+
+msgid "Number of questions limited to a maximum of %d"
+msgstr "Number of questions limited to a maximum of %d"
+
+msgid "Please enter a valid word count"
+msgstr "Please enter a valid word count"
+
+msgid "Please enter a valid number"
+msgstr "Please enter a valid number"
+
+msgid "Invalid learning path item"
+msgstr "Invalid learning path item"
+
+msgid "Advancing in"
+msgstr "Advancing in"
+
+msgid "Video completed!"
+msgstr "Video completed!"
+
+msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+msgstr "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+
+msgid "Unmark favorite"
+msgstr "Unmark favorite"
+
+msgid "Mark favorite"
+msgstr "Mark favorite"
+
+msgid "Register student"
+msgstr "Register student"
+
+msgid "Ends tomorrow"
+msgstr "Ends tomorrow"
+
+msgid "Ends today"
+msgstr "Ends today"
+
+msgid "Write a short and striking course name, For example: Innovation Management"
+msgstr "Write a short and striking course name, For example: Innovation Management"
+
+msgid "Introduction updated successfully!"
+msgstr "Introduction updated successfully!"
+
+msgid "Introduction created successfully!"
+msgstr "Introduction created successfully!"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "No description available"
+msgstr "No description available"
+
+msgid "Demo"
+msgstr "Demo"
+
+msgid "Browse courses"
+msgstr "Browse courses"
+
+msgid "Or"
+msgstr "Or"
+
+msgid "No sender"
+msgstr "No sender"
+
+msgid "messages"
+msgstr "messages"
+
+msgid "Error deleting message"
+msgstr "Error deleting message"
+
+msgid "You are adding calendar events for attendance"
+msgstr "You are adding calendar events for attendance"
+
+msgid "Add attendance calendar"
+msgstr "Add attendance calendar"
+
+msgid "Back to attendance sheet"
+msgstr "Back to attendance sheet"
+
+msgid "Add calendar event"
+msgstr "Add calendar event"
+
+msgid "Clear all"
+msgstr "Clear all"
+
+msgid "Edit calendar event"
+msgstr "Edit calendar event"
+
+msgid "Delete calendar event"
+msgstr "Delete calendar event"
+
+msgid "Are you sure you want to delete this event?"
+msgstr "Are you sure you want to delete this event?"
+
+msgid "Are you sure you want to delete all calendar events?"
+msgstr "Are you sure you want to delete all calendar events?"
+
+msgid "Edit attendance"
+msgstr "Edit attendance"
+
+msgid "Go to calendar"
+msgstr "Go to calendar"
+
+msgid "Export to Excel"
+msgstr "Export to Excel"
+
+msgid "Generate QR code"
+msgstr "Generate QR code"
+
+msgid "Loading attendance data..."
+msgstr "Loading attendance data..."
+
+msgid "No attendance assigned yet."
+msgstr "No attendance assigned yet."
+
+msgid "View comment"
+msgstr "View comment"
+
+msgid "No attendance data for today."
+msgstr "No attendance data for today."
+
+msgid "Error recalculating results"
+msgstr "Error recalculating results"
+
+msgid "Results recalculated"
+msgstr "Results recalculated"
+
+msgid "No test attempt found"
+msgstr "No test attempt found"
+
+msgid "No item found"
+msgstr "No item found"
+
+msgid "No video found"
+msgstr "No video found"
+
+msgid "Invalid access URL or session"
+msgstr "Invalid access URL or session"
+
+msgid "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+
+msgid "Catalogue access"
+msgstr "Catalogue access"
+
+msgid "The uploaded file does not match the selected file type."
+msgstr "The uploaded file does not match the selected file type."
+
+msgid "Uninstall"
+msgstr "Uninstall"

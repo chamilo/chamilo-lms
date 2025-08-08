@@ -8,21 +8,21 @@
           size="normal"
           type="black"
           @click="redirectToAttendanceSheet"
-          :title="t('Back to Attendance Sheet')"
+          :title="t('Back to attendance sheet')"
         />
         <BaseButton
           icon="plus"
           size="normal"
           type="black"
           @click="redirectToAddCalendarEvent"
-          :title="t('Add Calendar Event')"
+          :title="t('Add calendar event')"
         />
         <BaseButton
           icon="clear-all"
           size="normal"
           type="black"
           @click="clearAllEvents"
-          :title="t('Clear All')"
+          :title="t('Clear all')"
         />
       </template>
     </BaseToolbar>
@@ -67,7 +67,7 @@
     <!-- Edit Dialog -->
     <Dialog
       v-model:visible="editDialogVisible"
-      :header="t('Edit Calendar Event')"
+      :header="t('Edit calendar event')"
       :modal="true"
       :closable="false"
     >
@@ -98,7 +98,7 @@
     <!-- Delete Dialog -->
     <Dialog
       v-model:visible="deleteDialogVisible"
-      :header="t('Delete Calendar Event')"
+      :header="t('Delete calendar event')"
       :modal="true"
       :closable="false"
     >

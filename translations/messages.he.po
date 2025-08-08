@@ -4512,7 +4512,7 @@ msgstr "שיעור זה אינו רשום בקורס"
 msgid "tool"
 msgstr "כלי"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "מספר פריטים"
 
 msgid "Documents and folders"
@@ -6429,10 +6429,10 @@ msgstr "הצג הערה של נתוני הפעלה"
 msgid "Subscription sessions in the category"
 msgstr "הפעלות הרשמה בקטגוריה"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "רשימת הפעלות בפלטפורמה"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "רשימת מפגשים בקטגוריות"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9528,8 +9528,8 @@ msgstr "לא ביקר בקישור"
 msgid "No document downloaded"
 msgstr "לא הורד מסמך"
 
-msgid "clicks"
-msgstr "קליקים"
+msgid "%d clicks"
+msgstr "קליקים%d "
 
 msgid "Search results"
 msgstr "תוצאות חיפוש"
@@ -9672,7 +9672,7 @@ msgstr "שעות"
 msgid "minutes"
 msgstr "דקות"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "תיעוד נוצר"
 
 msgid "The forum has been added"

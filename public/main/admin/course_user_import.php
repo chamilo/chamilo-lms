@@ -161,7 +161,7 @@ set_time_limit(0);
 // Creating the form.
 $form = new FormValidator('course_user_import');
 $form->addElement('header', '', $tool_name);
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
 $form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove users from any courses that are not mentioned explicitly in this file'));
 $form->addButtonImport(get_lang('Import'));

@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 
 /* For licensing terms, see /license.txt */
@@ -8,6 +7,14 @@ exit;
 /**
  * Script to scan Chamilo LMS master branch for translatable terms and compare with messages.pot
  */
+
+$showAll = false;
+foreach ($argv as $arg) {
+    if ($arg === '--all') {
+        $showAll = true;
+        break;
+    }
+}
 
 $root = realpath(__DIR__ . '/../../../');
 
@@ -54,9 +61,12 @@ foreach ($dirsToScan as $dir) {
         foreach ($lines as $num => $line) {
             $terms = extractTermsFromLine($line, $isVue);
             foreach ($terms as $term) {
-                echo "[".str_pad($termIndex,5, ' ', STR_PAD_LEFT)."] Found \"{$term}\" in {$path}:" . ($num + 1) . "\n";
+                $isMissing = !isset($msgids[$term]);
+                if ($showAll || $isMissing) {
+                    echo "[".str_pad($termIndex,5, ' ', STR_PAD_LEFT)."] Found \"{$term}\" in {$path}:" . ($num + 1) . "\n";
+                }
                 $termIndex++;
-                if (!isset($msgids[$term])) {
+                if ($isMissing) {
                     echo "\033[31m  Missing in messages.pot\033[0m\n";
                     $missing[$term] = true;
                 }

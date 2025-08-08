@@ -141,7 +141,7 @@ if (isset($_POST['save_audio'])) {
         }
     }
     //echo Display::return_message(get_lang('Item updated'), 'confirm');
-    Display::addFlash(Display::return_message(get_lang('ItemUpdated'), 'confirm'));
+    Display::addFlash(Display::return_message(get_lang('Item updated'), 'confirm'));
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;

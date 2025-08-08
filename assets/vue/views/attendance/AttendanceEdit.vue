@@ -2,7 +2,7 @@
   <LayoutFormGeneric>
     <template #header>
       <BaseIcon icon="edit" />
-      {{ t("Edit Attendance") }}
+      {{ t("Edit attendance") }}
     </template>
     <div v-if="loading"></div>
     <div v-else-if="attendanceData">
@@ -12,7 +12,7 @@
       />
     </div>
     <div v-else>
-      <p>{{ t("No data available.") }}</p>
+      <p>{{ t("No data available") }}</p>
     </div>
   </LayoutFormGeneric>
 </template>

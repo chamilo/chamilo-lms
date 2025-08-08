@@ -237,8 +237,7 @@ class OpenAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log("[AI][OpenAI] Exception: " . $e->getMessage());
-
+            error_log('[AI][OpenAI] Exception: '.$e->getMessage());
 
             return null;
         }

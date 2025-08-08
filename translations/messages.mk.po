@@ -4503,7 +4503,7 @@ msgstr "Оваа паралелка не е запишана на курсот"
 msgid "tool"
 msgstr "алатка"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "број на елементи"
 
 msgid "Documents and folders"
@@ -6420,10 +6420,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9519,8 +9519,8 @@ msgstr "Нема посетена врска"
 msgid "No document downloaded"
 msgstr "Нема симнати документи"
 
-msgid "clicks"
-msgstr "кликнувања"
+msgid "%d clicks"
+msgstr "%d кликнувања"
 
 msgid "Search results"
 msgstr "Резултати од пребарувањето"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

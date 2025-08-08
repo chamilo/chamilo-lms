@@ -42,22 +42,22 @@ class LpAiHelper
         if ($hasSingleApi) {
             $apiName = $availableApis[$configuredApi]['model'] ?? $configuredApi;
             $form->addHtml('<div style="margin-bottom: 10px; font-size: 14px; color: #555;">'
-                .sprintf(get_lang('Using AI Provider: %s'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
+                .sprintf(get_lang('Using AI provider %s'), '<strong>'.htmlspecialchars($apiName).'</strong>').'</div>');
         }
 
         // Input fields for LP generation
         $form->addElement('text', 'lp_name', get_lang('Topic'));
-        $form->addRule('lp_name', get_lang('This field is required'), 'required');
+        $form->addRule('lp_name', get_lang('Required field'), 'required');
         $form->addElement('number', 'nro_items', get_lang('Number of items'));
-        $form->addRule('nro_items', get_lang('This field is required'), 'required');
+        $form->addRule('nro_items', get_lang('Required field'), 'required');
         $form->addElement('number', 'words_count', get_lang('Words count per page'));
-        $form->addRule('words_count', get_lang('This field is required'), 'required');
+        $form->addRule('words_count', get_lang('Required field'), 'required');
 
         // Checkbox for adding quizzes
         $form->addElement('checkbox', 'add_lp_quiz', null, get_lang('Add test after each page'), ['id' => 'add-lp-quiz']);
         $form->addHtml('<div id="lp-quiz-area">');
         $form->addElement('number', 'nro_questions', get_lang('Number of questions'));
-        $form->addRule('nro_questions', get_lang('This field is required'), 'required');
+        $form->addRule('nro_questions', get_lang('Required field'), 'required');
         $form->addHtml('</div>');
         $form->setDefaults(['nro_questions' => 2]);
 
@@ -103,7 +103,7 @@ class LpAiHelper
                 $(".error-message").remove();
 
                 if (lpName === "") {
-                    $("[name=\'lp_name\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('This field is required').'</div>");
+                    $("[name=\'lp_name\']").after("<div class=\'error-message\' style=\'color: red;\'>'.get_lang('Required field').'</div>");
                     isValid = false;
                 }
 
@@ -118,7 +118,7 @@ class LpAiHelper
                 }
 
                 if (addTests && (isNaN(nroQuestions) || nroQuestions <= 0 || nroQuestions > 5)) {
-                    $("[name=\'nro_questions\']").after("<div class=\'error-message\' style=\'color: red;\'>'.sprintf(get_lang('Number of questions limited from %d to %d'), 1, 5).'</div>");
+                    $("[name=\'nro_questions\']").after("<div class=\'error-message\' style=\'color: red;\'>'.sprintf(get_lang('Number of questions limited to a maximum of %d'), 5).'</div>");
                     isValid = false;
                 }
 
@@ -257,7 +257,7 @@ class LpAiHelper
                 $quiz = $lpData['quiz_items'][$index];
 
                 $request = [
-                    'quiz_name' => get_lang('Exercise') . ': ' . $quiz['title'],
+                    'quiz_name' => get_lang('Test') . ': ' . $quiz['title'],
                     'nro_questions' => count(explode("\n", trim($quiz['content']))),
                     'course_id' => api_get_course_int_id($courseCode),
                     'aiken_format' => trim($quiz['content']),

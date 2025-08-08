@@ -173,7 +173,7 @@ function handlePlugins()
             ? ($isEnabled
                 ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
                 : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
-            : '<span class="badge badge--default">'.get_lang('Not Installed').'</span>';
+            : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
         echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
@@ -765,7 +765,7 @@ function searchImageFilter(int $id): string
 
         return '<img src="'.$imageUrl.'" alt="'.get_lang('Template preview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('Preview not available').'"/>';
     }
 }
 
@@ -860,7 +860,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>'
+                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('Preview not available').'"/>'
             );
         }
 

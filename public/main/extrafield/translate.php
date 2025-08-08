@@ -94,7 +94,7 @@ if ($form->validate()) {
     api_location($currentUrl);
 }
 
-$tpl = new Template(get_lang('Translations'));
+$tpl = new Template(get_lang('Translation'));
 $tpl->assign('form', $form->returnForm());
 $template = $tpl->get_template('extrafield/translate.html.twig');
 $content = $tpl->fetch($template);

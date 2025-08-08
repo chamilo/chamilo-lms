@@ -81,7 +81,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('ReturnToLearning paths')).
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back to learning paths')).
     '</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);

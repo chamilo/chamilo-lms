@@ -37,10 +37,10 @@ interface AiProviderInterface
     /**
      * Grade a single open‑answer.
      *
-     * @param string $prompt    El prompt completo con idioma, pregunta, contexto y respuesta.
-     * @param string $toolName  Una etiqueta, p.ej. 'open_answer_grade'.
+     * @param string $prompt   el prompt completo con idioma, pregunta, contexto y respuesta
+     * @param string $toolName Una etiqueta, p.ej. 'open_answer_grade'.
      *
-     * @return string|null       El texto bruto de la respuesta: "X\nFeedback…"
+     * @return string|null El texto bruto de la respuesta: "X\nFeedback…"
      */
     public function gradeOpenAnswer(string $prompt, string $toolName): ?string;
 }

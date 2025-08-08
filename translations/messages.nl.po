@@ -4535,8 +4535,8 @@ msgstr "Deze klas is niet ingeschreven in een cursus"
 msgid "tool"
 msgstr "module"
 
-msgid "number of items"
-msgstr "aantal items"
+msgid "Number of items"
+msgstr "Aantal items"
 
 msgid "Documents and folders"
 msgstr "Bestanden en mappen"
@@ -6454,10 +6454,10 @@ msgstr "Toon commentaar in sessie"
 msgid "Subscription sessions in the category"
 msgstr "Voeg sessie toe aan categorieën"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Sessielijst in het platform"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Sessielijst in de categorieën"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9560,8 +9560,8 @@ msgstr "Geen link bezocht"
 msgid "No document downloaded"
 msgstr "Geen document gedownloaded"
 
-msgid "clicks"
-msgstr "klikken"
+msgid "%d clicks"
+msgstr "%d klikken"
 
 msgid "Search results"
 msgstr "Zoekresultaten"
@@ -9704,7 +9704,7 @@ msgstr "Uren"
 msgid "minutes"
 msgstr "minuten"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Het document werd aangemaakt."
 
 msgid "The forum has been added"

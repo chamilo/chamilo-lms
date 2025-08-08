@@ -4503,7 +4503,7 @@ msgstr "این کلاس در هیچ  درسی ثبت نام نشده است"
 msgid "tool"
 msgstr "ابزارآموزشی"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "تعداد موارد"
 
 msgid "Documents and folders"
@@ -6420,10 +6420,10 @@ msgstr "نمایش دیدگاه اطلاعات جلسه"
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "فهرت جلسات در این پلاتفرم"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "فهرست جلسات در این دسته"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9519,8 +9519,8 @@ msgstr "هیچ پیوندی دیده نشده است"
 msgid "No document downloaded"
 msgstr "هیچ سندی دانلود نشده است"
 
-msgid "clicks"
-msgstr "کلیک ها"
+msgid "%d clicks"
+msgstr "کلیک ها%d "
 
 msgid "Search results"
 msgstr "نتایج جستجو"
@@ -9663,7 +9663,7 @@ msgstr "ساعت ها"
 msgid "minutes"
 msgstr "دقیقه ها"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "سند شاخته شد"
 
 msgid "The forum has been added"

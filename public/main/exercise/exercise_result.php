@@ -92,11 +92,11 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
         'exercise_result_actions',
         [
             Display::url(
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')),
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')),
                 'admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
             )
             .Display::url(
-                Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')),
+                Display::getMdiIcon('cog', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')),
                 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id
             ),
         ]
@@ -161,7 +161,7 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         Display::addFlash(
             Display::return_message(
-                sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+                sprintf(get_lang('You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
             'warning',
             false
             )

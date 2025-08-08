@@ -60,26 +60,26 @@ switch ($type) {
     case 'dir':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add section')];
         break;
     case 'document':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
         break;
     default:
         $interbreadcrumb[] = [
             'url' => api_get_self()."?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
         break;
 }
 
 if ('add_item' === $action && 'document' === $type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Document created')];
 }
 
 // Theme calls.
@@ -125,7 +125,7 @@ $page = $lp->build_action_menu(
 $page .= '<div class="row" style="overflow:hidden">';
 $page .= $lp->showBuildSideBar(null, true);
 
-$recordVoiceForm = '<h3 class="page-header">'.get_lang('RecordYourVoice').'</h3>';
+$recordVoiceForm = '<h3 class="page-header">'.get_lang('Record your voice').'</h3>';
 $page .= '<div id="doc_form" class="col-md-8">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
 $tpl = new Template(get_lang('Add'));
@@ -137,11 +137,11 @@ $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 //$tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
 $recordVoiceForm .= $tpl->fetch('@ChamiloCore/LearnPath/record_voice.html.twig');
-$form->addElement('header', '<small class="text-muted">'.get_lang('Or').'</small> '.get_lang('AudioFile'));
+$form->addElement('header', '<small class="text-muted">'.get_lang('or').'</small> '.get_lang('Audio file'));
 
 $audioLabel = '';
 if (!empty($lp_item->audio)) {
-    $audioLabel = '<br />'.get_lang('FileName').': <b>'.$lp_item->audio.'<b/>';
+    $audioLabel = '<br />'.get_lang('Filename').': <b>'.$lp_item->audio.'<b/>';
 }
 
 $form->addLabel(null, sprintf(get_lang('Audio file for item %s'), $lp_item->get_title()).$audioLabel);
@@ -157,7 +157,7 @@ if (!empty($file)) {
         'label',
         null,
         Display::url(
-            get_lang('RemoveAudio'),
+            get_lang('Remove audio'),
             $url,
             ['class' => 'btn btn--danger']
         )
@@ -188,7 +188,7 @@ $page .= $recordVoiceForm;
 $page .= '<br>';
 $page .= $form->returnForm();
 $page .= '<h3 class="page-header">
-            <small>'.get_lang('Or').'</small> '.
+            <small>'.get_lang('or').'</small> '.
             get_lang('Select an audio file from documents').
          '</h3>';
 

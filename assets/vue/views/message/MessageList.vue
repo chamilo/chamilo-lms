@@ -169,7 +169,7 @@
           </template>
         </Column>
         <Column
-          :header="t('Send date')"
+          :header="t('Sent date')"
           :sortable="true"
           class="truncate w-24 md:w-auto"
           field="sendDate"
@@ -251,7 +251,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="text-sm font-bold">{{ t("Send date") }}:</div>
+            <div class="text-sm font-bold">{{ t("Sent date") }}:</div>
             <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
           </div>
           <div class="mt-4 flex space-x-2">

@@ -51,7 +51,7 @@
       <!--BaseAutocomplete
         id="template"
         v-model="courseTemplate"
-        :label="t('Select Template')"
+        :label="t('Course template')"
         :search="searchTemplates"
       /-->
     </div>

@@ -206,7 +206,7 @@ $redirectTo = '';
 switch ($action) {
     case 'recalculate':
         if (!isset($oLP) || !$lp_found) {
-            Display::addFlash(Display::return_message(get_lang('NoLpFound'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('No learning path found'), 'error'));
             header("Location: $listUrl");
             exit;
         }
@@ -214,7 +214,7 @@ switch ($action) {
         $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 
         if (0 === $userId) {
-            Display::addFlash(Display::return_message(get_lang('NoUserIdProvided'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('User ID not provided'), 'error'));
             header("Location: $listUrl");
             exit;
         }
@@ -287,7 +287,7 @@ switch ($action) {
 
             MessageManager::send_message_simple(
                 $coachInfo['user_id'],
-                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
+                sprintf(get_lang('Student %s has completed his/her learning paths.'), $studentInfo['complete_name']),
                 $emailBody,
                 $studentInfo['user_id']
             );
@@ -427,7 +427,7 @@ switch ($action) {
                 // Remove audio
                 if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
                     $lp_item_obj->removeAudio();
-                    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
+                    Display::addFlash(Display::return_message(get_lang('File deleted')));
                     api_location($url);
                 }
 
@@ -436,7 +436,7 @@ switch ($action) {
                     // Updating the lp.modified_on
                     $oLP->set_modified_on();
                     $lp_item_obj->addAudio();
-                    Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                    Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                     api_location($url);
                 }
 
@@ -1074,14 +1074,14 @@ switch ($action) {
     case 'set_previous_step_as_prerequisite':
         $oLP->set_previous_step_as_prerequisite_for_all_items();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
+        Display::addFlash(Display::return_message(get_lang('Item updated')));
         header('Location: '.$url);
         exit;
         break;
     case 'clear_prerequisites':
         $oLP->clearPrerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
+        Display::addFlash(Display::return_message(get_lang('Item updated')));
         header('Location: '.$url);
         exit;
         break;

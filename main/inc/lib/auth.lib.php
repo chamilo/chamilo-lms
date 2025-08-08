@@ -234,8 +234,8 @@ class Auth
         $result = false;
         $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "UPDATE $table
-                SET title='".api_htmlentities($title, ENT_QUOTES, api_get_system_encoding())."'
-                WHERE id='".$category_id."'";
+                SET title = '".api_htmlentities($title, ENT_QUOTES, api_get_system_encoding())."'
+                WHERE id = ".$category_id." AND user_id = ".api_get_user_id();
         $resultQuery = Database::query($sql);
         if (Database::affected_rows($resultQuery)) {
             $result = true;

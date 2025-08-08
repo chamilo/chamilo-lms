@@ -6412,10 +6412,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -29188,4 +29188,34 @@ msgid "Free"
 msgstr ""
 
 msgid "No description available"
+msgstr ""
+
+msgid "Error recalculating results"
+msgstr ""
+
+msgid "Results recalculated"
+msgstr ""
+
+msgid "No test attempt found"
+msgstr ""
+
+msgid "No item found"
+msgstr ""
+
+msgid "No video found"
+msgstr ""
+
+msgid "Invalid access URL or session"
+msgstr ""
+
+msgid "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+
+msgid "Catalogue access"
+msgstr ""
+
+msgid "The uploaded file does not match the selected file type."
+msgstr ""
+
+msgid "Uninstall"
 msgstr ""

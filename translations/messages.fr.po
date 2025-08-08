@@ -6620,10 +6620,10 @@ msgstr "Afficher informations sur la session dans la page de cours de l'utilisat
 msgid "Subscription sessions in the category"
 msgstr "Ajouter des sessions dans une catégorie"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Liste des sessions sur la plateforme"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Liste des sessions dans la catégorie"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

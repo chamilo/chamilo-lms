@@ -360,7 +360,7 @@ if (!empty($users)) {
         );
 
         $actions .= Display::url(
-            Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate result')),
+            Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate results')),
             api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
             ['title' => get_lang('Recalculate results')]
         );

@@ -6420,11 +6420,11 @@ msgstr "Show session data comment"
 msgid "Subscription sessions in the category"
 msgstr "Subscription sessions in the category"
 
-msgid "List of session in the platform"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platform"
+msgstr "List of sessions on the platform"
 
-msgid "List of sesiones in the categories"
-msgstr "List of sesiones in the categories"
+msgid "List of sessions in the categories"
+msgstr "List of sessions in the categories"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
 msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -29221,3 +29221,33 @@ msgstr "Free"
 
 msgid "No description available"
 msgstr "No description available"
+
+msgid "Error recalculating results"
+msgstr "Error recalculating results"
+
+msgid "Results recalculated"
+msgstr "Results recalculated"
+
+msgid "No test attempt found"
+msgstr "No test attempt found"
+
+msgid "No item found"
+msgstr "No item found"
+
+msgid "No video found"
+msgstr "No video found"
+
+msgid "Invalid access URL or session"
+msgstr "Invalid access URL or session"
+
+msgid "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+
+msgid "Catalogue access"
+msgstr "Catalogue access"
+
+msgid "The uploaded file does not match the selected file type."
+msgstr "The uploaded file does not match the selected file type."
+
+msgid "Uninstall"
+msgstr "Uninstall"

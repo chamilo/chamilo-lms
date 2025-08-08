@@ -6428,10 +6428,10 @@ msgstr "Apresentar comentários dos dados da sessão"
 msgid "Subscription sessions in the category"
 msgstr "Subscrever sessões na categoria"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Lista das sessões na plataforma/sistema"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Lista das sessões nas categorias"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

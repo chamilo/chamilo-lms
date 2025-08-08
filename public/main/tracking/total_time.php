@@ -136,13 +136,13 @@ Display::display_header($nameTools, 'Tracking');
 
 /* MAIN CODE */
 
-$actionsLeft = Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('StudentsReporting'));
+$actionsLeft = Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners report'));
 $actionsLeft .= Display::url(
     Display::getMdiIcon(ToolIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group reporting')),
     'course_log_groups.php?'.api_get_cidreq()
 );
 $actionsLeft .= Display::url(
-    Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CourseReporting')),
+    Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course reporting data')),
     'course_log_tools.php?'.api_get_cidreq()
 );
 

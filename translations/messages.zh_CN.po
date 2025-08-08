@@ -6420,10 +6420,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr "注册讲习班到此分类"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "系统中讲习班列表"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "分类中讲习班列表"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

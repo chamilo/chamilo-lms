@@ -6429,10 +6429,10 @@ msgstr "اظهار بيانات تعليق الدورة"
 msgid "Subscription sessions in the category"
 msgstr "تسجيل الدورات في الفئة"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "اظهار قائمة الدورة في النظام"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "اظهار قائمة الدورات في الفئات"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

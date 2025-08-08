@@ -6428,11 +6428,11 @@ msgstr "Show session data comment"
 msgid "Subscription sessions in the category"
 msgstr "Subscription sessions in the category"
 
-msgid "List of session in the platform"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platform"
+msgstr "List of sessions on the platform"
 
-msgid "List of sesiones in the categories"
-msgstr "List of sesiones in the categories"
+msgid "List of sessions in the categories"
+msgstr "List of sessions in the categories"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
 msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -16454,8 +16454,8 @@ msgstr "Edit sessions for a URL"
 msgid "Add sessions to URL"
 msgstr "Add sessions to URL"
 
-msgid "List of sessions in"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platfom"
+msgstr "List of sessions on the platform"
 
 msgid "Go to learner details"
 msgstr "Go to learner details"

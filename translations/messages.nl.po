@@ -6454,10 +6454,10 @@ msgstr "Toon commentaar in sessie"
 msgid "Subscription sessions in the category"
 msgstr "Voeg sessie toe aan categorieën"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Sessielijst in het platform"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Sessielijst in de categorieën"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

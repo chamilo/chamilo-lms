@@ -651,7 +651,7 @@ Display::display_header($tool_name);
 $form = new FormValidator('user_import', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $group = [
     $form->createElement(
         'radio',

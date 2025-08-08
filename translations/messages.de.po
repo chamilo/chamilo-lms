@@ -6481,10 +6481,10 @@ msgstr "Beschreibungen der Kurs-Sessions anzeigen"
 msgid "Subscription sessions in the category"
 msgstr "Kurs-Sessions in Kategorien eintragen"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Liste der Kurs-Sessions der Plattform"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Liste der Kurs-Sessions in den Kategorien"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."

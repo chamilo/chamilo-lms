@@ -287,7 +287,7 @@ switch ($action) {
 
             MessageManager::send_message_simple(
                 $coachInfo['user_id'],
-                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
+                sprintf(get_lang('Student %s has completed his/her learning paths.'), $studentInfo['complete_name']),
                 $emailBody,
                 $studentInfo['user_id']
             );
@@ -427,7 +427,7 @@ switch ($action) {
                 // Remove audio
                 if (isset($_GET['delete_file']) && 1 == $_GET['delete_file']) {
                     $lp_item_obj->removeAudio();
-                    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
+                    Display::addFlash(Display::return_message(get_lang('File deleted')));
                     api_location($url);
                 }
 

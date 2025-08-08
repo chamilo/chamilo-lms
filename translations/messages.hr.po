@@ -4504,7 +4504,7 @@ msgstr "Razred nije upisan ni na jedan kolegij"
 msgid "tool"
 msgstr "alat"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "broj elemenata"
 
 msgid "Documents and folders"
@@ -6421,10 +6421,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9520,8 +9520,8 @@ msgstr "Niti jedna poveznica nije bila odabrana"
 msgid "No document downloaded"
 msgstr "Niti jedna datoteka nije bila preuzeta"
 
-msgid "clicks"
-msgstr "broj klikova"
+msgid "%d clicks"
+msgstr "%d broj klikova"
 
 msgid "Search results"
 msgstr "Rezultati pretrage"
@@ -9664,7 +9664,7 @@ msgstr "sati"
 msgid "minutes"
 msgstr "minute"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Napravljen dokument"
 
 msgid "The forum has been added"

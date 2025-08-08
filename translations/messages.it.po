@@ -4512,8 +4512,8 @@ msgstr "La classe non è iscritta ad alcun corso"
 msgid "tool"
 msgstr "strumento"
 
-msgid "number of items"
-msgstr "numero di elementi"
+msgid "Number of items"
+msgstr "Numero di elementi"
 
 msgid "Documents and folders"
 msgstr "Documenti e cartelle"
@@ -6429,10 +6429,10 @@ msgstr "Mostra la descrizione delle sessioni"
 msgid "Subscription sessions in the category"
 msgstr "Assegna una categoria alle sessioni"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Elenco delle sessioni in piattaforma"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Elenco delle sessioni nelle diverse categorie"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9528,8 +9528,8 @@ msgstr "Nessun collegamento visitato"
 msgid "No document downloaded"
 msgstr "Nessun documento scaricato"
 
-msgid "clicks"
-msgstr "Click"
+msgid "%d clicks"
+msgstr "%d click"
 
 msgid "Search results"
 msgstr "Risultati della ricerca"
@@ -9672,7 +9672,7 @@ msgstr "ore"
 msgid "minutes"
 msgstr "minuti"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documento creato"
 
 msgid "The forum has been added"

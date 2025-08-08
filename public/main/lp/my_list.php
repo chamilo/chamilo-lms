@@ -70,7 +70,7 @@ if (!empty($courses)) {
         $params = '&cid='.$course->getId().'&sid='.$sessionId;
         $link = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view'.$params.'&lp_id='.$id;
         $icon = Display::url(
-            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 22, get_lang('Lp')),
+            Display::getMdiIcon('map-marker-path', 'ch-tool-icon', null, 22, get_lang('Learning path')),
             $link
         );
 
@@ -84,7 +84,7 @@ if (!empty($courses)) {
     }
 }
 
-$template = new Template(get_lang('MyLps'));
+$template = new Template(get_lang('My learning paths'));
 $template->assign('lps', $lps);
 $content = $template->fetch($template->get_template('learnpath/my_list.tpl'));
 $template->assign('content', $content);

@@ -4495,7 +4495,7 @@ msgstr ""
 msgid "tool"
 msgstr ""
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -6412,10 +6412,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9514,7 +9514,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9658,7 +9658,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -29139,6 +29139,27 @@ msgstr ""
 msgid "Toggle visibility"
 msgstr ""
 
+msgid "Number of questions limited to a maximum of %d"
+msgstr ""
+
+msgid "Please enter a valid word count"
+msgstr ""
+
+msgid "Please enter a valid number"
+msgstr ""
+
+msgid "Invalid learning path item"
+msgstr ""
+
+msgid "Advancing in"
+msgstr ""
+
+msgid "Video completed!"
+msgstr ""
+
+msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+msgstr ""
+
 msgid "Unmark favorite"
 msgstr ""
 
@@ -29236,4 +29257,34 @@ msgid "View comment"
 msgstr ""
 
 msgid "No attendance data for today."
+msgstr ""
+
+msgid "Error recalculating results"
+msgstr ""
+
+msgid "Results recalculated"
+msgstr ""
+
+msgid "No test attempt found"
+msgstr ""
+
+msgid "No item found"
+msgstr ""
+
+msgid "No video found"
+msgstr ""
+
+msgid "Invalid access URL or session"
+msgstr ""
+
+msgid "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr ""
+
+msgid "Catalogue access"
+msgstr ""
+
+msgid "The uploaded file does not match the selected file type."
+msgstr ""
+
+msgid "Uninstall"
 msgstr ""

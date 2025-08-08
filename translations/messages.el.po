@@ -4511,7 +4511,7 @@ msgstr "Η τάξη δεν είναι εγγεγραμμένη σε μάθημα
 msgid "tool"
 msgstr "εργαλείο"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "πλήθος στοιχείων"
 
 msgid "Documents and folders"
@@ -6428,11 +6428,11 @@ msgstr "Show session data comment"
 msgid "Subscription sessions in the category"
 msgstr "Subscription sessions in the category"
 
-msgid "List of session in the platform"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platform"
+msgstr "List of sessions on the platform"
 
-msgid "List of sesiones in the categories"
-msgstr "List of sesiones in the categories"
+msgid "List of sessions in the categories"
+msgstr "List of sessions in the categories"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
 msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9527,8 +9527,8 @@ msgstr "No link visited"
 msgid "No document downloaded"
 msgstr "No document downloaded"
 
-msgid "clicks"
-msgstr "κλικς"
+msgid "%d clicks"
+msgstr "%d κλικς"
 
 msgid "Search results"
 msgstr "Αποτελέσματα αναζήτησης"
@@ -9671,7 +9671,7 @@ msgstr "ώρες"
 msgid "minutes"
 msgstr "λεπτά"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Το έγγραφο δημιουργήθηκε"
 
 msgid "The forum has been added"
@@ -16454,8 +16454,8 @@ msgstr "Edit sessions for a URL"
 msgid "Add sessions to URL"
 msgstr "Add sessions to URL"
 
-msgid "List of sessions in"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platfom"
+msgstr "List of sessions on the platform"
 
 msgid "Go to learner details"
 msgstr "Go to learner details"

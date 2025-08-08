@@ -40,7 +40,7 @@ $form = new FormValidator(
     ['enctype' => 'multipart/form-data']
 );
 
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addElement('checkbox', 'remove_old_relationships', null, get_lang('Remove previous relationships'));
 //$form->addElement('checkbox', 'send_email', null, get_lang('Send a mail to users'));
 $form->addButtonImport(get_lang('Import session(s)'));

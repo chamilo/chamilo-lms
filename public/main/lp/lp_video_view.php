@@ -21,14 +21,14 @@ $oLP = Session::read('oLP');
 $lpItem = $oLP->items[$lpItemId] ?? null;
 
 if (!$lpItem) {
-    echo get_lang('Invalid LP Item');
+    echo get_lang('Invalid learning path item');
     exit;
 }
 
 $documentIid = (int) $lpItem->get_path();
 
 if (empty($documentIid)) {
-    echo get_lang('Document not found');
+    echo get_lang('The file was not found');
     exit;
 }
 
@@ -37,7 +37,7 @@ $document = $em->getRepository(CDocument::class)
     ->find($documentIid);
 
 if (!$document instanceof CDocument) {
-    echo get_lang('Document not found');
+    echo get_lang('The file was not found');
     exit;
 }
 

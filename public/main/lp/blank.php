@@ -21,7 +21,7 @@ $message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
         case 'document_protected':
-            $message = Display::return_message(get_lang('Protected document'), 'warning');
+            $message = Display::return_message(get_lang('Protected Document'), 'warning');
             break;
         case 'document_deleted':
             $message = Display::return_message(

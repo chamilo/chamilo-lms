@@ -4512,7 +4512,7 @@ msgstr " هذا الفصل غير مسجل في أي مقرر"
 msgid "tool"
 msgstr "  أداة"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr " عدد البنود"
 
 msgid "Documents and folders"
@@ -6429,10 +6429,10 @@ msgstr "اظهار بيانات تعليق الدورة"
 msgid "Subscription sessions in the category"
 msgstr "تسجيل الدورات في الفئة"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "اظهار قائمة الدورة في النظام"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "اظهار قائمة الدورات في الفئات"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9528,8 +9528,8 @@ msgstr "لم يتم زيارة أي رابط"
 msgid "No document downloaded"
 msgstr "لم يتم تنزيل أي مستند"
 
-msgid "clicks"
-msgstr "نقرات"
+msgid "%d clicks"
+msgstr "%d نقرات"
 
 msgid "Search results"
 msgstr "نتائج البحث"
@@ -9672,7 +9672,7 @@ msgstr "ساعات"
 msgid "minutes"
 msgstr "دقائق"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "تم انشاء المستند"
 
 msgid "The forum has been added"

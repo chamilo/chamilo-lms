@@ -180,7 +180,7 @@ if (!empty($main_result)) {
     $html_result .= '<th>'.get_lang('User').'</th>';
     $html_result .= '<th>'.get_lang('Attempt').'</th>';
     $html_result .= '<th>'.get_lang('Date').'</th>';
-    $html_result .= '<th>'.get_lang('Results and feedback and feedback').'</th>';
+    $html_result .= '<th>'.get_lang('Results and feedback').'</th>';
     $html_result .= '</tr>';
 
     foreach ($main_result as $course_code => $lps) {
@@ -243,7 +243,7 @@ function export_complete_report_csv($filename, $array)
         get_lang('User'),
         get_lang('Attempt'),
         get_lang('Date'),
-        get_lang('Results and feedback and feedback'),
+        get_lang('Results and feedback'),
     ];
     if (!empty($array)) {
         $array = array_merge($header, $array);

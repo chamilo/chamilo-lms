@@ -125,7 +125,7 @@ if (!empty($errorMessage)) {
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, ['enctype' => 'multipart/form-data']);
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addElement(
     'radio',
     'file_type',

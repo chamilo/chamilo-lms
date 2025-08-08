@@ -4511,7 +4511,7 @@ msgstr "Aquesta classe no està inscrita a cap curs"
 msgid "tool"
 msgstr "Eina"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "nombre d'elements"
 
 msgid "Documents and folders"
@@ -6428,10 +6428,10 @@ msgstr "Mostrar comentaris de dades de la sessió"
 msgid "Subscription sessions in the category"
 msgstr "Inscriure sessions a una categoria"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Llista de sessions de la plataforma"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Llista de sessions en la categoria"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -9527,8 +9527,8 @@ msgstr "No s'ha visitat cap enllaç"
 msgid "No document downloaded"
 msgstr "No s'ha descarregat cap document"
 
-msgid "clicks"
-msgstr "clics"
+msgid "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Cercar resultats"
@@ -9671,7 +9671,7 @@ msgstr "hores"
 msgid "minutes"
 msgstr "minuts"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Document creat"
 
 msgid "The forum has been added"

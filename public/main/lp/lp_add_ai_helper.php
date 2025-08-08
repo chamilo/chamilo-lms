@@ -18,7 +18,7 @@ Display::display_header(get_lang('AI generator'), 'Learnpath');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', '', 32, get_lang('Return to Learningpaths')).'</a>';
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', '', 32, get_lang('Back to learning paths')).'</a>';
 echo '</div>';
 
 $aiHelper = new LpAiHelper();

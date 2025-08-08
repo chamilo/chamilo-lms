@@ -4503,7 +4503,7 @@ msgstr "Kay claseqa mana qelqachisqa kashanchu ima yachachinapipas"
 msgid "tool"
 msgstr "Llank'anakuna"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Hayka imaymanakuna"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Mana watukunchu ima waskhanapas"
 msgid "No document downloaded"
 msgstr "Mana uraychikunchu ima qelqa khipupas"
 
-msgid "clicks"
-msgstr "clics"
+msgid "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Maskhay tarisqakunata"
@@ -9663,7 +9663,7 @@ msgstr "horas"
 msgid "minutes"
 msgstr "minutos"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Qelqa khipu kamarisqa"
 
 msgid "The forum has been added"

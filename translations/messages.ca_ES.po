@@ -4511,7 +4511,7 @@ msgstr "Aquesta classe no està inscrita a cap curs"
 msgid "tool"
 msgstr "Eina"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "nombre d'elements"
 
 msgid "Documents and folders"
@@ -9527,8 +9527,8 @@ msgstr "No s'ha visitat cap enllaç"
 msgid "No document downloaded"
 msgstr "No s'ha descarregat cap document"
 
-msgid "clicks"
-msgstr "clics"
+msgid "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Cercar resultats"
@@ -9671,7 +9671,7 @@ msgstr "hores"
 msgid "minutes"
 msgstr "minuts"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Document creat"
 
 msgid "The forum has been added"

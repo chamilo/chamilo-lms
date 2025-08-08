@@ -4511,7 +4511,7 @@ msgstr "Η τάξη δεν είναι εγγεγραμμένη σε μάθημα
 msgid "tool"
 msgstr "εργαλείο"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "πλήθος στοιχείων"
 
 msgid "Documents and folders"
@@ -9527,8 +9527,8 @@ msgstr "No link visited"
 msgid "No document downloaded"
 msgstr "No document downloaded"
 
-msgid "clicks"
-msgstr "κλικς"
+msgid "%d clicks"
+msgstr "%d κλικς"
 
 msgid "Search results"
 msgstr "Αποτελέσματα αναζήτησης"
@@ -9671,7 +9671,7 @@ msgstr "ώρες"
 msgid "minutes"
 msgstr "λεπτά"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Το έγγραφο δημιουργήθηκε"
 
 msgid "The forum has been added"

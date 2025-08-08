@@ -4564,7 +4564,7 @@ msgstr "Diese Klasse ist in keinem Kurs eingeschrieben"
 msgid "tool"
 msgstr "Werkzeug"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Anzahl"
 
 msgid "Documents and folders"
@@ -9580,8 +9580,8 @@ msgstr "Kein besuchter Link"
 msgid "No document downloaded"
 msgstr "Kein Dokument herunter geladen"
 
-msgid "clicks"
-msgstr "Klicks"
+msgid "%d clicks"
+msgstr "%d Klicks"
 
 msgid "Search results"
 msgstr "Suchergebnisse"
@@ -9724,7 +9724,7 @@ msgstr "Stunden"
 msgid "minutes"
 msgstr "Minuten"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Audiodatei erstellt"
 
 msgid "The forum has been added"

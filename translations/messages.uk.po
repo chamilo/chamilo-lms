@@ -4496,7 +4496,7 @@ msgstr "Цей клас не зараховано на курс"
 msgid "tool"
 msgstr "інструмент"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "кількість елементів"
 
 msgid "Documents and folders"
@@ -9512,8 +9512,8 @@ msgstr "Жодного посилання не відвідано"
 msgid "No document downloaded"
 msgstr "Жодного документу не скачано"
 
-msgid "clicks"
-msgstr "кліки"
+msgid "%d clicks"
+msgstr "%d кліки"
 
 msgid "Search results"
 msgstr "Результати пошуку"
@@ -9656,7 +9656,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

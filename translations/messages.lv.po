@@ -4504,7 +4504,7 @@ msgstr "Šī klase nav pievienota šim kursam"
 msgid "tool"
 msgstr "Instruments"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "lietu skaits"
 
 msgid "Documents and folders"
@@ -9520,8 +9520,8 @@ msgstr "Hipersaite nav apmeklēta"
 msgid "No document downloaded"
 msgstr "Dokuments nav lejupielādēts"
 
-msgid "clicks"
-msgstr "Klikšķi"
+msgid "%d clicks"
+msgstr "%d Klikšķi"
 
 msgid "Search results"
 msgstr "Meklēšanas rezultāti"
@@ -9664,7 +9664,7 @@ msgstr "Stundas"
 msgid "minutes"
 msgstr "Minūtes"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokuments izveidots"
 
 msgid "The forum has been added"

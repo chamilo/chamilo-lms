@@ -4496,7 +4496,7 @@ msgstr ""
 msgid "tool"
 msgstr ""
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -9512,7 +9512,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9656,7 +9656,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

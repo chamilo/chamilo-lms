@@ -4512,7 +4512,7 @@ msgstr "Ta razred ni vpisan v tečaj"
 msgid "tool"
 msgstr "orodje"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "število elementov"
 
 msgid "Documents and folders"
@@ -9528,8 +9528,8 @@ msgstr "Ni obiskanih povezav"
 msgid "No document downloaded"
 msgstr "Ni prenesenih dokumentov"
 
-msgid "clicks"
-msgstr "klikov"
+msgid "%d clicks"
+msgstr "%d klikov"
 
 msgid "Search results"
 msgstr "Rezultati iskanja"
@@ -9672,7 +9672,7 @@ msgstr "ur"
 msgid "minutes"
 msgstr "minut"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokument je bil ustvarjen"
 
 msgid "The forum has been added"

@@ -4516,7 +4516,7 @@ msgstr "Esta clase no está inscrita en ningún curso"
 msgid "tool"
 msgstr "Herramienta"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Número de elementos"
 
 msgid "Documents and folders"
@@ -9532,7 +9532,7 @@ msgstr "No se ha visitado ningún enlace"
 msgid "No document downloaded"
 msgstr "No se ha descargado ningún documento"
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr "clics"
 
 msgid "Search results"
@@ -9676,7 +9676,7 @@ msgstr "Horas"
 msgid "minutes"
 msgstr "Minutos"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documento creado"
 
 msgid "The forum has been added"

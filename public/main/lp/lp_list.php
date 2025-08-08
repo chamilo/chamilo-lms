@@ -98,7 +98,7 @@ if ($is_allowed_to_edit) {
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_MEDIUM,
-                get_lang('Lp Ai Generator')
+                get_lang('AI learning path generator')
             ),
             api_get_self().'?'.api_get_cidreq().'&action=ai_helper'
         );
@@ -841,7 +841,7 @@ foreach ($categories as $category) {
 
             $forumSessionIcon = '';
             if ($is_allowed_to_edit && learnpath::isForumFromBaseCourse((int) $id)) {
-                $forumSessionIcon = Display::getMdiIcon('alert-circle', 'ch-tool-icon', '', 22, get_lang('This Learningpath includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session.'));
+                $forumSessionIcon = Display::getMdiIcon('alert-circle', 'ch-tool-icon', '', 22, get_lang('This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session.'));
             }
 
             $listData[] = [

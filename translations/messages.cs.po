@@ -4496,7 +4496,7 @@ msgstr "Tato třída neobsahuje žádný kurz"
 msgid "tool"
 msgstr "nástroj"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "počet položek"
 
 msgid "Documents and folders"
@@ -9512,7 +9512,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9656,7 +9656,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

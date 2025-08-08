@@ -4503,7 +4503,7 @@ msgstr "這班級沒有選修課程"
 msgid "tool"
 msgstr "工具"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "項目數量"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "未有連結曾被探訪"
 msgid "No document downloaded"
 msgstr "未有文件曾被下載"
 
-msgid "clicks"
-msgstr "按下"
+msgid "%d clicks"
+msgstr "%d 按下"
 
 msgid "Search results"
 msgstr "搜尋結果"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

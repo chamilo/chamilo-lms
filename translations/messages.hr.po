@@ -4504,7 +4504,7 @@ msgstr "Razred nije upisan ni na jedan kolegij"
 msgid "tool"
 msgstr "alat"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "broj elemenata"
 
 msgid "Documents and folders"
@@ -9520,8 +9520,8 @@ msgstr "Niti jedna poveznica nije bila odabrana"
 msgid "No document downloaded"
 msgstr "Niti jedna datoteka nije bila preuzeta"
 
-msgid "clicks"
-msgstr "broj klikova"
+msgid "%d clicks"
+msgstr "%d broj klikova"
 
 msgid "Search results"
 msgstr "Rezultati pretrage"
@@ -9664,7 +9664,7 @@ msgstr "sati"
 msgid "minutes"
 msgstr "minute"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Napravljen dokument"
 
 msgid "The forum has been added"

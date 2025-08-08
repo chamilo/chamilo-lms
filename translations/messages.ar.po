@@ -4512,7 +4512,7 @@ msgstr " هذا الفصل غير مسجل في أي مقرر"
 msgid "tool"
 msgstr "  أداة"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr " عدد البنود"
 
 msgid "Documents and folders"
@@ -9528,8 +9528,8 @@ msgstr "لم يتم زيارة أي رابط"
 msgid "No document downloaded"
 msgstr "لم يتم تنزيل أي مستند"
 
-msgid "clicks"
-msgstr "نقرات"
+msgid "%d clicks"
+msgstr "%d نقرات"
 
 msgid "Search results"
 msgstr "نتائج البحث"
@@ -9672,7 +9672,7 @@ msgstr "ساعات"
 msgid "minutes"
 msgstr "دقائق"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "تم انشاء المستند"
 
 msgid "The forum has been added"

@@ -4503,7 +4503,7 @@ msgstr "Този клас не е записан в курс."
 msgid "tool"
 msgstr "Инструмент"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Брой позиции"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Няма посетени връзки."
 msgid "No document downloaded"
 msgstr "Няма свалени документи."
 
-msgid "clicks"
-msgstr "Щраквания"
+msgid "%d clicks"
+msgstr "%d Щраквания"
 
 msgid "Search results"
 msgstr "Резултати от търсенето"
@@ -9663,7 +9663,7 @@ msgstr "часа"
 msgid "minutes"
 msgstr "минути"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Документът е създаден."
 
 msgid "The forum has been added"

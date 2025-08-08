@@ -4495,7 +4495,7 @@ msgstr ""
 msgid "tool"
 msgstr ""
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -9514,7 +9514,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9658,7 +9658,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -29137,4 +29137,25 @@ msgid "Link is not valid"
 msgstr ""
 
 msgid "Toggle visibility"
+msgstr ""
+
+msgid "Number of questions limited to a maximum of %d"
+msgstr ""
+
+msgid "Please enter a valid word count"
+msgstr ""
+
+msgid "Please enter a valid number"
+msgstr ""
+
+msgid "Invalid learning path item"
+msgstr ""
+
+msgid "Advancing in"
+msgstr ""
+
+msgid "Video completed!"
+msgstr ""
+
+msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
 msgstr ""

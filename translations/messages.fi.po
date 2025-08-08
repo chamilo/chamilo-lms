@@ -4505,7 +4505,7 @@ msgstr "Tätä luokkaa ei ole ilmoitettu kursille"
 msgid "tool"
 msgstr "työkalu"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -9521,7 +9521,7 @@ msgstr "Ei vierailtu"
 msgid "No document downloaded"
 msgstr "Tiedostoa ei ladattu"
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr "klikkausta"
 
 msgid "Search results"
@@ -9665,7 +9665,7 @@ msgstr "tuntia"
 msgid "minutes"
 msgstr "minuuttia"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokumentti luotu"
 
 msgid "The forum has been added"

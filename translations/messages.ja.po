@@ -4566,7 +4566,7 @@ msgstr ""
 msgid "tool"
 msgstr "ツール"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -9582,8 +9582,8 @@ msgstr "リンクにアクセスしていません"
 msgid "No document downloaded"
 msgstr "ドキュメントをダウンロードしていません"
 
-msgid "clicks"
-msgstr "クリック"
+msgid "%d clicks"
+msgstr "%d クリック"
 
 msgid "Search results"
 msgstr ""
@@ -9726,7 +9726,7 @@ msgstr "時間"
 msgid "minutes"
 msgstr "分"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

@@ -4503,7 +4503,7 @@ msgstr "没有此班级的课程"
 msgid "tool"
 msgstr "工具"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "项目数字"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "无访问过的链接"
 msgid "No document downloaded"
 msgstr "无下载的文档"
 
-msgid "clicks"
-msgstr "单击"
+msgid "%d clicks"
+msgstr "%d 单击"
 
 msgid "Search results"
 msgstr "检索结果"
@@ -9663,7 +9663,7 @@ msgstr "时"
 msgid "minutes"
 msgstr "分"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "创建文档"
 
 msgid "The forum has been added"

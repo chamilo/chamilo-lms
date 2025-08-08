@@ -4503,7 +4503,7 @@ msgstr "Оваа паралелка не е запишана на курсот"
 msgid "tool"
 msgstr "алатка"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "број на елементи"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Нема посетена врска"
 msgid "No document downloaded"
 msgstr "Нема симнати документи"
 
-msgid "clicks"
-msgstr "кликнувања"
+msgid "%d clicks"
+msgstr "%d кликнувања"
 
 msgid "Search results"
 msgstr "Резултати од пребарувањето"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

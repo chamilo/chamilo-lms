@@ -4503,7 +4503,7 @@ msgstr "Tiu ĉi klaso aliĝis al neniu kurso"
 msgid "tool"
 msgstr "modulo"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "nombro da eroj"
 
 msgid "Documents and folders"
@@ -9519,7 +9519,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

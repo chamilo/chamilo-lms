@@ -346,7 +346,7 @@ $headers = [
 $items = [$formUsers->toHtml(), $form->toHtml()];
 
 if ($allowUserGroups) {
-    $headers[] = get_lang('SubscribeUserGroupsToLp');
+    $headers[] = get_lang('Add classes to a learning path');
     $items[] = $formUserGroup->toHtml();
 }
 $menu = $oLP->build_action_menu(true, false, true, false);

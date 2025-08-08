@@ -4503,7 +4503,7 @@ msgstr "Klase hau ikastaro batean ere ez dago inskribaturik"
 msgid "tool"
 msgstr "tresna"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "elementu kopurua"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Ez da lotura bat ere bisitatu"
 msgid "No document downloaded"
 msgstr "Ez da dokumentu bat ere deskargatu"
 
-msgid "clicks"
-msgstr "klikak"
+msgid "%d clicks"
+msgstr "%d klikak"
 
 msgid "Search results"
 msgstr "Bilaketaren emaitzak"
@@ -9663,7 +9663,7 @@ msgstr "orduak"
 msgid "minutes"
 msgstr "minutuak"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokumentua sortu da"
 
 msgid "The forum has been added"

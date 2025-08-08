@@ -4503,8 +4503,8 @@ msgstr "Esta clase no pertenece a ningún curso"
 msgid "tool"
 msgstr "herramienta"
 
-msgid "number of items"
-msgstr "número de items"
+msgid "Number of items"
+msgstr "Número de items"
 
 msgid "Documents and folders"
 msgstr "Documentos y carpetas"
@@ -9519,7 +9519,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

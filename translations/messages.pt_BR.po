@@ -4511,7 +4511,7 @@ msgstr "Esta turma não está inscrita em nenhum curso"
 msgid "tool"
 msgstr "Ferramenta"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Número de ítens"
 
 msgid "Documents and folders"
@@ -9527,8 +9527,8 @@ msgstr "Nenhum link visitado"
 msgid "No document downloaded"
 msgstr "Nenhum documento baixado"
 
-msgid "clicks"
-msgstr "Cliques"
+msgid "%d clicks"
+msgstr "%d Cliques"
 
 msgid "Search results"
 msgstr "Resultados da pesquisa"
@@ -9671,7 +9671,7 @@ msgstr "horas"
 msgid "minutes"
 msgstr "minutos"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documento criado"
 
 msgid "The forum has been added"

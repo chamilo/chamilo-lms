@@ -147,11 +147,11 @@ $actionsLeft .= Display::url(
 );
 
 /*$actionsLeft .= Display::url(
-    Display::getMdiIcon(ObjectIcon::RESOURCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ResourcesReporting')),
+    Display::getMdiIcon(ObjectIcon::RESOURCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reporting')),
     'course_log_resources.php?'.api_get_cidreq()
 );*/
 $actionsLeft .= Display::url(
-    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExamReporting')),
+    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Exams reports')),
     api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
 );
 

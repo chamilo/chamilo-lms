@@ -167,7 +167,7 @@ if ($lpReporting) {
         echo '</table></div>';
     } else {
         if ($export_csv) {
-            $temp = [get_lang('NoLearningPath'), ''];
+            $temp = [get_lang('No learning path available'), ''];
             $csv_content[] = $temp;
         }
     }
@@ -233,7 +233,7 @@ if ($exerciseReporting) {
     } else {
         echo '<tr><td>'.get_lang('No tests').'</td></tr>';
         if ($export_csv) {
-            $temp = [get_lang('No tests', ''), ''];
+            $temp = [get_lang('No tests'), ''];
             $csv_content[] = $temp;
         }
     }
@@ -299,7 +299,7 @@ if ($showChatReporting) {
         $session_id
     );
     if ($export_csv) {
-        $csv_content[] = [get_lang('Chat', ''), ''];
+        $csv_content[] = [get_lang('Chat'), ''];
         $csv_content[] = [
             sprintf(
                 get_lang('Connections to the chat during last %s days', ''),
@@ -342,12 +342,12 @@ if ($showTrackingReporting) {
         foreach ($tools_most_used as $row) {
             echo '<tr>
                     <td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-                    <td align="right">'.$row['count_access_tool'].' '.get_lang('clicks').'</td>
+                    <td align="right">'.sprintf(get_lang('%d clicks'), $row['count_access_tool']).'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
                     get_lang(ucfirst($row['access_tool']), ''),
-                    $row['count_access_tool'].' '.get_lang('clicks', ''),
+                    sprintf(get_lang('%d clicks'), $row['count_access_tool']),
                 ];
                 $csv_content[] = $temp;
             }
@@ -382,7 +382,7 @@ if ($documentReporting) {
     );
 
     if ($export_csv) {
-        $temp = [get_lang('Documents most downloaded', ''), ''];
+        $temp = [get_lang('Documents most downloaded'), ''];
         $csv_content[] = ['', ''];
         $csv_content[] = $temp;
     }
@@ -401,12 +401,12 @@ if ($documentReporting) {
                 $viewLink
             );
             echo '</td>
-                    <td align="right">'.$row['count_down'].' '.get_lang('clicks').'</td>
+                    <td align="right">'.sprintf(get_lang('%d clicks'), $row['count_down']).'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
                     $row['npath'],
-                    $row['count_down'].' '.get_lang('clicks', ''),
+                    sprintf(get_lang('%d clicks'), $row['count_down']),
                 ];
                 $csv_content[] = $temp;
             }
@@ -414,7 +414,7 @@ if ($documentReporting) {
     } else {
         echo '<tr><td>'.get_lang('No document downloaded').'</td></tr>';
         if ($export_csv) {
-            $temp = [get_lang('No document downloaded', ''), ''];
+            $temp = [get_lang('No document downloaded'), ''];
             $csv_content[] = $temp;
         }
     }
@@ -448,11 +448,11 @@ if ($linkReporting) {
                 $row['title'].' ('.$row['url'].')',
                 $row['url']
             );
-            echo '</td><td align="right">'.$row['count_visits'].' '.get_lang('clicks').'</td></tr>';
+            echo '</td><td align="right">'.sprintf(get_lang('%d clicks'), $row['count_visits']).'</td></tr>';
             if ($export_csv) {
                 $temp = [
                     $row['title'],
-                    $row['count_visits'].' '.get_lang('clicks'),
+                    sprintf(get_lang('%d clicks'), $row['count_visits']),
                 ];
                 $csv_content[] = $temp;
             }

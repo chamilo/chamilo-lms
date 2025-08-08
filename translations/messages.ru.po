@@ -4504,7 +4504,7 @@ msgstr "Этот класс не подписан на курс"
 msgid "tool"
 msgstr "инструмент"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "количество элементов"
 
 msgid "Documents and folders"
@@ -9520,8 +9520,8 @@ msgstr "Нет посещенных ссылок"
 msgid "No document downloaded"
 msgstr "Нет загрущенных документов"
 
-msgid "clicks"
-msgstr "щелчки"
+msgid "%d clicks"
+msgstr "%d щелчки"
 
 msgid "Search results"
 msgstr "Результаты поиска"
@@ -9664,7 +9664,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

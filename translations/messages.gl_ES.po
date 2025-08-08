@@ -4511,8 +4511,8 @@ msgstr "Esta clase non está suscrita nun curso"
 msgid "tool"
 msgstr "ferramenta"
 
-msgid "number of items"
-msgstr "número de elementos"
+msgid "Number of items"
+msgstr "Número de elementos"
 
 msgid "Documents and folders"
 msgstr "Documentos e carpetas"
@@ -9527,8 +9527,8 @@ msgstr "Non hai enlaces visitados"
 msgid "No document downloaded"
 msgstr "Non se descargou ningún documento"
 
-msgid "clicks"
-msgstr "clicks"
+msgid "%d clicks"
+msgstr "%d clicks"
 
 msgid "Search results"
 msgstr "Resultados da busca"
@@ -9671,7 +9671,7 @@ msgstr "horas"
 msgid "minutes"
 msgstr "minutos"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documento creado"
 
 msgid "The forum has been added"

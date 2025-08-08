@@ -4512,8 +4512,8 @@ msgstr "Aceasta clasa nu este inscrisa la curs"
 msgid "tool"
 msgstr "unelte"
 
-msgid "number of items"
-msgstr "numar de elemente"
+msgid "Number of items"
+msgstr "Numar de elemente"
 
 msgid "Documents and folders"
 msgstr "Documente si directoare"
@@ -9528,8 +9528,8 @@ msgstr "Nici un link vizitat"
 msgid "No document downloaded"
 msgstr "Nici un document incarcat"
 
-msgid "clicks"
-msgstr "Apasa"
+msgid "%d clicks"
+msgstr "%d Apasa"
 
 msgid "Search results"
 msgstr "Rezultatele cautarii"
@@ -9672,7 +9672,7 @@ msgstr "ore"
 msgid "minutes"
 msgstr "minute"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documentul a fost creat."
 
 msgid "The forum has been added"

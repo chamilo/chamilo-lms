@@ -4503,7 +4503,7 @@ msgstr "이 클래스는 과정에 등록하지 않았습니다"
 msgid "tool"
 msgstr "도구"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "아이템 수"
 
 msgid "Documents and folders"
@@ -9519,7 +9519,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

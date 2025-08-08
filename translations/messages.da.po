@@ -4503,7 +4503,7 @@ msgstr "Denne klasse er ikke tilmeldt noget kursus"
 msgid "tool"
 msgstr "værktøj"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "antal objekter"
 
 msgid "Documents and folders"
@@ -9519,7 +9519,7 @@ msgstr "Ingen besøgte links"
 msgid "No document downloaded"
 msgstr "Intet downloadet dokument"
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr "klik"
 
 msgid "Search results"
@@ -9663,7 +9663,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

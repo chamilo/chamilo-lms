@@ -4503,7 +4503,7 @@ msgstr "Ez az osztály nincs feliratkozva kurzusra"
 msgid "tool"
 msgstr "eszköz"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "elemek száma"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Nincs meglátogatott link"
 msgid "No document downloaded"
 msgstr "Nincs letöltött dokumentum"
 
-msgid "clicks"
-msgstr "Kattintások"
+msgid "vclicks"
+msgstr "%d Kattintások"
 
 msgid "Search results"
 msgstr "Keresési eredmények"
@@ -9663,7 +9663,7 @@ msgstr "óra"
 msgid "minutes"
 msgstr "perc"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "A dokumentum létrejött"
 
 msgid "The forum has been added"

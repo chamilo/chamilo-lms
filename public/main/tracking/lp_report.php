@@ -387,7 +387,7 @@ function getData($from, $numberOfItems, $column, $direction, $params)
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(),
-    'name' => get_lang('Tracking'),
+    'name' => get_lang('Reporting'),
 ];
 
 $course = api_get_course_entity();
@@ -397,7 +397,7 @@ $qb = $lpRepo->findAllByCourse($course, $session);
 /** @var CLp[] $lps */
 $lps = $qb->getQuery()->getResult();
 
-$tool_name = get_lang('CourseLPsGenericStats');
+$tool_name = get_lang('Learning paths generic stats');
 
 $headers = [];
 $headers[] = get_lang('First name');

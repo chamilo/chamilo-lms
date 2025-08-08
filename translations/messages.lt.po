@@ -4505,7 +4505,7 @@ msgstr "Ši klasė nepriregistruota prie kurso"
 msgid "tool"
 msgstr "įrankis"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "elementų skaičius"
 
 msgid "Documents and folders"
@@ -9521,8 +9521,8 @@ msgstr "Jokia nuoroda neaplankyta"
 msgid "No document downloaded"
 msgstr "Joks dokumentas neparsiųstas"
 
-msgid "clicks"
-msgstr "paspaudimai"
+msgid "%d clicks"
+msgstr "%d paspaudimai"
 
 msgid "Search results"
 msgstr "Paieškos rezultatai"
@@ -9665,7 +9665,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

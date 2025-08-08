@@ -4535,8 +4535,8 @@ msgstr "Deze klas is niet ingeschreven in een cursus"
 msgid "tool"
 msgstr "module"
 
-msgid "number of items"
-msgstr "aantal items"
+msgid "Number of items"
+msgstr "Aantal items"
 
 msgid "Documents and folders"
 msgstr "Bestanden en mappen"
@@ -9560,8 +9560,8 @@ msgstr "Geen link bezocht"
 msgid "No document downloaded"
 msgstr "Geen document gedownloaded"
 
-msgid "clicks"
-msgstr "klikken"
+msgid "%d clicks"
+msgstr "%d klikken"
 
 msgid "Search results"
 msgstr "Zoekresultaten"
@@ -9704,7 +9704,7 @@ msgstr "Uren"
 msgid "minutes"
 msgstr "minuten"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Het document werd aangemaakt."
 
 msgid "The forum has been added"

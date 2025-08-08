@@ -4496,7 +4496,7 @@ msgstr ""
 msgid "tool"
 msgstr "tool"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr ""
 
 msgid "Documents and folders"
@@ -9512,8 +9512,8 @@ msgstr "Walang link na nabisita"
 msgid "No document downloaded"
 msgstr "Walang dokumentong na-download"
 
-msgid "clicks"
-msgstr "mga click"
+msgid "%d clicks"
+msgstr "%d mga click"
 
 msgid "Search results"
 msgstr ""
@@ -9656,7 +9656,7 @@ msgstr "mga oras"
 msgid "minutes"
 msgstr "mga minuto"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

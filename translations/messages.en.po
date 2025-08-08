@@ -4503,8 +4503,8 @@ msgstr "This class isn't subscribed in a course"
 msgid "tool"
 msgstr "tool"
 
-msgid "number of items"
-msgstr "number of items"
+msgid "Number of items"
+msgstr "Number of items"
 
 msgid "Documents and folders"
 msgstr "Documents and folders"
@@ -9522,8 +9522,8 @@ msgstr "No link visited"
 msgid "No document downloaded"
 msgstr "No document downloaded"
 
-msgid "clicks"
-msgstr "clicks"
+msgid "%d clicks"
+msgstr "%d clicks"
 
 msgid "Search results"
 msgstr "Search results"
@@ -9666,8 +9666,8 @@ msgstr "hours"
 msgid "minutes"
 msgstr "minutes"
 
-msgid "Documented created"
-msgstr "Documented created"
+msgid "Document created"
+msgstr "Document created"
 
 msgid "The forum has been added"
 msgstr "The forum has been added"
@@ -29170,3 +29170,24 @@ msgstr "Link is not valid"
 
 msgid "Toggle visibility"
 msgstr "Toggle visibility"
+
+msgid "Number of questions limited to a maximum of %d"
+msgstr "Number of questions limited to a maximum of %d"
+
+msgid "Please enter a valid word count"
+msgstr "Please enter a valid word count"
+
+msgid "Please enter a valid number"
+msgstr "Please enter a valid number"
+
+msgid "Invalid learning path item"
+msgstr "Invalid learning path item"
+
+msgid "Advancing in"
+msgstr "Advancing in"
+
+msgid "Video completed!"
+msgstr "Video completed!"
+
+msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+msgstr "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."

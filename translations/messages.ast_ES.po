@@ -4503,7 +4503,7 @@ msgstr "Esta clase nun ta asociada a nengún cursu"
 msgid "tool"
 msgstr "Ferramienta"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Númberu d'elementos"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Nun se visitó nengún enllaz"
 msgid "No document downloaded"
 msgstr "Nun se descargó nengún documentu"
 
-msgid "clicks"
-msgstr "clics"
+msgid "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Buscar resultaos"
@@ -9663,7 +9663,7 @@ msgstr "hores"
 msgid "minutes"
 msgstr "minutos"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Documentu creau"
 
 msgid "The forum has been added"

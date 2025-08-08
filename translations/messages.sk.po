@@ -4511,7 +4511,7 @@ msgstr "Táto trieda nie je zaradená v žiadnom kurze"
 msgid "tool"
 msgstr "nástroj"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "počet položiek"
 
 msgid "Documents and folders"
@@ -9527,8 +9527,8 @@ msgstr "Žiadna linka nebola navštívená"
 msgid "No document downloaded"
 msgstr "Žiadny dokument nebol stiahnutý"
 
-msgid "clicks"
-msgstr "Kliknutia"
+msgid "%d clicks"
+msgstr "%d Kliknutia"
 
 msgid "Search results"
 msgstr "Výsledky vyhľadávania"
@@ -9671,7 +9671,7 @@ msgstr "hodiny"
 msgid "minutes"
 msgstr "minúty"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokument vytvorený"
 
 msgid "The forum has been added"

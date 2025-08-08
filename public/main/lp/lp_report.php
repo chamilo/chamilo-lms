@@ -220,7 +220,7 @@ if ($reset) {
                     );
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('LPWasReset').': '.$studentInfo['complete_name_with_username'],
+                            get_lang('Learning path was reset for the learner').': '.$studentInfo['complete_name_with_username'],
                             'success'
                         )
                     );
@@ -247,7 +247,7 @@ if ($reset) {
             if (!empty($result)) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('LPWasReset').': '.implode(', ', $result),
+                        get_lang('Learning path was reset for the learner').': '.implode(', ', $result),
                         'success'
                     )
                 );
@@ -362,7 +362,7 @@ if (!empty($users)) {
         $actions .= Display::url(
             Display::getMdiIcon('file-document-refresh', 'ch-tool-icon', null, 32, get_lang('Recalculate result')),
             api_get_path(WEB_CODE_PATH) . 'lp/lp_controller.php?'.api_get_cidreq().'&action=recalculate&user_id='.$userId.'&lp_id='.$lpId,
-            ['title' => get_lang('Recalculate result')]
+            ['title' => get_lang('Recalculate results')]
         );
 
         $row[] = $actions;
@@ -371,7 +371,7 @@ if (!empty($users)) {
         $added[] = $userId;
     }
 } else {
-    Display::addFlash(Display::return_message(get_lang('NoUserAdded'), 'warning'));
+    Display::addFlash(Display::return_message(get_lang('No user added'), 'warning'));
 }
 
 $parameters = [
@@ -385,16 +385,16 @@ $parameters = [
 $table = new SortableTableFromArrayConfig($userList, 1, 20, 'lp');
 $table->set_additional_parameters($parameters);
 $column = 0;
-$table->set_header($column++, get_lang('FirstName'));
-$table->set_header($column++, get_lang('LastName'));
+$table->set_header($column++, get_lang('First name'));
+$table->set_header($column++, get_lang('Last name'));
 if ('true' === $showEmail) {
-    $table->set_header($column++, get_lang('Email'));
+    $table->set_header($column++, get_lang('E-mail'));
 }
 $table->set_header($column++, $label, false);
-$table->set_header($column++, get_lang('ScormTime'));
+$table->set_header($column++, get_lang('Time'));
 $table->set_header($column++, get_lang('Progress'));
-$table->set_header($column++, get_lang('ScormScore'));
-$table->set_header($column++, get_lang('LastConnection'), false);
+$table->set_header($column++, get_lang('Score'));
+$table->set_header($column++, get_lang('Last connection'), false);
 if (false === $export) {
     $table->set_header($column++, get_lang('Actions'), false);
 }
@@ -411,7 +411,7 @@ $actions = Display::url(
 
 if (!empty($users)) {
     $actions .= Display::url(
-        Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 32, get_lang('ExportToPdf')),
+        Display::getMdiIcon('file-pdf-box', 'ch-tool-icon', null, 32, get_lang('Export to PDF')),
         $url.'&export=pdf'
     );
     $userListToString = array_column($userList, 'username');
@@ -423,7 +423,7 @@ if (!empty($users)) {
     );
 }
 
-$template = new Template(get_lang('StudentScore'));
+$template = new Template(get_lang('Learner score'));
 $template->assign('group_class_label', $label);
 $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
@@ -442,7 +442,7 @@ $template->assign('content', $result);
 
 if ($export) {
     $pdfParams = [
-        'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
+        'filename' => get_lang('Learner score').'_'.api_get_local_time(),
     ];
     $pdf = new PDF('A4', 'P', $pdfParams);
     $pdf->html_to_pdf_with_template(

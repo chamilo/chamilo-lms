@@ -4503,7 +4503,7 @@ msgstr "Denna klass prenumererar inte på någon kurs"
 msgid "tool"
 msgstr "verktyg"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "antal objekt"
 
 msgid "Documents and folders"
@@ -9519,8 +9519,8 @@ msgstr "Ingen länk besökt"
 msgid "No document downloaded"
 msgstr "Inget dokument nerladdat"
 
-msgid "clicks"
-msgstr "klick"
+msgid "%d clicks"
+msgstr "%d klick"
 
 msgid "Search results"
 msgstr "Sökresultat"
@@ -9663,7 +9663,7 @@ msgstr "timmar"
 msgid "minutes"
 msgstr "minuter"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"

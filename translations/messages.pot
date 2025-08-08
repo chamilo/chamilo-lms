@@ -29139,7 +29139,6 @@ msgstr ""
 msgid "Toggle visibility"
 msgstr ""
 
-<<<<<<< HEAD
 msgid "Number of questions limited to a maximum of %d"
 msgstr ""
 

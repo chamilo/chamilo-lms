@@ -3,6 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -90,27 +94,44 @@ class UrlManager
     public static function delete($id)
     {
         $id = (int) $id;
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $tableUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tableCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $tableSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tableGroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
-        $sql = "DELETE FROM $tableCourse WHERE access_url_id = ".$id;
-        Database::query($sql);
         /*
          * $tableCourseCategory = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
         Database::query($sql);
         */
-        $sql = "DELETE FROM $tableSession WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $tableGroup WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $tableUser WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $table WHERE id = ".$id;
-        Database::query($sql);
+        $em = Container::getEntityManager();
+
+        $relEntities = [
+            AccessUrlRelCourse::class,
+            AccessUrlRelSession::class,
+            AccessUrlRelUserGroup::class,
+            AccessUrlRelUser::class,
+        ];
+
+        foreach ($relEntities as $relEntity) {
+            $qb = $em->createQueryBuilder();
+
+            $em
+                ->createQueryBuilder()
+                ->delete($relEntity, 'rel')
+                ->where($qb->expr()->eq('rel.url', ':id'))
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->execute()
+            ;
+        }
+
+        $qb = $em->createQueryBuilder();
+
+        $em
+            ->createQueryBuilder()
+            ->delete(AccessUrl::class, 'au')
+            ->where($qb->expr()->eq('au.id', ':id'))
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }

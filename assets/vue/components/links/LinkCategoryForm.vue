@@ -20,7 +20,7 @@
         @click="emit('backPressed')"
       />
       <BaseButton
-        :label="t('Save category')"
+        :label="t('Save the category')"
         icon="send"
         type="success"
         @click="submitCategoryForm"

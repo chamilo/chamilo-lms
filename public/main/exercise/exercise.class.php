@@ -2067,12 +2067,12 @@ class Exercise
                     'Random categories with random questions'
                 ),
                 // C 87 B 654 A 321
-                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('Random categories with questions ordered (questions not grouped)'),
                 /*    B 456 C 78 A 123
                         456 78 123
                         123 456 78
                 */
-                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('Random categories with random questions (questions not grouped)'),
                 /*
                     A 123 B 456 C 78
                     B 456 C 78 A 123
@@ -2080,8 +2080,8 @@ class Exercise
                     654 87 321
                     165 842 73
                 */
-                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
-                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('Ordered categories by parent with questions ordered'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('Ordered categories by parent with random questions'),
             ];
 
             $form->addSelect(
@@ -2126,7 +2126,7 @@ class Exercise
                     get_lang('Hide correct answered questions')
                 ),
             ];
-            $form->addGroup($group, null, get_lang('Results and feedback page configuration'));
+            $form->addGroup($group, null, get_lang('Results page configuration'));
 
             $group = [
                 $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
@@ -2158,7 +2158,7 @@ class Exercise
                 'randomQuestions',
                 [
                     get_lang('Random questions'),
-                    get_lang('Random questionsHelp'),
+                    get_lang("To randomize all questions choose 10. To disable randomization, choose \"Do not randomize\"."),
                 ],
                 $option,
                 ['id' => 'randomQuestions']
@@ -2222,7 +2222,7 @@ class Exercise
             $form->addElement(
                 'number',
                 'exerciseAttempts',
-                get_lang('max. 20 characters, e.g. <i>INNOV21</i> number of attempts'),
+                get_lang('Max number of attempts'),
                 null,
                 ['id' => 'exerciseAttempts']
             );
@@ -2427,7 +2427,7 @@ class Exercise
         // defaults
         if ('full' == $type) {
             // rules
-            $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
+            $form->addRule('exerciseAttempts', get_lang('Numerical'), 'numeric');
             $form->addRule('start_time', get_lang('Invalid date'), 'datetime');
             $form->addRule('end_time', get_lang('Invalid date'), 'datetime');
 
@@ -2537,9 +2537,9 @@ class Exercise
         // Feedback type.
         $feedback = [];
         $warning = sprintf(
-            get_lang('TheSettingXWillChangeToX'),
-            get_lang('ShowResultsToStudents'),
-            get_lang('ShowScoreAndRightAnswer')
+            get_lang("The setting \"%s\" will change to \"%s\""),
+            get_lang('Show score to learner'),
+            get_lang('Auto-evaluation mode: show score and expected answers')
         );
         $endTest = $form->createElement(
             'radio',

@@ -400,8 +400,8 @@ $lps = $qb->getQuery()->getResult();
 $tool_name = get_lang('CourseLPsGenericStats');
 
 $headers = [];
-$headers[] = get_lang('FirstName');
-$headers[] = get_lang('LastName');
+$headers[] = get_lang('First name');
+$headers[] = get_lang('Last name');
 $headers[] = get_lang('Username');
 foreach ($lps as $lp) {
     $lpName = $lp->getTitle();
@@ -417,7 +417,7 @@ if (!empty($action)) {
         case 'export':
             $data = getData(0, 100000, null, null, null);
             $data = array_merge([$headers], $data);
-            $name = api_get_course_id().'_'.get_lang('Learnpath').'_'.get_lang('Export');
+            $name = api_get_course_id().'_'.get_lang('Learning path').'_'.get_lang('Export');
             Export::arrayToXls($data, $name);
             exit;
             break;
@@ -427,7 +427,7 @@ if (!empty($action)) {
 $actionsLeft = TrackingCourseLog::actionsLeft('lp', api_get_session_id(), false);
 $actionsCenter = '';
 $actionsRight = Display::url(
-    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsXLS')),
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')),
     api_get_self().'?action=export&'.api_get_cidreq()
 );
 

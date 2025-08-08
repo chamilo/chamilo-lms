@@ -29168,3 +29168,72 @@ msgstr ""
 
 msgid "No description available"
 msgstr ""
+
+msgid "Demo"
+msgstr ""
+
+msgid "Browse courses"
+msgstr ""
+
+msgid "Or"
+msgstr ""
+
+msgid "No sender"
+msgstr ""
+
+msgid "messages"
+msgstr ""
+
+msgid "Error deleting message"
+msgstr ""
+
+msgid "You are adding calendar events for attendance"
+msgstr ""
+
+msgid "Add attendance calendar"
+msgstr ""
+
+msgid "Back to attendance sheet"
+msgstr ""
+
+msgid "Add calendar event"
+msgstr ""
+
+msgid "Clear all"
+msgstr ""
+
+msgid "Edit calendar event"
+msgstr ""
+
+msgid "Delete calendar event"
+msgstr ""
+
+msgid "Are you sure you want to delete this event?"
+msgstr ""
+
+msgid "Are you sure you want to delete all calendar events?"
+msgstr ""
+
+msgid "Edit attendance"
+msgstr ""
+
+msgid "Go to calendar"
+msgstr ""
+
+msgid "Export to Excel"
+msgstr ""
+
+msgid "Generate QR code"
+msgstr ""
+
+msgid "Loading attendance data..."
+msgstr ""
+
+msgid "No attendance assigned yet."
+msgstr ""
+
+msgid "View comment"
+msgstr ""
+
+msgid "No attendance data for today."
+msgstr ""

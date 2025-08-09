@@ -9,6 +9,8 @@
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
@@ -113,13 +115,32 @@ if ($form->validate()) {
             $url_to_go = 'access_urls.php';
             $message = get_lang('The URL has been edited');
         } else {
-            $num = UrlManager::url_exist($url);
+            try {
+                $exists = $urlRepo->exists($url);
+            } catch (NoResultException|NonUniqueResultException $e) {
+                $exists = true;
+            }
+
             $url_to_go = 'access_url_edit.php';
             $message = get_lang('This URL already exists, please select another URL');
-            if (0 === $num) {
+            if (!$exists) {
                 // checking url
                 if ('/' != substr($url, strlen($url) - 1, strlen($url))) {
                     $url .= '/';
+                }
+
+                if ($isLoginOnly) {
+                    $sameDomain = $urlHelper->isSameBaseDomain(
+                        array_merge($urlRepo->getUrlList(), [$url])
+                    );
+
+                    if (!$sameDomain) {
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name will not be taken into account for access sharing.')
+                            )
+                        );
+                    }
                 }
 
                 $accessUrl = $urlRepo->findOneBy(['url' => $url]);

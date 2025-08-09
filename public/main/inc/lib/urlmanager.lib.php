@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Class UrlManager
@@ -29,9 +31,7 @@ class UrlManager
     {
         $repo = Container::getAccessUrlRepository();
 
-        $num = self::url_exist($url);
-
-        if (0 !== $num) {
+        if (!$repo->exists($url)) {
             return null;
         }
 
@@ -134,40 +134,6 @@ class UrlManager
         ;
 
         return true;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return int
-     */
-    public static function url_exist($url)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table
-                WHERE url = '".Database::escape_string($url)."' ";
-        $res = Database::query($sql);
-
-        return Database::num_rows($res);
-    }
-
-    /**
-     * @param int $urlId
-     *
-     * @return int
-     */
-    public static function url_id_exist($urlId)
-    {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            return false;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table WHERE id = ".$urlId;
-        $res = Database::query($sql);
-        $num = Database::num_rows($res);
-
-        return $num;
     }
 
     /**

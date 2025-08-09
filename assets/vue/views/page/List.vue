@@ -40,9 +40,13 @@
     </Column>
 
     <Column
-      :header="t('Locale')"
+      :header="t('Language')"
       field="locale"
-    />
+    >
+      <template #body="{ data }">
+        {{ ensureLanguageName(data?.locale) }}
+      </template>
+    </Column>
     <Column
       :header="t('Category')"
       field="category.title"
@@ -222,11 +226,12 @@
 <script setup>
 import { useStore } from "vuex"
 import { useDatatableList } from "../../composables/datatableList"
-import { computed, inject, onMounted, ref } from "vue"
+import { computed, inject, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useToast } from "primevue/usetoast"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
+import { useLocale } from "../../composables/locale"
 
 const router = useRouter()
 const store = useStore()
@@ -235,6 +240,21 @@ const securityStore = useSecurityStore()
 const { t } = useI18n()
 
 const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } = useDatatableList("Page")
+const { getLanguageName, fetchLanguageNameFromApi } = useLocale()
+const langMap = reactive({})
+
+function ensureLanguageName(iso) {
+  if (!iso) return "-"
+  if (!langMap[iso]) {
+    langMap[iso] = getLanguageName(iso)
+    fetchLanguageNameFromApi(iso)
+      .then((name) => {
+        if (name) langMap[iso] = name
+      })
+      .catch(() => {})
+  }
+  return langMap[iso]
+}
 
 const toast = useToast()
 

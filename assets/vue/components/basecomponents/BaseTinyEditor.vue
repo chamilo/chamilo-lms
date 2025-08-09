@@ -3,7 +3,7 @@
     <FloatLabel
       variant="on"
       :class="{
-        'input-has-content': modelValue.trim().length > 0,
+        'input-has-content': hasContent,
         'input-has-focus': isFocused
       }"
     >
@@ -35,6 +35,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import FloatLabel from "primevue/floatlabel"
 import { useLocale } from "../../composables/locale"
 
+const hasContent = computed(() => String(modelValue ?? '').trim().length > 0)
 const modelValue = defineModel({
   type: String,
   required: true,

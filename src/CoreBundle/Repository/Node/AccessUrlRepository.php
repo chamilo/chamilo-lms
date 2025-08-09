@@ -74,4 +74,31 @@ class AccessUrlRepository extends ResourceRepository
     {
         return $this->findOneBy(['isLoginOnly' => true]);
     }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function exists(string $url): bool
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->where('a.url = :url')
+            ->setParameter('url', $url)
+            ->getQuery()
+            ->getSingleScalarResult() > 0
+        ;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getUrlList(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.url')
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
+    }
 }

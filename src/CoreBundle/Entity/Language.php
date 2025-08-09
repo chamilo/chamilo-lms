@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use Chamilo\CoreBundle\Entity\Listener\LanguageListener;
@@ -21,9 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Platform languages.
  */
-#[ApiResource(paginationEnabled: false)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['language:read']],
+    paginationEnabled: false
+)]
 #[ApiFilter(BooleanFilter::class, properties: ['available'])]
-#[ApiFilter(OrderFilter::class, properties: ['english_name' => 'DESC'])]
+#[ApiFilter(OrderFilter::class, properties: ['englishName' => 'DESC', 'originalName' => 'ASC'])]
+#[ApiFilter(SearchFilter::class, properties: ['isocode' => 'exact'])]
 #[ORM\Table(name: 'language', options: ['row_format' => 'DYNAMIC'])]
 #[ORM\Entity(repositoryClass: LanguageRepository::class)]
 #[ORM\EntityListeners([LanguageListener::class])]
@@ -79,7 +84,7 @@ class Language
         return $this;
     }
 
-    public function getOriginalName(): string
+    public function getOriginalName(): ?string
     {
         return $this->originalName;
     }
@@ -142,10 +147,8 @@ class Language
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -53,7 +53,7 @@
       v-model="v$.item.locale.$model"
       :error-text="v$.item.locale.$errors.map((error) => error.$message).join('<br>')"
       :is-invalid="v$.item.locale.$error"
-      :label="t('Locale')"
+      :label="t('Language')"
       :options="locales"
       id="locale"
       name="locale"
@@ -103,7 +103,12 @@ const emit = defineEmits(["update:modelValue", "submit"])
 
 const { t } = useI18n()
 
-let locales = ref(window.languages)
+let locales = ref(
+  (window.languages || []).map((l) => ({
+    originalName: l.originalName || l.original_name || l.english_name,
+    isocode: l.isocode,
+  })),
+)
 
 let categories = ref([])
 

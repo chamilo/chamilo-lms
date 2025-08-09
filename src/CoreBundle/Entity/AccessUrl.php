@@ -7,6 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use Chamilo\CoreBundle\Controller\Api\UserAccessUrlsController;
+use Chamilo\CoreBundle\Entity\Listener\AccessUrlListener;
+use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,6 +36,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'access_url')]
 #[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity(repositoryClass: AccessUrlRepository::class)]
+#[ORM\EntityListeners([AccessUrlListener::class, ResourceListener::class])]
+#[ApiResource(
+    uriTemplate: '/users/{id}/access_urls',
+    operations: [new GetCollection(controller: UserAccessUrlsController::class)],
+    uriVariables: [
+        'id' => new Link(description: 'User identifier'),
+    ],
+    normalizationContext: ['groups' => ['user_access_url:read']],
+    paginationEnabled: false,
+)]
 class AccessUrl extends AbstractResource implements ResourceInterface, Stringable
 {
     public const DEFAULT_ACCESS_URL = 'http://localhost/';
@@ -106,10 +121,11 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
     protected ?AccessUrl $root = null;
 
     #[Assert\NotBlank]
-    #[Groups(['access_url:read', 'access_url:write'])]
+    #[Groups(['access_url:read', 'access_url:write', 'user_access_url:read'])]
     #[ORM\Column(name: 'url', type: 'string', length: 255)]
     protected string $url;
 
+    #[Groups(['user_access_url:read'])]
     #[ORM\Column(name: 'description', type: 'text')]
     protected ?string $description = null;
 
@@ -598,5 +614,17 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         $this->isLoginOnly = $isLoginOnly;
 
         return $this;
+    }
+
+    public function setSuperior(?AccessUrl $accessUrl): static
+    {
+        $this->parent = $accessUrl;
+
+        return $this;
+    }
+
+    public function getSuperior(): ?AccessUrl
+    {
+        return $this->parent;
     }
 }

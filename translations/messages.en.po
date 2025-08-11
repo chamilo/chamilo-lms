@@ -5217,8 +5217,8 @@ msgstr "If this option is activated, clicking on an e-mail address will open an 
 msgid "Include header line?"
 msgstr "Include header line?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 
 msgid "List of users subscribed to course"
 msgstr "List of users subscribed to course"
@@ -15621,8 +15621,8 @@ msgstr "Assigned courses list to sessions administrator"
 msgid "Assign sessions to platform administrator"
 msgstr "Assign sessions to platform administrator"
 
-msgid "assign sessions to sessions administrator"
-msgstr "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
+msgstr "Assign sessions to sessions administrator"
 
 msgid "Assigned sessions list to platform administrator"
 msgstr "Assigned sessions list to platform administrator"
@@ -29350,3 +29350,63 @@ msgstr "Select all URLs"
 
 msgid "Search URL"
 msgstr "Search URL"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Course unregistered from the URL"
+msgstr "Course unregistered from the URL"
+
+msgid "This page allows you to massively assign or remove the assignment of courses to/from many URLs in one single action. Assigning and removing courses to/from URLs can have a high impact on access for users and data stored about users' progress. Please use carefully."
+msgstr "This page allows you to massively assign or remove the assignment of courses to/from many URLs in one single action. Assigning and removing courses to/from URLs can have a high impact on access for users and data stored about users' progress. Please use carefully."
+
+msgid "Add courses to URLs"
+msgstr "Add courses to URLs"
+
+msgid "Parent category"
+msgstr "Parent category"
+
+msgid "No parent"
+msgstr "No parent"
+
+msgid "Cannot move category down"
+msgstr "Cannot move category down"
+
+msgid "Cannot move category up"
+msgstr "Cannot move category up"
+
+msgid "No course found in this category"
+msgstr "No course found in this category"
+
+msgid "Minimum number of assessments to validate"
+msgstr "Minimum number of assessments to validate"
+
+msgid "Number of assessments to validate in dependencies"
+msgstr "Number of assessments to validate in dependencies"
+
+msgid "Depends on assessments"
+msgstr "Depends on assessments"
+
+msgid "Are you sure you want to unassign the selected users from the selected URLs?"
+msgstr "Are you sure you want to unassign the selected users from the selected URLs?"
+
+msgid "Are you sure you want to assign the selected users to the selected URLs?"
+msgstr "Are you sure you want to assign the selected users to the selected URLs?"
+
+msgid "Remove users from selected URLs"
+msgstr "Remove users from selected URLs"
+
+msgid "Add users to selected URLs"
+msgstr "Add users to selected URLs"
+
+msgid "Search users"
+msgstr "Search users"
+
+msgid "The user accounts have been unassigned from the URL"
+msgstr "The user accounts have been unassigned from the URL"
+
+msgid "Add course to this URL"
+msgstr "Add course to this URL"
+
+msgid "Remove from selection"
+msgstr "Remove from selection"

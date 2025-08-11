@@ -5217,8 +5217,8 @@ msgstr "Om du aktiverar det här kommer en inbäddad e-postfunktion öppnas när
 msgid "Include header line?"
 msgstr "Lägga till CSV-formaterat filhuvud?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Ja, lägg till CSV-filhuvud<br /> Raden definierar fälten och är nödvändig om du ska importera filen i en annan Chamiloportal"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Raden definierar fälten och är nödvändig om du ska importera filen i en annan Chamiloportal"
 
 msgid "List of users subscribed to course"
 msgstr "Lista på registrerade användare för kursen"
@@ -15618,7 +15618,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"

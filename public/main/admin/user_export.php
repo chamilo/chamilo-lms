@@ -59,11 +59,11 @@ $form->addElement(
     null,
     null,
     '<div class="form_help">'
-    . get_lang('This will put the field names on the first line. It is necessary when you want to import the file later on in a Chamilo portal.')
+    . get_lang('This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal.')
     . '</div>'
 );
 $form->addSelect('course_code', get_lang('Only users from the course'), $courses);
-$form->addSelect('course_session', get_lang('Only users from the courseSession'), $coursesSessions);
+$form->addSelect('course_session', get_lang('Only users from one course in a session'), $coursesSessions);
 $form->addButtonExport(get_lang('Export'));
 $form->setDefaults(['file_type' => 'csv']);
 

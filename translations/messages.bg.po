@@ -5217,8 +5217,8 @@ msgstr "Когато тази настройка е активирана, щра
 msgid "Include header line?"
 msgstr "Да се добави ли заглавен ред в CSV-файла?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Добавяне на заглавен ред в CSV-файла.<br/>В този ред се поставят наименованията на полетата. Необходим е, когато импортирате файла в различна система Chamilo."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "В този ред се поставят наименованията на полетата. Необходим е, когато импортирате файла в различна система Chamilo."
 
 msgid "List of users subscribed to course"
 msgstr "Потребители, записали се в курса"
@@ -15618,7 +15618,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"

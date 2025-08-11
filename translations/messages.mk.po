@@ -5217,8 +5217,8 @@ msgstr "Ако оваа опција е активирана, со кликањ�
 msgid "Include header line?"
 msgstr "Дали да се додаде ред за CSV заглавие?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Да, додај CSV  заглавие<br /> Овој ред ги дефинира полињата и е неопходен кога сакате да ја увезете датотеката во друг кампус на Chamilo"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Овој ред ги дефинира полињата и е неопходен кога сакате да ја увезете датотеката во друг кампус на Chamilo"
 
 msgid "List of users subscribed to course"
 msgstr ""
@@ -15618,7 +15618,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"

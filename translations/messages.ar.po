@@ -5226,7 +5226,7 @@ msgstr " في حالة تنشيط هذا الخيار، يتم تحرير الب
 msgid "Include header line?"
 msgstr " ؟ CSV إضافة العنوان الرأسي للملف"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr " نعم، قم بإضافة العنوان الرأسي <br / > للملف CSV. يقوم هذا السطر بتعريف الحقول و يعتبر ضروري عند استيراد  الملف من دوكيوس آخر .CSV للملف <br /> نعم، قم بإضافة العنوان الرأسي"
 
 msgid "List of users subscribed to course"
@@ -15627,7 +15627,7 @@ msgstr "تخصيص قائمة المقررات الى مدير الدورة"
 msgid "Assign sessions to platform administrator"
 msgstr "تخصيص الدورات الى مدير النظام"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "تخصيص دورات الى مدير الدورات"
 
 msgid "Assigned sessions list to platform administrator"

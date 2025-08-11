@@ -5217,7 +5217,7 @@ msgstr "Aukera hau aktibatzen bada, posta elektronikoko helbide batean klikatzea
 msgid "Include header line?"
 msgstr "Gehitu behar al da CSV goiburuaren lerroa?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr "Bai, gehitu CSV goiburua"
 
 msgid "List of users subscribed to course"
@@ -15618,7 +15618,7 @@ msgstr "Saioetako kudeatzaileari emandako ikastaro zerrenda"
 msgid "Assign sessions to platform administrator"
 msgstr "Eman saioak plataformako kudeatzaileari"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Eman saioak saioetako kudeatzaileari"
 
 msgid "Assigned sessions list to platform administrator"

@@ -5218,8 +5218,8 @@ msgstr "Jeżeli opcja jest aktywna, kliknięcie na adres e-mail otworzy edytor e
 msgid "Include header line?"
 msgstr "Dodać linię nagłówka CSV?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Tak, dodaj nagłówek CSV<br /> Nagłówek definiuje pola użyte w pliku CSV i jest niezbędny jeżeli chcesz importować plik na innej platformie niż Chamilo."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Nagłówek definiuje pola użyte w pliku CSV i jest niezbędny jeżeli chcesz importować plik na innej platformie niż Chamilo."
 
 msgid "List of users subscribed to course"
 msgstr "Lista użytkowników zapisanych na kurs"
@@ -15619,7 +15619,7 @@ msgstr "Przypisz listę kursów do sesji administratora"
 msgid "Assign sessions to platform administrator"
 msgstr "Przypisz sesje do administratora platformy"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Przypisz sesje do administratorów sesji"
 
 msgid "Assigned sessions list to platform administrator"

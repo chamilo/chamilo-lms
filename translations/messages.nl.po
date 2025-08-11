@@ -5249,8 +5249,8 @@ msgstr "Als deze optie is geactiveerd, wordt een online e-mail editor geopend na
 msgid "Include header line?"
 msgstr "Voeg de CSV hoofding toe?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Ja, voeg de CSV hoofding toe<br />Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Chamilo campus"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Chamilo campus"
 
 msgid "List of users subscribed to course"
 msgstr "Lijst van gebruikers ingeschreven voor cursus"
@@ -15677,7 +15677,7 @@ msgstr "Toegewezen cursussenlijst aan sessiemanager"
 msgid "Assign sessions to platform administrator"
 msgstr "Wijs sessies toe aan platformbeheerder"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "wijs sessies toe aan sessiebeheerder"
 
 msgid "Assigned sessions list to platform administrator"

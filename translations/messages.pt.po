@@ -5225,8 +5225,8 @@ msgstr "Se esta opção estiver activada, ao clicar num endereço de e-mail o ed
 msgid "Include header line?"
 msgstr "Adicionar a linha de cabeçalho CVS?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Sim, adicionar o cabeçalho CVS.<br /> Esta linha define os campos e é necessária sempre que desejar importar o ficheiro para um outro portal Chamilo."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Esta linha define os campos e é necessária sempre que desejar importar o ficheiro para um outro portal Chamilo."
 
 msgid "List of users subscribed to course"
 msgstr "Lista de utilizadores inscritos no curso"
@@ -15626,7 +15626,7 @@ msgstr "Lista de cursos atribuídos ao administrador das sessões"
 msgid "Assign sessions to platform administrator"
 msgstr "Atribuir sessões ao administrador da plataforma"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Atribuir sessões ao administrador das sessões"
 
 msgid "Assigned sessions list to platform administrator"

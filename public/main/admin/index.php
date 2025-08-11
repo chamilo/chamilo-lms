@@ -404,7 +404,7 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('Terms and Conditions')];
     }
 
-    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools')];
+    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools (LTI)')];
 
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
@@ -436,7 +436,7 @@ if (api_is_platform_admin()) {
     ];
     /*$items[] = [
         'url' => 'periodic_export.php',
-        'label' => get_lang('PeriodicExport'),
+        'label' => get_lang('Periodic export'),
     ];*/
     $items[] = [
         'url' => 'system_status.php',
@@ -569,7 +569,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         'Chamilo.org'
     );
-    $blocks['version_check']['label'] = get_lang('Version Check');
+    $blocks['version_check']['label'] = get_lang('Version check');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';

@@ -5217,8 +5217,8 @@ msgstr "如果这个选项被激活,点击邮件会打开一个在线邮件编�
 msgid "Include header line?"
 msgstr "添加CSV首行内容?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "是的, 添加CSV头部<br />首行内容定义了字段名, 当导入到其它的Chamilo平台时为必须的"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "首行内容定义了字段名, 当导入到其它的Chamilo平台时为必须的"
 
 msgid "List of users subscribed to course"
 msgstr "登记本课程的用户列表"
@@ -15618,7 +15618,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"

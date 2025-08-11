@@ -5217,8 +5217,8 @@ msgstr "Se tiu opcio estas aktiva, konektita mesaĝilo estas malfermata post alk
 msgid "Include header line?"
 msgstr "Ĉu aldoni la CSV-titolon?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Jes, aldoni la CSV-titolon<br /> Tiu linio difinas la kampojn kaj estas necesan kiam vi volas importi la dosieron en alian Chamilo-kampon"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Tiu linio difinas la kampojn kaj estas necesan kiam vi volas importi la dosieron en alian Chamilo-kampon"
 
 msgid "List of users subscribed to course"
 msgstr "Listo de uzantoj enskribitaj por la kurso"
@@ -15618,7 +15618,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"

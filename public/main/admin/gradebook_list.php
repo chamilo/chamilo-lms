@@ -87,7 +87,7 @@ switch ($action) {
 
         $form->addSelectAjax(
             'depends',
-            get_lang('DependsOnAssessments'),
+            get_lang('Minimum number of assessments to validate'),
             [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
@@ -97,12 +97,12 @@ switch ($action) {
 
         $form->addText(
             'gradebooks_to_validate_in_dependence',
-            get_lang('NumberOfAssessmentsToValidateInDependence')
+            get_lang('Number of assessments to validate in dependencies')
         );
 
         $form->addText(
             'minimum',
-            get_lang('MinimumAssessmentsToValidate'),
+            get_lang('Minimum number of assessments to validate'),
             false
         );
 
@@ -201,7 +201,7 @@ switch ($action) {
 
             $form->addSelectAjax(
                 'depends',
-                get_lang('DependsOnAssessments'),
+                get_lang('Depends on assessments'),
                 $options,
                 [
                     'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
@@ -211,12 +211,12 @@ switch ($action) {
 
             $form->addText(
                 'gradebooks_to_validate_in_dependence',
-                get_lang('NumberOfAssessmentsToValidateInDependence')
+                get_lang('Number of assessments to validate in dependencies')
             );
 
             $form->addText(
                 'minimum',
-                get_lang('MinimumAssessmentsToValidate'),
+                get_lang('Minimum number of assessments to validate'),
                 false
             );
 

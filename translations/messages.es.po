@@ -5230,8 +5230,8 @@ msgstr "Si se activa esta opción, al hacer clic en un correo electrónico, se a
 msgid "Include header line?"
 msgstr "¿Incluir las cabeceras?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Sí, añadir las cabeceras<br /> Esta primera línea identifica los campos y es útil, entre otras situaciones, cuando quiera importar el archivo en algun portal Chamilo"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Esta primera línea identifica los campos y es útil, entre otras situaciones, cuando quiera importar el archivo en algun portal Chamilo"
 
 msgid "List of users subscribed to course"
 msgstr "Lista de usuarios inscritos en el curso"
@@ -15634,7 +15634,7 @@ msgstr "Lista de cursos asignados al administrador de sesiones"
 msgid "Assign sessions to platform administrator"
 msgstr "Asignar sesiones al administrador de la plataforma"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Asignar sesiones al administrador de sesiones"
 
 msgid "Assigned sessions list to platform administrator"

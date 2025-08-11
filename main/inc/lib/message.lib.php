@@ -1097,6 +1097,10 @@ class MessageManager
                         $fileCopied = true;
                     }
                 }
+
+                if ('image/svg+xml' === $type) {
+                    sanitizeSvgFile($new_path);
+                }
             }
 
             if ($fileCopied) {

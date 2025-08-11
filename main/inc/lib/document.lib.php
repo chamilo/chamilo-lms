@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use enshrined\svgSanitize\Sanitizer;
 
 /**
  *  Class DocumentManager
@@ -486,6 +487,13 @@ class DocumentManager
                 }
                 echo $content;
             } else {
+                if ('image/svg+xml' === $contentType) {
+                    $svgContent = file_get_contents($full_file_name);
+
+                    echo (new Sanitizer())->sanitize($svgContent);
+                    return true;
+                }
+
                 if (isset($enableMathJaxScript) && $enableMathJaxScript === true) {
                     $content = file_get_contents($full_file_name);
                     $content = self::includeMathJaxScript($content);

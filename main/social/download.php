@@ -9,6 +9,9 @@
  *
  * @package chamilo.messages
  */
+
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -20,8 +23,10 @@ header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
 header('Pragma: no-cache');
 
-$messageId = isset($_GET['message_id']) ? $_GET['message_id'] : 0;
-$attachmentId = isset($_GET['attachment_id']) ? $_GET['attachment_id'] : 0;
+$httpRequest = HttpRequest::createFromGlobals();
+
+$messageId = $httpRequest->query->getInt('message_id');
+$attachmentId = $httpRequest->query->getInt('attachment_id');
 
 $messageInfo = MessageManager::get_message_by_id($messageId);
 $attachmentInfo = MessageManager::getAttachment($attachmentId);

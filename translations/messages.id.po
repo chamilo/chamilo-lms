@@ -4500,8 +4500,8 @@ msgstr "User tersebut tidak terdaftar pada suatu kelas mata kuliah"
 msgid "This class isn't subscribed in a course"
 msgstr "Klas ini tidak terdaftar pada mata kuliah"
 
-msgid "tool"
-msgstr "tool"
+msgid "Tool"
+msgstr "Tool"
 
 msgid "Number of items"
 msgstr "jumlah item"

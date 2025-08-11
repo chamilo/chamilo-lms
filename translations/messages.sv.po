@@ -4500,7 +4500,7 @@ msgstr "Denna anv�ndare prenumererar inte p� n�gon klass"
 msgid "This class isn't subscribed in a course"
 msgstr "Denna klass prenumererar inte på någon kurs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "verktyg"
 
 msgid "Number of items"

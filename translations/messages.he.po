@@ -4509,7 +4509,7 @@ msgstr "משתמש זה אינו רשום בכיתה"
 msgid "This class isn't subscribed in a course"
 msgstr "שיעור זה אינו רשום בקורס"
 
-msgid "tool"
+msgid "Tool"
 msgstr "כלי"
 
 msgid "Number of items"

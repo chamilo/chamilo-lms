@@ -4500,7 +4500,7 @@ msgstr "Erabiltzaile honek klase batean ere ez du izenik eman"
 msgid "This class isn't subscribed in a course"
 msgstr "Klase hau ikastaro batean ere ez dago inskribaturik"
 
-msgid "tool"
+msgid "Tool"
 msgstr "tresna"
 
 msgid "Number of items"

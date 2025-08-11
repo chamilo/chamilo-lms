@@ -4500,7 +4500,7 @@ msgstr "Bu kullanıcı herhangi bir sınıfa kayıtlı değil"
 msgid "This class isn't subscribed in a course"
 msgstr "Bu sınıf herhangi bir derse kayıtlı değil"
 
-msgid "tool"
+msgid "Tool"
 msgstr "araç"
 
 msgid "Number of items"

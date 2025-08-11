@@ -4508,7 +4508,7 @@ msgstr "Ο χρήστης δεν είναι εγγεγραμμένος σε τά
 msgid "This class isn't subscribed in a course"
 msgstr "Η τάξη δεν είναι εγγεγραμμένη σε μάθημα"
 
-msgid "tool"
+msgid "Tool"
 msgstr "εργαλείο"
 
 msgid "Number of items"

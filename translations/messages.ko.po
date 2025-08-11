@@ -4500,7 +4500,7 @@ msgstr "이 유저는 클래스에 등록하지 않았습니다"
 msgid "This class isn't subscribed in a course"
 msgstr "이 클래스는 과정에 등록하지 않았습니다"
 
-msgid "tool"
+msgid "Tool"
 msgstr "도구"
 
 msgid "Number of items"

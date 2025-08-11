@@ -4532,7 +4532,7 @@ msgstr "Deze gebruiker is in geen enkele klas ingeschreven"
 msgid "This class isn't subscribed in a course"
 msgstr "Deze klas is niet ingeschreven in een cursus"
 
-msgid "tool"
+msgid "Tool"
 msgstr "module"
 
 msgid "Number of items"

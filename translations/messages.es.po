@@ -4513,7 +4513,7 @@ msgstr "Este usuario no está inscrito en ninguna clase"
 msgid "This class isn't subscribed in a course"
 msgstr "Esta clase no está inscrita en ningún curso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Herramienta"
 
 msgid "Number of items"

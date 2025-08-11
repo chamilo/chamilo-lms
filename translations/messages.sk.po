@@ -4508,7 +4508,7 @@ msgstr "Tento používateľ nie je zaradený v žiadnej triede"
 msgid "This class isn't subscribed in a course"
 msgstr "Táto trieda nie je zaradená v žiadnom kurze"
 
-msgid "tool"
+msgid "Tool"
 msgstr "nástroj"
 
 msgid "Number of items"

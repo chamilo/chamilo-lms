@@ -4501,7 +4501,7 @@ msgstr "Korisnik nije upisan ni u jednu skupinu"
 msgid "This class isn't subscribed in a course"
 msgstr "Razred nije upisan ni na jedan kolegij"
 
-msgid "tool"
+msgid "Tool"
 msgstr "alat"
 
 msgid "Number of items"

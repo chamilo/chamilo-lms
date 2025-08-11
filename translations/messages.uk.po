@@ -4493,7 +4493,7 @@ msgstr "Цього користувача не зараховано до кла�
 msgid "This class isn't subscribed in a course"
 msgstr "Цей клас не зараховано на курс"
 
-msgid "tool"
+msgid "Tool"
 msgstr "інструмент"
 
 msgid "Number of items"

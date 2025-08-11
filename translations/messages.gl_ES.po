@@ -4508,7 +4508,7 @@ msgstr "Este usuario non está suscrito nunha clase"
 msgid "This class isn't subscribed in a course"
 msgstr "Esta clase non está suscrita nun curso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "ferramenta"
 
 msgid "Number of items"

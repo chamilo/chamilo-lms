@@ -4500,7 +4500,7 @@ msgstr "Este usuario no pertenece a ninguna clase"
 msgid "This class isn't subscribed in a course"
 msgstr "Esta clase no pertenece a ningún curso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "herramienta"
 
 msgid "Number of items"

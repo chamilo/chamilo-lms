@@ -4500,7 +4500,7 @@ msgstr ""
 msgid "This class isn't subscribed in a course"
 msgstr ""
 
-msgid "tool"
+msgid "Tool"
 msgstr ""
 
 msgid "Number of items"

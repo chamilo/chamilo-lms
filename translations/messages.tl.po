@@ -4493,8 +4493,8 @@ msgstr "Ang user na ito ay hindi naka-subscribe sa isang klase"
 msgid "This class isn't subscribed in a course"
 msgstr ""
 
-msgid "tool"
-msgstr "tool"
+msgid "Tool"
+msgstr "Tool"
 
 msgid "Number of items"
 msgstr ""

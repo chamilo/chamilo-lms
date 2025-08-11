@@ -4501,7 +4501,7 @@ msgstr "Ten użytkownik nie jest zapisany do klasy"
 msgid "This class isn't subscribed in a course"
 msgstr "Ta klasa nie jest zapisana na kurs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "narzędzie"
 
 msgid "Number of items"

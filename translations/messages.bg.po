@@ -4500,7 +4500,7 @@ msgstr "Този потребител не е записан в клас."
 msgid "This class isn't subscribed in a course"
 msgstr "Този клас не е записан в курс."
 
-msgid "tool"
+msgid "Tool"
 msgstr "Инструмент"
 
 msgid "Number of items"

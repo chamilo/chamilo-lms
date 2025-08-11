@@ -4500,7 +4500,7 @@ msgstr "Ĉi tiu uzulo aliĝis al neniu klaso"
 msgid "This class isn't subscribed in a course"
 msgstr "Tiu ĉi klaso aliĝis al neniu kurso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "modulo"
 
 msgid "Number of items"

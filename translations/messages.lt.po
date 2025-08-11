@@ -4502,7 +4502,7 @@ msgstr "Šis vartotojas nepriregistruotas prie klasės"
 msgid "This class isn't subscribed in a course"
 msgstr "Ši klasė nepriregistruota prie kurso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "įrankis"
 
 msgid "Number of items"

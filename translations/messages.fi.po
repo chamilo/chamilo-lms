@@ -4502,7 +4502,7 @@ msgstr "Tämä käyttäjä ei ole ilmoittautunut luokkaan"
 msgid "This class isn't subscribed in a course"
 msgstr "Tätä luokkaa ei ole ilmoitettu kursille"
 
-msgid "tool"
+msgid "Tool"
 msgstr "työkalu"
 
 msgid "Number of items"

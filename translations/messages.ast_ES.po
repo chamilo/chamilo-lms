@@ -4500,7 +4500,7 @@ msgstr "Esti usuariu nun ta matriculáu en nenguna clase"
 msgid "This class isn't subscribed in a course"
 msgstr "Esta clase nun ta asociada a nengún cursu"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Ferramienta"
 
 msgid "Number of items"

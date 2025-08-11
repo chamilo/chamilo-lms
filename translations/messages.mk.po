@@ -4500,7 +4500,7 @@ msgstr "Овој корисник не е запишан во оваа пара�
 msgid "This class isn't subscribed in a course"
 msgstr "Оваа паралелка не е запишана на курсот"
 
-msgid "tool"
+msgid "Tool"
 msgstr "алатка"
 
 msgid "Number of items"

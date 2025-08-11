@@ -4500,7 +4500,7 @@ msgstr "Denne brukeren er ikke p�meldt noen klasse"
 msgid "This class isn't subscribed in a course"
 msgstr "Denne klassen er ikke p�meldt noen kurs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Verktøy"
 
 msgid "Number of items"

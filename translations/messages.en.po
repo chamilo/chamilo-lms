@@ -4500,8 +4500,8 @@ msgstr "This user isn't subscribed in a class"
 msgid "This class isn't subscribed in a course"
 msgstr "This class isn't subscribed in a course"
 
-msgid "tool"
-msgstr "tool"
+msgid "Tool"
+msgstr "Tool"
 
 msgid "Number of items"
 msgstr "Number of items"
@@ -29410,3 +29410,27 @@ msgstr "Add course to this URL"
 
 msgid "Remove from selection"
 msgstr "Remove from selection"
+
+msgid "Gradebooks"
+msgstr "Gradebooks"
+
+msgid "Users in consent list"
+msgstr "Users in consent list"
+
+msgid "Select tools"
+msgstr "Select tools"
+
+msgid "Skills and gradebooks"
+msgstr "Skills and gradebooks"
+
+msgid "No tool available for this report"
+msgstr "No tool available for this report"
+
+msgid "No user found with activity in open courses without enrollment."
+msgstr "No user found with activity in open courses without enrollment."
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "Mandatory fields"
+msgstr "Mandatory fields"

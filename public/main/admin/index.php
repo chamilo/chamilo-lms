@@ -101,7 +101,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('Profiling')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
     if ('true' !== api_get_setting('profile.disable_gdpr')) {
-        $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consents list')];
+        $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consent list')];
     }
     if ('true' === api_get_setting('admin.show_link_request_hrm_user')) {
         $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('Student linking requests')];
@@ -207,7 +207,7 @@ if (api_is_platform_admin()) {
         get_lang('Sessions management')
     );
     $blocks['sessions']['label'] = get_lang('Sessions management');
-    $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions.');
+    $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions');
     $blocks['sessions']['class'] = 'block-admin-sessions';
 
     if (api_is_platform_admin()) {
@@ -280,7 +280,7 @@ if (api_is_platform_admin()) {
             ICON_SIZE_MEDIUM,
             get_lang('Skills')
         );
-        $blocks['skills']['label'] = get_lang('Skills and gradebook');
+        $blocks['skills']['label'] = get_lang('Skills and gradebooks');
         $blocks['skills']['description'] = get_lang('Manage the skills of your users, through courses and badges');
         $blocks['skills']['class'] = 'block-admin-skills';
 
@@ -318,7 +318,7 @@ if (api_is_platform_admin()) {
         if (!$allow) {
             $items[] = [
                 'url' => 'gradebook_list.php',
-                'label' => get_lang('List of qualifications'),
+                'label' => get_lang('Gradebooks'),
             ];
         }
         $blocks['skills']['items'] = $items;

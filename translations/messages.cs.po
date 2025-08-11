@@ -4493,7 +4493,7 @@ msgstr "Uživatel není zařazen ve třídě"
 msgid "This class isn't subscribed in a course"
 msgstr "Tato třída neobsahuje žádný kurz"
 
-msgid "tool"
+msgid "Tool"
 msgstr "nástroj"
 
 msgid "Number of items"

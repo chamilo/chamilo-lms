@@ -4500,7 +4500,7 @@ msgstr "Ez a felhasználó nincs beliratkozva osztályba"
 msgid "This class isn't subscribed in a course"
 msgstr "Ez az osztály nincs feliratkozva kurzusra"
 
-msgid "tool"
+msgid "Tool"
 msgstr "eszköz"
 
 msgid "Number of items"

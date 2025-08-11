@@ -4500,7 +4500,7 @@ msgstr "没有此用户的班级"
 msgid "This class isn't subscribed in a course"
 msgstr "没有此班级的课程"
 
-msgid "tool"
+msgid "Tool"
 msgstr "工具"
 
 msgid "Number of items"

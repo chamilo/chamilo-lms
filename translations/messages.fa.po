@@ -4500,7 +4500,7 @@ msgstr "کاربر مورد نظر در هیچ کلاسی  ثبت نام نشد�
 msgid "This class isn't subscribed in a course"
 msgstr "این کلاس در هیچ  درسی ثبت نام نشده است"
 
-msgid "tool"
+msgid "Tool"
 msgstr "ابزارآموزشی"
 
 msgid "Number of items"

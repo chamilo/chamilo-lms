@@ -4509,7 +4509,7 @@ msgstr "Utilizatorul nu este inscris in clasa"
 msgid "This class isn't subscribed in a course"
 msgstr "Aceasta clasa nu este inscrisa la curs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "unelte"
 
 msgid "Number of items"

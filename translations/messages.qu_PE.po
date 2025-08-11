@@ -4500,7 +4500,7 @@ msgstr "Este usuario no está inscrito en ninguna clase"
 msgid "This class isn't subscribed in a course"
 msgstr "Kay claseqa mana qelqachisqa kashanchu ima yachachinapipas"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Llank'anakuna"
 
 msgid "Number of items"

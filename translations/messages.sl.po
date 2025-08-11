@@ -4509,7 +4509,7 @@ msgstr "Ta uporabnik ni vpisan v razred"
 msgid "This class isn't subscribed in a course"
 msgstr "Ta razred ni vpisan v tečaj"
 
-msgid "tool"
+msgid "Tool"
 msgstr "orodje"
 
 msgid "Number of items"

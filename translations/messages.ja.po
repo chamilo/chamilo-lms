@@ -4563,7 +4563,7 @@ msgstr "このユーザーはクラスに登録されていません"
 msgid "This class isn't subscribed in a course"
 msgstr ""
 
-msgid "tool"
+msgid "Tool"
 msgstr "ツール"
 
 msgid "Number of items"

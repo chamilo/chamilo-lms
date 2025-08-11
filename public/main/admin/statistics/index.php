@@ -803,7 +803,7 @@ switch ($report) {
             $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
             $table->setHeaderContents(0, 0, get_lang('Name'));
             $table->setHeaderContents(0, 1, get_lang('Course'));
-            $table->setHeaderContents(0, 2, get_lang('Last access'));
+            $table->setHeaderContents(0, 2, get_lang('Latest access'));
             $row = 1;
             foreach ($userList as $user) {
                 $name = Display::tag('strong', $user['firstname'].' '.$user['lastname']);
@@ -817,7 +817,7 @@ switch ($report) {
             }
             $content .= $table->toHtml();
         } else {
-            $content .= Display::tag('p', get_lang('No users found with activity in open courses without enrollment.'));
+            $content .= Display::tag('p', get_lang('No user found with activity in open courses without enrollment.'));
         }
         $content .= '</div>';
         $content .= '
@@ -837,7 +837,7 @@ switch ($report) {
         $courseTools = Statistics::getAvailableTools();
 
         if (empty($courseTools)) {
-            $content .= '<div class="alert alert-info">'.get_lang('No tools available for this report').'</div>';
+            $content .= '<div class="alert alert-info">'.get_lang('No tool available for this report').'</div>';
             break;
         }
 
@@ -845,7 +845,7 @@ switch ($report) {
         $form->addHeader(get_lang('Tool-based resource count'));
         $form->addSelect(
             'tool_ids',
-            get_lang('Select Tools'),
+            get_lang('Select tools'),
             $courseTools,
             ['multiple' => true, 'required' => true]
         );
@@ -966,8 +966,8 @@ switch ($report) {
 
             $data = [];
             $headers = [
-                get_lang('FirstName'),
-                get_lang('LastName'),
+                get_lang('First name'),
+                get_lang('Last name'),
                 get_lang('Registration date'),
                 get_lang('Native language'),
                 get_lang('Users by target language'),
@@ -1105,7 +1105,7 @@ switch ($report) {
 
             $all = [
                 get_lang('Active') => $active,
-                get_lang('Inactive') => $noActive,
+                get_lang('inactive') => $noActive,
             ];
 
             $data = Statistics::buildJsChartData($all, $reportName1);

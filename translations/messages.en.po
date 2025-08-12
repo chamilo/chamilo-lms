@@ -29458,3 +29458,99 @@ msgstr "Available groups"
 
 msgid "Total groups"
 msgstr "Total groups"
+
+msgid "Column is locked or read-only"
+msgstr "Column is locked or read-only"
+
+msgid "Remove state"
+msgstr "Remove state"
+
+msgid "Saving..."
+msgstr "Saving..."
+
+msgid "Save attendance"
+msgstr "Save attendance"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Clear" 
+msgstr "Clear"
+
+msgid "No attendance data to save."
+msgstr "No attendance data to save."
+
+msgid "Attendance saved successfully"
+msgstr "Attendance saved successfully"
+
+msgid "Failed to save attendance. Please try again."
+msgstr "Failed to save attendance. Please try again."
+
+msgid "Unknown attendance"
+msgstr "Unknown attendance"
+
+msgid "Error exporting to PDF"
+msgstr "Error exporting to PDF"
+
+msgid "Error exporting to Excel"
+msgstr "Error exporting to Excel"
+
+msgid "Failed to generate QR code"
+msgstr "Failed to generate QR code"
+
+msgid "Add attendance"
+msgstr "Add attendance"
+
+msgid "Search users for friends"
+msgstr "Search users for friends"
+
+msgid "Go to friends list"
+msgstr "Go to friends list"
+
+msgid "Please enter a search query"
+msgstr "Please enter a search query"
+
+msgid "Error fetching friends list"
+msgstr "Error fetching friends list"
+
+msgid "Error fetching users"
+msgstr "Error fetching users"
+
+msgid "Friend request sent successfully"
+msgstr "Friend request sent successfully"
+
+msgid "Failed to send friend request"
+msgstr "Failed to send friend request"
+
+msgid "You have a new friend request"
+msgstr ""
+
+msgid "You have received a new friend request. Visit the invitations page to accept or reject the request."
+msgstr "You have received a new friend request. Visit the invitations page to accept or reject the request."
+
+msgid "Notification message sent successfully"
+msgstr "Notification message sent successfully"
+
+msgid "Failed to send notification message"
+msgstr "Failed to send notification message"
+
+msgid "An error occurred while sending the notification message"
+msgstr "An error occurred while sending the notification message"
+
+msgid "Are you sure to delete the friendship?"
+msgstr "Are you sure to delete the friendship?"
+
+msgid "If file exists"
+msgstr "If file exists"
+
+msgid "New document"
+msgstr "New document"
+
+msgid "New drawing"
+msgstr "New drawing"
+
+msgid "New cloud file"
+msgstr "New cloud file"
+
+msgid "Usage"
+msgstr "Usage"

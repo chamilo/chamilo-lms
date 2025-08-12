@@ -366,7 +366,7 @@
                           @click="selectState(user.id, date.id, null)"
                         >
                           <div class="w-5 h-5 rounded-full bg-gray-30"></div>
-                          <span>{{ t("Remove State") }}</span>
+                          <span>{{ t("Remove state") }}</span>
                         </div>
                       </div>
                       <div
@@ -400,7 +400,7 @@
         <div class="mt-4 flex justify-end">
           <BaseButton
             v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
-            :label="isSaving ? t('Saving...') : t('Save Attendance')"
+            :label="isSaving ? t('Saving...') : t('Save attendance')"
             icon="check"
             type="success"
             @click="saveAttendanceSheet"
@@ -685,10 +685,10 @@ const fetchAttendanceTitle = async () => {
     isLoading.value = true
     const attendanceId = route.params.id
     const response = await attendanceService.getAttendance(attendanceId)
-    attendanceTitle.value = response.title || t("Unknown Attendance")
+    attendanceTitle.value = response.title || t("Unknown attendance")
   } catch (error) {
     console.error("Error fetching attendance title:", error)
-    attendanceTitle.value = t("Unknown Attendance")
+    attendanceTitle.value = t("Unknown attendance")
   } finally {
     isLoading.value = false
   }
@@ -986,7 +986,7 @@ const generateQrCode = async () => {
     qrImageUrl.value = window.URL.createObjectURL(new Blob([response], { type: "image/png" }))
     showQrDialog.value = true
   } catch (error) {
-    alert(t("Failed to generate QR Code"))
+    alert(t("Failed to generate QR code"))
     console.error(error)
   }
 }

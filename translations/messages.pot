@@ -29426,3 +29426,99 @@ msgstr ""
 
 msgid "Total groups"
 msgstr ""
+
+msgid "Column is locked or read-only"
+msgstr ""
+
+msgid "Remove state"
+msgstr ""
+
+msgid "Saving..."
+msgstr ""
+
+msgid "Save attendance"
+msgstr ""
+
+msgid "Signature"
+msgstr ""
+
+msgid "Clear" 
+msgstr ""
+
+msgid "No attendance data to save."
+msgstr ""
+
+msgid "Attendance saved successfully"
+msgstr ""
+
+msgid "Failed to save attendance. Please try again."
+msgstr ""
+
+msgid "Unknown attendance"
+msgstr ""
+
+msgid "Error exporting to PDF"
+msgstr ""
+
+msgid "Error exporting to Excel"
+msgstr ""
+
+msgid "Failed to generate QR code"
+msgstr ""
+
+msgid "Add attendance"
+msgstr ""
+
+msgid "Search users for friends"
+msgstr ""
+
+msgid "Go to friends list"
+msgstr ""
+
+msgid "Please enter a search query"
+msgstr ""
+
+msgid "Error fetching friends list"
+msgstr ""
+
+msgid "Error fetching users"
+msgstr ""
+
+msgid "Friend request sent successfully"
+msgstr ""
+
+msgid "Failed to send friend request"
+msgstr ""
+
+msgid "You have a new friend request"
+msgstr ""
+
+msgid "You have received a new friend request. Visit the invitations page to accept or reject the request."
+msgstr ""
+
+msgid "Notification message sent successfully"
+msgstr ""
+
+msgid "Failed to send notification message"
+msgstr ""
+
+msgid "An error occurred while sending the notification message"
+msgstr ""
+
+msgid "Are you sure to delete the friendship?"
+msgstr ""
+
+msgid "If file exists"
+msgstr ""
+
+msgid "New document"
+msgstr ""
+
+msgid "New drawing"
+msgstr ""
+
+msgid "New cloud file"
+msgstr ""
+
+msgid "Usage"
+msgstr ""

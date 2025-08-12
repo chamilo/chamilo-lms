@@ -2,7 +2,7 @@
   <LayoutFormGeneric>
     <template #header>
       <BaseIcon icon="plus" />
-      {{ t("Add Attendance") }}
+      {{ t("Add attendance") }}
     </template>
 
     <AttendanceForm @back-pressed="goBack" />

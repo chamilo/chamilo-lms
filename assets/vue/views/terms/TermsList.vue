@@ -13,7 +13,7 @@
       :closable="false"
       severity="warn"
     >
-      {{ t("You should create the Term and Conditions for all the available languages.") }}
+      {{ t("You should create the \"Term and Conditions\" for all the available languages.") }}
     </Message>
 
     <DataTable

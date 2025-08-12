@@ -68,7 +68,7 @@ async function onSearchProfile(profile) {
 </script>
 
 <template>
-  <SectionHeader :title="t('Skill wheel')" />
+  <SectionHeader :title="t('Skills wheel')" />
 
   <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
     <div class="xl:col-span-1 skill-options flex flex-col gap-4">

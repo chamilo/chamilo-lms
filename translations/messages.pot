@@ -29630,3 +29630,129 @@ msgstr ""
 
 msgid "You have been invited to join this group"
 msgstr ""
+
+msgid "Assignment created"
+msgstr ""
+
+msgid "Write my submission"
+msgstr ""
+
+msgid "Add users"
+msgstr ""
+
+msgid "Users without submission"
+msgstr ""
+
+msgid "You can no longer submit. The deadline has passed."
+msgstr ""
+
+msgid "Failed to export PDF"
+msgstr ""
+
+msgid "Are you sure you want to delete all corrections?"
+msgstr ""
+
+msgid "All corrections deleted"
+msgstr ""
+
+msgid "Failed to delete corrections"
+msgstr ""
+
+msgid "Add documents"
+msgstr ""
+
+msgid "No documents added yet."
+msgstr ""
+
+msgid "Available documents"
+msgstr ""
+
+msgid "No available documents."
+msgstr ""
+
+msgid "Error adding document"
+msgstr ""
+
+msgid "Document removed"
+msgstr ""
+
+msgid "Error removing document"
+msgstr ""
+
+msgid "Assignment updated"
+msgstr ""
+
+msgid "No users added yet."
+msgstr ""
+
+msgid "Search users by username"
+msgstr ""
+
+msgid "No available users."
+msgstr ""
+
+msgid "User added"
+msgstr ""
+
+msgid "Error adding user"
+msgstr ""
+
+msgid "User removed"
+msgstr ""
+
+msgid "Error removing user"
+msgstr ""
+
+msgid "Student progress"
+msgstr ""
+
+msgid "Send email to all"
+msgstr ""
+
+msgid "Users without submission for assignment"
+msgstr ""
+
+msgid "No missing submissions found for this assignment or data is not available."
+msgstr ""
+
+msgid "Email sent to all unsubmitted users."
+msgstr ""
+
+msgid "Failed to send email."
+msgstr ""
+
+msgid "Upload your assignment"
+msgstr ""
+
+msgid "Submission title"
+msgstr ""
+
+msgid "Enter a title for your submission"
+msgstr ""
+
+msgid "Write your answer here..."
+msgstr ""
+
+msgid "File uploaded successfully"
+msgstr ""
+
+msgid "Failed to upload file"
+msgstr ""
+
+msgid "Please provide a title and some text"
+msgstr ""
+
+msgid "Text submitted successfully"
+msgstr ""
+
+msgid "Edit Terms and Conditions"
+msgstr ""
+
+msgid "Type of terms"
+msgstr ""
+
+msgid "Back to list"
+msgstr ""
+
+msgid "Show public link"
+msgstr ""

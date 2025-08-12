@@ -29662,3 +29662,129 @@ msgstr "Sent invitations"
 
 msgid "You have been invited to join this group"
 msgstr "You have been invited to join this group"
+
+msgid "Assignment created"
+msgstr "Assignment created"
+
+msgid "Write my submission"
+msgstr "Write my submission"
+
+msgid "Add users"
+msgstr "Add users"
+
+msgid "Users without submission"
+msgstr "Users without submission"
+
+msgid "You can no longer submit. The deadline has passed."
+msgstr "You can no longer submit. The deadline has passed."
+
+msgid "Failed to export PDF"
+msgstr "Failed to export PDF"
+
+msgid "Are you sure you want to delete all corrections?"
+msgstr "Are you sure you want to delete all corrections?"
+
+msgid "All corrections deleted"
+msgstr "All corrections deleted"
+
+msgid "Failed to delete corrections"
+msgstr "Failed to delete corrections"
+
+msgid "Add documents"
+msgstr "Add documents"
+
+msgid "No documents added yet."
+msgstr "No documents added yet."
+
+msgid "Available documents"
+msgstr "Available documents"
+
+msgid "No available documents."
+msgstr "No available documents."
+
+msgid "Error adding document"
+msgstr "Error adding document"
+
+msgid "Document removed"
+msgstr "Document removed"
+
+msgid "Error removing document"
+msgstr "Error removing document"
+
+msgid "Assignment updated"
+msgstr "Assignment updated"
+
+msgid "No users added yet."
+msgstr "No users added yet."
+
+msgid "Search users by username"
+msgstr "Search users by username"
+
+msgid "No available users."
+msgstr "No available users."
+
+msgid "User added"
+msgstr "User added"
+
+msgid "Error adding user"
+msgstr "Error adding user"
+
+msgid "User removed"
+msgstr "User removed"
+
+msgid "Error removing user"
+msgstr "Error removing user"
+
+msgid "Student progress"
+msgstr "Student progress"
+
+msgid "Send email to all"
+msgstr "Send email to all"
+
+msgid "Users without submission for assignment"
+msgstr "Users without submission for assignment"
+
+msgid "No missing submissions found for this assignment or data is not available."
+msgstr "No missing submissions found for this assignment or data is not available."
+
+msgid "Email sent to all unsubmitted users."
+msgstr "Email sent to all unsubmitted users."
+
+msgid "Failed to send email."
+msgstr "Failed to send email."
+
+msgid "Upload your assignment"
+msgstr "Upload your assignment"
+
+msgid "Submission title"
+msgstr "Submission title"
+
+msgid "Enter a title for your submission"
+msgstr "Enter a title for your submission"
+
+msgid "Write your answer here..."
+msgstr "Write your answer here..."
+
+msgid "File uploaded successfully"
+msgstr "File uploaded successfully"
+
+msgid "Failed to upload file"
+msgstr "Failed to upload file"
+
+msgid "Please provide a title and some text"
+msgstr "Please provide a title and some text"
+
+msgid "Text submitted successfully"
+msgstr "Text submitted successfully"
+
+msgid "Edit Terms and Conditions"
+msgstr "Edit Terms and Conditions"
+
+msgid "Type of terms"
+msgstr "Type of terms"
+
+msgid "Back to list"
+msgstr "Back to list"
+
+msgid "Show public link"
+msgstr "SHow public link"

@@ -71,7 +71,7 @@
           <BaseIcon
             icon="file-pdf"
             size="big"
-            :title="t('Export PDF')"
+            :title="t('Export to PDF')"
             @click="exportPdf"
           />
           <BaseIcon

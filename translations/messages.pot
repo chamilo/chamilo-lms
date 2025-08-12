@@ -12370,7 +12370,7 @@ msgstr ""
 msgid "delete"
 msgstr ""
 
-msgid "Space Available"
+msgid "Space available"
 msgstr ""
 
 msgid "This course currently uses"
@@ -29521,4 +29521,112 @@ msgid "New cloud file"
 msgstr ""
 
 msgid "Usage"
+msgstr ""
+
+msgid "Add file variation"
+msgstr ""
+
+msgid "Set as default certificate"
+msgstr ""
+
+msgid "Template options"
+msgstr ""
+
+msgid "New folder"
+msgstr ""
+
+msgid "Confirm deletion"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Error deleting document(s)."
+msgstr ""
+
+msgid "Replace video"
+msgstr ""
+
+msgid "Replace (files or videos only)"
+msgstr ""
+
+msgid "Document not saved"
+msgstr ""
+
+msgid "Document moved successfully"
+msgstr ""
+
+msgid "Error moving the document"
+msgstr ""
+
+msgid "Certificate set as default successfully"
+msgstr ""
+
+msgid "Error setting certificate as default"
+msgstr ""
+
+msgid "Template successfully deteled."
+msgstr ""
+
+msgid "Error deleting the template."
+msgstr ""
+
+msgid "The title and thumbnail are required."
+msgstr ""
+
+msgid "Template created successfully."
+msgstr ""
+
+msgid "Error creating the template."
+msgstr ""
+
+msgid "Error submitting the form."
+msgstr ""
+
+msgid "Back to Documents"
+msgstr ""
+
+msgid "Original file"
+msgstr ""
+
+msgid "Title:"
+msgstr ""
+
+msgid "Format:"
+msgstr ""
+
+msgid "Size:"
+msgstr ""
+
+msgid "Upload new variation"
+msgstr ""
+
+msgid "Choose file"
+msgstr ""
+
+msgid "Current variations"
+msgstr ""
+
+msgid "Creator"
+msgstr ""
+
+msgid "Associated URL"
+msgstr ""
+
+msgid "Default (No URL)"
+msgstr ""
+
+msgid "Invite friends to group"
+msgstr ""
+
+msgid "Available friends"
+msgstr ""
+
+msgid "Selected friends"
+msgstr ""
+
+msgid "Sent invitations"
+msgstr ""
+
+msgid "You have been invited to join this group"
 msgstr ""

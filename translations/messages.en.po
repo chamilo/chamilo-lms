@@ -29554,3 +29554,111 @@ msgstr "New cloud file"
 
 msgid "Usage"
 msgstr "Usage"
+
+msgid "Add file variation"
+msgstr "Add file variation"
+
+msgid "Set as default certificate"
+msgstr "Set as default certificate"
+
+msgid "Template options"
+msgstr "Template options"
+
+msgid "New folder"
+msgstr "New folder"
+
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+msgid "Saved"
+msgstr "Saved"
+
+msgid "Error deleting document(s)."
+msgstr "Error deleting document(s)."
+
+msgid "Replace video"
+msgstr "Replace video"
+
+msgid "Replace (files or videos only)"
+msgstr "Replace (files or videos only)"
+
+msgid "Document not saved"
+msgstr "Document not saved"
+
+msgid "Document moved successfully"
+msgstr "Document moved successfully"
+
+msgid "Error moving the document"
+msgstr "Error moving the document"
+
+msgid "Certificate set as default successfully"
+msgstr "Certificate set as default successfully"
+
+msgid "Error setting certificate as default"
+msgstr "Error setting certificate as default"
+
+msgid "Template successfully deteled."
+msgstr "Template successfully deteled."
+
+msgid "Error deleting the template."
+msgstr "Error deleting the template."
+
+msgid "The title and thumbnail are required."
+msgstr "The title and thumbnail are required."
+
+msgid "Template created successfully."
+msgstr "Template created successfully."
+
+msgid "Error creating the template."
+msgstr "Error creating the template."
+
+msgid "Error submitting the form."
+msgstr "Error submitting the form."
+
+msgid "Back to Documents"
+msgstr "Back to Documents"
+
+msgid "Original file"
+msgstr "Original file"
+
+msgid "Title:"
+msgstr "Title:"
+
+msgid "Format:"
+msgstr "Format:"
+
+msgid "Size:"
+msgstr "Size:"
+
+msgid "Upload new variation"
+msgstr "Upload new variation"
+
+msgid "Choose file"
+msgstr "Choose file"
+
+msgid "Current variations"
+msgstr "Current variations"
+
+msgid "Creator"
+msgstr "Creator"
+
+msgid "Associated URL"
+msgstr "Associated URL"
+
+msgid "Default (No URL)"
+msgstr "Default (No URL)"
+
+msgid "Invite friends to group"
+msgstr "Invite friends to group"
+
+msgid "Available friends"
+msgstr "Available friends"
+
+msgid "Selected friends"
+msgstr "Selected friends"
+
+msgid "Sent invitations"
+msgstr "Sent invitations"
+
+msgid "You have been invited to join this group"
+msgstr "You have been invited to join this group"

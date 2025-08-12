@@ -39,7 +39,7 @@ $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-Display::display_header($nameTools, 'Exercise');
+Display::display_header(get_lang('ViewHistoryChange'), 'Exercise');
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseEdited'])) {
@@ -79,7 +79,7 @@ while ($row = Database::fetch_array($query)) {
     echo '<td>'.$row['question'].'</td>';
     echo '<td>'.$row['marks'].'</td>';
     if (!empty($row['teacher_comment'])) {
-        echo '<td>'.$row['teacher_comment'].'</td>';
+        echo '<td>'.Security::remove_XSS($row['teacher_comment']).'</td>';
     } else {
         echo '<td>'.get_lang('WithoutComment').'</td>';
     }

@@ -650,7 +650,7 @@
     "Select gradebook option": "Select gradebook option",
     "Gradebook column title": "Gradebook column title",
     "Grade weight": "Grade weight",
-    "No invitations or records found": "No invitation or record found",
+    "No invitations or records found": "No invitations or records found",
     "Accept invitation": "Accept invitation",
     "Reject invitation": "Reject invitation",
     "Friend added successfully": "Friend added successfully",
@@ -679,8 +679,6 @@
     "Score updated successfully": "Score updated successfully",
     "Comment added successfully": "Comment added successfully",
     "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext": "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext",
-    "Are you sure you want to delete the selected items?": "Are you sure you want to delete the selected items?",
-    "Assignments deleted": "Assignments deleted",
     "Failed to download package": "Failed to download package",
     "Failed to upload corrections": "Failed to upload corrections",
     "Edit submission": "Edit submission",
@@ -698,10 +696,8 @@
     "Are you sure you want to delete this submission?": "Are you sure you want to delete this submission?",
     "Submission deleted successfully!": "Submission deleted successfully!",
     "Friendly URL": "Friendly URL",
-    "Definition": "Definition",
-    "Glossary exported": "Glossary exported",
-    "Could not export glossary": "Glossary exported",
     "Column": "Column",
     "Blocks Palette": "Blocks Palette",
-    "Error message": "Error message"
+    "Error message": "Error message",
+    "You only have access to the URL %s": "You only have access to the URL {0}"
 }

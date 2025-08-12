@@ -14505,12 +14505,6 @@ msgstr "Please go back to Step"
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 
-msgid "MBString extension not available"
-msgstr "MBString extension not available"
-
-msgid "MySQL extension not available"
-msgstr "MySQL extension not available"
-
 msgid "Optional parameters"
 msgstr "معلمات اختيارية"
 
@@ -18131,15 +18125,6 @@ msgstr "مرحبا في اداة تنصيب كاميلو"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "غير متوافق مع متطلبات النظامـ يرجى التحقق من حصولك على احدث اصدار ثم حاول مرة ثانية PHP ان اصدار"
-
-msgid "Sessions extension not available"
-msgstr "اضافات الدورة غير متوفرة"
-
-msgid "Zlib extension not available"
-msgstr "Zlib لا تتوفر اضافة"
-
-msgid "PCRE extension not available"
-msgstr "PCRE لا تتوفر اضافة"
 
 msgid "To social group"
 msgstr "الذهاب الى المجموعة الاجتماعية"

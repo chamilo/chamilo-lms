@@ -14491,12 +14491,6 @@ msgstr ""
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr ""
 
-msgid "MBString extension not available"
-msgstr ""
-
-msgid "MySQL extension not available"
-msgstr ""
-
 msgid "Optional parameters"
 msgstr ""
 
@@ -18110,15 +18104,6 @@ msgid "Welcome to the Chamilo installer"
 msgstr ""
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
-msgstr ""
-
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
 msgstr ""
 
 msgid "To social group"
@@ -29401,4 +29386,43 @@ msgid "Inactive"
 msgstr ""
 
 msgid "Mandatory fields"
+msgstr ""
+
+msgid "%s extension not available"
+msgstr ""
+
+msgid "Unknown"
+msgstr ""
+
+msgid "The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables."
+msgstr ""
+
+msgid "Users active in open courses (not enrolled)"
+msgstr ""
+
+msgid "Show/Hide users active in open courses (not enrolled)"
+msgstr ""
+
+msgid "Unsubscriptions"
+msgstr ""
+
+msgid "Subscriptions vs unsubscriptions, by day"
+msgstr ""
+
+msgid "Quarterly report"
+msgstr ""
+
+msgid "Course/Session subscriptions, by day"
+msgstr ""
+
+msgid "New users registrations"
+msgstr ""
+
+msgid "File imported just users that are not registered"
+msgstr ""
+
+msgid "Available groups"
+msgstr ""
+
+msgid "Total groups"
 msgstr ""

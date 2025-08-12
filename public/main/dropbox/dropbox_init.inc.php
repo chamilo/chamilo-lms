@@ -174,7 +174,7 @@ function confirmsend()
 
 function confirmation (name)
 {
-    if (confirm(\"".get_lang('ConfirmDelete')." : \"+ name )){
+    if (confirm(\"".get_lang('Do you really want to delete this file')." : \"+ name )){
         return true;
     } else {
         return false;

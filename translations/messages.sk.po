@@ -14504,12 +14504,6 @@ msgstr "Prosím choďte späť na etapu"
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Upgrade skript obnoví a aktualizuje Chamilo databázu(y). Za týmto účelom bude tento skript používať databázy a nastavenie definované nižšie. Pretože náš softvér beží na širokej škále systémov a pretože všetky z nich nemusia byť testované, dôrazne odporúčame vykonať úplnú zálohu databázy, pred tým ako budete pokračovať s upgradom!"
 
-msgid "MBString extension not available"
-msgstr "MBString rozšírenie nedostupné"
-
-msgid "MySQL extension not available"
-msgstr "MySQL rozšírenie nedostupné"
-
 msgid "Optional parameters"
 msgstr "Nepovinné parametre"
 
@@ -18130,15 +18124,6 @@ msgstr "Vitajte v inštalácií Chamilo"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Vaša PHP verzia nezodpovedá požiadavkám pre tento softvér. Skontrolujte prosím, či máte najnovšiu verziu a skúste to znova."
-
-msgid "Sessions extension not available"
-msgstr "Rozšírenie spojenia nie je k dispozícií"
-
-msgid "Zlib extension not available"
-msgstr "Zlib rozšírenie nie je k dispozícií"
-
-msgid "PCRE extension not available"
-msgstr "PCRE rozšírenie nie je k dispozícií"
 
 msgid "To social group"
 msgstr "Pre sociálnu skupinu"

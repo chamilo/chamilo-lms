@@ -174,7 +174,7 @@ Display::page_subheader2($tool_name);
                 type="text"
                 id="destFilter"
                 onkeyup="filterSelect('destFilter', 'destination_users')"
-                placeholder="<?php echo get_lang('Search group'); ?>"
+                placeholder="<?php echo get_lang('Search groups'); ?>"
                 class="mb-2 w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
             />
             <select

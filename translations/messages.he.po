@@ -14505,12 +14505,6 @@ msgstr "אנא חזור לשלב"
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "סקריפט השדרוג ישחזר ויעדכן את מסדי הנתונים של Chamilo. על מנת לעשות זאת, סקריפט זה ישתמש בבסיסי הנתונים ובהגדרות המוגדרים להלן. מכיוון שהתוכנה שלנו פועלת על מגוון רחב של מערכות ובגלל שכולן ייתכן שלא נבדק, אנו ממליצים בחום לעשות גיבוי מלא של מסדי הנתונים שלך לפני שתמשיך בשדרוג!"
 
-msgid "MBString extension not available"
-msgstr "תוסף MBString לא זמין"
-
-msgid "MySQL extension not available"
-msgstr "תוסף MySQL אינו זמין"
-
 msgid "Optional parameters"
 msgstr "פרמטרים אופציונליים"
 
@@ -18131,15 +18125,6 @@ msgstr "ברוכים הבאים למתקין Chamilo"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "גרסת ה-PHP שלך אינה תואמת את הדרישות עבור תוכנה זו. אנא בדוק שיש לך את הגרסה העדכנית ביותר, ולאחר מכן נסה שוב."
-
-msgid "Sessions extension not available"
-msgstr "תוסף הפעלות לא זמין"
-
-msgid "Zlib extension not available"
-msgstr "תוסף Zlib אינו זמין"
-
-msgid "PCRE extension not available"
-msgstr "תוסף PCRE אינו זמין"
 
 msgid "To social group"
 msgstr "לקבוצה חברתית"

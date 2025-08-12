@@ -426,7 +426,7 @@ switch ($report) {
             $htmlHeadXtra[] = Statistics::getJSChartTemplateWithData(
                 $chartData,
                 'bar',
-                'title: { text: "'.get_lang('Subscriptions vs Unsubscriptions by day').'", display: true }',
+                'title: { text: "'.get_lang('Subscriptions vs unsubscriptions, by day').'", display: true }',
                 'subscriptions_chart',
                 true
             );

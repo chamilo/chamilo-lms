@@ -14504,12 +14504,6 @@ msgstr "Por favor, volte para o Passo"
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "O script de actualização irá recuperar e actualizar as bases-de-dados do Chamilo. Para isso, este script irá utilizar as bases-de-dados e configurações definidas abaixo. Em virtude da diversidade de sistemas em que o Chamilo está instalado e porque nem sempre esses sistemas são previamente testados, recomendamos vivamente que faça um backup/cópia de segurança integral das suas bases-de-dados antes de continuar com a actualização !"
 
-msgid "MBString extension not available"
-msgstr "Extensão MBString não disponível"
-
-msgid "MySQL extension not available"
-msgstr "Extensão MySQL não disponível"
-
 msgid "Optional parameters"
 msgstr "Parâmetros opcionais"
 
@@ -18129,15 +18123,6 @@ msgid "Welcome to the Chamilo installer"
 msgstr ""
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
-msgstr ""
-
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
 msgstr ""
 
 msgid "To social group"

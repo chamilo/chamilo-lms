@@ -476,7 +476,7 @@ function display_requirements(
         'status' => checkExtension(
             'session',
             get_lang('Yes'),
-            get_lang('Sessions extension not available')
+            sprintf(get_lang('%s extension not available'), 'Sessions')
         ),
     ];
     $extensions[] = [
@@ -485,7 +485,7 @@ function display_requirements(
         'status' => checkExtension(
             'pdo_mysql',
             get_lang('Yes'),
-            get_lang('MySQL extension not available')
+            sprintf(get_lang('%s extension not available'), 'MySQL')
         ),
     ];
     $extensions[] = [
@@ -494,7 +494,7 @@ function display_requirements(
         'status' => checkExtension(
             'zip',
             get_lang('Yes'),
-            get_lang('Extension not available')
+            sprintf(get_lang('%s extension not available'), 'Zip')
         ),
     ];
     $extensions[] = [
@@ -503,7 +503,7 @@ function display_requirements(
         'status' => checkExtension(
             'zlib',
             get_lang('Yes'),
-            get_lang('Zlib extension not available')
+            sprintf(get_lang('%s extension not available'), 'Zlib')
         ),
     ];
     $extensions[] = [
@@ -512,7 +512,7 @@ function display_requirements(
         'status' => checkExtension(
             'pcre',
             get_lang('Yes'),
-            get_lang('PCRE extension not available')
+            sprintf(get_lang('%s extension not available'), 'PCRE')
         ),
     ];
     $extensions[] = [
@@ -548,7 +548,7 @@ function display_requirements(
         'status' => checkExtension(
             'gd',
             get_lang('Yes'),
-            get_lang('GD Extension not available')
+            sprintf(get_lang('%s extension not available'), 'GD')
         ),
     ];
     $extensions[] = [
@@ -566,7 +566,7 @@ function display_requirements(
         'status' => checkExtension(
             'mbstring',
             get_lang('Yes'),
-            get_lang('MBString extension not available'),
+            sprintf(get_lang('%s extension not available'), 'MBString'),
             true
         ),
     ];
@@ -576,7 +576,7 @@ function display_requirements(
         'status' => checkExtension(
             'exif',
             get_lang('Yes'),
-            get_lang('Exif extension not available'),
+            sprintf(get_lang('%s extension not available'), 'Exif'),
             true
         ),
     ];
@@ -618,7 +618,7 @@ function display_requirements(
         'status' => checkExtension(
             'ldap',
             get_lang('Yes'),
-            get_lang('LDAP Extension not available'),
+            sprintf(get_lang('%s extension not available'), 'LDAP'),
             true
         ),
     ];

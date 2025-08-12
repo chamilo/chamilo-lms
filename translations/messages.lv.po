@@ -14497,12 +14497,6 @@ msgstr "Lūdzu atgriezties uz Soli Nr."
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Atjaunināšanas skripts pārrakstīs un atjaunos Chamilo datubāzi (-es). Lai to izdarītu, šis skripts izmantos datubāzes un iestatījumus, kas noteiktas zemāk. sakarā ar to, ka mūsu programma darbojas plašā sistēmu spektrā un iespējams, ka  visas no tām varētu nebūt pārbaudītas, mēs iesakām jums veikt pilnu dublējumkopiju datu bāzes, pirms Jūs turpināt atjaunināt!"
 
-msgid "MBString extension not available"
-msgstr "MBString papla"
-
-msgid "MySQL extension not available"
-msgstr "MySQL papla"
-
 msgid "Optional parameters"
 msgstr "Izvēles parametri"
 
@@ -18123,15 +18117,6 @@ msgstr "Laipni lūdzam Chamilo uzstādītājā"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Jūsu PHP versija nesakrīt prasību attiecībā uz šo programmatūru. Lūdzu, pārbaudiet vai jums ir pieejama jaunākā versija, tad mēģiniet vēlreiz."
-
-msgid "Sessions extension not available"
-msgstr "Sesijas paplašinājums nav pieejams"
-
-msgid "Zlib extension not available"
-msgstr "Zlib paplašinājums nav pieejams"
-
-msgid "PCRE extension not available"
-msgstr "PCRE paplašinājums nav pieejams"
 
 msgid "To social group"
 msgstr "Uz sociālo grupu"

@@ -14965,12 +14965,6 @@ msgstr ""
 "été testés, nous recommandons avec insistance de procéder à une copie de "
 "sauvegarde complète de votre/vos base(s) de données avant d'aller plus loin !"
 
-msgid "MBString extension not available"
-msgstr "Extension MBString non disponible"
-
-msgid "MySQL extension not available"
-msgstr "Extension MySQL non disponible"
-
 msgid "Optional parameters"
 msgstr "Paramètres facultatifs"
 
@@ -18722,15 +18716,6 @@ msgstr "Bienvenue dans l'installateur de Chamilo"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Votre version de PHP ne suffit pas pour les pré-requis d'installation de ce logiciel. Veuillez vérifier que vous disposez d'une version égale ou supérieure à celle indiquée, puis essayez à nouveau."
-
-msgid "Sessions extension not available"
-msgstr "Extension de sessions non disponible"
-
-msgid "Zlib extension not available"
-msgstr "Extension Zlib non disponible"
-
-msgid "PCRE extension not available"
-msgstr "Extension PCRE non disponible"
 
 msgid "To social group"
 msgstr "À un groupe social"

@@ -14496,12 +14496,6 @@ msgstr "Mesedez, itzuli honako Urratsera"
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Bertsioa berritzeko programak berreskuratu eta eguneratu egingo d(it)u Chamilo datu basea(k). Hau egin ahal izateko, scriptak behean zehaztutako datu baseak eta ezarpenak erabiliko ditu. Chamiloren softwarea sistema askotan dabil eta guzti-guztietan probatu ezin izan delako, biziki gomendatzen dizugu zure datu baseen babeskopia osoa egitea, bertsioa berritzeari ekin baino lehen."
 
-msgid "MBString extension not available"
-msgstr "MBString luzapena ez dago erabilgarri"
-
-msgid "MySQL extension not available"
-msgstr "MySQL luzapena ez dago erabilgarri"
-
 msgid "Optional parameters"
 msgstr "Aukerako parametroak"
 
@@ -18122,15 +18116,6 @@ msgstr "Ongi etorri Chamiloren instalatzailera"
 
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Zure PHP bertsioa ez dator bat software honetarako eskakizunekin. Mesedez, egiaztatu bertsiorik berriena baduzula eta, orduan, saiatu berriro."
-
-msgid "Sessions extension not available"
-msgstr "Sessions luzapena ez dago erabilgarri"
-
-msgid "Zlib extension not available"
-msgstr "Zlib luzapena ez dago erabilgarri"
-
-msgid "PCRE extension not available"
-msgstr "PCRE luzapena ez dago erabilgarri"
 
 msgid "To social group"
 msgstr "Gizarte talde batentzat"

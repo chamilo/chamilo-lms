@@ -9,7 +9,7 @@ export const useSecurityStore = defineStore("security", () => {
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
   const showAccessUrlChooser = computed(() => {
-    return !!(isAuthenticated.value && !isAdmin.value && window.is_login_url)
+    return !!(isAuthenticated.value && window.is_login_url)
   })
 
   /**

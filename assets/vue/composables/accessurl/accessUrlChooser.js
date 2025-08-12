@@ -24,6 +24,8 @@ export function useAccessUrlChooser() {
       accessUrls.value = items
 
       if (1 === items.length) {
+        isLoading.value = false
+
         await doRedirectToPortal(items[0].url)
       }
     } catch (error) {

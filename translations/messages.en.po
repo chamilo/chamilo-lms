@@ -29788,3 +29788,198 @@ msgstr "Back to list"
 
 msgid "Show public link"
 msgstr "SHow public link"
+
+msgid "Public link"
+msgstr "Public link"
+
+msgid "You can share or copy this link:"
+msgstr "You can share or copy this link:"
+
+msgid "Select the link above and press Ctrl+C to copy it"
+msgstr "Select the link above and press Ctrl+C to copy it"
+
+msgid "New page"
+msgstr "New page"
+
+msgid "Pages deleted"
+msgstr "Pages deleted"
+
+msgid "Export glossary"
+msgstr "Export glossary"
+
+msgid "Export to Documents"
+msgstr "Export to Documents"
+
+msgid "Could not delete term"
+msgstr "Could not delete term"
+
+msgid "Exported to documents"
+msgstr "Exported to documents"
+
+msgid "Could not export to documents"
+msgstr "Could not export to documents"
+
+msgid "Could not fetch glossary terms"
+msgstr "Could not fetch glossary terms"
+
+msgid "Edit glossary term"
+msgstr "Edit glossary term"
+
+msgid "Edit page layout"
+msgstr "Edit page layout"
+
+msgid "e.g. /index.php"
+msgstr "e.g. /index.php"
+
+msgid "URL is required"
+msgstr "URL is required"
+
+msgid "Optional - e.g. ROLE_TEACHER"
+msgstr "Optional - e.g. ROLE_TEACHER"
+
+msgid "Layout template"
+msgstr "Layout template"
+
+msgid "Loading templates..."
+msgstr "Loading templates..."
+
+msgid "Select a template"
+msgstr "Select a template"
+
+msgid "Layout templates"
+msgstr "Layout templates"
+
+msgid "Create template"
+msgstr "Create template"
+
+msgid "Back to layouts"
+msgstr "Back to layouts"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Columns"
+msgstr "Columns"
+
+msgid "Blocks"
+msgstr "Blocks"
+
+msgid "View JSON"
+msgstr "View JSON"
+
+msgid "Layout JSON details"
+msgstr "Layout JSON details"
+
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+msgid "Are you sure you want to delete this template?"
+msgstr "Are you sure you want to delete this template?"
+
+msgid "Create layout template"
+msgstr "Create layout template"
+
+msgid "Layout template name"
+msgstr "Layout template name"
+
+msgid "e.g. 3 columns layout"
+msgstr "e.g. 3 columns layout"
+
+msgid "Template name is required"
+msgstr "Template name is required"
+
+msgid "Layout type"
+msgstr "Layout type"
+
+msgid "Save template"
+msgstr "Save template"
+
+msgid "Edit layout template"
+msgstr "Edit layout template"
+
+msgid "Replace layout with predefined type?"
+msgstr "Replace layout with predefined type?"
+
+msgid "Page layout details"
+msgstr "Page layout details"
+
+msgid "Loading layout..."
+msgstr "Loading layout..."
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "Create layout"
+msgstr "Create layout"
+
+msgid "Manage templates"
+msgstr "Manage templates"
+
+msgid "Are you sure you want to delete this layout?"
+msgstr "Are you sure you want to delete this layout?"
+
+msgid "Create page layout"
+msgstr "Create page layout"
+
+msgid "You do not have permission to view this page"
+msgstr "You do not have permission to view this page"
+
+msgid "Why you want to delete your Legal Agreement"
+msgstr "Why you want to delete your Legal Agreement"
+
+msgid "Delete Account"
+msgstr "Delete Account"
+
+msgid "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+msgstr "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+
+msgid "Data exchanges (GDPR)"
+msgstr "Data exchanges (GDPR)"
+
+msgid "Back to third parties"
+msgstr "Back to third parties"
+
+msgid "Add exchange"
+msgstr "Add exchange"
+
+msgid "All users?"
+msgstr "All users?"
+
+msgid "Add data exchange"
+msgstr "Add data exchange"
+
+msgid "Select users"
+msgstr "Select users"
+
+msgid "Please select at least one user."
+msgstr "Please select at least one user."
+
+msgid "Data exchange successfully saved."
+msgstr "Data exchange successfully saved."
+
+msgid "Error saving data exchange."
+msgstr "Error saving data exchange."
+
+msgid "Professional support"
+msgstr "Professional support"
+
+msgid "Add third party"
+msgstr "Add third party"
+
+msgid "Recruiter"
+msgstr "Recruiter"
+
+msgid "Send data"
+msgstr "Send data"
+
+msgid "Is recruiter?"
+msgstr "Is recruiter?"
+
+msgid "Is used for data exchange?"
+msgstr "Is used for data exchange?"
+
+msgid "Event"
+msgstr "Event"
+
+msgid "Go to session"
+msgstr "Go to session"

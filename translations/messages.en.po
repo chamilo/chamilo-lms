@@ -29983,3 +29983,180 @@ msgstr "Event"
 
 msgid "Go to session"
 msgstr "Go to session"
+
+msgid "Add your first link to this course"
+msgstr "Add your first link to this course"
+
+msgid "There are no links in this category"
+msgstr "There are no links in this category"
+
+msgid "With links"
+msgstr "With links"
+
+msgid "Link deleted"
+msgstr "Link deleted"
+
+msgid "Could not delete link"
+msgstr "Could not delete link"
+
+msgid "Link visibility updated"
+msgstr "Link visibility updated"
+
+msgid "Could not change visibility of link"
+msgstr "Could not change visibility of link"
+
+msgid "Link moved up"
+msgstr "Link moved up"
+
+msgid "Could not move link up"
+msgstr "Could not move link up"
+
+msgid "Link moved down"
+msgstr "Link moved down"
+
+msgid "Could not move link down"
+msgstr "Could not move link down"
+
+msgid "Could not delete category"
+msgstr "Could not delete category"
+
+msgid "Visibility of category changed"
+msgstr "Visibility of category changed"
+
+msgid "Could not change visibility of category"
+msgstr "Could not change visibility of category"
+
+msgid "Could not retrieve links"
+msgstr "Could not retrieve links"
+
+msgid "Update category"
+msgstr "Update category"
+
+msgid "Update link"
+msgstr "Update link"
+
+msgid "Matching courses"
+msgstr "Matching courses"
+
+msgid "Apply advanced filters"
+msgstr "Apply advanced filters"
+
+msgid "Filter by title"
+msgstr "Filter by title"
+
+msgid "Filter by category"
+msgstr "Filter by category"
+
+msgid "Filter by language"
+msgstr "Filter by language"
+
+msgid "Loading more courses..."
+msgstr "Loading more courses..."
+
+msgid "Total number of sessions"
+msgstr "Total number of sessions"
+
+msgid "Matching sessions"
+msgstr "Matching sessions"
+
+msgid "Searching by"
+msgstr "Searching by"
+
+msgid "Loading sessions. Please wait."
+msgstr "Loading sessions. Please wait."
+
+msgid "No session available"
+msgstr "No session available"
+
+msgid "Loading more sessions..."
+msgstr "Loading more sessions..."
+
+msgid "Course ID is missing. Unable to navigate to the course home page."
+msgstr "Course ID is missing. Unable to navigate to the course home page."
+
+msgid "An unexpected error occurred."
+msgstr "An unexpected error occurred."
+
+msgid "Incomplete courses"
+msgstr "Incomplete courses"
+
+msgid "Session period"
+msgstr "Session period"
+
+msgid "Search student"
+msgstr "Search student"
+
+msgid "Create new user"
+msgstr "Create new user"
+
+msgid "Matching students"
+msgstr "Matching students"
+
+msgid "Local user"
+msgstr "Local user"
+
+msgid "External user"
+msgstr "External user"
+
+msgid "Send course invitation"
+msgstr "Send course invitation"
+
+msgid "Password (leave blank to auto)"
+msgstr "Password (leave blank to auto)"
+
+msgid "Send access details to user by email"
+msgstr "Send access details to user by email"
+
+msgid "Course sent to"
+msgstr "Course sent to"
+
+msgid "An error occurred while sending the course."
+msgstr "An error occurred while sending the course."
+
+msgid "User created"
+msgstr "User created"
+
+msgid "Could not create user"
+msgstr "Could not create user"
+
+msgid "Completed courses"
+msgstr "Completed courses"
+
+msgid "Issued at"
+msgstr "Issued at"
+
+msgid "Load more"
+msgstr "Load more"
+
+msgid "Restartable courses"
+msgstr "Restartable courses"
+
+msgid "Ended"
+msgstr "Ended"
+
+msgid "Extend one week"
+msgstr "Extend one week"
+
+msgid "Could not load data"
+msgstr "Could not load data"
+
+msgid "Session extended"
+msgstr "Session extended"
+
+msgid "Action failed"
+msgstr "Action failed"
+
+msgid "Available courses in this URL"
+msgstr "Available courses in this URL"
+
+msgid "Loading courses..."
+msgstr "Loading courses..."
+
+msgid "No courses available."
+msgstr "No courses available."
+
+msgid "Favorite courses"
+msgstr "Favorite courses"
+
+msgid "No favorite courses."
+msgstr "No favorite courses."

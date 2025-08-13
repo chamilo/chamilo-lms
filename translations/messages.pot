@@ -29951,3 +29951,180 @@ msgstr ""
 
 msgid "Go to session"
 msgstr ""
+
+msgid "Add your first link to this course"
+msgstr ""
+
+msgid "There are no links in this category"
+msgstr ""
+
+msgid "With links"
+msgstr ""
+
+msgid "Link deleted"
+msgstr ""
+
+msgid "Could not delete link"
+msgstr ""
+
+msgid "Link visibility updated"
+msgstr ""
+
+msgid "Could not change visibility of link"
+msgstr ""
+
+msgid "Link moved up"
+msgstr ""
+
+msgid "Could not move link up"
+msgstr ""
+
+msgid "Link moved down"
+msgstr ""
+
+msgid "Could not move link down"
+msgstr ""
+
+msgid "Could not delete category"
+msgstr ""
+
+msgid "Visibility of category changed"
+msgstr ""
+
+msgid "Could not change visibility of category"
+msgstr ""
+
+msgid "Could not retrieve links"
+msgstr ""
+
+msgid "Update category"
+msgstr ""
+
+msgid "Update link"
+msgstr ""
+
+msgid "Matching courses"
+msgstr ""
+
+msgid "Apply advanced filters"
+msgstr ""
+
+msgid "Filter by title"
+msgstr ""
+
+msgid "Filter by category"
+msgstr ""
+
+msgid "Filter by language"
+msgstr ""
+
+msgid "Loading more courses..."
+msgstr ""
+
+msgid "Total number of sessions"
+msgstr ""
+
+msgid "Matching sessions"
+msgstr ""
+
+msgid "Searching by"
+msgstr ""
+
+msgid "Loading sessions. Please wait."
+msgstr ""
+
+msgid "No session available"
+msgstr ""
+
+msgid "Loading more sessions..."
+msgstr ""
+
+msgid "Course ID is missing. Unable to navigate to the course home page."
+msgstr ""
+
+msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "Incomplete courses"
+msgstr ""
+
+msgid "Session period"
+msgstr ""
+
+msgid "Search student"
+msgstr ""
+
+msgid "Create new user"
+msgstr ""
+
+msgid "Matching students"
+msgstr ""
+
+msgid "Local user"
+msgstr ""
+
+msgid "External user"
+msgstr ""
+
+msgid "Send course invitation"
+msgstr ""
+
+msgid "Password (leave blank to auto)"
+msgstr ""
+
+msgid "Send access details to user by email"
+msgstr ""
+
+msgid "Course sent to"
+msgstr ""
+
+msgid "An error occurred while sending the course."
+msgstr ""
+
+msgid "User created"
+msgstr ""
+
+msgid "Could not create user"
+msgstr ""
+
+msgid "Completed courses"
+msgstr ""
+
+msgid "Issued at"
+msgstr ""
+
+msgid "Load more"
+msgstr ""
+
+msgid "Restartable courses"
+msgstr ""
+
+msgid "Ended"
+msgstr ""
+
+msgid "Extend one week"
+msgstr ""
+
+msgid "Could not load data"
+msgstr ""
+
+msgid "Session extended"
+msgstr ""
+
+msgid "Action failed"
+msgstr ""
+
+msgid "Available courses in this URL"
+msgstr ""
+
+msgid "Loading courses..."
+msgstr ""
+
+msgid "No courses available."
+msgstr ""
+
+msgid "Favorite courses"
+msgstr ""
+
+msgid "No favorite courses."
+msgstr ""

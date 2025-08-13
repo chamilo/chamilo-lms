@@ -6,10 +6,19 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Controller\Api\LpReorderController;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\LpCollectionStateProvider;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,12 +26,53 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course learning paths (LPs).
  */
+#[ApiResource(
+    shortName: 'LearningPaths',
+    operations: [
+        new GetCollection(
+            openapiContext: [
+                'summary' => 'List learning paths filtered by resourceNode.parent (course) and sid',
+                'parameters' => [
+                    ['name'=>'resourceNode.parent','in'=>'query','required'=>true,'schema'=>['type'=>'integer']],
+                    ['name'=>'sid','in'=>'query','required'=>false,'schema'=>['type'=>'integer']],
+                    ['name'=>'title','in'=>'query','required'=>false,'schema'=>['type'=>'string']],
+                ],
+            ],
+            name: 'get_lp_collection_with_progress',
+            provider: LpCollectionStateProvider::class,
+        ),
+        new Get(security: "is_granted('ROLE_USER')"),
+        new Post(
+            uriTemplate: '/learning_paths/reorder',
+            status: 204,
+            controller: LpReorderController::class,
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')",
+            read: false,
+            deserialize: false,
+            name: 'lp_reorder'
+        ),
+    ],
+    normalizationContext: [
+        'groups' => ['lp:read','resource_node:read','resource_link:read'],
+        'enable_max_depth' => true,
+    ],
+    denormalizationContext: ['groups' => ['lp:write']],
+    paginationEnabled: true,
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'partial',
+    'resourceNode.parent' => 'exact',
+])]
+#[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_lp')]
 #[ORM\Entity(repositoryClass: CLpRepository::class)]
 class CLp extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
@@ -34,6 +84,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['lp:read'])]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
@@ -42,12 +93,14 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected string $title;
 
     #[ORM\Column(name: 'ref', type: 'text', nullable: true)]
     protected ?string $ref = null;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected ?string $description;
 
     #[ORM\Column(name: 'path', type: 'text', nullable: false)]
@@ -105,6 +158,8 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     #[ORM\ManyToOne(targetEntity: CLpCategory::class, inversedBy: 'lps')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'iid')]
+    #[Groups(['lp:read'])]
+    #[MaxDepth(1)]
     protected ?CLpCategory $category = null;
 
     #[ORM\Column(name: 'max_attempts', type: 'integer', nullable: false)]
@@ -122,9 +177,11 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected DateTime $modifiedOn;
 
     #[ORM\Column(name: 'published_on', type: 'datetime', nullable: true)]
+    #[Groups(['lp:read'])]
     protected ?DateTime $publishedOn;
 
     #[ORM\Column(name: 'expired_on', type: 'datetime', nullable: true)]
+    #[Groups(['lp:read'])]
     protected ?DateTime $expiredOn = null;
 
     #[ORM\Column(name: 'accumulate_scorm_time', type: 'integer', nullable: false, options: ['default' => 1])]
@@ -160,6 +217,10 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     #[ORM\Column(name: 'auto_forward_video', type: 'boolean', options: ['default' => 0])]
     protected bool $autoForwardVideo = false;
+
+    #[Groups(['lp:read'])]
+    #[SerializedName('progress')]
+    private ?int $progress = null;
 
     public function __construct()
     {
@@ -660,6 +721,15 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
         $this->autoForwardVideo = $autoForwardVideo;
 
         return $this;
+    }
+
+    public function getProgress(): int
+    {
+        return ($this->progress ?? 0);
+    }
+    public function setProgress(?int $progress): void
+    {
+        $this->progress = $progress;
     }
 
     public function getResourceIdentifier(): int|Uuid

@@ -293,12 +293,12 @@ class SocialController extends AbstractController
             $fieldToUpdate = 'request_for_delete_account';
             $justificationFieldToUpdate = 'request_for_delete_account_justification';
             $emailSubject = $translator->trans('Request for account removal');
-            $emailContent = \sprintf($translator->trans("User %s asked for the deletion of his/her account, explaining that \"%s\". You can process the request here: %s"), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = \sprintf($translator->trans('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
         } elseif ('delete_legal' === $requestType) {
             $fieldToUpdate = 'request_for_legal_agreement_consent_removal';
             $justificationFieldToUpdate = 'request_for_legal_agreement_consent_removal_justification';
             $emailSubject = $translator->trans('Request for consent withdrawal on legal terms');
-            $emailContent = \sprintf($translator->trans("User %s asked for the removal of his/her consent to our legal terms, explaining that \"%s\". You can process the request here: %s"), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
+            $emailContent = \sprintf($translator->trans('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'), $user->getFullName(), $explanation, '<a href="'.$link.'">'.$link.'</a>');
         } else {
             return $this->json(['success' => false, 'message' => 'Invalid action type']);
         }

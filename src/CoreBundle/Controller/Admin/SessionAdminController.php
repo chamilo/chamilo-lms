@@ -283,19 +283,19 @@ class SessionAdminController extends BaseController
         $qb = $this->courseDescriptionRepository->getResourcesByCourse($course);
         $items = $qb->getQuery()->getResult();
 
-        $descriptions = array_map(static function($d) {
+        $descriptions = array_map(static function ($d) {
             return [
-                'title'   => $d->getTitle(),
+                'title' => $d->getTitle(),
                 'content' => $d->getContent(),
             ];
         }, $items);
 
         return $this->json([
-            'id'              => $course->getId(),
-            'title'           => $course->getTitle(),
-            'code'            => $course->getCode(),
-            'description'     => '',
-            'descriptions'    => $descriptions,
+            'id' => $course->getId(),
+            'title' => $course->getTitle(),
+            'code' => $course->getCode(),
+            'description' => '',
+            'descriptions' => $descriptions,
             'illustrationUrl' => method_exists($course, 'getIllustrationUrl')
                 ? $course->getIllustrationUrl()
                 : null,

@@ -157,7 +157,7 @@ class ProcessUserDataRequestsCommand extends Command
                 continue;
             }
 
-            $content = sprintf(
+            $content = \sprintf(
                 $this->translator->trans(
                     'The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s',
                 ),

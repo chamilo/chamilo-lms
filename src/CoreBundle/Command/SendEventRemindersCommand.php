@@ -198,7 +198,7 @@ class SendEventRemindersCommand extends Command
         $locale = $user->getLocale() ?: 'en';
         $this->translator->setLocale($locale);
 
-        $messageSubject = sprintf(
+        $messageSubject = \sprintf(
             $this->translator->trans('Reminder for event : %s'),
             [$event->getTitle()]
         );

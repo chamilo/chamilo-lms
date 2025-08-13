@@ -29788,3 +29788,6 @@ msgstr "Back to list"
 
 msgid "Show public link"
 msgstr "SHow public link"
+
+msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
+msgstr "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"

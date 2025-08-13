@@ -29757,5 +29757,377 @@ msgstr ""
 msgid "Show public link"
 msgstr ""
 
+msgid "Public link"
+msgstr ""
+
+msgid "You can share or copy this link:"
+msgstr ""
+
+msgid "Select the link above and press Ctrl+C to copy it"
+msgstr ""
+
+msgid "New page"
+msgstr ""
+
+msgid "Pages deleted"
+msgstr ""
+
+msgid "Export glossary"
+msgstr ""
+
+msgid "Export to Documents"
+msgstr ""
+
+msgid "Could not delete term"
+msgstr ""
+
+msgid "Exported to documents"
+msgstr ""
+
+msgid "Could not export to documents"
+msgstr ""
+
+msgid "Could not fetch glossary terms"
+msgstr ""
+
+msgid "Edit glossary term"
+msgstr ""
+
+msgid "Edit page layout"
+msgstr ""
+
+msgid "e.g. /index.php"
+msgstr ""
+
+msgid "URL is required"
+msgstr ""
+
+msgid "Optional - e.g. ROLE_TEACHER"
+msgstr ""
+
+msgid "Layout template"
+msgstr ""
+
+msgid "Loading templates..."
+msgstr ""
+
+msgid "Select a template"
+msgstr ""
+
+msgid "Layout templates"
+msgstr ""
+
+msgid "Create template"
+msgstr ""
+
+msgid "Back to layouts"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Blocks"
+msgstr ""
+
+msgid "View JSON"
+msgstr ""
+
+msgid "Layout JSON details"
+msgstr ""
+
+msgid "Confirm deletion"
+msgstr ""
+
+msgid "Are you sure you want to delete this template?"
+msgstr ""
+
+msgid "Create layout template"
+msgstr ""
+
+msgid "Layout template name"
+msgstr ""
+
+msgid "e.g. 3 columns layout"
+msgstr ""
+
+msgid "Template name is required"
+msgstr ""
+
+msgid "Layout type"
+msgstr ""
+
+msgid "Save template"
+msgstr ""
+
+msgid "Edit layout template"
+msgstr ""
+
+msgid "Replace layout with predefined type?"
+msgstr ""
+
+msgid "Page layout details"
+msgstr ""
+
+msgid "Loading layout..."
+msgstr ""
+
+msgid "Page layouts"
+msgstr ""
+
+msgid "Create layout"
+msgstr ""
+
+msgid "Manage templates"
+msgstr ""
+
+msgid "Are you sure you want to delete this layout?"
+msgstr ""
+
+msgid "Create page layout"
+msgstr ""
+
+msgid "You do not have permission to view this page"
+msgstr ""
+
+msgid "Why you want to delete your Legal Agreement"
+msgstr ""
+
+msgid "Delete Account"
+msgstr ""
+
+msgid "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+msgstr ""
+
+msgid "Data exchanges (GDPR)"
+msgstr ""
+
+msgid "Back to third parties"
+msgstr ""
+
+msgid "Add exchange"
+msgstr ""
+
+msgid "All users?"
+msgstr ""
+
+msgid "Add data exchange"
+msgstr ""
+
+msgid "Select users"
+msgstr ""
+
+msgid "Please select at least one user."
+msgstr ""
+
+msgid "Data exchange successfully saved."
+msgstr ""
+
+msgid "Error saving data exchange."
+msgstr ""
+
+msgid "Professional support"
+msgstr ""
+
+msgid "Add third party"
+msgstr ""
+
+msgid "Recruiter"
+msgstr ""
+
+msgid "Send data"
+msgstr ""
+
+msgid "Is recruiter?"
+msgstr ""
+
+msgid "Is used for data exchange?"
+msgstr ""
+
+msgid "Event"
+msgstr ""
+
+msgid "Go to session"
+msgstr ""
+
+msgid "Add your first link to this course"
+msgstr ""
+
+msgid "There are no links in this category"
+msgstr ""
+
+msgid "With links"
+msgstr ""
+
+msgid "Link deleted"
+msgstr ""
+
+msgid "Could not delete link"
+msgstr ""
+
+msgid "Link visibility updated"
+msgstr ""
+
+msgid "Could not change visibility of link"
+msgstr ""
+
+msgid "Link moved up"
+msgstr ""
+
+msgid "Could not move link up"
+msgstr ""
+
+msgid "Link moved down"
+msgstr ""
+
+msgid "Could not move link down"
+msgstr ""
+
+msgid "Could not delete category"
+msgstr ""
+
+msgid "Visibility of category changed"
+msgstr ""
+
+msgid "Could not change visibility of category"
+msgstr ""
+
+msgid "Could not retrieve links"
+msgstr ""
+
+msgid "Update category"
+msgstr ""
+
+msgid "Update link"
+msgstr ""
+
+msgid "Matching courses"
+msgstr ""
+
+msgid "Apply advanced filters"
+msgstr ""
+
+msgid "Filter by title"
+msgstr ""
+
+msgid "Filter by category"
+msgstr ""
+
+msgid "Filter by language"
+msgstr ""
+
+msgid "Loading more courses..."
+msgstr ""
+
+msgid "Total number of sessions"
+msgstr ""
+
+msgid "Matching sessions"
+msgstr ""
+
+msgid "Searching by"
+msgstr ""
+
+msgid "Loading sessions. Please wait."
+msgstr ""
+
+msgid "No session available"
+msgstr ""
+
+msgid "Loading more sessions..."
+msgstr ""
+
+msgid "Course ID is missing. Unable to navigate to the course home page."
+msgstr ""
+
+msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "Incomplete courses"
+msgstr ""
+
+msgid "Session period"
+msgstr ""
+
+msgid "Search student"
+msgstr ""
+
+msgid "Create new user"
+msgstr ""
+
+msgid "Matching students"
+msgstr ""
+
+msgid "Local user"
+msgstr ""
+
+msgid "External user"
+msgstr ""
+
+msgid "Send course invitation"
+msgstr ""
+
+msgid "Password (leave blank to auto)"
+msgstr ""
+
+msgid "Send access details to user by email"
+msgstr ""
+
+msgid "Course sent to"
+msgstr ""
+
+msgid "An error occurred while sending the course."
+msgstr ""
+
+msgid "User created"
+msgstr ""
+
+msgid "Could not create user"
+msgstr ""
+
+msgid "Completed courses"
+msgstr ""
+
+msgid "Issued at"
+msgstr ""
+
+msgid "Load more"
+msgstr ""
+
+msgid "Restartable courses"
+msgstr ""
+
+msgid "Ended"
+msgstr ""
+
+msgid "Extend one week"
+msgstr ""
+
+msgid "Could not load data"
+msgstr ""
+
+msgid "Session extended"
+msgstr ""
+
+msgid "Action failed"
+msgstr ""
+
+msgid "Available courses in this URL"
+msgstr ""
+
+msgid "Loading courses..."
+msgstr ""
+
+msgid "No courses available."
+msgstr ""
+
+msgid "Favorite courses"
+msgstr ""
+
+msgid "No favorite courses."
+msgstr ""
+
 msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
 msgstr ""

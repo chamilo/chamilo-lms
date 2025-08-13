@@ -29,7 +29,7 @@
           <BaseIcon :icon="data.recruiter ? 'check' : 'minus'" />
         </template>
       </Column>
-      <Column :header="t('Data Exchange')">
+      <Column :header="t('Data exchange')">
         <template #body="{ data }">
           <BaseIcon :icon="data.dataExchangeParty ? 'check' : 'minus'" />
         </template>

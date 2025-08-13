@@ -29789,5 +29789,377 @@ msgstr "Back to list"
 msgid "Show public link"
 msgstr "SHow public link"
 
+msgid "Public link"
+msgstr "Public link"
+
+msgid "You can share or copy this link:"
+msgstr "You can share or copy this link:"
+
+msgid "Select the link above and press Ctrl+C to copy it"
+msgstr "Select the link above and press Ctrl+C to copy it"
+
+msgid "New page"
+msgstr "New page"
+
+msgid "Pages deleted"
+msgstr "Pages deleted"
+
+msgid "Export glossary"
+msgstr "Export glossary"
+
+msgid "Export to Documents"
+msgstr "Export to Documents"
+
+msgid "Could not delete term"
+msgstr "Could not delete term"
+
+msgid "Exported to documents"
+msgstr "Exported to documents"
+
+msgid "Could not export to documents"
+msgstr "Could not export to documents"
+
+msgid "Could not fetch glossary terms"
+msgstr "Could not fetch glossary terms"
+
+msgid "Edit glossary term"
+msgstr "Edit glossary term"
+
+msgid "Edit page layout"
+msgstr "Edit page layout"
+
+msgid "e.g. /index.php"
+msgstr "e.g. /index.php"
+
+msgid "URL is required"
+msgstr "URL is required"
+
+msgid "Optional - e.g. ROLE_TEACHER"
+msgstr "Optional - e.g. ROLE_TEACHER"
+
+msgid "Layout template"
+msgstr "Layout template"
+
+msgid "Loading templates..."
+msgstr "Loading templates..."
+
+msgid "Select a template"
+msgstr "Select a template"
+
+msgid "Layout templates"
+msgstr "Layout templates"
+
+msgid "Create template"
+msgstr "Create template"
+
+msgid "Back to layouts"
+msgstr "Back to layouts"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Columns"
+msgstr "Columns"
+
+msgid "Blocks"
+msgstr "Blocks"
+
+msgid "View JSON"
+msgstr "View JSON"
+
+msgid "Layout JSON details"
+msgstr "Layout JSON details"
+
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+msgid "Are you sure you want to delete this template?"
+msgstr "Are you sure you want to delete this template?"
+
+msgid "Create layout template"
+msgstr "Create layout template"
+
+msgid "Layout template name"
+msgstr "Layout template name"
+
+msgid "e.g. 3 columns layout"
+msgstr "e.g. 3 columns layout"
+
+msgid "Template name is required"
+msgstr "Template name is required"
+
+msgid "Layout type"
+msgstr "Layout type"
+
+msgid "Save template"
+msgstr "Save template"
+
+msgid "Edit layout template"
+msgstr "Edit layout template"
+
+msgid "Replace layout with predefined type?"
+msgstr "Replace layout with predefined type?"
+
+msgid "Page layout details"
+msgstr "Page layout details"
+
+msgid "Loading layout..."
+msgstr "Loading layout..."
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "Create layout"
+msgstr "Create layout"
+
+msgid "Manage templates"
+msgstr "Manage templates"
+
+msgid "Are you sure you want to delete this layout?"
+msgstr "Are you sure you want to delete this layout?"
+
+msgid "Create page layout"
+msgstr "Create page layout"
+
+msgid "You do not have permission to view this page"
+msgstr "You do not have permission to view this page"
+
+msgid "Why you want to delete your Legal Agreement"
+msgstr "Why you want to delete your Legal Agreement"
+
+msgid "Delete Account"
+msgstr "Delete Account"
+
+msgid "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+msgstr "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+
+msgid "Data exchanges (GDPR)"
+msgstr "Data exchanges (GDPR)"
+
+msgid "Back to third parties"
+msgstr "Back to third parties"
+
+msgid "Add exchange"
+msgstr "Add exchange"
+
+msgid "All users?"
+msgstr "All users?"
+
+msgid "Add data exchange"
+msgstr "Add data exchange"
+
+msgid "Select users"
+msgstr "Select users"
+
+msgid "Please select at least one user."
+msgstr "Please select at least one user."
+
+msgid "Data exchange successfully saved."
+msgstr "Data exchange successfully saved."
+
+msgid "Error saving data exchange."
+msgstr "Error saving data exchange."
+
+msgid "Professional support"
+msgstr "Professional support"
+
+msgid "Add third party"
+msgstr "Add third party"
+
+msgid "Recruiter"
+msgstr "Recruiter"
+
+msgid "Send data"
+msgstr "Send data"
+
+msgid "Is recruiter?"
+msgstr "Is recruiter?"
+
+msgid "Is used for data exchange?"
+msgstr "Is used for data exchange?"
+
+msgid "Event"
+msgstr "Event"
+
+msgid "Go to session"
+msgstr "Go to session"
+
+msgid "Add your first link to this course"
+msgstr "Add your first link to this course"
+
+msgid "There are no links in this category"
+msgstr "There are no links in this category"
+
+msgid "With links"
+msgstr "With links"
+
+msgid "Link deleted"
+msgstr "Link deleted"
+
+msgid "Could not delete link"
+msgstr "Could not delete link"
+
+msgid "Link visibility updated"
+msgstr "Link visibility updated"
+
+msgid "Could not change visibility of link"
+msgstr "Could not change visibility of link"
+
+msgid "Link moved up"
+msgstr "Link moved up"
+
+msgid "Could not move link up"
+msgstr "Could not move link up"
+
+msgid "Link moved down"
+msgstr "Link moved down"
+
+msgid "Could not move link down"
+msgstr "Could not move link down"
+
+msgid "Could not delete category"
+msgstr "Could not delete category"
+
+msgid "Visibility of category changed"
+msgstr "Visibility of category changed"
+
+msgid "Could not change visibility of category"
+msgstr "Could not change visibility of category"
+
+msgid "Could not retrieve links"
+msgstr "Could not retrieve links"
+
+msgid "Update category"
+msgstr "Update category"
+
+msgid "Update link"
+msgstr "Update link"
+
+msgid "Matching courses"
+msgstr "Matching courses"
+
+msgid "Apply advanced filters"
+msgstr "Apply advanced filters"
+
+msgid "Filter by title"
+msgstr "Filter by title"
+
+msgid "Filter by category"
+msgstr "Filter by category"
+
+msgid "Filter by language"
+msgstr "Filter by language"
+
+msgid "Loading more courses..."
+msgstr "Loading more courses..."
+
+msgid "Total number of sessions"
+msgstr "Total number of sessions"
+
+msgid "Matching sessions"
+msgstr "Matching sessions"
+
+msgid "Searching by"
+msgstr "Searching by"
+
+msgid "Loading sessions. Please wait."
+msgstr "Loading sessions. Please wait."
+
+msgid "No session available"
+msgstr "No session available"
+
+msgid "Loading more sessions..."
+msgstr "Loading more sessions..."
+
+msgid "Course ID is missing. Unable to navigate to the course home page."
+msgstr "Course ID is missing. Unable to navigate to the course home page."
+
+msgid "An unexpected error occurred."
+msgstr "An unexpected error occurred."
+
+msgid "Incomplete courses"
+msgstr "Incomplete courses"
+
+msgid "Session period"
+msgstr "Session period"
+
+msgid "Search student"
+msgstr "Search student"
+
+msgid "Create new user"
+msgstr "Create new user"
+
+msgid "Matching students"
+msgstr "Matching students"
+
+msgid "Local user"
+msgstr "Local user"
+
+msgid "External user"
+msgstr "External user"
+
+msgid "Send course invitation"
+msgstr "Send course invitation"
+
+msgid "Password (leave blank to auto)"
+msgstr "Password (leave blank to auto)"
+
+msgid "Send access details to user by email"
+msgstr "Send access details to user by email"
+
+msgid "Course sent to"
+msgstr "Course sent to"
+
+msgid "An error occurred while sending the course."
+msgstr "An error occurred while sending the course."
+
+msgid "User created"
+msgstr "User created"
+
+msgid "Could not create user"
+msgstr "Could not create user"
+
+msgid "Completed courses"
+msgstr "Completed courses"
+
+msgid "Issued at"
+msgstr "Issued at"
+
+msgid "Load more"
+msgstr "Load more"
+
+msgid "Restartable courses"
+msgstr "Restartable courses"
+
+msgid "Ended"
+msgstr "Ended"
+
+msgid "Extend one week"
+msgstr "Extend one week"
+
+msgid "Could not load data"
+msgstr "Could not load data"
+
+msgid "Session extended"
+msgstr "Session extended"
+
+msgid "Action failed"
+msgstr "Action failed"
+
+msgid "Available courses in this URL"
+msgstr "Available courses in this URL"
+
+msgid "Loading courses..."
+msgstr "Loading courses..."
+
+msgid "No courses available."
+msgstr "No courses available."
+
+msgid "Favorite courses"
+msgstr "Favorite courses"
+
+msgid "No favorite courses."
+msgstr "No favorite courses."
+
 msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
 msgstr "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"

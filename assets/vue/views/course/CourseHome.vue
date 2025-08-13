@@ -85,28 +85,28 @@
           v-if="isAllowedToEdit && documentAutoLaunch === 1"
           class="text-sm text-gray-600"
         >
-          {{ t("Document auto-launch is enabled for students") }}
+          {{ t("The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.") }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("Exercise auto-launch is enabled for students") }}
+          {{ t("The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.") }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("LP auto-launch is enabled for students") }}
+          {{ t("The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.") }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("Forum auto-launch is enabled for students") }}
+          {{ t("The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.") }}
         </p>
 
         <div class="grow-0">

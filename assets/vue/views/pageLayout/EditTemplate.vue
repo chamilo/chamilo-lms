@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader :title="t('Edit Layout Template')">
+  <SectionHeader :title="t('Edit layout template')">
     <BaseButton
       icon="back"
       type="gray"
@@ -17,11 +17,11 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
         <div class="md:col-span-2">
           <label class="block text-gray-700 font-semibold mb-1">
-            {{ t("Layout Template Name") }}
+            {{ t("Layout template name") }}
           </label>
           <BaseInputText
             v-model.trim="templateName"
-            :placeholder="t('e.g. 3 Columns Layout')"
+            :placeholder="t('e.g. 3 columns layout')"
             :error="submitted && !templateName"
             label=""
           />

@@ -2012,7 +2012,6 @@ class Category implements GradebookItem
         bool $sendNotification = false,
         bool $skipGenerationIfExists = false
     ) {
-        $user_id = (int) $user_id;
         $categoryId = $category->getId();
         $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
         $courseId = $category->getCourse()->getId();

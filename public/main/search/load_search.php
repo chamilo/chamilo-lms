@@ -275,8 +275,8 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('method', get_lang('Méthode de Travail'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Method de Travail Explanation').'</p>');
+$userForm->addStartPanel('method', get_lang('Work methodology'));
+$userForm->addHtml('<p class="text-info">'.get_lang('Work methodolofy explanation').'</p>');
 
 $fieldsToShow = [
     'methode_de_travaille',
@@ -317,8 +317,8 @@ if (isset($_POST) && !empty($_POST)) {
     $searchChecked3 = null === $searchChecked3 ? 'checked' : $searchChecked3;
 }
 
-$form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Disponibilite Avant'));
-$form->addHtml('<p class="text-info">'.get_lang('Disponibilite Avant Explanation').'</p>');
+$form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Availability before'));
+$form->addHtml('<p class="text-info">'.get_lang('Availability before explanation').'</p>');
 
 // Session fields
 $showOnlyThisFields = [
@@ -362,8 +362,8 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('theme_obj', '<input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;'.get_lang('Themes Objectifs'));
-$form->addHtml('<p class="text-info">'.get_lang('Themes Objectifs Explanation').'</p>');
+$form->addStartPanel('theme_obj', '<input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;'.get_lang('Topics objectives'));
+$form->addHtml('<p class="text-info">'.get_lang('Topics objectives explanation').'</p>');
 
 $showOnlyThisFields = [
     'domaine',
@@ -385,16 +385,16 @@ $extra = $extraField->addElements(
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
-            get_lang('Domaine').' 1',
-            get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3',
+            sprintf(get_lang('Domain %s'),'1'),
+            sprintf(get_lang('Domain %s'),'2'),
+            sprintf(get_lang('Domain %s'),'3'),
         ],
         $theme => [
-            get_lang('Theme Field').' 1',
-            get_lang('Theme Field').' 2',
-            get_lang('Theme Field').' 3',
-            get_lang('Theme Field').' 4',
-            get_lang('Theme Field').' 5',
+            sprintf(get_lang('Topic %s'),'1'),
+            sprintf(get_lang('Topic %s'),'2'),
+            sprintf(get_lang('Topic %s'),'3'),
+            sprintf(get_lang('Topic %s'),'4'),
+            sprintf(get_lang('Topic %s'),'5'),
         ],
     ],
     true
@@ -420,8 +420,8 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('Niveau Langue'));
-$form->addHtml('<p class="text-info">'.get_lang('Niveau Langue Explanation').'</p>');
+$form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('Language level'));
+$form->addHtml('<p class="text-info">'.get_lang('Language level explanation').'</p>');
 
 $showOnlyThisFields = [
     'ecouter',
@@ -445,16 +445,16 @@ $extra = $extraField->addElements(
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
-            get_lang('Domaine').' 1',
-            get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3',
+            sprintf(get_lang('Domain %s'),'1'),
+            sprintf(get_lang('Domain %s'),'2'),
+            sprintf(get_lang('Domain %s'),'3'),
         ],
         $theme => [
-            get_lang('Theme').' 1',
-            get_lang('Theme').' 2',
-            get_lang('Theme').' 3',
-            get_lang('Theme').' 4',
-            get_lang('Theme').' 5',
+            sprintf(get_lang('Topic %s'),'1'),
+            sprintf(get_lang('Topic %s'),'2'),
+            sprintf(get_lang('Topic %s'),'3'),
+            sprintf(get_lang('Topic %s'),'4'),
+            sprintf(get_lang('Topic %s'),'5'),
         ],
     ]
 );

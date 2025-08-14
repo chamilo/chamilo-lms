@@ -2519,9 +2519,6 @@ msgstr "Esti campu pue contener la facultá, el departamentu o cualquier otra ca
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Si tien duldes de títulu esautu del cursu o del códigu que-y correspuende, consultar el"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa del cursu</a>. Si'l sitiu que quier crear nun se correspuende con un cursu esistente, pue inverntar ún. Por exemplu <i>INNOVACION</i> si ye un programa de formación en xestión de la innovación."
-
 msgid "SCORM Path builder"
 msgstr "Constructor d'itinerarios SCORM"
 

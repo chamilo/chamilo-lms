@@ -2523,9 +2523,6 @@ msgstr "This is the department or any other context where the course is delivere
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "If you are unsure of your course code, consult the training details."
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-
 msgid "SCORM Path builder"
 msgstr "SCORM Path builder"
 
@@ -29474,7 +29471,7 @@ msgstr "Save attendance"
 msgid "Signature"
 msgstr "Signature"
 
-msgid "Clear" 
+msgid "Clear"
 msgstr "Clear"
 
 msgid "No attendance data to save."
@@ -30163,3 +30160,45 @@ msgstr "No favorite courses."
 
 msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
 msgstr "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
+
+msgid "Group does not exist in course"
+msgstr "Group does not exist in course"
+
+msgid "Unauthorised access to group"
+msgstr "Unauthorised access to group"
+
+msgid "You're not allowed in this group"
+msgstr "You're not allowed in this group"
+
+msgid "Save diagnostic changes"
+msgstr "Save diagnostic changes"
+
+msgid "Domain %s"
+msgstr "Domain %s"
+
+msgid "Topic %s"
+msgstr "Topic %s"
+
+msgid "Software program"
+msgstr "Software program"
+
+msgid "Send mail to users"
+msgstr "Send mail to users"
+
+msgid "Update user list from XML/CSV"
+msgstr "Update user list from XML/CSV"
+
+msgid "CSV must look as follows: "
+msgstr "CSV must look as follows: "
+
+msgid "Course/Session subscriptions by day"
+msgstr "Course/Session subscriptions by day"
+
+msgid "Remove user from all group-related entities if his/her name is not in the list"
+msgstr "Remove user from all group-related entities if his/her name is not in the list"
+
+msgid "Groups assigned to URL"
+msgstr "Groups assigned to URL"
+
+msgid "Proceed with the import"
+msgstr "Proceed with the import"

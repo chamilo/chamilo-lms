@@ -2520,9 +2520,6 @@ msgstr "Ovo je oblast ili bilo koja druga kategorija gde je kurs postavljan."
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ako imate sumnji oko šifre kursa, konsultujte"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program kursa</a>. Ako vaš kurs nema šifru, iz bilo kog razloga, izmislite mu jednu. Na primer <i>INOVACIJE</i> ako je kurs o Inovacionom menadžmentu."
-
 msgid "SCORM Path builder"
 msgstr "Alat za izgradnju Scorm putanje"
 

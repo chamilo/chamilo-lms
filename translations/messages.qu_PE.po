@@ -2519,9 +2519,6 @@ msgstr "Kay kanchapiqa kanman facultad utaq departamento nisqa hinallataq yachac
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Sichus mana allintachu reqsishanki yachachinaq sutinchayninta utaq chip'untapas tapuriy kayta"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Yachachinaq programan</a>. Sichus k'iti kamarisqayki manan masichakunchu hoq yachachinawan, chayqa qan umaykimanta kamarinki. Kay hinata <i>INNOVACION</i> icha qhawarichiyqa sichus innovacion nisqawan masichakuqtin"
-
 msgid "SCORM Path builder"
 msgstr "SCORM yachanakuna ruwaq"
 

@@ -2519,9 +2519,6 @@ msgstr ""
 msgid "If you are unsure of your course code, consult the training details."
 msgstr ""
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr ""
-
 msgid "SCORM Path builder"
 msgstr ""
 

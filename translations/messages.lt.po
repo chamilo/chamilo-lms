@@ -2521,9 +2521,6 @@ msgstr "This is the department or any other category where the course is deliver
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Jei nežinote kokį kodą rašyti, peržvelkite"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "kurso programą</a>. Jei Jūsų kursas neturi kodo, rašykite susijusį žodį, pvz. <i>INNOVATION</i> jei kursas yra apie Innovation Management"
-
 msgid "SCORM Path builder"
 msgstr "Scorm kūrimo įrankis"
 

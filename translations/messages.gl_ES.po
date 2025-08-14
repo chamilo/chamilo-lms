@@ -2527,9 +2527,6 @@ msgstr "Trátase da facultade (ou outra categoría) na que se realiza o curso"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "No caso de dúbidas sobre o título exacto do curso ou o código que lle corresponde , consultar o"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa do curso</a>. Se a web que vostede quere crear non se corresponde con un código do curso existente, vostede pode inventarse un. Por exemplo <i>INNOVACION</i> se se trata dun programa de formación  sobre xestión da innovación"
-
 msgid "SCORM Path builder"
 msgstr "Constructor de itinerarios scorm"
 

@@ -2519,9 +2519,6 @@ msgstr "Detta är den fakultet eller avdelning där kursen hålls"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Om du tvivlar tvivlar på kurskoden, kontrollera,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursprogrammet</a>. Om din kurs inte har någon kod, oavsett anledning, hitta på en. Till exempel <i>LKSV01</i> om kursen är en lokal kurs i Svenska"
-
 msgid "SCORM Path builder"
 msgstr "Scorm Path byggare"
 

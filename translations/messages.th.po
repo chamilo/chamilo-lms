@@ -2519,9 +2519,6 @@ msgstr "ภาควิชา/หมวดวิชา"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "ุถ้าท่านสงสัยเกี่ยวกับชื่อรหัสวิชา โปรดปรึกษา"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "โปรแกรมวิชา </a>ถ้ารายวิชาของท่านไม่มีรหัสวิชา ไม่ว่าด้วยสาเหตุใด ให้เลือกคำใดคำหนึ่งที่สื่อความหมายแทน เช่น <b>Design </b>สำหรับรายวิชาชื่อ <b>Visual Communication Design</b>"
-
 msgid "SCORM Path builder"
 msgstr "เครื่องมือสร้างแบบมาตรฐานScorm"
 

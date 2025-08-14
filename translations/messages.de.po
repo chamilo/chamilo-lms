@@ -2581,9 +2581,6 @@ msgstr "Dies ist der Bereich, den der Kurs anbietet"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Wenn Sie sich nicht sicher sind, welche Nummer Sie belegen sollen, wenden Sie sich bitte an "
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursprogramm</a>. Wenn Ihr Kurs keine Nummer hat, aus welchem Grund auch immer, erfinden Sie eine; z.B. <i>Erfinder</i>, wenn der Kurs das Thema Thomas Edison hat"
-
 msgid "SCORM Path builder"
 msgstr "Lernpfad-Baukasten (SCORM)"
 

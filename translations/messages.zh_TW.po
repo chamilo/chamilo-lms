@@ -2519,9 +2519,6 @@ msgstr "這是本門課程所屬部門或分類"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "如果您對課程代碼有疑問的話，請詢問"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "<a>教學大綱</a>如果您的課程沒有代碼，請創建一個，例如︰如果您的課程內容是關於改革管理的，可以取課程代碼為<i>INNOVATION</i>"
-
 msgid "SCORM Path builder"
 msgstr "Scorm 編輯器"
 

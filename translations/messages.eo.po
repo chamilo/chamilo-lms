@@ -2519,9 +2519,6 @@ msgstr "Jen la nomo de la fakultato, kie la kurso estas instruata"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Se vi dubas pri la ĝusta titolo aŭ la kodo de via kurso, vi povas ĝin trovi en la kurslisto"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursprogramo </a>. Se la startpaĝo, kiun vi volas krei, ne respondas al ekzistanta kurskodo, vi povas elpensi ĝin. Ekzemple <i>RENOVIGO</i> kiam temas pri kleriga programo pri renoviga mastrumado"
-
 msgid "SCORM Path builder"
 msgstr "Konstruo de Scorm-lernopado"
 

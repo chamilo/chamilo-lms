@@ -2528,9 +2528,6 @@ msgstr "To je fakulteta, oddelek, aktiv ali šola ali smer, ki ponuja ta tečaj"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Če ne veš kode tečaja, se posvetuj z,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program tečaja</a>. Če tečaj nima kode, si jo izmisli. Na primer <i>PROG_JAVA</i> je lahko koda tečaja o programiranju v Javi"
-
 msgid "SCORM Path builder"
 msgstr "Kreator SCORM učne poti"
 

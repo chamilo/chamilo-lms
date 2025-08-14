@@ -2513,9 +2513,6 @@ msgstr "Це відділення або будь-яка інша категор
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Якщо ви сумніваєтесь щодо коду курсу, проконсультуйтесь"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Програма курсу. Якщо ваш курс не має коду, з якихось причин, призначте його. Наприклад, <i>INNOVATION</i>, якщо курс стосується Інноваційного менеджменту"
-
 msgid "SCORM Path builder"
 msgstr "Будівельник планів SCORM"
 

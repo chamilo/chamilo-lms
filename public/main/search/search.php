@@ -307,7 +307,7 @@ $extra = $extraFieldSession->addElements(
 if ($userForm->hasElement('extra_access_start_date')) {
     $userForm->addRule(
         ['extra_access_start_date', 'extra_access_end_date'],
-        get_lang('StartDateMustBeBeforeTheEndDate'),
+        get_lang('Start date must be before the end date'),
         'compare_datetime_text',
         '< allow_empty'
     );
@@ -371,7 +371,7 @@ $extra = $extraField->addElements(
 if ($userForm->hasElement('extra_datedebutstage')) {
     $userForm->addRule(
         ['extra_datedebutstage', 'extra_datefinstage'],
-        get_lang('StartDateMustBeBeforeTheEndDate'),
+        get_lang('Start date must be before the end date'),
         'compare_datetime_text',
         '< allow_empty'
     );
@@ -382,12 +382,12 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[dispo_pendant_stage]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('theme_obj', get_lang('Themes Objectifs'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Themes Objectifs Explanation').'</p>');
+$userForm->addStartPanel('theme_obj', get_lang('Topics objectives'));
+$userForm->addHtml('<p class="text-info">'.get_lang('Topics objectives explanation').'</p>');
 
 $introductionTextList = [
-    'domaine' => get_lang('Domaine Introduction'),
-    $theme => get_lang('Theme Field Introduction'),
+    'domaine' => get_lang('Domain introduction'),
+    $theme => get_lang('Topic field introduction'),
 ];
 
 $fieldsToShow = [
@@ -409,16 +409,16 @@ $extra = $extraFieldSession->addElements(
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
-            get_lang('Domaine').' 1',
-            get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3',
+            sprintf(get_lang('Domain %s'),'1'),
+            sprintf(get_lang('Domain %s'),'2'),
+            sprintf(get_lang('Domain %s'),'3'),
         ],
         $theme => [
-            get_lang('ThemeField').' 1',
-            get_lang('ThemeField').' 2',
-            get_lang('ThemeField').' 3',
-            get_lang('ThemeField').' 4',
-            get_lang('ThemeField').' 5',
+            sprintf(get_lang('Topic %s'),'1'),
+            sprintf(get_lang('Topic %s'),'2'),
+            sprintf(get_lang('Topic %s'),'3'),
+            sprintf(get_lang('Topic %s'),'4'),
+            sprintf(get_lang('Topic %s'),'5'),
         ],
     ],
     true, //$addEmptyOptionSelects
@@ -430,8 +430,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[theme_obj]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('niveau_langue', get_lang('Niveau Langue'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Niveau Langue Explanation').'</p>');
+$userForm->addStartPanel('niveau_langue', get_lang('Language level'));
+$userForm->addHtml('<p class="text-info">'.get_lang('Language level explanation').'</p>');
 
 $fieldsToShow = [
     //'competenceniveau'
@@ -510,8 +510,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[methode_travail]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('environnement', get_lang('Mon Environnement De Travail'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail').'</p>');
+$userForm->addStartPanel('environnement', get_lang('My work environment'));
+$userForm->addHtml('<p class="text-info">'.get_lang('My work environment').'</p>');
 
 $fieldsToShow = [
     'outil_de_travail_ordinateur',

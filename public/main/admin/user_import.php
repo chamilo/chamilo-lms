@@ -618,11 +618,11 @@ if (!empty($importData)) {
     if ($isResume) {
         $resumeStop = $importData['counter'] >= count($importData['complete_list']);
         if (false == $resumeStop) {
-            $formContinue->addButtonImport(get_lang('ContinueImport'), 'import_continue');
+            $formContinue->addButtonImport(get_lang('Proceed with the import'), 'import_continue');
         }
     }
 
-    $formContinue->addHtml(get_lang('Results and feedback and feedback').'<br />'.$importData['log_messages']);
+    $formContinue->addHtml(get_lang('Results and feedback').'<br />'.$importData['log_messages']);
 
     if ($formContinue->validate()) {
         $users = parse_csv_data(

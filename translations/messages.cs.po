@@ -2513,9 +2513,6 @@ msgstr "Toto je oddělení nebo jiná kategorie, kde je kurz zařazený"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Jestli máte pochybnosti o kódu kurzu, poraďte se s administrátorem"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program kurzu</a>. Jestli Váš kurz nemá kód a to z jakéhokoliv důvodu, vytvořte mu ho. Například <i>INOVACE</i> když se kurz týká Inovačního Managementu"
-
 msgid "SCORM Path builder"
 msgstr "Vytváření SCORM učební osnovy"
 

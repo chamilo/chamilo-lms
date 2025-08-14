@@ -2512,9 +2512,6 @@ msgstr ""
 msgid "If you are unsure of your course code, consult the training details."
 msgstr ""
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr ""
-
 msgid "SCORM Path builder"
 msgstr ""
 
@@ -29442,7 +29439,7 @@ msgstr ""
 msgid "Signature"
 msgstr ""
 
-msgid "Clear" 
+msgid "Clear"
 msgstr ""
 
 msgid "No attendance data to save."
@@ -30130,4 +30127,46 @@ msgid "No favorite courses."
 msgstr ""
 
 msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
+msgstr ""
+
+msgid "Group does not exist in course"
+msgstr ""
+
+msgid "Unauthorised access to group"
+msgstr ""
+
+msgid "You're not allowed in this group"
+msgstr ""
+
+msgid "Save diagnostic changes"
+msgstr ""
+
+msgid "Domain %s"
+msgstr ""
+
+msgid "Topic %s"
+msgstr ""
+
+msgid "Software program"
+msgstr ""
+
+msgid "Send mail to users"
+msgstr ""
+
+msgid "Update user list from XML/CSV"
+msgstr ""
+
+msgid "CSV must look as follows: "
+msgstr ""
+
+msgid "Course/Session subscriptions by day"
+msgstr ""
+
+msgid "Remove user from all group-related entities if his/her name is not in the list"
+msgstr ""
+
+msgid "Groups assigned to URL"
+msgstr ""
+
+msgid "Proceed with the import"
 msgstr ""

@@ -2519,9 +2519,6 @@ msgstr ""
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Nếu chưa rõ cách đặt mã, xin hỏi"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Chương trình Khoá học</a>.Nếu khoá học chưa có mã, hãy tạo mã có tính gợi ý và ngắn gọn"
-
 msgid "SCORM Path builder"
 msgstr ""
 

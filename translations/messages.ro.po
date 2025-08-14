@@ -2528,9 +2528,6 @@ msgstr "Acest câmp trebuie să conțină facultății, departamentului sau oric
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Dacă aveți dubii cu privire la codul sau titlul exact consultati in"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program de curs</a>. În cazul în care site-ul pe care doriți să il creați nu corespunde unui curs existent, puteți face unul. De exemplu <i>INOVATIE</i> în cazul în care este un program de instruire privind managementul inovației"
-
 msgid "SCORM Path builder"
 msgstr "Constructor de lectii SCORM"
 

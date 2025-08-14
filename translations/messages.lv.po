@@ -2520,9 +2520,6 @@ msgstr "Departaments, kategorija vai kāda cita struktūrvienība, zem kura būs
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Lūdzu <b>konsulējaties ar atbildīgo personu, par kursa kodu.</b> Tas ir svarīgi!"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursa programa</a>. Ja nezinat kursa kodu, lai kāds būtu iemesls tam, izdomājit to. Piemēram <i>INNOVATION</i> ja kurss saucas <i>Innovation Management</i>"
-
 msgid "SCORM Path builder"
 msgstr "Mācību programmas SCORM veidošanas instruments"
 

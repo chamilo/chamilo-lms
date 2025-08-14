@@ -2527,9 +2527,6 @@ msgstr "Η σχολή ή το τμήμα που αναφέρεται το μάθ
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Αν δεν ξέρετε το κωδικό του μαθήματος συμβουλευτείτε"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "το Πρόγραμμα Μαθημάτων. Αν το μάθημα δεν έχει κωδικό βάλτε ένα της αρεσκεία σας. Για παράδειγμα<i>ΑΛΓΕΒΡΑ</i>"
-
 msgid "SCORM Path builder"
 msgstr "Δημιουργός μονοπατιού Scorm"
 

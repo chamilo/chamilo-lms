@@ -2519,9 +2519,6 @@ msgstr "Honetan ikastaroa duen fakultatea, saila edo beste kategoria bat agertze
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ikastaroaren kodeaz edo izen zehatzaz zalantza izanez gero, begiratu ikastaroaren xehetasunak"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Ikastaroaren programa. Sortu nahi duzun ikastaroak koderik ez badu, edonola ere, kode bat asmatu dezakezu. Esate baterako, BERRIKUNTZA, ikastaroa berrikuntzaren kudeaketaren gainean bada."
-
 msgid "SCORM Path builder"
 msgstr "SCORM ibilbide eraikitzailea"
 

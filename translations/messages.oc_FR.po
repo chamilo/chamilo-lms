@@ -2513,9 +2513,6 @@ msgstr "Aquò es la facultat, lo despartement ò l'escòla qu'apartèn lo cors"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Se dobtatz dau títol ò dau còdi de vòstre cors, demandatz,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa dau cors</a>. Se ton cors a ges de còdi, per la rason que siegue, inventa-ne'n un. Per exemple<i>INNOVACION<i> si lo cors tracta de la Gestion de l'Innovacion"
-
 msgid "SCORM Path builder"
 msgstr "Creator de modules SCORM"
 

@@ -2521,9 +2521,6 @@ msgstr "Kurssista vastaava koulutusala:"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Jos et tiedä kurssin koodia, kysy:"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kurssin ohjelma</a>. Jos kurssilla ei ole koodia, keksi sellainen, esimerkiksi jos kurssisi käsittelee keksintöjä, niin anna kurssin koodiksi <i>Keksinnöt</i>"
-
 msgid "SCORM Path builder"
 msgstr "Scorm polun rakentaminen"
 

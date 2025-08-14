@@ -2528,9 +2528,6 @@ msgstr "Questa è la Facoltà, Dipartimento o Scuola presso cui il corso è tenu
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "In caso di dubbio sulla denominazione esatta o sul codice del corso, consulta il,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programma del corso</a>. Se non esiste un codice appropriato, puoi inventarne uno. Ad esempio <i>INNOVAZ01</i> se si tratta di un corso di formazione sulla gestione dell'innovazione"
-
 msgid "SCORM Path builder"
 msgstr "Sistema autore di moduli didattici"
 

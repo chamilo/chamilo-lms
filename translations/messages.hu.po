@@ -2519,9 +2519,6 @@ msgstr "Ez az a részleg vagy bármilyen kategória ahova a kurzus tartozik"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ha kételkedik a kurzusa kódjában, egyeztessen :"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kurzus Program</a>. Ha a kurzusának nincs kódja, bármi is az oka, találjon  ki egyet. Pl .: <i>INNOVATION</i> ha a kurzus az Innovációs Menedzsmentről szól"
-
 msgid "SCORM Path builder"
 msgstr "Tanulási program építő"
 

@@ -2519,9 +2519,6 @@ msgstr "گروه آموزشی یا سازمان ارائه کنندۀ دورۀ �
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "اگر نسبت به کد درس خود شک دارید، با جزئیات آموزشی مشورت کنید."
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "اگر به هر دلیلی درس شما دارای کد نمی باشد، کدی برای آن در نظر بگیرید. اهمیتی ندارد که چه حروفی را برای کد درس انتخاب کنید"
-
 msgid "SCORM Path builder"
 msgstr "خط سیر ساز"
 

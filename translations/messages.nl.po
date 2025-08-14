@@ -2545,9 +2545,6 @@ msgstr "Vul hier de naam in van de faculteit waar de cursus wordt gedoceerd"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Indien u twijfelt over de juiste titel of code van uw cursus, kunt u deze in de cursuslijst raadplegen."
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Cursusprogramma</a>. Als de startpagina die u wil creëren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer."
-
 msgid "SCORM Path builder"
 msgstr "Constructie van SCORM-leerpad"
 

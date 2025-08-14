@@ -2519,9 +2519,6 @@ msgstr "Pusat Pengajian yang Menawarkan Subjek Ini."
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "If you doubt on your course's code, consult,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-
 msgid "SCORM Path builder"
 msgstr ""
 

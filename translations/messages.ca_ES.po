@@ -2527,9 +2527,6 @@ msgstr "Aquesta és la facultat, departament o escola on s'imparteix el curs"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Si dubteu sobre el títol o el codi del vostre curs, consulteu,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa del curs</a>. Si el teu curs no té codi, per la raó que sigui, inventa'n un. Per exemple<i>INNOVACIÓ</i> si el curs és sobre Gestió de la Innovació"
-
 msgid "SCORM Path builder"
 msgstr " Constructor de paquets SCORM"
 

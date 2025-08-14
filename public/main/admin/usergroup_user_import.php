@@ -147,7 +147,7 @@ $form = new FormValidator('class_user_import');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('CSV file import location'));
 //$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
-$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from course if his name is not in the list'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from all group-related entities if his/her name is not in the list'));
 $form->addButtonImport(get_lang('Import'));
 
 $errors = [];

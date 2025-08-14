@@ -2528,9 +2528,6 @@ msgstr " هذا التصنيف الذي سيوضع الدرس ضمنه"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "  إذا كنت في شك من رمز مقررك, استشر"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr " برنامج المقرر</a> إذا لم يكن لدى مقررك رمز خاص . لأي سبب كان . اخترع واحدا , مثلا :  <i>حاسب</i> إذا كان مقررك خاص بالحاسب الآلي"
-
 msgid "SCORM Path builder"
 msgstr " مولد سكورم مسار التّعلم"
 

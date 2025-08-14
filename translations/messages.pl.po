@@ -2520,9 +2520,6 @@ msgstr "Wydział, Instytut lub Szkoła, w której kurs jest prowadzony"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Jeśli masz wątpliwości co do kodu kursu, skonsultuj się z administratorem"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program kursu. Jeśli Twój kurs nie ma kodu, wymyśl go. Na przykład INNOWACJA, jeśli kurs dotyczy Innowacji w Zarządzaniu."
-
 msgid "SCORM Path builder"
 msgstr "Twórca ścieżki SCORM"
 

@@ -2519,9 +2519,6 @@ msgstr "Angiv under hvilket faultet kurset udbydes og skal kunne findes"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Hvis du er i tvivl om koden på dit kursus, kontakt,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursusprogram</a>. Hvis dit kursus ikke har en kode, så skal du bare opfinde en. F.eks. <i>INNOVATION</i> hvis kurset drejer sig om Innovation Management"
-
 msgid "SCORM Path builder"
 msgstr "Scorm Sti-bygger"
 

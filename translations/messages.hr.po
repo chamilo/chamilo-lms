@@ -2520,9 +2520,6 @@ msgstr "Naziv fakulteta, odjela ili katedre"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ako ne znate šifru kolegija, pogledajte ,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Nastavni program </a>. Ako ne postoji izmislite ga.  Primjerice <i>MATE1</i> za predmet MATEMATIKA I"
-
 msgid "SCORM Path builder"
 msgstr "Program za izradu Scorm Path"
 

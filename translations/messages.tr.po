@@ -2519,9 +2519,6 @@ msgstr "Dersin verildiği fakülte, bölüm veya okul"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ders kodunu okulunuzun web sitesinde bulabilirsiniz,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Ders Programı</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-
 msgid "SCORM Path builder"
 msgstr "Scorm Yol oluşturucu"
 

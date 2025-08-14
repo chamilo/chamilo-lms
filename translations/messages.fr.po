@@ -2614,9 +2614,6 @@ msgstr "Il s'agit du département ou de toute autre structure de votre organisat
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "En cas de doute sur l'intitulé exact ou le code de votre cours, consultez le"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Catalogue des cours</a>. Si le cours que vous voulez créer ne correspond pas à un code cours existant, vous pouvez en inventer un. Par exemple <i>INNOV001</i> s'il s'agit d'un programme de gestion de l'innovation"
-
 msgid "SCORM Path builder"
 msgstr "Construire un parcours"
 

@@ -2528,9 +2528,6 @@ msgstr "זו המחלקה או כל הקשר אחר שבו הקורס מועבר
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "אם אינך בטוח בקוד הקורס שלך, עיין בפרטי ההדרכה."
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "תוכנית הקורס</a>. אם לקורס שלך אין קוד, לא משנה מה הסיבה, המציא אחד. למשל <i>INNOVATION</i> אם הקורס עוסק בניהול חדשנות"
-
 msgid "SCORM Path builder"
 msgstr "בונה נתיבים של SCORM"
 

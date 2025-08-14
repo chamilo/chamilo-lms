@@ -168,7 +168,7 @@ class CidReqListener
                 $group->setParent($course);
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this group'));
+                    throw new AccessDeniedException($this->translator->trans("You're not allowed in this group"));
                 }
 
                 $sessionHandler->set('gid', $groupId);

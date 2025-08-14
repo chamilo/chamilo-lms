@@ -1533,9 +1533,9 @@ function showSearchToolsStatusTable()
             }
             $data2[] = [$program, $output[0], $icon];
         }
-        echo Display::tag('h3', get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Managements needed to convert files'));
+        echo Display::tag('h3', get_lang('Programs needed to convert files'));
         $table = new SortableTableFromArray($data2);
-        $table->set_header(0, get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management'), false);
+        $table->set_header(0, get_lang('Software program'), false);
         $table->set_header(1, get_lang('Path'), false);
         $table->set_header(2, get_lang('Status'), false);
         echo $table->display();

@@ -2519,9 +2519,6 @@ msgstr "Изберете категорията на курса."
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ако се съмнявате за кода на курса, обсъдете го с подходящите хора,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "със списъка на курсовете</a>. Ако вашият курс няма код, измислете такъв. Например <i>HISTORY</i> ако курсът ви е за История на България."
-
 msgid "SCORM Path builder"
 msgstr "Създател на пътеки за обучение"
 

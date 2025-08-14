@@ -2519,9 +2519,6 @@ msgstr "Ini merupakan nama fakultas, jurusan, atau program studi dimana mata kul
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Jika anda ragu tentang kode mata kuliah, hubungi,"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Pengelola System</a>. Jika mata kuliah tidak memilliki kode, masukkan kode sembarang. Misal <i>INOVASI</i> jika mata kuliah tsb tentang Manajemen Inovasi"
-
 msgid "SCORM Path builder"
 msgstr "Scorm Path builder"
 

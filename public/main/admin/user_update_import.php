@@ -64,7 +64,7 @@ function validate_data($users)
                 }
                 $info = $usergroup->get($id);
                 if (empty($info)) {
-                    $errors[$user['UserName']][] = sprintf(get_lang('ClassIdDoesntExists'), $id);
+                    $errors[$user['UserName']][] = sprintf(get_lang('Class ID does not exist'), $id);
                 } else {
                     $classExistList[] = $info['id'];
                 }
@@ -273,7 +273,7 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('Update user list fromm XML/CSV');
+$tool_name = get_lang('Update user list from XML/CSV');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
@@ -305,7 +305,7 @@ if ($form->validate()) {
 
         if ('csv' !== $uploadInfo['extension']) {
             Display::addFlash(
-                Display::return_message(get_lang('You must import a file according to selected option'), 'error')
+                Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error')
             );
 
             header('Location: '.api_get_self());
@@ -392,7 +392,7 @@ $content = '
 <div class="max-w-full mb-8">
   <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
     <h2 class="text-xl font-bold mb-4">'
-    . get_lang('CSV must look like') .
+    . get_lang('CSV must look as follows: ') .
     ' <span class="font-medium">(' . get_lang('Mandatory fields') . ')</span>
     </h2>
     <div class="overflow-x-auto bg-gray-20 p-4 rounded-md">

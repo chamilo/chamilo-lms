@@ -2519,9 +2519,6 @@ msgstr "Ова е институција/и каде курсот се кори�
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ако се сомневате околу шифрата на курсот, консултирајте се"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "<a>Програма_на_курсот</a>. Ако Вашиот курс од било која причина нема шифра, направете ја.  Во случајов <i>МАТ</i> ако курсот е за Математика."
-
 msgid "SCORM Path builder"
 msgstr "Програма за градење на патека - Scorm"
 

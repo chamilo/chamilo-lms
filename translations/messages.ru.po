@@ -2520,9 +2520,6 @@ msgstr "Это раздел, куда курс передается"
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Если Вы сомневаетесь по поводу кода курса, проконсультируйтесь"
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Программа курса</a>. Если Ваш курс не имеет кода, какой бы не была причина, придумайте его. Например <i>ИННОВАЦИЯ</i>, если курс об инновациях в управлении"
-
 msgid "SCORM Path builder"
 msgstr "Строитель плана Scorm"
 

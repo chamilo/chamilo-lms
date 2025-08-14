@@ -2527,9 +2527,6 @@ msgstr "Este é o departamento ou qualquer outra categoria onde a formação é 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Se você não tem certeza do seu código de formação, consultar os detalhes de treinamento."
 
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa de Formação de </a> Se o seu treinamento não tem nenhum código, seja qual for a razão, inventar uma Por exemplo <i> INOVAÇÃO </ i> se o treinamento é sobre Gestão da Inovação.."
-
 msgid "SCORM Path builder"
 msgstr "Construtor de Rotas de aprendizagem SCORM"
 

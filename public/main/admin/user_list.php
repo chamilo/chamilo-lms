@@ -1309,7 +1309,7 @@ if ($showDeletedUsers) {
     if (api_is_platform_admin() &&
         !api_get_env_variable('DENY_DELETE_USERS', false)
     ) {
-        $actionsList['destroy'] = get_lang('Destroy');
+        $actionsList['destroy'] = get_lang('Delete permanently');
     }
 } else {
     $table->set_column_filter(11, 'modify_filter');

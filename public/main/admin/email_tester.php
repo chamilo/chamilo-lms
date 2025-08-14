@@ -20,7 +20,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $toolName = get_lang('E-mail tester');
 
 $form = new FormValidator('email_tester');
-$form->addText('mailer_dsn', get_lang('Mailer DSN'));
+$form->addText('mailer_dsn', get_lang('Mail DSN'));
 $form->addText('destination', get_lang('Destination'));
 $form->addText('subject', get_lang('Subject'));
 $form->addHtmlEditor(

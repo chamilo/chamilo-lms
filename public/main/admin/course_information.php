@@ -126,7 +126,7 @@ $table = new SortableTableFromArray(
 );
 $table->set_additional_parameters(['code' => $courseInfo['code']]);
 $table->set_other_tables(['user_table', 'class_table']);
-$table->set_header(0, get_lang('tool'), true);
+$table->set_header(0, get_lang('Tool'), true);
 $table->set_header(1, get_lang('Number of items'), true);
 $table->display();*/
 

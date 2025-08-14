@@ -29,7 +29,7 @@ Display::display_header($tool_name);
 
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(

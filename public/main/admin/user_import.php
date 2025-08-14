@@ -581,9 +581,9 @@ if (!empty($importData)) {
     $isResume = $importData['resume'];
 
     $formContinue = new FormValidator('user_import_continue', 'post', api_get_self());
-    $label = get_lang('Results and feedback and feedback');
+    $label = get_lang('Results and feedback');
     if ($isResume) {
-        $label = get_lang('ContinueLastImport');
+        $label = get_lang('Continue last import');
     }
     $formContinue->addHeader($label);
     $formContinue->addLabel(get_lang('File'), $importData['filename']);

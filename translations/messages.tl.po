@@ -614,10 +614,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1715,8 +1715,8 @@ msgstr "Batay sa default, ang iyong kurso ay pampubliko. Subalit maaari mo itong
 msgid "Public - access allowed for the whole world"
 msgstr "Publiko - ang access ay pinapayagan para sa buong mundo"
 
-msgid " Open - access allowed for users registered on the platform"
-msgstr " Buksan - ang access ay pinapayagan para sa mga gumagamit na rehistrado sa platform"
+msgid "Open - access allowed for users registered on the platform"
+msgstr "Buksan - ang access ay pinapayagan para sa mga gumagamit na rehistrado sa platform"
 
 msgid "Student %s is no subscribed to this course"
 msgstr ""

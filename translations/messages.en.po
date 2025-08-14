@@ -624,11 +624,11 @@ msgstr "Course categories in %s site:"
 msgid "Course categories available"
 msgstr "Course categories available"
 
-msgid "The group now belongs to the selected site"
-msgstr "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
+msgstr "The group now belongs to the selected URL."
 
-msgid "You need to select at least one group and one site"
-msgstr "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
+msgstr "You need to select at least one group and one URL."
 
 msgid "Agenda list"
 msgstr "Agenda list"
@@ -1725,8 +1725,8 @@ msgstr "By default, your course is public. But you can define the level of acces
 msgid "Public - access allowed for the whole world"
 msgstr "Public - access allowed for the whole world"
 
-msgid " Open - access allowed for users registered on the platform"
-msgstr " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
+msgstr "Open - access allowed for users registered on the platform"
 
 msgid "Student %s is no subscribed to this course"
 msgstr "Student %s is no subscribed to this course"
@@ -30205,3 +30205,72 @@ msgstr "Proceed with the import"
 
 msgid "You only have access to the URL %s"
 msgstr "You only have access to the URL %s"
+
+msgid "View certificate"
+msgstr "View certificate"
+
+msgid "The sub-language does not exist."
+msgstr "The sub-language does not exist."
+
+msgid "Remove user from course if his/her name is not in the list"
+msgstr "Remove user from course if his/her name is not in the list"
+
+msgid "The user has not been deleted. Please confirm the user ID and try again."
+msgstr "The user has not been deleted. Please confirm the user ID and try again."
+
+msgid "The user has been deleted permanently."
+msgstr "The user has been deleted permanently."
+
+msgid "Selected users deleted permanently"
+msgstr "Selected users deleted permanently"
+
+msgid "The user has not been restored. Please confirm the user ID and try again."
+msgstr "The user has not been restored. Please confirm the user ID and try again."
+
+msgid "The user has been restored."
+msgstr "The user has been restored."
+
+msgid "Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search."
+msgstr "Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search."
+
+msgid "Selected users restored."
+msgstr "Selected users restored."
+
+msgid "The account has been removed temporarily."
+msgstr "The account has been removed temporarily."
+
+msgid "Are you sure you want to unlock this user?"
+msgstr "Are you sure you want to unlock this user?"
+
+msgid "Are you sure you want to lock this user?"
+msgstr "Are you sure you want to lock this user?"
+
+msgid "Add user group to selected URLs"
+msgstr "Add user group to selected URLs"
+
+msgid "Remove user group from selected URLs"
+msgstr "Remove user group from selected URLs"
+
+msgid "Are you sure you want to assign the selected groups to the selected URLs?"
+msgstr "Are you sure you want to assign the selected groups to the selected URLs?"
+
+msgid "Are you sure you want to unassign the selected groups from the selected URLs?"
+msgstr "Are you sure you want to unassign the selected groups from the selected URLs?"
+
+msgid "The group has been removed from the selected URL."
+msgstr "The group has been removed from the selected URL."
+
+msgid "Assigned users"
+msgstr "Assigned users"
+
+msgid "Available users"
+msgstr "Available users"
+
+msgid "Login-only URL"
+msgstr "Login-only URL"
+
+msgid "User groups"
+msgstr "User groups"
+
+msgid "Invalid access URL or session"
+msgstr "Invalid access URL or session"

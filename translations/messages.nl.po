@@ -637,10 +637,10 @@ msgstr "Cursus categorieën in %s site:"
 msgid "Course categories available"
 msgstr "Beschikbare cursus categorieën"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "De groep hoort nu bij de geselecteerde site"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "U moet tenminste één groep en één site kiezen"
 
 msgid "Agenda list"
@@ -1747,7 +1747,7 @@ msgstr "Standaard is uw cursus publiek toegankelijk. U kan de toegankelijkheid h
 msgid "Public - access allowed for the whole world"
 msgstr "Openbaar – toegang toegelaten voor de hele wereld"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Open – toegang toegelaten voor geregistreerde gebruikers"
 
 msgid "Student %s is no subscribed to this course"

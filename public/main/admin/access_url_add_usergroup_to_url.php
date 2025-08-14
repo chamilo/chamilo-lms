@@ -49,14 +49,14 @@ if (!empty($_POST['form_sent'])) {
     $urlList = isset($_POST['url_list']) && is_array($_POST['url_list']) ? $_POST['url_list'] : [];
 
     if (empty($userGroups) || empty($urlList)) {
-        echo Display::return_message(get_lang('You need to select at least one group and one site'), 'error');
+        echo Display::return_message(get_lang('You need to select at least one group and one URL.'), 'error');
     } else {
         if (isset($_POST['add'])) {
             UrlManager::addUserGroupListToUrl($userGroups, $urlList);
-            echo Display::return_message(get_lang('The group now belongs to the selected site'), 'confirm');
+            echo Display::return_message(get_lang('The group now belongs to the selected URL.'), 'confirm');
         } elseif (isset($_POST['remove'])) {
             UrlManager::removeUserGroupListFromUrl($userGroups, $urlList);
-            echo Display::return_message(get_lang('The group has been removed from the selected site'), 'confirm');
+            echo Display::return_message(get_lang('The group has been removed from the selected URL.'), 'confirm');
         }
     }
 }
@@ -73,7 +73,7 @@ $db_urls = Database::store_result(Database::query($sql));
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2"><?php echo get_lang('User groups list'); ?></label>
-                <input type="text" id="groupFilter" onkeyup="filterSelect('groupFilter', 'groupSelect')" class="mb-2 w-full p-2 border rounded" placeholder="<?php echo get_lang('Search group'); ?>">
+                <input type="text" id="groupFilter" onkeyup="filterSelect('groupFilter', 'groupSelect')" class="mb-2 w-full p-2 border rounded" placeholder="<?php echo get_lang('Search groups'); ?>">
                 <select name="user_group_list[]" id="groupSelect" multiple size="20" class="w-full h-[400px] p-2 border rounded">
                     <?php foreach ($dbUserGroups as $item): ?>
                         <option value="<?php echo $item['id']; ?>"><?php echo $item['title']; ?></option>

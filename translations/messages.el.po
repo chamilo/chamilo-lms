@@ -628,10 +628,10 @@ msgstr "Κατηγορίες μαθημάτων στην ιστοσελίδα %s
 msgid "Course categories available"
 msgstr "Διαθέσιμες Κατηγορίες μαθημάτων"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Η ομάδα ανήκει πλέον στο επιλεγμένο site"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Θα πρέπει να επιλέξετε τουλάχιστον μία ομάδα και μία ιστοσελίδα"
 
 msgid "Agenda list"
@@ -1729,7 +1729,7 @@ msgstr "Εξ' ορισμού, το μάθημά σας είναι δημόσιο
 msgid "Public - access allowed for the whole world"
 msgstr "Δημόσια - η πρόσβαση επιτρέπεται σε όλους"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Ανοιχτή - η πρόσβαση επιτρέπεται μόνο στους εγγεγραμμένους χρήστες"
 
 msgid "Student %s is no subscribed to this course"

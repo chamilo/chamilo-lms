@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1721,7 +1721,7 @@ msgstr "Defaŭlte via kurso estas publike alirebla. Vi povas ŝanĝi la alireble
 msgid "Public - access allowed for the whole world"
 msgstr "Malferma - aliro permesita al la tuta mondo"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Malferma - aliro permesita al registritaj uzuloj"
 
 msgid "Student %s is no subscribed to this course"

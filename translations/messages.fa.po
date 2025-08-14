@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1721,7 +1721,7 @@ msgstr "درس شما در حالت کلی قابل دسترسی برای عمو
 msgid "Public - access allowed for the whole world"
 msgstr "دسترسی عمومی، قابل دسترسی همگانی"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "دسترسی عمومی محدود، قابل دسترسی تنها برای کاربران ثبت نام شده در محیط آموزشی مجازی"
 
 msgid "Student %s is no subscribed to this course"

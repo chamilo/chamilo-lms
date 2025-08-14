@@ -613,10 +613,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1714,7 +1714,7 @@ msgstr ""
 msgid "Public - access allowed for the whole world"
 msgstr ""
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr ""
 
 msgid "Student %s is no subscribed to this course"
@@ -30172,4 +30172,73 @@ msgid "Proceed with the import"
 msgstr ""
 
 msgid "You only have access to the URL %s"
+msgstr ""
+
+msgid "View certificate"
+msgstr ""
+
+msgid "The sub-language does not exist."
+msgstr ""
+
+msgid "Remove user from course if his/her name is not in the list"
+msgstr ""
+
+msgid "The user has not been deleted. Please confirm the user ID and try again."
+msgstr ""
+
+msgid "The user has been deleted permanently."
+msgstr ""
+
+msgid "Selected users deleted permanently"
+msgstr ""
+
+msgid "The user has not been restored. Please confirm the user ID and try again."
+msgstr ""
+
+msgid "The user has been restored."
+msgstr ""
+
+msgid "Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search."
+msgstr ""
+
+msgid "Selected users restored."
+msgstr ""
+
+msgid "The account has been removed temporarily."
+msgstr ""
+
+msgid "Are you sure you want to unlock this user?"
+msgstr ""
+
+msgid "Are you sure you want to lock this user?"
+msgstr ""
+
+msgid "Add user group to selected URLs"
+msgstr ""
+
+msgid "Remove user group from selected URLs"
+msgstr ""
+
+msgid "Are you sure you want to assign the selected groups to the selected URLs?"
+msgstr ""
+
+msgid "Are you sure you want to unassign the selected groups from the selected URLs?"
+msgstr ""
+
+msgid "The group has been removed from the selected URL."
+msgstr ""
+
+msgid "Assigned users"
+msgstr ""
+
+msgid "Available users"
+msgstr ""
+
+msgid "Login-only URL"
+msgstr ""
+
+msgid "User groups"
+msgstr ""
+
+msgid "Invalid access URL or session"
 msgstr ""

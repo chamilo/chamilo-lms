@@ -352,7 +352,7 @@ if ($form->validate()) {
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
 
-    $warn = get_lang('TheFollowingCoursesAlreadyUseThisvisual code');
+    $warn = get_lang('The following courses already use this code');
     if (!empty($visual_code)) {
         $list = CourseManager::get_courses_info_from_visual_code($visual_code);
         foreach ($list as $course_temp) {
@@ -566,7 +566,7 @@ if ('catalogue_access' === $currentView) {
         'post',
         api_get_self().'?id='.$courseId.'&view=catalogue_access'
     );
-    
+
     $formCatalogue->addElement('header', get_lang('Course').'  #'.$courseInfo['real_id'].' '.$course_code);
 
     $groupEntities = $em->createQueryBuilder()
@@ -631,7 +631,7 @@ if ('catalogue_access' === $currentView) {
 
         $em->flush();
 
-        Display::addFlash(Display::return_message(get_lang('Changes saved successfully'), 'confirmation'));
+        Display::addFlash(Display::return_message(get_lang('Saved.'), 'confirmation'));
         header('Location: '.api_get_self().'?id='.$courseId.'&view=catalogue_access');
         exit;
     }

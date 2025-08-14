@@ -622,10 +622,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr "Kurssikategoriat käytettävissä"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Ryhmä kuuluu nyt valitulle sivulle"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Valitse vähintään yksi ryhmä ja sivu"
 
 msgid "Agenda list"
@@ -1723,7 +1723,7 @@ msgstr "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. J
 msgid "Public - access allowed for the whole world"
 msgstr "Avoinna - kaikilla pääsy (myös vierailijat)"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Avoinna - kaikki rekisteröityneet käyttäjät pääsevät"
 
 msgid "Student %s is no subscribed to this course"

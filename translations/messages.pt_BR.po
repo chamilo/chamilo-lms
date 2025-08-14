@@ -628,10 +628,10 @@ msgstr "Categorias de Cursos em local %s:"
 msgid "Course categories available"
 msgstr "Categorias de Cursos disponíveis"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "O grupo agora pertence ao site selecionado"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Você precisa selecionar pelo menos um grupo e um local"
 
 msgid "Agenda list"
@@ -1729,7 +1729,7 @@ msgstr "Seu curso é predefido como público. Podendo ser definido o nível de c
 msgid "Public - access allowed for the whole world"
 msgstr "Acesso Público - permitido acesso a todos (anónimos e incritos)"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Acesso Público - acesso permitido para usuários registrados na plataforma"
 
 msgid "Student %s is no subscribed to this course"

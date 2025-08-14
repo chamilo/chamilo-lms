@@ -80,7 +80,7 @@ function active_user(element) {
     var userId = $(element).attr("id").split("_")[1];
     var isActive = $(element).hasClass("mdi-check-circle");
     var newStatus = isActive ? 0 : 1;
-    var confirmMessage = isActive ? "'.get_lang('Are you sure you want to lock this user?', '').'" : "'.get_lang('Are you sure you want to unlock this user?', '').'";
+    var confirmMessage = isActive ? "'.get_lang('Are you sure you want to lock this user?').'" : "'.get_lang('Are you sure you want to unlock this user?').'";
     if (confirm(confirmMessage)) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
@@ -896,7 +896,7 @@ function active_filter(int $active, string $params, array $row): string
             'ch-tool-icon',
             null,
             ICON_SIZE_TINY,
-            'edit' === $action ? get_lang('Account expired') : get_lang('Account is removed temporally')
+            'edit' === $action ? get_lang('Account expired') : get_lang('The account has been removed temporarily.')
         );
     } elseif ($row['0'] != $_user['user_id']) {
         // you cannot lock yourself out otherwise you could disable all the
@@ -1053,7 +1053,7 @@ if (!empty($action)) {
                 if ($isMassDeletion) {
                     if (count($userIds) == $numberOfAffectedUsers) {
                         $message = Display::return_message(
-                            get_lang('Selected users restored'),
+                            get_lang('Selected users restored.'),
                             'confirmation'
                         );
                     } else {
@@ -1115,7 +1115,7 @@ if (!empty($action)) {
                 } else {
                     if ($numberOfAffectedUsers > 0) {
                         $message = Display::return_message(
-                            get_lang('The user has been deleted permanently'),
+                            get_lang('The user has been deleted permanently.'),
                             'confirmation'
                         );
                     } else {
@@ -1235,9 +1235,9 @@ $status_options['%'] = get_lang('All');
 $status_options[STUDENT] = get_lang('Learner');
 $status_options[COURSEMANAGER] = get_lang('Trainer');
 $status_options[DRH] = get_lang('Human Resources Manager');
-$status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
+$status_options[SESSIONADMIN] = get_lang('Sessions administrator');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
-$status_options[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+$status_options[STUDENT_BOSS] = get_lang("Student's superior");
 
 $form->addSelect(
     'keyword_status',
@@ -1248,7 +1248,7 @@ $form->addSelect(
 $active_group = [];
 $active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
 $active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
-$form->addGroup($active_group, '', get_lang('activeAccount'), null, false);
+$form->addGroup($active_group, '', get_lang('Account'), null, false);
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('Check passwords too easy to guess'));
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 

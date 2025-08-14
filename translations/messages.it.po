@@ -629,10 +629,10 @@ msgstr "Categorie del corso nel sito: %s"
 msgid "Course categories available"
 msgstr "Categorie disponibili dei corsi"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Il gruppo adesso appartiene al sito selezionato"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Devi selezionare almeno un gruppo e un sito"
 
 msgid "Agenda list"
@@ -1730,7 +1730,7 @@ msgstr "Per default, il corso è accessibile al pubblico. Puoi definire qui sopr
 msgid "Public - access allowed for the whole world"
 msgstr "Aperto - chiunque può accedere al corso"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Aperto - accesso consentito agli utenti registrati presso la piattaforma"
 
 msgid "Student %s is no subscribed to this course"

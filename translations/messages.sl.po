@@ -629,10 +629,10 @@ msgstr "Kategorije tečajev v okviru %s spletne strani:"
 msgid "Course categories available"
 msgstr "Dostopne kategorije tečajev"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Skupina sedaj pripada izbrani spletni strani"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Izbrati je potrebno vsaj eno skupino in eno spletno stran"
 
 msgid "Agenda list"
@@ -1730,7 +1730,7 @@ msgstr "Privzeto je vaš tečaj javen. Nivo zaupnosti oz. dostopa lahko definira
 msgid "Public - access allowed for the whole world"
 msgstr "Odprt - dostop dovoljen vsem brez omejitev"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Odprt - dostop dovoljen registriranim uporabnikom platforme"
 
 msgid "Student %s is no subscribed to this course"

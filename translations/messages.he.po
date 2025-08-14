@@ -629,10 +629,10 @@ msgstr "קטגוריות קורס באתר %s:"
 msgid "Course categories available"
 msgstr "קטגוריות קורסים זמינות"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "הקבוצה שייכת כעת לאתר הנבחר"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "עליך לבחור לפחות קבוצה אחת ואתר אחד"
 
 msgid "Agenda list"
@@ -1730,7 +1730,7 @@ msgstr "כברירת מחדל, הקורס שלך ציבורי. אבל אתה י�
 msgid "Public - access allowed for the whole world"
 msgstr "ציבורי - גישה מותרת לכל העולם"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr " פתוח - גישה מותרת למשתמשים הרשומים בפלטפורמה"
 
 msgid "Student %s is no subscribed to this course"

@@ -629,10 +629,10 @@ msgstr "فئات المقرر في %s موقع:"
 msgid "Course categories available"
 msgstr "فئات المقرر المتوفرة"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "المجموعة الان اصبحت تنتمي الى الموقع المحدد"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "يجب عليك اختيار مجموعة واحدة على الاقل وموقع واحد"
 
 msgid "Agenda list"
@@ -1730,7 +1730,7 @@ msgstr "  .مقررك عام افتراضيا؛ لكنه بإمكانك تحدي
 msgid "Public - access allowed for the whole world"
 msgstr "عام - الدخول للمقرر متاح للعالم باجمعه"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "  مفتوح - الوصول مسموح فقط  للمستخدمين المسجلين في النظام"
 
 msgid "Student %s is no subscribed to this course"

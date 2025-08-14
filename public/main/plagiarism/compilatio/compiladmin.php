@@ -12,13 +12,13 @@ $compilatio = new Compilatio();
 $use_space = number_format($quotas->usedSpace / 1000000, 2);
 $total_space = $quotas->space / 1000000;
 
-echo "<h3>".get_lang('CompilatioDescription')."</h3>";
+echo "<h3>".get_lang('Compilatio anti-plagiarism module')."</h3>";
 
 echo "<b>"
-    .get_lang('CompilatioQuota')
+    .get_lang('Quotas')
     .":"
     ." </b><br>"
-    .sprintf(get_lang('CompilatioCreditXOnY'), $quotas->usedCredits, $quotas->credits);
+    .sprintf(get_lang('Credits: %s on %s'), $quotas->usedCredits, $quotas->credits);
 
 ?>
 <br><br>

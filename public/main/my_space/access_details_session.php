@@ -605,7 +605,7 @@ echo Display::page_subheader(
 );
 
 echo Display::tabs(
-    [get_lang('CertificateOfAchievement'), get_lang('CertificateOfAchievementByDay')],
+    [get_lang('Certificate of achievement'), get_lang('Certificate of achievement by day')],
     [$form->returnForm(), $formByDay->returnForm()]
 );
 

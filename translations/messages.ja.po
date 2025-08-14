@@ -646,10 +646,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1785,8 +1785,8 @@ msgstr "既定では、コースは完全に公開されます。ただし、上
 msgid "Public - access allowed for the whole world"
 msgstr "完全な公開 - 全世界にアクセスを許可する"
 
-msgid " Open - access allowed for users registered on the platform"
-msgstr " 公開 - プラットフォームに登録されたユーザーにアクセスを許可する"
+msgid "Open - access allowed for users registered on the platform"
+msgstr "公開 - プラットフォームに登録されたユーザーにアクセスを許可する"
 
 msgid "Student %s is no subscribed to this course"
 msgstr ""

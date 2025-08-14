@@ -634,10 +634,10 @@ msgstr "Kurs-Kategorien auf Seite %s:"
 msgid "Course categories available"
 msgstr "Verfügbare Kurs-Kategorien"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Die Gruppe gehört nun zur gewählten Seite"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Es muß mindestens eine Gruppe und eine Seite gewählt werden"
 
 msgid "Agenda list"
@@ -1779,7 +1779,7 @@ msgstr "In der Grundeinstellung ist ein Kurs auch anderen zugänglich. Wenn Sie 
 msgid "Public - access allowed for the whole world"
 msgstr "Offen - Zugang erlaubt für alle"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Offen - Zugang für alle Portal-Benutzer"
 
 msgid "Student %s is no subscribed to this course"

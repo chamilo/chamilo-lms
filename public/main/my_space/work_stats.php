@@ -20,7 +20,7 @@ if (false === $consideredWorkingTime) {
 $courseCode = api_get_course_id();
 $sessionId = api_get_session_id();
 
-$nameTools = get_lang('Students');
+$nameTools = get_lang('Learners');
 
 $this_section = SECTION_TRACKING;
 $webCodePath = api_get_path(WEB_CODE_PATH);
@@ -185,14 +185,14 @@ $parameters = ['cidReq' => $courseCode, 'id_session' => $sessionId];
 $table->set_additional_parameters($parameters);
 
 if ($is_western_name_order) {
-    $table->set_header(0, get_lang('FirstName'), false);
-    $table->set_header(1, get_lang('LastName'), false);
+    $table->set_header(0, get_lang('First name'), false);
+    $table->set_header(1, get_lang('Last name'), false);
 } else {
-    $table->set_header(0, get_lang('LastName'), false);
-    $table->set_header(1, get_lang('FirstName'), false);
+    $table->set_header(0, get_lang('Last name'), false);
+    $table->set_header(1, get_lang('First name'), false);
 }
 
-$table->set_header(2, get_lang('TimeSpentInTheCourse'), false);
+$table->set_header(2, get_lang('Time spent in the course'), false);
 $table->set_header(3, get_lang('TimeSpentInWork'), false);
 $table->set_header(4, get_lang('Status'), false);
 

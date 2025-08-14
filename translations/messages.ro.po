@@ -629,10 +629,10 @@ msgstr "Categorii de cursuri pe site-ul %s:"
 msgid "Course categories available"
 msgstr "Categorii de cursuri disponibile"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Grupul aparține acum grupului selectat"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Trebuie să selectați cel puțin un grup și un site"
 
 msgid "Agenda list"
@@ -1730,7 +1730,7 @@ msgstr "În mod implicit cursul este public. Dar dumneavoastra puteți defini ni
 msgid "Public - access allowed for the whole world"
 msgstr "Public - acces autorizat la orice persoana"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Deschis - acces permis doar pentru utilizatorii înregistrați in platforma"
 
 msgid "Student %s is no subscribed to this course"

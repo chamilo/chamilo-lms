@@ -787,7 +787,7 @@ if (SkillModel::isAllowed($studentId, false)) {
 
 if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
-        Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CountDoneAttendance')),
+        Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('# attended')),
         api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?action=all_attendance&student='.$studentId
     );
 }
@@ -894,7 +894,7 @@ $csv_content[] = [
 $csv_content[] = [
     get_lang('First connectionInPlatform'),
     get_lang('Latest login in platform'),
-    get_lang('Time spentInTheCourse'),
+    get_lang('Time spent in the course'),
     get_lang('Progress'),
     get_lang('Score'),
 ];
@@ -1355,7 +1355,7 @@ if (empty($details)) {
                                 api_get_path(WEB_CODE_PATH)
                                 .'attendance/index.php?cid='.$courseId.'&sid='.$sId.'&student_id='
                                 .$studentId,
-                                ['title' => get_lang('GoAttendance')]
+                                ['title' => get_lang('Go to attendances')]
                             );
                         } else {
                             $attendances_faults_avg = $results_faults_avg['faults'].'/'
@@ -1501,7 +1501,7 @@ if (empty($details)) {
                 )
             );
             $sessionAction .= Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsXLS')),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')),
                 $currentUrl.'&'
                 .http_build_query(
                     [
@@ -1514,7 +1514,7 @@ if (empty($details)) {
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
-                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -1526,7 +1526,7 @@ if (empty($details)) {
                     )
                 );
                 $sessionAction .= Display::url(
-                    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CertificateOfAchievement')),
+                    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Certificate of achievement')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -2180,12 +2180,12 @@ if (empty($details)) {
                     if ($workingTimeEdit && $showOnce) {
                         $showOnce = false;
                         echo '&nbsp;'.Display::url(
-                                get_lang('AddTime'),
+                                get_lang('Add time'),
                                 $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
 
                         echo '&nbsp;'.Display::url(
-                                get_lang('RemoveTime'),
+                                get_lang('Remove time'),
                                 $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
                     }

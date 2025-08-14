@@ -621,10 +621,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1722,7 +1722,7 @@ msgstr "По умолчянию Ваш курс является публичн�
 msgid "Public - access allowed for the whole world"
 msgstr "Открытый доступ разрешен для всех"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Открытый доступ разрешен для пользователей, зарегистрированных на платформе"
 
 msgid "Student %s is no subscribed to this course"

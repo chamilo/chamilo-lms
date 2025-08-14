@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1721,7 +1721,7 @@ msgstr "課程預設為開放. 你可以自定義開放級別."
 msgid "Public - access allowed for the whole world"
 msgstr "開放 - 允許任何人訪問"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "開放 - 僅供本平台已註冊的使用者"
 
 msgid "Student %s is no subscribed to this course"

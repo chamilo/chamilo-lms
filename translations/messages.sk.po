@@ -628,10 +628,10 @@ msgstr "Kategórie kurzov na %s stránke:"
 msgid "Course categories available"
 msgstr "Kategórie kurzov k dispozícii"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Skupina teraz patrí do vybranej stránky"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Musíte vybrať aspoň jednu skupinu a jednu stránku"
 
 msgid "Agenda list"
@@ -1729,7 +1729,7 @@ msgstr "Štandardne je Váš kurz verejný. Hore však môžete definovať úrov
 msgid "Public - access allowed for the whole world"
 msgstr "Otvorené - prístup povolený každému"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Otvorené - prístup povolený používateľom registrovaným na platforme"
 
 msgid "Student %s is no subscribed to this course"

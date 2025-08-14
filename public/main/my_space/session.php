@@ -92,7 +92,7 @@ switch ($action) {
             $first = Tracking::get_first_connection_date($studentId);
             $last = Tracking::get_last_connection_date($studentId);
             $timeSpentContent = '';
-            $pdfTitle = get_lang('AttestationOfAttendance');
+            $pdfTitle = get_lang('Attestation of attendance');
             if ('attendance' === $type) {
                 $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
                 $column = 0;

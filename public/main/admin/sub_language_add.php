@@ -192,7 +192,7 @@ if ('definenewsublanguage' === $requestAction) {
 
         if ($removed) {
             Display::addFlash(
-                Display::return_message(get_lang('The sub language has been removed.'))
+                Display::return_message(get_lang('The sub language has been removed'))
             );
             api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php');
         }

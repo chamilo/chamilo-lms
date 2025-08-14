@@ -3,7 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Class UrlManager
@@ -21,13 +27,11 @@ class UrlManager
      * @param string $description The description of the site
      * @param int    $active      is active or not
      */
-    public static function add($url, $description, $active): ?AccessUrl
+    public static function add($url, $description, $active, bool $isLoginOnly = false): ?AccessUrl
     {
         $repo = Container::getAccessUrlRepository();
 
-        $num = self::url_exist($url);
-
-        if (0 !== $num) {
+        if (!$repo->exists($url)) {
             return null;
         }
 
@@ -37,6 +41,7 @@ class UrlManager
             ->setActive($active)
             ->setUrl($url)
             ->setCreatedBy(api_get_user_id())
+            ->setIsLoginOnly($isLoginOnly)
         ;
 
         $repo->create($accessUrl);
@@ -56,23 +61,25 @@ class UrlManager
      *
      * @return bool if success
      */
-    public static function update($urlId, $url, $description, $active)
+    public static function update($urlId, $url, $description, $active, bool $isLoginOnly = false)
     {
         $urlId = (int) $urlId;
         $active = (int) $active;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "UPDATE $table
-                SET url 	= '".Database::escape_string($url)."',
-                description = '".Database::escape_string($description)."',
-                active 		= '".$active."',
-                created_by 	= '".api_get_user_id()."',
-                tms 		= '".api_get_utc_datetime()."'
-                WHERE id = '$urlId'";
 
-        $result = Database::query($sql);
-
-        return $result;
+        return Database::update(
+            $table,
+            [
+                'url' => $url,
+                'description' => $description,
+                'active' => $active,
+                'created_by' => api_get_user_id(),
+                'tms' => api_get_utc_datetime(),
+                'is_login_only' => $isLoginOnly,
+            ],
+            ['id = ?' => [$urlId]]
+        );
     }
 
     /**
@@ -87,63 +94,46 @@ class UrlManager
     public static function delete($id)
     {
         $id = (int) $id;
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $tableUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tableCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $tableSession = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tableGroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
-        $sql = "DELETE FROM $tableCourse WHERE access_url_id = ".$id;
-        Database::query($sql);
         /*
          * $tableCourseCategory = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
         $sql = "DELETE FROM $tableCourseCategory WHERE access_url_id = ".$id;
         Database::query($sql);
         */
-        $sql = "DELETE FROM $tableSession WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $tableGroup WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $tableUser WHERE access_url_id = ".$id;
-        Database::query($sql);
-        $sql = "DELETE FROM $table WHERE id = ".$id;
-        Database::query($sql);
+        $em = Container::getEntityManager();
+
+        $relEntities = [
+            AccessUrlRelCourse::class,
+            AccessUrlRelSession::class,
+            AccessUrlRelUserGroup::class,
+            AccessUrlRelUser::class,
+        ];
+
+        foreach ($relEntities as $relEntity) {
+            $qb = $em->createQueryBuilder();
+
+            $em
+                ->createQueryBuilder()
+                ->delete($relEntity, 'rel')
+                ->where($qb->expr()->eq('rel.url', ':id'))
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->execute()
+            ;
+        }
+
+        $qb = $em->createQueryBuilder();
+
+        $em
+            ->createQueryBuilder()
+            ->delete(AccessUrl::class, 'au')
+            ->where($qb->expr()->eq('au.id', ':id'))
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return int
-     */
-    public static function url_exist($url)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table
-                WHERE url = '".Database::escape_string($url)."' ";
-        $res = Database::query($sql);
-
-        return Database::num_rows($res);
-    }
-
-    /**
-     * @param int $urlId
-     *
-     * @return int
-     */
-    public static function url_id_exist($urlId)
-    {
-        $urlId = (int) $urlId;
-        if (empty($urlId)) {
-            return false;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table WHERE id = ".$urlId;
-        $res = Database::query($sql);
-        $num = Database::num_rows($res);
-
-        return $num;
     }
 
     /**

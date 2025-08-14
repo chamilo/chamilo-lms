@@ -30202,3 +30202,6 @@ msgstr "Groups assigned to URL"
 
 msgid "Proceed with the import"
 msgstr "Proceed with the import"
+
+msgid "You only have access to the URL %s"
+msgstr "You only have access to the URL %s"

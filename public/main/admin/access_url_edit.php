@@ -6,8 +6,11 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
@@ -17,6 +20,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_global_admin_script();
 
 $httpRequest = HttpRequest::createFromGlobals();
+$urlRepo = Container::getAccessUrlRepository();
+$urlHelper = Container::getAccessUrlUtil();
 
 $form = new FormValidator('add_url');
 
@@ -34,33 +39,46 @@ $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
 if ($httpRequest->query->has('url_id')) {
     $url_id = $httpRequest->query->getInt('url_id');
-    $num_url_id = UrlManager::url_id_exist($url_id);
-    if (1 != $num_url_id) {
+
+    /** @var AccessUrl $url_data */
+    $url_data = $urlRepo->find($url_id);
+
+    if (!$url_data) {
         header('Location: access_urls.php');
         exit();
     }
-    $url_data = UrlManager::get_url_data_from_id($url_id);
-    $form->addElement('hidden', 'id', $url_data['id']);
+    $form->addElement('hidden', 'id', $url_data->getId());
     // If we're still with localhost (should only happen at the very beginning)
     // offer the current URL by default. Once this has been saved, no more
     // magic will happen, ever.
-    if ($url_data['id'] === 1 && $url_data['url'] === 'http://localhost/') {
+    if ($url_data->getId() === 1 && $url_data->getUrl() === AccessUrl::DEFAULT_ACCESS_URL) {
         $https = api_is_https() ? 'https://' : 'http://';
-        $url_data['url'] = $https.$_SERVER['HTTP_HOST'].'/';
+        $url_data->setUrl($https.$_SERVER['HTTP_HOST'].'/');
     }
-    $form->setDefaults($url_data);
+    $form->setDefaults([
+        'id' => $url_data->getId(),
+        'url' => $url_data->getUrl(),
+        'description' => $url_data->getDescription(),
+        'active' => $url_data->getActive(),
+        'login_only' => $url_data->isLoginOnly(),
+    ]);
 }
 
 $form->addHidden(
     'parentResourceNodeId',
-    Container::getAccessUrlUtil()->getFirstAccessUrl()->resourceNode->getId()
+    $urlHelper->getFirstAccessUrl()->resourceNode->getId()
 );
-$form->addButtonCreate(get_lang('Save'));
 
 //the first url with id = 1 will be always active
-if ($httpRequest->query->has('url_id') && 1 !== $httpRequest->query->getInt('url_id')) {
-    $form->addElement('checkbox', 'active', null, get_lang('active'));
+if ($httpRequest->query->has('url_id')) {
+    if ($urlHelper->getFirstAccessUrl()?->getId() !== $httpRequest->query->getInt('url_id')) {
+        $form->addElement('checkbox', 'active', null, get_lang('active'));
+    }
 }
+
+$form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
+
+$form->addButtonCreate(get_lang('Save'));
 
 if ($form->validate()) {
     $check = Security::check_token('post');
@@ -70,6 +88,7 @@ if ($form->validate()) {
         $description = Security::remove_XSS($url_array['description']);
         $active = isset($url_array['active']) ? (int) $url_array['active'] : 0;
         $url_id = isset($url_array['id']) ? (int) $url_array['id'] : 0;
+        $isLoginOnly = isset($url_array['login_only']) && (bool) $url_array['login_only'];
         $url_to_go = 'access_urls.php';
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
@@ -77,31 +96,74 @@ if ($form->validate()) {
                 $active = 1;
             }
             // Checking url
-            if ('/' == substr($url, strlen($url) - 1, strlen($url))) {
-                UrlManager::update($url_id, $url, $description, $active);
-            } else {
-                UrlManager::update($url_id, $url.'/', $description, $active);
+            if ('/' != substr($url, strlen($url) - 1, strlen($url))) {
+                $url .= '/';
             }
+
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $urlRepo->find($url_id);
+
+            $accessUrl
+                ->setUrl($url)
+                ->setDescription($description)
+                ->setActive($active)
+                ->setCreatedBy(api_get_user_id())
+                ->setTms(api_get_utc_datetime(null, false, true))
+                ->setIsLoginOnly($isLoginOnly)
+            ;
+
             $url_to_go = 'access_urls.php';
             $message = get_lang('The URL has been edited');
         } else {
-            $num = UrlManager::url_exist($url);
+            try {
+                $exists = $urlRepo->exists($url);
+            } catch (NoResultException|NonUniqueResultException $e) {
+                $exists = true;
+            }
+
             $url_to_go = 'access_url_edit.php';
             $message = get_lang('This URL already exists, please select another URL');
-            if (0 === $num) {
+            if (!$exists) {
                 // checking url
-                if ('/' == substr($url, strlen($url) - 1, strlen($url))) {
-                    $accessUrl = UrlManager::add($url, $description, $active);
-                } else {
-                    //create
-                    $accessUrl = UrlManager::add($url.'/', $description, $active);
+                if ('/' != substr($url, strlen($url) - 1, strlen($url))) {
+                    $url .= '/';
                 }
-                if (null !== $accessUrl) {
+
+                if ($isLoginOnly) {
+                    $sameDomain = $urlHelper->isSameBaseDomain(
+                        array_merge($urlRepo->getUrlList(), [$url])
+                    );
+
+                    if (!$sameDomain) {
+                        Display::addFlash(
+                            Display::return_message(
+                                get_lang('To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name will not be taken into account for access sharing.')
+                            )
+                        );
+                    }
+                }
+
+                $accessUrl = $urlRepo->findOneBy(['url' => $url]);
+
+                if (!$accessUrl) {
+                    $accessUrl = new AccessUrl();
+                    $accessUrl
+                        ->setDescription($description)
+                        ->setActive($active)
+                        ->setUrl($url)
+                        ->setCreatedBy(api_get_user_id())
+                        ->setIsLoginOnly($isLoginOnly)
+                    ;
+
+                    Database::getManager()->persist($accessUrl);
+
                     $message = get_lang('The URL has been added');
                     $url_to_go = 'access_urls.php';
                 }
             }
         }
+
+        Database::getManager()->flush();
 
         Security::clear_token();
         $tok = Security::get_token();

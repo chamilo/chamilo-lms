@@ -42,11 +42,11 @@ if (Database::num_rows($result_course) > 0) {
     echo '<table class="table table-hover table-striped data_table">
             <tr>
                 <th>'.get_lang('Course').'</th>
-                <th>'.get_lang('TempsFrequentation').'</th>
-                <th>'.get_lang('Progression').'</th>
-                <th>'.get_lang('MoyenneTest').'</th>
+                <th>'.get_lang('Frequentation time').'</th>
+                <th>'.get_lang('Progress').'</th>
+                <th>'.get_lang('Tests score').'</th>
             </tr>';
-    $header = [get_lang('Course'), get_lang('TempsFrequentation'), get_lang('Progression'), get_lang('MoyenneTest')];
+    $header = [get_lang('Course'), get_lang('Frequentation time'), get_lang('Progress'), get_lang('Tests score')];
     while ($a_course = Database::fetch_array($result_course)) {
         // TODO: This query is to be checked, there are no HotPotatoes tests results.
         $sql_moy_test = "SELECT score,max_score

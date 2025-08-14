@@ -75,7 +75,7 @@ $form->addSelectAjax(
 if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $exerciseList,
         [
             'multiple' => true,

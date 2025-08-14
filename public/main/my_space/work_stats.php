@@ -26,7 +26,7 @@ $this_section = SECTION_TRACKING;
 $webCodePath = api_get_path(WEB_CODE_PATH);
 $interbreadcrumb[] = [
     'url' => api_is_student_boss() ? '#' : 'index.php',
-    'name' => get_lang('MySpace'),
+    'name' => get_lang('Reporting'),
 ];
 
 function get_count_users()

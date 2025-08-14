@@ -554,7 +554,7 @@ switch ($action) {
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));
             } else {
-                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('all fields required'), 'warning'));
             }
 
             header('Location: '.$currentUrl);
@@ -574,10 +574,10 @@ switch ($action) {
             LegalManager::sendLegal($studentId, api_get_user_id());
             /*
                 $currentUserInfo = api_get_user_info();
-                $subject = get_lang('SendLegalSubject');
+                $subject = get_lang('Legal conditions');
                 $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
                 $content = sprintf(
-                    get_lang('SendTermsDescriptionToUrlX'),
+                    get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
                     $user_info['complete_name'],
                     "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
                     $currentUserInfo['complete_name']
@@ -892,7 +892,7 @@ $csv_content[] = [
     get_lang('Reporting'),
 ];
 $csv_content[] = [
-    get_lang('First connectionInPlatform'),
+    get_lang('First login in platform'),
     get_lang('Latest login in platform'),
     get_lang('Time spent in the course'),
     get_lang('Progress'),
@@ -1573,7 +1573,7 @@ if (empty($details)) {
                 'ch-tool-icon',
                 'align: absmiddle; hspace: 3px',
                 ICON_SIZE_SMALL,
-                get_lang('LPProgressScore')
+                get_lang('% of learning objects visited')
             ),
         'last_connection' => get_lang('Latest login').
             Display::getMdiIcon(

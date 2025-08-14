@@ -90,7 +90,7 @@ $returnParams = $extraField->addElements(
 
 $form->addElement('hidden', 'formSent', 1);
 $form->addButtonSearch(get_lang('Search'));
-$form->addButtonExport(get_lang('ExportAsCSV'), 'export');
+$form->addButtonExport(get_lang('CSV export'), 'export');
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
@@ -238,8 +238,8 @@ if ($form->validate()) {
         $headers = [
             get_lang('Session'),
             get_lang('Course'),
-            get_lang('FirstName'),
-            get_lang('LastName'),
+            get_lang('First name'),
+            get_lang('LastN name'),
             get_lang('Score'),
             get_lang('Date'),
         ];
@@ -340,13 +340,13 @@ $actions .= Display::url(
 if ($allowCustomCertificate) {
     $url = api_get_path(WEB_PLUGIN_PATH).'CustomCertificate/src/export_pdf_all_in_one.php';
     $actions .= Display::url(
-        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToPDF')),
+        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all certificates to PDF')),
         $url,
         ['id' => 'export_pdf']
     );
 
     $actions .= Display::url(
-        Display::getMdiIcon(ActionIcon::DOWNLOAD_MULTIPLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAllCertificatesToZIP')),
+        Display::getMdiIcon(ActionIcon::DOWNLOAD_MULTIPLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export all certificates to ZIP')),
         $url,
         ['id' => 'export_zip']
     );
@@ -356,7 +356,7 @@ echo Display::toolbarAction('actions', [$actions]);
 echo $form->returnForm();
 
 if (0 == count($certificateList)) {
-    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
     echo '<table class="table table-hover table-striped  data_table">';
     echo '<tbody>';
@@ -366,7 +366,7 @@ if (0 == count($certificateList)) {
         $courseInfo = api_get_course_info($courseCode);
         echo '<tr>';
         echo '<td width="50%" class="actions">';
-        echo get_lang('Student').' : ';
+        echo get_lang('Learner').' : ';
         echo api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
         echo '</td>';
         echo '<td width="50%" class="actions">'.$courseInfo['title'].'</td>';

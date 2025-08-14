@@ -338,7 +338,7 @@ if (false === $skipData) {
     if ($export_csv) {
         //csv part
         $csv_content[] = [get_lang('Learners')];
-        $csv_content[] = [get_lang('InactivesLearners'), $nb_inactive_students];
+        $csv_content[] = [get_lang('Inactive learners'), $nb_inactive_students];
         $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
         $csv_content[] = [
             get_lang('Average number of courses to which my learners are subscribed'),

@@ -164,7 +164,7 @@ $form->display();
                 $stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$data['times'].'<br />';
                 echo $stats;
             } else {
-                echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+                echo Display::return_message(get_lang('No data available'), 'warning');
             }
             ?>
         </div>

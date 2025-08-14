@@ -2272,7 +2272,7 @@ class GroupManager
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
-                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportSurveyResults')),
+                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export survey results')),
                         $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
                     ).'&nbsp;';
                 }

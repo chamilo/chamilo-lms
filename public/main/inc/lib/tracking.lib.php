@@ -7928,7 +7928,7 @@ class Tracking
                 );
 
                 if (is_numeric($progress)) {
-                    $progress = sprintf(get_lang('XPercent'), $progress);
+                    $progress = sprintf(get_lang('%s %%'), $progress);
                 }
 
                 $learningpathData[] = $progress;
@@ -7943,9 +7943,9 @@ class Tracking
                 );
 
                 if (is_numeric($percentage_score)) {
-                    $percentage_score = sprintf(get_lang('XPercent'), $percentage_score);
+                    $percentage_score = sprintf(get_lang('%s %%'), $percentage_score);
                 } else {
-                    $percentage_score = sprintf(get_lang('XPercent'), 0);
+                    $percentage_score = sprintf(get_lang('%s %%'), 0);
                 }
 
                 $learningpathData[] = $percentage_score;

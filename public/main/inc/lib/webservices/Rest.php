@@ -1801,13 +1801,13 @@ class Rest extends WebService
             if ('loginname' === strtolower($name)) {
                 $userId = UserManager::get_user_id_from_username($value);
                 if (false === $userId) {
-                    throw new Exception(get_lang('UserNotFound'));
+                    throw new Exception(get_lang('User not found.'));
                 }
                 break;
             }
         }
         if (is_null($userId)) {
-            throw new Exception(get_lang('NoData'));
+            throw new Exception(get_lang('No data available'));
         }
         $user = api_get_user_entity($userId);
         if (empty($user)) {
@@ -1879,7 +1879,7 @@ class Rest extends WebService
                 case 'language':
                     $languages = api_get_languages();
                     if (!in_array($value, $languages['folder'])) {
-                        throw new Exception(get_lang('LanguageUnavailable'));
+                        throw new Exception(get_lang('Language unavailable.'));
                     }
                     $user->setLocale($value);
                     break;

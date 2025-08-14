@@ -40,15 +40,15 @@ $result_admins = Database::query($sql);
 if (api_is_western_name_order()) {
     echo '<table class="table table-hover table-striped data_table">
         <tr>
-        <th>'.get_lang('FirstName').'</th>
-        <th>'.get_lang('LastName').'</th>
-        <th>'.get_lang('Email').'</th></tr>';
+        <th>'.get_lang('First name').'</th>
+        <th>'.get_lang('Last name').'</th>
+        <th>'.get_lang('E-mail').'</th></tr>';
 } else {
     echo '<table class="table table-hover table-striped data_table">
         <tr>
-            <th>'.get_lang('LastName').'</th>
-            <th>'.get_lang('FirstName').'</th>
-            <th>'.get_lang('Email').'</th></tr>';
+            <th>'.get_lang('Last name').'</th>
+            <th>'.get_lang('First name').'</th>
+            <th>'.get_lang('E-mail').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {

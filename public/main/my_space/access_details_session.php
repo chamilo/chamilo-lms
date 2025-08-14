@@ -311,7 +311,7 @@ function getReport($userId, $from, $to, $addTime = false)
         $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
         $headers = [
         get_lang('Course'),
-            get_lang('TotalDuration'),
+            get_lang('Total time spent'),
     ];
         $row = 0;
         $column = 0;
@@ -348,7 +348,7 @@ if ($form->validate()) {
 
     $from = api_get_utc_datetime($from->format('Y-m-d'));
     $to = api_get_utc_datetime($to->format('Y-m-d'));
-    $title = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $title = Display::page_subheader3(sprintf(get_lang('Extraction from %s'), api_get_local_time()));
     $result = getReport($userId, $from, $to);
 
     $first = $result['first'];
@@ -405,13 +405,13 @@ $formByDay = new FormValidator(
 );
 $formByDay->addElement('text', 'from', get_lang('From'));
 $formByDay->addElement('text', 'to', get_lang('Until'));
-$formByDay->addCheckBox('reduced', null, get_lang('ReducedReport'));
+$formByDay->addCheckBox('reduced', null, get_lang('Reduced report'));
 $formByDay->addHidden('user_id', $userId);
-$formByDay->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
-$formByDay->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
-$formByDay->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
-$formByDay->addRule('to', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
-$formByDay->addButtonSearch(get_lang('GenerateReport'));
+$formByDay->addRule('from', get_lang('Required field'), 'required');
+$formByDay->addRule('from', get_lang('Required field').' dd/mm/yyyy', 'callback', 'validateDate');
+$formByDay->addRule('to', get_lang('Required field'), 'required');
+$formByDay->addRule('to', get_lang('Required field').' dd/mm/yyyy', 'callback', 'validateDate');
+$formByDay->addButtonSearch(get_lang('Generate report'));
 
 if ($formByDay->validate()) {
     $from = $formByDay->getSubmitValue('from');
@@ -524,8 +524,8 @@ if ($formByDay->validate()) {
 
         $table = new HTML_Table(['class' => ' table_print']);
         $headers = [
-            get_lang('FirstLogin'),
-            get_lang('LastConnection'),
+            get_lang('First connection'),
+            get_lang('Last connection'),
             get_lang('Total'),
         ];
 
@@ -553,7 +553,7 @@ if ($formByDay->validate()) {
             ).'</div>';
         $tableList .= $table->toHtml();
         if (!$reduced && !empty($total)) {
-            $diff = get_lang('NotInCourse').' '.api_format_time($data['diff'] - $total, 'js');
+            $diff = get_lang('Outside courses').' '.api_format_time($data['diff'] - $total, 'js');
             $tableList .= $courseSessionTable;
             $tableList .= $totalCourseSessionTable;
             $tableList .= '<div style="text-align: center;">'.Display::page_subheader3($diff).'</div>';
@@ -561,9 +561,9 @@ if ($formByDay->validate()) {
     }
 
     $tpl = new Template('', false, false, false, true, false, false);
-    $tpl->assign('title', get_lang('RealisationCertificate'));
+    $tpl->assign('title', get_lang('Certificate of achievement'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $totalTable = Display::page_subheader3(sprintf(get_lang('Extraction from %s'), api_get_local_time()));
     $tpl->assign('table_progress', $totalTable.$tableList);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));

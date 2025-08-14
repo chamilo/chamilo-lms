@@ -1426,7 +1426,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-Z0-9ñÑ]+',
-                'title' => get_lang('Only lettersAndNumbers'),
+                'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
             ]
         );
 
@@ -1435,7 +1435,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('Only lettersAndNumbers'),
+                get_lang('Only letters (a-z) and numbers (0-9)'),
             ],
             $attributes
         );
@@ -1448,7 +1448,7 @@ EOT;
 
         $this->addRule(
             $name,
-            get_lang('Only lettersAndNumbers'),
+            get_lang('Only letters (a-z) and numbers (0-9)'),
             'regex',
             '/^[a-zA-Z0-9ÑÑ]+$/'
         );
@@ -1552,7 +1552,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-ZñÑ\s]+',
-                'title' => get_lang('Only lettersAndSpaces'),
+                'title' => get_lang('Only letters and spaces'),
             ]
         );
 
@@ -1561,7 +1561,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('Only lettersAndSpaces'),
+                get_lang('Only letters and spaces'),
             ],
             $attributes
         );
@@ -1574,7 +1574,7 @@ EOT;
 
         $this->addRule(
             $name,
-            get_lang('Only lettersAndSpaces'),
+            get_lang('Only letters and spaces'),
             'regex',
             '/^[a-zA-ZñÑ\s]+$/'
         );
@@ -1599,7 +1599,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-Z0-9ñÑ\s]+',
-                'title' => get_lang('Only lettersAndNumbersAndSpaces'),
+                'title' => get_lang('Only letters, numbers and spaces'),
             ]
         );
 
@@ -1608,7 +1608,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('Only lettersAndNumbersAndSpaces'),
+                get_lang('Only letters, numbers and spaces'),
             ],
             $attributes
         );
@@ -1621,7 +1621,7 @@ EOT;
 
         $this->addRule(
             $name,
-            get_lang('Only lettersAndNumbersAndSpaces'),
+            get_lang('Only letters, numbers and spaces'),
             'regex',
             '/^[a-zA-Z0-9ñÑ\s]+$/'
         );

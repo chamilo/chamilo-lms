@@ -101,7 +101,7 @@ if (!empty($allUsers)) {
 if (!empty($courseIdList)) {
     $form->addSelect(
         'exercises',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $exerciseList,
         [
             'multiple' => true,
@@ -116,7 +116,7 @@ $tableContent = '';
 if ($form->validate()) {
     $headers = [
         get_lang('Course'),
-        get_lang('Exercise'),
+        get_lang('Test'),
         get_lang('Question'),
         get_lang('WrongAnswer').' / '.get_lang('Total'),
         '%',

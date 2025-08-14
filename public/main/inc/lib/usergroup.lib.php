@@ -1853,7 +1853,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addText('url', get_lang('Url'), false);
+        $form->addText('url', get_lang('URL'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();

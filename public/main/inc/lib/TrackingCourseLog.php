@@ -1310,7 +1310,7 @@ class TrackingCourseLog
         );
 
         if ($returnFormatted) {
-            return sprintf(get_lang('XPercent'), $rounded);
+            return sprintf(get_lang('%s %%'), $rounded);
         }
 
         return $rounded;

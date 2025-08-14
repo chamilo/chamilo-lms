@@ -31,13 +31,13 @@ if (!isset($_GET['action'])) {
 </form>
 <?php
 } else {
-        echo get_lang('CompilatioConnectionTestSoap')."<br>";
-        echo "1) ".get_lang('CompilatioServerConnection')."<br>";
+        echo get_lang('SOAP connection test...')."<br>";
+        echo "1) ".get_lang("Connection to Compilatio's SOAP server")."<br>";
         $compilatio = new Compilatio();
         if ($compilatio) {
-            echo get_lang('CompilatioConnectionSuccessful')."<br>";
-            echo "2) ".get_lang('CompilatioSendTextToServer')."<br>";
-            $text = sprintf(get_lang('CompilatioTextSendingTestKeyX'), $compilatio->getKey());
+            echo get_lang('Connection successful.')."<br>";
+            echo "2) ".get_lang('Sending text to the Compilatio server')."<br>";
+            $text = sprintf(get_lang('This is a text sending test to the Compilatio server via its API.\nCompilatio key used: %s'), $compilatio->getKey());
             $id_compi = $compilatio->SendDoc(
             'Doc de test',
             'test',
@@ -46,14 +46,14 @@ if (!isset($_GET['action'])) {
             $text
         );
             if (Compilatio::isMd5($id_compi)) {
-                echo get_lang('CompilatioSuccessfulTransfer')."<br>";
+                echo get_lang('Transfer successful.')."<br>";
             } else {
-                echo get_lang('CompilatioFailedTransfer')."<br>";
-                echo get_lang('CompilatioParamVerification')."<br>";
+                echo get_lang('Transfer failed.')."<br>";
+                echo get_lang('Check your key, your server ports and possibly your proxy settings.')."<br>";
             }
         } else {
-            echo get_lang('CompilatioNoConnection')."<br>";
-            echo get_lang('CompilatioParamVerification')."<br>";
+            echo get_lang("Could not connect to Compilatio's SOAP server.")."<br>";
+            echo get_lang('Check your key, your server ports and possibly your proxy settings.')."<br>";
         }
     }
 ?>

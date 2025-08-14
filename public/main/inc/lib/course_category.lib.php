@@ -423,7 +423,7 @@ class CourseCategory
             }
 
             $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
-            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportAsCSV'));
+            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CSV export'));
             $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $urlId = api_get_current_access_url_id();
 

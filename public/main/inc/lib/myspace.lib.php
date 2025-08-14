@@ -1369,7 +1369,7 @@ class MySpace
                 $form
                     ->addButton(
                         'export_csv',
-                        get_lang('ExportAsCSV'),
+                        get_lang('CSV export'),
                         'check',
                         'primary',
                         null,
@@ -3218,11 +3218,11 @@ class MySpace
             $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
-                $table->set_header(2, get_lang('FirstName'), true);
-                $table->set_header(3, get_lang('LastName'), true);
+                $table->set_header(2, get_lang('First name'), true);
+                $table->set_header(3, get_lang('Last name'), true);
             } else {
-                $table->set_header(2, get_lang('LastName'), true);
-                $table->set_header(3, get_lang('FirstName'), true);
+                $table->set_header(2, get_lang('Last name'), true);
+                $table->set_header(3, get_lang('First name'), true);
             }
             $table->set_header(4, get_lang('IP'), false);
             $table->set_header(5, get_lang('TimeLoggedIn'), false);

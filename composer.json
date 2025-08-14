@@ -84,6 +84,7 @@
         "graphp/graphviz": "~0.2",
         "gregwar/captcha-bundle": "^2.2",
         "jbroadway/urlify": "~1.1",
+        "jeremykendall/php-domain-parser": "^6.4",
         "jeroendesloovere/vcard": "~1.7",
         "jimmiw/php-time-ago": "~3.2",
         "kigkonsult/icalcreator": "~2.29",

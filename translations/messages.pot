@@ -30170,3 +30170,6 @@ msgstr ""
 
 msgid "Proceed with the import"
 msgstr ""
+
+msgid "You only have access to the URL %s"
+msgstr ""

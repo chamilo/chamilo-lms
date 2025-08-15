@@ -793,7 +793,22 @@ class learnpath
 
         $course = api_get_course_entity();
         $session = api_get_session_entity();
+        /* @var CLp $lp */
         $lp = Container::getLpRepository()->find($this->lp_id);
+
+        // 1) Detach the asset to avoid FK constraint
+        $asset = $lp->getAsset();
+        if ($asset) {
+            $lp->setAsset(null);
+            $em = Database::getManager();
+            $em->persist($lp);
+            $em->flush();
+        }
+
+        // 2) Now delete the asset and its folder
+        if ($asset) {
+            Container::getAssetRepository()->delete($asset);
+        }
 
         Database::getManager()
             ->getRepository(ResourceLink::class)
@@ -7051,38 +7066,87 @@ class learnpath
         );
     }
 
+    public static function getQuotaInfo(string $localFilePath): array
+    {
+        $post_max_raw   = ini_get('post_max_size');
+        $post_max_bytes = (int) rtrim($post_max_raw, 'MG') * (str_ends_with($post_max_raw,'G') ? 1024**3 : 1024**2);
+        $upload_max_raw = ini_get('upload_max_filesize');
+        $upload_max_bytes = (int) rtrim($upload_max_raw, 'MG') * (str_ends_with($upload_max_raw,'G') ? 1024**3 : 1024**2);
+
+        $em     = Database::getManager();
+        $course = api_get_course_entity(api_get_course_int_id());
+
+        $nodes  = Container::getResourceNodeRepository()->findByResourceTypeAndCourse('file', $course);
+        $root   = null;
+        foreach ($nodes as $n) {
+            if ($n->getParent() === null) {
+                $root = $n; break;
+            }
+        }
+        $docsSize = $root
+            ? Container::getDocumentRepository()->getFolderSize($root, $course)
+            : 0;
+
+        $assetRepo = Container::getAssetRepository();
+        $fs        = $assetRepo->getFileSystem();
+        $scormSize = 0;
+        foreach (Container::getLpRepository()->findScormByCourse($course) as $lp) {
+            if ($asset = $lp->getAsset()) {
+                $folder = $assetRepo->getFolder($asset);
+                if ($folder && $fs->directoryExists($folder)) {
+                    $scormSize += self::getFolderSize($folder);
+                }
+            }
+        }
+
+        $uploadedSize = filesize($localFilePath);
+        $existingTotal = $docsSize + $scormSize;
+        $combined = $existingTotal + $uploadedSize;
+
+        $quotaMb = DocumentManager::get_course_quota();
+        $quotaBytes = $quotaMb * 1024 * 1024;
+
+        return [
+            'post_max'      => $post_max_bytes,
+            'upload_max'    => $upload_max_bytes,
+            'docs_size'     => $docsSize,
+            'scorm_size'    => $scormSize,
+            'existing_total'=> $existingTotal,
+            'uploaded_size' => $uploadedSize,
+            'combined'      => $combined,
+            'quota_bytes'   => $quotaBytes,
+        ];
+    }
+
     /**
      * Verify document size.
-     *
-     * @param string $s
-     *
-     * @return bool
      */
-    public static function verify_document_size($s)
+    public static function verify_document_size(string $localFilePath): bool
     {
-        $post_max = ini_get('post_max_size');
-        if ('M' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-        $upl_max = ini_get('upload_max_filesize');
-        if ('M' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-
-        $repo = Container::getDocumentRepository();
-        $documents_total_space = $repo->getTotalSpace(api_get_course_int_id());
-
-        $course_max_space = DocumentManager::get_course_quota();
-        $total_size = filesize($s) + $documents_total_space;
-        if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {
+        $info = self::getQuotaInfo($localFilePath);
+        if ($info['uploaded_size'] > $info['post_max']
+            || $info['uploaded_size'] > $info['upload_max']
+            || $info['combined']    > $info['quota_bytes']
+        ) {
+            Container::getSession()->set('quota_info', $info);
             return true;
         }
 
         return false;
+    }
+
+    private static function getFolderSize(string $path): int
+    {
+        $size     = 0;
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)
+        );
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $size += $file->getSize();
+            }
+        }
+        return $size;
     }
 
     /**

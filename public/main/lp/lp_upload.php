@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 
@@ -29,56 +30,54 @@ if (('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) && isset
  * because if the file size exceed the maximum file upload
  * size set in php.ini, all variables from POST are cleared !
  */
-$user_file = $_GET['user_file'] ?? [];
-$user_file = $user_file ? $user_file : [];
-$is_error = $user_file['error'] ?? false;
-$em = Database::getManager();
+$user_file = $_FILES['user_file'] ?? [];
+$is_error  = $user_file['error'] ?? false;
+$em        = Database::getManager();
 
 if (isset($_POST) && $is_error) {
-    Display::addFlash(
-        Display::return_message(get_lang('The file is too big to upload.'))
-    );
-
-    return false;
     unset($_FILES['user_file']);
-} elseif ('POST' === $_SERVER['REQUEST_METHOD'] && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+    ChamiloHelper::redirectTo(api_get_path(WEB_PATH).'main/upload/index.php?'.api_get_cidreq().'&origin=course&curdirpath=/&tool=learnpath');
+}
+elseif ('POST' === $_SERVER['REQUEST_METHOD']
+    && !empty($_FILES['user_file']['name'])
+) {
     // A file upload has been detected, now deal with the file...
-    // Directory creation.
-    $stopping_error = false;
     $s = $_FILES['user_file']['name'];
 
     // Get name of the zip file without the extension.
-    $info = pathinfo($s);
-    $filename = $info['basename'];
-    $extension = $info['extension'];
+    $info           = pathinfo($s);
+    $filename       = $info['basename'];
+    $extension      = $info['extension'];
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
-    $type = learnpath::getPackageType($_FILES['user_file']['tmp_name'], $_FILES['user_file']['name']);
+    $type    = learnpath::getPackageType(
+        $_FILES['user_file']['tmp_name'],
+        $_FILES['user_file']['name']
+    );
 
-    $proximity = 'local';
-    if (!empty($_REQUEST['content_proximity'])) {
-        $proximity = $_REQUEST['content_proximity'];
-    }
-
-    $maker = 'Scorm';
-    if (!empty($_REQUEST['content_maker'])) {
-        $maker = $_REQUEST['content_maker'];
-    }
+    // Defaults
+    $proximity = $_REQUEST['content_proximity'] ?? 'local';
+    $maker     = $_REQUEST['content_maker']     ?? 'Scorm';
 
     switch ($type) {
         case 'chamilo':
             $filename = CourseArchiver::importUploadedFile($_FILES['user_file']['tmp_name']);
             if ($filename) {
-                $course = CourseArchiver::readCourse($filename, false);
+                $course        = CourseArchiver::readCourse($filename, false);
                 $courseRestorer = new CourseRestorer($course);
-                // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
                 $courseRestorer->set_file_option(FILE_OVERWRITE);
                 $courseRestorer->restore('', api_get_session_id());
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             break;
         case 'scorm':
+            $tmpFile  = $_FILES['user_file']['tmp_name'];
+            $fileSize = filesize($tmpFile);
+            $blocked = learnpath::verify_document_size($tmpFile);
+            if ($blocked) {
+                ChamiloHelper::redirectTo(api_get_path(WEB_PATH).'main/upload/index.php?'.api_get_cidreq().'&origin=course&curdirpath=/&tool=learnpath');
+            }
             $scorm = new scorm();
             $scorm->import_package(
                 $_FILES['user_file'],
@@ -92,10 +91,8 @@ if (isset($_POST) && $is_error) {
                 $scorm->parse_manifest();
                 $lp = $scorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
                 if ($lp) {
-                    $lp
-                        ->setContentLocal($proximity)
-                        ->setContentMaker($maker)
-                    ;
+                    $lp->setContentLocal($proximity)
+                        ->setContentMaker($maker);
                     $em->persist($lp);
                     $em->flush();
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
@@ -104,31 +101,25 @@ if (isset($_POST) && $is_error) {
             break;
         case 'aicc':
             $oAICC = new aicc();
-            //$entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_package($_FILES['user_file']);
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
                 Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
-            /*$entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('aicc_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();*/
             break;
         case 'oogie':
-            $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
+            $take_slide_name = !empty($_POST['take_slide_name']);
             $o_ppt = new OpenofficePresentation($take_slide_name);
-            $first_item_id = $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
+            $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
             Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             break;
         case 'woogie':
-            $split_steps = empty($_POST['split_steps']) || 'per_page' === $_POST['split_steps'] ? 'per_page' : 'per_chapter';
+            $split_steps = (!empty($_POST['split_steps']) && $_POST['split_steps'] === 'per_chapter')
+                ? 'per_chapter'
+                : 'per_page';
             $o_doc = new OpenofficeText($split_steps);
-            $first_item_id = $o_doc->convert_document($_FILES['user_file']);
+            $o_doc->convert_document($_FILES['user_file']);
             Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             break;
         case '':
@@ -235,6 +226,5 @@ if (isset($_POST) && $is_error) {
             );
 
             return false;
-            break;
     }
 }

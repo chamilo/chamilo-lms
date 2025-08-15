@@ -51,41 +51,91 @@ if (is_object($objQuestion)) {
     }
 
     // FORM VALIDATION
+    //$result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, 100);
+
     if (isset($_POST['submitQuestion'])) {
-        $validationResult = true;
-        if (method_exists($objQuestion, 'validateAnswers')) {
-            $validationResult = $objQuestion->validateAnswers($form);
-        }
-        if (is_array($validationResult) && !empty($validationResult['errors'])) {
-            echo Display::return_message(implode("<br>", $validationResult['errors']), 'error', false);
-        } elseif ($form->validate()) {
-            $objQuestion->processCreation($form, $objExercise);
-            $objQuestion->processAnswersCreation($form, $objExercise);
-            if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq().'";</script>';
-            } elseif (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
-                $url = 'admin.php?'.api_get_cidreq().'&'.http_build_query(['exerciseId' => $exerciseId, 'page' => $page, 'mad_admin' => $objQuestion->iid]);
-                echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
+        // Media is selected?
+        $parentId = $form->getSubmitValue('parent_id');
+        $categories = $form->getSubmitValue('questionCategory');
+        $process = true;
+        $message = null;
+
+        // A media question was sent
+        if (isset($parentId) && !empty($parentId)) {
+            // No allowing 2 categories if a media was selected
+            $tryAgain = Display::url(
+                get_lang('TryAgain'),
+                api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&myid=1&editQuestion='.$objQuestion->id.'&'.api_get_cidreq(),
+                array('class' => 'btn')
+            );
+
+            if (isset($categories) && !empty($categories)) {
+
+                if (count($categories) > 1) {
+                    $message = Display::display_warning_message(get_lang('WhenUsingAMediaQuestionYouCantAddMoreThanOneCategory'));
+                    $message .= ' '.$tryAgain;
+
+                    $process = false;
+                }
+
+                $questionCategoriesOfMediaQuestions = $objQuestion->getQuestionCategoriesOfMediaQuestions($exerciseId, $parentId);
+
+                if (!empty($questionCategoriesOfMediaQuestions)) {
+                    // Check if the media sent matches other medias sent before
+                    $result = $objQuestion->allQuestionWithMediaHaveTheSameCategory($exerciseId, $parentId, $categories, $objQuestion->id);
+
+                    if ($result == false) {
+                        $message = Display::display_warning_message(get_lang('TheSelectedCategoryDoesNotMatchWithTheOtherQuestionWithTheSameMediaQuestion'));
+                        $message .= ' '.$tryAgain;
+                        $process = false;
+                    }
+                }
             } else {
-                if (isset($_GET['editQuestion'])) {
-                    if (empty($exerciseId)) {
-                        Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
-                        $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->iid;
-                        echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
-                        exit;
-                    }
-                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated";</script>';
-                } else {
-                    // New question
-                    $page = 1;
-                    $length = api_get_configuration_value('question_pagination_length');
-                    if (!empty($length)) {
-                        $page = round($objExercise->getQuestionCount() / $length);
-                    }
-                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded";</script>';
+                if (!empty($objQuestion->category_list)) {
+                    $message = Display::display_warning_message(get_lang('YouMustProvideACategoryBecauseTheCurrentCategoryDoesNotMatchOtherMediaQuestions'));
+                    $message .= ' '.$tryAgain;
+                    $process = false;
                 }
             }
-            exit();
+        }
+
+        if ($process) {
+
+            $validationResult = true;
+            if (method_exists($objQuestion, 'validateAnswers')) {
+                $validationResult = $objQuestion->validateAnswers($form);
+            }
+            if (is_array($validationResult) && !empty($validationResult['errors'])) {
+                echo Display::return_message(implode("<br>", $validationResult['errors']), 'error', false);
+            } elseif ($form->validate()) {
+                $objQuestion->processCreation($form, $objExercise);
+                $objQuestion->processAnswersCreation($form, $objExercise);
+                if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
+                    echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->iid.'&'.api_get_cidreq().'";</script>';
+                } elseif (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
+                    $url = 'admin.php?'.api_get_cidreq().'&'.http_build_query(['exerciseId' => $exerciseId, 'page' => $page, 'mad_admin' => $objQuestion->iid]);
+                    echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
+                } else {
+                    if (isset($_GET['editQuestion'])) {
+                        if (empty($exerciseId)) {
+                            Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+                            $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->iid;
+                            echo '<script type="text/javascript">window.location.href="'.$url.'";</script>';
+                            exit;
+                        }
+                        echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated";</script>';
+                    } else {
+                        // New question
+                        $page = 1;
+                        $length = api_get_configuration_value('question_pagination_length');
+                        if (!empty($length)) {
+                            $page = round($objExercise->getQuestionCount() / $length);
+                        }
+                        echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemAdded";</script>';
+                    }
+                }
+                exit();
+            }
         }
     }
 

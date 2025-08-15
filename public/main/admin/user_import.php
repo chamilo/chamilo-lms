@@ -505,7 +505,8 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 $reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['reload_import']);
 
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
-
+$csv_custom_error = '';
+$fatalError = false;
 if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
@@ -525,28 +526,37 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             Session::erase('user_import_data_'.$userId);
-            $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
-            $users = parse_csv_data(
-                $users,
-                $_FILES['import_file']['name'],
-                $sendMail,
-                $checkUniqueEmail,
-                $resume
-            );
-            $users = validate_data($users, $checkUniqueEmail);
-            $error_kind_file = false;
+            if (!Import::assertCommaSeparated($_FILES['import_file']['tmp_name'])) {
+                $csv_custom_error = get_lang('Semicolon (;) delimiter detected. Chamilo 2 requires comma (,) as the CSV separator. Please re-export your file as CSV (comma-separated).');
+                $error_kind_file = true;
+                $fatalError = true;
+                $users = [];
+            } else {
+                $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
+                $users = parse_csv_data(
+                    $users,
+                    $_FILES['import_file']['name'],
+                    $sendMail,
+                    $checkUniqueEmail,
+                    $resume
+                );
+                $users = validate_data($users, $checkUniqueEmail);
+                $error_kind_file = false;
+            }
         } elseif (0 === strcmp($file_type, 'xml') && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
 
-        processUsers($users, $sendMail);
+        if (!$fatalError) {
+            processUsers($users, $sendMail);
+        }
 
-        if ($error_kind_file) {
+        if ($error_kind_file || $fatalError) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('You must import a file corresponding to the selected format'),
+                    $csv_custom_error ?: get_lang('You must import a file corresponding to the selected format'),
                     'error',
                     false
                 )

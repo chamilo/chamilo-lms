@@ -23,6 +23,64 @@ class Import
     }
 
     /**
+     * Guess the CSV delimiter by scanning the first non-empty line.
+     */
+    public static function detectCsvSeparator(string $filePath): ?string
+    {
+        if (!is_readable($filePath)) {
+            return null;
+        }
+        $h = @fopen($filePath, 'rb');
+        if (!$h) {
+            return null;
+        }
+        $line = '';
+        for ($i = 0; $i < 5 && !feof($h); $i++) {
+            $line = fgets($h, 1024 * 1024);
+            if ($line !== false && trim($line) !== '') {
+                break;
+            }
+        }
+        fclose($h);
+        if ($line === false || $line === '') {
+            return null;
+        }
+
+        $cands = [',', ';', "\t", '|'];
+        $scores = array_fill_keys($cands, 0);
+        $inQuotes = false;
+        $len = strlen($line);
+        for ($i = 0; $i < $len; $i++) {
+            $ch = $line[$i];
+            if ($ch === '"') {
+                $prev = $i > 0 ? $line[$i - 1] : null;
+                if ($prev !== '\\') {
+                    $inQuotes = !$inQuotes;
+                }
+            } elseif (!$inQuotes && isset($scores[$ch])) {
+                $scores[$ch]++;
+            }
+        }
+        arsort($scores);
+        $top = array_key_first($scores);
+        return ($scores[$top] > 0) ? $top : null;
+    }
+
+    /**
+     * Check if the CSV appears to be comma-separated.
+     */
+    public static function assertCommaSeparated(string $filePath): bool
+    {
+        $det = self::detectCsvSeparator($filePath);
+
+        if ($det === null) {
+            return true;
+        }
+
+        return $det === ',';
+    }
+
+    /**
      * Reads a CSV-file into an array. The first line of the CSV-file should contain the array-keys.
      * The encoding of the input file is tried to be detected.
      * The elements of the returned array are encoded in the system encoding.

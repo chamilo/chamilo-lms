@@ -3381,9 +3381,6 @@ msgstr "Adauga nota"
 msgid "Edit my personal note"
 msgstr "Modificati nota"
 
-msgid "Back to note list"
-msgstr "Intoarcere la lista anotarilor"
-
 msgid "Notebook management"
 msgstr "Administrare a notei personal"
 
@@ -6588,9 +6585,6 @@ msgstr "doar petru profesori"
 msgid "Define Headings"
 msgstr "Defineste antete"
 
-msgid "Back to users list"
-msgstr "Inapoi la lista utilizatorilor"
-
 msgid "change rights of"
 msgstr "Schimba drepturile lui"
 
@@ -7007,9 +7001,6 @@ msgstr "Grupuri din clase"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Utilizand aceasta optiune, puteti crea grupuri bazate pe clasele inscrise la cursul dumneavoastra."
-
-msgid "Back to Groups list"
-msgstr "Inapoi la lista de grupuri."
 
 msgid "A new forum has now been created"
 msgstr "Noul forum este facut"
@@ -8415,9 +8406,6 @@ msgstr "Ati ajuns la limita de timp pentru a realiza acest exercitiu"
 msgid "Last score of a exercise"
 msgstr "Ultimul punctaj obtinut"
 
-msgid "Back to result list"
-msgstr "Inapoi la lista de rezultate"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Daca etitati punctajul acestei intrebari veti modifica rezultatul exercitiului,va reamintim ca acest exercitiu este adaugat la o Lectie"
 
@@ -8498,9 +8486,6 @@ msgstr "Utilizatori online"
 
 msgid "Remove"
 msgstr "Indepartati"
-
-msgid "Back to courses list"
-msgstr "Inapoi la lista cursurilor"
 
 msgid "Links"
 msgstr "Linkuri"
@@ -10214,9 +10199,6 @@ msgstr "Trimite un mesaj"
 
 msgid "Menu"
 msgstr "Meniu"
-
-msgid "Back to user list"
-msgstr "Intoarcetiva la lista de uzuari"
 
 msgid "Graphic not available"
 msgstr "Grafic nu disponibil"
@@ -14237,9 +14219,6 @@ msgstr "Scorul nu poate fi mai mare decat scorul maxim."
 
 msgid "Delete all papers"
 msgstr "Sterge toate fisierele"
-
-msgid "Back to Assignments list"
-msgstr "Inapoi la lista"
 
 msgid "Edit and mark paper"
 msgstr "Modifica fisierul"
@@ -18599,14 +18578,8 @@ msgstr "Intrebare mica"
 msgid "questions"
 msgstr "Intrebări mici"
 
-msgid "Back to test list"
-msgstr "Înapoi la lista de exerciții"
-
 msgid "Category description"
 msgstr "Descriere categorie"
-
-msgid "Back to category list"
-msgstr "Înapoi la lista de categorii"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Numele categoriei nu exista.Va rugam indicati alt nume."

@@ -103,7 +103,7 @@ function loadGraph() {
                     attr(\"href\", url+'&export=excel')
                     .attr('class', 'btn btn--plain')
                     .attr('target', '_blank')
-                    .html('".addslashes(get_lang('ExportAsXLS'))."');
+                    .html('".addslashes(get_lang('Export to XLS'))."');
 
                 $('#messages').append(exportLink);
 

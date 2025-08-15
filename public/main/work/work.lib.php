@@ -45,7 +45,7 @@ function displayWorkActionLinks($id, $action, $isTutor)
 
     if (!empty($id)) {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$my_back_id.'">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))).
             '</a>';
     }
 

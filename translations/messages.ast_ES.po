@@ -3372,9 +3372,6 @@ msgstr "Amestar nota"
 msgid "Edit my personal note"
 msgstr "Camudar nota"
 
-msgid "Back to note list"
-msgstr "Volver a la llista d'anotaciones"
-
 msgid "Notebook management"
 msgstr "Alminitración de nota personal"
 
@@ -6579,9 +6576,6 @@ msgstr "Namás profesores"
 msgid "Define Headings"
 msgstr "Definir encabezaos"
 
-msgid "Back to users list"
-msgstr "Tornar al llistáu d'usuarios"
-
 msgid "change rights of"
 msgstr "cambiar los permisos de"
 
@@ -6998,9 +6992,6 @@ msgstr "Grupos de clases"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Información de grupos de clases"
-
-msgid "Back to Groups list"
-msgstr "Volver a la llista de grupos"
 
 msgid "A new forum has now been created"
 msgstr "Creóse un foru nuevu"
@@ -8406,9 +8397,6 @@ msgstr "Algamóse'l llímite de tiempu pa facer esti exerciciu"
 msgid "Last score of a exercise"
 msgstr "Puntuación cabera algamada"
 
-msgid "Back to result list"
-msgstr "Volver a la llista de resultaos"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Si edites la puntuación d'esta entruga, modificarás el resultáu del exerciciu, remembra qu'esti exerciciu tamién ta amestáu a una lleición"
 
@@ -8489,9 +8477,6 @@ msgstr "Usuarios coneutaos"
 
 msgid "Remove"
 msgstr "Esborrar"
-
-msgid "Back to courses list"
-msgstr "Tornar al mio llistáu de cursos"
 
 msgid "Links"
 msgstr "Enllaces"
@@ -10205,9 +10190,6 @@ msgstr "Unviar mensax"
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "Back to user list"
-msgstr "Volver a la llista d'usuarios"
 
 msgid "Graphic not available"
 msgstr "Gráficu nun disponible"
@@ -14228,9 +14210,6 @@ msgstr "La calificación nun puede ser superior a la calificación másima"
 
 msgid "Delete all papers"
 msgstr "Desaniciar too"
-
-msgid "Back to Assignments list"
-msgstr "Volver a la llista de Tarees"
 
 msgid "Edit and mark paper"
 msgstr "Editar y marcar la tarea"
@@ -18585,13 +18564,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

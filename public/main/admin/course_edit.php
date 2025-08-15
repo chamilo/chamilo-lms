@@ -257,7 +257,7 @@ $form->addText('video_url', get_lang('Video URL'), false);
 $form->addCheckBox('sticky', null, get_lang('Special course'));
 
 if ('true' === api_get_setting('course.show_course_duration')) {
-    $form->addElement('text', 'duration', get_lang('Duration (in minutes)'), [
+    $form->addElement('text', 'duration', get_lang('Duration (minutes)'), [
         'id' => 'duration',
         'maxlength' => 10,
     ]);
@@ -468,7 +468,7 @@ if ($form->validate()) {
 $tabs = [
     'general' => [
         'url' => 'course_edit.php?id='.$courseId,
-        'content' => get_lang('Edit course'),
+        'content' => get_lang('Edit course information'),
     ],
     'catalogue_access' => [
         'url' => 'course_edit.php?id='.$courseId.'&view=catalogue_access',

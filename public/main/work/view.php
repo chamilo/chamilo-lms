@@ -211,7 +211,7 @@ if (($isDrhOfCourse || $allowEdition || $isDrhOfSession || user_is_author($id)) 
         if ($work->getContainsFile()) {
             if ($work->getResourceNode()->hasResourceFile()) {
                 $actions = Display::url(
-                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')),
+                    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))),
                     api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq()
                 );
                 $url = $repo->getResourceFileDownloadUrl($work).'?'.api_get_cidreq();

@@ -53,7 +53,7 @@ if (isset($_GET['message'])) {
 }
 
 $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to result list')).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Result list'))).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 ?>
 

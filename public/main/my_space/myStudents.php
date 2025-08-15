@@ -1490,7 +1490,7 @@ if (empty($details)) {
             $csv_content[] = $csvRow;
             $exportCourseList[$sId][] = $csvRow;
             $sessionAction = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCSV')),
+                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
                 $currentUrl.'&'
                 .http_build_query(
                     [

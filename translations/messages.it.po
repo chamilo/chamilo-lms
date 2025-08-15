@@ -3381,9 +3381,6 @@ msgstr "Aggiungi appunto"
 msgid "Edit my personal note"
 msgstr "Modifica appunto"
 
-msgid "Back to note list"
-msgstr "Torna all'elenco degli appunti"
-
 msgid "Notebook management"
 msgstr "Gestione appunti"
 
@@ -6588,9 +6585,6 @@ msgstr "solo docenti"
 msgid "Define Headings"
 msgstr "Definisci le intestazioni"
 
-msgid "Back to users list"
-msgstr "Ritorna all'elenco degli utenti"
-
 msgid "change rights of"
 msgstr "cambia i diritti di"
 
@@ -7007,9 +7001,6 @@ msgstr "Gruppi basati sulle classi"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Scegliendo tale opzione, verranno creati dei gruppi sulla base delle classi iscritte al corso."
-
-msgid "Back to Groups list"
-msgstr "Torna all'elenco gruppi"
 
 msgid "A new forum has now been created"
 msgstr "Il forum è stato creato"
@@ -8415,9 +8406,6 @@ msgstr "Configura i limiti di tempo"
 msgid "Last score of a exercise"
 msgstr "Ultimo punteggio di un test"
 
-msgid "Back to result list"
-msgstr "Torna all'elenco dei risultati"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Se modifichi il punteggio di un quesito, ricorda che il Test è inserito in un modulo didattico: i punteggi del modulo potrebbero esserne influenzati"
 
@@ -8498,9 +8486,6 @@ msgstr "Utenti collegati"
 
 msgid "Remove"
 msgstr "Rimuovi"
-
-msgid "Back to courses list"
-msgstr "<< elenco dei corsi"
 
 msgid "Links"
 msgstr "Collegamenti"
@@ -10214,9 +10199,6 @@ msgstr "Invia messaggio"
 
 msgid "Menu"
 msgstr "Menù"
-
-msgid "Back to user list"
-msgstr "Torna all'elenco dei corsisti"
 
 msgid "Graphic not available"
 msgstr "Grafico non disponibile"
@@ -14237,9 +14219,6 @@ msgstr "Il voto non può superare il valore massimo stabilito"
 
 msgid "Delete all papers"
 msgstr "Elimina tutti i file"
-
-msgid "Back to Assignments list"
-msgstr "Torna all'elenco degli elaborati"
 
 msgid "Edit and mark paper"
 msgstr "Modifica file"
@@ -18599,14 +18578,8 @@ msgstr "quesiti"
 msgid "questions"
 msgstr "quesiti"
 
-msgid "Back to test list"
-msgstr "Torna alla lista del test"
-
 msgid "Category description"
 msgstr "Descrizione categoria"
-
-msgid "Back to category list"
-msgstr "Torna alla lista categorie"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Un'altra categoria ha lo stesso nome. Usane un altro."

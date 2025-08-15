@@ -3380,9 +3380,6 @@ msgstr "Vytvoriť poznámku"
 msgid "Edit my personal note"
 msgstr "Upraviť moje osobné poznámky"
 
-msgid "Back to note list"
-msgstr "Späť na zoznam poznámok"
-
 msgid "Notebook management"
 msgstr "Správa knihy poznámok"
 
@@ -6587,9 +6584,6 @@ msgstr "len pre lektorov"
 msgid "Define Headings"
 msgstr "Definovať nadpisy"
 
-msgid "Back to users list"
-msgstr "Spať na zoznam používateľov"
-
 msgid "change rights of"
 msgstr "zmeniť práva"
 
@@ -7006,9 +7000,6 @@ msgstr "Skupiny z tried"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Použitím tejto možnosti môžete vytvoriť skupiny na základe tried zapísaných do Vášho kurzu."
-
-msgid "Back to Groups list"
-msgstr "Späť do zoznamu skupín"
 
 msgid "A new forum has now been created"
 msgstr "Nové fórum bolo vytvorené"
@@ -8414,9 +8405,6 @@ msgstr "Administrátor dosiahol časový limit"
 msgid "Last score of a exercise"
 msgstr "Posledné bodové hodnotenie cvičenia"
 
-msgid "Back to result list"
-msgstr "Späť do zoznamu výsledkov"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Ak upravíte skóre otázky, pamätajte, že toto cvičenie bolo pridané do kurzu"
 
@@ -8497,9 +8485,6 @@ msgstr "Používatelia online"
 
 msgid "Remove"
 msgstr "Odstrániť"
-
-msgid "Back to courses list"
-msgstr "Späť na zoznam mojích kurzov"
 
 msgid "Links"
 msgstr "Odkazy"
@@ -10213,9 +10198,6 @@ msgstr "Poslať správu"
 
 msgid "Menu"
 msgstr "Ponuka"
-
-msgid "Back to user list"
-msgstr "Späť na zoznam používateľov"
 
 msgid "Graphic not available"
 msgstr "Grafika nie je k dispozícii"
@@ -14236,9 +14218,6 @@ msgstr "Známka nemôže prekročiť maximálne skóre"
 
 msgid "Delete all papers"
 msgstr "Odstrániť všetky papiere"
-
-msgid "Back to Assignments list"
-msgstr "Späť do zoznamu zadaní"
 
 msgid "Edit and mark paper"
 msgstr "Upraviť a označiť média"
@@ -18598,14 +18577,8 @@ msgstr "otázka"
 msgid "questions"
 msgstr "otázky"
 
-msgid "Back to test list"
-msgstr "Späť do testu"
-
 msgid "Category description"
 msgstr "Popis kategórie"
-
-msgid "Back to category list"
-msgstr "Späť do kategórie"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Názov kategórie už existuje. Použite prosím iný názov."

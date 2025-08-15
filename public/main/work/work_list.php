@@ -65,7 +65,7 @@ $interbreadcrumb[] = [
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))).'</a>';
 
 $actionsRight = '';
 $onlyOnePublication = ('true' === api_get_setting('work.allow_only_one_student_publication_per_user'));

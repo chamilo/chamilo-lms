@@ -3373,9 +3373,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6580,9 +6577,6 @@ msgstr "samo predavač"
 msgid "Define Headings"
 msgstr "Odredi naslove"
 
-msgid "Back to users list"
-msgstr "Natrag u popis korisnika"
-
 msgid "change rights of"
 msgstr "izmijeni prava"
 
@@ -6999,9 +6993,6 @@ msgstr "Skupine iz istih razreda"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Odabir ove opcije omogučava stvaranje skupine temeljene na razredima upisanih u vaš kolegij"
-
-msgid "Back to Groups list"
-msgstr ""
 
 msgid "A new forum has now been created"
 msgstr "Napravljen je novi forum"
@@ -8407,9 +8398,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8490,9 +8478,6 @@ msgstr "Aktivnih korisnika"
 
 msgid "Remove"
 msgstr "Ukloni"
-
-msgid "Back to courses list"
-msgstr "Povratak na popis kolegija"
 
 msgid "Links"
 msgstr "Poveznice"
@@ -10205,9 +10190,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14229,9 +14211,6 @@ msgstr "Broj bodova ne može biti veći od maksimalnog broja bodova"
 
 msgid "Delete all papers"
 msgstr "Obriši sve dokumente"
-
-msgid "Back to Assignments list"
-msgstr "Povratak na popis zadataka"
 
 msgid "Edit and mark paper"
 msgstr "Uredi i ocijeni dokument"
@@ -18586,13 +18565,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

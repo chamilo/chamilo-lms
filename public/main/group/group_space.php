@@ -73,7 +73,7 @@ Display::display_header(
 Display::display_introduction_section(TOOL_GROUP);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Group list'))).
     '</a>';
 
 $confirmationMessage = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));

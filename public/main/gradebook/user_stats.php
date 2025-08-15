@@ -123,7 +123,7 @@ if (!empty($evaluationId)) {
         'name' => get_lang('Assessment details'),
     ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
-	'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to result list')).'</a>';
+	'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Result list'))).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat='.$category[0]->get_id().'&'.api_get_cidreq().'" target="_blank">

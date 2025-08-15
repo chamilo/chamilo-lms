@@ -403,7 +403,7 @@ if (false === $skipData) {
 $view->assign('header', $nameTools);
 $view->assign('form', $form->returnForm());
 $view->assign('actions', Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
-$view->assign('title', get_lang('Students').' ('.$numberStudents.')');
+$view->assign('title', get_lang('Learners').' ('.$numberStudents.')');
 
 $template = $view->get_template('my_space/index.tpl');
 $content = $view->fetch($template);

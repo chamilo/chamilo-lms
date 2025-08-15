@@ -76,7 +76,7 @@ $interbreadcrumb[] = [
 
 Display::display_header(null);
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 if (!empty($my_folder_data['description'])) {
     echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.

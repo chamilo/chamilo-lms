@@ -3380,9 +3380,6 @@ msgstr "Crear nota"
 msgid "Edit my personal note"
 msgstr "Editar a miña nota persoal"
 
-msgid "Back to note list"
-msgstr "Voltar ao listado de notas"
-
 msgid "Notebook management"
 msgstr "Xestión do caderno"
 
@@ -6587,9 +6584,6 @@ msgstr "Só profesores"
 msgid "Define Headings"
 msgstr "Definir encabezados"
 
-msgid "Back to users list"
-msgstr "Voltar &aacute lista de usuarios"
-
 msgid "change rights of"
 msgstr "cambiar os dereitos de"
 
@@ -7006,9 +7000,6 @@ msgstr "Grupos de clases"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Información de grupos de clases"
-
-msgid "Back to Groups list"
-msgstr "Volver á lista de grupos"
 
 msgid "A new forum has now been created"
 msgstr "Creouse o novo foro"
@@ -8414,9 +8405,6 @@ msgstr "Alcanzou o límite de tempo para realizar este exercicio"
 msgid "Last score of a exercise"
 msgstr "Última puntuación obtida"
 
-msgid "Back to result list"
-msgstr "Volver á lista de resultados"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Se edita a puntuación desta pregunta modificará o resultado do exercicio, lembre que este exercicio tamén está agregado a unha lección"
 
@@ -8497,9 +8485,6 @@ msgstr "Usuarios conectados"
 
 msgid "Remove"
 msgstr "Eliminar"
-
-msgid "Back to courses list"
-msgstr "Entrar no curso"
 
 msgid "Links"
 msgstr "Ligazóns"
@@ -10213,9 +10198,6 @@ msgstr "Mandar unha mensaxe"
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "Back to user list"
-msgstr "Voltar á lista de usuarios"
 
 msgid "Graphic not available"
 msgstr "Gráfico non dispoñible"
@@ -14236,9 +14218,6 @@ msgstr "A marca non pode exceder a puntuación máxima"
 
 msgid "Delete all papers"
 msgstr "Eliminar tódolos papeis"
-
-msgid "Back to Assignments list"
-msgstr "Voltar á lista de tarefas"
 
 msgid "Edit and mark paper"
 msgstr "Editar e marcar papel"
@@ -18598,14 +18577,8 @@ msgstr "Pregunta"
 msgid "questions"
 msgstr "Preguntas"
 
-msgid "Back to test list"
-msgstr "Regresar ás lista de exercicios"
-
 msgid "Category description"
 msgstr "Descrición da categoría"
-
-msgid "Back to category list"
-msgstr "Regresar á lista de categorias"
 
 msgid "This category name already exists. Please use another name."
 msgstr "O nome desta categoria xa existe. Por favor use outro nome"

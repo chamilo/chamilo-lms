@@ -76,7 +76,7 @@ if ($httpRequest->query->has('url_id')) {
     }
 }
 
-$form->addCheckBox('login_only', get_lang('Login only'), get_lang('Yes'));
+$form->addCheckBox('login_only', get_lang('Login-only URL'), get_lang('Yes'));
 
 $form->addButtonCreate(get_lang('Save'));
 
@@ -137,7 +137,7 @@ if ($form->validate()) {
                     if (!$sameDomain) {
                         Display::addFlash(
                             Display::return_message(
-                                get_lang('To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name will not be taken into account for access sharing.')
+                                get_lang('To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing.')
                             )
                         );
                     }
@@ -189,7 +189,12 @@ $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple a
 Display::display_header($tool_name);
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(
+        ActionIcon::BACK,
+        'ch-tool-icon',
+        null, ICON_SIZE_MEDIUM,
+        sprintf(get_lang('Back to %s'), get_lang('URL list'))
+    ),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo '</div>';

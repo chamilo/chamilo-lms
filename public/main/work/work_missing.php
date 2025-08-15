@@ -100,7 +100,7 @@ if (isset($_GET['list']) && 'with' === $_GET['list']) {
 Display::display_header(null);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))).'</a>';
 if (!empty($workId)) {
     if (empty($_GET['list']) or 'with' == Security::remove_XSS($_GET['list'])) {
         $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.

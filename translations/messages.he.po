@@ -3381,9 +3381,6 @@ msgstr "צור הערה"
 msgid "Edit my personal note"
 msgstr "ערוך את ההערה האישית שלי"
 
-msgid "Back to note list"
-msgstr "חזרה לרשימת הערות"
-
 msgid "Notebook management"
 msgstr "ניהול מחברת"
 
@@ -6588,9 +6585,6 @@ msgstr "מורים בלבד"
 msgid "Define Headings"
 msgstr "הגדר כותרות"
 
-msgid "Back to users list"
-msgstr "חזרה לרשימת המשתמשים"
-
 msgid "change rights of"
 msgstr "שינוי זכויות של"
 
@@ -7007,9 +7001,6 @@ msgstr "קבוצות משיעורים"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "באמצעות אפשרות זו, אתה יכול ליצור קבוצות על סמך השיעורים הרשומים לקורס שלך."
-
-msgid "Back to Groups list"
-msgstr "חזרה לרשימת הקבוצות"
 
 msgid "A new forum has now been created"
 msgstr "נוצר כעת פורום חדש"
@@ -8415,9 +8406,6 @@ msgstr "מנהל הגבלה בזמן"
 msgid "Last score of a exercise"
 msgstr "ציון אחרון של תרגיל"
 
-msgid "Back to result list"
-msgstr "חזרה לרשימת התוצאות"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "אם אתה עורך ציון שאלה, אנא זכור שתרגיל זה נוסף בקורס"
 
@@ -8498,9 +8486,6 @@ msgstr "משתמשים מחוברים"
 
 msgid "Remove"
 msgstr "הסרה"
-
-msgid "Back to courses list"
-msgstr "חזרה לרשימת קורסים"
 
 msgid "Links"
 msgstr "קישורים"
@@ -10214,9 +10199,6 @@ msgstr "שלח הודעה"
 
 msgid "Menu"
 msgstr "תפריט"
-
-msgid "Back to user list"
-msgstr "חזרה לרשימת המשתמשים"
 
 msgid "Graphic not available"
 msgstr "הגרפיקה לא זמינה"
@@ -14237,9 +14219,6 @@ msgstr "הציון אינו יכול לחרוג מהניקוד המרבי"
 
 msgid "Delete all papers"
 msgstr "מחק את כל הניירות"
-
-msgid "Back to Assignments list"
-msgstr "חזרה לרשימת המשימות"
 
 msgid "Edit and mark paper"
 msgstr "ערוך וסמן נייר"
@@ -18598,14 +18577,8 @@ msgstr "שאלה"
 msgid "questions"
 msgstr "שאלות"
 
-msgid "Back to test list"
-msgstr "חזרה לרשימת הבדיקות"
-
 msgid "Category description"
 msgstr "תיאור קטגוריה"
-
-msgid "Back to category list"
-msgstr "חזרה לרשימת הקטגוריות"
 
 msgid "This category name already exists. Please use another name."
 msgstr "שם הקטגוריה הזה כבר קיים. אנא השתמש בשם אחר."

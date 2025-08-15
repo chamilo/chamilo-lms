@@ -3380,9 +3380,6 @@ msgstr "Afegir nota"
 msgid "Edit my personal note"
 msgstr "Modificar nota"
 
-msgid "Back to note list"
-msgstr "Tornar a la llista d'anotacions"
-
 msgid "Notebook management"
 msgstr "Administració de nota personal"
 
@@ -6587,9 +6584,6 @@ msgstr "Només professors"
 msgid "Define Headings"
 msgstr "Definir encapçalaments"
 
-msgid "Back to users list"
-msgstr "Tornar a la llista d'usuaris"
-
 msgid "change rights of"
 msgstr "Canviar drets de"
 
@@ -7006,9 +7000,6 @@ msgstr "Grups de classes"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs."
-
-msgid "Back to Groups list"
-msgstr "Tornar a la llista de grups"
 
 msgid "A new forum has now been created"
 msgstr "El nou fòrum ha estat creat"
@@ -8414,9 +8405,6 @@ msgstr "Ha arribat a el límit de temps per a realitzar aquest exercici"
 msgid "Last score of a exercise"
 msgstr "Última puntuació obtinguda"
 
-msgid "Back to result list"
-msgstr "Tornar a la llista de resultats"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Si edita la puntuació d'aquesta pregunta modificarà el resultat de l'exercici, recordi que aquest exercici està agregat també a una Lliçó"
 
@@ -8497,9 +8485,6 @@ msgstr "Usuaris connectats"
 
 msgid "Remove"
 msgstr "Esborra"
-
-msgid "Back to courses list"
-msgstr "Retorna a la llista dels meus cursos"
 
 msgid "Links"
 msgstr "Enllaços"
@@ -10213,9 +10198,6 @@ msgstr "Enviar missatge"
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "Back to user list"
-msgstr "Tornar a la llista d'usuaris"
 
 msgid "Graphic not available"
 msgstr "Gràfic no disponible"
@@ -14236,9 +14218,6 @@ msgstr "La qualificació no pot ser superior a la qualificació màxima"
 
 msgid "Delete all papers"
 msgstr "Eliminar tot"
-
-msgid "Back to Assignments list"
-msgstr "Tornar a la llista de tasques"
 
 msgid "Edit and mark paper"
 msgstr "Editar i marcar la tasca"
@@ -18598,14 +18577,8 @@ msgstr "pregunta"
 msgid "questions"
 msgstr "preguntes"
 
-msgid "Back to test list"
-msgstr "Torna a la llista d'exercicis"
-
 msgid "Category description"
 msgstr "Descripció de la categoria"
-
-msgid "Back to category list"
-msgstr "Torna a la llista de categories"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Aquest nom de categoria ja existeix. Indiqueu un altre nom."

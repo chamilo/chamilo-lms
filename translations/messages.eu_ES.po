@@ -3372,9 +3372,6 @@ msgstr "Sortu oharra"
 msgid "Edit my personal note"
 msgstr "Editatu oharra"
 
-msgid "Back to note list"
-msgstr "Itzuli ohar zerrendara"
-
 msgid "Notebook management"
 msgstr "Ohar koadernoa kudeatzea"
 
@@ -6579,9 +6576,6 @@ msgstr "Irakasleak soilik"
 msgid "Define Headings"
 msgstr "Zehaztu izenburuak"
 
-msgid "Back to users list"
-msgstr "Itzuli erabiltzaile zerrendara"
-
 msgid "change rights of"
 msgstr "aldatu eskubideak honakoari:"
 
@@ -6998,9 +6992,6 @@ msgstr "Klaseetako taldeak"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Aukera hau baliatuz gero, zure ikastaroan inskribaturiko klaseetan oinarrituz sortu ahalko dituzu taldeak"
-
-msgid "Back to Groups list"
-msgstr "Itzuli talde zerrendara"
 
 msgid "A new forum has now been created"
 msgstr "Foro berri bat oraintxe sortu da"
@@ -8406,9 +8397,6 @@ msgstr "Ariketa hau egiteko denbora bete da"
 msgid "Last score of a exercise"
 msgstr "Ariketaren azken puntuazioa"
 
-msgid "Back to result list"
-msgstr "Itzuli emaitzen zerrendara"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Galdera honen puntuazioa editatzen baduzu, ariketaren emaitza aldatuko da. Gogoratu ariketa hau ikastaro bati ere gehitu zitzaiola."
 
@@ -8489,9 +8477,6 @@ msgstr "Erabiltzaileak online"
 
 msgid "Remove"
 msgstr "Kendu"
-
-msgid "Back to courses list"
-msgstr "Itzuli ikastaro zerrendara"
 
 msgid "Links"
 msgstr "Loturak"
@@ -10205,9 +10190,6 @@ msgstr "Bidali mezua"
 
 msgid "Menu"
 msgstr "Menua"
-
-msgid "Back to user list"
-msgstr "Itzuli erabiltzaile zerrendara"
 
 msgid "Graphic not available"
 msgstr "Grafikoa ez dago eskuragarri"
@@ -14228,9 +14210,6 @@ msgstr "Kalifikazioak ezin du gehieneko puntuazioa gainditu"
 
 msgid "Delete all papers"
 msgstr "Ezabatu lan guztiak"
-
-msgid "Back to Assignments list"
-msgstr "Itzuli Egiteko lanen zerrendara"
 
 msgid "Edit and mark paper"
 msgstr "Editatu eta markatu lana"
@@ -18590,14 +18569,8 @@ msgstr "galdera"
 msgid "questions"
 msgstr "galderak"
 
-msgid "Back to test list"
-msgstr "Itzuli ariketa zerrendara"
-
 msgid "Category description"
 msgstr "Kategoriaren azalpena"
-
-msgid "Back to category list"
-msgstr "Itzuli kategoria zerrendara"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Lehendik da kategoriaren izen hau. Mesedez, adierazi beste izen bat"

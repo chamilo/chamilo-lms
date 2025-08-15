@@ -3372,9 +3372,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6579,9 +6576,6 @@ msgstr "ผู้สอนเท่านั้น"
 msgid "Define Headings"
 msgstr "นิยามหัวเรื่อง"
 
-msgid "Back to users list"
-msgstr "กลับไปที่รายชื่อผู้ใช้"
-
 msgid "change rights of"
 msgstr "เปลี่ยนแปลงสิทธิ์ของ"
 
@@ -6997,9 +6991,6 @@ msgid "Groups from classes"
 msgstr ""
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
-msgstr ""
-
-msgid "Back to Groups list"
 msgstr ""
 
 msgid "A new forum has now been created"
@@ -8406,9 +8397,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8489,9 +8477,6 @@ msgstr "สมาชิกที่กำลังใช้งาน"
 
 msgid "Remove"
 msgstr "เอาออก"
-
-msgid "Back to courses list"
-msgstr "ย้อนกลับ"
 
 msgid "Links"
 msgstr "การเชื่อมโยง"
@@ -10204,9 +10189,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14227,9 +14209,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18585,13 +18564,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

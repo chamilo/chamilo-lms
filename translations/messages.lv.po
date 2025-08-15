@@ -3373,9 +3373,6 @@ msgstr "Veidot piezīmi"
 msgid "Edit my personal note"
 msgstr "Rediģēt manas personīgās piezīmes"
 
-msgid "Back to note list"
-msgstr "Atpakaļ uz piezīmju sarakstu"
-
 msgid "Notebook management"
 msgstr "Piezīmju grāmatas vadība"
 
@@ -6580,9 +6577,6 @@ msgstr "Tikai Lektoram"
 msgid "Define Headings"
 msgstr "Definēt virsrakstus"
 
-msgid "Back to users list"
-msgstr "Atgriezties Lietotāju sarakstā"
-
 msgid "change rights of"
 msgstr "tiesību maiņa"
 
@@ -6999,9 +6993,6 @@ msgstr "Klašu grupas"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Lietojot šo opciju, Jūs variet veidot grupas no klasēm, kuras ir pierakstītas Jūsu kursam"
-
-msgid "Back to Groups list"
-msgstr "Atpakaļ uz Grupu sarakstu"
 
 msgid "A new forum has now been created"
 msgstr "Tikko tika izveidota jauna diskusiju telpa"
@@ -8407,9 +8398,6 @@ msgstr "Sasniegts laika limits (admin)"
 msgid "Last score of a exercise"
 msgstr "Testa pēdējais rezultāts"
 
-msgid "Back to result list"
-msgstr "Atpakaļ uz rezultātu sarakstu"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Ja rediģējat jautājuma vērtējumu, atcerieties, ka šis tests ir pievienots kursā"
 
@@ -8490,9 +8478,6 @@ msgstr "Lietotāji tiešsaistē"
 
 msgid "Remove"
 msgstr "Izņemt"
-
-msgid "Back to courses list"
-msgstr "Atpakaļ uz manu kursu sarakstu"
 
 msgid "Links"
 msgstr "Ievietot Hipersaišu arhīvā esošas tīmekļa hipersaites"
@@ -10206,9 +10191,6 @@ msgstr "Sūtīt ziņu"
 
 msgid "Menu"
 msgstr "Izvēlne"
-
-msgid "Back to user list"
-msgstr "Atpakaļ uz lietotāju sarakstu"
 
 msgid "Graphic not available"
 msgstr "Grafiks nav pieejams"
@@ -14229,9 +14211,6 @@ msgstr "Marķējums nevar būt lielāks par maksimālo vērtējumu"
 
 msgid "Delete all papers"
 msgstr "Dzēst visus iesniegtos darbus"
-
-msgid "Back to Assignments list"
-msgstr "Atgriezties uz patstāvīgo darbu sarakstu"
 
 msgid "Edit and mark paper"
 msgstr "Rediģēt un vērtēt patstāvīgo darbu"
@@ -18586,14 +18565,8 @@ msgstr "Jautājuma zemākais gadījums"
 msgid "questions"
 msgstr "Jautājuma zemākais gadījums"
 
-msgid "Back to test list"
-msgstr "Atgriezties uz Testu sarakstu"
-
 msgid "Category description"
 msgstr "Kategoriju apraksts"
-
-msgid "Back to category list"
-msgstr "Atgriezties Kategoriju sarakstā"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Tāds pievienotās Kategorijas nosaukums jau eksistē"

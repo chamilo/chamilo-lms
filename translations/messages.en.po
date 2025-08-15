@@ -3372,9 +3372,6 @@ msgstr "Create note"
 msgid "Edit my personal note"
 msgstr "Edit my personal note"
 
-msgid "Back to note list"
-msgstr "Back to note list"
-
 msgid "Notebook management"
 msgstr "Notebook management"
 
@@ -6579,9 +6576,6 @@ msgstr "Teachers only"
 msgid "Define Headings"
 msgstr "Define Headings"
 
-msgid "Back to users list"
-msgstr "Back to users list"
-
 msgid "change rights of"
 msgstr "change rights of"
 
@@ -7001,9 +6995,6 @@ msgstr "Groups from classes"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Using this option, you can create groups based on the classes subscribed to your course."
-
-msgid "Back to Groups list"
-msgstr "Back to Groups list"
 
 msgid "A new forum has now been created"
 msgstr "A new forum has now been created"
@@ -8409,9 +8400,6 @@ msgstr "Reached time limit admin"
 msgid "Last score of a exercise"
 msgstr "Last score of a exercise"
 
-msgid "Back to result list"
-msgstr "Back to result list"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "If you edit a question score, please remember that this Exercise was added in a Course"
 
@@ -8492,9 +8480,6 @@ msgstr "Users online"
 
 msgid "Remove"
 msgstr "Remove"
-
-msgid "Back to courses list"
-msgstr "Back to courses list"
 
 msgid "Links"
 msgstr "Links"
@@ -10208,9 +10193,6 @@ msgstr "Send a message"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Back to user list"
 
 msgid "Graphic not available"
 msgstr "Graphic not available"
@@ -14231,9 +14213,6 @@ msgstr "The mark cannot exceed maximum score"
 
 msgid "Delete all papers"
 msgstr "Delete all papers"
-
-msgid "Back to Assignments list"
-msgstr "Back to Assignments list"
 
 msgid "Edit and mark paper"
 msgstr "Edit and mark paper"
@@ -18593,14 +18572,8 @@ msgstr "question"
 msgid "questions"
 msgstr "questions"
 
-msgid "Back to test list"
-msgstr "Back to test list"
-
 msgid "Category description"
 msgstr "Category description"
-
-msgid "Back to category list"
-msgstr "Back to category list"
 
 msgid "This category name already exists. Please use another name."
 msgstr "This category name already exists. Please use another name."
@@ -24130,9 +24103,6 @@ msgstr "By checking this box, I confirm that I accept the data processing by the
 
 msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
 msgstr "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
-
-msgid "Back to tests list"
-msgstr "Back to tests list"
 
 msgid "Number of times the question was answered"
 msgstr "Number of times the question was answered"
@@ -30272,5 +30242,26 @@ msgstr "Login-only URL"
 msgid "User groups"
 msgstr "User groups"
 
-msgid "Invalid access URL or session"
-msgstr "Invalid access URL or session"
+msgid "Invalid access URL or course"
+msgstr "Invalid access URL or course"
+
+msgid "Edit URL"
+msgstr "Edit URL"
+
+msgid "Back to %s"
+msgstr "Back to %s"
+
+msgid "Currently showing users for role: <strong>%s</strong>"
+msgstr "Currently showing users for role: <strong>%s</strong>"
+
+msgid "Missing POST data"
+msgstr "Missing POST data"
+
+msgid "To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing."
+msgstr "To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing."
+
+msgid "Time spent on assignments"
+msgstr "Time spent on assignments"
+
+msgid "Inactive learners"
+msgstr "Inactive learners"

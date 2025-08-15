@@ -3381,9 +3381,6 @@ msgstr "انشاء ملاحظة"
 msgid "Edit my personal note"
 msgstr "تعديل ملاحظتي الشخصية"
 
-msgid "Back to note list"
-msgstr "الرجوع الى قائمة الملاحظات"
-
 msgid "Notebook management"
 msgstr "ادارة دفتر الملاحظات"
 
@@ -6588,9 +6585,6 @@ msgstr "مدرسين فقط"
 msgid "Define Headings"
 msgstr "Define Headings"
 
-msgid "Back to users list"
-msgstr "الرجوع لقائمة المستخدمين"
-
 msgid "change rights of"
 msgstr "غير صلاحيات"
 
@@ -7007,9 +7001,6 @@ msgstr "مجموعات من الفصول"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "باستخدام هذه الخاصية, يمكنك  إنشاء مجموعات بناءا على الفصول المسجلة في مقررك"
-
-msgid "Back to Groups list"
-msgstr "الرجوع لقائمة المجموعات"
 
 msgid "A new forum has now been created"
 msgstr "تم إنشاء المنتدى الجديد"
@@ -8415,9 +8406,6 @@ msgstr "الوصول لحد الوقت للمدير"
 msgid "Last score of a exercise"
 msgstr "اخر درجة للتمرين"
 
-msgid "Back to result list"
-msgstr "الرجوع الى قائمة النتائج"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "اذا قمت بتعديل درجة السؤال، فتذكر بان هذا التمرين تم اضافته الى المقرر"
 
@@ -8498,9 +8486,6 @@ msgstr "المستخدمون المتصلون"
 
 msgid "Remove"
 msgstr "إزالة"
-
-msgid "Back to courses list"
-msgstr " الرجوع إلى قائمة مقرراتي"
 
 msgid "Links"
 msgstr " روابط"
@@ -10214,9 +10199,6 @@ msgstr "ارسال رسالة"
 
 msgid "Menu"
 msgstr "قائمة"
-
-msgid "Back to user list"
-msgstr "الرجوع الى قائمة المستخدمين"
 
 msgid "Graphic not available"
 msgstr "الرسوم غير متوفرة"
@@ -14237,9 +14219,6 @@ msgstr "الدرجة لا يمكن ان تتجاوز الدرجة القصوى"
 
 msgid "Delete all papers"
 msgstr "حذف جميع الملفات"
-
-msgid "Back to Assignments list"
-msgstr "العودة الى قائمة الواجبات"
 
 msgid "Edit and mark paper"
 msgstr "تحرير ووضع الدرجة للورقة"
@@ -18598,14 +18577,8 @@ msgstr "سؤال"
 msgid "questions"
 msgstr "اسئلة"
 
-msgid "Back to test list"
-msgstr "العودة الى قائمة الاختبار"
-
 msgid "Category description"
 msgstr "وصف الفئة"
-
-msgid "Back to category list"
-msgstr "العودة الى قائمة الفئة"
 
 msgid "This category name already exists. Please use another name."
 msgstr "اسم الفئة موجود مسبقا، يرجى استخدام اسم اخر"

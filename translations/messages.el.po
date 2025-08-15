@@ -3380,9 +3380,6 @@ msgstr "Δημιουργία σημείωσης"
 msgid "Edit my personal note"
 msgstr "Επεξεργασία προσωπικής σημείωσης"
 
-msgid "Back to note list"
-msgstr "Επιστοφή στην λίστα σημειώσεων"
-
 msgid "Notebook management"
 msgstr "Διαχείριση σημειωματάριου"
 
@@ -6587,9 +6584,6 @@ msgstr "Μόνο Εκπαιδευτικός"
 msgid "Define Headings"
 msgstr "Ορίστε τους τίτλους"
 
-msgid "Back to users list"
-msgstr "Πίσω στην λίστα των χρηστών"
-
 msgid "change rights of"
 msgstr "Αλλαγή των δικαιωμάτων διαχειριστή του"
 
@@ -7006,9 +7000,6 @@ msgstr "Χρησιμοποιώντας αυτή την επιλογή, μπορ�
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Χρησιμοποιώντας αυτή την επιλογή, μπορείτε να δημιουργήσετε ομάδες βασισμένες στις τάξεις που γράφτηκαν στα μαθήματά σας."
-
-msgid "Back to Groups list"
-msgstr "Επιστροφή στον κατάλογο των ομάδων"
 
 msgid "A new forum has now been created"
 msgstr "Το νέο Forum δημιουργήθηκε"
@@ -8414,9 +8405,6 @@ msgstr "Φθάσατε στο όριο χρόνου διαχειριστή"
 msgid "Last score of a exercise"
 msgstr "Τελευταία βαθμολογία μιας άσκησης"
 
-msgid "Back to result list"
-msgstr "Επιστροφή στον κατάλογο αποτελεσμάτων"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Αν επεξεργάζεσθε την βαθμολογία μιας ερώτησης, παρακαλώ να θυμάσθε ότι αυτή η Ερώτηση έχει προστεθεί σε μια σειρά μαθημάτων"
 
@@ -8497,9 +8485,6 @@ msgstr "Συνδεδεμένοι Χρήστες"
 
 msgid "Remove"
 msgstr "Μετακίνηση σε"
-
-msgid "Back to courses list"
-msgstr "Είσοδος"
 
 msgid "Links"
 msgstr "Σύνδεσμοι"
@@ -10213,9 +10198,6 @@ msgstr "Αποστολή μηνύματος"
 
 msgid "Menu"
 msgstr "Μενού"
-
-msgid "Back to user list"
-msgstr "Επιστροφή στην λίστα χρηστών"
 
 msgid "Graphic not available"
 msgstr "Graphic not available"
@@ -14236,9 +14218,6 @@ msgstr "The mark cannot exceed maximum score"
 
 msgid "Delete all papers"
 msgstr "Delete all papers"
-
-msgid "Back to Assignments list"
-msgstr "Back to Assignments list"
 
 msgid "Edit and mark paper"
 msgstr "Edit and mark paper"
@@ -18598,14 +18577,8 @@ msgstr "ερώτηση"
 msgid "questions"
 msgstr "ερωτήσεις"
 
-msgid "Back to test list"
-msgstr "Επιστροφή στην λίστα των test"
-
 msgid "Category description"
 msgstr "Περιγραφή κατηγορίας"
-
-msgid "Back to category list"
-msgstr "Επιστροφή στην λίστα των κατηγοριών"
 
 msgid "This category name already exists. Please use another name."
 msgstr "This category name already exists. Please use another name."

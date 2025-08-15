@@ -47,7 +47,7 @@ lp_upload_quiz_main();
 function lp_upload_quiz_actions()
 {
     return '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
 }
 
 function lp_upload_quiz_main()

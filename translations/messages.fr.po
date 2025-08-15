@@ -3477,9 +3477,6 @@ msgstr "Enregistrer la note"
 msgid "Edit my personal note"
 msgstr "Modifier la note"
 
-msgid "Back to note list"
-msgstr "Retour à la liste de notes"
-
 msgid "Notebook management"
 msgstr "Gestion du cahier de notes"
 
@@ -6779,9 +6776,6 @@ msgstr "Réservé au responsable"
 msgid "Define Headings"
 msgstr "Définir les intitulés"
 
-msgid "Back to users list"
-msgstr "Retourner à liste des utilisateurs"
-
 msgid "change rights of"
 msgstr "changer les droits de"
 
@@ -7203,9 +7197,6 @@ msgstr "Groupes dans classes"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "En utilisant cette option, vous pouvez créer des groupes basés sur les classes inscrites dans le cours."
-
-msgid "Back to Groups list"
-msgstr "Retour à la liste des groupes"
 
 msgid "A new forum has now been created"
 msgstr "Le nouveau forum a bien été créé."
@@ -8631,9 +8622,6 @@ msgstr "Limite de temps dépassée."
 msgid "Last score of a exercise"
 msgstr "Dernier résultat de l'exercice"
 
-msgid "Back to result list"
-msgstr "Retourner à la liste"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Si vous éditez le score d'une question, le score total de l'exercice sera modifié lui aussi. N'oubliez pas que cet exercice a déjà été ajouté à un parcours."
 
@@ -8714,9 +8702,6 @@ msgstr "Utilisateurs en ligne"
 
 msgid "Remove"
 msgstr "Éliminer"
-
-msgid "Back to courses list"
-msgstr "Retourner à votre liste de cours"
 
 msgid "Links"
 msgstr "Liens"
@@ -10436,9 +10421,6 @@ msgstr "Envoyer un message"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Retour à la liste d'utilisateurs"
 
 msgid "Graphic not available"
 msgstr "Graphique non disponible"
@@ -14531,9 +14513,6 @@ msgstr "La cote ne peut pas être supérieure à la qualification maximale"
 
 msgid "Delete all papers"
 msgstr "Supprimer tous les travaux"
-
-msgid "Back to Assignments list"
-msgstr "Retour à la liste de travaux"
 
 msgid "Edit and mark paper"
 msgstr "Éditer et coter le travail"
@@ -19196,14 +19175,8 @@ msgstr "question"
 msgid "questions"
 msgstr "questions"
 
-msgid "Back to test list"
-msgstr "Retour à la liste des tests"
-
 msgid "Category description"
 msgstr "Description de la catégorie<br/><span style='font-size:100%; font-style:italic'>(Invisible pour les apprenants)</span>"
-
-msgid "Back to category list"
-msgstr "Retour à la liste des catégories"
 
 msgid "This category name already exists. Please use another name."
 msgstr "La catégorie n'a pas été ajouté. Une catégorie de même nom existe déjà."
@@ -25981,9 +25954,6 @@ msgstr "Mon profil"
 
 msgid "Number of times this answer was selected"
 msgstr "Nombre de fois que cette réponse a été sélectionnée"
-
-msgid "Back to tests list"
-msgstr "Retour à la liste des tests"
 
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr "Texte apparaissant à la fin du test lorsque l'utilisateur a échoué."

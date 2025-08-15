@@ -461,7 +461,7 @@ echo Display::input('hidden', 'add_type', null);
             <strong><?php echo get_lang('Users in group'); ?></strong>
             <?php if(!empty($relation)) { ?>
                 <span class="text-sm mb-1 text-gray-600">
-                    - <?php echo get_lang('Currently showing users for role').': <strong>'.UserGroupModel::getRoleName($relation).'</strong>'; ?>
+                    - <?php echo sprintf(get_lang('Currently showing users for role: <strong>%s</strong>'), UserGroupModel::getRoleName($relation)); ?>
                 </span>
             <?php } ?>
             <?php echo Display::select(

@@ -3364,9 +3364,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6571,9 +6568,6 @@ msgstr ""
 msgid "Define Headings"
 msgstr ""
 
-msgid "Back to users list"
-msgstr ""
-
 msgid "change rights of"
 msgstr ""
 
@@ -6992,9 +6986,6 @@ msgid "Groups from classes"
 msgstr ""
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
-msgstr ""
-
-msgid "Back to Groups list"
 msgstr ""
 
 msgid "A new forum has now been created"
@@ -8401,9 +8392,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8483,9 +8471,6 @@ msgid "Users online"
 msgstr ""
 
 msgid "Remove"
-msgstr ""
-
-msgid "Back to courses list"
 msgstr ""
 
 msgid "Links"
@@ -10199,9 +10184,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14222,9 +14204,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18574,13 +18553,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -24110,9 +24083,6 @@ msgid "By checking this box, I confirm that I accept the data processing by the 
 msgstr ""
 
 msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
-msgstr ""
-
-msgid "Back to tests list"
 msgstr ""
 
 msgid "Number of times the question was answered"
@@ -30240,5 +30210,26 @@ msgstr ""
 msgid "User groups"
 msgstr ""
 
-msgid "Invalid access URL or session"
+msgid "Invalid access URL or course"
+msgstr ""
+
+msgid "Edit URL"
+msgstr ""
+
+msgid "Back to %s"
+msgstr ""
+
+msgid "Currently showing users for role: <strong>%s</strong>"
+msgstr ""
+
+msgid "Missing POST data"
+msgstr ""
+
+msgid "To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing."
+msgstr ""
+
+msgid "Time spent on assignments"
+msgstr ""
+
+msgid "Inactive learners"
 msgstr ""

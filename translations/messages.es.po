@@ -3385,9 +3385,6 @@ msgstr "Añadir nota"
 msgid "Edit my personal note"
 msgstr "Modificar nota"
 
-msgid "Back to note list"
-msgstr "Regresar a la lista de anotaciones"
-
 msgid "Notebook management"
 msgstr "Administración de nota personal"
 
@@ -6592,9 +6589,6 @@ msgstr "Sólo profesores"
 msgid "Define Headings"
 msgstr "Definir encabezados"
 
-msgid "Back to users list"
-msgstr "Volver a la lista de usuarios"
-
 msgid "change rights of"
 msgstr "cambiar los permisos de"
 
@@ -7011,9 +7005,6 @@ msgstr "Grupos de clases"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Información de grupos de clases"
-
-msgid "Back to Groups list"
-msgstr "Volver a la lista de grupos"
 
 msgid "A new forum has now been created"
 msgstr "El foro ha sido añadido"
@@ -8419,9 +8410,6 @@ msgstr "Ha alcanzado el límite de tiempo para realizar este ejercicio"
 msgid "Last score of a exercise"
 msgstr "Última puntuación obtenida"
 
-msgid "Back to result list"
-msgstr "Volver a lista de resultados"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Si edita la puntuación de esta pregunta modificará el resultado del ejercicio, recuerde que este ejercicio también está agregado a una Lección"
 
@@ -8502,9 +8490,6 @@ msgstr "Usuarios en línea"
 
 msgid "Remove"
 msgstr "Eliminar"
-
-msgid "Back to courses list"
-msgstr "Volver a mi lista de cursos"
 
 msgid "Links"
 msgstr "Enlaces"
@@ -10221,9 +10206,6 @@ msgstr "Enviar mensaje"
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "Back to user list"
-msgstr "Regresar a lista de usuarios"
 
 msgid "Graphic not available"
 msgstr "Gráfico no disponible"
@@ -14244,9 +14226,6 @@ msgstr "La calificación no puede ser superior a la calificacion máxima"
 
 msgid "Delete all papers"
 msgstr "Eliminar todo"
-
-msgid "Back to Assignments list"
-msgstr "Regresar a la lista de Tareas"
 
 msgid "Edit and mark paper"
 msgstr "Editar y marcar la tarea"
@@ -18620,14 +18599,8 @@ msgstr "Pregunta minúsculas"
 msgid "questions"
 msgstr "preguntas"
 
-msgid "Back to test list"
-msgstr "Regreso a lista de ejercicios"
-
 msgid "Category description"
 msgstr "Descripción de categoría"
-
-msgid "Back to category list"
-msgstr "Regreso a la lista de categorías"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Este nombre de categoría ya existe. Por favor indique otro nombre."
@@ -24109,9 +24082,6 @@ msgstr "Marcando esta caja, confirmo que acepto el tratamiento de datos en este 
 
 msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
 msgstr "El propietario de la plataforma, responsable del tratamiento, implementa el tratamiento de datos personales para responde a su solicitud de contacto. Estos datos son necesarios. Sin ellos, no será posible responder a su solicitud."
-
-msgid "Back to tests list"
-msgstr "Regresar a la lista de ejercicios"
 
 msgid "Number of times the question was answered"
 msgstr "Número de veces que la pregunta fue respondida"

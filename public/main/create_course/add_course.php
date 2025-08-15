@@ -409,7 +409,7 @@ if ($form->validate()) {
                 $message .= Display::tag(
                     'div',
                     Display::url(
-                        get_lang('Back to courses list'),
+                        sprintf(get_lang('Back to %s'), get_lang('Course list')),
                         api_get_path(WEB_PATH).'user_portal.php',
                         ['class' => 'btn btn--primary']
                     ),

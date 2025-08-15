@@ -933,7 +933,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
 } else {
     $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
     $actions .= '<a href="question_create.php?'.api_get_cidreq().'">'.
         Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New question')).'</a>';
 }

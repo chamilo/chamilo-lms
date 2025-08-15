@@ -3435,9 +3435,6 @@ msgstr "ノートを作成"
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6642,9 +6639,6 @@ msgstr ""
 msgid "Define Headings"
 msgstr ""
 
-msgid "Back to users list"
-msgstr ""
-
 msgid "change rights of"
 msgstr ""
 
@@ -7061,9 +7055,6 @@ msgstr ""
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr ""
-
-msgid "Back to Groups list"
-msgstr "グループ一覧へ戻る"
 
 msgid "A new forum has now been created"
 msgstr ""
@@ -8469,9 +8460,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8552,9 +8540,6 @@ msgstr "オンライン ユーザー"
 
 msgid "Remove"
 msgstr "败瓢"
-
-msgid "Back to courses list"
-msgstr ""
 
 msgid "Links"
 msgstr "リンク"
@@ -10268,9 +10253,6 @@ msgstr ""
 
 msgid "Menu"
 msgstr "メニュー"
-
-msgid "Back to user list"
-msgstr ""
 
 msgid "Graphic not available"
 msgstr ""
@@ -14290,9 +14272,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18648,13 +18627,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

@@ -108,7 +108,7 @@ if ($form->validate()) {
 } else {
     Display::display_header($nameTools);
     $actions = '<a href="exercise.php?show=test">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 
     $form->display();

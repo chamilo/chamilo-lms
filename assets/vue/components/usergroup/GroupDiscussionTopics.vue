@@ -10,7 +10,7 @@
     class="discussion"
   >
     <BaseButton
-      :label="t('Back to Groups list')"
+      :label="t('Back')"
       class="back-button mb-8"
       icon="back"
       type="button"

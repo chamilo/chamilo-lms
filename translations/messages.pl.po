@@ -3373,9 +3373,6 @@ msgstr "Utwórz notatkę"
 msgid "Edit my personal note"
 msgstr "Edytuj moją notatkę"
 
-msgid "Back to note list"
-msgstr "Powrót do listy notatek"
-
 msgid "Notebook management"
 msgstr "Zarządzanie notatnikiem"
 
@@ -6580,9 +6577,6 @@ msgstr "tylko dla nauczycieli"
 msgid "Define Headings"
 msgstr "Definiuj nagłówki"
 
-msgid "Back to users list"
-msgstr "Powrót do listy użytkowników"
-
 msgid "change rights of"
 msgstr "zmień uprawnienia dla"
 
@@ -6999,9 +6993,6 @@ msgstr "Grupa oparta na klasie kursu"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Używając tej opcji możesz stworzyć grupę opartą na klasie przypisanej do kursu."
-
-msgid "Back to Groups list"
-msgstr "Powrót do listy grup"
 
 msgid "A new forum has now been created"
 msgstr "Nowe forum zostało dodane"
@@ -8407,9 +8398,6 @@ msgstr "Wykorzystany limit czasu administratora"
 msgid "Last score of a exercise"
 msgstr "Ostatnia ocena z ćwiczeń"
 
-msgid "Back to result list"
-msgstr "Powrót do listy wyników"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Jeśli edytujesz wynik pytania, pamiętaj, że to ćwiczenie zostało dodane w kursie"
 
@@ -8490,9 +8478,6 @@ msgstr "Użytkownicy online"
 
 msgid "Remove"
 msgstr "Usuń"
-
-msgid "Back to courses list"
-msgstr "Powrót do listy kursów"
 
 msgid "Links"
 msgstr "Linki"
@@ -10206,9 +10191,6 @@ msgstr "Wyślij wiadomość"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Powrót do listy użytkownika"
 
 msgid "Graphic not available"
 msgstr "Grafika jest niedostępna"
@@ -14229,9 +14211,6 @@ msgstr "Ocena nie może przekroczyć maksymalnego wyniku"
 
 msgid "Delete all papers"
 msgstr "Usuń wszystkie dokumenty"
-
-msgid "Back to Assignments list"
-msgstr "Powrót do listy zadań"
 
 msgid "Edit and mark paper"
 msgstr "Edytuj i oceń dokument"
@@ -18591,14 +18570,8 @@ msgstr "pytanie"
 msgid "questions"
 msgstr "Pytania"
 
-msgid "Back to test list"
-msgstr "Powrót do listy testów"
-
 msgid "Category description"
 msgstr "Opis kategorii"
-
-msgid "Back to category list"
-msgstr "Powrót do listy kategorii"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Nazwa tej kategorii już istnieje. Użyj innej nazwy."

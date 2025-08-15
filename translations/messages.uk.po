@@ -3365,9 +3365,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6572,9 +6569,6 @@ msgstr "Лише викладачі"
 msgid "Define Headings"
 msgstr "Визначити Заголовки"
 
-msgid "Back to users list"
-msgstr "Повернутись до списку користувачів"
-
 msgid "change rights of"
 msgstr "змінити права"
 
@@ -6991,9 +6985,6 @@ msgstr "Групи з класів"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Використовуючи цю опцію, ви можете створювати групи на основі класів, зарахованих на ваш курс."
-
-msgid "Back to Groups list"
-msgstr ""
 
 msgid "A new forum has now been created"
 msgstr ""
@@ -8399,9 +8390,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8482,9 +8470,6 @@ msgstr "Користувачі онлайн"
 
 msgid "Remove"
 msgstr "Видалити"
-
-msgid "Back to courses list"
-msgstr "Повернутися до списку моїх курсів"
 
 msgid "Links"
 msgstr "Посилання"
@@ -10197,9 +10182,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14220,9 +14202,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18578,13 +18557,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

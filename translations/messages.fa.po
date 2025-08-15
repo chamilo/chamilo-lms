@@ -3372,9 +3372,6 @@ msgstr "ساخت یادداشت"
 msgid "Edit my personal note"
 msgstr "ویرایش یادداشت شخصی من"
 
-msgid "Back to note list"
-msgstr "بازگشت به فهرست یادداشت"
-
 msgid "Notebook management"
 msgstr "مدیریت دفترچه یادداشت"
 
@@ -6579,9 +6576,6 @@ msgstr "فقط اساتید"
 msgid "Define Headings"
 msgstr "تعیین سر فصل ها"
 
-msgid "Back to users list"
-msgstr "بازگشت به فهرست کاربران"
-
 msgid "change rights of"
 msgstr "تغییر حقوق"
 
@@ -6998,9 +6992,6 @@ msgstr "گروه های کلاس ها"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "با استفاده از این گزینه، شما قادر به ساخت گروه ها بسته به کلاس های ثبت نام شده در درس خود را دارید."
-
-msgid "Back to Groups list"
-msgstr "بازگشت به فهرست گروه ها"
 
 msgid "A new forum has now been created"
 msgstr ""
@@ -8406,9 +8397,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8489,9 +8477,6 @@ msgstr "کاربران آنلاین"
 
 msgid "Remove"
 msgstr "حذف"
-
-msgid "Back to courses list"
-msgstr "بازگشت به فهرست دروس"
 
 msgid "Links"
 msgstr "پیوندها"
@@ -10205,9 +10190,6 @@ msgstr "ارسال یک پیام"
 
 msgid "Menu"
 msgstr "منو"
-
-msgid "Back to user list"
-msgstr "بازگشت به فهرست کاربران"
 
 msgid "Graphic not available"
 msgstr "گرفایک در دسترس نیست"
@@ -14228,9 +14210,6 @@ msgstr "علامت نمی تواند بیش از حداکثر امتیاز با�
 
 msgid "Delete all papers"
 msgstr "حذف تمامی فایل ها"
-
-msgid "Back to Assignments list"
-msgstr "بازگشت به فهرست تکالیف"
 
 msgid "Edit and mark paper"
 msgstr "ویرایش و علامتگذاری فایل"
@@ -18585,13 +18564,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

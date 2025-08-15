@@ -3433,9 +3433,6 @@ msgstr "Notiz erstellen"
 msgid "Edit my personal note"
 msgstr "Meine persönliche Notiz bearbeiten"
 
-msgid "Back to note list"
-msgstr "Zurück zur Übersicht"
-
 msgid "Notebook management"
 msgstr "Notizbuch-Verwaltung"
 
@@ -6640,9 +6637,6 @@ msgstr "Nur für Kursleiter"
 msgid "Define Headings"
 msgstr "Überschriften definieren"
 
-msgid "Back to users list"
-msgstr "Zurück zur Benutzerlsite"
-
 msgid "change rights of"
 msgstr "Rechte bearbeiten"
 
@@ -7059,9 +7053,6 @@ msgstr "Gruppen aus Klassen"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind"
-
-msgid "Back to Groups list"
-msgstr "Zurück zur Gruppenliste"
 
 msgid "A new forum has now been created"
 msgstr "Das neue Forum wurde erstellt"
@@ -8467,9 +8458,6 @@ msgstr "Zeitlimit-Admin"
 msgid "Last score of a exercise"
 msgstr "Letzte Wertung eines Tests"
 
-msgid "Back to result list"
-msgstr "Zurück zur Ergebnis-Liste"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Wenn die Wertung einer Frage geändert wurde, bitte dies auch in entsprechenden Kursen berücksichtigen!"
 
@@ -8550,9 +8538,6 @@ msgstr "Benutzer online"
 
 msgid "Remove"
 msgstr "Entfernen"
-
-msgid "Back to courses list"
-msgstr "Kurs betreten"
 
 msgid "Links"
 msgstr "Links"
@@ -10266,9 +10251,6 @@ msgstr "Nachricht senden"
 
 msgid "Menu"
 msgstr "Menü"
-
-msgid "Back to user list"
-msgstr "Zurück zur Benutzerliste"
 
 msgid "Graphic not available"
 msgstr "Grafik nicht verfügbar"
@@ -14289,9 +14271,6 @@ msgstr "Die Bewertung kann die Maximal-Wertung nicht überschreiten"
 
 msgid "Delete all papers"
 msgstr "Alle Dokumente löschen"
-
-msgid "Back to Assignments list"
-msgstr "Zurück zur Übersicht"
 
 msgid "Edit and mark paper"
 msgstr "Dokument ändern und bewerten"
@@ -18652,14 +18631,8 @@ msgstr "Frage"
 msgid "questions"
 msgstr "Fragen"
 
-msgid "Back to test list"
-msgstr "Zurück zur Test-Übersicht"
-
 msgid "Category description"
 msgstr "Beschreibung Kategorie"
-
-msgid "Back to category list"
-msgstr "Zurück zur Kategorien-Übersicht"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Diese Kategorie ist bereits vorhanden. Bitte benutzen Sie einen anderen Namen."
@@ -25670,9 +25643,6 @@ msgstr "Kurseinführung"
 
 msgid "Upcoming session tab"
 msgstr "Bevorstehend"
-
-msgid "Back to tests list"
-msgstr "Zurück zur Testliste"
 
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr ""

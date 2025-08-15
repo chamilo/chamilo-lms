@@ -3372,9 +3372,6 @@ msgstr "Not oluştur"
 msgid "Edit my personal note"
 msgstr "Kişisel notlarımı düzenle"
 
-msgid "Back to note list"
-msgstr "Not listesine geri dön"
-
 msgid "Notebook management"
 msgstr "Not Defteri yönetimi"
 
@@ -6579,9 +6576,6 @@ msgstr "sadece öğretmen"
 msgid "Define Headings"
 msgstr "Başlıkları Tanımla"
 
-msgid "Back to users list"
-msgstr "Kullanıcı listesine dön"
-
 msgid "change rights of"
 msgstr "hakları değiştir"
 
@@ -6998,9 +6992,6 @@ msgstr "Sınıflardan grup"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Bu seçenek ile dersinize kayıtlı sınıflardan gruplar oluşturabilirsiniz"
-
-msgid "Back to Groups list"
-msgstr "Gruplar listesine dön"
 
 msgid "A new forum has now been created"
 msgstr ""
@@ -8406,9 +8397,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8489,9 +8477,6 @@ msgstr "Online kullanıcılar"
 
 msgid "Remove"
 msgstr "Kaldır"
-
-msgid "Back to courses list"
-msgstr "Derslerinizin listesi"
 
 msgid "Links"
 msgstr "Bağlantılar"
@@ -10204,9 +10189,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14228,9 +14210,6 @@ msgstr "Not maksimum puanı aşamaz"
 
 msgid "Delete all papers"
 msgstr "Tüm sayfaları sil"
-
-msgid "Back to Assignments list"
-msgstr "Ödev listesine dön"
 
 msgid "Edit and mark paper"
 msgstr "Sayı düzenle ve işaretle"
@@ -18585,13 +18564,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

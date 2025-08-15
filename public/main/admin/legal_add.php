@@ -120,7 +120,7 @@ $token = Security::get_token();
 
 $form->addElement('hidden', 'sec_token');
 $defaults['sec_token'] = $token;
-$form->addElement('header', get_lang('Display a Terms DisplayTermsConditions Conditions statement on the registration page, require visitor to accept the TDisplayTermsConditionsC to register.'));
+$form->addElement('header', get_lang('Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register.'));
 $jqueryReady = '';
 
 if (isset($_POST['language'])) {

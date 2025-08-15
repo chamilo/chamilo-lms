@@ -3399,9 +3399,6 @@ msgstr "Maak notitie aan"
 msgid "Edit my personal note"
 msgstr "Pas mijn persoonlijke notitie aan"
 
-msgid "Back to note list"
-msgstr "Terug naar notitielijst"
-
 msgid "Notebook management"
 msgstr "Notitiebeheer"
 
@@ -6613,9 +6610,6 @@ msgstr "Enkel voor cursusbeheerders"
 msgid "Define Headings"
 msgstr "Definieer aanvullende informatie"
 
-msgid "Back to users list"
-msgstr "Terug naar gebruikerslijst"
-
 msgid "change rights of"
 msgstr "Beheersrechten wijzigen van"
 
@@ -7032,9 +7026,6 @@ msgstr "Groepen op basis van klassen"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Gebruik makend van deze optie, kan u groepen aanmaken op basis van de klassen die ingeschreven zijn in uw cursus."
-
-msgid "Back to Groups list"
-msgstr "terug naar de groepenlijst"
 
 msgid "A new forum has now been created"
 msgstr "Het nieuwe forum is aangemaakt"
@@ -8447,9 +8438,6 @@ msgstr "Tijdslimiet bereikt admin"
 msgid "Last score of a exercise"
 msgstr "Laatste score  van een oefening"
 
-msgid "Back to result list"
-msgstr "Terg naar resultatenlijst"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Als u een de score van een vraag wijzigt, vergeet niet dat dit een oefening is die in een cursus werd toegevoegd."
 
@@ -8530,9 +8518,6 @@ msgstr "Gebruikers online"
 
 msgid "Remove"
 msgstr "Verwijder"
-
-msgid "Back to courses list"
-msgstr "Terug naar uw cursuslijst"
 
 msgid "Links"
 msgstr "Links"
@@ -10246,9 +10231,6 @@ msgstr "Stuur een bericht"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Terug naar de gebruikerslijst"
 
 msgid "Graphic not available"
 msgstr "Afbeelding niet beschikbaar"
@@ -14271,9 +14253,6 @@ msgstr "De score kan niet hoger zijn dan de maximum score"
 
 msgid "Delete all papers"
 msgstr "Alle bestanden verwijderen"
-
-msgid "Back to Assignments list"
-msgstr "Terug naar lijst"
 
 msgid "Edit and mark paper"
 msgstr "wijzig bestand"
@@ -18722,14 +18701,8 @@ msgstr "vraag"
 msgid "questions"
 msgstr "vragen"
 
-msgid "Back to test list"
-msgstr "Terug naar de test lijst"
-
 msgid "Category description"
 msgstr "Categorie omschrijving"
-
-msgid "Back to category list"
-msgstr "Terug naar de categorielijst"
 
 msgid "This category name already exists. Please use another name."
 msgstr "De naam van de categorie bestaat reeds. Gelieve een andere naam te gebruiken."
@@ -28750,9 +28723,6 @@ msgstr ""
 
 msgid "Round score in test exports"
 msgstr "Afronden van scores in toetsexporten"
-
-msgid "Back to tests list"
-msgstr "Terug naar de lijst met oefeningen"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr ""

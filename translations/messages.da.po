@@ -3372,9 +3372,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6579,9 +6576,6 @@ msgstr "kun underviser"
 msgid "Define Headings"
 msgstr "Stil spørgsmål til deltagerne via deltagerlisten"
 
-msgid "Back to users list"
-msgstr "Tilbage til deltagerlisten"
-
 msgid "change rights of"
 msgstr "ændre rettigheder for"
 
@@ -6998,9 +6992,6 @@ msgstr "Grupper fra kurser"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Ved anvendelse af denne funktion kan du oprette grupper, der er baseret på deltagerne på kurussiden"
-
-msgid "Back to Groups list"
-msgstr ""
 
 msgid "A new forum has now been created"
 msgstr "Det nye forum er tilføjet"
@@ -8406,9 +8397,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8489,9 +8477,6 @@ msgstr "Brugere online"
 
 msgid "Remove"
 msgstr "Flyt"
-
-msgid "Back to courses list"
-msgstr "Tilbage til min kursusoversigt"
 
 msgid "Links"
 msgstr "Links"
@@ -10204,9 +10189,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14227,9 +14209,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18585,13 +18564,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

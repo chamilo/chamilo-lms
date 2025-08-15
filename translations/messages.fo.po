@@ -3365,9 +3365,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -6572,9 +6569,6 @@ msgstr ""
 msgid "Define Headings"
 msgstr ""
 
-msgid "Back to users list"
-msgstr ""
-
 msgid "change rights of"
 msgstr ""
 
@@ -6990,9 +6984,6 @@ msgid "Groups from classes"
 msgstr ""
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
-msgstr ""
-
-msgid "Back to Groups list"
 msgstr ""
 
 msgid "A new forum has now been created"
@@ -8399,9 +8390,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8481,9 +8469,6 @@ msgid "Users online"
 msgstr "Innritaðir brúkarar"
 
 msgid "Remove"
-msgstr ""
-
-msgid "Back to courses list"
 msgstr ""
 
 msgid "Links"
@@ -10197,9 +10182,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -14220,9 +14202,6 @@ msgid "The mark cannot exceed maximum score"
 msgstr ""
 
 msgid "Delete all papers"
-msgstr ""
-
-msgid "Back to Assignments list"
 msgstr ""
 
 msgid "Edit and mark paper"
@@ -18578,13 +18557,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."

@@ -199,7 +199,7 @@ if ($form->validate()) {
                 Display::getMdiIcon('back', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')).'</a>';
         } else {
             $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to test list')).
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list')).
                 '</a>';
         }
     }

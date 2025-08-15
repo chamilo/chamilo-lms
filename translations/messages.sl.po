@@ -3381,9 +3381,6 @@ msgstr "Dodaj beležko"
 msgid "Edit my personal note"
 msgstr "Spremeni beležko"
 
-msgid "Back to note list"
-msgstr "Nazaj na seznam beležk"
-
 msgid "Notebook management"
 msgstr "Upravljanje beležk"
 
@@ -6588,9 +6585,6 @@ msgstr "Le učitelji"
 msgid "Define Headings"
 msgstr "Definiraj naslove"
 
-msgid "Back to users list"
-msgstr "Povratek na seznam uporabnikov"
-
 msgid "change rights of"
 msgstr "uredi pravice za"
 
@@ -7007,9 +7001,6 @@ msgstr "Skupine iz razredov"
 
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Z uporabo te možnosti lahko ustvarite skupine iz razredov, vpisanih v vaš tečaj."
-
-msgid "Back to Groups list"
-msgstr "Nazaj na seznam skupin"
 
 msgid "A new forum has now been created"
 msgstr "Nov forum je bil ustvarjen"
@@ -8415,9 +8406,6 @@ msgstr "Upravljanje časovnih omejitev"
 msgid "Last score of a exercise"
 msgstr "Zadnji rezultat testa"
 
-msgid "Back to result list"
-msgstr "Nazaj na spisek rezultatov"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Pri urejanju točkovnih vrednosti pomnite, da je ta test trenutno aktivnen v tečaju"
 
@@ -8498,9 +8486,6 @@ msgstr "Aktivnih uporabnikov"
 
 msgid "Remove"
 msgstr "Odstrani"
-
-msgid "Back to courses list"
-msgstr "Nazaj na seznam tečajev"
 
 msgid "Links"
 msgstr "Povezave"
@@ -10214,9 +10199,6 @@ msgstr "Pošlji sporočilo"
 
 msgid "Menu"
 msgstr "Meni"
-
-msgid "Back to user list"
-msgstr "Nazaj na seznam uporabnikov"
 
 msgid "Graphic not available"
 msgstr "Slika ni na voljo"
@@ -14237,9 +14219,6 @@ msgstr "Ocena ne more preseči največje podane vrednosti rezultata/ocene."
 
 msgid "Delete all papers"
 msgstr "Odstrani vse objave"
-
-msgid "Back to Assignments list"
-msgstr "Nazaj na seznam nalog"
 
 msgid "Edit and mark paper"
 msgstr "Uredi in oceni objave"
@@ -18599,14 +18578,8 @@ msgstr "vprašanje"
 msgid "questions"
 msgstr "vprašanj"
 
-msgid "Back to test list"
-msgstr "Nazaj na seznam testov"
-
 msgid "Category description"
 msgstr "Opis kategorije (neviden za tačajnike)"
-
-msgid "Back to category list"
-msgstr "Nazaj na seznam kategorij"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Dodajanje kategorije ni uspelo. Kategorija s tem imenom že obstaja."

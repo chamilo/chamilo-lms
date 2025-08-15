@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Skill;
 use Skill as SkillManager;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Page for assign skills to a user.
@@ -11,7 +12,12 @@ use Skill as SkillManager;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = isset($_REQUEST['user']) ? (int) $_REQUEST['user'] : 0;
+$httpRequest = HttpRequest::createFromGlobals();
+
+$userId = $httpRequest->query->getInt(
+    'user',
+    $httpRequest->request->getInt('user')
+);
 
 if (empty($userId)) {
     api_not_allowed(true);
@@ -53,11 +59,25 @@ if (empty($skillLevels)) {
         $skillsOptions[$skill['data']['id']] = $skill['data']['name'];
     }
 }
-$skillIdFromGet = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$currentValue = isset($_REQUEST['current_value']) ? (int) $_REQUEST['current_value'] : 0;
-$currentLevel = isset($_REQUEST['current']) ? (int) str_replace('sub_skill_id_', '', $_REQUEST['current']) : 0;
+$skillIdFromGet = $httpRequest->query->getInt(
+    'id',
+    $httpRequest->request->getInt('id')
+);
+$currentValue = $httpRequest->query->getInt(
+    'current_value',
+    $httpRequest->request->getInt('current_value')
+);
+$currentLevel = $httpRequest->query->get(
+    'current',
+    $httpRequest->request->get('current', '')
+);
+$currentLevel = (int) str_replace('sub_skill_id_', '', $currentLevel);
 
-$subSkillList = isset($_REQUEST['sub_skill_list']) ? explode(',', $_REQUEST['sub_skill_list']) : [];
+$subSkillList = $httpRequest->query->get(
+    'sub_skill_list',
+    $httpRequest->request->get('sub_skill_list', '')
+);
+$subSkillList = explode(',', $subSkillList);
 $subSkillList = array_unique($subSkillList);
 
 if (!empty($subSkillList)) {
@@ -94,7 +114,10 @@ if (!empty($currentLevel)) {
     }
 }
 
-$skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : key($skillsOptions);
+$skillId = $httpRequest->query->getInt(
+    'id',
+    $httpRequest->request->getInt('id', key($skillsOptions))
+);
 $skill = $skillRepo->find($skillId);
 $profile = false;
 if ($skill) {
@@ -234,8 +257,7 @@ if ($showLevels) {
     //$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
 }
 
-$form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
-$form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
+$form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6], true);
 $form->addRule(
     'argumentation',
     sprintf(get_lang('ThisTextShouldBeAtLeastXCharsLong'), 10),
@@ -243,6 +265,7 @@ $form->addRule(
     10
 );
 $form->applyFilter('argumentation', 'trim');
+$form->applyFilter('argumentation', 'html_filter');
 $form->addButtonSave(get_lang('Save'));
 $form->setDefaults($formDefaultValues);
 

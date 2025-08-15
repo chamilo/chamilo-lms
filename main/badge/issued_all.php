@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use SkillRelUser as SkillRelUserManager;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Show information about all issued badges with same skill by user.
@@ -12,8 +13,10 @@ use SkillRelUser as SkillRelUserManager;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = isset($_GET['user']) ? (int) $_GET['user'] : 0;
-$skillId = isset($_GET['skill']) ? (int) $_GET['skill'] : 0;
+$httpRequest = HttpRequest::createFromGlobals();
+
+$userId = $httpRequest->query->getInt('user');
+$skillId = $httpRequest->query->getInt('skill');
 
 if (!$userId || !$skillId) {
     api_not_allowed(true);
@@ -90,7 +93,7 @@ foreach ($userSkills as $index => $skillIssue) {
             $argumentationAuthor['firstname'],
             $argumentationAuthor['lastname']
         ),
-        'argumentation' => $skillIssue->getArgumentation(),
+        'argumentation' => Security::remove_XSS($skillIssue->getArgumentation()),
         'source_name' => $skillIssue->getSourceName(),
         'user_id' => $skillIssue->getUser()->getId(),
         'user_complete_name' => UserManager::formatUserFullName($skillIssue->getUser()),

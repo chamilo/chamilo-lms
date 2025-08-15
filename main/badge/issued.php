@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use SkillRelUser as SkillRelUserManager;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Show information about the issued badge.
@@ -13,7 +14,12 @@ use SkillRelUser as SkillRelUserManager;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$issue = isset($_REQUEST['issue']) ? (int) $_REQUEST['issue'] : 0;
+$httpRequest = HttpRequest::createFromGlobals();
+
+$issue = $httpRequest->query->getInt(
+    'issue',
+    $httpRequest->request->getInt('issue')
+);
 
 if (empty($issue)) {
     api_not_allowed(true);
@@ -103,7 +109,7 @@ $skillIssueInfo = [
     'acquired_level' => $currentSkillLevel,
     'argumentation_author_id' => $skillIssue->getArgumentationAuthorId(),
     'argumentation_author_name' => $author['complete_name'],
-    'argumentation' => $skillIssue->getArgumentation(),
+    'argumentation' => Security::remove_XSS($skillIssue->getArgumentation()),
     'source_name' => $skillIssue->getSourceName(),
     'user_id' => $skillIssue->getUser()->getId(),
     'user_complete_name' => UserManager::formatUserFullName($skillIssue->getUser()),

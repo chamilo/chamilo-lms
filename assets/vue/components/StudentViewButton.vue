@@ -28,24 +28,30 @@ const securityStore = useSecurityStore()
 const { isCoach } = useUserSessionSubscription()
 
 const isStudentView = computed({
-  async set() {
-    const studentView = await permissionService.toogleStudentView()
+  async set(v) {
+    try {
+      const resp = await permissionService.toogleStudentView()
+      const mode = (typeof resp === "string" ? resp : resp?.data || "").toString().toLowerCase()
+      const desired = mode.includes("student")
 
-    platformConfigStore.studentView = studentView
-
-    emit("change", studentView)
+      platformConfigStore.studentView = desired
+      emit("change", desired)
+    } catch (e) {
+      console.warn("[SVB] toggle failed", e)
+      const desired = !platformConfigStore.isStudentViewActive
+      platformConfigStore.studentView = desired
+      emit("change", desired)
+    }
   },
   get() {
     return platformConfigStore.isStudentViewActive
   },
 })
 
-const showButton = computed(() => {
-  return (
-    securityStore.isAuthenticated &&
-    cidReqStore.course &&
-    (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
-    "true" === platformConfigStore.getSetting("course.student_view_enabled")
-  )
-})
+const showButton = computed(() =>
+  securityStore.isAuthenticated &&
+  cidReqStore.course &&
+  (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
+  platformConfigStore.getSetting("course.student_view_enabled") === "true"
+)
 </script>

@@ -17,10 +17,49 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * Learning paths categories.
- */
+#[ApiResource(
+    shortName: 'LearningPathCategories',
+    operations: [
+        new GetCollection(
+            openapiContext: [
+                'summary' => 'List LP categories by course (resourceNode.parent) or sid',
+                'parameters' => [
+                    [
+                        'name' => 'resourceNode.parent',
+                        'in' => 'query',
+                        'required' => true,
+                        'description' => 'Parent ResourceNode (course node id)',
+                        'schema' => ['type' => 'integer'],
+                    ],
+                    [
+                        'name' => 'sid',
+                        'in' => 'query',
+                        'required' => false,
+                        'description' => 'Session id (SidFilter si aplica)',
+                        'schema' => ['type' => 'integer'],
+                    ],
+                ],
+            ],
+        ),
+        new Get(security: "is_granted('ROLE_USER')"),
+    ],
+    normalizationContext: [
+        'groups' => ['lp_category:read', 'resource_node:read', 'resource_link:read'],
+        'enable_max_depth' => true,
+    ],
+    paginationEnabled: false,
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'resourceNode.parent' => 'exact',
+    'title' => 'partial',
+])]
 #[ORM\Table(name: 'c_lp_category')]
 #[ORM\Entity(repositoryClass: CLpCategoryRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
@@ -28,10 +67,12 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['lp_category:read','lp:read'])]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text')]
+    #[Groups(['lp_category:read','lp:read'])]
     protected string $title;
 
     /**

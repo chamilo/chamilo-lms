@@ -28,7 +28,7 @@ class LearningPath extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/lp/lp_controller.php';
+        return '/resources/lp/:nodeId/';
     }
 
     public function getIcon(): string

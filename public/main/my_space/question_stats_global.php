@@ -17,7 +17,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
 $courseIdList = $_REQUEST['courses'] ?? [];
 $exercises = $_REQUEST['exercises'] ?? [];
@@ -118,7 +118,7 @@ if ($form->validate()) {
         get_lang('Course'),
         get_lang('Test'),
         get_lang('Question'),
-        get_lang('WrongAnswer').' / '.get_lang('Total'),
+        get_lang('Wrong answer').' / '.get_lang('Total'),
         '%',
     ];
     $scoreDisplay = new ScoreDisplay();
@@ -166,7 +166,7 @@ if ($form->validate()) {
     }
 }
 
-$nameTools = get_lang('ExerciseManagement');
+$nameTools = get_lang('Tests management');
 $htmlHeadXtra[] = '<script>
 $(function() {
  $("#search_form").submit();
@@ -179,7 +179,7 @@ $(function() {
 });
 </script>';
 
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, get_lang('Test'));
 $form->display();
 echo $tableContent;
 

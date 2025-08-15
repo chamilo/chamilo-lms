@@ -22886,14 +22886,11 @@ msgstr "Opomba: ta napredek je določen na osnovi kombinacije napredka v učnih 
 msgid "Create a new Doodle type survey"
 msgstr "Ustvari nov vprašalnik vrste Doodle"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Odstrani podvojena vprašanja"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Podvojena vprašanja"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr ""
 
 msgid "Create meeting poll"
 msgstr "Ustvari anketo sestanka"
@@ -23432,10 +23429,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Pozdravljen %s<br /><br />"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -24041,10 +24038,10 @@ msgstr "Zadnja prijava v tečaj"
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

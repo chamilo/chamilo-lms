@@ -18,7 +18,7 @@ class ch_multiplechoiceother extends survey_question
             'horizontal' => get_lang('Horizontal'),
             'vertical' => get_lang('Vertical'),
         ];
-        $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
+        $this->getForm()->addRadio('horizontalvertical', get_lang('Display'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
@@ -69,7 +69,7 @@ class ch_multiplechoiceother extends survey_question
 
         foreach ($questionData['options'] as &$option) {
             if ('other' === $option) {
-                $option = '<p>'.get_lang('SurveyOtherAnswerSpecify').'</p>';
+                $option = '<p>'.get_lang('Other...').'</p>';
             }
         }
         $questionId = $questionData['question_id'];
@@ -101,7 +101,7 @@ class ch_multiplechoiceother extends survey_question
         $form->addHtml('<div id="other_div_'.$questionId.'" class="multiple_choice_other" style="'.$display.'">');
         $element = $form->addText(
             'other_question'.$questionId,
-            get_lang('SurveyOtherAnswer'),
+            get_lang('Please specify:'),
             false,
             ['id' => 'other_question'.$questionId]
         );

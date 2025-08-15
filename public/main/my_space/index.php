@@ -137,7 +137,7 @@ if ($is_drh) {
         'company_reports.php'
     );
     $menu_items[] = Display::url(
-        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate reportResumed')),
+        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate report, short version')),
         'company_reports_resumed.php'
     );
 }

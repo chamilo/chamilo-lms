@@ -22888,14 +22888,11 @@ msgstr "Nota: Este progresso é obtido através de uma combinação de progresso
 msgid "Create a new Doodle type survey"
 msgstr "Criar uma nova pesquisa do tipo Doodle"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Remover perguntas multiplicadas"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Questões multiplicadas"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "Você pode usar as tags {{class_name}} e {{student_full_name}} na pergunta para multiplicar as perguntas. Na página da lista da pesquisa, no campo de ação, você tem um botão para multiplicar a pergunta que procurará a tag {{class_name}} e duplicar a pergunta para todas as classes inscritas no curso e renomeá-las com o nome da turma. Ele também adicionará uma página finalizando para criar uma nova página para cada classe. Em seguida, ele procurará a tag {{student_full_name}} e duplicará a pergunta para todos os alunos da turma (para cada turma) e a renomeará com o nome completo do aluno."
 
 msgid "Create meeting poll"
 msgstr "Criar enquete de reunião"
@@ -23434,10 +23431,10 @@ msgstr "Pesquisa de grupo para %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Olá %s"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Pesquisa %s multiplicada"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Pesquisa %s não multiplicada"
 
 msgid "Export survey results"
@@ -24043,10 +24040,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

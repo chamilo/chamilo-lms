@@ -426,7 +426,7 @@ $result = Database::query($sql);
 <input type="hidden" name="formSent" value="1" />
 <div class="row">
     <div class="col-md-4">
-        <?php echo get_lang('User listInPlatform'); ?>
+        <?php echo get_lang('Portal users list'); ?>
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">

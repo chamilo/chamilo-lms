@@ -69,9 +69,9 @@ foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
 }
 
-$form->addSelect('session_id', get_lang('SessionList'), $options, ['id' => 'session-id']);
-$form->addDatePicker('date_begin', get_lang('DateStart'), ['id' => 'date-begin']);
-$form->addDatePicker('date_end', get_lang('DateEnd'), ['id' => 'date-end']);
+$form->addSelect('session_id', get_lang('Session list'), $options, ['id' => 'session-id']);
+$form->addDatePicker('date_begin', get_lang('Start date'), ['id' => 'date-begin']);
+$form->addDatePicker('date_end', get_lang('End date'), ['id' => 'date-end']);
 
 // EXTRA FIELDS
 $extraField = new ExtraField('user');
@@ -239,7 +239,7 @@ if ($form->validate()) {
             get_lang('Session'),
             get_lang('Course'),
             get_lang('First name'),
-            get_lang('LastN name'),
+            get_lang('Last name'),
             get_lang('Score'),
             get_lang('Date'),
         ];
@@ -299,7 +299,7 @@ $htmlHeadXtra[] = "<script>
             var date_begin = $('#date-begin').val();
             var date_end = $('#date-end').val();
 
-            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
+            if (confirm('".$plugin->get_lang('Only courses with a personalized certificate are exported')."')) {
                 var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
                     'CustomCertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
@@ -316,7 +316,7 @@ $htmlHeadXtra[] = "<script>
             var session_id = $('#session-id').val();
             var date_begin = $('#date-begin').val();
             var date_end = $('#date-end').val();
-            if (confirm('".$plugin->get_lang('OnlyCustomCertificates')."')) {
+            if (confirm('".$plugin->get_lang('Only courses with a personalized certificate are exported')."')) {
                 var url = '".api_get_path(WEB_PLUGIN_PATH)."' +
                     'CustomCertificate/src/export_pdf_all_in_one.php?' +
                     '".$urlParam."&' +
@@ -328,9 +328,9 @@ $htmlHeadXtra[] = "<script>
     });
 </script>";
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-Display::display_header(get_lang('CertificatesSessions'));
-echo Display::page_header(get_lang('CertificatesSessions'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+Display::display_header(get_lang('Certificates in sessions'));
+echo Display::page_header(get_lang('Certificates in sessions'));
 $actions = '';
 $actions .= Display::url(
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),

@@ -22910,14 +22910,11 @@ msgstr "Nota: Este progreso es obtenido a través de una combinación del progre
 msgid "Create a new Doodle type survey"
 msgstr "Crear una nueva encuesta de tipo Doodle"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Eliminar las preguntas demultiplicadas"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Multiplicar las preguntas"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "Puedes usar las etiquetas {{class_name}} y {{student_full_name}} en la pregunta para poder multiplicar las preguntas."
 
 msgid "Create meeting poll"
 msgstr "Crear encuesta de reunión"
@@ -23456,10 +23453,10 @@ msgstr "Encuesta del groupo %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Hola %s<br/><br/>Como tutor del grupo %s te invitamos a participar en la siguiente encuesta:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Encuesta %s demultiplicada"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Encuesta %s no demultiplicada"
 
 msgid "Export survey results"
@@ -24116,10 +24113,10 @@ msgstr "Último acceso en un curso"
 msgid "The"
 msgstr "El"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "Multiplicar las preguntas por clase"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "Multiplicar las preguntas por usuario"
 
 msgid "Questions about next user"

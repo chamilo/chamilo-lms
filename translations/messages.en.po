@@ -22883,14 +22883,11 @@ msgstr "Note: This progress is obtained through a combination of progress in the
 msgid "Create a new Doodle type survey"
 msgstr "Create a new Doodle type survey"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Remove multiplied questions"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Multiply questions"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
 
 msgid "Create meeting poll"
 msgstr "Create meeting poll"
@@ -23429,10 +23426,10 @@ msgstr "Group survey for %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Survey %s multiplied"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Survey %s not multiplied"
 
 msgid "Export survey results"
@@ -24185,11 +24182,11 @@ msgstr "Latest login in a course"
 msgid "The"
 msgstr "The"
 
-msgid "Multiplicate questions by class"
-msgstr "Multiplicate questions by class"
+msgid "Multiply questions by class"
+msgstr "Multiply questions by class"
 
-msgid "Multiplicate questions by user"
-msgstr "Multiplicate questions by user"
+msgid "Multiply questions by user"
+msgstr "Multiply questions by user"
 
 msgid "Questions about next user"
 msgstr "Questions about next user"
@@ -30265,3 +30262,15 @@ msgstr "Time spent on assignments"
 
 msgid "Inactive learners"
 msgstr "Inactive learners"
+
+msgid "Result list"
+msgstr "Result list"
+
+msgid "Session start date"
+msgstr "Session start date"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiply questions. On the survey list page, in the action field, you have a button to multiply a question that will look for the {{class_name}} tag, duplicate the question for all the classes subscribed to the course, and rename it with the name of the class. It will also add a page ending to make a new page for each class. Then it will look for the {{student_full_name}} tag and duplicate the question for all the students in the class (for each class) and rename it with the student's full name."
+msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiply questions. On the survey list page, in the action field, you have a button to multiply a question that will look for the {{class_name}} tag, duplicate the question for all the classes subscribed to the course, and rename it with the name of the class. It will also add a page ending to make a new page for each class. Then it will look for the {{student_full_name}} tag and duplicate the question for all the students in the class (for each class) and rename it with the student's full name."
+
+msgid "Serie"
+msgstr "Serie"

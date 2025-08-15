@@ -22885,14 +22885,11 @@ msgstr "הערה: התקדמות זו מתקבלת באמצעות שילוב ש�
 msgid "Create a new Doodle type survey"
 msgstr "צור סקר חדש מסוג שרבוט"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "הסר שאלות כפולות"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "כפל שאלות"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "תוכל להשתמש בתגים {{class_name}} ו-{{student_full_name}} בשאלה כדי להיות מסוגל להכפיל שאלות.\nבדף הרשימה של הסקר בשדה הפעולה יש לך כפתור להכפלת שאלה שיחפש את התג {{class_name}} וישכפל את השאלה עבור כל הכיתה הרשומה לקורס וישנה את שמה עם שם הכיתה.\nזה גם יוסיף סיום עמוד כדי ליצור דף חדש לכל כיתה.\nלאחר מכן הוא יחפש את התג {{student_full_name}} וישכפל את השאלה עבור כל התלמיד בכיתה (עבור כל כיתה) וישנה את שמה בשמו המלא של התלמיד."
 
 msgid "Create meeting poll"
 msgstr "צור סקר פגישה"
@@ -23431,10 +23428,10 @@ msgstr "סקר קבוצתי עבור %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "היי %s <br/><br/>כמורה קבוצתי של הקבוצה %s אתה מוזמן להשתתף בסקר הבא:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "הסקר %s מוכפל"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "הסקר %s לא מוכפל"
 
 msgid "Export survey results"
@@ -24040,10 +24037,10 @@ msgstr "כניסה אחרונה בקורס"
 msgid "The"
 msgstr "ה"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "כפל שאלות לפי כיתה"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "כפל שאלות לפי משתמש"
 
 msgid "Questions about next user"

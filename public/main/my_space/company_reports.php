@@ -252,7 +252,7 @@ if (!empty($actions)) {
     $content .= $actions;
 }
 $content .= Display::url(
-    get_lang("Corporate reportResumed"),
+    get_lang("Corporate report, short version"),
     api_get_path(WEB_CODE_PATH).'my_space/company_reports_resumed.php',
     [
         'class' => 'btn btn--success',

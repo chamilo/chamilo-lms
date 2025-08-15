@@ -731,16 +731,16 @@ class SurveyUtil
                 echo '';
                 echo '	<tr>';
                 echo '		<th style="width: 50%">&nbsp;</th>';
-                echo '		<th style="width: 10%">'.get_lang('AbsoluteTotal').'</th>';
+                echo '		<th style="width: 10%">'.get_lang('Absolute total').'</th>';
                 echo '		<th style="width: 10%">'.get_lang('Percentage').'</th>';
-                echo '		<th style="width: 30%">'.get_lang('VisualRepresentation').'</th>';
+                echo '		<th style="width: 30%">'.get_lang('Graphic').'</th>';
                 echo '	</tr>';
 
                 // Displaying the table: the content
                 if (is_array($options)) {
                     foreach ($options as $key => &$value) {
                         if ('multiplechoiceother' === $type && 'other' === $value['option_text']) {
-                            $value['option_text'] = get_lang('SurveyOtherAnswer');
+                            $value['option_text'] = get_lang('Please specify:');
                         }
 
                         $absolute_number = null;
@@ -1041,7 +1041,7 @@ class SurveyUtil
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
                 .Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1c.submit();">'
-                .Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCompactCSV')).'</a>';
+                .Display::getMdiIcon(ActionIcon::EXPORT_ARCHIVE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export as compact CSV')).'</a>';
 
             $content .= Display::toolbarAction('survey', [$actions]);
 
@@ -2882,7 +2882,7 @@ class SurveyUtil
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('Survey name'));
-        $table->set_header(2, get_lang('Survey code'));
+        $table->set_header(2, get_lang('Code'));
         $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
         $table->set_header(5, get_lang('Available from'));
@@ -2933,7 +2933,7 @@ class SurveyUtil
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('Survey name'));
-        $table->set_header(2, get_lang('Survey code'));
+        $table->set_header(2, get_lang('Code'));
         $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
         $table->set_header(5, get_lang('Available from'));
@@ -2953,11 +2953,11 @@ class SurveyUtil
 
         $table->set_column_filter(8, 'anonymous_filter');
         $actions = [
-            'export_all' => get_lang('ExportResults'),
-            'export_by_class' => get_lang('ExportByClass'),
+            'export_all' => get_lang('Export results'),
+            'export_by_class' => get_lang('Export by class'),
             'send_to_tutors' => get_lang('SendToGroupTutors'),
-            'multiplicate' => get_lang('MultiplicateQuestions'),
-            'delete' => get_lang('DeleteSurvey'),
+            'multiplicate' => get_lang('Multiply questions'),
+            'delete' => get_lang('Delete survey'),
         ];
         $table->set_form_actions($actions);
         $table->display();
@@ -3128,7 +3128,7 @@ class SurveyUtil
                 );
 
                 $actions[] = Display::url(
-                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('RemoveMultiplicate questions')),
+                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Remove multiplied questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
                 );
@@ -3664,7 +3664,7 @@ class SurveyUtil
             if (0 == $survey->getAnswered()) {
                 echo '<td>';
                 $url = self::generateFillSurveyLink($survey, $row['invitation_code'], $course, $row['session_id']);
-                $icon = Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('ClickHereToAnswerTheSurvey'));
+                $icon = Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Click here to answer the survey'));
                 echo '<a href="'.$url.'">
                     '.$icon
                     .$row['title']
@@ -3674,7 +3674,7 @@ class SurveyUtil
                     $user_id,
                     $_course
                 );
-                $icon = Display::getMdiIcon(ObjectIcon::SURVEY, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('SurveysDone'));
+                $icon = Display::getMdiIcon(ObjectIcon::SURVEY, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, get_lang('Completed surveys'));
                 $showLink = (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse)
                     && SURVEY_VISIBLE_TUTOR != $row['visible_results'];
 
@@ -3735,7 +3735,7 @@ class SurveyUtil
         $field_list_array['username']['visibility'] = 0;
 
         //	OFFICIAL CODE
-        $field_list_array['official_code']['name'] = get_lang('OfficialCourse code');
+        $field_list_array['official_code']['name'] = get_lang('Official code');
 
         if ('true' != api_get_setting('profile', 'officialcode')) {
             $field_list_array['official_code']['visibility'] = 1;

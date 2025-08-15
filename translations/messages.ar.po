@@ -22885,14 +22885,11 @@ msgstr "ملاحظة: هذا التقدم تم احرازه عبر مزيج من
 msgid "Create a new Doodle type survey"
 msgstr "Doodle انشاء استبيان جديد على نمط الشخبطة"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "ازالة الاسئلة المضروبة"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "الاسئلة المضروبة"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "يمكنك استخدام الوسوم التالية {{class_name}} و {{student_full_name}} في السؤال الذي تريد تكراره. في صفحة قائمة الاستبيان في حقل الاجراء توجد ايقونة لسؤال التكرار {{class_name}} قم بوضع وسم وكرر السؤال لكافة الصفوف المسجلة في المقرر وقم باعادة تسمية باسم الصف. كذكل سوف يتم اضافة نهاية لعمل صفحة جديدة لكل صف. ثم سيتم البحث عن {{student_full_name}} الوسم وكرر نسخ السؤال لكافة الطلبة في الصف (لكل صف) وقم باعادة التسمية مع اسم المستخدم الكامل"
 
 msgid "Create meeting poll"
 msgstr "انشاء اقتراع للاجتماع"
@@ -23431,10 +23428,10 @@ msgstr "استطلاع المجموعة لـ %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "مرحبا %s"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "الاستطلاع %s مضاعف"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "الاستطلاع %s غير مضاعف"
 
 msgid "Export survey results"
@@ -24040,10 +24037,10 @@ msgstr "اخر تسجيل دخول للمقرر"
 msgid "The"
 msgstr "الـ"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "مضاعفة الاسئلة وفقا للصف"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "مضاعفة الاسئلة وفقا للمستخدم"
 
 msgid "Questions about next user"

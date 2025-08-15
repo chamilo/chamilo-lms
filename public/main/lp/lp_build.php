@@ -73,7 +73,7 @@ if (isset($is_success) && true === $is_success) {
     $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnPath->get_id(),
         get_lang("Ranking"),
-        get_lang('RankingComment'),
+        '',
         ActionIcon::PREVIEW_CONTENT
     );
     $rightColumn .= '</ul>';

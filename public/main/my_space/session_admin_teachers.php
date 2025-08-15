@@ -26,14 +26,14 @@ $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $nameTools = get_lang('Teachers');
 $this_section = SECTION_TRACKING;
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
     $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
-    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
 }
 
 function get_count_users()
@@ -185,7 +185,7 @@ $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = [
         Display::url(
-            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStats')),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         ),
         Display::url(Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')), 'student.php'),

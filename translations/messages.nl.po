@@ -23616,16 +23616,11 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr "Maak een nieuwe Doodle-type enquête"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Verwijder vermenigvuldigde vragen"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Meervoudige vragen"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr ""
-"U kunt de tags {{class_name}} en {{student_full_name}} in de vraag gebruiken "
-"om vragen te kunnen vermenigvuldigen."
 
 msgid "Create meeting poll"
 msgstr "Maak vergaderingspeiling"
@@ -24267,10 +24262,10 @@ msgstr ""
 "Hallo %s <br/><br/>Als groepstutor voor de groep %s wordt u uitgenodigd om "
 "deel te nemen aan de volgende enquête:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Enquête %s vermenigvuldigd"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Enquête %s non multipliée"
 
 msgid "Export survey results"
@@ -24945,10 +24940,10 @@ msgstr "Laatste login in een cursus"
 msgid "The"
 msgstr "De"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "Vermenigvuldig vragen per klas"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "Vermenigvuldig vragen door gebruiker"
 
 msgid "Questions about next user"

@@ -17,7 +17,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 
 $courseIdList = isset($_REQUEST['courses']) ? $_REQUEST['courses'] : [];
 $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
@@ -118,10 +118,10 @@ function getCourseSessionRow($courseId, Exercise $exercise, $sessionId, $title)
 if ($form->validate()) {
     $headers = [
         get_lang('Session'),
-        get_lang('CorrectAttempts'),
-        get_lang('WrongAttempts'),
-        get_lang('StudentsWithCorrectAnswers'),
-        get_lang('StudentsWithWrongAnswers'),
+        get_lang('Correct attempts'),
+        get_lang('Incorrect attempts'),
+        get_lang('Students with correct answers'),
+        get_lang('Students with incorrect answers'),
     ];
     $scoreDisplay = new ScoreDisplay();
     $exercises = $form->getSubmitValue('exercises');
@@ -200,7 +200,7 @@ if ($form->validate()) {
     }
 }
 
-$nameTools = get_lang('ExerciseManagement');
+$nameTools = get_lang('Tests management');
 $htmlHeadXtra[] = '<script>
 $(function() {
  $("#search_form").submit();
@@ -213,7 +213,7 @@ $(function() {
 });
 </script>';
 
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, get_lang('Test'));
 $form->display();
 echo $tableContent;
 

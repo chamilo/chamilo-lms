@@ -2262,7 +2262,7 @@ if ($allowMessages) {
 $allow = ('true' === api_get_setting('message.allow_user_message_tracking'));
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
-    echo Display::page_subheader2(get_lang('MessageReporting'));
+    echo Display::page_subheader2(get_lang('Message tracking'));
     $table = new HTML_Table(['class' => 'table']);
     $column = 0;
     $row = 0;

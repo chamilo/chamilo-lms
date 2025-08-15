@@ -307,7 +307,7 @@ while ($row = Database::fetch_assoc($result)) {
     if ('yesno' === $row['type']) {
         $tool_name = get_lang('Yes / No');
     } elseif ('multiplechoice' === $row['type']) {
-        $tool_name = get_lang('UniqueSelect');
+        $tool_name = get_lang('Multiple choice');
     } elseif ('multipleresponse' === $row['type']) {
         $tool_name = get_lang('Multiple choice, multiple answers');
     } elseif ('selectivedisplay' === $row['type']) {

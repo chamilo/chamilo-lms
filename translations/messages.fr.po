@@ -23562,14 +23562,11 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr "Créer une nouvelle enquête de type Doodle"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Supprimer les questions démultipliées"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Multiplier les questions"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "Vous pouvez utiliser les balises {{class_name}} et {{student_full_name}} dans la question afin de multiplier les questions."
 
 msgid "Create meeting poll"
 msgstr "Créer un sondage de réunion"
@@ -24144,10 +24141,10 @@ msgstr "Enquête du groupe %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Bonjour %s<br/><br/>En tant que tuteur du groupe %s vous êtes invité à participer à l'enquête suivante :"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Enquête %s démultipliée"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Enquête %s non démultipliée"
 
 msgid "Export survey results"
@@ -24884,10 +24881,10 @@ msgstr "Dernier accès à un cours"
 msgid "The"
 msgstr "Le"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "Multiplier les questions par classe"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "Multiplier les questions par utilisateur"
 
 msgid "Questions about next user"

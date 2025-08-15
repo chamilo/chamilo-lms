@@ -89,7 +89,7 @@
     "select2": "^4.1.0-rc.0",
     "signature_pad": "^3.0.0-beta.4",
     "sortablejs": "^1.15.6",
-    "sweetalert2": "^11.22.2",
+    "sweetalert2": "^11.22.4",
     "textcomplete": "^0.18.2",
     "timeago": "^1.6.7",
     "timepicker": "^1.14.1",

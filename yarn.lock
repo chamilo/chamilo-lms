@@ -4769,7 +4769,7 @@ __metadata:
     select2: "npm:^4.1.0-rc.0"
     signature_pad: "npm:^3.0.0-beta.4"
     sortablejs: "npm:^1.15.6"
-    sweetalert2: "npm:^11.22.2"
+    sweetalert2: "npm:^11.22.4"
     tailwindcss: "npm:^3.4.17"
     textcomplete: "npm:^0.18.2"
     timeago: "npm:^1.6.7"
@@ -11117,10 +11117,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sweetalert2@npm:^11.22.2":
-  version: 11.22.2
-  resolution: "sweetalert2@npm:11.22.2"
-  checksum: 10c0/e4d2b6822ad9ee9fc71e384ca5bb126cac8ad93fa99e300ce58444b8cbcdaf1d4c94a06bc855947ebe00a7aeb84bb64f9616b6a5d0c9bb5a0e01d3306670c28a
+"sweetalert2@npm:^11.22.4":
+  version: 11.22.4
+  resolution: "sweetalert2@npm:11.22.4"
+  checksum: 10c0/5dd53ea09144230ff50a1480d5b19669e283028d426df2addfdd5c16df8e1f51320979c19369d18e577086378ae5f2b70ea907403ff521ed16f9c38a0e5508a1
   languageName: node
   linkType: hard
 

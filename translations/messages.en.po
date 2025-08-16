@@ -5061,8 +5061,8 @@ msgstr "Finish session creation"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videoconference RTMTP protocol port"
 
-msgid "Session name already exists"
-msgstr "Session name already exists"
+msgid "Session title already exists"
+msgstr "Session title already exists"
 
 msgid "No classes have been created"
 msgstr "No classes have been created"
@@ -17403,14 +17403,14 @@ msgstr "Item copied"
 msgid "My statistics"
 msgstr "My statistics"
 
-msgid "Exercises available"
-msgstr "Exercises available"
+msgid "Tests available"
+msgstr "Tests available"
 
 msgid "Exercises taken"
 msgstr "Exercises taken"
 
-msgid "Average exercise result"
-msgstr "Average exercise result"
+msgid "Average test result"
+msgstr "Average test result"
 
 msgid "Learning path progress"
 msgstr "Learning path progress"
@@ -18368,8 +18368,8 @@ msgstr "Certification"
 msgid "Online link to certificate"
 msgstr "Online link to certificate"
 
-msgid "New exercises"
-msgstr "New exercises"
+msgid "New tests"
+msgstr "New tests"
 
 msgid "My average"
 msgstr "My average"
@@ -30307,3 +30307,45 @@ msgstr "Hello %s, you have been enrolled in the course %s for the session %s."
 
 msgid "You have been enrolled in the course %s for the session %s"
 msgstr "You have been enrolled in the course %s for the session %s"
+
+msgid "Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr "Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+
+msgid "Replication"
+msgstr "Replication"
+
+msgid "Schedule changed"
+msgstr "Schedule changed"
+
+msgid "Classroom changed"
+msgstr "Classroom changed"
+
+msgid "Location changed"
+msgstr "Location changed"
+
+msgid "Enrollment cancelled"
+msgstr "Enrollment cancelled"
+
+msgid "Parent session"
+msgstr "Parent session"
+
+msgid "The field must be a positive integer"
+msgstr "The field must be a positive integer"
+
+msgid "Validity (days)"
+msgstr "Validity (days)"
+
+msgid "Last repetition"
+msgstr "Last repetition"
+
+msgid "The field must be empty or a positive integer"
+msgstr "The field must be empty or a positive integer"
+
+msgid "Days before finishing automated creation of new repetitions"
+msgstr "Days before finishing automated creation of new repetitions"
+
+msgid "Notify subscription of user to student boss"
+msgstr "Notify subscription of user to student boss"
+
+msgid "User does not exist"
+msgstr "User does not exist"

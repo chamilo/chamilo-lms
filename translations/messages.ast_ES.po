@@ -5061,7 +5061,7 @@ msgstr "Acabar la creación de la sesión"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Puertu del protocolu RTMP pa videoconferencia"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "El nome de la sesión yá esiste"
 
 msgid "No classes have been created"
@@ -17400,13 +17400,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -18360,7 +18360,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"

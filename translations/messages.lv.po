@@ -5062,7 +5062,7 @@ msgstr "Beigt sesijas izveidi"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videokonferences RTMTP protokola ports"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Sesijas nosaukums jau eksistē"
 
 msgid "No classes have been created"
@@ -17401,13 +17401,13 @@ msgstr "Saturs pārkopēts"
 msgid "My statistics"
 msgstr "Mana statistika"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Pieejamie uzdevumu / testi"
 
 msgid "Exercises taken"
 msgstr "Izpildītie uzdevumi / testi"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Vidējie rezultāti uzdevumos / testos"
 
 msgid "Learning path progress"
@@ -18361,7 +18361,7 @@ msgstr "Sertifikācija"
 msgid "Online link to certificate"
 msgstr "Links tiešsaistes sertifikācijai"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Jauni uzdevumi"
 
 msgid "My average"

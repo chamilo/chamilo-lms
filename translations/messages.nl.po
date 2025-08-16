@@ -5093,7 +5093,7 @@ msgstr "De sessie is aangemaakt"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videoconferentie RTMTP protocol poort"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Sessienaam zal binnenkort bestaan"
 
 msgid "No classes have been created"
@@ -17498,13 +17498,13 @@ msgstr "Item gekopieerd"
 msgid "My statistics"
 msgstr "Mijn statistieken"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Beschikbare oefeningen"
 
 msgid "Exercises taken"
 msgstr "Doorlopen oefeningen"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Gemiddeld oefeningenresultaat"
 
 msgid "Learning path progress"
@@ -18471,7 +18471,7 @@ msgstr "Certificering"
 msgid "Online link to certificate"
 msgstr "Online link naar certificaat"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Nieuwe oefeningen"
 
 msgid "My average"

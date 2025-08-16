@@ -229,7 +229,7 @@ if ('overview' === $action) {
     $html .= '<div class="survey-reports">';
     $html .= '<div class="list-group">';
     $html .= Display::url(
-        Display::getMdiIcon('chart-line', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Questions\' overall report')).'<h4>'.get_lang('Questions\' overall report').'</h4><p>'.get_lang('Questions\' overall reportDetail').'</p>',
+        Display::getMdiIcon('chart-line', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Questions\' overall report')).'<h4>'.get_lang('Questions\' overall report').'</h4><p>'.get_lang('In this report you see the results of all questions').'</p>',
         $url.'action=questionreport&survey_id='.$surveyId.'&single_page=1',
         ['class' => 'list-group-item']
     );

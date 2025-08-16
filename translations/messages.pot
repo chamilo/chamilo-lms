@@ -5053,7 +5053,7 @@ msgstr ""
 msgid "Videoconference RTMTP protocol port"
 msgstr ""
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr ""
 
 msgid "No classes have been created"
@@ -17389,13 +17389,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -18349,7 +18349,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -30274,4 +30274,46 @@ msgid "Hello %s, you have been enrolled in the course %s for the session %s."
 msgstr ""
 
 msgid "You have been enrolled in the course %s for the session %s"
+msgstr ""
+
+msgid "Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr ""
+
+msgid "Replication"
+msgstr ""
+
+msgid "Schedule changed"
+msgstr ""
+
+msgid "Classroom changed"
+msgstr ""
+
+msgid "Location changed"
+msgstr ""
+
+msgid "Enrollment cancelled"
+msgstr ""
+
+msgid "Parent session"
+msgstr ""
+
+msgid "The field must be a positive integer"
+msgstr ""
+
+msgid "Validity (days)"
+msgstr ""
+
+msgid "Last repetition"
+msgstr ""
+
+msgid "The field must be empty or a positive integer"
+msgstr ""
+
+msgid "Days before finishing automated creation of new repetitions"
+msgstr ""
+
+msgid "Notify subscription of user to student boss"
+msgstr ""
+
+msgid "User does not exist"
 msgstr ""

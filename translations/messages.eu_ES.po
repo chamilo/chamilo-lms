@@ -5061,7 +5061,7 @@ msgstr "Amaitu saioaren sorrera"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Bideokonferentzia egiteko RTMTP protokoloaren ataka"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Saioaren izena bada lehendik"
 
 msgid "No classes have been created"
@@ -17400,13 +17400,13 @@ msgstr "Elementua kopiatu da"
 msgid "My statistics"
 msgstr "Estatistikak"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Ariketa erabilgarriak"
 
 msgid "Exercises taken"
 msgstr "Egindako ariketak"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Ariketaren batez besteko emaitza"
 
 msgid "Learning path progress"
@@ -18365,7 +18365,7 @@ msgstr "Ziurtagiria"
 msgid "Online link to certificate"
 msgstr "Ziurtagirirako lotura online"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Ariketa berriak"
 
 msgid "My average"

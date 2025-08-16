@@ -5069,8 +5069,8 @@ msgstr "Finish session creation"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videoconference RTMTP protocol port"
 
-msgid "Session name already exists"
-msgstr "Session name already exists"
+msgid "Session title already exists"
+msgstr "Session title already exists"
 
 msgid "No classes have been created"
 msgstr "No classes have been created"
@@ -17408,14 +17408,14 @@ msgstr "Το στοιχείο αντιγράφηκε"
 msgid "My statistics"
 msgstr "Τα στατιστικά μου"
 
-msgid "Exercises available"
-msgstr "Exercises available"
+msgid "Tests available"
+msgstr "Tests available"
 
 msgid "Exercises taken"
 msgstr "Exercises taken"
 
-msgid "Average exercise result"
-msgstr "Average exercise result"
+msgid "Average test result"
+msgstr "Average test result"
 
 msgid "Learning path progress"
 msgstr "Learning path progress"
@@ -18373,7 +18373,7 @@ msgstr "Πιστοποίηση"
 msgid "Online link to certificate"
 msgstr "Online link to certificate"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Νέα Test"
 
 msgid "My average"

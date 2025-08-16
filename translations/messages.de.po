@@ -5122,7 +5122,7 @@ msgstr "Kurs-Session Erstellung abschließen"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videokonferenz RTMP Protokoll Port"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Bezeichnung für Kurs-Session existiert bereits"
 
 msgid "No classes have been created"
@@ -17461,13 +17461,13 @@ msgstr "Inhalt kopiert"
 msgid "My statistics"
 msgstr "Meine Auswertungen"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Verfügbare Tests"
 
 msgid "Exercises taken"
 msgstr "Abslovierte Prüfungen"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Durchschnittliches Prüfungsergebnis"
 
 msgid "Learning path progress"
@@ -18427,7 +18427,7 @@ msgstr "Zertifizierung"
 msgid "Online link to certificate"
 msgstr "Link zum Zertifikat"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Neue Tests"
 
 msgid "My average"

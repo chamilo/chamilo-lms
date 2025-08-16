@@ -5069,7 +5069,7 @@ msgstr "Acabar la creació de la sessió"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Port del protocol RTMPT per la videoconferència"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Aquest nom de sessió ja existeix"
 
 msgid "No classes have been created"
@@ -17408,13 +17408,13 @@ msgstr "Element copiat"
 msgid "My statistics"
 msgstr "Les meves estadístiques"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Exercicis disponibles"
 
 msgid "Exercises taken"
 msgstr "Exercicis realitzats"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Resultat mig de l'exercici"
 
 msgid "Learning path progress"
@@ -18373,7 +18373,7 @@ msgstr "Certificació"
 msgid "Online link to certificate"
 msgstr "Vincle al certificat en línia"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Exercici nou"
 
 msgid "My average"

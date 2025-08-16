@@ -5069,7 +5069,7 @@ msgstr "Ukončiť tvorbu stretnutia"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Port video konferenčného RTMTP protokolu"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Názov stretnutia bude o chvíľu existovať"
 
 msgid "No classes have been created"
@@ -17408,13 +17408,13 @@ msgstr "Položka skopírovaná"
 msgid "My statistics"
 msgstr "Moja štatistika"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Cvičenie k dispozícií"
 
 msgid "Exercises taken"
 msgstr "Prijaté cvičenie"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Priemerný výsledok cvičenia"
 
 msgid "Learning path progress"
@@ -18373,7 +18373,7 @@ msgstr "Certifikát"
 msgid "Online link to certificate"
 msgstr "Online link k certifikátu"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Nové cvičenie"
 
 msgid "My average"

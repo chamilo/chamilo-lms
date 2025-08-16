@@ -190,7 +190,7 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         if (empty($name)) {
-            return get_lang('A title is required for the session');
+            return get_lang('A title is required');
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') &&
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')
         ) {
@@ -1870,7 +1870,7 @@ class SessionManager
 
             if ($exists) {
                 Display::addFlash(
-                    Display::return_message(get_lang('Session name already exists'), 'warning')
+                    Display::return_message(get_lang('Session title already exists'), 'warning')
                 );
 
                 return false;
@@ -7187,7 +7187,7 @@ class SessionManager
                 if (empty($sessionInfo)) {
                     $sessionData = isset($data['SessionName']) ? $data['SessionName'] : $data['SessionId'];
                     Display::addFlash(
-                        Display::return_message(get_lang('SessionNotFound').' - '.$sessionData, 'warning')
+                        Display::return_message(get_lang('Session not found.').' - '.$sessionData, 'warning')
                     );
                     continue;
                 }
@@ -8279,7 +8279,7 @@ class SessionManager
             true,
             ['maxlength' => 150, 'aria-label' => get_lang('Session name')]
         );
-        $form->addRule('title', get_lang('Session name already exists'), 'callback', 'check_session_name');
+        $form->addRule('title', get_lang('Session title already exists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addSelectFromCollection(
@@ -8453,7 +8453,7 @@ class SessionManager
             'duration',
             [
                 get_lang('Session duration'),
-                get_lang('The session duration allows you to set a number of days of access starting from the first access date of the user to the session. This way, you can set a session to last for 15 days instead of starting at a fixed date for all students.'),
+                get_lang("The session duration allows you to set a number of days of access starting from the first access date of the user to the session. This way, you can set a session to 'last for 15 days' instead of starting at a fixed date for all students."),
             ],
             [
                 'maxlength' => 50,
@@ -8542,7 +8542,7 @@ class SessionManager
 
         $form->addCheckBox(
             'notify_boss',
-            get_lang('Notify inscription of user to student boss')
+            get_lang('Notify subscription of user to student boss')
         );
 
         // Picture
@@ -8580,7 +8580,7 @@ class SessionManager
             );
             $form->addRule(
                 'days_before_finishing_for_reinscription',
-                get_lang('Days must be a positive number or empty'),
+                get_lang('The field must be empty or a positive integer'),
                 'regex',
                 '/^\d*$/'
             );
@@ -8590,12 +8590,12 @@ class SessionManager
             $form->addElement(
                 'text',
                 'days_before_finishing_to_create_new_repetition',
-                get_lang('Days before finishing to create new repetition'),
+                get_lang('Days before finishing automated creation of new repetitions'),
                 ['maxlength' => 5]
             );
             $form->addRule(
                 'days_before_finishing_to_create_new_repetition',
-                get_lang('Days must be a positive number or empty'),
+                get_lang('The field must be empty or a positive integer'),
                 'regex',
                 '/^\d*$/'
             );
@@ -8611,18 +8611,18 @@ class SessionManager
             $form->addElement(
                 'number',
                 'validity_in_days',
-                get_lang('Validity in days'),
+                get_lang('Validity (days)'),
                 [
                     'min' => 0,
                     'max' => 365,
                     'step' => 1,
-                    'placeholder' => get_lang('Enter the number of days'),
+                    'placeholder' => get_lang('Number of days'),
                 ]
             );
 
             $form->addRule(
                 'validity_in_days',
-                get_lang('The field must be a positive number'),
+                get_lang('The field must be a positive integer'),
                 'numeric',
                 null,
                 'client'
@@ -9002,8 +9002,8 @@ class SessionManager
                     '#',
                     get_lang('Title'),
                     get_lang('Category'),
-                    get_lang('Session Display Start Date'),
-                    get_lang('Session Display End Date'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Visibility'),
                 ];
 
@@ -10144,10 +10144,10 @@ class SessionManager
     public static function getSessionChangeUserReasons(): array
     {
         return [
-            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
-            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
-            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
-            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
+            self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('Schedule changed'),
+            self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('Classroom changed'),
+            self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('Location changed'),
+            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('Enrollment cancelled'),
         ];
     }
 

@@ -5070,7 +5070,7 @@ msgstr "סיים את יצירת הפגישה"
 msgid "Videoconference RTMTP protocol port"
 msgstr "יציאת פרוטוקול RTMTP של ועידת וידאו"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "שם הפגישה כבר קיים"
 
 msgid "No classes have been created"
@@ -17409,13 +17409,13 @@ msgstr "הפריט הועתק"
 msgid "My statistics"
 msgstr "הסטטיסטיקה שלי"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "תרגילים זמינים"
 
 msgid "Exercises taken"
 msgstr "תרגילים נלקחו"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "תוצאת פעילות גופנית ממוצעת"
 
 msgid "Learning path progress"
@@ -18373,7 +18373,7 @@ msgstr "אישור"
 msgid "Online link to certificate"
 msgstr "קישור מקוון לאישור"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "תרגילים חדשים"
 
 msgid "My average"

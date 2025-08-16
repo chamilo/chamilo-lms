@@ -5070,7 +5070,7 @@ msgstr "Končaj kreiranje sej"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Vrata (port) videokonferenčnega RTMP protokola"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Ime seje bo kmalu obstajalo"
 
 msgid "No classes have been created"
@@ -17409,13 +17409,13 @@ msgstr "Element je bil kopiran"
 msgid "My statistics"
 msgstr "Moja statistika"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Dosegljive vaje/testi"
 
 msgid "Exercises taken"
 msgstr "Izvajane vaje/testi"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Povprečen rezultat vaj/testov"
 
 msgid "Learning path progress"
@@ -18374,7 +18374,7 @@ msgstr "Certificiranje"
 msgid "Online link to certificate"
 msgstr "Povezava na certifikat"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Novi testi"
 
 msgid "My average"

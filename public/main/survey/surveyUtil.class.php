@@ -2986,7 +2986,7 @@ class SurveyUtil
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('Survey name'));
-        $table->set_header(2, get_lang(''));
+        $table->set_header(2, get_lang('Code'));
         $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
         $table->set_header(5, get_lang('Available from'));

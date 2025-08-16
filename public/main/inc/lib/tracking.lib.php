@@ -5026,8 +5026,8 @@ class Tracking
             $html .= '<tr>
                   '.Display::tag('th', get_lang('Session'), ['width' => '300px']).'
                   '.Display::tag('th', get_lang('Tests available'), ['width' => '300px']).'
-                  '.Display::tag('th', get_lang('New exercises')).'
-                  '.Display::tag('th', get_lang('Average exercise result')).'
+                  '.Display::tag('th', get_lang('New tests')).'
+                  '.Display::tag('th', get_lang('Average test result')).'
                   '.Display::tag('th', get_lang('Details')).'
                   </tr>';
             $html .= '</thead>';
@@ -5162,16 +5162,16 @@ class Tracking
                         ['width' => '300px'],
                     ],
                     'published_exercises' => [
-                        get_lang('Exercises available'),
+                        get_lang('Tests available'),
                     ],
                     'new_exercises' => [
-                        get_lang('New exercises'),
+                        get_lang('New tests'),
                     ],
                     'my_average' => [
                         get_lang('My average'),
                     ],
                     'average_exercise_result' => [
-                        get_lang('Average exercise result'),
+                        get_lang('Average test result'),
                     ],
                     'time_spent' => [
                         get_lang('Time spent in the course'),

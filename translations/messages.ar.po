@@ -5070,7 +5070,7 @@ msgstr "الانتهاء من انشاء الدورة"
 msgid "Videoconference RTMTP protocol port"
 msgstr "منفذ بروتوكول الاتصال المرئيRTMP"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "يوجد اسم للدورة مسبقا"
 
 msgid "No classes have been created"
@@ -17409,13 +17409,13 @@ msgstr "تم نسخ العنصر"
 msgid "My statistics"
 msgstr "احصائاتي"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "التمارين المتوفرة"
 
 msgid "Exercises taken"
 msgstr "التمارين المؤداة"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "متوسط نتيجة التمرين"
 
 msgid "Learning path progress"
@@ -18373,7 +18373,7 @@ msgstr "شهادة"
 msgid "Online link to certificate"
 msgstr "الرابط للشهادة"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "تمارين جديدة"
 
 msgid "My average"

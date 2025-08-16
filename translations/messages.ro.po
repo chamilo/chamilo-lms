@@ -5070,7 +5070,7 @@ msgstr "Finalizeaza crearea sesiunii"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Portul pentru protocolul RTMTP al videoconferintei"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Numele sesiunii exista de curand"
 
 msgid "No classes have been created"
@@ -17409,13 +17409,13 @@ msgstr "Element copiat"
 msgid "My statistics"
 msgstr "Statisticile mele"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -18374,7 +18374,7 @@ msgstr "Certificare"
 msgid "Online link to certificate"
 msgstr "Link catre certificatul on-line"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Exercitiu nou"
 
 msgid "My average"

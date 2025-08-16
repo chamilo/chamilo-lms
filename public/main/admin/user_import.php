@@ -527,7 +527,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
         ) {
             Session::erase('user_import_data_'.$userId);
             if (!Import::assertCommaSeparated($_FILES['import_file']['tmp_name'])) {
-                $csv_custom_error = get_lang('Semicolon (;) delimiter detected. Chamilo 2 requires comma (,) as the CSV separator. Please re-export your file as CSV (comma-separated).');
+                $csv_custom_error = get_lang('Semicolon (;) delimiter detected. Chamilo 2 requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated).');
                 $error_kind_file = true;
                 $fatalError = true;
                 $users = [];

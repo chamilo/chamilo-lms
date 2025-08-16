@@ -5061,7 +5061,7 @@ msgstr "اتمام ساخت جلسه"
 msgid "Videoconference RTMTP protocol port"
 msgstr ""
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "نام جلسه از قبل وجود دارد"
 
 msgid "No classes have been created"
@@ -17400,13 +17400,13 @@ msgstr "بخش کپی شد"
 msgid "My statistics"
 msgstr "آمار من"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -18360,7 +18360,7 @@ msgstr "گواهی"
 msgid "Online link to certificate"
 msgstr "پیوند آنلاین به گواهی"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "تمرین های جدید"
 
 msgid "My average"

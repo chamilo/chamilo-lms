@@ -5062,7 +5062,7 @@ msgstr "Завершить создание сессии"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Порт протокола видеоконференции RTMTP"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Название сессии скоро существовать"
 
 msgid "No classes have been created"
@@ -17401,13 +17401,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -18361,7 +18361,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"

@@ -1389,7 +1389,9 @@ class GradebookUtils
 
             $link = '';
             $pdf = '';
-
+            if (api_is_platform_admin()) {
+                $publish = true;
+            }
             if (!empty($hash) && $publish) {
                 $link = api_get_path(WEB_PATH) . "certificates/{$hash}.html";
                 $pdf = api_get_path(WEB_PATH)."certificates/{$hash}.pdf";

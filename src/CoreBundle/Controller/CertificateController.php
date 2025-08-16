@@ -34,12 +34,14 @@ class CertificateController extends AbstractController
     {
         // Build the expected certificate filename from the hash
         $filename = $hash.'.html';
+        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
 
-        // Look up the certificate record by its path
-        $certificate = $this->certificateRepository->findOneBy([
-            'pathCertificate' => $filename,
-        ]);
-
+        $certificate = null;
+        $matchedPath = '';
+        foreach ($candidates as $cand) {
+            $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
+            if ($row) { $certificate = $row; $matchedPath = $cand; break; }
+        }
         if (!$certificate) {
             throw new NotFoundHttpException('The requested certificate does not exist.');
         }
@@ -48,28 +50,31 @@ class CertificateController extends AbstractController
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
-        $isOwner = ($user->getId() === $this->getUser()->getId());
-        $isPlatformAdmin = $user->isAdmin();
+        $securityUser = $this->getUser();
+        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
+        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
 
         if (!$isOwner && !$isPlatformAdmin) {
-            if (
-                (!$allowPublic || !$certificate->getPublish())
-                && (!$allowSessionAdmin || !$user->isSessionAdmin())
-            ) {
+            $isPublic = ($allowPublic && $certificate->getPublish());
+            $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
+            if (!$isPublic && !$isSessAdminAllowed) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }
         }
 
         // Fetch the actual certificate file from personal files using its title
         $personalFileRepo = Container::getPersonalFileRepository();
-        $personalFile = $personalFileRepo->findOneBy(['title' => $filename]);
-
-        if (!$personalFile) {
+        $pf = null;
+        $pfMatch = '';
+        foreach ($candidates as $cand) {
+            $row = $personalFileRepo->findOneBy(['title' => $cand]);
+            if ($row) { $pf = $row; $pfMatch = $cand; break; }
+        }
+        if (!$pf) {
             throw new NotFoundHttpException('The certificate file was not found.');
         }
 
-        // Read the certificate HTML content and sanitize for print compatibility
-        $content = $personalFileRepo->getResourceFileContent($personalFile);
+        $content = $personalFileRepo->getResourceFileContent($pf);
         $content = str_replace(' media="screen"', '', $content);
 
         // Return the certificate as a raw HTML response
@@ -82,8 +87,14 @@ class CertificateController extends AbstractController
     public function downloadPdf(string $hash): Response
     {
         $filename = $hash.'.html';
+        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
 
-        $certificate = $this->certificateRepository->findOneBy(['pathCertificate' => $filename]);
+        $certificate = null;
+        $matchedPath = '';
+        foreach ($candidates as $cand) {
+            $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
+            if ($row) { $certificate = $row; $matchedPath = $cand; break; }
+        }
         if (!$certificate) {
             throw $this->createNotFoundException('The requested certificate does not exist.');
         }
@@ -91,25 +102,30 @@ class CertificateController extends AbstractController
         $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
-        $isOwner = ($user->getId() === $this->getUser()->getId());
-        $isPlatformAdmin = $user->isAdmin();
+        $securityUser = $this->getUser();
+        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
+        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
 
         if (!$isOwner && !$isPlatformAdmin) {
-            if (
-                (!$allowPublic || !$certificate->getPublish())
-                && (!$allowSessionAdmin || !$user->isSessionAdmin())
-            ) {
+            $isPublic = ($allowPublic && $certificate->getPublish());
+            $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
+            if (!$isPublic && !$isSessAdminAllowed) {
                 throw new AccessDeniedHttpException('The requested certificate is not public.');
             }
         }
 
         $personalFileRepo = Container::getPersonalFileRepository();
-        $personalFile = $personalFileRepo->findOneBy(['title' => $filename]);
-        if (!$personalFile) {
+        $pf = null;
+        $pfMatch = '';
+        foreach ($candidates as $cand) {
+            $row = $personalFileRepo->findOneBy(['title' => $cand]);
+            if ($row) { $pf = $row; $pfMatch = $cand; break; }
+        }
+        if (!$pf) {
             throw $this->createNotFoundException('The certificate file was not found.');
         }
 
-        $html = $personalFileRepo->getResourceFileContent($personalFile);
+        $html = $personalFileRepo->getResourceFileContent($pf);
         $html = str_replace(' media="screen"', '', $html);
 
         try {

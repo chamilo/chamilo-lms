@@ -541,7 +541,7 @@ class CourseManager
             } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('InternalDatabaseError').': '.$exception->getMessage(),
+                        sprintf(get_lang('Internal database error: %s'), $exception->getMessage()),
                         'warning'
                     )
                 );
@@ -580,7 +580,7 @@ class CourseManager
         ])) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
+                    get_lang('Subscribing not allowed'),
                     'warning'
         )
             );
@@ -611,7 +611,7 @@ class CourseManager
                     // user has ancient or future student session(s) but not available now
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('CanNotSubscribeToCourseUserSessionExpired'),
+                            get_lang('You cannot subscribe to the course any more because your session has expired.'),
                             'warning'
                         )
                     );
@@ -625,7 +625,7 @@ class CourseManager
                 } catch (Exception $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('WrongNumberOfDays').': '.$numberOfDays.': '.$exception->getMessage(),
+                            sprintf(get_lang('Wrong number of days: %s: %s'), $numberOfDays, $exception->getMessage()),
                             'warning'
                         )
                     );
@@ -636,7 +636,7 @@ class CourseManager
                 $endDate->add($duration);
                 $session = new SessionEntity();
                 $session->setTitle(
-                    sprintf(get_lang('FirstnameLastnameCourses'), $user->getFirstname(), $user->getLastname())
+                    sprintf(get_lang('Courses of %s %s'), $user->getFirstname(), $user->getLastname())
                 );
                 $session->setAccessEndDate($endDate);
                 $session->setCoachAccessEndDate($endDate);
@@ -651,7 +651,7 @@ class CourseManager
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
+                            sprintf(get_lang('Internal database error: %s'), $exception->getMessage()),
                             'warning'
                         )
                     );
@@ -667,7 +667,7 @@ class CourseManager
                 } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('InternalDatabaseError').': '.$exception->getMessage(),
+                            sprintf(get_lang('Internal database error: %s'), $exception->getMessage()),
                             'warning'
                         )
                     );
@@ -686,7 +686,7 @@ class CourseManager
             } catch (\Doctrine\ORM\OptimisticLockException $exception) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('InternalDatabaseError').': '.$exception->getMessage(),
+                        sprintf(get_lang('Internal database error: %s'), $exception->getMessage()),
                         'warning'
                     )
                 );
@@ -2491,7 +2491,7 @@ class CourseManager
         if ($sequenceResource) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ThereIsASequenceResourceLinkedToThisCourseYouNeedToDeleteItFirst'),
+                    get_lang('There is a sequence resource linked to this course. You must delete this link first.'),
                     'error'
                 )
             );
@@ -2786,7 +2786,7 @@ class CourseManager
             $emailto = $tutor['email'];
             $emailsubject = get_lang('New user in the course').': '.$name_course;
             $emailbody = get_lang('Dear').': '.api_get_person_name($tutor['firstname'], $tutor['lastname'])."\n";
-            $emailbody .= get_lang('MessageNew user in the course').': '.$name_course."\n";
+            $emailbody .= get_lang('There is a new user in the course').': '.$name_course."\n";
             $emailbody .= get_lang('Username').': '.$student['username']."\n";
             if (api_is_western_name_order()) {
                 $emailbody .= get_lang('First name').': '.$student['firstname']."\n";
@@ -4196,7 +4196,7 @@ class CourseManager
                 ) {
                 $sessionInfo['dates'] = '';
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
                 }
                 $active = true;
             } else {
@@ -4204,7 +4204,7 @@ class CourseManager
                     get_lang('From').' '.$sessionInfo['access_start_date'].' '.
                     get_lang('To').' '.$sessionInfo['access_end_date'];
                 if ('true' === api_get_setting('show_session_coach')) {
-                    $sessionInfo['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
+                    $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
                 }
                 $date_start = $sessionInfo['access_start_date'];
                 $date_end = $sessionInfo['access_end_date'];
@@ -6529,7 +6529,7 @@ class CourseManager
     {
         $tabs = [
             'simple' => [
-                'content' => get_lang('Standard list'),
+                'content' => get_lang('Standard List'),
                 'url' => api_get_path(WEB_CODE_PATH).'admin/course_list.php',
             ],
             'admin' => [
@@ -6549,7 +6549,7 @@ class CourseManager
                 null,
                 null,
                 null,
-                get_lang('CourseUsedInOtherURL')
+                get_lang('This course is used in at least one other portal')
             );
         }
 
@@ -6601,7 +6601,7 @@ class CourseManager
             'radio',
             'visibility',
             null,
-            get_lang(' Open - access allowed for users registered on the platform'),
+            get_lang('Open - access allowed for users registered on the platform'),
             Course::OPEN_PLATFORM
         );
         $group[] = $form->createElement(

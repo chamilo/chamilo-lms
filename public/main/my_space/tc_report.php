@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
 $csv_content = [];
-$nameTools = get_lang('MySpace');
+$nameTools = get_lang('Reporting');
 
 $allowToTrack = api_is_platform_admin(true, true);
 if (!$allowToTrack) {
@@ -96,7 +96,7 @@ if ('add_user' !== $action) {
     $form->addSelectLanguage(
         'language',
         get_lang('Language'),
-        ['placeholder' => get_lang('Select an option')]
+        ['placeholder' => get_lang('Please select an option')]
     );
     $form->addButtonSearch(get_lang('Search'));
 
@@ -157,7 +157,7 @@ if ('add_user' !== $action) {
         $url = api_get_self().'?a=add_user&boss_id='.$bossId;
 
         $tableContent .= '<div class="add_user">';
-        $tableContent .= '<strong>'.get_lang('Add student').'</strong>';
+        $tableContent .= '<strong>'.get_lang('Add learner').'</strong>';
         $addUserForm = new FormValidator(
             'add_user_to_'.$bossId,
             'post',

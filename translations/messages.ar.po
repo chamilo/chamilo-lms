@@ -17772,7 +17772,7 @@ msgstr "URL المستخدم ليس لديه رابط"
 msgid "Extra data"
 msgstr "البيانات الاضافية"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "التمارين في مسارات التعلم"
 
 msgid "Id"
@@ -23734,11 +23734,8 @@ msgstr "متخرج"
 msgid "Absent"
 msgstr "غائب"
 
-msgid "Internal database error"
-msgstr "خطأ في قاعدة البيانات الداخلية"
-
-msgid "Wrong number of days"
-msgstr "خطأ في عدد الايام"
+msgid "Internal database error: %s"
+msgstr "خطأ في قاعدة البيانات الداخلية: %s"
 
 msgid "Subscription not allowed"
 msgstr "التسجيل غير مسموح"

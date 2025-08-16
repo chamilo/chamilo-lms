@@ -57,7 +57,7 @@ class MoodleImport
                 }
 
                 if (!file_exists($destinationDir.'/moodle_backup.xml')) {
-                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                    throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
                 }
 
                 break;
@@ -76,7 +76,7 @@ class MoodleImport
                 }
 
                 if (!$mainFileKey) {
-                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                    throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
                 }
 
                 $package->extract(PCLZIP_OPT_PATH, $destinationDir);
@@ -165,7 +165,7 @@ class MoodleImport
             removeDir($destinationDir);
             unlink($filePath);
 
-            throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+            throw new Exception(get_lang("Failed to import: this doesn't seem to be a Moodle course backup file (.mbz)"));
         }
         $activities = $doc->getElementsByTagName('activity');
 
@@ -864,7 +864,7 @@ class MoodleImport
             case 'ddmatch':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
+                $questionInstance->updateDescription(get_lang('This question type is not supported yet'));
                 $questionInstance->save($exercise);
 
                 return false;

@@ -17772,7 +17772,7 @@ msgstr "למשתמש זה אין כתובת URL קשורה."
 msgid "Extra data"
 msgstr "נתונים נוספים"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "תרגילים במסלולי למידה"
 
 msgid "Id"
@@ -23735,10 +23735,10 @@ msgid "Absent"
 msgstr "נעדר"
 
 msgid "Internal database error"
-msgstr "שגיאת מסד נתונים פנימית"
+msgstr "שגיאת מסד נתונים פנימית %s"
 
-msgid "Wrong number of days"
-msgstr "מספר ימים שגוי"
+msgid "Wrong number of days: %s: %s"
+msgstr "מספר ימים שגוי %s %s"
 
 msgid "Subscription not allowed"
 msgstr "הרשמה אסורה"

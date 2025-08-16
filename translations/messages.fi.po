@@ -17765,7 +17765,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -23723,10 +23723,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"

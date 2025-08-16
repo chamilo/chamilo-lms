@@ -17771,7 +17771,7 @@ msgstr "Este usuário não tem um URL relacionado."
 msgid "Extra data"
 msgstr "dados adicionais"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Exercícios em percursos de aprendizagem"
 
 msgid "Id"
@@ -23737,11 +23737,11 @@ msgstr "Graduado"
 msgid "Absent"
 msgstr "Ausente"
 
-msgid "Internal database error"
-msgstr "Erro de banco de dados interno"
+msgid "Internal database error: %s"
+msgstr "Erro de banco de dados interno: %s"
 
-msgid "Wrong number of days"
-msgstr "Número errado de dias"
+msgid "Wrong number of days: %s: %s"
+msgstr "Número errado de dias: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Assinatura não permitida"

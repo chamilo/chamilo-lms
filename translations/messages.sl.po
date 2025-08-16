@@ -17772,7 +17772,7 @@ msgstr "Ta uporabnik nima povezanega URL-ja"
 msgid "Extra data"
 msgstr "Dodatni podatki"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Testi v učnih poteh"
 
 msgid "Id"
@@ -23735,11 +23735,11 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
-msgstr "Napaka sistema podatkovne zbirke (notranja)"
+msgid "Internal database error: %s"
+msgstr "Napaka sistema podatkovne zbirke (notranja): %s"
 
-msgid "Wrong number of days"
-msgstr "Napačno število dni"
+msgid "Wrong number of days: %s: %s"
+msgstr "Napačno število dni: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Vpis ni dovoljen"

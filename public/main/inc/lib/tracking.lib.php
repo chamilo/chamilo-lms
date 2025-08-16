@@ -207,7 +207,7 @@ class Tracking
 
         $extra .= '<div id="dialog-confirm" title="'.get_lang('Please confirm your choice').'">';
         $form = new FormValidator('report', 'post', null, null, ['class' => 'form-vertical']);
-        $form->addCheckBox('add_logo', '', get_lang('AddRightLogo'), ['id' => 'export_format_csv_label']);
+        $form->addCheckBox('add_logo', '', get_lang('Add right logo'), ['id' => 'export_format_csv_label']);
         $extra .= $form->returnForm();
         $extra .= '</div>';
         $output .= $extra;
@@ -5162,7 +5162,7 @@ class Tracking
                         ['width' => '300px'],
                     ],
                     'published_exercises' => [
-                        get_lang('Tests available'),
+                        get_lang('Exercises available'),
                     ],
                     'new_exercises' => [
                         get_lang('New exercises'),
@@ -5450,7 +5450,7 @@ class Tracking
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('In case of multiple attempts')
+                    get_lang('In case of multiple attempts, only shows the best result of each learner')
                     ).
             '</th>
             </tr>
@@ -5854,7 +5854,7 @@ class Tracking
                     options: {
                             title: {
                                     display: true,
-                                    text: '".get_lang('TestsInTimeProgressChart')."'
+                                    text: '".get_lang('Progress of own exercises results over time, against learners average')."'
                             },
                             tooltips: {
                                     mode: 'index',
@@ -6904,7 +6904,7 @@ class Tracking
 
     public static function getCourseLpProgress($userId, $sessionId)
     {
-        $controller = new IndexManager(get_lang('MyCourses'));
+        $controller = new IndexManager(get_lang('My courses'));
         $data = $controller->returnCoursesAndSessions($userId);
         $courseList = $data['courses'];
         $result = [];
@@ -7555,31 +7555,31 @@ class Tracking
         }*/
 
         if ($update_database) {
-            echo Display::return_message(get_lang('StatsMoved'));
+            echo Display::return_message(get_lang('Stats moved.'));
             if (is_array($result_message)) {
                 foreach ($result_message as $table => $times) {
                     echo 'Table '.$table.' - '.$times.' records updated <br />';
                 }
             }
         } else {
-            echo '<h4>'.get_lang('UserInformationOfThisCourse').'</h4>';
+            echo '<h4>'.get_lang('User information for this course').'</h4>';
             echo '<br />';
             echo '<table class="table" width="100%">';
             echo '<tr>';
             echo '<td width="50%" valign="top">';
 
             if (0 == $origin_session_id) {
-                echo '<h5>'.get_lang('OriginCourse').'</h5>';
+                echo '<h5>'.get_lang('Original course').'</h5>';
             } else {
-                echo '<h5>'.get_lang('OriginSession').' #'.$origin_session_id.'</h5>';
+                echo '<h5>'.get_lang('Original session').' #'.$origin_session_id.'</h5>';
             }
             self::compareUserData($result_message);
             echo '</td>';
             echo '<td width="50%" valign="top">';
             if (0 == $new_session_id) {
-                echo '<h5>'.get_lang('DestinyCourse').'</h5>';
+                echo '<h5>'.get_lang('Destination course').'</h5>';
             } else {
-                echo '<h5>'.get_lang('DestinySession').' #'.$new_session_id.'</h5>';
+                echo '<h5>'.get_lang('Destination session').' #'.$new_session_id.'</h5>';
             }
             self::compareUserData($result_message_compare);
             echo '</td>';
@@ -7593,11 +7593,11 @@ class Tracking
         foreach ($result_message as $table => $data) {
             $title = $table;
             if ('TRACK_E_EXERCISES' === $table) {
-                $title = get_lang('Exercises');
+                $title = get_lang('Tests');
             } elseif ('TRACK_E_EXERCISES_IN_LP' === $table) {
-                $title = get_lang('ExercisesInLp');
+                $title = get_lang('Tests in learning paths');
             } elseif ('LP_VIEW' === $table) {
-                $title = get_lang('LearningPaths');
+                $title = get_lang('Learning paths');
             }
             echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
 
@@ -7606,18 +7606,18 @@ class Tracking
                     if ('TRACK_E_EXERCISES' === $table || 'TRACK_E_EXERCISES_IN_LP' === $table) {
                         echo "<br /><h3>".get_lang('Attempt')." #$id</h3>";
                         echo '<h3>';
-                        echo get_lang('Exercise').' #'.$item['exe_exo_id'];
+                        echo get_lang('Test').' #'.$item['exe_exo_id'];
                         echo '</h3>';
                         if (!empty($item['orig_lp_id'])) {
                             echo '<h3>';
-                            echo get_lang('LearningPath').' #'.$item['orig_lp_id'];
+                            echo get_lang('Learning path').' #'.$item['orig_lp_id'];
                             echo '</h3>';
                         }
                         // Process data.
                         $array = [
                             'exe_date' => get_lang('Date'),
                             'score' => get_lang('Score'),
-                            'max_score' => get_lang('Weighting'),
+                            'max_score' => get_lang('Score'),
                         ];
                         foreach ($item as $key => $value) {
                             if (in_array($key, array_keys($array))) {
@@ -7634,7 +7634,7 @@ class Tracking
                     }
                 }
             } else {
-                echo get_lang('NoResults');
+                echo get_lang('No results found');
             }
         }
     }
@@ -7656,7 +7656,7 @@ class Tracking
         $exerciseList = ExerciseLib::get_all_exercises($courseInfo, $sessionId, false, null);
 
         if (empty($exerciseList)) {
-            return Display::return_message(get_lang('NoEx'));
+            return Display::return_message(get_lang('There is no test for the moment'));
         }
 
         $toGraphExerciseResult = [];
@@ -7664,17 +7664,17 @@ class Tracking
         $quizzesTable = new SortableTableFromArray([], 0, 0, 'quizzes');
         $quizzesTable->setHeaders(
             [
-                get_lang('Exercises'),
+                get_lang('Tests'),
                 get_lang('Attempts'),
-                get_lang('BestAttempt'),
+                get_lang('Best attempt'),
                 get_lang('Ranking'),
-                get_lang('BestResultInCourse'),
+                get_lang('Best result in course'),
                 get_lang('Statistics').Display::getMdiIcon(
                     ActionIcon::INFORMATION,
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('OnlyBestResultsPerStudent')
+                    get_lang('In case of multiple attempts, only shows the best result of each learner')
                 ),
             ]
         );
@@ -7706,7 +7706,7 @@ class Tracking
                     ['target' => SESSION_LINK_TARGET]
                 );
             } elseif (-1 == $exercices['active']) {
-                $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
+                $exercices['title'] = sprintf(get_lang('%s (deleted)'), $exercices['title']);
             }
 
             $quizData = [
@@ -7818,12 +7818,12 @@ class Tracking
     private static function generateLearningPathsTable(int $userId, array $courseInfo, int $sessionId = 0): string
     {
         $columnHeaders = [
-            'lp' => get_lang('LearningPath'),
-            'time' => get_lang('LatencyTimeSpent'),
+            'lp' => get_lang('Learning paths'),
+            'time' => get_lang('Time spent'),
             'progress' => get_lang('Progress'),
             'score' => get_lang('Score'),
-            'best_score' => get_lang('BestScore'),
-            'last_connection' => get_lang('LastConnexion'),
+            'best_score' => get_lang('Best score'),
+            'last_connection' => get_lang('Latest login'),
         ];
 
         $trackingColumns = api_get_setting('session.tracking_columns', true);
@@ -7873,7 +7873,7 @@ class Tracking
         $lpList = $list->get_flat_list();
 
         if (empty($lpList)) {
-            return Display::return_message(get_lang('NoLearnpath'));
+            return Display::return_message(get_lang('No learning path'));
         }
 
         $webCodePath = api_get_path(WEB_CODE_PATH);
@@ -7963,7 +7963,7 @@ class Tracking
                 );
 
                 if (is_numeric($bestScore)) {
-                    $bestScore = sprintf(get_lang('XPercent'), $bestScore);
+                    $bestScore = sprintf(get_lang('%s %%'), $bestScore);
                 } else {
                     $bestScore = '-';
                 }

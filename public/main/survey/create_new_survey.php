@@ -259,7 +259,7 @@ if ('add' === $action) {
 
 $form->addElement('checkbox', 'one_question_per_page', null, get_lang('One question per page'));
 $form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
-$form->addElement('checkbox', 'display_question_number', null, get_lang('Display question number'))->setValue(true);
+$form->addElement('checkbox', 'display_question_number', null, get_lang('Show question number'))->setValue(true);
 
 $input_name_list = null;
 
@@ -326,7 +326,7 @@ $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
 $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 $form->addRule(
     ['start_date', 'end_date'],
-    get_lang('Start DateShouldBeBeforeEnd Date'),
+    get_lang('The first date should be before the end date'),
     'date_compare',
     'lte'
 );

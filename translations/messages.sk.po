@@ -17771,7 +17771,7 @@ msgstr "Tento používateľ nemá súvisiace URL"
 msgid "Extra data"
 msgstr "Ďalšie údaje"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Cvičenie v učebnej osnove"
 
 msgid "Id"
@@ -23734,10 +23734,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"

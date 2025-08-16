@@ -569,7 +569,7 @@ class SurveyUtil
                 ICON_SIZE_MEDIUM
             ).'</a>';
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPdf')),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
             'javascript: void(0);',
             ['onclick' => 'exportToPdf();']
         );
@@ -577,16 +577,16 @@ class SurveyUtil
         echo Display::toolbarAction('survey', [$actions]);
 
         $fromUntil = sprintf(
-            get_lang('FromXUntilY'),
+            get_lang('From %s until %s'),
             api_get_local_time($survey->getAvailFrom()),
             api_get_local_time($survey->getAvailTill())
         );
         $max = 80;
         $data = [
-            get_lang('SurveyTitle') => cut(strip_tags($survey->getTitle()), $max),
-            get_lang('SurveySubTitle') => cut(strip_tags($survey->getSubtitle()), $max),
+            get_lang('Survey title') => cut(strip_tags($survey->getTitle()), $max),
+            get_lang('Survey subtitle') => cut(strip_tags($survey->getSubtitle()), $max),
             get_lang('Dates') => $fromUntil,
-            get_lang('SurveyIntroduction') => cut(strip_tags($survey->getIntro()), $max),
+            get_lang('Survey introduction') => cut(strip_tags($survey->getIntro()), $max),
         ];
 
         $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
@@ -2955,7 +2955,7 @@ class SurveyUtil
         $actions = [
             'export_all' => get_lang('Export results'),
             'export_by_class' => get_lang('Export by class'),
-            'send_to_tutors' => get_lang('SendToGroupTutors'),
+            'send_to_tutors' => get_lang('Publish for group tutors'),
             'multiplicate' => get_lang('Multiply questions'),
             'delete' => get_lang('Delete survey'),
         ];
@@ -2986,7 +2986,7 @@ class SurveyUtil
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
         $table->set_header(1, get_lang('Survey name'));
-        $table->set_header(2, get_lang('Survey code'));
+        $table->set_header(2, get_lang(''));
         $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
         $table->set_header(5, get_lang('Available from'));
@@ -3122,7 +3122,7 @@ class SurveyUtil
                 );
 
                 $actions[] = Display::url(
-                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiplicate questions')),
+                    Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiply questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
                 );
@@ -3161,7 +3161,7 @@ class SurveyUtil
         $groupData = $extraFieldValue->get_values_by_handler_and_field_variable($survey_id, 'group_id');
         if ($groupData && !empty($groupData['value'])) {
             $actions[] = Display::url(
-                Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('SendToGroupTutors')),
+                Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Publish for group tutors')),
                 $codePath.'survey/survey_list.php?action=send_to_tutors&'.http_build_query($params + ['survey_id' => $survey_id])
             );
         }

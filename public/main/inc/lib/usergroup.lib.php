@@ -3099,7 +3099,7 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_HRM:
                 return get_lang('Human Resources Manager');
             default:
-                return get_lang('Undefined role');
+                return get_lang('Custom or undefined role');
         }
     }
 }

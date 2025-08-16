@@ -17763,7 +17763,7 @@ msgstr "Erabiltzaile honek ez du loturiko URLrik"
 msgid "Extra data"
 msgstr "Datu gehigarriak"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Ariketak ikaskuntza ibilbideetan"
 
 msgid "Id"
@@ -23726,10 +23726,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"

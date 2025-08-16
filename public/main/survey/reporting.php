@@ -235,25 +235,25 @@ if ('overview' === $action) {
     );
 
     $html .= Display::url(
-        Display::getMdiIcon('chart-gantt', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Detailed report by question')).'<h4>'.get_lang('Detailed report by question').'</h4><p>'.get_lang('Detailed report by questionDetail').'</p>',
+        Display::getMdiIcon('chart-gantt', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Detailed report by question')).'<h4>'.get_lang('Detailed report by question').'</h4><p>'.get_lang('In this report you see the results question by question. Basic statistical analysis and graphics are provided').'</p>',
         $url.'action=questionreport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
-        Display::getMdiIcon('chart-bar', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Detailed report by user')).'<h4>'.get_lang('Detailed report by user').'</h4><p>'.get_lang('Detailed report by userDetail').'</p>',
+        Display::getMdiIcon('chart-bar', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Detailed report by user')).'<h4>'.get_lang('Detailed report by user').'</h4><p>'.get_lang('In this report you can see all the answers a specific user has given.').'</p>',
         $url.'action=userreport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
-        Display::getMdiIcon('chart-areaspline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Comparative report')).'<h4>'.get_lang('Comparative report').'</h4><p>'.get_lang('Comparative reportDetail').'</p>',
+        Display::getMdiIcon('chart-areaspline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Comparative report')).'<h4>'.get_lang('Comparative report').'</h4><p>'.get_lang('In this report you can compare two questions.').'</p>',
         $url.'action=comparativereport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );
 
     $html .= Display::url(
-        Display::getMdiIcon('chart-multiple', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Complete report')).'<h4>'.get_lang('Complete report').'</h4><p>'.get_lang('Complete reportDetail').'</p>',
+        Display::getMdiIcon('chart-multiple', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Complete report')).'<h4>'.get_lang('Complete report').'</h4><p>'.get_lang('In this report you get an overview of all the answers of all users on all questions. You also have the option to see only a selection of questions. You can export the results in CSV format and use this for processing in a statistical application').'</p>',
         $url.'action=completereport&survey_id='.$surveyId,
         ['class' => 'list-group-item']
     );

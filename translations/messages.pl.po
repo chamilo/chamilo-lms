@@ -17764,7 +17764,7 @@ msgstr "Ten użytkownik nie posiada powiązanego URL."
 msgid "Extra data"
 msgstr "Dodatkowe dane"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Ćwiczenia w ścieżkach edukacyjnych"
 
 msgid "Id"
@@ -23727,10 +23727,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"

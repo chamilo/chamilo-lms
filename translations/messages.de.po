@@ -17824,7 +17824,7 @@ msgstr "Diesem Benutzer wurde keine URL zugeordnet."
 msgid "Extra data"
 msgstr "Extra Daten"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Tests im Lernpfad"
 
 msgid "Id"
@@ -24054,11 +24054,11 @@ msgstr "Absolvent"
 msgid "Absent"
 msgstr "Abwesend"
 
-msgid "Internal database error"
-msgstr "Interner Datenbankfehler"
+msgid "Internal database error: %s"
+msgstr "Interner Datenbankfehler: %s"
 
-msgid "Wrong number of days"
-msgstr "Falsche Anzahl von Tagen"
+msgid "Wrong number of days: %s: %s"
+msgstr "Falsche Anzahl von Tagen: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Abonnement nicht erlaubt"

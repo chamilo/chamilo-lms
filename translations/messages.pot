@@ -17752,7 +17752,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -23713,10 +23713,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -26020,9 +26020,6 @@ msgid "Hide test attempts table on test start page"
 msgstr ""
 
 msgid "Hide the table showing all previous attempts on the test start page."
-msgstr ""
-
-msgid "Hide question number"
 msgstr ""
 
 msgid "Hide the question incremental numbering when taking a test."
@@ -30241,4 +30238,40 @@ msgid "You can use the tags {{class_name}} and {{student_full_name}} in the ques
 msgstr ""
 
 msgid "Serie"
+msgstr ""
+
+msgid "Add learner"
+msgstr ""
+
+msgid "Only courses with a personalized certificate are exported"
+msgstr ""
+
+msgid "Show question number"
+msgstr ""
+
+msgid "Custom or undefined role"
+msgstr ""
+
+msgid "To unsubscribe from notifications, click here: %s"
+msgstr ""
+
+msgid "You have been enrolled in the course"
+msgstr ""
+
+msgid "Hello %s, you have been enrolled in the course %s."
+msgstr ""
+
+msgid "Acquisition"
+msgstr ""
+
+msgid "Session display dates"
+msgstr ""
+
+msgid "Session access dates"
+msgstr ""
+
+msgid "Hello %s, you have been enrolled in the course %s for the session %s."
+msgstr ""
+
+msgid "You have been enrolled in the course %s for the session %s"
 msgstr ""

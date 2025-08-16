@@ -17861,7 +17861,7 @@ msgstr "Deze gebruiker heeft geen gerelateerde URL"
 msgid "Extra data"
 msgstr "Extra data"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Oefeningen in leerpaden"
 
 msgid "Id"
@@ -24600,11 +24600,11 @@ msgstr "Afgestudeerd"
 msgid "Absent"
 msgstr "Afwezig"
 
-msgid "Internal database error"
-msgstr "Interne databasefout"
+msgid "Internal database error: %s"
+msgstr "Interne databasefout: %s"
 
-msgid "Wrong number of days"
-msgstr "Verkeerd aantal dagen"
+msgid "Wrong number of days: %s: %s"
+msgstr "Verkeerd aantal dagen: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Abonnement niet toegestaan"

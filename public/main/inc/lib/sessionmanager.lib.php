@@ -10155,7 +10155,7 @@ class SessionManager
     {
         return [
             self::STATUS_PLANNED => get_lang('Planned'),
-            self::STATUS_PROGRESS => get_lang('InProgress'),
+            self::STATUS_PROGRESS => get_lang('In progress'),
             self::STATUS_FINISHED => get_lang('Finished'),
             self::STATUS_CANCELLED => get_lang('Cancelled'),
         ];
@@ -10777,18 +10777,18 @@ class SessionManager
             get_lang('First name'),
             get_lang('Last name'),
             get_lang('Login'),
-            get_lang('Training time'),
+            get_lang('Time'),
             get_lang('Course progress'),
             get_lang('Exercise progress'),
             get_lang('Exercise average'),
             get_lang('Score'),
             get_lang('Score') . ' - ' . get_lang('Best attempt'),
-            get_lang('Student_publication'),
+            get_lang('Assignments'),
             get_lang('Messages'),
             get_lang('Classes'),
             get_lang('Registration date'),
-            get_lang('First login in course'),
-            get_lang('Latest login in course'),
+            get_lang('First access to course'),
+            get_lang('Latest access in course'),
         ];
 
         $csvData = TrackingCourseLog::getUserData(

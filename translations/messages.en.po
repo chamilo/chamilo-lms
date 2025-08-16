@@ -17766,8 +17766,8 @@ msgstr "This user doesn't have a related URL."
 msgid "Extra data"
 msgstr "Extra data"
 
-msgid "Exercises in learning paths"
-msgstr "Exercises in learning paths"
+msgid "Tests in learning paths"
+msgstr "Tests in learning paths"
 
 msgid "Id"
 msgstr "Id"
@@ -23732,11 +23732,11 @@ msgstr "Graduated"
 msgid "Absent"
 msgstr "Absent"
 
-msgid "Internal database error"
-msgstr "Internal database error"
+msgid "Internal database error: %s"
+msgstr "Internal database error: %s"
 
-msgid "Wrong number of days"
-msgstr "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
+msgstr "Wrong number of days: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Subscription not allowed"
@@ -26041,9 +26041,6 @@ msgstr "Hide test attempts table on test start page"
 
 msgid "Hide the table showing all previous attempts on the test start page."
 msgstr "Hide the table showing all previous attempts on the test start page."
-
-msgid "Hide question number"
-msgstr "Hide question number"
 
 msgid "Hide the question incremental numbering when taking a test."
 msgstr "Hide the question incremental numbering when taking a test."
@@ -30274,3 +30271,39 @@ msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the que
 
 msgid "Serie"
 msgstr "Serie"
+
+msgid "Add learner"
+msgstr "Add learner"
+
+msgid "Only courses with a personalized certificate are exported"
+msgstr "Only courses with a personalized certificate are exported"
+
+msgid "Show question number"
+msgstr "Show question number"
+
+msgid "Custom or undefined role"
+msgstr "Custom or undefined role"
+
+msgid "To unsubscribe from notifications, click here: %s"
+msgstr "To unsubscribe from notifications, click here: %s"
+
+msgid "You have been enrolled in the course"
+msgstr "You have been enrolled in the course"
+
+msgid "Hello %s, you have been enrolled in the course %s."
+msgstr "Hello %s, you have been enrolled in the course %s."
+
+msgid "Acquisition"
+msgstr "Acquisition"
+
+msgid "Session display dates"
+msgstr "Session display dates"
+
+msgid "Session access dates"
+msgstr "Session access dates"
+
+msgid "Hello %s, you have been enrolled in the course %s for the session %s."
+msgstr "Hello %s, you have been enrolled in the course %s for the session %s."
+
+msgid "You have been enrolled in the course %s for the session %s"
+msgstr "You have been enrolled in the course %s for the session %s"

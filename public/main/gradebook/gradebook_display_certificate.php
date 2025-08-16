@@ -335,29 +335,58 @@ if (0 == count($certificate_list)) {
             echo '<td width="50%">'.get_lang('Score').' : '.$valueCertificate['score_certificate'].'</td>';
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
-            $url = '';
-            if (!empty($valueCertificate['path_certificate']) && $valueCertificate['publish']) {
-                $hash = pathinfo($valueCertificate['path_certificate'], PATHINFO_FILENAME);
-                $url = api_get_path(WEB_PATH).'certificates/'.$hash.'.html';
+
+            // Normalize and availability checks
+            $pathRaw = isset($valueCertificate['path_certificate']) ? (string) $valueCertificate['path_certificate'] : '';
+            $path    = ltrim($pathRaw, '/'); // ensure no leading slash
+            $hasPath = $path !== '';
+            $hash    = $hasPath ? pathinfo($path, PATHINFO_FILENAME) : '';
+
+            // Admin can bypass publish flag for visibility
+            $isPublished = !empty($valueCertificate['publish']) || api_is_platform_admin();
+            $isAvailable = $hasPath && $isPublished;
+
+            // Build URLs only if available
+            $htmlUrl = $isAvailable ? api_get_path(WEB_PATH).'certificates/'.$hash.'.html' : '';
+            $pdfUrl  = $isAvailable ? api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf'  : '';
+
+            // HTML certificate button/link
+            if ($isAvailable) {
+                echo Display::url(
+                    get_lang('Certificate'),
+                    $htmlUrl,
+                    ['target' => '_blank', 'class' => 'btn btn--plain']
+                );
+            } else {
+                // Disabled button with clear message
+                echo '<button type="button" class="btn btn--plain disabled" disabled '
+                    .'title="Certificate not available"> '.get_lang('Certificate').' </button>';
             }
-            $certificateUrl = Display::url(
-                get_lang('Certificate'),
-                $url,
-                ['target' => '_blank', 'class' => 'btn btn--plain']
-            );
-            echo $certificateUrl.PHP_EOL;
+            echo PHP_EOL;
 
-            $url .= '&action=export';
-            $pdf = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
-                $url,
-                ['target' => '_blank']
-            );
-            echo $pdf.PHP_EOL;
+            // PDF download button/link (mdi icon)
+            if ($isAvailable) {
+                echo Display::url(
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
+                    $pdfUrl,
+                    ['target' => '_blank', 'title' => 'Download PDF certificate']
+                );
+            } else {
+                // Disabled icon with tooltip
+                echo '<button type="button" class="btn btn-link disabled" disabled '
+                    .'title="PDF download unavailable">'
+                    .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF download unavailable'))
+                    .'</button>';
+            }
+            echo PHP_EOL;
 
-            echo '<a onclick="return confirmation();" href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq().'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">
-                    '.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'
-                  </a>'.PHP_EOL;
+            // Delete action (unchanged)
+            echo '<a onclick="return confirmation();" '
+                .'href="gradebook_display_certificate.php?sec_token='.$token.'&'.api_get_cidreq()
+                .'&action=delete&cat_id='.$categoryId.'&certificate_id='.$valueCertificate['id'].'">'
+                .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete'))
+                .'</a>'.PHP_EOL;
+
             echo '</td></tr>';
         }
         echo '</tbody>';

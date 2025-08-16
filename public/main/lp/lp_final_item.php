@@ -140,14 +140,14 @@ function safeGenerateCertificateForCategory(GradebookCategory $category, int $us
     $sessId   = $session ? $session->getId() : 0;
     $catId    = (int) $category->getId();
 
-    $gb = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
-    $html = is_array($gb) && isset($gb['content']) ? $gb['content'] : '';
+    $gb   = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
+    $html = (is_array($gb) && isset($gb['content'])) ? $gb['content'] : '';
+    $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
+    $fileName = ltrim(hash('sha256', $userId.$catId).'.html', '/');
 
-    $fileName = hash('sha256', $userId.$catId).'.html';
     $certRepo = Container::getGradeBookCertificateRepository();
     $pf = $certRepo->generateCertificatePersonalFile($userId, $fileName, $html);
     try {
-        $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
         $certRepo->registerUserInfoAboutCertificate($catId, $userId, $score, $fileName);
     } catch (\Throwable $e) {
         error_log('[LP_FINAL] register cert error: '.$e->getMessage());

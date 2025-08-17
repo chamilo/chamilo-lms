@@ -14323,11 +14323,11 @@ msgstr "Uputstvo"
 msgid "You should write a message"
 msgstr "Trebalo bi da napišete poruku"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "To poruka vam je poslata da vas informiše o kreiranju novog kursa na platformi"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "To poruka vam je poslata da vas informiše o kreiranju novog kursa na %s"
 
-msgid "New course created in"
-msgstr "Novi kurs kreiran u"
+msgid "New course created on %s"
+msgstr "Novi kurs kreiran u %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Trener je podešen na Vas trenutno. Možete da promenite ovo podešavanja kasnije u podešavanjima konfiguracije treninga"

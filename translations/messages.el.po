@@ -14330,11 +14330,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "Πρέπει να γράψετε ένα μήνυμα"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Αυτό το μήνυμα είναι για να σας ενημερώσει ότι δημιουργήθηκε μια νέα σειρά μαθημάτων στην πλατφόρμα"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Αυτό το μήνυμα είναι για να σας ενημερώσει ότι δημιουργήθηκε μια νέα σειρά μαθημάτων στην πλατφόρμα %s"
 
-msgid "New course created in"
-msgstr "Δημιουργήθηκε μια νέα σειρά μαθηματων στο"
+msgid "New course created on %s"
+msgstr "Δημιουργήθηκε μια νέα σειρά μαθηματων στο %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Προς το παρόν, έχετε ορισθεί εσείς ως Εκπαιδευτικός. Αργότερα, μπορείτε να αλλάξετε αυτή τη ρύθμιση, από τις ρυθμίσεις της σειράς μαθημάτων."

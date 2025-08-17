@@ -14330,11 +14330,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "Escriviu un missatge"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Aquest missatge és per informar-lo que s'ha creat un curs nou a la plataforma"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Aquest missatge és per informar-lo que s'ha creat un curs nou a %s"
 
-msgid "New course created in"
-msgstr "Curs nou creat en"
+msgid "New course created on %s"
+msgstr "Curs nou creat en %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Per ara, està definit com professor. Podreu canviar el professor a la pàgina de configuració del curs"

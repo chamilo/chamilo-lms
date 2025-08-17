@@ -14331,11 +14331,11 @@ msgstr "Instructiuni"
 msgid "You should write a message"
 msgstr "Scrieti un mesaj"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Acest mesaj este pentru a va informa ca a fost creat un curs nou in plataforma"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Acest mesaj este pentru a va informa ca a fost creat un curs nou in %s"
 
-msgid "New course created in"
-msgstr "Noul curs creat in"
+msgid "New course created on %s"
+msgstr "Noul curs creat in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Pentru moment,dumneavoastra sunteti definit ca profesor.Veti putea aschimba profesorul in pagina de configuratie a cursului"

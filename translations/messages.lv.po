@@ -14323,11 +14323,11 @@ msgstr "Dokumentācija"
 msgid "You should write a message"
 msgstr "Jums vajadzētu rakstīt ziņu"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Šī ziņa informē Jūs, par jauna Kursa izveidi platformā:"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Šī ziņa informē Jūs, par jauna Kursa izveidi %s"
 
-msgid "New course created in"
-msgstr "Ir izveidots jauns kurss, vidē:"
+msgid "New course created on %s"
+msgstr "Ir izveidots jauns kurss, vidē %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Patreiz, kā kursa veidotājs, esat noteikts Jūs. Vēlāk, Jūs varat mainīt šo iestatījumu, mācību kursa konfigurācijas uzstādījumos, sadaļā <b>Administrācija / Kursa iestatījumi</b>"

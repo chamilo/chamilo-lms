@@ -14331,11 +14331,11 @@ msgstr "Guida in linea"
 msgid "You should write a message"
 msgstr "Devi scrivere il testo del messaggio"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Caro %s, nn questo messaggio ti informa che sulla piattaforma %s - %s nn è stato creato il nuovo corson Titolo: %s n Categoria: %s n Creato da: %s n Lingua: %s\";"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Caro %s, nn questo messaggio ti informa che sulla %s nn è stato creato il nuovo corson"
 
-msgid "New course created in"
-msgstr "Nuovo corso creato in"
+msgid "New course created on %s"
+msgstr "Nuovo corso creato in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Ora sei tu il docente del corso; in seguito potrai configurare altre persone come docenti."

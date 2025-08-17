@@ -14322,11 +14322,11 @@ msgstr "Ръководство"
 msgid "You should write a message"
 msgstr "Трябва да напишете съобщението."
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "С това съобщение Ви информираме, че сте създали в системата за обучение нов курс"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "С това съобщение Ви информираме, че сте създали в системата за обучение нов курс %s"
 
-msgid "New course created in"
-msgstr "Нов курс създаден в"
+msgid "New course created on %s"
+msgstr "Нов курс създаден в %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Вие сте преподавател в курса. Можете да промените преподавателя в страницата за настройки на курса."

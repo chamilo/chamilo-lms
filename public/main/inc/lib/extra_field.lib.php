@@ -398,7 +398,7 @@ class ExtraField extends Model
 
                 $('#map_extra_{$variable}')
                     .html('<div class=\"alert alert-info\">"
-            .addslashes(get_lang('You need to activate the GoogleMaps plugin in adminPlatform to see the Map'))
+            .addslashes(get_lang('You need to activate the GoogleMaps plugin in administration to see the Map'))
             ."</div>');
             });
 
@@ -493,10 +493,10 @@ class ExtraField extends Model
                                     infowindow.open(map_{$variable}, marker);
                                 });
                             } else {
-                                alert('".get_lang('NotFound')."');
+                                alert('".get_lang('Not found')."');
                             }
                         } else {
-                            alert('Geocode ".get_lang('Error').': '.get_lang('AddressField').' '.get_lang('NotFound')."');
+                            alert('Geocode ".get_lang('Error').': '.get_lang('Address').' '.get_lang('NotFound')."');
                         }
                     });
                 }
@@ -527,12 +527,12 @@ class ExtraField extends Model
                             id="geolocalization_extra_'.$variable.'"
                             name="geolocalization_extra_'.$variable.'"
                             type="submit">
-                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
+                            <em class="fa fa-map-marker"></em> '.get_lang('Search for this location').'
                         </button>
                         <button class="btn btn--plain" id="myLocation_extra_'.$variable.'"
                             name="myLocation_extra_'.$variable.'"
                             type="submit">
-                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                            <em class="fa fa-crosshairs"></em> '.get_lang('My location').'
                         </button>
                     </div>
                 </div>
@@ -2079,10 +2079,10 @@ class ExtraField extends Model
         $types[self::FIELD_TYPE_TIMEZONE] = get_lang('Timezone');
         $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('Social network link');
         $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('Mobile phone number');
-        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('Checkbox');
-        $types[self::FIELD_TYPE_INTEGER] = get_lang('Integer');
+        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('Checkbox options');
+        $types[self::FIELD_TYPE_INTEGER] = get_lang('Integer value');
         $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('Image');
-        $types[self::FIELD_TYPE_FLOAT] = get_lang('Float');
+        $types[self::FIELD_TYPE_FLOAT] = get_lang('Float value');
         $types[self::FIELD_TYPE_FILE] = get_lang('File');
         $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('Video URL');
         $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('Text only letters');

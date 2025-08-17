@@ -342,12 +342,12 @@ class CourseDescription
     public function get_default_information()
     {
         $information = [];
-        $information[1] = get_lang('DescriptionInformation');
+        $information[1] = get_lang('Describe the course (number of hours, serial number, location) and teacher (name, office, Tel., e-mail, office hours . . . .).');
         $information[2] = get_lang('What are the objectives of the course (competences, skills, outcomes)?');
         $information[3] = get_lang('List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts.');
         $information[4] = get_lang('Presentation of the activities (conference, papers, group research, labs...).');
-        $information[5] = get_lang('Course materialInformation');
-        $information[6] = get_lang('ResourcesInformation');
+        $information[5] = get_lang('Short description of the course materials.');
+        $information[6] = get_lang('Describe the course (number of hours, serial number, location) and teacher (name, office, Tel., e-mail, office hours . . . .).');
         $information[7] = get_lang('Criteria for skills acquisition.');
         //$information[8]= get_lang('The thematic advance tool allows you to organize your course through time.');
 

@@ -56,7 +56,7 @@ class ZombieReport implements Countable
                 ],
                 [
                     'name' => 'active_only',
-                    'label' => get_lang('active only'),
+                    'label' => get_lang('Active only'),
                     'type' => 'checkbox',
                     'default' => $this->get_active_only(),
                 ],
@@ -86,7 +86,7 @@ class ZombieReport implements Countable
         );
 
         $form->addDatePicker('ceiling', get_lang('Latest access'));
-        $form->addCheckBox('active_only', get_lang('active only'));
+        $form->addCheckBox('active_only', get_lang('Active only'));
         $form->addButtonSearch(get_lang('Search'));
 
         $params = [

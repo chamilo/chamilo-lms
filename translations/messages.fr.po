@@ -14785,11 +14785,11 @@ msgstr "Manuel"
 msgid "You should write a message"
 msgstr "Vous devriez écrire un message"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Ce petit message pour vous informer qu'un nouveau cours a été créé sur la plateforme"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Ce petit message pour vous informer qu'un nouveau cours a été créé sur %s"
 
-msgid "New course created in"
-msgstr "Nouveau cours créé dans"
+msgid "New course created on %s"
+msgstr "Nouveau cours créé sur %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Vous êtes considéré comme formateur pour l'instant. Vous pourrez modifier ce paramètre plus tard dans la page de configuration des paramètres du cours."
@@ -29318,9 +29318,6 @@ msgstr "Quelques éléments supplémentaires"
 
 msgid "Buttons"
 msgstr "Boutons"
-
-msgid "Course catalogue"
-msgstr "Catalogue de cours"
 
 msgid "Show advanced mode"
 msgstr "Afficher le mode avancé"

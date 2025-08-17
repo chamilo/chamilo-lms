@@ -14324,11 +14324,11 @@ msgstr "Manuaali"
 msgid "You should write a message"
 msgstr "Sinun pitäisi kirjoittaa viesti"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Tiedoksesi, että uusi kurssi on luotu oppimisympäristöön"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Tiedoksesi, että uusi kurssi on luotu oppimisympäristöön %s"
 
-msgid "New course created in"
-msgstr "Uusi kurssi luotu:"
+msgid "New course created on %s"
+msgstr "Uusi kurssi luotu %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Sinut on nyt määritetty kouluttajaksi. Voit muuttaa tätä asetusta myöhemmin kurssin asetuksissa."

@@ -14325,11 +14325,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "You should write a message"
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr "This message is to inform you that a new course has been created on the platform"
 
-msgid "New course created in"
-msgstr "New course created in"
+msgid "New course created on %s"
+msgstr "New course created on %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -27416,9 +27416,6 @@ msgstr "Mail confirmation"
 msgid "Campus homepage"
 msgstr "Campus homepage"
 
-msgid "Course catalogue"
-msgstr "Course catalogue"
-
 msgid "Search shows unlinked results"
 msgstr "Search shows unlinked results"
 
@@ -30349,3 +30346,36 @@ msgstr "Notify subscription of user to student boss"
 
 msgid "User does not exist"
 msgstr "User does not exist"
+
+msgid "(Percentage of file analysis)"
+msgstr "(Percentage of file analysis)"
+
+msgid "Pause training"
+msgstr "Pause training"
+
+msgid "Date of birth"
+msgstr "Date of birth"
+
+msgid "A user creator is required"
+msgstr "A user creator is required"
+
+msgid "Save links"
+msgstr "Save links"
+
+msgid "Links moved"
+msgstr "Links moved"
+
+msgid "No option available"
+msgstr "No option available"
+
+msgid "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
+msgstr "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
+
+msgid "Remove on anonymisation"
+msgstr "Remove on anonymisation"
+
+msgid "Auto remove"
+msgstr "Auto remove"
+
+msgid "You need to activate the GoogleMaps plugin in administration to see the Map"
+msgstr "You need to activate the GoogleMaps plugin in administration to see the Map"

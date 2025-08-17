@@ -14365,11 +14365,11 @@ msgstr "Handleiding"
 msgid "You should write a message"
 msgstr "Je moet een bericht schrijven"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Er werd een nieuwe cursus aangemaakt op het platform:"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Er werd een nieuwe cursus aangemaakt op %s"
 
-msgid "New course created in"
-msgstr "Er werd een nieuwe cursus aangemaakt in"
+msgid "New course created on %s"
+msgstr "Er werd een nieuwe cursus aangemaakt in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen."
@@ -27679,9 +27679,6 @@ msgstr ""
 msgid "Generic configuration array to reconfigure the WYSIWYG editor globally."
 msgstr ""
 "Generieke configuratie-array om de WYSIWYG-editor globaal te herconfigureren."
-
-msgid "Course catalogue"
-msgstr "Cursuscatalogus"
 
 msgid "Session name and course title"
 msgstr "Sessienaam en cursustitel"

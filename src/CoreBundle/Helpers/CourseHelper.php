@@ -193,10 +193,10 @@ class CourseHelper
         $institutionName = $this->getDefaultSetting('platform.institution');
         $courseName = $course->getTitle();
 
-        $subject = $this->translator->trans('New course created in')." $siteName - $institutionName";
+        $subject = $this->translator->trans('New course created on %s')." $siteName - $institutionName";
 
         $greeting = $this->translator->trans('Dear %s,');
-        $intro = $this->translator->trans('This message is to inform you that has created a new course on platform');
+        $intro = $this->translator->trans('This message is to inform you that a new course has been created on %s');
         $courseNameLabel = $this->translator->trans('Course name');
 
         $message = \sprintf($greeting, $recipientName)."\n\n";

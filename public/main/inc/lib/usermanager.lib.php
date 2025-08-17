@@ -152,7 +152,7 @@ class UserManager
 
         if (0 === $creatorId) {
             Display::addFlash(
-                Display::return_message(get_lang('A user creator is needed'))
+                Display::return_message(get_lang('A user creator is required'))
             );
 
             return false;
@@ -5590,7 +5590,7 @@ SQL;
             $url .= '&s='.$sessionToRedirect;
         }
         $mailSubject = get_lang('Registration confirmation');
-        $mailBody = get_lang('Registration confirmationEmailMessage')
+        $mailBody = get_lang('To complete your platform registration you need confirm your account by clicking the following link')
             .PHP_EOL
             .Display::url($url, $url);
 
@@ -5764,12 +5764,12 @@ SQL;
                     self::anonymize($userId)
                 ) {
                     $message = Display::return_message(
-                        sprintf(get_lang('User %s information anonymized.'), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("User %s's information anonymized."), $userToUpdateInfo['complete_name_with_username']),
                         'confirmation'
                     );
                 } else {
                     $message = Display::return_message(
-                        sprintf(get_lang('We could not anonymize user %s information. Please try again or check the logs.'), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang("We could not anonymize user %s's information. Please try again or check the logs."), $userToUpdateInfo['complete_name_with_username']),
                         'error'
                     );
                 }
@@ -5819,7 +5819,7 @@ SQL;
                         'confirmation'
                     );
                 } else {
-                    $message = Display::return_message(get_lang('You cannot delete this userBecauseOwnsCourse'), 'error');
+                    $message = Display::return_message(get_lang('This user cannot be deleted because he is still teacher in a course. You can either remove his teacher status from these courses and then delete his account, or disable his account instead of deleting it.'), 'error');
                 }
             }
         }

@@ -14322,11 +14322,11 @@ msgstr "راهنما"
 msgid "You should write a message"
 msgstr "شما باید یک پیام بنویسید"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "این پیغام جهت اطلاع رسانی ساخته شدن یک درس جدید در سیستم به شماست"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "این پیغام جهت اطلاع رسانی ساخته شدن یک درس جدید در سیستم به شماست %s"
 
-msgid "New course created in"
-msgstr "درس جدید ایجاد شد در"
+msgid "New course created on %s"
+msgstr "درس جدید ایجاد شد در %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "الان شما به عنوان استاد معرفی شده اید. شما بعدا در قسمت پیکربندی درس می توانید این تنظیمات را تغییر دهید."

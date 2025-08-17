@@ -14383,11 +14383,11 @@ msgstr "Führer"
 msgid "You should write a message"
 msgstr "Sie sollten eine Nachricht schreiben"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Diese Nachricht informiert Sie darüber, dass einer neuer Kurs auf dem Portal angelegt wurde."
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Diese Nachricht informiert Sie darüber, dass einer neuer Kurs auf dem  %s angelegt wurde."
 
-msgid "New course created in"
-msgstr "Neuer Kurs erstellt in"
+msgid "New course created on %s"
+msgstr "Neuer Kurs erstellt in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Als Kursleiter wurden Sie selbst eingetragen. Sie können diese Einstellung später in den Kurseinstellungen ändern."
@@ -28624,9 +28624,6 @@ msgstr ""
 "Lehrkräfte können einige Kurse im Nur-Lese-Modus einstellen, wenn sie über "
 "Sessions geöffnet werden. In den Kurseigenschaften wählen Sie die Option "
 "'Kurs in der Session sperren'."
-
-msgid "Course catalogue"
-msgstr "Kurskatalog"
 
 msgid "Session name and course title"
 msgstr "Sessionname und Kurstitel"

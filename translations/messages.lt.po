@@ -14324,10 +14324,10 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"

@@ -14331,11 +14331,11 @@ msgstr "ידני"
 msgid "You should write a message"
 msgstr "עליך לכתוב הודעה"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "הודעה זו מיועדת ליידע אותך שיצר קורס חדש בפלטפורמה"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "הודעה זו מיועדת ליידע אותך שיצר קורס חדש בפלטפורמה %s"
 
-msgid "New course created in"
-msgstr "קורס חדש נוצר ב"
+msgid "New course created on %s"
+msgstr "קורס חדש נוצר ב %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "המורה מוגדר כמוך לעת עתה. אתה יכול לשנות הגדרה זו מאוחר יותר בהגדרות תצורת הקורס"

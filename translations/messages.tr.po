@@ -14322,11 +14322,11 @@ msgstr "Rehber"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Bu mesaj platformda yeni bir ders yaratıldığı için bilgilendirme amaçlıdır."
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Bu mesaj %s yeni bir ders yaratıldığı için bilgilendirme amaçlıdır."
 
-msgid "New course created in"
-msgstr "Yeni dersin yaratıldığı yer"
+msgid "New course created on %s"
+msgstr "Yeni dersin yaratıldığı yer %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Eğitmen şu an için ayarladı. Ancak ayarlarınızı daha sonra eğitim ayarlarından değiştirebilirsiniz."

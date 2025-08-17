@@ -884,7 +884,7 @@ class CourseCategory
             case 'subscribe_user_with_password':
             case 'display_random_courses':
             case 'display_courses':
-                $nameTools = get_lang('Courses catalog');
+                $nameTools = get_lang('Courses catalogue');
                 break;
             case 'display_sessions':
                 $nameTools = get_lang('Course sessions');

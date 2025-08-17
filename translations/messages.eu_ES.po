@@ -14322,11 +14322,11 @@ msgstr "Eskuz"
 msgid "You should write a message"
 msgstr "Mezua idatzi dezakezu"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Mezu honen bidez, plataforman beste ikastaro bat sortu berri dela jakinarazten dizugu"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Mezu honen bidez, plataforman beste ikastaro bat sortu berri dela jakinarazten dizugu %s"
 
-msgid "New course created in"
-msgstr "Ikastaro berri bat sortu da honakoan:"
+msgid "New course created on %s"
+msgstr "Ikastaro berri bat sortu da honakoan %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Oraingoz, zu zaude irakasletzat. Irakaslea aldatu dezakezu ikastaroaren ezarpenak zehazteko orrian."

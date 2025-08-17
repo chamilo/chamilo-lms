@@ -14338,11 +14338,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "Escribir un mensaje"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Este mensaje es para informarle de que ha sido creado un nuevo curso en la plataforma"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Este mensaje es para informarle de que ha sido creado un nuevo curso en %s"
 
-msgid "New course created in"
-msgstr "Nuevo curso creado en"
+msgid "New course created on %s"
+msgstr "Nuevo curso creado en %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Por ahora, Ud está definido como profesor. Podrá cambiar el profesor en la página de configuración del curso"
@@ -27726,9 +27726,6 @@ msgstr "Botones"
 
 msgid "Prevent teacher from modifying assignment scores"
 msgstr "Evitar que el tutor modifique las puntuaciones de tareas"
-
-msgid "Course catalogue"
-msgstr "Catálogo de cursos"
 
 msgid "Session name and course title"
 msgstr "Nombre de la sesión y título del curso"

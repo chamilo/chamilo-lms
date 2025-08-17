@@ -14331,11 +14331,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "يجب عليك كتابة رسالة"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "هذه الرسالة لغرض اعلامك بانه تم انشاء مقرر جديد في النظام"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "هذه الرسالة لغرض اعلامك بانه تم انشاء مقرر جديد في النظام %s"
 
-msgid "New course created in"
-msgstr "تم انشاء مقرر في"
+msgid "New course created on %s"
+msgstr "تم انشاء مقرر في %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "تم تعيينك كمدرس حاليا، يمكنك تغيير هذه الاعدادات لاحقا في تهيئة اعدادات المقرر"

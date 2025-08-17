@@ -630,7 +630,7 @@ class ExtraFieldOption extends Model
             return $html;
         }
 
-        return get_lang("No options available");
+        return get_lang("No option available");
     }
 
     /**

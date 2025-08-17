@@ -14317,10 +14317,10 @@ msgstr ""
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -27396,9 +27396,6 @@ msgstr ""
 msgid "Campus homepage"
 msgstr ""
 
-msgid "Course catalogue"
-msgstr ""
-
 msgid "Search shows unlinked results"
 msgstr ""
 
@@ -30316,4 +30313,37 @@ msgid "Notify subscription of user to student boss"
 msgstr ""
 
 msgid "User does not exist"
+msgstr ""
+
+msgid "(Percentage of file analysis)"
+msgstr ""
+
+msgid "Pause training"
+msgstr ""
+
+msgid "Date of birth"
+msgstr ""
+
+msgid "A user creator is required"
+msgstr ""
+
+msgid "Save links"
+msgstr ""
+
+msgid "Links moved"
+msgstr ""
+
+msgid "No option available"
+msgstr ""
+
+msgid "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
+msgstr ""
+
+msgid "Remove on anonymisation"
+msgstr ""
+
+msgid "Auto remove"
+msgstr ""
+
+msgid "You need to activate the GoogleMaps plugin in administration to see the Map"
 msgstr ""

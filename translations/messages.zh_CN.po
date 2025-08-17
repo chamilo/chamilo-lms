@@ -14322,11 +14322,11 @@ msgstr "手册"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "此信息告之您系统中已添加一个新的课程"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "此信息告之您系统中已添加一个新的课程 %s"
 
-msgid "New course created in"
-msgstr "新课程创建在"
+msgid "New course created on %s"
+msgstr "新课程创建在 %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "暂时预定此教师, 你可以稍后通过课程设置改更"

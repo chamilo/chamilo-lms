@@ -1477,7 +1477,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             $content .= Display::noDataView(
                 get_lang('Links'),
                 Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_BIG),
-                get_lang('Add links'),
+                get_lang('Add a link'),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'addlink'])
             );
         }
@@ -1567,7 +1567,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             'target',
             [
                 get_lang('Link\'s target'),
-                get_lang('Select the target which shows the link on the homepage of the course'),
+                get_lang('Select the "target" which shows the link on the homepage of the course"'),
             ],
             $targets
         );
@@ -1583,7 +1583,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
 
         if ('true' === api_get_setting('search_enabled')) {
             $specific_fields = get_specific_field_list();
-            $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
+            $form->addCheckBox('index_document', get_lang('Index link title and description?'), get_lang('Yes'));
 
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';

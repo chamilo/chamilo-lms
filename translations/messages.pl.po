@@ -14323,11 +14323,11 @@ msgstr "Podręcznik"
 msgid "You should write a message"
 msgstr "Napisz wiadomość"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Ta wiadomość jest informacją o utworzeniu nowego kursu na platformie"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Ta wiadomość jest informacją o utworzeniu nowego kursu na %s"
 
-msgid "New course created in"
-msgstr "Nowy kurs utworzony w"
+msgid "New course created on %s"
+msgstr "Nowy kurs utworzony w %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Jesteś teraz zapisany/ustawiony jako nauczyciel. Możesz zmienić to ustawienie później w ustawieniach konfiguracyjnych kursu"

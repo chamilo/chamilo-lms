@@ -618,11 +618,11 @@ class CoursesAndSessionsCatalog
         /** @var $extraFields ExtraField[] */
         $standardLabels = [
             'title' => get_lang('Title'),
-            'creation_date' => get_lang('CreationDate'),
-            'count_users' => get_lang('SubscriptionCount'),
-            'point_info/point_average' => get_lang('PointAverage'),
-            'point_info/total_score' => get_lang('TotalScore'),
-            'point_info/users' => get_lang('VoteCount'),
+            'creation_date' => get_lang('Creation date'),
+            'count_users' => get_lang('Subscription count'),
+            'point_info/point_average' => get_lang('Average score'),
+            'point_info/total_score' => get_lang('Score Sum'),
+            'point_info/users' => get_lang('Vote count'),
         ];
         $options = [];
         foreach (array_keys(self::courseStandardSortOrder()) as $name) {
@@ -1080,7 +1080,7 @@ class CoursesAndSessionsCatalog
             tabindex="0" role="button"
             class="btn btn--plain panel_popover"
             data-toggle="popover"
-            title="'.addslashes(get_lang('CourseTeachers')).'"
+            title="'.addslashes(get_lang('Teachers')).'"
             data-html="true"
         >
             <i class="fa fa-graduation-cap" aria-hidden="true"></i>
@@ -1090,7 +1090,7 @@ class CoursesAndSessionsCatalog
                 $name = $value['firstname'].' '.$value['lastname'];
                 $html .= '<div class="popover-teacher">';
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
                 $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">'
                     .$name.'</a></h5></div>';
@@ -1102,10 +1102,10 @@ class CoursesAndSessionsCatalog
                 $name = $value['firstname'].' '.$value['lastname'];
                 if ($length > 2) {
                     $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
                 } else {
                     $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
                     $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                         .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
@@ -1127,10 +1127,10 @@ class CoursesAndSessionsCatalog
     public static function return_already_registered_label($status)
     {
         $icon = '<em class="fa fa-check"></em>';
-        $title = get_lang('YouAreATeacherOfThisCourse');
+        $title = get_lang('You are a teacher of this course');
         if ('student' === $status) {
             $icon = '<em class="fa fa-check"></em>';
-            $title = get_lang('AlreadySubscribed');
+            $title = get_lang('Already subscribed');
         }
 
         $html = Display::tag(
@@ -1252,7 +1252,7 @@ class CoursesAndSessionsCatalog
                 'primary',
                 [
                     'class' => $class.' ajax',
-                    'data-title' => get_lang('AreYouSureToSubscribe'),
+                    'data-title' => get_lang('Are you sure to subscribe?'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe'),
                 ],
@@ -1266,7 +1266,7 @@ class CoursesAndSessionsCatalog
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('SubscribeToSessionRequest'),
+                get_lang('Request subscription'),
                 $url,
                 'pencil',
                 'primary',
@@ -1299,15 +1299,15 @@ class CoursesAndSessionsCatalog
         );
 
         return Display::toolbarButton(
-            get_lang('CheckRequirements'),
+            get_lang('Check requirements'),
             $url,
             'shield',
             'info',
             [
                 'class' => $class.' ajax',
-                'data-title' => get_lang('CheckRequirements'),
+                'data-title' => get_lang('Check requirements'),
                 'data-size' => 'md',
-                'title' => get_lang('CheckRequirements'),
+                'title' => get_lang('Check requirements'),
             ],
             $includeText
         );
@@ -1326,7 +1326,7 @@ class CoursesAndSessionsCatalog
             $icon,
             [
                 'class' => 'btn btn--plain btn-sm registered',
-                'title' => get_lang("AlreadyRegisteredToSession"),
+                'title' => get_lang("Already registered to session"),
             ]
         );
     }
@@ -1484,14 +1484,14 @@ class CoursesAndSessionsCatalog
         if (self::showCourses()) {
             $headers[] = [
                 'url' => api_get_self(),
-                'content' => get_lang('CourseManagement'),
+                'content' => get_lang('Courses catalog'),
             ];
         }
 
         if (self::showSessions()) {
             $headers[] = [
                 'url' => $url,
-                'content' => get_lang('SessionList'),
+                'content' => get_lang('Session list'),
             ];
         }
 

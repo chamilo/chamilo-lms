@@ -14322,11 +14322,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "Tienes qu'escribir un mensax"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Esti mensax ye pa informate que se crió un cursu nuevu na plataforma"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Esti mensax ye pa informate que se crió un cursu nuevu na %s"
 
-msgid "New course created in"
-msgstr "Nuevu cursu criáu en"
+msgid "New course created on %s"
+msgstr "Nuevu cursu criáu en %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "El mayestru ta definíu como Ud. Va poder cambialo na páxina de configuración del cursu."

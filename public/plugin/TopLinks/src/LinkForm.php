@@ -81,7 +81,7 @@ class LinkForm extends FormValidator
             'picture',
             [
                 $this->link ? get_lang('UpdateImage') : get_lang('AddImage'),
-                get_lang('OnlyImagesAllowed'),
+                get_lang('Only PNG, JPG or GIF images allowed'),
             ],
             [
                 'id' => 'picture',

@@ -130,7 +130,7 @@ try {
         }
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemUpdated'))
+            Display::return_message(get_lang('Item updated'))
         );
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');

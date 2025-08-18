@@ -60,6 +60,7 @@ foreach ($dirsToScan as $dir) {
         $lines = file($path);
         foreach ($lines as $num => $line) {
             $terms = extractTermsFromLine($line, $isVue);
+            $hiddenTerms = extractHiddenTermsFromLine($line, $isVue);
             foreach ($terms as $term) {
                 $isMissing = !isset($msgids[$term]);
                 if ($showAll || $isMissing) {
@@ -67,7 +68,13 @@ foreach ($dirsToScan as $dir) {
                 }
                 $termIndex++;
                 if ($isMissing) {
-                    echo "\033[31m  Missing in messages.pot\033[0m\n";
+                    echo "\033[31m Missing in messages.pot\033[0m\n";
+                    $missing[$term] = true;
+                }
+            }
+            foreach ($hiddenTerms as $term) {
+                $isMissing = !isset($msgids[$term]);
+                if ($isMissing) {
                     $missing[$term] = true;
                 }
             }
@@ -152,13 +159,28 @@ function extractTermsFromLine(string $line, bool $isVue): array
         addUnescapedTerms($matches, $terms);
     } else {
         // get_lang("term")
-        preg_match_all('/\bget_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
+        preg_match_all('/(?<!\$this->)(?<!\$plugin->)\bget_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*(?:,.*)?\)/x', $line, $matches);
         addUnescapedTerms($matches, $terms);
 
         // trans("term"), ->trans("term"), .trans("term")
         preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
         addUnescapedTerms($matches, $terms);
     }
+
+    return $terms;
+}
+
+function extractHiddenTermsFromLine(string $line, bool $isVue): array
+{
+    $terms = [];
+
+    if ($isVue) {
+        return $terms;
+    }
+
+    // $this->get_lang("term") or $plugin->get_lang("term")
+    preg_match_all('/\$(this|plugin)->get_lang\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*(?:,.*)?\)/x', $line, $matches);
+    addUnescapedTerms($matches, $terms);
 
     return $terms;
 }

@@ -728,7 +728,7 @@ class SortableTable extends HTML_Table
         $nav = $pager_links['first'].' '.$pager_links['back'];
         $nav .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
         $nav .= $pager_links['next'].' '.$pager_links['last'];
-
+        $nav = str_replace('&amp;', '&', $nav);
         return $nav;
     }
 

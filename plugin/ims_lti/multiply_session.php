@@ -38,7 +38,7 @@ try {
     $session = api_get_session_entity($sessionId);
 
     if (!$session) {
-        throw new Exception(get_lang('SessionNotFound'));
+        throw new Exception(get_lang('Session not found.'));
     }
 
     $content = '';
@@ -71,7 +71,7 @@ try {
             'multiple' => true,
         ]
     );
-    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
+    $form->addCheckBox('tool_visible', get_lang('Set visible'), get_lang('The tool is now visible.'));
     $form->addButtonExport(get_lang('Save'));
 
     if ($form->validate()) {

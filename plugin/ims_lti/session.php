@@ -60,7 +60,7 @@ try {
 
         if (!$formValues['sessions']) {
             Display::addFlash(
-                Display::return_message(get_lang('SessionNotFound'), 'error', false)
+                Display::return_message(get_lang('Session not found.'), 'error', false)
             );
             header('Location:'.api_get_self());
             exit;

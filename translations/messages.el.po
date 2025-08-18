@@ -24,7 +24,7 @@ msgid "The badges will be sent to this backpack"
 msgstr "Τα συγκεκριμένα badges θα αποσταλούν σε αυτό το backpack"
 
 msgid "Backpack details"
-msgstr "Backpack details"
+msgstr ""
 
 msgid "Criteria to earn the badge"
 msgstr "Κριτήρια για να κερδίσετε το badge"
@@ -42,13 +42,13 @@ msgid "Download badges"
 msgstr "Λήψη badges"
 
 msgid "Badges issuer details"
-msgstr "Badges issuer details"
+msgstr ""
 
 msgid "Create badge"
 msgstr "Δημιουργήστε badge"
 
 msgid "Badges"
-msgstr "Badges"
+msgstr ""
 
 msgid "Students who acquired skill %s"
 msgstr "Εκπαιδευόμενοι που απέκτησαν δεξιότητες %s"
@@ -60,13 +60,13 @@ msgid "Skills report"
 msgstr "Έκθεση δεξιοτήτων"
 
 msgid "Users assigned to their superior"
-msgstr "Users assigned to their superior"
+msgstr ""
 
 msgid "Assign users to superior"
-msgstr "Assign users to superior"
+msgstr ""
 
 msgid "Student's superior"
-msgstr "Student's superior"
+msgstr ""
 
 msgid "Cosecant:\t\t\t\tcsc(x)"
 msgstr "Συντεμνούσα:\t\t\t\tcsc(x)"
@@ -207,7 +207,7 @@ msgid "Delete comment"
 msgstr "Διαγραφή σχολίου"
 
 msgid "Social wall"
-msgstr "Social wall"
+msgstr ""
 
 msgid "Buy courses"
 msgstr "Αγοράστε μαθήματα"
@@ -366,7 +366,7 @@ msgid "Include all users"
 msgstr "Περιλαμβάνει όλους τους χρήστες"
 
 msgid "Hosting warning reached"
-msgstr "Hosting warning reached"
+msgstr ""
 
 msgid "Session name"
 msgstr "Όνομα συνεδρίας"
@@ -494,7 +494,7 @@ msgid "Human Resources Manager"
 msgstr "Διευθυντής Ανθρώπινου Δυναμικού"
 
 msgid "Global"
-msgstr "Global"
+msgstr ""
 
 msgid "Question title"
 msgstr "Τίτλος ερώτησης"
@@ -503,7 +503,7 @@ msgid "Question ID"
 msgstr "Ερώτηση ID"
 
 msgid "ExerciseId"
-msgstr "ExerciseId"
+msgstr ""
 
 msgid "Excel export"
 msgstr "Εξαγωγή Excel"
@@ -524,7 +524,7 @@ msgid "No session provided"
 msgstr "Δεν παρέχεται συνεδρία"
 
 msgid "Users must have the HR director role"
-msgstr "Users must have the HR director role"
+msgstr ""
 
 msgid "Nothing to add"
 msgstr "Δεν υπάρχει κάτι να προσθέσετε"
@@ -551,7 +551,7 @@ msgid "Modification date"
 msgstr "Ημερομηνία τροποποίησης"
 
 msgid "Weep"
-msgstr "Weep"
+msgstr ""
 
 msgid "Latest changes"
 msgstr "Τελευταίες αλλαγές"
@@ -653,13 +653,13 @@ msgid "Parameters not found"
 msgstr "Οι Παράμετροι δεν βρέθηκαν"
 
 msgid "Users to add"
-msgstr "Users to add"
+msgstr ""
 
 msgid "Documents added"
 msgstr "Τα Έγγραφα προστέθηκαν"
 
 msgid "No users to add"
-msgstr "No users to add"
+msgstr ""
 
 msgid "Start the Survey"
 msgstr "Ξεκινήστε την Έρευνα"
@@ -677,10 +677,10 @@ msgid "Click on the image to load a new one."
 msgstr "Κάντε κλικ στην εικόνα για να φορτώσετε μια νέα."
 
 msgid "Account blocked by captcha."
-msgstr "Account blocked by captcha."
+msgstr ""
 
 msgid "Capture screenshot/screencast"
-msgstr "Capture screenshot/screencast"
+msgstr ""
 
 msgid "View"
 msgstr "Δείτε"
@@ -809,7 +809,7 @@ msgid "This tool allows you to create glossary terms for this course, which can 
 msgstr "Αυτό το εργαλείο σας επιτρέπει να δημιουργήσετε γλωσσάρι όρων για το συγκεκριμένο μάθημα, το οποίο μπορεί στη συνέχεια να χρησιμοποιηθεί από το εργαλείο εγγράφων"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "The forum is an discussion tool for asynchronous written work. In contrast to email, a forum is for public, or semi-public, group discussion."
+msgstr ""
 
 msgid "Forum help"
 msgstr "Φόρουμ βοήθειας"
@@ -968,7 +968,7 @@ msgid "Detailed exercises progress"
 msgstr "Λεπτομερής πρόοδος ασκήσεων"
 
 msgid "Accesses by user overview"
-msgstr "Accesses by user overview"
+msgstr ""
 
 msgid "Allow members to leave group"
 msgstr "Επιτρέπεται στα μέλη να αποχωρήσουν από την ομάδα"
@@ -1940,7 +1940,7 @@ msgid "Course registration password"
 msgstr "Συνθηματικό εγγραφής στο μάθημα"
 
 msgid "Click on this link for a full removal of the course from the server.<br /><br />Be carefull, there's no way back!"
-msgstr "Click on this link for a full removal of the course from the server.<br /><br />Be carefull, there's no way back!"
+msgstr ""
 
 msgid "Duplicate the course or some learning objects in another course. You need 2 courses to use this feature: an original course and a target course."
 msgstr "Αναπαραγωγή εις διπλούν της σειράς μαθημάτων ή κάποιων εκπαιδευτικών αντικειμένων. Χρειάζεσθε 2 σειρές μαθημάτων για να χρησιμοποιήσετε αυτό το χαρακτηριστικό: μία αρχική σειρά μαθημάτων και μία σειρά-στόχο."
@@ -2021,19 +2021,19 @@ msgid "Format"
 msgstr "Φορμάτ"
 
 msgid ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
-msgstr ":draft:draft,,      final:final,,      revised:revised,,      unavailable:unavailable"
+msgstr ""
 
 msgid ":no:free, no cost,, yes:not free, cost"
-msgstr ":no:free, no cost,, yes:not free, cost"
+msgstr ""
 
 msgid ":yes:copyright,, no:no copyright"
-msgstr ":yes:copyright,, no:no copyright"
+msgstr ""
 
 msgid ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
-msgstr ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP"
+msgstr ""
 
 msgid ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
-msgstr ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture"
+msgstr ""
 
 msgid "Please select a backup option"
 msgstr "Παρακαλώ επιλέξτε μία μορφή αντιγράφου ασφαλείας"
@@ -2204,211 +2204,211 @@ msgid "Go to Top"
 msgstr "Μετάβαση στην κορυφή"
 
 msgid "New poll"
-msgstr "New poll"
+msgstr ""
 
 msgid "Create a new poll for this room"
-msgstr "Create a new poll for this room"
+msgstr ""
 
 msgid "Question"
-msgstr "Question"
+msgstr ""
 
 msgid "Polltype:"
-msgstr "Polltype:"
+msgstr ""
 
 msgid "Info: Every connected User in this room will get a notification of this new Poll."
-msgstr "Info: Every connected User in this room will get a notification of this new Poll."
+msgstr ""
 
 msgid "Yes / No"
-msgstr "Yes / No"
+msgstr ""
 
 msgid "Numeric 1-10"
-msgstr "Numeric 1-10"
+msgstr ""
 
 msgid "Poll"
-msgstr "Poll"
+msgstr ""
 
 msgid "You have to become Moderator of this Room to make polls."
-msgstr "You have to become Moderator of this Room to make polls."
+msgstr ""
 
 msgid "Your vote has been sent"
-msgstr "Your vote has been sent"
+msgstr ""
 
 msgid "You've already voted for this poll"
-msgstr "You've already voted for this poll"
+msgstr ""
 
 msgid "Vote!"
-msgstr "Vote!"
+msgstr ""
 
 msgid "Your answer"
-msgstr "Your answer"
+msgstr ""
 
 msgid "wants to know:"
-msgstr "wants to know:"
+msgstr ""
 
 msgid "Poll results"
-msgstr "Poll results"
+msgstr ""
 
 msgid "There is no Poll."
-msgstr "There is no Poll."
+msgstr ""
 
 msgid "Meeting (max 4 seats)"
-msgstr "Meeting (max 4 seats)"
+msgstr ""
 
 msgid "Conference (max 50 seats)"
-msgstr "Conference (max 50 seats)"
+msgstr ""
 
 msgid "Remaining seats"
-msgstr "Remaining seats"
+msgstr ""
 
 msgid "Already in"
-msgstr "Already in"
+msgstr ""
 
 msgid "Check in"
-msgstr "Check in"
+msgstr ""
 
 msgid "The Moderator of this Conference has left the room."
-msgstr "The Moderator of this Conference has left the room."
+msgstr ""
 
 msgid "System message"
-msgstr "System message"
+msgstr ""
 
 msgid "Choose devices"
-msgstr "Choose devices"
+msgstr ""
 
 msgid "Choose Cam:"
-msgstr "Choose Cam:"
+msgstr ""
 
 msgid "Choose Mic:"
-msgstr "Choose Mic:"
+msgstr ""
 
 msgid "You have to reconnect so that the changes take effect."
-msgstr "You have to reconnect so that the changes take effect."
+msgstr ""
 
 msgid "Change settings"
-msgstr "Change settings"
+msgstr ""
 
 msgid "Course language"
-msgstr "Language:"
+msgstr ""
 
 msgid "Confirm Clear Whiteboard"
-msgstr "Confirm Clear Whiteboard"
+msgstr ""
 
 msgid "Should the whiteboard be cleared before I add a new Image?"
-msgstr "Should the whiteboard be cleared before I add a new Image?"
+msgstr ""
 
 msgid "Don't ask me again"
-msgstr "Don't ask me again"
+msgstr ""
 
 msgid "Ask confirmation before clearing whiteboard"
-msgstr "Ask confirmation before clearing whiteboard"
+msgstr ""
 
 msgid "Clear Draw Area"
-msgstr "Clear Draw Area"
+msgstr ""
 
 msgid "Undo"
-msgstr "Undo"
+msgstr ""
 
 msgid "Redo"
-msgstr "Redo"
+msgstr ""
 
 msgid "Select an Object"
-msgstr "Select an Object"
+msgstr ""
 
 msgid "Draw line"
-msgstr "Draw line"
+msgstr ""
 
 msgid "Draw underline"
-msgstr "Draw underline"
+msgstr ""
 
 msgid "Rectangle"
-msgstr "Rectangle"
+msgstr ""
 
 msgid "Ellipse"
-msgstr "Ellipse"
+msgstr ""
 
 msgid "Arrow"
-msgstr "Arrow"
+msgstr ""
 
 msgid "Delete selected resource"
-msgstr "Delete selected resource"
+msgstr ""
 
 msgid "Apply for moderation"
-msgstr "Apply for moderation"
+msgstr ""
 
 msgid "Apply"
-msgstr "Apply"
+msgstr ""
 
 msgid "Become moderator"
-msgstr "Become moderator"
+msgstr ""
 
 msgid "Italic"
-msgstr "Italic"
+msgstr ""
 
 msgid "Bold"
-msgstr "Bold"
+msgstr ""
 
 msgid "Waiting"
-msgstr "Waiting"
+msgstr ""
 
 msgid "A User wants to apply for moderation:"
-msgstr "A User wants to apply for moderation:"
+msgstr ""
 
 msgid "Reject"
-msgstr "Reject"
+msgstr ""
 
 msgid "Sending request to the following users"
-msgstr "Sending request to the following users"
+msgstr ""
 
 msgid "Accepted"
-msgstr "Accepted"
+msgstr ""
 
 msgid "Rejected"
-msgstr "Rejected"
+msgstr ""
 
 msgid "Change Moderator"
-msgstr "Change Moderator"
+msgstr ""
 
 msgid "You are not moderator."
-msgstr "You are not moderator."
+msgstr ""
 
 msgid "Moderator"
-msgstr "Moderator"
+msgstr ""
 
 msgid "This Room is full. Sorry please try again later."
-msgstr "This Room is full. Sorry please try again later."
+msgstr ""
 
 msgid "Please wait while loading image"
-msgstr "Please wait while loading image"
+msgstr ""
 
 msgid "Synchronizing conference members"
-msgstr "Synchronizing conference members"
+msgstr ""
 
 msgid "Teacher"
-msgstr "Teacher"
+msgstr ""
 
 msgid "Slides"
-msgstr "Slides"
+msgstr ""
 
 msgid "Waiting for participants"
-msgstr "Waiting for participants"
+msgstr ""
 
 msgid "Browse"
-msgstr "Browse"
+msgstr ""
 
 msgid "Choose a file to import"
-msgstr "Choose a file to import"
+msgstr ""
 
 msgid "Converting document"
-msgstr "Converting document"
+msgstr ""
 
 msgid "Disconnected"
-msgstr "Disconnected"
+msgstr ""
 
 msgid "Thin"
-msgstr "Thin"
+msgstr ""
 
 msgid "Thick"
-msgstr "Thick"
+msgstr ""
 
 msgid "The hot courses list will be added in the index page"
 msgstr "Η σελίδα με τα Καυτά μαθήματα θα προστεθεί στη σελίδα ευρετηρίου"
@@ -2417,7 +2417,7 @@ msgid "Show hot courses"
 msgstr "Εμφάνιση Καυτών μαθημάτων"
 
 msgid "This item is invisible for learner but you have access as teacher."
-msgstr "This item is invisible for learner but you have access as teacher."
+msgstr ""
 
 msgid "Prevent session admins to manage all users"
 msgstr "Πρόληψη διαχείρισης όλων των user από τους administrator της εφαρμογής"
@@ -2429,7 +2429,7 @@ msgid "Allow visitors"
 msgstr "Αποδοχή επισκεπτών"
 
 msgid "Allowing arbitrary iframes in the HTML Editor will enhance the edition capabilities of the users, but it can represent a security risk. Please make sure you can rely on your users (i.e. you know who they are) before enabling this feature."
-msgstr "Allowing arbitrary iframes in the HTML Editor will enhance the edition capabilities of the users, but it can represent a security risk. Please make sure you can rely on your users (i.e. you know who they are) before enabling this feature."
+msgstr ""
 
 msgid "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon."
 msgstr "Αυτή η άσκηση έχει συμπεριληφθεί στην Εκπαιδευτική διαδρομή, οπότε οι εκπαιδευόμενοι δεν μπορούν να έχουν πρόσβαση σε αυτήν από εδώ. Αν θέλετε αυτή η άσκηση να είναι διαθέσιμη μέσα από τα εργαλεία ασκήσεων, παρακαλώ κάντε ένα αντίγραφό της, χρησιμοποιώντας το εικονίδιο της αντιγραφής."
@@ -2567,7 +2567,7 @@ msgid "Visibility"
 msgstr "Ορατότητα"
 
 msgid "Database version used at archive time"
-msgstr "Database version used at archive time"
+msgstr ""
 
 msgid "Expiration"
 msgstr "Λήξη προθεσμίας"
@@ -2693,10 +2693,10 @@ msgid "Already registered in course"
 msgstr "Έχετε ήδη εγγραφεί στο μάθημα"
 
 msgid "Show Feedback"
-msgstr "Show Feedback"
+msgstr ""
 
 msgid "Give / Edit Feedback"
-msgstr "Give / Edit Feedback"
+msgstr ""
 
 msgid "---Just upload---"
 msgstr "--- Ανέβασμα αρχείου ---"
@@ -3023,10 +3023,10 @@ msgid "All learners"
 msgstr "Όλοι οι εκπαιδευόμενοι"
 
 msgid "Qualified learners"
-msgstr "Qualified learners"
+msgstr ""
 
 msgid "Unqualified learners"
-msgstr "Unqualified learners"
+msgstr ""
 
 msgid "First names and last names"
 msgstr "Ονόματα και Επίθετα"
@@ -3155,34 +3155,34 @@ msgid "Delete list"
 msgstr "Διαγραφή λίστας"
 
 msgid "Edit Link"
-msgstr "Edit Link"
+msgstr ""
 
 msgid "CSV import"
 msgstr "Εισαγωγή αρχείου CSV"
 
 msgid "CSV import file could not be opened (e.g. empty, too big)"
-msgstr "CSV import file could not be opened (e.g. empty, too big)"
+msgstr ""
 
 msgid "CSV import file must use , or ; as listseparator"
-msgstr "CSV import file must use , or ; as listseparator"
+msgstr ""
 
 msgid "CSV import file must at least have columns URL and title"
-msgstr "CSV import file must at least have columns URL and title"
+msgstr ""
 
 msgid "... - line 1 ="
-msgstr "... - line 1 ="
+msgstr ""
 
 msgid "line(s) failed to import a link (no URL or no title)."
-msgstr "line(s) failed to import a link (no URL or no title)."
+msgstr ""
 
 msgid "existing link(s) updated (same URL and category)."
-msgstr "existing link(s) updated (same URL and category)."
+msgstr ""
 
 msgid "new link(s) created."
-msgstr "new link(s) created."
+msgstr ""
 
 msgid "The file should look like:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>If URL and category are equal to those of an existing link, its title and description are updated. In all other cases a new link is created.<br><br>Bold = mandatory. Fields can be in any order, names in upper- or lowercase. Additional fields are added to description. Separator: comma or semicolon. Values may be quoted, but not the field names. Some [b]HTML tags[/b] can be imported in the description field."
-msgstr "The file should look like:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>If URL and category are equal to those of an existing link, its title and description are updated. In all other cases a new link is created.<br><br>Bold = mandatory. Fields can be in any order, names in upper- or lowercase. Additional fields are added to description. Separator: comma or semicolon. Values may be quoted, but not the field names. Some [b]HTML tags[/b] can be imported in the description field."
+msgstr ""
 
 msgid "Link has been updated"
 msgstr "Ο σύνδεσμος ενημερώθηκε"
@@ -3194,7 +3194,7 @@ msgid "Show this link as an icon on course homepage"
 msgstr "Εμφάνιση συνδέσμου ως εικονίδιου στην άρχικη σελίδα"
 
 msgid "Index link title and description?"
-msgstr "Index link title and description?"
+msgstr ""
 
 msgid "Save link"
 msgstr "Αποθήκευση συνδέσμου"
@@ -3321,7 +3321,7 @@ msgid "(recommended)"
 msgstr "(προτείνεται)"
 
 msgid "SCORM DB"
-msgstr "Scorm DB"
+msgstr ""
 
 msgid "Administrator last name"
 msgstr "Επώνυμο Διαχειριστή"
@@ -3573,10 +3573,10 @@ msgid "List of all documents"
 msgstr "Λίστα όλων των εγγράφων"
 
 msgid "Table of contents"
-msgstr "Table of contents"
+msgstr ""
 
 msgid "Edit table of contents"
-msgstr "Edit table of contents"
+msgstr ""
 
 msgid "Edit"
 msgstr "Επεξεργασία"
@@ -3585,82 +3585,82 @@ msgid "Create a rich media page / activity"
 msgstr "Δημιουργία ενός έγγραφο"
 
 msgid "Missing images detected"
-msgstr "Missing images detected"
+msgstr ""
 
 msgid "Publish"
 msgstr "Δημοσίευση"
 
 msgid "This is a SCORM course. To play it, click here : <input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "This is a Scorm format course. To play it, click here : <input type=button name=scormbutton value='Launch it !' onclick='openscorm()'>"
+msgstr ""
 
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
-msgstr "This is a Scorm format course. To play it, click here : <input type=button name=scormbutton value='Launch it !' onclick='openscorm()'>"
+msgstr ""
 
 msgid " Zip file uploaded and uncompressed"
-msgstr " Zip file uploaded and uncompressed"
+msgstr ""
 
 msgid "The zip file can not contain .PHP files"
-msgstr "The zip file can not contain .PHP files"
+msgstr ""
 
 msgid "Group forum"
-msgstr "Group forum"
+msgstr ""
 
 msgid "This is not a valid SCORM ZIP file !"
-msgstr "This is not a scorm ZIP file !"
+msgstr ""
 
 msgid "Please type your text / HTML content"
-msgstr "Please type your text / HTML content"
+msgstr ""
 
 msgid "Please enter the file name"
-msgstr "Please enter the file name"
+msgstr ""
 
 msgid "The file to upload is not valid."
-msgstr "The file to upload is not valid."
+msgstr ""
 
 msgid "Visibility modified"
-msgstr "Visibility modified"
+msgstr ""
 
 msgid "Add/Edit a comment to"
 msgstr "Προσθήκη / αλλαγή σχολίου στο"
 
 msgid "Operation impossible"
-msgstr "Operation impossible"
+msgstr ""
 
 msgid "The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space."
-msgstr "The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space."
+msgstr ""
 
 msgid "The upload is finished"
 msgstr "Ολοκληρώθηκε το ανέβασμα"
 
 msgid "The operation is impossible, a file with this name already exists."
-msgstr "The operation is impossible, a file with this name already exists."
+msgstr ""
 
 msgid "Document copied"
-msgstr "Document copied"
+msgstr ""
 
 msgid "Document deleted"
-msgstr "Document deleted"
+msgstr ""
 
 msgid "Element renamed"
-msgstr "Element renamed"
+msgstr ""
 
 msgid "Element moved"
-msgstr "Element moved"
+msgstr ""
 
 msgid "Comment modified"
 msgstr "Τα σχόλια τροποποιήθηκαν"
 
 msgid "Rename"
-msgstr "Rename"
+msgstr ""
 
 msgid "Name of the new folder"
-msgstr "Name of the new folder"
+msgstr ""
 
 msgid "Download file"
-msgstr "Upload file"
+msgstr ""
 
 msgid "Create a course (authoring tool)"
-msgstr "Create a course (authoring tool)"
+msgstr ""
 
 msgid "Mark as unread"
 msgstr "Σήμανση ως Μη Αναγνωσμένο"
@@ -3693,7 +3693,7 @@ msgid "Uncompress zip"
 msgstr "αποσυμπίεση του αρχείο (.zip) στον εξυπηρέτη"
 
 msgid "Export as SCORM"
-msgstr "Export as SCORM"
+msgstr ""
 
 msgid "All day"
 msgstr "Όλη την ημέρα"
@@ -3705,7 +3705,7 @@ msgid "Show status"
 msgstr "Προβολή status"
 
 msgid "Mode"
-msgstr "Mode"
+msgstr ""
 
 msgid "Schedule"
 msgstr "Πρόγραμμα"
@@ -4059,7 +4059,7 @@ msgid "Show tree"
 msgstr "Εμφάνιση δενδρικής μορφής"
 
 msgid "Meta image path"
-msgstr "Meta image path"
+msgstr ""
 
 msgid "Category deleted"
 msgstr "Η κατηγορία διαγράφηκε"
@@ -4170,13 +4170,13 @@ msgid "errors found"
 msgstr "βρέθηκαν σφάλματα"
 
 msgid "Backup"
-msgstr "Backup"
+msgstr ""
 
 msgid "Upgrade Chamilo"
 msgstr "Αναβάθμιση βάσης δεδομένων"
 
 msgid "Website"
-msgstr "Chamilo Website"
+msgstr ""
 
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
@@ -4359,7 +4359,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Να επιτρέπετε σε εκπαιδευτικούς να δημιουργούν κατηγορίες στο εργαλείο Ομάδων"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
+msgstr ""
 
 msgid "Production Server"
 msgstr "Server Παραγωγής"
@@ -4386,7 +4386,7 @@ msgid "Default hard disk space"
 msgstr "Προεπιλεγμένος χώρος δίσκου."
 
 msgid "What is the available disk space for a course? You can override the quota for specific course through: platform administration > Courses > modify"
-msgstr "What is the available disk space for a course? You can override the quota for specific training through: platform administration > Training > modify"
+msgstr ""
 
 msgid "Profile"
 msgstr "Προφίλ"
@@ -4404,7 +4404,7 @@ msgid "Group disk space available"
 msgstr "Διαθέσιμος χώρος δίσκου ομάδας."
 
 msgid "What is the default hard disk spacde available for a groups documents tool?"
-msgstr "What is the default hard disk spade available for a groups documents tool?"
+msgstr ""
 
 msgid "Lost password"
 msgstr "Χαμένο συνθηματικό"
@@ -4416,13 +4416,13 @@ msgid "Registration"
 msgstr "Εγγραφή"
 
 msgid "Is registration as a new user allowed? Can users create new accounts?"
-msgstr "Is registration as a new user allowed? Can users create new accounts?"
+msgstr ""
 
 msgid "Registration as teacher"
 msgstr "Εγγραφή ως εκπαιδευτικός"
 
 msgid "Can one register as a teacher (with the ability to create courses)?"
-msgstr "Can one register as a teacher (with the ability to create courses)?"
+msgstr ""
 
 msgid "Tuning"
 msgstr "Βελτιστοποίηση"
@@ -4431,7 +4431,7 @@ msgid "Split users' upload directory"
 msgstr "Διαχωρισμός φακέλου upload του χρήστη"
 
 msgid "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
-msgstr "On high-load portals, where a lot of users are registered and send their pictures, the upload directory (main/upload/users/) might contain too many files for the filesystem to handle (it has been reported with more than 36000 files on a Debian server). Changing this option will enable a one-level splitting of the directories in the upload directory. 9 directories will be used in the base directory and all subsequent users' directories will be stored into one of these 9 directories. The change of this option will not affect the directories structure on disk, but will affect the behaviour of the Chamilo code, so if you change this option, you have to create the new directories and move the existing directories by yourself on te server. Be aware that when creating and moving those directories, you will have to move the directories of users 1 to 9 into subdirectories of the same name. If you are not sure about this option, it is best not to activate it."
+msgstr ""
 
 msgid "Disk Space"
 msgstr "Χώρος Δίσκου"
@@ -4452,10 +4452,10 @@ msgid "Edit Homepage central area"
 msgstr "Επεξεργασία χώρου αρχικής σελίδας"
 
 msgid "Can a teacher define learner profile fields to retrieve additional information?"
-msgstr "Can a teacher define learner profile fields to retrieve additional information?"
+msgstr ""
 
 msgid "Twitter Site account"
-msgstr "Twitter Site account"
+msgstr ""
 
 msgid "Languages"
 msgstr "Γλώσσες"
@@ -4473,10 +4473,10 @@ msgid "Open in new window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
 msgid "In the screens allowing addition of users to courses or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)"
-msgstr "In the screens allowing addition of users to training or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)"
+msgstr ""
 
 msgid "Hide the [= ... =] markup when a language variable is not translated"
-msgstr "Hide the [= ... =] markup when a language variable is not translated"
+msgstr ""
 
 msgid "Upgrade from LMS v1.9.*"
 msgstr "Αναβάθμιση από LMS v1.9.*"
@@ -4515,7 +4515,7 @@ msgid "Personal Agenda"
 msgstr "Προσωπική Ατζέντα"
 
 msgid "Can the learner add personal events to the Agenda?"
-msgstr "Can the learner add personal events to the Agenda?"
+msgstr ""
 
 msgid "current value"
 msgstr "τρέχουσα τιμή"
@@ -4542,10 +4542,10 @@ msgid "Create dummy course content"
 msgstr "Δημιουργία παραδειγματικού περιεχομένου στο μάθημα"
 
 msgid "This will add some dummy (example) content to this course. This is only meant for testing purposes."
-msgstr "This will add some dummy (example) content to this course. This is only meant for testing purposes."
+msgstr ""
 
 msgid "These are the plugins that have been found on your system. You can download additional plugins on <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
-msgstr "These are the plugins that have been found on your system. You can download additional plugins on <a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>"
+msgstr ""
 
 msgid "Display list of virtual courses"
 msgstr "Εμφάνιση καταλόγου εικονικών μαθημάτων"
@@ -4554,10 +4554,10 @@ msgid "Linked to real course code"
 msgstr "Διασύνδεση με τον κωδικό του πραγματικού μαθήματος"
 
 msgid "Attempted creation of virtual course..."
-msgstr "Attempted creation of virtual course..."
+msgstr ""
 
 msgid "Wanted course code"
-msgstr "Wanted course code"
+msgstr ""
 
 msgid "Reset password"
 msgstr "Επαναφορά συνθηματικού"
@@ -4572,7 +4572,7 @@ msgid "Use a title for the document name"
 msgstr "Χρήση τίτλου για το όνομα του εγγράφου"
 
 msgid "This will allow the use of a title for document names instead of document_name.ext"
-msgstr "This will allow the use of a title for document names instead of document_name.ext"
+msgstr ""
 
 msgid "Assignments"
 msgstr "Αναθέσεις"
@@ -4593,34 +4593,34 @@ msgid "Dropbox: Can documents be overwritten"
 msgstr "Dropbox: Τα αρχεία μπορούν να αντικατασταθούν"
 
 msgid "Can the original document be overwritten when a user or trainer uploads a document with the name of a document that already exist? If you answer yes then you loose the versioning mechanism."
-msgstr "Can the original document be overwritten when a user or trainer uploads a document with the name of a document that already exist? If you answer yes then you loose the versioning mechanism."
+msgstr ""
 
 msgid "Dropbox: Upload to own dropbox space?"
-msgstr "Dropbox: Upload to own dropbox space?"
+msgstr ""
 
 msgid "Allow trainers and users to upload documents to their dropbox without sending  the documents to themselves"
-msgstr "Allow trainers and users to upload documents to their dropbox without sending  the documents to themselves"
+msgstr ""
 
 msgid "Dropbox: Learner <-> Learner"
 msgstr "Dropbox: Εκπαιδευτής <-> Εκπαιδευτής"
 
 msgid "Allow users to send documents to other users (peer 2 peer). Users might use this for less relevant documents also (mp3, tests solutions, ...). If you disable this then the users can send documents to the trainer only."
-msgstr "Allow users to send documents to other users (peer 2 peer). Users might use this for less relevant documents also (mp3, tests solutions, ...). If you disable this then the users can send documents to the trainer only."
+msgstr ""
 
 msgid "Dropbox: Allow mailing"
-msgstr "Dropbox: Allow mailing"
+msgstr ""
 
 msgid "With the mailing functionality you can send each learner a personal document"
-msgstr "With the mailing functionality you can send each learner a personal document"
+msgstr ""
 
 msgid "Permissions for new directories"
 msgstr "Δικαιώματα νέων φακέλων"
 
 msgid "The ability to define the permissions settings to assign to every newly created directory lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0770) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions."
-msgstr "The ability to define the permissions settings to assign to every newly created directory lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0770) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions."
+msgstr ""
 
 msgid "The users list has been exported."
-msgstr "The users list has been exported."
+msgstr ""
 
 msgid "Download the file"
 msgstr "Κατέβασμα αρχείου"
@@ -4638,7 +4638,7 @@ msgid "Portfolio"
 msgstr "Εκτεταμένο προφίλ"
 
 msgid "If this setting is on, a user can fill in the following (optional) fields: 'My personal open area', 'My competences', 'My diplomas', 'What I am able to teach'"
-msgstr "If this setting is set to 'True', a user can fill in following (optional) fields: 'My competences', 'My diplomas', 'What I am able to teach' and 'My personal open area'"
+msgstr ""
 
 msgid "Classes"
 msgstr "Tάξεις"
@@ -4659,16 +4659,16 @@ msgid "(d/m/y h:m)"
 msgstr "(y/m/d h:m)"
 
 msgid "Homepage-files are not writable!"
-msgstr "Homepage-files are not writable!"
+msgstr ""
 
 msgid "Please give a notice text"
-msgstr "Please give a notice text"
+msgstr ""
 
 msgid "Please give a notice title"
-msgstr "Please give a notice title"
+msgstr ""
 
 msgid "Plese give a link name"
-msgstr "Plese give a link name"
+msgstr ""
 
 msgid "Insert this link"
 msgstr "Εισαγωγή συνδέσμου"
@@ -4692,7 +4692,7 @@ msgid "No users in this class"
 msgstr "Δεν υπάρχουν χρήστες στην τάξη"
 
 msgid "The selected users are subscribed to the selected course"
-msgstr "The selected users are subscribed to the selected course"
+msgstr ""
 
 msgid "This category is already used"
 msgstr "Η κατηγορία (κωδικός) χρησιμοποιείται ήδη"
@@ -4704,25 +4704,25 @@ msgid "Register your portal"
 msgstr "Καταχώρηση της πλαρφόρμα σας"
 
 msgid "Display course navigation menu"
-msgstr "Display training navigation menu"
+msgstr ""
 
 msgid "Display a navigation menu that quickens access to the tools"
-msgstr "Display a navigation menu that quickens access to the tools"
+msgstr ""
 
 msgid "Import class list via CSV"
-msgstr "Import class list via CSV"
+msgstr ""
 
 msgid "Display number of users online on the login page (visible for the world)"
-msgstr "Display number of users online on the login page (visible for the world)"
+msgstr ""
 
 msgid "Display number of users online all pages (visible for the persons who are logged in)"
-msgstr "Display number of users online all pages (visible for the persons who are logged in)"
+msgstr ""
 
 msgid "Display number of users online in this course"
-msgstr "Display number of users online in this course"
+msgstr ""
 
 msgid "Show icons in navigation menu?"
-msgstr "Show icons in navigation menu?"
+msgstr ""
 
 msgid "Focus on location"
 msgstr "Focus στην τοποθεσία"
@@ -4731,7 +4731,7 @@ msgid "Twitter Creator account"
 msgstr "Δημιουργός λογαριασμού Twitter"
 
 msgid "The selected classes were subscribed to the selected course"
-msgstr "The selected classes were subscribed to the selected training"
+msgstr ""
 
 msgid "Role ID"
 msgstr "ID Ρόλου"
@@ -4749,13 +4749,13 @@ msgid "Make unavailable"
 msgstr "Χωρίς Διάθεση"
 
 msgid "Style sheets"
-msgstr "Style sheets"
+msgstr ""
 
 msgid "Should the navigation menu show the different tool icons?"
-msgstr "Should the navigation menu show the different tool icons?"
+msgstr ""
 
 msgid "Plugin"
-msgstr "Plugins"
+msgstr ""
 
 msgid "Main menu"
 msgstr "Βασικό μενού"
@@ -4764,34 +4764,34 @@ msgid "Main menu after login"
 msgstr "Βασικό μενού με το login"
 
 msgid "Banner"
-msgstr "Banner"
+msgstr ""
 
 msgid "Resize uploaded user images"
-msgstr "Resize uploaded user images"
+msgstr ""
 
 msgid "User images can be resized on upload if PHP is compiled with the <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. If GD is unavailable, this setting will be silently ignored."
-msgstr "User images can be resized on upload if PHP is compiled with the <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. If GD is unavailable, this setting will be silently ignored."
+msgstr ""
 
 msgid "Maximum user image width"
-msgstr "Maximum user image width"
+msgstr ""
 
 msgid "Maximum width in pixels of a user image. This setting only applies if user images are set to be resized on upload."
-msgstr "Maximum width in pixels of a user image. This setting only applies if user images are set to be resized on upload."
+msgstr ""
 
 msgid "Maximum user image height"
-msgstr "Maximum user image height"
+msgstr ""
 
 msgid "Maximum height in pixels of a user image. This setting only applies if user images are set to be resized on upload."
-msgstr "Maximum height in pixels of a user image. This setting only applies if user images are set to be resized on upload."
+msgstr ""
 
 msgid "Your version is"
 msgstr "Η έκδοσή σας είναι"
 
 msgid "Socket Connection Error"
-msgstr "Socket Connection Error"
+msgstr ""
 
 msgid "Socket connections are disabled"
-msgstr "Socket connections are disabled"
+msgstr ""
 
 msgid "Show email addresses"
 msgstr "Εμφάνιση διευθύνσεων email"
@@ -4803,19 +4803,19 @@ msgid "Activate this service"
 msgstr "Ενεργοποίηση υπηρεσίας"
 
 msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whiteboard to draw and write on top of slides, audio/video duplex and chat. It requires Flash® player 9+ and offers 2 modes : one to many and many to many."
-msgstr "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whiteboard to draw and write on top of slides, audio/video duplex and chat. It requires Flash® player 9+ and offers 2 modes : one to many and many to many."
+msgstr ""
 
 msgid "Chamilo RAPID"
-msgstr "Chamilo RAPID"
+msgstr ""
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
-msgstr "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint presentations and their Openoffice equivalents to SCORM-compliant e-courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assigment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
+msgstr ""
 
 msgid "Bandwidth statistics"
 msgstr "Στατιστικά Bandwidth"
 
 msgid "MRTG allow you to consult advanced statistics about the state of the server on the last 24 hours."
-msgstr "MRTG allow you to consult advanced statistics about the state of the server on the last 24 hours."
+msgstr ""
 
 msgid "Server statistics"
 msgstr "Στατιστικά Server"
@@ -4896,31 +4896,31 @@ msgid "Enable learner view"
 msgstr "Ενεργοποίηση όψης μαθητή"
 
 msgid "Enable the learner view, which allows a teacher or admin to see a course as a learner would see it"
-msgstr "Enable the learner view, which allows a trainer or admin to see a training as a learner would see it"
+msgstr ""
 
 msgid "Time limit on Who Is Online"
-msgstr "Time limit on Who Is Online"
+msgstr ""
 
 msgid "This time limit defines for how many minutes after his last action a user will be considered *online*"
-msgstr "This time limit defines for how many minutes after his last action a user will be considered *online*"
+msgstr ""
 
 msgid "Example material on course creation"
-msgstr "Example material on course creation"
+msgstr ""
 
 msgid "Create example material automatically when creating a new course"
-msgstr "Create example material automatically when creating a new course"
+msgstr ""
 
 msgid "Account validity"
 msgstr "Εγγυρότητα λογαρισμού"
 
 msgid "A user account is valid for this number of days after creation"
-msgstr "A user account is valid for this number of days after creation"
+msgstr ""
 
 msgid "Use training sessions"
 msgstr "Χρήση περιόδων"
 
 msgid "Training sessions give a different way of dealing with training, where courses have an author, a coach and learners. Each coach gives a course for a set period of time, called a *training session*, to a set of learners who do not mix with other learner groups attached to another training session."
-msgstr "Training sessions give a different way of dealing with training, where training have an author, a coach and learners. Each coach gives a training for a set period of time, called a *training session*, to a set of learners who do not mix with other learner groups attached to another training session."
+msgstr ""
 
 msgid "Activity view"
 msgstr "Activity view (default)"
@@ -4944,37 +4944,37 @@ msgid "Icons and text"
 msgstr "Εικονίδια και κείμενο"
 
 msgid "Enable tool introduction"
-msgstr "Enable tool introduction"
+msgstr ""
 
 msgid "Enable introductions on each tool's homepage"
-msgstr "Enable introductions on each tool's homepage"
+msgstr ""
 
 msgid "Course homepage breadcrumb"
-msgstr "Course homepage breadcrumb"
+msgstr ""
 
 msgid "The breadcrumb is the horizontal links navigation system usually in the top left of your page. This option selects what you want to appear in the breadcrumb on courses' homepages"
-msgstr "The breadcrumb is the horizontal links navigation system usually in the top left of your page. This option selects what you want to appear in the breadcrumb on courses' homepages"
+msgstr ""
 
 msgid "The Twitter site is a Twitter account (e.g. @chamilo_news) that is related to your site. It is usually a more temporary account than the Twitter creator account, or represents an entity (instead of a person). This field is required if you want the Twitter card meta fields to show."
 msgstr "Ο ιστότοπος Twitter είναι ένας λογαριασμός Twitter (π.χ. @chamilo_news) που σχετίζεται με τη σελίδα σας. Συνήθως είναι ένας προσωρινός λογαριασμός, και εκπροσωπεί μια οντότητα (αντί για φυσικό πρόσωπο). Αυτό το πεδίο είναι υποχρεωτικό αν θέλετε να εμφανίζονται οι αναλύσεις σας στο Twitter."
 
 msgid "Login page main area"
-msgstr "Login page main area"
+msgstr ""
 
 msgid "Login page menu"
-msgstr "Login page menu"
+msgstr ""
 
 msgid "Portal homepage main area"
-msgstr "Portal homepage main area"
+msgstr ""
 
 msgid "Portal homepage menu"
-msgstr "Portal homepage menu"
+msgstr ""
 
 msgid "Courses main area"
-msgstr "Courses main area"
+msgstr ""
 
 msgid "Courses menu"
-msgstr "Courses menu"
+msgstr ""
 
 msgid "Header"
 msgstr "Κεφαλίδα"
@@ -4983,10 +4983,10 @@ msgid "Footer"
 msgstr "Υποσέλιδο"
 
 msgid "Public pages compliance to WAI"
-msgstr "Public pages compliance to WAI"
+msgstr ""
 
 msgid "WAI (Web Accessibility Initiative) is an initiative to make the web more accessible. By selecting this option, the public pages of Chamilo will become more accessible. This also means that some content on the portal's public pages might appear differently."
-msgstr "WAI (Web Accessibility Initiative) is an initiative to make the web more accessible. By selecting this option, the public pages of Chamilo will become more accessible. This also means that some content on the portal's public pages might appear differently."
+msgstr ""
 
 msgid "Version check"
 msgstr "Έλεγχος έκδοσης"
@@ -4995,10 +4995,10 @@ msgid "Session overview"
 msgstr "Περίληψη περιόδου"
 
 msgid "Add user in the course only if not yet in"
-msgstr "Add user in the training only if not yet in"
+msgstr ""
 
 msgid "Remove users from any courses that are not mentioned explicitly in this file"
-msgstr "Remove user from training if his name is not in the list"
+msgstr ""
 
 msgid "Delete selected sessions"
 msgstr "Διαγραφή επιλεγμένων περιόδων"
@@ -5007,34 +5007,34 @@ msgid "Courses in this session"
 msgstr "Μαθήματα στην περίοδο"
 
 msgid "Unsubscribe selected courses from this session"
-msgstr "Unsubscribe selected courses from this session"
+msgstr ""
 
 msgid "Subscribe users to this session"
 msgstr "Εγγραφή χρηστών στην περίοδο"
 
 msgid "Portal users list"
-msgstr "Portal users list"
+msgstr ""
 
 msgid "List of users registered in this session"
-msgstr "List of users registered in this session"
+msgstr ""
 
 msgid "Courses list"
 msgstr "Λίστα μαθημάτων"
 
 msgid "Host"
-msgstr "Host"
+msgstr ""
 
 msgid "FTP password"
-msgstr "FTP password"
+msgstr ""
 
 msgid "Path to LZX files"
-msgstr "Path to LZX files"
+msgstr ""
 
 msgid "Text"
 msgstr "Κείμενο"
 
 msgid "Add courses to this session"
-msgstr "Add courses to this session"
+msgstr ""
 
 msgid "Start date (available from 00:00:00 on this date)"
 msgstr "Ημερ. έναρξης"
@@ -5043,16 +5043,16 @@ msgid "End date (until 23:59:59 on this date)"
 msgstr "Ημερ. λήξης"
 
 msgid "Path to live conferencing"
-msgstr "Path to live conferencing"
+msgstr ""
 
 msgid "Path to classroom live conferencing"
-msgstr "Path to classroom live conferencing"
+msgstr ""
 
 msgid "Reconfigure extension"
 msgstr "Επαναρύθμιση extension"
 
 msgid "Service reconfigured"
-msgstr "Service reconfigured"
+msgstr ""
 
 msgid "Choose news language"
 msgstr "Επιλογή γλώσσας νέων"
@@ -5061,22 +5061,22 @@ msgid "Total time spent in a course"
 msgstr "Συνολικός χρόνος στο μάθημα"
 
 msgid "This option is used to calculate in real time the time that a user spend in a course. The value in the field is the refresh interval in seconds. To disable this option, let the default value 0 in the field."
-msgstr "This option is used to calculate in real time the time that a user spend in a course. The value in the field is the refresh interval in seconds. To disable this option, let the default value 0 in the field."
+msgstr ""
 
 msgid "Finish session creation"
-msgstr "Finish session creation"
+msgstr ""
 
 msgid "Videoconference RTMTP protocol port"
-msgstr "Videoconference RTMTP protocol port"
+msgstr ""
 
 msgid "Session title already exists"
-msgstr "Session title already exists"
+msgstr ""
 
 msgid "No classes have been created"
-msgstr "No classes have been created"
+msgstr ""
 
 msgid "This field should be numeric"
-msgstr "This field should be numeric"
+msgstr ""
 
 msgid "User locked"
 msgstr "Κλειδωμένος χρήστης"
@@ -5166,7 +5166,7 @@ msgid "No file was sent"
 msgstr "Δεν απεστάλει κανένα αρχείο"
 
 msgid "Learner status has been given to"
-msgstr "Learner status has been given to"
+msgstr ""
 
 msgid "Wrong date format (yyyy-mm-dd)"
 msgstr "Λάθος format ημερομηνίας (εεεε-μμ-ηη)"
@@ -5178,7 +5178,7 @@ msgid "Size of the slides"
 msgstr "Μέγεθος των slides"
 
 msgid "Ephorus plagiarism prevention"
-msgstr "Ephorus plagiarism prevention"
+msgstr ""
 
 msgid "Teachers"
 msgstr "Εκπαιδευτικοί"
@@ -5196,118 +5196,118 @@ msgid "Unsubscribe selected users from session"
 msgstr "Αναίρεση εγγραφής των επιλεγμένων χρηστών από την περίοδο"
 
 msgid "Show the language each course is in, next to the course title, on the homepage courses list"
-msgstr "Show the language each course is in, next to the course title, on the homepage courses list"
+msgstr ""
 
 msgid "Show the categories of courses on the homepage, even if they're empty"
-msgstr "Show the categories of courses on the homepage, even if they're empty"
+msgstr ""
 
 msgid "Show empty courses categories"
 msgstr "Show the categories of courses on the homepage, even if they're empty"
 
 msgid "XML document is not valid"
-msgstr "XML document is not valid"
+msgstr ""
 
 msgid "for the session"
 msgstr "για την περίοδο"
 
 msgid "Online e-mail editor enabled"
-msgstr "Online e-mail editor enabled"
+msgstr ""
 
 msgid "If this option is activated, clicking on an e-mail address will open an online editor."
-msgstr "If this option is activated, clicking on an e-mail address will open an online mail editor."
+msgstr ""
 
 msgid "Include header line?"
-msgstr "Add the CSV header line?"
+msgstr ""
 
 msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "This line defines the fields and is necessary when you want to import the file in a different Chamilo portal"
+msgstr ""
 
 msgid "List of users subscribed to course"
-msgstr "List of users subscribed to course"
+msgstr ""
 
 msgid "Show course languages"
 msgstr "Show the language each course is in, next to the course title, on the homepage courses list"
 
 msgid "Videoconference RTMPT protocol tunnel port"
-msgstr "Videoconference RTMTP protocol tunnel port"
+msgstr ""
 
 msgid "Security"
 msgstr "Ασφάλεια"
 
 msgid "Type of filtering on document uploads"
-msgstr "Type of filtering on document uploads"
+msgstr ""
 
 msgid "Whether you want to use the blacklist or whitelist filtering. See blacklist or whitelist description below for more details."
-msgstr "Whether you want to use the blacklist or whitelist filtering. See blacklist or whitelist description below for more details."
+msgstr ""
 
 msgid "Blacklist"
-msgstr "Blacklist"
+msgstr ""
 
 msgid "Whitelist"
-msgstr "Whitelist"
+msgstr ""
 
 msgid "Blacklist - setting"
-msgstr "Blacklist - setting"
+msgstr ""
 
 msgid "Whitelist - setting"
-msgstr "Whitelist - setting"
+msgstr ""
 
 msgid "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
-msgstr "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
+msgstr ""
 
 msgid "The whitelist is used to filter the file extensions by removing (or renaming) any file whose extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) such as the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
-msgstr "The whitelist is used to filter the files extensions by removing (or renaming) any file which extension does *NOT* figure in the whitelist below. It is generally considered as a safer but more restrictive approach to filtering. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  htm;html;txt;doc;xls;ppt;jpg;jpeg;gif;sxw . Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter."
+msgstr ""
 
 msgid "Filtering behaviour (skip/rename)"
-msgstr "Filtering behaviour (skip/rename)"
+msgstr ""
 
 msgid "If you choose to skip, the files filtered through the blacklist or whitelist will not be uploaded to the system. If you choose to rename them, their extension will be replaced by the one defined in the extension replacement setting. Beware that renaming doesn't really protect you, and may cause name collision if several files of the same name but different extensions exist."
-msgstr "If you choose to skip, the files filtered through the blacklist or whitelist will not be uploaded to the system. If you choose to rename them, their extension will be replaced by the one defined in the extension replacement setting. Beware that renaming doesn't really protect you, and may cause name collision if several files of the same name but different extensions exist."
+msgstr ""
 
 msgid "Replacement extension"
-msgstr "Replacement extension"
+msgstr ""
 
 msgid "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
-msgstr "Enter the extension that you want to use to replace the dangerous extensions detected by the filter. Only needed if you have selected a filter by replacement."
+msgstr ""
 
 msgid "Show the number of courses in each category in the courses categories on the homepage"
-msgstr "Show the number of courses in each category in the courses categories on the homepage"
+msgstr ""
 
 msgid "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
-msgstr "Start using the Ephorus anti plagiarism service in Chamilo.<br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t<strong>With Ephorus, you will prevent internet plagiarism without any additional effort.</strong><br /> \t\t\t\t\t\t\t\t\t\t\t\t\t\t You can use our unique open standard webservice to build your own integration or you can use one of our Chamilo-integration modules."
+msgstr ""
 
 msgid "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
-msgstr "<strong>Leaders in <br />anti plagiarism </strong>\t\t\t\t"
+msgstr ""
 
 msgid "Click here for more information and prices\t\t\t"
-msgstr "Click here for more information and prices\t\t\t"
+msgstr ""
 
 msgid "This user isn't subscribed in a session"
 msgstr "Ο χρήστης δεν έχει κάνει εγγραφή σε περίοδο"
 
 msgid "Display categories on home page"
-msgstr "Display categories on home page"
+msgstr ""
 
 msgid "This option will display or hide courses categories on the portal home page"
-msgstr "This option will display or hide training categories on the portal home page"
+msgstr ""
 
 msgid "Tabs in the header"
-msgstr "Tabs in the header"
+msgstr ""
 
 msgid "Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my courses page if these need to appear"
-msgstr "Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my training page if these need to appear"
+msgstr ""
 
 msgid "Default forum view"
-msgstr "Default forum view"
+msgstr ""
 
 msgid "What should be the default option when creating a new forum. Any trainer can however choose a different view for every individual forum"
-msgstr "What should be the default option when creating a new forum. Any trainer can however choose a different view for every individual forum"
+msgstr ""
 
 msgid "Courses tab"
 msgstr "Καρτέλα μαθημάτων"
 
 msgid "Portal homepage tab"
-msgstr "Portal homepage tab"
+msgstr ""
 
 msgid "Reporting tab"
 msgstr "Καρτέλα αναφορών"
@@ -5319,106 +5319,106 @@ msgid "No course for this session"
 msgstr "Δεν υπάρχουν μαθήματα σε αυτή την περίοδο"
 
 msgid "No Users for this session"
-msgstr "No Users for this session"
+msgstr ""
 
 msgid "The last name cannot be empty"
-msgstr "The last name cannot be empty"
+msgstr ""
 
 msgid "The first name cannot be empty"
-msgstr "The first name cannot be empty"
+msgstr ""
 
 msgid "The email cannot be empty"
-msgstr "The email cannot be empty"
+msgstr ""
 
 msgid "Agenda tab"
-msgstr "Agenda tab"
+msgstr ""
 
 msgid "The notice will be not displayed on the homepage"
-msgstr "The notice will be not displayed on the homepage"
+msgstr ""
 
 msgid "Let those fields empty to hide the notice"
-msgstr "Let those fields empty to hide the notice"
+msgstr ""
 
 msgid "The voice recording feature in the course editor relies on a Red5 streaming server. This server's parameters can be configured in the videoconference section on the current page."
-msgstr "The voice recording feature in the course editor relies on a Red5 streaming server. This server's parameters can be configured in the videoconference section on the current page."
+msgstr ""
 
 msgid "Character set"
-msgstr "Character set"
+msgstr ""
 
 msgid "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
-msgstr "The character set is what pilots the way specific languages can be displayed in Chamilo. If you use Russian or Japanese characters, for example, you might want to change this. For all english, latin and west-european characters, the default UTF-8 should be alright."
+msgstr ""
 
 msgid "Portfolio fields at registration"
-msgstr "Extended profile fields in registration"
+msgstr ""
 
 msgid "Which of the following fields of the portfolio have to be available in the user registration process? This requires that the portfolio option be enabled (see above)."
-msgstr "Which of the following fields of the extended profile have to be available in the user registration process? This requires that the extended profile is activated (see above)."
+msgstr ""
 
 msgid "Required portfolio fields in registration"
-msgstr "Required extended profile fields in registration"
+msgstr ""
 
 msgid "Which of the following fields of the portfolio are *required* in the user registration process? This requires that the portfolio option be enabled and that the field be also available in the registration form (see above)."
-msgstr "Which of the following fields of the extende profile are required in the user registration process? This requires that the extended profile is activated and that the field is also available in the registration form (see above)."
+msgstr ""
 
 msgid "No-reply e-mail address"
-msgstr "No-reply e-mail address"
+msgstr ""
 
 msgid "This is the e-mail address to be used when an e-mail has to be sent specifically requesting that no answer be sent in return. Generally, this e-mail address should be configured on your server to drop/ignore any incoming e-mail."
-msgstr "This is the e-mail address to be used when an e-mail has to be sent specifically requesting that no answer be sent in return. Generally, this e-mail address should be configured on your server to drop/ignore any incoming e-mail."
+msgstr ""
 
 msgid "Survey e-mail sender (no-reply)"
-msgstr "Survey e-mail sender (no-reply)"
+msgstr ""
 
 msgid "Should the survey invitations use the coach e-mail address or the no-reply address defined in the main configuration section?"
-msgstr "Should the survey invitations use the coach email address or the no-reply address defined in the main configuration section?"
+msgstr ""
 
 msgid "Coach e-mail address"
-msgstr "Coach email address"
+msgstr ""
 
 msgid "Enable the OpenID URL-based authentication (displays an additional login form on the homepage)"
-msgstr "Enable the OpenID URL-based authentication (displays an additional login form on the homepage)"
+msgstr ""
 
 msgid "Version check enabled"
-msgstr "Version check enabled"
+msgstr ""
 
 msgid "The main/install directory of your Chamilo system is still accessible to web users. This might represent a security threat for your installation. We recommend that you remove this directory or that you change its permissions so web users cannot use the scripts it contains."
-msgstr "The main/install directory of your Chamilo system is still accessible to web users. This might represent a security threat for your installation. We recommend that you remove this directory or that you change its permissions so web users cannot use the scripts it contains."
+msgstr ""
 
 msgid "Assessments tool activation"
-msgstr "Assessments tool activation"
+msgstr ""
 
 msgid "The Assessments tool allows you to assess competences in your organization by merging classroom and online activities evaluations into Performance reports. Do you want to activate it?"
-msgstr "The Assessments tool allows you to assess competences in your organization by merging classroom and online activities evaluations into Performance reports. Do you want to activate it?"
+msgstr ""
 
 msgid "Theme (stylesheet)"
-msgstr "Theme (stylesheet)"
+msgstr ""
 
 msgid "User theme selection"
-msgstr "User theme selection"
+msgstr ""
 
 msgid "Allow users to select their own visual theme in their profile. This will change the look of Chamilo for them, but will leave the default style of the portal intact. If a specific course or session has a specific theme assigned, it will have priority over user-defined themes."
-msgstr "Allow users to select their own visual theme in their profile. This will change the look of Chamilo for them, but will leave the default style of the portal intact. If a specific course or session has a specific theme assigned, it will have priority over user-defined themes."
+msgstr ""
 
 msgid "Videoconference streaming server hostname or IP address"
 msgstr "Οικοδεσπότης βιντεοδιάσκεψης"
 
 msgid "Videoconference streaming server port"
-msgstr "Videoconference streaming server port"
+msgstr ""
 
 msgid "Videoconference streaming server password"
-msgstr "Videoconference streaming server password"
+msgstr ""
 
 msgid "Port"
 msgstr "Θύρα"
 
 msgid "Click here for a demo account"
-msgstr "Click here for a demo account"
+msgstr ""
 
 msgid "Profiling"
-msgstr "Profiling"
+msgstr ""
 
 msgid "Add profile field"
-msgstr "Add profile field"
+msgstr ""
 
 msgid "Field label"
 msgstr "Ετικέτα πεδίου"
@@ -5448,52 +5448,52 @@ msgid "Radio buttons"
 msgstr "Αποκλειστικά κουμπιά"
 
 msgid "Select drop-down"
-msgstr "Select drop-down"
+msgstr ""
 
 msgid "Multiple selection drop-down"
-msgstr "Multiple selection drop-down"
+msgstr ""
 
 msgid "Field succesfully added"
-msgstr "Field succesfully added"
+msgstr ""
 
 msgid "Grades thresholds colouring"
-msgstr "Grades thresholds colouring"
+msgstr ""
 
 msgid "Tick the box to enable marks thresholds"
-msgstr "Tick the box to enable marks thresholds"
+msgstr ""
 
 msgid "Enable marks thresholds"
-msgstr "Enable marks thresholds"
+msgstr ""
 
 msgid "Competence levels labelling"
-msgstr "Competence levels labelling"
+msgstr ""
 
 msgid "Tick the box to enable Competence levels labelling"
-msgstr "Tick the box to enable Competence levels labelling"
+msgstr ""
 
 msgid "Enable Competence level labelling"
-msgstr "Enable Competence level labelling"
+msgstr ""
 
 msgid "Threshold"
-msgstr "Threshold"
+msgstr ""
 
 msgid "The threshold (in %) under which scores will be colored red"
-msgstr "The threshold (in %) under which scores will be colored red"
+msgstr ""
 
 msgid "Display score upper limit"
-msgstr "Display score upper limit"
+msgstr ""
 
 msgid "Tick the box to show the score's upper limit"
-msgstr "Tick the box to show the score's upper limit"
+msgstr ""
 
 msgid "Enable score's upper limit display"
-msgstr "Enable score's upper limit display"
+msgstr ""
 
 msgid "Possible values"
 msgstr "Πιθανές τιμές"
 
 msgid "Only given for repetitive fields, split by semi-column (;)"
-msgstr "Only given for repetitive fields, split by semi-column (;)"
+msgstr ""
 
 msgid "Date"
 msgstr "Ημερομηνία"
@@ -5502,190 +5502,190 @@ msgid "Date and time"
 msgstr "Ημερομηνία και ώρα"
 
 msgid "Adding a user field is very easy:<br />- pick a one-word, lowercase identifier,<br />- select a type,<br />- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),<br />- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Chamilo), split by semi-column characters,<br />- for text types, you can choose a default value.<br /><br />Once you're done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless."
-msgstr "Adding a user field is very easy:<br />- pick a one-word, lowercase identifier,<br />- select a type,<br />- pick a text that should appear to the user (if you use an existing translated name like BirthDate or UserSex, it will automatically get translated to any language),<br />- if you picked a multiple type (radio, select, multiple select), provide the possible choices (again, it can make use of the language variables defined in Chamilo), split by semi-column characters,<br />- for text types, you can choose a default value.<br /><br />Once you're done, add the field and choose whether you want to make it visible and modifiable. Making it modifiable but not visible is useless."
+msgstr ""
 
 msgid "Allow course themes"
 msgstr "Να επιτρέπονται θεμ. παραλλαγές στα μαθήματα"
 
 msgid "Allows course graphical themes and makes it possible to change the style sheet used by a course to any of the possible style sheets available to Chamilo. When a user enters the course, the style sheet of the course will have priority over the user's own style sheet and the platform's default style sheet."
-msgstr "Allows course graphical themes and makes it possible to change the style sheet used by a course to any of the possible style sheets available to Chamilo. When a user enters the course, the style sheet of the course will have priority over the user's own style sheet and the platform's default style sheet."
+msgstr ""
 
 msgid "Display the small month calendar in the agenda tool"
-msgstr "Display the small month calendar in the agenda tool"
+msgstr ""
 
 msgid "This setting enables or disables the small month calendar that appears in the left column of the agenda tool"
-msgstr "This setting enables or disables the small month calendar that appears in the left column of the agenda tool"
+msgstr ""
 
 msgid "Display the upcoming events in the agenda tool"
-msgstr "Display the upcoming events in the agenda tool"
+msgstr ""
 
 msgid "This setting enables or disables the upcoming events that appears in the left column of the agenda tool of the course"
-msgstr "This setting enables or disables the upcoming events that appears in the left column of the agenda tool of the course"
+msgstr ""
 
 msgid "Number of upcoming events that have to be displayed."
-msgstr "Number of upcoming events that have to be displayed."
+msgstr ""
 
 msgid "The number of upcoming events that have to be displayed in the agenda. This requires that the upcoming event functionlity is activated (see setting above)."
-msgstr "The number of upcoming events that have to be displayed in the agenda. This requires that the upcoming event functionlity is activated (see setting above)."
+msgstr ""
 
 msgid "Display closed courses on login page and portal start page?"
-msgstr "Display closed courses on login page and portal start page?"
+msgstr ""
 
 msgid "Display closed courses on the login page and courses start page? On the portal start page an icon will appear next to the courses to quickly subscribe to each courses. This will only appear on the portal's start page when the user is logged in and when the user is not subscribed to the portal yet."
-msgstr "Display closed courses on the login page and courses start page? On the portal start page an icon will appear next to the courses to quickly subscribe to each courses. This will only appear on the portal's start page when the user is logged in and when the user is not subscribed to the portal yet."
+msgstr ""
 
 msgid "LDAP Connection Error"
-msgstr "LDAP Connection Error"
+msgstr ""
 
 msgid "LDAP"
-msgstr "LDAP Connection Error"
+msgstr ""
 
 msgid "Enable LDAP"
-msgstr "Enable LDAP"
+msgstr ""
 
 msgid "If you have an LDAP server, you will have to configure its settings below and modify your configuration file as described in the installation guide, and then activate it. This will allow users to authenticate using their LDAP logins. If you don't know what LDAP is, please leave it disabled"
-msgstr "If you have an LDAP server, you will have to configure its settings below and modify your configuration file as described in the installation guide, and then activate it. This will allow users to authenticate using their LDAP logins. If you don't know what LDAP is, please leave it disabled"
+msgstr ""
 
 msgid "Main LDAP server address"
-msgstr "Main LDAP server address"
+msgstr ""
 
 msgid "The IP address or url of your main LDAP server."
-msgstr "The IP address or url of your main LDAP server."
+msgstr ""
 
 msgid "Main LDAP server's port."
-msgstr "Main LDAP server's port."
+msgstr ""
 
 msgid "The port on which the main LDAP server will respond (usually 389). This is a mandatory setting."
-msgstr "The port on which the main LDAP server will respond (usually 389). This is a mandatory setting."
+msgstr ""
 
 msgid "LDAP domain"
-msgstr "LDAP domain"
+msgstr ""
 
 msgid "This is the LDAP domain (dc) that will be used to find the contacts on the LDAP server. For example: dc=xx, dc=yy, dc=zz"
-msgstr "This is the LDAP domain (dc) that will be used to find the contacts on the LDAP server. For example: dc=xx, dc=yy, dc=zz"
+msgstr ""
 
 msgid "Replicate server address"
-msgstr "Replicate server address"
+msgstr ""
 
 msgid "When the main server is not available, this server will be accessed. Leave blank or use the same value as the main server if you don't have a replicate server."
-msgstr "When the main server is not available, this server will be accessed. Leave blank or use the same value as the main server if you don't have a replicate server."
+msgstr ""
 
 msgid "Replicate server's port"
-msgstr "Replicate server's port"
+msgstr ""
 
 msgid "The port on which the replicate server will respond."
-msgstr "The port on which the replicate server will respond."
+msgstr ""
 
 msgid "Search term"
 msgstr "Αναζήτηση όρου"
 
 msgid "This term will be used to filter the search for contacts on the LDAP server. If you are unsure what to put in here, please refer to your LDAP server's documentation and configuration."
-msgstr "This term will be used to filter the search for contacts on the LDAP server. If you are unsure what to put in here, please refer to your LDAP server's documentation and configuration."
+msgstr ""
 
 msgid "LDAP version"
-msgstr "LDAP version"
+msgstr ""
 
 msgid "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server's configuration."
-msgstr "Please select the version of the LDAP server you want to use. Using the right version depends on your LDAP server's configuration."
+msgstr ""
 
 msgid "LDAP 2"
-msgstr "LDAP 2"
+msgstr ""
 
 msgid "LDAP 3"
-msgstr "LDAP 3"
+msgstr ""
 
 msgid "Tutor identification field"
-msgstr "Tutor identification field"
+msgstr ""
 
 msgid "A check will be done on this LDAP contact field on new users insertion. If this field is not empty, the user will be considered as a tutor and inserted in Chamilo as such. If you want all your users to be recognised as simple users, leave this field empty. You can modify this behaviour by changing the code. Please read the <a href=\"../../documentation/installation_guide.html\">installation guide</a> for more information."
-msgstr "A check will be done on this LDAP contact field on new users insertion. If this field is not empty, the user will be considered as a tutor and inserted in Chamilo as such. If you want all your users to be recognised as simple users, leave this field empty. You can modify this behaviour by changing the code. Please read the <a href=\"../../documentation/installation_guide.html\">installation guide</a> for more information."
+msgstr ""
 
 msgid "Authentication login"
-msgstr "Authentication login"
+msgstr ""
 
 msgid "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user login that should be used. Do not include \"cn=\". Leave empty for anonymous access."
-msgstr "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user login that should be used. Do not include \"cn=\". Leave empty for anonymous access."
+msgstr ""
 
 msgid "Authentication password"
-msgstr "Authentication password"
+msgstr ""
 
 msgid "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user password that should be used."
-msgstr "If you are using an LDAP server that does not support or accept anonymous access, fill the following field with the user password that should be used."
+msgstr ""
 
 msgid "LDAP Import"
-msgstr "LDAP Import"
+msgstr ""
 
 msgid "Notify subscribed users by e-mail"
-msgstr "Notify subscribed users by e-mail"
+msgstr ""
 
 msgid "Do not uncheck"
-msgstr "Do not uncheck"
+msgstr ""
 
 msgid "All/None"
 msgstr "Όλα/Κανένα"
 
 msgid "LDAP Import: Users/Steps"
-msgstr "LDAP Import: Users/Steps"
+msgstr ""
 
 msgid "Enter step to add to your session"
-msgstr "Enter step to add to your session"
+msgstr ""
 
 msgid "In order to do this, you must enter the year, the department and the step"
-msgstr "In order to do this, you must enter the year, the department and the step"
+msgstr ""
 
 msgid "Follow each of these steps, step by step"
 msgstr "Ακολούθησε καθένα από αυτά τα βήματα, βήμα προς βήμα"
 
 msgid "Registration year. Example: %s for academic year %s-%s"
-msgstr "Registration year. Example: %s for academic year %s-%s"
+msgstr ""
 
 msgid "Select department"
 msgstr "Επιλογή τμήματος"
 
 msgid "Registration year"
-msgstr "Registration year. Example: %s for academic year %s-%s"
+msgstr ""
 
 msgid "Select step (academic year)"
-msgstr "Select step (academic year)"
+msgstr ""
 
 msgid "Error: this step already exists"
-msgstr "Error: this step already exists"
+msgstr ""
 
 msgid "Error: step not found on LDAP server"
-msgstr "Error: step not found on LDAP server"
+msgstr ""
 
 msgid "Step deleted successfully"
-msgstr "Step deleted successfully"
+msgstr ""
 
 msgid "Step users removed successfully"
-msgstr "Step users removed successfully"
+msgstr ""
 
 msgid "No LOs in this session"
-msgstr "No LOs in this session"
+msgstr ""
 
 msgid "Remove users from step"
-msgstr "Remove users from step"
+msgstr ""
 
 msgid "Import learners of all steps"
-msgstr "Import learners of all steps"
+msgstr ""
 
 msgid "Import LDAP users into the platform"
-msgstr "Import LDAP users into the platform"
+msgstr ""
 
 msgid "No user in this session"
-msgstr "No user in this session"
+msgstr ""
 
 msgid "Subscribe some users to this session"
-msgstr "Subscribe some users to this session"
+msgstr ""
 
 msgid "Enter the learners you would like to register to your course"
-msgstr "Enter the learners you would like to register to your course"
+msgstr ""
 
 msgid "In order to do this, you must enter the year, the component and the component's step"
-msgstr "In order to do this, you must enter the year, the component and the component's step"
+msgstr ""
 
 msgid "Select component"
-msgstr "Select component"
+msgstr ""
 
 msgid "Component"
 msgstr "Στοιχείο"
@@ -5703,67 +5703,67 @@ msgid "Import LDAP users into a course"
 msgstr "Εισαγωγή LDAP χρηστών στο μάθημα"
 
 msgid "Import LDAP users and a step into a session"
-msgstr "Import LDAP users and a step into a session"
+msgstr ""
 
 msgid "LDAP synchro: Import learners/steps into course sessions"
-msgstr "LDAP synchro: Import learners/steps into course sessions"
+msgstr ""
 
 msgid "Assessments tab"
 msgstr "Καρτέλα αξιολογήσεων"
 
 msgid "LDAP users added or updated"
-msgstr "LDAP users added or updated"
+msgstr ""
 
 msgid "Search for LDAP users"
 msgstr "Αναζήτηση για χρήστες LDAP"
 
 msgid "Select a course in which you would like to register the users you are going to select next"
-msgstr "Select a course in which you would like to register the users you are going to select next"
+msgstr ""
 
 msgid "Import LDAP users into a session"
-msgstr "Import LDAP users into a session"
+msgstr ""
 
 msgid "Select a filter to find a matching string at the end of the OU attribute"
-msgstr "Select a filter to find a matching string at the end of the OU attribute"
+msgstr ""
 
 msgid "The OU attribute filter"
-msgstr "The OU attribute filter"
+msgstr ""
 
 msgid "Select the session in which you want to import these users"
-msgstr "Select the session in which you want to import these users"
+msgstr ""
 
 msgid "Use the RTMPT protocol"
-msgstr "Use the rtmpt protocol"
+msgstr ""
 
 msgid "The RTMPT protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended to avoid using it unless required."
-msgstr "The rtmpt protocol allows access to the videoconference from behind a firewall, by redirecting the communications on port 80. This, however, will slow down the streaming, so it is recommended not to use it unless necessary."
+msgstr ""
 
 msgid "New stylesheet file"
-msgstr "New stylesheet file"
+msgstr ""
 
 msgid "Name of the stylesheet"
-msgstr "Name of the stylesheet"
+msgstr ""
 
 msgid "The stylesheet has been added"
-msgstr "The stylesheet has been added"
+msgstr ""
 
 msgid "Tutor identification value"
-msgstr "Tutor identification value"
+msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
+msgstr ""
 
 msgid "The field is successfully moved down"
-msgstr "The field is successfully moved down"
+msgstr ""
 
 msgid "Cannot move the field."
 msgstr "Αδυναμία μετακίνησης του πεδίου"
 
 msgid "The field is successfully moved up."
-msgstr "The field is successfully moved up."
+msgstr ""
 
 msgid "OpenGraph meta title"
-msgstr "OpenGraph meta title"
+msgstr ""
 
 msgid "This will show an OpenGraph Description meta (og:description) in your site's headers"
 msgstr "Αυτή η επιλογή δείχνει ένα τίτλο OpenGraph στην επικεφαλίδα του ιστότοπου σας."
@@ -5781,22 +5781,22 @@ msgid "Cannot delete the field"
 msgstr "Το πεδίο δεν μπορεί να διαγραφεί"
 
 msgid "Register users by Coach"
-msgstr "Register users by Coach"
+msgstr ""
 
 msgid "Coach users may create users to the platform and subscribe users to a session."
-msgstr "Coach users may create users to the platform and subscribe users to a session."
+msgstr ""
 
 msgid "Sort the options of the profiling fields"
-msgstr "Sort the options of the profiling fields"
+msgstr ""
 
 msgid "The option has been moved up."
-msgstr "The option has been moved up."
+msgstr ""
 
 msgid "Cannot move the option."
-msgstr "Cannot move the option."
+msgstr ""
 
 msgid "The option has been moved down."
-msgstr "The option has been moved down."
+msgstr ""
 
 msgid "Define access limits for the coach"
 msgstr "Ορισμός χρόνος πρόσβασης υπευθύνου"
@@ -5814,13 +5814,13 @@ msgid "Multiple registration"
 msgstr "Πολλαπλή εγγραφή"
 
 msgid "Full-text search feature"
-msgstr "Full-text search feature"
+msgstr ""
 
 msgid "Select 'Yes' to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
-msgstr "Select \"Yes\" to enable this feature. It is highly dependent on the Xapian extension for PHP, so this will not work if this extension is not installed on your server, in version 1.x at minimum."
+msgstr ""
 
 msgid "Find a training session"
-msgstr "Find a training session"
+msgstr ""
 
 msgid "Session session"
 msgstr "Ενεργή περίοδος"
@@ -5832,79 +5832,79 @@ msgid "Show session coach"
 msgstr "Εμφάνιση υπευθύνου περιόδου"
 
 msgid "Show the global session coach name in session title box in the courses list"
-msgstr "Show the global session coach name in session title box in the training list"
+msgstr ""
 
 msgid "Extend rights for coach"
-msgstr "Extend rights for coach"
+msgstr ""
 
 msgid "Activate this option will give the coach the same permissions as the trainer on authoring tools"
-msgstr "Activate this option will give the coach the same permissions as the trainer on authoring tools"
+msgstr ""
 
 msgid "Activate this option will allow the coachs to create and edit surveys"
-msgstr "Activate this option will allow the coachs to create and edit surveys"
+msgstr ""
 
 msgid "Extend rights for coachs on surveys"
-msgstr "Extend rights for coachs on surveys"
+msgstr ""
 
 msgid "This user cannot be deleted because he is still teacher in a course. You can either remove his teacher status from these courses and then delete his account, or disable his account instead of deleting it."
-msgstr "This user cannot be deleted because he is still teacher in a course. You can either remove his teacher status from these courses and then delete his account, or disable his account instead of deleting it."
+msgstr ""
 
 msgid "Allow non admin to create courses"
-msgstr "Allow non admin to create courses"
+msgstr ""
 
 msgid "Allow non administrators (teachers) to create new courses on the server"
-msgstr "Allow non administrators (teachers) to create new courses on the server"
+msgstr ""
 
 msgid "Allow learners to browse the courses catalogue and subscribe to available courses"
-msgstr "Allow learners to browse the courses catalogue and subscribe to available courses"
+msgstr ""
 
 msgid "Yes (the files will be deleted permanently and will not be recoverable)"
-msgstr "Yes (the files will be deleted permanently and will not be recoverable)"
+msgstr ""
 
 msgid "No (the files will be deleted from the application but will be manually recoverable  by your server administrator)"
-msgstr "No (the files will be deleted from the application but will be manually recoverable  by your server administrator)"
+msgstr ""
 
 msgid "Select a manager"
 msgstr "Επιλογή υπευθύνου"
 
 msgid "No HR manager available"
-msgstr "No HR manager available"
+msgstr ""
 
 msgid "Learners access to courses catalogue"
-msgstr "Learners access to courses catalogue"
+msgstr ""
 
 msgid "This is a shared setting"
-msgstr "This is a shared setting"
+msgstr ""
 
 msgid "Global agenda"
 msgstr "Καθολική αντζέντα"
 
 msgid "Advanced file manager in the WYSIWYG editor"
-msgstr "Advanced file manager in the WYSIWYG editor"
+msgstr ""
 
 msgid "Enable advanced file manager for WYSIWYG editor? This will add a considerable amount of additional options to the file manager that opens in a pop-up window when uploading files to the server, but might be a little more complicated to use for the final user."
-msgstr "Enable advanced file manager for WYSIWYG editor? This will add a considerable amount of additional options to the file manager that opens in a pop-up window when uploading files to the server, but might be a little more complicated to use for the final user."
+msgstr ""
 
 msgid "Average progress in courses"
-msgstr "Average progress in courses"
+msgstr ""
 
 msgid "Multiple access URL / Branding"
-msgstr "Multiple access URL / Branding"
+msgstr ""
 
 msgid "Full-text search: show unlinked results"
-msgstr "Full-text search: show unlinked results"
+msgstr ""
 
 msgid "When showing the results of a full-text search, what should be done with the results that are not accessible to the current user?"
-msgstr "When showing the results of a full-text search, what should be done with the results that are not accessible to the current user?"
+msgstr ""
 
 msgid "Do not show them"
 msgstr "Να μην εμφανιστούν"
 
 msgid "Show them but without a link to the resource"
-msgstr "Full-text search: show unlinked results"
+msgstr ""
 
 msgid "Templates"
-msgstr "Templates"
+msgstr ""
 
 msgid "Enable version check"
 msgstr "Ενεργοποίηση ελέγχου έκδοσης"
@@ -5916,58 +5916,58 @@ msgid "Booking"
 msgstr "Κρατήσεις"
 
 msgid "The booking system allows you to book resources for your courses (rooms, tables, books, screens, ...). You need this tool to be enabled (through the Admin) to have it appear in the user menu."
-msgstr "The booking system allows you to book resources for your training (rooms, tables, books, screens, ...). You need this tool to be enabled (through the Admin) to have it appear in the user menu."
+msgstr ""
 
 msgid "Configure"
-msgstr "Configure"
+msgstr ""
 
 msgid "Configure multiple access URL"
-msgstr "Configure multiple access URL"
+msgstr ""
 
 msgid "The URL has been added"
-msgstr "The URL has been added"
+msgstr ""
 
 msgid "This URL already exists, please select another URL"
-msgstr "This URL already exists, please select another URL"
+msgstr ""
 
 msgid "Are you sure you want to set this language as the portal's default?"
-msgstr "Are you sure you want to set this language as the portal's default?"
+msgstr ""
 
 msgid "Current portal's language"
-msgstr "Current portal's language"
+msgstr ""
 
 msgid "Edit users and URLs"
-msgstr "Edit users and URLs"
+msgstr ""
 
 msgid "Add users to an URL"
-msgstr "Add users to an URL"
+msgstr ""
 
 msgid "URL list"
-msgstr "URL list"
+msgstr ""
 
 msgid "Add users to that URL"
-msgstr "Add users to that URL"
+msgstr ""
 
 msgid "Select URL"
-msgstr "Select a URL"
+msgstr ""
 
 msgid "Users subscribed to this URL"
-msgstr "Users subscribed to this URL"
+msgstr ""
 
 msgid "The user accounts have been updated"
-msgstr "The user accounts have been updated"
+msgstr ""
 
 msgid "You must select at least one user and one URL"
-msgstr "You must select at least one user and one URL"
+msgstr ""
 
 msgid "The user accounts are now attached to the URL"
-msgstr "The user accounts are now attached to the URL"
+msgstr ""
 
 msgid "Course score"
 msgstr "Σκορ Ομάδας"
 
 msgid "Average of tests in Learning Paths"
-msgstr "Average of tests in learning paths"
+msgstr ""
 
 msgid "Import courses list"
 msgstr "Εισαγωγή λίστας μαθημάτων"
@@ -5982,13 +5982,13 @@ msgid "Users of"
 msgstr "Λίστα χρηστών του Portal"
 
 msgid "The URL has been disabled"
-msgstr "The URL has been disabled"
+msgstr ""
 
 msgid "The URL has been enabled"
-msgstr "The URL has been enabled"
+msgstr ""
 
 msgid "Edit users"
-msgstr "Edit users and URLs"
+msgstr ""
 
 msgid "Edit courses"
 msgstr "Επεξεργασία μαθημάτων"
@@ -5997,43 +5997,43 @@ msgid "Courses of"
 msgstr "Μαθήματα στην περίοδο"
 
 msgid "Add courses to an URL"
-msgstr "Add courses to an URL"
+msgstr ""
 
 msgid "Edit courses of an URL"
-msgstr "Edit courses of an URL"
+msgstr ""
 
 msgid "Add courses to that URL"
-msgstr "Add courses to that URL"
+msgstr ""
 
 msgid "Enable the selected plugins"
-msgstr "Enable the selected plugins"
+msgstr ""
 
 msgid "At least one course and one URL"
-msgstr "At least one course and one URL"
+msgstr ""
 
 msgid "Click here to register the admin into all sites"
-msgstr "Click here to register the admin into all sites"
+msgstr ""
 
 msgid "Admin user should be registered here"
-msgstr "Admin user should be registered here"
+msgstr ""
 
 msgid "URL not configured yet, please add this URL :"
-msgstr "URL not configured yet, please add this URL :"
+msgstr ""
 
 msgid "Admin user assigned to this URL"
-msgstr "Admin user assigned to this URL"
+msgstr ""
 
 msgid "Courses updated successfully"
-msgstr "Courses updated successfully"
+msgstr ""
 
 msgid "The URL has been edited"
-msgstr "The URL has been edited"
+msgstr ""
 
 msgid "Add session to an URL"
-msgstr "Add session to an URL"
+msgstr ""
 
 msgid "Session title's first letter"
-msgstr "Session title's first letter"
+msgstr ""
 
 msgid "Edit session"
 msgstr "Επεξεργασία περιόδου"
@@ -6042,22 +6042,22 @@ msgid "Add sessions to that URL"
 msgstr "Προσθήκη περιόδων σε αυτό το URL"
 
 msgid "Sessions were edited"
-msgstr "Sessions were edited"
+msgstr ""
 
 msgid "Manage sessions"
 msgstr "Διαχείριση περιόδων"
 
 msgid "Enabling the internal messaging tool allows users to send messages to other users of the platform and to have a messaging inbox."
-msgstr "Enabling the internal messaging tool allows users to send messages to other users of the platform and to have a messaging inbox."
+msgstr ""
 
 msgid "Social network tool (Facebook-like)"
-msgstr "Social network tool (Facebook-like)"
+msgstr ""
 
 msgid "The social network tool allows users to define relations with other users and, by doing so, to define groups of friends. Combined with the internal messaging tool, this tool allows tight communication with friends, inside the portal environment."
-msgstr "The social network tool allows users to define relations with other users and, by doing so, to define groups of friends. Combined with the internal messaging tool, this tool allows tight communication with friends, inside the portal environment."
+msgstr ""
 
 msgid "Set language as default"
-msgstr "Set language as default"
+msgstr ""
 
 msgid "Filter"
 msgstr "Φίλτρο"
@@ -6069,61 +6069,61 @@ msgid "Filter off"
 msgstr "Φίλτρο ανενεργό"
 
 msgid "You can now use this field as a filter"
-msgstr "You can now use this field as a filter"
+msgstr ""
 
 msgid "You can't use this field as a filter"
-msgstr "You can't use this field as a filter"
+msgstr ""
 
 msgid "Add user field"
-msgstr "Add user field"
+msgstr ""
 
 msgid "The users have been subscribed to the following courses because several courses share the same visual code"
-msgstr "The users have been subscribed to the following courses because several courses share the same visual code"
+msgstr ""
 
 msgid "The following courses already use this code"
-msgstr "The following courses already use this code"
+msgstr ""
 
 msgid "The users have been unsubscribed from the following courses because several courses share the same visual code"
-msgstr "The users have been unsubscribed from the following courses because several courses share the same visual code"
+msgstr ""
 
 msgid "Filter users"
-msgstr "Filter users"
+msgstr ""
 
 msgid "Several courses were subscribed to the session because of a duplicate course code"
-msgstr "Several courses were subscribed to the session because of a duplicate course code"
+msgstr ""
 
 msgid "You must select a coach"
-msgstr "You must select a coach"
+msgstr ""
 
 msgid "Encryption method"
-msgstr "Encryption method"
+msgstr ""
 
 msgid "Add a template"
-msgstr "Add a template"
+msgstr ""
 
 msgid "This image will represent the template in the templates list. It should be no larger than 100x70 pixels"
-msgstr "This image will represent the template in the templates list. It should be no larger than 100x70 pixels"
+msgstr ""
 
 msgid "Template added"
-msgstr "Template added"
+msgstr ""
 
 msgid "Template deleted"
-msgstr "Template deleted"
+msgstr ""
 
 msgid "Template edition"
-msgstr "Template edition"
+msgstr ""
 
 msgid "The users that were not registered on the platform have been imported"
-msgstr "The users that were not registered on the platform have been imported"
+msgstr ""
 
 msgid "You must import a file corresponding to the selected format"
-msgstr "You must import a file corresponding to the selected format"
+msgstr ""
 
 msgid "Show teacher or tutor's e-mail address in the footer"
-msgstr "Show teacher or tutor's e-mail address in the footer"
+msgstr ""
 
 msgid "Show trainer or tutor's e-mail in footer ?"
-msgstr "Show trainer or tutor's e-mail in footer ?"
+msgstr ""
 
 msgid "Add a system announcement"
 msgstr "Προσθήκη ανακοίνωσης συστήματος"
@@ -6132,181 +6132,181 @@ msgid "Edit system announcement"
 msgstr "Επεξεργασία ανακοίνωσης συστήματος"
 
 msgid "% of learning objects visited"
-msgstr "% of learning objects visited"
+msgstr ""
 
 msgid "Total time in course"
 msgstr "Συνολικός χρόνος στο μάθημα"
 
 msgid "Last time learner entered the course"
-msgstr "Last time learner entered the course"
+msgstr ""
 
 msgid "The announcement is available"
-msgstr "The announcement is available"
+msgstr ""
 
 msgid "The announcement is not available"
-msgstr "The announcement is not available"
+msgstr ""
 
 msgid "Searching"
 msgstr "Αναζήτηση"
 
 msgid "Add LDAP users"
-msgstr "Add LDAP users"
+msgstr ""
 
 msgid "Academica"
-msgstr "Academica"
+msgstr ""
 
 msgid "Add news"
 msgstr "Προσθήκη νέων"
 
 msgid "Failed to open the search database"
-msgstr "Failed to open the search database"
+msgstr ""
 
 msgid "The search database uses an unsupported format"
-msgstr "The search database uses an unsupported format"
+msgstr ""
 
 msgid "The search database has been modified/broken"
-msgstr "The search database has been modified/broken"
+msgstr ""
 
 msgid "Failed to lock the search database"
-msgstr "Failed to lock the search database"
+msgstr ""
 
 msgid "Failed to create the search database"
-msgstr "Failed to create the search database"
+msgstr ""
 
 msgid "The search database has suffered corruption"
-msgstr "The search database has suffered corruption"
+msgstr ""
 
 msgid "Connection timed out while communicating with the remote search database"
-msgstr "Connection timed out while communicating with the remote search database"
+msgstr ""
 
 msgid "Error in search engine"
-msgstr "Error in search engine"
+msgstr ""
 
 msgid "The Xapian search module is not installed"
-msgstr "The Xapian search module is not installed"
+msgstr ""
 
 msgid "Field removed"
-msgstr "Field removed"
+msgstr ""
 
 msgid "The new sub-language has been added"
-msgstr "The new sub-language has been added"
+msgstr ""
 
 msgid "Delete sub-language"
-msgstr "Delete sub-language"
+msgstr ""
 
 msgid "Create a sub-language for this language"
-msgstr "Create a sub-language for this language"
+msgstr ""
 
 msgid "Delete this sub-language"
-msgstr "Delete this sub-language"
+msgstr ""
 
 msgid "Create sub-language"
-msgstr "Create a sub-language for this language"
+msgstr ""
 
 msgid "Define new terms for this sub-language"
-msgstr "Define new terms for this sub-language"
+msgstr ""
 
 msgid "Sub-language terms"
-msgstr "Sub-language terms"
+msgstr ""
 
 msgid "Load language file"
-msgstr "Load language file"
+msgstr ""
 
 msgid "Allow definition and use of sub-languages"
-msgstr "Allow definition and use of sub-languages"
+msgstr ""
 
 msgid "By enabling this option, you will be able to define variations for each of the language terms used in the platform's interface, in the form of a new language based on and extending an existing language. You'll find this option in the languages section of the administration panel."
-msgstr "By enabling this option, you will be able to define variations for each of the language terms used in the platform's interface, in the form of a new language based on and extending an existing language. You'll find this option in the languages section of the administration panel."
+msgstr ""
 
 msgid "Add terms to the sub-language"
-msgstr "Add terms to the sub-language"
+msgstr ""
 
 msgid "Template edited"
-msgstr "Template edited"
+msgstr ""
 
 msgid "Sub-language"
-msgstr "Sub-language"
+msgstr ""
 
 msgid "The language has been made visible and can now be used throughout the platform."
-msgstr "The language has been made visible and can now be used throughout the platform."
+msgstr ""
 
 msgid "The language has been hidden. It will not be possible to use it until it becomes visible again."
-msgstr "The language has been hidden. It will not be possible to use it until it becomes visible again."
+msgstr ""
 
 msgid "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
-msgstr "The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message."
+msgstr ""
 
 msgid "Show glossary terms in documents"
-msgstr "Show glossary terms in documents"
+msgstr ""
 
 msgid "From here you can configure how to add links to the glossary terms from the documents"
-msgstr "From here you can configure how to add links to the glossary terms from the documents"
+msgstr ""
 
 msgid "Automatic: adds links to all defined glossary terms found in the document"
-msgstr "Automatic: adds links to all defined glossary terms found in the document"
+msgstr ""
 
 msgid "Manual: shows a glossary icon in the online editor, so you can mark the terms that are in the glossary and that you want to link"
-msgstr "Manual: shows a glossary icon in the online editor, so you can mark the terms that are in the glossary and that you want to link"
+msgstr ""
 
 msgid "None: doesn't add any glossary terms to the documents"
-msgstr "None: doesn't add any glossary terms to the documents"
+msgstr ""
 
 msgid "Language variable"
-msgstr "Language variable"
+msgstr ""
 
 msgid "To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export"
-msgstr "To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export"
+msgstr ""
 
 msgid "Session's tutor's data is shown in the footer."
-msgstr "Session's tutor's data is shown in the footer."
+msgstr ""
 
 msgid "Show the session's tutor reference (name and e-mail if available) in the footer?"
-msgstr "Show the session's tutor reference (name and e-mail if available) in the footer?"
+msgstr ""
 
 msgid "Show teacher information in footer"
-msgstr "Show teacher information in footer"
+msgstr ""
 
 msgid "Show the teacher reference (name and e-mail if available) in the footer?"
-msgstr "Show the teacher reference (name and e-mail if available) in the footer?"
+msgstr ""
 
 msgid "HTML"
-msgstr "HTML"
+msgstr ""
 
 msgid "Page Link"
-msgstr "Page Link"
+msgstr ""
 
 msgid "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register."
-msgstr "Display a Terms & Conditions statement on the registration page, require visitor to accept the T&C to register."
+msgstr ""
 
 msgid "Enable terms and conditions"
-msgstr "Enable terms and conditions"
+msgstr ""
 
 msgid "This option will display the Terms and Conditions in the register form for new users. Need to be configured first in the portal administration page."
-msgstr "This option will display the Terms and Conditions in the register form for new users. Need to be configured first in the portal administration page."
+msgstr ""
 
 msgid "Load"
-msgstr "Load language file"
+msgstr ""
 
 msgid "All versions"
-msgstr "All versions"
+msgstr ""
 
 msgid "Edit terms and conditions"
-msgstr "Edit terms and conditions"
+msgstr ""
 
 msgid "Explain changes"
-msgstr "Explain changes"
+msgstr ""
 
 msgid "Term and condition not saved"
-msgstr "Term and condition not saved"
+msgstr ""
 
 msgid "The sub language has been removed"
-msgstr "The sub language has been removed"
+msgstr ""
 
 msgid "Add terms and conditions"
-msgstr "Add terms and conditions"
+msgstr ""
 
 msgid "Term and condition saved"
-msgstr "Term and condition saved"
+msgstr ""
 
 msgid "Sessions categories list"
 msgstr "Λίστα κατηγοριών περιόδων"
@@ -6324,13 +6324,13 @@ msgid "Category update"
 msgstr "Η κατηγορία ενημερώθηκε"
 
 msgid "The selected categories have been deleted"
-msgstr "The selected categories have been deleted"
+msgstr ""
 
 msgid "Please give a name to the sessions category"
-msgstr "Please give a name to the sessions category"
+msgstr ""
 
 msgid "There are no sessions available"
-msgstr "There are no sessions available"
+msgstr ""
 
 msgid "Select a session"
 msgstr "Επιλογή περιόδου"
@@ -6351,7 +6351,7 @@ msgid "You must select a course from the original session and select a destinati
 msgstr "Πρέπει να επιλέξετε ένα μάθημα από την αρχική περίοδο"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
-msgstr "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
+msgstr ""
 
 msgid "Edit session courses by user"
 msgstr "Επεξεργασία μαθημάτων περιόδου ανά χρήστη"
@@ -6372,28 +6372,28 @@ msgid "Visibility after end date"
 msgstr "Ορατότητα μετά την καταληκτική ημερομηνία"
 
 msgid "Block user from courses in this session"
-msgstr "Block user from courses in this session"
+msgstr ""
 
 msgid "Language file"
 msgstr "Αρχείο γλώσσας"
 
 msgid "Show the courses descriptions in the catalog"
-msgstr "Show the courses descriptions in the catalog"
+msgstr ""
 
 msgid "Show the courses descriptions as an integrated popup when clicking on a course info icon in the courses catalog"
-msgstr "Show the courses descriptions as an integrated popup when clicking on a course info icon in the courses catalog"
+msgstr ""
 
 msgid "The stylesheet could not be added"
-msgstr "The stylesheet could not be added"
+msgstr ""
 
 msgid "Add sessions in categories"
-msgstr "Add sessions in categories"
+msgstr ""
 
 msgid "It is recommended to install the imagick php extension for better performances in the resolution for generating the thumbnail images otherwise not show very well, if it is not install by default uses the php-gd extension."
-msgstr "It is recommended to install the imagick php extension for better performances in the resolution for generating the thumbnail images otherwise not show very well, if it is not install by default uses the php-gd extension."
+msgstr ""
 
 msgid "Edit specific search field"
-msgstr "Edit specific search field"
+msgstr ""
 
 msgid "Field name"
 msgstr "Όνομα πεδίου"
@@ -6405,55 +6405,55 @@ msgid "Special create full backup"
 msgstr "Ειδική δημιουργία πλήρους backup"
 
 msgid "Special let me select items"
-msgstr "Special let me select items"
+msgstr ""
 
 msgid "Allow coaches to edit inside course sessions"
-msgstr "Allow coaches to edit inside course sessions"
+msgstr ""
 
 msgid "Show session data title"
-msgstr "Show session data title"
+msgstr ""
 
 msgid "Show session data comment"
-msgstr "Show session data comment"
+msgstr ""
 
 msgid "Subscription sessions in the category"
-msgstr "Subscription sessions in the category"
+msgstr ""
 
 msgid "List of sessions on the platform"
-msgstr "List of sessions on the platform"
+msgstr ""
 
 msgid "List of sessions in the categories"
-msgstr "List of sessions in the categories"
+msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
-msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
+msgstr ""
 
 msgid "There were no courses registered or may not have made the association with the sessions"
-msgstr "There were no courses registered or may not have made the association with the sessions"
+msgstr ""
 
 msgid "Setting the registration page"
 msgstr "Διαχείριση της σελίδας εγγραφής"
 
 msgid "Select category and sessions"
-msgstr "Select category and sessions"
+msgstr ""
 
 msgid "Number sessions"
 msgstr "Πλήθος περιόδων"
 
 msgid "Delete only the selected categories without sessions"
-msgstr "Delete only the selected categories without sessions"
+msgstr ""
 
 msgid "Delete the selected categories to sessions"
-msgstr "Delete the selected categories to sessions"
+msgstr ""
 
 msgid "Edit Note"
-msgstr "Edit Note"
+msgstr ""
 
 msgid "Add Tabs"
-msgstr "Add Tabs"
+msgstr ""
 
 msgid "Edit Tabs"
-msgstr "Edit Tabs"
+msgstr ""
 
 msgid "Announcements list has been cleared up"
 msgstr "Τα περιεχόμενα του φακέλου ανακοινώσεων διαγράφτηκαν"
@@ -6486,7 +6486,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "Αποστολή (με email) της ανακοίνωσης στους εγγεγραμμένους μαθητές"
 
 msgid "On"
-msgstr "On"
+msgstr ""
 
 msgid "registered users of the site"
 msgstr "εγγεγραμμένοι χρήστες του μαθήματος"
@@ -6618,7 +6618,7 @@ msgid "The selected users have been unsubscribed from the course"
 msgstr "Οι επιλεγμένοι χρήστες διαγράφηκαν από την εκπαίδευσης"
 
 msgid "This learner is subscribed in this training through a training session. You cannot edit his information"
-msgstr "This learner is subscribed in this training through a training session. You cannot edit his information"
+msgstr ""
 
 msgid "Are you sure you want to add this contact to your friends ?"
 msgstr "Είστε σίγουροι ότι θέλετε να προσθέσετε την επαφή στους φίλους σας?"
@@ -6651,7 +6651,7 @@ msgid "Select one group"
 msgstr "Επιλογή ομάδας"
 
 msgid "Add personal contacts"
-msgstr "Add personal contacts"
+msgstr ""
 
 msgid "Successfully added contacts to group"
 msgstr "Η προσθήκη των επαφών στην ομάδα έγινε με επιτυχία"
@@ -6660,7 +6660,7 @@ msgid "Added contact to list"
 msgstr "Η επαφή πρστέθηκε στην λίστα"
 
 msgid "This screen is a list of contacts sorted by groups"
-msgstr "This screen is a list of contacts sorted by groups"
+msgstr ""
 
 msgid "No contacts found"
 msgstr "Δεν βρέθηκε επαφή"
@@ -6681,7 +6681,7 @@ msgid "Request contact"
 msgstr "Αίτηση επαφής"
 
 msgid "Unknown"
-msgstr "Unknown"
+msgstr ""
 
 msgid "My parents"
 msgstr "Οι γονείς μου"
@@ -6771,10 +6771,10 @@ msgid "Send invitation"
 msgstr "Αποστολή πρόσκλησης"
 
 msgid "Invite to join my group of friends"
-msgstr "Invite to join my group of friends"
+msgstr ""
 
 msgid "My certificates"
-msgstr "My certificates"
+msgstr ""
 
 msgid "Create new group(s)"
 msgstr "Δημιουργία νέας ομάδας"
@@ -6978,7 +6978,7 @@ msgid "Please enter a valid number for the maximum number of members."
 msgstr "Παρακαλώ εισάγετε έναν έγκυρο αριθμό για τον ανώτατο αριθμό μελών."
 
 msgid "The category order was changed"
-msgstr "The category order was changed"
+msgstr ""
 
 msgid "Category created"
 msgstr "Δημιουργήθηκε Κατηγορία"
@@ -7128,22 +7128,22 @@ msgid "The learning object has been deleted"
 msgstr "Το αντικείμενο μάθησης διαγράφηκε"
 
 msgid "The learning object has been edited"
-msgstr "The learning object has been edited"
+msgstr ""
 
 msgid "This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps."
-msgstr "This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps."
+msgstr ""
 
 msgid "Add section"
-msgstr "Add section"
+msgstr ""
 
 msgid "Add learning object or activity"
 msgstr "Προσθήκη αντικειμένου γνώσης ή δραστηριότητας"
 
 msgid "Edit the prerequisites of the current LO"
-msgstr "Edit the prerequisites of the current LO"
+msgstr ""
 
 msgid "Edit section"
-msgstr "Edit section"
+msgstr ""
 
 msgid "Edit document"
 msgstr "Επεξεργασία εγγράφου"
@@ -7155,10 +7155,10 @@ msgid "Edit assignment"
 msgstr "Επεξεργασία ανάθεσης"
 
 msgid "Adding a section to the course"
-msgstr "Adding a section to the course"
+msgstr ""
 
 msgid "Enter information for section"
-msgstr "Enter information for section"
+msgstr ""
 
 msgid "Create new rich media page"
 msgstr "Δημιουργία πολυμεσικής σελίδας"
@@ -7173,43 +7173,43 @@ msgid "Position"
 msgstr "Στον πίνακα περιεχομένων"
 
 msgid "A new section has now been created. You may continue by adding a section or step."
-msgstr "A new section has now been created. You may continue by adding a section or step."
+msgstr ""
 
 msgid "The new link has been created"
-msgstr "The new link has been created"
+msgstr ""
 
 msgid "The new assignment has been created"
-msgstr "The new assignment has been created"
+msgstr ""
 
 msgid "The new section has been created. You can now add a section or a learning object to it."
-msgstr "The new section has been created. You can now add a section or a learning object to it."
+msgstr ""
 
 msgid "The test has been added to the course"
-msgstr "The test has been added to the course"
+msgstr ""
 
 msgid "The learning object has been removed"
-msgstr "The learning object has been removed"
+msgstr ""
 
 msgid "Converting..."
 msgstr "Μετατροπή..."
 
 msgid "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint."
-msgstr "Error during the conversion of PowerPoint. Please check if there are special characters in the name of your PowerPoint."
+msgstr ""
 
 msgid "Build"
-msgstr "Build"
+msgstr ""
 
 msgid "Current view mode: embedded"
-msgstr "Current view mode: embedded"
+msgstr ""
 
 msgid "Current view mode: fullscreen"
-msgstr "Current view mode: fullscreen"
+msgstr ""
 
 msgid "Show debug"
-msgstr "Show debug"
+msgstr ""
 
 msgid "Hide debug"
-msgstr "Hide debug"
+msgstr ""
 
 msgid "This document is not editable"
 msgstr "Το έγγραφο δεν είναι επεξεργάσιμο"
@@ -7221,25 +7221,25 @@ msgid "Prerequisities (limit)"
 msgstr "Προαπαιτήσεις (όριο)"
 
 msgid "This HotPotatoes test has been closed."
-msgstr "This HotPotatoes test has been closed."
+msgstr ""
 
 msgid "Completion limit (minimum points)"
-msgstr "Completion limit (minimum points)"
+msgstr ""
 
 msgid " you need first accomplish"
 msgstr "πρέπεε πρώτα να φέρετε εις πέρας"
 
 msgid "At least 1 step is missing from"
-msgstr "At least 1 step is missing from"
+msgstr ""
 
 msgid " which is set as prerequisities."
-msgstr " which is set as prerequisities."
+msgstr ""
 
 msgid " you must reach minimum"
-msgstr " you must reach minimum"
+msgstr ""
 
 msgid " points in"
-msgstr " points in"
+msgstr ""
 
 msgid "Now you have :"
 msgstr "Τώρα έχετε :"
@@ -7254,55 +7254,55 @@ msgid "There was a"
 msgstr "Υπήρχε"
 
 msgid "page (step) here in the original Chamilo Learning Path."
-msgstr "page (step) here in the original Chamilo Learning Path."
+msgstr ""
 
 msgid "Select a learning object in the table of contents"
-msgstr "Select a learning object in the table of contents"
+msgstr ""
 
 msgid "The rich media page/activity has been added to the course"
-msgstr "The rich media page/activity has been added to the course"
+msgstr ""
 
 msgid "Edit the current section"
-msgstr "Edit the current section"
+msgstr ""
 
 msgid "Create a new document"
-msgstr "Adding a rich media page/activity to the course"
+msgstr ""
 
 msgid "Move the current document"
-msgstr "Move the current document"
+msgstr ""
 
 msgid "Edit the current document"
-msgstr "Edit the current document"
+msgstr ""
 
 msgid "Warning !"
 msgstr "Προειδοποίηση!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
-msgstr "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
+msgstr ""
 
 msgid "Adding a test to the course"
-msgstr "Adding a test to the course"
+msgstr ""
 
 msgid "Move the current test"
 msgstr "Μετακίνηση στο τρέχων test"
 
 msgid "Edit the current test"
-msgstr "Edit the current test"
+msgstr ""
 
 msgid "Import AICC, SCORM and Chamilo learning path"
-msgstr "Import SCORM course"
+msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr "To continue add a section or a learning object or activity to your course."
+msgstr ""
 
 msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
+msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
-msgstr "Prerequisites to the current learning object have been added."
+msgstr ""
 
 msgid "Add/edit prerequisites"
-msgstr "Add/edit prerequisites"
+msgstr ""
 
 msgid "No documents"
 msgstr "Δεν υπάρχουν έγγραφα"
@@ -7314,58 +7314,58 @@ msgid "No links available"
 msgstr "Δεν υπάρχουν διαθέσιμοι σύνδεσμοι"
 
 msgid "There are no learning objects in the course. Click on \"Build\" to enter authoring mode."
-msgstr "There are no learning objects in the course. Click on \"Build\" to enter authoring mode."
+msgstr ""
 
 msgid "First position"
-msgstr "First position"
+msgstr ""
 
 msgid "New test"
 msgstr "Νέο test"
 
 msgid "Adding a forum to the course"
-msgstr "Adding a forum to the course"
+msgstr ""
 
 msgid "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
-msgstr "<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left."
+msgstr ""
 
 msgid "To start, give a title to your course"
-msgstr "To start, give a title to your course"
+msgstr ""
 
 msgid "Adding a link to the course"
-msgstr "Adding a link to the course"
+msgstr ""
 
 msgid "Move the current link"
-msgstr "Move the current link"
+msgstr ""
 
 msgid "Edit the current link"
-msgstr "Edit the current link"
+msgstr ""
 
 msgid "Move the current assignment"
-msgstr "Move the current assignment"
+msgstr ""
 
 msgid "Edit the current assignment"
-msgstr "Edit the current assignment"
+msgstr ""
 
 msgid "Allow multiple attempts"
-msgstr "Allow multiple attempts"
+msgstr ""
 
 msgid "Prevent multiple attempts"
-msgstr "Prevent multiple attempts"
+msgstr ""
 
 msgid "Make SCORM recordings extra"
-msgstr "Make SCORM recordings extra"
+msgstr ""
 
 msgid "Make SCORM recordings normal"
-msgstr "Make SCORM recordings normal"
+msgstr ""
 
 msgid "The document cannot be displayed because it has been deleted"
-msgstr "The document cannot be displayed because it has been deleted"
+msgstr ""
 
 msgid "Edit the current forum"
-msgstr "Edit the current forum"
+msgstr ""
 
 msgid "No prerequisites"
-msgstr "No prerequisites"
+msgstr ""
 
 msgid "Create a new link"
 msgstr "Δημιουργία συνδέσμου"
@@ -7374,73 +7374,73 @@ msgid "Create a new forum"
 msgstr "Δημιουργία forum"
 
 msgid "Woogie : Word conversion"
-msgstr "Woogie : Word conversion"
+msgstr ""
 
 msgid "MS Word to course converter"
-msgstr "MS Word to course converter"
+msgstr ""
 
 msgid "Welcome to Woogie Rapid Learning<ul type=\"1\"><li>Browse your hard disk to find any .doc, .sxw or .odt file<li>Upload it to Woogie. It will convert it into a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>"
-msgstr "Welcome to Woogie Rapid Learning<ul type=\"1\"><li>Choose a file .doc, .sxw, .odt<li>Upload it to Woogie. It will be convert to a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>"
+msgstr ""
 
 msgid "Error during the conversion of the word document. Please check if there are special characters in the name of your document.."
-msgstr "Error during the conversion of the word document. Please check if there are special characters in the name of your document.."
+msgstr ""
 
 msgid "MS Word conversion"
-msgstr "MS Word conversion"
+msgstr ""
 
 msgid "Interaction ID"
-msgstr "Interaction ID"
+msgstr ""
 
 msgid "Time (finished at...)"
-msgstr "Time (finished at...)"
+msgstr ""
 
 msgid "Correct answers"
-msgstr "Correct answers"
+msgstr ""
 
 msgid "Learner answers"
-msgstr "Learner answers"
+msgstr ""
 
 msgid "Time spent"
-msgstr "Time spent"
+msgstr ""
 
 msgid "A page, a learning object"
-msgstr "A page, a learning object"
+msgstr ""
 
 msgid "A section, a learning object"
-msgstr "A section, a learning object"
+msgstr ""
 
 msgid "Use the slides names as course learning object names"
-msgstr "Use the slides names as course learning object names"
+msgstr ""
 
 msgid "The connection to the document converter failed. Please contact your platform administrator to fix the problem."
-msgstr "The connection to the document converter failed. Please contact your platform administrator to fix the problem."
+msgstr ""
 
 msgid "The conversion failed. <br />Some documents are too complex to be treated automatically by the document converter.<br />We try to improve it."
-msgstr "The conversion failed. <br />Some documents are too complex to be threated automatically by the document converter. <br />We try to improve it."
+msgstr ""
 
 msgid "The conversion failed for an unknown reason.<br />Please contact your administrator to get more information."
-msgstr "The conversion failed for an unknown reason.<br />Please contact your administrator to get more information."
+msgstr ""
 
 msgid "Please upload presentations only. Filename extension should be .ppt or .odp"
-msgstr "Please upload presentations only. Filename should end with .ppt or .odp"
+msgstr ""
 
 msgid "Please upload text documents only. Filename extension should be .doc, .docx or .odt"
-msgstr "Please upload text documents only. Filename should end with .doc, .docx or .odt"
+msgstr ""
 
 msgid "Show audio recorder"
-msgstr "Show audio recorder"
+msgstr ""
 
 msgid "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
-msgstr "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word 'car' tagged as 'truck', not     including the word 'ferrari' but including the word 'ford' and the exact  phrase 'high consumption'."
+msgstr ""
 
 msgid "View course"
 msgstr "Εμφάνιση μαθήματος"
 
 msgid "Tags to add to the document, if indexing"
-msgstr "Tags to add to the document, if indexing"
+msgstr ""
 
 msgid "Back to learning paths"
-msgstr "Back to learning paths"
+msgstr ""
 
 msgid "Upload Mp3 audio"
 msgstr "Ανέβασμα Mp3"
@@ -7449,7 +7449,7 @@ msgid "Add audio"
 msgstr "Προσθήκη ήχου"
 
 msgid "Leave import form empty to keep current audio file"
-msgstr "Leave import form empty to keep current audio file"
+msgstr ""
 
 msgid "Remove audio"
 msgstr "Διαγραφή ήχου"
@@ -7458,10 +7458,10 @@ msgid "Validate"
 msgstr "Επικύρωση"
 
 msgid "View score change history"
-msgstr "View score change history"
+msgstr ""
 
 msgid "Trainer picture will resize if needed"
-msgstr "Trainer picture will resize if needed"
+msgstr ""
 
 msgid "Image preview"
 msgstr "Προεπικόπηση εικόνας"
@@ -7470,7 +7470,7 @@ msgid " already exists."
 msgstr "υπάρχει ήδη."
 
 msgid "The uploaded file could not be saved (perhaps a permission problem?)"
-msgstr "The uploaded file could not be saved (perhaps a permission problem?)"
+msgstr ""
 
 msgid "Move document"
 msgstr "Μετακίνηση εγγράφου"
@@ -7488,16 +7488,16 @@ msgid "Hide all attempts"
 msgstr "Απόκρυψη όλων των προσπαθειών"
 
 msgid "Show all attempts by test"
-msgstr "Show all attempts by test"
+msgstr ""
 
 msgid "Show attempt"
-msgstr "Show attempt"
+msgstr ""
 
 msgid "Show and grade attempt"
-msgstr "Show and grade attempt"
+msgstr ""
 
 msgid "Save prerequisites settings"
-msgstr "Save prerequisites settings"
+msgstr ""
 
 msgid "Continue"
 msgstr "Συνέχεια"
@@ -7506,28 +7506,28 @@ msgid "Add test to course"
 msgstr "Προσθήκη test στο μάθημα"
 
 msgid "Add this document to the course"
-msgstr "Add this document to the course"
+msgstr ""
 
 msgid "Objective ID"
-msgstr "Objective ID"
+msgstr ""
 
 msgid "Objective status"
-msgstr "Objective status"
+msgstr ""
 
 msgid "Objective raw score"
-msgstr "Objective raw score"
+msgstr ""
 
 msgid "Objective max score"
-msgstr "Objective max score"
+msgstr ""
 
 msgid "Objective min score"
-msgstr "Objective min score"
+msgstr ""
 
 msgid "Learning path name"
 msgstr "Όνομα μαθήματος"
 
 msgid "Authoring options"
-msgstr "Authoring options"
+msgstr ""
 
 msgid "Save section"
 msgstr "Αποθήκευση τομέα"
@@ -7542,7 +7542,7 @@ msgid "Add forum to course"
 msgstr "Προσθήκη forum στο μάθημα"
 
 msgid "Save audio and organization"
-msgstr "Save audio and organization"
+msgstr ""
 
 msgid "Please upload mp3 files only"
 msgstr "Παρακαλούμε ανεβάστε μόνο αρχείο ήχουμ mp3"
@@ -7551,7 +7551,7 @@ msgid "Chamilo supports the OpenBadges standard"
 msgstr "Το Chamilo έχει τη βασική έκδοση των OpenBadges"
 
 msgid "No posts"
-msgstr "No posts"
+msgstr ""
 
 msgid "Without achieved skills"
 msgstr "Χωρίς πρόοδο"
@@ -7569,7 +7569,7 @@ msgid "Urgent: %s course expiration reminder"
 msgstr "Επείγον! Υπενθύμιση λήξης % των course"
 
 msgid "Exercise and learning path"
-msgstr "Exercise and learning path"
+msgstr ""
 
 msgid "Warning: It is possible to use, in the gradebook, tests that are part of learning paths. If the learning path itself is already included, this test might be part of the gradebook already. The learning paths evaluation is made on the basis of a progress percentage, while the evaluation on tests is made on the basis of a score. Survey evaluation is based on whether the user has answered (1) or not (0). Make sure you test your combinations of gradebook evaluations to avoid mind-boggling situations."
 msgstr "Προσοχή! Υπάρχει δυνατότητα να χρησιμοποιηθούν test κατά τη διάρκεια της εκπαίδευσης. Αν το course έχει ήδη πραγματοποιηθεί, τότε υπάρχει πιθανότητα να υπάρχει ήδη βαθμολογία του Test στο βαθμολόγιο.Η αξιολόγηση των course γίνεται με βάση ποσοστό προόδου, ενώ η αξιολόγηση των test σύμφωνα με τις ερωτήσεις που έχουν απαντηθεί (1) και αυτές που έχουν μείνει κενές (0). Βεβαιωθείτε πως έχετε αξιολογήσει τον τρόπο βαθμολόγησης."
@@ -7587,7 +7587,7 @@ msgid "Short description"
 msgstr "Σύντομη περιγραφή"
 
 msgid "Target audience"
-msgstr "Target audience"
+msgstr ""
 
 msgid "Convert your virtual campus to a skills-based learning experience"
 msgstr "Μετατρέψτε την εικονική πλατφόρμα σας σε εμπειρική πλατφόρμα εκμάθησης δεξιοτήτων"

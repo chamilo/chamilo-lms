@@ -1644,7 +1644,7 @@ HOTSPOT;
         $headers = [
             get_lang('Course'),
             get_lang('Session'),
-            get_lang('Quiz'),
+            get_lang('Test'),
             get_lang('Link to test edition'),
         ];
 
@@ -2341,7 +2341,7 @@ HOTSPOT;
 
                             $sendMailUrl =  api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=send_email&exerciseId='.$exercise_id.'&attemptId='.$results[$i]['exe_id'];
                             $emailLink = '<a href="'.$sendMailUrl.'">'
-                                .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by email'))
+                                .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by e-mail'))
                                 .'</a>';
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
@@ -4144,8 +4144,8 @@ EOT;
         // check the default value of option
         $tabSelected = [$default => " selected='selected' "];
         $res = "<select name='$name' id='$name' onchange='".$onchange."' >";
-        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
-        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
+        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('All groups')." --</option>";
+        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('Not in a group')." -</option>";
         $groups = GroupManager::get_group_list();
         $currentCatId = 0;
         $countGroups = count($groups);
@@ -4236,7 +4236,7 @@ EOT;
         if ($objExercise->getResultAccess()) {
             if (false === $objExercise->hasResultsAccess($exercise_stat_info)) {
                 echo Display::return_message(
-                    sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
+                    sprintf(get_lang('You have passed the %s minutes limit to see the results.'), $objExercise->getResultsAccess())
                 );
 
                 return false;
@@ -5810,9 +5810,9 @@ EOT;
                 $exerciseNotification = $extraFieldData['value'];
             }
 
-            $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+            $subject = sprintf(get_lang('Failure on attempt %s at %s'), $attemptCountToSend, $courseInfo['title']);
             if ($exercisePassed) {
-                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+                $subject = sprintf(get_lang('Validation of exercise at %s'), $courseInfo['title']);
             }
 
             if ($exercisePassed) {
@@ -5997,7 +5997,7 @@ EOT;
                                         );
 
                                         @$pdf = new PDF();
-                                        $filename = get_lang('Exercise');
+                                        $filename = get_lang('Test');
                                         $pdfPath = @$pdf->content_to_pdf(
                                             "<html><body>$pdfContent</body></html>",
                                             null,

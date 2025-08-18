@@ -134,7 +134,7 @@ switch ($action) {
         break;
 }
 
-$tool_name = get_lang('Courses categories');
+$tool_name = get_lang('Course categories');
 $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),

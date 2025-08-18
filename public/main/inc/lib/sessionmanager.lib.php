@@ -6777,7 +6777,7 @@ class SessionManager
                                 );
                                 continue;
                             }
-                            $messages[] = Display::return_message(get_lang('Learners list').'<br />'.$userToString, 'info', false);
+                            $messages[] = Display::return_message(get_lang('Learner list').'<br />'.$userToString, 'info', false);
                             self::subscribeUsersToSession(
                                 $sessionDestinationId,
                                 $newUserList,
@@ -7198,7 +7198,7 @@ class SessionManager
 
                 if (empty($userInfo)) {
                         Display::addFlash(
-                            Display::return_message(get_lang('UserDoesNotExist').' - '.$username, 'warning')
+                            Display::return_message(get_lang("This user doesn't exist").' - '.$username, 'warning')
                         );
                         continue;
                 }

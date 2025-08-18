@@ -23,7 +23,7 @@ $userId = api_get_user_id();
 
 /*$interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
@@ -55,13 +55,13 @@ $orderName = api_is_western_name_order() ? 'firstname' : 'lastname';
 $type = 'simple';
 $columns = [
     get_lang('Course'),
-    get_lang('WorkName'),
-    get_lang('FullUserName'),
+    get_lang('Assignment name'),
+    get_lang('Full name'),
     get_lang('Title'),
     get_lang('Score'),
     get_lang('Date'),
     get_lang('Status'),
-    get_lang('UploadCorrection'),
+    get_lang('Upload correction'),
 ];
 $columns = array_merge($columns, $plagiarismListJqgridColumn);
 $columns[] = get_lang('Actions');
@@ -168,8 +168,8 @@ if (!empty($courses)) {
     $form->addSelect('course', get_lang('Course'), $courses, ['placeholder' => get_lang('All')]);
     $status = [
         1 => get_lang('All'),
-        2 => get_lang('NotRevised'),
-        3 => get_lang('Revised'),
+        2 => get_lang('Not reviewed'),
+        3 => get_lang('Reviewed'),
     ];
     $form->addSelect('status', get_lang('Status'), $status);
     $form->addButtonSearch(get_lang('Search'));
@@ -190,10 +190,10 @@ if (!empty($courses)) {
         }
     }
 } else {
-    $content .= Display::return_message(get_lang('NoCoursesForThisUser'), 'warning');
+    $content .= Display::return_message(get_lang("This user isn't subscribed in a course"), 'warning');
 }
 
-Display::display_header(get_lang('StudentPublications'));
+Display::display_header(get_lang('Assignments'));
 ?>
 <script>
 $(function() {
@@ -217,8 +217,8 @@ $(function() {
 
 /*$actionsLeft = null;
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);*/
-echo Display::page_header(get_lang('StudentPublicationToCorrect'));
-echo Display::return_message(get_lang('StudentPublicationCorrectionWarning'), 'warning');
+echo Display::page_header(get_lang("Student's assignments to be corrected"));
+echo Display::return_message(get_lang('You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status.'), 'warning');
 echo $content;
 
 Display::display_footer();

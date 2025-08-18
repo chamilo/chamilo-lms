@@ -63,7 +63,7 @@ $(function() {
 });
 
 function confirmation(name) {
-    if (confirm("'.get_lang('Are you sure to delete?').' " + name + " ?")) {
+    if (confirm("'.get_lang('Are you sure to delete').' " + name + " ?")) {
             document.forms["profile"].submit();
     } else {
         return false;
@@ -269,7 +269,7 @@ if ('true' === api_get_setting('extended_profile')) {
     // WHAT I AM ABLE TO TEACH
     $form->addHtmlEditor(
         'teach',
-        get_lang('What I am able to teach'),
+        get_lang('What I can teach'),
         false,
         false,
         [
@@ -307,7 +307,7 @@ if ('true' === api_get_setting('extended_profile')) {
 if (in_array(UserAuthSource::PLATFORM, $user_data['auth_sources']) &&
     in_array('password', $profileList)
 ) {
-    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
+    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('To change your password, enter your current password in the field above and your new password in both fields below. To maintain the current password, leave the three fields empty.')], ['size' => 40]);
     $form->addElement('password', 'password1', get_lang('New password'), ['id' => 'password1', 'size' => 40]);
 
     $form->addElement('password', 'password2', get_lang('Confirm password'), ['size' => 40]);
@@ -421,7 +421,7 @@ if ($form->validate()) {
             if (!empty($userFromEmail) && empty($user_data['password0'])) {
                 Display::addFlash(
                     Display:: return_message(
-                        get_lang('ToChangeYoure-mailMustTypeYourPassword'),
+                        get_lang('In order to change your e-mail address, you are required to confirm your password'),
                         'error',
                         false
                     )

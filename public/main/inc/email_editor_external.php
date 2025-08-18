@@ -21,12 +21,12 @@ if (empty($originUrl) && isset($_SERVER['HTTP_REFERER'])) {
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $form = new FormValidator('email_editor', 'post');
-$form->addText('email', get_lang('Email'));
-$form->addRule('email', get_lang('EmailWrong'), 'email');
-$form->addText('email_title', get_lang('EmailTitle'));
+$form->addText('email', get_lang('E-mail'));
+$form->addRule('email', get_lang('The email address is not complete or contains some invalid characters'), 'email');
+$form->addText('email_title', get_lang('Subject'));
 $form->addTextarea('email_text', get_lang('Message'), ['rows' => '6'], true);
 $form->addCaptcha();
-$form->addButtonSend(get_lang('SendMail'));
+$form->addButtonSend(get_lang('Send email'));
 
 $emailTitle = isset($_REQUEST['subject']) ? Security::remove_XSS($_REQUEST['subject']) : '';
 $emailText = isset($_REQUEST['body']) ? Security::remove_XSS($_REQUEST['body']) : '';
@@ -48,9 +48,9 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $message =
-        get_lang('Sender').': '.$values['email'].'<br /><br />'.
+        get_lang('sender').': '.$values['email'].'<br /><br />'.
         nl2br($values['email_text']).
-        '<br /><br /><br />'.get_lang('EmailSentFromLMS').' '.api_get_path(WEB_PATH);
+        '<br /><br /><br />'.get_lang('E-mail sent from the platform').' '.api_get_path(WEB_PATH);
 
     api_mail_html(
         '',
@@ -60,13 +60,13 @@ if ($form->validate()) {
         get_lang('Anonymous')
     );
 
-    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+    Display::addFlash(Display::return_message(get_lang('Message Sent')));
     $orig = Session::read('origin_url');
     Session::erase('origin_url');
     header('Location:'.$orig);
     exit;
 }
 
-Display::display_header(get_lang('SendEmail'));
+Display::display_header(get_lang('Send email'));
 $form->display();
 Display::display_footer();

@@ -504,7 +504,7 @@ if (is_array($threads)) {
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {
                 $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=liststd&content=thread&id={$threadId}".'">'.
-                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Learners list'))
+                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Learner list'))
                     .'</a>';
             }
             $html .= $iconsEdit;

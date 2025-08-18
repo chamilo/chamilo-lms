@@ -330,7 +330,7 @@ switch ($action) {
                 );
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved..'), 'confirmation');
+            echo Display::return_message(get_lang('Saved.'), 'confirmation');
         }
         break;
     case 'update_question_order':
@@ -359,7 +359,7 @@ switch ($action) {
                 ;
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved..'), 'confirmation');
+            echo Display::return_message(get_lang('Saved.'), 'confirmation');
         }
         break;
     case 'add_question_to_reminder':
@@ -409,7 +409,7 @@ switch ($action) {
 
         $statInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
-        echo Display::page_subheader(get_lang('QuestionsToReview'));
+        echo Display::page_subheader(get_lang('Questions to be reviewed'));
         echo $objExercise->getReminderTable($questionList, $statInfo, true);
         break;
     case 'save_question_description':
@@ -1000,7 +1000,7 @@ switch ($action) {
 
         try {
             if (!$trackConfirmationId) {
-                throw new Exception(get_lang('ErrorOccurred'));
+                throw new Exception(get_lang('An error occurred.'));
             }
 
             /** @var TrackEExerciseConfirmation $trackConfirmation */
@@ -1015,7 +1015,7 @@ switch ($action) {
             );
 
             if (!$trackConfirmation) {
-                throw new Exception(get_lang('NotFound'));
+                throw new Exception(get_lang('Not found'));
             }
 
             $trackConfirmation

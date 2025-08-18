@@ -229,9 +229,9 @@ if (false === $userAlreadyRegisteredShowTerms &&
         }
     }
 
-    $LastnameLabel = get_lang('LastName');
+    $LastnameLabel = get_lang('Last name');
     if ('true' === api_get_setting('profile.registration_add_helptext_for_2_names')) {
-        $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
+        $LastnameLabel = [$LastnameLabel, get_lang('Insert your two names')];
     }
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
@@ -432,7 +432,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     ) {
         $form->addHtmlEditor(
             'teach',
-            get_lang('What I am able to teach'),
+            get_lang('What I can teach'),
             false,
             false,
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']

@@ -38,8 +38,8 @@ class NotificationEvent extends Model
     public function getEventsForSelect()
     {
         return [
-            self::ACCOUNT_EXPIRATION => get_lang('AccountExpiration'),
-            self::JUSTIFICATION_EXPIRATION => get_lang('JustificationExpiration'),
+            self::ACCOUNT_EXPIRATION => get_lang('Account expiration'),
+            self::JUSTIFICATION_EXPIRATION => get_lang('Justification expiration'),
         ];
     }
 
@@ -53,7 +53,7 @@ class NotificationEvent extends Model
     public function getForm(FormValidator $form, array $data = []): FormValidator
     {
         $options = $this->getEventsForSelect();
-        $form->addSelect('event_type', get_lang('EventType'), $options);
+        $form->addSelect('event_type', get_lang('Event type'), $options);
         $form->freeze('event_type');
 
         $eventType = $data['event_type'];
@@ -62,7 +62,7 @@ class NotificationEvent extends Model
                 $plugin = Justification::create();
                 $list = $plugin->getList();
                 $list = array_column($list, 'name', 'id');
-                $form->addSelect('event_id', get_lang('JustificationType'), $list);
+                $form->addSelect('event_id', get_lang('Justification type'), $list);
                 $form->freeze('event_id');
 
                 break;
@@ -92,7 +92,7 @@ class NotificationEvent extends Model
 
         $form->addSelect(
             'event_type',
-            get_lang('EventType'),
+            get_lang('Event type'),
             $options,
             ['placeholder' => get_lang('Please select an option'), 'onchange' => 'document.add.submit()']
         );
@@ -171,7 +171,7 @@ class NotificationEvent extends Model
                             'id' => $id,
                             'title' => $event['title'],
                             'content' => $event['content'],
-                            'event_text' => get_lang('ExpirationDate').': '.api_get_local_time($userInfo['expiration_date']),
+                            'event_text' => get_lang('Expiration date').': '.api_get_local_time($userInfo['expiration_date']),
                             'link' => $event['link'],
                             'persistent' => $event['persistent'],
                         ];

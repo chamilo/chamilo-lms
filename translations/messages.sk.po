@@ -3494,7 +3494,7 @@ msgstr "Vytvor kategóriu kurzov"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Naozaj chcete zmazať kategóriu kurzov? Kurzy v tejto kategórii budú presunuté do nadradenej kategórie"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategórie kurzov"
 
 msgid "Courses in this category"
@@ -5752,9 +5752,6 @@ msgstr "Identifikačná hodnota tútora"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Keď je identifikačná hodnota učiteľa zadaná, tak musí byť vo vnútri jedného z čiastkových prvkov učiteľského poľa, aby bol považovaný za trénera. Pokiaľ necháte toto pole prázdne, potom je podmienkou existencia poľa pre tohto LDAP používateľa, aby bol považovaný za trénera. Napríklad: pole môže byť \"člen\" a hodnota vyhľadávania môže byť \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "nie je možné prepísať"
 
 msgid "The field is successfully moved down"
 msgstr "Pole bolo úspešne presunuté nadol"
@@ -13694,7 +13691,7 @@ msgstr "Je tam učebnica, zborník dokumentov, bibliografia, zoznam odkazov na i
 msgid "Short description of the course materials."
 msgstr "Krátky popis materiálov kurzu."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Sú tam lektori, tútori, technická pomoc, asistenti, počítačové učebne?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17363,8 +17360,8 @@ msgstr "Vytvoriť sociálnu skupinu"
 msgid "Not logged in for some time"
 msgstr "Nie ste prihlásený nejakú dobu"
 
-msgid "Last %i months"
-msgstr "Posledné %i mesiace"
+msgid "Last %d months"
+msgstr "Posledné %d mesiace"
 
 msgid "Never connected"
 msgstr "Nikdy pripojený"
@@ -18856,7 +18853,7 @@ msgstr "Overené"
 msgid "Not validated"
 msgstr "Neoverené"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Posúdené"
 
 msgid "Select a question to revise"
@@ -19000,7 +18997,7 @@ msgstr "Zobrazí globálne panel nástrojov v hornej časti stránky na určený
 msgid "Session list"
 msgstr "Zoznam stretnutie"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Zoznam študentov"
 
 msgid "Learners who're taking the exercise right now"
@@ -23971,7 +23968,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

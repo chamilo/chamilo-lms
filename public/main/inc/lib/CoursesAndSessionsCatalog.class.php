@@ -1186,7 +1186,7 @@ class CoursesAndSessionsCatalog
      */
     public static function return_unregister_button($course, $stok, $search_term, $categoryCode, $sessionId = 0)
     {
-        $title = get_lang('Unsubscription');
+        $title = get_lang('Unsubscribe');
         $search_term = Security::remove_XSS($search_term);
         $categoryCode = Security::remove_XSS($categoryCode);
         $sessionId = (int) $sessionId;
@@ -1484,7 +1484,7 @@ class CoursesAndSessionsCatalog
         if (self::showCourses()) {
             $headers[] = [
                 'url' => api_get_self(),
-                'content' => get_lang('Courses catalog'),
+                'content' => get_lang('Course catalog'),
             ];
         }
 

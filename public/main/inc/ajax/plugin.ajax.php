@@ -26,7 +26,7 @@ switch ($action) {
 
         $pluginPaths = $appPlugin->read_plugins_from_path();
         if (!in_array($plugin, $pluginPaths)) {
-            echo Display::return_message(get_lang('NotAllowed'), 'error', false);
+            echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error', false);
             exit;
         }
 

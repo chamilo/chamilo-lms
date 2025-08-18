@@ -496,7 +496,7 @@ class ExtraField extends Model
                                 alert('".get_lang('Not found')."');
                             }
                         } else {
-                            alert('Geocode ".get_lang('Error').': '.get_lang('Address').' '.get_lang('NotFound')."');
+                            alert('Geocode ".get_lang('Error').': '.get_lang('Address').' '.get_lang('Not found')."');
                         }
                     });
                 }

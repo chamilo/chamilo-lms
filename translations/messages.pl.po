@@ -3487,7 +3487,7 @@ msgstr "Utwórz kategorię kursu"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Jesteś pewien, że chcesz skasować tę kategorię kursu? Kursy z tej kategorii zostaną przeniesione poza kategorie."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorie kursów"
 
 msgid "Courses in this category"
@@ -5745,9 +5745,6 @@ msgstr "Wartość uwierzytelniania nauczyciela"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Gdy kontrola odbywa się na polu nauczyciela podanego powyżej, wartość ta musi być w środku jednego z pól podelementów nauczyciela dla użytkownika, który ma być traktowany jako trener. Jeśli zostawisz to pole puste, jedynym warunkiem jest to, że pole istniejące dla tego użytkownika LDAP jest uznane jako trener. Na przykład, pole \"memberof\" oraz wartość do sprawdzenia to \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "nie jest zapisywany"
 
 msgid "The field is successfully moved down"
 msgstr "Pole zostało przeniesione poniżej"
@@ -13687,7 +13684,7 @@ msgstr "Czy jest do pobrania online skrypt kursu, zbiór referatów, bibliografi
 msgid "Short description of the course materials."
 msgstr "Krótki opis materiałów wykorzystywanych w czasie kursu."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Czy są nauczyciele, wychowawcy, pomoc techniczna, pracownicy socjalni, sale komputerowe?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17356,8 +17353,8 @@ msgstr "Utwórz grupę społeczną"
 msgid "Not logged in for some time"
 msgstr "Nie zalogowany przez jakiś czas"
 
-msgid "Last %i months"
-msgstr "Ostatnie %i miesięcy"
+msgid "Last %d months"
+msgstr "Ostatnie %d miesięcy"
 
 msgid "Never connected"
 msgstr "Nie podłączony"
@@ -18849,7 +18846,7 @@ msgstr "Zatwierdzone"
 msgid "Not validated"
 msgstr "Nie zatwierdzone"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Poprawione"
 
 msgid "Select a question to revise"
@@ -18993,7 +18990,7 @@ msgstr "Pokazuje globalny pasek narzędzi na górze strony, do wyznaczonych ról
 msgid "Session list"
 msgstr "Lista sesji"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lista studentów"
 
 msgid "Learners who're taking the exercise right now"
@@ -23964,7 +23961,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

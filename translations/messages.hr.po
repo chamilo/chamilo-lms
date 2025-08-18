@@ -3487,7 +3487,7 @@ msgstr "Izradi kategoriju kolegija"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Želite li doista izbrisati ovu kategoriju kolegija? Kolegiji unutar ove kategorije bit će premješteni izvan postojećih kategorija"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorije kolegija"
 
 msgid "Courses in this category"
@@ -5745,9 +5745,6 @@ msgstr "Identifikacijska vrijednost Tutora"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr ""
-
-msgid "is not writeable"
-msgstr "ne može se pisati"
 
 msgid "The field is successfully moved down"
 msgstr ""
@@ -13687,7 +13684,7 @@ msgstr "Postoji li udžbenik, zbornik, popis literature, popis poveznica na Inte
 msgid "Short description of the course materials."
 msgstr "Kratki opis gradiva."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Postoje li predavači, tutori, tehnička potpora, asistenti, informatičke sobe?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17356,7 +17353,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18844,7 +18841,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -18988,7 +18985,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -23959,7 +23956,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

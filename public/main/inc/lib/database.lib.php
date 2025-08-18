@@ -288,7 +288,7 @@ class Database
             throw $e;
         } else {
             error_log($e->getMessage());
-            api_not_allowed(false, get_lang('An error has occurred. Please contact your system administrator.'));
+            api_not_allowed(false, get_lang('There happened an unknown error. Please contact the platform administrator.'));
         }
     }
 

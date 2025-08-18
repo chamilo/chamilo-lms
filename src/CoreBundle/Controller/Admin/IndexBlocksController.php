@@ -330,7 +330,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-course-category',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_category.php']),
-            'label' => $this->translator->trans('Courses categories'),
+            'label' => $this->translator->trans('Course categories'),
         ];
         $items[] = [
             'class' => 'item-course-subscription',

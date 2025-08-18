@@ -176,7 +176,7 @@ if (api_is_platform_admin()) {
 
     $items[] = ['url' => 'course_export.php', 'label' => get_lang('Export courses')];
     $items[] = ['url' => 'course_import.php', 'label' => get_lang('Import courses list')];
-    $items[] = ['url' => 'course_category.php', 'label' => get_lang('Courses categories')];
+    $items[] = ['url' => 'course_category.php', 'label' => get_lang('Course categories')];
     $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('Add a user to a course')];
     $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('Import users list')];
 

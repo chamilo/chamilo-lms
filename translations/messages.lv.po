@@ -3487,7 +3487,7 @@ msgstr "Izveidot kursu kategoriju (mapi)"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Vai tiešām vēlaties izdzēst šo kursu kategoriju?<br>Kursi, kas ir šajā kategorijā, tiks pārvietoti ārpus kursu kategoriju saraksta."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kursu kategorijas"
 
 msgid "Courses in this category"
@@ -5745,9 +5745,6 @@ msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr ""
-
-msgid "is not writeable"
-msgstr "Nav ierakstāms"
 
 msgid "The field is successfully moved down"
 msgstr "Lauks veiksmīgi tika pārvietots uz leju"
@@ -13687,7 +13684,7 @@ msgstr "<br><b>Informējiet Kursantu :</b><br>Vai ir pieejams kursa materiāls d
 msgid "Short description of the course materials."
 msgstr "Kursa materiālu īss apraksts."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "<br><b>Informējiet Kursantu :</b><br>Aprakstiet, kādi Pasniedzēji, metodiķi, tehniskais atbalsts, laboranti, datorklases un citi resursi ir pieejami Kursa apguvē."
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17356,7 +17353,7 @@ msgstr "Izveidot sociālo grupu"
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18844,7 +18841,7 @@ msgstr "Apstiprināts"
 msgid "Not validated"
 msgstr "Nav apstiprināts"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Izskatīts"
 
 msgid "Select a question to revise"
@@ -18988,7 +18985,7 @@ msgstr ""
 msgid "Session list"
 msgstr "Sesiju saraksts"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lietotāju saraksts"
 
 msgid "Learners who're taking the exercise right now"
@@ -23959,7 +23956,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

@@ -3486,7 +3486,7 @@ msgstr "Crear una categoría de cursos"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "¿ Ta seguru de querer esborrar esta categoría de cursu ? Los cursos d'esta categoría van apaecer nel llistáu ensin pertenecer a una categoría"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Categoríes de cursos"
 
 msgid "Courses in this category"
@@ -5744,9 +5744,6 @@ msgstr "Valor d'identificación d'un profesor"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "De la que se fai una comprobación nel campu profesor qu'apaez enriba pa que l'usuariu apaeza como profesor, el valor que se-y dé tien de ser ún de los soelementos del campu profesor. Si'l campu queda en blancu, la única condición pa ser consideráu profesor  ye que nesti usuariu LDAP el campu esista. Por exemplu, el campu pue ser \"memberof\" y el valor de busca pue ser \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "nun se pue escribir"
 
 msgid "The field is successfully moved down"
 msgstr "El campu desplazóse pa embaxu"
@@ -13686,7 +13683,7 @@ msgstr "¿ Esiste una guía del cursu, una coleición de documentos, una bibliog
 msgid "Short description of the course materials."
 msgstr "Descripción breve de los materiales del cursu."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "¿ Quién son los profesores, tutores, serviciu d'asistencia téunica, asistentes sociales, etc ? ¿Cuálos son los recursos físicos qu'hai pal cursu: sala d'ordenadores, etc. ?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17355,7 +17352,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18843,7 +18840,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -18987,7 +18984,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -23958,7 +23955,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

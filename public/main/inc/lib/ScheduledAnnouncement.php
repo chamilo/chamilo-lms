@@ -177,7 +177,7 @@ class ScheduledAnnouncement extends Model
         ];
 
         if ($useBaseDate) {
-            $typeOptions['base_date'] = get_lang('BaseDate');
+            $typeOptions['base_date'] = get_lang("Dispatch based on the session's start/end dates");
         }
 
         $form->addSelect(

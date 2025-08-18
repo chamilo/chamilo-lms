@@ -519,7 +519,7 @@ if ($allowAntiPlagiarism) {
         .'" onclick="javascript: setCheckbox(false, \''
         .'gbox_results'
         .'\'); return false;">'
-        .get_lang('UnSelect all')
+        .get_lang('Unselect all')
         .'</a> ';
     $html .= '</div>';
     $html .= '<div class="btn-group">

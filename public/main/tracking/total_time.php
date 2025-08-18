@@ -252,7 +252,7 @@ if (api_is_platform_admin(true) ||
     }
 }
 
-$html .= Display::page_subheader2(get_lang('Learners list'));
+$html .= Display::page_subheader2(get_lang('Learner list'));
 
 // PERSON_NAME_DATA_EXPORT is buggy
 $is_western_name_order = api_is_western_name_order();

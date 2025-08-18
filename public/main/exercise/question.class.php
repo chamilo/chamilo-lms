@@ -1619,7 +1619,7 @@ abstract class Question
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
                 if (true == $score['revised']) {
-                    $scoreLabel = get_lang('Revised');
+                    $scoreLabel = get_lang('Reviewed');
                     $class = '';
                 } else {
                     $scoreLabel = get_lang('Not reviewed');

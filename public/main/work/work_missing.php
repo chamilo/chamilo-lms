@@ -104,7 +104,7 @@ $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.
 if (!empty($workId)) {
     if (empty($_GET['list']) or 'with' == Security::remove_XSS($_GET['list'])) {
         $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
-            Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('ViewLearners who didn\'t send their work')).
+            Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang("Learners who didn't send their work")).
             '</a>';
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && 'send_mail' != $_GET['action'])) {

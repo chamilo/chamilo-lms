@@ -396,8 +396,8 @@ if (isset($_GET['action'])) {
                 }
             }
 
-            $fileName = get_lang('Learners list');
-            $pdfTitle = get_lang('Learners list');
+            $fileName = get_lang('Learner list');
+            $pdfTitle = get_lang('Learner list');
 
             if (COURSEMANAGER == $type) {
                 $fileName = get_lang('Trainers');

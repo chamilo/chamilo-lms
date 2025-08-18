@@ -3495,7 +3495,7 @@ msgstr "Creaza o categorie de curs"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Chiar vrei sa stergi aceasta categorie? Cursurile aflate în aceasta categorie vor fi mutate in afara categoriei."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Categorii de cursuri"
 
 msgid "Courses in this category"
@@ -5753,9 +5753,6 @@ msgstr "Valoarea pentru identificarea tutorelui"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Cand se face o verificare a campului tutor de mai sus, aceasta valoare trebuie sa apartina unui dintre campurile sub-elementare ale campului tutor pentru ca utilizatorul sa fie considerat ca si profesor. Daca lasati acest camp gol, singura conditie este ca acest camp sa existe pentru ca utilizatorul LDAP sa fie considerat profesor. De exemplu, campul ar putea fi \"memberof\" iar valoarea de cautare ar putea fi \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "nu este editabil"
 
 msgid "The field is successfully moved down"
 msgstr "Campul a fost deplasat in jos cu succes"
@@ -13695,7 +13692,7 @@ msgstr "Exista o carte a cursului, o colectie de hârtii, o bibliografie, o lega
 msgid "Short description of the course materials."
 msgstr "Scurta descriere a materialelor cursului."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Sunt profesori, tutori, serviciu de asistenta tehnica, asistenti sociali, sali de calculatoare?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17364,7 +17361,7 @@ msgstr "Creati un grup social"
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18857,7 +18854,7 @@ msgstr "Corectat"
 msgid "Not validated"
 msgstr "Necorectat"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Revizat"
 
 msgid "Select a question to revise"
@@ -19001,7 +18998,7 @@ msgstr "Afișează utilizatorilor în funcție de profilul lor,o bara globala î
 msgid "Session list"
 msgstr "Lista de sesiuni"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lista de elevi"
 
 msgid "Learners who're taking the exercise right now"
@@ -23972,7 +23969,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

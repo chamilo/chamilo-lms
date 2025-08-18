@@ -386,7 +386,7 @@ class TrackingCourseLog
         // the information the users have entered or selected.
         $return .= '<div class="form-group">';
         $return .= '<select class="chzn-select" name="additional_profile_field[]" multiple>';
-        $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
+        $return .= '<option value="-">'.get_lang('Select user profile field to add').'</option>';
         $extraFieldsToShow = 0;
         foreach ($extraFields as $field) {
             // exclude extra profile fields by id
@@ -418,7 +418,7 @@ class TrackingCourseLog
         // the submit button
         $return .= '<div class="form-group">';
         $return .= '<button class="save btn btn-primary" type="submit">'
-            .get_lang('AddAdditionalProfileField').'</button>';
+            .get_lang('Add user profile field').'</button>';
         $return .= '</div>';
         $return .= '</form>';
 
@@ -1095,7 +1095,7 @@ class TrackingCourseLog
 
             $warning = '';
             if ($totalLpTime > $totalCourseTime) {
-                $warning = '&nbsp;'.Display::label(get_lang('TimeDifference'), 'danger');
+                $warning = '&nbsp;'.Display::label(get_lang('Time difference'), 'danger');
             }
 
             $user['total_lp_time'] = api_time_to_hms($totalLpTime).$warning;
@@ -1147,37 +1147,37 @@ class TrackingCourseLog
     public static function actionsLeft($current, $sessionId = 0): string
     {
         $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('StudentsTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
             'courseLog.php?'.api_get_cidreq(true, false)
         );
 
         $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
             'course_log_groups.php?'.api_get_cidreq()
         );
 
         $resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
             'course_log_resources.php?'.api_get_cidreq(true, false)
         );
 
         $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
             'course_log_tools.php?'.api_get_cidreq(true, false)
         );
 
         $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('security.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
         $lpLink = Display::url(
-            Display::return_icon('scorms.png', get_lang('CourseLearningPathsGenericStats'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('scorms.png', get_lang('Learning paths generic stats'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
         );
 
@@ -1194,7 +1194,7 @@ class TrackingCourseLog
                 $usersLink = Display::url(
                     Display::return_icon(
                         'user_na.png',
-                        get_lang('StudentsTracking'),
+                        get_lang('Report on learners'),
                         [],
                         ICON_SIZE_MEDIUM
                     ),
@@ -1203,13 +1203,13 @@ class TrackingCourseLog
                 break;
             case 'groups':
                 $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('group_na.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'courses':
                 $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('course_na.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
@@ -1217,7 +1217,7 @@ class TrackingCourseLog
                 $resourcesLink = Display::url(
                     Display::return_icon(
                         'tools_na.png',
-                        get_lang('ResourcesTracking'),
+                        get_lang('Report on resource'),
                         [],
                         ICON_SIZE_MEDIUM
                     ),
@@ -1226,13 +1226,13 @@ class TrackingCourseLog
                 break;
             case 'exams':
                 $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('security_na.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
@@ -1248,7 +1248,7 @@ class TrackingCourseLog
                 $lpLink = Display::url(
                     Display::return_icon(
                         'scorms_na.png',
-                        get_lang('CourseLearningPathsGenericStats'),
+                        get_lang('Learning paths generic stats'),
                         [],
                         ICON_SIZE_MEDIUM
                     ),

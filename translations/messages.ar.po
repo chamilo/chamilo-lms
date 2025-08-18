@@ -3495,7 +3495,7 @@ msgstr " إنشاء تصنيف للمقررات"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "  هل أنت متأكد من أنك تريد حذف هذا التصنيف الخاص بالمقررات ؟ المقررات التابعة لهذا التصنيف سيتم إخراجها من هذا التصنيف"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr " تصنيف المقررات"
 
 msgid "Courses in this category"
@@ -5753,9 +5753,6 @@ msgstr "القيمة التعريفية للمعلم"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "عندما تكتمل عملية التحقق من حقل المعلم في الاعلى، فان هذه القيمة سوف تكون داخل احدى حقول المعلم"
-
-msgid "is not writeable"
-msgstr "غير قابل للتحرير"
 
 msgid "The field is successfully moved down"
 msgstr "تم تحريك الحقل إلى الأسفل بنجاح"
@@ -13695,7 +13692,7 @@ msgstr "هل هناك كتاب للمقرر، مذكرة ملزمة،  رواب�
 msgid "Short description of the course materials."
 msgstr "نبذة عن المواد الدراسيه."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "هل هناك اساتذة و معلمين ودعم فني ومساعدين اجتماعيين وقاعات حاسب؟"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17364,8 +17361,8 @@ msgstr "انشاء مجموعة اجتماعية"
 msgid "Not logged in for some time"
 msgstr "غير مسجل لبعض الوقت"
 
-msgid "Last %i months"
-msgstr "اخر %i اشهر"
+msgid "Last %d months"
+msgstr "اخر %d اشهر"
 
 msgid "Never connected"
 msgstr "لم يتصل ابدا"
@@ -18856,7 +18853,7 @@ msgstr "تم التحقق منه"
 msgid "Not validated"
 msgstr "لم يتم التحقق منه"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "تمت مراجعته"
 
 msgid "Select a question to revise"
@@ -19000,7 +18997,7 @@ msgstr "يعرض لك شريط اعلى الصفحة لبعض المستخدمي
 msgid "Session list"
 msgstr "قائمة الدورات"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "قائمة الطلبة"
 
 msgid "Learners who're taking the exercise right now"
@@ -23968,7 +23965,7 @@ msgstr "الطلبة ذوي الاجابات الصحيحة"
 msgid "Students with incorrect answers"
 msgstr "الطلبة ذوي الاجابات غير الصحيحة"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "قائمة المحتويات"
 
 msgid "Tariff"

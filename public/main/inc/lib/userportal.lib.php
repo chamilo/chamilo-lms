@@ -851,9 +851,9 @@ class IndexManager
             if (!api_is_drh()) {
                 $items[] = [
                     'class' => 'list-course',
-                    'icon' => Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course catalogue')),
+                    'icon' => Display::getMdiIcon(ObjectIcon::CHAPTER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course catalog')),
                     'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
-                    'title' => get_lang('Course catalogue'),
+                    'title' => get_lang('Course catalog'),
                 ];
             } else {
                 $items[] = [

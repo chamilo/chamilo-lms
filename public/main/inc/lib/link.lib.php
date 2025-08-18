@@ -1213,7 +1213,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             }
         }
 
-        Display::addFlash(Display::return_message(get_lang('LinksMoved')));
+        Display::addFlash(Display::return_message(get_lang('Links moved')));
     }
 
     /**
@@ -1567,7 +1567,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             'target',
             [
                 get_lang('Link\'s target'),
-                get_lang('Select the "target" which shows the link on the homepage of the course"'),
+                get_lang('Select the "target" which shows the link on the homepage of the course'),
             ],
             $targets
         );

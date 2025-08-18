@@ -623,7 +623,7 @@ class ExtraFieldOption extends Model
                             $elements[] = $value;
                         }
                     }
-                    $html = !empty($elements) ? implode(';', $elements) : get_lang("No options available");
+                    $html = !empty($elements) ? implode(';', $elements) : get_lang("No option available");
                     break;
             }
 

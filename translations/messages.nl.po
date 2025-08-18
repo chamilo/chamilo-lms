@@ -3513,7 +3513,7 @@ msgstr "Cursuscategorie creëren"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Bent u zeker dat u deze cursuscategorie wilt verwijderen? De cursussen van deze categorie worden verplaatst buiten de cursuscategorieën."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Cursuscategorieën"
 
 msgid "Courses in this category"
@@ -5776,9 +5776,6 @@ msgstr "Begeleider identificatie waarde"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Als een check wordt gedaan op het hierboven gegeven begeleiderveld, dan dient deze waarde in een van de begeleider subvelden te vinden zijn voordat de gebruiker beschouwd wordt als lesgever. Als u dit veld leeg laat dan is de enige voorwaarde dat dit veld bestaat voor deze LDAP gebruiker om beschouwd te worden als lesgever. Als voorbeeld kan het veld bijvoorbeeld zijn \"memberof\" en de waarde waarop gezocht dient te worden zou kunnen zijn \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "is niet schrijfbaar"
 
 msgid "The field is successfully moved down"
 msgstr "Het veld is met succes naar beneden verplaatst"
@@ -13729,7 +13726,7 @@ msgstr "Is er een lesboek, een verzameling van documenten, een bibliografie, een
 msgid "Short description of the course materials."
 msgstr "Korte beschrijving van het cursusmateriaal."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Zijn er leraren, een technische helpdesk, sociale medewerkers, computerlokalen?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17453,8 +17450,8 @@ msgstr "Sociale groep maken"
 msgid "Not logged in for some time"
 msgstr "Al enige tijd niet ingelogd"
 
-msgid "Last %i months"
-msgstr "Laatste %i maanden"
+msgid "Last %d months"
+msgstr "Laatste %d maanden"
 
 msgid "Never connected"
 msgstr "Nooit verbonden"
@@ -19003,7 +19000,7 @@ msgstr "Nagezien"
 msgid "Not validated"
 msgstr "Niet nagezien"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Gereviseerd"
 
 msgid "Select a question to revise"
@@ -19152,7 +19149,7 @@ msgstr ""
 msgid "Session list"
 msgstr "Sessielijst"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lijst cursisten"
 
 msgid "Learners who're taking the exercise right now"
@@ -24862,7 +24859,7 @@ msgid "Students with incorrect answers"
 msgstr "Leerlingen met onjuiste antwoorden"
 
 #, fuzzy
-msgid "List of contents"
+msgid "Content list"
 msgstr "Inhoudsopgave"
 
 msgid "Tariff"

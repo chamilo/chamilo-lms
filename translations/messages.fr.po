@@ -3591,7 +3591,7 @@ msgstr "Créer une catégorie personnelle de cours"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Êtes-vous certain de vouloir supprimer cette catégorie de cours ? Les cours de cette catégorie seront déplacés en dehors de toute catégorie de cours."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Catégories de cours"
 
 msgid "Courses in this category"
@@ -5931,9 +5931,6 @@ msgstr "Valeur d'identification d'un enseignant"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Lorsque la vérification du champ enseignant est faite sur le champ donné ci-dessus, la valeur donnée ci-dessous doit se trouver dans les sous-éléments du champ donné pour que l'utilisateur soit considéré comme un enseignant. Si vous laissez ce champ vide, la seule condition est que le sous-élément défini par le champ enseignant ci-dessus existe pour l'utilisateur LDAP pour qu'il soit considéré comme un enseignant. Par exemple, le champ pourrait être \"memberof\" et la valeur à trouver \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "n'est pas inscriptible"
 
 msgid "The field is successfully moved down"
 msgstr "Le champ a bien été déplacé vers le bas"
@@ -13985,7 +13982,7 @@ msgstr "Existe-t-il des supports, de la documentation, des liens à consulter, .
 msgid "Short description of the course materials."
 msgstr "Présentation du ou des supports, bibliographie, localisation des documents disponibles."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr ""
 "Quelles sont les ressources humaines et physiques disponibles ? Que peuvent "
 "attendre les participants de l'équipe d'encadrement ?"
@@ -17946,8 +17943,8 @@ msgstr "Créer un groupe social"
 msgid "Not logged in for some time"
 msgstr "Non connecté depuis..."
 
-msgid "Last %i months"
-msgstr "Derniers %i mois"
+msgid "Last %d months"
+msgstr "Derniers %d mois"
 
 msgid "Never connected"
 msgstr "Jamais connecté"
@@ -19454,7 +19451,7 @@ msgstr "Annoté"
 msgid "Not validated"
 msgstr "Non annoté"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Annoté"
 
 msgid "Select a question to revise"
@@ -19598,7 +19595,7 @@ msgstr "Affiche une barre d'outils globale au sommet de la page aux utilisateurs
 msgid "Session list"
 msgstr "Liste des sessions"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Liste des étudiants"
 
 msgid "Learners who're taking the exercise right now"
@@ -24693,7 +24690,7 @@ msgstr "Étudiants avec réponses correctes"
 msgid "Students with incorrect answers"
 msgstr "Étudiants avec réponses incorrectes"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "Liste de contenus"
 
 msgid "Tariff"

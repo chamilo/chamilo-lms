@@ -3479,7 +3479,7 @@ msgstr "Vytvoř kategorii kurzu"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Opravdu chcete smazat kategorii tohoto kurzu? Kurzy uvnitř této kategorie kurzu budou přesunuty mimo kategorie kurzu."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorie kurzu"
 
 msgid "Courses in this category"
@@ -5737,9 +5737,6 @@ msgstr "Identifikační hodnota učitele"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Když je identifikační hodnota učitele zadána, tak musí být uvnitř jednoho z dílčích prvků učitelského pole, aby byl považován za školitele. Pokud necháte toto pole prázdné, pak je podmínkou existence pole pro tohoto LDAP uživatele, aby byl považován za školitele. Například: pole může být \"člen\" a hodnota vyhledávání může být \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "Není zapisovatelný"
 
 msgid "The field is successfully moved down"
 msgstr "Pole je úspěšně přesunuto dolů"
@@ -13679,7 +13676,7 @@ msgstr ""
 msgid "Short description of the course materials."
 msgstr ""
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr ""
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17348,7 +17345,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18836,7 +18833,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -18980,7 +18977,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -23951,7 +23948,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

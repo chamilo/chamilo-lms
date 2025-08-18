@@ -40,8 +40,8 @@ class MessageManager
 
                 $deleteLink = '';
                 if (!empty($url) && $sender && $currentUserId === $sender->getId()) {
-                    $deleteLink = '<button title="'.addslashes(get_lang('DeleteMessage')).'"
-                       onclick="event.stopPropagation(); if(confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage'))).'\')) {
+                    $deleteLink = '<button title="'.addslashes(get_lang('Delete message')).'"
+                       onclick="event.stopPropagation(); if(confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure you want to delete the selected message?'))).'\')) {
                        window.location.href=\''.$url.'&action=delete_message&message_id='.$messageId.'\';
                        } return false;"
                        class="ml-2 inline-flex items-center">'.
@@ -887,7 +887,7 @@ class MessageManager
 
         $langEdit = get_lang('Edit');
         $langReply = get_lang('Reply');
-        $langLastUpdated = get_lang('LastUpdated');
+        $langLastUpdated = get_lang('Last updated');
         $langCreated = get_lang('Created');
 
         $rows = self::get_messages_by_group_by_message($groupId, $topic_id);
@@ -1487,7 +1487,7 @@ class MessageManager
             $emailbody = $tplMailBody->fetch($layoutContent);
         }
 
-        $emailsubject = '['.get_lang('ApprovalForNewAccount').'] '.$user->getUsername();
+        $emailsubject = '['.get_lang('Approval for new account').'] '.$user->getUsername();
 
         if ('true' === api_get_setting('admin.send_inscription_notification_to_general_admin_only')) {
             $email = api_get_setting('emailAdministrator');

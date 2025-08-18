@@ -158,7 +158,7 @@ switch ($action) {
                 'url'    => $repo->getResourceFileUrl($doc),
                 'size'   => format_file_size($filesize),
                 'type'   => api_htmlentities($mimetype),
-                'result' => Display::return_icon('accept.png', get_lang('Uploaded'))
+                'result' => Display::return_icon('accept.png', get_lang('Uploaded.'))
             ];
         };
 

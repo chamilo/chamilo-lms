@@ -3495,7 +3495,7 @@ msgstr "צור קטגוריית קורסים אישית"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "האם אתה בטוח שברצונך למחוק את קטגוריית הקורסים הזו? קורסים בתוך קטגוריה זו יועברו אל מחוץ לקטגוריות"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "קטגוריות קורסים"
 
 msgid "Courses in this category"
@@ -5753,9 +5753,6 @@ msgstr "ערך זיהוי המורה"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "כאשר מתבצעת בדיקה בשדה המורה המופיע למעלה, ערך זה חייב להיות בתוך אחד מתתי-האלמנטים של שדות המורה כדי שהמשתמש ייחשב כמאמן. אם תשאיר שדה זה ריק, התנאי היחיד הוא שהשדה קיים עבור משתמש LDAP זה כדי להיחשב כמאמן. כדוגמה, השדה יכול להיות \"memberof\" והערך לחיפוש יכול להיות \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "לא ניתן לכתיבה"
 
 msgid "The field is successfully moved down"
 msgstr "השדה הועבר בהצלחה למטה"
@@ -13695,7 +13692,7 @@ msgstr "האם יש ספר קורס, אוסף מאמרים, ביבליוגרפי
 msgid "Short description of the course materials."
 msgstr "תיאור קצר של חומרי הקורס."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "שקול את הקורסים, המאמנים, דלפק העזרה הטכני, מנהלי הקורסים ו/או החומרים הזמינים."
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17364,8 +17361,8 @@ msgstr "צור קבוצת חברה"
 msgid "Not logged in for some time"
 msgstr "לא היית מחובר כבר זמן מה"
 
-msgid "Last %i months"
-msgstr "%י חודשים אחרונים"
+msgid "Last %d months"
+msgstr "d%י חודשים אחרונים"
 
 msgid "Never connected"
 msgstr "מעולם לא התחברתם"
@@ -18856,7 +18853,7 @@ msgstr "אומת"
 msgid "Not validated"
 msgstr "לא מאומת"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "מתוקן"
 
 msgid "Select a question to revise"
@@ -19000,7 +18997,7 @@ msgstr "מציג סרגל כלים גלובלי בראש הדף לתפקידי �
 msgid "Session list"
 msgstr "רשימת מפגשים"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "רשימת לומדים"
 
 msgid "Learners who're taking the exercise right now"
@@ -23971,7 +23968,7 @@ msgstr "סטודנטים עם תשובות נכונות"
 msgid "Students with incorrect answers"
 msgstr "סטודנטים עם תשובות שגויות"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "רשימת תוכן"
 
 msgid "Tariff"

@@ -511,14 +511,14 @@ function showStudentAllWorkGrid($withResults = 1)
     $columns = [
         get_lang('Type'),
         get_lang('Title'),
-        get_lang('HandOutDateLimit'),
+        get_lang('Deadline'),
     ];
 
     $id = 'workList';
     if ($withResults) {
         $id = 'workListWithResults';
         $columns[] = get_lang('Feedback');
-        $columns[] = get_lang('LastUpload');
+        $columns[] = get_lang('Last upload');
     }
 
     $columnModel = [
@@ -1915,7 +1915,7 @@ function get_work_user_list_from_documents(
             if (empty($row['qualificator_id'])) {
                 $status = Display::label(get_lang('Not reviewed'), 'warning');
             } else {
-                $status = Display::label(get_lang('Revised'), 'success');
+                $status = Display::label(get_lang('Reviewed'), 'success');
             }
             $row['qualificator_id'] = $status;
         }
@@ -2437,7 +2437,7 @@ function get_work_user_list(
                 if (empty($qualificatorId)) {
                     $qualificator_id = Display::label(get_lang('Not reviewed'), 'warning');
                 } else {
-                    $qualificator_id = Display::label(get_lang('Revised'), 'success');
+                    $qualificator_id = Display::label(get_lang('Reviewed'), 'success');
                 }
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
                 $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
@@ -2615,7 +2615,7 @@ function getAllWork(
     $unoconv = api_get_setting('platform.unoconv_binaries');
     $loadingText = addslashes(get_lang('Loading'));
     $uploadedText = addslashes(get_lang('Uploaded'));
-    $failsUploadText = addslashes(get_lang('UplNoFileUploaded'));
+    $failsUploadText = addslashes(get_lang('No file was uploaded.'));
     $failsUploadIcon = Display::getMdiIcon(
         StateIcon::INCOMPLETE,
         'ch-tool-icon',
@@ -2628,7 +2628,7 @@ function getAllWork(
 
     $correctionIconSmall = Display::getMdiIcon(ActionIcon::ACCEPT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction'));
 
-    $rateIcon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CorrectAndRate'));
+    $rateIcon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Correct and rate'));
     $parentList = [];
     $blockEdition = ('true' === api_get_setting('work.block_student_publication_edition'));
     $blockScoreEdition = ('true' === api_get_setting('work.block_student_publication_score_edition'));
@@ -2789,7 +2789,7 @@ function getAllWork(
                 if ($unoconv && empty($work['contains_file'])) {
                     $action .= '<a
                         href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
-                        title="'.get_lang('ExportToDoc').'" >'.
+                        title="'.get_lang('Export to .doc').'" >'.
                         Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportToDoc')).'</a> ';
                 }
 
@@ -2807,7 +2807,7 @@ function getAllWork(
                     enctype="multipart/form-data"
                     >
                     <div id="progress_'.$item_id.'" class="text-center button-load">
-                        '.addslashes(get_lang('ClickOrDropOneFileHere')).'
+                        '.addslashes(get_lang('Click or drop one file here')).'
                         '.Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Correction')).'
                         '.$alreadyUploaded.'
                     </div>
@@ -2851,7 +2851,7 @@ function getAllWork(
 
                 if ($locked) {
                     if ($qualification_exists) {
-                        $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('CorrectAndRate'));
+                        $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Correct and rate'));
                     } else {
                         $action .= Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Comment'));
                     }
@@ -2869,7 +2869,7 @@ function getAllWork(
                         } else {
                             $editLink = '<a
                                 href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'"
-                                title="'.get_lang('Modify').'">'.
+                                title="'.get_lang('Update').'">'.
                                 $editIcon.'</a>';
                         }
                     }
@@ -2895,7 +2895,7 @@ function getAllWork(
                 /*if ($locked) {
                     $action .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
                 } else {
-                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
+                    $action .= '<a href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=delete&item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }*/
             } elseif ($is_author && (empty($work['qualificator_id']) || 0 == $work['qualificator_id'])) {
@@ -2904,10 +2904,10 @@ function getAllWork(
 
                 if (1 == api_get_course_setting('student_delete_own_publication')) {
                     if (api_is_allowed_to_session_edit(false, true)) {
-                        $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
+                        $action .= '<a href="'.$url.'edit.php?'.$cidReq.'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Update').'">'.
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Comment')).'</a>';
                     }
-                    $action .= ' <a href="'.$url.'work_list.php?'.$cidReq.'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
+                    $action .= ' <a href="'.$url.'work_list.php?'.$cidReq.'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                 }
             } else {
@@ -2917,9 +2917,9 @@ function getAllWork(
 
             // Status.
             if (empty($work['qualificator_id'])) {
-                $qualificator_id = Display::label(get_lang('NotRevised'), 'warning');
+                $qualificator_id = Display::label(get_lang('Not reviewed'), 'warning');
             } else {
-                $qualificator_id = Display::label(get_lang('Revised'), 'success');
+                $qualificator_id = Display::label(get_lang('Reviewed'), 'success');
             }
             $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
             $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
@@ -2929,25 +2929,25 @@ function getAllWork(
                 $compilationId = $compilation->getCompilatioId($item_id, $courseId);
                 if ($compilationId) {
                     $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
-                        ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
+                        ".$loading.'&nbsp;'.get_lang('Connecting with the Compilatio server').'</div>';
                 } else {
                     $workDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
                     if (!Compilatio::verifiFileType($dbTitle)) {
-                        $actionCompilatio = get_lang('FileFormatNotSupported');
+                        $actionCompilatio = get_lang('File format not supported');
                     } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
                         $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
-                        $actionCompilatio = get_lang('UplFileTooBig').': '.format_file_size($sizeFile).'<br />';
+                        $actionCompilatio = get_lang('The file is too big to upload.').': '.format_file_size($sizeFile).'<br />';
                     } else {
                         $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
                         $actionCompilatio .= Display::url(
-                            get_lang('CompilatioAnalysis'),
+                            get_lang('Analyse'),
                             'javascript:void(0)',
                             [
                                 'class' => 'getSingleCompilatio btn btn--primary btn-xs',
                                 'onclick' => "getSingleCompilatio($item_id);",
                             ]
                         );
-                        $actionCompilatio .= get_lang('CompilatioWithCompilatio');
+                        $actionCompilatio .= get_lang('with Compilatio');
                     }
                 }
                 $work['compilatio'] = $actionCompilatio;
@@ -4120,8 +4120,8 @@ function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $
     $id = $studentPublication->getIid();
     $title = $studentPublication->getTitle();
     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$id;
-    $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $parentWork['title']);
-    $content = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $title, $url);
+    $subject = sprintf(get_lang("There's a new feedback in work: %s"), $parentWork['title']);
+    $content = sprintf(get_lang("There's a new feedback in work: %s <a href='%s'>Click here</a> to see it."), $title, $url);
 
     if (!empty($data['comment'])) {
         $content .= '<br /><b>'.get_lang('Comment').':</b><br />'.$data['comment'];
@@ -4231,7 +4231,7 @@ function getWorkCommentForm(CStudentPublication $work, $workParent)
         $form->addCheckBox(
             'send_email',
             null,
-            get_lang('Send message mail to student')
+            get_lang('Send mail to student')
         );
     }
 
@@ -4285,7 +4285,7 @@ function getWorkDateValidationStatus($homework)
             $message = Display::return_message(get_lang('Expiry date already passed').' '.$expires_on, 'warning');
         } else {
             if ($has_expired) {
-                $message = Display::return_message(get_lang('ExpiryDateToSend messageWorkIs').' '.$expires_on);
+                $message = Display::return_message(get_lang('Deadline for assignments').' '.$expires_on);
             }
         }
     }
@@ -4536,17 +4536,17 @@ function sendAlertToUsers($workInfo, $workId, $courseInfo, $sessionId = 0)
             }
 
             $userPostedADocument = sprintf(
-                get_lang('UserXPostedADocumentInCourseX'),
+                get_lang('User %s has posted a document in the Assignments tool in the course %s'),
                 $userInfo['complete_name'],
                 $courseInfo['name']
             );
 
             $subject = "[".api_get_setting('siteName')."] ".$userPostedADocument;
             $message = $userPostedADocument."<br />";
-            $message .= get_lang('DateSent')." : ".api_format_date(api_get_local_time())."<br />";
-            $message .= get_lang('AssignmentName')." : ".Display::url($workInfo['title'], $folderUrl)."<br />";
+            $message .= get_lang('Date sent')." : ".api_format_date(api_get_local_time())."<br />";
+            $message .= get_lang('Assignment name')." : ".Display::url($workInfo['title'], $folderUrl)."<br />";
             $message .= get_lang('Filename')." : ".$workData['title']."<br />";
-            $message .= '<a href="'.$fileUrl.'">'.get_lang('DownloadLink')."</a><br />";
+            $message .= '<a href="'.$fileUrl.'">'.get_lang('Download link')."</a><br />";
 
             MessageManager::send_message_simple(
                 $userId,
@@ -5402,7 +5402,7 @@ function getFormWork($form, $defaults = [], $workId = 0)
     }
 
     // ScoreOfAssignment
-    $form->addText('qualification', get_lang('ScoreNumeric'), false);
+    $form->addText('qualification', get_lang('Score'), false);
 
     if (0 != $sessionId && Gradebook::is_active() || 0 == $sessionId) {
         $form->addElement(

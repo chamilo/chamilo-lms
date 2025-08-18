@@ -3494,7 +3494,7 @@ msgstr "Crear una categoria de curs"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Esteu segur que voleu esborrar aquesta categoria de curs? Els cursos dins d'aquesta categoria apareixeran a la llista sense catalogar"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Categories de cursos"
 
 msgid "Courses in this category"
@@ -5752,9 +5752,6 @@ msgstr "Valor d'identificació d'un professor"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Quan es realitzi una comprovació en el camp professor que apareix dalt, per tal que l'usuari sigui considerat professor, el valor que se li doni cal que sigui un dels subelements del camp professor. Si deixeu aquest camp en blanc, l'única condició per tal que sigui considerat professor és que en aquest usuari LDAP existeixi el camp. Per exemple, el camp pot ser \"memberof\" i el valor de cerca pot ser \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "no es pot escriure"
 
 msgid "The field is successfully moved down"
 msgstr "El camp ha estat mogut cap avall"
@@ -13694,7 +13691,7 @@ msgstr "Existeix una guia del curs, una col·lecció de documents, una bibliogra
 msgid "Short description of the course materials."
 msgstr "Breu descripció dels materials del curs"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Qui són els professors, tutors, servei d'assistència tècnica, assistents socials, etc ? Quins són els recursos físics dels quals disposa el curs: sala d'ordinadors, etc ?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17363,8 +17360,8 @@ msgstr "Crea un grup social"
 msgid "Not logged in for some time"
 msgstr "No connectats per un temps"
 
-msgid "Last %i months"
-msgstr "Últims %i mesos"
+msgid "Last %d months"
+msgstr "Últims %d mesos"
 
 msgid "Never connected"
 msgstr "Mai connectats"
@@ -18856,7 +18853,7 @@ msgstr "Corregit"
 msgid "Not validated"
 msgstr "Sense corregir"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Revisat"
 
 msgid "Select a question to revise"
@@ -19000,7 +18997,7 @@ msgstr "Mostra als usuaris, segons el seu perfil, una barra global a la part sup
 msgid "Session list"
 msgstr "Llista de sessions"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Llista d'estudiants"
 
 msgid "Learners who're taking the exercise right now"
@@ -23971,7 +23968,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

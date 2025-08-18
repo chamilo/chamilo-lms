@@ -3495,7 +3495,7 @@ msgstr "Ustvari osebno kategorijo tečajev"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Si prepričan, da želiš odstraniti to kategorijo tečajev? Preostali tečaji te kategorije bodo prestavljeni izven obstoječih kategorij."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorije tečajev"
 
 msgid "Courses in this category"
@@ -5753,9 +5753,6 @@ msgstr "Identifikacijska vrednost tutorja"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Vrednost zgornjega tutorjevega polja mora biti znotraj enega od podelementov tutorjevih polj, da se uporabnika smatra kot učitelja. Če to polje pustite prazno, je edini pogoj, da se uporabnika LDAP smatra kot učitelja, obstoj ustreznega polja. Na primer: polje je lahko \"memberof\", vrednost ki jo iščemo pa \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "je zgolj bralnega tipa"
 
 msgid "The field is successfully moved down"
 msgstr "Polje je bilo uspešno premaknjeno navdol."
@@ -13695,7 +13692,7 @@ msgstr "Ali obstajajo gradiva o obliki učbenikov, knjig? Bibliografija, seznam 
 msgid "Short description of the course materials."
 msgstr "Kratek opis gradiv tečaja."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Kdo so učitelji, tutorji, asistenti, ali obstaja in kje je tehnična pomoč, kje so (računalniške) učilnice, laboratoriji, lokacije v/na katerih se bodo izvajale predvidene dejavnosti?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17364,8 +17361,8 @@ msgstr "Ustvari socialno skupino"
 msgid "Not logged in for some time"
 msgstr "Neprijavljen nekaj časa"
 
-msgid "Last %i months"
-msgstr "Zadnjih %i mesecev"
+msgid "Last %d months"
+msgstr "Zadnjih %d mesecev"
 
 msgid "Never connected"
 msgstr "Nikoli povezan(a)"
@@ -18857,7 +18854,7 @@ msgstr "Pregledan"
 msgid "Not validated"
 msgstr "Ni pregledan"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Pregledano"
 
 msgid "Select a question to revise"
@@ -19001,7 +18998,7 @@ msgstr "Prikaže globalno orodno vrstico na vrhu strani za izbrane vloge uporabn
 msgid "Session list"
 msgstr "Seznam sej"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Seznam tečajnikov"
 
 msgid "Learners who're taking the exercise right now"
@@ -23972,7 +23969,7 @@ msgstr "Tečajniki s pravilnimi odgovori"
 msgid "Students with incorrect answers"
 msgstr "Tečajniki z nepravilnimi odgovori"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

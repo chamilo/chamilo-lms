@@ -3478,7 +3478,7 @@ msgstr ""
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr ""
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr ""
 
 msgid "Courses in this category"
@@ -5735,9 +5735,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -13681,7 +13678,7 @@ msgstr ""
 msgid "Short description of the course materials."
 msgstr ""
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr ""
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17344,7 +17341,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18832,7 +18829,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -18976,7 +18973,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -23950,7 +23947,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -30346,4 +30343,34 @@ msgid "Auto remove"
 msgstr ""
 
 msgid "You need to activate the GoogleMaps plugin in administration to see the Map"
+msgstr ""
+
+msgid "Files uploaded. Reloading in 5 seconds..."
+msgstr ""
+
+msgid "Corrected test result"
+msgstr ""
+
+msgid "Send by e-mail"
+msgstr ""
+
+msgid "Question also used in the following tests"
+msgstr ""
+
+msgid "Missing chart library, please check web server logs."
+msgstr ""
+
+msgid "Dependency tree graph"
+msgstr ""
+
+msgid "Assignment list"
+msgstr ""
+
+msgid "The given score cannot be above the maximum score"
+msgstr ""
+
+msgid "This e-mail address has already been used by the maximum number of allowed accounts. Please use another."
+msgstr ""
+
+msgid "Could not write to %s"
 msgstr ""

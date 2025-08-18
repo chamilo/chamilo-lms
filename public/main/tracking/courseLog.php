@@ -584,7 +584,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     }
 }
 
-$html .= Display::page_subheader2(get_lang('Learners list'));
+$html .= Display::page_subheader2(get_lang('Learner list'));
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Only best attempts');
 if ($nbStudents > 0) {

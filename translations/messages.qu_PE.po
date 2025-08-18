@@ -3486,7 +3486,7 @@ msgstr "Kamay yachachinakumanta hoq mitata"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr " Cheqaychu kashanki yachachinamanta mitata pichakunanpaq ? Mitamanta yachachinakunaqa rinsipi rikurimunku mana mitachasqasqa"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Yachachinakunamanta mitakuna"
 
 msgid "Courses in this category"
@@ -5744,9 +5744,6 @@ msgstr "Yachacheq chanin reqsipachiynin"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Cuando se realice una comprobación en el campo profesor que aparece arriba, para que el usuario sea considerado profesor, el valor que se le dé debe ser uno de los subelementos del campo profesor. Si deja este campo en blanco, la única condición para que sea considerado como profesor es que en este usuario LDAP el campo exista. Por ejemplo, el campo puede ser \"memberof\" y el valor de búsqueda puede ser \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "manan atikunchu qelqayqa"
 
 msgid "The field is successfully moved down"
 msgstr "Kanchaqa urayman kuyuchikun"
@@ -13686,7 +13683,7 @@ msgstr "Yachachinamanta kashanku pusaqnin, qelqa khipu khipukunan, bibliografia 
 msgid "Short description of the course materials."
 msgstr "Yachachinaq llank'anakunamanta pisi nisqasqay."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Pikunan yachachiqkuna, pusaqkuna, yanapakuy técnica nisqa, yanapakuy social, hoqkunawan ? Yachachinamantari  manqan yanapay hapinapaq kan: wasi computadora nisqakunawan, hoqkunapas ?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17355,7 +17352,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18843,7 +18840,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -18987,7 +18984,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -23958,7 +23955,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

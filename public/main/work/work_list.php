@@ -110,7 +110,7 @@ if (!empty($extraFieldWorkData)) {
     $forceDownload = ('true' === api_get_setting('work.force_download_doc_before_upload_work'));
     if ($forceDownload) {
         // Force to download documents first.
-        $downloadDocumentsFirst = addslashes(get_lang('DownloadDocumentsFirst'));
+        $downloadDocumentsFirst = addslashes(get_lang('Download documents first'));
         $content .= "<script>
             $(function() {
                 var clicked = 0;

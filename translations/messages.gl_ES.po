@@ -3494,7 +3494,7 @@ msgstr "Crear unha categoría de cursos"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "¿Seguro que quere eliminar esta categoría de cursos? Os cursos incluidos dentro desta categoría serán desplazados fora das categorías de cursos."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Categorías de cursos"
 
 msgid "Courses in this category"
@@ -5752,9 +5752,6 @@ msgstr "Valor de identificación dun profesor"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Cando se realice unha comprobación no campo profesor que aparece arriba, para que o usuario sexa considerado profesor, o valor que se lle dea debe ser un dos subelementos do campo profesor. Se deixa este campo en branco, a única condición para que sexa considerado como profesor é que neste usuario LDAP o campo exista. Por exemplo, o campo pode ser \"memberof\" e o valor de procura pode ser \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "non se pode escribir"
 
 msgid "The field is successfully moved down"
 msgstr "O campo desprazouse cara abaixo"
@@ -13694,7 +13691,7 @@ msgstr "¿Existe unha guía do curso, unha colección de documentos, unha biblio
 msgid "Short description of the course materials."
 msgstr "Breve descripción dos materiais do curso."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "¿Dispón de profesores, titores, servicio de asistencia técnica, aistentes sociais, salas de ordenadores?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17363,8 +17360,8 @@ msgstr "Crear un grupo social"
 msgid "Not logged in for some time"
 msgstr "Non conectados por un tempo"
 
-msgid "Last %i months"
-msgstr "Últimos %i meses"
+msgid "Last %d months"
+msgstr "Últimos %d meses"
 
 msgid "Never connected"
 msgstr "Nunca conectados"
@@ -18856,7 +18853,7 @@ msgstr "Validado"
 msgid "Not validated"
 msgstr "Non validado"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Revisado"
 
 msgid "Select a question to revise"
@@ -19000,7 +18997,7 @@ msgstr "Amosa aos usuarios, segundo o seu perfil, unha barra global na parte sup
 msgid "Session list"
 msgstr "Lista de sesións"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lista de estudantes"
 
 msgid "Learners who're taking the exercise right now"
@@ -23971,7 +23968,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

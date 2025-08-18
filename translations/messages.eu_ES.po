@@ -3486,7 +3486,7 @@ msgstr "Sortu ikastaroen kategoria pertsonalizatua"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Ziur al zaude ikastaro kategoria hau ezabatu nahi duzula? Kategoria honetako ikastaroak pertsonalizatu gabeko zerrendan agertuko dira"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Ikastaro kategoriak"
 
 msgid "Courses in this category"
@@ -5744,9 +5744,6 @@ msgstr "Irakasle baten identifikazio balioa"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Goian agertzen den irakasle eremuan konprobazio bat egiten denean, erabiltzailea irakasletzat jotzeko, eman behar zaion balio hau arduradun irakaslearen eremuen azpielementuetatik bat izan beharko da. Eremu hau zurian uzten baduzu, LDAP erabiltzaile hau irakasletzat hartzeko baldintza bakarra eremu hau izatea da. Adibidez, eremua \"kidea\" izan daiteke eta bilaketa egiteko balioa, berriz, \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "ezin da idatzi"
 
 msgid "The field is successfully moved down"
 msgstr "Eremua behera eraman da ongi"
@@ -13686,7 +13683,7 @@ msgstr "Ba al dago ikastaroko eskulibururik, paper bildumarik, bibliografiarik e
 msgid "Short description of the course materials."
 msgstr "Ikastaroan erabili beharreko materialen deskripzio laburra."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Nortzuk dira irakasleak, arduradunak, koordinatzaileak,...? Zeintzuk dira eskuragarri dauden baliabide teknikoak eta ikasmaterialak?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17355,8 +17352,8 @@ msgstr "Sortu gizarte talde bat"
 msgid "Not logged in for some time"
 msgstr "Ez dago aldi baterako konektaturik"
 
-msgid "Last %i months"
-msgstr "Azken %i hilabete"
+msgid "Last %d months"
+msgstr "Azken %d hilabete"
 
 msgid "Never connected"
 msgstr "Inoiz ez konektaturik"
@@ -18848,7 +18845,7 @@ msgstr "Zuzendua"
 msgid "Not validated"
 msgstr "Zuzendu gabe"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Berrikusia"
 
 msgid "Select a question to revise"
@@ -18992,7 +18989,7 @@ msgstr "Tresna barra global bat erakusten die orriaren goiko aldean erabiltzaile
 msgid "Session list"
 msgstr "Saio zerrenda"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Ikasle zerrenda"
 
 msgid "Learners who're taking the exercise right now"
@@ -23963,7 +23960,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

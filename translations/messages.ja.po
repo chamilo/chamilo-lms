@@ -3549,7 +3549,7 @@ msgstr ""
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr ""
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "コース カテゴリ"
 
 msgid "Courses in this category"
@@ -5806,9 +5806,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -13749,7 +13746,7 @@ msgstr "コースの書籍、論文集、参考文献、インターネットの
 msgid "Short description of the course materials."
 msgstr "コース教材の短い説明です。"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "教員、TA、技術的なヘルプデスク、コース管理者、および教材を検討します。"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -17418,7 +17415,7 @@ msgstr "ソーシャル グループを作成"
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -18906,7 +18903,7 @@ msgstr "確認済み"
 msgid "Not validated"
 msgstr "未確認"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19050,7 +19047,7 @@ msgstr "ページの上部のグローバル ツールバーを、指定した�
 msgid "Session list"
 msgstr "セッション一覧"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "学生一覧"
 
 msgid "Learners who're taking the exercise right now"
@@ -24021,7 +24018,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"

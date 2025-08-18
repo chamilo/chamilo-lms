@@ -27,6 +27,7 @@ use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -192,22 +193,33 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
-    public function loginTokenRequest(JWTTokenManagerInterface $jwtManager): JsonResponse
-    {
+    public function loginTokenRequest(
+        JWTTokenManagerInterface $jwtManager,
+        Security $security,
+    ): JsonResponse {
         $user = $this->userHelper->getCurrent();
 
         if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
+        $token = $jwtManager->create($user);
+
+        // Logout the current user in the login-only Access URL
+        $security->logout(false);
+
         return new JsonResponse([
-            'token' => $jwtManager->create($user),
+            'token' => $token,
         ]);
     }
 
+    /**
+     * @see LoginTokenAuthenticator
+     */
     #[Route('/login/token/check', name: 'login_token_check', methods: ['POST'])]
     public function loginTokenCheck(): Response
     {
+        // this response was managed in LoginTokenAuthenticator class
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 

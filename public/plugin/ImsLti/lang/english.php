@@ -75,3 +75,4 @@ $strings['ReplacementUserIdHelp'] = 'The current user_id (sub) in launch params 
 $strings['AddInCourses'] = 'Add in courses';
 $strings['AddInAllCourses'] = 'Add in all courses';
 $strings['AddInSessions'] = 'Add in sessions';
+$strings["BaseToolsCanBeAddedInSessionsOnly"] = "Base tools can be added in sessions only";

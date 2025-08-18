@@ -5706,7 +5706,7 @@ msgstr "Uvozi LDAP uporabnike v tečaj"
 msgid "Import LDAP users and a step into a session"
 msgstr "Uvozi LDAP uporabnike in korak v sejo"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP sinhronizacija: Uvoz tečajnikov/korakov v seje"
 
 msgid "Assessments tab"
@@ -8883,7 +8883,7 @@ msgstr "jezik"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Oprostite, koda tečaja že obstaja. Izberite drugo kodo."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Seznam skupin"
 
 msgid "The target folder does not exist"
@@ -13314,7 +13314,7 @@ msgstr "Vpišite vprašanje"
 msgid "Number of question"
 msgstr "Številka vprašanja"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Ta koda že obstaja"
 
 msgid "Save and exit"

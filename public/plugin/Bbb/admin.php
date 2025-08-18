@@ -64,7 +64,7 @@ if ($action) {
                 [$tool_name, $plugin->get_lang('RecordList')],
                 [],
                 [
-                    get_lang('CreatedAt'),
+                    get_lang('Created at'),
                     get_lang('Status'),
                     $plugin->get_lang('Records'),
                     get_lang('Course'),

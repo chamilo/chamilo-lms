@@ -5690,7 +5690,7 @@ msgstr "Importovat LDAP uživatele do kurzu"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importovat LDAP uživatele a etapu do sezení"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchronizace: Importovat studenty/etapy do sezení"
 
 msgid "Assessments tab"
@@ -8867,7 +8867,7 @@ msgstr "jazyk"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Lituji, ale takový kód kurzu již existuje. Prosím zvolte jiný."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "seznam skupin"
 
 msgid "The target folder does not exist"
@@ -13298,7 +13298,7 @@ msgstr ""
 msgid "Number of question"
 msgstr ""
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr ""
 
 msgid "Save and exit"

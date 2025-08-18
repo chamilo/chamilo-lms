@@ -5697,7 +5697,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -8874,7 +8874,7 @@ msgstr "lisan"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Üzgünüm, Bu ders kodu zaten var. Lütfen başka bir kod belirleyiniz."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "grup listesi"
 
 msgid "The target folder does not exist"
@@ -13305,7 +13305,7 @@ msgstr "Lütfen bir soru girin"
 msgid "Number of question"
 msgstr "Soru Sayısı"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Bu kod zaten mevcut"
 
 msgid "Save and exit"

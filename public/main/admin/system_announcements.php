@@ -245,7 +245,7 @@ if ($action_todo) {
         $form->addHtml('</div>');
     }
 
-    // Add Picture Announcements
+    // Add Announcement picture (new feature, correct paths and lang vars)
     try {
         /*$form->addFile(
             'picture',

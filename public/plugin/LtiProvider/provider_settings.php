@@ -31,7 +31,7 @@ if (empty($jwksUrl)) {
 
 try {
     if ($enabled !== 'true') {
-        throw new Exception(get_lang('Forbidden'));
+        throw new Exception(get_lang('Not allowed'));
     }
 
     $html = '<div class="row">'

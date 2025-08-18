@@ -579,7 +579,7 @@ class Compilatio
                         ."</div>";
                     $text = [];
                     $text['analysisinqueue'] = get_lang('Pending Analysis');
-                    $text['analysisinfinalization'] = get_lang('AnalyseEnding');
+                    $text['analysisinfinalization'] = get_lang('Analysis ending...');
                     $text['refresh'] = get_lang('Refresh');
                     $actionCompilatio .= self::getProgressionAnalyseDocv31(
                         $status,

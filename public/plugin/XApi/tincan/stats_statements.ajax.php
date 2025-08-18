@@ -22,7 +22,7 @@ if (!$request->isXmlHttpRequest()
     || !api_is_allowed_to_edit()
     || !$course
 ) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('Not allowed'), 'error');
 
     exit;
 }
@@ -77,10 +77,10 @@ if (count($statements) <= 0) {
 }
 
 $table = new HTML_Table(['class' => 'table table-condensed table-bordered table-striped table-hover']);
-$table->setHeaderContents(0, 0, get_lang('CreatedAt'));
+$table->setHeaderContents(0, 0, get_lang('Created at'));
 $table->setHeaderContents(0, 1, $plugin->get_lang('Actor'));
 $table->setHeaderContents(0, 2, $plugin->get_lang('Verb'));
-$table->setHeaderContents(0, 3, $plugin->get_lang('ActivityId'));
+$table->setHeaderContents(0, 3, $plugin->get_lang('Activity ID'));
 
 $i = 1;
 

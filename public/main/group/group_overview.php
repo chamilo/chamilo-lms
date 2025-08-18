@@ -85,7 +85,7 @@ if (isset($_GET['action'])) {
         case 'export_pdf':
             $content = GroupManager::getOverview($course, $keyword);
             $pdf = new PDF();
-            $extra = '<div style="text-align:center"><h2>'.get_lang('Groups list').'</h2></div>';
+            $extra = '<div style="text-align:center"><h2>'.get_lang('Group list').'</h2></div>';
             $extra .= '<strong>'.get_lang('Course').': </strong>'.$course->getTitle().' ('.$course->getCode().')';
 
             $content = $extra.$content;

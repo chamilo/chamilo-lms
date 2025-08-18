@@ -87,7 +87,7 @@ try {
         )
     );
 } catch (NotFoundException $notFoundException) {
-    echo Display::return_message(get_lang('NoResults'), 'warning');
+    echo Display::return_message(get_lang('No results found'), 'warning');
 
     exit;
 } catch (XApiException $exception) {

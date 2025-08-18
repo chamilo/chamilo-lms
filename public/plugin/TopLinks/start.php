@@ -19,7 +19,7 @@ $link = $em->find(TopLink::class, $httpRequest->query->getInt('link'));
 
 if (null === $link) {
     Display::addFlash(
-        Display::return_message(get_lang('NotFound'), 'error')
+        Display::return_message(get_lang('Resource not found'), 'error')
     );
 
     RedirectResponse::create(api_get_course_url())->send();

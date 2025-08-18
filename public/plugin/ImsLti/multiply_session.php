@@ -32,13 +32,13 @@ try {
     }
 
     if ($tool->getParent()) {
-        throw new Exception($plugin->get_lang('NoAllowed'));
+        throw new Exception($plugin->get_lang('BaseToolsCanBeAddedInSessionsOnly'));
     }
 
     $session = api_get_session_entity($sessionId);
 
     if (!$session) {
-        api_not_allowed(true);
+        throw new Exception(get_lang('Session not found.'));
     }
 
     $content = '';
@@ -71,7 +71,7 @@ try {
             'multiple' => true,
         ]
     );
-    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
+    $form->addCheckBox('tool_visible', get_lang('Set visible'), get_lang('The tool is now visible.'));
     $form->addButtonExport(get_lang('Save'));
 
     if ($form->validate()) {
@@ -130,7 +130,7 @@ try {
         }
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemUpdated'))
+            Display::return_message(get_lang('Item updated'))
         );
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');

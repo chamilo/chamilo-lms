@@ -161,7 +161,7 @@ class LtiProviderPlugin extends Plugin
         $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info($course['code']);
-            $optgroupLabel = "{$course['title']} : ".get_lang('Learnpath');
+            $optgroupLabel = "{$course['title']} : ".get_lang('Learning path');
             $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
 
             $list = new LearnpathList(

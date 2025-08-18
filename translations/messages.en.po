@@ -5697,8 +5697,8 @@ msgstr "Import LDAP users into a course"
 msgid "Import LDAP users and a step into a session"
 msgstr "Import LDAP users and a step into a session"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
-msgstr "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
+msgstr "LDAP synchronization: Import learners/steps into course sessions"
 
 msgid "Assessments tab"
 msgstr "Assessments tab"
@@ -8877,8 +8877,8 @@ msgstr "language"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Sorry, but that course code already exists. Please choose another one."
 
-msgid "Groups list"
-msgstr "Groups list"
+msgid "Group list"
+msgstr "Group list"
 
 msgid "The target folder does not exist"
 msgstr "The target folder does not exist"
@@ -13308,8 +13308,8 @@ msgstr "Please enter a question"
 msgid "Number of question"
 msgstr "Number of question"
 
-msgid "This code already exist"
-msgstr "This code already exist"
+msgid "This code already exists"
+msgstr "This code already exists"
 
 msgid "Save and exit"
 msgstr "Save and exit"
@@ -30412,3 +30412,30 @@ msgstr "Could not write to %s"
 
 msgid "Account disabled"
 msgstr "Account disabled"
+
+msgid "Language level"
+msgstr "Language level"
+
+msgid "LDAP synchronization: Import learners/steps in all sessions"
+msgstr "LDAP synchronization: Import learners/steps in all sessions"
+
+msgid "Send message by e-mail"
+msgstr "Send message by e-mail"
+
+msgid "Days before finishing for re-enrollment"
+msgstr "Days before finishing for re-enrollment"
+
+msgid "Analysis ending..."
+msgstr "Analysis ending..."
+
+msgid "Margin to the left"
+msgstr "Margin to the left"
+
+msgid "Margin to the right"
+msgstr "Margin to the right"
+
+msgid "Other options"
+msgstr "Other options"
+
+msgid "Activity ID"
+msgstr "Activity ID"

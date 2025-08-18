@@ -5705,7 +5705,7 @@ msgstr "Εισαγωγή LDAP χρηστών στο μάθημα"
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -8882,7 +8882,7 @@ msgstr "γλώσσα"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Ο κωδικός αυτού του μαθήματος υπάρχει ήδη. Παρακαλούμε επιλέξτε κάποιον άλλο"
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Λίστα ομάδων"
 
 msgid "The target folder does not exist"
@@ -13313,8 +13313,8 @@ msgstr "Please enter a question"
 msgid "Number of question"
 msgstr "Number of question"
 
-msgid "This code already exist"
-msgstr "This code already exist"
+msgid "This code already exists"
+msgstr "This code already exists"
 
 msgid "Save and exit"
 msgstr "Save and exit"

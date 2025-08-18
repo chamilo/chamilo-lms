@@ -155,9 +155,9 @@ class BlockEvaluationGraph extends Block
                         $dataSet->addPoints($max, 'Serie1');
                         $dataSet->addPoints($items, 'Labels');
 
-                        $dataSet->setSerieDescription('Serie1', get_lang('Maximum'));
+                        $dataSet->setSerieDescription('Serie1', get_lang('maximum'));
                         $dataSet->setSerieDescription('Serie2', get_lang('Average'));
-                        $dataSet->setSerieDescription('Serie3', get_lang('Minimum'));
+                        $dataSet->setSerieDescription('Serie3', get_lang('minimum'));
                         $dataSet->setAbscissa('Labels');
 
                         $dataSet->setAbscissaName(get_lang('Assessment'));
@@ -343,9 +343,9 @@ class BlockEvaluationGraph extends Block
                             $dataSet->addPoints($max, 'Serie1');
                             $dataSet->addPoints($items, 'Labels');
 
-                            $dataSet->setSerieDescription('Serie1', get_lang('Maximum'));
-                            $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
-                            $dataSet->setSerieDescription('Serie3', get_lang('Minimum'));
+                            $dataSet->setSerieDescription('Serie1', get_lang('maximum'));
+                            $dataSet->setSerieDescription('Serie2', get_lang('Average'));
+                            $dataSet->setSerieDescription('Serie3', get_lang('minimum'));
                             $dataSet->setAbscissa('Labels');
                             $dataSet->setAbscissaName(get_lang('Assessment'));
                             $dataSet->normalize(100, '%');

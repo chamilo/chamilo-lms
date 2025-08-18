@@ -5689,7 +5689,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -8869,7 +8869,7 @@ msgstr ""
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr ""
 
-msgid "Groups list"
+msgid "Group list"
 msgstr ""
 
 msgid "The target folder does not exist"
@@ -13300,7 +13300,7 @@ msgstr ""
 msgid "Number of question"
 msgstr ""
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr ""
 
 msgid "Save and exit"
@@ -30376,4 +30376,31 @@ msgid "Could not write to %s"
 msgstr ""
 
 msgid "Account disabled"
+msgstr ""
+
+msgid "Language level"
+msgstr ""
+
+msgid "LDAP synchronization: Import learners/steps in all sessions"
+msgstr ""
+
+msgid "Send message by e-mail"
+msgstr ""
+
+msgid "Days before finishing for re-enrollment"
+msgstr ""
+
+msgid "Analysis ending..."
+msgstr ""
+
+msgid "Margin to the left"
+msgstr ""
+
+msgid "Margin to the right"
+msgstr ""
+
+msgid "Other options"
+msgstr ""
+
+msgid "Activity ID"
 msgstr ""

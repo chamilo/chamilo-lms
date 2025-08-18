@@ -10178,7 +10178,7 @@ msgstr "Més informació"
 msgid "Make invisible"
 msgstr "Fer invisible"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Fer visible"
 
 msgid "Image"

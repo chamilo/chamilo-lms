@@ -109,7 +109,7 @@ $form->addFile(
     )),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
-$form->addText('video_url', get_lang('VideoUrl'), false);
+$form->addText('video_url', get_lang('Video URL'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);

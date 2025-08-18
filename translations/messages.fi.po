@@ -10172,7 +10172,7 @@ msgstr "Lisätietoja"
 msgid "Make invisible"
 msgstr "Tee näkymättömäksi"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Tee näkyväksi"
 
 msgid "Image"

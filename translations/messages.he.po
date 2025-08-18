@@ -10179,7 +10179,7 @@ msgstr "מידע נוסף"
 msgid "Make invisible"
 msgstr "הפוך לבלתי נראה"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "הפוך לגלוי"
 
 msgid "Image"

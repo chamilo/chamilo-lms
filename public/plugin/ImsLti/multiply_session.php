@@ -17,7 +17,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('NotAllowed'));
+        throw new Exception(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'));
     }
 
     $request = Request::createFromGlobals();
@@ -55,7 +55,7 @@ try {
     $selectedCoursesIds = array_keys($slctCourses);
 
     $form = new FormValidator('frm_multiply', 'post', api_get_self().'?id='.$tool->getId().'&session_id='.$sessionId);
-    $form->addLabel(get_lang('SessionName'), $session);
+    $form->addLabel(get_lang('Session name'), $session);
     $form->addLabel($plugin->get_lang('Tool'), $tool->getName());
     $form->addSelectAjax(
         'courses',
@@ -147,7 +147,7 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInCourses'));

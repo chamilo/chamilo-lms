@@ -56,7 +56,7 @@ $form->removeElement('name');
 $form->removeElement('addresult');
 $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
 $form->insertElementBefore($slcLtiTools, 'hid_category_id');
-$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('name', get_lang('Required field'), 'required');
 
 $ltiTools = $ltiToolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 
@@ -135,7 +135,7 @@ $(document).ready( function() {
 });
 </script>';
 
-Display::display_header(get_lang('NewEvaluation'));
+Display::display_header(get_lang('Add classroom activity'));
 
 $form->display();
 

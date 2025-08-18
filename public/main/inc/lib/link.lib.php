@@ -966,7 +966,7 @@ class Link extends Model
                             break;
                         case 0:
                             $urlVisibility .= '&action=visible';
-                            $title = get_lang('Make Visible');
+                            $title = get_lang('Make visible');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,

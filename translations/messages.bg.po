@@ -10170,7 +10170,7 @@ msgstr "Още информация"
 msgid "Make invisible"
 msgstr "Скриване"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Показване"
 
 msgid "Image"

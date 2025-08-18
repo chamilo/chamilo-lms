@@ -10170,7 +10170,7 @@ msgstr "Aswan willa"
 msgid "Make invisible"
 msgstr "Churay ama rikuchikunanpaq"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Churay rikuchikunanpaq"
 
 msgid "Image"

@@ -2114,7 +2114,7 @@ function get_work_user_list(
         $unoconv = api_get_setting('platform.unoconv_binaries');
         $loadingText = addslashes(get_lang('Loading'));
         $uploadedText = addslashes(get_lang('Uploaded.'));
-        $failsUploadText = addslashes(get_lang('No file was uploaded..'));
+        $failsUploadText = addslashes(get_lang('No file was uploaded.'));
         $failsUploadIcon = Display::getMdiIcon(
             StateIcon::INCOMPLETE,
             'ch-tool-icon',
@@ -2614,7 +2614,7 @@ function getAllWork(
     $url = api_get_path(WEB_CODE_PATH).'work/';
     $unoconv = api_get_setting('platform.unoconv_binaries');
     $loadingText = addslashes(get_lang('Loading'));
-    $uploadedText = addslashes(get_lang('Uploaded'));
+    $uploadedText = addslashes(get_lang('Uploaded.'));
     $failsUploadText = addslashes(get_lang('No file was uploaded.'));
     $failsUploadIcon = Display::getMdiIcon(
         StateIcon::INCOMPLETE,
@@ -2790,7 +2790,7 @@ function getAllWork(
                     $action .= '<a
                         href="'.$url.'work_list_all.php?'.$cidReq.'&id='.$workId.'&action=export_to_doc&item_id='.$item_id.'"
                         title="'.get_lang('Export to .doc').'" >'.
-                        Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportToDoc')).'</a> ';
+                        Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to .doc')).'</a> ';
                 }
 
                 $alreadyUploaded = '';

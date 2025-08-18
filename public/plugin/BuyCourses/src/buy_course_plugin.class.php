@@ -1353,8 +1353,8 @@ class BuyCoursesPlugin extends Plugin
             $this->get_lang('SalePrice'),
             $this->get_lang('ProductType'),
             $this->get_lang('ProductName'),
-            $this->get_lang('UserName'),
-            get_lang('Email'),
+            get_lang('Username'),
+            get_lang('E-mail'),
         ];
         //Validation Export
         $dateStart = strtotime($dateStart);

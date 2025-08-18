@@ -10178,7 +10178,7 @@ msgstr "Viac informácií"
 msgid "Make invisible"
 msgstr "Skryť"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Zviditeľniť"
 
 msgid "Image"

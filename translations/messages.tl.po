@@ -10163,7 +10163,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr "Gawing di-nakikita"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"

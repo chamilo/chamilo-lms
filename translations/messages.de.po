@@ -10231,7 +10231,7 @@ msgstr "Mehr Information"
 msgid "Make invisible"
 msgstr "Unsichtbar machen"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "sichtbar machen"
 
 msgid "Image"

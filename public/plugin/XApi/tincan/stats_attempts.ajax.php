@@ -25,7 +25,7 @@ if (!$request->isXmlHttpRequest()
     || !api_is_allowed_to_edit()
     || !$course
 ) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }
@@ -41,7 +41,7 @@ $toolLaunch = $em->find(
 $student = api_get_user_entity($request->request->getInt('student'));
 
 if (!$toolLaunch || !$student) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }
@@ -54,7 +54,7 @@ $userIsSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
 );
 
 if (!$userIsSubscribedToCourse) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }

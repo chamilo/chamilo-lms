@@ -48,7 +48,7 @@ switch ($action) {
         );
         $form->addDateRangePicker(
             'range',
-            [get_lang('DateRange'), $plugin->get_lang('EmbedDateRangeHelp')]
+            [get_lang('Date range'), $plugin->get_lang('EmbedDateRangeHelp')]
         );
         $form->addTextarea(
             'html_code',

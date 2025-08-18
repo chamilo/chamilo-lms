@@ -10179,7 +10179,7 @@ msgstr "Ulteriori informazioni"
 msgid "Make invisible"
 msgstr "Rendi non visibile"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Rendi visibile"
 
 msgid "Image"

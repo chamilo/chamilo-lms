@@ -10233,7 +10233,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr "非表示にする"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"

@@ -49,7 +49,7 @@ class OutcomeForm extends EvalForm
         );
         $this->build_basic_form();
 
-        $this->addButtonCreate(get_lang('AddAssessment'), 'submit');
+        $this->addButtonCreate(get_lang('Add this classroom activity to the assessment'), 'submit');
     }
 
     /**
@@ -67,7 +67,7 @@ class OutcomeForm extends EvalForm
 
         $this->addText(
             'name',
-            get_lang('EvaluationName'),
+            get_lang('Assessment'),
             true,
             [
                 'maxlength' => '50',
@@ -87,11 +87,11 @@ class OutcomeForm extends EvalForm
             $select_gradebook = $this->addElement(
                 'select',
                 'hid_category_id',
-                get_lang('SelectGradebook'),
+                get_lang('Select assessment'),
                 [],
                 ['id' => 'hid_category_id']
             );
-            $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'nonzero');
+            $this->addRule('hid_category_id', get_lang('Required field'), 'nonzero');
             $default_weight = 0;
             if (!empty($all_categories)) {
                 foreach ($all_categories as $my_cat) {
@@ -135,7 +135,7 @@ class OutcomeForm extends EvalForm
             if (!$this->evaluation_object->has_results()) {
                 $this->addText(
                     'max',
-                    get_lang('QualificationNumeric'),
+                    get_lang('Maximum score'),
                     true,
                     [
                         'maxlength' => '5',
@@ -144,7 +144,7 @@ class OutcomeForm extends EvalForm
             } else {
                 $this->addText(
                     'max',
-                    [get_lang('QualificationNumeric'), get_lang('CannotChangeTheMaxNote')],
+                    [get_lang('Maximum score'), get_lang('Cannot change the score')],
                     false,
                     [
                         'maxlength' => '5',
@@ -155,7 +155,7 @@ class OutcomeForm extends EvalForm
         } else {
             $this->addText(
                 'max',
-                get_lang('QualificationNumeric'),
+                get_lang('Maximum score'),
                 true,
                 [
                     'maxlength' => '5',
@@ -167,12 +167,12 @@ class OutcomeForm extends EvalForm
         }
 
         $this->addElement('textarea', 'description', get_lang('Description'));
-        $this->addRule('hid_category_id', get_lang('ThisFieldIsRequired'), 'required');
+        $this->addRule('hid_category_id', get_lang('Required field'), 'required');
         $this->addElement('checkbox', 'visible', null, get_lang('Visible'));
-        $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
+        $this->addRule('max', get_lang('Only numbers'), 'numeric');
         $this->addRule(
             'max',
-            get_lang('NegativeValue'),
+            get_lang('Negative value'),
             'compare',
             '>=',
             'server',

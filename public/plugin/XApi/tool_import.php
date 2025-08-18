@@ -160,7 +160,7 @@ $pageContent = $frmActivity->returnForm();
 if ($lp) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
-        'name' => get_lang('LearningPaths'),
+        'name' => get_lang('Learning paths'),
     ];
     $interbreadcrumb[] = [
         'url' => $pluginIndex,

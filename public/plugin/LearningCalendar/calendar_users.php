@@ -27,11 +27,11 @@ $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 // jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_calendar_users&id='.$calendarId;
 
-// The order is important you need to check the the $column variable in the model.ajax.php file
+// The order is important you need to check the $column variable in the model.ajax.php file
 $columns = [
     get_lang('First name'),
     get_lang('Last name'),
-    get_lang('Exam'),
+    get_lang('Test'),
 ];
 
 // Column config

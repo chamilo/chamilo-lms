@@ -10178,7 +10178,7 @@ msgstr "Περισσότερες πληροφορίες"
 msgid "Make invisible"
 msgstr "Να μην εμφανίζεται"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Να εμφανίζεται"
 
 msgid "Image"

@@ -10,6 +10,6 @@ if (!empty($plugin_info['settings']['hello_world_show_type'])) {
 }
 
 //Using get_lang inside a plugin
-echo get_lang('HelloPlugin');
+echo get_lang('Hello plugin');
 
 echo '</div>';

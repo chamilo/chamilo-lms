@@ -10173,8 +10173,8 @@ msgstr "More information"
 msgid "Make invisible"
 msgstr "Make invisible"
 
-msgid "Make Visible"
-msgstr "Make Visible"
+msgid "Make visible"
+msgstr "Make visible"
 
 msgid "Image"
 msgstr "Image"

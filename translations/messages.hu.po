@@ -10170,7 +10170,7 @@ msgstr "További információ"
 msgid "Make invisible"
 msgstr "Ne legyen látható"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Tegyük láthatóvá"
 
 msgid "Image"

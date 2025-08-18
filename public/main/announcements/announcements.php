@@ -313,7 +313,7 @@ switch ($action) {
             $allow = ('true' === api_get_setting('announcement.disable_delete_all_announcements'));
             if (false === $allow) {
                 AnnouncementManager::delete_all_announcements($_course);
-                Display::addFlash(Display::return_message(get_lang('Announcement has been deletedAll')));
+                Display::addFlash(Display::return_message(get_lang('Announcement has been deleted')));
             }
             header('Location: '.$homeUrl);
             exit;

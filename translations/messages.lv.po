@@ -10171,7 +10171,7 @@ msgstr "Vairāk informācijas"
 msgid "Make invisible"
 msgstr "Padarīt neredzamu"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Padarīt redzamu"
 
 msgid "Image"

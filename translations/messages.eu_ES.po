@@ -10170,7 +10170,7 @@ msgstr "Informazioa eskuratzeko"
 msgid "Make invisible"
 msgstr "Ikusezin bihurtu"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Ikusgai bihurtu"
 
 msgid "Image"

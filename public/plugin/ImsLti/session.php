@@ -20,7 +20,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('NotAllowed'));
+        throw new Exception(get_lang('You are not allowed here.'));
     }
 
     /** @var ImsLtiTool $tool */
@@ -75,7 +75,7 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInSessions'));

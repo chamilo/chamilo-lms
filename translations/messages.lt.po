@@ -10172,7 +10172,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"

@@ -10170,7 +10170,7 @@ msgstr "اطلاعات بیشتر"
 msgid "Make invisible"
 msgstr "پنهان کردن"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "آشکار کردن"
 
 msgid "Image"

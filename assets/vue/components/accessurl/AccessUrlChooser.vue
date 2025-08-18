@@ -13,6 +13,7 @@ const { visible, isLoading, accessUrls, doRedirectToPortal } = useAccessUrlChoos
     v-model:visible="visible"
     :modal="true"
     :closable="false"
+    :draggable="false"
     :header="t('Access URL')"
     :style="{ width: '60vw' }"
   >
@@ -21,14 +22,14 @@ const { visible, isLoading, accessUrls, doRedirectToPortal } = useAccessUrlChoos
       class="pi pi-spin pi-spinner"
     />
     <div
-      class="space-y-4"
+      class="space-y-4 text-center"
       v-else-if="1 === accessUrls.length"
     >
       <p>{{ t("You only have access to the URL %s", [accessUrls[0].url]) }}</p>
       <p v-text="t('You will therefore be automatically redirected to this URL.')" />
     </div>
     <div
-      class="space-y-4"
+      class="space-y-4 text-center"
       v-else-if="accessUrls.length > 1"
     >
       <p v-text="t('You have access to multiple URLs. Here is the list of your accesses.')" />

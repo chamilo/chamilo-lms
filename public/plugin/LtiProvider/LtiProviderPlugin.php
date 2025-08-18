@@ -121,7 +121,7 @@ class LtiProviderPlugin extends Plugin
         $htmlcontent .= '<option value="">-- '.$this->get_lang('SelectOneActivity').' --</option>';
         foreach ($courses as $course) {
             $courseInfo = api_get_course_info($course['code']);
-            $optgroupLabel = "{$course['title']} : ".get_lang('Quizzes');
+            $optgroupLabel = "{$course['title']} : ".get_lang('Tests');
             $htmlcontent .= '<optgroup label="'.$optgroupLabel.'">';
             $exerciseList = ExerciseLib::get_all_exercises_for_course_id(
                 $courseInfo,

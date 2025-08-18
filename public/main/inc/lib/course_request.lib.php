@@ -146,8 +146,8 @@ class CourseRequestManager
         $email_body .= get_lang('Course name', $email_language).': '.$title."\n";
         $email_body .= get_lang('Fac', $email_language).': '.$category_code."\n";
         $email_body .= get_lang('Course code', $email_language).': '.$code."\n";
-        $email_body .= get_lang('Professor', $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
-        $email_body .= get_lang('Email', $email_language).': '.$user_info['mail']."\n";
+        $email_body .= get_lang('Teacher', $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
+        $email_body .= get_lang('E-mail', $email_language).': '.$user_info['mail']."\n";
         $email_body .= get_lang('Description', $email_language).': '.$description."\n";
         $email_body .= get_lang('Objectives', $email_language).': '.$objectives."\n";
         $email_body .= get_lang('Target audience', $email_language).': '.$target_audience."\n";
@@ -524,7 +524,7 @@ class CourseRequestManager
                 )."\n";
             $email_body .= get_lang('Teacher', $email_language).' '.api_get_setting('siteName')."\n";
             $email_body .= get_lang('Phone', $email_language).': '.api_get_setting('administratorTelephone')."\n";
-            $email_body .= get_lang('Email', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
+            $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
             $email_body .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
             $sender_name = api_get_person_name(
@@ -606,7 +606,7 @@ class CourseRequestManager
         $email_body .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, null, $email_language)."\n";
         $email_body .= get_lang('Teacher', $email_language).' '.api_get_setting('siteName')."\n";
         $email_body .= get_lang('Phone', $email_language).': '.api_get_setting('administratorTelephone')."\n";
-        $email_body .= get_lang('Email', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
+        $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
         $sender_name = api_get_person_name(

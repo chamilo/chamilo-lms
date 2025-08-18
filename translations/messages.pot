@@ -30374,3 +30374,6 @@ msgstr ""
 
 msgid "Could not write to %s"
 msgstr ""
+
+msgid "Account disabled"
+msgstr ""

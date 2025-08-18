@@ -30409,3 +30409,6 @@ msgstr "This e-mail address has already been used by the maximum number of allow
 
 msgid "Could not write to %s"
 msgstr "Could not write to %s"
+
+msgid "Account disabled"
+msgstr "Account disabled"

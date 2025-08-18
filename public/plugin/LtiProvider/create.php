@@ -44,7 +44,7 @@ if ($form->validate()) {
 
 $form->setDefaultValues();
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'LtiProvider/admin.php', 'name' => $plugin->get_title()];
 
 $pageTitle = $plugin->get_lang('AddPlatform');

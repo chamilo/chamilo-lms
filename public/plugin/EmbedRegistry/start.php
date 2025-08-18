@@ -121,7 +121,7 @@ switch ($action) {
 
         $form = new FormValidator('frm_edit');
         $form->addText('title', get_lang('Title'), true);
-        $form->addDateRangePicker('range', get_lang('DateRange'));
+        $form->addDateRangePicker('range', get_lang('Date range'));
         $form->addTextarea('html_code', $plugin->get_lang('HtmlCode'), ['rows' => 5], true);
         $form->addButtonUpdate(get_lang('Edit'));
         $form->addHidden('id', $embed->getId());

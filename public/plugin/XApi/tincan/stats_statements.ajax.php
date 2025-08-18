@@ -38,7 +38,7 @@ $toolLaunch = $em->find(
 $attempt = $request->request->get('attempt');
 
 if (!$toolLaunch || !$attempt) {
-    echo Display::return_message(get_lang('NoResults'), 'error');
+    echo Display::return_message(get_lang('No results found'), 'error');
 
     exit;
 }
@@ -71,7 +71,7 @@ try {
 $statements = $result->getStatements();
 
 if (count($statements) <= 0) {
-    echo Display::return_message(get_lang('NoResults'), 'warning');
+    echo Display::return_message(get_lang('No results found'), 'warning');
 
     exit;
 }

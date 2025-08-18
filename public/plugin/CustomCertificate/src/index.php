@@ -637,7 +637,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_center'])) {
-    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -667,7 +667,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_right'])) {
-    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -696,7 +696,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['seal'])) {
-    $form->addElement('checkbox', 'remove_seal', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_seal', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -734,7 +734,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature1'])) {
-    $form->addElement('checkbox', 'remove_signature1', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature1', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -770,7 +770,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature2'])) {
-    $form->addElement('checkbox', 'remove_signature2', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature2', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -806,7 +806,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature3'])) {
-    $form->addElement('checkbox', 'remove_signature3', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature3', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -842,7 +842,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature4'])) {
-    $form->addElement('checkbox', 'remove_signature4', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature4', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -853,7 +853,7 @@ if (!empty($infoCertificate['signature4'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature4',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -874,7 +874,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['background'])) {
-    $form->addElement('checkbox', 'remove_background', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_background', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -885,7 +885,7 @@ if (!empty($infoCertificate['background'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'background',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );

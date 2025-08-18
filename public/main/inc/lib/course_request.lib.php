@@ -144,14 +144,14 @@ class CourseRequestManager
 
         $email_body = get_lang('We registered the following request for a new course:', $email_language)."\n\n";
         $email_body .= get_lang('Course name', $email_language).': '.$title."\n";
-        $email_body .= get_lang('Fac', $email_language).': '.$category_code."\n";
+        $email_body .= get_lang('Category', $email_language).': '.$category_code."\n";
         $email_body .= get_lang('Course code', $email_language).': '.$code."\n";
         $email_body .= get_lang('Teacher', $email_language).': '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language)."\n";
         $email_body .= get_lang('E-mail', $email_language).': '.$user_info['mail']."\n";
         $email_body .= get_lang('Description', $email_language).': '.$description."\n";
         $email_body .= get_lang('Objectives', $email_language).': '.$objectives."\n";
         $email_body .= get_lang('Target audience', $email_language).': '.$target_audience."\n";
-        $email_body .= get_lang('Ln', $email_language).': '.$course_language."\n";
+        $email_body .= get_lang('Language', $email_language).': '.$course_language."\n";
         $email_body .= get_lang('Fill with demo content', $email_language).': '.($exemplary_content ? get_lang('Yes', $email_language) : get_lang('No', $email_language))."\n";
 
         // Sending an e-mail to the platform administrator.

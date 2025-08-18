@@ -5706,7 +5706,7 @@ msgstr "Importati utilizatori LDAP in curs"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importati utilizatori LDAP si un pas intr-o sesiune"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "Sincronizare LDAP: Importati studenti/pasi in sesiuni"
 
 msgid "Assessments tab"
@@ -8883,7 +8883,7 @@ msgstr "limba"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Acest cod de curs exista deja, alege altul."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Lista de grupuri"
 
 msgid "The target folder does not exist"
@@ -13314,7 +13314,7 @@ msgstr "Va rugam puneti o intrebare."
 msgid "Number of question"
 msgstr "Numarul de intrebari"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Acest cod exista deja"
 
 msgid "Save and exit"

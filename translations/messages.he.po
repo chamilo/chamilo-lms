@@ -5706,7 +5706,7 @@ msgstr "יבא משתמשי LDAP לקורס"
 msgid "Import LDAP users and a step into a session"
 msgstr "ייבוא ​​משתמשי LDAP ושלב לתוך הפעלה"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "סינכרון LDAP: ייבוא ​​לומדים/צעדים למפגשי הקורס"
 
 msgid "Assessments tab"
@@ -8883,7 +8883,7 @@ msgstr "שפה"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "מצטערים, אבל קוד הקורס הזה כבר קיים. אנא בחר אחד אחר."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "רשימת קבוצות"
 
 msgid "The target folder does not exist"
@@ -13314,7 +13314,7 @@ msgstr "אנא הזן שאלה"
 msgid "Number of question"
 msgstr "מספר שאלות"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "קוד זה כבר קיים"
 
 msgid "Save and exit"

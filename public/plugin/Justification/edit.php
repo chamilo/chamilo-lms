@@ -37,7 +37,7 @@ if ($form->validate()) {
     $sql = "SELECT * FROM justification_document WHERE code = '$code' AND id <> $id";
     $result = Database::query($sql);
     $data = Database::fetch_array($result);
-    $message = Display::return_message(get_lang('ThisCodeAlradyExists'), 'warning');
+    $message = Display::return_message(get_lang('This code already exists'), 'warning');
     if (empty($data)) {
         $params = [
             'name' => $values['name'],

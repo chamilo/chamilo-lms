@@ -750,13 +750,13 @@ $actions .= Display::url(
 $email = $user->getEmail();
 if (!empty($email)) {
     $send_mail = '<a href="mailto:'.$email.'">'.
-        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send message mail')).'</a>';
+        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send message by e-mail')).'</a>';
 } else {
-    $send_mail = Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send message mail'));
+    $send_mail = Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send message by e-mail'));
 }
 $actions .= $send_mail;
 if (!empty($studentId) && !empty($courseCode)) {
-    // Only show link to connection details if course and student were defined in the URL
+    // Only show link to connection details if the course and student were defined in the URL
     $actions .= '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
         .$courseId.'&id_session='.$sessionId.'">'
         .Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details'))

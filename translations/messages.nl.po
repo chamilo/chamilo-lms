@@ -5729,7 +5729,7 @@ msgstr "Importeer LDAP gebruikers in een cursus"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importeer LDAP gebruikers in een stap in een sessie"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchronisatie: Importeer studenten/stappen in sessies"
 
 msgid "Assessments tab"
@@ -8915,7 +8915,7 @@ msgstr "Nederlands"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Deze cursuscode is al in gebruik. Gelieve een andere te kiezen."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Groepenlijst"
 
 msgid "The target folder does not exist"
@@ -13348,7 +13348,7 @@ msgstr "Gelieve een vraag in te geven."
 msgid "Number of question"
 msgstr "Aantal vragen"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Deze code bestaat reeds"
 
 msgid "Save and exit"

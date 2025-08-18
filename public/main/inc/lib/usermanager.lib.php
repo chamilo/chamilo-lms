@@ -650,7 +650,7 @@ class UserManager
             get_lang('Username',      $adminLocale) => (string) $user->getUsername(),
             get_lang('Official code', $adminLocale) => (string) ($user->getOfficialCode() ?? ''),
             get_lang('Phone',         $adminLocale) => (string) ($user->getPhone() ?? ''),
-            get_lang('User address',  $adminLocale) => (string) ($user->getAddress() ?? ''),
+            get_lang('Address',       $adminLocale) => (string) ($user->getAddress() ?? ''),
             get_lang('Language',      $adminLocale) => (string) $languageName,
             get_lang('What do you want to do?', $adminLocale) => $statusLabel,
         ];

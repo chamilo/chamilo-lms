@@ -75,7 +75,7 @@ $frmActivity->addText(
 );
 $frmActivity->addHtml('</div>');
 $frmActivity->addButtonImport(get_lang('Import'));
-$frmActivity->addRule('file', get_lang('ThisFileIsRequired'), 'required');
+$frmActivity->addRule('file', get_lang('Required field'), 'required');
 $frmActivity->addRule(
     'file',
     $plugin->get_lang('OnlyZipOrXmlAllowed'),

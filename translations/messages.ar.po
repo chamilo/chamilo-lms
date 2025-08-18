@@ -5706,7 +5706,7 @@ msgstr "LDAP استيراد المستخدمين للمقرر عبر"
 msgid "Import LDAP users and a step into a session"
 msgstr "LDAP استيراد المستخدمين للدورة عبر"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchro استيراد الطلبة في مقرر الدورة عبر"
 
 msgid "Assessments tab"
@@ -8883,7 +8883,7 @@ msgstr "اللغة"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "عفوا ! رمز المقرر مستخدم مسبقا, فضلا اختر واحدا أخر."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "قائمة المجموعات"
 
 msgid "The target folder does not exist"
@@ -13314,7 +13314,7 @@ msgstr "فضلا، أكتب سؤالا"
 msgid "Number of question"
 msgstr "عدد الأسئلة"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "هذا الرمز موجود مسبقا"
 
 msgid "Save and exit"

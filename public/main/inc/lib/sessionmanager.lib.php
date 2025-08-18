@@ -8575,7 +8575,7 @@ class SessionManager
             $form->addElement(
                 'text',
                 'days_before_finishing_for_reinscription',
-                get_lang('Days before finishing for reinscription'),
+                get_lang('Days before finishing for re-enrollment'),
                 ['maxlength' => 5]
             );
             $form->addRule(

@@ -32,13 +32,13 @@ try {
     }
 
     if ($tool->getParent()) {
-        throw new Exception($plugin->get_lang('NoAllowed'));
+        throw new Exception($plugin->get_lang('BaseToolsCanBeAddedInSessionsOnly'));
     }
 
     $session = api_get_session_entity($sessionId);
 
     if (!$session) {
-        api_not_allowed(true);
+        throw new Exception(get_lang('SessionNotFound'));
     }
 
     $content = '';

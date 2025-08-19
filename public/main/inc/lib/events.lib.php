@@ -368,6 +368,21 @@ class Event
             $questionsList = array_map('intval', $questionsList);
         }
 
+        if (!empty($questionsList)) {
+            $questionsList = array_map('intval', $questionsList);
+            $questionsList = array_filter(
+                $questionsList,
+                function (int $qid) {
+                    $q = Question::read($qid);
+                    return $q && !in_array(
+                            $q->type,
+                            [PAGE_BREAK, MEDIA_QUESTION],
+                            true
+                        );
+                }
+            );
+        }
+
         if (!empty($remindList)) {
             $remindList = array_map('intval', $remindList);
             $remindList = array_filter($remindList);

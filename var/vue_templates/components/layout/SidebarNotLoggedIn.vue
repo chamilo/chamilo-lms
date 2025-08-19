@@ -58,7 +58,7 @@ const menuItems = computed(() => {
   if (allowRegistration.value) {
     items.splice(2, 0, {
       label: t("Registration"),
-      url: "/main/auth/inscription.php",
+      url: "/main/auth/registration.php",
     })
   }
 

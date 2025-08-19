@@ -8025,9 +8025,6 @@ msgstr "Vous avez atteint le nombre maximum de tentatives pour cet exercice. En 
 msgid "Exercise added"
 msgstr "Exercice ajouté"
 
-msgid "Assesment settings"
-msgstr "Paramètres d'évaluation"
-
 msgid "active"
 msgstr "Actif"
 

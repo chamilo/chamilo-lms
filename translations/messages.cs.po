@@ -7802,9 +7802,6 @@ msgstr "Dosáhl jste maxima pokusů pro tento test Pokud jste cvičitel, můžet
 msgid "Exercise added"
 msgstr "Cvičení přidáno"
 
-msgid "Assesment settings"
-msgstr "Nastavení hodnocení"
-
 msgid "active"
 msgstr "aktivní"
 

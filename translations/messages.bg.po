@@ -7809,9 +7809,6 @@ msgstr "Достигнахте максималният брой опити за
 msgid "Exercise added"
 msgstr "Добавен е тест."
 
-msgid "Assesment settings"
-msgstr "Настройки на оценяването"
-
 msgid "active"
 msgstr "активно"
 

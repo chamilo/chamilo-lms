@@ -7817,9 +7817,6 @@ msgstr "Atingiu o máximo número de tentativas para este exercício. Como instr
 msgid "Exercise added"
 msgstr "Exercício adicionado"
 
-msgid "Assesment settings"
-msgstr "Configurações da avaliação"
-
 msgid "active"
 msgstr "Ativo"
 

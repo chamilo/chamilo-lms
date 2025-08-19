@@ -7810,9 +7810,6 @@ msgstr "Osiągnąłeś maksymalną liczbę prób dla tego zadania. Będąc trene
 msgid "Exercise added"
 msgstr "Ćwiczenie dodane"
 
-msgid "Assesment settings"
-msgstr "Ustawienia oceny"
-
 msgid "active"
 msgstr "aktywne"
 

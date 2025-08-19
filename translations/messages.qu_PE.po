@@ -7809,9 +7809,6 @@ msgstr "Ha llegado al número máximo de intentos para este ejercicio. No obstan
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "Parámetros de evaluación"
-
 msgid "active"
 msgstr "hap'ichisqa"
 

@@ -7817,9 +7817,6 @@ msgstr "Chegou ao número máximo de intentos permitidos neste exercicio. Non ob
 msgid "Exercise added"
 msgstr "Exercicio engadido"
 
-msgid "Assesment settings"
-msgstr "Parámetros de avaliación"
-
 msgid "active"
 msgstr "activo"
 

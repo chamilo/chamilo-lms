@@ -7870,9 +7870,6 @@ msgstr "Die maximale Anzahl an Versuchen für diesen Test wurde erreicht. Als Ku
 msgid "Exercise added"
 msgstr "Test hinzugefügt"
 
-msgid "Assesment settings"
-msgstr "Bewertungseinstellung"
-
 msgid "active"
 msgstr "aktiv"
 

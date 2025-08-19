@@ -7817,9 +7817,6 @@ msgstr "Φθάσατε στον ανώτατο αριθμό προσπαθειώ
 msgid "Exercise added"
 msgstr "Προστέθηκε Άσκηση"
 
-msgid "Assesment settings"
-msgstr "Ρυθμίσεις αξιολόγησης"
-
 msgid "active"
 msgstr "ενεργό"
 

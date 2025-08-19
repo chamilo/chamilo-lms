@@ -7818,9 +7818,6 @@ msgstr "הגעת למספר המקסימלי של ניסיונות למבחן ז
 msgid "Exercise added"
 msgstr "תרגיל נוסף"
 
-msgid "Assesment settings"
-msgstr "הגדרות הערכה"
-
 msgid "active"
 msgstr "פעיל"
 

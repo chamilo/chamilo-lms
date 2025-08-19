@@ -7809,9 +7809,6 @@ msgstr "Ariketa honetarako onartutako saio kopuru handiena bete duzu jadanik. Ha
 msgid "Exercise added"
 msgstr "Ariketa erantsia"
 
-msgid "Assesment settings"
-msgstr "Ebaluazioaren ezarpenak"
-
 msgid "active"
 msgstr "aktiboa"
 

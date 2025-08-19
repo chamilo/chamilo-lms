@@ -7809,9 +7809,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr "Övning tillagd"
 
-msgid "Assesment settings"
-msgstr "utvärderings parametrar"
-
 msgid "active"
 msgstr "aktiv"
 

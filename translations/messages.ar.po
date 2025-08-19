@@ -7818,9 +7818,6 @@ msgstr "لقد وصلت الى العدد الاقصى للمحاولات لهذ
 msgid "Exercise added"
 msgstr "تمت إضافة التمرين"
 
-msgid "Assesment settings"
-msgstr " عوامل التقييم"
-
 msgid "active"
 msgstr "فعال"
 

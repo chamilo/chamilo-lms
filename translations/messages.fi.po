@@ -7811,9 +7811,6 @@ msgstr "Olet saavuttanut yritysten maksimin."
 msgid "Exercise added"
 msgstr "Harjoitus lisätty"
 
-msgid "Assesment settings"
-msgstr "Pisteytys määritykset"
-
 msgid "active"
 msgstr "Toimiva"
 

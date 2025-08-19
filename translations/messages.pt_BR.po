@@ -7817,9 +7817,6 @@ msgstr "Você atingiu o número máximo de tentativas para este exame Ser um tre
 msgid "Exercise added"
 msgstr "Exercício adicionado"
 
-msgid "Assesment settings"
-msgstr "Parâmetros de avaliação"
-
 msgid "active"
 msgstr "Ativo"
 

@@ -7810,9 +7810,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "postavke ocjenjivanja"
-
 msgid "active"
 msgstr "Aktivno"
 

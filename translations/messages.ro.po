@@ -7818,9 +7818,6 @@ msgstr "Ati atins numarul maxim de incercari pentru testul realizat. Puteti, tot
 msgid "Exercise added"
 msgstr "Exercitiu adaugat"
 
-msgid "Assesment settings"
-msgstr "parametrii de evaluare"
-
 msgid "active"
 msgstr "Activ"
 

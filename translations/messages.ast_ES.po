@@ -7809,9 +7809,6 @@ msgstr "Llegaste al númberu másimu d'intentos permitidos nesti exerciciu. Pero
 msgid "Exercise added"
 msgstr "Exerciciu amestáu"
 
-msgid "Assesment settings"
-msgstr "Parámetros d'evaluación"
-
 msgid "active"
 msgstr "activu"
 

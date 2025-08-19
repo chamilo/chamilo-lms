@@ -7818,9 +7818,6 @@ msgstr "Dosegli ste največje dovoljeno število poskusov tega testa. V primeru,
 msgid "Exercise added"
 msgstr "Test je bil dodan"
 
-msgid "Assesment settings"
-msgstr "Nastavitve ocenjevanja"
-
 msgid "active"
 msgstr "aktiven"
 

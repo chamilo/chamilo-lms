@@ -7809,9 +7809,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "เกณฑ์การประเมินผล"
-
 msgid "active"
 msgstr "เปิด"
 

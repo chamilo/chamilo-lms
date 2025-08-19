@@ -7872,9 +7872,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "爬眶のセッティング"
-
 msgid "active"
 msgstr "铜跟"
 

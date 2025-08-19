@@ -7810,9 +7810,6 @@ msgstr "Jūs esat iztērējis šī testa pieļaujamo mēģinājumu skaitu. Tā k
 msgid "Exercise added"
 msgstr "Uzdevums pievienots"
 
-msgid "Assesment settings"
-msgstr "Novērtēšanas iestatījumi"
-
 msgid "active"
 msgstr "aktīvs"
 

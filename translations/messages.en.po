@@ -7812,9 +7812,6 @@ msgstr "You have reached the maximum number of attempts for this test. Being a t
 msgid "Exercise added"
 msgstr "Exercise added"
 
-msgid "Assesment settings"
-msgstr "Assesment settings"
-
 msgid "active"
 msgstr "active"
 

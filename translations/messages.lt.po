@@ -7811,9 +7811,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "įvertinimo parametrai"
-
 msgid "active"
 msgstr "aktyvus"
 

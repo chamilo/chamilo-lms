@@ -7818,9 +7818,6 @@ msgstr "Hai superato il numero di tentativi per l'esercizio. Poiché sei gestore
 msgid "Exercise added"
 msgstr "Quesito aggiunto"
 
-msgid "Assesment settings"
-msgstr "parametri di valutazione"
-
 msgid "active"
 msgstr "attivo"
 

@@ -7817,9 +7817,6 @@ msgstr "Dosiahli ste maximálny počet pokusov pre tento test. Ak ste lektorom, 
 msgid "Exercise added"
 msgstr "Cvičenie bolo pridané"
 
-msgid "Assesment settings"
-msgstr "Nastavenie hodnotenia"
-
 msgid "active"
 msgstr "aktívny"
 

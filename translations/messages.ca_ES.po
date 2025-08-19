@@ -7817,9 +7817,6 @@ msgstr "Ha arribat al nombre màxim d'intents permesos en aquest exercici. No ob
 msgid "Exercise added"
 msgstr "Exercici afegit"
 
-msgid "Assesment settings"
-msgstr "Detalls de la puntuació"
-
 msgid "active"
 msgstr "Actiu"
 

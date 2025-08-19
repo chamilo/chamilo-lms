@@ -7850,9 +7850,6 @@ msgstr "U hebt het maximaal aantal toegelaten pogingen voor de test bereikt. U k
 msgid "Exercise added"
 msgstr "Oefening toegevoegd"
 
-msgid "Assesment settings"
-msgstr "Evaluatieparameters"
-
 msgid "active"
 msgstr "actief"
 

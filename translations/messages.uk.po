@@ -7802,9 +7802,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "параметри оцінювання"
-
 msgid "active"
 msgstr "активний"
 

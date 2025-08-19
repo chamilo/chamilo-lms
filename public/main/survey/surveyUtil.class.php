@@ -300,7 +300,7 @@ class SurveyUtil
         }
 
         if (false !== $result) {
-            $message = get_lang('The user\'s answers to the survey have been succesfully removed.').'<br />
+            $message = get_lang('The user\'s answers to the survey have been successfully removed.').'<br />
 					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
                 .$survey_id.'">'.
                 get_lang('Go back').'</a>';

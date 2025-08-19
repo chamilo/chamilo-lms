@@ -4651,7 +4651,7 @@ msgstr ""
 msgid "Please give a notice title"
 msgstr ""
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr ""
 
 msgid "Insert this link"
@@ -5437,7 +5437,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -7804,9 +7804,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr ""
-
 msgid "active"
 msgstr ""
 
@@ -9328,9 +9325,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr ""
 
@@ -9361,7 +9355,7 @@ msgstr ""
 msgid "Could not open"
 msgstr ""
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9577,7 +9571,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -10507,7 +10501,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11518,7 +11512,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13351,13 +13345,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13555,7 +13549,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15649,7 +15643,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -28971,7 +28965,7 @@ msgstr ""
 msgid "Could not export glossary"
 msgstr ""
 
-msgid "Terms imported succesfully"
+msgid "Terms imported successfully"
 msgstr ""
 
 msgid "Could not import terms"

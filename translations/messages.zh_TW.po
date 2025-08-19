@@ -4659,7 +4659,7 @@ msgstr "請加入通告內容"
 msgid "Please give a notice title"
 msgstr "請加入通告標題"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "請加入連結名稱"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -7809,9 +7809,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "評分設定"
-
 msgid "active"
 msgstr "顯示"
 
@@ -9333,9 +9330,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr "我的學員"
 
@@ -9366,7 +9360,7 @@ msgstr "沒有資源可供循環使用"
 msgid "Could not open"
 msgstr "不能開啟"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9582,7 +9576,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr "檔案太大不能上傳"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。"
 
 msgid "Assessments"
@@ -10512,7 +10506,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11523,7 +11517,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13356,13 +13350,13 @@ msgstr "編輯問題"
 msgid "This type does not exist"
 msgstr "這類型不存在"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "已成功創建統計調查"
 
 msgid "You can now add questions to your survey"
 msgstr "你現在可在問卷中加入問題"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "已成功更新統計調查"
 
 msgid "The question has been added."
@@ -13560,7 +13554,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15654,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

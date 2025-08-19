@@ -4659,7 +4659,7 @@ msgstr "Ama hina kaychu, haykuchiy willaypa qelqanta"
 msgid "Please give a notice title"
 msgstr "Ama hina kaychu, haykuchiy willaypa sutinchayninta"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Ama hina kaychu, haykuchiy waskhanaq sutinta"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr "Desplegable"
 msgid "Multiple selection drop-down"
 msgstr "Desplegable con elección múltiple"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "El campo ha sido añadido"
 
 msgid "Grades thresholds colouring"
@@ -7809,9 +7809,6 @@ msgstr "Ha llegado al número máximo de intentos para este ejercicio. No obstan
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "Parámetros de evaluación"
-
 msgid "active"
 msgstr "hap'ichisqa"
 
@@ -9333,9 +9330,6 @@ msgstr "Sesiones nisqaykuna hap'ichisqa"
 msgid "My inactive sessions"
 msgstr "Sesiones nisqaykuna mana hap'ichisqa"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Kay extensión nisqaqa hap'ichisqañan, ichaqa kunanqa manaraq kanqachu hap'ichasqa."
-
 msgid "My learners"
 msgstr "Yachaqeykuna"
 
@@ -9366,7 +9360,7 @@ msgstr "Mana kanchu yanapaysinakuna waqaychanapaq"
 msgid "Could not open"
 msgstr "Mana kichakunchu"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Tiempo de frecuenciación"
 
 msgid "This course could not be found"
@@ -9582,7 +9576,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr " Khipu apachisqaqa sinchi hatunmi !"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "El envío del archivo no se ha podido realizar. Por favor, inténtelo de nuevo más tarde o póngase en contacto con el administrador de la plataforma."
 
 msgid "Assessments"
@@ -10512,7 +10506,7 @@ msgstr "Pataraq wha"
 msgid "Who changed it"
 msgstr "Pin t'ijrapachiran"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "La evaluación ha sido modificada"
 
 msgid "Incorrect data"
@@ -11523,7 +11517,7 @@ msgstr "Kunanqa raphiqa llipin haykuqmasikuyawan qhawachikunqa"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Raphi qallariyqa yachachinamanta yachachiqllawan t'ijrapachikun"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Yachachiq raphinman haykuna"
 
 msgid "Now discussion is visible by trainers only"
@@ -13356,13 +13350,13 @@ msgstr "Ruwapay taputa"
 msgid "This type does not exist"
 msgstr "Kay ima niraqqa manan kanchu"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Tapuqa kamachisqaña"
 
 msgid "You can now add questions to your survey"
 msgstr "Kunanqa yapawaq tapukunata"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Tapukuyqa kunanyachisqaña"
 
 msgid "The question has been added."
@@ -13560,7 +13554,7 @@ msgstr "Tapukupa chinpunqa kashanña. Kay tapukuy ichapas hoq simipi kasqanrayku
 msgid "This survey code soon exists in this language"
 msgstr "Kay tapukuypa chinpunqa kashanña kay simipi"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Haykuqmasiq kutichiyninqa allintan pichakun"
 
 msgid "Delete this user's answers"
@@ -15654,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

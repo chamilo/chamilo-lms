@@ -1033,7 +1033,7 @@ class CourseManager
      * @param string $courseCode the course code
      * @param int    $visible    (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
      *
-     * @return bool true if added succesfully, false otherwise
+     * @return bool true if added successfully, false otherwise
      */
     public static function addUserVisibilityToCourseInCatalogue(
         $userId,
@@ -1087,7 +1087,7 @@ class CourseManager
      * @param string $courseCode the course code
      * @param int    $visible    (optional) The course visibility in the catalogue to the user (1=visible, 0=invisible)
      *
-     * @return bool true if removed succesfully or register not found, false otherwise
+     * @return bool true if removed successfully or register not found, false otherwise
      */
     public static function removeUserVisibilityToCourseInCatalogue(
         $userId,

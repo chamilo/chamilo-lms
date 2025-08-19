@@ -4668,7 +4668,7 @@ msgstr "אנא תנו הודעת טקסט"
 msgid "Please give a notice title"
 msgstr "נא לתת כותרת להודעה"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "אנא תן שם קישור"
 
 msgid "Insert this link"
@@ -5454,7 +5454,7 @@ msgstr "בחר תפריט נפתח"
 msgid "Multiple selection drop-down"
 msgstr "תפריט נפתח של בחירה מרובה"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "השדה נוסף בהצלחה"
 
 msgid "Grades thresholds colouring"
@@ -7818,9 +7818,6 @@ msgstr "הגעת למספר המקסימלי של ניסיונות למבחן ז
 msgid "Exercise added"
 msgstr "תרגיל נוסף"
 
-msgid "Assesment settings"
-msgstr "הגדרות הערכה"
-
 msgid "active"
 msgstr "פעיל"
 
@@ -9342,9 +9339,6 @@ msgstr "ההפעלות הפעילות שלי"
 msgid "My inactive sessions"
 msgstr "ההפעלות הלא פעילות שלי"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "הרחבה זו הופעלה אך לא יכולה להיות פעילה כרגע."
-
 msgid "My learners"
 msgstr "התלמידים שלי"
 
@@ -9375,7 +9369,7 @@ msgstr "אין משאב למחזור"
 msgid "Could not open"
 msgstr "לא ניתן לפתוח"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "זמן תדירות"
 
 msgid "This course could not be found"
@@ -9591,7 +9585,7 @@ msgstr "כתובת אתר OpenID"
 msgid "The file is too big to upload."
 msgstr "הקובץ גדול מדי להעלאה."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "הקובץ שהעלית לא התקבל בהצלחה. אנא נסה שוב מאוחר יותר או צור קשר עם מנהל הפורטל הזה."
 
 msgid "Assessments"
@@ -10521,7 +10515,7 @@ msgstr "נראות הערכה"
 msgid "Who changed it"
 msgstr "מי שינה את זה"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "ההערכה נערכה בהצלחה"
 
 msgid "Incorrect data"
@@ -11532,7 +11526,7 @@ msgstr "עכשיו הדף גלוי לכל המשתמשים"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "את הדף הראשי ניתן לערוך על ידי מורה בלבד"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "גישה לדף המאמן"
 
 msgid "Now discussion is visible by trainers only"
@@ -13365,13 +13359,13 @@ msgstr "ערוך שאלה"
 msgid "This type does not exist"
 msgstr "סוג זה אינו קיים"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "הסקר נוצר בהצלחה"
 
 msgid "You can now add questions to your survey"
 msgstr "עכשיו אתה יכול להוסיף שאלות לסקר שלך"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "הסקר עודכן בהצלחה"
 
 msgid "The question has been added."
@@ -13569,7 +13563,7 @@ msgstr "קוד הסקר הזה כבר קיים. זה כנראה אומר שהס�
 msgid "This survey code soon exists in this language"
 msgstr "קוד הסקר הזה קיים בקרוב בשפה זו"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "התשובות של המשתמש לסקר הוסרו בהצלחה."
 
 msgid "Delete this user's answers"
@@ -15663,7 +15657,7 @@ msgstr "תמטי"
 msgid "Thematic plan"
 msgstr "תוכנית נושאית"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "ערוך התקדמות תמטי"
 
 msgid "Edit thematic advance"

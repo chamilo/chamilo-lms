@@ -4661,7 +4661,7 @@ msgstr "Prašome pateikti įspėjimo tekstą"
 msgid "Please give a notice title"
 msgstr "Prašome pateikti įspėjimo pavadinimą"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Prašome pateikti nuorodos tekstą"
 
 msgid "Insert this link"
@@ -5447,7 +5447,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -7811,9 +7811,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "įvertinimo parametrai"
-
 msgid "active"
 msgstr "aktyvus"
 
@@ -9335,9 +9332,6 @@ msgstr "Mano aktyvios sesijos"
 msgid "My inactive sessions"
 msgstr "Mano naktyvios sesijos"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Šis plėtinys aktyvuotas, bet kol kas neveikiantis."
-
 msgid "My learners"
 msgstr "Mano studentai"
 
@@ -9368,8 +9362,8 @@ msgstr "Resursas neištrinamas"
 msgid "Could not open"
 msgstr "Atidaryti neįmanoma"
 
-msgid "Frequentation time"
-msgstr "Frequentation time"
+msgid "Time in course"
+msgstr "Time in course"
 
 msgid "This course could not be found"
 msgstr "Kursas nerastas"
@@ -9584,7 +9578,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -10514,7 +10508,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11525,7 +11519,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13089,7 +13083,7 @@ msgid "Homepage Help"
 msgstr "Help Course Home Page"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p>\n<b>Navigation</b>\n<p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p>\n<b>Best practice</b>\n<p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p>\n<p>To build your course, it might proove relevant to follow these steps:\n<ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li>\n<li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li>\n<li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li>\n<li>Hide all tools : your home page is empty in Student view,</li>\n<li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li>\n<li>Click on the eye icon besides the path you created : this path will then show on your home page,</li>\n<li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
+msgstr "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p>\n<b>Navigation</b>\n<p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p>\n<b>Best practice</b>\n<p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p>\n<p>To build your course, it might proove relevant to follow these steps:\n<ol><li>In Course Settings, check Course Access : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li>\n<li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li>\n<li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li>\n<li>Hide all tools : your home page is empty in Student view,</li>\n<li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li>\n<li>Click on the eye icon besides the path you created : this path will then show on your home page,</li>\n<li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
 msgstr "Help Live Conferencing system"
@@ -13358,13 +13352,13 @@ msgstr "Redaguoti klausimą"
 msgid "This type does not exist"
 msgstr "Šis tipas neegzistuoja"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Apklausa sėkmingai sukurta"
 
 msgid "You can now add questions to your survey"
 msgstr "Dabar galite įdėti klausimus į apklausą"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Apklausa sėkmingai atnaujinta"
 
 msgid "The question has been added."
@@ -13562,7 +13556,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15656,7 +15650,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

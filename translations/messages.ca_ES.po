@@ -4667,7 +4667,7 @@ msgstr "Si usplau, introduïu el text de la notícia"
 msgid "Please give a notice title"
 msgstr "Si us plau, introduïu el títol de la notícia"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Si us plau, introduïu el nom de l'enllaç"
 
 msgid "Insert this link"
@@ -5453,7 +5453,7 @@ msgstr "Desplegable"
 msgid "Multiple selection drop-down"
 msgstr "Desplegable amb elecció múltiple"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "El camp ha estat afegit"
 
 msgid "Grades thresholds colouring"
@@ -7817,9 +7817,6 @@ msgstr "Ha arribat al nombre màxim d'intents permesos en aquest exercici. No ob
 msgid "Exercise added"
 msgstr "Exercici afegit"
 
-msgid "Assesment settings"
-msgstr "Detalls de la puntuació"
-
 msgid "active"
 msgstr "Actiu"
 
@@ -9341,9 +9338,6 @@ msgstr "Les meues sessions actives"
 msgid "My inactive sessions"
 msgstr "Les meves sessions no actives"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Aquesta extensió ha estat activada però, ara com ara, no pot estar operativa."
-
 msgid "My learners"
 msgstr "Els meus estudiants"
 
@@ -9374,7 +9368,7 @@ msgstr "No hi ha recursos per a reciclar"
 msgid "Could not open"
 msgstr "No pot obrir-se"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Temps de freqüenciació"
 
 msgid "This course could not be found"
@@ -9590,7 +9584,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr "¡ El fitxer enviat és massa gran !"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "L'enviament de l'arxiu no s'ha pogut realitzar. Per favor, intenti'l de nou més tard o posi's en contacte amb l'administrador de la plataforma."
 
 msgid "Assessments"
@@ -10520,7 +10514,7 @@ msgstr "Visibilitat de la avaluació"
 msgid "Who changed it"
 msgstr "Qui ho va modificar"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "L'avaluació ha estat modificada"
 
 msgid "Incorrect data"
@@ -11531,7 +11525,7 @@ msgstr "La pàgina ara és visible per tots els usuaris"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "La pàgina principal del Wiki del curs només pot ser modificada per un professor"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Accés a la pàgina del professor"
 
 msgid "Now discussion is visible by trainers only"
@@ -13364,13 +13358,13 @@ msgstr "Editar qüestió"
 msgid "This type does not exist"
 msgstr "Aquest tipus no existeix"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "L'enquesta ha estat creada"
 
 msgid "You can now add questions to your survey"
 msgstr "Ara pot afegir les preguntes"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "L'enquesta ha estat actualitzada"
 
 msgid "The question has been added."
@@ -13568,7 +13562,7 @@ msgstr "Aquest codi de l'enquesta ja existeix. Probablement això sigui degut al
 msgid "This survey code soon exists in this language"
 msgstr "Aquest codi d'enquesta ja existeix en aquest idioma"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Les respostes de l'usuari han estat eliminades satisfactòriament"
 
 msgid "Delete this user's answers"
@@ -15662,7 +15656,7 @@ msgstr "Unitat didàctica"
 msgid "Thematic plan"
 msgstr "Programació de la unitat didàctica"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Edita la programació de la unitat didàctica"
 
 msgid "Edit thematic advance"

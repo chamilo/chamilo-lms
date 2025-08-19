@@ -4659,7 +4659,7 @@ msgstr "Mesedez, sartu abisuaren testua"
 msgid "Please give a notice title"
 msgstr "Mesedez, idatzi abisuaren titulua"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Mesedez, sartu loturaren izena"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr "Goitik behera zabaltzea"
 msgid "Multiple selection drop-down"
 msgstr "Aukera anitzeko goitibeherakoa"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Eremua ongi gehitu da"
 
 msgid "Grades thresholds colouring"
@@ -7809,9 +7809,6 @@ msgstr "Ariketa honetarako onartutako saio kopuru handiena bete duzu jadanik. Ha
 msgid "Exercise added"
 msgstr "Ariketa erantsia"
 
-msgid "Assesment settings"
-msgstr "Ebaluazioaren ezarpenak"
-
 msgid "active"
 msgstr "aktiboa"
 
@@ -9333,9 +9330,6 @@ msgstr "Nire saio aktiboak"
 msgid "My inactive sessions"
 msgstr "Nire saio inaktiboak"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Luzapen hau aktibatu da, baina, oraingoz, ez dago eragiteko moduan."
-
 msgid "My learners"
 msgstr "Nirekin diren ikasleak"
 
@@ -9366,7 +9360,7 @@ msgstr "Ez dago birziklatzeko baliabiderik"
 msgid "Could not open"
 msgstr "Ezin da ireki"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Maiztasun denbora"
 
 msgid "This course could not be found"
@@ -9582,7 +9576,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Kargatu beharreko fitxategia handiegia da!"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Kargatu zenuen fitxategia ez da ongi jaso. Mesedez, geroago saiatu berriro ere edo harremanetan jarri atariaren kudeatzailearekin."
 
 msgid "Assessments"
@@ -10512,7 +10506,7 @@ msgstr "Ebaluazioaren ikusgaitasuna"
 msgid "Who changed it"
 msgstr "Nork aldatu zuen"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Ebaluazioa ongi editatu da"
 
 msgid "Incorrect data"
@@ -11523,7 +11517,7 @@ msgstr "Orain erabiltzaile guztiek ikusi ahal dute orria"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Irakasle batek bakarrik editatu ahalko du Wikiaren orri nagusia"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Irakaslearen orrirako sarbidea"
 
 msgid "Now discussion is visible by trainers only"
@@ -13356,13 +13350,13 @@ msgstr "Editatu galdera"
 msgid "This type does not exist"
 msgstr "Mota hau ez dago"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Inkesta ongi sortu da"
 
 msgid "You can now add questions to your survey"
 msgstr "Orain galderak gehitu diezaizkiozu inkestari"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Inkesta ongi eguneratu da"
 
 msgid "The question has been added."
@@ -13560,7 +13554,7 @@ msgstr "Inkestaren kode hau bada lehendik. Honek esan nahi du, seguraski, inkest
 msgid "This survey code soon exists in this language"
 msgstr "Inkestaren kode hau bada hizkuntza honetarako"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Erabiltzaileak inkestari emaniko erantzunak ongi kendu dira."
 
 msgid "Delete this user's answers"
@@ -15654,7 +15648,7 @@ msgstr "Ikasgaia"
 msgid "Thematic plan"
 msgstr "Ikasgaiaren plangintza"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Editatu ikasgai aurreratua"
 
 msgid "Edit thematic advance"

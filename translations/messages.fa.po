@@ -4659,7 +4659,7 @@ msgstr "لطفاً عنوانی به این نوشته دهید"
 msgid "Please give a notice title"
 msgstr "لطفاً عنوان یادداشت را وارد کنید"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "لطفاً نامی برای پیوند تعیین کنید"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -7809,9 +7809,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr ""
 
-msgid "Assesment settings"
-msgstr "معیارهای  ارزشیابی"
-
 msgid "active"
 msgstr "فعال"
 
@@ -9333,9 +9330,6 @@ msgstr "جلسات فعال من"
 msgid "My inactive sessions"
 msgstr "جلسات غیر فعال من"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "این ماژول فعال شده است ولی در حال حاضر قادر به اجرا نمی باشد."
-
 msgid "My learners"
 msgstr "دانشجویان من"
 
@@ -9366,7 +9360,7 @@ msgstr "هیچ منبعی برای بازیابی نیست"
 msgid "Could not open"
 msgstr "قادر به بازکردن نبودیم"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "زمان تکرار"
 
 msgid "This course could not be found"
@@ -9582,7 +9576,7 @@ msgstr "آدرس OpenID"
 msgid "The file is too big to upload."
 msgstr "حجم فایل آپلود شده زیاد است."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "فایل آپلود شده بدرستی دریافت نشد. لطفا مجددا امتحان کنید و یا اینکه با مدیر پرتال تماس بگیرید."
 
 msgid "Assessments"
@@ -10512,7 +10506,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11523,7 +11517,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13087,7 +13081,7 @@ msgid "Homepage Help"
 msgstr "راهنماییدر مورد صفحۀآغازین"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr "صفحۀ آغازین درس در بر دارندۀ پیوندهایی به سوی ابزارهای مختلف آموزشی ست. می توانید ابزارهایی را که از نظر شما در آموزش درس مورد نظرتان استفاده ای ندارند از نگاه دانشجویان پنهان کنید. ابزارهای پنهان شده را می توان دوباره آشکار کرد. برای دانستن موقعیت مکانی خود در محیط آموزشی می توانید از اطلاعات سمت چپ بالای صفحه استفاده کنید. در قسمت سمت راست بالای صفحه نیز علائمی وجود دارند که می توانند برای نقل مکان در محیط آموزشی مورد استفاده قرار گیرند. برای افزایش پویایی محیط آموزشی خود می توانید به طور مداوم صفحۀ آغازین درستان را با اضافه نمودن مطالب مختلف همچون آخرین اخبار در مورد درس، آخرین مهلت انجام فعالیت علمی خاصی و ... تغییر دهید. برای انجام این عمل می بایست روی مداد زرد رنگ فشار دهید. با استفاده از قسمت تنظیمات درس می توان نحوۀ دسترسی به درس را تنظیم نمود. به عنوان مثال با انتخاب گزینۀ �دسترسی خصوصی� و گزینۀ �ثبت نام� تنها افرادی می توانند به درس دسترسی پیدا کنند که شما آنها را در فهرست کاربران ثبت نام کرده اید . خط سیر آموزشی را می توان یکی از مهمترین ابزارهای آموزشی در نظر گرفت. خط سیر آموزشی ، تنظیم زنجیره ای از صفحات مختلف و حتی ابزارهای مختلف آموزشی را امکان پذیر می سازد. این زنجیره در واقع روند آموزشی دانشجویان یا به عبارتی خط سیر آموزشی آنان را در طول دورۀ آموزشی مشخص می کند. با ورود به قسمت خط سیر آموزشی می توانید به آفرینش خطوط سیر آموزشی مختلف بپردازید. در این قسمت در کنار نام هر خط سیر آموزشی که شما ایجاد خواهید کرد، علامت چشمی نمایان خواهد شد.با  فشار دادن روی علامت چشم، پیوندی بر روی صفحۀ آغازین درس به سمت خط سیر مربوطه ایجاد خواهد شد. محیط آموزشی برای استاد و دانشجو به طرق مختلفی جلوه می کند. برای مشاهدۀ محیط آموزشی از دید دانشجویان می توانید بر روی �دید دانشجو� در قسمت سمت راست بالای صفحه فشار دهید<br /><br /><p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p> <b>Navigation</b> <p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p> <b>Best practice</b> <p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p> <p>To build your course, it might proove relevant to follow these steps: <ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li> <li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li> <li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li> <li>Hide all tools : your home page is empty in Student view,</li> <li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li> <li>Click on the eye icon besides the path you created : this path will then show on your home page,</li> <li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
+msgstr "صفحۀ آغازین درس در بر دارندۀ پیوندهایی به سوی ابزارهای مختلف آموزشی ست. می توانید ابزارهایی را که از نظر شما در آموزش درس مورد نظرتان استفاده ای ندارند از نگاه دانشجویان پنهان کنید. ابزارهای پنهان شده را می توان دوباره آشکار کرد. برای دانستن موقعیت مکانی خود در محیط آموزشی می توانید از اطلاعات سمت چپ بالای صفحه استفاده کنید. در قسمت سمت راست بالای صفحه نیز علائمی وجود دارند که می توانند برای نقل مکان در محیط آموزشی مورد استفاده قرار گیرند. برای افزایش پویایی محیط آموزشی خود می توانید به طور مداوم صفحۀ آغازین درستان را با اضافه نمودن مطالب مختلف همچون آخرین اخبار در مورد درس، آخرین مهلت انجام فعالیت علمی خاصی و ... تغییر دهید. برای انجام این عمل می بایست روی مداد زرد رنگ فشار دهید. با استفاده از قسمت تنظیمات درس می توان نحوۀ دسترسی به درس را تنظیم نمود. به عنوان مثال با انتخاب گزینۀ �دسترسی خصوصی� و گزینۀ �ثبت نام� تنها افرادی می توانند به درس دسترسی پیدا کنند که شما آنها را در فهرست کاربران ثبت نام کرده اید . خط سیر آموزشی را می توان یکی از مهمترین ابزارهای آموزشی در نظر گرفت. خط سیر آموزشی ، تنظیم زنجیره ای از صفحات مختلف و حتی ابزارهای مختلف آموزشی را امکان پذیر می سازد. این زنجیره در واقع روند آموزشی دانشجویان یا به عبارتی خط سیر آموزشی آنان را در طول دورۀ آموزشی مشخص می کند. با ورود به قسمت خط سیر آموزشی می توانید به آفرینش خطوط سیر آموزشی مختلف بپردازید. در این قسمت در کنار نام هر خط سیر آموزشی که شما ایجاد خواهید کرد، علامت چشمی نمایان خواهد شد.با  فشار دادن روی علامت چشم، پیوندی بر روی صفحۀ آغازین درس به سمت خط سیر مربوطه ایجاد خواهد شد. محیط آموزشی برای استاد و دانشجو به طرق مختلفی جلوه می کند. برای مشاهدۀ محیط آموزشی از دید دانشجویان می توانید بر روی �دید دانشجو� در قسمت سمت راست بالای صفحه فشار دهید<br /><br /><p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p> <b>Navigation</b> <p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p> <b>Best practice</b> <p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p> <p>To build your course, it might proove relevant to follow these steps: <ol><li>In Course Settings, check Course Access : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li> <li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li> <li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li> <li>Hide all tools : your home page is empty in Student view,</li> <li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li> <li>Click on the eye icon besides the path you created : this path will then show on your home page,</li> <li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
 msgstr "راهنماییدر مورد همایشبه طور زنده"
@@ -13356,13 +13350,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13560,7 +13554,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15654,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

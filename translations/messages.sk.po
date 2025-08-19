@@ -4667,7 +4667,7 @@ msgstr "Prosím zadajte text oznamu"
 msgid "Please give a notice title"
 msgstr "Prosím zadajte názov oznamu"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Prosím zadajte názov odkazu"
 
 msgid "Insert this link"
@@ -5453,7 +5453,7 @@ msgstr "Roztváracia ponuka"
 msgid "Multiple selection drop-down"
 msgstr "Viacnásobný výber drop-down"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Pole úspešne pridané"
 
 msgid "Grades thresholds colouring"
@@ -7817,9 +7817,6 @@ msgstr "Dosiahli ste maximálny počet pokusov pre tento test. Ak ste lektorom, 
 msgid "Exercise added"
 msgstr "Cvičenie bolo pridané"
 
-msgid "Assesment settings"
-msgstr "Nastavenie hodnotenia"
-
 msgid "active"
 msgstr "aktívny"
 
@@ -9341,9 +9338,6 @@ msgstr "Moje aktívne stretnutia"
 msgid "My inactive sessions"
 msgstr "Moje neaktívne stretnutia"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Rozšírenie bolo aktivované ale zatiaľ nemôže byť použité."
-
 msgid "My learners"
 msgstr "Moji študenti"
 
@@ -9374,7 +9368,7 @@ msgstr "Žiadny zdroj k recyklácii"
 msgid "Could not open"
 msgstr "Nie je možné otvoriť"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Prístupová doba"
 
 msgid "This course could not be found"
@@ -9590,7 +9584,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr "Súbor je príliš veľký."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Nahrávanie súboru bolo neúspešné. Prosím skúste to znova alebo kontaktujte administrátora portálu."
 
 msgid "Assessments"
@@ -10520,7 +10514,7 @@ msgstr "Zviditeľniť klasifikačný hárok"
 msgid "Who changed it"
 msgstr "Kto to zmenil"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Hodnotenie bolo úspešne upravené"
 
 msgid "Incorrect data"
@@ -11531,7 +11525,7 @@ msgstr "Teraz je stránka viditeľná pre všetkých používateľov"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Hlavná stránka môže byť zmenená len lektorom"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Prístup na stránku lektora"
 
 msgid "Now discussion is visible by trainers only"
@@ -13364,13 +13358,13 @@ msgstr "Upraviť otázku"
 msgid "This type does not exist"
 msgstr "Tento typ neexistuje"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Prieskum je úspešne vytvorený"
 
 msgid "You can now add questions to your survey"
 msgstr "Teraz môžete do svojho prieskumu pridať otázky"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Prieskum je úspešne aktualizovaný"
 
 msgid "The question has been added."
@@ -13568,7 +13562,7 @@ msgstr "Tento kód prieskumu už existuje. To znamená, že prieskum pravdepodob
 msgid "This survey code soon exists in this language"
 msgstr "Tento kód prieskumu bude onedlho existovať v tomto jazyku"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Odpovede používateľov na tento prieskum sú úspešne odstránené."
 
 msgid "Delete this user's answers"
@@ -15662,7 +15656,7 @@ msgstr "Tématický"
 msgid "Thematic plan"
 msgstr "Tématický plán"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Upraviť najprv tému"
 
 msgid "Edit thematic advance"

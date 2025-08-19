@@ -4652,7 +4652,7 @@ msgstr "Prosím napište text"
 msgid "Please give a notice title"
 msgstr "Prosím napište titulek k textu"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Prosím napište název odkazu"
 
 msgid "Insert this link"
@@ -5438,7 +5438,7 @@ msgstr "Rolovací nabídka"
 msgid "Multiple selection drop-down"
 msgstr "Vícenásobné rolovací menu"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Pole úspěšně vloženo"
 
 msgid "Grades thresholds colouring"
@@ -7802,9 +7802,6 @@ msgstr "Dosáhl jste maxima pokusů pro tento test Pokud jste cvičitel, můžet
 msgid "Exercise added"
 msgstr "Cvičení přidáno"
 
-msgid "Assesment settings"
-msgstr "Nastavení hodnocení"
-
 msgid "active"
 msgstr "aktivní"
 
@@ -9326,9 +9323,6 @@ msgstr "Moje aktivní výuka"
 msgid "My inactive sessions"
 msgstr "Moje neaktivní výuka"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Rozšírení bylo aktivováno, ale prozatím nemůže být použito."
-
 msgid "My learners"
 msgstr "Moji studenti"
 
@@ -9359,7 +9353,7 @@ msgstr "Žádný zdroj k recyklaci"
 msgid "Could not open"
 msgstr "Nemohu otevřít"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Čas návštěvy"
 
 msgid "This course could not be found"
@@ -9575,7 +9569,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -10505,7 +10499,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11516,7 +11510,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13349,13 +13343,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13553,7 +13547,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15647,7 +15641,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

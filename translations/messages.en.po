@@ -4659,8 +4659,8 @@ msgstr "Please give a notice text"
 msgid "Please give a notice title"
 msgstr "Please give a notice title"
 
-msgid "Plese give a link name"
-msgstr "Plese give a link name"
+msgid "Please give a link name"
+msgstr "Please give a link name"
 
 msgid "Insert this link"
 msgstr "Insert this link"
@@ -5445,8 +5445,8 @@ msgstr "Select drop-down"
 msgid "Multiple selection drop-down"
 msgstr "Multiple selection drop-down"
 
-msgid "Field succesfully added"
-msgstr "Field succesfully added"
+msgid "Field successfully added"
+msgstr "Field successfully added"
 
 msgid "Grades thresholds colouring"
 msgstr "Grades thresholds colouring"
@@ -7812,9 +7812,6 @@ msgstr "You have reached the maximum number of attempts for this test. Being a t
 msgid "Exercise added"
 msgstr "Exercise added"
 
-msgid "Assesment settings"
-msgstr "Assesment settings"
-
 msgid "active"
 msgstr "active"
 
@@ -9336,9 +9333,6 @@ msgstr "My active Sessions"
 msgid "My inactive sessions"
 msgstr "My inactive sessions"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "This extension has been actived but can't be operational for the moment."
-
 msgid "My learners"
 msgstr "My learners"
 
@@ -9369,8 +9363,8 @@ msgstr "No resource to recycle"
 msgid "Could not open"
 msgstr "Could not open"
 
-msgid "Frequentation time"
-msgstr "Frequentation time"
+msgid "Time in course"
+msgstr "Time in course"
 
 msgid "This course could not be found"
 msgstr "This course could not be found"
@@ -9585,8 +9579,8 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "The file is too big to upload."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
-msgstr "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
+msgstr "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 
 msgid "Assessments"
 msgstr "Assessments"
@@ -10515,8 +10509,8 @@ msgstr "Assessment visibility"
 msgid "Who changed it"
 msgstr "Who changed it"
 
-msgid "The evaluation has been succesfully edited"
-msgstr "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
+msgstr "The evaluation has been successfully edited"
 
 msgid "Incorrect data"
 msgstr "Incorrect data"
@@ -11526,8 +11520,8 @@ msgstr "Now the page is visible by all users"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "The Main Page can be edited by a teacher only"
 
-msgid "Acces to trainer page"
-msgstr "Acces to trainer page"
+msgid "Access to trainer page"
+msgstr "Access to trainer page"
 
 msgid "Now discussion is visible by trainers only"
 msgstr "Now discussion is visible by trainers only"
@@ -13359,13 +13353,13 @@ msgstr "Edit question"
 msgid "This type does not exist"
 msgstr "This type does not exist"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "The survey has been created successfully"
 
 msgid "You can now add questions to your survey"
 msgstr "You can now add questions to your survey"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "The survey has been updated successfully"
 
 msgid "The question has been added."
@@ -13563,7 +13557,7 @@ msgstr "This survey code already exists. That probably means the survey exists i
 msgid "This survey code soon exists in this language"
 msgstr "This survey code soon exists in this language"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "The user's answers to the survey have been successfully removed."
 
 msgid "Delete this user's answers"
@@ -15657,8 +15651,8 @@ msgstr "Thematic"
 msgid "Thematic plan"
 msgstr "Thematic plan"
 
-msgid "Edit tematic advance"
-msgstr "Edit tematic advance"
+msgid "Edit thematicadvance"
+msgstr "Edit thematicadvance"
 
 msgid "Edit thematic advance"
 msgstr "Edit thematic advance"
@@ -29003,8 +28997,8 @@ msgstr "Glossary exported"
 msgid "Could not export glossary"
 msgstr "Could not export glossary"
 
-msgid "Terms imported succesfully"
-msgstr "Terms imported succesfully"
+msgid "Terms imported successfully"
+msgstr "Terms imported successfully"
 
 msgid "Could not import terms"
 msgstr "Could not import terms"

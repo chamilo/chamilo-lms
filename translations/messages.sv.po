@@ -4659,7 +4659,7 @@ msgstr "Var vänlig ange anteckningstext"
 msgid "Please give a notice title"
 msgstr "Var vänlig ange titeln på anteckningen"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Var vänlig namnge länken"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr "Välj drop-down"
 msgid "Multiple selection drop-down"
 msgstr "Flervals drop-down"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Fältet tillagt"
 
 msgid "Grades thresholds colouring"
@@ -7809,9 +7809,6 @@ msgstr ""
 msgid "Exercise added"
 msgstr "Övning tillagd"
 
-msgid "Assesment settings"
-msgstr "utvärderings parametrar"
-
 msgid "active"
 msgstr "aktiv"
 
@@ -9333,9 +9330,6 @@ msgstr "Mina aktiva perioder"
 msgid "My inactive sessions"
 msgstr "Mina inaktiva perioder"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Utökningen är aktiverad, men är för tillfället inte funktionell."
-
 msgid "My learners"
 msgstr "Mina studenter"
 
@@ -9366,7 +9360,7 @@ msgstr "Inga återanvändbara resurser"
 msgid "Could not open"
 msgstr "Kunde inte öppna"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Besökstid"
 
 msgid "This course could not be found"
@@ -9582,7 +9576,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Filen är för stor för att laddas upp!"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Filen du laddat upp mottogs inte helt. Vänligen försök senare eller kontakta portaladministratören."
 
 msgid "Assessments"
@@ -10512,7 +10506,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11523,7 +11517,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13356,13 +13350,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13560,7 +13554,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15654,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

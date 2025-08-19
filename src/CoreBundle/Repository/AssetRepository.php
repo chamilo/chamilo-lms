@@ -161,11 +161,27 @@ class AssetRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Deletes an Asset from the database.
+     * If it is a SCORM package, first removes its extracted folder on disk.
+     */
     public function delete(?Asset $asset = null): void
     {
-        if (null !== $asset) {
-            $this->getEntityManager()->remove($asset);
-            $this->getEntityManager()->flush();
+        if (null === $asset) {
+            return;
         }
+
+        // If this is a SCORM package, delete its directory and all its contents
+        if (Asset::SCORM === $asset->getCategory()) {
+            $folder = $this->getFolder($asset); // e.g. "/scorm/MyScormPackage/"
+            if ($folder && $this->filesystem->directoryExists($folder)) {
+                $this->filesystem->deleteDirectory($folder);
+            }
+        }
+
+        // Remove the asset record from the database
+        $em = $this->getEntityManager();
+        $em->remove($asset);
+        $em->flush();
     }
 }

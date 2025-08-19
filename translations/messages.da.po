@@ -4659,7 +4659,7 @@ msgstr "Angiv venligst notits tekst"
 msgid "Please give a notice title"
 msgstr "Angiv venligst notits titel"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Angiv venligst linkets navn"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -9330,9 +9330,6 @@ msgstr "Mine aktive sessioner"
 msgid "My inactive sessions"
 msgstr "Mine inaktive sessioner"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Overførslen er blevet aktiveret, men kan ikke gøres operationel lige nu"
-
 msgid "My learners"
 msgstr "Mine deltagere"
 
@@ -9363,7 +9360,7 @@ msgstr "Der er ingen ressourcer at genbruge"
 msgid "Could not open"
 msgstr "Kunne ikke åbne"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Hyppighed"
 
 msgid "This course could not be found"
@@ -9579,7 +9576,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Filen fylder for meget og kan ikke uploades!"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Filen, som du har forsøgt at uploade, kunne ikke uploades. Prøv at forsøge senere eller kontakt administratoren."
 
 msgid "Assessments"
@@ -10509,7 +10506,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11520,7 +11517,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13353,13 +13350,13 @@ msgstr "Rediger spørgsmål"
 msgid "This type does not exist"
 msgstr "Typen findes ikke"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Evalueringen er blevet oprettet"
 
 msgid "You can now add questions to your survey"
 msgstr "Du kan nu tilføje spørgsmål til evalueringskemaet"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Evalueringen er opdateret"
 
 msgid "The question has been added."
@@ -13557,7 +13554,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -15651,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

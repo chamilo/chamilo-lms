@@ -105,7 +105,7 @@ const submitForm = async () => {
 
   try {
     await glossaryService.import(formData)
-    notification.showSuccessNotification(t("Terms imported succesfully"))
+    notification.showSuccessNotification(t("Terms imported successfully"))
     await router.push({
       name: "GlossaryList",
       query: route.query,

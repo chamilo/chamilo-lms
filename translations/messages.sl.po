@@ -4668,7 +4668,7 @@ msgstr "Podajte vsebilo obvestila"
 msgid "Please give a notice title"
 msgstr "Podajte naslov obvestila"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Podajte ime povezave"
 
 msgid "Insert this link"
@@ -5454,7 +5454,7 @@ msgstr "Padajoča izbira"
 msgid "Multiple selection drop-down"
 msgstr "Večkratna padajoča izbira"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Polje je bilo uspešno dodano"
 
 msgid "Grades thresholds colouring"
@@ -9339,9 +9339,6 @@ msgstr "Moje aktivne seje"
 msgid "My inactive sessions"
 msgstr "Moje neaktivne seje"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Ta razširitev je bila aktivirana, vendar trenutno ne more biti operativna"
-
 msgid "My learners"
 msgstr "Moji tečajniki"
 
@@ -9372,7 +9369,7 @@ msgstr "Ni ničesar za recikliranje"
 msgid "Could not open"
 msgstr "Ne morem odpreti"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Pogostost"
 
 msgid "This course could not be found"
@@ -9588,7 +9585,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Datoteka je prevelika !"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Nalagana datoteka se ni pravilno naložila. Poskusite ponovno kasneje ali pa se obrnite na upravitelja tega portala."
 
 msgid "Assessments"
@@ -10518,7 +10515,7 @@ msgstr "Vidnost redovalnice"
 msgid "Who changed it"
 msgstr "Kdo je izvršil spremembo"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Urejanje ocenjevanja je bilo uspešno dokončano"
 
 msgid "Incorrect data"
@@ -11529,7 +11526,7 @@ msgstr "Sedaj je stran vidna za vse uporabnike"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Glavno stran lahko spremeni le učitelj"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Dostop do učiteljeve strani"
 
 msgid "Now discussion is visible by trainers only"
@@ -13362,13 +13359,13 @@ msgstr "Uredi vprašanje"
 msgid "This type does not exist"
 msgstr "Ta vrsta ne obstaja"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Evalvacijski vprašalnik je bil uspešno ustvarjen."
 
 msgid "You can now add questions to your survey"
 msgstr "Sedaj lahko vprašalniku dodate vprašanja"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Vprašalnik je bil uspešno ažuriran"
 
 msgid "The question has been added."
@@ -13566,7 +13563,7 @@ msgstr "Ta koda vprašalnika že obstaja. Verjetno to pomeni, da vprašalnik že
 msgid "This survey code soon exists in this language"
 msgstr "Ta koda vprašalnika bo kmalu obstajala v tej jezikovni varianti."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Uporabnikovi odgovori tega vprašalnika so bili uspešno odstranjeni."
 
 msgid "Delete this user's answers"
@@ -15660,7 +15657,7 @@ msgstr "Napredovanje"
 msgid "Thematic plan"
 msgstr "Tematski načrt"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Uredi napredovanje po temah"
 
 msgid "Edit thematic advance"

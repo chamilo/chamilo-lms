@@ -4667,7 +4667,7 @@ msgstr ""
 msgid "Please give a notice title"
 msgstr ""
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr ""
 
 msgid "Insert this link"
@@ -5453,7 +5453,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -9338,9 +9338,6 @@ msgstr "Οι ενεργές περιόδοί μου"
 msgid "My inactive sessions"
 msgstr "Οι ανενεργές περιόδοί μου"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr "Οι εκπαιδευόμενοί μου"
 
@@ -9371,7 +9368,7 @@ msgstr "No resource to recycle"
 msgid "Could not open"
 msgstr "Δεν μπορεί να ανοιχθεί"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9587,7 +9584,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -10517,7 +10514,7 @@ msgstr "Ορατότητα της αξιολόγησης"
 msgid "Who changed it"
 msgstr "Ποιος την άλλαξε"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Έγινε επιτυχής επεξεργασία της αξιολόγησης"
 
 msgid "Incorrect data"
@@ -11528,7 +11525,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13361,14 +13358,14 @@ msgstr "Edit question"
 msgid "This type does not exist"
 msgstr "This type does not exist"
 
-msgid "The survey has been created succesfully"
-msgstr "The survey has been created succesfully"
+msgid "The survey has been created successfully"
+msgstr "The survey has been created successfully"
 
 msgid "You can now add questions to your survey"
 msgstr "You can now add questions to your survey"
 
-msgid "The survey has been updated succesfully"
-msgstr "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
+msgstr "The survey has been updated successfully"
 
 msgid "The question has been added."
 msgstr "The question has been added."
@@ -13565,8 +13562,8 @@ msgstr "This survey code already exists. That probably means the survey exists i
 msgid "This survey code soon exists in this language"
 msgstr "This survey code soon exists in this language"
 
-msgid "The user's answers to the survey have been succesfully removed."
-msgstr "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
+msgstr "The user's answers to the survey have been successfully removed."
 
 msgid "Delete this user's answers"
 msgstr "Delete this user's answers"
@@ -15659,7 +15656,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

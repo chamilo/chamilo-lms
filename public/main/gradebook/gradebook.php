@@ -376,7 +376,7 @@ if (isset($_GET['editcat'])) {
     Display::addFlash(Display::return_message(get_lang('Category updated'), 'confirmation', false));
 }
 if (isset($_GET['editeval'])) {
-    Display::addFlash(Display::return_message(get_lang('The evaluation has been succesfully edited'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The evaluation has been successfully edited'), 'confirmation', false));
 }
 if (isset($_GET['linkedited'])) {
     Display::addFlash(Display::return_message(get_lang('Assessment edited'), 'confirmation', false));

@@ -238,7 +238,7 @@
     "Delete all terms before import.": "\u05de\u05d7\u05e7 \u05d0\u05ea \u05db\u05dc \u05d4\u05ea\u05e0\u05d0\u05d9\u05dd \u05dc\u05e4\u05e0\u05d9 \u05d4\u05d9\u05d9\u05d1\u05d5\u05d0.",
     "Update existing terms.": "\u05e2\u05d3\u05db\u05df \u05ea\u05e0\u05d0\u05d9\u05dd \u05e7\u05d9\u05d9\u05de\u05d9\u05dd.",
     "Import": "\u05d9\u05d9\u05d1\u05d5\u05d0",
-    "Terms imported succesfully": "Terms imported succesfully",
+    "Terms imported successfully": "Terms imported successfully",
     "Could not import terms": "Could not import terms",
     "Definition": "Definition",
     "Install step 1": "Install step 1",

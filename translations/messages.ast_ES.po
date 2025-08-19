@@ -4659,7 +4659,7 @@ msgstr "Por favor, escriba'l testu de la noticia"
 msgid "Please give a notice title"
 msgstr "Por favor, escriba'l títulu de la noticia"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Por favor, escriba'l nome del enllaz"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr "Desplegable"
 msgid "Multiple selection drop-down"
 msgstr "Desplegable con escoyeta múltiple"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "El campu amestóse"
 
 msgid "Grades thresholds colouring"
@@ -9330,9 +9330,6 @@ msgstr "Les mios sesiones actives"
 msgid "My inactive sessions"
 msgstr "Les mios sesiones inactives"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Esta estensión activóse, pero de momentu nun pue ponese a funcionar."
-
 msgid "My learners"
 msgstr "Los mios estudiantes"
 
@@ -9363,7 +9360,7 @@ msgstr "Nun hai nada pa tirar a la basoria"
 msgid "Could not open"
 msgstr "Nun se pue abrir"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Frecuencia"
 
 msgid "This course could not be found"
@@ -9579,7 +9576,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr "L'archivu unviáu ye más grande de la cuenta"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "L'unvíu del archivu nun se pudo facer. Por favor, inténtelo otra vez más tarde o contaute col alministrador de la plataforma."
 
 msgid "Assessments"
@@ -10509,7 +10506,7 @@ msgstr "Visibilidá del cuadernu"
 msgid "Who changed it"
 msgstr "Quién lu modificó"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "La evaluación modificóse"
 
 msgid "Incorrect data"
@@ -11520,7 +11517,7 @@ msgstr "La páxina agora puen vela tolos usuarios"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "La páxina d'entamu namás pue modificala un profesor del cursu."
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Entrada a la páxina del profesor"
 
 msgid "Now discussion is visible by trainers only"
@@ -13353,13 +13350,13 @@ msgstr "Editar entruga"
 msgid "This type does not exist"
 msgstr "Esti tipu nun esiste"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Creóse la encuesta"
 
 msgid "You can now add questions to your survey"
 msgstr "Agora pue amestar entrugues a la so encuesta"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Actualizóse la encuesta"
 
 msgid "The question has been added."
@@ -13557,7 +13554,7 @@ msgstr "Esti códigu yá esiste. Ye posible qu'ello seya porque esta encuesta es
 msgid "This survey code soon exists in this language"
 msgstr "Esti códigu d'encuesta yá esiste nesti idioma."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Los retruques del usuariu esborrárense dafechu."
 
 msgid "Delete this user's answers"
@@ -15651,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

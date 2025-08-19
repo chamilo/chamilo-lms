@@ -363,7 +363,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('The survey has been created succesfully'),
+                    get_lang('The survey has been created successfully'),
                     'success'
                 )
             );
@@ -454,7 +454,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('The survey has been updated succesfully'),
+                    get_lang('The survey has been updated successfully'),
                     'confirmation'
                 )
             );

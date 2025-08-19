@@ -4659,7 +4659,7 @@ msgstr "Моля, въведете текст на бележката!"
 msgid "Please give a notice title"
 msgstr "Моля, въведете заглавие на бележката!"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Моля, задайте име на връзката!"
 
 msgid "Insert this link"
@@ -5445,7 +5445,7 @@ msgstr "Падаща кутия за избор"
 msgid "Multiple selection drop-down"
 msgstr "Кутия за множествен избор"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Полето е добавено."
 
 msgid "Grades thresholds colouring"
@@ -9330,9 +9330,6 @@ msgstr "Моите активни сесии"
 msgid "My inactive sessions"
 msgstr "Моите неактивни сесии"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Разширението е активирано, но в момента не може да работи."
-
 msgid "My learners"
 msgstr "Моите курсисти"
 
@@ -9363,7 +9360,7 @@ msgstr "Няма ресурси за рециклиране."
 msgid "Could not open"
 msgstr "Не може да се отвори."
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Многократно"
 
 msgid "This course could not be found"
@@ -9579,7 +9576,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Файлът е твърде голям, за да бъде качен."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Файлът не беше качен успешно. Моля, опитайте отново малко по-късно или се свържете с адмистратора на системата."
 
 msgid "Assessments"
@@ -10509,7 +10506,7 @@ msgstr "Видимост на оценяването"
 msgid "Who changed it"
 msgstr "Кой е променял"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Оценяването е редактирано."
 
 msgid "Incorrect data"
@@ -11520,7 +11517,7 @@ msgstr "Страницата се вижда от всички потребит�
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Началната страница може да се редактира само от преподавател."
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13353,13 +13350,13 @@ msgstr "Редактиране на въпрос"
 msgid "This type does not exist"
 msgstr "Този тип не съществува."
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Анкетата е създадена"
 
 msgid "You can now add questions to your survey"
 msgstr "Можете да добавяте въпроси."
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Анкетата е актуализирана"
 
 msgid "The question has been added."
@@ -13557,7 +13554,7 @@ msgstr "Този код на анкетата вече съществува. Т�
 msgid "This survey code soon exists in this language"
 msgstr "Кодът на анкетата вече съществува за този език."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Отговорите на потребителя в анкетата са изтрити."
 
 msgid "Delete this user's answers"
@@ -15651,7 +15648,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr "Тематичен план"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"

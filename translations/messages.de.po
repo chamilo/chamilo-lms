@@ -4720,7 +4720,7 @@ msgstr "Bitte Text für Notitzen eingeben"
 msgid "Please give a notice title"
 msgstr "Bitte Titel für Notiz eingeben"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Bitte eine Bezeichnung für den Link eingeben"
 
 msgid "Insert this link"
@@ -5506,7 +5506,7 @@ msgstr "Auswahlliste (drop down)"
 msgid "Multiple selection drop-down"
 msgstr "Mehrfachauswahl (drop down)"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Feld wurde hinzugefügt"
 
 msgid "Grades thresholds colouring"
@@ -9391,9 +9391,6 @@ msgstr "Meine aktiven Session-Kurse"
 msgid "My inactive sessions"
 msgstr "Meine inaktiven Session-Kurse"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Diese Erweiterung wurde aktiviert, kann aber momentan nicht benutzt werden"
-
 msgid "My learners"
 msgstr "Meine Teilnehmer"
 
@@ -9424,7 +9421,7 @@ msgstr "Kein Element zur Wiederverwendung"
 msgid "Could not open"
 msgstr "Öffnen nicht möglich"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Durchschnittliche Besuchszeit"
 
 msgid "This course could not be found"
@@ -9640,7 +9637,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Datei ist zu groß!"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Der Upload Ihrer Datei war nicht erfolgreich. Versuchen Sie es bitte später nochmals oder kontaktieren Sie den System-Administrator"
 
 msgid "Assessments"
@@ -10570,7 +10567,7 @@ msgstr "Sichtbarkeit der Bewertung"
 msgid "Who changed it"
 msgstr "Wer hat geändert"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Die Bewertung wurde erfogreich bearbeitet"
 
 msgid "Incorrect data"
@@ -11581,7 +11578,7 @@ msgstr "Nun ist die Seite für alle Benutzer sichtbar"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Die Haupt-Seite kann nur vom Kursleiter bearbeitet werden"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Zugang zur Kursleiter-Seite"
 
 msgid "Now discussion is visible by trainers only"
@@ -13414,13 +13411,13 @@ msgstr "Frage bearbeiten"
 msgid "This type does not exist"
 msgstr "Dieser Typ existiert nicht"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Die Umfrage wurde erfolgreich erstellt"
 
 msgid "You can now add questions to your survey"
 msgstr "Sie können nun Fragen zu Ihrer Umfrage hinzufügen"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Die Umfrage wurde erfolgreich aktualisiert"
 
 msgid "The question has been added."
@@ -13618,7 +13615,7 @@ msgstr "Dieser Umfrage-Code existiert bereits.  Das bedeutet vermutlich, dass di
 msgid "This survey code soon exists in this language"
 msgstr "Diesen Umfrage-Code wird es demnächst in dieser Sprache geben."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Die Antwort des Benutzers wurde erfolgreich entfernt."
 
 msgid "Delete this user's answers"
@@ -15712,7 +15709,7 @@ msgstr "Thematisch"
 msgid "Thematic plan"
 msgstr "Ablauf"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Bearbeiten"
 
 msgid "Edit thematic advance"

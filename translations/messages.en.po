@@ -29894,6 +29894,9 @@ msgstr "Data exchanges (GDPR)"
 msgid "Back to third parties"
 msgstr "Back to third parties"
 
+msgid "Data exchange"
+msgstr "Data exchange"
+
 msgid "Add exchange"
 msgstr "Add exchange"
 
@@ -30439,3 +30442,93 @@ msgstr "Other options"
 
 msgid "Activity ID"
 msgstr "Activity ID"
+
+msgid "No resource link entity found"
+msgstr "No resource link entity found"
+
+msgid "Access URL"
+msgstr "Access URL"
+
+msgid "You will therefore be automatically redirected to this URL."
+msgstr "You will therefore be automatically redirected to this URL."
+
+msgid "You have access to multiple URLs. Here is the list of your accesses."
+msgstr "You have access to multiple URLs. Here is the list of your accesses."
+
+msgid "Please click on the link below corresponding to the URL you wish to access."
+msgstr "Please click on the link below corresponding to the URL you wish to access"
+
+msgid "Does not have enough contrast against background"
+msgstr "Does not have enough contrast against background"
+
+msgid "Featured courses"
+msgstr "Featured courses"
+
+msgid "Show more courses"
+msgstr "Show more courses"
+
+msgid "I would like to choose a sector"
+msgstr "I would like to choose a sector"
+
+msgid "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank."
+msgstr "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank."
+
+msgid "Availability during my internship/mobility"
+msgstr "Availability during my internship/mobility"
+
+msgid "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability"
+msgstr "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability"
+
+msgid "My learning goals"
+msgstr "My learning goals"
+
+msgid "What do you want to learn? What area do you want to improve in? You can write your answers freely here."
+msgstr "What do you want to learn? What area do you want to improve in? You can write your answers freely here."
+
+msgid "My working method"
+msgstr "My working method"
+
+msgid "On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style."
+msgstr "On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style."
+
+msgid "Availability before my internship/mobility"
+msgstr "Availability before my internship/mobility"
+
+msgid "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability"
+msgstr "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability"
+
+msgid "The topics that interest me / My learning objectives"
+msgstr "The topics that interest me / My learning objectives"
+
+msgid "The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program."
+msgstr "The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program."
+
+msgid "My language level"
+msgstr "My language level"
+
+msgid "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>"
+msgstr "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>"
+
+msgid "My work environment"
+msgstr "My work environment"
+
+msgid "To work on the platform, I use:"
+msgstr "To work on the platform, I use:"
+
+msgid "You will find in the <a style=\"color:blue\" href=\"/faq">FAQ</a> the recommended environment to work on the platform."
+msgstr "You will find in the <a style=\"color:blue\" href=\"/faq">FAQ</a> the recommended environment to work on the platform."
+
+msgid "Validate learning trail"
+msgstr "Validate learning trail"
+
+msgid "Skills and objectives assessment"
+msgstr "Skills and objectives assessment"
+
+msgid "Welcome to the platforme! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. </br></br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.</br></br>Happy learning on the platform!"
+msgstr "Welcome to the platforme! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. </br></br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.</br></br>Happy learning on the platform!"
+
+msgid "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.</br></br>"
+msgstr "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.</br></br>"
+
+msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.</br></br>"
+msgstr "Once the areas have been selected, choose 5 themes and objectives in order of preference.</br></br>"

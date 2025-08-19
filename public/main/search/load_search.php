@@ -200,8 +200,8 @@ $extraFieldUser = new ExtraField('user');
 
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 
-$userForm->addStartPanel('filiere', get_lang('Filiere'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Filiere Explanation').'</p>');
+$userForm->addStartPanel('filiere', get_lang('I would like to choose a sector'));
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the island corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank.').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -227,8 +227,8 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('dispo', get_lang('Disponibilite Pendant Mon Stage'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Disponibilite Pendant Mon Stage Explanation').'</p>');
+$userForm->addStartPanel('dispo', get_lang('Availability during my internship/mobility'));
+$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
@@ -254,8 +254,8 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('objectifs', get_lang('Objectifs Apprentissage'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Objectifs Apprentissage Explanation').'</p>');
+$userForm->addStartPanel('objectifs', get_lang('My learning goals'));
+$userForm->addHtml('<p class="text-info">'.get_lang('What do you want to learn? What area do you want to improve in? You can write your answers freely here.').'</p>');
 $fieldsToShow = [
     'objectif_apprentissage',
 ];
@@ -275,8 +275,8 @@ $extra = $extraFieldUser->addElements(
 );
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('method', get_lang('Work methodology'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Work methodolofy explanation').'</p>');
+$userForm->addStartPanel('method', get_lang('My working method'));
+$userForm->addHtml("<p class=\"text-info\">".get_lang("On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style.")."</p>");
 
 $fieldsToShow = [
     'methode_de_travaille',
@@ -317,8 +317,8 @@ if (isset($_POST) && !empty($_POST)) {
     $searchChecked3 = null === $searchChecked3 ? 'checked' : $searchChecked3;
 }
 
-$form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Availability before'));
-$form->addHtml('<p class="text-info">'.get_lang('Availability before explanation').'</p>');
+$form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Availability before my internship/mobility'));
+$form->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability').'</p>')
 
 // Session fields
 $showOnlyThisFields = [
@@ -362,8 +362,8 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('theme_obj', '<input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;'.get_lang('Topics objectives'));
-$form->addHtml('<p class="text-info">'.get_lang('Topics objectives explanation').'</p>');
+$form->addStartPanel('theme_obj', '<input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;'.get_lang('The topics that interest me / My learning objectives'));
+$form->addHtml("<p class=\"text-info\">".get_lang("The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program.")."</p>");
 
 $showOnlyThisFields = [
     'domaine',
@@ -420,8 +420,8 @@ $extra = $extraFieldUser->addElements(
 
 $form->addEndPanel();
 
-$form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('Language level'));
-$form->addHtml('<p class="text-info">'.get_lang('Language level explanation').'</p>');
+$form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('My language level'));
+$form->addHtml("<p class=\"text-info\">".get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>")."</p>");
 
 $showOnlyThisFields = [
     'ecouter',
@@ -461,8 +461,8 @@ $extra = $extraField->addElements(
 
 $form->addEndPanel();
 
-$userForm->addStartPanel('environnement_travail', get_lang('Mon Environnement De Travail'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail Explanation').'</p>');
+$userForm->addStartPanel('environnement_travail', get_lang('My work environment'));
+$userForm->addHtml('<p class="text-info">'.get_lang(' ').'</p>');
 
 $fieldsToShow = [
     'outil_de_travail_ordinateur',
@@ -473,7 +473,7 @@ $fieldsToShow = [
     'outil_de_travail_smartphone_so',
 ];
 
-$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro1'));
+$userForm->addLabel(null, get_lang('To work on the platform, I use:'));
 
 $extra = $extraFieldUser->addElements(
     $userForm,
@@ -488,7 +488,7 @@ $extra = $extraFieldUser->addElements(
     $forceShowFields
 );
 
-$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro2'));
+$userForm->addLabel(null, get_lang(' '));
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -514,7 +514,7 @@ $extra = $extraFieldUser->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail Renvoi FAQ').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('You will find in the <a style="color:blue" href=\"/faq">FAQ</a> the recommended environment to work on the platform.').'</p>');
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 
@@ -1306,7 +1306,7 @@ if ($userToLoad) {
     );
     $button .= '<br /><br />';
     $userReportButton = Display::url(
-        get_lang('Diagnostic Validate LearningPath'),
+        get_lang('Validate learning trail'),
         api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?student='.$userToLoad,
         ['class' => 'btn btn--primary']
     );

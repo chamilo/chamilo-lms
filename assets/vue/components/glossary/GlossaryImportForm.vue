@@ -27,7 +27,7 @@
     <BaseCheckbox
       id="terms-update"
       v-model="update"
-      :label="t('Update existing terms')"
+      :label="t('Update existing terms.')"
       name="terms-delete-all"
     />
 

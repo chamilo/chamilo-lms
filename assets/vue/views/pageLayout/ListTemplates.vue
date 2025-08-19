@@ -86,7 +86,7 @@
   <!-- Dialog to show JSON -->
   <BaseDialogConfirmCancel
     v-model:is-visible="isJsonDialogVisible"
-    :title="t('Layout JSON Details')"
+    :title="t('Layout JSON details')"
     hide-cancel
     confirm-label="Copy JSON"
     @confirm-clicked="copyJsonToClipboard"

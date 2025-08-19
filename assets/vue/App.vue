@@ -55,6 +55,7 @@ import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
+import DashboardLayout from "./components/layout/DashboardLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 import apolloClient from "./config/apolloClient"
@@ -79,14 +80,14 @@ const layout = computed(() => {
     (queryParams.has("lp_id") && "view" === queryParams.get("action")) ||
     (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))
   ) {
-    return "EmptyLayout"
+    return EmptyLayout
   }
 
   if (customVueTemplateEnabled) {
     return CustomDashboardLayout
   }
 
-  return `${router.currentRoute.value.meta.layout ?? "Dashboard"}Layout`
+  return router.currentRoute.value.meta.layout ? `${router.currentRoute.value.meta.layout}Layout` : DashboardLayout
 })
 
 const legacyContainer = ref(null)
@@ -114,15 +115,6 @@ watchEffect(() => {
     chEditors.forEach((editorConfig) => tinymce.init(editorConfig))
 
     content.style.display = "block"
-  }
-})
-
-watchEffect(async () => {
-  try {
-    const component = `${route.meta.layout}.vue`
-    layout.value = component?.default || "Dashboard"
-  } catch (e) {
-    layout.value = "Dashboard"
   }
 })
 

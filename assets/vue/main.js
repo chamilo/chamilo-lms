@@ -31,9 +31,6 @@ import VueFlatPickr from "vue-flatpickr-component"
 import "flatpickr/dist/flatpickr.css"
 import "@mdi/font/css/materialdesignicons.css"
 
-import DashboardLayout from "./components/layout/DashboardLayout.vue"
-import EmptyLayout from "./components/layout/EmptyLayout.vue"
-
 // Prime
 import PrimeVue from "primevue/config"
 import DataView from "primevue/dataview"
@@ -188,8 +185,6 @@ app.component("Button", Button)
 app.component("Column", Column)
 app.component("ColumnGroup", ColumnGroup)
 app.component("Toolbar", Toolbar)
-app.component("DashboardLayout", DashboardLayout)
-app.component("EmptyLayout", EmptyLayout)
 app.component("BaseAppLink", BaseAppLink)
 
 app.config.globalProperties.axios = axios

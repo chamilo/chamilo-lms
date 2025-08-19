@@ -391,6 +391,9 @@ foreach ($questionList as $questionId) {
 $counter = 1;
 $exercise_content = '';
 $category_list = [];
+$mediaList = [];
+$tempParentId = null;
+$mediaCounter = 0;
 $useAdvancedEditor = true;
 
 if (!empty($maxEditors) && count($questionList) > $maxEditors) {
@@ -863,13 +866,34 @@ foreach ($questionList as $questionId) {
 
     $contents = ob_get_clean();
     $question_content = '<div class="question_row">';
+    $showMedia = false;
+
+    $counterToShow = $counter;
+
+    if ($objQuestionTmp->parent_id != 0) {
+
+        if (!in_array($objQuestionTmp->parent_id, $media_list)) {
+            $media_list[] = $objQuestionTmp->parent_id;
+            $show_media = true;
+        }
+        if ($tempParentId == $objQuestionTmp->parent_id) {
+            $mediaCounter++;
+        } else {
+            $mediaCounter = 0;
+        }
+        $counterToShow = chr(97 + $mediaCounter);
+        $tempParentId = $objQuestionTmp->parent_id;
+    }
+
     if ($show_results && $objQuestionTmp) {
         $objQuestionTmp->export = $action === 'export';
         // Shows question title an description
         $question_content .= $objQuestionTmp->return_header(
             $objExercise,
             $counter,
-            $score
+            $score,
+            $showMedia,
+            $mediaCounter
         );
     }
     $counter++;

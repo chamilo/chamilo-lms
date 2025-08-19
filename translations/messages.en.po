@@ -30509,8 +30509,8 @@ msgstr "My work environment"
 msgid "To work on the platform, I use:"
 msgstr "To work on the platform, I use:"
 
-msgid "You will find in the <a style=\"color:blue\" href=\"/faq">FAQ</a> the recommended environment to work on the platform."
-msgstr "You will find in the <a style=\"color:blue\" href=\"/faq">FAQ</a> the recommended environment to work on the platform."
+msgid "You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform."
+msgstr "You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform."
 
 msgid "Validate learning trail"
 msgstr "Validate learning trail"

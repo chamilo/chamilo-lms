@@ -30474,7 +30474,7 @@ msgstr ""
 msgid "To work on the platform, I use:"
 msgstr ""
 
-msgid "You will find in the <a style=\"color:blue\" href=\"/faq">FAQ</a> the recommended environment to work on the platform."
+msgid "You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform."
 msgstr ""
 
 msgid "Validate learning trail"

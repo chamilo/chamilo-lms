@@ -87,7 +87,7 @@
   >
     <div v-if="![4, 3].includes(groupInfo.role)">
       <BaseButton
-        :label="t('Join to group')"
+        :label="t('Join group')"
         class="mt-4"
         icon="join-group"
         type="primary"

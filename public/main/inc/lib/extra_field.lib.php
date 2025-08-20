@@ -2522,8 +2522,8 @@ class ExtraField extends Model
             $form->addElement(
                 'checkbox',
                 'auto_remove',
-                get_lang('Remove on anonymisation'),
-                get_lang('Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation.')
+                get_lang('Remove on anonymization'),
+                get_lang('Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization.')
             );
         }
 

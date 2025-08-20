@@ -30330,10 +30330,10 @@ msgstr ""
 msgid "No option available"
 msgstr ""
 
-msgid "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
+msgid "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
 msgstr ""
 
-msgid "Remove on anonymisation"
+msgid "Remove on anonymization"
 msgstr ""
 
 msgid "Auto remove"

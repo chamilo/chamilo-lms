@@ -24250,7 +24250,7 @@ msgid "Username list"
 msgstr "Liste de nom d'utilisateur"
 
 msgid "Users about to be anonymized:"
-msgstr "Utilisateurs sur le point d'être anonymiser :"
+msgstr "Utilisateurs sur le point d'être anonymisés :"
 
 msgid "Could not read file."
 msgstr "Impossible de lire le fichier"

@@ -30362,11 +30362,11 @@ msgstr "Links moved"
 msgid "No option available"
 msgstr "No option available"
 
-msgid "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
-msgstr "Remove this value when anonymising a user, because it could otherwise help identify the user despite the anonymisation."
+msgid "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
+msgstr "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
 
-msgid "Remove on anonymisation"
-msgstr "Remove on anonymisation"
+msgid "Remove on anonymization"
+msgstr "Remove on anonymization"
 
 msgid "Auto remove"
 msgstr "Auto remove"

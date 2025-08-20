@@ -30523,3 +30523,18 @@ msgstr "The learning courses are designed around the following main areas. Choos
 
 msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
 msgstr "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
+
+msgid "PDF download unavailable"
+msgstr "PDF download unavailable"
+
+msgid "Registering"
+msgstr "Registering"
+
+msgid "Hello,<br>You haven't logged into to your account for three months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "Hello,<br>You haven't logged into to your account for three months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+
+msgid "Hello,<br>You haven't logged into your account for six months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "Hello,<br>You haven't logged into your account for six months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+
+msgid "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
+msgstr "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."

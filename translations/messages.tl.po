@@ -8561,9 +8561,6 @@ msgstr "Pangalan"
 msgid "Last name"
 msgstr "Apelyido"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr ""
 

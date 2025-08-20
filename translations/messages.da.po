@@ -8568,9 +8568,6 @@ msgstr "Fornavn"
 msgid "Last name"
 msgstr "Efternavn"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Slideshow-konvertering"
 

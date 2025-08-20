@@ -1226,7 +1226,7 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('e-mail'),
+            get_lang('E-mail'),
             get_lang('Man hours'),
             get_lang('Generated certificate'),
             get_lang('Approved'),

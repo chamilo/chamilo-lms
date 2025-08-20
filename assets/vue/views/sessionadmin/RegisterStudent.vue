@@ -84,7 +84,7 @@
           <thead class="bg-gray-20 text-gray-90 font-medium">
             <tr>
               <th class="px-4 py-2 text-left">{{ t("Full name") }}</th>
-              <th class="px-4 py-2 text-left">{{ t("e-mail") }}</th>
+              <th class="px-4 py-2 text-left">{{ t("E-mail") }}</th>
               <th class="px-4 py-2 text-left">{{ t("Active") }}</th>
               <th class="px-4 py-2 text-left">{{ t("Local user") }}</th>
               <th class="px-4 py-2 text-right"></th>
@@ -156,7 +156,7 @@
         <InputText
           v-model="createForm.email"
           type="email"
-          :placeholder="t('Email')"
+          :placeholder="t('E-mail')"
           class="w-full"
         />
         <InputText

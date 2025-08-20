@@ -3285,7 +3285,7 @@ function display_list_users_without_publication($task_id, $studentId = null)
     $origin = api_get_origin();
     $table_header[] = [get_lang('Last name'), true];
     $table_header[] = [get_lang('First name'), true];
-    $table_header[] = [get_lang('e-mail'), true];
+    $table_header[] = [get_lang('E-mail'), true];
 
     $data = get_list_users_without_publication($task_id);
 

@@ -8570,9 +8570,6 @@ msgstr "Vardas"
 msgid "Last name"
 msgstr "Pavardė"
 
-msgid "e-mail"
-msgstr "El. paštas"
-
 msgid "Slideshow conversion"
 msgstr "Skaidrių konvertavimas"
 

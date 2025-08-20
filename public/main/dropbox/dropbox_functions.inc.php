@@ -1081,7 +1081,7 @@ function store_add_dropbox($file = [], $work = null)
                     $_user['lastName'],
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
-                )."\n".get_lang('e-mail')." : ".$_user['mail'],
+                )."\n".get_lang('E-mail')." : ".$_user['mail'],
                 api_get_person_name(
                     $_user['firstName'],
                     $_user['lastName'],

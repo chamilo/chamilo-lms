@@ -46,7 +46,7 @@
         </template>
       </Column>
 
-      <Column :header="t('e-mail')">
+      <Column :header="t('E-mail')">
         <template #body="slotProps">
           <a
             class="text-blue-600 hover:underline"

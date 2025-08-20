@@ -8568,9 +8568,6 @@ msgstr "Keresztnév"
 msgid "Last name"
 msgstr "Vezetéknév"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Diabemutató konverziója"
 

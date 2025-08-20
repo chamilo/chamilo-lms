@@ -8563,9 +8563,6 @@ msgstr ""
 msgid "Last name"
 msgstr ""
 
-msgid "e-mail"
-msgstr ""
-
 msgid "Slideshow conversion"
 msgstr ""
 

@@ -180,7 +180,7 @@ if (Database::num_rows($res) > 0) {
         $table->set_header(1, get_lang('Last name'), true);
         $table->set_header(2, get_lang('First name'), true);
     }
-    $table->set_header(3, get_lang('e-mail'), true);
+    $table->set_header(3, get_lang('E-mail'), true);
     $table->set_header(4, get_lang('Status'), true);
     $table->set_header(5, '', false);
     $table->display();

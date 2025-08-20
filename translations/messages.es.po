@@ -8581,9 +8581,6 @@ msgstr "Nombres"
 msgid "Last name"
 msgstr "Apellidos"
 
-msgid "e-mail"
-msgstr "Correo electrónico"
-
 msgid "Slideshow conversion"
 msgstr "Conversión de la presentación"
 

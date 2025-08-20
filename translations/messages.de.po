@@ -8629,9 +8629,6 @@ msgstr "Vorname"
 msgid "Last name"
 msgstr "Nachname"
 
-msgid "e-mail"
-msgstr "E-Mail"
-
 msgid "Slideshow conversion"
 msgstr "Diashow Konvertierung"
 

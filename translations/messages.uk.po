@@ -8561,9 +8561,6 @@ msgstr "Ім'я"
 msgid "Last name"
 msgstr "Прізвище"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Перетворення на слайдшоу"
 

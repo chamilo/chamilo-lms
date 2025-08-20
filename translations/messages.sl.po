@@ -8577,9 +8577,6 @@ msgstr "Ime"
 msgid "Last name"
 msgstr "Priimek"
 
-msgid "e-mail"
-msgstr "E-pošta"
-
 msgid "Slideshow conversion"
 msgstr "Pretvorba prosojnic"
 

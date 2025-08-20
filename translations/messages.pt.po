@@ -8576,9 +8576,6 @@ msgstr "Primeiro Nome"
 msgid "Last name"
 msgstr "Último Nome"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Conversão da apresentação de diapositivos"
 

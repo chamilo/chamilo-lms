@@ -8568,9 +8568,6 @@ msgstr "Nome"
 msgid "Last name"
 msgstr "Apellíos"
 
-msgid "e-mail"
-msgstr "Corréu electrónicu"
-
 msgid "Slideshow conversion"
 msgstr "Conversión de la presentación"
 

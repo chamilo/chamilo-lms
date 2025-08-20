@@ -143,7 +143,7 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
 // e-mail
-$form->addElement('text', 'email', get_lang('e-mail'));
+$form->addElement('text', 'email', get_lang('E-mail'));
 $form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');

@@ -644,7 +644,7 @@ class UserManager
         }
 
         $corePairs = [
-            get_lang('e-mail',        $adminLocale) => (string) $user->getEmail(),
+            get_lang('E-mail',        $adminLocale) => (string) $user->getEmail(),
             get_lang('First name',    $adminLocale) => (string) $user->getFirstname(),
             get_lang('Last name',     $adminLocale) => (string) $user->getLastname(),
             get_lang('Username',      $adminLocale) => (string) $user->getUsername(),

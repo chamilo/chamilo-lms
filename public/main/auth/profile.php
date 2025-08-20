@@ -172,7 +172,7 @@ if ('true' === api_get_setting('registration', 'officialcode') &&
 }
 
 //    EMAIL
-$form->addElement('email', 'email', get_lang('e-mail'), ['size' => 40]);
+$form->addElement('email', 'email', get_lang('E-mail'), ['size' => 40]);
 if (!in_array('email', $profileList)) {
     $form->freeze('email');
 }

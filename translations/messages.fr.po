@@ -8793,9 +8793,6 @@ msgstr "Prénom"
 msgid "Last name"
 msgstr "Nom"
 
-msgid "e-mail"
-msgstr "Courriel"
-
 msgid "Slideshow conversion"
 msgstr "Conversion de la présentation"
 

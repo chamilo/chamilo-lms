@@ -144,7 +144,7 @@ if (isset($_GET['action'])) {
                         get_lang('First name'),
                         get_lang('Last name'),
                         get_lang('Username'),
-                        get_lang('e-mail'),
+                        get_lang('E-mail'),
                         get_lang('Phone'),
                         get_lang('Code'),
                         get_lang('active'),
@@ -155,7 +155,7 @@ if (isset($_GET['action'])) {
                         get_lang('Last name'),
                         get_lang('First name'),
                         get_lang('Username'),
-                        get_lang('e-mail'),
+                        get_lang('E-mail'),
                         get_lang('Phone'),
                         get_lang('Code'),
                         get_lang('active'),
@@ -200,7 +200,7 @@ if (isset($_GET['action'])) {
                         get_lang('Picture'),
                         get_lang('Code'),
                         get_lang('First name').', '.get_lang('Last name'),
-                        get_lang('e-mail'),
+                        get_lang('E-mail'),
                         get_lang('Phone'),
                     ];
                 } else {
@@ -209,7 +209,7 @@ if (isset($_GET['action'])) {
                         get_lang('Picture'),
                         get_lang('Code'),
                         get_lang('Last name').', '.get_lang('First name'),
-                        get_lang('e-mail'),
+                        get_lang('E-mail'),
                         get_lang('Phone'),
                     ];
                 }

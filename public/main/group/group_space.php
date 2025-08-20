@@ -372,7 +372,7 @@ if (api_is_western_name_order()) {
 }
 
 if ('true' === api_get_setting('show_email_addresses') || api_is_allowed_to_edit()) {
-    $table->set_header(3, get_lang('e-mail'));
+    $table->set_header(3, get_lang('E-mail'));
     $table->set_column_filter(3, 'email_filter');
     $table->set_header(4, get_lang('active'));
     $table->set_column_filter(4, 'activeFilter');

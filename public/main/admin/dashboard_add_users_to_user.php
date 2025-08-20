@@ -260,7 +260,7 @@ $filters = [
     ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('First name')],
     ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('Last name')],
     ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('Code')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('e-mail')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('E-mail')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);

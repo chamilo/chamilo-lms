@@ -150,7 +150,7 @@ if ($form->validate()) {
                 get_lang('Administrator')." ".
                 api_get_setting('siteName')."\nT. ".
                 api_get_setting('administratorTelephone')."\n".
-                get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
+                get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
             $emailbody = nl2br($emailbody);
 
             MessageManager::send_message_simple($userInfo['user_id'], $emailsubject, $emailbody);

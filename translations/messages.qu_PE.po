@@ -8568,9 +8568,6 @@ msgstr "Suti"
 msgid "Last name"
 msgstr "Mamatayta suti"
 
-msgid "e-mail"
-msgstr "E-chaski"
-
 msgid "Slideshow conversion"
 msgstr "Rikuchinapa t'ijraynin"
 

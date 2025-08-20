@@ -8576,9 +8576,6 @@ msgstr "Όνομα"
 msgid "Last name"
 msgstr "Επίθετο"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Slideshow conversion"
 

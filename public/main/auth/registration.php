@@ -204,7 +204,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     'false' !== api_get_setting('allow_registration')
 ) {
     // EMAIL
-    $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
+    $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
     if ('true' === api_get_setting('registration', 'email')) {
         $form->addRule('email', get_lang('Required field'), 'required');
     }

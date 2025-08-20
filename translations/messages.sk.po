@@ -8576,9 +8576,6 @@ msgstr "Krstné meno"
 msgid "Last name"
 msgstr "Priezvisko"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Konverzia pre slideshow"
 

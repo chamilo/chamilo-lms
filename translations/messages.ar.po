@@ -8577,9 +8577,6 @@ msgstr "الإسم الأول"
 msgid "Last name"
 msgstr "اللقب"
 
-msgid "e-mail"
-msgstr "البريد الإلكتروني"
-
 msgid "Slideshow conversion"
 msgstr "محول شرائح العرض"
 

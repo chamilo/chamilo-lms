@@ -8577,9 +8577,6 @@ msgstr "Nume"
 msgid "Last name"
 msgstr "Numele de familie"
 
-msgid "e-mail"
-msgstr "email"
-
 msgid "Slideshow conversion"
 msgstr "Conversia presentatiei"
 

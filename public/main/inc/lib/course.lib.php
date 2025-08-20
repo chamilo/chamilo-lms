@@ -2795,7 +2795,7 @@ class CourseManager
                 $emailbody .= get_lang('Last name').': '.$student['lastname']."\n";
                 $emailbody .= get_lang('First name').': '.$student['firstname']."\n";
             }
-            $emailbody .= get_lang('e-mail').': <a href="mailto:'.$student['email'].'">'.$student['email']."</a>\n\n";
+            $emailbody .= get_lang('E-mail').': <a href="mailto:'.$student['email'].'">'.$student['email']."</a>\n\n";
             $recipient_name = api_get_person_name(
                 $tutor['firstname'],
                 $tutor['lastname'],

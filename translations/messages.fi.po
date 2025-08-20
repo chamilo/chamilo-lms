@@ -8570,9 +8570,6 @@ msgstr "Etunimi"
 msgid "Last name"
 msgstr "Sukunimi"
 
-msgid "e-mail"
-msgstr "Sähköposti"
-
 msgid "Slideshow conversion"
 msgstr "Esityksen muuntaminen"
 

@@ -8568,9 +8568,6 @@ msgstr "名"
 msgid "Last name"
 msgstr "姓"
 
-msgid "e-mail"
-msgstr "電子郵件"
-
 msgid "Slideshow conversion"
 msgstr "轉換投映片"
 

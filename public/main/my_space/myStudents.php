@@ -876,7 +876,7 @@ $csv_content[] = [
 ];
 $csv_content[] = [
     get_lang('Name'),
-    get_lang('e-mail'),
+    get_lang('E-mail'),
     get_lang('Tel'),
 ];
 $csv_content[] = [

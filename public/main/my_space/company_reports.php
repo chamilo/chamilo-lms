@@ -35,7 +35,7 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 $columns = [
     get_lang('Course'),
     get_lang('User'),
-    get_lang('e-mail'),
+    get_lang('E-mail'),
     get_lang('Man hours'),
     get_lang('Generated certificate'),
     get_lang('Completed learning paths'),

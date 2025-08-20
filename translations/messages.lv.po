@@ -8569,9 +8569,6 @@ msgstr "Vārds"
 msgid "Last name"
 msgstr "Uzvārds"
 
-msgid "e-mail"
-msgstr "e-pasts"
-
 msgid "Slideshow conversion"
 msgstr "Slaidu demonstrācijas konvertācija"
 

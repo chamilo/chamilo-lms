@@ -8609,9 +8609,6 @@ msgstr "Voornaam"
 msgid "Last name"
 msgstr "Familienaam"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Conversie van de presentatie"
 

@@ -8561,9 +8561,6 @@ msgstr "Fornavn"
 msgid "Last name"
 msgstr "Eftirnavn"
 
-msgid "e-mail"
-msgstr "Teldupostur"
-
 msgid "Slideshow conversion"
 msgstr ""
 

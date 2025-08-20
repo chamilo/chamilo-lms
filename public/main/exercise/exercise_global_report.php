@@ -29,7 +29,7 @@ $header = [];
 $header[] = get_lang('Username');
 $header[] = get_lang('First name');
 $header[] = get_lang('Last name');
-$header[] = get_lang('e-mail');
+$header[] = get_lang('E-mail');
 $header[] = get_lang('Official code');
 
 foreach ($categories as $categoryInfo) {

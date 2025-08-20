@@ -8577,9 +8577,6 @@ msgstr "שם פרטי"
 msgid "Last name"
 msgstr "שם משפחה"
 
-msgid "e-mail"
-msgstr "דוא\"ל"
-
 msgid "Slideshow conversion"
 msgstr "המרת הנפשה"
 

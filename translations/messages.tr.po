@@ -8568,9 +8568,6 @@ msgstr "Adınız"
 msgid "Last name"
 msgstr "Soyadınız"
 
-msgid "e-mail"
-msgstr "E-posta"
-
 msgid "Slideshow conversion"
 msgstr ""
 

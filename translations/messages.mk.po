@@ -8568,9 +8568,6 @@ msgstr "Име"
 msgid "Last name"
 msgstr "Презиме"
 
-msgid "e-mail"
-msgstr "E-mail"
-
 msgid "Slideshow conversion"
 msgstr "Претворање на слајд-шоу"
 

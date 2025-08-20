@@ -8576,9 +8576,6 @@ msgstr "Nom"
 msgid "Last name"
 msgstr "Cognom"
 
-msgid "e-mail"
-msgstr "Correu electrònic"
-
 msgid "Slideshow conversion"
 msgstr "Conversió de la presentació"
 

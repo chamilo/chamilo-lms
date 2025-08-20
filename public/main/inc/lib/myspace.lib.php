@@ -2972,7 +2972,7 @@ class MySpace
                     get_lang('Sincerely').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
                     get_lang('Administrator')." ".api_get_setting('siteName')."\nT. ".
-                    api_get_setting('administratorTelephone')."\n".get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
+                    api_get_setting('administratorTelephone')."\n".get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
                     api_get_person_name($user['First name'], $user['Last name'], null, PERSON_NAME_EMAIL_ADDRESS),

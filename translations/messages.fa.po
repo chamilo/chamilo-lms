@@ -8568,9 +8568,6 @@ msgstr "نام"
 msgid "Last name"
 msgstr "نام خانوادگی"
 
-msgid "e-mail"
-msgstr "پست الکترونیک"
-
 msgid "Slideshow conversion"
 msgstr "تبدیل اسلایدشو"
 

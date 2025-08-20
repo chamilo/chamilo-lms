@@ -340,7 +340,7 @@ class ExerciseResult
         }
 
         $data .= get_lang('Login').';';
-        $data .= get_lang('e-mail').';';
+        $data .= get_lang('E-mail').';';
         $data .= get_lang('Groups').';';
 
         if ($export_user_fields) {
@@ -504,7 +504,7 @@ class ExerciseResult
             }
 
             $list[0][] = get_lang('Login');
-            $list[0][] = get_lang('e-mail');
+            $list[0][] = get_lang('E-mail');
         }
 
         $list[0][] = get_lang('Groups');

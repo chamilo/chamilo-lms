@@ -153,7 +153,7 @@ $table->setHeaderContents(0, 0, get_lang('Information'));
 $csvContent[] = [get_lang('Information')];
 $data = [
     get_lang('Name') => $completeName,
-    get_lang('e-mail') => $user->getEmail(),
+    get_lang('E-mail') => $user->getEmail(),
     get_lang('Phone') => $user->getPhone(),
     get_lang('Course code') => $user->getOfficialCode(),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),

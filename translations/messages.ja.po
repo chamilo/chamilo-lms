@@ -8631,9 +8631,6 @@ msgstr "名"
 msgid "Last name"
 msgstr "姓"
 
-msgid "e-mail"
-msgstr "電子メール"
-
 msgid "Slideshow conversion"
 msgstr ""
 

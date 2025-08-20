@@ -3744,7 +3744,7 @@ class SurveyUtil
         }
 
         // EMAIL
-        $field_list_array['email']['name'] = get_lang('e-mail');
+        $field_list_array['email']['name'] = get_lang('E-mail');
         if ('true' != api_get_setting('profile', 'email')) {
             $field_list_array['email']['visibility'] = 1;
         } else {

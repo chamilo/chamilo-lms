@@ -164,4 +164,20 @@ final class ThemeHelper
 
         return '';
     }
+
+    public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
+    {
+        $candidates = $type === 'email'
+            ? ['images/email-logo.svg', 'images/email-logo.png']
+            : ['images/header-logo.svg', 'images/header-logo.png'];
+
+        foreach ($candidates as $relPath) {
+            $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);
+            if ($url !== '') {
+                return $url;
+            }
+        }
+
+        return '';
+    }
 }

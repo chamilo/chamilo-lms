@@ -75,7 +75,13 @@ class ChamiloExtension extends AbstractExtension
             new TwigFunction('theme_asset', $this->getThemeAssetUrl(...)),
             new TwigFunction('theme_asset_link_tag', $this->getThemeAssetLinkTag(...), ['is_safe' => ['html']]),
             new TwigFunction('theme_asset_base64', $this->getThemeAssetBase64Encoded(...)),
+            new TwigFunction('theme_logo', $this->getThemeLogoUrl(...)),
         ];
+    }
+
+    public function getThemeLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
+    {
+        return $this->themeHelper->getPreferredLogoUrl($type, $absoluteUrl);
     }
 
     public function completeUserNameWithLink(User $user): string

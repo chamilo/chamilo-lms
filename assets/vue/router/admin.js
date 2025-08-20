@@ -17,6 +17,12 @@ export default {
       component: () => import("../views/admin/AdminConfigureColors.vue"),
     },
     {
+      path: "configuration/branding",
+      name: "AdminBranding",
+      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true },
+      component: () => import("../views/admin/AdminBranding.vue"),
+    },
+    {
       path: "gdpr/third-parties",
       name: "ThirdPartyManager",
       meta: { requiresAdmin: true, showBreadcrumb: true },

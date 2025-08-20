@@ -616,14 +616,14 @@ class AccessUrl extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    public function setSuperior(?AccessUrl $accessUrl): static
+    public function setSuperior(?self $accessUrl): static
     {
         $this->parent = $accessUrl;
 
         return $this;
     }
 
-    public function getSuperior(): ?AccessUrl
+    public function getSuperior(): ?self
     {
         return $this->parent;
     }

@@ -9,11 +9,8 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
-use Doctrine\Persistence\ObjectManager;
 
 readonly class AccessUrlListener
 {
@@ -64,7 +61,7 @@ readonly class AccessUrlListener
         $firstAccessUrl = $this->accessUrlHelper->getFirstAccessUrl();
 
         foreach ($all as $accessUrl) {
-            if (in_array($accessUrl->getId(), [$firstAccessUrl->getId(), $currentAccessUrl->getId()])) {
+            if (\in_array($accessUrl->getId(), [$firstAccessUrl->getId(), $currentAccessUrl->getId()])) {
                 continue;
             }
 

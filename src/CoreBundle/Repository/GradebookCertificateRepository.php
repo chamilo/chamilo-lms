@@ -75,7 +75,7 @@ class GradebookCertificateRepository extends ServiceEntityRepository
             $certificate = new GradebookCertificate();
 
             $category = 0 === $catId ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
-            $user     = $this->_em->getRepository(User::class)->find($userId);
+            $user = $this->_em->getRepository(User::class)->find($userId);
 
             if ($category) {
                 $certificate->setCategory($category);
@@ -83,10 +83,11 @@ class GradebookCertificateRepository extends ServiceEntityRepository
             $certificate->setUser($user);
             $certificate->setPathCertificate($fileName);
             $certificate->setScoreCertificate($scoreCertificate);
-            $certificate->setCreatedAt(new \DateTime());
+            $certificate->setCreatedAt(new DateTime());
 
             $this->_em->persist($certificate);
             $this->_em->flush();
+
             return;
         }
 

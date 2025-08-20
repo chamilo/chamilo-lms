@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * @extends Voter<'CREATE'|'VIEW'|'EDIT'|'DELETE'|'EXPORT', Resource>
+ * @extends Voter<'CREATE'|'VIEW'|'EDIT'|'DELETE'|'EXPORT', resource>
  */
 class ResourceVoter extends Voter
 {

@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Serializer\SerializerInterface;
 use Twig\Environment;

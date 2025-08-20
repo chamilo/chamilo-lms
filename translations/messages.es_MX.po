@@ -1604,7 +1604,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -7266,7 +7266,7 @@ msgstr "Mover el documento actual"
 msgid "Edit the current document"
 msgstr "Editar el documento actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Advertencia !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Volver a la lista de preguntas"
 msgid "Answers to the question"
 msgstr "Responder la pregunta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "AAtención ! Esta pregunta y sus respuestas se usaron en varios ejercicios. Desea modificarla"
 
 msgid "in all tests"
@@ -14293,7 +14293,7 @@ msgid "Add a Link help"
 msgstr "Ayuda de añadir un enlace"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos es una herramienta modular. Usted puede mostrar y esconder las herramientas que desee, de acuerdo a su proyecto o a sus etapas cronológicas. Pero usted también puede añadir sus herramientas o herramientas externas al portal Chamilo. De esta form"
+msgstr "<p>Chamilo es una herramienta modular. Usted puede mostrar y esconder las herramientas que desee, de acuerdo a su proyecto o a sus etapas cronológicas. Pero usted también puede añadir sus herramientas o herramientas externas al portal Chamilo. De esta form"
 
 msgid "Clear content"
 msgstr "</p><p><b>Pedagogía</b><p>Para los profesores, preparar un curso en internet es también un asunto  pedagógico."
@@ -14325,8 +14325,8 @@ msgstr "Idioma de instalación"
 msgid "Please read the following requirements thoroughly."
 msgstr "Lea cuidadosamente"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Atención !<br />El instalador ha detectado una instalación previa de Chamilo en su sistema."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Atención ! El instalador ha detectado una instalación previa de Chamilo en su sistema."
 
 msgid "New installation"
 msgstr "Nueva instalación"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

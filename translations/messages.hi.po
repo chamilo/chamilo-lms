@@ -1598,7 +1598,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -7259,7 +7259,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr ""
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7652,7 +7652,7 @@ msgstr ""
 msgid "Answers to the question"
 msgstr ""
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr ""
 
 msgid "in all tests"
@@ -14318,7 +14318,7 @@ msgstr ""
 msgid "Please read the following requirements thoroughly."
 msgstr ""
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr ""
 
 msgid "New installation"
@@ -15095,7 +15095,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

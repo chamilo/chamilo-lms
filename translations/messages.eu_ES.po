@@ -1604,7 +1604,7 @@ msgstr "Pakete honen formatua ez da onartu. Mesedez, egiaztatu ea paketeak balio
 msgid "Move the current forum"
 msgstr "Lekuz aldatu uneko foroa"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Abisua! Ikaskuntza objektu baten edukia editatzen duzunean, ikastaroaren txostena aldatu dezakezu edo ikaskuntza objektuari kalte egin."
 
 msgid "Please provide a subject or message"
@@ -7266,7 +7266,7 @@ msgstr "Aldatu lekuz uneko dokumentua"
 msgid "Edit the current document"
 msgstr "Editatu uneko dokumentua"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Abisua !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Itzuli galdera zerrendara"
 msgid "Answers to the question"
 msgstr "Erantzunak galderari"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Abisua! Kontuz, galdera hau eta erantzunak ariketa batzuetan erabiltzen dira. Aldatu nahi al dituzu?"
 
 msgid "in all tests"
@@ -14325,7 +14325,7 @@ msgstr "Instalazioaren hizkuntza"
 msgid "Please read the following requirements thoroughly."
 msgstr "Mesedez, irakurri itzazu hurrengo eskakizunak oso adi"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr "Abisua!"
 
 msgid "New installation"
@@ -15102,7 +15102,7 @@ msgstr "Ez dago eremu estra erabilgarririk"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Hasi idazten eta, jarraian, klikatu barra honen gainean etiketa balidatzeko"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instalatu Chamilo"
 
 msgid "Chamilo URL"

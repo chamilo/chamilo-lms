@@ -1604,7 +1604,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -4351,7 +4351,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "과정관리자가 그룹 모듈의 카테고리 생성하는 것을 허용하시겠습니까?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "플랫폼 관리자의 다른 부분에서 플랫폼 언어를 결정할 수 있습니다, 즉; <a href=\"languages.php\">Dokeos Platform Languages</a>"
+msgstr "플랫폼 관리자의 다른 부분에서 플랫폼 언어를 결정할 수 있습니다, 즉; <a href=\"languages.php\">Chamilo Platform Languages</a>"
 
 msgid "Production Server"
 msgstr "제품 서버"
@@ -7266,7 +7266,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr ""
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "문제 목록으로 돌아가기"
 msgid "Answers to the question"
 msgstr "문제의 해답"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "경고! 이 문제와 해답은 여러 테스트에서 사용되었습니다. 이를 수정하시겠습니까?"
 
 msgid "in all tests"
@@ -14325,8 +14325,8 @@ msgstr ""
 msgid "Please read the following requirements thoroughly."
 msgstr "철저히 읽기"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning !<br>인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warning! 인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다."
 
 msgid "New installation"
 msgstr "새로 설치"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

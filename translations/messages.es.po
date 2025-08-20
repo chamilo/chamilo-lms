@@ -1615,7 +1615,7 @@ msgstr "El formato de este paquete no ha sido reconocido. Por favor, compruebe e
 msgid "Move the current forum"
 msgstr "Mover el foro actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "¡ Aviso ! Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el objeto."
 
 msgid "Please provide a subject or message"
@@ -7279,7 +7279,7 @@ msgstr "Mover el documento actual"
 msgid "Edit the current document"
 msgstr "Editar el documento actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Atención !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7672,7 +7672,7 @@ msgstr "Volver a la lista de ejercicios"
 msgid "Answers to the question"
 msgstr "Responder la pregunta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Precaución! Esta pregunta y sus respuestas son usadas en varios ejercicios. ¿Quiere modificarlas?"
 
 msgid "in all tests"
@@ -14341,8 +14341,8 @@ msgstr "Idioma de instalación"
 msgid "Please read the following requirements thoroughly."
 msgstr "Lea con atención los requerimientos siguientes."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "¡ Atención !<br>El instalador ha detectado una instalación anterior de Chamilo en su sistema."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "¡ Atención ! El instalador ha detectado una instalación anterior de Chamilo en su sistema."
 
 msgid "New installation"
 msgstr "Nueva instalación"
@@ -15118,7 +15118,7 @@ msgstr "No hay campos extras disponibles"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Comience a escribir, a continuación, haga clic en esta barra para validar la etiqueta"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instalar Chamilo"
 
 msgid "Chamilo URL"

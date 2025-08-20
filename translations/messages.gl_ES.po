@@ -1612,7 +1612,7 @@ msgstr "O formato do paquete non pode ser recoñecido. Por favor, cerciórese de
 msgid "Move the current forum"
 msgstr "Mover o foro actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "¡ Aviso ! <br /> Se edita o contido de un paso scorm, pode alterar o informe da secuencia de aprendizaxe ou danar o paso"
 
 msgid "Please provide a subject or message"
@@ -7274,7 +7274,7 @@ msgstr "Mover o documento actual"
 msgid "Edit the current document"
 msgstr "Editar o documento actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Atención!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7667,7 +7667,7 @@ msgstr "Volver á lista de preguntas"
 msgid "Answers to the question"
 msgstr "Resposta-la pregunta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Precaución! Esta pregunta e estas respostas úsanse en varios exercicios. ¿Quérelas modificar?"
 
 msgid "in all tests"
@@ -14301,7 +14301,7 @@ msgid "Add a Link help"
 msgstr "Axuda Engadir unha ligazón"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos é unha ferramenta modular. Podes agochar e mostrar ferramentas en calquer momento, de acordo co teu proxecto ou coas súas diferentes fases cronolóxicas. E tamén podes engadir á túa páxina principal ferramentas ou páxinas creadas por ti mesmo ou que proveñan do exterior do teu portal Chamilo. Deste xeito, farás da páxina principal do teu curso A TÚA páxina.</p><p>Para apoderareste así da túa páxina, Engadiraslle ligazóns. Estes hipervínculos poden ser de dous tipos:<ul><li><b>Ligazóns externas</b>: creas na túa páxina principal un vínculo para un sitio web situado fora do teu curso. Neste caso, seleccionarás Target= Nunha xanela nova porque non queres que ese sitio web substitúa o teu ambiente Chamilo.</li><lil><b>Ligazóns internas</b>: ligas cunha páxina ou ferramenta que está dentro do teu curso Chamilo. Para facelo, vai primeiro a esa páxina, documento ou ferramenta, copia o seu URL da barra de enderezos do teu navegador (CTRL+C) e logo vas a Engadir unha ligazón e pegas este URL no campo URL e daslle o nome que queiras. Neste caso, seleccionarás Target=Mesma xanela, porque así manterás a faixa de Chamilo na parte superior e permanecerás no mesmo ambiente.</li></ul>Unha vez creados, estes vínculos non se poden modificar. Para editalos, a única solución é desactivalos, eliminalos e comezar de cero.</p>"
+msgstr "<p>Chamilo é unha ferramenta modular. Podes agochar e mostrar ferramentas en calquer momento, de acordo co teu proxecto ou coas súas diferentes fases cronolóxicas. E tamén podes engadir á túa páxina principal ferramentas ou páxinas creadas por ti mesmo ou que proveñan do exterior do teu portal Chamilo. Deste xeito, farás da páxina principal do teu curso A TÚA páxina.</p><p>Para apoderareste así da túa páxina, Engadiraslle ligazóns. Estes hipervínculos poden ser de dous tipos:<ul><li><b>Ligazóns externas</b>: creas na túa páxina principal un vínculo para un sitio web situado fora do teu curso. Neste caso, seleccionarás Target= Nunha xanela nova porque non queres que ese sitio web substitúa o teu ambiente Chamilo.</li><lil><b>Ligazóns internas</b>: ligas cunha páxina ou ferramenta que está dentro do teu curso Chamilo. Para facelo, vai primeiro a esa páxina, documento ou ferramenta, copia o seu URL da barra de enderezos do teu navegador (CTRL+C) e logo vas a Engadir unha ligazón e pegas este URL no campo URL e daslle o nome que queiras. Neste caso, seleccionarás Target=Mesma xanela, porque así manterás a faixa de Chamilo na parte superior e permanecerás no mesmo ambiente.</li></ul>Unha vez creados, estes vínculos non se poden modificar. Para editalos, a única solución é desactivalos, eliminalos e comezar de cero.</p>"
 
 msgid "Clear content"
 msgstr "Limpar contido"
@@ -14333,8 +14333,8 @@ msgstr "Lingua de Instalación"
 msgid "Please read the following requirements thoroughly."
 msgstr "Lea con cuidado"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "¡Cuidado! <br> O instalador detectou unha platafoma Chamilo xa instalada no seu servidor."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "¡Cuidado! O instalador detectou unha platafoma Chamilo xa instalada no seu servidor."
 
 msgid "New installation"
 msgstr "Instalación nova"
@@ -15110,7 +15110,7 @@ msgstr "Non hai campos extra dispoñibles"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Comece a escribir, entón faga click nesta barra para validar a etiqueta"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instalar Chamilo"
 
 msgid "Chamilo URL"

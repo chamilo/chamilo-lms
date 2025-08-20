@@ -1630,7 +1630,7 @@ msgstr "Het pakket kan niet worden herkend. Zorg er voor dat het correct is aang
 msgid "Move the current forum"
 msgstr "Verplaats het huidige forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Opgelet !<br /> Wanneer u de inhoud van een scorm-fase wijzigt, kunt u de weergave van het leerpad veranderen, of de stap beschadigen."
 
 msgid "Please provide a subject or message"
@@ -7300,7 +7300,7 @@ msgstr "Huidig bestand verplaatsen"
 msgid "Edit the current document"
 msgstr "Huidig document wijzigen"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Aandacht !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7700,7 +7700,7 @@ msgstr "Terug naar de vragenlijst van de oefening"
 msgid "Answers to the question"
 msgstr "Antwoorden op de vraag"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Waarschuwing: Deze vraag en zijn antwoorden worden in verschillende oefeningen gebruikt. Wilt u de vraag wijzigen?"
 
 msgid "in all tests"
@@ -14368,8 +14368,8 @@ msgstr "Installatie taal"
 msgid "Please read the following requirements thoroughly."
 msgstr "Grondig lezen a.u.b."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Opgelet!<br />Er is een bestaande Chamiloinstallatie aanwezig op uw systeem."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Opgelet! Er is een bestaande Chamiloinstallatie aanwezig op uw systeem."
 
 msgid "New installation"
 msgstr "Nieuwe installatie"
@@ -15147,7 +15147,7 @@ msgstr "Er zijn geen extra velden beschikbaar"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Tik hier en klik vervolgens op deze balk om de tag te valideren"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Installeer Chamilo"
 
 msgid "Chamilo URL"

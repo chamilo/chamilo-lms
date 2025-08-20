@@ -1604,7 +1604,7 @@ msgstr "El formatu d'esti paquete ye desconocíu. Por favor, compruebe que ye un
 msgid "Move the current forum"
 msgstr "Mover el foru actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "¡ Cuidáu ! <br/>Si edita'l conteníu d'un elementu SCORM igual cambia l'informe de la secuencia d'aprendizaxe o estroza l'elementu."
 
 msgid "Please provide a subject or message"
@@ -7266,7 +7266,7 @@ msgstr "Mover el documentu actual"
 msgid "Edit the current document"
 msgstr "Editar el documentu actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Cuidáu !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Tornar al llistáu d'entrugues"
 msgid "Answers to the question"
 msgstr "Retrucar la entruga"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "¡Cuidáu! Esta entruga y les sos rempuestes úsense en varios exercicios. ¿ Quier cambiales ?"
 
 msgid "in all tests"
@@ -11242,7 +11242,7 @@ msgid "The wiki page has been saved."
 msgstr "La entrada nueva nel wiki guardóse. Pue vela calcando en:"
 
 msgid " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>"
-msgstr "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>"
+msgstr "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>"
 
 msgid "Wiki pages"
 msgstr "Páxines Wiki del cursu"
@@ -14293,7 +14293,7 @@ msgid "Add a Link help"
 msgstr "Ayuda: Amestar un enllaz esternu"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos tien  estructura modular. Permite amosar o esconder les ferramientes, según el diseñu d'entrada del nuestru proyeutu pedagóxicu o según les fases cronolóxiques. De la mesma manera, la plataforma tamién permite amestarr direutamente enllaces na páxina principal del sitiu web del so cursu. Estos enllaces puen ser de dos tipos: <ul> <li><strong>Enllaces esternos </strong>: Si apunten a otros llugares d'Internet. Escriba la URL correspondiente. Nesti casu, lo meyor ye escoyer qu'abran nuna  ventana nueva.   <li><strong>Enllaces internos </strong> : Apunten a cualquier páxina o ferramienta asitiada nel interior de la so actividá. Pa ello, vaya a esa páxina o ferramienta y copie la so URL (CTRL+C), torne a la ferramienta 'Amestar un enllaz a la páxina principal', pegue la URL (CTRL+V), y pónga-y un nome. Nesti casu, el destín meyor pa qu'abra ye la mesma ventana.</li> </ul>"
+msgstr "<p>Chamilo tien  estructura modular. Permite amosar o esconder les ferramientes, según el diseñu d'entrada del nuestru proyeutu pedagóxicu o según les fases cronolóxiques. De la mesma manera, la plataforma tamién permite amestarr direutamente enllaces na páxina principal del sitiu web del so cursu. Estos enllaces puen ser de dos tipos: <ul> <li><strong>Enllaces esternos </strong>: Si apunten a otros llugares d'Internet. Escriba la URL correspondiente. Nesti casu, lo meyor ye escoyer qu'abran nuna  ventana nueva.   <li><strong>Enllaces internos </strong> : Apunten a cualquier páxina o ferramienta asitiada nel interior de la so actividá. Pa ello, vaya a esa páxina o ferramienta y copie la so URL (CTRL+C), torne a la ferramienta 'Amestar un enllaz a la páxina principal', pegue la URL (CTRL+V), y pónga-y un nome. Nesti casu, el destín meyor pa qu'abra ye la mesma ventana.</li> </ul>"
 
 msgid "Clear content"
 msgstr "Esborrar el conteníu"
@@ -14325,8 +14325,8 @@ msgstr "Idioma d'instalación"
 msgid "Please read the following requirements thoroughly."
 msgstr "Llea con atención"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "¡ Cuidáu ! <br> L'instalador acaba deteutar qu'hai una instalación anterior de Chamilo nel so sistema."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "¡ Cuidáu ! L'instalador acaba deteutar qu'hai una instalación anterior de Chamilo nel so sistema."
 
 msgid "New installation"
 msgstr "Instalación nueva"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

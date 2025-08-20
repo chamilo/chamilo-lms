@@ -680,7 +680,7 @@ class ExtraFieldOption extends Model
             '' => get_lang('Please select an option'),
             1 => get_lang('Success'),
             2 => get_lang('Information'),
-            3 => get_lang('Warning !'),
+            3 => get_lang('Warning!'),
             4 => get_lang('Error'),
         ];
     }

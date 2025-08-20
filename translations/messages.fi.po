@@ -1606,7 +1606,7 @@ msgstr "Tiedostomuotoa ei voitu tunnistaa. Tarkista yhteensopivuus."
 msgid "Move the current forum"
 msgstr "Siirrä tämä keskustelualue"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Varoitus! Jos muokkaat Scorm -elementin sisältöä, saatat muuttaa kurssin raportointia tai vahingoittaa Scorm -elementtiä."
 
 msgid "Please provide a subject or message"
@@ -7268,7 +7268,7 @@ msgstr "Siirrä nykyinen dokumentti"
 msgid "Edit the current document"
 msgstr "Muokkaa nykyistä dokumenttia"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Varoitus!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7661,7 +7661,7 @@ msgstr "Palaa takaisin kysymyslistaan"
 msgid "Answers to the question"
 msgstr "Vastaa kysymyksiin"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Varoitus! Tämä kysymys on käytössä useissa harjoituksissa. Haluatko varmasti muokata sitä?"
 
 msgid "in all tests"
@@ -14327,7 +14327,7 @@ msgstr ""
 msgid "Please read the following requirements thoroughly."
 msgstr ""
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr ""
 
 msgid "New installation"
@@ -15104,7 +15104,7 @@ msgstr "Lisäkenttiä ei ole saatavilla"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Aloita kirjoittamalla ja klikkaa sitten tästä hyväksyäksesi tunnisteen"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

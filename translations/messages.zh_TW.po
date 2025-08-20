@@ -1604,7 +1604,7 @@ msgstr "未能確認檔案包格式，請檢查其中有否包含錯誤。問題
 msgid "Move the current forum"
 msgstr "移動當前討論區"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -7266,7 +7266,7 @@ msgstr "移動當前檔案"
 msgid "Edit the current document"
 msgstr "編輯當前檔案"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "警告﹗"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "返回題目清單"
 msgid "Answers to the question"
 msgstr "題目的答案"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "警告﹗這個題目和答案已經用於多個測驗，你確定要修改它嗎？"
 
 msgid "in all tests"
@@ -13066,7 +13066,7 @@ msgid "Forums Help"
 msgstr "論壇幫助"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "論壇是異步討論工具. 電子郵件是一對一的對話方式, 而論壇則使得公共對話或者半公共(組)對話成為可能.<p>從技術上講, 用戶只要使用瀏覽器就可以使用Dokeos論壇.</p><p>要組織論壇, 請點擊'論壇管理'. 論壇按照類和子類以如下方式組織起來:</p><p><b>分類 > 論壇 > 話題 > 回復</b></p>為使學生的討論有一個清晰的結構, 預先組織分類和論壇是必要的, 然後讓學生來發表話題和回復. IILearn論壇的默認設置只包含一個'Public'分類,一個論去樣例和一個話題.<p>所以首先要做的事是刪除話題樣例, 更新第一個論壇的名稱. 接下來,可以在'public'分類中按照小組或主題創建新的論壇來滿足課程學習環境的需要.</p><p>不要混淆分類和論壇, 也不要忘記空的類別 (不含有論壇) 對學生是不可見的.</p><p>論壇簡介可以是它的用戶列表, 目標, 任務, 主題等等...</p> <p>小組論壇不能通過論壇工具創建, 但可以通過小組工具創建. 使用小組工具你可以決定所創建的論壇是私有論壇還是公開論壇.</p> <b>教育學的高級應用</b><p>一些教師/教練員使用論壇發佈作業. 學生/學員提交作業答案. 教師/教練員點擊編輯器按鈕(黃色的筆), 然後啟動所見即所得編輯器判作業 (使用顏色和下劃線指出錯誤和正確的例子), 其他學生/學員從這個改正中受益."
+msgstr "論壇是異步討論工具. 電子郵件是一對一的對話方式, 而論壇則使得公共對話或者半公共(組)對話成為可能.<p>從技術上講, 用戶只要使用瀏覽器就可以使用Chamilo論壇.</p><p>要組織論壇, 請點擊'論壇管理'. 論壇按照類和子類以如下方式組織起來:</p><p><b>分類 > 論壇 > 話題 > 回復</b></p>為使學生的討論有一個清晰的結構, 預先組織分類和論壇是必要的, 然後讓學生來發表話題和回復. IILearn論壇的默認設置只包含一個'Public'分類,一個論去樣例和一個話題.<p>所以首先要做的事是刪除話題樣例, 更新第一個論壇的名稱. 接下來,可以在'public'分類中按照小組或主題創建新的論壇來滿足課程學習環境的需要.</p><p>不要混淆分類和論壇, 也不要忘記空的類別 (不含有論壇) 對學生是不可見的.</p><p>論壇簡介可以是它的用戶列表, 目標, 任務, 主題等等...</p> <p>小組論壇不能通過論壇工具創建, 但可以通過小組工具創建. 使用小組工具你可以決定所創建的論壇是私有論壇還是公開論壇.</p> <b>教育學的高級應用</b><p>一些教師/教練員使用論壇發佈作業. 學生/學員提交作業答案. 教師/教練員點擊編輯器按鈕(黃色的筆), 然後啟動所見即所得編輯器判作業 (使用顏色和下劃線指出錯誤和正確的例子), 其他學生/學員從這個改正中受益."
 
 msgid "Dropbox Help"
 msgstr "投遞箱"
@@ -14325,8 +14325,8 @@ msgstr "安裝語言"
 msgid "Please read the following requirements thoroughly."
 msgstr ""
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "警告！<br />安裝器發現你的系統中已有一個 Chamilo 平台"
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "警告！ 安裝器發現你的系統中已有一個 Chamilo 平台"
 
 msgid "New installation"
 msgstr "新安裝"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

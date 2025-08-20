@@ -1605,7 +1605,7 @@ msgstr "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generira
 msgid "Move the current forum"
 msgstr "Premjesti trenutni forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, može doći do promjene izvješćivanja Puta učenja ili do greške samog koraka."
 
 msgid "Please provide a subject or message"
@@ -7267,7 +7267,7 @@ msgstr "Premjesti trenutni dokument"
 msgid "Edit the current document"
 msgstr "Uredi trenutni dokument"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Upozorenje !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7660,7 +7660,7 @@ msgstr "Povratak u popis pitanja"
 msgid "Answers to the question"
 msgstr "Odgovori na pitanje"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Upozorenje! Ovo pitanje i njegovi odgovori koriste se u nekoliko vježbi. Želite li ih izmijeniti?"
 
 msgid "in all tests"
@@ -14294,7 +14294,7 @@ msgid "Add a Link help"
 msgstr "Pomoć za dodavanje poveznica"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos je modularni alat. Alate možete skriti i prikazati kad god želite, ovisno o vašemu projektu ili njegovim različitim kronološkim fazama. Ali svojoj početnoj stranici možete dodati i alate ili stranice koje ste sami izradili ili koje ste preuzeli izvan vašega portala Chamilo. Tako ćete početnu stranicu vašega kolegija učiniti SVOJOM stranicom.</p> <p>Kako biste na taj način ovladali svojom stranicom, na nju ćete dodati poveznice. Postoje dvije vrste poveznica: <ul><li><b>Vanjska poveznica</b>: na svojoj početnoj stranici izradite poveznicu prema stranici weba smještenoj izvan okruženja vašeg kolegija. U tom slučaju, odabrat ćete Odredište= U novi prozor jer ne želite da ta stranica weba zamijeni vaše okruženje Chamilo.</li> <li><b>Unutrašnja poveznica:</b>: povezujete se prema stranici unutar svoga kolegija Chamilo. Kako biste to učinili, prvo pođite na tu stranicu, dokument ili alat, preslikajte njegov URL iz vrpce URL-a svoga preglednika (CTRL+C), potom pođite na Dodaj poveznicu i zalijepite taj URL u polje URL-a i imenujete je kako želite. U tom slučaju, odabrat ćete Odredište=Isti prozor jer ćete Chamiloovu zastavicu zadržati na vrhu, a ostatak u istom okruženju.</li></ul> Jednom kad se izrade, ove se poveznice ne mogu uređivati. Kako biste ih izmijenili, jedino je rješenje da ih deaktivirate i potom izbrišete te krenete isponova.</p>"
+msgstr "<p>Chamilo je modularni alat. Alate možete skriti i prikazati kad god želite, ovisno o vašemu projektu ili njegovim različitim kronološkim fazama. Ali svojoj početnoj stranici možete dodati i alate ili stranice koje ste sami izradili ili koje ste preuzeli izvan vašega portala Chamilo. Tako ćete početnu stranicu vašega kolegija učiniti SVOJOM stranicom.</p> <p>Kako biste na taj način ovladali svojom stranicom, na nju ćete dodati poveznice. Postoje dvije vrste poveznica: <ul><li><b>Vanjska poveznica</b>: na svojoj početnoj stranici izradite poveznicu prema stranici weba smještenoj izvan okruženja vašeg kolegija. U tom slučaju, odabrat ćete Odredište= U novi prozor jer ne želite da ta stranica weba zamijeni vaše okruženje Chamilo.</li> <li><b>Unutrašnja poveznica:</b>: povezujete se prema stranici unutar svoga kolegija Chamilo. Kako biste to učinili, prvo pođite na tu stranicu, dokument ili alat, preslikajte njegov URL iz vrpce URL-a svoga preglednika (CTRL+C), potom pođite na Dodaj poveznicu i zalijepite taj URL u polje URL-a i imenujete je kako želite. U tom slučaju, odabrat ćete Odredište=Isti prozor jer ćete Chamiloovu zastavicu zadržati na vrhu, a ostatak u istom okruženju.</li></ul> Jednom kad se izrade, ove se poveznice ne mogu uređivati. Kako biste ih izmijenili, jedino je rješenje da ih deaktivirate i potom izbrišete te krenete isponova.</p>"
 
 msgid "Clear content"
 msgstr "</p><p><b>Teorija obrazovanja</b><p>Za profesore pripremanje predmeta na Internetu je pitanje teorije obrazovanja."
@@ -14326,8 +14326,8 @@ msgstr "Jezik instalacije"
 msgid "Please read the following requirements thoroughly."
 msgstr "Pročitaj pažljivo"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Upozorenje!<br />Instalacijski program je pronašao postojeću Chamilo platformu na vašem sustavu."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Upozorenje! Instalacijski program je pronašao postojeću Chamilo platformu na vašem sustavu."
 
 msgid "New installation"
 msgstr "Nova instalacija"
@@ -15103,7 +15103,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

@@ -1693,7 +1693,7 @@ msgstr "Le format du fichier envoyé n'a pas pu être identifié. Veuillez véri
 msgid "Move the current forum"
 msgstr "Déplacer le forum courant"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Attention !<br />Quand on édite une étape SCORM, on peut altérer le reporting, voire endommager le document."
 
 msgid "Please provide a subject or message"
@@ -7471,7 +7471,7 @@ msgstr "Déplacer le document courant"
 msgid "Edit the current document"
 msgstr "Éditer le document actuel"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Attention !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7875,7 +7875,7 @@ msgstr "Retour à la liste des questions"
 msgid "Answers to the question"
 msgstr "Réponses à la question"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Attention ! Cette question et ses réponses sont utilisées dans plusieurs tests. Souhaitez-vous les modifier"
 
 msgid "in all tests"
@@ -14756,7 +14756,7 @@ msgid "Add a Link help"
 msgstr "Aide Ajouter un lien"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos est un outil modulaire. Il vous permet de masquer et d'afficher les outils à votre guise. Poussant plus loin cette logique, Chamilo vous permet aussi d'ajouter des liens sur votre page d'accueil.</p>Ces liens peuvent être de deux types:<ul><li><b>Lien externe</b> : par exemple vous renvoyez ver le site Google, http://www.google.be. Choisissez alors comme destination du lien : Dans une autre fenêtre,</li><li><b>Lien interne</b> : vous pouvez créer un raccourci sur votre page d'accueil qui pointe directement vers n'importe quelle page ou outil situé à l'intérieur de votre cours. Pour ce faire, rendez-vous sur cette page ou dans cet outil, copiez (CTRL+C) l'URL de la page, revenez sur la page d'accueil, ouvrez Ajouter un lien et collez (CTRL+V) l'URL de la page dans le champ URL puis donnez-lui le nom de votre choix. Dans ce cas, vous choisirez préférablement comme destination du lien : Dans la même fenêtre.</li></ul>Remarque : une fois créés, les liens sur page d'accueil ne peuvent pas être modifiés. Il vous faudra les masquer, puis les détruire, puis recommencer en partant de zéro.</p>"
+msgstr "<p>Chamilo est un outil modulaire. Il vous permet de masquer et d'afficher les outils à votre guise. Poussant plus loin cette logique, Chamilo vous permet aussi d'ajouter des liens sur votre page d'accueil.</p>Ces liens peuvent être de deux types:<ul><li><b>Lien externe</b> : par exemple vous renvoyez ver le site Google, http://www.google.be. Choisissez alors comme destination du lien : Dans une autre fenêtre,</li><li><b>Lien interne</b> : vous pouvez créer un raccourci sur votre page d'accueil qui pointe directement vers n'importe quelle page ou outil situé à l'intérieur de votre cours. Pour ce faire, rendez-vous sur cette page ou dans cet outil, copiez (CTRL+C) l'URL de la page, revenez sur la page d'accueil, ouvrez Ajouter un lien et collez (CTRL+V) l'URL de la page dans le champ URL puis donnez-lui le nom de votre choix. Dans ce cas, vous choisirez préférablement comme destination du lien : Dans la même fenêtre.</li></ul>Remarque : une fois créés, les liens sur page d'accueil ne peuvent pas être modifiés. Il vous faudra les masquer, puis les détruire, puis recommencer en partant de zéro.</p>"
 
 msgid "Clear content"
 msgstr "Effacer le contenu"
@@ -14788,7 +14788,7 @@ msgstr "Langue d'installation"
 msgid "Please read the following requirements thoroughly."
 msgstr "Pré-requis suivants à lire attentivement."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr "Attention ! Une installation de Chamilo existe déjà sur votre système."
 
 msgid "New installation"
@@ -15619,7 +15619,7 @@ msgstr "Aucun champ de profil disponible"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Commencez à taper, puis cliquez sur cette barre pour valider"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Installer Chamilo"
 
 msgid "Chamilo URL"

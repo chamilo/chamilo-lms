@@ -1604,7 +1604,7 @@ msgstr "El formato de este paquete no ha sido reconocido. Por favor, compruebe e
 msgid "Move the current forum"
 msgstr "Kuyurichiy kunan kaq rimarinaman"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "¡ Paqtataq ! <br /> Sichus scorm nisqapi ima kasqanta ruwapayanki, ichapas waqllichiwaq yachachinata utaq imaymana kasqatapas."
 
 msgid "Please provide a subject or message"
@@ -3210,7 +3210,7 @@ msgid "Your company short name"
 msgstr "Acrónimo de la organización"
 
 msgid "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data."
-msgstr "Use este script únicamente tras haber hecho una copia de seguridad. El equipo deDokeos no es resposable si Vd. pierde o deteriora sus datos."
+msgstr "Use este script únicamente tras haber hecho una copia de seguridad. El equipo deChamilo no es resposable si Vd. pierde o deteriora sus datos."
 
 msgid "Allow self-registration as a trainer"
 msgstr "Permitir que los propios usuarios puedan registrarse como creadores de cursos"
@@ -7266,7 +7266,7 @@ msgstr "Kuyuchiy kunan kaq qelqa khiputa"
 msgid "Edit the current document"
 msgstr "Ruwapay kunan kaq qelqa khiputa"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Paqtataq !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Kutiy tapuykunaq sinrinman"
 msgid "Answers to the question"
 msgstr "Kutichiy tapuyta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Paqtataq! Kay tapu llapan kutichikunawanqa kashan askha llank'aynakunapi. ¿Munashankichu t'ijrapayta?"
 
 msgid "in all tests"
@@ -14293,7 +14293,7 @@ msgid "Add a Link help"
 msgstr "Yanapa: Yapay hoq hawa wataqta"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos  tiene una estructura modular. Nos permite mostrar u ocultar las herramientas, en función del diseño inicial de nuestro proyecto pedagógico o a lo largo de sus diferentes fases cronológicas. En esta línea, la plataforma también permite añadir directamente enlaces en la página principal del sitio web de su curso. Estos enlaces pueden ser de dos tipos:<ul>  <li><strong>Enlaces externos </strong>: cuando apuntan a otros lugares de Internet. Escriba la URL correspondiente. En este caso, lo ideal es elegir que se abran en una nueva ventana.  <li><strong>Enlaces internos </strong> : apuntan a cualquier página o herramienta situada en el interior de su actividad. Para ello, vaya a esa página o herramienta y copie su URL (CTRL+C), vuelva a la herramienta Añadir un enlace a la página principal, pegue la URL (CTRL+V), y póngale nombre. En este caso, el destino preferible para su apertura es la misma ventana.</li></ul>"
+msgstr "<p>Chamilo  tiene una estructura modular. Nos permite mostrar u ocultar las herramientas, en función del diseño inicial de nuestro proyecto pedagógico o a lo largo de sus diferentes fases cronológicas. En esta línea, la plataforma también permite añadir directamente enlaces en la página principal del sitio web de su curso. Estos enlaces pueden ser de dos tipos:<ul>  <li><strong>Enlaces externos </strong>: cuando apuntan a otros lugares de Internet. Escriba la URL correspondiente. En este caso, lo ideal es elegir que se abran en una nueva ventana.  <li><strong>Enlaces internos </strong> : apuntan a cualquier página o herramienta situada en el interior de su actividad. Para ello, vaya a esa página o herramienta y copie su URL (CTRL+C), vuelva a la herramienta Añadir un enlace a la página principal, pegue la URL (CTRL+V), y póngale nombre. En este caso, el destino preferible para su apertura es la misma ventana.</li></ul>"
 
 msgid "Clear content"
 msgstr "</p><p><b>Teoría Educativa</b><p>Para los profesores, preparar un curso en Internet es principalmente una cuestión deTeoría Educativa."
@@ -14325,8 +14325,8 @@ msgstr "Idioma de instalación"
 msgid "Please read the following requirements thoroughly."
 msgstr "Lea con atención"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "¡ Atención !<br>El instalador ha detectado una instalación anterior de Chamilo en su sistema."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "¡ Atención ! El instalador ha detectado una instalación anterior de Chamilo en su sistema."
 
 msgid "New installation"
 msgstr "Nueva instalación"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

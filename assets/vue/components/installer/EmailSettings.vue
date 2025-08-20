@@ -50,7 +50,7 @@
           <BaseButton
             type="info"
             icon="send"
-            :label="t('Test send e-mail')"
+            :label="t('Test e-mail sending')"
             :is-loading="isTesting"
             :disabled="!mailerTestDestination || isTesting"
             @click="testSmtp"

@@ -1,7 +1,7 @@
 <template>
   <div class="install-step">
     <img
-      :alt="t('Install step 1')"
+      :alt="t('Step 1 - Installation Language')"
       class="install-icon w-36 mx-auto mb-4"
       src="/main/install/chamilo-install.svg"
     />

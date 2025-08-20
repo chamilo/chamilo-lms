@@ -1613,7 +1613,7 @@ msgstr "Formatul acestui pachet nu a fost recunoscut. Vă rugăm, să verificaț
 msgid "Move the current forum"
 msgstr "Mutați forumul actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "¡ Observați ! Daca editati conținutul unui element SCORM, poate modifica raportul secvenței de formare sau deteriorarea obiectul."
 
 msgid "Please provide a subject or message"
@@ -4360,7 +4360,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Permiteti administratorilor de curs sa creeze noi categorii in modulul Grup?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "Puteti modifica limba utilizata in cadrul platformei si in alta zona de administrare a platformei: <a href=\"languages.php\">Dokeos Platform Languages</a>"
+msgstr "Puteti modifica limba utilizata in cadrul platformei si in alta zona de administrare a platformei: <a href=\"languages.php\">Chamilo Platform Languages</a>"
 
 msgid "Production Server"
 msgstr "Server de productie"
@@ -7275,7 +7275,7 @@ msgstr "Muta documentul actual"
 msgid "Edit the current document"
 msgstr "Editeaza documentul actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Atentie !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7668,7 +7668,7 @@ msgstr "Inapoi la lista de intrebari"
 msgid "Answers to the question"
 msgstr "Raspunsuri la intrebari"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Atentie! Aceasta intrebare si raspunsurile ei sunt folosite in mai multe teste. Ai dori sa le modifici"
 
 msgid "in all tests"
@@ -14302,7 +14302,7 @@ msgid "Add a Link help"
 msgstr "Ajutor la modulul link"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos este o platforma modulara. Puteti face modulele vizibile sau invizibile cand doriti. De asemenea puteti plasa module pe pagina initiala. Astfel va puteti crea <em>pagina personala</em>.</p> <p>Puteti adauga doua feluri de link: <ul> <li><b>Link extern</b>: pe situl cursului puteti face un link la o pagina web din afara platformei. In aceasta situatie puteti selecta scopul. Puteti deschide linkul intr-o fereastra noua daca nu doriti sa parasiti platforma Chamiloplatform.</li> <li><b>Link intern</b>: trimiteti la o pagina din siteul cursului. Pentru aceasta, mergeti prima data la pagina, document sau modul. Copiaza <acronym title=\"Uniform Resource Locator\" xml:lang=\"en\" lang=\"en\">URL</acronym>. Apoi mergi la modulul link, adauga linkul si copiaza <acronym title=\"Uniform Resource Locator\" xml:lang=\"en\" lang=\"en\">URL</acronym> in spatiul prevazut. Puteti da un nume linkului.</li> </ul> Odata facut, nu mai puteti modifica acest link. Pentru a modifica, trebuie sa stergeti linkul si apoi sa-l recreati.</p>"
+msgstr "<p>Chamilo este o platforma modulara. Puteti face modulele vizibile sau invizibile cand doriti. De asemenea puteti plasa module pe pagina initiala. Astfel va puteti crea <em>pagina personala</em>.</p> <p>Puteti adauga doua feluri de link: <ul> <li><b>Link extern</b>: pe situl cursului puteti face un link la o pagina web din afara platformei. In aceasta situatie puteti selecta scopul. Puteti deschide linkul intr-o fereastra noua daca nu doriti sa parasiti platforma Chamiloplatform.</li> <li><b>Link intern</b>: trimiteti la o pagina din siteul cursului. Pentru aceasta, mergeti prima data la pagina, document sau modul. Copiaza <acronym title=\"Uniform Resource Locator\" xml:lang=\"en\" lang=\"en\">URL</acronym>. Apoi mergi la modulul link, adauga linkul si copiaza <acronym title=\"Uniform Resource Locator\" xml:lang=\"en\" lang=\"en\">URL</acronym> in spatiul prevazut. Puteti da un nume linkului.</li> </ul> Odata facut, nu mai puteti modifica acest link. Pentru a modifica, trebuie sa stergeti linkul si apoi sa-l recreati.</p>"
 
 msgid "Clear content"
 msgstr "Creaţi conţinut gol"
@@ -14334,8 +14334,8 @@ msgstr "Limba de Instalare"
 msgid "Please read the following requirements thoroughly."
 msgstr "Citeste in intregime"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Atentie ! <br>Programul de instalare a detectat o platforma existenta Chamilo pe acest sistem."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Atentie ! Programul de instalare a detectat o platforma existenta Chamilo pe acest sistem."
 
 msgid "New installation"
 msgstr "Instalare noua"
@@ -15111,7 +15111,7 @@ msgstr "Nu sunt câmpuri suplimentare disponibile"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Incepeti sa scrieti,in continuare,dati click aici pentru validare"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instalati Chamilo"
 
 msgid "Chamilo URL"

@@ -1613,7 +1613,7 @@ msgstr "לא ניתן לזהות את הפורמט של חבילה זו. אנא 
 msgid "Move the current forum"
 msgstr "העבר את הפורום הנוכחי"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "אזהרה! כאשר אתה עורך את התוכן של אובייקט למידה, אתה עלול לשנות את הדיווח של הקורס או לפגוע באובייקט הלמידה."
 
 msgid "Please provide a subject or message"
@@ -7275,7 +7275,7 @@ msgstr "הזז את המסמך הנוכחי"
 msgid "Edit the current document"
 msgstr "ערוך את המסמך הנוכחי"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "אזהרה!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7668,7 +7668,7 @@ msgstr "חזור לרשימת השאלות"
 msgid "Answers to the question"
 msgstr "תשובות לשאלה"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "אזהרה! שאלה זו ותשובותיה משמשות במספר מבחנים. האם תרצה לערוך אותן"
 
 msgid "in all tests"
@@ -14334,8 +14334,8 @@ msgstr "שפת התקנה"
 msgid "Please read the following requirements thoroughly."
 msgstr "אנא קרא את הדרישות הבאות ביסודיות."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "אזהרה!<br />המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "אזהרה! המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך."
 
 msgid "New installation"
 msgstr "התקנה חדשה"
@@ -15111,7 +15111,7 @@ msgstr "אין שדות נוספים זמינים"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "התחל להקליד ולאחר מכן לחץ על סרגל זה כדי לאמת תג"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "התקן chamilo"
 
 msgid "Chamilo URL"

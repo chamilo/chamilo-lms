@@ -1612,7 +1612,7 @@ msgstr "El format d'aquest paquet no ha estat reconegut. Per favor, comprovi aqu
 msgid "Move the current forum"
 msgstr "Moure el foro actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte."
 
 msgid "Please provide a subject or message"
@@ -7274,7 +7274,7 @@ msgstr "Moure el document actual"
 msgid "Edit the current document"
 msgstr "Editar el document actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Compte !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7667,7 +7667,7 @@ msgstr "Tornar a la llista de preguntes"
 msgid "Answers to the question"
 msgstr "Contesta la pregunta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr " Advertiment! Aquesta pregunta i les seves respostes s'utilitzen en unes quantes proves. Li agradaria modificar-les?"
 
 msgid "in all tests"
@@ -11250,7 +11250,7 @@ msgid "The wiki page has been saved."
 msgstr "La nova pàgina ha estat guardada"
 
 msgid " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>"
-msgstr "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Dokeos\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text"
+msgstr "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Chamilo\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text"
 
 msgid "Wiki pages"
 msgstr "Pàgines wiki del curs"
@@ -14333,8 +14333,8 @@ msgstr "Idioma d'instal·lació"
 msgid "Please read the following requirements thoroughly."
 msgstr "Llegiu amb atenció"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Atenció !"
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr ""
 
 msgid "New installation"
 msgstr "Instal·lació nova"
@@ -15110,7 +15110,7 @@ msgstr "No hi ha camps addicionals disponibles"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Comenceu a escriure, a continuació, feu clic sobre aquesta barra per validar l'etiqueta"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instal·la Chamilo"
 
 msgid "Chamilo URL"

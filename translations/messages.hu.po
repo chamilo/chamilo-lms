@@ -1604,7 +1604,7 @@ msgstr "A csomag fármátumát nem sikerült meghatározni. Kérem győződjön 
 msgid "Move the current forum"
 msgstr "A jelenlegi fórum áthelyezése"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Figyelem! <br /> Amikor módosítja egy scorm lépcsőfok tartalmát, az kihatással lehet a tanösvény jelentéseire,  vagy elronthatja a lépcsőfokot."
 
 msgid "Please provide a subject or message"
@@ -4351,7 +4351,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Engedélyezi a kurzusgazdáknak, hogy a csoport modulban új kategóriákat hozhassanak létre?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "Megadhatja a felület nyelvét az adminisztrációs felület más részéről is a <a href=\"languages.php\">Dokeos felület nyelvek</a> hivatkozásra kattintva."
+msgstr "Megadhatja a felület nyelvét az adminisztrációs felület más részéről is a <a href=\"languages.php\">Chamilo felület nyelvek</a> hivatkozásra kattintva."
 
 msgid "Production Server"
 msgstr "'Éles' szerver"
@@ -7266,7 +7266,7 @@ msgstr "A jelenlegi dokumentum áthelyezése"
 msgid "Edit the current document"
 msgstr "A jelenlegi dokumentum szerkesztése"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Figyelem !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Menjen vissza a kérdések listájához"
 msgid "Answers to the question"
 msgstr "A feltett kérdés válaszai"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Figyelmeztetés! Ez a kérdés és válaszai több tesztben is szerepel. Szeretné módosítani őket?"
 
 msgid "in all tests"
@@ -14325,8 +14325,8 @@ msgstr "Telepítési nyelv"
 msgid "Please read the following requirements thoroughly."
 msgstr "Olvassa el figyelmesen"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Figyelmeztetés!<br>A telepítő egy már létező Chamilo alkalmazást érzékelt a rendszerén."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Figyelmeztetés! A telepítő egy már létező Chamilo alkalmazást érzékelt a rendszerén."
 
 msgid "New installation"
 msgstr "Új telepítés"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"

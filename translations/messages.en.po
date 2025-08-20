@@ -1608,8 +1608,8 @@ msgstr "The format of this package could not be recognized. Please check this is
 msgid "Move the current forum"
 msgstr "Move the current forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
-msgstr "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgstr "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 
 msgid "Please provide a subject or message"
 msgstr "Please provide a subject or message"
@@ -7269,8 +7269,8 @@ msgstr "Move the current document"
 msgid "Edit the current document"
 msgstr "Edit the current document"
 
-msgid "Warning !"
-msgstr "Warning !"
+msgid "Warning!"
+msgstr "Warning!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
 msgstr "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7662,8 +7662,8 @@ msgstr "Go back to the questions list"
 msgid "Answers to the question"
 msgstr "Answers to the question"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
-msgstr "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
+msgstr "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 
 msgid "in all tests"
 msgstr "in all tests"
@@ -14328,8 +14328,8 @@ msgstr "Installation language"
 msgid "Please read the following requirements thoroughly."
 msgstr "Please read the following requirements thoroughly."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warning! The installer has detected an existing Chamilo platform on your system."
 
 msgid "New installation"
 msgstr "New installation"
@@ -15105,8 +15105,8 @@ msgstr "There are not extra fields available"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Start to type, then click on this bar to validate tag"
 
-msgid "Install chamilo"
-msgstr "Install chamilo"
+msgid "Install Chamilo"
+msgstr "Install Chamilo"
 
 msgid "Chamilo URL"
 msgstr "Chamilo URL"
@@ -30538,3 +30538,36 @@ msgstr "Hello,<br>You haven't logged into your account for six months. It has no
 
 msgid "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
 msgstr "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
+
+msgid "An update is available. Click the button below to proceed with the update."
+msgstr "An update is available. Click the button below to proceed with the update."
+
+msgid "Update Chamilo"
+msgstr "Update Chamilo"
+
+msgid "Verifying migration:"
+msgstr "Verifying migration:"
+
+msgid "Migration completed successfully!"
+msgstr "Migration completed successfully!"
+
+msgid "Please check the following error:"
+msgstr "Please check the following error:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Migration failed!"
+msgstr "Migration failed!"
+
+msgid "Test e-mail sending"
+msgstr "Test e-mail sending"
+
+msgid "The last migration executed successfully was:"
+msgstr "The last migration executed successfully was:"
+
+msgid "Please contact support with the error details."
+msgstr "Please contact support with the error details."
+
+msgid "Contact support"
+msgstr "Contact support"

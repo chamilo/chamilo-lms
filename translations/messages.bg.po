@@ -1604,7 +1604,7 @@ msgstr "Форматът на този пакет не е разпознат. М
 msgid "Move the current forum"
 msgstr "Преместване на текущия форум"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Предупреждение!<br />Когато в пътеката за обучение редактирате стъпка, има опасност да да я повредите или да разкъсате нейната връзка със записите за генериране на справки или отчети."
 
 msgid "Please provide a subject or message"
@@ -7266,7 +7266,7 @@ msgstr "Преместване на текущия документ"
 msgid "Edit the current document"
 msgstr "Редактиране на текущия документ"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Внимание!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7659,7 +7659,7 @@ msgstr "Обратно към списъка с въпроси"
 msgid "Answers to the question"
 msgstr "Отговорете на въпроса"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Внимание! Този въпрос и отговорите му се използват в няколко теста. Искате ли да го промените?"
 
 msgid "in all tests"
@@ -14325,8 +14325,8 @@ msgstr "Език при инсталирането"
 msgid "Please read the following requirements thoroughly."
 msgstr "Прочетете внимателно."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Предупреждение:<br/>Инсталаторът откри съществуваща система Chamilo на вашия сървър."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Предупреждение: Инсталаторът откри съществуваща система Chamilo на вашия сървър."
 
 msgid "New installation"
 msgstr "Нова инсталация"
@@ -15102,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Инсталиране на Chamilo"
 
 msgid "Chamilo URL"

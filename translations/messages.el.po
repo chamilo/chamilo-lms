@@ -1612,7 +1612,7 @@ msgstr "Η μορφή αυτού του πακέτου δεν μπορούσε �
 msgid "Move the current forum"
 msgstr "Μετακίνηση του παρόντος Forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Προειδοποίηση ! Όταν κάνετε επεξεργασία ενός εκπαιδευτικού αντικειμένου, ενδέχεται να αλλοιώσετε τις αναφορές αυτής της σειράς μαθημάτων, ή ακόμη και να προκαλέσετε βλάβη στο εκπαιδευτικό αντικείμενο."
 
 msgid "Please provide a subject or message"
@@ -7274,7 +7274,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Προειδοποίηση!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7667,7 +7667,7 @@ msgstr "Επιστροφή στη λίστα ερωτήσεων"
 msgid "Answers to the question"
 msgstr "Απαντήσεις στην ερώτηση"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Προσοχή ! Αυτή η ερώτηση και οι απαντήσεις της, χρησιμοποιούνται σε αρκετές ασκήσεις. Θέλετε να τις αλλάξετε;"
 
 msgid "in all tests"
@@ -14333,7 +14333,7 @@ msgstr "Installation language"
 msgid "Please read the following requirements thoroughly."
 msgstr "Please read the following requirements thoroughly."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
 msgstr "Προειδοποίηση! Ανιχνεύτηκε προϋπάρχουσα πλατφόρμα Chamilo στο σύστημά σου"
 
 msgid "New installation"
@@ -15110,7 +15110,7 @@ msgstr "There are not extra fields available"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Ξεκινήστε την πληκτρολόγηση και μετά κάντε την επιλογή σας από την λίστα που θα εμφανιστεί"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Εγκατάσταση chamilo"
 
 msgid "Chamilo URL"

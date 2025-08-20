@@ -238,11 +238,11 @@ $(function() {
 </script>';
 
 $userForm->addStartPanel('diagnostic', get_lang('Skills and objectives assessment'));
-$userForm->addHtml(get_lang('Welcome to the platforme! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. </br></br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.</br></br>Happy learning on the platform!'));
+$userForm->addHtml(get_lang('Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!'));
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('filiere', get_lang('I would like to choose a sector'));
-$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank.').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank.').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -289,7 +289,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[filiere]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('dispo', get_lang('Availability before my internship/mobility'));
-$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability').'</p>');
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -344,7 +344,7 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('dispo_pendant_stage', get_lang('Availability during my internship/mobility'));
-$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
@@ -386,8 +386,8 @@ $userForm->addStartPanel('theme_obj', get_lang('The topics that interest me / My
 $userForm->addHtml("<p class=\"text-info\">".get_lang("The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program.")."</p>");
 
 $introductionTextList = [
-    'domaine' => get_lang('The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.</br></br>'),
-    $theme => get_lang('Once the areas have been selected, choose 5 themes and objectives in order of preference.</br></br>'),
+    'domaine' => get_lang('The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>'),
+    $theme => get_lang('Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>'),
 ];
 
 $fieldsToShow = [
@@ -431,7 +431,7 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[theme_obj]');
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('niveau_langue', get_lang('My language level'));
-$userForm->addHtml('<p class="text-info">'.get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>").'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>").'</p>');
 
 $fieldsToShow = [
     //'competenceniveau'

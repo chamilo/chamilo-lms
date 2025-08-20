@@ -11313,7 +11313,7 @@ msgid "Chamilo can't handle the request automatically for this type of account. 
 msgstr "Chamilo ne peut prendre la requête en charge automatiquement pour ce type de compte. Votre requête a été envoyée à un administrateur de la plateforme qui prendra les mesures appropriées et vous avertira du résultat."
 
 msgid "Start with selecting a session below.<br />You can then see your progress for every course you are subscribed to."
-msgstr "Commencez par choisir une session ci-dessous. </br>Vous pouvez ensuite voir votre progression dans tous les cours où vous êtes inscrit(e)"
+msgstr "Commencez par choisir une session ci-dessous. <br>Vous pouvez ensuite voir votre progression dans tous les cours où vous êtes inscrit(e)"
 
 msgid "Never expires"
 msgstr "N'expire jamais"
@@ -23472,7 +23472,7 @@ msgstr "Merci de bien vouloir nous donner une brève explication sur la raison d
 msgid "Explain in this box why you want your account deleted"
 msgstr "Merci de bien vouloir nous donner une brève explication sur la raison de votre demande de suppression de votre compte, afin que nous puissions y procéder de la meilleure manière possible."
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr "Ci-dessous, vous pouvez faire une demande de retrait de votre accord avec nos conditions d'utilisation ou de suppression de votre compte.<br />"
 
 msgid "Personal data protection"

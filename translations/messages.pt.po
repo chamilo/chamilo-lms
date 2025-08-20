@@ -6384,7 +6384,7 @@ msgid "Show the courses descriptions as an integrated popup when clicking on a c
 msgstr "Apresentar a descrição dos cursos numa janela popup quando se clicar no ícone de informação do cursos no catálogo de cursos"
 
 msgid "The stylesheet could not be added"
-msgstr "O estilo de página não pode ser adicionado. <br></br>Provavelmente, o ficheiro zip poderá conter ficheiros que não são permitidos. Os tipos de ficheiros permitidos são: 'png', 'jpg', 'gif', 'css'."
+msgstr "O estilo de página não pode ser adicionado. <br><br>Provavelmente, o ficheiro zip poderá conter ficheiros que não são permitidos. Os tipos de ficheiros permitidos são: 'png', 'jpg', 'gif', 'css'."
 
 msgid "Add sessions in categories"
 msgstr "Adicionar sessões em categorias"
@@ -8055,7 +8055,7 @@ msgid "Description and scoring are required for each hotspot. Feedback is option
 msgstr "A descrição e a pontuação são obrigatórios para cada hotspot. O feedback é opcional."
 
 msgid "To create a hotspot: select a shape next to the colour, and draw the hotspot. To move a hotspot, select the colour, click another spot in the image, and draw the hotspot. To add a hotspot: click the Add hotspot button. To close a polygon shape: right click and select Close polygon."
-msgstr "Para criar um hotspot: selecionar uma forma de polígono ao lado da cor, e desenhar o hotspot.<br>Para mover um hotspot, selecionar a cor, clicar num outro ponto da imagem, e desenhar o hotspot.<br>Para adicionar um hotspot: clicar no botão Adicionar hotspot.<br>Para fechar uma forma de polígono: clicar no botão direito do rato e seleccionar Fechar polígono.</br>"
+msgstr "Para criar um hotspot: selecionar uma forma de polígono ao lado da cor, e desenhar o hotspot.<br>Para mover um hotspot, selecionar a cor, clicar num outro ponto da imagem, e desenhar o hotspot.<br>Para adicionar um hotspot: clicar no botão Adicionar hotspot.<br>Para fechar uma forma de polígono: clicar no botão direito do rato e seleccionar Fechar polígono.<br>"
 
 msgid "Incorrect"
 msgstr "Incorrecto"
@@ -22796,7 +22796,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -24996,4 +24996,4 @@ msgid "The attempted oral questions are %s"
 msgstr "Foram feitas %s tentativas em questões orais"
 
 msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
-msgstr "Ajuda para a cópia de cursos de uma sessão para outra sessão:<br></br>Para copiar cursos entre várias sessões, deverá em primeiro lugar, seleccionar um curso da lista da sessão de origem. Poderá copiar os conteúdos das ferramentas de descrição do curso, documentos, glossário, ligações/links, exercícios e avaliações, de forma directa ou seleccionando os componentes do curso"
+msgstr "Ajuda para a cópia de cursos de uma sessão para outra sessão:<br><br>Para copiar cursos entre várias sessões, deverá em primeiro lugar, seleccionar um curso da lista da sessão de origem. Poderá copiar os conteúdos das ferramentas de descrição do curso, documentos, glossário, ligações/links, exercícios e avaliações, de forma directa ou seleccionando os componentes do curso"

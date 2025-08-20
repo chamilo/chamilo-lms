@@ -22826,7 +22826,7 @@ msgstr "Por favor indíquenos porqué desea eliminar su acuerda a nuestras condi
 msgid "Explain in this box why you want your account deleted"
 msgstr "Por favor indíquenos porqué desea que eliminemos su cuenta, para asegurar que lo podamos hacer de la mejor manera."
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr "Puede solicitar a bajo la eliminación de su acuerdo a nuestras condiciones de uso o la eliminación de su cuenta.<br />"
 
 msgid "Personal data protection"
@@ -24462,7 +24462,7 @@ msgid "You are registered in the training %s since the %s"
 msgstr "Estás registrado en la formación %s desde el %s"
 
 msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
-msgstr "Estás recibiendo este mensaje porque has completado una leccion con %s% de progreso de tu formación.</br>Tu progreso debe ser 100% para considerar que tu formación se llevó a cabo.</br> Si tienes el más mínimo problema, debes contactar con tu profesor."
+msgstr "Estás recibiendo este mensaje porque has completado una leccion con %s% de progreso de tu formación.<br>Tu progreso debe ser 100% para considerar que tu formación se llevó a cabo.<br> Si tienes el más mínimo problema, debes contactar con tu profesor."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
 msgstr "Como recordatorio, para acceder a la plataforma de formación:<br/>1. Conéctese a la plataforma en la dirección: %s<br/>2. Luego ingrese:<br/>Su nombre de usuario: %s<br/>Su contraseña: Se le envió por correo electrónico.<br/>si lo olvidó y no puede encontrarlo, puede recuperarlo yendo a %s<br/><br/>Gracias por hacer lo necesario."

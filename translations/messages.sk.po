@@ -809,7 +809,7 @@ msgid "This tool allows you to create glossary terms for this course, which can 
 msgstr "Tento nástroj vám umožní vytvoriť slovník termínov pre tento kurz, ktoré potom môžu byť použité z nástroja dokumentov"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "Fórum je diskusný nástroj pre asynchrónne písomné práce.  Na rozdiel od e-mailu, fórum je pre verejnosť, alebo polo-verejné, skupinové diskusie. </br> </br>"
+msgstr "Fórum je diskusný nástroj pre asynchrónne písomné práce.  Na rozdiel od e-mailu, fórum je pre verejnosť, alebo polo-verejné, skupinové diskusie. <br> <br>"
 
 msgid "Forum help"
 msgstr "Fórum pomoc"
@@ -16158,7 +16158,7 @@ msgid "<p>Go ahead and browse our course catalog %s to register to any course yo
 msgstr "Nehanbite sa a prechádzajte zoznam kurzov %s. Zaregistrujte sa do kurzu, ak sa vám páči. Akonáhle sa zaregistrujete, uvidíte priebeh kurzu %s, namiesto tejto správy."
 
 msgid "<p>Hello <strong>%s</strong> and welcome,</p>"
-msgstr "Dobrý deň a vitajte %s!</br><br>"
+msgstr "Dobrý deň a vitajte %s!<br><br>"
 
 msgid "Unsubscribe users already added"
 msgstr "Odhlásení používatelia už pridaní"
@@ -22801,7 +22801,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"

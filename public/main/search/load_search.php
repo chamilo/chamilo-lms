@@ -201,7 +201,7 @@ $extraFieldUser = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 
 $userForm->addStartPanel('filiere', get_lang('I would like to choose a sector'));
-$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the island corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank.').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the island corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank.').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -228,7 +228,7 @@ $extra = $extraFieldUser->addElements(
 $userForm->addEndPanel();
 
 $userForm->addStartPanel('dispo', get_lang('Availability during my internship/mobility'));
-$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
@@ -318,7 +318,7 @@ if (isset($_POST) && !empty($_POST)) {
 }
 
 $form->addStartPanel('dispo_avant', '<input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;'.get_lang('Availability before my internship/mobility'));
-$form->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability').'</p>')
+$form->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability').'</p>');
 
 // Session fields
 $showOnlyThisFields = [
@@ -421,7 +421,7 @@ $extra = $extraFieldUser->addElements(
 $form->addEndPanel();
 
 $form->addStartPanel('niveau_langue', '<input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;'.get_lang('My language level'));
-$form->addHtml("<p class=\"text-info\">".get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>")."</p>");
+$form->addHtml("<p class=\"text-info\">".get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>")."</p>");
 
 $showOnlyThisFields = [
     'ecouter',

@@ -22799,8 +22799,8 @@ msgstr "Please tell us why you want to withdraw the rights you previously gave u
 msgid "Explain in this box why you want your account deleted"
 msgstr "Explain in this box why you want your account deleted"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
-msgstr "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgstr "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 
 msgid "Personal data protection"
 msgstr "Personal data protection"
@@ -30464,14 +30464,14 @@ msgstr "Show more courses"
 msgid "I would like to choose a sector"
 msgstr "I would like to choose a sector"
 
-msgid "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank."
-msgstr "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.</br></br>Check one or more answers or fill in the blank."
+msgid "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank."
+msgstr "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank."
 
 msgid "Availability during my internship/mobility"
 msgstr "Availability during my internship/mobility"
 
-msgid "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability"
-msgstr "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. </br></br>Indicate the dates and your availability"
+msgid "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability"
+msgstr "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability"
 
 msgid "My learning goals"
 msgstr "My learning goals"
@@ -30488,8 +30488,8 @@ msgstr "On the platform, you'll complete some activities independently, while ot
 msgid "Availability before my internship/mobility"
 msgstr "Availability before my internship/mobility"
 
-msgid "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability"
-msgstr "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.</br></br>Indicate the dates and your availability"
+msgid "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability"
+msgstr "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability"
 
 msgid "The topics that interest me / My learning objectives"
 msgstr "The topics that interest me / My learning objectives"
@@ -30500,8 +30500,8 @@ msgstr "The platform offers numerous resources and thematic learning courses to 
 msgid "My language level"
 msgstr "My language level"
 
-msgid "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>"
-msgstr "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.</br></br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).</br></br>"
+msgid "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>"
+msgstr "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>"
 
 msgid "My work environment"
 msgstr "My work environment"
@@ -30509,8 +30509,8 @@ msgstr "My work environment"
 msgid "To work on the platform, I use:"
 msgstr "To work on the platform, I use:"
 
-msgid "You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform."
-msgstr "You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform."
+msgid "You will find in the <a style=\"color:blue\" href=\"/faq\">FAQ</a> the recommended environment to work on the platform."
+msgstr "You will find in the <a style=\"color:blue\" href=\"/faq\">FAQ</a> the recommended environment to work on the platform."
 
 msgid "Validate learning trail"
 msgstr "Validate learning trail"
@@ -30518,11 +30518,11 @@ msgstr "Validate learning trail"
 msgid "Skills and objectives assessment"
 msgstr "Skills and objectives assessment"
 
-msgid "Welcome to the platforme! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. </br></br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.</br></br>Happy learning on the platform!"
-msgstr "Welcome to the platforme! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. </br></br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.</br></br>Happy learning on the platform!"
+msgid "Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!"
+msgstr "Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!"
 
-msgid "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.</br></br>"
-msgstr "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.</br></br>"
+msgid "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>"
+msgstr "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>"
 
-msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.</br></br>"
-msgstr "Once the areas have been selected, choose 5 themes and objectives in order of preference.</br></br>"
+msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
+msgstr "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"

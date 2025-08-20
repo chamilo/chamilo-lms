@@ -537,7 +537,7 @@ $extra = $extraField->addElements(
     $adminPermissions
 );
 
-$userForm->addLabel(null, get_lang(' '));
+$userForm->addLabel(null, ' ');
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 

@@ -33,7 +33,7 @@ $languages = $languageRepo->getAllAvailable(true)->getQuery()->getResult();
 $form = new FormValidator('translate', 'POST', $currentUrl);
 $form->addHidden('id', $fieldId);
 
-$extraField->setLocale(Container::getParameter('locale'));
+$extraField->setTranslatableLocale(Container::getParameter('locale'));
 $em->refresh($extraField);
 
 $form->addHeader($extraField->getDisplayText());

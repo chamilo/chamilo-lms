@@ -52,7 +52,7 @@ foreach ($languages as $language) {
 
 $translateUrl = api_get_self().'?'.http_build_query(['skill' => $skill->getId(), 'action' => $action]);
 
-$skill->setLocale($defaultLocale);
+$skill->setTranslatableLocale($defaultLocale);
 $em->refresh($skill);
 
 $defaults = [

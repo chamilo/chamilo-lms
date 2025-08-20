@@ -24,7 +24,7 @@ $fieldId = (int) ($_REQUEST['id'] ?? 0);
 /** @var ExtraFieldOptions|null $extraFieldOption */
 $extraFieldOption = $extraFieldOptionsRepo->find($fieldId);
 
-$extraFieldOption->setLocale(Container::getParameter('locale'));
+$extraFieldOption->setTranslatableLocale(Container::getParameter('locale'));
 $em->refresh($extraFieldOption);
 
 if (null === $extraFieldOption) {

@@ -57,7 +57,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  */
 function get_lang(string $variable, ?string $locale = null): string
 {
-    $translator = Container::$translator ?: Container::$container->get('translator');
+    $translator = Container::$translator ?: Container::$container?->get('translator');
 
     if (!$translator) {
         return $variable;

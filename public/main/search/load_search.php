@@ -462,7 +462,7 @@ $extra = $extraField->addElements(
 $form->addEndPanel();
 
 $userForm->addStartPanel('environnement_travail', get_lang('My work environment'));
-$userForm->addHtml('<p class="text-info">'.get_lang(' ').'</p>');
+$userForm->addHtml('<p class="text-info"> </p>');
 
 $fieldsToShow = [
     'outil_de_travail_ordinateur',
@@ -488,7 +488,7 @@ $extra = $extraFieldUser->addElements(
     $forceShowFields
 );
 
-$userForm->addLabel(null, get_lang(' '));
+$userForm->addLabel(null, ' ');
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 

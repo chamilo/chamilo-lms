@@ -6,11 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use Chamilo\CoreBundle\Component\Composer\ScriptHandler;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
+use Chamilo\CoreBundle\Helpers\TempUploadHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -193,5 +195,78 @@ class AdminController extends BaseController
             'message' => 'Cache for users invalidated!',
             'invalidated_cache_key' => $cacheKey,
         ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/cleanup-temp-uploads', name: 'admin_cleanup_temp_uploads', methods: ['GET'])]
+    public function showCleanupTempUploads(
+        TempUploadHelper $tempUploadHelper,
+    ): Response {
+        $stats = $tempUploadHelper->stats(); // ['files' => int, 'bytes' => int]
+
+        return $this->render('@ChamiloCore/Admin/cleanup_temp_uploads.html.twig', [
+            'tempDir' => $tempUploadHelper->getTempDir(),
+            'stats' => $stats,
+            'defaultOlderThan' => 0, // 0 = delete all
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/cleanup-temp-uploads', name: 'admin_cleanup_temp_uploads_run', methods: ['POST'])]
+    public function runCleanupTempUploads(
+        Request          $request,
+        TempUploadHelper $tempUploadHelper,
+    ): Response {
+        // CSRF
+        $token = (string) $request->request->get('_token', '');
+        if (!$this->isCsrfTokenValid('cleanup_temp_uploads', $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        // Read inputs
+        $olderThan = (int) ($request->request->get('older_than', 0));
+        $dryRun    = (bool) $request->request->get('dry_run', false);
+
+        // 1) Purge temp uploads/cache (configurable dir via helper parameter)
+        $purge = $tempUploadHelper->purge(olderThanMinutes: $olderThan, dryRun: $dryRun);
+
+        if ($dryRun) {
+            $this->addFlash('success', sprintf(
+                'DRY RUN: %d files (%.2f MB) would be removed from %s.',
+                $purge['files'],
+                $purge['bytes'] / 1048576,
+                $tempUploadHelper->getTempDir()
+            ));
+        } else {
+            $this->addFlash('success', sprintf(
+                'Temporary uploads/cache cleaned: %d files removed (%.2f MB) in %s.',
+                $purge['files'],
+                $purge['bytes'] / 1048576,
+                $tempUploadHelper->getTempDir()
+            ));
+        }
+
+        // 2) Remove legacy build main.js and hashed variants (best effort)
+        $publicBuild = $this->getParameter('kernel.project_dir').'/public/build';
+        if (is_dir($publicBuild) && is_readable($publicBuild)) {
+            @unlink($publicBuild.'/main.js');
+            $files = @scandir($publicBuild) ?: [];
+            foreach ($files as $f) {
+                if (preg_match('/^main\..*\.js$/', $f)) {
+                    @unlink($publicBuild.'/'.$f);
+                }
+            }
+        }
+
+        // 3) Rebuild styles/assets like original archive_cleanup.php
+        try {
+            ScriptHandler::dumpCssFiles();
+            $this->addFlash('success', 'The styles and assets in the web/ folder have been refreshed.');
+        } catch (\Throwable $e) {
+            $this->addFlash('error', 'The styles and assets could not be refreshed. Ensure public/ is writable.');
+            error_log($e->getMessage());
+        }
+
+        return $this->redirectToRoute('admin_cleanup_temp_uploads', [], Response::HTTP_SEE_OTHER);
     }
 }

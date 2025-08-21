@@ -1,0 +1,128 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="w-full px-4 md:px-8 py-6 space-y-6">
+
+        <h1 class="text-2xl font-semibold text-gray-90">
+            {{ 'Cleanup temporary uploads and cache'|trans }}
+        </h1>
+
+        {# Flash messages #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                {% set tone = label == 'error' ? 'danger' : (label == 'success' ? 'success' : 'info') %}
+                <div class="rounded-2xl border px-4 py-3
+                    {% if tone == 'danger' %} border-danger bg-danger/10 text-danger
+                    {% elseif tone == 'success' %} border-success bg-success/10 text-success
+                    {% else %} border-info bg-info/10 text-info {% endif %}">
+                    {{ message|raw }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+                <div class="text-caption text-gray-50 mb-1">{{ 'Directory'|trans }}</div>
+                <div class="text-body-1 text-gray-90 break-all">
+                    <code class="bg-gray-10 px-2 py-1 rounded">{{ tempDir }}</code>
+                </div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+                <div class="text-caption text-gray-50 mb-1">{{ 'Files'|trans }}</div>
+                <div class="text-body-1 text-gray-90">{{ stats.files|number_format(0, '.', ',') }}</div>
+            </div>
+
+            <div class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm">
+                <div class="text-caption text-gray-50 mb-1">{{ 'Size'|trans }}</div>
+                <div class="text-body-1 text-gray-90">
+                    {{ (stats.bytes / 1048576)|number_format(2, '.', ',') }} MB
+                </div>
+            </div>
+        </div>
+
+        <form method="post"
+              action="{{ path('admin_cleanup_temp_uploads_run') }}"
+              class="rounded-2xl border border-gray-25 bg-white p-5 shadow-sm space-y-4">
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                    <label for="older_than" class="block text-caption text-gray-50 mb-1">
+                        {{ 'Only delete files older than (minutes)'|trans }}
+                    </label>
+                    <input type="number"
+                           id="older_than"
+                           name="older_than"
+                           value="{{ defaultOlderThan }}"
+                           min="0" step="1"
+                           class="w-full form-input rounded-2xl border-gray-25 focus:ring-0 focus:border-primary" />
+                    <p class="text-tiny text-gray-50 mt-1">
+                        {{ 'Set 0 to delete all files. Use a positive value (e.g., 60) to avoid removing files still being uploaded.'|trans }}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <input type="checkbox"
+                           id="dry_run"
+                           name="dry_run"
+                           value="1"
+                           class="form-checkbox rounded border-gray-25 text-primary focus:ring-0" />
+                    <label for="dry_run" class="text-body-2 text-gray-90">
+                        {{ 'Preview only (do not delete)'|trans }}
+                    </label>
+                </div>
+
+                <div class="flex md:justify-end">
+                    <button id="runBtn" type="submit"
+                            class="inline-flex items-center justify-center rounded-2xl px-4 py-2
+                         bg-primary text-white hover:opacity-90 transition">
+                        {{ 'Proceed with cleanup'|trans }}
+                    </button>
+                </div>
+            </div>
+
+            <input type="hidden" name="_token" value="{{ csrf_token('cleanup_temp_uploads') }}">
+            <div id="warnNote" class="hidden rounded-2xl border border-warning text-warning px-4 py-3">
+                {{ 'Warning: you are about to delete ALL temporary files. This action cannot be undone.'|trans }}
+            </div>
+        </form>
+
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="{{ path('admin_cleanup_temp_uploads_run') }}"]');
+        const older = document.getElementById('older_than');
+        const dry   = document.getElementById('dry_run');
+        const note  = document.getElementById('warnNote');
+
+        function refreshState() {
+          const isZero = parseInt(older.value || '0', 10) === 0;
+          const isDry  = !!dry.checked;
+          if (isZero && !isDry) {
+            note.classList.remove('hidden');
+          } else {
+            note.classList.add('hidden');
+          }
+        }
+
+        function confirmSubmit(e) {
+          const isZero = parseInt(older.value || '0', 10) === 0;
+          const isDry  = !!dry.checked;
+          if (!isDry) {
+            const msg = isZero
+              ? "{{ 'This will delete all temporary files. Continue?'|trans }}"
+              : "{{ 'This will delete files older than %minutes% minutes. Continue?'|trans({'%minutes%': '__MIN__'}) }}".replace('__MIN__', older.value || '0');
+            if (!confirm(msg)) {
+              e.preventDefault();
+            }
+          }
+        }
+
+        refreshState();
+        older.addEventListener('input', refreshState);
+        dry.addEventListener('change', refreshState);
+        form.addEventListener('submit', confirmSubmit);
+      });
+    </script>
+{% endblock %}

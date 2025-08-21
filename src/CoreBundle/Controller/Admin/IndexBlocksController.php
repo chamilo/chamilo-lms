@@ -607,6 +607,12 @@ class IndexBlocksController extends BaseController
             'label' => $this->translator->trans('Resources by type'),
         ];
 
+        $items[] = [
+            'class' => 'item-cleanup-temp-uploads',
+            'url' => '/admin/cleanup-temp-uploads',
+            'label' => $this->translator->trans('Clean uploaded temp files'),
+        ];
+
         return $items;
     }
 

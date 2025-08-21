@@ -26,7 +26,9 @@ export function useAccessUrlChooser() {
       if (1 === items.length) {
         isLoading.value = false
 
-        await doRedirectToPortal(items[0].url)
+        if (!securityStore.isAdmin) {
+          await doRedirectToPortal(items[0].url)
+        }
       }
     } catch (error) {
       showErrorNotification(error)

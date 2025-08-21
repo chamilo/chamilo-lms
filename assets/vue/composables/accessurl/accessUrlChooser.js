@@ -9,12 +9,12 @@ export function useAccessUrlChooser() {
 
   const { showErrorNotification } = useNotification()
 
-  const visible = computed(() => securityStore.showAccessUrlChooser)
+  const loadComponent = computed(() => !!(securityStore.isAuthenticated && window.is_login_url))
   const isLoading = ref(true)
   const accessUrls = ref([])
 
   async function init() {
-    if (!securityStore.showAccessUrlChooser) {
+    if (!loadComponent.value) {
       return
     }
 
@@ -50,7 +50,7 @@ export function useAccessUrlChooser() {
   init().then(() => {})
 
   return {
-    visible,
+    loadComponent,
     isLoading,
     accessUrls,
     doRedirectToPortal,

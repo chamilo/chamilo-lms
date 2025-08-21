@@ -11,7 +11,7 @@
     />
     <ConfirmDialog />
 
-    <AccessUrlChooser />
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
   </component>
   <Toast position="top-center">
     <template #message="slotProps">
@@ -56,9 +56,11 @@ import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
 import DashboardLayout from "./components/layout/DashboardLayout.vue"
+import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 import apolloClient from "./config/apolloClient"
+import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 
 provide(DefaultApolloClient, apolloClient)
@@ -69,7 +71,16 @@ const i18n = useI18n()
 
 const { loader: mejsLoader } = useMediaElementLoader()
 
+const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
+const showAccessUrlChosserLayout = computed(
+  () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
+)
+
 const layout = computed(() => {
+  if (showAccessUrlChosserLayout.value) {
+    return AccessUrlChooserLayout
+  }
+
   if (route.meta.emptyLayout) {
     return EmptyLayout
   }

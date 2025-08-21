@@ -201,7 +201,7 @@ $extraFieldUser = new ExtraField('user');
 $userForm = new FormValidator('user_form', 'post', api_get_self());
 
 $userForm->addStartPanel('filiere', get_lang('I would like to choose a sector'));
-$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the island corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank.').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank.').'</p>');
 
 $fieldsToShow = [
     'statusocial',

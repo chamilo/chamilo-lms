@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 
 if (!$is_allowed_to_edit) {
     header('location:lp_controller.php?action=list&'.api_get_cidreq());

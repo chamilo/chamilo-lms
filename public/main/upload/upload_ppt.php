@@ -60,7 +60,7 @@ if (isset($_POST['convert'])) {
 Event::event_access_tool(TOOL_UPLOAD);
 
 // check access permissions (edit permission is needed to add a document or a LP)
-$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);

@@ -1712,7 +1712,7 @@ HOTSPOT;
             if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                 $current_time = time();
                 $expired_time = api_strtotime(
-                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y:m:d H:i:s'),
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s'),
                     'UTC'
                 );
                 $total_time_allowed = $expired_time + 30;

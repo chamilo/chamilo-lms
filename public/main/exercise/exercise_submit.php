@@ -608,7 +608,7 @@ if ($time_control) {
             }
         }
     } else {
-        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y:m:d H:i:s');
+        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
     }
 }
 

@@ -1,0 +1,165 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="files-info-page">
+        <h1>{{ 'Login attempts'|trans }}</h1>
+
+        <form method="get" action="{{ path('admin_security_login_attempts') }}" style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:20px;">
+            <input type="text" name="username" value="{{ filters.username }}" placeholder="{{ 'Username'|trans }}" class="form-control">
+            <input type="text" name="ip" value="{{ filters.ip }}" placeholder="IP" class="form-control">
+            <input type="date" name="from" value="{{ filters.from }}" class="form-control">
+            <input type="date" name="to" value="{{ filters.to }}" class="form-control">
+            <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
+        </form>
+
+        <div class="grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+            <div class="card">
+                <h3 style="margin:0 0 8px 0">{{ 'Attempts by day (last 7 days)'|trans }}</h3>
+                <canvas id="chartByDay" height="140"></canvas>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 8px 0">{{ 'Top IPs (last 30 days)'|trans }}</h3>
+                <canvas id="chartTopIps" height="140"></canvas>
+            </div>
+            <div class="card">
+                <h3 style="margin:0 0 8px 0">{{ 'Failed attempts by month (last 12 months)'|trans }}</h3>
+                <canvas id="chartByMonth" height="140"></canvas>
+            </div>
+            <div class="card">
+                <h3>{{ 'Success vs failed (last 30 days)'|trans }}</h3>
+                <canvas id="chartSuccessVsFailed" height="140"></canvas>
+            </div>
+            <div class="card">
+                <h3>{{ 'Attempts by hour (last 7 days)'|trans }}</h3>
+                <canvas id="chartByHour" height="140"></canvas>
+            </div>
+            <div class="card">
+                <h3>{{ 'Unique IPs per day (last 30 days)'|trans }}</h3>
+                <canvas id="chartUniqueIps" height="140"></canvas>
+            </div>
+        </div>
+
+        {% if items is empty %}
+            <p>{{ 'No results found.'|trans }}</p>
+        {% else %}
+            <table class="data_table">
+                <thead>
+                <tr>
+                    <th>{{ 'Date'|trans }}</th>
+                    <th>IP</th>
+                    <th>{{ 'Username'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row in items %}
+                    <tr>
+                        <td>{{ row.login_date|date('Y-m-d H:i') }}</td>
+                        <td>{{ row.user_ip }}</td>
+                        <td>{{ row.username }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {% set totalPages = (total / pageSize)|round(0, 'ceil') %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="{{ path('admin_security_login_attempts', filters|merge({'page': page-1, 'pageSize': pageSize})) }}">&laquo; {{ 'Previous'|trans }}</a>
+                {% endif %}
+                {% for i in max(1, page-2)..min(totalPages, page+2) %}
+                    {% if i == page %}
+                        <span>{{ i }}</span>
+                    {% else %}
+                        <a href="{{ path('admin_security_login_attempts', filters|merge({'page': i, 'pageSize': pageSize})) }}">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page < totalPages %}
+                    <a href="{{ path('admin_security_login_attempts', filters|merge({'page': page+1, 'pageSize': pageSize})) }}">{{ 'Next'|trans }} &raquo;</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script src="{{ asset('build/libs/chartjs/chart.umd.min.js') }}"></script>
+    <script>
+      (function() {
+        const byDay       = {{ stats.byDay|json_encode|raw }};
+        const byMonth     = {{ stats.byMonth|json_encode|raw }};
+        const topIps      = {{ stats.topIps|json_encode|raw }};
+
+        const dayLabels = byDay.map(r => (r.day || r.DAY || r.date).toString().slice(0,10));
+        const dayData   = byDay.map(r => Number(r.failed));
+        new Chart(document.getElementById('chartByDay'), {
+          type: 'line',
+          data: {
+            labels: dayLabels,
+            datasets: [{ label: '{{ "Failed attempts"|trans }}', data: dayData, fill: false, tension: 0.3 }]
+          },
+          options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+        });
+
+        const ipLabels = topIps.map(r => r.ip);
+        const ipData   = topIps.map(r => Number(r.failed));
+        new Chart(document.getElementById('chartTopIps'), {
+          type: 'bar',
+          data: {
+            labels: ipLabels,
+            datasets: [{ label: '{{ "Attempts"|trans }}', data: ipData }]
+          },
+          options: { indexAxis: 'x', scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+        });
+
+        const monthLabels = byMonth.map(r => (r.month || r.MONTH).toString().slice(0,7));
+        const monthData   = byMonth.map(r => Number(r.failed));
+        new Chart(document.getElementById('chartByMonth'), {
+          type: 'line',
+          data: {
+            labels: monthLabels,
+            datasets: [{ label: '{{ "Failed attempts"|trans }}', data: monthData, fill: false, tension: 0.3 }]
+          },
+          options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+        });
+
+        const svf = {{ stats.successVsFailed|json_encode|raw }};
+        new Chart(document.getElementById('chartSuccessVsFailed'), {
+          type: 'bar',
+          data: {
+            labels: svf.map(r => r.day.toString().slice(0,10)),
+            datasets: [
+              { label: '{{ "Failed"|trans }}',  data: svf.map(r => +r.failed_cnt),  stack: 'a' },
+              { label: '{{ "Success"|trans }}', data: svf.map(r => +r.success_cnt), stack: 'a' },
+            ]
+          },
+          options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+        });
+      })();
+
+      const byHour = {{ stats.byHour|json_encode|raw }};
+      new Chart(document.getElementById('chartByHour'), {
+        type: 'bar',
+        data: {
+          labels: byHour.map(r => r.hour.toString().padStart(2,'0') + ':00'),
+          dataSets: undefined
+        }
+      });
+      Chart.getChart('chartByHour')?.destroy();
+      new Chart(document.getElementById('chartByHour'), {
+        type: 'bar',
+        data: {
+          labels: byHour.map(r => r.hour.toString().padStart(2,'0') + ':00'),
+          datasets: [{ label: '{{ "Failed attempts"|trans }}', data: byHour.map(r => +r.failed) }]
+        },
+        options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+      });
+      const uniq = {{ stats.uniqueIps|json_encode|raw }};
+      new Chart(document.getElementById('chartUniqueIps'), {
+        type: 'line',
+        data: {
+          labels: uniq.map(r => r.day.toString().slice(0,10)),
+          datasets: [{ label: '{{ "Unique IPs"|trans }}', data: uniq.map(r => +r.unique_ips), fill: false, tension: 0.3 }]
+        },
+        options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 }}}}
+      });
+    </script>
+{% endblock %}

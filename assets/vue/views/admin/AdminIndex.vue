@@ -168,6 +168,16 @@
       :title="t('Platform management')"
       icon="admin-settings"
     />
+    <AdminBlock
+      v-if="blockSecurity"
+      :id="blockSecurity.id"
+      v-model:extra-content="blockSecurity.extraContent"
+      :description="t('Security tools and reports')"
+      :editable="blockSecurity.editable"
+      :items="blockSecurity.items"
+      :title="t('Security')"
+      icon="shield-check"
+    />
 
     <AdminBlock
       v-if="blockChamilo"
@@ -258,6 +268,7 @@ const {
   blockSettings,
   blockPlatform,
   blockChamilo,
+  blockSecurity,
   loadBlocks,
   blockNewsStatusEl,
   blockSupportStatusEl,

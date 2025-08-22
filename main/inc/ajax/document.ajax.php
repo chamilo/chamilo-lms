@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+use Chamilo\CoreBundle\Component\Editor\Driver\PersonalDriver;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -223,6 +224,42 @@ switch ($action) {
 
         if (!$isMimeAccepted) {
             exit;
+        }
+
+        $resizeMax = api_get_configuration_value('wysiwyg_image_auto_resize_max');
+
+        if (is_array($resizeMax)) {
+            if ($fileUpload['size'] > ($resizeMax['mb'] * 1024 * 1024)) {
+                echo json_encode([
+                    'uploaded' => 0,
+                    'error' => [
+                        'message' => get_lang('UplFileTooBig'),
+                    ]
+                ]);
+
+                exit;
+            }
+
+            $temp = new Image($fileUpload['tmp_name']);
+            $pictureInfo = $temp->get_image_info();
+
+            $thumbSize = 0;
+
+            if ($pictureInfo['width'] > $pictureInfo['height']) {
+                if ($pictureInfo['width'] > $resizeMax['w']) {
+                    $thumbSize = $resizeMax['w'];
+                }
+            } else {
+                if ($pictureInfo['height'] > $resizeMax['h']) {
+                    $thumbSize = $resizeMax['h'];
+                }
+            }
+
+            if ($thumbSize) {
+                $temp->resize($thumbSize);
+                $temp->send_image($fileUpload['tmp_name']);
+                $fileUpload['size'] = filesize($fileUpload['tmp_name']);
+            }
         }
 
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);

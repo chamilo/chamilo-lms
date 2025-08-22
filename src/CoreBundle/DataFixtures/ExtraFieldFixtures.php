@@ -379,6 +379,14 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
             ],
             [
+                'variable' => 'gdpr',
+                'display_text' => 'GDPR compliance',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'visible_to_self' => false,
+                'changeable' => true,
+            ],
+            [
                 'variable' => 'isFromNewLogin',
                 'display_text' => 'Is from new login',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
@@ -403,6 +411,14 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Moodle password',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => 'my_terms',
+                'display_text' => 'My terms',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+                'visible_to_self' => true,
+                'changeable' => true,
             ],
             [
                 'variable' => 'new_tracking_system',

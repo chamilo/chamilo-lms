@@ -47,6 +47,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
                 'data_protection_officer_email' => '',
                 'hide_user_field_from_list' => '',
                 'send_notification_when_user_added' => '',
+                'show_conditions_to_user' => '',
                 'allow_teachers_to_classes' => 'false',
                 'profile_fields_visibility' => '',
                 'user_import_settings' => '',
@@ -130,6 +131,7 @@ class ProfileSettingsSchema extends AbstractSettingsSchema
             ->add('data_protection_officer_email', TextType::class)
             ->add('hide_user_field_from_list', TextareaType::class)
             ->add('send_notification_when_user_added', TextareaType::class)
+            ->add('show_conditions_to_user', TextareaType::class)
             ->add('allow_teachers_to_classes', YesNoType::class)
             ->add('profile_fields_visibility', TextareaType::class)
             ->add('user_import_settings', TextareaType::class)

@@ -30056,3 +30056,9 @@ msgstr "Es ist keine Konfiguration für Push-Benachrichtigungen eingerichtet."
 
 msgid "Documents deleted"
 msgstr "Dokumente gelöscht"
+
+msgid "New folder"
+msgstr "Neue Datei"
+
+msgid "No available options"
+msgstr "Keine Optionen verfügbar"

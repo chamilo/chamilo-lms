@@ -2350,11 +2350,19 @@ class PortfolioController
             $itemDirectory = $item->getCreationDate()->format('Y-m-d-H-i-s');
 
             $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
-            $itemFileContent = $this->fixImagesSourcesToHtml($itemsHtml[$i]);
+            $imagePaths = [];
+            $itemFileContent = $this->fixImagesSourcesToHtml($itemsHtml[$i], $imagePaths);
 
             $fs->dumpFile($itemFilename, $itemFileContent);
 
             $filenames[] = $itemFilename;
+
+            foreach ($imagePaths as $imagePath) {
+                $inlineFile = dirname($itemFilename).'/'.basename($imagePath);
+                $filenames[] = $inlineFile;
+                $fs->copy($imagePath, $inlineFile);
+            }
+
 
             $attachments = $attachmentsRepo->findFromItem($item);
 
@@ -2397,12 +2405,19 @@ class PortfolioController
         foreach ($comments as $i => $comment) {
             $commentDirectory = $comment->getDate()->format('Y-m-d-H-i-s');
 
-            $commentFileContent = $this->fixImagesSourcesToHtml($commentsHtml[$i]);
+            $imagePaths = [];
+            $commentFileContent = $this->fixImagesSourcesToHtml($commentsHtml[$i], $imagePaths);
             $commentFilename = sprintf('%s/comments/%s/comment.html', $tempPortfolioDirectory, $commentDirectory);
 
             $fs->dumpFile($commentFilename, $commentFileContent);
 
             $filenames[] = $commentFilename;
+
+            foreach ($imagePaths as $imagePath) {
+                $inlineFile = dirname($commentFilename).'/'.basename($imagePath);
+                $filenames[] = $inlineFile;
+                $fs->copy($imagePath, $inlineFile);
+            }
 
             $attachments = $attachmentsRepo->findFromComment($comment);
 
@@ -4277,7 +4292,7 @@ class PortfolioController
         return $commentsHtml;
     }
 
-    private function fixImagesSourcesToHtml(string $htmlContent): string
+    private function fixImagesSourcesToHtml(string $htmlContent, array &$imagePaths): string
     {
         $doc = new DOMDocument();
         @$doc->loadHTML($htmlContent);
@@ -4288,30 +4303,38 @@ class PortfolioController
             return $htmlContent;
         }
 
-        $webCoursePath = api_get_path(WEB_COURSE_PATH);
-        $webUploadPath = api_get_path(WEB_UPLOAD_PATH);
+        $webPath = api_get_path(WEB_PATH);
+        $sysPath = rtrim(api_get_path(SYS_PATH), '/');
 
         /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $src = trim($element->getAttribute('src'));
 
-            if (strpos($src, 'http') === 0) {
+            if (!str_starts_with($src, '/')
+                && !str_starts_with($src, $webPath)
+            ) {
                 continue;
             }
 
+            $src = str_replace($webPath, '/', $src);
+
             if (strpos($src, '/app/upload/') === 0) {
+                $imagePaths[] = $sysPath.$src;
+
                 $element->setAttribute(
                     'src',
-                    preg_replace('/\/app/upload\//', $webUploadPath, $src, 1)
+                    basename($src)
                 );
 
                 continue;
             }
 
             if (strpos($src, '/courses/') === 0) {
+                $imagePaths[] = $sysPath.'/app'.$src;
+
                 $element->setAttribute(
                     'src',
-                    preg_replace('/\/courses\//', $webCoursePath, $src, 1)
+                    basename($src)
                 );
 
                 continue;

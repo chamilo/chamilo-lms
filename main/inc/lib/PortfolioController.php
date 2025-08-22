@@ -1417,7 +1417,7 @@ class PortfolioController
         );
 
         $urlUserString = "";
-        if (isset($urlUser)) {
+        if (!empty($urlUser)) {
             $urlUserString = "user=".$urlUser;
         }
 

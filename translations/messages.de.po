@@ -30068,3 +30068,6 @@ msgstr "Eintrag"
 
 msgid "Color"
 msgstr "Farbe"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "Alle Nachrichten hier werden automatisch als offiziell markiert."

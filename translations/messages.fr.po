@@ -30409,3 +30409,6 @@ msgstr "Événement"
 
 msgid "Color"
 msgstr "Couleur"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "Tous les messages ici sont automatiquement marqués comme officiels."

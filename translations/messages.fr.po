@@ -4976,7 +4976,7 @@ msgid "Start date"
 msgstr "Date de début"
 
 msgid "End date"
-msgstr "date de fin"
+msgstr "Date de fin"
 
 msgid "Coach name"
 msgstr "Nom du coach"
@@ -30403,3 +30403,9 @@ msgstr "Nouveau dossier"
 
 msgid "No available options"
 msgstr "Aucune option disponible"
+
+msgid "Event"
+msgstr "Événement"
+
+msgid "Color"
+msgstr "Couleur"

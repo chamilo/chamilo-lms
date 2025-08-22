@@ -24781,7 +24781,7 @@ msgid "Add notification"
 msgstr "Benachrichtigung hinzufügen"
 
 msgid "Notification to remind the event"
-msgstr "Benachrichtigung zur Erinnerung an das Ereignis"
+msgstr "Benachrichtigung zur Erinnerung an den Eintrag"
 
 msgid "Add tags"
 msgstr "Tags hinzufügen"
@@ -30062,3 +30062,9 @@ msgstr "Neue Datei"
 
 msgid "No available options"
 msgstr "Keine Optionen verfügbar"
+
+msgid "Event"
+msgstr "Eintrag"
+
+msgid "Color"
+msgstr "Farbe"

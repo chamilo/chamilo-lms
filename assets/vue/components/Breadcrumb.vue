@@ -263,9 +263,15 @@ watchEffect(() => {
     const matchedRoutes = route.matched
     const toolBase = matchedRoutes[0]
     const currentMatched = matchedRoutes[matchedRoutes.length - 1]
-    const toolLabel = formatToolName(mainToolName)
+
+    let toolLabel = formatToolName(mainToolName)
+    if (mainToolName === "ccalendarevent") {
+      const cid = Number(route.query?.cid || 0)
+      const gid = Number(route.query?.gid || 0)
+      toolLabel = gid > 0 ? "Group agenda" : (cid > 0 ? "Agenda" : "Personal agenda")
+    }
     itemList.value.push({
-      label: toolLabel,
+      label: t(toolLabel),
       route: { name: toolBase.name, params: route.params, query: route.query },
     })
 

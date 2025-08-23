@@ -167,36 +167,40 @@ $form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove users from any
 $form->addButtonImport(get_lang('Import'));
 $form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
 $errors = [];
-
+$csvCustomError = '';
+$topStaticErrorHtml = '';
 if ($form->validate()) {
-    $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
-    $errors = validate_data($users_courses);
-    if (0 == count($errors)) {
-        $inserted_in_course = save_data($users_courses);
-        // Build the alert message in case there were visual codes subscribed to.
-        if (isset($_POST['subscribe']) && $_POST['subscribe']) {
-            //$warn = get_lang('The users have been subscribed to the following courses because several courses share the same visual code').': ';
-        } else {
-            $warn = get_lang('The users have been unsubscribed from the following courses because several courses share the same visual code').': ';
+    $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+    if (true !== $check) {
+        $csvCustomError = $check;
+        $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+    } else {
+        $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+        $errors = validate_data($users_courses);
+        if (0 == count($errors)) {
+            $inserted_in_course = save_data($users_courses);
+
+            if (!empty($inserted_in_course)) {
+                $warn = get_lang('File imported');
+            } else {
+                $warn = get_lang('Errors when importing file');
+            }
+
+            Display::addFlash(Display::return_message($warn));
+
+            Security::clear_token();
+            $tok = Security::get_token();
+            header('Location: '.api_get_self());
+            exit();
         }
-
-        if (!empty($inserted_in_course)) {
-            $warn = get_lang('File imported');
-        } else {
-            $warn = get_lang('Errors when importing file');
-        }
-
-        Display::addFlash(Display::return_message($warn));
-
-        Security::clear_token();
-        $tok = Security::get_token();
-        header('Location: '.api_get_self());
-        exit();
     }
 }
 
 // Displaying the header.
 Display :: display_header($tool_name);
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 
 if (0 != count($errors)) {
     $error_message = '<ul>';
@@ -212,18 +216,15 @@ if (0 != count($errors)) {
 // Displaying the form.
 $form->display();
 
-$content = '
-<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
-<blockquote>
-<pre>
-<b>UserName</b>;<b>CourseCode</b>;<b>Status</b>
-jdoe;course01;<?php echo COURSEMANAGER; ?>
-adam;course01;<?php echo STUDENT; ?>
-</pre>
-'.COURSEMANAGER.': '.get_lang('Trainer').'<br />
-'.STUDENT.': '.get_lang('Learner').'<br />
-</blockquote>
-';
+$content  = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>';
+$content .= '<blockquote><pre>';
+$content .= '<b>UserName</b>,<b>CourseCode</b>,<b>Status</b>'."\n";
+$content .= 'jdoe,course01,'.COURSEMANAGER."\n";
+$content .= 'adam,course01,'.STUDENT."\n";
+$content .= '</pre>';
+$content .= COURSEMANAGER.': '.get_lang('Trainer').'<br />';
+$content .= STUDENT.': '.get_lang('Learner').'<br />';
+$content .= '</blockquote>';
 
 echo Display::prose($content);
 

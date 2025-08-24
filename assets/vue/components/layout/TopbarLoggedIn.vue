@@ -16,19 +16,13 @@
       </BaseAppLink>
 
       <BaseAppLink
+        v-if="messagingEnabled"
         :class="{ 'item-button--unread': !!btnInboxBadge }"
         :to="{ name: 'MessageList' }"
         class="item-button"
       >
-        <BaseIcon
-          class="item-button__icon"
-          icon="inbox"
-        />
-        <span
-          v-if="btnInboxBadge"
-          class="item-button__badge"
-          v-text="btnInboxBadge"
-        />
+        <BaseIcon class="item-button__icon" icon="inbox" />
+        <span v-if="btnInboxBadge" class="item-button__badge" v-text="btnInboxBadge" />
       </BaseAppLink>
     </div>
     <div class="app-topbar__end">
@@ -81,6 +75,7 @@ const platformConfigStore = usePlatformConfig()
 const messageRelUserStore = useMessageRelUserStore()
 const notification = useNotification()
 const cidReqStore = useCidReqStore()
+const messagingEnabled = computed(() => platformConfigStore.getSetting("message.allow_message_tool") === "true")
 
 const ticketUrl = computed(() => {
   const searchParms = new URLSearchParams()
@@ -137,9 +132,12 @@ function toggleUserMenu(event) {
 }
 
 const btnInboxBadge = computed(() => {
+  if (!messagingEnabled.value) return null
   const unreadCount = messageRelUserStore.countUnread
-  return unreadCount > 20 ? "9+" : unreadCount > 0 ? unreadCount.toString() : null
+  return unreadCount > 20 ? "20+" : unreadCount > 0 ? unreadCount.toString() : null
 })
 
-messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
+if (messagingEnabled.value) {
+  messageRelUserStore.findUnreadCount().catch((e) => notification.showErrorNotification(e))
+}
 </script>

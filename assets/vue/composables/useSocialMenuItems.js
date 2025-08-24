@@ -18,7 +18,10 @@ export function useSocialMenuItems() {
   const { isCurrentUser } = useSocialInfo()
   const { user } = storeToRefs(securityStore)
 
-  const unreadMessagesCount = computed(() => messageRelUserStore.countUnread)
+  const messagingEnabled = computed(() => platformConfigStore.getSetting("message.allow_message_tool") === "true")
+
+  const unreadMessagesCount = computed(() => (messagingEnabled.value ? messageRelUserStore.countUnread : 0))
+
   const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
   const hideSocialGroupBlock = computed(
     () => platformConfigStore.getSetting("social.hide_social_groups_block") === "true",
@@ -42,11 +45,7 @@ export function useSocialMenuItems() {
   const getGroupLink = async () => {
     try {
       const response = await axios.get("/social-network/get-forum-link")
-      if (isValidGlobalForumsCourse.value) {
-        groupLink.value = response.data.go_to
-      } else {
-        groupLink.value = { name: "UserGroupList" }
-      }
+      groupLink.value = isValidGlobalForumsCourse.value ? response.data.go_to : { name: "UserGroupList" }
     } catch (error) {
       console.error("Error fetching forum link:", error)
       groupLink.value = { name: "UserGroupList" }
@@ -59,25 +58,29 @@ export function useSocialMenuItems() {
   }
 
   const items = computed(() => {
-    const menuItems = [
-      { icon: "mdi mdi-home", label: t("Home"), route: "/social" },
-      {
+    const menuItems = []
+
+    // Home
+    menuItems.push({ icon: "mdi mdi-home", label: t("Home"), route: "/social" })
+
+    if (messagingEnabled.value) {
+      menuItems.push({
         icon: "mdi mdi-email",
         label: t("Messages"),
         route: "/resources/messages",
         badgeCount: unreadMessagesCount.value,
-      },
-      { icon: "mdi mdi-handshake", label: t("My friends"), route: { name: "UserRelUserList" } },
-      {
-        icon: "mdi mdi-briefcase",
-        label: t("My files"),
-        route: { name: "PersonalFileList", params: { node: securityStore.user.resourceNode.id } },
-      },
-      { icon: "mdi mdi-account", label: t("Personal data"), route: "/resources/users/personal_data" },
-    ]
+      })
+    }
+
+    // My friends
+    menuItems.push({
+      icon: "mdi mdi-handshake",
+      label: t("My friends"),
+      route: { name: "UserRelUserList" },
+    })
 
     if (!hideSocialGroupBlock.value) {
-      menuItems.splice(3, 0, {
+      menuItems.push({
         icon: "mdi mdi-group",
         label: t("Social groups"),
         route: groupLink.value,
@@ -85,17 +88,36 @@ export function useSocialMenuItems() {
       })
     }
 
-    return isCurrentUser.value
-      ? menuItems
-      : [
-          { icon: "mdi mdi-home", label: t("Home"), route: "/social" },
-          {
-            icon: "mdi mdi-email",
-            label: t("Send message"),
-            link: `/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id=${user.value.id}`,
-            isExternal: true,
-          },
-        ]
+    // My files
+    menuItems.push({
+      icon: "mdi mdi-briefcase",
+      label: t("My files"),
+      route: { name: "PersonalFileList", params: { node: securityStore.user.resourceNode.id } },
+    })
+
+    // Personal data
+    menuItems.push({
+      icon: "mdi mdi-account",
+      label: t("Personal data"),
+      route: "/resources/users/personal_data",
+    })
+
+    if (!isCurrentUser.value) {
+      const othersMenu = [{ icon: "mdi mdi-home", label: t("Home"), route: "/social" }]
+
+      if (messagingEnabled.value) {
+        othersMenu.push({
+          icon: "mdi mdi-email",
+          label: t("Send message"),
+          link: `/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id=${user.value.id}`,
+          isExternal: true,
+        })
+      }
+
+      return othersMenu
+    }
+
+    return menuItems
   })
 
   return { items }

@@ -19,18 +19,14 @@
           {{ t("Home") }}
         </BaseAppLink>
       </li>
-      <li :class="['menu-item', { active: isActive('/resources/messages') }]">
+      <li
+        v-if="messagingEnabled"
+        :class="['menu-item', { active: isActive('/resources/messages') }]"
+      >
         <BaseAppLink to="/resources/messages">
-          <i
-            aria-hidden="true"
-            class="mdi mdi-email"
-          ></i>
+          <i aria-hidden="true" class="mdi mdi-email"></i>
           {{ t("Messages") }}
-          <span
-            v-if="unreadMessagesCount > 0"
-            class="badge badge-warning"
-            >{{ unreadMessagesCount }}</span
-          >
+          <span v-if="unreadMessagesCount > 0" class="badge badge-warning">{{ unreadMessagesCount }}</span>
         </BaseAppLink>
       </li>
       <li :class="['menu-item', { active: isActive('/resources/friends/invitations') }]">
@@ -126,16 +122,13 @@
           {{ t("Home") }}
         </BaseAppLink>
       </li>
-      <li class="menu-item">
+      <li class="menu-item" v-if="messagingEnabled">
         <a
           class="ajax"
           href="/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id={{user.id}}"
           rel="noopener noreferrer"
         >
-          <i
-            aria-hidden="true"
-            class="mdi mdi-email"
-          ></i>
+          <i aria-hidden="true" class="mdi mdi-email"></i>
           {{ t("Send message") }}
         </a>
       </li>
@@ -166,6 +159,7 @@ const isCurrentUser = inject("is-current-user")
 const groupLink = ref({ name: "UserGroupShow" })
 const platformConfigStore = usePlatformConfig()
 const globalForumsCourse = computed(() => platformConfigStore.getSetting("forum.global_forums_course_id"))
+const messagingEnabled = computed(() => platformConfigStore.getSetting("message.allow_message_tool") === "true")
 const isValidGlobalForumsCourse = computed(() => {
   const courseId = globalForumsCourse.value
   return courseId !== null && courseId !== undefined && courseId > 0
@@ -203,7 +197,9 @@ watchEffect(() => {
         currentNodeId.value = currentUser.resourceNode.id
       }
     }
-    messageRelUserStore.findUnreadCount()
+    if (messagingEnabled.value) {
+      messageRelUserStore.findUnreadCount()
+    }
     if (user.value && user.value.id) {
       fetchInvitationsCount(user.value.id)
     }

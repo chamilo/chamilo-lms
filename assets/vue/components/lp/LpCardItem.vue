@@ -91,10 +91,10 @@ const dateText = computed(() => {
     <div class="mt-auto pt-3 flex items-center pl-8">
       <div class="flex items-center gap-2">
         <div class="relative w-10 h-10">
-          <svg viewBox="0 0 40 40" class="w-10 h-10">
-            <circle cx="20" cy="20" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />
+          <svg viewBox="0 0 37 37" class="w-10 h-10">
+            <circle cx="18.5" cy="19" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />
             <circle
-              cx="20" cy="20" r="16" stroke-width="3.5" fill="none"
+              cx="21" cy="18.5" r="16" stroke-width="3.5" fill="none"
               :stroke-dasharray="ringDash(lp.progress)"
               stroke-linecap="round"
               class="text-support-5"

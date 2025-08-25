@@ -2351,7 +2351,7 @@ class PortfolioController
 
             $itemFilename = sprintf('%s/items/%s/item.html', $tempPortfolioDirectory, $itemDirectory);
             $imagePaths = [];
-            $itemFileContent = $this->fixImagesSourcesToHtml($itemsHtml[$i], $imagePaths);
+            $itemFileContent = $this->fixMediaSourcesToHtml($itemsHtml[$i], $imagePaths);
 
             $fs->dumpFile($itemFilename, $itemFileContent);
 
@@ -2406,7 +2406,7 @@ class PortfolioController
             $commentDirectory = $comment->getDate()->format('Y-m-d-H-i-s');
 
             $imagePaths = [];
-            $commentFileContent = $this->fixImagesSourcesToHtml($commentsHtml[$i], $imagePaths);
+            $commentFileContent = $this->fixMediaSourcesToHtml($commentsHtml[$i], $imagePaths);
             $commentFilename = sprintf('%s/comments/%s/comment.html', $tempPortfolioDirectory, $commentDirectory);
 
             $fs->dumpFile($commentFilename, $commentFileContent);
@@ -4292,21 +4292,44 @@ class PortfolioController
         return $commentsHtml;
     }
 
-    private function fixImagesSourcesToHtml(string $htmlContent, array &$imagePaths): string
+    /**
+     * @param string $htmlContent
+     * @param array $imagePaths Relative paths found in $htmlContent
+     *
+     * @return string
+     */
+    private function fixMediaSourcesToHtml(string $htmlContent, array &$imagePaths): string
     {
         $doc = new DOMDocument();
         @$doc->loadHTML($htmlContent);
 
-        $elements = $doc->getElementsByTagName('img');
+        $tagsWithSrc = ['img', 'video', 'audio', 'source'];
+        /** @var array<int, \DOMElement> $elements */
+        $elements = [];
 
-        if (empty($elements->length)) {
+        foreach ($tagsWithSrc as $tag) {
+            foreach ($doc->getElementsByTagName($tag) as $element) {
+                if ($element->hasAttribute('src')) {
+                    $elements[] = $element;
+                }
+            }
+        }
+
+        if (empty($elements)) {
             return $htmlContent;
         }
+
+        /** @var array<int, \DOMElement> $anchorElements */
+        $anchorElements = $doc->getElementsByTagName('a');
 
         $webPath = api_get_path(WEB_PATH);
         $sysPath = rtrim(api_get_path(SYS_PATH), '/');
 
-        /** @var \DOMElement $element */
+        $paths = [
+            '/app/upload/' => $sysPath,
+            '/courses/' => $sysPath.'/app'
+        ];
+
         foreach ($elements as $element) {
             $src = trim($element->getAttribute('src'));
 
@@ -4316,28 +4339,25 @@ class PortfolioController
                 continue;
             }
 
-            $src = str_replace($webPath, '/', $src);
+            if ($anchorElements->length > 0) {
+                foreach ($anchorElements as $anchorElement) {
+                    if (!$anchorElement->hasAttribute('href')) {
+                        continue;
+                    }
 
-            if (strpos($src, '/app/upload/') === 0) {
-                $imagePaths[] = $sysPath.$src;
-
-                $element->setAttribute(
-                    'src',
-                    basename($src)
-                );
-
-                continue;
+                    if ($src === $anchorElement->getAttribute('href')) {
+                        $anchorElement->setAttribute('href', basename($src));
+                    }
+                }
             }
 
-            if (strpos($src, '/courses/') === 0) {
-                $imagePaths[] = $sysPath.'/app'.$src;
+            $src = str_replace($webPath, '/', $src);
 
-                $element->setAttribute(
-                    'src',
-                    basename($src)
-                );
-
-                continue;
+            foreach ($paths as $prefix => $basePath) {
+                if (str_starts_with($src, $prefix)) {
+                    $imagePaths[] = $basePath.urldecode($src);
+                    $element->setAttribute('src', basename($src));
+                }
             }
         }
 

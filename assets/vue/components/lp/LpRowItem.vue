@@ -21,6 +21,14 @@ const dateText = computed(() => {
   const v = props.buildDates ? props.buildDates(props.lp) : ""
   return typeof v === "string" ? v.trim() : ""
 })
+
+const progressBgClass = computed(() => {
+  return props.ringValue(props.lp.progress) === 100 ? 'bg-success' : 'bg-support-5'
+})
+
+const progressTextClass = computed(() => {
+  return props.ringValue(props.lp.progress) === 100 ? 'text-success' : 'text-support-5'
+})
 </script>
 
 <template>
@@ -132,12 +140,15 @@ const dateText = computed(() => {
                 cx="21" cy="18.5" r="16" stroke-width="3.5" fill="none"
                 :stroke-dasharray="ringDash(lp.progress)"
                 stroke-linecap="round"
-                class="text-support-5"
+                :class="progressTextClass"
                 stroke="currentColor"
                 transform="rotate(-90 20 20)"
               />
             </svg>
-            <span class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-support-5 ring-2 ring-white" aria-hidden/>
+            <span 
+              class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white" 
+              :class="progressBgClass" 
+              aria-hidden/>
             <div class="absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90">
               {{ ringValue(lp.progress) }}%
             </div>

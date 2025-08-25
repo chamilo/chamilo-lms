@@ -194,7 +194,7 @@ if (!empty($projectId)) {
         0 => get_lang('Unassigned'),
     ];
     foreach ($admins as $admin) {
-        $selectAdmins[$admin['user_id']] = $admin['complete_name_with_username'];
+        $selectAdmins[$admin['id']] = $admin['firstname'].' '.$admin['lastname'];
     }
     $status = TicketManager::get_all_tickets_status();
     $selectStatus = [];

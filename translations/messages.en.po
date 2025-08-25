@@ -30296,8 +30296,8 @@ msgstr "Hello %s, you have been enrolled in the course %s for the session %s."
 msgid "You have been enrolled in the course %s for the session %s"
 msgstr "You have been enrolled in the course %s for the session %s"
 
-msgid "Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
-msgstr "Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
 
 msgid "Replication"
 msgstr "Replication"

@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Form element to select a date and hour.
  */
@@ -71,7 +73,8 @@ class DateTimePicker extends HTML_QuickForm_text
         $localeCode = $this->getLocaleCode();
         $id = $this->getAttribute('id');
 
-        $altFormat = ($localeCode === 'en') ? 'F d, Y - H:i' : 'd F, Y - H:i';
+        $baseLang = strtolower(explode('-', $localeCode)[0] ?? $localeCode);
+        $altFormat = ($baseLang === 'en') ? 'F d, Y - H:i' : 'd F, Y - H:i';
 
         $js = "<script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -194,68 +197,40 @@ class DateTimePicker extends HTML_QuickForm_text
      */
     private function getLocaleCode(): string
     {
-        // 1) platform default
-        $raw = (string) api_get_language_isocode();
+        $raw = '';
 
-        // 2) user (if not anonymous)
-        $user = api_get_user_info();
-        if (is_array($user) && !empty($user['language']) && ANONYMOUS != $user['status']) {
-            $raw = (string) $user['language'];
+        if (class_exists('\Chamilo\CoreBundle\Framework\Container')) {
+            $req = Container::getRequest();
+            if ($req && $req->getLocale()) {
+                $raw = $req->getLocale();
+            }
         }
 
-        // 3) course (highest priority)
-        $course = api_get_course_info();
-        if (!empty($course) && !empty($course['language'])) {
-            $raw = (string) $course['language'];
+        if ($raw === '' && !empty($_SESSION['_locale']) && is_string($_SESSION['_locale'])) {
+            $raw = $_SESSION['_locale'];
         }
 
-        return $this->normalizeIsoKey($raw);
-    }
+        if ($raw === '') {
+            $raw = (string) api_get_language_isocode();
+        }
 
-    /**
-     * Normalizes any ISO/custom-ISO to a base language code that Intl can handle safely.
-     * Rules:
-     *  - 'xx'                -> 'xx'
-     *  - 'xx_YY' / 'xx-YY'   -> 'xx'   (e.g., pt_PT -> pt, nn_NO -> nn, zh_TW -> zh)
-     *  - 'xx_suffix*'        -> 'xx'   (e.g., de_german2 -> de, es_spanish -> es, fr_french2 -> fr)
-     *  - 'longtag_ES'        -> 'es'   (e.g., ast_ES, eu_ES -> es, instead of falling back to en)
-     *  - otherwise           -> 'en'
-     */
-    private function normalizeIsoKey(string $raw): string
-    {
-        $s = strtolower(trim($raw));
+        $s = str_replace('_', '-', trim($raw));
         if ($s === '') {
-            return 'en';
+            return 'en-US';
         }
 
-        // unify separator
-        $s = str_replace('-', '_', $s);
-
-        // direct 2-letter language (es, en, fr, de, ...)
-        if (preg_match('/^[a-z]{2}$/', $s)) {
-            return $s;
+        if (preg_match('/^([A-Za-z]{2,3})-([A-Za-z]{2})$/', $s, $m)) {
+            return strtolower($m[1]).'-'.strtoupper($m[2]);
         }
 
-        // 'xx_YY' or 'xx_anything' -> keep base 'xx'
-        if (preg_match('/^([a-z]{2})_[a-z0-9]+$/', $s, $m)) {
-            return $m[1];
+        if (preg_match('/^([A-Za-z]{2,3})$/', $s, $m)) {
+            return strtolower($m[1]);
         }
 
-        // 'xx_suffix' with digits (custom like es_spanish, de_german2, ...)
-        if (preg_match('/^([a-z]{2})_[a-z]+[0-9]*$/', $s, $m)) {
-            return $m[1];
+        if (preg_match('/^([A-Za-z]{2,3})[-_].+$/', $s, $m)) {
+            return strtolower($m[1]);
         }
 
-        // long language tag followed by region, prefer 'es' if region is ES
-        if (preg_match('/^[a-z]{3,}_(..)$/', $s, $m)) {
-            return ($m[1] === 'es') ? 'es' : 'en';
-        }
-
-        // fallback: extract first 2 letters if available
-        if (preg_match('/^([a-z]{2})/', $s, $m)) {
-            return $m[1];
-        }
-
-        return 'en';
+        return 'en-US';
     }
 }

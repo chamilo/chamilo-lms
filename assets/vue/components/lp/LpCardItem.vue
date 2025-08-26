@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
+import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 
 const { t } = useI18n()
 
@@ -42,22 +43,29 @@ const progressTextClass = computed(() => {
       </svg>
     </button>
 
-    <details v-if="canEdit" class="absolute right-3 top-3">
-      <summary
-        class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-        :title="t('More')" :aria-label="t('More')"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-        </svg>
-      </summary>
-      <div class="absolute right-0 mt-2 w-44 bg-white border border-gray-25 rounded-xl shadow p-1 z-10">
-        <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('settings', lp)">{{ t('Settings') }}</button>
-        <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-visible', lp)">{{ t('Toggle visibility') }}</button>
-        <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
-        <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
-      </div>
-    </details>
+    <BaseDropdownMenu v-if="canEdit" 
+      :dropdown-id="`card-${lp.iid}`"
+      class="absolute right-3 top-3"
+    >
+      <template #button>
+        <span
+          class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
+          :title="t('More')" :aria-label="t('More')"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
+          </svg>
+        </span>
+      </template>
+      <template #menu>
+        <div class="absolute right-0 mt-2 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10">
+          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('settings', lp)">{{ t('Settings') }}</button>
+          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-visible', lp)">{{ t('Toggle visibility') }}</button>
+          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
+          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+        </div>
+      </template>
+    </BaseDropdownMenu>
 
     <div class="mt-2 grid grid-cols-[80px_1fr] gap-3 items-start pr-10 pl-8">
       <div class="w-20 h-20 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">

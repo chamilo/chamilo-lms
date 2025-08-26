@@ -20,17 +20,8 @@ $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session l
 set_time_limit(0);
 
 $inserted_in_course = [];
-
-Display::display_header($tool_name);
-
-$actions = '<a href="../session/session_list.php">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
-
-echo Display::toolbarAction('toolbar', [$actions]);
-
-if (!empty($error_message)) {
-    echo Display::return_message($error_message, 'normal', false);
-}
+$csvCustomError = '';
+$topStaticErrorHtml = '';
 
 $form = new FormValidator(
     'import_sessions',
@@ -42,26 +33,42 @@ $form = new FormValidator(
 
 $form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addElement('checkbox', 'remove_old_relationships', null, get_lang('Remove previous relationships'));
-//$form->addElement('checkbox', 'send_email', null, get_lang('Send a mail to users'));
 $form->addButtonImport(get_lang('Import session(s)'));
 
 if ($form->validate()) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
         $values = $form->exportValues();
-        $sendMail = isset($values['send_email']) ? true : false;
-        $removeOldRelationships = isset($values['remove_old_relationships']) ? true : false;
-
-        $result = SessionManager::importSessionDrhCSV(
-            $_FILES['import_file']['tmp_name'],
-            $sendMail,
-            $removeOldRelationships
-        );
-        Display::addFlash(Display::return_message($result, 'info', false));
-        header('Location: '.api_get_self());
-        exit;
+        $sendMail = !empty($values['send_email']);
+        $removeOldRelationships = !empty($values['remove_old_relationships']);
+        $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+        if (true !== $check) {
+            $csvCustomError = $check;
+            $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+        } else {
+            $result = SessionManager::importSessionDrhCSV(
+                $_FILES['import_file']['tmp_name'],
+                $sendMail,
+                $removeOldRelationships
+            );
+            Display::addFlash(Display::return_message($result, 'info', false));
+            header('Location: '.api_get_self());
+            exit;
+        }
     } else {
         $error_message = get_lang('No file was sent');
     }
+}
+
+Display::display_header($tool_name);
+$actions = '<a href="../session/session_list.php">'.
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).'</a>';
+
+echo Display::toolbarAction('toolbar', [$actions]);
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
+if (!empty($error_message)) {
+    echo Display::return_message($error_message, 'normal', false);
 }
 
 $form->display();
@@ -70,9 +77,9 @@ $content = '
 <p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
-Username;SessionName;
-drh1;Session 1;
-drh2;Session 2;
+Username,SessionName
+drh1,Session 1
+drh2,Session 2
 </pre>
 </blockquote>';
 

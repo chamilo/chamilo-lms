@@ -30412,3 +30412,12 @@ msgstr "Couleur"
 
 msgid "All messages here are automatically marked as promoted."
 msgstr "Tous les messages ici sont automatiquement marqués comme officiels."
+
+msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr "Délimiteur point-virgule (;) détecté. Cette version de Chamilo nécessite une virgule (,) comme séparateur CSV. Veuillez réexporter votre fichier au format CSV (séparé par des virgules)."
+
+msgid "Skills History"
+msgstr "Historique des compétences"
+
+msgid "Badge"
+msgstr "Badge"

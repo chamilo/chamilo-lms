@@ -30071,3 +30071,9 @@ msgstr "Farbe"
 
 msgid "All messages here are automatically marked as promoted."
 msgstr "Alle Nachrichten hier werden automatisch als offiziell markiert."
+
+msgid "Skills History"
+msgstr "Kompetenzverlauf"
+
+msgid "Badge"
+msgstr "Auszeichnung"

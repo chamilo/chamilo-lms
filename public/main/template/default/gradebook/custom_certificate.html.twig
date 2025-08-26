@@ -26,7 +26,7 @@
                     <td style="border-collapse: collapse; padding: 0;">
                         <table border="0" cellspacing="0" cellpadding="0" width="100%">
                             <tr>
-                                <td style="border-collapse: collapse; padding: 0;" bgcolor="#92c647" width=58 height="91">
+                                <td style="border-collapse: collapse; padding: 0;" bgcolor="#92c647" width="58" height="91">
                                     <img src="{{ theme_asset_base64('images/lado-b.png') }}" style="display:block;">
                                 </td>
                                 <td bgcolor="#92c647" width="700" height="91"
@@ -59,18 +59,21 @@
                                     <br />
                                     <p style="font-size: 16px;">{{ 'This preparation corresponds to a volume of approximately %s training hours.'|trans|format(time_spent_in_lps_in_hours)|raw }}</p>
                                     <br />
-                                    <p style="font-size: 16px;">{{ 'The following contents have been validated'|trans|raw }}
-                                        :</p>
+                                    <p style="font-size: 16px;">{{ 'The following contents have been validated'|trans|raw }} :</p>
+
                                     {% if sessions %}
-                                    <ul style="color: #672290; font-size: 16px;">
-                                        {% for session in sessions %}
-                                            <li>  {{ session.session_name }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                    {% endif %}<br />
+                                        <ul style="color: #672290; font-size: 16px;">
+                                            {% for session in sessions %}
+                                                <li>{{ session.session_name }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+
+                                    <br />
                                     <h4 style="color: #672290; font-size: 16px;">{{ complete_name }}</h4>
-                                    <p style="color:#40ad49; font-size: 16px;">{{ 'Obtained the following skills'|trans|raw }}
-                                        :</p>
+                                    <p style="color:#40ad49; font-size: 16px;">{{ 'Obtained the following skills'|trans|raw }} :</p>
+
+                                    {# Lista simple de nombres de skills (si la quieres mantener) #}
                                     {% if skills %}
                                         <ul style="color: #672290; font-size: 16px;">
                                             {% for skill in skills %}
@@ -78,6 +81,33 @@
                                             {% endfor %}
                                         </ul>
                                     {% endif %}
+
+                                    {% if skills_table_html is defined and skills_table_html %}
+                                        <br />
+                                        <p style="color:#40ad49; font-size:16px;">{{ 'Badges obtained'|trans|raw }} :</p>
+                                        <div>
+                                            {{ skills_table_html|raw }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if (skills_table_html is not defined or not skills_table_html) and skills_rows is defined and skills_rows|length %}
+                                        <br />
+                                        <p style="color:#40ad49; font-size:16px;">{{ 'Badges obtained'|trans|raw }} :</p>
+                                        <table border="0" cellspacing="6" cellpadding="0">
+                                            <tr>
+                                                {% for r in skills_rows %}
+                                                <td align="center" valign="top" style="text-align:center;">
+                                                    {{ r.skill_badge|raw }}
+                                                    <div style="font-size:10px; line-height:1.2; color:#672290; max-width:90px;">
+                                                        {{ r.skill_title }}
+                                                    </div>
+                                                </td>
+                                                {% if loop.index % 6 == 0 %}</tr><tr>{% endif %}
+                                                {% endfor %}
+                                            </tr>
+                                        </table>
+                                    {% endif %}
+
                                     <br />
                                     <p style="color:#40ad49; font-size: 16px;">
                                         {{ 'The'|trans }}
@@ -87,7 +117,7 @@
                                     </p>
                                     <br />
                                 </td>
-                                <td height=755 bgcolor="#92c647" style="border-collapse: collapse; padding: 0;">
+                                <td height="755" bgcolor="#92c647" style="border-collapse: collapse; padding: 0;">
                                     <img src="{{ theme_asset_base64('images/lado-b.png') }}" style="display:block;">
                                 </td>
                             </tr>
@@ -98,16 +128,14 @@
                     <td style="border-collapse: collapse; padding: 0;">
                         <table border="0" cellspacing="0" cellpadding="0" width="100%" height="91">
                             <tr>
-                                <td bgcolor="#92c647" width="58" height="91"
-                                    style="border-collapse: collapse; padding: 0;">
+                                <td bgcolor="#92c647" width="58" height="91" style="border-collapse: collapse; padding: 0;">
                                     <img src="{{ theme_asset_base64('images/lado-b.png') }}" style="display:block;">
                                 </td>
-                                <td bgcolor="#92c647" width=500 height=91
+                                <td bgcolor="#92c647" width="500" height="91"
                                     style="border-collapse: collapse; padding: 0; font-family:CourierSans-Light; line-height: 18px; color:#FFF;">
                                     {{ 'Chamilo LMS'|trans|raw }}
                                 </td>
-                                <td bgcolor="#92c647" width="245" height="91"
-                                    style="border-collapse: collapse; padding: 0;">
+                                <td bgcolor="#92c647" width="245" height="91" style="border-collapse: collapse; padding: 0;">
                                 </td>
                             </tr>
                         </table>

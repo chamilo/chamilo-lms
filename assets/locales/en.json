@@ -994,7 +994,7 @@
     "Please contact support with the error details": "Please contact support with the error details",
     "Click the image to crop it (1:1 ratio, 120x120 px recommended)": "Click the image to crop it (1:1 ratio, 120x120 px recommended)",
     "Use the crop tool to select a 1:1 region": "Use the crop tool to select a 1:1 region",
-    "All messages here are automatically marked as promoted": "All messages here are automatically marked as promoted",
+    "All messages here are automatically marked as promoted.": "All messages here are automatically marked as promoted.",
     "Checking push subscription": "Checking push subscription",
     "You're subscribed to push notifications in this browser": "You're subscribed to push notifications in this browser",
     "Push notifications are not enabled in this browser": "Push notifications are not enabled in this browser",

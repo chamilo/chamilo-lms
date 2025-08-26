@@ -506,6 +506,7 @@ $reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['rel
 
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $csv_custom_error = '';
+$topStaticErrorHtml = '';
 $fatalError = false;
 if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
@@ -526,8 +527,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             Session::erase('user_import_data_'.$userId);
-            if (!Import::assertCommaSeparated($_FILES['import_file']['tmp_name'])) {
-                $csv_custom_error = get_lang('Semicolon (;) delimiter detected. Chamilo 2+ requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated).');
+            if (true !== ($csv_custom_error = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true))) {
                 $error_kind_file = true;
                 $fatalError = true;
                 $users = [];
@@ -554,13 +554,8 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
         }
 
         if ($error_kind_file || $fatalError) {
-            Display::addFlash(
-                Display::return_message(
-                    $csv_custom_error ?: get_lang('You must import a file corresponding to the selected format'),
-                    'error',
-                    false
-                )
-            );
+            $msg = $csv_custom_error ?: get_lang('You must import a file corresponding to the selected format');
+            $topStaticErrorHtml = Display::return_message($msg, 'error', false);
         } else {
             $reload = '';
             if ($resume) {
@@ -657,7 +652,9 @@ if (!empty($importData)) {
 }
 
 Display::display_header($tool_name);
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 $form = new FormValidator('user_import', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addElement('hidden', 'formSent');

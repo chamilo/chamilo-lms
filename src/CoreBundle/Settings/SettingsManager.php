@@ -225,6 +225,7 @@ class SettingsManager implements SettingsManagerInterface
                 }
             }
 
+            $knownParameters = $this->normalizeNullsBeforeResolve($knownParameters, $settingsBuilder);
             $parameters = $settingsBuilder->resolve($knownParameters);
             $settings->setParameters($parameters);
             $schemaList[$name] = $settings;
@@ -268,7 +269,7 @@ class SettingsManager implements SettingsManagerInterface
                 $parameters[$parameter] = $transformer->reverseTransform($parameters[$parameter]);
             }
         }
-
+        $parameters = $this->normalizeNullsBeforeResolve($parameters, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($parameters);
         $settings->setParameters($parameters);
 
@@ -284,7 +285,9 @@ class SettingsManager implements SettingsManagerInterface
 
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        $raw = $settings->getParameters();
+        $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
+        $parameters = $settingsBuilder->resolve($raw);
         // Transform value. Example array to string using transformer. Example:
         // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
         // 2. Is defined as an array in class DocumentSettingsSchema
@@ -346,7 +349,9 @@ class SettingsManager implements SettingsManagerInterface
 
         $settingsBuilder = new SettingsBuilder();
         $schema->buildSettings($settingsBuilder);
-        $parameters = $settingsBuilder->resolve($settings->getParameters());
+        $raw = $settings->getParameters();
+        $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
+        $parameters = $settingsBuilder->resolve($raw);
         // Transform value. Example array to string using transformer. Example:
         // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
         // 2. Is defined as an array in class DocumentSettingsSchema
@@ -1016,5 +1021,15 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         return (string) $value;
+    }
+
+    private function normalizeNullsBeforeResolve(array $parameters, SettingsBuilder $settingsBuilder): array
+    {
+        foreach ($parameters as $k => $v) {
+            if ($v === null && $settingsBuilder->isDefined($k)) {
+                unset($parameters[$k]);
+            }
+        }
+        return $parameters;
     }
 }

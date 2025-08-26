@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
-use Chamilo\CoreBundle\Entity\Plugin;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 
 /**
  * Responses to AJAX calls.
@@ -14,7 +14,7 @@ api_block_anonymous_users();
 
 $action = $_REQUEST['a'];
 $em = Database::getManager();
-$pluginRepository = $em->getRepository(Plugin::class);
+$pluginRepository = $em->getRepository(PluginEntity::class);
 
 $accessUrlUtil = Container::getAccessUrlUtil();
 $currentAccessUrl = $accessUrlUtil->getCurrent();
@@ -53,17 +53,11 @@ switch ($action) {
             'title' => $pluginTitle,
         ];
 
-        $criteria = ['title' => $pluginTitle];
-
-        if ($accessUrlUtil->isMultiple()) {
-            $criteria['accessUrlId'] = $currentAccessUrl->getId();
-        }
-
-        $plugin = $pluginRepository->findOneBy($criteria);
+        $plugin = $pluginRepository->findOneBy(['title' => $pluginTitle]);
 
         if (empty($plugin)) {
             if ('install' === $action) {
-                $plugin = new Plugin();
+                $plugin = new PluginEntity();
             } else {
                 die(json_encode(['error' => 'Plugin not found']));
             }
@@ -88,7 +82,7 @@ switch ($action) {
             ;
 
             if (AppPlugin::isOfficial($pluginTitle)) {
-                $plugin->setSource(Plugin::SOURCE_OFFICIAL);
+                $plugin->setSource(PluginEntity::SOURCE_OFFICIAL);
             }
 
             // ✅ Removed: persist($plugin) here
@@ -109,6 +103,36 @@ switch ($action) {
         }
 
         $em->flush();
+
+        if (in_array($action, ['enable','disable','uninstall'], true)) {
+            $appPlugin = new AppPlugin();
+            $info = $appPlugin->getPluginInfo($pluginTitle, true);
+            $pluginClass = $info['plugin_class'] ?? null;
+
+            if (!$pluginClass) {
+                $guess = ucfirst(strtolower($pluginTitle)).'Plugin';
+                if (class_exists($guess, false)) {
+                    $pluginClass = $guess;
+                }
+            }
+
+            $instance = null;
+            if ($pluginClass && class_exists($pluginClass, false)) {
+                if (method_exists($pluginClass, 'create')) {
+                    $instance = $pluginClass::create();
+                } else {
+                    $instance = new $pluginClass();
+                }
+            }
+
+            if ($instance && !empty($instance->isCoursePlugin)) {
+                if ($action === 'enable') {
+                    $instance->install_course_fields_in_all_courses(true);
+                } else {
+                    $instance->uninstall_course_fields_in_all_courses();
+                }
+            }
+        }
 
         echo json_encode(['success' => true, 'message' => "Plugin action '$action' applied to '$pluginTitle'."]);
         break;

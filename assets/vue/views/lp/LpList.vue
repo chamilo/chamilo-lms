@@ -40,16 +40,8 @@
     </div>
 
     <div v-if="loading" class="space-y-4 animate-pulse">
-      <div class="h-22 bg-gray-15 rounded-2xl" />
-      <div class="h-22 bg-gray-15 rounded-2xl" />
-      <div class="h-22 bg-gray-15 rounded-2xl" />
       <div class="mt-4">
-        <div class="h-6 w-48 bg-gray-15 rounded mb-3" />
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-        </div>
+      <div class="h-36 bg-gray-15 rounded-2xl" />
       </div>
     </div>
 

@@ -14,12 +14,13 @@ const props = defineProps({
   category: { type: Object, required: true },
   list: { type: Array, default: () => [] },
   canEdit: { type: Boolean, default: false },
+  canExportScorm: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete",
+  "toggle-visible","toggle-publish","delete", "export-scorm",
   "reorder"
 ])
 
@@ -177,6 +178,7 @@ function onChangeCat() {
             :canEdit="canEdit"
             :ringDash="ringDash"
             :ringValue="ringValue"
+            :canExportScorm="canExportScorm"
             @open="$emit('open', element)"
             @edit="$emit('edit', element)"
             @report="$emit('report', element)"

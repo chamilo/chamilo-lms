@@ -90,6 +90,7 @@
               :buildDates="buildDates"
               :ringDash="ringDash"
               :ringValue="ringValue"
+              :canExportScorm="canExportScorm"
               @open="openLegacy"
               @edit="goEdit"
               @report="onReport"
@@ -98,6 +99,7 @@
               @toggle-visible="onToggleVisible"
               @toggle-publish="onTogglePublish"
               @delete="onDelete"
+              @export-scorm="onExportScorm"
             />
           </template>
         </Draggable>
@@ -112,6 +114,7 @@
         :canEdit="canEdit"
         :ringDash="ringDash"
         :ringValue="ringValue"
+        :canExportScorm="canExportScorm"
         @open="openLegacy"
         @edit="goEdit"
         @report="onReport"
@@ -120,6 +123,7 @@
         @toggle-visible="onToggleVisible"
         @toggle-publish="onTogglePublish"
         @delete="onDelete"
+        @export-scorm="onExportScorm"
         @reorder="(ids) => onReorderCategory(cat, ids)"
       />
     </template>
@@ -155,6 +159,11 @@ const error = ref(null)
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
+
+const canExportScorm = computed(() => {
+  const isScormEnabled = platformConfig.getSetting("hide_scorm_export_link") !== "true"
+  return canEdit.value && isScormEnabled
+})
 
 const items = ref([])
 const categories = ref([])
@@ -396,5 +405,23 @@ async function onEndUncat() {
   } finally {
     draggingUncat.value = false
   }
+}
+
+const onExportScorm = (lp) => {
+  if (!canExportScorm.value) return
+  
+  const params = new URLSearchParams({
+    action: 'export',
+    lp_id: lp.iid,
+    cid: cid.value,
+  })
+  
+  if (sid.value) { 
+    params.append('sid', sid.value)
+  }
+
+  const exportUrl = `/main/lp/lp_controller.php?${params.toString()}`
+  
+  window.location.href = exportUrl
 }
 </script>

@@ -43,30 +43,6 @@ const progressTextClass = computed(() => {
       </svg>
     </button>
 
-    <BaseDropdownMenu v-if="canEdit" 
-      :dropdown-id="`card-${lp.iid}`"
-      class="absolute right-3 top-3"
-    >
-      <template #button>
-        <span
-          class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-          :title="t('More')" :aria-label="t('More')"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-          </svg>
-        </span>
-      </template>
-      <template #menu>
-        <div class="absolute right-0 mt-2 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10">
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('settings', lp)">{{ t('Settings') }}</button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-visible', lp)">{{ t('Toggle visibility') }}</button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
-        </div>
-      </template>
-    </BaseDropdownMenu>
-
     <div class="mt-2 grid grid-cols-[80px_1fr] gap-3 items-start pr-10 pl-8">
       <div class="w-20 h-20 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">
         <img v-if="lp.coverUrl" :src="lp.coverUrl" alt="" class="w-full h-full object-cover" />
@@ -158,6 +134,32 @@ const progressTextClass = computed(() => {
             <path fill="#000000" d="M600.704 64a32 32 0 0 1 30.464 22.208l35.2 109.376c14.784 7.232 28.928 15.36 42.432 24.512l112.384-24.192a32 32 0 0 1 34.432 15.36L944.32 364.8a32 32 0 0 1-4.032 37.504l-77.12 85.12a357.12 357.12 0 0 1 0 49.024l77.12 85.248a32 32 0 0 1 4.032 37.504l-88.704 153.6a32 32 0 0 1-34.432 15.296L708.8 803.904c-13.44 9.088-27.648 17.28-42.368 24.512l-35.264 109.376A32 32 0 0 1 600.704 960H423.296a32 32 0 0 1-30.464-22.208L357.696 828.48a351.616 351.616 0 0 1-42.56-24.64l-112.32 24.256a32 32 0 0 1-34.432-15.36L79.68 659.2a32 32 0 0 1 4.032-37.504l77.12-85.248a357.12 357.12 0 0 1 0-48.896l-77.12-85.248A32 32 0 0 1 79.68 364.8l88.704-153.6a32 32 0 0 1 34.432-15.296l112.32 24.256c13.568-9.152 27.776-17.408 42.56-24.64l35.2-109.312A32 32 0 0 1 423.232 64H600.64zm-23.424 64H446.72l-36.352 113.088-24.512 11.968a294.113 294.113 0 0 0-34.816 20.096l-22.656 15.36-116.224-25.088-65.28 113.152 79.68 88.192-1.92 27.136a293.12 293.12 0 0 0 0 40.192l1.92 27.136-79.808 88.192 65.344 113.152 116.224-25.024 22.656 15.296a294.113 294.113 0 0 0 34.816 20.096l24.512 11.968L446.72 896h130.688l36.48-113.152 24.448-11.904a288.282 288.282 0 0 0 34.752-20.096l22.592-15.296 116.288 25.024 65.28-113.152-79.744-88.192 1.92-27.136a293.12 293.12 0 0 0 0-40.256l-1.92-27.136 79.808-88.128-65.344-113.152-116.288 24.96-22.592-15.232a287.616 287.616 0 0 0-34.752-20.096l-24.448-11.904L577.344 128zM512 320a192 192 0 1 1 0 384 192 192 0 0 1 0-384zm0 64a128 128 0 1 0 0 256 128 128 0 0 0 0-256z" stroke-width="1.2"/>
           </svg>
         </button>
+        <div class="relative w-8 h-8">
+
+          <BaseDropdownMenu v-if="canEdit" 
+       :dropdown-id="`card-${lp.iid}`"
+       class="absolute"
+     >
+       <template #button>
+         <span
+           class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
+           :title="t('More')" :aria-label="t('More')"
+         >
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+             <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
+           </svg>
+         </span>
+       </template>
+       <template #menu>
+         <div class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10 mb-2" style="bottom: calc(-100% + 2.5rem)">
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+         </div>
+       </template>
+     </BaseDropdownMenu>
+        </div>
       </div>
     </div>
   </div>

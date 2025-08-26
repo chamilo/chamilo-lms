@@ -135,30 +135,29 @@ const progressTextClass = computed(() => {
           </svg>
         </button>
         <div class="relative w-8 h-8">
-
           <BaseDropdownMenu v-if="canEdit" 
-       :dropdown-id="`card-${lp.iid}`"
-       class="absolute"
-     >
-       <template #button>
-         <span
-           class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-           :title="t('More')" :aria-label="t('More')"
-         >
-           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-             <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-           </svg>
-         </span>
-       </template>
-       <template #menu>
-         <div class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10 mb-2" style="bottom: calc(-100% + 2.5rem)">
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
-         </div>
-       </template>
-     </BaseDropdownMenu>
+          :dropdown-id="`card-${lp.iid}`"
+          class="absolute"
+          >
+            <template #button>
+              <span
+                class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
+                :title="t('More')" :aria-label="t('More')"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
+                </svg>
+              </span>
+            </template>
+            <template #menu>
+              <div class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10 mb-2" style="bottom: calc(-100% + 2.5rem)">
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+              </div>
+            </template>
+          </BaseDropdownMenu>
         </div>
       </div>
     </div>

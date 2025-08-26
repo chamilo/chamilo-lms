@@ -125,7 +125,13 @@ $label = get_lang('Add image');
 if ($lp->getResourceNode()->hasResourceFile()) {
     $label = get_lang('Update Image');
     $imageUrl = $lpRepo->getResourceFileUrl($lp);
-    $form->addElement('label', get_lang('Image preview'), '<img src="'.$imageUrl.'"/>');
+    $image = '<div class="flex gap-2 mb-2">
+                <label class="control-label">'.get_lang('Image').'</label>
+                <div class="w-20 h-20 rounded-xl overflow-hidden">
+                    <img class="w-full h-full object-cover" src="'.$imageUrl.'" />
+                </div>
+            </div>';
+    $form->addElement('html', $image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
 }
 

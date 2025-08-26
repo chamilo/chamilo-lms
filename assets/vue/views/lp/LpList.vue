@@ -7,33 +7,35 @@
           :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"
           @change="onStudentViewChange"
         />
-        <button
-          v-if="canEdit"
-          class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-          :aria-label="t('More actions')"
-          @click.stop.prevent="moreOpen = !moreOpen"
+        <BaseDropdownMenu v-if="canEdit"
+          class="relative flex items-center gap-2"
+          :dropdown-id="'top-menu'"
         >
-          ⋮
-        </button>
-        <div
-          v-if="canEdit && moreOpen"
-          class="absolute right-0 top-11 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1"
-          @mousedown.stop
-          @click.stop
-        >
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('new', e)">
-            {{ t('New learning path') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('import', e)">
-            {{ t('Import') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('rapid', e)">
-            {{ t('Chamilo RAPID') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('category', e)">
-            {{ t('Add category') }}
-          </button>
-        </div>
+          <template #button>
+            <button
+              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
+              :aria-label="t('More actions')"
+            >
+              ⋮
+            </button>
+          </template>
+          <template #menu>
+            <div class="absolute right-0 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1">
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('new', $event)">
+                {{ t('New learning path') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('import', $event)">
+                {{ t('Import') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('rapid', $event)">
+                {{ t('Chamilo RAPID') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('category', $event)">
+                {{ t('Add category') }}
+              </button>
+            </div>
+          </template>
+        </BaseDropdownMenu>
       </div>
     </div>
 
@@ -90,7 +92,7 @@
           @end="onEndUncat"
         >
           <template #item="{ element }">
-            <LpRowItem
+            <LpRowItem 
               :lp="element"
               :canEdit="canEdit"
               :buildDates="buildDates"
@@ -133,7 +135,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, onBeforeUnmount, ref, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -144,8 +146,8 @@ import Draggable from "vuedraggable"
 import LpRowItem from "../../components/lp/LpRowItem.vue"
 import LpCategorySection from "../../components/lp/LpCategorySection.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
-import { nextTick } from "vue"
 import { useI18n } from "vue-i18n"
+import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 
 const { t } = useI18n()
 const draggingUncat = ref(false)
@@ -157,7 +159,6 @@ const securityStore = useSecurityStore()
 
 const loading = ref(true)
 const error = ref(null)
-const moreOpen = ref(false)
 
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")

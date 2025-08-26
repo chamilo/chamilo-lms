@@ -181,7 +181,6 @@ function onChangeCat() {
             @edit="$emit('edit', element)"
             @report="$emit('report', element)"
             @settings="$emit('settings', element)"
-            @build="$emit('build', element)"
             @toggle-visible="$emit('toggle-visible', element)"
             @toggle-publish="$emit('toggle-publish', element)"
             @delete="$emit('delete', element)"

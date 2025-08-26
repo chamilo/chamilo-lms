@@ -30571,3 +30571,9 @@ msgstr "Please contact support with the error details."
 
 msgid "Contact support"
 msgstr "Contact support"
+
+msgid "Skills History"
+msgstr "Skills History"
+
+msgid "Badge"
+msgstr "Badge"

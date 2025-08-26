@@ -30536,3 +30536,9 @@ msgstr ""
 
 msgid "Contact support"
 msgstr ""
+
+msgid "Skills History"
+msgstr ""
+
+msgid "Badge"
+msgstr ""

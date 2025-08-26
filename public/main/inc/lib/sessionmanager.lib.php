@@ -5230,7 +5230,10 @@ class SessionManager
 
             $coach = api_get_user_entity($coach_id);
 
-            $users = isset($enreg['Users']) && $enreg['Users'] !== '' ? explode('|', $enreg['Users']) : [];
+            $usersRaw = (string)($enreg['Users'] ?? '');
+            $users = $usersRaw === ''
+                ? []
+                : array_values(array_filter(array_map('trim', explode('|', $usersRaw)), 'strlen'));
             $courses = isset($enreg['Courses']) && $enreg['Courses'] !== '' ? explode('|', $enreg['Courses']) : [];
 
             $deleteOnlyCourseCoaches = false;
@@ -5632,10 +5635,18 @@ class SessionManager
                     }
 
                     $course_counter++;
-                    $course_coaches = isset($courseArray[1]) ? $courseArray[1] : null;
-                    $course_users = isset($courseArray[2]) ? $courseArray[2] : null;
-                    $course_users = explode(',', $course_users);
-                    $course_coaches = explode(',', $course_coaches);
+                    $course_coaches = array_values(
+                        array_filter(
+                            array_map('trim', explode(',', (string)($courseArray[1] ?? ''))),
+                            'strlen'
+                        )
+                    );
+                    $course_users = array_values(
+                        array_filter(
+                            array_map('trim', explode(',', (string)($courseArray[2] ?? ''))),
+                            'strlen'
+                        )
+                    );
 
                     // Checking if the flag is set TeachersWillBeAddedAsCoachInAllCourseSessions (course_edit.php)
                     $addTeachersToSession = true;
@@ -5698,7 +5709,8 @@ class SessionManager
                                     }
                                     $savedCoaches[] = $coach_id;
                                 } else {
-                                    $error_message .= get_lang('This user doesn\'t exist').' : '.$course_coach.$eol;
+                                    $badCoach = trim((string)$course_coach);
+                                    $error_message .= get_lang("This user doesn't exist").': "'.$badCoach.'"'.$eol;
                                 }
                             }
                         }
@@ -5978,7 +5990,8 @@ class SessionManager
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
-                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$course_coach.$eol;
+                                        $badCoach = trim((string)$course_coach);
+                                        $error_message .= get_lang("This user doesn't exist").': "'.$badCoach.'"'.$eol;
                                     }
                                 }
                             }
@@ -6001,7 +6014,8 @@ class SessionManager
                                     $logger->debug("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                 }
                             } else {
-                                $error_message .= get_lang('This user doesn\'t exist').': '.$user.$eol;
+                                $badUser = trim((string)$user);
+                                $error_message .= get_lang("This user doesn't exist").': "'.$badUser.'"'.$eol;
                             }
                         }
                     }
@@ -10368,7 +10382,8 @@ class SessionManager
                     $message,
                     api_get_user_id(),
                     false,
-                    true
+                    true,
+                    false
                 );
             }
         }

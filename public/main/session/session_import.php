@@ -133,7 +133,7 @@ if (!empty($topStaticErrorHtml)) {
     echo $topStaticErrorHtml;
 }
 if (!empty($errorMessage)) {
-    echo Display::return_message($errorMessage, 'error');
+    echo Display::return_message($errorMessage, 'error', false);
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, ['enctype' => 'multipart/form-data']);

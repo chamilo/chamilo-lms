@@ -108,7 +108,7 @@ const progressTextClass = computed(() => {
         </button>
 
         <BaseDropdownMenu
-          :dropdown-id="lp.iid"
+          :dropdown-id="`row-${lp.iid}`"
           class="row-start-1 col-start-4 relative"
         >
           <template #button>

@@ -1,4 +1,4 @@
-import { createApp } from "vue"
+import { createApp, watch } from "vue"
 import App from "./App.vue"
 import i18n from "./i18n"
 import router from "./router"
@@ -212,5 +212,24 @@ app
   .use(store)
   .use(pinia)
   .use(i18n)
+
+function applyPrimeLocale() {
+  const t = i18n.global.t
+  const cfg = app.config.globalProperties.$primevue?.config
+  if (!cfg) return
+  cfg.locale = {
+    ...(cfg.locale ?? {}),
+    emptyMessage: t("No available options"),
+    emptyFilterMessage: t("No available options"),
+  }
+}
+applyPrimeLocale()
+
+try {
+  const loc = i18n.global.locale
+  if (loc && typeof loc === "object" && "value" in loc) {
+    watch(loc, applyPrimeLocale)
+  }
+} catch {}
 
 app.mount("#app")

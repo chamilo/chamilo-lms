@@ -5,6 +5,7 @@
         {{ t("Menu") }}
       </h3>
       <div
+        v-if="!isAnonymous"
         class="app-sidebar__panel"
         @click="handlePanelHeaderClick"
       >
@@ -18,22 +19,11 @@
           v-else-if="!hasOnlyOneItem && !enrolledStore.isInitialized"
           class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
         >
-          <BaseIcon
-            class="text-sm"
-            icon="courses"
-            size="small"
-          />
-          <div
-            v-if="sidebarIsOpen"
-            class="font-bold text-sm self-center"
-          >
+          <BaseIcon class="text-sm" icon="courses" size="small" />
+          <div v-if="sidebarIsOpen" class="font-bold text-sm self-center">
             {{ t("Course") }}
           </div>
-          <BaseIcon
-            class="text-sm animate-spin"
-            icon="sync"
-            size="small"
-          />
+          <BaseIcon class="text-sm animate-spin" icon="sync" size="small" />
         </div>
 
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
@@ -44,7 +34,7 @@
         <p v-html="t('Created with Chamilo copyright year', [currentYear])" />
       </div>
       <a
-        v-if="securityStore.isAuthenticated"
+        v-if="securityStore.isAuthenticated && !isAnonymous"
         class="app-sidebar__logout-link"
         href="/logout"
       >
@@ -72,7 +62,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue"
+import { onMounted, ref, watch, computed } from "vue"
 import ToggleButton from "primevue/togglebutton"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
@@ -94,6 +84,15 @@ const expandingDueToPanelClick = ref(false)
 
 const currentYear = new Date().getFullYear()
 
+const isAnonymous = computed(() => {
+  const u = securityStore.user || {}
+  const roles = Array.isArray(u.roles) ? u.roles : []
+  if (roles.includes("ROLE_ANONYMOUS")) return true
+  if (u.is_anonymous === true || u.isAnonymous === true) return true
+  const st = (u.status || "").toString().toUpperCase()
+  return st === "ANONYMOUS"
+})
+
 watch(
   sidebarIsOpen,
   (newValue) => {
@@ -104,9 +103,7 @@ watch(
     if (!newValue) {
       if (!expandingDueToPanelClick.value) {
         const expandedHeaders = document.querySelectorAll(".p-panelmenu-header.p-highlight")
-        expandedHeaders.forEach((header) => {
-          header.click()
-        })
+        expandedHeaders.forEach((header) => header.click())
         sidebarIsOpen.value = false
         window.localStorage.setItem("sidebarIsOpen", "false")
       }
@@ -131,6 +128,8 @@ const handlePanelHeaderClick = (event) => {
 }
 
 onMounted(async () => {
-  await initialize()
+  if (!isAnonymous.value) {
+    await initialize()
+  }
 })
 </script>

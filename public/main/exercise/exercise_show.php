@@ -404,6 +404,7 @@ $strids = '';
 $marksid = '';
 
 $countPendingQuestions = 0;
+$panelsByParent = [];
 foreach ($questionList as $questionId) {
     $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : '';
     // destruction of the Question object
@@ -418,6 +419,11 @@ foreach ($questionList as $questionId) {
     }
     $questionWeighting = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
+
+    $objQ = Question::read($questionId, $objExercise->course);
+    if (!$objQ || $objQ->type === MEDIA_QUESTION) {
+        continue;
+    }
 
     // Start buffer
     ob_start();
@@ -882,7 +888,10 @@ foreach ($questionList as $questionId) {
     $counter++;
     $questionContent .= $contents;
     $questionContent .= '</div>';
-    $exercise_content .= Display::panel($questionContent);
+    //$exercise_content .= Display::panel($questionContent);
+    $panelHtml       = Display::panel($questionContent);
+    $parentId = (int) $objQ->parent_id;
+    $panelsByParent[$parentId][] = $panelHtml;
 } // end of large foreach on questions
 
 // Display the text when finished message if we are on a LP #4227
@@ -966,7 +975,44 @@ if (in_array(
 }
 
 echo $totalScoreText;
-echo $exercise_content;
+//echo $exercise_content;
+foreach ($panelsByParent as $pid => $panels) {
+    if ($pid !== 0) {
+        $mediaQ = Question::read($pid, $objExercise->course);
+        echo '<div class="media-group">';
+        echo '<div class="media-content">';
+        ob_start();
+        $objExercise->manage_answer(
+            $id,
+            $pid,
+            null,
+            'exercise_show',
+            [],
+            false,
+            true,
+            $show_results,
+            $objExercise->selectPropagateNeg()
+        );
+        echo ob_get_clean();
+        echo '</div>';
+
+        if (!empty($mediaQ->question)) {
+            echo '<div class="media-description">';
+            echo  $mediaQ->description;
+            echo '</div>';
+        }
+
+        echo '<div class="media-children">';
+    }
+
+    foreach ($panels as $panelHtml) {
+        echo $panelHtml;
+    }
+
+    if ($pid !== 0) {
+        echo '</div></div>';
+    }
+}
 
 // only show "score" in bottom of page if there's exercise content
 if ($show_results) {

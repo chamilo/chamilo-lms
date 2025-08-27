@@ -57,7 +57,7 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);
  */
 function get_lang(string $variable, ?string $locale = null): string
 {
-    $translator = Container::$translator ?: Container::$container->get('translator');
+    $translator = Container::$translator ?: Container::$container?->get('translator');
 
     if (!$translator) {
         return $variable;
@@ -263,9 +263,7 @@ function api_get_utc_datetime($time = null, $returnNullIfInvalidDate = false, $r
         return $time;
     }
     try {
-        $fromTimezone = api_get_timezone();
-        $date = new DateTime($time, new DateTimezone($fromTimezone));
-        $date->setTimezone(new DateTimeZone('UTC'));
+        $date = new DateTime($time, new DateTimezone('UTC'));
         if ($returnObj) {
             return $date;
         } else {
@@ -505,62 +503,156 @@ function api_format_date($time, $format = null, $language = null)
 }
 
 /**
- * Returns the difference between the current date (date(now)) with the parameter
- * $date in a string format like "2 days ago, 1 hour ago".
- * You can use it like this:
- * Display::dateToStringAgoAndLongDate($dateInUtc);.
+ * Return a Westsworld\TimeAgo translation instance based on Chamilo's isocode.
+ * Tolerates custom isocodes like "pl_polish2", "es_spanish", etc.
  *
- * @param string|DateTime $date                 Result of a date function in this format -> date('Y-m-d H:i:s', time());
- * @param string          $timeZone
- * @param bool            $returnDateDifference
- *
- * @return string
- *
- * @author Julio Montoya
+ * @return object Instance of Westsworld\TimeAgo\Translations\*
  */
-function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false)
+function timeago_resolve_language(?string $iso)
 {
-    if ('0000-00-00 00:00:00' === $date) {
+    // Normalize ISO (snake_case, lowercase)
+    $iso = $iso ?: api_get_language_isocode();
+    $norm = strtolower(str_replace('-', '_', trim($iso)));
+
+    // Candidates: full, parent chain (if available), then base (first 2 letters)
+    $candidates = [$norm];
+
+    if (class_exists('SubLanguageManager')) {
+        $tmp = $iso;
+        // SubLanguageManager returns parents like "en_US"; normalize to snake_case
+        while (!empty($parent = SubLanguageManager::getParentLocale($tmp))) {
+            $candidates[] = strtolower(str_replace('-', '_', $parent));
+            $tmp = $parent;
+        }
+    }
+
+    if (preg_match('/^[a-z]{2}/', $norm, $m)) {
+        $base = $m[0]; // e.g. "pl" from "pl_polish2", "es" from "es_spanish"
+        $candidates[] = $base;
+    } else {
+        $base = $norm;
+    }
+
+    // Map of classes supported by the library (key = snake_case, value = class suffix)
+    $map = [
+        'ar' => 'Ar', 'bg' => 'Bg', 'cs' => 'Cs', 'da' => 'Da',
+        'de' => 'De', 'el' => 'El', 'en' => 'En', 'es' => 'Es',
+        'fa' => 'Fa', 'fi' => 'Fi', 'fr' => 'Fr', 'he' => 'He',
+        'hr' => 'Hr', 'hu' => 'Hu', 'id' => 'Id', 'it' => 'It',
+        'ja' => 'Ja', 'ko' => 'Ko', 'nb' => 'Nb', 'nl' => 'Nl',
+        'no' => 'No', 'pl' => 'Pl',
+        'pt_br' => 'Pt_BR', 'pt_pt' => 'Pt_PT',
+        'ro' => 'Ro', 'ru' => 'Ru', 'sk' => 'Sk', 'sr' => 'Sr',
+        'sv' => 'Sv', 'tr' => 'Tr', 'uk' => 'Uk', 'vi' => 'Vi',
+        'zh_cn' => 'Zh_CN', 'zh_tw' => 'Zh_TW',
+        'pt' => 'Pt_BR',
+        'zh' => 'Zh_CN',
+        'nn' => 'Nb',
+    ];
+
+    // Try exact candidates first, then special rules, then the base
+    foreach ($candidates as $cand) {
+        if (isset($map[$cand])) {
+            $class = "Westsworld\\TimeAgo\\Translations\\{$map[$cand]}";
+            if (class_exists($class)) {
+                return new $class();
+            }
+        }
+
+        // Special handling when the candidate is an ambiguous base
+        if ($cand === 'pt') {
+            foreach (['Pt_BR', 'Pt_PT'] as $suf) {
+                $class = "Westsworld\\TimeAgo\\Translations\\$suf";
+                if (class_exists($class)) {
+                    return new $class();
+                }
+            }
+        }
+        if ($cand === 'zh') {
+            foreach (['Zh_CN', 'Zh_TW'] as $suf) {
+                $class = "Westsworld\\TimeAgo\\Translations\\$suf";
+                if (class_exists($class)) {
+                    return new $class();
+                }
+            }
+        }
+        if ($cand === 'nn') {
+            foreach (['Nb', 'No'] as $suf) {
+                $class = "Westsworld\\TimeAgo\\Translations\\$suf";
+                if (class_exists($class)) {
+                    return new $class();
+                }
+            }
+        }
+    }
+
+    // Last attempt: try base directly if it has a mapping
+    if (isset($map[$base])) {
+        $class = "Westsworld\\TimeAgo\\Translations\\{$map[$base]}";
+        if (class_exists($class)) {
+            return new $class();
+        }
+    }
+
+    // Final fallback: English
+    return new Westsworld\TimeAgo\Translations\En();
+}
+
+/**
+ * Time-ago function with proper locale resolution (including custom isocodes)
+ * and consistent timezone handling.
+ */
+function date_to_str_ago($date, $timeZone = null, $returnDateDifference = false)
+{
+    if (empty($date) || '0000-00-00 00:00:00' === $date) {
         return '';
     }
 
-    $getOldTimezone = api_get_timezone();
-    $isoCode = api_get_language_isocode();
-    if ('pt' === $isoCode) {
-        $isoCode = 'pt-BR';
-    }
-    if ('fr_FR' === $isoCode) {
-        $isoCode = 'Fr';
-    }
-    $isoCode = ucfirst($isoCode);
-    $class = "Westsworld\TimeAgo\Translations\\".$isoCode;
-    if (class_exists($class)) {
-        $language = new $class();
+    // Resolve timezone: prefer parameter, otherwise user/platform timezone
+    $tz = $timeZone ?: api_get_timezone();
+
+    // Resolve language for TimeAgo (tolerant to pl_polish2, es_spanish, etc.)
+    $language = timeago_resolve_language(api_get_language_isocode());
+    $timeAgo  = new TimeAgo($language);
+
+    // Normalize $date to DateTime in the same timezone as "now"
+    if (!($date instanceof DateTime)) {
+        if (is_numeric($date)) {
+            // Timestamp: create from UTC epoch and then set target TZ
+            $dateObj = new DateTime('@'.(int) $date);
+            $dateObj->setTimezone(new DateTimeZone($tz));
+            $date = $dateObj;
+        } else {
+            // Assume DB string is UTC, then convert to target TZ
+            $date = new DateTime($date, new DateTimeZone('UTC'));
+            $date->setTimezone(new DateTimeZone($tz));
+        }
     } else {
-        $language = new Westsworld\TimeAgo\Translations\En();
+        // Ensure provided DateTime uses the target TZ
+        $date->setTimezone(new DateTimeZone($tz));
     }
 
-    $timeAgo = new TimeAgo($language);
-    if (!($date instanceof DateTime)) {
-        $date = api_get_utc_datetime($date, null, true);
+    // Ensure the library computes "now" in the same TZ
+    $oldTz = date_default_timezone_get();
+    date_default_timezone_set($tz);
+
+    if ($returnDateDifference) {
+        $now  = new DateTime('now', new DateTimeZone($tz));
+        $diff = $date->diff($now);
+        date_default_timezone_set($oldTz);
+
+        return [
+            'years' => $diff->y,
+            'months' => $diff->m,
+            'days' => $diff->d,
+            'hours' => $diff->h,
+            'minutes' => $diff->i,
+            'seconds' => $diff->s,
+        ];
     }
 
     $value = $timeAgo->inWords($date);
-    date_default_timezone_set($getOldTimezone);
-
-    if ($returnDateDifference) {
-        $now = new DateTime('now', $date->getTimezone());
-        $value = $date->diff($now);
-
-        return [
-            'years' => $value->y,
-            'months' => $value->m,
-            'days' => $value->d,
-            'hours' => $value->h,
-            'minutes' => $value->i,
-            'seconds' => $value->s,
-        ];
-    }
+    date_default_timezone_set($oldTz);
 
     return $value;
 }

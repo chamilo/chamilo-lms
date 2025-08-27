@@ -381,10 +381,10 @@ $table = new SortableTable(
 );
 
 $table->set_header(0, get_lang('Course title'), false);
-$table->set_header(1, get_lang('NbLearners'), false);
+$table->set_header(1, get_lang('Learners'), false);
 $table->set_header(2, get_lang('Time spent in the course').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Time in course')), false);
 $table->set_header(3, get_lang('Thematic advance'), false);
-$table->set_header(4, get_lang('AvgLearnersProgress').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
+$table->set_header(4, get_lang('Progress').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
 $table->set_header(5, get_lang('Average score in learning paths').Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Average of all learners in all courses')), false);
 $table->set_header(6, get_lang('Messages per learner'), false);
 $table->set_header(7, get_lang('Assignments'), false);

@@ -5,7 +5,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Build the form
 $form = new FormValidator('resend');
-$form->addHeader(get_lang('Send message confirmation mail again'));
+$form->addHeader(get_lang('Send confirmation mail again'));
 $form->addText('user', get_lang('Username'), true);
 $form->addButtonSend(get_lang('Send message'));
 

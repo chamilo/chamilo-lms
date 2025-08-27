@@ -14,7 +14,7 @@ $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 $csv_content = [];
-$nameTools = get_lang('MySpace');
+$nameTools = get_lang('Reporting');
 
 $allowToTrack = api_is_platform_admin(true, true);
 if (!$allowToTrack) {

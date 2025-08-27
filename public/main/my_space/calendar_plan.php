@@ -79,7 +79,7 @@ foreach ($students as &$student) {
 
 $table = new HTML_Table(['class' => 'table table-responsive']);
 $headers = [
-    get_lang('SessionName'),
+    get_lang('Session name'),
     get_lang('Color'),
 ];
 $row = 0;
@@ -98,7 +98,7 @@ foreach ($sessionColorName as $color => $name) {
 $agenda = new Agenda('personal');
 $actions = $agenda->displayActions('list', $userId);
 
-$toolName = get_lang('SessionsPlanCalendar');
+$toolName = get_lang('Sessions plan calendar');
 
 $template = new Template($toolName);
 $template->assign('toolbar', $actions);

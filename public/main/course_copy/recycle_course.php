@@ -73,7 +73,7 @@ if (Security::check_token('post') && (
             $cr->recycle($recycle_type);
             echo Display::return_message(get_lang('Recycle is finished'), 'confirm');
         } else {
-            $messageFailCourseCode = '<p>'.get_lang('CourseRegistrationCodeIncorrect').'</p>';
+            $messageFailCourseCode = '<p>'.get_lang('Course registration code incorrect').'</p>';
             $messageFailCourseCode .= '<p><a class="btn btn--primary" href="'.api_get_self().'?'.api_get_cidreq().'">'.
                 get_lang('Back to previous page').
                 '</a></p>';
@@ -124,7 +124,7 @@ if (Security::check_token('post') && (
             'course_code'
         );
 
-        $form->addButtonSave(get_lang('RecycleCourse'));
+        $form->addButtonSave(get_lang('Recycle course'));
         $form->setDefaults(['recycle_option' => 'select_items']);
         // Add Security token
         $token = Security::get_token();

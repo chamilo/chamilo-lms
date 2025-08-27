@@ -10,7 +10,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $this_section = SECTION_COURSES;
 api_protect_course_script();
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 
 if (!$is_allowed_to_edit) {
     header('location:lp_controller.php?action=list&'.api_get_cidreq());
@@ -81,7 +81,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('ReturnToLearning paths')).
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Back to learning paths')).
     '</a>';
 
 echo Display::toolbarAction('toolbar', [$actions]);

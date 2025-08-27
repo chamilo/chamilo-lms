@@ -67,7 +67,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             GROUP_USER_PERMISSION_PENDING_INVITATION
         );
         $title = get_lang('You are invited to group').' '.$group_info['name'];
-        $content = get_lang('You are invited to groupContent').' '.$group_info['name'].' <br />';
+        $content = get_lang('You are invited to access a group content').' '.$group_info['name'].' <br />';
         $content .= get_lang('To subscribe, click the link below').' <br />';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.
             get_lang('Subscribe').'</a>';

@@ -1074,14 +1074,14 @@ function store_add_dropbox($file = [], $work = null)
                 ),
                 $recipent_temp['email'],
                 get_lang('A new file has been sent in the dropbox'),
-                get_lang('A new file has been sent in the dropboxContent').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('See file').'</a>'.
+                get_lang('A new file has been sent to the Dropbox').' <a href="'.api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq().'">'.get_lang('See file').'</a>'.
                 "\n\n".
                 api_get_person_name(
                     $_user['firstName'],
                     $_user['lastName'],
                     null,
                     PERSON_NAME_EMAIL_ADDRESS
-                )."\n".get_lang('e-mail')." : ".$_user['mail'],
+                )."\n".get_lang('E-mail')." : ".$_user['mail'],
                 api_get_person_name(
                     $_user['firstName'],
                     $_user['lastName'],
@@ -1383,7 +1383,7 @@ function generate_html_overview($files, $dont_show_columns = [], $make_link = []
     $return .= "\t".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
     $return .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">'."\n";
 
-    $return .= "<head>\n\t<title>".get_lang('Overview of diles in this Zip')."</title>\n";
+    $return .= "<head>\n\t<title>".get_lang('Overview of files in this Zip')."</title>\n";
     $return .= "\t".'<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />'."\n";
     $return .= "</head>\n\n";
     $return .= '<body dir="'.api_get_text_direction().'">'."\n\n";

@@ -28,7 +28,7 @@ Display::display_header($nameTools);
 echo Display::page_header($nameTools);
 
 if (0 == count($_POST)) {
-    echo Display::return_message(get_lang('Special exportsIntroduction'));
+    echo Display::return_message(get_lang("The special exports feature is meant to help an instructional controller to export all courses documents in one unique step. Another option lets you choose the courses you want to export, and will export documents present in these courses' sessions as well. This is a very heavy operation, and we recommend you do not start it during normal usage hours of your portal. Do it in a quieter period. If you don't need all the contents at once, try to export courses documents directly from the course maintenance tool inside the course itself."));
 }
 $error = 0;
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);

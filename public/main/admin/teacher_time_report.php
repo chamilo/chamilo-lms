@@ -24,7 +24,7 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
-$toolName = get_lang('Trainers time report');
+$toolName = get_lang('Teachers time report');
 
 // Access restrictions.
 api_protect_admin_script();
@@ -330,14 +330,14 @@ $timeReport->sortData($withFilter);
 
 if (isset($_GET['export'])) {
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
-    $fileName = get_lang('Trainers time report').' '.api_get_local_time();
+    $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     switch ($_GET['export']) {
         case 'pdf':
             $params = [
                 'filename' => $fileName,
                 'pdf_title' => "$reportTitle - $reportSubTitle",
-                'pdf_description' => get_lang('Trainers time report'),
+                'pdf_description' => get_lang('Teachers time report'),
                 'format' => 'A4-L',
                 'orientation' => 'L',
             ];
@@ -438,7 +438,7 @@ $tpl->assign('rows', $timeReport->data);
 
 $templateName = $tpl->get_template('admin/teacher_time_report.tpl');
 $contentTemplate = $tpl->fetch($templateName);
-$tpl->assign('header', get_lang('Trainers time report'));
+$tpl->assign('header', get_lang('Teachers time report'));
 $tpl->assign(
     'actions',
     Display::toolbarAction(

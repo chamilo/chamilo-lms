@@ -66,7 +66,7 @@ if (!empty($courseId)) {
             $sessions
         );
 
-        $form->addButtonSearch(get_lang('CompareStats'), 'compare');
+        $form->addButtonSearch(get_lang('Compare stats'), 'compare');
         $form->addButtonCopy(get_lang('Move'), 'move');
     }
 
@@ -129,7 +129,7 @@ if (!empty($courseId)) {
             $subscribed = SessionManager::isUserSubscribedAsStudent($destinationSessionId, $studentId);
 
             if ($subscribed) {
-                $content .= Display::return_message(get_lang('AlreadySubscribed'));
+                $content .= Display::return_message(get_lang('Already subscribed'));
                 continue;
             }
 

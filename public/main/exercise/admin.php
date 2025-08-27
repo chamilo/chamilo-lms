@@ -271,7 +271,7 @@ if (!$exerciseId && $nameTools != get_lang('Tests management')) {
 
 // if the question is duplicated, disable the link of tool name
 if ('thisExercise' === $modifyIn) {
-    if ($buttonBack) {
+    if (!empty($buttonBack)) {
         $modifyIn = 'allExercises';
     }
 }
@@ -306,7 +306,7 @@ if ($inATest) {
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
     }
     $actions .= '<a
         href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->getId().'&preview=1">'.
@@ -346,7 +346,7 @@ if ($inATest) {
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
-                .get_lang('Warning: This question exists in another tests'),
+                .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
             'warning',
             false
         );
@@ -376,17 +376,17 @@ if ($inATest) {
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
         $alert .= sprintf(
-            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
             $objExercise->random,
             $maxScoreAllQuestions
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
         $alert .= sprintf(
-            '<br>'.get_lang('XQuestionsSelectedWithTotalScoreY'),
+            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
             $objExercise->random,
             $maxScoreAllQuestions
         );

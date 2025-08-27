@@ -279,7 +279,7 @@ class GradebookUtils
                                 Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Unlock evaluation.')).'</a>';
                         } else {
                             $modify_icons .= '&nbsp;<a href="#">'.
-                                Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it).')).'</a>';
+                                Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).')).'</a>';
                         }
                         $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF')).'</a>';
                     } else {
@@ -1389,7 +1389,9 @@ class GradebookUtils
 
             $link = '';
             $pdf = '';
-
+            if (api_is_platform_admin()) {
+                $publish = true;
+            }
             if (!empty($hash) && $publish) {
                 $link = api_get_path(WEB_PATH) . "certificates/{$hash}.html";
                 $pdf = api_get_path(WEB_PATH)."certificates/{$hash}.pdf";

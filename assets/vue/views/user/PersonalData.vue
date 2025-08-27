@@ -133,7 +133,7 @@
               />
               <LayoutFormButtons>
                 <BaseButton
-                  :label="t('Delete Account')"
+                  :label="t('Delete account')"
                   icon="delete"
                   type="danger"
                   @click="submitDeleteAccount"

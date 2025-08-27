@@ -46,7 +46,7 @@ $frmActivity->addTextarea('description', get_lang('Description'));
 if ($toolIsTinCan) {
     $frmActivity->addButtonAdvancedSettings('advanced_params');
     $frmActivity->addHtml('<div id="advanced_params_options" style="display:none">');
-    $frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('AllowMultipleAttempts'));
+    $frmActivity->addCheckBox('allow_multiple_attempts', '', get_lang('Allow multiple attempts'));
     $frmActivity->addHtml('</div>');
 }
 

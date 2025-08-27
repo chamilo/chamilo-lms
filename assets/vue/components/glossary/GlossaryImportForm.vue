@@ -20,14 +20,14 @@
     <BaseCheckbox
       id="terms-delete-all"
       v-model="replace"
-      :label="t('Delete all terms before import')"
+      :label="t('Delete all terms before import.')"
       name="terms-delete-all"
     />
 
     <BaseCheckbox
       id="terms-update"
       v-model="update"
-      :label="t('Update existing terms')"
+      :label="t('Update existing terms.')"
       name="terms-delete-all"
     />
 
@@ -105,7 +105,7 @@ const submitForm = async () => {
 
   try {
     await glossaryService.import(formData)
-    notification.showSuccessNotification(t("Terms imported succesfully"))
+    notification.showSuccessNotification(t("Terms imported successfully"))
     await router.push({
       name: "GlossaryList",
       query: route.query,

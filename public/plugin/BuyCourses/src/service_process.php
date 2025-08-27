@@ -199,7 +199,7 @@ if ($typeUser) {
             )
         );
     }
-    $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
+    $form->addSelect('info_select', get_lang('Learning path'), $selectOptions);
 }
 
 $form->addHidden('t', intval($_GET['t']));

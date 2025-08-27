@@ -90,7 +90,7 @@ class CategorizedExerciseResultStateProvider implements ProviderInterface
             );
 
             if (false === $objExercise->hasResultsAccess($exercise_stat_info)) {
-                throw new Exception(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess());
+                throw new Exception(get_lang('You passed the time limit to see the results'), $objExercise->getResultsAccess());
             }
         }
 

@@ -634,10 +634,10 @@ msgstr "Kurs-Kategorien auf Seite %s:"
 msgid "Course categories available"
 msgstr "Verfügbare Kurs-Kategorien"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Die Gruppe gehört nun zur gewählten Seite"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Es muß mindestens eine Gruppe und eine Seite gewählt werden"
 
 msgid "Agenda list"
@@ -1662,7 +1662,7 @@ msgstr "Das Format des Paktes wird nicht erkannt. Vergewissern Sie sich, dass es
 msgid "Move the current forum"
 msgstr "Das bestehende Forum verschieben"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Warnung!<br>Wenn man den Inhalt eines SCORM Schritts bearbeitet, kann man das SCORM-Reporting des Lernpfads löschen oder den kompletten Lernpfad zerstören!"
 
 msgid "Please provide a subject or message"
@@ -1779,7 +1779,7 @@ msgstr "In der Grundeinstellung ist ein Kurs auch anderen zugänglich. Wenn Sie 
 msgid "Public - access allowed for the whole world"
 msgstr "Offen - Zugang erlaubt für alle"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Offen - Zugang für alle Portal-Benutzer"
 
 msgid "Student %s is no subscribed to this course"
@@ -1809,7 +1809,7 @@ msgstr "Link zu einer  Website auf der Homepage einfügen"
 msgid "has been deleted"
 msgstr "wurde gelöscht"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr ""
 "Wenn der Kurs gelöscht wird, werden auch alle enthaltenen Dokumente und die "
 "Registrierungen der Kursteilnehmer gelöscht. (Kursteilnehmer werden jedoch "
@@ -2580,9 +2580,6 @@ msgstr "Dies ist der Bereich, den der Kurs anbietet"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Wenn Sie sich nicht sicher sind, welche Nummer Sie belegen sollen, wenden Sie sich bitte an "
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursprogramm</a>. Wenn Ihr Kurs keine Nummer hat, aus welchem Grund auch immer, erfinden Sie eine; z.B. <i>Erfinder</i>, wenn der Kurs das Thema Thomas Edison hat"
 
 msgid "SCORM Path builder"
 msgstr "Lernpfad-Baukasten (SCORM)"
@@ -3436,9 +3433,6 @@ msgstr "Notiz erstellen"
 msgid "Edit my personal note"
 msgstr "Meine persönliche Notiz bearbeiten"
 
-msgid "Back to note list"
-msgstr "Zurück zur Übersicht"
-
 msgid "Notebook management"
 msgstr "Notizbuch-Verwaltung"
 
@@ -3553,7 +3547,7 @@ msgstr "Eine persönliche Kategorie erstellen"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Wollen Sie diese Kategorie wirklich löschen? Kurse in dieser Kategorie werden nach ausserhalb der Kategorien verschoben"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorien"
 
 msgid "Courses in this category"
@@ -4561,10 +4555,10 @@ msgstr "Dieser Benutzer ist keiner Klasse zugeordnet"
 msgid "This class isn't subscribed in a course"
 msgstr "Diese Klasse ist in keinem Kurs eingeschrieben"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Werkzeug"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Anzahl"
 
 msgid "Documents and folders"
@@ -4726,7 +4720,7 @@ msgstr "Bitte Text für Notitzen eingeben"
 msgid "Please give a notice title"
 msgstr "Bitte Titel für Notiz eingeben"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Bitte eine Bezeichnung für den Link eingeben"
 
 msgid "Insert this link"
@@ -5128,7 +5122,7 @@ msgstr "Kurs-Session Erstellung abschließen"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videokonferenz RTMP Protokoll Port"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Bezeichnung für Kurs-Session existiert bereits"
 
 msgid "No classes have been created"
@@ -5278,8 +5272,8 @@ msgstr "Wenn diese Option aktiviert ist, öffnet ein Klick auf eine E-Mail den o
 msgid "Include header line?"
 msgstr "Die CSV Header-Zeile hinzufügen?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Ja, den CSV Header hinzufügen<br/>Diese Zeile definiert Felder und ist notwendig, wenn man die Datei in ein andere Chamilo Installation importieren will."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Diese Zeile definiert Felder und ist notwendig, wenn man die Datei in ein andere Chamilo Installation importieren will."
 
 msgid "List of users subscribed to course"
 msgstr "Liste der im Kurs angemeldeten Benutzer"
@@ -5512,7 +5506,7 @@ msgstr "Auswahlliste (drop down)"
 msgid "Multiple selection drop-down"
 msgstr "Mehrfachauswahl (drop down)"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Feld wurde hinzugefügt"
 
 msgid "Grades thresholds colouring"
@@ -5764,7 +5758,7 @@ msgstr "LDAP Benutzer in Kurs importieren"
 msgid "Import LDAP users and a step into a session"
 msgstr "LDAP Benutzer und einen Schritt in eine Session importieren"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP Synchro: Benutzer/Schritte in eine Session importieren"
 
 msgid "Assessments tab"
@@ -5811,9 +5805,6 @@ msgstr "Kursleiter Identifikationswert"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Gibt es einen Check für das obige Tutor Feld, muss der Wert innerhalb eines der Unterlemente des Tutor Feldes sein, damit der Benutzer als ein Lehrer eingeordnet wird. Wird das Feld leer gelassen, dann ist die einzige Bedingung, dass das Feld für diesen LDAP Benutzer existiert, damit er als Lehrer eingeordnet wird. Zum Beispiel: das Feld könnte sein \"memberof\" und der Wert für die Suche könnte sein \"\"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "keine Schreibrechte vorhanden"
 
 msgid "The field is successfully moved down"
 msgstr "Das Feld wurde erfolgreich nach unten verschoben"
@@ -6403,16 +6394,13 @@ msgstr "Kurse der ursprünglichen Kurs-Session"
 msgid "Courses from the destination session"
 msgstr "Kurse der ausgewählten Kurs-Session"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Hilfe für das Kopieren von Kursen von einer Kurs-Session zur anderen"
-
 msgid "Type of copy"
 msgstr "Typ der Kopie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopieren eines Kurs einer Kurs-Session in eine andere Kurs-Session"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Sie müssen eine Kurs der ursprünglichen Kurs-Session auswählen"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6484,10 +6472,10 @@ msgstr "Beschreibungen der Kurs-Sessions anzeigen"
 msgid "Subscription sessions in the category"
 msgstr "Kurs-Sessions in Kategorien eintragen"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Liste der Kurs-Sessions der Plattform"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Liste der Kurs-Sessions in den Kategorien"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6645,9 +6633,6 @@ msgstr "Nur für Kursleiter"
 
 msgid "Define Headings"
 msgstr "Überschriften definieren"
-
-msgid "Back to users list"
-msgstr "Zurück zur Benutzerlsite"
 
 msgid "change rights of"
 msgstr "Rechte bearbeiten"
@@ -7066,9 +7051,6 @@ msgstr "Gruppen aus Klassen"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Mit dieser Option können Sie Gruppen auf der Grundlage von Klassen erstellen, die für den Kurs angemeldet sind"
 
-msgid "Back to Groups list"
-msgstr "Zurück zur Gruppenliste"
-
 msgid "A new forum has now been created"
 msgstr "Das neue Forum wurde erstellt"
 
@@ -7345,7 +7327,7 @@ msgstr "Aktuelles Dokument verschieben"
 msgid "Edit the current document"
 msgstr "Aktuelles Dokument bearbeiten"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Warnung !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7738,7 +7720,7 @@ msgstr "Zurück zur Fragenliste"
 msgid "Answers to the question"
 msgstr "Antworten auf die Fragen"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Warnung ! Diese Fragen und ihre Antworten werden in verschiedenen Tests benutzt. Möchten Sie diese bearbeiten:"
 
 msgid "in all tests"
@@ -7887,9 +7869,6 @@ msgstr "Die maximale Anzahl an Versuchen für diesen Test wurde erreicht. Als Ku
 
 msgid "Exercise added"
 msgstr "Test hinzugefügt"
-
-msgid "Assesment settings"
-msgstr "Bewertungseinstellung"
 
 msgid "active"
 msgstr "aktiv"
@@ -8473,9 +8452,6 @@ msgstr "Zeitlimit-Admin"
 msgid "Last score of a exercise"
 msgstr "Letzte Wertung eines Tests"
 
-msgid "Back to result list"
-msgstr "Zurück zur Ergebnis-Liste"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Wenn die Wertung einer Frage geändert wurde, bitte dies auch in entsprechenden Kursen berücksichtigen!"
 
@@ -8556,9 +8532,6 @@ msgstr "Benutzer online"
 
 msgid "Remove"
 msgstr "Entfernen"
-
-msgid "Back to courses list"
-msgstr "Kurs betreten"
 
 msgid "Links"
 msgstr "Links"
@@ -8655,9 +8628,6 @@ msgstr "Vorname"
 
 msgid "Last name"
 msgstr "Nachname"
-
-msgid "e-mail"
-msgstr "E-Mail"
 
 msgid "Slideshow conversion"
 msgstr "Diashow Konvertierung"
@@ -8959,7 +8929,7 @@ msgstr "Sprache"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Dieses Kürzel existiert bereits. Benutzen Sie bitte ein anderes Kürzel"
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Gruppen-Liste"
 
 msgid "The target folder does not exist"
@@ -9418,9 +9388,6 @@ msgstr "Meine aktiven Session-Kurse"
 msgid "My inactive sessions"
 msgstr "Meine inaktiven Session-Kurse"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Diese Erweiterung wurde aktiviert, kann aber momentan nicht benutzt werden"
-
 msgid "My learners"
 msgstr "Meine Teilnehmer"
 
@@ -9451,7 +9418,7 @@ msgstr "Kein Element zur Wiederverwendung"
 msgid "Could not open"
 msgstr "Öffnen nicht möglich"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Durchschnittliche Besuchszeit"
 
 msgid "This course could not be found"
@@ -9583,8 +9550,8 @@ msgstr "Kein besuchter Link"
 msgid "No document downloaded"
 msgstr "Kein Dokument herunter geladen"
 
-msgid "clicks"
-msgstr "Klicks"
+msgid "%d clicks"
+msgstr "%d Klicks"
 
 msgid "Search results"
 msgstr "Suchergebnisse"
@@ -9667,7 +9634,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Datei ist zu groß!"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Der Upload Ihrer Datei war nicht erfolgreich. Versuchen Sie es bitte später nochmals oder kontaktieren Sie den System-Administrator"
 
 msgid "Assessments"
@@ -9727,7 +9694,7 @@ msgstr "Stunden"
 msgid "minutes"
 msgstr "Minuten"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Audiodatei erstellt"
 
 msgid "The forum has been added"
@@ -10255,7 +10222,7 @@ msgstr "Mehr Information"
 msgid "Make invisible"
 msgstr "Unsichtbar machen"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "sichtbar machen"
 
 msgid "Image"
@@ -10272,9 +10239,6 @@ msgstr "Nachricht senden"
 
 msgid "Menu"
 msgstr "Menü"
-
-msgid "Back to user list"
-msgstr "Zurück zur Benutzerliste"
 
 msgid "Graphic not available"
 msgstr "Grafik nicht verfügbar"
@@ -10600,7 +10564,7 @@ msgstr "Sichtbarkeit der Bewertung"
 msgid "Who changed it"
 msgstr "Wer hat geändert"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Die Bewertung wurde erfogreich bearbeitet"
 
 msgid "Incorrect data"
@@ -11611,7 +11575,7 @@ msgstr "Nun ist die Seite für alle Benutzer sichtbar"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Die Haupt-Seite kann nur vom Kursleiter bearbeitet werden"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Zugang zur Kursleiter-Seite"
 
 msgid "Now discussion is visible by trainers only"
@@ -13393,7 +13357,7 @@ msgstr "Bitte eine Frage eingeben"
 msgid "Number of question"
 msgstr "Anzahl Fragen"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Dieser Code existiert bereits"
 
 msgid "Save and exit"
@@ -13444,13 +13408,13 @@ msgstr "Frage bearbeiten"
 msgid "This type does not exist"
 msgstr "Dieser Typ existiert nicht"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Die Umfrage wurde erfolgreich erstellt"
 
 msgid "You can now add questions to your survey"
 msgstr "Sie können nun Fragen zu Ihrer Umfrage hinzufügen"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Die Umfrage wurde erfolgreich aktualisiert"
 
 msgid "The question has been added."
@@ -13648,7 +13612,7 @@ msgstr "Dieser Umfrage-Code existiert bereits.  Das bedeutet vermutlich, dass di
 msgid "This survey code soon exists in this language"
 msgstr "Diesen Umfrage-Code wird es demnächst in dieser Sprache geben."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Die Antwort des Benutzers wurde erfolgreich entfernt."
 
 msgid "Delete this user's answers"
@@ -13771,7 +13735,7 @@ msgstr "Gibt es ein Kurshandbuch, eine Blattsammlung, eine Bibliographie, eine L
 msgid "Short description of the course materials."
 msgstr "Kurze Beschreibung des Kursmaterials"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Gibt es Lehrer, Assistenten, eine technische Information, soziale Hilfestellung, Computerraum ?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14296,9 +14260,6 @@ msgstr "Die Bewertung kann die Maximal-Wertung nicht überschreiten"
 msgid "Delete all papers"
 msgstr "Alle Dokumente löschen"
 
-msgid "Back to Assignments list"
-msgstr "Zurück zur Übersicht"
-
 msgid "Edit and mark paper"
 msgstr "Dokument ändern und bewerten"
 
@@ -14357,7 +14318,7 @@ msgid "<p>The tests tool allows you to create tests containing as many questions
 msgstr "<p>Das Test-Werkzeug ermöglicht es Ihnen, Übungen mit beliebig vielen Fragen zu erstellen.<br><br>Sie können unterschiedliche Antwortformen zu Ihren Fragen einrichten:<br><br><ul>  <li>Multiple choice (eine richtige Antwort)</li>  <li>Multiple choice (mehrere richtige Antworten)</li>  <li>Verbinden/Zuordnen</li>  <li>Lückentext</li></ul>Übungen umfassen zumeist mehrere Fragen zu einem Themenbereich.</p><hr><b>Übungen erstellen</b><p>Um eine neue Übung zu erstellne, klicken Sie auf \"Neue Übung\".<br><br>Geben Sie einen Namen für die Übung und eine kurze Beschreibung (optional) ein.<br><br>Sie können nun zwischen zwei Typen wählen:<br><br><ul>  <li>Alle Fragen auf einer einzigen Seite</li>  <li>Eine Frage pro Seite</li></ul>und festlegen ob die Fragen nach dem Zufallsprinzip bei der Ausführung angeordnet werden sollen. Dies erhöht den Übungserfolg beim mehrfachen Bearbeiten der Übung durch die Teilnehmer/innen.<br><br>Speichern Sie nun die Übung. Jetzt können Sie die Fragen für diese Übung bearbeiten.</p><hr><b>Fragen hinzufügen</b><p>Sie können nun der soeben erstellten Übung Fragen hinzufügen. Die Beschreibung ist optional, genauso wie ein Bild, das Sie der Frage hinzufügen können.</p><hr><b>Multiple choice</b><p>MAQ (multiple answer question) / MCQ (multiple choice question).<br><br>So erstellen Sie eine MAQ / MCQ :<br><br><ul>  <li>Legen Sie die Antworten für Ihre Frage fest. Mit dem rechten Button können Sie Fragen hinzufügen oder löschen.</li>  <li>In der linken Box bestimmen Sie die richtige Antwort/en</li>  <li>Ergänzen Sie bei Bedarf einen zusätzlichen Kommentar. Er ist für die Teilnehmer/innen erst nach der Beantwortung der Frage sichtbar.</li>  <li>Geben Sie den Antworten einen Punktwert als Bewertung. Der Wert kann eine positive oder negative Zhal oder Null sein.</li>  <li>Speichern Sie Ihre Antworten</li></ul></p><hr><b>Füllen Sie die Leerstellen aus</b><p>Hier können Sie einen Lückentext erstellen. Die Teilnehmer/innen sollen nun die fehlenden Wörter suchen und eintragen.<br><br>Um ein Wort aus dem Text zu entfernen (für die Teilnehmer/innen) setzen sie ihn in [eckige Klammern] (AltGr+8 bzw. AltGr+9).<br><br>Nachdem Sie debn Text eingetragen und die Lücken bestimmt ahben, können sie einen Kommentar ergänzen, den die Teilnehmer/innen nach dem Ausfüllen angezeigt bekommen.<br><br>Speichern Sie Ihren Text. Nun können Sie im nächsten Schritt für jede Leerstelle im Text Bewertungen vergeben. Wenn die richtige Beantwortung der gesamten Frage 10 Punkte erzielen soll und Sie 5 Leerstellen eingetragen haben, können Sie jede Leerstelle mit 2 Punkten bewerten.</p><hr><b>Verbinden/Zuordnen</b><p>Diesen Antworttyp könenn sie auswählen, wenn Elemente einer Einheit U1 mit Elementen einer Einheit U2 verbunden werden sollen.<br><br>Sie können jedoch auch Elemente in einer bestimmten Reihenfolge sortieren oder anordnen lassen.<br><br>Zuerst bestimmen Sie die Wahlmöglichkeiten unter denen gewählt werden kann. Dann legen Sie die Frage fest, die mit diesen Optionen verbunden werden soll. Abschließend verbinden Sie mit dem Drop-down Menü Elemente der ersten Einheit mit denen der zweiten Einheit.<br><br>Anmerkung: Einzelne Elemente der ersten Einheit können zu der zweiten Einheit passen.<br><br>Vergeben Sie nun Punkte für jede richtige Zuordnung.</p><hr><b>Übungen bearbeiten</b><p>Um Ihre Übungen zu bearbeiten können Sie genauso vorgehen, wie bei der Erstellung der Übung. Klicken Sie auf das Symbol zum Überarbeiten neben der Übung <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\">, und folgen Sie der Anleitung oben auf dieser Seite.</p><hr><b>Übungen löschen</b><p>Um Ihre Übungen zu löschen, klicken sie auf das Symbol <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> neben der Übung.</p><hr><b>Übungen aktivieren</b><p>Wenn Ihre Übung nun bereitgestellt werden soll, müssen Sie sie durch einen Klick auf das Symbol <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> neben der Übung aktivieren.</p><hr><b>Übung ausführen</b><p>Probieren Sie die Übung selber aus. Klicken Sie im Verzeichnis der Übungen auf den Namen der Übung.</p><hr><b>Zufallsfunktion</b><p>Beim Erstellen oder Bearbeiten der Übung können Sie festlegen, ob die Fragen der Übung nach dem Zufallsprinzip bereitgestellt werden sollen.<br><br>Bei jedem Aufruf der Übungen werden die verschiedenen Fragen dann in einer anderen Reihenfolge angezeigt.<br><br>Wenn Sie eine sehr große Zahl von Fragen eingerichtet haben können Sie auch festlegen, dass nur eine bestimmte Zahl von Fragen in der Übung gezeigt werden.</p><hr><b>Fragen-Archiv</b><p>Wenn Sie eine Frage gelöscht haben, wird diese nicht in der Datenbank gelöscht. Sie kann für eine neue Übung aus dem Archiv geholt werden.<br><br>Das Archiv ermöglicht Ihnen auch die gleiche Frage für verschiedene Übungen zu verwenden.<br><br>In der Grundeinstellung werden alle Fragen Ihres Seminars angezeigt. Im Drop-down-Menü können Sie nun Veränderungen vornhemen \"Filter\".<br><br>Verwaiste Fragen werden gerade in keiner Übung verwendet.</p>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "Mit dem Lernpfad-Werkzeug kann man 2 Funktionen aufrufen: <ul><li>Lernpfad erstellen</li> <li>ein Scorm oder IMS-Paket importieren</li></ul> <img src=\"../img/path_help.gif\"> <p><b> Was ist ein Lernpfad ?</b> </p><p>Ein Lernpfad ist eine Sequenz von Lernschritten, gekapselt in einem Modul. Er kann inhalts-basierend aufgebaut sein (wie ein TOC) oder aktivitäts-basierend, wie eine Agenda.</p><p>Zusätzlich zur Struktur kann ein Lernpfad auch Bedingungen enthalten. Das bedeutet, um weiterzukommen muß z.B. zuerst Schritt 1 erfolgreich absolviert werden. Diese Sequenzen können sowohl Kann- als auch Pflicht-Bestimmungen sein.</p> <p><b>Wie erstelle ich meinen eigenen Lernpfad?</b></p> <p>Im ersten Schritt klicken Sie im Lernpfad-Werkzeug auf <i>neuen Lernpfad erstellen</i>. Diese sind nach dem Anlegen noch leer, bis sie mit Inhalt gefüllt werden.<br>Wenn Sie einen Lernpfad als sichtbar kennzeichnen, erscheint dieser als neues Modul auf der Kurs-Seite. So ist auch eine gezielte Veröffentlichung möglich.</p> <p> <b>Wie sind die einzelnen Schritte, um einen Lernpfad aufzubauen?</b></p> <p>Alle Tools und Aktivitäten aus Ihrer Chamilo-Installation stehen zur Verfügung:<br><ul> <li>Agenda</li> <li>Dokumente und Bilder, etc...</li> <li>Ankündigungen</li> <li>Foren</li><li>Links</li> <li>Dokeos Tests</li> <li>HotPotatoes Tests <br>(Hinweis: die unsichtbaren Tests/Übungen, welche in einen Lernpfad integriert werden, stehen auch nur in diesem Lernpfad zur Verfügung, und sind auch weiterhin nicht sichtbar!)</li><li>Dropbox Elemente</li></ul> </p> <p><b>Andere Funktionen im Lernpfad</b> </p> <p>Wenn im Lernpfad Dokumente anders benannt werden, so sind diese nach wie vor auch unter dem Original-Namen verfügbar.</p><p>Wenn Sie mit der Erstellung fertig sind, sollten Sie unbedingt den Ansichtsmodus wechseln, um zu sehen, wie der Kurs für die Teilnehmer aussieht</p><br><p><b>Was ist SCORM oder IMS, und wie kann ich diese importieren?</b> </p> <p>Im Lernpfad-Werkzeug können auch vorgefertigte Kurse importiert werden.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) ist ein Standard, der von vielen Content-Providern verabschiedet wurde (z.B. NETg, Macromedia, Microsoft, Skillsoft, etc.) und auf 3 Ebenen gegliedert ist <li><b>Ökonomie :</b><br>Scorm-Pakete können auf verschiendenen Learning Management Systemen (LMS) eingesetzt werden, da sie entsprechend aufgebaut sind</li> <li><b>Pädagogik :</b><br>In Scorm-Paketen kann eine Logik implementiert werden, die ein <i>sequenzielles Lernen</i> ermöglicht (<i>z.B. </i>\"Sie müssen zuerst Schritt 1 absolvieren\"),</li> <li><b>Technologie :</b><br>Scorm-Pakete können zentral gepflegt werden, in dem der Inhalt lediglich in den LMS angezeigt wird, aber extern lagert. Somit kann Inhalt stets aktuell vorgehalten werden, ohne jeden davon betroffenen Kurs zu aktualisieren. </li> </ul><b>Wie erstellt man einen SCORM-kompatiblen Lern-Pfad?</b><br> <br>Am schnellsten geht dies wohl mit dem integrierten Lernpfad-Werkzeug von Chamilo. Eine andere Möglichkeit ist, diese Kurse zuerst offline auf dem Computer zu erstellen. In diesem Fall empfehlen sich Programme wie z.B. eXe®, Lectora® or Reload® <br></p><p> <b>weitere Links</b><br> <ul> <li>Adlnet : Scorm Normierung <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Open Source Scorm Player und Editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm Generator, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes, <a href=\"http://www.hotpotatoes.de/\">http://www.hotpotatoes.de/</a><br> </li> </ul> <p><b>Hinweis :</b></p><p>In der Lernpfad-Sektion werden sowohl die <i>Dokeos-eigenen</i> als auch die <i>importierten Scorm-Pakete</i> angezeigt. </p>"
+msgstr "Mit dem Lernpfad-Werkzeug kann man 2 Funktionen aufrufen: <ul><li>Lernpfad erstellen</li> <li>ein Scorm oder IMS-Paket importieren</li></ul> <img src=\"../img/path_help.gif\"> <p><b> Was ist ein Lernpfad ?</b> </p><p>Ein Lernpfad ist eine Sequenz von Lernschritten, gekapselt in einem Modul. Er kann inhalts-basierend aufgebaut sein (wie ein TOC) oder aktivitäts-basierend, wie eine Agenda.</p><p>Zusätzlich zur Struktur kann ein Lernpfad auch Bedingungen enthalten. Das bedeutet, um weiterzukommen muß z.B. zuerst Schritt 1 erfolgreich absolviert werden. Diese Sequenzen können sowohl Kann- als auch Pflicht-Bestimmungen sein.</p> <p><b>Wie erstelle ich meinen eigenen Lernpfad?</b></p> <p>Im ersten Schritt klicken Sie im Lernpfad-Werkzeug auf <i>neuen Lernpfad erstellen</i>. Diese sind nach dem Anlegen noch leer, bis sie mit Inhalt gefüllt werden.<br>Wenn Sie einen Lernpfad als sichtbar kennzeichnen, erscheint dieser als neues Modul auf der Kurs-Seite. So ist auch eine gezielte Veröffentlichung möglich.</p> <p> <b>Wie sind die einzelnen Schritte, um einen Lernpfad aufzubauen?</b></p> <p>Alle Tools und Aktivitäten aus Ihrer Chamilo-Installation stehen zur Verfügung:<br><ul> <li>Agenda</li> <li>Dokumente und Bilder, etc...</li> <li>Ankündigungen</li> <li>Foren</li><li>Links</li> <li>Chamilo Tests</li> <li>HotPotatoes Tests <br>(Hinweis: die unsichtbaren Tests/Übungen, welche in einen Lernpfad integriert werden, stehen auch nur in diesem Lernpfad zur Verfügung, und sind auch weiterhin nicht sichtbar!)</li><li>Dropbox Elemente</li></ul> </p> <p><b>Andere Funktionen im Lernpfad</b> </p> <p>Wenn im Lernpfad Dokumente anders benannt werden, so sind diese nach wie vor auch unter dem Original-Namen verfügbar.</p><p>Wenn Sie mit der Erstellung fertig sind, sollten Sie unbedingt den Ansichtsmodus wechseln, um zu sehen, wie der Kurs für die Teilnehmer aussieht</p><br><p><b>Was ist SCORM oder IMS, und wie kann ich diese importieren?</b> </p> <p>Im Lernpfad-Werkzeug können auch vorgefertigte Kurse importiert werden.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) ist ein Standard, der von vielen Content-Providern verabschiedet wurde (z.B. NETg, Macromedia, Microsoft, Skillsoft, etc.) und auf 3 Ebenen gegliedert ist <li><b>Ökonomie :</b><br>Scorm-Pakete können auf verschiendenen Learning Management Systemen (LMS) eingesetzt werden, da sie entsprechend aufgebaut sind</li> <li><b>Pädagogik :</b><br>In Scorm-Paketen kann eine Logik implementiert werden, die ein <i>sequenzielles Lernen</i> ermöglicht (<i>z.B. </i>\"Sie müssen zuerst Schritt 1 absolvieren\"),</li> <li><b>Technologie :</b><br>Scorm-Pakete können zentral gepflegt werden, in dem der Inhalt lediglich in den LMS angezeigt wird, aber extern lagert. Somit kann Inhalt stets aktuell vorgehalten werden, ohne jeden davon betroffenen Kurs zu aktualisieren. </li> </ul><b>Wie erstellt man einen SCORM-kompatiblen Lern-Pfad?</b><br> <br>Am schnellsten geht dies wohl mit dem integrierten Lernpfad-Werkzeug von Chamilo. Eine andere Möglichkeit ist, diese Kurse zuerst offline auf dem Computer zu erstellen. In diesem Fall empfehlen sich Programme wie z.B. eXe®, Lectora® or Reload® <br></p><p> <b>weitere Links</b><br> <ul> <li>Adlnet : Scorm Normierung <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Open Source Scorm Player und Editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm Generator, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes, <a href=\"http://www.hotpotatoes.de/\">http://www.hotpotatoes.de/</a><br> </li> </ul> <p><b>Hinweis :</b></p><p>In der Lernpfad-Sektion werden sowohl die <i>Chamilo-eigenen</i> als auch die <i>importierten Scorm-Pakete</i> angezeigt. </p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 msgstr "<p>Damit können Sie Ihren Kurs sachlich und nüchtern beschreiben. Spätere Teilnehmer erhalten so einen klaren Überblick, was sie in diesem Kurs erwartet. Sie haben dabei auch die Möglichkeit, den Kurs zu überdenken.</p><p>Die genannten Punkte sind lediglich als Vorschläge gedacht. Sie können jederzeit Ihre Kursbeschreibung mit Ihren eigenen Ideen und Texten erstellen, indem Sie den 'andere' Link benutzen und einen eigenen Titel vergeben.</p><p>Um die Kursbeschreibung auszufüllen, wählen sie 'Erstellen' aus und nutzen Sie dann die Formulare und Auswahllisten. Sie können die Inhalte jederzeit wieder ändern oder löschen, indem Sie auf das Bleistift- bzw das rote Kreuz-Symbol klicken.</p>"
@@ -14410,11 +14371,11 @@ msgstr "Führer"
 msgid "You should write a message"
 msgstr "Sie sollten eine Nachricht schreiben"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Diese Nachricht informiert Sie darüber, dass einer neuer Kurs auf dem Portal angelegt wurde."
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Diese Nachricht informiert Sie darüber, dass einer neuer Kurs auf dem  %s angelegt wurde."
 
-msgid "New course created in"
-msgstr "Neuer Kurs erstellt in"
+msgid "New course created on %s"
+msgstr "Neuer Kurs erstellt in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Als Kursleiter wurden Sie selbst eingetragen. Sie können diese Einstellung später in den Kurseinstellungen ändern."
@@ -14425,8 +14386,8 @@ msgstr "Sprache für die Installation"
 msgid "Please read the following requirements thoroughly."
 msgstr "Bitte lesen Sie die folgenden Anforderungen gründlich durch."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warnung!<br/>Bei der Installation wurde eine andere Chamilo Version auf Ihrem System entdeckt."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warnung! Bei der Installation wurde eine andere Chamilo Version auf Ihrem System entdeckt."
 
 msgid "New installation"
 msgstr "Neuinstallation"
@@ -14559,12 +14520,6 @@ msgstr "Bitte zurück gehen zu Schritt"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Das Upgrade Skript wird die Chamilo Datenbanken wiederherstellen und updaten. Um dies zu bewerkstelligen, benutzt das Skript die Datenbanken und Einstellungen wie sie unten definiert sind. Da unsere Software auf vielen verschiedenen Systemen läuft und nicht alle getestet werden konnten, schlagen wir vor, unbedingt ein volles Backup ihrer Datenbanken zu erstellen, bevor sie mit dem Upgrade fortfahren!"
-
-msgid "MBString extension not available"
-msgstr "MB String Extension ist nicht verfügbar"
-
-msgid "MySQL extension not available"
-msgstr "MySQL Erweiterung ist nicht verfügbar"
 
 msgid "Optional parameters"
 msgstr "Optionale Einstellungen"
@@ -14747,10 +14702,10 @@ msgid "Export courses"
 msgstr "Kurse exportieren"
 
 msgid "Is administrator"
-msgstr "Ist Admininstrator"
+msgstr "Ist Administrator"
 
 msgid "Is not administrator"
-msgstr "Ist nicht Admininstrator"
+msgstr "Ist nicht Administrator"
 
 msgid "Add time limit"
 msgstr "Zeit-Limit hinzufügen"
@@ -15208,7 +15163,7 @@ msgstr "Es sind keine Extra-Felder verfügbar"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Beginnen Sie mit der Eingabe und klicken Sie auf die Leiste, um die Eingabe zu überprüfen"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Chamilo installieren"
 
 msgid "Chamilo URL"
@@ -15682,7 +15637,7 @@ msgstr "Liste der zu Kurs-Session-Leitern zugeordneten Kurse"
 msgid "Assign sessions to platform administrator"
 msgstr "Kurs-Sessions zu Administratoren zuordnen"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Kurs-Sessions zu Kurs-Session-Leitern zuordnen"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15751,7 +15706,7 @@ msgstr "Thematisch"
 msgid "Thematic plan"
 msgstr "Ablauf"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Bearbeiten"
 
 msgid "Edit thematic advance"
@@ -17449,8 +17404,8 @@ msgstr "Eine soziale Gruppe anlegen"
 msgid "Not logged in for some time"
 msgstr "Seit einiger Zeit nicht an der Plattform angemeldet"
 
-msgid "Last %i months"
-msgstr "Die letzten %i Monate"
+msgid "Last %d months"
+msgstr "Die letzten %d Monate"
 
 msgid "Never connected"
 msgstr "Nie angemeldet"
@@ -17494,13 +17449,13 @@ msgstr "Inhalt kopiert"
 msgid "My statistics"
 msgstr "Meine Auswertungen"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Verfügbare Tests"
 
 msgid "Exercises taken"
 msgstr "Abslovierte Prüfungen"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Durchschnittliches Prüfungsergebnis"
 
 msgid "Learning path progress"
@@ -17857,7 +17812,7 @@ msgstr "Diesem Benutzer wurde keine URL zugeordnet."
 msgid "Extra data"
 msgstr "Extra Daten"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Tests im Lernpfad"
 
 msgid "Id"
@@ -18187,15 +18142,6 @@ msgstr "Willkommen zum Chamilo-Installer"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Ihre PHP-Version entspricht nicht den Anforderungen dieser Software. Überprüfen Sie bite die Aktualität Ihrer PHP-Version und versuchen Sie es erneut."
 
-msgid "Sessions extension not available"
-msgstr "Session Erweiterung nicht verfügbar"
-
-msgid "Zlib extension not available"
-msgstr "Zlib Erweiterung nicht verfügbar"
-
-msgid "PCRE extension not available"
-msgstr "PCRE Erweiterung nicht verfügbar"
-
 msgid "To social group"
 msgstr "Zur Gruppe"
 
@@ -18469,7 +18415,7 @@ msgstr "Zertifizierung"
 msgid "Online link to certificate"
 msgstr "Link zum Zertifikat"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Neue Tests"
 
 msgid "My average"
@@ -18673,14 +18619,8 @@ msgstr "Frage"
 msgid "questions"
 msgstr "Fragen"
 
-msgid "Back to test list"
-msgstr "Zurück zur Test-Übersicht"
-
 msgid "Category description"
 msgstr "Beschreibung Kategorie"
-
-msgid "Back to category list"
-msgstr "Zurück zur Kategorien-Übersicht"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Diese Kategorie ist bereits vorhanden. Bitte benutzen Sie einen anderen Namen."
@@ -18958,7 +18898,7 @@ msgstr "Bestätigt"
 msgid "Not validated"
 msgstr "Nicht bestätigt"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Korrigiert"
 
 msgid "Select a question to revise"
@@ -19102,7 +19042,7 @@ msgstr "Zeigt eine globale Toolbar ganz oben für selektierte Benutzergruppen. M
 msgid "Session list"
 msgstr "Session-Liste"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Liste der Lernenden"
 
 msgid "Learners who're taking the exercise right now"
@@ -21358,7 +21298,7 @@ msgstr "Diagnosemanagement"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Sie müssen zuerst Ihr Profil ausfüllen, um die Validierung der Bestimmungen und Bedingungen zu ermöglichen."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "Diagnostik"
 
 msgid "Allow show the user Skype account"
@@ -23022,14 +22962,14 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr "Erklären Sie in diesem Feld, warum Sie Ihr Konto löschen möchten"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 "Sie können unten darum bitten, dass Ihre rechtliche Vereinbarung gelöscht "
-"wird oder Ihr Konto gelöscht wird.</br>Im Falle der rechtlichen Vereinbarung "
+"wird oder Ihr Konto gelöscht wird.<br>Im Falle der rechtlichen Vereinbarung "
 "müssen Sie diese nach der Löschung bei Ihrem nächsten Login erneut "
 "akzeptieren, um Zugang zur Plattform zu erhalten und Ihren Zugang "
 "wiederherzustellen, da wir Ihnen nicht gleichzeitig ein persönliches Umfeld "
-"bieten und Ihre persönlichen Daten nicht verarbeiten können.</br>Im Falle "
+"bieten und Ihre persönlichen Daten nicht verarbeiten können.<br>Im Falle "
 "einer Kontolöschung wird Ihr Konto zusammen mit all Ihren Kursabonnements "
 "und allen Informationen, die mit Ihrem Konto verbunden sind, gelöscht. Bitte "
 "wählen Sie die entsprechende Option sorgfältig aus. In beiden Fällen wird "
@@ -23122,16 +23062,11 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr "Erstellen Sie eine neue Doodle-Typ-Umfrage"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Entfernen Sie vervielfachte Fragen"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Fragen vervielfältigen"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr ""
-"Sie können die Tags {{class_name}} und {{student_full_name}} in der Frage "
-"verwenden, um Fragen zu vervielfachen."
 
 msgid "Create meeting poll"
 msgstr "Erstellen Sie eine Besprechungsumfrage"
@@ -23768,10 +23703,10 @@ msgstr ""
 "Hallo %s <br/><br/>Als Gruppentutor für die Gruppe %s sind Sie eingeladen, "
 "an der folgenden Umfrage teilzunehmen:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Umfrage %s vervielfacht"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Umfrage %s nicht vervielfacht"
 
 msgid "Export survey results"
@@ -24107,11 +24042,11 @@ msgstr "Absolvent"
 msgid "Absent"
 msgstr "Abwesend"
 
-msgid "Internal database error"
-msgstr "Interner Datenbankfehler"
+msgid "Internal database error: %s"
+msgstr "Interner Datenbankfehler: %s"
 
-msgid "Wrong number of days"
-msgstr "Falsche Anzahl von Tagen"
+msgid "Wrong number of days: %s: %s"
+msgstr "Falsche Anzahl von Tagen: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Abonnement nicht erlaubt"
@@ -24368,7 +24303,7 @@ msgstr "Lernende mit richtigen Antworten"
 msgid "Students with incorrect answers"
 msgstr "Lernende mit falschen Antworten"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "Inhaltsverzeichnis"
 
 msgid "Tariff"
@@ -24483,10 +24418,10 @@ msgstr "Letzter Login in einem Kurs"
 msgid "The"
 msgstr "Der"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "Fragen nach Klasse vervielfachen"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "Fragen vervielfachen pro Benutzer"
 
 msgid "Questions about next user"
@@ -24846,7 +24781,7 @@ msgid "Add notification"
 msgstr "Benachrichtigung hinzufügen"
 
 msgid "Notification to remind the event"
-msgstr "Benachrichtigung zur Erinnerung an das Ereignis"
+msgstr "Benachrichtigung zur Erinnerung an den Eintrag"
 
 msgid "Add tags"
 msgstr "Tags hinzufügen"
@@ -25691,9 +25626,6 @@ msgstr "Kurseinführung"
 
 msgid "Upcoming session tab"
 msgstr "Bevorstehend"
-
-msgid "Back to tests list"
-msgstr "Zurück zur Testliste"
 
 msgid "Text appearing at the end of the test when the user has failed."
 msgstr ""
@@ -28681,9 +28613,6 @@ msgstr ""
 "Sessions geöffnet werden. In den Kurseigenschaften wählen Sie die Option "
 "'Kurs in der Session sperren'."
 
-msgid "Course catalogue"
-msgstr "Kurskatalog"
-
 msgid "Session name and course title"
 msgstr "Sessionname und Kurstitel"
 
@@ -30127,3 +30056,24 @@ msgstr "Es ist keine Konfiguration für Push-Benachrichtigungen eingerichtet."
 
 msgid "Documents deleted"
 msgstr "Dokumente gelöscht"
+
+msgid "New folder"
+msgstr "Neue Datei"
+
+msgid "No available options"
+msgstr "Keine Optionen verfügbar"
+
+msgid "Event"
+msgstr "Eintrag"
+
+msgid "Color"
+msgstr "Farbe"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "Alle Nachrichten hier werden automatisch als offiziell markiert."
+
+msgid "Skills History"
+msgstr "Kompetenzverlauf"
+
+msgid "Badge"
+msgstr "Auszeichnung"

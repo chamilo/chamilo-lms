@@ -359,7 +359,7 @@ $form->display();
 
 // Show past data
 if (api_is_allowed_to_edit() && $counter > 0) {
-    echo '<h4>'.get_lang('ScoreChangesHistory').'</h4>';
+    echo '<h4>'.get_lang('Score changes history').'</h4>';
     if (isset($_GET['type']) && 'false' === $_GET['type']) {
         $buttons = '<a
             class="btn btn--plain"

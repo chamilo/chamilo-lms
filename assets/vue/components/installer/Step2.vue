@@ -118,7 +118,7 @@
             />
             <th
               class="requirements-recommended"
-              v-text="t('Recommended')"
+              v-text="t('Recommended settings')"
             />
             <th
               class="requirements-value"
@@ -257,7 +257,7 @@
           <a
             href="/main/documentation/installation_guide.html"
             target="_blank"
-            v-text="t('installation guide')"
+            v-text="t('Installation guide')"
           />
         </p>
         <ul class="list-disc list-inside">
@@ -276,7 +276,7 @@
           :closable="false"
           severity="warning"
         >
-          {{ t("The installer has detected an existing Chamilo platform on your system.") }}
+          {{ t("Warning! The installer has detected an existing Chamilo platform on your system.") }}
         </Message>
       </div>
 

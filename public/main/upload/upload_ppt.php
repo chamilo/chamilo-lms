@@ -60,7 +60,7 @@ if (isset($_POST['convert'])) {
 Event::event_access_tool(TOOL_UPLOAD);
 
 // check access permissions (edit permission is needed to add a document or a LP)
-$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
@@ -87,8 +87,8 @@ $options = ChamiloHelper::getDocumentConversionSizes();
 $form->addSelect('slide_size', get_lang('Size of the slides'), $options);
 if ('true' === api_get_setting('search_enabled')) {
     $specific_fields = get_specific_field_list();
-    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
-    $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentumentLanguage'));
+    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?'));
+    $form->addSelectLanguage('language', get_lang('Document language for indexation'));
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
     }

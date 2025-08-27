@@ -68,7 +68,7 @@ if ($createForm->validate()) {
         );
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CannotCreate skill'), 'error')
+            Display::return_message(get_lang('Cannot create skill'), 'error')
         );
     }
 

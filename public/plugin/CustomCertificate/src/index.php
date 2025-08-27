@@ -618,7 +618,7 @@ if (!empty($infoCertificate['logo_left'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'logo_left',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -637,7 +637,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_center'])) {
-    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_logo_center', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -667,7 +667,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_right'])) {
-    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_logo_right', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -678,7 +678,7 @@ if (!empty($infoCertificate['logo_right'])) {
 $tblProperty = api_get_supported_image_extensions(false);
 $form->addRule(
     'logo_right',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -696,7 +696,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['seal'])) {
-    $form->addElement('checkbox', 'remove_seal', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_seal', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -707,7 +707,7 @@ if (!empty($infoCertificate['seal'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'seal',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -734,7 +734,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature1'])) {
-    $form->addElement('checkbox', 'remove_signature1', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature1', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -745,7 +745,7 @@ if (!empty($infoCertificate['signature1'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature1',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -770,7 +770,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature2'])) {
-    $form->addElement('checkbox', 'remove_signature2', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature2', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -781,7 +781,7 @@ if (!empty($infoCertificate['signature2'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature2',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -806,7 +806,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature3'])) {
-    $form->addElement('checkbox', 'remove_signature3', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature3', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -817,7 +817,7 @@ if (!empty($infoCertificate['signature3'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature3',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -842,7 +842,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['signature4'])) {
-    $form->addElement('checkbox', 'remove_signature4', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_signature4', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -853,7 +853,7 @@ if (!empty($infoCertificate['signature4'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'signature4',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
@@ -874,7 +874,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['background'])) {
-    $form->addElement('checkbox', 'remove_background', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_background', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -885,14 +885,14 @@ if (!empty($infoCertificate['background'])) {
 $allowedPictureTypes = api_get_supported_image_extensions(false);
 $form->addRule(
     'background',
-    get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowedPictureTypes).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowedPictureTypes).')',
     'filetype',
     $allowedPictureTypes
 );
 $form->addHtml('</fieldset>');
 $form->addHtml('</div>');
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('OtherOptions')).'</legend>');
+$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Other options')).'</legend>');
 $marginOptions = [];
 $i = 0;
 while ($i < 298) {
@@ -901,13 +901,13 @@ while ($i < 298) {
 }
 $form->addSelect(
     'margin_left',
-    get_lang('MarginLeft'),
+    get_lang('Margin to the left'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
 $form->addSelect(
     'margin_right',
-    get_lang('MarginRight'),
+    get_lang('Margin to the right'),
     $marginOptions,
     ['cols-size' => [4, 8, 0]]
 );
@@ -917,7 +917,7 @@ $form->addHtml('<div class="clearfix"></div>');
 
 $form->addButton(
     'submit',
-    get_lang('SaveCertificate'),
+    get_lang('Save certificate'),
     'check',
     'primary',
     null,

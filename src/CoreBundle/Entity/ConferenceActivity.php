@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
             read: false,
             deserialize: false,
             validate: false
-        )
+        ),
     ]
 )]
 #[ORM\Entity(repositoryClass: ConferenceActivityRepository::class)]

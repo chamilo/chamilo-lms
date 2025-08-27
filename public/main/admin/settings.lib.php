@@ -137,7 +137,7 @@ function handlePlugins()
 
     // Header
     echo '<div class="mb-4 flex items-center justify-between">';
-    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage Plugins').'</h2>';
+    echo '<h2 class="text-2xl font-semibold text-gray-90">'.get_lang('Manage plugins').'</h2>';
     echo '<p class="text-gray-50 text-sm">'.get_lang('Install, activate or deactivate plugins easily.').'</p>';
     echo '</div>';
 
@@ -173,7 +173,7 @@ function handlePlugins()
             ? ($isEnabled
                 ? '<span class="badge badge--success">'.get_lang('Enabled').'</span>'
                 : '<span class="badge badge--warning">'.get_lang('Disabled').'</span>')
-            : '<span class="badge badge--default">'.get_lang('Not Installed').'</span>';
+            : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
         echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
@@ -765,7 +765,7 @@ function searchImageFilter(int $id): string
 
         return '<img src="'.$imageUrl.'" alt="'.get_lang('Template preview').'"/>';
     } else {
-        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>';
+        return '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('Preview not available').'"/>';
     }
 }
 
@@ -860,7 +860,7 @@ function addEditTemplate()
                 'static',
                 'template_image_preview',
                 '',
-                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('NoTemplate preview').'"/>'
+                '<img src="'.api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif" alt="'.get_lang('Preview not available').'"/>'
             );
         }
 
@@ -1533,9 +1533,9 @@ function showSearchToolsStatusTable()
             }
             $data2[] = [$program, $output[0], $icon];
         }
-        echo Display::tag('h3', get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Managements needed to convert files'));
+        echo Display::tag('h3', get_lang('Programs needed to convert files'));
         $table = new SortableTableFromArray($data2);
-        $table->set_header(0, get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management'), false);
+        $table->set_header(0, get_lang('Software program'), false);
         $table->set_header(1, get_lang('Path'), false);
         $table->set_header(2, get_lang('Status'), false);
         echo $table->display();

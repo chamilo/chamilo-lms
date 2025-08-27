@@ -2067,12 +2067,12 @@ class Exercise
                     'Random categories with random questions'
                 ),
                 // C 87 B 654 A 321
-                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('Random categories with questions ordered (questions not grouped)'),
                 /*    B 456 C 78 A 123
                         456 78 123
                         123 456 78
                 */
-                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('Random categories with random questions (questions not grouped)'),
                 /*
                     A 123 B 456 C 78
                     B 456 C 78 A 123
@@ -2080,8 +2080,8 @@ class Exercise
                     654 87 321
                     165 842 73
                 */
-                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
-                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('Ordered categories by parent with questions ordered'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('Ordered categories by parent with random questions'),
             ];
 
             $form->addSelect(
@@ -2126,7 +2126,7 @@ class Exercise
                     get_lang('Hide correct answered questions')
                 ),
             ];
-            $form->addGroup($group, null, get_lang('Results and feedback page configuration'));
+            $form->addGroup($group, null, get_lang('Results page configuration'));
 
             $group = [
                 $form->createElement('radio', 'hide_question_number', null, get_lang('Yes'), '1'),
@@ -2158,7 +2158,7 @@ class Exercise
                 'randomQuestions',
                 [
                     get_lang('Random questions'),
-                    get_lang('Random questionsHelp'),
+                    get_lang("To randomize all questions choose 10. To disable randomization, choose \"Do not randomize\"."),
                 ],
                 $option,
                 ['id' => 'randomQuestions']
@@ -2222,7 +2222,7 @@ class Exercise
             $form->addElement(
                 'number',
                 'exerciseAttempts',
-                get_lang('max. 20 characters, e.g. <i>INNOV21</i> number of attempts'),
+                get_lang('Max number of attempts'),
                 null,
                 ['id' => 'exerciseAttempts']
             );
@@ -2322,7 +2322,7 @@ class Exercise
                 ['id' => 'pass_percentage']
             );
 
-            $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
+            $form->addRule('pass_percentage', get_lang('Numerical'), 'numeric');
             $form->addRule('pass_percentage', get_lang('Value is too small.'), 'min_numeric_length', 0);
             $form->addRule('pass_percentage', get_lang('Value is too big.'), 'max_numeric_length', 100);
 
@@ -2427,7 +2427,7 @@ class Exercise
         // defaults
         if ('full' == $type) {
             // rules
-            $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
+            $form->addRule('exerciseAttempts', get_lang('Numerical'), 'numeric');
             $form->addRule('start_time', get_lang('Invalid date'), 'datetime');
             $form->addRule('end_time', get_lang('Invalid date'), 'datetime');
 
@@ -2537,9 +2537,9 @@ class Exercise
         // Feedback type.
         $feedback = [];
         $warning = sprintf(
-            get_lang('TheSettingXWillChangeToX'),
-            get_lang('ShowResultsToStudents'),
-            get_lang('ShowScoreAndRightAnswer')
+            get_lang("The setting \"%s\" will change to \"%s\""),
+            get_lang('Show score to learner'),
+            get_lang('Auto-evaluation mode: show score and expected answers')
         );
         $endTest = $form->createElement(
             'radio',
@@ -3264,11 +3264,11 @@ class Exercise
         $endTest = false;
         if (ALL_ON_ONE_PAGE == $this->type || $nbrQuestions == $questionNum || $endReminderValue) {
             if ($this->review_answers) {
-                $label = get_lang('ReviewQuestions');
+                $label = get_lang('Review selected questions');
                 $class = 'btn btn--success';
             } else {
                 $endTest = true;
-                $label = get_lang('End Test');
+                $label = get_lang('End test');
                 $class = 'btn btn--warning';
             }
         } else {
@@ -5733,19 +5733,19 @@ class Exercise
                                     <td><b>'.get_lang('Your answer').'</b></td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>'.get_lang('Overlapping areaping area').'</b></td>
+                                    <td><b>'.get_lang('Overlapping area').'</b></td>
                                     <td>'.get_lang('Minimum').' '.$threadhold1.'</td>
                                     <td class="text-right '.($overlap_color ? 'text-success' : 'text-error').'">'
                                     .$overlap.'</td>
                                 </tr>
                                 <tr>
-                                    <td><b>'.get_lang('Excessive areaive area').'</b></td>
+                                    <td><b>'.get_lang('Excessive area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold2.'</td>
                                     <td class="text-right '.($excess_color ? 'text-success' : 'text-error').'">'
                                     .$excess.'</td>
                                 </tr>
                                 <tr class="row_even">
-                                    <td><b>'.get_lang('Missing area area').'</b></td>
+                                    <td><b>'.get_lang('Missing area').'</b></td>
                                     <td>'.get_lang('max. 20 characters, e.g. <i>INNOV21</i>').' '.$threadhold3.'</td>
                                     <td class="text-right '.($missing_color ? 'text-success' : 'text-error').'">'
                                     .$missing.'</td>
@@ -6434,7 +6434,7 @@ class Exercise
         if (!empty($user_data)) {
             $userFullName = $user_data['complete_name'];
             if (api_is_teacher() || api_is_platform_admin(true, true)) {
-                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('GoToStudentDetails').'">'.
+                $userFullName = '<a href="'.$user_data['profile_url'].'" title="'.get_lang('Go to learner details').'">'.
                     $user_data['complete_name'].'</a>';
             }
 
@@ -6610,11 +6610,11 @@ class Exercise
             return [
                 'value' => false,
                 'message' => Display::return_message(
-                    get_lang('TestNotFound'),
+                    get_lang('Test not found or not visible'),
                     'warning',
                     false
                 ),
-                'rawMessage' => get_lang('TestNotFound'),
+                'rawMessage' => get_lang('Test not found or not visible'),
             ];
         }
 
@@ -6639,11 +6639,11 @@ class Exercise
                 return [
                     'value' => false,
                     'message' => Display::return_message(
-                        get_lang('TestNotFound'),
+                        get_lang('Test not found or not visible'),
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('TestNotFound'),
+                    'rawMessage' => get_lang('Test not found or not visible'),
                 ];
             }
         } else {
@@ -6655,11 +6655,11 @@ class Exercise
                 return [
                     'value' => false,
                     'message' => Display::return_message(
-                        get_lang('TestNotFound'),
+                        get_lang('Test not found or not visible'),
                         'warning',
                         false
                     ),
-                    'rawMessage' => get_lang('TestNotFound'),
+                    'rawMessage' => get_lang('Test not found or not visible'),
                 ];
             }
         }
@@ -6701,14 +6701,14 @@ class Exercise
                     // after start date, no end date
                     $isVisible = true;
                     $message = sprintf(
-                        get_lang('TestAvailableSinceX'),
+                        get_lang('Exercise available since %s'),
                         api_convert_and_format_date($this->start_time)
                     );
                 } else {
                     // before start date, no end date
                     $isVisible = false;
                     $message = sprintf(
-                        get_lang('TestAvailableFromX'),
+                        get_lang('Exercise available from %s'),
                         api_convert_and_format_date($this->start_time)
                     );
                 }
@@ -6718,14 +6718,14 @@ class Exercise
                     // before end date, no start date
                     $isVisible = true;
                     $message = sprintf(
-                        get_lang('TestAvailableUntilX'),
+                        get_lang('Exercise available until %s'),
                         api_convert_and_format_date($this->end_time)
                     );
                 } else {
                     // after end date, no start date
                     $isVisible = false;
                     $message = sprintf(
-                        get_lang('TestAvailableUntilX'),
+                        get_lang('Exercise available until %s'),
                         api_convert_and_format_date($this->end_time)
                     );
                 }
@@ -6736,7 +6736,7 @@ class Exercise
                         // after start date and before end date
                         $isVisible = true;
                         $message = sprintf(
-                            get_lang('TestIsActivatedFromXToY'),
+                            get_lang('Exercise was activated from %s to %s'),
                             api_convert_and_format_date($this->start_time),
                             api_convert_and_format_date($this->end_time)
                         );
@@ -6744,7 +6744,7 @@ class Exercise
                         // after start date and after end date
                         $isVisible = false;
                         $message = sprintf(
-                            get_lang('TestWasActivatedFromXToY'),
+                            get_lang('Exercise was activated from %s to %s'),
                             api_convert_and_format_date($this->start_time),
                             api_convert_and_format_date($this->end_time)
                         );
@@ -6754,7 +6754,7 @@ class Exercise
                         // before start date and before end date
                         $isVisible = false;
                         $message = sprintf(
-                            get_lang('TestWillBeActivatedFromXToY'),
+                            get_lang('Exercise will be activated from %s to %s'),
                             api_convert_and_format_date($this->start_time),
                             api_convert_and_format_date($this->end_time)
                         );
@@ -6810,7 +6810,7 @@ class Exercise
                             $currentAttempt = current($userAttempts);
                             if ($currentAttempt['total_percentage'] <= $blockPercentage) {
                                 $message = sprintf(
-                                    get_lang('ExerciseBlockBecausePercentageX'),
+                                    get_lang('All attempts blocked because you did not reach the minimum score of %s % at one of your attempts.'),
                                     $blockPercentage
                                 );
                                 $isVisible = false;
@@ -7337,7 +7337,7 @@ class Exercise
         $html .= '</div>';
         $icon = Display::getMdiIcon('clock-outline', 'ch-tool-icon');
         $html .= '<div class="count_down">
-                    '.get_lang('RemainingTimeToFinishExercise').'
+                    '.get_lang('Remaining time to finish exercise').'
                     '.$icon.'<span id="exercise_clock_warning"></span>
                 </div>';
 
@@ -9057,7 +9057,7 @@ class Exercise
                         '</a>'.$sessionStar;
 
                     if (ExerciseLib::isQuizEmbeddable($exerciseEntity)) {
-                        $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This quiz can be embeddable'));
+                        $embeddableIcon = Display::getMdiIcon('book-music-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This quiz can be embeddable on videos or mobile content'));
                         $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                     }
 
@@ -9140,7 +9140,7 @@ class Exercise
                         if (true === $allowClean) {
                             if (!$locked) {
                                 $clean = Display::url(
-                                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clean student results')
+                                    Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clear all learners results for this exercise')
                                     ),
                                     '',
                                     [
@@ -9156,7 +9156,7 @@ class Exercise
                                     ]
                                 );
                             } else {
-                                $clean = Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Resource locked by gradebook')
+                                $clean = Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.')
                                 );
                             }
                         }
@@ -9167,7 +9167,7 @@ class Exercise
                         $visibility = '';
                         if (api_is_platform_admin()) {
                             if ($exercise->exercise_was_added_in_lp) {
-                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddedToLPCannotBeAccessed')
+                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.')
                                 );
                             } else {
                                 if (!$exerciseEntity->isVisible($course, $session)) {
@@ -9212,14 +9212,14 @@ class Exercise
                         $actions .= $export;
                     } else {
                         // not session
-                        $actions = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Exercise edition not available in session')
+                        $actions = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang("You can't edit this course exercise from inside a session")
                         );
 
                         // Check if this exercise was added in a LP
                         $visibility = '';
                         if (api_is_platform_admin()) {
                             if ($exercise->exercise_was_added_in_lp) {
-                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Added to learnpath cannot be accessed')
+                                $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.')
                                 );
                             } else {
                                 if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
@@ -9269,7 +9269,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".
-                                        addslashes(api_htmlentities(get_lang('Are you sure to delete?')))." ".
+                                        addslashes(api_htmlentities(get_lang('Are you sure you want to delete')))." ".
                                         addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
                                     'href' => $deleteUrl,
                                 ]
@@ -9313,7 +9313,7 @@ class Exercise
                                 $random_number_of_question
                             );
                             $number_of_questions = $nbQuestionsTotal.' ';
-                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('Questions lower case') : get_lang(
+                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang('questions') : get_lang(
                                 'Question lower case'
                             );
                             $number_of_questions .= ' - ';
@@ -9520,12 +9520,12 @@ class Exercise
             if ($is_allowedToEdit && 'learnpath' !== $origin) {
                 if (!empty($_GET['keyword'])) {
                     $content .= Display::return_message(
-                        get_lang('No Results for keyword: ').Security::remove_XSS($_GET['keyword']),
+                        sprintf(get_lang('No result for keyword %s'),Security::remove_XSS($_GET['keyword'])),
                         'warning'
                     );
                 } else {
                     $content .= Display::noDataView(
-                        get_lang('Quiz'),
+                        get_lang('Test'),
                         Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_BIG),
                         get_lang('Create a new test'),
                         'exercise_admin.php?'.api_get_cidreq()
@@ -9709,11 +9709,11 @@ class Exercise
                         <tr class="row_odd" >
                             <td>&nbsp;</td>
                             <td><b>'.get_lang('Requirements').'</b></td>
-                            <td><b>'.get_lang('YourAnswer').'</b></td>
+                            <td><b>'.get_lang('Your answer').'</b></td>
                         </tr>
                         <tr class="row_even">
-                            <td><b>'.get_lang('Overlap').'</b></td>
-                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                            <td><b>'.get_lang('Overlapping area').'</b></td>
+                            <td>'.get_lang('Minimum overlap').' '.$threadhold1.'</td>
                             <td>
                                 <div style="color:'.$overlap_color.'">
                                     '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
@@ -9721,8 +9721,8 @@ class Exercise
                             </td>
                         </tr>
                         <tr>
-                            <td><b>'.get_lang('Excess').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                            <td><b>'.get_lang('Excessive area').'</b></td>
+                            <td>'.get_lang('Maximum excess').' '.$threadhold2.'</td>
                             <td>
                                 <div style="color:'.$excess_color.'">
                                     '.(($final_excess < 0) ? 0 : intval($final_excess)).'
@@ -9730,8 +9730,8 @@ class Exercise
                             </td>
                         </tr>
                         <tr class="row_even">
-                            <td><b>'.get_lang('Missing').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                            <td><b>'.get_lang('Missing area').'</b></td>
+                            <td>'.get_lang('Maximum missing').' '.$threadhold3.'</td>
                             <td>
                                 <div style="color:'.$missing_color.'">
                                     '.(($final_missing < 0) ? 0 : intval($final_missing)).'
@@ -9754,12 +9754,12 @@ class Exercise
             }
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
             if ($organs_at_risk_hit > 0) {
-                $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+                $message = '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
+                $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('One (or more) area at risk has been hit').'</b></p>';
             } else {
-                $message = '<p>'.get_lang('YourDelineation').'</p>';
+                $message = '<p>'.get_lang('Your delineation :').'</p>';
                 $message .= $table_resume;
-                $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                $message .= '<br />'.get_lang('Your result is :').' <b>'.$result_comment.'</b><br />';
             }
             $message .= '<p>'.$comment.'</p>';
             echo $message;*/
@@ -10064,7 +10064,7 @@ class Exercise
         $exerciseId = $exercise_stat_info['exe_exo_id'];
         $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
 
-        $content = Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
+        $content = Display::label(get_lang('Questions without answer'), 'danger');
         $content .= '<div class="clear"></div><br />';
         $table = '';
         $counter = 0;
@@ -10165,7 +10165,7 @@ class Exercise
 
             if (isChecked == 1) {
                 $("#message").addClass("warning-message");
-                $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+                $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
             } else {
                 window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
             }
@@ -10690,7 +10690,7 @@ class Exercise
         }
 
         if (!empty($open_question_list)) {
-            $msg .= '<p><br />'.get_lang('A learner has answered an open questionAre').' :</p>'.
+            $msg .= '<p><br />'.get_lang('A learner has answered an open question').' :</p>'.
                 '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
             $msg .= '</table><br />';
@@ -10878,9 +10878,9 @@ class Exercise
         );
 
         $warning = sprintf(
-            get_lang('TheSettingXWillChangeToX'),
-            get_lang('FeedbackType'),
-            get_lang('NoFeedback')
+            get_lang("The setting \"%s\" will change to \"%s\""),
+            get_lang('Feedback'),
+            get_lang('Exam (no feedback)')
         );
         $resultDisabledGroup[] = $form->createElement(
             'radio',

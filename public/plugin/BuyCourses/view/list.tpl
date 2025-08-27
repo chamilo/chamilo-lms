@@ -161,8 +161,8 @@
                 <a href="{{ _p.web_plugin ~ 'BuyCourses/src/services_add.php' }}" class="btn btn--primary">
                     <em class="fa fa-cart-plus fa-fw"></em> {{ 'NewService'| get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
-                </br>
-                </br>
+                <br>
+                <br>
                 <table id="services_table" class="table">
                     <thead>
                     <tr>

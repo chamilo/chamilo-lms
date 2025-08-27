@@ -688,7 +688,7 @@ switch ($action) {
         if (!empty($attendance_calendar)) {
             foreach ($attendance_calendar as $calendar) {
                 $content .= '<li class="list-group-item">';
-                $content .= Display::getMdiIcon('calendar-month', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Date DateTime time')).' '.
+                $content .= Display::getMdiIcon('calendar-month', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Date & time')).' '.
                     substr(
                         $calendar['date_time'],
                         0,
@@ -727,7 +727,7 @@ switch ($action) {
         if (api_is_course_admin() || api_is_drh()) {
             $result = $attendance->getAttendanceBaseInLogin(false, true);
             $actions = '<a href="index.php?'.api_get_cidreq().'&action=calendar_list">'.
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AttendanceCalendar')).
+                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Attendance calendar')).
                 '</a>';
             $content .= Display::toolbarAction('toolbar', [$actions]);
             $content .= $result['form'];

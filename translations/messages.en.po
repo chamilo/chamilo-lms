@@ -624,11 +624,11 @@ msgstr "Course categories in %s site:"
 msgid "Course categories available"
 msgstr "Course categories available"
 
-msgid "The group now belongs to the selected site"
-msgstr "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
+msgstr "The group now belongs to the selected URL."
 
-msgid "You need to select at least one group and one site"
-msgstr "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
+msgstr "You need to select at least one group and one URL."
 
 msgid "Agenda list"
 msgstr "Agenda list"
@@ -1608,8 +1608,8 @@ msgstr "The format of this package could not be recognized. Please check this is
 msgid "Move the current forum"
 msgstr "Move the current forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
-msgstr "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgstr "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 
 msgid "Please provide a subject or message"
 msgstr "Please provide a subject or message"
@@ -1725,8 +1725,8 @@ msgstr "By default, your course is public. But you can define the level of acces
 msgid "Public - access allowed for the whole world"
 msgstr "Public - access allowed for the whole world"
 
-msgid " Open - access allowed for users registered on the platform"
-msgstr " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
+msgstr "Open - access allowed for users registered on the platform"
 
 msgid "Student %s is no subscribed to this course"
 msgstr "Student %s is no subscribed to this course"
@@ -1755,8 +1755,8 @@ msgstr "Add link to page on Home Page"
 msgid "has been deleted"
 msgstr "has been deleted"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
-msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?</p>"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
+msgstr "Deleting this course will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 
 msgid "YES"
 msgstr "YES"
@@ -2522,9 +2522,6 @@ msgstr "This is the department or any other context where the course is delivere
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "If you are unsure of your course code, consult the training details."
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
 
 msgid "SCORM Path builder"
 msgstr "SCORM Path builder"
@@ -3375,9 +3372,6 @@ msgstr "Create note"
 msgid "Edit my personal note"
 msgstr "Edit my personal note"
 
-msgid "Back to note list"
-msgstr "Back to note list"
-
 msgid "Notebook management"
 msgstr "Notebook management"
 
@@ -3492,8 +3486,8 @@ msgstr "Create a personal courses category"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 
-msgid "Courses categories"
-msgstr "Courses categories"
+msgid "Course categories"
+msgstr "Course categories"
 
 msgid "Courses in this category"
 msgstr "Courses in this category"
@@ -4500,11 +4494,11 @@ msgstr "This user isn't subscribed in a class"
 msgid "This class isn't subscribed in a course"
 msgstr "This class isn't subscribed in a course"
 
-msgid "tool"
-msgstr "tool"
+msgid "Tool"
+msgstr "Tool"
 
-msgid "number of items"
-msgstr "number of items"
+msgid "Number of items"
+msgstr "Number of items"
 
 msgid "Documents and folders"
 msgstr "Documents and folders"
@@ -4665,8 +4659,8 @@ msgstr "Please give a notice text"
 msgid "Please give a notice title"
 msgstr "Please give a notice title"
 
-msgid "Plese give a link name"
-msgstr "Plese give a link name"
+msgid "Please give a link name"
+msgstr "Please give a link name"
 
 msgid "Insert this link"
 msgstr "Insert this link"
@@ -5067,8 +5061,8 @@ msgstr "Finish session creation"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videoconference RTMTP protocol port"
 
-msgid "Session name already exists"
-msgstr "Session name already exists"
+msgid "Session title already exists"
+msgstr "Session title already exists"
 
 msgid "No classes have been created"
 msgstr "No classes have been created"
@@ -5217,8 +5211,8 @@ msgstr "If this option is activated, clicking on an e-mail address will open an 
 msgid "Include header line?"
 msgstr "Include header line?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 
 msgid "List of users subscribed to course"
 msgstr "List of users subscribed to course"
@@ -5451,8 +5445,8 @@ msgstr "Select drop-down"
 msgid "Multiple selection drop-down"
 msgstr "Multiple selection drop-down"
 
-msgid "Field succesfully added"
-msgstr "Field succesfully added"
+msgid "Field successfully added"
+msgstr "Field successfully added"
 
 msgid "Grades thresholds colouring"
 msgstr "Grades thresholds colouring"
@@ -5703,8 +5697,8 @@ msgstr "Import LDAP users into a course"
 msgid "Import LDAP users and a step into a session"
 msgstr "Import LDAP users and a step into a session"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
-msgstr "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
+msgstr "LDAP synchronization: Import learners/steps into course sessions"
 
 msgid "Assessments tab"
 msgstr "Assessments tab"
@@ -5750,9 +5744,6 @@ msgstr "Tutor identification value"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "is not writeable"
 
 msgid "The field is successfully moved down"
 msgstr "The field is successfully moved down"
@@ -6342,17 +6333,14 @@ msgstr "Courses from the original session"
 msgid "Courses from the destination session"
 msgstr "Courses from the destination session"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Help for the copy of courses from session to session"
-
 msgid "Type of copy"
 msgstr "Type of copy"
 
 msgid "Copy from course in session to another session"
 msgstr "Copy from course in session to another session"
 
-msgid "You must select a course from original session"
-msgstr "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
+msgstr "You must select a course from the original session and select a destination session"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
 msgstr "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6367,7 +6355,7 @@ msgid "Current courses"
 msgstr "Current courses"
 
 msgid "Unaccessible courses"
-msgstr "Unaccessible courses"
+msgstr "Inaccessible courses"
 
 msgid "Edit session courses"
 msgstr "Edit session courses"
@@ -6423,11 +6411,11 @@ msgstr "Show session data comment"
 msgid "Subscription sessions in the category"
 msgstr "Subscription sessions in the category"
 
-msgid "List of session in the platform"
-msgstr "List of session in the platform"
+msgid "List of sessions on the platform"
+msgstr "List of sessions on the platform"
 
-msgid "List of sesiones in the categories"
-msgstr "List of sesiones in the categories"
+msgid "List of sessions in the categories"
+msgstr "List of sessions in the categories"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
 msgstr "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6584,9 +6572,6 @@ msgstr "Teachers only"
 
 msgid "Define Headings"
 msgstr "Define Headings"
-
-msgid "Back to users list"
-msgstr "Back to users list"
 
 msgid "change rights of"
 msgstr "change rights of"
@@ -7008,9 +6993,6 @@ msgstr "Groups from classes"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Using this option, you can create groups based on the classes subscribed to your course."
 
-msgid "Back to Groups list"
-msgstr "Back to Groups list"
-
 msgid "A new forum has now been created"
 msgstr "A new forum has now been created"
 
@@ -7287,8 +7269,8 @@ msgstr "Move the current document"
 msgid "Edit the current document"
 msgstr "Edit the current document"
 
-msgid "Warning !"
-msgstr "Warning !"
+msgid "Warning!"
+msgstr "Warning!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
 msgstr "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7680,8 +7662,8 @@ msgstr "Go back to the questions list"
 msgid "Answers to the question"
 msgstr "Answers to the question"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
-msgstr "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
+msgstr "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 
 msgid "in all tests"
 msgstr "in all tests"
@@ -7829,9 +7811,6 @@ msgstr "You have reached the maximum number of attempts for this test. Being a t
 
 msgid "Exercise added"
 msgstr "Exercise added"
-
-msgid "Assesment settings"
-msgstr "Assesment settings"
 
 msgid "active"
 msgstr "active"
@@ -8415,9 +8394,6 @@ msgstr "Reached time limit admin"
 msgid "Last score of a exercise"
 msgstr "Last score of a exercise"
 
-msgid "Back to result list"
-msgstr "Back to result list"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "If you edit a question score, please remember that this Exercise was added in a Course"
 
@@ -8498,9 +8474,6 @@ msgstr "Users online"
 
 msgid "Remove"
 msgstr "Remove"
-
-msgid "Back to courses list"
-msgstr "Back to courses list"
 
 msgid "Links"
 msgstr "Links"
@@ -8597,9 +8570,6 @@ msgstr "First name"
 
 msgid "Last name"
 msgstr "Last name"
-
-msgid "e-mail"
-msgstr "e-mail"
 
 msgid "Slideshow conversion"
 msgstr "Slideshow conversion"
@@ -8901,8 +8871,8 @@ msgstr "language"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Sorry, but that course code already exists. Please choose another one."
 
-msgid "Groups list"
-msgstr "Groups list"
+msgid "Group list"
+msgstr "Group list"
 
 msgid "The target folder does not exist"
 msgstr "The target folder does not exist"
@@ -9360,9 +9330,6 @@ msgstr "My active Sessions"
 msgid "My inactive sessions"
 msgstr "My inactive sessions"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "This extension has been actived but can't be operational for the moment."
-
 msgid "My learners"
 msgstr "My learners"
 
@@ -9393,8 +9360,8 @@ msgstr "No resource to recycle"
 msgid "Could not open"
 msgstr "Could not open"
 
-msgid "Frequentation time"
-msgstr "Frequentation time"
+msgid "Time in course"
+msgstr "Time in course"
 
 msgid "This course could not be found"
 msgstr "This course could not be found"
@@ -9525,8 +9492,8 @@ msgstr "No link visited"
 msgid "No document downloaded"
 msgstr "No document downloaded"
 
-msgid "clicks"
-msgstr "clicks"
+msgid "%d clicks"
+msgstr "%d clicks"
 
 msgid "Search results"
 msgstr "Search results"
@@ -9609,8 +9576,8 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "The file is too big to upload."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
-msgstr "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
+msgstr "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 
 msgid "Assessments"
 msgstr "Assessments"
@@ -9669,8 +9636,8 @@ msgstr "hours"
 msgid "minutes"
 msgstr "minutes"
 
-msgid "Documented created"
-msgstr "Documented created"
+msgid "Document created"
+msgstr "Document created"
 
 msgid "The forum has been added"
 msgstr "The forum has been added"
@@ -10197,8 +10164,8 @@ msgstr "More information"
 msgid "Make invisible"
 msgstr "Make invisible"
 
-msgid "Make Visible"
-msgstr "Make Visible"
+msgid "Make visible"
+msgstr "Make visible"
 
 msgid "Image"
 msgstr "Image"
@@ -10214,9 +10181,6 @@ msgstr "Send a message"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Back to user list"
 
 msgid "Graphic not available"
 msgstr "Graphic not available"
@@ -10542,8 +10506,8 @@ msgstr "Assessment visibility"
 msgid "Who changed it"
 msgstr "Who changed it"
 
-msgid "The evaluation has been succesfully edited"
-msgstr "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
+msgstr "The evaluation has been successfully edited"
 
 msgid "Incorrect data"
 msgstr "Incorrect data"
@@ -11553,8 +11517,8 @@ msgstr "Now the page is visible by all users"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "The Main Page can be edited by a teacher only"
 
-msgid "Acces to trainer page"
-msgstr "Acces to trainer page"
+msgid "Access to trainer page"
+msgstr "Access to trainer page"
 
 msgid "Now discussion is visible by trainers only"
 msgstr "Now discussion is visible by trainers only"
@@ -13335,8 +13299,8 @@ msgstr "Please enter a question"
 msgid "Number of question"
 msgstr "Number of question"
 
-msgid "This code already exist"
-msgstr "This code already exist"
+msgid "This code already exists"
+msgstr "This code already exists"
 
 msgid "Save and exit"
 msgstr "Save and exit"
@@ -13386,13 +13350,13 @@ msgstr "Edit question"
 msgid "This type does not exist"
 msgstr "This type does not exist"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "The survey has been created successfully"
 
 msgid "You can now add questions to your survey"
 msgstr "You can now add questions to your survey"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "The survey has been updated successfully"
 
 msgid "The question has been added."
@@ -13590,7 +13554,7 @@ msgstr "This survey code already exists. That probably means the survey exists i
 msgid "This survey code soon exists in this language"
 msgstr "This survey code soon exists in this language"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "The user's answers to the survey have been successfully removed."
 
 msgid "Delete this user's answers"
@@ -13713,8 +13677,8 @@ msgstr "Is there a course book, a collection of papers, a bibliography, a list o
 msgid "Short description of the course materials."
 msgstr "Short description of the course materials."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
-msgstr "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
+msgstr "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 
 msgid "Identify and describe the different contact persons and technical devices available."
 msgstr "Identify and describe the different contact persons and technical devices available."
@@ -14238,9 +14202,6 @@ msgstr "The mark cannot exceed maximum score"
 msgid "Delete all papers"
 msgstr "Delete all papers"
 
-msgid "Back to Assignments list"
-msgstr "Back to Assignments list"
-
 msgid "Edit and mark paper"
 msgstr "Edit and mark paper"
 
@@ -14352,11 +14313,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "You should write a message"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "This message is to inform you that a new course has been created on the platform"
 
-msgid "New course created in"
-msgstr "New course created in"
+msgid "New course created on %s"
+msgstr "New course created on %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -14367,8 +14328,8 @@ msgstr "Installation language"
 msgid "Please read the following requirements thoroughly."
 msgstr "Please read the following requirements thoroughly."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warning! The installer has detected an existing Chamilo platform on your system."
 
 msgid "New installation"
 msgstr "New installation"
@@ -14501,12 +14462,6 @@ msgstr "Please go back to Step"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-
-msgid "MBString extension not available"
-msgstr "MBString extension not available"
-
-msgid "MySQL extension not available"
-msgstr "MySQL extension not available"
 
 msgid "Optional parameters"
 msgstr "Optional parameters"
@@ -15150,8 +15105,8 @@ msgstr "There are not extra fields available"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Start to type, then click on this bar to validate tag"
 
-msgid "Install chamilo"
-msgstr "Install chamilo"
+msgid "Install Chamilo"
+msgstr "Install Chamilo"
 
 msgid "Chamilo URL"
 msgstr "Chamilo URL"
@@ -15624,8 +15579,8 @@ msgstr "Assigned courses list to sessions administrator"
 msgid "Assign sessions to platform administrator"
 msgstr "Assign sessions to platform administrator"
 
-msgid "assign sessions to sessions administrator"
-msgstr "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
+msgstr "Assign sessions to sessions administrator"
 
 msgid "Assigned sessions list to platform administrator"
 msgstr "Assigned sessions list to platform administrator"
@@ -15693,8 +15648,8 @@ msgstr "Thematic"
 msgid "Thematic plan"
 msgstr "Thematic plan"
 
-msgid "Edit tematic advance"
-msgstr "Edit tematic advance"
+msgid "Edit thematicadvance"
+msgstr "Edit thematicadvance"
 
 msgid "Edit thematic advance"
 msgstr "Edit thematic advance"
@@ -17391,8 +17346,8 @@ msgstr "Create a social group"
 msgid "Not logged in for some time"
 msgstr "Not logged in for some time"
 
-msgid "Last %i months"
-msgstr "Last %i months"
+msgid "Last %d months"
+msgstr "Last %d months"
 
 msgid "Never connected"
 msgstr "Never connected"
@@ -17436,14 +17391,14 @@ msgstr "Item copied"
 msgid "My statistics"
 msgstr "My statistics"
 
-msgid "Exercises available"
-msgstr "Exercises available"
+msgid "Tests available"
+msgstr "Tests available"
 
 msgid "Exercises taken"
 msgstr "Exercises taken"
 
-msgid "Average exercise result"
-msgstr "Average exercise result"
+msgid "Average test result"
+msgstr "Average test result"
 
 msgid "Learning path progress"
 msgstr "Learning path progress"
@@ -17799,8 +17754,8 @@ msgstr "This user doesn't have a related URL."
 msgid "Extra data"
 msgstr "Extra data"
 
-msgid "Exercises in learning paths"
-msgstr "Exercises in learning paths"
+msgid "Tests in learning paths"
+msgstr "Tests in learning paths"
 
 msgid "Id"
 msgstr "Id"
@@ -18129,15 +18084,6 @@ msgstr "Welcome to the Chamilo installer"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 
-msgid "Sessions extension not available"
-msgstr "Sessions extension not available"
-
-msgid "Zlib extension not available"
-msgstr "Zlib extension not available"
-
-msgid "PCRE extension not available"
-msgstr "PCRE extension not available"
-
 msgid "To social group"
 msgstr "To social group"
 
@@ -18410,8 +18356,8 @@ msgstr "Certification"
 msgid "Online link to certificate"
 msgstr "Online link to certificate"
 
-msgid "New exercises"
-msgstr "New exercises"
+msgid "New tests"
+msgstr "New tests"
 
 msgid "My average"
 msgstr "My average"
@@ -18614,14 +18560,8 @@ msgstr "question"
 msgid "questions"
 msgstr "questions"
 
-msgid "Back to test list"
-msgstr "Back to test list"
-
 msgid "Category description"
 msgstr "Category description"
-
-msgid "Back to category list"
-msgstr "Back to category list"
 
 msgid "This category name already exists. Please use another name."
 msgstr "This category name already exists. Please use another name."
@@ -18899,8 +18839,8 @@ msgstr "Validated"
 msgid "Not validated"
 msgstr "Not validated"
 
-msgid "Revised"
-msgstr "Revised"
+msgid "Reviewed"
+msgstr "Reviewed"
 
 msgid "Select a question to revise"
 msgstr "Select a question to revise"
@@ -19043,8 +18983,8 @@ msgstr "Shows a global toolbar on top of the page to the designated user roles. 
 msgid "Session list"
 msgstr "Session list"
 
-msgid "Learners list"
-msgstr "Learners list"
+msgid "Learner list"
+msgstr "Learner list"
 
 msgid "Learners who're taking the exercise right now"
 msgstr "Learners who're taking the exercise right now"
@@ -19464,7 +19404,7 @@ msgid "User certificates can be view by unregistered users."
 msgstr "User certificates can be view by unregistered users."
 
 msgid "Don't forget to select the media files if your resource need it"
-msgstr "Don't forget to select the media files if your resource need it"
+msgstr "Don't forget to select the media files if your resource needs it"
 
 msgid "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
 msgstr "No learner certificate available yet. Please note that, to generate his certificate, a learner has to go to the assessments tool and click the certificate icon, which will only appear when he reached the course objectives."
@@ -21299,8 +21239,8 @@ msgstr "Diagnosis management"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "You must first fill your profile to enable the terms and conditions validation."
 
-msgid "Diagnostic"
-msgstr "Diagnostic"
+msgid "Diagnosis"
+msgstr "Diagnosis"
 
 msgid "Allow show the user Skype account"
 msgstr "Allow show the user Skype account"
@@ -22856,8 +22796,8 @@ msgstr "Please tell us why you want to withdraw the rights you previously gave u
 msgid "Explain in this box why you want your account deleted"
 msgstr "Explain in this box why you want your account deleted"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
-msgstr "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgstr "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 
 msgid "Personal data protection"
 msgstr "Personal data protection"
@@ -22931,14 +22871,11 @@ msgstr "Note: This progress is obtained through a combination of progress in the
 msgid "Create a new Doodle type survey"
 msgstr "Create a new Doodle type survey"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Remove multiplied questions"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Multiply questions"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
 
 msgid "Create meeting poll"
 msgstr "Create meeting poll"
@@ -23477,10 +23414,10 @@ msgstr "Group survey for %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Survey %s multiplied"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Survey %s not multiplied"
 
 msgid "Export survey results"
@@ -23783,11 +23720,11 @@ msgstr "Graduated"
 msgid "Absent"
 msgstr "Absent"
 
-msgid "Internal database error"
-msgstr "Internal database error"
+msgid "Internal database error: %s"
+msgstr "Internal database error: %s"
 
-msgid "Wrong number of days"
-msgstr "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
+msgstr "Wrong number of days: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Subscription not allowed"
@@ -24020,8 +23957,8 @@ msgstr "Students with correct answers"
 msgid "Students with incorrect answers"
 msgstr "Students with incorrect answers"
 
-msgid "List of contents"
-msgstr "List of contents"
+msgid "Content list"
+msgstr "Content list"
 
 msgid "Tariff"
 msgstr "Tariff"
@@ -24152,9 +24089,6 @@ msgstr "By checking this box, I confirm that I accept the data processing by the
 msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
 msgstr "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
 
-msgid "Back to tests list"
-msgstr "Back to tests list"
-
 msgid "Number of times the question was answered"
 msgstr "Number of times the question was answered"
 
@@ -24236,11 +24170,11 @@ msgstr "Latest login in a course"
 msgid "The"
 msgstr "The"
 
-msgid "Multiplicate questions by class"
-msgstr "Multiplicate questions by class"
+msgid "Multiply questions by class"
+msgstr "Multiply questions by class"
 
-msgid "Multiplicate questions by user"
-msgstr "Multiplicate questions by user"
+msgid "Multiply questions by user"
+msgstr "Multiply questions by user"
 
 msgid "Questions about next user"
 msgstr "Questions about next user"
@@ -24593,8 +24527,8 @@ msgstr "Hello %s"
 msgid "You are registered in the training %s since the %s"
 msgstr "You are registered in the training %s since the %s"
 
-msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
-msgstr "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgid "You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
+msgstr "You are receiving this message because you have completed a learning path with a %s%% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
 msgstr "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
@@ -26096,9 +26030,6 @@ msgstr "Hide test attempts table on test start page"
 msgid "Hide the table showing all previous attempts on the test start page."
 msgstr "Hide the table showing all previous attempts on the test start page."
 
-msgid "Hide question number"
-msgstr "Hide question number"
-
 msgid "Hide the question incremental numbering when taking a test."
 msgstr "Hide the question incremental numbering when taking a test."
 
@@ -27473,9 +27404,6 @@ msgstr "Mail confirmation"
 msgid "Campus homepage"
 msgstr "Campus homepage"
 
-msgid "Course catalogue"
-msgstr "Course catalogue"
-
 msgid "Search shows unlinked results"
 msgstr "Search shows unlinked results"
 
@@ -28567,3 +28495,2085 @@ msgstr "By filling this form, you agree that the editor of Chamilo, the %s compa
 
 msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
 msgstr "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
+
+msgid "In person"
+msgstr "In person"
+
+msgid "Blended learning"
+msgstr "Blended learning"
+
+msgid "Centralised"
+msgstr "Centralised"
+
+msgid "Score for user %d is %s"
+msgstr "Score for user %d is %s"
+
+msgid "Score not set"
+msgstr "Score not set"
+
+msgid "Evaluation for external tool added"
+msgstr "Evaluation for external tool added"
+
+msgid "External tool"
+msgstr "External tool"
+
+msgid "External tool added"
+msgstr "External tool added"
+
+msgid "Add external tool"
+msgstr "Add external tool"
+
+msgid "External tool added: %s"
+msgstr "External tool added: %s"
+
+msgid "External tool edited"
+msgstr "External tool edited"
+
+msgid "Edit external tool"
+msgstr "Edit external tool"
+
+msgid "External tool deleted"
+msgstr "External tool deleted"
+
+msgid "You passed the time limit to see the results"
+msgstr "You passed the time limit to see the results"
+
+msgid "You're not allowed in this course"
+msgstr "You're not allowed in this course"
+
+msgid "Group not found"
+msgstr "Group not found"
+
+msgid "Session not found"
+msgstr "Session not found"
+
+msgid "You're not allowed in this session"
+msgstr "You're not allowed in this session"
+
+msgid "Course does not exist"
+msgstr "Course does not exist"
+
+msgid "The security code entered was incorrect."
+msgstr "The security code entered was incorrect."
+
+msgid "Security check"
+msgstr "Security check"
+
+msgid "New instance of recurring session created"
+msgstr "New instance of recurring session created"
+
+msgid "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"
+msgstr "A new instance of the recurring session <em>%s</em> has been created. Please review the details: %s"
+
+msgid "This course is locked. You must complete the prerequisite(s) first."
+msgstr "This course is locked. You must complete the prerequisite(s) first."
+
+msgid "The resource doesn't exist."
+msgstr "The resource doesn't exist."
+
+msgid "The resource doesn't have a node."
+msgstr "The resource doesn't have a node."
+
+msgid "No terms and conditions available for this language."
+msgstr "No terms and conditions available for this language."
+
+msgid "Client"
+msgstr "Client"
+
+msgid "Hide advanced settings"
+msgstr "Hide advanced settings"
+
+msgid "Show advanced settings"
+msgstr "Show advanced settings"
+
+msgid "Are you sure you want to delete this item?"
+msgstr "Are you sure you want to delete this item?"
+
+msgid "No available options"
+msgstr "No available options"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Send"
+msgstr "Send"
+
+msgid "Draft"
+msgstr "Draft"
+
+msgid "Share with user"
+msgstr "Share with user"
+
+msgid "Multilingual"
+msgstr "Multilingual"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Subscribing..."
+msgstr "Subscribing..."
+
+msgid "You are receiving a copy because you are one of the course coaches"
+msgstr "You are receiving a copy because you are one of the course coaches"
+
+msgid "You are receiving a copy because you are the course coach"
+msgstr "You are receiving a copy because you are the course coach"
+
+msgid "This group is closed."
+msgstr "This group is closed."
+
+msgid "Your request has been received."
+msgstr "Your request has been received."
+
+msgid "Legal consent revoked successfully."
+msgstr "Legal consent revoked successfully."
+
+msgid "User ID not provided"
+msgstr "User ID not provided"
+
+msgid "Terms accepted successfully."
+msgstr "Terms accepted successfully."
+
+msgid "File not found for resource"
+msgstr "File not found for resource"
+
+msgid "Resource not found"
+msgstr "Resource not found"
+
+msgid "No files"
+msgstr "No files"
+
+msgid "Unauthorised access to resource"
+msgstr "Unauthorised access to resource"
+
+msgid "Resource file not found for the given resource node"
+msgstr "Resource file not found for the given resource node"
+
+msgid "You have been enrolled in a new course"
+msgstr "You have been enrolled in a new course"
+
+msgid "Remove users from URLs with a CSV file"
+msgstr "Remove users from URLs with a CSV file"
+
+msgid "Assign users to URLs from CSV"
+msgstr "Assign users to URLs from CSV"
+
+msgid "Template not found."
+msgstr "Template not found."
+
+msgid "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+msgstr "Invalid login request: check that the Content-Type header is <em>application/json</em>."
+
+msgid "An error occurred while creating the course."
+msgstr "An error occurred while creating the course."
+
+msgid "Course created successfully."
+msgstr "Course created successfully."
+
+msgid "Tool not found"
+msgstr "Tool not found"
+
+msgid "Course not found"
+msgstr "Course not found"
+
+msgid "Attendance data and comments saved successfully"
+msgstr "Attendance data and comments saved successfully"
+
+msgid "Your account has expired."
+msgstr "Your account has expired."
+
+msgid "Invalid credentials. Please try again or contact support if you continue to experience issues."
+msgstr "Invalid credentials. Please try again or contact support if you continue to experience issues."
+
+msgid "Your account has not been activated."
+msgstr "Your account has not been activated."
+
+msgid "Third parties (GDPR)"
+msgstr "Third parties (GDPR)"
+
+msgid "Resources by type"
+msgstr "Resources by type"
+
+msgid "File info"
+msgstr "File info"
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "No push notification settings configured."
+msgstr "No push notification settings configured."
+
+msgid "Current user not found."
+msgstr "Current user not found."
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+
+msgid "You are registered on %s"
+msgstr "You are registered on %s"
+
+msgid "Learning path categories"
+msgstr "Learning path categories"
+
+msgid "Translation saved."
+msgstr "Translation saved."
+
+msgid "Total available hours"
+msgstr "Total available hours"
+
+msgid "Sum of hours in subscribed sessions"
+msgstr "Sum of hours in subscribed sessions"
+
+msgid "Count of available hours"
+msgstr "Count of available hours"
+
+msgid "Go to the session"
+msgstr "Go to the session"
+
+msgid "Duration (minutes)"
+msgstr "Duration (minutes)"
+
+msgid "Gradebook options"
+msgstr "Gradebook options"
+
+msgid "Qualify attendance gradebook"
+msgstr "Qualify attendance gradebook"
+
+msgid "Select gradebook option"
+msgstr "Select gradebook option"
+
+msgid "Gradebook column title"
+msgstr "Gradebook column title"
+
+msgid "Grade weight"
+msgstr "Grade weight"
+
+msgid "No invitations or records found"
+msgstr "No invitations or records found"
+
+msgid "Accept invitation"
+msgstr "Accept invitation"
+
+msgid "Reject invitation"
+msgstr "Reject invitation"
+
+msgid "Friend added successfully"
+msgstr "Friend added successfully"
+
+msgid "Friend request rejected"
+msgstr "Friend request rejected"
+
+msgid "We could not retrieve the themes"
+msgstr "We could not retrieve the themes"
+
+msgid "Theme title"
+msgstr "Theme title"
+
+msgid "A file name is required to save the recorded audio"
+msgstr "A file name is required to save the recorded audio"
+
+msgid "We are sorry, your browser does not support using a microphone"
+msgstr "We are sorry, your browser does not support using a microphone"
+
+msgid "Results for"
+msgstr "Results for"
+
+msgid "Search groups"
+msgstr "Search groups"
+
+msgid "Pending group invitations"
+msgstr "Pending group invitations"
+
+msgid "Delete skill profile"
+msgstr "Delete skill profile"
+
+msgid "Skill profile deleted"
+msgstr "Skill profile deleted"
+
+msgid "Skill profiles"
+msgstr "Skill profiles"
+
+msgid "No skill profile"
+msgstr "No skill profile"
+
+msgid "Original assignment"
+msgstr "Original assignment"
+
+msgid "Student's submission"
+msgstr "Student's submission"
+
+msgid "Write your comment..."
+msgstr "Write your comment..."
+
+msgid "Not graded yet"
+msgstr "Not graded yet"
+
+msgid "Attach file (optional)"
+msgstr "Attach file (optional)"
+
+msgid "Please add a comment, a grade or a file"
+msgstr "Please add a comment, a grade or a file"
+
+msgid "Score updated successfully"
+msgstr "Score updated successfully"
+
+msgid "Comment added successfully"
+msgstr "Comment added successfully"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+msgstr "Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext"
+
+msgid "Are you sure you want to delete the selected items?"
+msgstr "Are you sure you want to delete the selected items?"
+
+msgid "Assignments deleted"
+msgstr "Assignments deleted"
+
+msgid "Failed to download package"
+msgstr "Failed to download package"
+
+msgid "Failed to upload corrections"
+msgstr "Failed to upload corrections"
+
+msgid "Edit submission"
+msgstr "Edit submission"
+
+msgid "Submission updated!"
+msgstr "Submission updated!"
+
+msgid "Diagnosis of user %s"
+msgstr "Diagnosis of user %s"
+
+msgid "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+msgstr "Diagnosis of user %s (language: %s) with link %s. Contact at %s"
+
+msgid "%s support"
+msgstr "%s support"
+
+msgid "This option is not available because this activity is contained by an assessment."
+msgstr "This option is not available because this activity is contained by an assessment."
+
+msgid "Move to thread"
+msgstr "Move to thread"
+
+msgid "Moved."
+msgstr "Moved."
+
+msgid "Score changes history"
+msgstr "Score changes history"
+
+msgid "Sessions"
+msgstr "Sessions"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+
+msgid "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+msgstr "Chamilo is an Open Source project and this portal is provided to our community free of charge by the Chamilo Association, which pursues the goal of improving the availability of a quality education around the globe.<br /><br />However, developing Chamilo and providing this service is expensive and having a little bit of help from you would go a long way to ensure these services improve faster over time.<br /><br />Creating a course on this portal is one of the most resource-intensive operation. Please consider making a contribution to the Chamilo Association before creating this course to help keep this service free for all!"
+
+msgid "Give your course a short and striking title, e.g. Innovation Management"
+msgstr "Give your course a short and striking title, e.g. Innovation Management"
+
+msgid "Untitled survey"
+msgstr "Untitled survey"
+
+msgid "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+msgstr "LTI tools allow your students to access external tools directly from your course. They can be enabled in your course if configured at the platform level."
+
+msgid "AI helpers"
+msgstr "AI helpers"
+
+msgid "Auto-launch for forums"
+msgstr "Auto-launch for forums"
+
+msgid "E-mail student when he is subscribed to the course"
+msgstr "E-mail student when he is subscribed to the course"
+
+msgid "You're now subscribed."
+msgstr "You're now subscribed."
+
+msgid "You cannot delete the last category"
+msgstr "You cannot delete the last category"
+
+msgid "groups"
+msgstr "groups"
+
+msgid "AI Aiken generator"
+msgstr "AI Aiken generator"
+
+msgid "Apply suggestion"
+msgstr "Apply suggestion"
+
+msgid "Suggested feedback"
+msgstr "Suggested feedback"
+
+msgid "Suggested score"
+msgstr "Suggested score"
+
+msgid "AI suggestion"
+msgstr "AI suggestion"
+
+msgid "Suggest with AI"
+msgstr "Suggest with AI"
+
+msgid "Send all by email"
+msgstr "Send all by email"
+
+msgid "Export all attempts"
+msgstr "Export all attempts"
+
+msgid "All emails sent successfully"
+msgstr "All emails sent successfully"
+
+msgid "Email content logged to error_log"
+msgstr "Email content logged to error_log"
+
+msgid "Adaptive behavior (success/failure)"
+msgstr "Adaptive behavior (success/failure)"
+
+msgid "Error opening XML file"
+msgstr "Error opening XML file"
+
+msgid "Go to resource"
+msgstr "Go to resource"
+
+msgid "No result for keyword %s"
+msgstr "No result for keyword %s"
+
+msgid "Results"
+msgstr "Results"
+
+msgid "No assignments available"
+msgstr "No assignments available"
+
+msgid "Please select a target assignment"
+msgstr "Please select a target assignment"
+
+msgid "Submission moved successfully"
+msgstr "Submission moved successfully"
+
+msgid "Correction uploaded successfully!"
+msgstr "Correction uploaded successfully!"
+
+msgid "Invalid submission"
+msgstr "Invalid submission"
+
+msgid "Invalid resource link ID"
+msgstr "Invalid resource link ID"
+
+msgid "Can not change visibility"
+msgstr "Can not change visibility"
+
+msgid "Visibility updated successfully!"
+msgstr "Visibility updated successfully!"
+
+msgid "No download available"
+msgstr "No download available"
+
+msgid "Are you sure you want to delete this submission?"
+msgstr "Are you sure you want to delete this submission?"
+
+msgid "Submission deleted successfully!"
+msgstr "Submission deleted successfully!"
+
+msgid "Friendly URL"
+msgstr "Friendly URL"
+
+msgid "Definition"
+msgstr "Definition"
+
+msgid "Export format"
+msgstr "Export format"
+
+msgid "Glossary exported"
+msgstr "Glossary exported"
+
+msgid "Could not export glossary"
+msgstr "Could not export glossary"
+
+msgid "Terms imported successfully"
+msgstr "Terms imported successfully"
+
+msgid "Could not import terms"
+msgstr "Could not import terms"
+
+msgid "Could not fetch glossary term"
+msgstr "Could not fetch glossary term"
+
+msgid "Glossary term saved"
+msgstr "Glossary term saved"
+
+msgid "Could not create glossary term"
+msgstr "Could not create glossary term"
+
+msgid "Column"
+msgstr "Column"
+
+msgid "Blocks Palette"
+msgstr "Blocks Palette"
+
+msgid "Already answered"
+msgstr "Already answered"
+
+msgid "You have left the group successfully"
+msgstr "You have left the group successfully"
+
+msgid "Your skill ranking"
+msgstr "Your skill ranking"
+
+msgid "The comment is required"
+msgstr "The comment is required"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "All messages here are automatically marked as promoted."
+
+msgid "Item 1"
+msgstr "Item 1"
+
+msgid "Item 2"
+msgstr "Item 2"
+
+msgid "Item 3"
+msgstr "Item 3"
+
+msgid "Value 1"
+msgstr "Value 1"
+
+msgid "Value 2"
+msgstr "Value 2"
+
+msgid "Value 3"
+msgstr "Value 3"
+
+msgid "Checkbox 1"
+msgstr "Checkbox 1"
+
+msgid "Checkbox 2"
+msgstr "Checkbox 2"
+
+msgid "Forms"
+msgstr "Forms"
+
+msgid "Dialogs"
+msgstr "Dialogs"
+
+msgid "Editable content"
+msgstr "Editable content"
+
+msgid "Color updated"
+msgstr "Color updated"
+
+msgid "Modify color theme"
+msgstr "Modify color theme"
+
+msgid "Select as current theme"
+msgstr "Select as current theme"
+
+msgid "Save as new theme"
+msgstr "Save as new theme"
+
+msgid "New color theme"
+msgstr "New color theme"
+
+msgid "Filters"
+msgstr "Filters"
+
+msgid "Color"
+msgstr "Color"
+
+msgid "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+msgstr "Click the image to crop it (1:1 ratio, 120x120 px recommended)."
+
+msgid "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+msgstr "Use the crop tool to select a 1:1 region. Recommended size: 120x120 pixels."
+
+msgid "Link saved"
+msgstr "Link saved"
+
+msgid "Link is valid"
+msgstr "Link is valid"
+
+msgid "Link is not valid"
+msgstr "Link is not valid"
+
+msgid "Toggle visibility"
+msgstr "Toggle visibility"
+
+msgid "Number of questions limited to a maximum of %d"
+msgstr "Number of questions limited to a maximum of %d"
+
+msgid "Please enter a valid word count"
+msgstr "Please enter a valid word count"
+
+msgid "Please enter a valid number"
+msgstr "Please enter a valid number"
+
+msgid "Invalid learning path item"
+msgstr "Invalid learning path item"
+
+msgid "Advancing in"
+msgstr "Advancing in"
+
+msgid "Video completed!"
+msgstr "Video completed!"
+
+msgid "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+msgstr "This learning path includes a forum from the base course, so once users in a session will participate in this forum, it will start to appear in the forum tool in the session, whereas by default forums from the base course do not appear in the session."
+
+msgid "Unmark favorite"
+msgstr "Unmark favorite"
+
+msgid "Mark favorite"
+msgstr "Mark favorite"
+
+msgid "Register student"
+msgstr "Register student"
+
+msgid "Ends tomorrow"
+msgstr "Ends tomorrow"
+
+msgid "Ends today"
+msgstr "Ends today"
+
+msgid "Write a short and striking course name, For example: Innovation Management"
+msgstr "Write a short and striking course name, For example: Innovation Management"
+
+msgid "Introduction updated successfully!"
+msgstr "Introduction updated successfully!"
+
+msgid "Introduction created successfully!"
+msgstr "Introduction created successfully!"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "No description available"
+msgstr "No description available"
+
+msgid "Demo"
+msgstr "Demo"
+
+msgid "Browse courses"
+msgstr "Browse courses"
+
+msgid "Or"
+msgstr "Or"
+
+msgid "No sender"
+msgstr "No sender"
+
+msgid "messages"
+msgstr "messages"
+
+msgid "Error deleting message"
+msgstr "Error deleting message"
+
+msgid "You are adding calendar events for attendance"
+msgstr "You are adding calendar events for attendance"
+
+msgid "Add attendance calendar"
+msgstr "Add attendance calendar"
+
+msgid "Back to attendance sheet"
+msgstr "Back to attendance sheet"
+
+msgid "Add calendar event"
+msgstr "Add calendar event"
+
+msgid "Clear all"
+msgstr "Clear all"
+
+msgid "Edit calendar event"
+msgstr "Edit calendar event"
+
+msgid "Delete calendar event"
+msgstr "Delete calendar event"
+
+msgid "Are you sure you want to delete this event?"
+msgstr "Are you sure you want to delete this event?"
+
+msgid "Are you sure you want to delete all calendar events?"
+msgstr "Are you sure you want to delete all calendar events?"
+
+msgid "Edit attendance"
+msgstr "Edit attendance"
+
+msgid "Go to calendar"
+msgstr "Go to calendar"
+
+msgid "Export to Excel"
+msgstr "Export to Excel"
+
+msgid "Generate QR code"
+msgstr "Generate QR code"
+
+msgid "Loading attendance data..."
+msgstr "Loading attendance data..."
+
+msgid "No attendance assigned yet."
+msgstr "No attendance assigned yet."
+
+msgid "View comment"
+msgstr "View comment"
+
+msgid "No attendance data for today."
+msgstr "No attendance data for today."
+
+msgid "Error recalculating results"
+msgstr "Error recalculating results"
+
+msgid "Results recalculated"
+msgstr "Results recalculated"
+
+msgid "No test attempt found"
+msgstr "No test attempt found"
+
+msgid "No item found"
+msgstr "No item found"
+
+msgid "No video found"
+msgstr "No video found"
+
+msgid "Invalid access URL or session"
+msgstr "Invalid access URL or session"
+
+msgid "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+msgstr "Select classes for which this session will be visible for subscription in the catalogue. Subscription rules still apply apart from it being visible in the catalogue."
+
+msgid "Catalogue access"
+msgstr "Catalogue access"
+
+msgid "The uploaded file does not match the selected file type."
+msgstr "The uploaded file does not match the selected file type."
+
+msgid "Uninstall"
+msgstr "Uninstall"
+
+msgid "Install, activate or deactivate plugins easily."
+msgstr "Install, activate or deactivate plugins easily."
+
+msgid "Manage plugins"
+msgstr "Manage plugins"
+
+msgid "Nothing left to update."
+msgstr "Nothing left to update."
+
+msgid "Update database"
+msgstr "Update database"
+
+msgid "Are you sure you want to remove the selected courses from the selected URLs?"
+msgstr "Are you sure you want to remove the selected courses from the selected URLs?"
+
+msgid "Are you sure you want to add the selected courses to the selected URLs?"
+msgstr "Are you sure you want to add the selected courses to the selected URLs?"
+
+msgid "Remove courses from selected URLs"
+msgstr "Remove courses from selected URLs"
+
+msgid "Add courses to selected URLs"
+msgstr "Add courses to selected URLs"
+
+msgid "Select all URLs"
+msgstr "Select all URLs"
+
+msgid "Search URL"
+msgstr "Search URL"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Course unregistered from the URL"
+msgstr "Course unregistered from the URL"
+
+msgid "This page allows you to massively assign or remove the assignment of courses to/from many URLs in one single action. Assigning and removing courses to/from URLs can have a high impact on access for users and data stored about users' progress. Please use carefully."
+msgstr "This page allows you to massively assign or remove the assignment of courses to/from many URLs in one single action. Assigning and removing courses to/from URLs can have a high impact on access for users and data stored about users' progress. Please use carefully."
+
+msgid "Add courses to URLs"
+msgstr "Add courses to URLs"
+
+msgid "Parent category"
+msgstr "Parent category"
+
+msgid "No parent"
+msgstr "No parent"
+
+msgid "Cannot move category down"
+msgstr "Cannot move category down"
+
+msgid "Cannot move category up"
+msgstr "Cannot move category up"
+
+msgid "No course found in this category"
+msgstr "No course found in this category"
+
+msgid "Minimum number of assessments to validate"
+msgstr "Minimum number of assessments to validate"
+
+msgid "Number of assessments to validate in dependencies"
+msgstr "Number of assessments to validate in dependencies"
+
+msgid "Depends on assessments"
+msgstr "Depends on assessments"
+
+msgid "Are you sure you want to unassign the selected users from the selected URLs?"
+msgstr "Are you sure you want to unassign the selected users from the selected URLs?"
+
+msgid "Are you sure you want to assign the selected users to the selected URLs?"
+msgstr "Are you sure you want to assign the selected users to the selected URLs?"
+
+msgid "Remove users from selected URLs"
+msgstr "Remove users from selected URLs"
+
+msgid "Add users to selected URLs"
+msgstr "Add users to selected URLs"
+
+msgid "Search users"
+msgstr "Search users"
+
+msgid "The user accounts have been unassigned from the URL"
+msgstr "The user accounts have been unassigned from the URL"
+
+msgid "Add course to this URL"
+msgstr "Add course to this URL"
+
+msgid "Remove from selection"
+msgstr "Remove from selection"
+
+msgid "Gradebooks"
+msgstr "Gradebooks"
+
+msgid "Users in consent list"
+msgstr "Users in consent list"
+
+msgid "Select tools"
+msgstr "Select tools"
+
+msgid "Skills and gradebooks"
+msgstr "Skills and gradebooks"
+
+msgid "No tool available for this report"
+msgstr "No tool available for this report"
+
+msgid "No user found with activity in open courses without enrollment."
+msgstr "No user found with activity in open courses without enrollment."
+
+msgid "Inactive"
+msgstr "Inactive"
+
+msgid "Mandatory fields"
+msgstr "Mandatory fields"
+
+msgid "%s extension not available"
+msgstr "%s extension not available"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables."
+msgstr "The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables."
+
+msgid "Users active in open courses (not enrolled)"
+msgstr "Users active in open courses (not enrolled)"
+
+msgid "Show/Hide users active in open courses (not enrolled)"
+msgstr "Show/Hide users active in open courses (not enrolled)"
+
+msgid "Unsubscriptions"
+msgstr "Unsubscriptions"
+
+msgid "Subscriptions vs unsubscriptions, by day"
+msgstr "Subscriptions vs unsubscriptions, by day"
+
+msgid "Quarterly report"
+msgstr "Quarterly report"
+
+msgid "Course/Session subscriptions, by day"
+msgstr "Course/Session subscriptions, by day"
+
+msgid "New users registrations"
+msgstr "New users registrations"
+
+msgid "File imported just users that are not registered"
+msgstr "File imported just users that are not registered"
+
+msgid "Available groups"
+msgstr "Available groups"
+
+msgid "Total groups"
+msgstr "Total groups"
+
+msgid "Column is locked or read-only"
+msgstr "Column is locked or read-only"
+
+msgid "Remove state"
+msgstr "Remove state"
+
+msgid "Saving..."
+msgstr "Saving..."
+
+msgid "Save attendance"
+msgstr "Save attendance"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "No attendance data to save."
+msgstr "No attendance data to save."
+
+msgid "Attendance saved successfully"
+msgstr "Attendance saved successfully"
+
+msgid "Failed to save attendance. Please try again."
+msgstr "Failed to save attendance. Please try again."
+
+msgid "Unknown attendance"
+msgstr "Unknown attendance"
+
+msgid "Error exporting to PDF"
+msgstr "Error exporting to PDF"
+
+msgid "Error exporting to Excel"
+msgstr "Error exporting to Excel"
+
+msgid "Failed to generate QR code"
+msgstr "Failed to generate QR code"
+
+msgid "Add attendance"
+msgstr "Add attendance"
+
+msgid "Search users for friends"
+msgstr "Search users for friends"
+
+msgid "Go to friends list"
+msgstr "Go to friends list"
+
+msgid "Please enter a search query"
+msgstr "Please enter a search query"
+
+msgid "Error fetching friends list"
+msgstr "Error fetching friends list"
+
+msgid "Error fetching users"
+msgstr "Error fetching users"
+
+msgid "Friend request sent successfully"
+msgstr "Friend request sent successfully"
+
+msgid "Failed to send friend request"
+msgstr "Failed to send friend request"
+
+msgid "You have a new friend request"
+msgstr ""
+
+msgid "You have received a new friend request. Visit the invitations page to accept or reject the request."
+msgstr "You have received a new friend request. Visit the invitations page to accept or reject the request."
+
+msgid "Notification message sent successfully"
+msgstr "Notification message sent successfully"
+
+msgid "Failed to send notification message"
+msgstr "Failed to send notification message"
+
+msgid "An error occurred while sending the notification message"
+msgstr "An error occurred while sending the notification message"
+
+msgid "Are you sure to delete the friendship?"
+msgstr "Are you sure to delete the friendship?"
+
+msgid "If file exists"
+msgstr "If file exists"
+
+msgid "New document"
+msgstr "New document"
+
+msgid "New drawing"
+msgstr "New drawing"
+
+msgid "New cloud file"
+msgstr "New cloud file"
+
+msgid "Usage"
+msgstr "Usage"
+
+msgid "Add file variation"
+msgstr "Add file variation"
+
+msgid "Set as default certificate"
+msgstr "Set as default certificate"
+
+msgid "Template options"
+msgstr "Template options"
+
+msgid "New folder"
+msgstr "New folder"
+
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+msgid "Saved"
+msgstr "Saved"
+
+msgid "Error deleting document(s)."
+msgstr "Error deleting document(s)."
+
+msgid "Replace video"
+msgstr "Replace video"
+
+msgid "Replace (files or videos only)"
+msgstr "Replace (files or videos only)"
+
+msgid "Document not saved"
+msgstr "Document not saved"
+
+msgid "Document moved successfully"
+msgstr "Document moved successfully"
+
+msgid "Error moving the document"
+msgstr "Error moving the document"
+
+msgid "Certificate set as default successfully"
+msgstr "Certificate set as default successfully"
+
+msgid "Error setting certificate as default"
+msgstr "Error setting certificate as default"
+
+msgid "Template successfully deteled."
+msgstr "Template successfully deteled."
+
+msgid "Error deleting the template."
+msgstr "Error deleting the template."
+
+msgid "The title and thumbnail are required."
+msgstr "The title and thumbnail are required."
+
+msgid "Template created successfully."
+msgstr "Template created successfully."
+
+msgid "Error creating the template."
+msgstr "Error creating the template."
+
+msgid "Error submitting the form."
+msgstr "Error submitting the form."
+
+msgid "Back to Documents"
+msgstr "Back to Documents"
+
+msgid "Original file"
+msgstr "Original file"
+
+msgid "Title:"
+msgstr "Title:"
+
+msgid "Format:"
+msgstr "Format:"
+
+msgid "Size:"
+msgstr "Size:"
+
+msgid "Upload new variation"
+msgstr "Upload new variation"
+
+msgid "Choose file"
+msgstr "Choose file"
+
+msgid "Current variations"
+msgstr "Current variations"
+
+msgid "Creator"
+msgstr "Creator"
+
+msgid "Associated URL"
+msgstr "Associated URL"
+
+msgid "Default (No URL)"
+msgstr "Default (No URL)"
+
+msgid "Invite friends to group"
+msgstr "Invite friends to group"
+
+msgid "Available friends"
+msgstr "Available friends"
+
+msgid "Selected friends"
+msgstr "Selected friends"
+
+msgid "Sent invitations"
+msgstr "Sent invitations"
+
+msgid "You have been invited to join this group"
+msgstr "You have been invited to join this group"
+
+msgid "Assignment created"
+msgstr "Assignment created"
+
+msgid "Write my submission"
+msgstr "Write my submission"
+
+msgid "Add users"
+msgstr "Add users"
+
+msgid "Users without submission"
+msgstr "Users without submission"
+
+msgid "You can no longer submit. The deadline has passed."
+msgstr "You can no longer submit. The deadline has passed."
+
+msgid "Failed to export PDF"
+msgstr "Failed to export PDF"
+
+msgid "Are you sure you want to delete all corrections?"
+msgstr "Are you sure you want to delete all corrections?"
+
+msgid "All corrections deleted"
+msgstr "All corrections deleted"
+
+msgid "Failed to delete corrections"
+msgstr "Failed to delete corrections"
+
+msgid "Add documents"
+msgstr "Add documents"
+
+msgid "No documents added yet."
+msgstr "No documents added yet."
+
+msgid "Available documents"
+msgstr "Available documents"
+
+msgid "No available documents."
+msgstr "No available documents."
+
+msgid "Error adding document"
+msgstr "Error adding document"
+
+msgid "Document removed"
+msgstr "Document removed"
+
+msgid "Error removing document"
+msgstr "Error removing document"
+
+msgid "Assignment updated"
+msgstr "Assignment updated"
+
+msgid "No users added yet."
+msgstr "No users added yet."
+
+msgid "Search users by username"
+msgstr "Search users by username"
+
+msgid "No available users."
+msgstr "No available users."
+
+msgid "User added"
+msgstr "User added"
+
+msgid "Error adding user"
+msgstr "Error adding user"
+
+msgid "User removed"
+msgstr "User removed"
+
+msgid "Error removing user"
+msgstr "Error removing user"
+
+msgid "Student progress"
+msgstr "Student progress"
+
+msgid "Send email to all"
+msgstr "Send email to all"
+
+msgid "Users without submission for assignment"
+msgstr "Users without submission for assignment"
+
+msgid "No missing submissions found for this assignment or data is not available."
+msgstr "No missing submissions found for this assignment or data is not available."
+
+msgid "Email sent to all unsubmitted users."
+msgstr "Email sent to all unsubmitted users."
+
+msgid "Failed to send email."
+msgstr "Failed to send email."
+
+msgid "Upload your assignment"
+msgstr "Upload your assignment"
+
+msgid "Submission title"
+msgstr "Submission title"
+
+msgid "Enter a title for your submission"
+msgstr "Enter a title for your submission"
+
+msgid "Write your answer here..."
+msgstr "Write your answer here..."
+
+msgid "File uploaded successfully"
+msgstr "File uploaded successfully"
+
+msgid "Failed to upload file"
+msgstr "Failed to upload file"
+
+msgid "Please provide a title and some text"
+msgstr "Please provide a title and some text"
+
+msgid "Text submitted successfully"
+msgstr "Text submitted successfully"
+
+msgid "Edit Terms and Conditions"
+msgstr "Edit Terms and Conditions"
+
+msgid "Type of terms"
+msgstr "Type of terms"
+
+msgid "Back to list"
+msgstr "Back to list"
+
+msgid "Show public link"
+msgstr "SHow public link"
+
+msgid "Public link"
+msgstr "Public link"
+
+msgid "You can share or copy this link:"
+msgstr "You can share or copy this link:"
+
+msgid "Select the link above and press Ctrl+C to copy it"
+msgstr "Select the link above and press Ctrl+C to copy it"
+
+msgid "New page"
+msgstr "New page"
+
+msgid "Pages deleted"
+msgstr "Pages deleted"
+
+msgid "Export glossary"
+msgstr "Export glossary"
+
+msgid "Export to Documents"
+msgstr "Export to Documents"
+
+msgid "Could not delete term"
+msgstr "Could not delete term"
+
+msgid "Exported to documents"
+msgstr "Exported to documents"
+
+msgid "Could not export to documents"
+msgstr "Could not export to documents"
+
+msgid "Could not fetch glossary terms"
+msgstr "Could not fetch glossary terms"
+
+msgid "Edit glossary term"
+msgstr "Edit glossary term"
+
+msgid "Edit page layout"
+msgstr "Edit page layout"
+
+msgid "e.g. /index.php"
+msgstr "e.g. /index.php"
+
+msgid "URL is required"
+msgstr "URL is required"
+
+msgid "Optional - e.g. ROLE_TEACHER"
+msgstr "Optional - e.g. ROLE_TEACHER"
+
+msgid "Layout template"
+msgstr "Layout template"
+
+msgid "Loading templates..."
+msgstr "Loading templates..."
+
+msgid "Select a template"
+msgstr "Select a template"
+
+msgid "Layout templates"
+msgstr "Layout templates"
+
+msgid "Create template"
+msgstr "Create template"
+
+msgid "Back to layouts"
+msgstr "Back to layouts"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Columns"
+msgstr "Columns"
+
+msgid "Blocks"
+msgstr "Blocks"
+
+msgid "View JSON"
+msgstr "View JSON"
+
+msgid "Layout JSON details"
+msgstr "Layout JSON details"
+
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+msgid "Are you sure you want to delete this template?"
+msgstr "Are you sure you want to delete this template?"
+
+msgid "Create layout template"
+msgstr "Create layout template"
+
+msgid "Layout template name"
+msgstr "Layout template name"
+
+msgid "e.g. 3 columns layout"
+msgstr "e.g. 3 columns layout"
+
+msgid "Template name is required"
+msgstr "Template name is required"
+
+msgid "Layout type"
+msgstr "Layout type"
+
+msgid "Save template"
+msgstr "Save template"
+
+msgid "Edit layout template"
+msgstr "Edit layout template"
+
+msgid "Replace layout with predefined type?"
+msgstr "Replace layout with predefined type?"
+
+msgid "Page layout details"
+msgstr "Page layout details"
+
+msgid "Loading layout..."
+msgstr "Loading layout..."
+
+msgid "Page layouts"
+msgstr "Page layouts"
+
+msgid "Create layout"
+msgstr "Create layout"
+
+msgid "Manage templates"
+msgstr "Manage templates"
+
+msgid "Are you sure you want to delete this layout?"
+msgstr "Are you sure you want to delete this layout?"
+
+msgid "Create page layout"
+msgstr "Create page layout"
+
+msgid "You do not have permission to view this page"
+msgstr "You do not have permission to view this page"
+
+msgid "Why you want to delete your Legal Agreement"
+msgstr "Why you want to delete your Legal Agreement"
+
+msgid "Delete Account"
+msgstr "Delete Account"
+
+msgid "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+msgstr "Go to Explore to find a topic of interest, or wait for someone to subscribe you"
+
+msgid "Data exchanges (GDPR)"
+msgstr "Data exchanges (GDPR)"
+
+msgid "Back to third parties"
+msgstr "Back to third parties"
+
+msgid "Data exchange"
+msgstr "Data exchange"
+
+msgid "Add exchange"
+msgstr "Add exchange"
+
+msgid "All users?"
+msgstr "All users?"
+
+msgid "Add data exchange"
+msgstr "Add data exchange"
+
+msgid "Select users"
+msgstr "Select users"
+
+msgid "Please select at least one user."
+msgstr "Please select at least one user."
+
+msgid "Data exchange successfully saved."
+msgstr "Data exchange successfully saved."
+
+msgid "Error saving data exchange."
+msgstr "Error saving data exchange."
+
+msgid "Professional support"
+msgstr "Professional support"
+
+msgid "Add third party"
+msgstr "Add third party"
+
+msgid "Recruiter"
+msgstr "Recruiter"
+
+msgid "Send data"
+msgstr "Send data"
+
+msgid "Is recruiter?"
+msgstr "Is recruiter?"
+
+msgid "Is used for data exchange?"
+msgstr "Is used for data exchange?"
+
+msgid "Event"
+msgstr "Event"
+
+msgid "Go to session"
+msgstr "Go to session"
+
+msgid "Add your first link to this course"
+msgstr "Add your first link to this course"
+
+msgid "There are no links in this category"
+msgstr "There are no links in this category"
+
+msgid "With links"
+msgstr "With links"
+
+msgid "Link deleted"
+msgstr "Link deleted"
+
+msgid "Could not delete link"
+msgstr "Could not delete link"
+
+msgid "Link visibility updated"
+msgstr "Link visibility updated"
+
+msgid "Could not change visibility of link"
+msgstr "Could not change visibility of link"
+
+msgid "Link moved up"
+msgstr "Link moved up"
+
+msgid "Could not move link up"
+msgstr "Could not move link up"
+
+msgid "Link moved down"
+msgstr "Link moved down"
+
+msgid "Could not move link down"
+msgstr "Could not move link down"
+
+msgid "Could not delete category"
+msgstr "Could not delete category"
+
+msgid "Visibility of category changed"
+msgstr "Visibility of category changed"
+
+msgid "Could not change visibility of category"
+msgstr "Could not change visibility of category"
+
+msgid "Could not retrieve links"
+msgstr "Could not retrieve links"
+
+msgid "Update category"
+msgstr "Update category"
+
+msgid "Update link"
+msgstr "Update link"
+
+msgid "Matching courses"
+msgstr "Matching courses"
+
+msgid "Apply advanced filters"
+msgstr "Apply advanced filters"
+
+msgid "Filter by title"
+msgstr "Filter by title"
+
+msgid "Filter by category"
+msgstr "Filter by category"
+
+msgid "Filter by language"
+msgstr "Filter by language"
+
+msgid "Loading more courses..."
+msgstr "Loading more courses..."
+
+msgid "Total number of sessions"
+msgstr "Total number of sessions"
+
+msgid "Matching sessions"
+msgstr "Matching sessions"
+
+msgid "Searching by"
+msgstr "Searching by"
+
+msgid "Loading sessions. Please wait."
+msgstr "Loading sessions. Please wait."
+
+msgid "No session available"
+msgstr "No session available"
+
+msgid "Loading more sessions..."
+msgstr "Loading more sessions..."
+
+msgid "Course ID is missing. Unable to navigate to the course home page."
+msgstr "Course ID is missing. Unable to navigate to the course home page."
+
+msgid "An unexpected error occurred."
+msgstr "An unexpected error occurred."
+
+msgid "Incomplete courses"
+msgstr "Incomplete courses"
+
+msgid "Session period"
+msgstr "Session period"
+
+msgid "Search student"
+msgstr "Search student"
+
+msgid "Create new user"
+msgstr "Create new user"
+
+msgid "Matching students"
+msgstr "Matching students"
+
+msgid "Local user"
+msgstr "Local user"
+
+msgid "External user"
+msgstr "External user"
+
+msgid "Send course invitation"
+msgstr "Send course invitation"
+
+msgid "Password (leave blank to auto)"
+msgstr "Password (leave blank to auto)"
+
+msgid "Send access details to user by email"
+msgstr "Send access details to user by email"
+
+msgid "Course sent to"
+msgstr "Course sent to"
+
+msgid "An error occurred while sending the course."
+msgstr "An error occurred while sending the course."
+
+msgid "User created"
+msgstr "User created"
+
+msgid "Could not create user"
+msgstr "Could not create user"
+
+msgid "Completed courses"
+msgstr "Completed courses"
+
+msgid "Issued at"
+msgstr "Issued at"
+
+msgid "Load more"
+msgstr "Load more"
+
+msgid "Restartable courses"
+msgstr "Restartable courses"
+
+msgid "Ended"
+msgstr "Ended"
+
+msgid "Extend one week"
+msgstr "Extend one week"
+
+msgid "Could not load data"
+msgstr "Could not load data"
+
+msgid "Session extended"
+msgstr "Session extended"
+
+msgid "Action failed"
+msgstr "Action failed"
+
+msgid "Available courses in this URL"
+msgstr "Available courses in this URL"
+
+msgid "Loading courses..."
+msgstr "Loading courses..."
+
+msgid "No courses available."
+msgstr "No courses available."
+
+msgid "Favorite courses"
+msgstr "Favorite courses"
+
+msgid "No favorite courses."
+msgstr "No favorite courses."
+
+msgid "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
+msgstr "The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s"
+
+msgid "Group does not exist in course"
+msgstr "Group does not exist in course"
+
+msgid "Unauthorised access to group"
+msgstr "Unauthorised access to group"
+
+msgid "You're not allowed in this group"
+msgstr "You're not allowed in this group"
+
+msgid "Save diagnostic changes"
+msgstr "Save diagnostic changes"
+
+msgid "Domain %s"
+msgstr "Domain %s"
+
+msgid "Topic %s"
+msgstr "Topic %s"
+
+msgid "Software program"
+msgstr "Software program"
+
+msgid "Send mail to users"
+msgstr "Send mail to users"
+
+msgid "Update user list from XML/CSV"
+msgstr "Update user list from XML/CSV"
+
+msgid "CSV must look as follows: "
+msgstr "CSV must look as follows: "
+
+msgid "Course/Session subscriptions by day"
+msgstr "Course/Session subscriptions by day"
+
+msgid "Remove user from all group-related entities if his/her name is not in the list"
+msgstr "Remove user from all group-related entities if his/her name is not in the list"
+
+msgid "Groups assigned to URL"
+msgstr "Groups assigned to URL"
+
+msgid "Proceed with the import"
+msgstr "Proceed with the import"
+
+msgid "You only have access to the URL %s"
+msgstr "You only have access to the URL %s"
+
+msgid "View certificate"
+msgstr "View certificate"
+
+msgid "The sub-language does not exist."
+msgstr "The sub-language does not exist."
+
+msgid "Remove user from course if his/her name is not in the list"
+msgstr "Remove user from course if his/her name is not in the list"
+
+msgid "The user has not been deleted. Please confirm the user ID and try again."
+msgstr "The user has not been deleted. Please confirm the user ID and try again."
+
+msgid "The user has been deleted permanently."
+msgstr "The user has been deleted permanently."
+
+msgid "Selected users deleted permanently"
+msgstr "Selected users deleted permanently"
+
+msgid "The user has not been restored. Please confirm the user ID and try again."
+msgstr "The user has not been restored. Please confirm the user ID and try again."
+
+msgid "The user has been restored."
+msgstr "The user has been restored."
+
+msgid "Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search."
+msgstr "Some of the selected users have not been restored. We recommend you confirm which, by using the advanced search."
+
+msgid "Selected users restored."
+msgstr "Selected users restored."
+
+msgid "The account has been removed temporarily."
+msgstr "The account has been removed temporarily."
+
+msgid "Are you sure you want to unlock this user?"
+msgstr "Are you sure you want to unlock this user?"
+
+msgid "Are you sure you want to lock this user?"
+msgstr "Are you sure you want to lock this user?"
+
+msgid "Add user group to selected URLs"
+msgstr "Add user group to selected URLs"
+
+msgid "Remove user group from selected URLs"
+msgstr "Remove user group from selected URLs"
+
+msgid "Are you sure you want to assign the selected groups to the selected URLs?"
+msgstr "Are you sure you want to assign the selected groups to the selected URLs?"
+
+msgid "Are you sure you want to unassign the selected groups from the selected URLs?"
+msgstr "Are you sure you want to unassign the selected groups from the selected URLs?"
+
+msgid "The group has been removed from the selected URL."
+msgstr "The group has been removed from the selected URL."
+
+msgid "Assigned users"
+msgstr "Assigned users"
+
+msgid "Available users"
+msgstr "Available users"
+
+msgid "Login-only URL"
+msgstr "Login-only URL"
+
+msgid "User groups"
+msgstr "User groups"
+
+msgid "Invalid access URL or course"
+msgstr "Invalid access URL or course"
+
+msgid "Edit URL"
+msgstr "Edit URL"
+
+msgid "Back to %s"
+msgstr "Back to %s"
+
+msgid "Currently showing users for role: <strong>%s</strong>"
+msgstr "Currently showing users for role: <strong>%s</strong>"
+
+msgid "Missing POST data"
+msgstr "Missing POST data"
+
+msgid "To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing."
+msgstr "To use the central login page feature, all URLs defined MUST use the same (root) domain name in order to limit security risks linked to sharing access tokens between URLs. URLs using a different domain name might not be taken into account for access sharing."
+
+msgid "Time spent on assignments"
+msgstr "Time spent on assignments"
+
+msgid "Inactive learners"
+msgstr "Inactive learners"
+
+msgid "Result list"
+msgstr "Result list"
+
+msgid "Session start date"
+msgstr "Session start date"
+
+msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiply questions. On the survey list page, in the action field, you have a button to multiply a question that will look for the {{class_name}} tag, duplicate the question for all the classes subscribed to the course, and rename it with the name of the class. It will also add a page ending to make a new page for each class. Then it will look for the {{student_full_name}} tag and duplicate the question for all the students in the class (for each class) and rename it with the student's full name."
+msgstr "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiply questions. On the survey list page, in the action field, you have a button to multiply a question that will look for the {{class_name}} tag, duplicate the question for all the classes subscribed to the course, and rename it with the name of the class. It will also add a page ending to make a new page for each class. Then it will look for the {{student_full_name}} tag and duplicate the question for all the students in the class (for each class) and rename it with the student's full name."
+
+msgid "Serie"
+msgstr "Serie"
+
+msgid "Add learner"
+msgstr "Add learner"
+
+msgid "Only courses with a personalized certificate are exported"
+msgstr "Only courses with a personalized certificate are exported"
+
+msgid "Show question number"
+msgstr "Show question number"
+
+msgid "Custom or undefined role"
+msgstr "Custom or undefined role"
+
+msgid "To unsubscribe from notifications, click here: %s"
+msgstr "To unsubscribe from notifications, click here: %s"
+
+msgid "You have been enrolled in the course"
+msgstr "You have been enrolled in the course"
+
+msgid "Hello %s, you have been enrolled in the course %s."
+msgstr "Hello %s, you have been enrolled in the course %s."
+
+msgid "Acquisition"
+msgstr "Acquisition"
+
+msgid "Session display dates"
+msgstr "Session display dates"
+
+msgid "Session access dates"
+msgstr "Session access dates"
+
+msgid "Hello %s, you have been enrolled in the course %s for the session %s."
+msgstr "Hello %s, you have been enrolled in the course %s for the session %s."
+
+msgid "You have been enrolled in the course %s for the session %s"
+msgstr "You have been enrolled in the course %s for the session %s"
+
+msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+
+msgid "Replication"
+msgstr "Replication"
+
+msgid "Schedule changed"
+msgstr "Schedule changed"
+
+msgid "Classroom changed"
+msgstr "Classroom changed"
+
+msgid "Location changed"
+msgstr "Location changed"
+
+msgid "Enrollment cancelled"
+msgstr "Enrollment cancelled"
+
+msgid "Parent session"
+msgstr "Parent session"
+
+msgid "The field must be a positive integer"
+msgstr "The field must be a positive integer"
+
+msgid "Validity (days)"
+msgstr "Validity (days)"
+
+msgid "Last repetition"
+msgstr "Last repetition"
+
+msgid "The field must be empty or a positive integer"
+msgstr "The field must be empty or a positive integer"
+
+msgid "Days before finishing automated creation of new repetitions"
+msgstr "Days before finishing automated creation of new repetitions"
+
+msgid "Notify subscription of user to student boss"
+msgstr "Notify subscription of user to student boss"
+
+msgid "User does not exist"
+msgstr "User does not exist"
+
+msgid "(Percentage of file analysis)"
+msgstr "(Percentage of file analysis)"
+
+msgid "Pause training"
+msgstr "Pause training"
+
+msgid "Date of birth"
+msgstr "Date of birth"
+
+msgid "A user creator is required"
+msgstr "A user creator is required"
+
+msgid "Save links"
+msgstr "Save links"
+
+msgid "Links moved"
+msgstr "Links moved"
+
+msgid "No option available"
+msgstr "No option available"
+
+msgid "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
+msgstr "Remove this value when anonymizing a user, because it could otherwise help identify the user despite the anonymization."
+
+msgid "Remove on anonymization"
+msgstr "Remove on anonymization"
+
+msgid "Auto remove"
+msgstr "Auto remove"
+
+msgid "You need to activate the GoogleMaps plugin in administration to see the Map"
+msgstr "You need to activate the GoogleMaps plugin in administration to see the Map"
+
+msgid "Files uploaded. Reloading in 5 seconds..."
+msgstr "Files uploaded. Reloading in 5 seconds..."
+
+msgid "Corrected test result"
+msgstr "Corrected test result"
+
+msgid "Send by e-mail"
+msgstr "Send by e-mail"
+
+msgid "Question also used in the following tests"
+msgstr "Question also used in the following tests"
+
+msgid "Add glossary item"
+msgstr "Add glossary item"
+
+msgid "Missing chart library, please check web server logs."
+msgstr "Missing chart library, please check web server logs."
+
+msgid "Dependency tree graph"
+msgstr "Dependency tree graph"
+
+msgid "Assignment list"
+msgstr "Assignment list"
+
+msgid "The given score cannot be above the maximum score"
+msgstr "The given score cannot be above the maximum score"
+
+msgid "This e-mail address has already been used by the maximum number of allowed accounts. Please use another."
+msgstr "This e-mail address has already been used by the maximum number of allowed accounts. Please use another."
+
+msgid "Could not write to %s"
+msgstr "Could not write to %s"
+
+msgid "Account disabled"
+msgstr "Account disabled"
+
+msgid "Language level"
+msgstr "Language level"
+
+msgid "LDAP synchronization: Import learners/steps in all sessions"
+msgstr "LDAP synchronization: Import learners/steps in all sessions"
+
+msgid "Send message by e-mail"
+msgstr "Send message by e-mail"
+
+msgid "Days before finishing for re-enrollment"
+msgstr "Days before finishing for re-enrollment"
+
+msgid "Analysis ending..."
+msgstr "Analysis ending..."
+
+msgid "Margin to the left"
+msgstr "Margin to the left"
+
+msgid "Margin to the right"
+msgstr "Margin to the right"
+
+msgid "Other options"
+msgstr "Other options"
+
+msgid "Activity ID"
+msgstr "Activity ID"
+
+msgid "No resource link entity found"
+msgstr "No resource link entity found"
+
+msgid "Access URL"
+msgstr "Access URL"
+
+msgid "You will therefore be automatically redirected to this URL."
+msgstr "You will therefore be automatically redirected to this URL."
+
+msgid "You have access to multiple URLs. Here is the list of your accesses."
+msgstr "You have access to multiple URLs. Here is the list of your accesses."
+
+msgid "Please click on the link below corresponding to the URL you wish to access."
+msgstr "Please click on the link below corresponding to the URL you wish to access"
+
+msgid "Does not have enough contrast against background"
+msgstr "Does not have enough contrast against background"
+
+msgid "Featured courses"
+msgstr "Featured courses"
+
+msgid "Show more courses"
+msgstr "Show more courses"
+
+msgid "I would like to choose a sector"
+msgstr "I would like to choose a sector"
+
+msgid "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank."
+msgstr "The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank."
+
+msgid "Availability during my internship/mobility"
+msgstr "Availability during my internship/mobility"
+
+msgid "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability"
+msgstr "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability"
+
+msgid "My learning goals"
+msgstr "My learning goals"
+
+msgid "What do you want to learn? What area do you want to improve in? You can write your answers freely here."
+msgstr "What do you want to learn? What area do you want to improve in? You can write your answers freely here."
+
+msgid "My working method"
+msgstr "My working method"
+
+msgid "On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style."
+msgstr "On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style."
+
+msgid "Availability before my internship/mobility"
+msgstr "Availability before my internship/mobility"
+
+msgid "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability"
+msgstr "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability"
+
+msgid "The topics that interest me / My learning objectives"
+msgstr "The topics that interest me / My learning objectives"
+
+msgid "The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program."
+msgstr "The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program."
+
+msgid "My language level"
+msgstr "My language level"
+
+msgid "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>"
+msgstr "The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>"
+
+msgid "My work environment"
+msgstr "My work environment"
+
+msgid "To work on the platform, I use:"
+msgstr "To work on the platform, I use:"
+
+msgid "You will find in the <a style=\"color:blue\" href=\"/faq\">FAQ</a> the recommended environment to work on the platform."
+msgstr "You will find in the <a style=\"color:blue\" href=\"/faq\">FAQ</a> the recommended environment to work on the platform."
+
+msgid "Validate learning trail"
+msgstr "Validate learning trail"
+
+msgid "Skills and objectives assessment"
+msgstr "Skills and objectives assessment"
+
+msgid "Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!"
+msgstr "Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!"
+
+msgid "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>"
+msgstr "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>"
+
+msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
+msgstr "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
+
+msgid "PDF download unavailable"
+msgstr "PDF download unavailable"
+
+msgid "Registering"
+msgstr "Registering"
+
+msgid "Hello,<br>You haven't logged into to your account for three months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "Hello,<br>You haven't logged into to your account for three months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+
+msgid "Hello,<br>You haven't logged into your account for six months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "Hello,<br>You haven't logged into your account for six months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+
+msgid "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
+msgstr "Hello,<br>%s hasn't logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
+
+msgid "An update is available. Click the button below to proceed with the update."
+msgstr "An update is available. Click the button below to proceed with the update."
+
+msgid "Update Chamilo"
+msgstr "Update Chamilo"
+
+msgid "Verifying migration:"
+msgstr "Verifying migration:"
+
+msgid "Migration completed successfully!"
+msgstr "Migration completed successfully!"
+
+msgid "Please check the following error:"
+msgstr "Please check the following error:"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Migration failed!"
+msgstr "Migration failed!"
+
+msgid "Test e-mail sending"
+msgstr "Test e-mail sending"
+
+msgid "The last migration executed successfully was:"
+msgstr "The last migration executed successfully was:"
+
+msgid "Please contact support with the error details."
+msgstr "Please contact support with the error details."
+
+msgid "Contact support"
+msgstr "Contact support"
+
+msgid "Skills History"
+msgstr "Skills History"
+
+msgid "Badge"
+msgstr "Badge"

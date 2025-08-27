@@ -591,7 +591,7 @@ class ChamiloHelper
 
             foreach ($bossIds as $bossId) {
                 $subject = \sprintf(get_lang('User %s signed the agreement.'), $current['complete_name']);
-                $content = \sprintf(get_lang('User %s signed the agreement on %s.'), $current['complete_name'], $dateStr);
+                $content = \sprintf(get_lang('User %s signed the agreement the %s.'), $current['complete_name'], $dateStr);
                 MessageManager::send_message_simple($bossId, $subject, $content, $userId);
             }
         }
@@ -599,10 +599,8 @@ class ChamiloHelper
 
     /**
      * Displays the Terms and Conditions page.
-     *
-     * @param string $returnUrl The URL to redirect back to after acceptance
      */
-    public static function displayLegalTermsPage(string $returnUrl = '/home'): void
+    public static function displayLegalTermsPage(string $returnUrl = '/home', bool $canAccept = true, string $infoMessage = ''): void
     {
         $iso = api_get_language_isocode();
         $langId = api_get_language_id($iso);
@@ -612,10 +610,9 @@ class ChamiloHelper
             // No T&C for current language → show a message
             Display::display_header(get_lang('Terms and Conditions'));
             echo '<div class="max-w-3xl mx-auto text-gray-90 text-lg text-center">'
-                .get_lang('No terms and conditions available for this language.')
-                .'</div>';
+                . get_lang('No terms and conditions available for this language.')
+                . '</div>';
             Display::display_footer();
-
             exit;
         }
 
@@ -623,45 +620,53 @@ class ChamiloHelper
 
         if (!empty($term['content'])) {
             echo '<div class="max-w-3xl mx-auto bg-white shadow p-8 rounded">';
-            echo '<h1 class="text-2xl font-bold text-primary mb-6">'.get_lang('Terms and Conditions').'</h1>';
-            echo '<div class="prose prose-sm max-w-none mb-6">'.$term['content'].'</div>';
+            echo '<h1 class="text-2xl font-bold text-primary mb-6">' . get_lang('Terms and Conditions') . '</h1>';
+
+            if (!empty($infoMessage)) {
+                echo '<div class="mb-4">'.$infoMessage.'</div>';
+            }
+
+            echo '<div class="prose prose-sm max-w-none mb-6">' . $term['content'] . '</div>';
 
             $extra = new ExtraFieldValue('terms_and_condition');
             foreach ($extra->getAllValuesByItem($term['id']) as $field) {
                 if (!empty($field['field_value'])) {
                     echo '<div class="mb-4">';
-                    echo '<h3 class="text-lg font-semibold text-primary">'.$field['display_text'].'</h3>';
-                    echo '<p class="text-gray-90 mt-1">'.$field['field_value'].'</p>';
+                    echo '<h3 class="text-lg font-semibold text-primary">' . $field['display_text'] . '</h3>';
+                    echo '<p class="text-gray-90 mt-1">' . $field['field_value'] . '</p>';
                     echo '</div>';
                 }
             }
 
-            $hide = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
+            echo '<form method="post" action="tc.php?return=' . urlencode($returnUrl) . '" class="space-y-6">';
+            echo '<input type="hidden" name="legal_accept_type" value="' . $term['version'] . ':' . $term['language_id'] . '">';
+            echo '<input type="hidden" name="return" value="' . htmlspecialchars($returnUrl) . '">';
 
-            echo '<form method="post" action="tc.php?return='.urlencode($returnUrl).'" class="space-y-6">';
-            echo '<input type="hidden" name="legal_accept_type" value="'.$term['version'].':'.$term['language_id'].'">';
-            echo '<input type="hidden" name="return" value="'.htmlspecialchars($returnUrl).'">';
+            if ($canAccept) {
+                $hide = 'true' === api_get_setting('registration.hide_legal_accept_checkbox');
+                if ($hide) {
+                    echo '<input type="hidden" name="legal_accept" value="1">';
+                } else {
+                    echo '<label class="flex items-start space-x-2">';
+                    echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
+                    echo '<span class="text-gray-90 text-sm">' . get_lang('I have read and agree to the') . ' ';
+                    echo '<a href="tc.php?preview=1" target="_blank" class="text-primary hover:underline">' . get_lang('Terms and Conditions') . '</a>';
+                    echo '</span>';
+                    echo '</label>';
+                }
 
-            if ($hide) {
-                echo '<input type="hidden" name="legal_accept" value="1">';
+                echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">' . get_lang('Accept Terms and Conditions') . '</button></div>';
             } else {
-                echo '<label class="flex items-start space-x-2">';
-                echo '<input type="checkbox" name="legal_accept" value="1" required class="rounded border-gray-300 text-primary focus:ring-primary">';
-                echo '<span class="text-gray-90 text-sm">'.get_lang('I have read and agree to the').' ';
-                echo '<a href="tc.php?preview=1" target="_blank" class="text-primary hover:underline">'.get_lang('Terms and Conditions').'</a>';
-                echo '</span>';
-                echo '</label>';
+                echo '<div><button type="button" class="inline-block bg-gray-400 text-white font-semibold px-6 py-3 rounded cursor-not-allowed" disabled>' . get_lang('Accept Terms and Conditions') . '</button></div>';
             }
 
-            echo '<div><button type="submit" class="inline-block bg-primary text-white font-semibold px-6 py-3 rounded hover:opacity-90 transition">'.get_lang('Accept terms and conditions').'</button></div>';
             echo '</form>';
             echo '</div>';
         } else {
-            echo '<div class="text-center text-gray-90 text-lg">'.get_lang('Coming soon...').'</div>';
+            echo '<div class="text-center text-gray-90 text-lg">' . get_lang('Coming soon...') . '</div>';
         }
 
         Display::display_footer();
-
         exit;
     }
 }

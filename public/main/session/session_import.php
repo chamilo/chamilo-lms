@@ -24,6 +24,8 @@ $toolName = get_lang('Import sessions list');
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
+$csvCustomError = '';
+$topStaticErrorHtml = '';
 
 // Set this option to true to enforce strict purification for usenames.
 $purificationOptionForUsernames = false;
@@ -55,6 +57,15 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $insertedInCourse = [];
             $errorMessage = '';
 
+            if ($fileType === 'csv') {
+                $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+                if (true !== $check) {
+                    $csvCustomError = $check;
+                    $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+                    $result = ['session_counter' => 0, 'session_list' => [], 'error_message' => ''];
+                }
+            }
+
             if ($fileType === 'xml') {
                 $result = SessionManager::importXML(
                     $_FILES['import_file']['tmp_name'],
@@ -65,7 +76,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     $insertedInCourse,
                     $errorMessage
                 );
-            } else {
+            } elseif (empty($topStaticErrorHtml)) {
                 $result = SessionManager::importCSV(
                     $_FILES['import_file']['tmp_name'],
                     $isOverwrite,
@@ -97,8 +108,8 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     implode(', ', array_map(fn($code, $title) => "$title ($code)", array_keys($insertedInCourse), $insertedInCourse));
             }
 
-            if (empty($errorMessage)) {
-                if ($sessionCounter === 1 && $fileType === 'csv') {
+            if (empty($errorMessage) && empty($topStaticErrorHtml)) {
+                if ($fileType === 'csv' && $sessionCounter === 1) {
                     $sessionId = current($sessionList);
                     header('Location: resume_session.php?id_session=' . $sessionId);
                     exit;
@@ -118,14 +129,16 @@ $actions = '<a href="../session/session_list.php">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Administration')).
     '</a>';
 echo Display::toolbarAction('session_import', [$actions]);
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 if (!empty($errorMessage)) {
-    echo Display::return_message($errorMessage, 'error');
+    echo Display::return_message($errorMessage, 'error', false);
 }
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, ['enctype' => 'multipart/form-data']);
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addElement(
     'radio',
     'file_type',
@@ -180,7 +193,7 @@ if (!empty($options) && isset($options['options'])) {
 }
 
 $form->setDefaults($defaults);
-Display::return_message(
+echo Display::return_message(
     get_lang(
         'The XML import lets you add more info and create resources (courses, users). The CSV import will only create sessions and let you assign existing resources to them.'
     )
@@ -217,11 +230,11 @@ document.addEventListener("DOMContentLoaded", function () {
     <div id="csv-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto">
         <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example CSV file'); ?>:</h3>
         <pre class="whitespace-nowrap text-sm">
-<strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration;DisplayStartDate;DisplayEndDate;CoachStartDate;CoachEndDate;Classes
-<strong>Example 1</strong>;username;<strong>2025/04/01</strong>;<strong>2025/04/30</strong>;username1|username2;course1[coach1][username1,...];read_only;2025/04/01;2025/04/30;2025/04/01;2025/04/30;class1
-<strong>Example 2</strong>;username;<strong>2025-04-01</strong>;<strong>2025-04-30</strong>;username1|username2;course1[coach1][username1,...];accessible;2025-04-01;2025-04-30;2025-04-01;2025-04-30;class2
-<strong>Example 3</strong>;username;<strong>2025/04/01 08:00:00</strong>;<strong>2025/04/30 23:59:59</strong>;username1|username2;course1[coach1][username1,...];not_accessible;2025/04/01 08:00:00;2025/04/30 23:59:59;2025/04/01 08:00:00;2025/04/30 23:59:59;class3
-    </pre>
+<strong>SessionName</strong>,Coach,<strong>DateStart</strong>,<strong>DateEnd</strong>,Users,Courses,VisibilityAfterExpiration,DisplayStartDate,DisplayEndDate,CoachStartDate,CoachEndDate,Classes
+<strong>Example 1</strong>,username,<strong>2025/04/01</strong>,<strong>2025/04/30</strong>,username1|username2,course1[coach1][username1,...],read_only,2025/04/01,2025/04/30,2025/04/01,2025/04/30,class1
+<strong>Example 2</strong>,username,<strong>2025-04-01</strong>,<strong>2025-04-30</strong>,username1|username2,course1[coach1][username1,...],accessible,2025-04-01,2025-04-30,2025-04-01,2025-04-30,class2
+<strong>Example 3</strong>,username,<strong>2025/04/01 08:00:00</strong>,<strong>2025/04/30 23:59:59</strong>,username1|username2,course1[coach1][username1,...],not_accessible,2025/04/01 08:00:00,2025/04/30 23:59:59,2025/04/01 08:00:00,2025/04/30 23:59:59,class3
+</pre>
     </div>
     <div id="xml-example" class="mt-6 rounded-lg border border-gray-300 bg-gray-100 p-4 overflow-auto hidden">
         <h3 class="font-bold text-lg mb-2"><?php echo get_lang('Example XML file'); ?>:</h3>

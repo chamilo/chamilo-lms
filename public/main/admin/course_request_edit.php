@@ -293,7 +293,7 @@ if ($course_validation_feature) {
             } else {
                 Display::addFlash(
                     Display::return_message(
-                        $course_request_values['wanted_code'].' - '.get_lang('CourseCourse codeAlreadyExists')
+                        $course_request_values['wanted_code'].' - '.get_lang('Sorry, but that course code already exists. Please choose another one.')
                     ),
                     'error',
                     false

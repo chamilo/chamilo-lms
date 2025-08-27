@@ -71,8 +71,8 @@ class ZoomPlugin extends Plugin
                     'options' => [
                         PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Teacher'),
-                        STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss'),
+                        STUDENT => get_lang('Learner'),
+                        STUDENT_BOSS => get_lang('Superior (n+1)'),
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],
@@ -236,8 +236,8 @@ class ZoomPlugin extends Plugin
     {
         $form = new FormValidator('search');
         $form->addHeader($this->get_lang('SearchMeeting'));
-        $form->addDatePicker('start', get_lang('StartDate'));
-        $form->addDatePicker('end', get_lang('EndDate'));
+        $form->addDatePicker('start', get_lang('Start date'));
+        $form->addDatePicker('end', get_lang('End date'));
         $form->addButtonSearch(get_lang('Search'));
         $oneMonth = new DateInterval('P1M');
         if ($form->validate()) {
@@ -289,9 +289,9 @@ class ZoomPlugin extends Plugin
         $form->addHeader($this->get_lang('UpdateMeeting'));
         $form->addText('topic', $this->get_lang('Topic'));
         if ($meeting->requiresDateAndDuration()) {
-            $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
+            $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('Start Time'));
             $form->setRequired($startTimeDatePicker);
-            $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
+            $durationNumeric = $form->addNumeric('duration', get_lang('Duration (minutes)'));
             $form->setRequired($durationNumeric);
         }
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
@@ -733,13 +733,13 @@ class ZoomPlugin extends Plugin
         }
         $form = new FormValidator('scheduleMeetingForm', 'post', api_get_self().'?'.$extraUrl);
         $form->addHeader($this->get_lang('ScheduleAMeeting'));
-        $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('StartTime'));
+        $startTimeDatePicker = $form->addDateTimePicker('startTime', get_lang('Start Time'));
         $form->setRequired($startTimeDatePicker);
 
         $form->addText('topic', $this->get_lang('Topic'), true);
         $form->addTextarea('agenda', get_lang('Agenda'), ['maxlength' => 2000]);
 
-        $durationNumeric = $form->addNumeric('duration', $this->get_lang('DurationInMinutes'));
+        $durationNumeric = $form->addNumeric('duration', get_lang('Duration (minutes)'));
         $form->setRequired($durationNumeric);
 
         if (null === $course && 'true' === $this->get('enableGlobalConference')) {
@@ -771,7 +771,7 @@ class ZoomPlugin extends Plugin
            $registrationOptions['RegisterNoUser'] = $this->get_lang('RegisterNoUser');
            $userRegistrationRadio = $form->addRadio(
                'userRegistration',
-               $this->get_lang('UserRegistration'),
+               get_lang('User registration'),
                $registrationOptions
            );
            $groupOptions = [];

@@ -137,7 +137,7 @@ if ($is_drh) {
         'company_reports.php'
     );
     $menu_items[] = Display::url(
-        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate reportResumed')),
+        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate report, short version')),
         'company_reports_resumed.php'
     );
 }
@@ -338,7 +338,7 @@ if (false === $skipData) {
     if ($export_csv) {
         //csv part
         $csv_content[] = [get_lang('Learners')];
-        $csv_content[] = [get_lang('InactivesLearners'), $nb_inactive_students];
+        $csv_content[] = [get_lang('Inactive learners'), $nb_inactive_students];
         $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
         $csv_content[] = [
             get_lang('Average number of courses to which my learners are subscribed'),
@@ -403,7 +403,7 @@ if (false === $skipData) {
 $view->assign('header', $nameTools);
 $view->assign('form', $form->returnForm());
 $view->assign('actions', Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]));
-$view->assign('title', get_lang('Students').' ('.$numberStudents.')');
+$view->assign('title', get_lang('Learners').' ('.$numberStudents.')');
 
 $template = $view->get_template('my_space/index.tpl');
 $content = $view->fetch($template);

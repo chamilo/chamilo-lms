@@ -92,8 +92,8 @@ $exercisesToString = '';
 if (!empty($table)) {
     if ($table instanceof SortableTableFromArrayConfig) {
         $table->headers = [];
-        $table->set_header(0, get_lang('ExerciseName'), false);
-        $table->set_header(1, get_lang('QuantityQuestions'), false);
+        $table->set_header(0, get_lang('Test name'), false);
+        $table->set_header(1, get_lang('Questions'), false);
         $table->set_header(2, get_lang('Actions'), false);
         $exerciseList = [];
         foreach ($table->table_data as &$data) {
@@ -107,7 +107,7 @@ if (!empty($table)) {
         $table->set_form_actions([]);
         $exercisesToString = $table->return_table();
     } else {
-        $exercisesToString = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+        $exercisesToString = Display::return_message(get_lang('No data available'), 'warning');
     }
 }
 

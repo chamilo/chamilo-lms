@@ -1418,7 +1418,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
                     $label = get_lang('Graduated');
                 } else {
                     $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
-                    $label = get_lang('Student');
+                    $label = get_lang('Learner');
                 }
                 break;
             case COURSEMANAGER:
@@ -1432,7 +1432,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
                 break;
             case STUDENT_BOSS:
                 $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
-                $label = get_lang('StudentBoss');
+                $label = get_lang('Student boss');
                 break;
         }
 
@@ -3552,7 +3552,7 @@ function api_not_allowed(
     string $severity = 'warning'
 ): never {
     throw new NotAllowedException(
-        $message ?: get_lang('You are not allowed'),
+        $message ?: get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
         $severity,
         403,
         [],

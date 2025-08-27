@@ -289,7 +289,7 @@ class UniqueAnswer extends Question
     private function addAdaptiveScenarioFields(FormValidator $form, array $questionList)
     {
         // Section header
-        $form->addHtml('<h4 class="m-4">'.get_lang('Adaptive behavior (Success / Failure)').'</h4>');
+        $form->addHtml('<h4 class="m-4">'.get_lang('Adaptive behavior (success/failure)').'</h4>');
 
         // Options for redirection behavior
         $questionListOptions = [

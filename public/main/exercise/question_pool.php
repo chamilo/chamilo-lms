@@ -482,7 +482,7 @@ $form
 $form
     ->addSelect(
         'exerciseId',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $my_exercise_list,
         ['onchange' => 'mark_exercise_id_changed(); submit_form(this);', 'id' => 'exerciseId']
     )
@@ -498,7 +498,7 @@ $form
 $form
     ->addSelect(
     'answerType',
-        get_lang('AnswerType'),
+        get_lang('Answer type'),
     $new_question_list,
         ['onchange' => 'submit_form(this);', 'id' => 'answerType']
     )
@@ -933,7 +933,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
 } else {
     $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
     $actions .= '<a href="question_create.php?'.api_get_cidreq().'">'.
         Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New question')).'</a>';
 }
@@ -1018,7 +1018,7 @@ $html .= '<div class="btn-group">
 $actionLabel = get_lang('Re-use a copy inside the current test');
 $actions = ['clone' => get_lang('Re-use a copy inside the current test')];
 if ($selected_course == api_get_course_int_id()) {
-    $actions = ['reuse' => get_lang('Re-use in current testQuestion')];
+    $actions = ['reuse' => get_lang('Re-use in current test')];
 }
 
 foreach ($actions as $action => $label) {
@@ -1149,7 +1149,7 @@ function get_action_icon_for_question(
             }
 
             if (isQuestionInActiveQuiz($in_questionid)) {
-                $res = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
+                $res = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'));
             } else {
                 $res = "<a href='".api_get_self()."?".
                 api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
@@ -1175,7 +1175,7 @@ function get_action_icon_for_question(
             if (!$myObjEx->hasQuestion($in_questionid)) {
                 $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
-                $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('InsertALinkToThisQuestionInTheExercise'));
+                $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Use this question in the test as a link (not a copy)'));
                 $res .= '</a>';
             }
 

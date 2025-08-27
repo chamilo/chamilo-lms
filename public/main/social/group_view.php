@@ -99,7 +99,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 } else {
     $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Groups list')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Group list')];
     } else {
         //$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Group'));
     }

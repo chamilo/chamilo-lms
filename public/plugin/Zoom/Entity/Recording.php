@@ -130,6 +130,6 @@ class Recording implements Stringable
         $later = new DateTime();
         $later->add(new DateInterval('PT'.$this->recordingMeeting->duration.'M'));
         $this->durationInterval = $later->diff($now);
-        $this->formattedDuration = $this->durationInterval->format(get_lang('DurationFormat'));
+        $this->formattedDuration = $this->durationInterval->format(get_lang('%1 seconds'));
     }
 }

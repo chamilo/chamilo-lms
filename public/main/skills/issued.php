@@ -210,7 +210,7 @@ if ($showLevels && $allowToEdit) {
             $skillRelUser->setAcquiredLevel($level);
             $entityManager->persist($skillRelUser);
             $entityManager->flush();
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
 
         header('Location: '.SkillRelUserModel::getIssueUrl($skillRelUser));
@@ -284,7 +284,11 @@ if (isset($_SESSION['flash_message'])) {
     );
 } else {
     $returnMessage .= Display::return_message(
-        get_lang('The skill has been successfully assigned.'),
+        sprintf(
+            get_lang('The skill %s has been assigned to user %s'),
+            $skillRelUserInfo['skill_name'],
+            $skillRelUserInfo['user_complete_name']
+        ),
         'success',
         false
     );

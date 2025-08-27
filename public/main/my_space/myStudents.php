@@ -554,7 +554,7 @@ switch ($action) {
 
                 Display::addFlash(Display::return_message(get_lang('Message Sent')));
             } else {
-                Display::addFlash(Display::return_message(get_lang('AllFieldsRequired'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('all fields required'), 'warning'));
             }
 
             header('Location: '.$currentUrl);
@@ -574,10 +574,10 @@ switch ($action) {
             LegalManager::sendLegal($studentId, api_get_user_id());
             /*
                 $currentUserInfo = api_get_user_info();
-                $subject = get_lang('SendLegalSubject');
+                $subject = get_lang('Legal conditions');
                 $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
                 $content = sprintf(
-                    get_lang('SendTermsDescriptionToUrlX'),
+                    get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
                     $user_info['complete_name'],
                     "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
                     $currentUserInfo['complete_name']
@@ -750,13 +750,13 @@ $actions .= Display::url(
 $email = $user->getEmail();
 if (!empty($email)) {
     $send_mail = '<a href="mailto:'.$email.'">'.
-        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send message mail')).'</a>';
+        Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send message by e-mail')).'</a>';
 } else {
-    $send_mail = Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send message mail'));
+    $send_mail = Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Send message by e-mail'));
 }
 $actions .= $send_mail;
 if (!empty($studentId) && !empty($courseCode)) {
-    // Only show link to connection details if course and student were defined in the URL
+    // Only show link to connection details if the course and student were defined in the URL
     $actions .= '<a href="access_details.php?student='.$studentId.'&course='.$courseCode.'&origin='.$origin.'&cid='
         .$courseId.'&id_session='.$sessionId.'">'
         .Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Access details'))
@@ -787,7 +787,7 @@ if (SkillModel::isAllowed($studentId, false)) {
 
 if (SkillModel::isAllowed($studentId, false)) {
     $actions .= Display::url(
-        Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CountDoneAttendance')),
+        Display::getMdiIcon(ObjectIcon::ATTENDANCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('# attended')),
         api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?action=all_attendance&student='.$studentId
     );
 }
@@ -876,7 +876,7 @@ $csv_content[] = [
 ];
 $csv_content[] = [
     get_lang('Name'),
-    get_lang('e-mail'),
+    get_lang('E-mail'),
     get_lang('Tel'),
 ];
 $csv_content[] = [
@@ -892,9 +892,9 @@ $csv_content[] = [
     get_lang('Reporting'),
 ];
 $csv_content[] = [
-    get_lang('First connectionInPlatform'),
+    get_lang('First login in platform'),
     get_lang('Latest login in platform'),
-    get_lang('Time spentInTheCourse'),
+    get_lang('Time spent in the course'),
     get_lang('Progress'),
     get_lang('Score'),
 ];
@@ -1355,7 +1355,7 @@ if (empty($details)) {
                                 api_get_path(WEB_CODE_PATH)
                                 .'attendance/index.php?cid='.$courseId.'&sid='.$sId.'&student_id='
                                 .$studentId,
-                                ['title' => get_lang('GoAttendance')]
+                                ['title' => get_lang('Go to attendances')]
                             );
                         } else {
                             $attendances_faults_avg = $results_faults_avg['faults'].'/'
@@ -1490,7 +1490,7 @@ if (empty($details)) {
             $csv_content[] = $csvRow;
             $exportCourseList[$sId][] = $csvRow;
             $sessionAction = Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCSV')),
+                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
                 $currentUrl.'&'
                 .http_build_query(
                     [
@@ -1501,7 +1501,7 @@ if (empty($details)) {
                 )
             );
             $sessionAction .= Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsXLS')),
+                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')),
                 $currentUrl.'&'
                 .http_build_query(
                     [
@@ -1514,7 +1514,7 @@ if (empty($details)) {
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
-                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
+                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -1526,7 +1526,7 @@ if (empty($details)) {
                     )
                 );
                 $sessionAction .= Display::url(
-                    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CertificateOfAchievement')),
+                    Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Certificate of achievement')),
                     api_get_path(WEB_CODE_PATH).'my_space/session.php?'
                     .http_build_query(
                         [
@@ -1573,7 +1573,7 @@ if (empty($details)) {
                 'ch-tool-icon',
                 'align: absmiddle; hspace: 3px',
                 ICON_SIZE_SMALL,
-                get_lang('LPProgressScore')
+                get_lang('% of learning objects visited')
             ),
         'last_connection' => get_lang('Latest login').
             Display::getMdiIcon(
@@ -2180,12 +2180,12 @@ if (empty($details)) {
                     if ($workingTimeEdit && $showOnce) {
                         $showOnce = false;
                         echo '&nbsp;'.Display::url(
-                                get_lang('AddTime'),
+                                get_lang('Add time'),
                                 $currentUrl.'&action=add_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
 
                         echo '&nbsp;'.Display::url(
-                                get_lang('RemoveTime'),
+                                get_lang('Remove time'),
                                 $currentUrl.'&action=remove_work_time&time='.$time.'&work_id='.$work->getIid()
                             );
                     }
@@ -2262,7 +2262,7 @@ if ($allowMessages) {
 $allow = ('true' === api_get_setting('message.allow_user_message_tracking'));
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
-    echo Display::page_subheader2(get_lang('MessageReporting'));
+    echo Display::page_subheader2(get_lang('Message tracking'));
     $table = new HTML_Table(['class' => 'table']);
     $column = 0;
     $row = 0;

@@ -169,7 +169,7 @@
           </template>
         </Column>
         <Column
-          :header="t('Send date')"
+          :header="t('Sent date')"
           :sortable="true"
           class="truncate w-24 md:w-auto"
           field="sendDate"
@@ -251,7 +251,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="text-sm font-bold">{{ t("Send date") }}:</div>
+            <div class="text-sm font-bold">{{ t("Sent date") }}:</div>
             <div class="text-base text-gray-500">{{ abbreviatedDatetime(item.sendDate) }}</div>
           </div>
           <div class="mt-4 flex space-x-2">
@@ -309,6 +309,7 @@ import InputGroup from "primevue/inputgroup"
 import InputText from "primevue/inputtext"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const route = useRoute()
 const router = useRouter()
@@ -324,6 +325,8 @@ const messageRelUserStore = useMessageRelUserStore()
 const { abbreviatedDatetime } = useFormatDate()
 
 const { mapReceiverMixToUsers } = useMessageReceiverFormatter()
+const platformConfigStore = usePlatformConfig()
+const messagingEnabled = computed(() => platformConfigStore.getSetting("message.allow_message_tool") === "true")
 
 const mItemsMarkAs = ref([
   {
@@ -629,6 +632,10 @@ function showDlgConfirmDeleteMultiple() {
 }
 
 onMounted(() => {
+  if (!messagingEnabled.value) {
+    router.replace("/social")
+    return
+  }
   showInbox()
 })
 

@@ -629,10 +629,10 @@ msgstr "קטגוריות קורס באתר %s:"
 msgid "Course categories available"
 msgstr "קטגוריות קורסים זמינות"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "הקבוצה שייכת כעת לאתר הנבחר"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "עליך לבחור לפחות קבוצה אחת ואתר אחד"
 
 msgid "Agenda list"
@@ -1613,7 +1613,7 @@ msgstr "לא ניתן לזהות את הפורמט של חבילה זו. אנא 
 msgid "Move the current forum"
 msgstr "העבר את הפורום הנוכחי"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "אזהרה! כאשר אתה עורך את התוכן של אובייקט למידה, אתה עלול לשנות את הדיווח של הקורס או לפגוע באובייקט הלמידה."
 
 msgid "Please provide a subject or message"
@@ -1730,7 +1730,7 @@ msgstr "כברירת מחדל, הקורס שלך ציבורי. אבל אתה י�
 msgid "Public - access allowed for the whole world"
 msgstr "ציבורי - גישה מותרת לכל העולם"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr " פתוח - גישה מותרת למשתמשים הרשומים בפלטפורמה"
 
 msgid "Student %s is no subscribed to this course"
@@ -1760,7 +1760,7 @@ msgstr "הוסף קישור לדף בדף הבית"
 msgid "has been deleted"
 msgstr "נמחק"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "מחיקת אזור זה תמחק לצמיתות את כל התוכן (מסמכים, קישורים...) שהוא מכיל ותבטל את הרישום של כל חבריו (לא תסיר אותם מקורסים אחרים)."
 
 msgid "YES"
@@ -2527,9 +2527,6 @@ msgstr "זו המחלקה או כל הקשר אחר שבו הקורס מועבר
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "אם אינך בטוח בקוד הקורס שלך, עיין בפרטי ההדרכה."
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "תוכנית הקורס</a>. אם לקורס שלך אין קוד, לא משנה מה הסיבה, המציא אחד. למשל <i>INNOVATION</i> אם הקורס עוסק בניהול חדשנות"
 
 msgid "SCORM Path builder"
 msgstr "בונה נתיבים של SCORM"
@@ -3384,9 +3381,6 @@ msgstr "צור הערה"
 msgid "Edit my personal note"
 msgstr "ערוך את ההערה האישית שלי"
 
-msgid "Back to note list"
-msgstr "חזרה לרשימת הערות"
-
 msgid "Notebook management"
 msgstr "ניהול מחברת"
 
@@ -3501,7 +3495,7 @@ msgstr "צור קטגוריית קורסים אישית"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "האם אתה בטוח שברצונך למחוק את קטגוריית הקורסים הזו? קורסים בתוך קטגוריה זו יועברו אל מחוץ לקטגוריות"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "קטגוריות קורסים"
 
 msgid "Courses in this category"
@@ -4509,10 +4503,10 @@ msgstr "משתמש זה אינו רשום בכיתה"
 msgid "This class isn't subscribed in a course"
 msgstr "שיעור זה אינו רשום בקורס"
 
-msgid "tool"
+msgid "Tool"
 msgstr "כלי"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "מספר פריטים"
 
 msgid "Documents and folders"
@@ -4674,7 +4668,7 @@ msgstr "אנא תנו הודעת טקסט"
 msgid "Please give a notice title"
 msgstr "נא לתת כותרת להודעה"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "אנא תן שם קישור"
 
 msgid "Insert this link"
@@ -5076,7 +5070,7 @@ msgstr "סיים את יצירת הפגישה"
 msgid "Videoconference RTMTP protocol port"
 msgstr "יציאת פרוטוקול RTMTP של ועידת וידאו"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "שם הפגישה כבר קיים"
 
 msgid "No classes have been created"
@@ -5226,7 +5220,7 @@ msgstr "אם אפשרות זו מופעלת, לחיצה על כתובת דואר
 msgid "Include header line?"
 msgstr "כלול שורת כותרת?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr "כן, הוסף את הכותרות<br />זה יציב את שמות השדות בשורה הראשונה. זה הכרחי כאשר אתה רוצה לייבא את הקובץ מאוחר יותר בפורטל Chamilo."
 
 msgid "List of users subscribed to course"
@@ -5460,7 +5454,7 @@ msgstr "בחר תפריט נפתח"
 msgid "Multiple selection drop-down"
 msgstr "תפריט נפתח של בחירה מרובה"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "השדה נוסף בהצלחה"
 
 msgid "Grades thresholds colouring"
@@ -5712,7 +5706,7 @@ msgstr "יבא משתמשי LDAP לקורס"
 msgid "Import LDAP users and a step into a session"
 msgstr "ייבוא ​​משתמשי LDAP ושלב לתוך הפעלה"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "סינכרון LDAP: ייבוא ​​לומדים/צעדים למפגשי הקורס"
 
 msgid "Assessments tab"
@@ -5759,9 +5753,6 @@ msgstr "ערך זיהוי המורה"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "כאשר מתבצעת בדיקה בשדה המורה המופיע למעלה, ערך זה חייב להיות בתוך אחד מתתי-האלמנטים של שדות המורה כדי שהמשתמש ייחשב כמאמן. אם תשאיר שדה זה ריק, התנאי היחיד הוא שהשדה קיים עבור משתמש LDAP זה כדי להיחשב כמאמן. כדוגמה, השדה יכול להיות \"memberof\" והערך לחיפוש יכול להיות \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "לא ניתן לכתיבה"
 
 msgid "The field is successfully moved down"
 msgstr "השדה הועבר בהצלחה למטה"
@@ -6351,16 +6342,13 @@ msgstr "קורסים מהמפגש המקורי"
 msgid "Courses from the destination session"
 msgstr "קורסים ממפגש היעד"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "עזרה להעתקה של קורסים ממפגש למפגש"
-
 msgid "Type of copy"
 msgstr "סוג העתקה"
 
 msgid "Copy from course in session to another session"
 msgstr "העתק מקורס במפגש למפגש אחר"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "עליך לבחור קורס מהמפגש המקורי"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6432,10 +6420,10 @@ msgstr "הצג הערה של נתוני הפעלה"
 msgid "Subscription sessions in the category"
 msgstr "הפעלות הרשמה בקטגוריה"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "רשימת הפעלות בפלטפורמה"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "רשימת מפגשים בקטגוריות"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6593,9 +6581,6 @@ msgstr "מורים בלבד"
 
 msgid "Define Headings"
 msgstr "הגדר כותרות"
-
-msgid "Back to users list"
-msgstr "חזרה לרשימת המשתמשים"
 
 msgid "change rights of"
 msgstr "שינוי זכויות של"
@@ -7014,9 +6999,6 @@ msgstr "קבוצות משיעורים"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "באמצעות אפשרות זו, אתה יכול ליצור קבוצות על סמך השיעורים הרשומים לקורס שלך."
 
-msgid "Back to Groups list"
-msgstr "חזרה לרשימת הקבוצות"
-
 msgid "A new forum has now been created"
 msgstr "נוצר כעת פורום חדש"
 
@@ -7293,7 +7275,7 @@ msgstr "הזז את המסמך הנוכחי"
 msgid "Edit the current document"
 msgstr "ערוך את המסמך הנוכחי"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "אזהרה!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7686,7 +7668,7 @@ msgstr "חזור לרשימת השאלות"
 msgid "Answers to the question"
 msgstr "תשובות לשאלה"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "אזהרה! שאלה זו ותשובותיה משמשות במספר מבחנים. האם תרצה לערוך אותן"
 
 msgid "in all tests"
@@ -7835,9 +7817,6 @@ msgstr "הגעת למספר המקסימלי של ניסיונות למבחן ז
 
 msgid "Exercise added"
 msgstr "תרגיל נוסף"
-
-msgid "Assesment settings"
-msgstr "הגדרות הערכה"
 
 msgid "active"
 msgstr "פעיל"
@@ -8421,9 +8400,6 @@ msgstr "מנהל הגבלה בזמן"
 msgid "Last score of a exercise"
 msgstr "ציון אחרון של תרגיל"
 
-msgid "Back to result list"
-msgstr "חזרה לרשימת התוצאות"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "אם אתה עורך ציון שאלה, אנא זכור שתרגיל זה נוסף בקורס"
 
@@ -8504,9 +8480,6 @@ msgstr "משתמשים מחוברים"
 
 msgid "Remove"
 msgstr "הסרה"
-
-msgid "Back to courses list"
-msgstr "חזרה לרשימת קורסים"
 
 msgid "Links"
 msgstr "קישורים"
@@ -8603,9 +8576,6 @@ msgstr "שם פרטי"
 
 msgid "Last name"
 msgstr "שם משפחה"
-
-msgid "e-mail"
-msgstr "דוא\"ל"
 
 msgid "Slideshow conversion"
 msgstr "המרת הנפשה"
@@ -8907,7 +8877,7 @@ msgstr "שפה"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "מצטערים, אבל קוד הקורס הזה כבר קיים. אנא בחר אחד אחר."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "רשימת קבוצות"
 
 msgid "The target folder does not exist"
@@ -9366,9 +9336,6 @@ msgstr "ההפעלות הפעילות שלי"
 msgid "My inactive sessions"
 msgstr "ההפעלות הלא פעילות שלי"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "הרחבה זו הופעלה אך לא יכולה להיות פעילה כרגע."
-
 msgid "My learners"
 msgstr "התלמידים שלי"
 
@@ -9399,7 +9366,7 @@ msgstr "אין משאב למחזור"
 msgid "Could not open"
 msgstr "לא ניתן לפתוח"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "זמן תדירות"
 
 msgid "This course could not be found"
@@ -9531,8 +9498,8 @@ msgstr "לא ביקר בקישור"
 msgid "No document downloaded"
 msgstr "לא הורד מסמך"
 
-msgid "clicks"
-msgstr "קליקים"
+msgid "%d clicks"
+msgstr "קליקים%d "
 
 msgid "Search results"
 msgstr "תוצאות חיפוש"
@@ -9615,7 +9582,7 @@ msgstr "כתובת אתר OpenID"
 msgid "The file is too big to upload."
 msgstr "הקובץ גדול מדי להעלאה."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "הקובץ שהעלית לא התקבל בהצלחה. אנא נסה שוב מאוחר יותר או צור קשר עם מנהל הפורטל הזה."
 
 msgid "Assessments"
@@ -9675,7 +9642,7 @@ msgstr "שעות"
 msgid "minutes"
 msgstr "דקות"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "תיעוד נוצר"
 
 msgid "The forum has been added"
@@ -10203,7 +10170,7 @@ msgstr "מידע נוסף"
 msgid "Make invisible"
 msgstr "הפוך לבלתי נראה"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "הפוך לגלוי"
 
 msgid "Image"
@@ -10220,9 +10187,6 @@ msgstr "שלח הודעה"
 
 msgid "Menu"
 msgstr "תפריט"
-
-msgid "Back to user list"
-msgstr "חזרה לרשימת המשתמשים"
 
 msgid "Graphic not available"
 msgstr "הגרפיקה לא זמינה"
@@ -10548,7 +10512,7 @@ msgstr "נראות הערכה"
 msgid "Who changed it"
 msgstr "מי שינה את זה"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "ההערכה נערכה בהצלחה"
 
 msgid "Incorrect data"
@@ -11559,7 +11523,7 @@ msgstr "עכשיו הדף גלוי לכל המשתמשים"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "את הדף הראשי ניתן לערוך על ידי מורה בלבד"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "גישה לדף המאמן"
 
 msgid "Now discussion is visible by trainers only"
@@ -13341,7 +13305,7 @@ msgstr "אנא הזן שאלה"
 msgid "Number of question"
 msgstr "מספר שאלות"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "קוד זה כבר קיים"
 
 msgid "Save and exit"
@@ -13392,13 +13356,13 @@ msgstr "ערוך שאלה"
 msgid "This type does not exist"
 msgstr "סוג זה אינו קיים"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "הסקר נוצר בהצלחה"
 
 msgid "You can now add questions to your survey"
 msgstr "עכשיו אתה יכול להוסיף שאלות לסקר שלך"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "הסקר עודכן בהצלחה"
 
 msgid "The question has been added."
@@ -13596,7 +13560,7 @@ msgstr "קוד הסקר הזה כבר קיים. זה כנראה אומר שהס�
 msgid "This survey code soon exists in this language"
 msgstr "קוד הסקר הזה קיים בקרוב בשפה זו"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "התשובות של המשתמש לסקר הוסרו בהצלחה."
 
 msgid "Delete this user's answers"
@@ -13719,7 +13683,7 @@ msgstr "האם יש ספר קורס, אוסף מאמרים, ביבליוגרפי
 msgid "Short description of the course materials."
 msgstr "תיאור קצר של חומרי הקורס."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "שקול את הקורסים, המאמנים, דלפק העזרה הטכני, מנהלי הקורסים ו/או החומרים הזמינים."
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14244,9 +14208,6 @@ msgstr "הציון אינו יכול לחרוג מהניקוד המרבי"
 msgid "Delete all papers"
 msgstr "מחק את כל הניירות"
 
-msgid "Back to Assignments list"
-msgstr "חזרה לרשימת המשימות"
-
 msgid "Edit and mark paper"
 msgstr "ערוך וסמן נייר"
 
@@ -14358,11 +14319,11 @@ msgstr "ידני"
 msgid "You should write a message"
 msgstr "עליך לכתוב הודעה"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "הודעה זו מיועדת ליידע אותך שיצר קורס חדש בפלטפורמה"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "הודעה זו מיועדת ליידע אותך שיצר קורס חדש בפלטפורמה %s"
 
-msgid "New course created in"
-msgstr "קורס חדש נוצר ב"
+msgid "New course created on %s"
+msgstr "קורס חדש נוצר ב %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "המורה מוגדר כמוך לעת עתה. אתה יכול לשנות הגדרה זו מאוחר יותר בהגדרות תצורת הקורס"
@@ -14373,8 +14334,8 @@ msgstr "שפת התקנה"
 msgid "Please read the following requirements thoroughly."
 msgstr "אנא קרא את הדרישות הבאות ביסודיות."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "אזהרה!<br />המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "אזהרה! המתקין זיהה פלטפורמת Chamilo קיימת במערכת שלך."
 
 msgid "New installation"
 msgstr "התקנה חדשה"
@@ -14507,12 +14468,6 @@ msgstr "אנא חזור לשלב"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "סקריפט השדרוג ישחזר ויעדכן את מסדי הנתונים של Chamilo. על מנת לעשות זאת, סקריפט זה ישתמש בבסיסי הנתונים ובהגדרות המוגדרים להלן. מכיוון שהתוכנה שלנו פועלת על מגוון רחב של מערכות ובגלל שכולן ייתכן שלא נבדק, אנו ממליצים בחום לעשות גיבוי מלא של מסדי הנתונים שלך לפני שתמשיך בשדרוג!"
-
-msgid "MBString extension not available"
-msgstr "תוסף MBString לא זמין"
-
-msgid "MySQL extension not available"
-msgstr "תוסף MySQL אינו זמין"
 
 msgid "Optional parameters"
 msgstr "פרמטרים אופציונליים"
@@ -15156,7 +15111,7 @@ msgstr "אין שדות נוספים זמינים"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "התחל להקליד ולאחר מכן לחץ על סרגל זה כדי לאמת תג"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "התקן chamilo"
 
 msgid "Chamilo URL"
@@ -15630,7 +15585,7 @@ msgstr "רשימת קורסים שהוקצתה למנהל הפעלות"
 msgid "Assign sessions to platform administrator"
 msgstr "הקצה הפעלות למנהל הפלטפורמה"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "הקצאת הפעלות למנהל הפעלות"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15699,7 +15654,7 @@ msgstr "תמטי"
 msgid "Thematic plan"
 msgstr "תוכנית נושאית"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "ערוך התקדמות תמטי"
 
 msgid "Edit thematic advance"
@@ -17397,8 +17352,8 @@ msgstr "צור קבוצת חברה"
 msgid "Not logged in for some time"
 msgstr "לא היית מחובר כבר זמן מה"
 
-msgid "Last %i months"
-msgstr "%י חודשים אחרונים"
+msgid "Last %d months"
+msgstr "d%י חודשים אחרונים"
 
 msgid "Never connected"
 msgstr "מעולם לא התחברתם"
@@ -17442,13 +17397,13 @@ msgstr "הפריט הועתק"
 msgid "My statistics"
 msgstr "הסטטיסטיקה שלי"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "תרגילים זמינים"
 
 msgid "Exercises taken"
 msgstr "תרגילים נלקחו"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "תוצאת פעילות גופנית ממוצעת"
 
 msgid "Learning path progress"
@@ -17805,7 +17760,7 @@ msgstr "למשתמש זה אין כתובת URL קשורה."
 msgid "Extra data"
 msgstr "נתונים נוספים"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "תרגילים במסלולי למידה"
 
 msgid "Id"
@@ -18135,15 +18090,6 @@ msgstr "ברוכים הבאים למתקין Chamilo"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "גרסת ה-PHP שלך אינה תואמת את הדרישות עבור תוכנה זו. אנא בדוק שיש לך את הגרסה העדכנית ביותר, ולאחר מכן נסה שוב."
 
-msgid "Sessions extension not available"
-msgstr "תוסף הפעלות לא זמין"
-
-msgid "Zlib extension not available"
-msgstr "תוסף Zlib אינו זמין"
-
-msgid "PCRE extension not available"
-msgstr "תוסף PCRE אינו זמין"
-
 msgid "To social group"
 msgstr "לקבוצה חברתית"
 
@@ -18415,7 +18361,7 @@ msgstr "אישור"
 msgid "Online link to certificate"
 msgstr "קישור מקוון לאישור"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "תרגילים חדשים"
 
 msgid "My average"
@@ -18619,14 +18565,8 @@ msgstr "שאלה"
 msgid "questions"
 msgstr "שאלות"
 
-msgid "Back to test list"
-msgstr "חזרה לרשימת הבדיקות"
-
 msgid "Category description"
 msgstr "תיאור קטגוריה"
-
-msgid "Back to category list"
-msgstr "חזרה לרשימת הקטגוריות"
 
 msgid "This category name already exists. Please use another name."
 msgstr "שם הקטגוריה הזה כבר קיים. אנא השתמש בשם אחר."
@@ -18904,7 +18844,7 @@ msgstr "אומת"
 msgid "Not validated"
 msgstr "לא מאומת"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "מתוקן"
 
 msgid "Select a question to revise"
@@ -19048,7 +18988,7 @@ msgstr "מציג סרגל כלים גלובלי בראש הדף לתפקידי �
 msgid "Session list"
 msgstr "רשימת מפגשים"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "רשימת לומדים"
 
 msgid "Learners who're taking the exercise right now"
@@ -21304,7 +21244,7 @@ msgstr "ניהול אבחון"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "תחילה עליך למלא את הפרופיל שלך כדי לאפשר את אימות התנאים וההגבלות."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "אבחון"
 
 msgid "Allow show the user Skype account"
@@ -22858,8 +22798,8 @@ msgstr "אנא ספר לנו מדוע אתה רוצה למשוך את הזכוי
 msgid "Explain in this box why you want your account deleted"
 msgstr "הסבר בתיבה זו מדוע אתה רוצה למחוק את חשבונך"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
-msgstr "אתה יכול לבקש להלן למחוק את ההסכם המשפטי שלך או למחוק את החשבון שלך.</br>במקרה של ההסכם המשפטי, לאחר המחיקה תצטרך לאשר אותו שוב בכניסה הבאה שלך כדי שתוכל כדי לגשת לפלטפורמה ולשחזר את הגישה שלך, מכיוון שאיננו יכולים באופן סביר באותו הזמן לתת לך סביבה אישית ולא לטפל בנתונים האישיים שלך.</br>במקרה של מחיקת חשבון, החשבון שלך יימחק יחד עם כל המנויים שלך לקורס וכל המידע הקשור לחשבון שלך. אנא בחר את האפשרות המתאימה בזהירות. בשני המקרים, אחד מהמנהלים שלנו יבדוק את בקשתך לפני שהיא תיכנס לתוקף, כדי למנוע אי הבנה ואובדן מוחלט של הנתונים שלך."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgstr "אתה יכול לבקש להלן למחוק את ההסכם המשפטי שלך או למחוק את החשבון שלך.<br>במקרה של ההסכם המשפטי, לאחר המחיקה תצטרך לאשר אותו שוב בכניסה הבאה שלך כדי שתוכל כדי לגשת לפלטפורמה ולשחזר את הגישה שלך, מכיוון שאיננו יכולים באופן סביר באותו הזמן לתת לך סביבה אישית ולא לטפל בנתונים האישיים שלך.<br>במקרה של מחיקת חשבון, החשבון שלך יימחק יחד עם כל המנויים שלך לקורס וכל המידע הקשור לחשבון שלך. אנא בחר את האפשרות המתאימה בזהירות. בשני המקרים, אחד מהמנהלים שלנו יבדוק את בקשתך לפני שהיא תיכנס לתוקף, כדי למנוע אי הבנה ואובדן מוחלט של הנתונים שלך."
 
 msgid "Personal data protection"
 msgstr "הגנה על מידע אישי"
@@ -22933,14 +22873,11 @@ msgstr "הערה: התקדמות זו מתקבלת באמצעות שילוב ש�
 msgid "Create a new Doodle type survey"
 msgstr "צור סקר חדש מסוג שרבוט"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "הסר שאלות כפולות"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "כפל שאלות"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "תוכל להשתמש בתגים {{class_name}} ו-{{student_full_name}} בשאלה כדי להיות מסוגל להכפיל שאלות.\nבדף הרשימה של הסקר בשדה הפעולה יש לך כפתור להכפלת שאלה שיחפש את התג {{class_name}} וישכפל את השאלה עבור כל הכיתה הרשומה לקורס וישנה את שמה עם שם הכיתה.\nזה גם יוסיף סיום עמוד כדי ליצור דף חדש לכל כיתה.\nלאחר מכן הוא יחפש את התג {{student_full_name}} וישכפל את השאלה עבור כל התלמיד בכיתה (עבור כל כיתה) וישנה את שמה בשמו המלא של התלמיד."
 
 msgid "Create meeting poll"
 msgstr "צור סקר פגישה"
@@ -23479,10 +23416,10 @@ msgstr "סקר קבוצתי עבור %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "היי %s <br/><br/>כמורה קבוצתי של הקבוצה %s אתה מוזמן להשתתף בסקר הבא:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "הסקר %s מוכפל"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "הסקר %s לא מוכפל"
 
 msgid "Export survey results"
@@ -23786,10 +23723,10 @@ msgid "Absent"
 msgstr "נעדר"
 
 msgid "Internal database error"
-msgstr "שגיאת מסד נתונים פנימית"
+msgstr "שגיאת מסד נתונים פנימית %s"
 
-msgid "Wrong number of days"
-msgstr "מספר ימים שגוי"
+msgid "Wrong number of days: %s: %s"
+msgstr "מספר ימים שגוי %s %s"
 
 msgid "Subscription not allowed"
 msgstr "הרשמה אסורה"
@@ -24022,7 +23959,7 @@ msgstr "סטודנטים עם תשובות נכונות"
 msgid "Students with incorrect answers"
 msgstr "סטודנטים עם תשובות שגויות"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "רשימת תוכן"
 
 msgid "Tariff"
@@ -24088,10 +24025,10 @@ msgstr "כניסה אחרונה בקורס"
 msgid "The"
 msgstr "ה"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "כפל שאלות לפי כיתה"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "כפל שאלות לפי משתמש"
 
 msgid "Questions about next user"

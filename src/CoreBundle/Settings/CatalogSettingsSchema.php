@@ -43,10 +43,10 @@ class CatalogSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('course_catalog_settings', TextareaType::class, [
-                'attr' => ['rows' => 10],
+                'attr' => ['rows' => 10, 'cols' => 100],
             ])
             ->add('session_catalog_settings', TextareaType::class, [
-                'attr' => ['rows' => 5],
+                'attr' => ['rows' => 8, 'cols' => 100],
             ])
             ->add('show_courses_descriptions_in_catalog', YesNoType::class)
             ->add('course_catalog_published', YesNoType::class)
@@ -54,7 +54,7 @@ class CatalogSettingsSchema extends AbstractSettingsSchema
             ->add('hide_public_link', YesNoType::class)
             ->add('only_show_selected_courses', YesNoType::class)
             ->add('only_show_course_from_selected_category', TextareaType::class, [
-                'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+                'attr' => ['rows' => 10, 'cols' => 100, 'style' => 'font-family: monospace;'],
             ])
             ->add('allow_students_to_browse_courses', YesNoType::class)
             ->add('course_catalog_hide_private', YesNoType::class)

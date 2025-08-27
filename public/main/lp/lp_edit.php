@@ -123,7 +123,7 @@ $form->applyFilter('lp_author', 'html_filter');
 // LP image
 $label = get_lang('Add image');
 if ($lp->getResourceNode()->hasResourceFile()) {
-    $label = get_lang('Update image');
+    $label = get_lang('Update Image');
     $imageUrl = $lpRepo->getResourceFileUrl($lp);
     $form->addElement('label', get_lang('Image preview'), '<img src="'.$imageUrl.'"/>');
     $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
@@ -185,7 +185,7 @@ $form->addHtml(
 if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $form->addText(
         'accumulate_work_time',
-        [get_lang('Minimum time (minutes)'), get_lang('Minimum time (minutes)Description')]
+        [get_lang('Minimum time (minutes)'), get_lang('Minimum time (in minutes) a student must remain in the learning path to get access to the next one.')]
     );
     $defaults['accumulate_work_time'] = $lp->getAccumulateWorkTime();
 }
@@ -264,8 +264,8 @@ if ($scoreAsProgressSetting && $countItems < 2 && 2 == $lpType) {
     $form->addElement(
         'checkbox',
         'extra_use_score_as_progress',
-        [null, get_lang('LearnpathUseScoreAsProgressComment')],
-        get_lang('LearnpathUseScoreAsProgress')
+        [null, get_lang('Use the score returned, by the only SCO in this learning path, as the progress indicator in the progress bar. This modifies the SCORM behaviour in the strict sense, but improves visual feedback to the learner.')],
+        get_lang('Use score as progress')
     );
     $defaults['extra_use_score_as_progress'] = $scoreAsProgress;
 }
@@ -350,7 +350,7 @@ if ($form->validate()) {
     $lp
         ->setTitle($_REQUEST['lp_name'])
         ->setAuthor($_REQUEST['lp_author'] ?? '')
-        ->setTheme($_REQUEST['lp_theme'])
+        ->setTheme($_REQUEST['lp_theme'] ?? '')
         ->setHideTocFrame($hide_toc_frame)
         ->setPrerequisite($_POST['prerequisites'] ?? 0)
         ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)

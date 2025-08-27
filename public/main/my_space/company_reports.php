@@ -35,7 +35,7 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 $columns = [
     get_lang('Course'),
     get_lang('User'),
-    get_lang('e-mail'),
+    get_lang('E-mail'),
     get_lang('Man hours'),
     get_lang('Generated certificate'),
     get_lang('Completed learning paths'),
@@ -252,7 +252,7 @@ if (!empty($actions)) {
     $content .= $actions;
 }
 $content .= Display::url(
-    get_lang("Corporate reportResumed"),
+    get_lang("Corporate report, short version"),
     api_get_path(WEB_CODE_PATH).'my_space/company_reports_resumed.php',
     [
         'class' => 'btn btn--success',

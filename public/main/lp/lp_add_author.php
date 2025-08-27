@@ -64,23 +64,23 @@ switch ($type) {
     case 'dir':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add section')];
         break;
     case 'document':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
         break;
     default:
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add learning object or activity')];
         break;
 }
 
 if ('add_item' === $action && 'document' === $type) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
 }
 
 // Theme calls.
@@ -98,7 +98,7 @@ $form = new FormValidator(
 $extraField['backTo'] = api_get_self().'?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
 $form->addHtml('<div id="doc_form" class="col-md-12 row">');
 $extraFieldValue = new ExtraFieldValue('lp_item');
-$form->addHeader(get_lang('LpByAuthor'));
+$form->addHeader(get_lang('Learning path by author'));
 $default = [];
 $form->addHtml('<div class="col-xs-12 row" >');
 $defaultAuthor = [];
@@ -138,7 +138,7 @@ foreach ($_SESSION['oLP']->items as $item) {
     $default['itemSelected'][$itemId] = false;
 }
 
-$options = [0 => get_lang('RemoveSelected')];
+$options = [0 => get_lang('Remove selected authors')];
 $default['authorItemSelect'] = [];
 $form->addHtml('</div>');
 $teachers = [];
@@ -234,13 +234,13 @@ if ($form->validate()) {
             $currentUrl = api_request_uri();
             $redirect = false;
             if ($removeExist) {
-                Display::addFlash(Display::return_message(get_lang('DeletedAuthors')));
+                Display::addFlash(Display::return_message(get_lang('Authors have been removed')));
                 $redirect = true;
             } elseif ($price > 0) {
-                Display::addFlash(Display::return_message(get_lang('PriceUpdated')));
+                Display::addFlash(Display::return_message(get_lang('Price updated')));
                 $redirect = true;
             } elseif (!empty($messages)) {
-                Display::addFlash(Display::return_message(get_lang('RegisteredAuthors').' '.$messages));
+                Display::addFlash(Display::return_message(get_lang('Authors that have been registered :').' '.$messages));
                 $redirect = true;
             }
 

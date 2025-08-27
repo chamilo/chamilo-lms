@@ -8,20 +8,20 @@
         <Button
           class="btn btn--primary"
           icon="fa fa-folder-plus"
-          label="New folder"
+          :label="t('New folder')"
           @click="openNewDialog"
         />
         <Button
           class="btn btn--primary"
           icon="fa fa-file-upload"
-          label="Upload"
+          :label="t('Upload')"
           @click="uploadDocumentHandler"
         />
         <Button
           v-if="selectedFiles.length"
           class="btn btn--danger"
           icon="pi pi-trash"
-          label="Delete"
+          :label="t('Delete')"
           @click="confirmDeleteMultiple"
         />
         <Button

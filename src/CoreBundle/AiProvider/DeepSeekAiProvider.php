@@ -243,7 +243,7 @@ class DeepSeekAiProvider implements AiProviderInterface
 
             return null;
         } catch (Exception $e) {
-            error_log("[AI][DeepSeek] Exception: " . $e->getMessage());
+            error_log('[AI][DeepSeek] Exception: '.$e->getMessage());
 
             return null;
         }

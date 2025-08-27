@@ -58,7 +58,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $active_group = [];
     $active_group[] = $form->createElement('checkbox', 'active', '', get_lang('active'));
     $active_group[] = $form->createElement('checkbox', 'inactive', '', get_lang('inactive'));
-    $form->addGroup($active_group, '', get_lang('activeSession'), null, false);
+    $form->addGroup($active_group, '', get_lang('Active sessions'), null, false);
     $form->addButtonSearch(get_lang('Search users'));
     $defaults['active'] = 1;
     $defaults['inactive'] = 1;
@@ -259,7 +259,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                             <?php echo get_lang('Select all'); ?>
                         </button>
                         <button type="button" class="btn btn--plain" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');">
-                            <?php echo get_lang('UnSelect all'); ?>
+                            <?php echo get_lang('Unselect all'); ?>
                         </button>
                     </div>
                 </div>

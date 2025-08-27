@@ -113,7 +113,7 @@ class Rest extends WebService
         $apiKey = self::findUserApiKey($username, self::SERVICE_NAME);
 
         if ($apiKey != $apiKeyToValidate) {
-            throw new Exception(get_lang('InvalidApiKey'));
+            throw new Exception(get_lang('Invalid API key'));
         }
 
         return new self($username, $apiKey);
@@ -166,7 +166,7 @@ class Rest extends WebService
         $course = api_get_course_entity($id);
 
         if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
+            throw new Exception(get_lang('This course could not be found'));
         }
 
         $this->course = $course;
@@ -190,7 +190,7 @@ class Rest extends WebService
         $session = api_get_session_entity($id);
 
         if (!$session) {
-            throw new Exception(get_lang('NoSession'));
+            throw new Exception(get_lang('The session could not be found'));
         }
 
         $this->session = $session;
@@ -503,7 +503,7 @@ class Rest extends WebService
         );
 
         if (!$announcement) {
-            throw new Exception(get_lang('NoAnnouncement'));
+            throw new Exception(get_lang('No announcement'));
         }
 
         return [
@@ -693,7 +693,7 @@ class Rest extends WebService
         $forumInfo = getForum($forumId);
 
         if (!isset($forumInfo['iid'])) {
-            throw new Exception(get_lang('NoForum'));
+            throw new Exception(get_lang('No forum'));
         }
 
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
@@ -815,7 +815,7 @@ class Rest extends WebService
         $categoriesTempList = learnpath::getCategories($this->course->getId());
 
         $categoryNone = new CLpCategory();
-        $categoryNone->setTitle(get_lang('WithOutCategory'));
+        $categoryNone->setTitle(get_lang('Without category'));
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
         $categoryData = [];
@@ -1204,13 +1204,13 @@ class Rest extends WebService
         if ($return) {
             $out = [
                 'status' => true,
-                'message' => get_lang('ANewSessionWasCreated'),
+                'message' => get_lang('A new session has been created'),
                 'id_session' => $return,
             ];
         } else {
             $out = [
                 'status' => false,
-                'message' => get_lang('ErrorOccurred'),
+                'message' => get_lang('An error occurred.'),
             ];
         }
 
@@ -1263,10 +1263,10 @@ class Rest extends WebService
             $extraFieldValues = new ExtraFieldValue('course');
             $extraFields = $extraFieldValues->getAllValuesByItem($course->getId());
             $results['extra_fields'] = $extraFields;
-            $results['message'] = sprintf(get_lang('CourseXAdded'), $course->getCode());
+            $results['message'] = sprintf(get_lang('Course %s added'), $course->getCode());
         } else {
             $results['status'] = false;
-            $results['message'] = get_lang('CourseCreationFailed');
+            $results['message'] = get_lang('The course has not been created due to an internal error.');
         }
 
         return $results;
@@ -1318,7 +1318,7 @@ class Rest extends WebService
 
         // First check wether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
-            throw new Exception(get_lang('UserNameNotAvailable'));
+            throw new Exception(get_lang('This login is not available'));
         }
 
         $userId = UserManager::create_user(
@@ -1339,7 +1339,7 @@ class Rest extends WebService
         );
 
         if (empty($userId)) {
-            throw new Exception(get_lang('UserNotRegistered'));
+            throw new Exception(get_lang('User not registered.'));
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -1535,7 +1535,7 @@ class Rest extends WebService
         if ($result) {
             return [
                 'status' => true,
-                'message' => get_lang('URLDeleted'),
+                'message' => get_lang('URL deleted.'),
             ];
         } else {
             return [
@@ -1574,7 +1574,7 @@ class Rest extends WebService
 
         return [
                 'status' => $result,
-                'message' => get_lang('ErrorOccurred'),
+                'message' => get_lang('An error occurred.'),
             ];
     }
 
@@ -1599,7 +1599,7 @@ class Rest extends WebService
 
         return [
             'status' => true,
-            'message' => get_lang('UsersAdded'),
+            'message' => get_lang('Users added'),
         ];
     }
 
@@ -1618,11 +1618,11 @@ class Rest extends WebService
     public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
     {
         if (empty($modelSessionId) || empty($sessionName) || empty($startDate) || empty($endDate)) {
-            throw new Exception(get_lang('NoData'));
+            throw new Exception(get_lang('No data available'));
         }
 
         if (!SessionManager::isValidId($modelSessionId)) {
-            throw new Exception(get_lang('ModelSessionDoesNotExist'));
+            throw new Exception(get_lang('The template session does not exist.'));
         }
 
         $modelSession = SessionManager::fetch($modelSessionId);
@@ -1657,7 +1657,7 @@ class Rest extends WebService
         );
 
         if (empty($newSessionId)) {
-            throw new Exception(get_lang('SessionNotRegistered'));
+            throw new Exception(get_lang('Session not registered.'));
         }
 
         if (is_string($newSessionId)) {
@@ -1690,7 +1690,7 @@ class Rest extends WebService
         if (is_array($courseList)
             && !empty($courseList)
             && !SessionManager::add_courses_to_session($newSessionId, $courseList)) {
-            throw new Exception(get_lang('CoursesNotAddedToSession'));
+            throw new Exception(get_lang('Courses not added to session.'));
         }
 
         if (api_is_multiple_url_enabled()) {
@@ -1722,12 +1722,12 @@ class Rest extends WebService
     public function subscribeUserToSessionFromUsername($sessionId, $loginName)
     {
         if (!SessionManager::isValidId($sessionId)) {
-            throw new Exception(get_lang('SessionNotFound'));
+            throw new Exception(get_lang('Session not found.'));
         }
 
         $userId = UserManager::get_user_id_from_username($loginName);
         if (false === $userId) {
-            throw new Exception(get_lang('UserNotFound'));
+            throw new Exception(get_lang('User not found.'));
         }
 
         $subscribed = SessionManager::subscribeUsersToSession(
@@ -1737,7 +1737,7 @@ class Rest extends WebService
             false
         );
         if (!$subscribed) {
-            throw new Exception(get_lang('UserNotSubscribed'));
+            throw new Exception(get_lang('User not subscribed.'));
         }
 
         return true;
@@ -1767,12 +1767,12 @@ class Rest extends WebService
 
         // throw if none found
         if (empty($sessionIdList)) {
-            throw new Exception(get_lang('NoSessionMatched'));
+            throw new Exception(get_lang('No session matched.'));
         }
 
         // throw if more than one found
         if (count($sessionIdList) > 1) {
-            throw new Exception(get_lang('MoreThanOneSessionMatched'));
+            throw new Exception(get_lang('More than one session matched.'));
         }
 
         // return sessionId
@@ -1801,17 +1801,17 @@ class Rest extends WebService
             if ('loginname' === strtolower($name)) {
                 $userId = UserManager::get_user_id_from_username($value);
                 if (false === $userId) {
-                    throw new Exception(get_lang('UserNotFound'));
+                    throw new Exception(get_lang('User not found.'));
                 }
                 break;
             }
         }
         if (is_null($userId)) {
-            throw new Exception(get_lang('NoData'));
+            throw new Exception(get_lang('No data available'));
         }
         $user = api_get_user_entity($userId);
         if (empty($user)) {
-            throw new Exception(get_lang('CouldNotLoadUser'));
+            throw new Exception(get_lang('Could not load user.'));
         }
 
         // tell the world we are about to update a user
@@ -1879,7 +1879,7 @@ class Rest extends WebService
                 case 'language':
                     $languages = api_get_languages();
                     if (!in_array($value, $languages['folder'])) {
-                        throw new Exception(get_lang('LanguageUnavailable'));
+                        throw new Exception(get_lang('Language unavailable.'));
                     }
                     $user->setLocale($value);
                     break;
@@ -1929,13 +1929,13 @@ class Rest extends WebService
                                     $fieldValue = $field['field_value'];
                                     if (!isset($fieldName) || !isset($fieldValue) ||
                                         !UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
+                                        throw new Exception(get_lang('Could not update extra field value.').': '.print_r($field, true));
                                     }
                                 }
                             } else {
                                 foreach ($value as $fieldName => $fieldValue) {
                                     if (!UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.$fieldName);
+                                        throw new Exception(get_lang('Could not update extra field value.').': '.$fieldName);
                                     }
                                 }
                             }
@@ -1962,7 +1962,7 @@ class Rest extends WebService
                 case 'password': // see UserManager::update_user usermanager.lib.php:1182
                 case 'username_canonical':
                 default:
-                    throw new Exception(get_lang('UnsupportedUpdate')." '$name'");
+                    throw new Exception(get_lang('Unsupported update.')." '$name'");
             }
         }
 
@@ -2014,7 +2014,7 @@ class Rest extends WebService
 
         $json = [
             "id" => $this->course->getId(),
-            "name" => get_lang('Exercises'),
+            "name" => get_lang('Tests'),
             "visible" => (int) $toolVisibility,
             "summary" => '',
             "summaryformat" => 1,
@@ -2038,7 +2038,7 @@ class Rest extends WebService
                     'visibleoncoursepage' => 0,
                     'modicon' => $quizIcon,
                     'modname' => 'quiz',
-                    'modplural' => get_lang('Exercises'),
+                    'modplural' => get_lang('Tests'),
                     'availability' => null,
                     'indent' => 0,
                     'onclick' => '',

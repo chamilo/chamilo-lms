@@ -10,6 +10,8 @@
       ref="legacyContainer"
     />
     <ConfirmDialog />
+
+    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
   </component>
   <Toast position="top-center">
     <template #message="slotProps">
@@ -53,9 +55,13 @@ import { useI18n } from "vue-i18n"
 import { customVueTemplateEnabled } from "./config/env"
 import CustomDashboardLayout from "../../var/vue_templates/components/layout/DashboardLayout.vue"
 import EmptyLayout from "./components/layout/EmptyLayout.vue"
+import DashboardLayout from "./components/layout/DashboardLayout.vue"
+import AccessUrlChooserLayout from "./components/layout/AccessUrlChooserLayout.vue"
 import { useMediaElementLoader } from "./composables/mediaElementLoader"
 
 import apolloClient from "./config/apolloClient"
+import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
+import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 
 provide(DefaultApolloClient, apolloClient)
 
@@ -65,7 +71,16 @@ const i18n = useI18n()
 
 const { loader: mejsLoader } = useMediaElementLoader()
 
+const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
+const showAccessUrlChosserLayout = computed(
+  () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
+)
+
 const layout = computed(() => {
+  if (showAccessUrlChosserLayout.value) {
+    return AccessUrlChooserLayout
+  }
+
   if (route.meta.emptyLayout) {
     return EmptyLayout
   }
@@ -76,14 +91,14 @@ const layout = computed(() => {
     (queryParams.has("lp_id") && "view" === queryParams.get("action")) ||
     (queryParams.has("origin") && "learnpath" === queryParams.get("origin"))
   ) {
-    return "EmptyLayout"
+    return EmptyLayout
   }
 
   if (customVueTemplateEnabled) {
     return CustomDashboardLayout
   }
 
-  return `${router.currentRoute.value.meta.layout ?? "Dashboard"}Layout`
+  return router.currentRoute.value.meta.layout ? `${router.currentRoute.value.meta.layout}Layout` : DashboardLayout
 })
 
 const legacyContainer = ref(null)
@@ -111,15 +126,6 @@ watchEffect(() => {
     chEditors.forEach((editorConfig) => tinymce.init(editorConfig))
 
     content.style.display = "block"
-  }
-})
-
-watchEffect(async () => {
-  try {
-    const component = `${route.meta.layout}.vue`
-    layout.value = component?.default || "Dashboard"
-  } catch (e) {
-    layout.value = "Dashboard"
   }
 })
 

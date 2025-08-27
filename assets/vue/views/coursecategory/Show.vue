@@ -29,14 +29,14 @@
           <tbody>
             <tr>
               <td>
-                <strong>{{ $t("name") }}</strong>
+                <strong>{{ $t("Name") }}</strong>
               </td>
               <td>
                 {{ item["title"] }}
               </td>
 
               <td>
-                <strong>{{ $t("code") }}</strong>
+                <strong>{{ $t("Code") }}</strong>
               </td>
               <td>
                 {{ item["code"] }}
@@ -45,7 +45,7 @@
 
             <tr>
               <td>
-                <strong>{{ $t("description") }}</strong>
+                <strong>{{ $t("Description") }}</strong>
               </td>
               <td>
                 {{ item["description"] }}

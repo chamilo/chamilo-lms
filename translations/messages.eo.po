@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1604,7 +1604,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -1721,7 +1721,7 @@ msgstr "Defaŭlte via kurso estas publike alirebla. Vi povas ŝanĝi la alireble
 msgid "Public - access allowed for the whole world"
 msgstr "Malferma - aliro permesita al la tuta mondo"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Malferma - aliro permesita al registritaj uzuloj"
 
 msgid "Student %s is no subscribed to this course"
@@ -1751,7 +1751,7 @@ msgstr "Aldoni ligilon kaj ligi al startpaĝo"
 msgid "has been deleted"
 msgstr "estas forigita"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Forigante ĉi-kurson, vi forigos ĉiujn dokumentojn en ĝi. <p>Ĉu vi deziras forigi ĉi-kurson?"
 
 msgid "YES"
@@ -2518,9 +2518,6 @@ msgstr "Jen la nomo de la fakultato, kie la kurso estas instruata"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Se vi dubas pri la ĝusta titolo aŭ la kodo de via kurso, vi povas ĝin trovi en la kurslisto"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursprogramo </a>. Se la startpaĝo, kiun vi volas krei, ne respondas al ekzistanta kurskodo, vi povas elpensi ĝin. Ekzemple <i>RENOVIGO</i> kiam temas pri kleriga programo pri renoviga mastrumado"
 
 msgid "SCORM Path builder"
 msgstr "Konstruo de Scorm-lernopado"
@@ -3375,9 +3372,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -3492,7 +3486,7 @@ msgstr "Krei kurskategorion"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Ĉu certe ke vi volas forigi ĉi-kategorion? La kursoj de ĉi-kategorio estas translokigitaj ekster la kurskategoriojn"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kurskategorioj"
 
 msgid "Courses in this category"
@@ -4357,7 +4351,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Ĉu permesi al kursmastrumantoj krei kategoriojn en la grupa modulo?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "Vi povas mastrumi la platformajn lingvojn en alia parto de la mastruma modulo: <ahref=\"languages.php\">Dokeos-aj Lingvovariabloj</a>"
+msgstr "Vi povas mastrumi la platformajn lingvojn en alia parto de la mastruma modulo: <ahref=\"languages.php\">Chamilo-aj Lingvovariabloj</a>"
 
 msgid "Production Server"
 msgstr "Produkta servilo"
@@ -4500,10 +4494,10 @@ msgstr "Ĉi tiu uzulo aliĝis al neniu klaso"
 msgid "This class isn't subscribed in a course"
 msgstr "Tiu ĉi klaso aliĝis al neniu kurso"
 
-msgid "tool"
+msgid "Tool"
 msgstr "modulo"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "nombro da eroj"
 
 msgid "Documents and folders"
@@ -4665,7 +4659,7 @@ msgstr "Bonvolu enigi anoncon"
 msgid "Please give a notice title"
 msgstr "Bonvolu enigi titolon"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Bonvolu enigi nomon de la ligilo"
 
 msgid "Insert this link"
@@ -5067,7 +5061,7 @@ msgstr "Fini la sesian kreadon"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Konektilo al vidkonferenca RTMP-protokolo"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Sesia nomo baldaŭ ekzistos"
 
 msgid "No classes have been created"
@@ -5217,8 +5211,8 @@ msgstr "Se tiu opcio estas aktiva, konektita mesaĝilo estas malfermata post alk
 msgid "Include header line?"
 msgstr "Ĉu aldoni la CSV-titolon?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Jes, aldoni la CSV-titolon<br /> Tiu linio difinas la kampojn kaj estas necesan kiam vi volas importi la dosieron en alian Chamilo-kampon"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Tiu linio difinas la kampojn kaj estas necesan kiam vi volas importi la dosieron en alian Chamilo-kampon"
 
 msgid "List of users subscribed to course"
 msgstr "Listo de uzantoj enskribitaj por la kurso"
@@ -5451,7 +5445,7 @@ msgstr "Elektolisto"
 msgid "Multiple selection drop-down"
 msgstr "Plurelekta listo"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Kampo aldonitis"
 
 msgid "Grades thresholds colouring"
@@ -5703,7 +5697,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5750,9 +5744,6 @@ msgstr "Identiga valoro de  repetitoro"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Se la ĉi-supre donita repetitora kampo estas markita, ties valoro estu ene de unu el la repetitorkampaj subelementoj por ke la uzanto estu konsiderata kiel instruisto. Se vi lasas ĉi tiun kampon malplena, la sola kondiĉo estas, ke la kampo ekzistas por ĉi tiu LDAP-uzanto estu konsiderata kiel instruisto. Ekzemple, la kampo povus esti \"membro de\" kaj la valoro serĉata povus esti \"CN=G_TREJNISTO,OU=Trejnisto\"."
-
-msgid "is not writeable"
-msgstr ""
 
 msgid "The field is successfully moved down"
 msgstr ""
@@ -6342,16 +6333,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6423,10 +6411,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6584,9 +6572,6 @@ msgstr "Nur por kursmastrumanto"
 
 msgid "Define Headings"
 msgstr "Difini Aldonan Informon"
-
-msgid "Back to users list"
-msgstr "Reiri al la uzula listo"
 
 msgid "change rights of"
 msgstr "Ŝanĝi mastrumrajtojn de"
@@ -7005,9 +6990,6 @@ msgstr "Grupoj sur bazo de klasoj"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Uzante ĉi tiun opcion vi povas ekfari grupojn sur bazo de klasoj enskribitaj en via kurso"
 
-msgid "Back to Groups list"
-msgstr ""
-
 msgid "A new forum has now been created"
 msgstr ""
 
@@ -7284,7 +7266,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr ""
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7677,7 +7659,7 @@ msgstr "Reiri al la demandlisto de la ekzerco"
 msgid "Answers to the question"
 msgstr "Respondoj al la demandoj"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Averto: Ĉi-demando kaj ties respondoj estas uzataj en diversaj ekzercoj. Ĉu vi volas ŝanĝi la demandon?"
 
 msgid "in all tests"
@@ -7826,9 +7808,6 @@ msgstr ""
 
 msgid "Exercise added"
 msgstr ""
-
-msgid "Assesment settings"
-msgstr "Valortaksaj parametroj"
 
 msgid "active"
 msgstr "aktiva"
@@ -8412,9 +8391,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8495,9 +8471,6 @@ msgstr "Konektitaj uzuloj"
 
 msgid "Remove"
 msgstr "Forigi"
-
-msgid "Back to courses list"
-msgstr "Reiru al via kurslisto"
 
 msgid "Links"
 msgstr "Ligiloj"
@@ -8593,9 +8566,6 @@ msgid "First name"
 msgstr ""
 
 msgid "Last name"
-msgstr ""
-
-msgid "e-mail"
 msgstr ""
 
 msgid "Slideshow conversion"
@@ -8898,7 +8868,7 @@ msgstr "Esperanto"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Tiu kurskodo jam ekzistas. Bonvolu elekti alian."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Gruplisto"
 
 msgid "The target folder does not exist"
@@ -9357,9 +9327,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr ""
 
@@ -9390,7 +9357,7 @@ msgstr ""
 msgid "Could not open"
 msgstr ""
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9522,7 +9489,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9606,7 +9573,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -9666,7 +9633,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -10194,7 +10161,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"
@@ -10210,9 +10177,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -10539,7 +10503,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11550,7 +11514,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13332,7 +13296,7 @@ msgstr ""
 msgid "Number of question"
 msgstr ""
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr ""
 
 msgid "Save and exit"
@@ -13383,13 +13347,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13587,7 +13551,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -13710,7 +13674,7 @@ msgstr "Ĉu estas lecionaro, dokumentaro, bibliografio, list da ligiloj al inter
 msgid "Short description of the course materials."
 msgstr "Konciza priskribo de la kursmaterialo"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Ĉu ekzistas instruistoj, helpantoj, teknika helpoficejo, sociaj helpantoj, komputilaj ĉambroj?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14235,9 +14199,6 @@ msgstr ""
 msgid "Delete all papers"
 msgstr ""
 
-msgid "Back to Assignments list"
-msgstr ""
-
 msgid "Edit and mark paper"
 msgstr ""
 
@@ -14296,7 +14257,7 @@ msgid "<p>The tests tool allows you to create tests containing as many questions
 msgstr "<p>La Ekzerca modulo ebligas krei diversajn ekzercojn enhavantajn tiom da demandoj, kiom vi volas.<i>Terminologio: \"ekzerco\" aŭ \"testo\" konsistas el aro da \"demandoj\".</i><br><br> Pluraj demandotipoj disponeblas:<br> <ul> <li>Plurelektaj kun unu ebla respondo</li> <li>Plurelektaj kun pluraj eblaj respondoj</li> <li>Kupladaj</li> <li> Kompletigendaj</li> </ul>Ekzerco kolektas nombron da demandoj kun komuna temo.</p> <hr> <b>Krei ekzercojn </b> <p>Por krei ekzercon: musklaku sur la ligilon \"nova ekzerco\".<br><br>  Donu nomon al la ekzerco, kaj ankaŭ priskribo (fakultative).<br><br>Vi ankaŭ povas elekti inter du ekzercaj tipoj:<br> <ul> <li>Ĉiuj demandoj sur unu paĝo</li> <li>Po unu demando sur paĝo (sinsekva testo)</li> </ul>Vi povas ankaŭ indiki ĉu vi volas ordigi la demandojn laŭ hazardo kiam la ekzerco komenciĝas.<br><br>Musklaku sur \"en ordo\" por konservi vian ekzercon. Vi nun iru al la demandomastrumado de la ekzerco.</p> <hr> <b>Aldoni demandojn</b> <p>Vi nun povas aldoni demandojn al la ĵus kreita ekzerco. Priskribo estas fakultativa, same kiel desegnaĵo.</p> <hr> <b>Plurelektaj demandoj</b> <p>Tio ĉi estas la tiel nomita MAQ / MCQ demandotipo (Multiple Answer Question / Multiple Choice Question).<br><br>Por krei plurelektan demandon:<br> <ul> <li>Difinu respondojn por via demando. Vi povas aldoni respondojn aŭ forigi ilin per musklako sur la butonoj \"+ respondo\" aŭ \"- respondo\".</li> <li>Marku per la maldekstraj butonoj la ĝusta(j)n respondojn.</li> <li>Aldonu fakultativan komentarion por ĉiu responda elemento. Tiu komentario videblas al studento nur post respondo al la demando.</li> <li>Sekve atribuu gravecon al ĉiu respondo. La graveco povas esti pozitiva aŭ negativa entjero, aŭ nul.</li> <li>Konservu la respondojn musklakante sur \"en ordo\"..</li> </ul></p> <hr> <b>Kompletigendaj demandoj</b> <p>Per tio vi povas krei tekston kun kompletigendaj spacoj. La celo estas igi studentojn plenigi la vortojn mankantajn en la teksto.<br><br> Por krei kompletigendaj spacojn, vi metu la vorton inter kvadrataj hoketoj [kiel ĉi tie].<br><br> Konservu vian tekston kaj sekve vi povas atribui gravecojn al ĉiu kompletigenda spaco. Ekzemple: por demando, kiu valoras 10 poentojn kun 5 kompletigendaj spacoj, vi povas atribui 2 poentojn al ĉiu kompletigenda spaco.</p> <hr> <b>Kuplado</b> <p>Ĉe tiu demandotipo la celo estas, ke studentoj ligu elementojn el elektolisto kun elementoj el alia elektolisto.<br><br>Ĝi uzeblas ankaŭ por igi studentojn ordigi elementojn en difinita sinsekvo.<br><br>Vi devas plenigi du elektolistojn por uzi tiun demandotipon. Vi povas aldoni tiom da elementoj, kiom vi volas. Per la ŝovlistoj vi povas ligi la elementojn el unu listo al elementoj de la alia listo.<br><br>Rimarku: diversaj elementoj de la unua listo povas ligiĝi al sama elemento el la dua listo.<br><br>Atribuu gravecon al ĉiu bona kuplo, poste konservu vian demandon.</p> <hr> <b>Ŝanĝi ekzercojn</b> <p>Ŝanĝi ekzercon similas al krei novan ekzercon. Musklaku sur la desegnaĵo <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> apud la ekzerco por ŝanĝi ĝin. Sekvu la ĉi-suprajn instruojn por fari ekzercojn.</p> <hr> <b>Viŝi ekzercojn</b> <p>Por viŝi musklaku sur la bildsimbolon <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> apud la ekzerco..</p> <hr> <b>Aktivigi ekzercojn</b> <p>Por malfermi ekzercon al studentoj vi aktivigu #285;in klakante sur la desegnaĵon <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> apud la ekzerco.</p> <hr> <b>Ruli ekzercon</b> <p>Vi povas testi vian ekzercon klakante sur ĝian nomon en la ekzercolisto.</p> <hr> <b>Laŭhazardaj ekzercoj</b> <p>Kiam vi kreas aŭ ŝanĝas ekzercon, vi povas indiki ilian aranĝon en hazarda sinsekvo. <br><br>Pro indiko de tiu opcio ĉiu studento vidos ĉiufoje la demandojn en alia sinsekvo.<br><br>Se vi havas multajn demandojn, vi ankaŭ povas ebligi lotumon el limigita nombro da demandoj el la tuta demandaro de la ekzerco.</p> <hr> <b>Kolekto de ĉiuj demandoj</b> <p>Se vi viŝas ekzercon, la individuaj demandoj de tiu ekzerco ne estas kune viŝataj, tiel ke ili restu reuzeblaj por novaj ekzercoj (per la demandokolekto).<br><br>Tiu ĝenerala listo da demandoj ankaŭ ebligas al vi uzi demandon samtempe en pluraj ekzercoj.<br><br>Defaŭlte ĉiuj demandoj de via kurso estas montrataj en la listo. Vi povas detaligi tiun supervidon per la ŝovmenuo \"Filtri\". Ekzemple: elektu la nomon de ekzerco el la ŝovmenuo kaj vi vidos nur la demandojn ligitaj al tiu demando.<br><br>Vi povas ankaŭ montri la \"orfajn\" demandojn; tio estas demandoj ne apartenantaj al ekzerco. </p>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "Du funkcioj de la lernpada ilo: <ul> <li>Krei propran lernpadon</li> <li>Alŝuti ekzistantan lernpadon en Scorm- aŭ IMS-formato</li> </ul> <img src=\"../img/path_help.gif\"> <p><b> Kio estas lernpado?</b> </p> <p>Lernpado estas sinsekvo de grandaj aŭ etaj lernceloj, disdividitaj en diversajn modulojn.Ĝi povas esti organizata (kiel enhavotabelo) aŭ kiel listo de agadoj necesaj por la kompreno kaj ekzerco de difinitaj scio kaj scipovoj. </p> <p>Krom la oferto de strukturo lernpado povas ankaŭ necesigi difinitan sinsekvon. Tio signifas, ke iuj paŝoj en la lernpado estas kondiĉo por pluiri al sekvanta paŝo ('vi ne povas komenci paŝon 2 antau fini paŝon 1'). La proponita sinsekvo povas esti nur sugesto (la diversaj paŝoj estas montrataj unu post alia) aŭ deviga (kondiĉoj estas donataj por sekvi difinitan sinsekvon).  </p> <p><b>Kiel konstrui lernpadon?</b></p> <p> Unue vi alvenu en la lernpada disvolva sekcio. Sur la lernpada ekrano vi trovas ligilon al ĝi. Musklakante sur <i>Aldonu novan lernpadon </i>vi povas aldoni multajn lernpadojn sed ili restos malplenaj ĝis kiam moduloj kaj lernceloj estos aldonitaj al ili.<br> Kiam vi videbligos la padon, ĝi aperos kiel nova ero sur la startpaĝo dela kurso igante la lernpadon pli facile alirebla.</p> <p> <b>Kiuj estas la eroj de tiuj lernpadoj? (Kiujn elementojn povas esti aldonataj?)</b></p> <p>Ĉiuj Chamilo-elementoj, -activecoj kaj -enhavo, kiujn vi trovas utilaj kaj kiujn vi pensas sencoplenaj por via lernpado, povas esti aldonataj :<br> <ul> <li>Agendaj elementoj</li> <li>Dokumentoj (tekstoj, bildoj, Office-dokumentoj, ...)</li> <li>Anoncoj</li> <li>Tutaj forumoj</li> <li>Temoj</li> <li>Individuaj mesaĝoj</li> <li>Ligiloj</li> <li>Dokeos-Testoj</li> <li>HotPotatoes-Testoj<br>(noto: la nevideblaj testoj metitaj en la lenrpado nur ĉi tie videblas al studentoj)</li> <li>Atribupaĝo</li> <li>Demetuja paĝo</li> <li>Ligiloj ekster la Chamilo-sistemo</li> </ul> </p> <p><b>Kromaj ebloj de Lernpado</b></p> <p>Eblas peti de studentoj, ke ili sekvas (legas) lernpadon en antaŭe difinita sinsekvo. Ja povas esti kondiĉoj fiksataj en la lernpado. Tio signifas ekzemple, ke studentoj ne povas komenci kvizon 2 antaŭ ol finleginti dokumenton 1. Ĉiuj elementoj havas statuson: finita aŭ nekompleta, tiel ke la progreso de la studentoj ĉiam estas videbla. </p> <p> Se vi ŝanĝas la titolon en paŝo, tiu nova titolo aperos en la pado, sed la originala titolo ne estas viŝata. Se vi ekzemple volas montri test8.doc kiel 'Fina ekzameno' en la pado, vi ne devas renomi la dosieron. Vi povas simple aldoni novan titolon. Tio ankaŭ faciligas por nomi ligilojn tro longajn. </p> <p> Poste vi povas kontroli, kiel aspektas via lernplano el 'studenta vidpunkto'. Maldekstre aperos enhavotabelo dum dekstre la diversaj paŝoj estas montrataj unu post alia. </p> <br> <p><b> Kio estas Scorm- aŭ IMS formata Lernpado kaj kiel oni alŝutu aŭ importu ĝin?</b> </p> <p>La Lernpada ilo ebligas importon de SCORM- kaj IMS-kongrua kursenhavon.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) estas publika normo, respektata de la plej gravaj aktoroj en la tereno de elektronika lernado, kiel NETg, Macromedia, Microsoft, Skillsoft, ktp. kaj ĝi celas 3 nivelojn: </p> <ul> <li><b>Ekonomiko</b> : Scorm ebligas reuzi kompletajn kursojn aŭ erojn en diversaj 'Learning Management Systems (LMS)' ĉar enhavo kaj kunteksto estas apartigataj,</li> <li><b>Pedagogio</b> : Scorm integras la ideon de postulita antaŭscio aŭ <i>sinsekvo</i> (<i>ekzemple</i>\"Vi ne povas lairi ĉapitron 2 antaŭ fininti kvizon 1\"),</li> <li><b>Teknologio</b> : Scorm generas enhavotabelon sendepende de la enhavo kaj ekster la LMS. Ĝi helpas interigi enhavon kaj LMSn. Tiu komunikado precipe okazas per <i>legomarkoj </i>(\"Kie troviĝas John en la kurso?\"), <i>poentaro</i> (\"Kiel sukcesis John en la testo?\") kaj<em> tempo</em> (\"Kiom da tempo uzis John por fini ĉapitron 1?\").</li> </ul> <b>Kiel fari SCORM-kongruan lernpadon?</b><br> <br> Logike vi povus uzi la Chamilo-Lernpado-Konstruilon. Vi tamen povus dezirri fari tutan Scorm-kongruan paketon per via loka komputilo antaŭ ol alŝuti ĝin al la Chamilo-platformo. Tiukaze estas konsilinde uzi pli elaboritan ilaron, kiel Lectora? kaj  Reload? <br> </p> <p> <b>Uzeblaj ligiloj</b><br> <ul> <li>Adlnet : responsa pri Scorm-normigo, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Malferm-fonta senpaga Scorm-ludilo kaj redaktilo, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm-disvolva programaro, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes hejmpaĝo , <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Noto :</b></p> <p> La lernpada sekcio montras kaj la <i>memfaritajn</i> kaj alŝutitajn <i>Scorm-formatajn Lernpadojn</i>. </p>"
+msgstr "Du funkcioj de la lernpada ilo: <ul> <li>Krei propran lernpadon</li> <li>Alŝuti ekzistantan lernpadon en Scorm- aŭ IMS-formato</li> </ul> <img src=\"../img/path_help.gif\"> <p><b> Kio estas lernpado?</b> </p> <p>Lernpado estas sinsekvo de grandaj aŭ etaj lernceloj, disdividitaj en diversajn modulojn.Ĝi povas esti organizata (kiel enhavotabelo) aŭ kiel listo de agadoj necesaj por la kompreno kaj ekzerco de difinitaj scio kaj scipovoj. </p> <p>Krom la oferto de strukturo lernpado povas ankaŭ necesigi difinitan sinsekvon. Tio signifas, ke iuj paŝoj en la lernpado estas kondiĉo por pluiri al sekvanta paŝo ('vi ne povas komenci paŝon 2 antau fini paŝon 1'). La proponita sinsekvo povas esti nur sugesto (la diversaj paŝoj estas montrataj unu post alia) aŭ deviga (kondiĉoj estas donataj por sekvi difinitan sinsekvon).  </p> <p><b>Kiel konstrui lernpadon?</b></p> <p> Unue vi alvenu en la lernpada disvolva sekcio. Sur la lernpada ekrano vi trovas ligilon al ĝi. Musklakante sur <i>Aldonu novan lernpadon </i>vi povas aldoni multajn lernpadojn sed ili restos malplenaj ĝis kiam moduloj kaj lernceloj estos aldonitaj al ili.<br> Kiam vi videbligos la padon, ĝi aperos kiel nova ero sur la startpaĝo dela kurso igante la lernpadon pli facile alirebla.</p> <p> <b>Kiuj estas la eroj de tiuj lernpadoj? (Kiujn elementojn povas esti aldonataj?)</b></p> <p>Ĉiuj Chamilo-elementoj, -activecoj kaj -enhavo, kiujn vi trovas utilaj kaj kiujn vi pensas sencoplenaj por via lernpado, povas esti aldonataj :<br> <ul> <li>Agendaj elementoj</li> <li>Dokumentoj (tekstoj, bildoj, Office-dokumentoj, ...)</li> <li>Anoncoj</li> <li>Tutaj forumoj</li> <li>Temoj</li> <li>Individuaj mesaĝoj</li> <li>Ligiloj</li> <li>Chamilo-Testoj</li> <li>HotPotatoes-Testoj<br>(noto: la nevideblaj testoj metitaj en la lenrpado nur ĉi tie videblas al studentoj)</li> <li>Atribupaĝo</li> <li>Demetuja paĝo</li> <li>Ligiloj ekster la Chamilo-sistemo</li> </ul> </p> <p><b>Kromaj ebloj de Lernpado</b></p> <p>Eblas peti de studentoj, ke ili sekvas (legas) lernpadon en antaŭe difinita sinsekvo. Ja povas esti kondiĉoj fiksataj en la lernpado. Tio signifas ekzemple, ke studentoj ne povas komenci kvizon 2 antaŭ ol finleginti dokumenton 1. Ĉiuj elementoj havas statuson: finita aŭ nekompleta, tiel ke la progreso de la studentoj ĉiam estas videbla. </p> <p> Se vi ŝanĝas la titolon en paŝo, tiu nova titolo aperos en la pado, sed la originala titolo ne estas viŝata. Se vi ekzemple volas montri test8.doc kiel 'Fina ekzameno' en la pado, vi ne devas renomi la dosieron. Vi povas simple aldoni novan titolon. Tio ankaŭ faciligas por nomi ligilojn tro longajn. </p> <p> Poste vi povas kontroli, kiel aspektas via lernplano el 'studenta vidpunkto'. Maldekstre aperos enhavotabelo dum dekstre la diversaj paŝoj estas montrataj unu post alia. </p> <br> <p><b> Kio estas Scorm- aŭ IMS formata Lernpado kaj kiel oni alŝutu aŭ importu ĝin?</b> </p> <p>La Lernpada ilo ebligas importon de SCORM- kaj IMS-kongrua kursenhavon.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) estas publika normo, respektata de la plej gravaj aktoroj en la tereno de elektronika lernado, kiel NETg, Macromedia, Microsoft, Skillsoft, ktp. kaj ĝi celas 3 nivelojn: </p> <ul> <li><b>Ekonomiko</b> : Scorm ebligas reuzi kompletajn kursojn aŭ erojn en diversaj 'Learning Management Systems (LMS)' ĉar enhavo kaj kunteksto estas apartigataj,</li> <li><b>Pedagogio</b> : Scorm integras la ideon de postulita antaŭscio aŭ <i>sinsekvo</i> (<i>ekzemple</i>\"Vi ne povas lairi ĉapitron 2 antaŭ fininti kvizon 1\"),</li> <li><b>Teknologio</b> : Scorm generas enhavotabelon sendepende de la enhavo kaj ekster la LMS. Ĝi helpas interigi enhavon kaj LMSn. Tiu komunikado precipe okazas per <i>legomarkoj </i>(\"Kie troviĝas John en la kurso?\"), <i>poentaro</i> (\"Kiel sukcesis John en la testo?\") kaj<em> tempo</em> (\"Kiom da tempo uzis John por fini ĉapitron 1?\").</li> </ul> <b>Kiel fari SCORM-kongruan lernpadon?</b><br> <br> Logike vi povus uzi la Chamilo-Lernpado-Konstruilon. Vi tamen povus dezirri fari tutan Scorm-kongruan paketon per via loka komputilo antaŭ ol alŝuti ĝin al la Chamilo-platformo. Tiukaze estas konsilinde uzi pli elaboritan ilaron, kiel Lectora? kaj  Reload? <br> </p> <p> <b>Uzeblaj ligiloj</b><br> <ul> <li>Adlnet : responsa pri Scorm-normigo, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Malferm-fonta senpaga Scorm-ludilo kaj redaktilo, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm-disvolva programaro, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes hejmpaĝo , <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Noto :</b></p> <p> La lernpada sekcio montras kaj la <i>memfaritajn</i> kaj alŝutitajn <i>Scorm-formatajn Lernpadojn</i>. </p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 msgstr "Ĉi-ilo helpos vin facile priskribi vian kurson de ekstere. Ĝi helpos vin doni al viaj studentoj pli bonan vidon de tio, kion ili povas atendi de via kurso. <br/><br/> Ĝi donos al vi la okazon denove pripensi vian kurson. En ĝi vi trovos proponojn kaj elementojn. Se vi volas enmeti kursan priskribon kun viaj propraj elementoj, uzu nur la elementon 'Aliaj' kaj elektu titolon. <br/><br/> Por plenigi la kursan priskribon unue elektu 'krei kaj ŝanĝi de formularoj'. Plenigu la formularon kaj validigu. Vi ĉiam povas ŝanĝi la enhavon de ĉiu elemento (krajono) aŭ ĝin forigi (ruĝa kruco)."
@@ -14349,10 +14310,10 @@ msgstr "Manlibro"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -14364,8 +14325,8 @@ msgstr "Instalada lingvo"
 msgid "Please read the following requirements thoroughly."
 msgstr "Bonvolu atente legi"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Atentu!!<br /> Ekzistas Dokeso-instalilo en via sistemo."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Atentu!! Ekzistas Chamilo-instalilo en via sistemo."
 
 msgid "New installation"
 msgstr "Nova instalado"
@@ -14497,12 +14458,6 @@ msgid "Please go back to Step"
 msgstr ""
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-msgstr ""
-
-msgid "MBString extension not available"
-msgstr ""
-
-msgid "MySQL extension not available"
 msgstr ""
 
 msgid "Optional parameters"
@@ -15147,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"
@@ -15621,7 +15576,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15690,7 +15645,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -17388,7 +17343,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17433,13 +17388,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -17796,7 +17751,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18126,15 +18081,6 @@ msgstr ""
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr ""
 
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
-msgstr ""
-
 msgid "To social group"
 msgstr ""
 
@@ -18402,7 +18348,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -18606,13 +18552,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -18891,7 +18831,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19035,7 +18975,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -21291,7 +21231,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22845,7 +22785,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22920,13 +22860,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23466,10 +23403,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23772,10 +23709,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24009,7 +23946,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24075,10 +24012,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

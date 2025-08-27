@@ -629,10 +629,10 @@ msgstr "فئات المقرر في %s موقع:"
 msgid "Course categories available"
 msgstr "فئات المقرر المتوفرة"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "المجموعة الان اصبحت تنتمي الى الموقع المحدد"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "يجب عليك اختيار مجموعة واحدة على الاقل وموقع واحد"
 
 msgid "Agenda list"
@@ -1613,7 +1613,7 @@ msgstr "لايمكن التعرف على نوع التحزيم.تأكد من ص�
 msgid "Move the current forum"
 msgstr "انقل المنتدى الحالي"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "تحذيرعندما تعدل في محتوى خطوة من خطوات سكورمقد تتسبب في تعديل او تدمير مسار التعلم لهذه الخطوة"
 
 msgid "Please provide a subject or message"
@@ -1730,7 +1730,7 @@ msgstr "  .مقررك عام افتراضيا؛ لكنه بإمكانك تحدي
 msgid "Public - access allowed for the whole world"
 msgstr "عام - الدخول للمقرر متاح للعالم باجمعه"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "  مفتوح - الوصول مسموح فقط  للمستخدمين المسجلين في النظام"
 
 msgid "Student %s is no subscribed to this course"
@@ -1760,7 +1760,7 @@ msgstr "إضافة رابط الصفحة على الصفحة الرئيسية"
 msgid "has been deleted"
 msgstr "تم الحذف"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "حذف هذا المجال سوف يحذف كافة المحتوى ( مستندات، روابط . . . ) إنه يتضمن إلغاء تسجيل جميع أعضائها ( لا يزيلها من المجالات الأخرى).إنه أيضاً يحذف أي مقررات إفتراضية ترتبط بهذا المقرر.هل تريد فعلاً حذف مساحة المقرر؟"
 
 msgid "YES"
@@ -2527,9 +2527,6 @@ msgstr " هذا التصنيف الذي سيوضع الدرس ضمنه"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "  إذا كنت في شك من رمز مقررك, استشر"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr " برنامج المقرر</a> إذا لم يكن لدى مقررك رمز خاص . لأي سبب كان . اخترع واحدا , مثلا :  <i>حاسب</i> إذا كان مقررك خاص بالحاسب الآلي"
 
 msgid "SCORM Path builder"
 msgstr " مولد سكورم مسار التّعلم"
@@ -3384,9 +3381,6 @@ msgstr "انشاء ملاحظة"
 msgid "Edit my personal note"
 msgstr "تعديل ملاحظتي الشخصية"
 
-msgid "Back to note list"
-msgstr "الرجوع الى قائمة الملاحظات"
-
 msgid "Notebook management"
 msgstr "ادارة دفتر الملاحظات"
 
@@ -3501,7 +3495,7 @@ msgstr " إنشاء تصنيف للمقررات"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "  هل أنت متأكد من أنك تريد حذف هذا التصنيف الخاص بالمقررات ؟ المقررات التابعة لهذا التصنيف سيتم إخراجها من هذا التصنيف"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr " تصنيف المقررات"
 
 msgid "Courses in this category"
@@ -4509,10 +4503,10 @@ msgstr " هذا المستخدم غير مسجل في أي فصل"
 msgid "This class isn't subscribed in a course"
 msgstr " هذا الفصل غير مسجل في أي مقرر"
 
-msgid "tool"
+msgid "Tool"
 msgstr "  أداة"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr " عدد البنود"
 
 msgid "Documents and folders"
@@ -4674,7 +4668,7 @@ msgstr " الرجاء إعطاء نصا للملاحظة"
 msgid "Please give a notice title"
 msgstr " الرجاء إعطاء عنوانا للملاحظة"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "  الرجاء إعطاء اسم الرابط"
 
 msgid "Insert this link"
@@ -5076,7 +5070,7 @@ msgstr "الانتهاء من انشاء الدورة"
 msgid "Videoconference RTMTP protocol port"
 msgstr "منفذ بروتوكول الاتصال المرئيRTMP"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "يوجد اسم للدورة مسبقا"
 
 msgid "No classes have been created"
@@ -5226,7 +5220,7 @@ msgstr " في حالة تنشيط هذا الخيار، يتم تحرير الب
 msgid "Include header line?"
 msgstr " ؟ CSV إضافة العنوان الرأسي للملف"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr " نعم، قم بإضافة العنوان الرأسي <br / > للملف CSV. يقوم هذا السطر بتعريف الحقول و يعتبر ضروري عند استيراد  الملف من دوكيوس آخر .CSV للملف <br /> نعم، قم بإضافة العنوان الرأسي"
 
 msgid "List of users subscribed to course"
@@ -5460,7 +5454,7 @@ msgstr "تحديد المنسدلة"
 msgid "Multiple selection drop-down"
 msgstr "متعددة اختيار المنسدلة"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "أضيف الحقل بنجاح"
 
 msgid "Grades thresholds colouring"
@@ -5712,7 +5706,7 @@ msgstr "LDAP استيراد المستخدمين للمقرر عبر"
 msgid "Import LDAP users and a step into a session"
 msgstr "LDAP استيراد المستخدمين للدورة عبر"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchro استيراد الطلبة في مقرر الدورة عبر"
 
 msgid "Assessments tab"
@@ -5759,9 +5753,6 @@ msgstr "القيمة التعريفية للمعلم"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "عندما تكتمل عملية التحقق من حقل المعلم في الاعلى، فان هذه القيمة سوف تكون داخل احدى حقول المعلم"
-
-msgid "is not writeable"
-msgstr "غير قابل للتحرير"
 
 msgid "The field is successfully moved down"
 msgstr "تم تحريك الحقل إلى الأسفل بنجاح"
@@ -6351,16 +6342,13 @@ msgstr "مقررات من الدورة الاصلية"
 msgid "Courses from the destination session"
 msgstr "مقررات من الدورة المقصودة"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "المساعدة في نسخ المقررات من دورة الى دورة"
-
 msgid "Type of copy"
 msgstr "نوع النسخ"
 
 msgid "Copy from course in session to another session"
 msgstr "النسخ من مقرر موجود داخل دورة الى دورة اخرى"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "يجب عليك اختيار مقرر من الدورة الاصلية"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6432,10 +6420,10 @@ msgstr "اظهار بيانات تعليق الدورة"
 msgid "Subscription sessions in the category"
 msgstr "تسجيل الدورات في الفئة"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "اظهار قائمة الدورة في النظام"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "اظهار قائمة الدورات في الفئات"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6593,9 +6581,6 @@ msgstr "مدرسين فقط"
 
 msgid "Define Headings"
 msgstr "Define Headings"
-
-msgid "Back to users list"
-msgstr "الرجوع لقائمة المستخدمين"
 
 msgid "change rights of"
 msgstr "غير صلاحيات"
@@ -7014,9 +6999,6 @@ msgstr "مجموعات من الفصول"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "باستخدام هذه الخاصية, يمكنك  إنشاء مجموعات بناءا على الفصول المسجلة في مقررك"
 
-msgid "Back to Groups list"
-msgstr "الرجوع لقائمة المجموعات"
-
 msgid "A new forum has now been created"
 msgstr "تم إنشاء المنتدى الجديد"
 
@@ -7293,7 +7275,7 @@ msgstr "قم بتحويل المستند الحالي"
 msgid "Edit the current document"
 msgstr "قم بتحرير المستند الحالي"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "! تحذير"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7686,7 +7668,7 @@ msgstr "الرجوع لقائمة الأسئلة"
 msgid "Answers to the question"
 msgstr "أجوبة للسؤال"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "تحذير ! هذا السؤال وجوابه مستخدم من قبل بعض الإختبارات الأخرى. هل تريد تعديلهم"
 
 msgid "in all tests"
@@ -7835,9 +7817,6 @@ msgstr "لقد وصلت الى العدد الاقصى للمحاولات لهذ
 
 msgid "Exercise added"
 msgstr "تمت إضافة التمرين"
-
-msgid "Assesment settings"
-msgstr " عوامل التقييم"
 
 msgid "active"
 msgstr "فعال"
@@ -8421,9 +8400,6 @@ msgstr "الوصول لحد الوقت للمدير"
 msgid "Last score of a exercise"
 msgstr "اخر درجة للتمرين"
 
-msgid "Back to result list"
-msgstr "الرجوع الى قائمة النتائج"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "اذا قمت بتعديل درجة السؤال، فتذكر بان هذا التمرين تم اضافته الى المقرر"
 
@@ -8504,9 +8480,6 @@ msgstr "المستخدمون المتصلون"
 
 msgid "Remove"
 msgstr "إزالة"
-
-msgid "Back to courses list"
-msgstr " الرجوع إلى قائمة مقرراتي"
 
 msgid "Links"
 msgstr " روابط"
@@ -8603,9 +8576,6 @@ msgstr "الإسم الأول"
 
 msgid "Last name"
 msgstr "اللقب"
-
-msgid "e-mail"
-msgstr "البريد الإلكتروني"
 
 msgid "Slideshow conversion"
 msgstr "محول شرائح العرض"
@@ -8907,7 +8877,7 @@ msgstr "اللغة"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "عفوا ! رمز المقرر مستخدم مسبقا, فضلا اختر واحدا أخر."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "قائمة المجموعات"
 
 msgid "The target folder does not exist"
@@ -9366,9 +9336,6 @@ msgstr "دوراتي النشطة"
 msgid "My inactive sessions"
 msgstr "دوراتي غير النشطة"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "لقد تم تنشيط الإمتداد لكن لا يمكن تشغيله حاليا"
-
 msgid "My learners"
 msgstr "طلابي"
 
@@ -9399,8 +9366,8 @@ msgstr "لا يوجد مصادر لإعادة استخدامها"
 msgid "Could not open"
 msgstr "لا يمكن الفتح"
 
-msgid "Frequentation time"
-msgstr "Frequentation time"
+msgid "Time in course"
+msgstr "Time in course"
 
 msgid "This course could not be found"
 msgstr "لم يتم العثور على المقرر"
@@ -9531,8 +9498,8 @@ msgstr "لم يتم زيارة أي رابط"
 msgid "No document downloaded"
 msgstr "لم يتم تنزيل أي مستند"
 
-msgid "clicks"
-msgstr "نقرات"
+msgid "%d clicks"
+msgstr "%d نقرات"
 
 msgid "Search results"
 msgstr "نتائج البحث"
@@ -9615,7 +9582,7 @@ msgstr "رابط الهوية المفتوحة"
 msgid "The file is too big to upload."
 msgstr "حجم الملف كبير جدا من أجل التحميل"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "إن الملف الذي حمّلته لم يستلم بنجاح . يرجى إعادة المحاولة لاحقًا أو الاتصال بمدير إدارة البوابة ."
 
 msgid "Assessments"
@@ -9675,7 +9642,7 @@ msgstr "ساعات"
 msgid "minutes"
 msgstr "دقائق"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "تم انشاء المستند"
 
 msgid "The forum has been added"
@@ -10203,7 +10170,7 @@ msgstr "معلومات اكثر"
 msgid "Make invisible"
 msgstr "جعله مخفي"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "جعله مرئي"
 
 msgid "Image"
@@ -10220,9 +10187,6 @@ msgstr "ارسال رسالة"
 
 msgid "Menu"
 msgstr "قائمة"
-
-msgid "Back to user list"
-msgstr "الرجوع الى قائمة المستخدمين"
 
 msgid "Graphic not available"
 msgstr "الرسوم غير متوفرة"
@@ -10548,7 +10512,7 @@ msgstr "مرئية التقييم"
 msgid "Who changed it"
 msgstr "من قام بالتغيير"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "تم تعديل التقييم بنجاح"
 
 msgid "Incorrect data"
@@ -11559,7 +11523,7 @@ msgstr "الان هذه الصفحة مرئية لجميع المستخدمين"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "الصفحة الرئيسية يمكن تحريرها من قبل المدرس فقط"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "الوصول الى صفحة المعلم"
 
 msgid "Now discussion is visible by trainers only"
@@ -13123,7 +13087,7 @@ msgid "Homepage Help"
 msgstr "Help Course Home Page"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p><b>Navigation</b><p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p><b>Best practice</b><p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p><p>To build your course, it might proove relevant to follow these steps:<ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li><li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li><li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li><li>Hide all tools : your home page is empty in Student view,</li><li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li><li>Click on the eye icon besides the path you created : this path will then show on your home page,</li><li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
+msgstr "<p>The course home page shows a series of tools : an introduction text, a course description, a Documents manager etc. This page is modular : you can hide / show any tool in one clic. Hidden tools can be reactivated at any time.</p><b>Navigation</b><p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p><b>Best practice</b><p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is 'somebody behind the screen'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p><p>To build your course, it might proove relevant to follow these steps:<ol><li>In Course Settings, check Course Access : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li><li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li><li>Use the tools you need to 'fill' your area with content, events, guidelines, tests etc.,</li><li>Hide all tools : your home page is empty in Student view,</li><li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don't show them at first sight.</li><li>Click on the eye icon besides the path you created : this path will then show on your home page,</li><li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>"
 
 msgid "Chamilo LIVE Help"
 msgstr "Help Live Conferencing system"
@@ -13341,7 +13305,7 @@ msgstr "فضلا، أكتب سؤالا"
 msgid "Number of question"
 msgstr "عدد الأسئلة"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "هذا الرمز موجود مسبقا"
 
 msgid "Save and exit"
@@ -13392,13 +13356,13 @@ msgstr "فم بتحرير سؤالا"
 msgid "This type does not exist"
 msgstr "هذا النوع غير موجود"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "لقد تم إنشاء الاستطلاع بنجاح"
 
 msgid "You can now add questions to your survey"
 msgstr "يمكنك الآن إضافة أسئلة إلى استطلاعك"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "لقد تم تحديث الاستطلاع بنجاح"
 
 msgid "The question has been added."
@@ -13596,7 +13560,7 @@ msgstr "رمز الاستبيان موجود مسبقا، وهذا قد يعني
 msgid "This survey code soon exists in this language"
 msgstr "رمز الاستبيان سوف يكون موجودا قريبا في هذه اللغة"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "تم ازالة استجابات المستخدم الخاصة بالاستبيان بنجاح"
 
 msgid "Delete this user's answers"
@@ -13719,7 +13683,7 @@ msgstr "هل هناك كتاب للمقرر، مذكرة ملزمة،  رواب�
 msgid "Short description of the course materials."
 msgstr "نبذة عن المواد الدراسيه."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "هل هناك اساتذة و معلمين ودعم فني ومساعدين اجتماعيين وقاعات حاسب؟"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14244,9 +14208,6 @@ msgstr "الدرجة لا يمكن ان تتجاوز الدرجة القصوى"
 msgid "Delete all papers"
 msgstr "حذف جميع الملفات"
 
-msgid "Back to Assignments list"
-msgstr "العودة الى قائمة الواجبات"
-
 msgid "Edit and mark paper"
 msgstr "تحرير ووضع الدرجة للورقة"
 
@@ -14305,7 +14266,7 @@ msgid "<p>The tests tool allows you to create tests containing as many questions
 msgstr "<p>The tests tool allows you to create tests that will contains as many questions as you like.<br /><br />There are various types of answers available for the creation of your questions :<br /><br /><ul>  <li>Multiple choice (Unique answer)</li>  <li>Multiple choice (multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks</li></ul>A test gathers a certain number of questions.</p><hr /><b>Test creation</b><p>In order to create a test, click on the link \"New test\".<br /><br />Type the test name, as well as an optional description of it.<br /><br />You can add an audio or a video file, for listening comprehension etc. It is up to you to choose these files as light as possible so that they download easily through the web. Prefer .mp3 files to .wav file for instance, because of a better compression and then smaller file size.<br /><br />You can also choose between 2 test types :<br /><br /><ul>  <li>Questions on an unique page</li>  <li>One question per page (sequential)</li></ul>and tell if you want questions to be randomly sorted at the time of test running.<br /><br />Then, save your test. You will go to to the question administration.</p><hr /><b>Adding a question</b><p>You can now add a question into the test previously created. The description is optional, as well as the picture that you have the possibility to link to your question.</p><hr /><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br /><br /><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user untill he/she has answered to the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer, or zero</li>  <li>Save your answers</li></ul></p><hr /><b>Fill in the blanks</b><p>This allows you to create a text with gaps. The aim is to let the user find words that you have removed from the text.<br /><br />To remove a word from the text, and so to create a blank, put this word between brackets [like this].<br /><br />Once the text has been typed and blanks defined, you can add a comment that will be seen by the student when it replies to the question.<br /><br />Save your text, and you will enter the next step that will allow you to give a weighting to each blank. For example, if the question worths 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr /><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from an unit U1 with elements from an unit U2.<br /><br />It can also be used to ask the user to sort elements in a certain order.<br /><br />First define the options among which the user will be able to choose the good answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect via the drop-down menu elements from the first unit with those of the second one.<br /><br />Notice : Several elements from the first unit can point to the same element in the second unit.<br /><br />Give a weighting to each correct matching, and save your answer.</p><hr /><b>Test modification</b><p>In order to modify a test, the principle is the same as for the creation. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow instructions above.</p><hr /><b>Test deleting</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr /><b>Test enabling</b><p>So as for a test to be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr /><b>Running the test</b><p>You can test your exercise by clicking on its name in the tests list.</p><hr /><b>Random questions</b><p>At the time of test creation / modification, you can tell if you want questions to be drawn in a random order among all questions of the test.<br /><br />By enabling this option, questions will be drawn in a different order every time users will run the test.<br /><br />If you have got a big number of questions, you can also choose to randomly draw only X questions among all questions available in that exercise.</p><hr /><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, and they can be reused into a new test, via the questions pool.<br /><br />The questions pool also allows to reuse the same question into several tests.<br /><br />By default, all the questions of your course are hidden. You can show the questions related to a test, by chosing this one in the drop-down menu \"Filter\".<br /><br />Orphan questions are questions that don not belong to any test.</p>Adding a question<hr /><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into Chamilo portal, to this Tests tool. Results of these tests are stored the same way as Chamilo tests. You can explore the results in User Tracking. In case of single tests, we recommend to use html or htm format, if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note : You can add HotPotatoes Tests as a step in the Learning Path, as well.</p><b>Method of the import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br /><b>Useful link</b><br /><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "The Learning Path tool has two functions :<ul><li>Create a learning Path</li><li>Upload a Scorm or IMS format Learning path</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path ?</b></p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others ('you cannot go to step 2 before step1'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).</p><p><b>How to create our own Learning Path ?</b></p><p>The first step is to arrive to Learning Path Builder section. Inthe Learning Path screen, there is a link to it. There you can createmany paths by clicking onto <i>Add a new learning path</i>. But they areempty, till you add modules and steps to them.<br />If you make a pathvisible, it will appear as a new tool on the homepage of the course. Thisway their access is easier.</p><p><b>What are the steps for these paths ? (What are the items that can be added?)</b></p><p>All Chamilo tools, activities and contents that you consider to be useful and connected to yourimagined path can be added :<br /><ul><li>Agenda items</li><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Announcement items</li><li>Forums as a whole</li><li>Topics</li><li>Individual topic messages</li><li>Links</li><li>Dokeos Tests</li><li>HotPotatoes Tests<br />(note : those invisible tests, that you put in a path, become visible for students, but only in the Path tool)</li><li>Assignments page</li><li>Dropbox page</li><li>External links, which point out of Chamilo system</li></ul></p><p><b>Other features of Learning Path</b></p><p>Students can be asked to follow (read) your path in a given order, as youcan set <u>prerequisities</u> in the path. This means that for example studentscannot go to Quiz 2 till they have read Document 1. All items have a status :completed or incomplete, so the progress of students is clearly available.</p><p>If you alter the original title of a step, the new title will appear inthe path, but the original title will not be deleted. So if you wanttest8.doc to appear as 'Final Exam' in the path, you do not have to renamethe file, you can use the new title in the path. It is also usefulto give new titles to links as they are too long.</p><p>When finished, do not forget to check the student view, where the table ofcontents appears on the left and the path steps usually appear on the right,one by one.</p><br /><p><b>What is a Scorm or IMS format Learning path and how to upload (import) it?</b></p><p>The learning path tool allows you to upload SCORM and IMS compliant coursecontents.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning actorslike NETg, Macromedia, Microsoft, Skillsoft, etc. and acting at three levels:</p><ul><li><b>Economy</b> : Scorm allows whole courses or small contentunits to be reusable on different Learning Management Systems (LMS)through the separation of content and context,</li><li><b>Pedagogy</b> : Scorm integrates the notion ofpre-requisite or <i>sequencing</i> (<i>e.g. </i>\"Youcannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : Scorm generates a table of contents asanabstraction layer situated outside content and outside the LMS. Ithelps content and LMS communicate with eachother. What is communicated is mainly <i>bookmarks</i>(\"Where is John in thecourse?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How muchtime did John spent in chapter 1?\").</li></ul><b>How to create a SCORM compliant learning path?</b><br /><br />The most natural way is to use the Chamilo Learning Path Builder. However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it onto your chamilo platform. In this case, we recommend the use of a sophisticated tool like Lectora or Reload<br /></p><p><b>Useful links</b><br /><ul><li>Adlnet : authority responsible for Scorm normalisation, <ahref=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li><li>Reload : Open Source free Scorm player and editor, <ahref=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li><li>Lectora : Scorm publisher authoring software, <ahref=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br /><li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br /></li></ul><p><b>Note :</b></p><p>The Learning Path section lists all the <i>self-built Learning Paths</i>and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>"
+msgstr "The Learning Path tool has two functions :<ul><li>Create a learning Path</li><li>Upload a Scorm or IMS format Learning path</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path ?</b></p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others ('you cannot go to step 2 before step1'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).</p><p><b>How to create our own Learning Path ?</b></p><p>The first step is to arrive to Learning Path Builder section. Inthe Learning Path screen, there is a link to it. There you can createmany paths by clicking onto <i>Add a new learning path</i>. But they areempty, till you add modules and steps to them.<br />If you make a pathvisible, it will appear as a new tool on the homepage of the course. Thisway their access is easier.</p><p><b>What are the steps for these paths ? (What are the items that can be added?)</b></p><p>All Chamilo tools, activities and contents that you consider to be useful and connected to yourimagined path can be added :<br /><ul><li>Agenda items</li><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Announcement items</li><li>Forums as a whole</li><li>Topics</li><li>Individual topic messages</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note : those invisible tests, that you put in a path, become visible for students, but only in the Path tool)</li><li>Assignments page</li><li>Dropbox page</li><li>External links, which point out of Chamilo system</li></ul></p><p><b>Other features of Learning Path</b></p><p>Students can be asked to follow (read) your path in a given order, as youcan set <u>prerequisities</u> in the path. This means that for example studentscannot go to Quiz 2 till they have read Document 1. All items have a status :completed or incomplete, so the progress of students is clearly available.</p><p>If you alter the original title of a step, the new title will appear inthe path, but the original title will not be deleted. So if you wanttest8.doc to appear as 'Final Exam' in the path, you do not have to renamethe file, you can use the new title in the path. It is also usefulto give new titles to links as they are too long.</p><p>When finished, do not forget to check the student view, where the table ofcontents appears on the left and the path steps usually appear on the right,one by one.</p><br /><p><b>What is a Scorm or IMS format Learning path and how to upload (import) it?</b></p><p>The learning path tool allows you to upload SCORM and IMS compliant coursecontents.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning actorslike NETg, Macromedia, Microsoft, Skillsoft, etc. and acting at three levels:</p><ul><li><b>Economy</b> : Scorm allows whole courses or small contentunits to be reusable on different Learning Management Systems (LMS)through the separation of content and context,</li><li><b>Pedagogy</b> : Scorm integrates the notion ofpre-requisite or <i>sequencing</i> (<i>e.g. </i>\"Youcannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : Scorm generates a table of contents asanabstraction layer situated outside content and outside the LMS. Ithelps content and LMS communicate with eachother. What is communicated is mainly <i>bookmarks</i>(\"Where is John in thecourse?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How muchtime did John spent in chapter 1?\").</li></ul><b>How to create a SCORM compliant learning path?</b><br /><br />The most natural way is to use the Chamilo Learning Path Builder. However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it onto your chamilo platform. In this case, we recommend the use of a sophisticated tool like Lectora or Reload<br /></p><p><b>Useful links</b><br /><ul><li>Adlnet : authority responsible for Scorm normalisation, <ahref=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li><li>Reload : Open Source free Scorm player and editor, <ahref=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li><li>Lectora : Scorm publisher authoring software, <ahref=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br /><li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br /></li></ul><p><b>Note :</b></p><p>The Learning Path section lists all the <i>self-built Learning Paths</i>and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 msgstr "<p>This tool will help you describe your course in a synthetic way and from the outside. It may help your future students get a clear view on what they can expect from this course. It is also an opportunity for you to rethink your course scenario.</p>Items are given here as proposals. If you want to create a course description with your own items, use only the 'Other' item and decide for its title.</p><p>To fill the course description, select Create and edit with forms > Scrolldown menu and select the item of your choice > fill the form > Validate. You can always edit or delete the content of every item by clicking on the pencil or red cross icons.</p>"
@@ -14341,7 +14302,7 @@ msgid "Add a Link help"
 msgstr "Help Add a Link"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos is a modular tool. You can hide and show tools whenever you want, according to your project or to its different chronological phases. But you can also add on your home page tools or pages that you have created yourself or that come from the outside of your Chamilo portal. This way, you will make of your course home page YOUR page.</p><p>To take possession of your page that way, you will Add links on it. These links can be of 2 types:<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link towards a page or a tool inside your Chamilo course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Chamilo banner on top and the remain in the same environment.</li></ul>Once created, these links cannot be edited. To modify them, the only solution is to deactivate them then delete them, then restart from zero.</p>"
+msgstr "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to your project or to its different chronological phases. But you can also add on your home page tools or pages that you have created yourself or that come from the outside of your Chamilo portal. This way, you will make of your course home page YOUR page.</p><p>To take possession of your page that way, you will Add links on it. These links can be of 2 types:<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link towards a page or a tool inside your Chamilo course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Chamilo banner on top and the remain in the same environment.</li></ul>Once created, these links cannot be edited. To modify them, the only solution is to deactivate them then delete them, then restart from zero.</p>"
 
 msgid "Clear content"
 msgstr "Clear content"
@@ -14358,11 +14319,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "يجب عليك كتابة رسالة"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "هذه الرسالة لغرض اعلامك بانه تم انشاء مقرر جديد في النظام"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "هذه الرسالة لغرض اعلامك بانه تم انشاء مقرر جديد في النظام %s"
 
-msgid "New course created in"
-msgstr "تم انشاء مقرر في"
+msgid "New course created on %s"
+msgstr "تم انشاء مقرر في %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "تم تعيينك كمدرس حاليا، يمكنك تغيير هذه الاعدادات لاحقا في تهيئة اعدادات المقرر"
@@ -14373,8 +14334,8 @@ msgstr "Installation language"
 msgid "Please read the following requirements thoroughly."
 msgstr "Read thoroughly"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning!<br />The installer has detected an existing Chamilo platform on your system."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warning! The installer has detected an existing Chamilo platform on your system."
 
 msgid "New installation"
 msgstr "New installation"
@@ -14507,12 +14468,6 @@ msgstr "Please go back to Step"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-
-msgid "MBString extension not available"
-msgstr "MBString extension not available"
-
-msgid "MySQL extension not available"
-msgstr "MySQL extension not available"
 
 msgid "Optional parameters"
 msgstr "معلمات اختيارية"
@@ -15156,7 +15111,7 @@ msgstr "لا توجد حقول اضافية متوفرة"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "ابدأ الكتابة ثم انقر على هذا الشريط لتوثيق الوسم"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "تنصيب كاميلو"
 
 msgid "Chamilo URL"
@@ -15630,7 +15585,7 @@ msgstr "تخصيص قائمة المقررات الى مدير الدورة"
 msgid "Assign sessions to platform administrator"
 msgstr "تخصيص الدورات الى مدير النظام"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "تخصيص دورات الى مدير الدورات"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15699,7 +15654,7 @@ msgstr "الموضوع"
 msgid "Thematic plan"
 msgstr "الخطة الموضوعية"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "تحرير التقدم الموضوعي"
 
 msgid "Edit thematic advance"
@@ -17397,8 +17352,8 @@ msgstr "انشاء مجموعة اجتماعية"
 msgid "Not logged in for some time"
 msgstr "غير مسجل لبعض الوقت"
 
-msgid "Last %i months"
-msgstr "اخر %i اشهر"
+msgid "Last %d months"
+msgstr "اخر %d اشهر"
 
 msgid "Never connected"
 msgstr "لم يتصل ابدا"
@@ -17442,13 +17397,13 @@ msgstr "تم نسخ العنصر"
 msgid "My statistics"
 msgstr "احصائاتي"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "التمارين المتوفرة"
 
 msgid "Exercises taken"
 msgstr "التمارين المؤداة"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "متوسط نتيجة التمرين"
 
 msgid "Learning path progress"
@@ -17805,7 +17760,7 @@ msgstr "URL المستخدم ليس لديه رابط"
 msgid "Extra data"
 msgstr "البيانات الاضافية"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "التمارين في مسارات التعلم"
 
 msgid "Id"
@@ -18135,15 +18090,6 @@ msgstr "مرحبا في اداة تنصيب كاميلو"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "غير متوافق مع متطلبات النظامـ يرجى التحقق من حصولك على احدث اصدار ثم حاول مرة ثانية PHP ان اصدار"
 
-msgid "Sessions extension not available"
-msgstr "اضافات الدورة غير متوفرة"
-
-msgid "Zlib extension not available"
-msgstr "Zlib لا تتوفر اضافة"
-
-msgid "PCRE extension not available"
-msgstr "PCRE لا تتوفر اضافة"
-
 msgid "To social group"
 msgstr "الذهاب الى المجموعة الاجتماعية"
 
@@ -18415,7 +18361,7 @@ msgstr "شهادة"
 msgid "Online link to certificate"
 msgstr "الرابط للشهادة"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "تمارين جديدة"
 
 msgid "My average"
@@ -18619,14 +18565,8 @@ msgstr "سؤال"
 msgid "questions"
 msgstr "اسئلة"
 
-msgid "Back to test list"
-msgstr "العودة الى قائمة الاختبار"
-
 msgid "Category description"
 msgstr "وصف الفئة"
-
-msgid "Back to category list"
-msgstr "العودة الى قائمة الفئة"
 
 msgid "This category name already exists. Please use another name."
 msgstr "اسم الفئة موجود مسبقا، يرجى استخدام اسم اخر"
@@ -18904,7 +18844,7 @@ msgstr "تم التحقق منه"
 msgid "Not validated"
 msgstr "لم يتم التحقق منه"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "تمت مراجعته"
 
 msgid "Select a question to revise"
@@ -19048,7 +18988,7 @@ msgstr "يعرض لك شريط اعلى الصفحة لبعض المستخدمي
 msgid "Session list"
 msgstr "قائمة الدورات"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "قائمة الطلبة"
 
 msgid "Learners who're taking the exercise right now"
@@ -21304,7 +21244,7 @@ msgstr "ادارة التشخيص"
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "يجب عليك اولا ملأ الحساب لكي يتم تفعيل التحقق من الاحكام والشروط"
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "التشخيص"
 
 msgid "Allow show the user Skype account"
@@ -22858,7 +22798,7 @@ msgstr "يرجى اخبارنا بسبب سحب الصلاحيات التي قد
 msgid "Explain in this box why you want your account deleted"
 msgstr "اشرح لماذا تريد حذف حسابك"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr "يمكنك الطلب ادناه لحذف الاتفاق القانوني حول حسابك الذي سوف يحذف."
 
 msgid "Personal data protection"
@@ -22933,14 +22873,11 @@ msgstr "ملاحظة: هذا التقدم تم احرازه عبر مزيج من
 msgid "Create a new Doodle type survey"
 msgstr "Doodle انشاء استبيان جديد على نمط الشخبطة"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "ازالة الاسئلة المضروبة"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "الاسئلة المضروبة"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr "يمكنك استخدام الوسوم التالية {{class_name}} و {{student_full_name}} في السؤال الذي تريد تكراره. في صفحة قائمة الاستبيان في حقل الاجراء توجد ايقونة لسؤال التكرار {{class_name}} قم بوضع وسم وكرر السؤال لكافة الصفوف المسجلة في المقرر وقم باعادة تسمية باسم الصف. كذكل سوف يتم اضافة نهاية لعمل صفحة جديدة لكل صف. ثم سيتم البحث عن {{student_full_name}} الوسم وكرر نسخ السؤال لكافة الطلبة في الصف (لكل صف) وقم باعادة التسمية مع اسم المستخدم الكامل"
 
 msgid "Create meeting poll"
 msgstr "انشاء اقتراع للاجتماع"
@@ -23479,10 +23416,10 @@ msgstr "استطلاع المجموعة لـ %s"
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr "مرحبا %s"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "الاستطلاع %s مضاعف"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "الاستطلاع %s غير مضاعف"
 
 msgid "Export survey results"
@@ -23785,11 +23722,8 @@ msgstr "متخرج"
 msgid "Absent"
 msgstr "غائب"
 
-msgid "Internal database error"
-msgstr "خطأ في قاعدة البيانات الداخلية"
-
-msgid "Wrong number of days"
-msgstr "خطأ في عدد الايام"
+msgid "Internal database error: %s"
+msgstr "خطأ في قاعدة البيانات الداخلية: %s"
 
 msgid "Subscription not allowed"
 msgstr "التسجيل غير مسموح"
@@ -24022,7 +23956,7 @@ msgstr "الطلبة ذوي الاجابات الصحيحة"
 msgid "Students with incorrect answers"
 msgstr "الطلبة ذوي الاجابات غير الصحيحة"
 
-msgid "List of contents"
+msgid "Content list"
 msgstr "قائمة المحتويات"
 
 msgid "Tariff"
@@ -24088,10 +24022,10 @@ msgstr "اخر تسجيل دخول للمقرر"
 msgid "The"
 msgstr "الـ"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "مضاعفة الاسئلة وفقا للصف"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "مضاعفة الاسئلة وفقا للمستخدم"
 
 msgid "Questions about next user"

@@ -253,7 +253,7 @@ switch ($action) {
                 if (api_get_session_id()) {
                     /*if ($thematic['session_id'] != api_get_session_id()) {
                         $show_form = false;
-                        echo Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
+                        echo Display::return_message(get_lang("Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser's \"Back\" button or follow the link below to return to the previous page."), 'error', false);
                     }*/
                 }
                 // set default values
@@ -635,9 +635,9 @@ switch ($action) {
         } else {
             if (api_is_allowed_to_edit(null, true)) {
                 $noData = Display::noDataView(
-                    get_lang('Educational programming'),
+                    get_lang('Course program'),
                     Display::getMdiIcon(ToolIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_BIG),
-                    get_lang('Add thematic'),
+                    get_lang('Add'),
                     api_get_path(WEB_CODE_PATH).'course_progress/index.php?'.api_get_cidreq().'&action=thematic_add'
                 );
             }

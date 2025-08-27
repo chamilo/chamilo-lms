@@ -126,7 +126,7 @@
               icon="reply-all"
               size="normal"
               only-icon
-              :label="t('Correct & Rate')"
+              :label="t('Correct and rate')"
               @click="correctAndRate(data)"
               type="success"
             />
@@ -354,7 +354,7 @@ async function viewSubmission(item) {
   } else if (RESOURCE_LINK_DRAFT === resourceLink.visibility) {
     resourceLink.visibility = RESOURCE_LINK_PUBLISHED
   } else {
-    notification.showErrorNotification(t("Cannot change visibility"))
+    notification.showErrorNotification(t("Can not change visibility"))
     return
   }
 

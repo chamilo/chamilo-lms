@@ -105,7 +105,7 @@ if ('catalogue_access' === $currentView) {
 
     $formCatalogue->addMultiSelect(
         'selected_usergroups',
-        get_lang('User groups'),
+        get_lang('User groups list'),
         $groups,
         ['style' => 'width:100%;height:300px;']
     );
@@ -138,7 +138,7 @@ if ('catalogue_access' === $currentView) {
 
         $em->flush();
 
-        Display::addFlash(Display::return_message(get_lang('Changes saved successfully'), 'confirmation'));
+        Display::addFlash(Display::return_message(get_lang('Saved.'), 'confirmation'));
         header('Location: '.api_get_self().'?id='.$id.'&view=catalogue_access');
         exit();
     }

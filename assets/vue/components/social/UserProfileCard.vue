@@ -13,13 +13,9 @@
         {{ user.fullName }}
       </div>
 
-      <div v-if="visibility.language && languageInfo">
-        <template v-if="flagIconExists(languageInfo.code)">
-          <i :class="`mdi mdi-flag-${languageInfo.code.toLowerCase()}`"></i>
-        </template>
-        <template v-else>
-          {{ t(languageInfo.code) }}
-        </template>
+      <div v-if="visibility.language && languageInfo" class="flex items-center gap-2">
+        <i v-if="countryFlag" :class="`flag-icon flag-icon-${countryFlag}`"></i>
+        <span>{{ languageDisplay }}</span>
       </div>
 
       <div class="mt-4">
@@ -273,4 +269,17 @@ async function handleUnsubscribe() {
     console.error("[Push] No user id for unsubscription.")
   }
 }
+
+const languageDisplay = computed(() => {
+  return languageInfo.value?.label
+    ?? languageInfo.value?.value
+    ?? languageInfo.value?.code?.toUpperCase()
+    ?? ''
+})
+
+const countryFlag = computed(() => {
+  const code = languageInfo.value?.code || ''
+  const m = code.match(/[-_](?<region>[A-Za-z]{2})$/)
+  return m?.groups?.region?.toLowerCase() || null
+})
 </script>

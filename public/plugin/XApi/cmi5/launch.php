@@ -38,7 +38,7 @@ $toolLaunch = $item->getTool();
 if ($toolLaunch->getId() !== $request->query->getInt('tool')) {
     api_not_allowed(
         false,
-        Display::return_message(get_lang('NotAllwed'), 'error')
+        Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error')
     );
 }
 

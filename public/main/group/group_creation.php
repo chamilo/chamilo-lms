@@ -277,7 +277,7 @@ EOT;
                     api_get_self().'?'.api_get_cidreq()
                 );
                 $create_subgroups_form->addElement('header', get_lang('Create subgroups'));
-                $create_subgroups_form->addElement('html', get_lang('Create subgroupsInfo'));
+                $create_subgroups_form->addElement('html', get_lang('This option allows you to create new groups based on an existing group. Provide the desired number of groups and choose an existing group. The given number of groups will be created and all members of the existing group will be subscribed in those new groups. The existing group remains unchanged.'));
                 $create_subgroups_form->addElement('hidden', 'action');
                 $group_el = [];
                 $group_el[] = $create_subgroups_form->createElement(

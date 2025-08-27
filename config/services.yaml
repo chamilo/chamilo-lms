@@ -65,6 +65,12 @@ services:
     Chamilo\CoreBundle\EventSubscriber\LocaleSubscriber:
         arguments: ['%locale%', '@Chamilo\CoreBundle\Settings\SettingsManager', '@parameter_bag']
 
+    stof_doctrine_extensions.tool.locale_synchronizer:
+        class: Stof\DoctrineExtensionsBundle\Tool\LocaleSynchronizer
+        arguments:
+            $listener: '@stof_doctrine_extensions.listener.translatable'
+        public: true
+
     Chamilo\CoreBundle\EventSubscriber\LoginFailureSubscriber:
         tags:
             - name: kernel.event_subscriber

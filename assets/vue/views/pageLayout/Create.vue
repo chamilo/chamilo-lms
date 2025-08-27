@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader :title="t('Create Page Layout')">
+  <SectionHeader :title="t('Create page layout')">
     <BaseButton
       icon="back"
       type="gray"
@@ -46,7 +46,7 @@
 
         <div class="md:col-span-2">
           <label class="block text-gray-700 font-semibold mb-1">
-            {{ t("Layout Template") }}
+            {{ t("Layout template") }}
           </label>
           <div
             v-if="loadingTemplates"

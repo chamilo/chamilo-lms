@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1604,7 +1604,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -1721,7 +1721,7 @@ msgstr "기본적으로 과정은 모두에게 공개됩니다. 그러나, 위�
 msgid "Public - access allowed for the whole world"
 msgstr "공개 - 누구나 접근 가능합니다"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "공개 - 플랫폼에 등록한 모든 유저가 접근가능합니다"
 
 msgid "Student %s is no subscribed to this course"
@@ -1751,7 +1751,7 @@ msgstr "홈페이지의 페이지에 링크 추가"
 msgid "has been deleted"
 msgstr "삭제되었습니다"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "이 부분을 삭제하게 되면 저장하고 있는 모든 문서를 영구적으로 삭제하게 되며 그 멤버들은 모두 등록이 취소가 됩니다.(다른 부분에서는 삭제되지 않음)<p>정말로 삭제하시겠습니까?"
 
 msgid "YES"
@@ -2517,9 +2517,6 @@ msgid "This is the department or any other context where the course is delivered
 msgstr "이것은 과정이 전달되는 특정 카테고리의 일부입니다."
 
 msgid "If you are unsure of your course code, consult the training details."
-msgstr ""
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
 msgstr ""
 
 msgid "SCORM Path builder"
@@ -3375,9 +3372,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -3492,7 +3486,7 @@ msgstr "과정 카테고리 생성"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "이 과정 카테고리를 정말로 삭제하시겠습니까? 이 과정 카테고리 안의 과정이 모두 과정 카테고리 밖으로 이동될 것입니다."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "과정 카테고리"
 
 msgid "Courses in this category"
@@ -4357,7 +4351,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "과정관리자가 그룹 모듈의 카테고리 생성하는 것을 허용하시겠습니까?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "플랫폼 관리자의 다른 부분에서 플랫폼 언어를 결정할 수 있습니다, 즉; <a href=\"languages.php\">Dokeos Platform Languages</a>"
+msgstr "플랫폼 관리자의 다른 부분에서 플랫폼 언어를 결정할 수 있습니다, 즉; <a href=\"languages.php\">Chamilo Platform Languages</a>"
 
 msgid "Production Server"
 msgstr "제품 서버"
@@ -4500,10 +4494,10 @@ msgstr "이 유저는 클래스에 등록하지 않았습니다"
 msgid "This class isn't subscribed in a course"
 msgstr "이 클래스는 과정에 등록하지 않았습니다"
 
-msgid "tool"
+msgid "Tool"
 msgstr "도구"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "아이템 수"
 
 msgid "Documents and folders"
@@ -4665,7 +4659,7 @@ msgstr "경고 메시지를 입력하십시요"
 msgid "Please give a notice title"
 msgstr "경고 제목을 입력하십시요"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "링크 네임을 입력하십시요"
 
 msgid "Insert this link"
@@ -5067,7 +5061,7 @@ msgstr ""
 msgid "Videoconference RTMTP protocol port"
 msgstr ""
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr ""
 
 msgid "No classes have been created"
@@ -5217,7 +5211,7 @@ msgstr ""
 msgid "Include header line?"
 msgstr ""
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr ""
 
 msgid "List of users subscribed to course"
@@ -5451,7 +5445,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -5703,7 +5697,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5749,9 +5743,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -6342,16 +6333,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6423,10 +6411,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6584,9 +6572,6 @@ msgstr "교사만 가능"
 
 msgid "Define Headings"
 msgstr "제목 정의"
-
-msgid "Back to users list"
-msgstr "유저 목록으로 돌아가기"
 
 msgid "change rights of"
 msgstr ""
@@ -7005,9 +6990,6 @@ msgstr ""
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr ""
 
-msgid "Back to Groups list"
-msgstr ""
-
 msgid "A new forum has now been created"
 msgstr ""
 
@@ -7284,7 +7266,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr ""
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7677,7 +7659,7 @@ msgstr "문제 목록으로 돌아가기"
 msgid "Answers to the question"
 msgstr "문제의 해답"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "경고! 이 문제와 해답은 여러 테스트에서 사용되었습니다. 이를 수정하시겠습니까?"
 
 msgid "in all tests"
@@ -7826,9 +7808,6 @@ msgstr ""
 
 msgid "Exercise added"
 msgstr ""
-
-msgid "Assesment settings"
-msgstr "평가 파라미터"
 
 msgid "active"
 msgstr "활성화"
@@ -8412,9 +8391,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8495,9 +8471,6 @@ msgstr "온라인 상의 유저"
 
 msgid "Remove"
 msgstr "삭제"
-
-msgid "Back to courses list"
-msgstr "과정 목록으로 돌아가기"
 
 msgid "Links"
 msgstr "링크"
@@ -8593,9 +8566,6 @@ msgid "First name"
 msgstr ""
 
 msgid "Last name"
-msgstr ""
-
-msgid "e-mail"
 msgstr ""
 
 msgid "Slideshow conversion"
@@ -8898,7 +8868,7 @@ msgstr "언어"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "존재하는 과목 코드입니다. 다른 코드를 선택하시기 바랍니다."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "그룹 목록"
 
 msgid "The target folder does not exist"
@@ -9357,9 +9327,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr ""
 
@@ -9390,7 +9357,7 @@ msgstr ""
 msgid "Could not open"
 msgstr ""
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9522,7 +9489,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9606,7 +9573,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -9666,7 +9633,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -10194,7 +10161,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"
@@ -10210,9 +10177,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -10539,7 +10503,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11550,7 +11514,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13332,7 +13296,7 @@ msgstr ""
 msgid "Number of question"
 msgstr ""
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr ""
 
 msgid "Save and exit"
@@ -13383,13 +13347,13 @@ msgstr ""
 msgid "This type does not exist"
 msgstr ""
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr ""
 
 msgid "You can now add questions to your survey"
 msgstr ""
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr ""
 
 msgid "The question has been added."
@@ -13587,7 +13551,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -13710,7 +13674,7 @@ msgstr "교재, 논문 모음집, 참고서적 목록, 관련 링크가 있습�
 msgid "Short description of the course materials."
 msgstr "학습 자료에 대한 간단한 설명."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "교사, 튜터, 기술의 헬프데스크, 사회적 보조물, 컴퓨터실이 있습니까?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14235,9 +14199,6 @@ msgstr ""
 msgid "Delete all papers"
 msgstr ""
 
-msgid "Back to Assignments list"
-msgstr ""
-
 msgid "Edit and mark paper"
 msgstr ""
 
@@ -14349,10 +14310,10 @@ msgstr ""
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -14364,8 +14325,8 @@ msgstr ""
 msgid "Please read the following requirements thoroughly."
 msgstr "철저히 읽기"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning !<br>인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Warning! 인스톨러가 이 시스템에 이미 설치되어 있는 chamilo를 탐지하였습니다."
 
 msgid "New installation"
 msgstr "새로 설치"
@@ -14497,12 +14458,6 @@ msgid "Please go back to Step"
 msgstr ""
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-msgstr ""
-
-msgid "MBString extension not available"
-msgstr ""
-
-msgid "MySQL extension not available"
 msgstr ""
 
 msgid "Optional parameters"
@@ -15147,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"
@@ -15621,7 +15576,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15690,7 +15645,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -17388,7 +17343,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17433,13 +17388,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -17796,7 +17751,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18126,15 +18081,6 @@ msgstr ""
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr ""
 
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
-msgstr ""
-
 msgid "To social group"
 msgstr ""
 
@@ -18402,7 +18348,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -18606,13 +18552,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -18891,7 +18831,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19035,7 +18975,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -21291,7 +21231,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22845,7 +22785,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22920,13 +22860,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23466,10 +23403,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23772,10 +23709,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24009,7 +23946,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24075,10 +24012,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

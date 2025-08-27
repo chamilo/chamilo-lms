@@ -621,10 +621,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1605,7 +1605,7 @@ msgstr ""
 msgid "Move the current forum"
 msgstr ""
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -1722,7 +1722,7 @@ msgstr "Svaki kurs po kreiranju je javni, ali Vi možete definisati nifo poverlj
 msgid "Public - access allowed for the whole world"
 msgstr "Otovren – pristup omogućen celom svetu"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Otvoren pristup – pristup omogućen korisnicima koji su registrovani."
 
 msgid "Student %s is no subscribed to this course"
@@ -1752,7 +1752,7 @@ msgstr "Dodaj link na početnu stranicu"
 msgid "has been deleted"
 msgstr "obrisano"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Brisanje ovog okruženja će permenento obrisati dokumenta i sadržinu i odjavit sve njene članove. (neće ih ukloniti iz drugih okruženja).<p>Da li zaista želite da obrišete?"
 
 msgid "YES"
@@ -2519,9 +2519,6 @@ msgstr "Ovo je oblast ili bilo koja druga kategorija gde je kurs postavljan."
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ako imate sumnji oko šifre kursa, konsultujte"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program kursa</a>. Ako vaš kurs nema šifru, iz bilo kog razloga, izmislite mu jednu. Na primer <i>INOVACIJE</i> ako je kurs o Inovacionom menadžmentu."
 
 msgid "SCORM Path builder"
 msgstr "Alat za izgradnju Scorm putanje"
@@ -3376,9 +3373,6 @@ msgstr "Kreiraj napomenu"
 msgid "Edit my personal note"
 msgstr "Izmeni moje lične napomene"
 
-msgid "Back to note list"
-msgstr "Nazad na listu napomena"
-
 msgid "Notebook management"
 msgstr "Notebook menadžment"
 
@@ -3493,7 +3487,7 @@ msgstr "Kreiraj kategoriju kursa"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Da li ste sigurni da želite da obrišete ovu kategoriju? Kursevi koji se nalaze u ovoj kategoriji će biti prebačeni izvan kategorije kursa."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategorije kursa"
 
 msgid "Courses in this category"
@@ -4358,7 +4352,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Omogući administratorima kursa da kreiraju kategorije u modulima grupa?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "Možete da postavite platformu za jezike u različitim delovima administratorske platforme <a href=\"languages.php\">Dokeos Platform Languages</a>"
+msgstr "Možete da postavite platformu za jezike u različitim delovima administratorske platforme <a href=\"languages.php\">Chamilo Platform Languages</a>"
 
 msgid "Production Server"
 msgstr "Produkcioni server"
@@ -4501,10 +4495,10 @@ msgstr "Ovaj korisnik nije prijavljen u razred"
 msgid "This class isn't subscribed in a course"
 msgstr "Ovaj razred nije prijavljen na kurs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "alat"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "Broj stavki"
 
 msgid "Documents and folders"
@@ -4666,7 +4660,7 @@ msgstr "Molim Vas, dodajte napomeni tekst"
 msgid "Please give a notice title"
 msgstr "Molim Vas, dajte napomeni naslov"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Molim Vas, dajte linku ime"
 
 msgid "Insert this link"
@@ -5068,7 +5062,7 @@ msgstr ""
 msgid "Videoconference RTMTP protocol port"
 msgstr ""
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr ""
 
 msgid "No classes have been created"
@@ -5218,7 +5212,7 @@ msgstr ""
 msgid "Include header line?"
 msgstr ""
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr ""
 
 msgid "List of users subscribed to course"
@@ -5452,7 +5446,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -5704,7 +5698,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5750,9 +5744,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -6343,16 +6334,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6424,10 +6412,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6585,9 +6573,6 @@ msgstr "samo predavač"
 
 msgid "Define Headings"
 msgstr "Definiši naslove"
-
-msgid "Back to users list"
-msgstr "Nazad na listu korisnika"
 
 msgid "change rights of"
 msgstr "promena prava"
@@ -7006,9 +6991,6 @@ msgstr ""
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr ""
 
-msgid "Back to Groups list"
-msgstr ""
-
 msgid "A new forum has now been created"
 msgstr ""
 
@@ -7285,7 +7267,7 @@ msgstr ""
 msgid "Edit the current document"
 msgstr ""
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr ""
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7678,7 +7660,7 @@ msgstr "Vrati se nazad na listu pitanja"
 msgid "Answers to the question"
 msgstr "Odgovori na pitanje"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Upozorenje! Ovo pitanje i ovi odgovori su upotrebljeni u više testova. Da li želite da ih izmenite?"
 
 msgid "in all tests"
@@ -7827,9 +7809,6 @@ msgstr ""
 
 msgid "Exercise added"
 msgstr "Vežba dodana"
-
-msgid "Assesment settings"
-msgstr "parametri za evaluaciju"
 
 msgid "active"
 msgstr "aktivan"
@@ -8413,9 +8392,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8496,9 +8472,6 @@ msgstr "Online korisnici"
 
 msgid "Remove"
 msgstr "Ukloni"
-
-msgid "Back to courses list"
-msgstr "Nazad na moju listu kurseva"
 
 msgid "Links"
 msgstr "Linkovi"
@@ -8595,9 +8568,6 @@ msgstr "Ime"
 
 msgid "Last name"
 msgstr "Prezime"
-
-msgid "e-mail"
-msgstr ""
 
 msgid "Slideshow conversion"
 msgstr ""
@@ -8899,7 +8869,7 @@ msgstr "jezik"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Takva šifra kursa već postoji. Molim Vas, izaberite drugu."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Lista grupa"
 
 msgid "The target folder does not exist"
@@ -9358,9 +9328,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr ""
 
@@ -9391,7 +9358,7 @@ msgstr ""
 msgid "Could not open"
 msgstr ""
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9523,7 +9490,7 @@ msgstr ""
 msgid "No document downloaded"
 msgstr ""
 
-msgid "clicks"
+msgid "%d clicks"
 msgstr ""
 
 msgid "Search results"
@@ -9607,7 +9574,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr ""
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr ""
 
 msgid "Assessments"
@@ -9667,7 +9634,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -10195,7 +10162,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"
@@ -10211,9 +10178,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -10540,7 +10504,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11551,7 +11515,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13333,7 +13297,7 @@ msgstr "Molimo Vas da unesete pitanje"
 msgid "Number of question"
 msgstr "Broj pitanja"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Ova šifra već postoji"
 
 msgid "Save and exit"
@@ -13384,13 +13348,13 @@ msgstr "Uredi pitanje"
 msgid "This type does not exist"
 msgstr "Ovaj tip ne postoji"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Anketa je uspješno napravljena"
 
 msgid "You can now add questions to your survey"
 msgstr "Sada možete da dodate na svoja pitanja u anketu"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Anketa je uspješno ažurirana"
 
 msgid "The question has been added."
@@ -13588,7 +13552,7 @@ msgstr "Ova šifra ankete već postoji, što vjerojatno znači da ova anketa ve�
 msgid "This survey code soon exists in this language"
 msgstr "Ova šifra ankete će uskoro postojati na odabranom jeziku"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Odgovori korisnika na anketu su uspešno uklonjeni."
 
 msgid "Delete this user's answers"
@@ -13711,7 +13675,7 @@ msgstr "Da li postoji knjiga za kurs, kolekcija radova, bibliografija, lista lin
 msgid "Short description of the course materials."
 msgstr "Kratak opis materijala za kurs."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Postoje li predavači, mentori, tehnička podrška, društvena pomoć, učionice sa računarima?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14236,9 +14200,6 @@ msgstr "Broj bodova ne može biti veći od maksimalnog broja bodova"
 msgid "Delete all papers"
 msgstr "Obriši sve dokumente"
 
-msgid "Back to Assignments list"
-msgstr "Povratak na popis zadataka"
-
 msgid "Edit and mark paper"
 msgstr "Izmeni i oceni rad"
 
@@ -14297,7 +14258,7 @@ msgid "<p>The tests tool allows you to create tests containing as many questions
 msgstr "<p>Alat za pravljenje testova će Vam omogućiti da napravite test sa onoliko pitanja koliko Vi želite. <br><br> Ima nekoliko tipova odgovora koji su Vam na raspolaganju za pravljenje pitanja:<br><br> <ul> <li>Ponuđeni odgovori (jedan tačan)</li> <li>Ponuđeni odgovori (više tačnih)</li> <li>Povezivanje</li> <li>Popunjavanje praznina </li> </ul> Test se satoji od određenog broja pitanja.</p> <hr> <b>Pravljenje testa </b> <p>Da biste napravili test kliknite na link \"Novi test\".<br><br> Otkucajte ime testa kao i njegov opis koji nije obavezan.<br><br> Možete da dodate audio ili video fajl za slušanje i razumevanje itd. Savet je da ovi fajlovi budu što lakši da bi se lakše učitavali preko Web pretraživača. Bolji su .mp3 fajlovi nego .wav fajlovi na primer, bolja je kompresija i manja im je veličina. <br> <br> Takođe možete da birate između dva tipa testa:<br><br> <ul> <li>Sva pitanja na jednoj strani </li> <li>Jedno pitanje na jednoj strani (iz delova)</li> </ul> i da odredite  da li želite da pitanja budu slučajno raspoređena u vreme pokretanja testa.<br><br> Potom snimite test. Idite do administracije pitanja.</p> <hr> <b>Dodavanje pitanja</b> <p>Sada možete dodati pitanje u test koji ste prethodno napravili. Opis nije obavezan kao ni skika za koju imate mogućnost da je povežete sa pitanjem.</p> <hr> <b>Ponuđeni odgovori </b> <p>Da biste definisali pitanje sa više tačnih odgovora i pitanje sa jednim tačnim odgovorom:<br><br> <ul> <li>Definišite odgovore na pitanje. Možete da dodate ili obrišete odgovor klikom na desno dugme.</li> <li>Obeležite levu kockicu za tačan odgovor/e</li> <li>Dodaje komentar, koji nije obavezan. Ovaj komentar neće biti poslat dok polaznik ne odgovori na pitanje.</li> <li>Odredite poene za svaki odgovor. Poen može biti bilo koja pozitivna ili negativna cifra ili nula</li> <li>Snimite svoje odgovore</li> </ul></p> <hr> <b>Popunite praznine </b> <p>Ovo Vam omogućava da napravite tekst sa prazninama. Cilje je da polaznik pronađe reči koje ste Vi uklonili iz teksta.<br><br> Da biste uklonili reč iz teksta i napravili prazninu, stavite reč u uglaste zagrade [ovako].<br><br> Kada je tekst unesen i definisane praznine, možete da dodate komentar koji će polaznik da vidi kada odgovori napitanje. <br><br> Snimite vaš tekst i doćićete do sledećeg koraka koji vam omogućava da odredite poene za svaku prazninu. Na primer ako pitanje vredi 10 poena i imate 5 praznina možete da date po 2 poena za svaku prazninu.</p> <hr> <b>Povezivanje</b> <p>Ovo je tip pitanja u kojem polaznik treba da poveže elemente sa jedne liste sa elementima sa druge liste.<br><br> Takođe može da se koristi da tražite od polaznika da poređe elemente po neko m redu.<br><br> Prvo definišite opcije između kojih će polaznik moći da bira tačan odgovor. Onda definišite pitanje koje će morati da bude povezano sa prethodno definisanom opcijom. Konačno povežite elemente iz padajućeg menija sa elementima iz drugog padajućeg menija. <br><br> Napomena: Nekoliko elemenata sa prve liste mogu da ukazuju na isti element druge liste.<br><br> Odredite poene za ispravno povezivanje i snimite odgovor. </p> <hr> <b>Izmena testa </b> <p>Da biste izmenili test princip je isti kao i za njegovo kreiranje. Samo kliknite na sliku <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> pored testa koji želite da izmenite i pratite uputstva navedena gore.</p> <hr> <b>Brisanje testa</b> <p>Da biste obrisali test kliknite na sliku <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> pored testa. </p> <hr> <b>Uključivanje testa</b> <p>Da biste mogli da koristite test morate da ga uključite klikom na sliku <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> pored imena testa.</p> <hr> <b>Pokretanje testa </b> <p>Vaš test možete proveriti klikom na njegovo ime na listi testova. </p> <hr> <b>Slučajna pitanja </b> <p>Dok ste kreirali/menjali test imali ste opciju u kojoj je trebalo da odredite da li želite da pitanja budu izvučena slučajnim redosledom iz seta pitanja koji je na raspolaganju.<br><br> Uključivanjem ove opcije pitanja će  se pojavljivati različitim redom svaki put kada korisnik pokrene test.<br><br> Ako imate veliki broj pitanja možete da kažete da slučajnim izborom izvuče x pitanja iz seta pitanja za tu vežbu. </p> <hr> <b>Set pitanja</b> <p>Kada obrišete test, njegova pitnja nisu uklonjena iz baze i mogu se ponovo koristiti za novi test kroz Set pitanja.<br><br> Set pitanja takođe omogućava da jedno pitanje koristite u više testova. <br><br> Osnovno podešavanje je da su sav pitanja sakrivene. Možete da pokažete pitanja koja su u vezi sa testom ako to odaberete u padajućem meniju \"Filter\".<br><br> Nezavisna pitanja su pitanja koja ne pripadaju nijednom testu.</p> Dodavanje pitanja<hr> <b>HotPotatoes Testovi</b> <p>U chamilo portal možete da uvezete HotPotatoes testove. Rezultati ovih testova se čuvaju na isti način kao i kod Chamilo testova. Rezultate možete da istražujete preko alatke za praćenje korisnika. U slučaju pojedinačih testova preporučujemo da koristite html ili htm format. Ako test sadrži slike učitajte ga kao zip fajl.</p> <p>Napomena: Možete i da dodate HotPotatoes testove kao korak u Putanji učenjaas.</p> <b>Metode uvoženja </b> <ul> <li>Selektujte fajl na vašem računaru koristeći dugme Browse <input type=submit value=Browse name=submit2> na desnoj strani ekrana.</li> <li> Pokrenite učitavanje dugmetom za učitavavanje. <input type=submit value=Upload name=submit2>. </li> <li> Test možete otvoriti klikom na njegovo ime. </li> </ul> <br> <b>Korisan link </b><br> <ul> <li>Hot Potatoes početna stranica: <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li> </li> </ul>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "Alatka za Putanju učenja ima dve funkcije: <ul><li>Kreiranje Putanje učenja </li> <li>Učitavanje Putanje učenja u Scorm ili IMS formatu </li></ul> <img src=\"../img/path_help.gif\"> <p><b> Šta je Putanja učenja?</b> </p><p> Putanja učenja  je niz koraka u učenju uključenih u module. Može da bude zasnovana na sadržaju (da izgelda kao sadržaj) ili na aktivnostima (da izgleda kao agenda ili program), ili bilo šta što je Vama neophodno da naučite ili uvežbate određeno znanje ili praktičan rad. </p><p>Osim toga što je organizovana Putanja učenja može da bude nastavljana. Ovo znači da će neki koraci podrazumevati predznanje za druge ('nemožete ići na korak 2 pre koraka 1'). Vaš niz može biti sugestivan (možete da prikažete korake jedan iza drugog) ili naredbodavan (dodate obavezni deo tako da polaznici moraju da prate niz). </p> <p><b>Kako da kreirate vašu Putanju učenja?</b></p> <p> Prvi korak je da odete u sekciju alatke za izgradnju Putanje učenja. Na ekranu Putanje učenja ima link ka alatu. Tamo možete da napravite mnogo putanji klikom na <i>Dodavanje nove Putanje učenja</i>. Ali oni su prazni dok im Vi ne dodate module i njima dodate korake.<br>Ako podesite da je Putanja vidljiva ona će se pojaviti kao alatka na početnoj stranici kursa. Na taj način pristup alatu je lakši.</p> <p> <b>Šta su koraci za ove Putanje? (Koje su stavke koje mogu biti dodate?)</b></p> <p>Svi Chamiloovi alati, aktivnosti, sadržaj za koji smatrate da je koristan i povezan sa vašom zamišljenom Putanjom mogu biti dodati:<br><ul> <li>Stavke Agende </li> <li>Odvojeni dokumenti (tekstovi, slike, Office dokumenta, ...)</li> <li>Obaveštenja</li> <li>Forumi</li> <li>Teme</li> <li>Poejdinačne tematske poruke </li> <li>Linkovi</li> <li>Dokeos Testovi</li> <li>HotPotatoes Testovi <br>(napomena: oni nevidljivi testovi koje stavite u putanju postaju vidljivi za polaznike ali samo u alatu za Putanju)</li> <li>Stranica sa Dodeljenim zadacima </li> <li>Dropbox stranica</li> <li>Spoljni linkovi, koji pokazuju na Chamilo sistem</li></ul> </p> <p><b> Druge mogućnosti Putanje učenja </b> </p> <p> Polaznicima možete da tražite da prate (čitaju) vašu Putanju u datom redu pošto možete da podesite <u>Zahteve</u> u Putanji. Ovo znači na primer da polaznici nemogu da idu na vežbu 2 dok ne pročitaju dokument 1. Sve stavke imaju status: završeno ili nezavršeno, tako da je progres polaznika jasan i dostupan. </p><p> Ako izmenite originalni naslov koraka, novi naslov će se pojaviti u Putanji ali prvi naslov neće biti izbrisan. Tako da ako želite da se test8 pojavi kao 'Konačan ispit' u Putanji ne morate da preimenujete fajl, možete da koristite opciju Novi naslov u Putanji. Takođe je korisno da date nove naslove linkovima koji su predugački. </p><p> Kada završite ne zaboravite da proverite Pogled polaznika gde se Sadržaj pojavljuje sa leve strane a koraci Putanje obično sa desne strane jedan po jedan. </p><br><p><b> Šta je Scorm ili IMS format Putanje učenja i kako da ih učitate (uvezete)?</b> </p> <p>Alatka za Putanju učenja vam omogućava da učitate SCORM u IMS sadržaj kursa.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) je javni standar koji za e-learning koriste velike kuće kao što su: NETg, Macromedia, Microsoft, Skillsoft, itd. i prate ga na tri nivoa: </p> <ul> <li><b>Ekonomski</b>: Scorm omogućava da celi kursevi budu upotrebljivi u različitim Learning Management Systems (LMS),</li> <li><b>Pedagoški</b>: Scorm integriše mogućnosti unosa Zahteva ili <i>Niza</i> (<i>npr. </i>\"Ne možete preći na poglavlje 2 pre prolaska vežbanja 1\"),</li> <li><b>Tehnološki</b>: Scorm generiše Sadržaje kao apstraktni sloj koji se nalazi izvan sadržaja i izvan LMS-a. On pomaže komunikaciju između sadržaja i LMS-a. Ono što se prenosi su uglavnom <i>bookmark</i> („Gde je Pera na kursu?“), <i>bodovi</i> („Kako je Pera uradio test?“) i <i>vreme</i> („Koliko je vremena Pera proveo na poglavlju 1?“).</li> </ul> <b>Kako da napravite SCORM usaglašen alat za pravljenje Putanji učenja?</b><br> <br> Najprirodniji način je da koristite Chamilo alat za pravljenje Putanji učenja. Ipak ukoliko želite da napravite lokalni Web sajt koji u potpunosti podržava Scorm format, predlažemo Vam da koristite alate kao što su Lectora&reg ili Reload&reg <br></p><p> <b>Korisni linkovi</b><br> <ul> <li>Adlnet: autoritet odgovoran za normalizciju Scorm-a, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Open Source besplatan Scorm player i editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Objavljivač autorizovanog Scorm softvera, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Note :</b></p><p> Sekcija Putanje učenja izlistava sve <i>samo-izgrađene Putanje učenja </i> i sve učitane <i> kao i Scorm format Putanje učenja.</i></p>"
+msgstr "Alatka za Putanju učenja ima dve funkcije: <ul><li>Kreiranje Putanje učenja </li> <li>Učitavanje Putanje učenja u Scorm ili IMS formatu </li></ul> <img src=\"../img/path_help.gif\"> <p><b> Šta je Putanja učenja?</b> </p><p> Putanja učenja  je niz koraka u učenju uključenih u module. Može da bude zasnovana na sadržaju (da izgelda kao sadržaj) ili na aktivnostima (da izgleda kao agenda ili program), ili bilo šta što je Vama neophodno da naučite ili uvežbate određeno znanje ili praktičan rad. </p><p>Osim toga što je organizovana Putanja učenja može da bude nastavljana. Ovo znači da će neki koraci podrazumevati predznanje za druge ('nemožete ići na korak 2 pre koraka 1'). Vaš niz može biti sugestivan (možete da prikažete korake jedan iza drugog) ili naredbodavan (dodate obavezni deo tako da polaznici moraju da prate niz). </p> <p><b>Kako da kreirate vašu Putanju učenja?</b></p> <p> Prvi korak je da odete u sekciju alatke za izgradnju Putanje učenja. Na ekranu Putanje učenja ima link ka alatu. Tamo možete da napravite mnogo putanji klikom na <i>Dodavanje nove Putanje učenja</i>. Ali oni su prazni dok im Vi ne dodate module i njima dodate korake.<br>Ako podesite da je Putanja vidljiva ona će se pojaviti kao alatka na početnoj stranici kursa. Na taj način pristup alatu je lakši.</p> <p> <b>Šta su koraci za ove Putanje? (Koje su stavke koje mogu biti dodate?)</b></p> <p>Svi Chamiloovi alati, aktivnosti, sadržaj za koji smatrate da je koristan i povezan sa vašom zamišljenom Putanjom mogu biti dodati:<br><ul> <li>Stavke Agende </li> <li>Odvojeni dokumenti (tekstovi, slike, Office dokumenta, ...)</li> <li>Obaveštenja</li> <li>Forumi</li> <li>Teme</li> <li>Poejdinačne tematske poruke </li> <li>Linkovi</li> <li>Chamilo Testovi</li> <li>HotPotatoes Testovi <br>(napomena: oni nevidljivi testovi koje stavite u putanju postaju vidljivi za polaznike ali samo u alatu za Putanju)</li> <li>Stranica sa Dodeljenim zadacima </li> <li>Dropbox stranica</li> <li>Spoljni linkovi, koji pokazuju na Chamilo sistem</li></ul> </p> <p><b> Druge mogućnosti Putanje učenja </b> </p> <p> Polaznicima možete da tražite da prate (čitaju) vašu Putanju u datom redu pošto možete da podesite <u>Zahteve</u> u Putanji. Ovo znači na primer da polaznici nemogu da idu na vežbu 2 dok ne pročitaju dokument 1. Sve stavke imaju status: završeno ili nezavršeno, tako da je progres polaznika jasan i dostupan. </p><p> Ako izmenite originalni naslov koraka, novi naslov će se pojaviti u Putanji ali prvi naslov neće biti izbrisan. Tako da ako želite da se test8 pojavi kao 'Konačan ispit' u Putanji ne morate da preimenujete fajl, možete da koristite opciju Novi naslov u Putanji. Takođe je korisno da date nove naslove linkovima koji su predugački. </p><p> Kada završite ne zaboravite da proverite Pogled polaznika gde se Sadržaj pojavljuje sa leve strane a koraci Putanje obično sa desne strane jedan po jedan. </p><br><p><b> Šta je Scorm ili IMS format Putanje učenja i kako da ih učitate (uvezete)?</b> </p> <p>Alatka za Putanju učenja vam omogućava da učitate SCORM u IMS sadržaj kursa.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) je javni standar koji za e-learning koriste velike kuće kao što su: NETg, Macromedia, Microsoft, Skillsoft, itd. i prate ga na tri nivoa: </p> <ul> <li><b>Ekonomski</b>: Scorm omogućava da celi kursevi budu upotrebljivi u različitim Learning Management Systems (LMS),</li> <li><b>Pedagoški</b>: Scorm integriše mogućnosti unosa Zahteva ili <i>Niza</i> (<i>npr. </i>\"Ne možete preći na poglavlje 2 pre prolaska vežbanja 1\"),</li> <li><b>Tehnološki</b>: Scorm generiše Sadržaje kao apstraktni sloj koji se nalazi izvan sadržaja i izvan LMS-a. On pomaže komunikaciju između sadržaja i LMS-a. Ono što se prenosi su uglavnom <i>bookmark</i> („Gde je Pera na kursu?“), <i>bodovi</i> („Kako je Pera uradio test?“) i <i>vreme</i> („Koliko je vremena Pera proveo na poglavlju 1?“).</li> </ul> <b>Kako da napravite SCORM usaglašen alat za pravljenje Putanji učenja?</b><br> <br> Najprirodniji način je da koristite Chamilo alat za pravljenje Putanji učenja. Ipak ukoliko želite da napravite lokalni Web sajt koji u potpunosti podržava Scorm format, predlažemo Vam da koristite alate kao što su Lectora&reg ili Reload&reg <br></p><p> <b>Korisni linkovi</b><br> <ul> <li>Adlnet: autoritet odgovoran za normalizciju Scorm-a, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Reload : Open Source besplatan Scorm player i editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Objavljivač autorizovanog Scorm softvera, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Note :</b></p><p> Sekcija Putanje učenja izlistava sve <i>samo-izgrađene Putanje učenja </i> i sve učitane <i> kao i Scorm format Putanje učenja.</i></p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 msgstr "<p>Ova alatka će Vam pomoći da opišete kurs na sažet način i sa spoljašnje strane. Na taj način ćete pomoći vašim budućim polaznicima da znaju šta mogu da očekuju od ovog kursa. To je takođe šansa da razmislite opet o scenariju kursa.</p>Ovde su date stavke kao predlozi. Ako želite da kreirate opis kursa sa vašim stavkama koristite samo stavku 'Drugo' i odredite naslov.</p> <p> Da biste popunili opis kursa odaberite Kreiraj i izmeni sa formama > Spustite se dole u meniju i odaberite stavku koja Vam odgovara > Potvrdite. Uvek možete da izmenite ili obrišete sadržaj svake stavke klikom na ikonicu olovke ili crvenog krstića.</p>"
@@ -14333,7 +14294,7 @@ msgid "Add a Link help"
 msgstr "Dodavanje linka"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos je modularna alatka. Možete da sakrivate i pokazujete alate kada god poželite i u skladu sa potrebama vašeg projekta i njegovim fazama. Ali isto tako na vašu početnu stranicu možete da dodate alate koje ste sami napravili i koji dolaze izvan Chamilo portala. Na taj način ćete od početne stranice kursa napraviti VAŠU početnu stranicu.</p> <p>Da biste na taj način preuzeli vašu stranicu, dodajte linkove na nju. Postoje dva tipa linkova koje možete da dodate: <ul><li><b>spoljašnji linkovi</b>: na vašoj početnoj stranici možete da kreirate link do Web sajta koji se ne nalazi u okruženju kursa. U tom slučaju selektujte da se odredište otvara u novom prozoru, zato što ne želite da taj sajt prekrije vaše Chamilo okruženje.</li> <li><b>Interni link</b>: link ka stranici koja se nalazi u Chamilo kursu. Da biste to uradili prvo idite na tu stranicu i iskopirajte njen URL sa adresne linije (CTRL+C), potom koristite opciju Dodavnje linka i prilepite URL u odgovarajuće polje i dajte mu ime. U ovom slučaju odabraćete da se odredište otvara u istom prozoru zato što će se zadržeti Chamilo banner na vrhu i ostaje isto okruženje.</li></ul> Jednom kada su napravljeni linkovi ne mogu da se izmene. Jedini način da ih izmenite je da ih deaktivirate i obrišete i krenete od početka.</p>"
+msgstr "<p>Chamilo je modularna alatka. Možete da sakrivate i pokazujete alate kada god poželite i u skladu sa potrebama vašeg projekta i njegovim fazama. Ali isto tako na vašu početnu stranicu možete da dodate alate koje ste sami napravili i koji dolaze izvan Chamilo portala. Na taj način ćete od početne stranice kursa napraviti VAŠU početnu stranicu.</p> <p>Da biste na taj način preuzeli vašu stranicu, dodajte linkove na nju. Postoje dva tipa linkova koje možete da dodate: <ul><li><b>spoljašnji linkovi</b>: na vašoj početnoj stranici možete da kreirate link do Web sajta koji se ne nalazi u okruženju kursa. U tom slučaju selektujte da se odredište otvara u novom prozoru, zato što ne želite da taj sajt prekrije vaše Chamilo okruženje.</li> <li><b>Interni link</b>: link ka stranici koja se nalazi u Chamilo kursu. Da biste to uradili prvo idite na tu stranicu i iskopirajte njen URL sa adresne linije (CTRL+C), potom koristite opciju Dodavnje linka i prilepite URL u odgovarajuće polje i dajte mu ime. U ovom slučaju odabraćete da se odredište otvara u istom prozoru zato što će se zadržeti Chamilo banner na vrhu i ostaje isto okruženje.</li></ul> Jednom kada su napravljeni linkovi ne mogu da se izmene. Jedini način da ih izmenite je da ih deaktivirate i obrišete i krenete od početka.</p>"
 
 msgid "Clear content"
 msgstr "Obriši sadržaj"
@@ -14350,11 +14311,11 @@ msgstr "Uputstvo"
 msgid "You should write a message"
 msgstr "Trebalo bi da napišete poruku"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "To poruka vam je poslata da vas informiše o kreiranju novog kursa na platformi"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "To poruka vam je poslata da vas informiše o kreiranju novog kursa na %s"
 
-msgid "New course created in"
-msgstr "Novi kurs kreiran u"
+msgid "New course created on %s"
+msgstr "Novi kurs kreiran u %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Trener je podešen na Vas trenutno. Možete da promenite ovo podešavanja kasnije u podešavanjima konfiguracije treninga"
@@ -14365,8 +14326,8 @@ msgstr ""
 msgid "Please read the following requirements thoroughly."
 msgstr "Pročitajte pažljivo."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Upozorenje!<br>Instaler je otkrio postojeću Chamilo platformu na vašem sistemu."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Upozorenje! Instaler je otkrio postojeću Chamilo platformu na vašem sistemu."
 
 msgid "New installation"
 msgstr "Nova Instalacija"
@@ -14498,12 +14459,6 @@ msgid "Please go back to Step"
 msgstr ""
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-msgstr ""
-
-msgid "MBString extension not available"
-msgstr ""
-
-msgid "MySQL extension not available"
 msgstr ""
 
 msgid "Optional parameters"
@@ -15148,7 +15103,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"
@@ -15622,7 +15577,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15691,7 +15646,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -17389,7 +17344,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17434,13 +17389,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -17797,7 +17752,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18127,15 +18082,6 @@ msgstr ""
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr ""
 
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
-msgstr ""
-
 msgid "To social group"
 msgstr ""
 
@@ -18403,7 +18349,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -18607,13 +18553,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -18892,7 +18832,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19036,7 +18976,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -21292,7 +21232,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22846,7 +22786,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22921,13 +22861,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23467,10 +23404,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23773,10 +23710,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24010,7 +23947,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24076,10 +24013,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

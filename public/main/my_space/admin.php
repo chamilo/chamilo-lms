@@ -40,15 +40,15 @@ $result_admins = Database::query($sql);
 if (api_is_western_name_order()) {
     echo '<table class="table table-hover table-striped data_table">
         <tr>
-        <th>'.get_lang('FirstName').'</th>
-        <th>'.get_lang('LastName').'</th>
-        <th>'.get_lang('Email').'</th></tr>';
+        <th>'.get_lang('First name').'</th>
+        <th>'.get_lang('Last name').'</th>
+        <th>'.get_lang('E-mail').'</th></tr>';
 } else {
     echo '<table class="table table-hover table-striped data_table">
         <tr>
-            <th>'.get_lang('LastName').'</th>
-            <th>'.get_lang('FirstName').'</th>
-            <th>'.get_lang('Email').'</th></tr>';
+            <th>'.get_lang('Last name').'</th>
+            <th>'.get_lang('First name').'</th>
+            <th>'.get_lang('E-mail').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
@@ -58,7 +58,7 @@ if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
     $header[] = get_lang('Last name');
     $header[] = get_lang('First name');
 }
-$header[] = get_lang('e-mail');
+$header[] = get_lang('E-mail');
 
 if (Database::num_rows($result_admins) > 0) {
     while ($admins = Database::fetch_array($result_admins)) {
@@ -71,9 +71,9 @@ if (Database::num_rows($result_admins) > 0) {
             $css_class = "row_odd";
             if (0 == $i % 20 && 0 != $i) {
                 if (api_is_western_name_order()) {
-                    echo '<tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+                    echo '<tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('E-mail').'</th></tr>';
                 } else {
-                    echo '<tr><th>'.get_lang('Last name').'</th><th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
+                    echo '<tr><th>'.get_lang('Last name').'</th><th>'.get_lang('First name').'</th><th>'.get_lang('E-mail').'</th></tr>';
                 }
             }
         } else {

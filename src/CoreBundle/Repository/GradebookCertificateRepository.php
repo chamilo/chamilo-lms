@@ -68,6 +68,7 @@ class GradebookCertificateRepository extends ServiceEntityRepository
 
     public function registerUserInfoAboutCertificate(int $catId, int $userId, float $scoreCertificate, string $fileName = ''): void
     {
+        $fileName = ltrim($fileName, '/');
         $existingCertificate = $this->getCertificateByUserId(0 === $catId ? null : $catId, $userId);
 
         if (!$existingCertificate) {
@@ -75,10 +76,6 @@ class GradebookCertificateRepository extends ServiceEntityRepository
 
             $category = 0 === $catId ? null : $this->_em->getRepository(GradebookCategory::class)->find($catId);
             $user = $this->_em->getRepository(User::class)->find($userId);
-
-            if (!empty($fileName)) {
-                $fileName = '/'.$fileName;
-            }
 
             if ($category) {
                 $certificate->setCategory($category);
@@ -90,7 +87,13 @@ class GradebookCertificateRepository extends ServiceEntityRepository
 
             $this->_em->persist($certificate);
             $this->_em->flush();
+
+            return;
         }
+
+        $existingCertificate->setPathCertificate($fileName);
+        $existingCertificate->setScoreCertificate($scoreCertificate);
+        $this->_em->flush();
     }
 
     public function generateCertificatePersonalFile(int $userId, string $fileName, string $certificateContent): ?PersonalFile

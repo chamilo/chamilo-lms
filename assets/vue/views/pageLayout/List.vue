@@ -1,14 +1,14 @@
 <template>
-  <SectionHeader :title="t('Page Layouts')">
+  <SectionHeader :title="t('Page layouts')">
     <div class="flex gap-4">
       <BaseButton
-        :label="t('Create Layout')"
+        :label="t('Create layout')"
         icon="file-add"
         type="success"
         @click="goToCreate"
       />
       <BaseButton
-        :label="t('Manage Templates')"
+        :label="t('Manage templates')"
         icon="cog"
         type="secondary"
         @click="goToTemplates"
@@ -87,7 +87,7 @@
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isDeleteDialogVisible"
-    :title="t('Confirm Deletion')"
+    :title="t('Confirm deletion')"
     @confirm-clicked="deleteLayout"
     @cancel-clicked="isDeleteDialogVisible = false"
   >

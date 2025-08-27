@@ -465,7 +465,7 @@ class TicketManager
                             <td width="400px">'.$currentUserInfo['username'].'</td>
                         </tr>
                         <tr>
-                            <td width="100px"><b>'.get_lang('Email').'</b></td>
+                            <td width="100px"><b>'.get_lang('E-mail').'</b></td>
                             <td width="400px">'.$currentUserInfo['email'].'</td>
                         </tr>
                         <tr>
@@ -1440,8 +1440,7 @@ class TicketManager
                 $unsubscribeLink = self::generateUnsubscribeLink($ticketId, $recipientId);
                 $finalMessageEmail = $messageEmailBase;
                 $finalMessageEmail .= '<br /><hr /><br />';
-                $finalMessageEmail .= '<small>' . get_lang('To unsubscribe from notifications, click here') . ': ';
-                $finalMessageEmail .= '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a></small>';
+                $finalMessageEmail .= '<small>'.sprintf(get_lang('To unsubscribe from notifications, click here: %s'), '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a>').'</small>';
 
                 echo "------------------------------------\n";
                 echo "Recipient: $recipientName (User ID: $recipientId)\n";
@@ -1458,8 +1457,7 @@ class TicketManager
 
             $finalMessageEmail = $messageEmailBase;
             $finalMessageEmail .= '<br /><hr /><br />';
-            $finalMessageEmail .= '<small>' . get_lang('To unsubscribe from notifications, click here') . ': ';
-            $finalMessageEmail .= '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a></small>';
+            $finalMessageEmail .= '<small>'.sprintf(get_lang('To unsubscribe from notifications, click here: %s'), '<a href="' . $unsubscribeLink . '">' . $unsubscribeLink . '</a>').'</small>';
 
             MessageManager::send_message_simple(
                 $recipientId,

@@ -146,7 +146,7 @@ if ('learnpath' !== $origin) {
             '</a>';
     } else {
         $actions .= '<a href="index.php?'.api_get_cidreq().'">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForumOverview')).
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum overview')).
             '</a>';
     }
     echo Display::toolbarAction('toolbar', [$actions]);

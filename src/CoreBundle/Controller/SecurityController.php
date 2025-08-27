@@ -13,15 +13,19 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +49,7 @@ class SecurityController extends AbstractController
         private readonly RouterInterface $router,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly AccessUrlRepository $accessUrlRepo,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
@@ -54,14 +59,14 @@ class SecurityController extends AbstractController
         TranslatorInterface $translator,
     ): Response {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is "application/json".'));
+            throw $this->createAccessDeniedException($translator->trans('Invalid login request: check that the Content-Type header is <em>application/json</em>.'));
         }
 
         $user = $this->userHelper->getCurrent();
 
         if (User::ACTIVE !== $user->getActive()) {
             if (User::INACTIVE === $user->getActive()) {
-                $message = $translator->trans('Account not activated.');
+                $message = $translator->trans('Your account has not been activated.');
             } else {
                 $message = $translator->trans('Invalid credentials. Please try again or contact support if you continue to experience issues.');
             }
@@ -181,6 +186,37 @@ class SecurityController extends AbstractController
         }
 
         throw $this->createAccessDeniedException();
+    }
+
+    #[Route('/login/token/request', name: 'login_token_request', methods: ['GET'])]
+    public function loginTokenRequest(
+        JWTTokenManagerInterface $jwtManager,
+        Security $security,
+    ): JsonResponse {
+        $user = $this->userHelper->getCurrent();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token = $jwtManager->create($user);
+
+        // Logout the current user in the login-only Access URL
+        $security->logout(false);
+
+        return new JsonResponse([
+            'token' => $token,
+        ]);
+    }
+
+    /**
+     * @see LoginTokenAuthenticator
+     */
+    #[Route('/login/token/check', name: 'login_token_check', methods: ['POST'])]
+    public function loginTokenCheck(): Response
+    {
+        // this response was managed in LoginTokenAuthenticator class
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

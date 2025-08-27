@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Repository\TrackEAttemptRepository;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Question;
@@ -19,18 +20,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-use const FILTER_VALIDATE_BOOLEAN;
+use const FILTER_SANITIZE_NUMBER_INT;
 
 /**
  * Controller to handle AI-related functionalities.
  */
 #[Route('/ai')]
-class AiController  extends AbstractController
+class AiController extends AbstractController
 {
     public function __construct(
-        private readonly AiProviderFactory        $aiProviderFactory,
-        private readonly TrackEAttemptRepository  $attemptRepo,
-        private readonly EntityManagerInterface   $em
+        private readonly AiProviderFactory $aiProviderFactory,
+        private readonly TrackEAttemptRepository $attemptRepo,
+        private readonly EntityManagerInterface $em
     ) {}
 
     #[Route('/generate_aiken', name: 'chamilo_core_ai_generate_aiken', methods: ['POST'])]
@@ -75,12 +76,12 @@ class AiController  extends AbstractController
         }
     }
 
-    #[Route("/open_answer_grade", name:"chamilo_core_ai_open_answer_grade", methods:["POST"])]
+    #[Route('/open_answer_grade', name: 'chamilo_core_ai_open_answer_grade', methods: ['POST'])]
     public function openAnswerGrade(Request $request): JsonResponse
     {
-        $exeId      = $request->request->getInt('exeId', 0);
+        $exeId = $request->request->getInt('exeId', 0);
         $questionId = $request->request->getInt('questionId', 0);
-        $courseId   = $request->request->getInt('courseId', 0);
+        $courseId = $request->request->getInt('courseId', 0);
 
         if (0 === $exeId || 0 === $questionId || 0 === $courseId) {
             return $this->json(['error' => 'Missing parameters'], 400);
@@ -89,15 +90,16 @@ class AiController  extends AbstractController
         /** @var TrackEExercise $trackExercise */
         $trackExercise = $this->em
             ->getRepository(TrackEExercise::class)
-            ->find($exeId);
+            ->find($exeId)
+        ;
         if (null === $trackExercise) {
             return $this->json(['error' => 'Exercise attempt not found'], 404);
         }
 
         $attempt = $this->attemptRepo->findOneBy([
             'trackExercise' => $trackExercise,
-            'questionId'    => $questionId,
-            'user'          => $trackExercise->getUser()
+            'questionId' => $questionId,
+            'user' => $trackExercise->getUser(),
         ]);
         if (null === $attempt) {
             return $this->json(['error' => 'Attempt not found'], 404);
@@ -108,7 +110,8 @@ class AiController  extends AbstractController
         if (ctype_digit($answerText)) {
             $cqa = $this->em
                 ->getRepository(CQuizAnswer::class)
-                ->find((int) $answerText);
+                ->find((int) $answerText)
+            ;
             if ($cqa) {
                 $answerText = $cqa->getAnswer();
             }
@@ -124,13 +127,17 @@ class AiController  extends AbstractController
             return $this->json(['error' => 'Question not found'], 404);
         }
 
-        $language     = $courseInfo['language'] ?? 'en';
-        $courseTitle  = $courseInfo['title']    ?? '';
-        $maxScore     = $question->selectWeighting();
+        $language = $courseInfo['language'] ?? 'en';
+        $courseTitle = $courseInfo['title'] ?? '';
+        $maxScore = $question->selectWeighting();
         $questionText = $question->selectTitle();
-        $prompt = sprintf(
+        $prompt = \sprintf(
             "In language %s, for the question: '%s', in the context of %s, provide a score between 0 and %d on one line, then feedback on the next line for the following answer: '%s'.",
-            $language, $questionText, $courseTitle, $maxScore, $answerText
+            $language,
+            $questionText,
+            $courseTitle,
+            $maxScore,
+            $answerText
         );
 
         $raw = trim((string) $this->aiProviderFactory
@@ -141,11 +148,11 @@ class AiController  extends AbstractController
             return $this->json(['error' => 'AI request failed'], 500);
         }
 
-        if (false !== strpos($raw, "\n")) {
+        if (str_contains($raw, "\n")) {
             [$scoreLine, $feedback] = explode("\n", $raw, 2);
         } else {
             $scoreLine = (string) $maxScore;
-            $feedback  = $raw;
+            $feedback = $raw;
         }
 
         $score = (int) filter_var($scoreLine, FILTER_SANITIZE_NUMBER_INT);
@@ -155,16 +162,17 @@ class AiController  extends AbstractController
             ->setDefaultUserId($this->getUser()->getId())
             ->setDefaultEventType('ai_use_question_feedback')
             ->setDefaultValueType('attempt_id')
-            ->setDefaultValue((string)$attempt->getId())
-            ->setDefaultDate(new \DateTime())
+            ->setDefaultValue((string) $attempt->getId())
+            ->setDefaultDate(new DateTime())
             ->setCId($courseId)
-            ->setSessionId(api_get_session_id());
+            ->setSessionId(api_get_session_id())
+        ;
         $this->em->persist($track);
         $this->em->flush();
 
         return $this->json([
-            'score'    => $score,
-            'feedback' => $feedback
+            'score' => $score,
+            'feedback' => $feedback,
         ]);
     }
 }

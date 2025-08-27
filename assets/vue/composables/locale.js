@@ -91,6 +91,70 @@ export function useLocale() {
 
   const appParentLocale = computed(() => useParentLocale(appLocale.value))
 
+  // Simple in-memory cache for API lookups
+  const __apiLangCache = new Map()
+
+  function normalizeIso(iso) {
+    // Normalize to DB and BCP-47 variants and extract parent (e.g., "pt_BR" -> "pt")
+    if (!iso) return { db: "", bcp47: "", parent: "" }
+    const u = String(iso).trim()
+    return {
+      db: u.replace("-", "_"),     // pt-BR -> pt_BR (DB)
+      bcp47: u.replace("_", "-"),  // pt_BR -> pt-BR (BCP-47)
+      parent: u.split(/[-_]/)[0],  // pt_BR -> pt
+    }
+  }
+
+  /**
+   * Get a human-readable language name using the current UI locale (synchronous).
+   * Does not depend on window.languages; falls back to it if Intl fails.
+   */
+  function getLanguageName(iso, displayLocale = null) {
+    if (!iso) return "-"
+    const tag = String(iso).replace("_", "-")
+    const ui = displayLocale || appLocale.value || document.documentElement.lang || "en"
+    try {
+      const dn = new Intl.DisplayNames([ui], { type: "language" })
+      return dn.of(tag) || iso.toUpperCase()
+    } catch {
+      const hit = (window.languages || []).find((l) => l.isocode === iso)
+      return hit?.originalName || hit?.original_name || hit?.english_name || iso.toUpperCase()
+    }
+  }
+
+  /**
+   * Fetch language name from API by isocode (includes unavailable languages).
+   * Tries exact, variant, then parent. Results are cached.
+   */
+  async function fetchLanguageNameFromApi(iso) {
+    if (!iso) return "-"
+    if (__apiLangCache.has(iso)) return __apiLangCache.get(iso)
+
+    const { db, bcp47, parent } = normalizeIso(iso)
+
+    async function hit(q) {
+      const r = await fetch(`/api/languages?isocode=${encodeURIComponent(q)}`)
+      if (!r.ok) return null
+      const j = await r.json()
+      const arr = j["hydra:member"] || j
+      return Array.isArray(arr) && arr.length ? arr[0] : null
+    }
+
+    let row = await hit(db)
+    if (!row && bcp47 !== db) row = await hit(bcp47)
+    if (!row && parent && parent !== db) row = await hit(parent)
+
+    const name =
+      row?.originalName ||
+      row?.original_name ||
+      row?.englishName ||
+      row?.english_name ||
+      iso.toUpperCase()
+
+    __apiLangCache.set(iso, name)
+    return name
+  }
+
   return {
     appLocale,
     appParentLocale,
@@ -98,6 +162,8 @@ export function useLocale() {
     currentLanguageFromList,
     reloadWithLocale,
     getOriginalLanguageName,
+    getLanguageName,
+    fetchLanguageNameFromApi,
   }
 }
 

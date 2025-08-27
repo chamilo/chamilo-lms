@@ -199,9 +199,9 @@ if (!empty($OkMsg)) {
     </td>
 </tr>
 <tr>
-  <td width="45%" align="center"><b><?php echo get_lang('Session listInPlatform'); ?> :</b></td>
+  <td width="45%" align="center"><b><?php echo get_lang('List of sessions on the platform'); ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('Session listInCategory'); ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('List of sessions in the categories'); ?> :</b></td>
 </tr>
 
 <?php if ('multiple' == $add_type) {

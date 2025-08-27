@@ -161,7 +161,7 @@ class SettingsController extends BaseController
 
             try {
                 $manager->save($form->getData());
-                $message = $this->trans('Settings have been successfully updated');
+                $message = $this->trans('The settings have been stored');
             } catch (ValidatorException $validatorException) {
                 $message = $this->trans($validatorException->getMessage());
                 $messageType = 'error';

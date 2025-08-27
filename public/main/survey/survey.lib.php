@@ -363,7 +363,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('The survey has been created succesfully'),
+                    get_lang('The survey has been created successfully'),
                     'success'
                 )
             );
@@ -454,7 +454,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('The survey has been updated succesfully'),
+                    get_lang('The survey has been updated successfully'),
                     'confirmation'
                 )
             );
@@ -2184,9 +2184,9 @@ class SurveyManager
                     );
 
                     foreach ($tutors as $tutor) {
-                        $subject = sprintf(get_lang('GroupSurveyX'), $groupInfo['name']);
+                        $subject = sprintf(get_lang('Group survey for %s'), $groupInfo['name']);
                         $content = sprintf(
-                            get_lang('HelloXGroupX'),
+                            get_lang('Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :'),
                             $tutor['complete_name'],
                             $groupInfo['name']
                         );

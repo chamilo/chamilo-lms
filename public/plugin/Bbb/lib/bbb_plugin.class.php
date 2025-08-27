@@ -53,8 +53,8 @@ class BbbPlugin extends Plugin
                     'options' => [
                         PLATFORM_ADMIN => get_lang('Administrator'),
                         COURSEMANAGER => get_lang('Teacher'),
-                        STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss'),
+                        STUDENT => get_lang('Learner'),
+                        STUDENT_BOSS => get_lang('Superior (n+1)'),
                     ],
                     'attributes' => ['multiple' => 'multiple'],
                 ],

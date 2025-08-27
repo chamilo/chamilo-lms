@@ -1853,7 +1853,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addText('url', get_lang('Url'), false);
+        $form->addText('url', get_lang('URL'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -3099,7 +3099,7 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_HRM:
                 return get_lang('Human Resources Manager');
             default:
-                return get_lang('Undefined role');
+                return get_lang('Custom or undefined role');
         }
     }
 }

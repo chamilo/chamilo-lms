@@ -69,7 +69,7 @@ function show_image(image,width,height) {
 }
 
 function confirmation(name) {
-    if (confirm("'.get_lang('Are you sure to delete?').' " + name + " ?")) {
+    if (confirm("'.get_lang('Are you sure to delete').' " + name + " ?")) {
             document.forms["profile"].submit();
     } else {
         return false;
@@ -143,7 +143,7 @@ $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
 
 // e-mail
-$form->addElement('text', 'email', get_lang('e-mail'));
+$form->addElement('text', 'email', get_lang('E-mail'));
 $form->addEmailRule('email');
 if ('true' == api_get_setting('registration', 'email')) {
     $form->addRule('email', get_lang('Required field'), 'required');
@@ -371,6 +371,19 @@ $(function () {
     '.$jqueryReadyContent.'
 });
 </script>';
+
+// Freeze user conditions, admin cannot updated them
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
+        }
+    }
+}
 
 // Submit button
 $form->addButtonSave(get_lang('Save'));

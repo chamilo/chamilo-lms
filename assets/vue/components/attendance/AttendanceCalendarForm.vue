@@ -12,7 +12,7 @@
     <!-- Repeat Date -->
     <BaseCheckbox
       v-model="formData.repeatDate"
-      :label="t('Repeat Date')"
+      :label="t('Repeat date')"
       @change="toggleRepeatOptions"
     />
 
@@ -20,7 +20,7 @@
       <!-- Repeat Type -->
       <BaseSelect
         v-model="formData.repeatType"
-        :label="t('Repeat Type')"
+        :label="t('Repeat type')"
         :options="repeatTypeOptions"
         required
       />
@@ -40,7 +40,7 @@
       <BaseCalendar
         id="end_date_time"
         v-model="formData.repeatEndDate"
-        :label="t('Repeat End Date')"
+        :label="t('Repeat end date')"
         :show-time="true"
         required
       />
@@ -109,9 +109,9 @@ const formData = reactive({
 const repeatTypeOptions = [
   { label: t("Daily"), value: "daily" },
   { label: t("Weekly"), value: "weekly" },
-  { label: t("Bi-Weekly"), value: "bi-weekly" },
-  { label: t("Every X Days"), value: "every-x-days" },
-  { label: t("Monthly by Date"), value: "monthly-by-date" },
+  { label: t("Bi-weekly"), value: "bi-weekly" },
+  { label: t("Every x days"), value: "every-x-days" },
+  { label: t("Monthly, by date"), value: "monthly-by-date" },
 ]
 
 const groupOptions = ref([])

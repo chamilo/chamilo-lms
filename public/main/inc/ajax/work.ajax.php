@@ -131,7 +131,7 @@ switch ($action) {
                         'ch-tool-icon',
                         null,
                         ICON_SIZE_SMALL,
-                        get_lang('Uploaded..')
+                        get_lang('Uploaded.')
                     );
                 } else {
                     $json['url'] = '';
@@ -209,7 +209,7 @@ switch ($action) {
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_TINY,
-                    get_lang('Uploaded..')
+                    get_lang('Uploaded.')
                 );
             } else {
                 $json['result'] = Display::getMdiIcon(

@@ -26,14 +26,14 @@ $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $nameTools = get_lang('Teachers');
 $this_section = SECTION_TRACKING;
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) {
     $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
-    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Tutors')];
+    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
 }
 
 function get_count_users()
@@ -185,10 +185,10 @@ $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = [
         Display::url(
-            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStats')),
+            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
             api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
         ),
-        Display::url(Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Students')), 'student.php'),
+        Display::url(Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')), 'student.php'),
         Display::url(
             Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Trainers')),
             'teachers.php'
@@ -214,7 +214,7 @@ $actionsRight = Display::url(
     ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
-    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportAsCSV')),
+    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
@@ -236,31 +236,31 @@ $params = [
 $table->set_additional_parameters($params);
 
 if ($is_western_name_order) {
-    $table->set_header(0, get_lang('FirstName'), false);
-    $table->set_header(1, get_lang('LastName'), false);
+    $table->set_header(0, get_lang('First name'), false);
+    $table->set_header(1, get_lang('Last name'), false);
 } else {
-    $table->set_header(0, get_lang('LastName'), false);
-    $table->set_header(1, get_lang('FirstName'), false);
+    $table->set_header(0, get_lang('Last name'), false);
+    $table->set_header(1, get_lang('First name'), false);
 }
 
-$table->set_header(2, get_lang('FirstLogin'), false);
-$table->set_header(3, get_lang('LastConnexion'), false);
+$table->set_header(2, get_lang('First connection'), false);
+$table->set_header(3, get_lang('Last connection'), false);
 $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
         $csv_header[] = [
-            get_lang('FirstName'),
-            get_lang('LastName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('First name'),
+            get_lang('Last name'),
+            get_lang('First connection'),
+            get_lang('Last connection'),
         ];
     } else {
         $csv_header[] = [
-            get_lang('LastName'),
-            get_lang('FirstName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('Last name'),
+            get_lang('First name'),
+            get_lang('First connection'),
+            get_lang('Last connection'),
         ];
     }
 }

@@ -73,7 +73,7 @@ Display::display_header(
 Display::display_introduction_section(TOOL_GROUP);
 
 $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Groups list')).
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Group list'))).
     '</a>';
 
 $confirmationMessage = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES));
@@ -226,7 +226,7 @@ if (api_is_allowed_to_edit(false, true) ||
     if ('true' === $enabled) {
         $actions_array[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq(),
-            'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('VideoConference')),
+            'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Videoconference')),
         ];
     }
 
@@ -372,7 +372,7 @@ if (api_is_western_name_order()) {
 }
 
 if ('true' === api_get_setting('show_email_addresses') || api_is_allowed_to_edit()) {
-    $table->set_header(3, get_lang('e-mail'));
+    $table->set_header(3, get_lang('E-mail'));
     $table->set_column_filter(3, 'email_filter');
     $table->set_header(4, get_lang('active'));
     $table->set_column_filter(4, 'activeFilter');

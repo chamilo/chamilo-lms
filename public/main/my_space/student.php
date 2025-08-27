@@ -280,7 +280,7 @@ if (api_is_drh()) {
     );
 
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStudentsSchedule')),
+        Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('My students schedule')),
         $webCodePath.'my_space/calendar_plan.php'
     );
 

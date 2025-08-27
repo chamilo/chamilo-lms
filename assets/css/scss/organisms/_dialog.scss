@@ -1,6 +1,10 @@
 .p-dialog {
   @apply max-h-[90%] scale-100 drop-shadow-lg rounded-lg border-0 border-none;
 
+  &-mask {
+    @apply bg-gray-30;
+  }
+
   &-header {
     @apply bg-white border-b border-solid border-gray-30 gap-4 rounded-t-lg p-4;
 

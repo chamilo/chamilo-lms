@@ -233,7 +233,7 @@ switch ($action) {
                     )."\n".
                     get_lang('Administrator')." ".
                     api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                    get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
+                    get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                     MessageManager::send_message_simple(
                         $user_id,

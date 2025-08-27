@@ -20,7 +20,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('NotAllowed'));
+        throw new Exception(get_lang('You are not allowed here.'));
     }
 
     /** @var ImsLtiTool $tool */
@@ -31,7 +31,7 @@ try {
     }
 
     if ($tool->getParent()) {
-        throw new Exception($plugin->get_lang('NoAllowed'));
+        throw new Exception($plugin->get_lang('BaseToolsCanBeAddedInSessionsOnly'));
     }
 
     $content = '';
@@ -60,7 +60,7 @@ try {
 
         if (!$formValues['sessions']) {
             Display::addFlash(
-                Display::return_message($plugin->get_lang('NeedToSelectASession'), 'error', false)
+                Display::return_message(get_lang('Session not found.'), 'error', false)
             );
             header('Location:'.api_get_self());
             exit;
@@ -75,7 +75,7 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInSessions'));

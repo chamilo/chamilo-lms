@@ -617,7 +617,7 @@ class DisplayGradebook
         $info .= get_lang('Name').' :  '.$user['complete_name_with_message_link'].'<br />';
 
         if ('true' == api_get_setting('show_email_addresses')) {
-            $info .= get_lang('e-mail').' : <a href="mailto:'.$user['email'].'">'.$user['email'].'</a><br />';
+            $info .= get_lang('E-mail').' : <a href="mailto:'.$user['email'].'">'.$user['email'].'</a><br />';
         }
 
         $info .= get_lang('Total for user').' : <b>'.$scorecourse_display.'</b>';

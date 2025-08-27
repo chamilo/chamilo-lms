@@ -637,10 +637,10 @@ msgstr "Cursus categorieën in %s site:"
 msgid "Course categories available"
 msgstr "Beschikbare cursus categorieën"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "De groep hoort nu bij de geselecteerde site"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "U moet tenminste één groep en één site kiezen"
 
 msgid "Agenda list"
@@ -1630,7 +1630,7 @@ msgstr "Het pakket kan niet worden herkend. Zorg er voor dat het correct is aang
 msgid "Move the current forum"
 msgstr "Verplaats het huidige forum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Opgelet !<br /> Wanneer u de inhoud van een scorm-fase wijzigt, kunt u de weergave van het leerpad veranderen, of de stap beschadigen."
 
 msgid "Please provide a subject or message"
@@ -1747,7 +1747,7 @@ msgstr "Standaard is uw cursus publiek toegankelijk. U kan de toegankelijkheid h
 msgid "Public - access allowed for the whole world"
 msgstr "Openbaar – toegang toegelaten voor de hele wereld"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Open – toegang toegelaten voor geregistreerde gebruikers"
 
 msgid "Student %s is no subscribed to this course"
@@ -1777,7 +1777,7 @@ msgstr "Link toevoegen en verbinden met startpagina"
 msgid "has been deleted"
 msgstr "werd verwijderd."
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Wanneer u deze cursus verwijdert, worden alle gegevens (documenten, links...) verwijderd. Eventuele virtuele cursussen gelinkt aan deze cursus worden ook verwijderd.<br /><br />Wenst u deze cursus te verwijderen?"
 
 msgid "YES"
@@ -2544,9 +2544,6 @@ msgstr "Vul hier de naam in van de faculteit waar de cursus wordt gedoceerd"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Indien u twijfelt over de juiste titel of code van uw cursus, kunt u deze in de cursuslijst raadplegen."
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Cursusprogramma</a>. Als de startpagina die u wil creëren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer."
 
 msgid "SCORM Path builder"
 msgstr "Constructie van SCORM-leerpad"
@@ -3402,9 +3399,6 @@ msgstr "Maak notitie aan"
 msgid "Edit my personal note"
 msgstr "Pas mijn persoonlijke notitie aan"
 
-msgid "Back to note list"
-msgstr "Terug naar notitielijst"
-
 msgid "Notebook management"
 msgstr "Notitiebeheer"
 
@@ -3519,7 +3513,7 @@ msgstr "Cursuscategorie creëren"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Bent u zeker dat u deze cursuscategorie wilt verwijderen? De cursussen van deze categorie worden verplaatst buiten de cursuscategorieën."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Cursuscategorieën"
 
 msgid "Courses in this category"
@@ -4532,11 +4526,11 @@ msgstr "Deze gebruiker is in geen enkele klas ingeschreven"
 msgid "This class isn't subscribed in a course"
 msgstr "Deze klas is niet ingeschreven in een cursus"
 
-msgid "tool"
+msgid "Tool"
 msgstr "module"
 
-msgid "number of items"
-msgstr "aantal items"
+msgid "Number of items"
+msgstr "Aantal items"
 
 msgid "Documents and folders"
 msgstr "Bestanden en mappen"
@@ -4697,7 +4691,7 @@ msgstr "Gelieve een melding in te geven"
 msgid "Please give a notice title"
 msgstr "Gelieve een titel in te vullen"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Gelieve een naam voor de link op te geven"
 
 msgid "Insert this link"
@@ -5099,7 +5093,7 @@ msgstr "De sessie is aangemaakt"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videoconferentie RTMTP protocol poort"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Sessienaam zal binnenkort bestaan"
 
 msgid "No classes have been created"
@@ -5249,8 +5243,8 @@ msgstr "Als deze optie is geactiveerd, wordt een online e-mail editor geopend na
 msgid "Include header line?"
 msgstr "Voeg de CSV hoofding toe?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Ja, voeg de CSV hoofding toe<br />Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Chamilo campus"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Deze lijn bepaalt de velden en is noodzakelijk als u het bestand wilt importeren in een andere Chamilo campus"
 
 msgid "List of users subscribed to course"
 msgstr "Lijst van gebruikers ingeschreven voor cursus"
@@ -5483,7 +5477,7 @@ msgstr "Selectielijst"
 msgid "Multiple selection drop-down"
 msgstr "Meerdere selecties lijst"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Veld toegevoegd"
 
 msgid "Grades thresholds colouring"
@@ -5735,7 +5729,7 @@ msgstr "Importeer LDAP gebruikers in een cursus"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importeer LDAP gebruikers in een stap in een sessie"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchronisatie: Importeer studenten/stappen in sessies"
 
 msgid "Assessments tab"
@@ -5782,9 +5776,6 @@ msgstr "Begeleider identificatie waarde"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Als een check wordt gedaan op het hierboven gegeven begeleiderveld, dan dient deze waarde in een van de begeleider subvelden te vinden zijn voordat de gebruiker beschouwd wordt als lesgever. Als u dit veld leeg laat dan is de enige voorwaarde dat dit veld bestaat voor deze LDAP gebruiker om beschouwd te worden als lesgever. Als voorbeeld kan het veld bijvoorbeeld zijn \"memberof\" en de waarde waarop gezocht dient te worden zou kunnen zijn \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "is niet schrijfbaar"
 
 msgid "The field is successfully moved down"
 msgstr "Het veld is met succes naar beneden verplaatst"
@@ -6376,16 +6367,13 @@ msgstr "Cursussen binnen de originele sessie"
 msgid "Courses from the destination session"
 msgstr "Cursussen van de doelsessie"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Help bij het kopiëren van cursussen van sessie naar sessie"
-
 msgid "Type of copy"
 msgstr "Soort kopie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopieer een cursus binnen een sessie naar een andere sessie"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "U moet een cursus selecteren uit de originele sessie"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6457,10 +6445,10 @@ msgstr "Toon commentaar in sessie"
 msgid "Subscription sessions in the category"
 msgstr "Voeg sessie toe aan categorieën"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Sessielijst in het platform"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Sessielijst in de categorieën"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6618,9 +6606,6 @@ msgstr "Enkel voor cursusbeheerders"
 
 msgid "Define Headings"
 msgstr "Definieer aanvullende informatie"
-
-msgid "Back to users list"
-msgstr "Terug naar gebruikerslijst"
 
 msgid "change rights of"
 msgstr "Beheersrechten wijzigen van"
@@ -7039,9 +7024,6 @@ msgstr "Groepen op basis van klassen"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Gebruik makend van deze optie, kan u groepen aanmaken op basis van de klassen die ingeschreven zijn in uw cursus."
 
-msgid "Back to Groups list"
-msgstr "terug naar de groepenlijst"
-
 msgid "A new forum has now been created"
 msgstr "Het nieuwe forum is aangemaakt"
 
@@ -7318,7 +7300,7 @@ msgstr "Huidig bestand verplaatsen"
 msgid "Edit the current document"
 msgstr "Huidig document wijzigen"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Aandacht !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7718,7 +7700,7 @@ msgstr "Terug naar de vragenlijst van de oefening"
 msgid "Answers to the question"
 msgstr "Antwoorden op de vraag"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Waarschuwing: Deze vraag en zijn antwoorden worden in verschillende oefeningen gebruikt. Wilt u de vraag wijzigen?"
 
 msgid "in all tests"
@@ -7867,9 +7849,6 @@ msgstr "U hebt het maximaal aantal toegelaten pogingen voor de test bereikt. U k
 
 msgid "Exercise added"
 msgstr "Oefening toegevoegd"
-
-msgid "Assesment settings"
-msgstr "Evaluatieparameters"
 
 msgid "active"
 msgstr "actief"
@@ -8453,9 +8432,6 @@ msgstr "Tijdslimiet bereikt admin"
 msgid "Last score of a exercise"
 msgstr "Laatste score  van een oefening"
 
-msgid "Back to result list"
-msgstr "Terg naar resultatenlijst"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Als u een de score van een vraag wijzigt, vergeet niet dat dit een oefening is die in een cursus werd toegevoegd."
 
@@ -8536,9 +8512,6 @@ msgstr "Gebruikers online"
 
 msgid "Remove"
 msgstr "Verwijder"
-
-msgid "Back to courses list"
-msgstr "Terug naar uw cursuslijst"
 
 msgid "Links"
 msgstr "Links"
@@ -8635,9 +8608,6 @@ msgstr "Voornaam"
 
 msgid "Last name"
 msgstr "Familienaam"
-
-msgid "e-mail"
-msgstr "E-mail"
 
 msgid "Slideshow conversion"
 msgstr "Conversie van de presentatie"
@@ -8939,7 +8909,7 @@ msgstr "Nederlands"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Deze cursuscode is al in gebruik. Gelieve een andere te kiezen."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Groepenlijst"
 
 msgid "The target folder does not exist"
@@ -9398,9 +9368,6 @@ msgstr "Mijn actieve sessies"
 msgid "My inactive sessions"
 msgstr "Mijn inactieve sessies"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Deze extensie is geactiveerd maar kan niet operationeel gemaakt worden op dit moment."
-
 msgid "My learners"
 msgstr "Mijn studenten"
 
@@ -9431,7 +9398,7 @@ msgstr "Geen resources voor recycling"
 msgid "Could not open"
 msgstr "Onmogelijk te openen"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Bezoekduur"
 
 msgid "This course could not be found"
@@ -9563,8 +9530,8 @@ msgstr "Geen link bezocht"
 msgid "No document downloaded"
 msgstr "Geen document gedownloaded"
 
-msgid "clicks"
-msgstr "klikken"
+msgid "%d clicks"
+msgstr "%d klikken"
 
 msgid "Search results"
 msgstr "Zoekresultaten"
@@ -9647,7 +9614,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Het bestand is te groot om door te sturen."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Het uploaden van uw bestand is mislukt. Probeer het later nog een keer, of neem contact op met uw platformbeheerder."
 
 msgid "Assessments"
@@ -9707,7 +9674,7 @@ msgstr "Uren"
 msgid "minutes"
 msgstr "minuten"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Het document werd aangemaakt."
 
 msgid "The forum has been added"
@@ -10235,7 +10202,7 @@ msgstr "Meer informatie"
 msgid "Make invisible"
 msgstr "Maak onzichtbaar"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Maak zichtbaar"
 
 msgid "Image"
@@ -10252,9 +10219,6 @@ msgstr "Stuur een bericht"
 
 msgid "Menu"
 msgstr "Menu"
-
-msgid "Back to user list"
-msgstr "Terug naar de gebruikerslijst"
 
 msgid "Graphic not available"
 msgstr "Afbeelding niet beschikbaar"
@@ -10580,7 +10544,7 @@ msgstr "Zichtbaarheid evaluatie"
 msgid "Who changed it"
 msgstr "Wie heeft het aangepast"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "De evaluatie werd succesvol gewijzigd"
 
 msgid "Incorrect data"
@@ -11591,7 +11555,7 @@ msgstr "Nu is de pagina zichtbaar voor alle gebruikers"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "De hoofdpagina kan enkel gewijzigd worden door de leerkracht"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Toegang tot de pagina van de trainer"
 
 msgid "Now discussion is visible by trainers only"
@@ -13375,7 +13339,7 @@ msgstr "Gelieve een vraag in te geven."
 msgid "Number of question"
 msgstr "Aantal vragen"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Deze code bestaat reeds"
 
 msgid "Save and exit"
@@ -13426,13 +13390,13 @@ msgstr "Vraag wijzigen"
 msgid "This type does not exist"
 msgstr "Dit type bestaat niet"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "De enquete is met succes aangemaakt"
 
 msgid "You can now add questions to your survey"
 msgstr "U kunt nu vragen toevoegen aan uw enquete"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "De enquete is met succes gewijzigd"
 
 msgid "The question has been added."
@@ -13630,7 +13594,7 @@ msgstr "Deze enquetecode bestaat al. Dat betekent waarschijnlijk dat de enquete 
 msgid "This survey code soon exists in this language"
 msgstr "Deze enquetecode bestaat binnenkort in deze taal."
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "De antwoorden van de gebruiker zijn succesvol verwijderd."
 
 msgid "Delete this user's answers"
@@ -13753,7 +13717,7 @@ msgstr "Is er een lesboek, een verzameling van documenten, een bibliografie, een
 msgid "Short description of the course materials."
 msgstr "Korte beschrijving van het cursusmateriaal."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Zijn er leraren, een technische helpdesk, sociale medewerkers, computerlokalen?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14278,9 +14242,6 @@ msgstr "De score kan niet hoger zijn dan de maximum score"
 msgid "Delete all papers"
 msgstr "Alle bestanden verwijderen"
 
-msgid "Back to Assignments list"
-msgstr "Terug naar lijst"
-
 msgid "Edit and mark paper"
 msgstr "wijzig bestand"
 
@@ -14392,11 +14353,11 @@ msgstr "Handleiding"
 msgid "You should write a message"
 msgstr "Je moet een bericht schrijven"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Er werd een nieuwe cursus aangemaakt op het platform:"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Er werd een nieuwe cursus aangemaakt op %s"
 
-msgid "New course created in"
-msgstr "Er werd een nieuwe cursus aangemaakt in"
+msgid "New course created on %s"
+msgstr "Er werd een nieuwe cursus aangemaakt in %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen."
@@ -14407,8 +14368,8 @@ msgstr "Installatie taal"
 msgid "Please read the following requirements thoroughly."
 msgstr "Grondig lezen a.u.b."
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Opgelet!<br />Er is een bestaande Chamiloinstallatie aanwezig op uw systeem."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Opgelet! Er is een bestaande Chamiloinstallatie aanwezig op uw systeem."
 
 msgid "New installation"
 msgstr "Nieuwe installatie"
@@ -14543,12 +14504,6 @@ msgstr "Gelieve terug te gaan naar stap"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Het upgradescript zal de Chamilo database(s) recupereren en updaten. Het script zal hiervoor onderstaande instellingen gebruiken. Aangezien deze software op een grote reeks verschillende systemen draait en niet alle systemen getest zijn, is het aangewezen een backup te maken van de database alvorens een upgrade uit te voeren."
-
-msgid "MBString extension not available"
-msgstr "MBString extensie is niet beschikbaar"
-
-msgid "MySQL extension not available"
-msgstr "De MySQL extensie is niet beschikbaar"
 
 msgid "Optional parameters"
 msgstr "Optionele parameters"
@@ -15192,7 +15147,7 @@ msgstr "Er zijn geen extra velden beschikbaar"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Tik hier en klik vervolgens op deze balk om de tag te valideren"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Installeer Chamilo"
 
 msgid "Chamilo URL"
@@ -15680,7 +15635,7 @@ msgstr "Toegewezen cursussenlijst aan sessiemanager"
 msgid "Assign sessions to platform administrator"
 msgstr "Wijs sessies toe aan platformbeheerder"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "wijs sessies toe aan sessiebeheerder"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15749,7 +15704,7 @@ msgstr "Thematisch"
 msgid "Thematic plan"
 msgstr "Thematisch plan"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Bewerk thematische voortgang"
 
 msgid "Edit thematic advance"
@@ -17486,8 +17441,8 @@ msgstr "Sociale groep maken"
 msgid "Not logged in for some time"
 msgstr "Al enige tijd niet ingelogd"
 
-msgid "Last %i months"
-msgstr "Laatste %i maanden"
+msgid "Last %d months"
+msgstr "Laatste %d maanden"
 
 msgid "Never connected"
 msgstr "Nooit verbonden"
@@ -17531,13 +17486,13 @@ msgstr "Item gekopieerd"
 msgid "My statistics"
 msgstr "Mijn statistieken"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Beschikbare oefeningen"
 
 msgid "Exercises taken"
 msgstr "Doorlopen oefeningen"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Gemiddeld oefeningenresultaat"
 
 msgid "Learning path progress"
@@ -17894,7 +17849,7 @@ msgstr "Deze gebruiker heeft geen gerelateerde URL"
 msgid "Extra data"
 msgstr "Extra data"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Oefeningen in leerpaden"
 
 msgid "Id"
@@ -18224,15 +18179,6 @@ msgstr "Welcome to the Chamilo installer"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 
-msgid "Sessions extension not available"
-msgstr "Sessions extension not available"
-
-msgid "Zlib extension not available"
-msgstr "Zlib extension not available"
-
-msgid "PCRE extension not available"
-msgstr "PCRE extension not available"
-
 msgid "To social group"
 msgstr "Naar social groep"
 
@@ -18513,7 +18459,7 @@ msgstr "Certificering"
 msgid "Online link to certificate"
 msgstr "Online link naar certificaat"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Nieuwe oefeningen"
 
 msgid "My average"
@@ -18743,14 +18689,8 @@ msgstr "vraag"
 msgid "questions"
 msgstr "vragen"
 
-msgid "Back to test list"
-msgstr "Terug naar de test lijst"
-
 msgid "Category description"
 msgstr "Categorie omschrijving"
-
-msgid "Back to category list"
-msgstr "Terug naar de categorielijst"
 
 msgid "This category name already exists. Please use another name."
 msgstr "De naam van de categorie bestaat reeds. Gelieve een andere naam te gebruiken."
@@ -19051,7 +18991,7 @@ msgstr "Nagezien"
 msgid "Not validated"
 msgstr "Niet nagezien"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Gereviseerd"
 
 msgid "Select a question to revise"
@@ -19200,7 +19140,7 @@ msgstr ""
 msgid "Session list"
 msgstr "Sessielijst"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lijst cursisten"
 
 msgid "Learners who're taking the exercise right now"
@@ -21813,7 +21753,7 @@ msgstr ""
 "U moet eerst uw profiel invullen om de validatie van de algemene voorwaarden "
 "mogelijk te maken."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr "Diagnostisch"
 
 msgid "Allow show the user Skype account"
@@ -23561,10 +23501,10 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr "Leg uit in dit vak waarom u uw account wilt verwijderen"
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 "U kunt hieronder vragen om uw juridische overeenkomst te laten verwijderen "
-"of om uw account te laten verwijderen.</br>In het geval van de juridische "
+"of om uw account te laten verwijderen.<br>In het geval van de juridische "
 "overeenkomst, zodra deze verwijderd is, moet u deze opnieuw accepteren bij "
 "uw volgende aanmelding om toegang te krijgen tot het platform en uw toegang "
 "te herstellen, omdat we niet redelijkerwijs tegelijkertijd u een "
@@ -23664,16 +23604,11 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr "Maak een nieuwe Doodle-type enquête"
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr "Verwijder vermenigvuldigde vragen"
 
-msgid "Multiplicate questions"
+msgid "Multiply questions"
 msgstr "Meervoudige vragen"
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
-msgstr ""
-"U kunt de tags {{class_name}} en {{student_full_name}} in de vraag gebruiken "
-"om vragen te kunnen vermenigvuldigen."
 
 msgid "Create meeting poll"
 msgstr "Maak vergaderingspeiling"
@@ -24315,10 +24250,10 @@ msgstr ""
 "Hallo %s <br/><br/>Als groepstutor voor de groep %s wordt u uitgenodigd om "
 "deel te nemen aan de volgende enquête:"
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr "Enquête %s vermenigvuldigd"
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr "Enquête %s non multipliée"
 
 msgid "Export survey results"
@@ -24653,11 +24588,11 @@ msgstr "Afgestudeerd"
 msgid "Absent"
 msgstr "Afwezig"
 
-msgid "Internal database error"
-msgstr "Interne databasefout"
+msgid "Internal database error: %s"
+msgstr "Interne databasefout: %s"
 
-msgid "Wrong number of days"
-msgstr "Verkeerd aantal dagen"
+msgid "Wrong number of days: %s: %s"
+msgstr "Verkeerd aantal dagen: %s: %s"
 
 msgid "Subscription not allowed"
 msgstr "Abonnement niet toegestaan"
@@ -24915,7 +24850,7 @@ msgid "Students with incorrect answers"
 msgstr "Leerlingen met onjuiste antwoorden"
 
 #, fuzzy
-msgid "List of contents"
+msgid "Content list"
 msgstr "Inhoudsopgave"
 
 msgid "Tariff"
@@ -24993,10 +24928,10 @@ msgstr "Laatste login in een cursus"
 msgid "The"
 msgstr "De"
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr "Vermenigvuldig vragen per klas"
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr "Vermenigvuldig vragen door gebruiker"
 
 msgid "Questions about next user"
@@ -27733,9 +27668,6 @@ msgid "Generic configuration array to reconfigure the WYSIWYG editor globally."
 msgstr ""
 "Generieke configuratie-array om de WYSIWYG-editor globaal te herconfigureren."
 
-msgid "Course catalogue"
-msgstr "Cursuscatalogus"
-
 msgid "Session name and course title"
 msgstr "Sessienaam en cursustitel"
 
@@ -28771,9 +28703,6 @@ msgstr ""
 
 msgid "Round score in test exports"
 msgstr "Afronden van scores in toetsexporten"
-
-msgid "Back to tests list"
-msgstr "Terug naar de lijst met oefeningen"
 
 msgid "HTTP Public Key Pinning protects your site from MiTM attacks using rogue X.509 certificates. By whitelisting only the identities that the browser should trust, your users are protected in the event a certificate authority is compromised."
 msgstr ""

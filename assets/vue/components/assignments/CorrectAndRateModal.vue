@@ -46,7 +46,7 @@
             step="0.1"
           />
           <template v-if="maxQualification">
-            <span class="text-xs text-gray-600"> {{ t("Max grade") }}: {{ maxQualification }} </span>
+            <span class="text-xs text-gray-600"> {{ t("Max score") }}: {{ maxQualification }} </span>
           </template>
         </template>
 

@@ -1,7 +1,7 @@
 {% autoescape false %}
-    <h1 class="page-header">{{ 'My Badges'|trans }}</h1>
+    <h1 class="page-header">{{ 'My skills'|trans }}</h1>
     <p>
-        {{ "My skills report introduction"|trans }}
+        {{ "The skills you have acquired, formally or non-formally, social or technical."|trans }}
     </p>
     {% if rows %}
         <div class="communications">
@@ -23,7 +23,7 @@
             {% for row in rows %}
                 <tr>
                     <td>{{ row.skill_badge }}</td>
-                    <td>{{ row.skill_name }}</td>
+                    <td>{{ row.skill_title }}</td>
                     <td>{{ row.achieved_at }}</td>
                     {% if row.course_name %}
                         <td>

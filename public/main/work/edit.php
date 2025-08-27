@@ -234,11 +234,11 @@ if ($form->validate()) {
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
                     $subject = sprintf(
-                        get_lang('There\'s a new feedback in work: %s'),
+                        get_lang("There's a new feedback in work: %s"),
                         $studentPublication->getTitle()
                     );
                     $message = sprintf(
-                        get_lang('There\'s a new feedback in work: %sInWorkXHere'),
+                        get_lang("There's a new feedback in work: %s <a href='%s'>Click here</a> to see it."),
                         $studentPublication->getTitle(),
                         $url
                     );
@@ -255,7 +255,7 @@ if ($form->validate()) {
 
             if (isset($_POST['qualification']) && $_POST['qualification'] > $_POST['qualification_over']) {
                 Display::addFlash(Display::return_message(
-                    get_lang('ScoreMustNotBeMoreThanScoreOver'),
+                    get_lang('The given score cannot be above the maximum score'),
                     'error'
                 ));
             } else {

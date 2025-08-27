@@ -64,7 +64,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $form->addHeader(get_lang('Answers'));
         $html = '<table class="table table-striped table-hover">
             <tr>
-                <th width="10px">'.get_lang('Number').'</th>
+                <th width="10px">'.get_lang('number').'</th>
                 <th width="10px">'.get_lang('True').'</th>
                 <th width="10px">'.get_lang('False').'</th>
                 <th width="50%">'.get_lang('Answer').'</th>';
@@ -345,7 +345,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'background-color' => '#F6BA2A',
                 'status' => self::LEVEL_WHITE,
                 'label' => get_lang('Declared ignorance'),
-                'description' => get_lang('Declared ignoranceDescription'),
+                'description' => get_lang('You didn\'t know the answer - only 50% sure'),
             ];
         } else {
             $checkResult = $studentAnswer == $expectedAnswer ? true : false;
@@ -356,7 +356,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'background-color' => '#1E9C55',
                         'status' => self::LEVEL_DARKGREEN,
                         'label' => get_lang('Very sure'),
-                        'description' => get_lang('Very sureDescription'),
+                        'description' => get_lang('Your answer was correct and you were 80% sure about it. Congratulations!'),
                     ];
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
@@ -364,7 +364,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'background-color' => '#B1E183',
                         'status' => self::LEVEL_LIGHTGREEN,
                         'label' => get_lang('Pretty sure'),
-                        'description' => get_lang('Pretty sureDescription'),
+                        'description' => get_lang('Your answer was correct but you were not completely sure (only 60% to 70% sure)'),
                     ];
                 }
             } else {
@@ -374,7 +374,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'background-color' => '#ED4040',
                         'status' => self::LEVEL_DARKRED,
                         'label' => get_lang('Very unsure'),
-                        'description' => get_lang('Very unsureDescription'),
+                        'description' => get_lang('Your answer was incorrect although you were about 80% (or more) sure it was wrong'),
                     ];
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
@@ -382,7 +382,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'background-color' => '#F79B88',
                         'status' => self::LEVEL_LIGHTRED,
                         'label' => get_lang('Unsure'),
-                        'description' => get_lang('UnsureDescription'),
+                        'description' => get_lang('Your answer was incorrect, but you guessed it was (60% to 70% sure)'),
                     ];
                 }
             }
@@ -405,7 +405,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 </td>
                 <td style="padding-left:10px;">
                     <b><?php echo get_lang('Very sure'); ?> :</b>
-                    <?php echo get_lang('Very sureDescription'); ?>
+                    <?php echo get_lang('Your answer was correct and you were 80% sure about it. Congratulations!'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
@@ -414,7 +414,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 </td>
                 <td style="padding-left:10px;">
                     <b><?php echo get_lang('Pretty sure'); ?> :</b>
-                    <?php echo get_lang('Pretty sureDescription'); ?>
+                    <?php echo get_lang('Your answer was correct but you were not completely sure (only 60% to 70% sure)'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
@@ -423,7 +423,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 </td>
                 <td style="padding-left:10px;">
                     <b><?php echo get_lang('Declared ignorance'); ?> :</b>
-                    <?php echo get_lang('Declared ignoranceDescription'); ?>
+                    <?php echo get_lang('You didn\'t know the answer - only 50% sure'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
@@ -432,7 +432,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 </td>
                 <td style="padding-left:10px;">
                     <b><?php echo get_lang('Unsure'); ?> :</b>
-                    <?php echo get_lang('UnsureDescription'); ?>
+                    <?php echo get_lang('Your answer was incorrect, but you guessed it was (60% to 70% sure)'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
@@ -441,7 +441,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 </td>
                 <td style="padding-left:10px;">
                     <b><?php echo get_lang('Very unsure'); ?> :</b>
-                    <?php echo get_lang('Very unsureDescription'); ?>
+                    <?php echo get_lang('Your answer was incorrect although you were about 80% (or more) sure it was wrong'); ?>
                 </td>
             </tr>
         </table><br/>

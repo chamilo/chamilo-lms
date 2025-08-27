@@ -177,11 +177,11 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             "course_information.php?id=$courseId"
         );
         /*$actions[] = Display::url(
-            Display::getMdiIcon('course_home', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CourseHomepage')),
+            Display::getMdiIcon('course_home', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage')),
             $coursePath.$course['directory'].'/index.php'
         );*/
         $actions[] = Display::url(
-            Display::getMdiIcon('statistics', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Tracking')),
+            Display::getMdiIcon('statistics', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')),
             $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseId)
         );
         $actions[] = Display::url(
@@ -336,17 +336,17 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         $form->addLabel('', '<button id="set_none_teacher" class="btn ">'.get_lang('None').'</button>');
     }
 
-    $form->addElement('radio', 'keyword_visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-    $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+    $form->addElement('radio', 'keyword_visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-    $form->addElement('radio', 'keyword_visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-    $form->addElement('radio', 'keyword_visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('Hidden - Completely hidden to all users except the administrators'), COURSE_VISIBILITY_HIDDEN);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('All'), '%');
     $form->addElement('radio', 'keyword_subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-    $form->addElement('radio', 'keyword_subscribe', null, get_lang('Denied'), 0);
+    $form->addElement('radio', 'keyword_subscribe', null, get_lang('This function is only available to trainers'), 0);
     $form->addElement('radio', 'keyword_subscribe', null, get_lang('All'), '%');
-    $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-    $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
+    $form->addElement('radio', 'keyword_unsubscribe', get_lang('Unsubscribe'), get_lang('Users are allowed to unsubscribe from this course'), 1);
+    $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('Users are not allowed to unsubscribe from this course'), 0);
     $form->addElement('radio', 'keyword_unsubscribe', null, get_lang('All'), '%');
     $form->addButtonSearch(get_lang('Search courses'));
     $defaults['keyword_language'] = '%';
@@ -358,9 +358,9 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 } else {
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin'),
+        'name' => get_lang('Administration'),
     ];
-    $tool_name = get_lang('CourseList');
+    $tool_name = get_lang('Course list');
     if (isset($_GET['delete_course']) && Security::check_token('get')) {
         $result = CourseManager::delete_course($_GET['delete_course']);
         if ($result) {
@@ -380,9 +380,9 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         'text',
         'keyword',
         null,
-        ['id' => 'course-search-keyword', 'aria-label' => get_lang('SearchCourse')]
+        ['id' => 'course-search-keyword', 'aria-label' => get_lang('Search courses')]
     );
-    $form->addButtonSearch(get_lang('SearchCourse'));
+    $form->addButtonSearch(get_lang('Search courses'));
     $advanced = '<a class="btn btn--plain" href="'.api_get_path(WEB_CODE_PATH).'admin/course_list_admin.php?search=advanced">
         <em class="fa fa-search"></em> '.
         get_lang('Advanced search').'</a>';
@@ -399,13 +399,13 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
     $courseListUrl = api_get_self();
     $actions1 = Display::url(
-        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddCourse')),
+        Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create a course')),
         api_get_path(WEB_CODE_PATH).'admin/course_add.php'
     );
 
     if ('true' === api_get_setting('course_validation')) {
         $actions1 .= Display::url(
-            Display::getMdiIcon('notebook-heart-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ReviewCourseRequests')),
+            Display::getMdiIcon('notebook-heart-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Review incoming course requests')),
             api_get_path(WEB_CODE_PATH).'admin/course_request_review.php'
         );
     }
@@ -458,8 +458,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header($column++, get_lang('Creation date'), true, 'width="70px"');
     $table->set_header($column++, get_lang('Latest access in course'), false, 'width="70px"');
     //$table->set_header($column++, get_lang('Category'));
-    //$table->set_header($column++, get_lang('SubscriptionAllowed'), true, 'width="60px"');
-    //$table->set_header($column++, get_lang('UnsubscriptionAllowed'), false, 'width="50px"');
+    //$table->set_header($column++, get_lang('Registr. allowed'), true, 'width="60px"');
+    //$table->set_header($column++, get_lang('Unreg. allowed'), false, 'width="50px"');
     if ($addTeacherColumn) {
         $table->set_header($column++, get_lang('Teachers'), true);
     }

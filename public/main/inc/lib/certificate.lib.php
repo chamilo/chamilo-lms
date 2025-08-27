@@ -660,8 +660,17 @@ class Certificate extends Model
         }
 
         $skill = new SkillModel();
-        // Ofaj
         $skills = $skill->getStudentSkills($this->user_id, 2);
+        $allowAll = ('true' === api_get_setting('skill.allow_teacher_access_student_skills'));
+        $courseIdForSkills  = $allowAll ? 0 : 0;
+        $sessionIdForSkills = $allowAll ? 0 : 0;
+        $skillsTable = $skill->getUserSkillsTable(
+            $this->user_id,
+            $courseIdForSkills,
+            $sessionIdForSkills,
+            false
+        );
+
         $timeInSeconds = Tracking::get_time_spent_on_the_platform(
             $this->user_id,
             'ever'
@@ -710,6 +719,8 @@ class Certificate extends Model
             )
         );
         $tplContent->assign('skills', $skills);
+        $tplContent->assign('skills_table_html', $skillsTable['table']);
+        $tplContent->assign('skills_rows', $skillsTable['skills']);
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));

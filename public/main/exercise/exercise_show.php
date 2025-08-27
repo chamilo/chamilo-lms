@@ -1299,7 +1299,7 @@ if ('learnpath' != $origin) {
         echo '</body></html>';
     } else {
         echo Display::return_message(
-            get_lang('ExerciseQuit tested').' '.get_lang('To continue this course, please use the side-menu.'),
+            get_lang('Test Finished').' '.get_lang('To continue this course, please use the side-menu.'),
             'normal'
         );
         echo '<br />';

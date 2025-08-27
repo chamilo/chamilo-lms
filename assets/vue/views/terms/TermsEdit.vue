@@ -60,14 +60,14 @@
         <BaseTinyEditor
           v-model="termData.content"
           :help-text="t('Why do we collect this data?')"
-          :title="t('Personal Data Collection')"
+          :title="t('Personal data collection')"
           editor-id="item_content"
         />
 
         <BaseRadioButtons
           v-model="termData.type"
           :options="typeOptions"
-          :title="t('Type of Terms')"
+          :title="t('Type of terms')"
           name="termsType"
         />
 

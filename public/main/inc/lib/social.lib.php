@@ -1883,7 +1883,7 @@ class SocialManager extends UserManager
             $plugin = PauseTraining::create();
             $headers[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'auth/PauseTraining.php',
-                'content' => $plugin->get_lang('PauseTraining'),
+                'content' => get_lang('Pause training'),
             ];
         }
 

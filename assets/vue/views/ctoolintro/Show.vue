@@ -27,14 +27,14 @@
             <tbody>
               <tr>
                 <td>
-                  <strong>{{ $t("title") }}</strong>
+                  <strong>{{ $t("Title") }}</strong>
                 </td>
                 <td>
                   {{ item["title"] }}
                 </td>
 
                 <td>
-                  <strong>{{ $t("code") }}</strong>
+                  <strong>{{ $t("Code") }}</strong>
                 </td>
                 <td>
                   {{ item["code"] }}
@@ -50,7 +50,7 @@
                 </td>
 
                 <td>
-                  <strong>{{ $t("category") }}</strong>
+                  <strong>{{ $t("Category") }}</strong>
                 </td>
                 <td>
                   <div v-if="item['category']">
@@ -62,7 +62,7 @@
 
               <tr>
                 <td>
-                  <strong>{{ $t("visibility") }}</strong>
+                  <strong>{{ $t("Visibility") }}</strong>
                 </td>
                 <td>
                   {{ $n(item["visibility"]) }}

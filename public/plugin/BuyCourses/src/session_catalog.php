@@ -37,7 +37,7 @@ if ($form->validate()) {
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
-$form->addText('name', get_lang('SessionName'), false);
+$form->addText('name', get_lang('Session name'), false);
 $form->addElement(
     'number',
     'min',

@@ -28,7 +28,7 @@ api_block_anonymous_users();
  * -------------------------------------------------- */
 function extractLatLng($raw) {
     if (empty($raw)) return [null, null];
-    $raw = trim($raw);
+    $raw = trim((string) $raw);
 
     // JSON {"lat":...,"lng":...}
     if (strlen($raw) > 1 && $raw[0] === '{') {
@@ -81,15 +81,15 @@ function ensureGeoExtraField(ExtraField $ef, ?string $var, string $label): ?arra
 }
 
 /* --------------------------------------------------
- * 1) Load helpers (PluginHelper, AccessUrlHelper, Repository)
+ * Services
  * -------------------------------------------------- */
-$pluginHelper    = Container::$container
-    ->get(PluginHelper::class);
-$accessUrlHelper = Container::$container
-    ->get(AccessUrlHelper::class);
-$pluginRepo      = Container::$container
-    ->get(AccessUrlRelPluginRepository::class);
+$pluginHelper    = Container::$container->get(PluginHelper::class);
+$accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
+$pluginRepo      = Container::$container->get(AccessUrlRelPluginRepository::class);
 
+/* --------------------------------------------------
+ * Validate plugin enabled for current URL
+ * -------------------------------------------------- */
 $PLUGIN_NAME = 'google_maps';
 
 /* Check plugin is enabled for the current access URL */
@@ -102,14 +102,15 @@ if (!$pluginHelper->isPluginEnabled($PLUGIN_NAME)) {
         );
         echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">Open Plugins admin</a></p>';
         Display::display_footer();
-        exit;
+    } else {
+        error_log('[social/map] DENY: plugin_disabled_in_url');
+        api_not_allowed(true);
     }
-    error_log('[social/map] DENY: plugin_disabled_in_url');
-    api_not_allowed(true);
+    exit;
 }
 
 /* --------------------------------------------------
- * 2) Load plugin configuration from DB (by current URL)
+ * Load plugin configuration from DB (by current URL)
  * -------------------------------------------------- */
 $currentUrl = $accessUrlHelper->getCurrent();
 if ($currentUrl === null) {
@@ -152,14 +153,15 @@ if (!$localization || $apiKey === '') {
         );
         echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">Open Plugins admin</a></p>';
         Display::display_footer();
-        exit;
+    } else {
+        error_log('[social/map] DENY: plugin_not_configured (enable_api='.var_export($enabledRaw,true).', api_key_present='.(int)($apiKey!=='').')');
+        api_not_allowed(true);
     }
-    error_log('[social/map] DENY: plugin_not_configured (enable_api='.var_export($enabledRaw,true).', api_key_present='.(int)($apiKey!=='').')');
-    api_not_allowed(true);
+    exit;
 }
 
 /* --------------------------------------------------
- * 3) Fields to use (from plugin.extra_field_name or legacy setting)
+ * Fields to use (from plugin.extra_field_name or legacy setting)
  * -------------------------------------------------- */
 $pluginFieldsCsv = (string) ($config['extra_field_name'] ?? '');
 $vars = array_values(array_filter(array_map('trim', explode(',', $pluginFieldsCsv))));
@@ -179,7 +181,7 @@ $var1 = $vars[0] ?? null; // e.g. terms_villedustage
 $var2 = $vars[1] ?? null; // e.g. terms_ville
 
 /* --------------------------------------------------
- * 4) Ensure extra fields exist (admin can auto-create), then continue if at least one is present
+ * Ensure extra fields exist (admin can auto-create), then continue if at least one is present
  * -------------------------------------------------- */
 $extraField = new ExtraField('user');
 $info1 = ensureGeoExtraField($extraField, $var1, $var1 ?: 'Geolocation A');
@@ -191,7 +193,7 @@ if (empty($info1) && empty($info2)) {
 }
 
 /* --------------------------------------------------
- * 5) Query users (LEFT JOIN per existing field) - allow users with at least one value
+ * Query users (LEFT JOIN per existing field) - allow users with at least one value
  * -------------------------------------------------- */
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -223,11 +225,10 @@ $sql = "SELECT $select
         FROM $tableUser u
         ".implode("\n", $joins)."
         WHERE u.active = 1
-          AND u.status = ".STUDENT."
           AND (".implode(' OR ', $conds).")";
 
 /* --------------------------------------------------
- * 6) Cache with fallback (APCu → Filesystem)
+ * Cache with fallback (APCu → Filesystem)
  * -------------------------------------------------- */
 $useApcu = false;
 if (function_exists('apcu_enabled')) {
@@ -247,35 +248,39 @@ if ($useApcu) {
     $cache = new FilesystemAdapter('social_map', 300, $cacheDir);
 }
 
-$keyDate = 'map_cache_date';
-$keyData = 'map_cache_data';
+$cacheKey = sprintf(
+    'places:url%d:f1_%s:f2_%s',
+    (int) $currentUrl->getId(),
+    (string) ($info1['id'] ?? 0),
+    (string) ($info2['id'] ?? 0)
+);
 
-$now     = time();
-$expires = strtotime('+5 minute', $now);
-
-/* Force refresh (keep same behavior as original code) */
-$loadFromDatabase = true;
-
-if ($loadFromDatabase) {
+$item = $cache->getItem($cacheKey);
+if (!$item->isHit()) {
     $result = Database::query($sql);
     $data   = Database::store_result($result, 'ASSOC');
-
-    $cacheItem = $cache->getItem($keyData);
-    $cacheItem->set($data);
-    $cache->save($cacheItem);
-
-    $cacheItem = $cache->getItem($keyDate);
-    $cacheItem->set($expires);
-    $cache->save($cacheItem);
+    $item->set($data);
+    $item->expiresAfter(300); // 5 minutes
+    $cache->save($item);
 } else {
-    $data = $cache->getItem($keyData)->get();
+    $data = $item->get();
 }
 
 /* --------------------------------------------------
- * 7) Parse coordinates and prepare payload for the template
+ * Parse coordinates and prepare payload for the template
  * -------------------------------------------------- */
+$guessType = static function (?string $var): ?string {
+    if (!$var) return null;
+    $v = strtolower($var);
+    if (str_contains($v, 'villedustage')) return 'stage';
+    if (str_contains($v, 'ville')) return 'ville';
+    return null;
+};
+$type1 = $guessType($var1);
+$type2 = $guessType($var2);
+
 foreach ($data as &$row) {
-    $row['complete_name'] = $row['firstname'].' '.$row['lastname'];
+    $row['complete_name'] = trim($row['firstname'].' '.$row['lastname']);
     $row['lastname']  = '';
     $row['firstname'] = '';
 
@@ -284,6 +289,10 @@ foreach ($data as &$row) {
         if ($aLat !== null && $aLng !== null) {
             $row['f1_lat']  = $aLat;
             $row['f1_long'] = $aLng;
+            if ($type1) {
+                $row[$type1.'_lat']  = $aLat;
+                $row[$type1.'_long'] = $aLng;
+            }
         }
         unset($row['f1']);
     }
@@ -292,20 +301,32 @@ foreach ($data as &$row) {
         if ($bLat !== null && $bLng !== null) {
             $row['f2_lat']  = $bLat;
             $row['f2_long'] = $bLng;
+            if ($type2) {
+                $row[$type2.'_lat']  = $bLat;
+                $row[$type2.'_long'] = $bLng;
+            }
         }
         unset($row['f2']);
     }
 }
+unset($row);
+
+$data = array_values(array_filter($data, static function ($r) {
+    return isset($r['f1_lat'],$r['f1_long'])
+        || isset($r['f2_lat'],$r['f2_long'])
+        || isset($r['ville_lat'],$r['ville_long'])
+        || isset($r['stage_lat'],$r['stage_long']);
+}));
 
 /* --------------------------------------------------
- * 8) Assets + render
+ * Assets + render
  * -------------------------------------------------- */
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 
 $tpl = new Template(null);
 $tpl->assign('url', api_get_path(WEB_PATH).'social');
-$tpl->assign('places', json_encode($data));
+$tpl->assign('places', json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 $tpl->assign('api_key', $apiKey);       // typical variable name used by templates
 $tpl->assign('gmap_api_key', $apiKey);  // also assign the legacy name, just in case
 
@@ -314,14 +335,8 @@ $tpl->assign('field_1', !empty($info1) ? ($info1['display_text'] ?? $var1 ?? '')
 $tpl->assign('field_2', !empty($info2) ? ($info2['display_text'] ?? $var2 ?? '') : '');
 
 /* Icons (if your template uses them) */
-$tpl->assign(
-    'image_city',
-    Display::return_icon('red-dot.png', '', [], ICON_SIZE_SMALL, false, true)
-);
-$tpl->assign(
-    'image_stage',
-    Display::return_icon('blue-dot.png', '', [], ICON_SIZE_SMALL, false, true)
-);
+$tpl->assign('image_city', Display::return_icon('red-dot.png', '', [], ICON_SIZE_SMALL, false, true));
+$tpl->assign('image_stage', Display::return_icon('blue-dot.png', '', [], ICON_SIZE_SMALL, false, true));
 
 $layout = $tpl->get_template('social/map.tpl');
 $tpl->display($layout);

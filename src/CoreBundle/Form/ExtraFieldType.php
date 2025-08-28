@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Form;
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\PluginHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\TagRepository;
@@ -39,98 +40,110 @@ class ExtraFieldType extends AbstractType
     private Security $security;
     private ExtraFieldRepository $extraFieldRepository;
     private TagRepository $tagRepository;
+    private PluginHelper $pluginHelper;
 
     public function __construct(
         ExtraFieldValuesRepository $extraFieldValuesRepository,
         ExtraFieldRepository $extraFieldRepository,
         TagRepository $tagRepository,
-        Security $security
+        Security $security,
+        PluginHelper $pluginHelper
     ) {
         $this->extraFieldValuesRepository = $extraFieldValuesRepository;
         $this->extraFieldRepository = $extraFieldRepository;
         $this->security = $security;
         $this->tagRepository = $tagRepository;
+        $this->pluginHelper = $pluginHelper;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // @todo implement Course/Session extra fields
         /** @var User|null $item */
         $item = $this->security->getUser();
-
         if (null === $item) {
             return;
         }
 
-        $extraFieldType = ExtraField::USER_FIELD_TYPE; // user/course/session ?
-        $extraFields = $this->extraFieldRepository->getExtraFields($extraFieldType);
-        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
+        $extraFieldType = ExtraField::USER_FIELD_TYPE;
 
+        // Load extra fields normally from repository
+        $extraFields = $this->extraFieldRepository->getExtraFields($extraFieldType);
+
+        // Determine Google Maps plugin state (enabled + API on)
+        $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
+        $gMapsPlugin   = GoogleMapsPlugin::create();
+        $apiEnabled    = ('true' === $gMapsPlugin->get('enable_api'));
+
+        // Force-inject these two fields ONLY if Google Maps is active for this portal
+        if ($pluginEnabled && $apiEnabled) {
+            $forceVars = ['terms_villedustage', 'terms_ville'];
+            $existing  = array_map(static fn($ef) => $ef->getVariable(), $extraFields);
+
+            foreach ($forceVars as $v) {
+                if (!in_array($v, $existing, true)) {
+                    $forced = $this->extraFieldRepository->findOneBy([
+                        'variable' => $v,
+                        'itemType' => $extraFieldType,
+                    ]);
+                    if ($forced) {
+                        $extraFields[] = $forced;
+                    }
+                }
+            }
+        }
+
+        // Fetch current values for the logged user
+        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
         $data = [];
         foreach ($values as $value) {
             $data[$value->getField()->getVariable()] = $value->getFieldValue();
         }
 
-        $gMapsPlugin = GoogleMapsPlugin::create();
-        $geolocalization = 'true' === $gMapsPlugin->get('enable_api');
-
+        // Build form fields
         foreach ($extraFields as $extraField) {
-            $text = $extraField->getDisplayText();
+            $text     = $extraField->getDisplayText();
             $variable = $extraField->getVariable();
-            $value = $data[$extraField->getVariable()] ?? null;
+            $value    = $data[$variable] ?? null;
 
             $isEditable = $extraField->isChangeable();
             $defaultOptions = [
-                'label' => $text,
-                'required' => false,
+                'label'        => $text,
+                'required'     => false,
                 'by_reference' => false,
-                'mapped' => false,
-                'data' => $value,
-                'attr' => $isEditable ? [] : ['readonly' => true, 'class' => 'readonly-field'],
+                'mapped'       => false,
+                'data'         => $value,
+                'attr'         => $isEditable ? [] : ['readonly' => true, 'class' => 'readonly-field'],
             ];
 
-            // @todo validate data.
             switch ($extraField->getValueType()) {
-                case \ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-                case \ExtraField::FIELD_TYPE_DIVIDER:
-                case \ExtraField::FIELD_TYPE_TIMEZONE:
-                case \ExtraField::FIELD_TYPE_FILE_IMAGE:
-                case \ExtraField::FIELD_TYPE_FILE:
-                case \ExtraField::FIELD_TYPE_LETTERS_SPACE:
-                case \ExtraField::FIELD_TYPE_ALPHANUMERIC_SPACE:
-                case \ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                case \ExtraField::FIELD_TYPE_TRIPLE_SELECT:
-                    // @todo
-                    break;
-
                 case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                 case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
-                    if (!$geolocalization) {
-                        break;
+                    // Render GoogleMapType only when the plugin is actually enabled and API is on
+                    if ($pluginEnabled && $apiEnabled) {
+                        $defaultOptions['data'] = [];
+                        if (!empty($value)) {
+                            $parts       = explode('::', (string) $value);
+                            $coordinates = isset($parts[1]) ? explode(',', $parts[1]) : [];
+                            $defaultOptions['data'] = [
+                                'address'   => $parts[0] ?? '',
+                                'latitude'  => $coordinates[0] ?? '',
+                                'longitude' => $coordinates[1] ?? '',
+                            ];
+                        }
+                        $builder->add($variable, GoogleMapType::class, $defaultOptions);
+                    } else {
+                        // Fallback to TextType when plugin or API are not active (keeps the field usable)
+                        if (!empty($value) && is_string($value)) {
+                            $defaultOptions['data'] = $value;
+                        }
+                        $defaultOptions['attr']['placeholder'] = 'address::lat,lng or lat,lng';
+                        $builder->add($variable, TextType::class, $defaultOptions);
                     }
-
-                    $defaultOptions['data'] = [];
-                    if (!empty($value)) {
-                        $parts = explode('::', $value);
-                        $coordinates = isset($parts[1]) ? explode(',', $parts[1]) : [];
-                        $mapArray = [
-                            'address' => $parts[0] ?? '',
-                            'latitude' => $coordinates[0] ?? '',
-                            'longitude' => $coordinates[1] ?? '',
-                        ];
-                        $defaultOptions['data'] = $mapArray;
-                    }
-
-                    $builder->add($variable, GoogleMapType::class, $defaultOptions);
-
                     break;
 
                 case \ExtraField::FIELD_TYPE_TAG:
                     $defaultOptions['expanded'] = false;
                     $defaultOptions['multiple'] = true;
-
-                    // The class will be loaded in the template: src/CoreBundle/Resources/views/Account/edit.html.twig
-                    // @todo implement generic form.
                     $class = 'select2_extra_rel_tag';
                     if (ExtraField::USER_FIELD_TYPE === $extraFieldType) {
                         $class = 'select2_user_rel_tag';
@@ -147,15 +160,15 @@ class ExtraFieldType extends AbstractType
                             $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                         }
 
-                        $defaultOptions['choices'] = $choices;
+                        $defaultOptions['choices']     = $choices;
                         $defaultOptions['choice_attr'] = $choicesAttributes;
-                        $defaultOptions['data'] = $choices;
+                        $defaultOptions['data']        = $choices;
                     }
 
                     $defaultOptions['attr'] = [
-                        'class' => $class,
-                        'style' => 'width:500px',
-                        'data.field_id' => $extraField->getId(),
+                        'class'        => $class,
+                        'style'        => 'width:500px',
+                        'data.field_id'=> $extraField->getId(),
                     ];
                     $builder->add($variable, ChoiceType::class, $defaultOptions);
 
@@ -175,7 +188,7 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_DATE:
                     $defaultOptions['data'] = null;
                     if (!empty($value)) {
-                        $defaultOptions['data'] = new DateTime($value);
+                        $defaultOptions['data'] = new DateTime((string) $value);
                     }
                     $defaultOptions['widget'] = 'single_text';
                     $builder->add($variable, DateType::class, $defaultOptions);
@@ -185,7 +198,7 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_DATETIME:
                     $defaultOptions['data'] = null;
                     if (!empty($value)) {
-                        $defaultOptions['data'] = new DateTime($value);
+                        $defaultOptions['data'] = new DateTime((string) $value);
                     }
                     $defaultOptions['widget'] = 'single_text';
                     $builder->add($variable, DateTimeType::class, $defaultOptions);
@@ -215,8 +228,7 @@ class ExtraFieldType extends AbstractType
                     break;
 
                 case \ExtraField::FIELD_TYPE_CHECKBOX:
-                    $defaultOptions['data'] = 1 === (int) $value;
-
+                    $defaultOptions['data'] = (1 === (int) $value);
                     $builder->add($variable, CheckboxType::class, $defaultOptions);
 
                     break;
@@ -224,8 +236,7 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
                     $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
-
-                    // no break
+                // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
@@ -251,49 +262,40 @@ class ExtraFieldType extends AbstractType
                     $builder->add($variable, ChoiceType::class, $defaultOptions);
 
                     break;
+
+                default:
+                    // no-op for unimplemented types
+                    break;
             }
         }
 
-        /*$builder->addEventListener(
-            FormEvents::POST_SET_DATA,
-            function (FormEvent $event) use ($item, $extraFields): void {
-                $data = $event->getData();
-                foreach ($extraFields as $extraField) {
-                    $newValue = $data[$extraField->getVariable()] ?? null;
-                    if (!empty($newValue)) {
-                        if (\ExtraField::FIELD_TYPE_TAG === $extraField->getValueType()) {
-                            $formItem = $event->getForm()->get($extraField->getVariable());
-                            $formItem->setData($newValue);
-                        }
-                    }
-                }
-            }
-        );*/
+        // Persist new values on submit
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($item, $extraFields): void {
                 $data = $event->getData();
                 foreach ($extraFields as $extraField) {
-                    $newValue = $data[$extraField->getVariable()] ?? null;
+                    $variable = $extraField->getVariable();
+                    $newValue = $data[$variable] ?? null;
 
                     switch ($extraField->getValueType()) {
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
-                            if (!empty($newValue)) {
-                                $newValue = $newValue['address'].'::'.$newValue['latitude'].','.$newValue['longitude'];
+                            if (!empty($newValue) && is_array($newValue)) {
+                                $newValue = ($newValue['address'] ?? '').'::'.($newValue['latitude'] ?? '').','.($newValue['longitude'] ?? '');
                             }
                             $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
 
                             break;
 
                         case \ExtraField::FIELD_TYPE_TAG:
-                            $formItem = $event->getForm()->get($extraField->getVariable());
-                            $options = $formItem->getConfig()->getOptions();
+                            $formItem = $event->getForm()->get($variable);
+                            $options  = $formItem->getConfig()->getOptions();
                             $options['choices'] = $newValue;
-                            $event->getForm()->add($extraField->getVariable(), ChoiceType::class, $options);
+                            $event->getForm()->add($variable, ChoiceType::class, $options);
 
                             if (!empty($newValue)) {
-                                foreach ($newValue as $tag) {
+                                foreach ((array) $newValue as $tag) {
                                     $this->tagRepository->addTagToUser($extraField, $item, $tag);
                                 }
                             }

@@ -873,4 +873,137 @@ class ExerciseShowFunctions
             }
         }
     }
+
+    /**
+     * Displays the answers for a Multiple Answer Dropdown question (result view).
+     * Renders a row per choice, showing: student choice, expected choice (if allowed),
+     * the textual answer, and status (Correct/Incorrect).
+     *
+     * Returned string contains <tr>...</tr> rows to be echoed in the answer table.
+     */
+    public static function displayMultipleAnswerDropdown(
+        Exercise $exercise,
+        Answer $answer,
+        array $correctAnswers,
+        array $studentChoices,
+        bool $showTotalScoreAndUserChoices = true
+    ): string {
+        // Hide if teacher wants to hide empty answers and user gave no answer
+        if (true === $exercise->hideNoAnswer && empty($studentChoices)) {
+            return '';
+        }
+
+        // Normalize inputs
+        $correctAnswers = array_map('intval', (array) $correctAnswers);
+        $studentChoices = array_map(
+            'intval',
+            array_filter((array) $studentChoices, static fn ($v) => $v !== '' && $v !== null && (int)$v !== -1)
+        );
+
+        // Build id => text map from Answer::getAnswers()
+        // getAnswers() typically returns rows with keys: iid, answer, correct, comment, weighting, position
+        $idToText = [];
+        if (method_exists($answer, 'getAnswers')) {
+            $rows = $answer->getAnswers();
+            if (is_array($rows)) {
+                foreach ($rows as $row) {
+                    if (isset($row['iid'])) {
+                        $id = (int) $row['iid'];
+                        $idToText[$id] = $row['answer'] ?? '';
+                    }
+                }
+            }
+        }
+
+        // Union of expected + student choices to render a single row per unique option
+        $allChoices = array_values(array_unique(array_merge($correctAnswers, $studentChoices)));
+        sort($allChoices);
+
+        // Icons/labels
+        $checkboxOn  = Display::getMdiIcon(StateIcon::CHECKBOX_MARKED, 'ch-tool-icon', null, ICON_SIZE_TINY);
+        $checkboxOff = Display::getMdiIcon(StateIcon::CHECKBOX_BLANK,  'ch-tool-icon', null, ICON_SIZE_TINY);
+        $labelOk     = Display::label(get_lang('Correct'), 'success');
+        $labelKo     = Display::label(get_lang('Incorrect'), 'danger');
+
+        $html = '';
+
+        foreach ($allChoices as $choiceId) {
+            $isStudentAnswer  = in_array($choiceId, $studentChoices, true);
+            $isExpectedAnswer = in_array($choiceId, $correctAnswers, true);
+            $isCorrectAnswer  = $isStudentAnswer && $isExpectedAnswer;
+
+            // Resolve displayed text safely; fall back to "None" if not found
+            $answerText = $idToText[$choiceId] ?? get_lang('None');
+
+            if ($exercise->export) {
+                // Strip potentially problematic wrappers on export
+                $answerText = strip_tags_blacklist($answerText, ['title', 'head']);
+                $answerText = str_replace(['<html>', '</html>', '<body>', '</body>'], '', $answerText);
+            }
+
+            // Respect result-visibility policy
+            $hideExpected = false;
+            switch ($exercise->selectResultsDisabled()) {
+                case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+                    $hideExpected = true;
+                    if (!$isCorrectAnswer && empty($studentChoices)) {
+                        continue 2;
+                    }
+                    break;
+                case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                    if (0 == $exercise->getFeedbackType()) {
+                        $hideExpected = true;
+                    }
+                    break;
+                case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+                case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                    $hideExpected = true;
+                    if ($showTotalScoreAndUserChoices) {
+                        $hideExpected = false;
+                    }
+                    break;
+                case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK:
+                    if (false === $showTotalScoreAndUserChoices && empty($studentChoices)) {
+                        continue 2;
+                    }
+                    break;
+            }
+
+            // Highlight only when policy requires and the student/expected match
+            $rowClass = '';
+            if ($isCorrectAnswer
+                && in_array(
+                    $exercise->selectResultsDisabled(),
+                    [RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER, RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING],
+                    true
+                )
+            ) {
+                $rowClass = 'success';
+            }
+
+            $html .= '<tr class="'.$rowClass.'">';
+
+            // Student choice icon
+            $html .= '<td class="text-center">'.($isStudentAnswer ? $checkboxOn : $checkboxOff).'</td>';
+
+            // Expected choice icon (optional)
+            if ($exercise->showExpectedChoiceColumn()) {
+                $html .= '<td class="text-center">';
+                $html .= $hideExpected ? '<span class="text-muted">&mdash;</span>' : ($isExpectedAnswer ? $checkboxOn : $checkboxOff);
+                $html .= '</td>';
+            }
+
+            // Answer text
+            $html .= '<td>'.Security::remove_XSS($answerText).'</td>';
+
+            // Status (optional)
+            if ($exercise->showExpectedChoice()) {
+                $html .= '<td class="text-center">'.($isCorrectAnswer ? $labelOk : $labelKo).'</td>';
+            }
+
+            $html .= '</tr>';
+        }
+
+        return $html;
+    }
 }

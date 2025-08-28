@@ -149,8 +149,10 @@ class ExerciseLib
             $num_suggestions = 0;
             switch ($answerType) {
                 case MATCHING:
+                case MATCHING_COMBINATION:
                 case DRAGGABLE:
                 case MATCHING_DRAGGABLE:
+                case MATCHING_DRAGGABLE_COMBINATION:
                     if (DRAGGABLE == $answerType) {
                         $isVertical = 'v' === $objQuestionTmp->extra;
                         $s .= '<p class="small">'
@@ -880,6 +882,7 @@ class ExerciseLib
                         $s .= '</tr>';
                         break;
                     case FILL_IN_BLANKS:
+                    case FILL_IN_BLANKS_COMBINATION:
                         // display the question, with field empty, for student to fill it,
                         // or filled to display the answer in the Question preview of the exercise/admin.php page
                         $displayForStudent = true;
@@ -1107,6 +1110,7 @@ class ExerciseLib
                         }
                         break;
                     case MATCHING:
+                    case MATCHING_COMBINATION:
                         // matching type, showing suggestions and answers
                         // TODO: replace $answerId by $numAnswer
                         if (0 != $answerCorrect) {
@@ -1268,6 +1272,7 @@ class ExerciseLib
                         }
                         break;
                     case MATCHING_DRAGGABLE:
+                    case MATCHING_DRAGGABLE_COMBINATION:
                         if (1 == $answerId) {
                             echo $objAnswerTmp->getJs();
                         }
@@ -1383,7 +1388,9 @@ HTML;
                 $answerType,
                 [
                     MATCHING,
+                    MATCHING_COMBINATION,
                     MATCHING_DRAGGABLE,
+                    MATCHING_DRAGGABLE_COMBINATION,
                     UNIQUE_ANSWER_NO_OPTION,
                     MULTIPLE_ANSWER_TRUE_FALSE,
                     MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE,
@@ -1428,7 +1435,7 @@ HTML;
                 return $s;
             }
             echo $s;
-        } elseif (HOT_SPOT == $answerType || HOT_SPOT_DELINEATION == $answerType) {
+        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_DELINEATION, HOT_SPOT_COMBINATION])) {
             global $exe_id;
             $questionDescription = $objQuestionTmp->selectDescription();
             // Get the answers, make a list
@@ -3706,25 +3713,22 @@ EOT;
         $session_id,
         $questionType = ''
     ) {
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $track_exercises   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempt     = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseUser        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseTable       = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $question_id = intval($question_id);
-        $exercise_id = intval($exercise_id);
-        $courseId = api_get_course_int_id($course_code);
-        $session_id = intval($session_id);
+        $question_id = (int) $question_id;
+        $exercise_id = (int) $exercise_id;
+        $courseId    = (int) api_get_course_int_id($course_code);
+        $session_id  = (int) $session_id;
 
-        if (FILL_IN_BLANKS == $questionType) {
-            $listStudentsId = [];
-            $listAllStudentInfo = CourseManager::get_student_list_from_course_code(
-                api_get_course_id(),
-                true
-            );
-            foreach ($listAllStudentInfo as $i => $listStudentInfo) {
-                $listStudentsId[] = $listStudentInfo['user_id'];
+        if (in_array($questionType, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION], true)) {
+            $listStudentsId     = [];
+            $listAllStudentInfo = CourseManager::get_student_list_from_course_code(api_get_course_id(), true);
+            foreach ($listAllStudentInfo as $listStudentInfo) {
+                $listStudentsId[] = (int) $listStudentInfo['user_id'];
             }
 
             $listFillTheBlankResult = FillBlanks::getFillTheBlankResult(
@@ -3741,41 +3745,36 @@ EOT;
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
+                ON cu.c_id = c.id AND cu.user_id = exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = " AND cu.status = ".SessionEntity::STUDENT;
+                ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         $sql = "SELECT DISTINCT exe_user_id
-                FROM $track_exercises e
-                INNER JOIN $track_attempt a
-                ON (
-                    a.exe_id = e.exe_id
-                )
-                INNER JOIN $courseTable c
-                ON (c.id = e.c_id)
-                $courseCondition
-                WHERE
-                    exe_exo_id = $exercise_id AND
-                    e.c_id = $courseId AND
-                    question_id = $question_id AND
-                    answer <> '0' AND
-                    e.status = ''
-                    $courseConditionWhere
-                    $sessionCondition
-            ";
-        $result = Database::query($sql);
-        $return = 0;
-        if ($result) {
-            $return = Database::num_rows($result);
-        }
+            FROM $track_exercises e
+            INNER JOIN $track_attempt a
+                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+            INNER JOIN $courseTable c
+                ON c.id = e.c_id
+            $courseCondition
+            WHERE
+                exe_exo_id  = $exercise_id AND
+                e.c_id      = $courseId AND
+                question_id = $question_id AND
+                answer <> '0' AND
+                e.status = ''
+                $courseConditionWhere
+                $sessionCondition
+    ";
 
-        return $return;
+        $result = Database::query($sql);
+
+        return $result ? (int) Database::num_rows($result) : 0;
     }
 
     /**
@@ -3863,24 +3862,27 @@ EOT;
         $current_answer = null
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $track_attempt   = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $courseTable     = Database::get_main_table(TABLE_MAIN_COURSE);
+        $courseUser      = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $question_id = (int) $question_id;
-        $answer_id = (int) $answer_id;
+        $answer_id   = (int) $answer_id;
         $exercise_id = (int) $exercise_id;
-        $courseId = api_get_course_int_id($course_code);
-        $session_id = (int) $session_id;
+        $courseId    = (int) api_get_course_int_id($course_code);
+        $session_id  = (int) $session_id;
 
         switch ($question_type) {
             case FILL_IN_BLANKS:
+            case FILL_IN_BLANKS_COMBINATION:
                 $answer_condition = '';
                 $select_condition = ' e.exe_id, answer ';
                 break;
             case MATCHING:
+            case MATCHING_COMBINATION:
             case MATCHING_DRAGGABLE:
+            case MATCHING_DRAGGABLE_COMBINATION:
             default:
                 $answer_condition = " answer = $answer_id AND ";
                 $select_condition = ' DISTINCT exe_user_id ';
@@ -3889,55 +3891,57 @@ EOT;
         if (empty($session_id)) {
             $courseCondition = "
             INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
+                ON cu.c_id = e.c_id AND cu.user_id = e.exe_user_id";
             $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+                ON (cu.c_id = e.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
         $sessionCondition = api_get_session_condition($session_id, true, false, 'e.session_id');
         $sql = "SELECT $select_condition
-                FROM $track_exercises e
-                INNER JOIN $track_attempt a
-                ON (
-                    a.exe_id = e.exe_id
-                )
-                INNER JOIN $courseTable c
+            FROM $track_exercises e
+            INNER JOIN $track_attempt a
+                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+            INNER JOIN $courseTable c
                 ON c.id = e.c_id
-                $courseCondition
-                WHERE
-                    exe_exo_id = $exercise_id AND
-                    e.c_id = $courseId AND
-                    $answer_condition
-                    question_id = $question_id AND
-                    e.status = ''
-                    $courseConditionWhere
-                    $sessionCondition
-            ";
+            $courseCondition
+            WHERE
+                exe_exo_id = $exercise_id AND
+                e.c_id = $courseId AND
+                $answer_condition
+                question_id = $question_id AND
+                e.status = ''
+                $courseConditionWhere
+                $sessionCondition
+    ";
+
         $result = Database::query($sql);
         $return = 0;
         if ($result) {
-            $good_answers = 0;
             switch ($question_type) {
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
+                    $good_answers = 0;
                     while ($row = Database::fetch_assoc($result)) {
                         $fill_blank = self::check_fill_in_blanks(
                             $correct_answer,
                             $row['answer'],
                             $current_answer
                         );
-                        if (isset($fill_blank[$current_answer]) && 1 == $fill_blank[$current_answer]) {
+                        if (isset($fill_blank[$current_answer]) && 1 == (int) $fill_blank[$current_answer]) {
                             $good_answers++;
                         }
                     }
 
                     return $good_answers;
-                    break;
+
                 case MATCHING:
+                case MATCHING_COMBINATION:
                 case MATCHING_DRAGGABLE:
+                case MATCHING_DRAGGABLE_COMBINATION:
                 default:
                     $return = Database::num_rows($result);
             }
@@ -6328,5 +6332,89 @@ EOT;
             @unlink($zipFilePath);
             exit;
         }
+    }
+
+    /**
+     * Calculates the overall score for Combination-type questions.
+     */
+    public static function getUserQuestionScoreGlobal(
+        int   $answerType,
+        array $listCorrectAnswers,
+        int   $exeId,
+        int   $questionId,
+        float $questionWeighting,
+        array $choice = [],
+        int $nbrAnswers = 0
+    ): float
+    {
+        $nbrCorrect = 0;
+        $nbrOptions = 0;
+
+        switch ($answerType) {
+            case FILL_IN_BLANKS_COMBINATION:
+                if (!empty($listCorrectAnswers)) {
+                    if (!empty($listCorrectAnswers['student_score']) && is_array($listCorrectAnswers['student_score'])) {
+                        foreach ($listCorrectAnswers['student_score'] as $val) {
+                            if ((int) $val === 1) {
+                                $nbrCorrect++;
+                            }
+                        }
+                    }
+                    if (!empty($listCorrectAnswers['words_count'])) {
+                        $nbrOptions = (int) $listCorrectAnswers['words_count'];
+                    } elseif (!empty($listCorrectAnswers['words']) && is_array($listCorrectAnswers['words'])) {
+                        $nbrOptions = count($listCorrectAnswers['words']);
+                    }
+                }
+                break;
+
+            case HOT_SPOT_COMBINATION:
+                if (!empty($listCorrectAnswers) && is_array($listCorrectAnswers) && is_array($choice)) {
+                    foreach ($listCorrectAnswers as $idx => $val) {
+                        if (isset($choice[$idx]) && (int) $choice[$idx] === 1) {
+                            $nbrCorrect++;
+                        }
+                    }
+                } else {
+                    $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                    $exeIdEsc = Database::escape_string($exeId);
+                    $qIdEsc   = Database::escape_string($questionId);
+                    $sql = "SELECT COUNT(hotspot_id) AS ct
+                        FROM $TBL_TRACK_HOTSPOT
+                        WHERE hotspot_exe_id = '$exeIdEsc'
+                          AND hotspot_question_id = '$qIdEsc'
+                          AND hotspot_correct = 1";
+                    $result = Database::query($sql);
+                    $nbrCorrect = (int) Database::result($result, 0, 0);
+                }
+                $nbrOptions = (int) $nbrAnswers;
+                break;
+
+            case MATCHING_COMBINATION:
+            case MATCHING_DRAGGABLE_COMBINATION:
+                if (isset($listCorrectAnswers['form_values'])) {
+                    if (!empty($listCorrectAnswers['form_values']['correct'])) {
+                        $nbrCorrect = count((array) $listCorrectAnswers['form_values']['correct']);
+                    }
+                    if (isset($listCorrectAnswers['form_values']['count_options'])) {
+                        $nbrOptions = (int) $listCorrectAnswers['form_values']['count_options'];
+                    }
+                } elseif (isset($listCorrectAnswers['from_database'])) {
+                    if (!empty($listCorrectAnswers['from_database']['correct'])) {
+                        $nbrCorrect = count((array) $listCorrectAnswers['from_database']['correct']);
+                    }
+                    if (isset($listCorrectAnswers['from_database']['count_options'])) {
+                        $nbrOptions = (int) $listCorrectAnswers['from_database']['count_options'];
+                    }
+                }
+                break;
+        }
+
+        $questionScore = 0.0;
+        if ($nbrOptions > 0 && $nbrCorrect === $nbrOptions) {
+            $questionScore = (float) $questionWeighting;
+        }
+
+        return $questionScore;
     }
 }

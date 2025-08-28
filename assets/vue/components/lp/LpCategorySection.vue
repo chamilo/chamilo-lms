@@ -20,7 +20,7 @@ const props = defineProps({
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete", "export-scorm",
+  "toggle-visible","toggle-publish","delete","export-scorm",
   "reorder"
 ])
 

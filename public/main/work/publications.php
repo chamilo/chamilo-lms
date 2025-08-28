@@ -14,10 +14,10 @@ api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$tpl = new Template(get_lang('StudentPublications'));
+$tpl = new Template(get_lang('Assignments'));
 
-$tpl->assign('intro_title', get_lang('MyStudentPublicationsTitle'));
-$tpl->assign('intro_content', Display::return_message(get_lang('MyStudentPublicationsExplanation')));
+$tpl->assign('intro_title', get_lang('All Assignments'));
+$tpl->assign('intro_content', Display::return_message(get_lang('You will find below all your assignment from all the courses and session in which you are registered.')));
 $tpl->assign('table', showStudentAllWorkGrid(0));
 $tpl->assign('table_with_results', showStudentAllWorkGrid(1));
 

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
@@ -21,7 +22,8 @@ class UserListener
     public function __construct(
         private UserRepository $userRepository,
         private Security $security,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private AccessUrlHelper $accessUrlHelper
     ) {}
 
     /**
@@ -31,6 +33,13 @@ class UserListener
     {
         $this->userRepository->updateCanonicalFields($user);
         $this->userRepository->updatePassword($user);
+
+        if ($user->getPortals()->isEmpty()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl) {
+                $user->setCurrentUrl($currentUrl);
+            }
+        }
 
         if ($user->isSkipResourceNode()) {
             return;

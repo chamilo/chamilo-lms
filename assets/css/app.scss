@@ -860,7 +860,64 @@ img.course-tool__icon {
   @apply absolute inset-0 flex items-center justify-center bg-white bg-opacity-95 backdrop-blur-sm;
 }
 
-//@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";
+#form_upload {
+  #files {
+    @apply bg-white divide-y divide-gray-20 rounded-lg shadow p-4 overflow-hidden;
+  }
+
+  #files > a.panel-image {
+    @apply block no-underline;
+  }
+
+  #files .row {
+    @apply flex items-center justify-between py-2 px-3;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #files .col-sm-5 {
+    @apply flex-1 text-gray-90 font-medium truncate;
+    width: auto !important;
+  }
+  #files .col-sm-3 {
+    @apply w-auto flex-shrink-0 ml-4;
+  }
+
+  .alert {
+    @apply text-sm px-2 py-1 rounded;
+  }
+  .alert-success {
+    @apply bg-success text-success-button-text;
+  }
+  .alert-danger {
+    @apply bg-danger text-danger-button-text;
+  }
+
+  #progress {
+    @apply h-2 bg-gray-20 rounded overflow-hidden mt-4;
+  }
+  #progress .progress-bar {
+    @apply block h-full bg-primary transition-all duration-150 ease-in-out max-w-full;
+  }
+
+  #dropzone {
+    @apply border-2 border-dashed border-gray-20 rounded-lg py-4 text-center text-gray-90 cursor-pointer transition-colors duration-150;
+  }
+  #dropzone:hover {
+    @apply bg-gray-5;
+  }
+}
+
+.ghosting { opacity: .6; }
+.chosen   { outline: 2px solid #ddd; }
+.dragging { outline: 2px solid var(--support-5, #f60); }
+
+.media-group       { border:2px solid #337ab7; background:#f5fafd; padding:1rem; margin:2rem 0; border-radius:4px; }
+.media-content     { margin-bottom:1rem; }
+.media-description { font-style:italic; margin-bottom:1rem; }
+.media-children    { margin-left:1rem; }
+.media-group h4   { margin-top:0; color:#23527c; }
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";

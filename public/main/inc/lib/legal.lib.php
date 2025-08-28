@@ -385,12 +385,10 @@ class LegalManager
     {
         $subject = get_lang('Your terms and conditions are ready to be signed');
         $studentDetails = api_get_user_info($userId);
-        $coachDetails = api_get_user_info($coachId);
-        $link = trim(
-            api_get_setting('course_validation_terms_and_conditions_url')
-        );
-        $completeLink = '<a href="'.$link.'">'.$link.'</a>';
-        // Note: Translated string has 3 replacement markers, not just one as the original string suggests.
+        $coachDetails   = api_get_user_info($coachId);
+        $link           = trim(api_get_setting('course_validation_terms_and_conditions_url'));
+        $completeLink   = '<a href="'.$link.'">'.$link.'</a>';
+
         $content = sprintf(
             get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
             $studentDetails['firstname'],
@@ -402,17 +400,42 @@ class LegalManager
 
         $extraFieldValue = new ExtraFieldValue('user');
         $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
-        if (false === $value || $value['value'] != 1) {
+        if ($value === false || (int)($value['value'] ?? 0) !== 1) {
             $extraFieldInfo = $extraFieldValue->getExtraField()->get_handler_field_info_by_field_variable('termactivated');
             if ($extraFieldInfo) {
-                $newParams = [
-                    'item_id' => $userId,
-                    'field_id' => $extraFieldInfo['id'],
+                $extraFieldValue->save([
+                    'item_id'     => $userId,
+                    'field_id'    => $extraFieldInfo['id'],
                     'field_value' => 1,
-                    'comment' => '',
-                ];
-                $extraFieldValue->save($newParams);
+                    'comment'     => '',
+                ]);
             }
+        }
+
+        $enforceProfileCompleted =
+            api_get_setting('ticket.show_terms_if_profile_completed') === 'true'
+            || api_get_setting('registration.show_terms_if_profile_completed') === 'true';
+
+        if ($enforceProfileCompleted) {
+            $allValues = $extraFieldValue->getAllValuesByItem($userId);
+            $justTermResults = [];
+            foreach ($allValues as $row) {
+                $var = $row['field_variable'] ?? $row['variable'] ?? null;
+                if ($var !== null && str_starts_with($var, 'terms_')) {
+                    $val = $row['value'] ?? null;
+                    $justTermResults[$var] = !empty($val) && $val !== '0';
+                }
+            }
+
+            $profileCompleted = 1;
+            if (in_array(false, $justTermResults, true)) {
+                $profileCompleted = 0;
+            }
+
+            $table = Database::get_main_table(TABLE_MAIN_USER);
+            Database::query("UPDATE $table SET profile_completed = ".$profileCompleted." WHERE id = ".$userId);
+
+            ChamiloSession::write('profile_completed_result', $justTermResults);
         }
     }
 

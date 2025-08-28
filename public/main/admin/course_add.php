@@ -149,7 +149,7 @@ $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
 if ('true' === api_get_setting('course.show_course_duration')) {
-    $form->addElement('text', 'duration', get_lang('Duration (in minutes)'), [
+    $form->addElement('text', 'duration', get_lang('Duration (minutes)'), [
         'id' => 'duration',
         'maxlength' => 10,
     ]);

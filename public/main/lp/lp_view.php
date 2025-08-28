@@ -401,6 +401,10 @@ switch ($returnLink) {
         $buttonHomeUrl .= '&redirectTo=portal_home&lp_id='.$lp->getIid();
         $buttonHomeText = get_lang('Home');
         break;
+    case 4: // My sessions
+        $buttonHomeUrl .= '&redirectTo=my_sessions&lp_id='.$lp->getIid();
+        $buttonHomeText = get_lang('My sessions');
+        break;
 }
 
 $lpPreviewImagePath = Display::returnIconPath('unknown.png', ICON_SIZE_BIG);

@@ -162,7 +162,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
         if (null === $link) {
             Display::addFlash(
-                Display::return_message(get_lang('NotFound'), 'error')
+                Display::return_message(get_lang('Resource not found'), 'error')
             );
 
             header("Location: $pageBaseUrl");
@@ -188,7 +188,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
             $em->getRepository(TopLinkRelTool::class)->updateTools($link);
 
             Display::addFlash(
-                Display::return_message(get_lang('LinkModded'), 'success')
+                Display::return_message(get_lang('Item updated'), 'success')
             );
 
             header("Location: $pageBaseUrl");
@@ -202,7 +202,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
         if (null === $link) {
             Display::addFlash(
-                Display::return_message(get_lang('NotFound'), 'error')
+                Display::return_message(get_lang('Resource not found'), 'error')
             );
 
             header("Location: $pageBaseUrl");
@@ -220,7 +220,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('LinkDeleted'), 'success')
+            Display::return_message(get_lang('Item deleted'), 'success')
         );
 
         header("Location: $pageBaseUrl");
@@ -230,7 +230,7 @@ switch ($httpRequest->query->getAlpha('action', 'list')) {
 
         if (null === $link) {
             Display::addFlash(
-                Display::return_message(get_lang('NotFound'), 'error')
+                Display::return_message(get_lang('Resource not found'), 'error')
             );
 
             header("Location: $pageBaseUrl");

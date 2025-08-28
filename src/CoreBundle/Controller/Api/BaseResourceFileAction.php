@@ -346,10 +346,10 @@ class BaseResourceFileAction
                                 // or perform any other desired actions based on your application's requirements
                                 $resource->setResourceName($title);
                                 $flashBag = $request->getSession()->getFlashBag();
-                                $message = $translator ? $translator->trans('upload.already_exists') : 'Upload Already Exists';
+                                $message = $translator ? $translator->trans('The operation is impossible, a file with this name already exists.') : 'Upload already exists';
                                 $flashBag->add('warning', $message);
 
-                                throw new BadRequestHttpException($translator ? $translator->trans('file.already_exists') : 'The file already exists and was not uploaded.');
+                                throw new BadRequestHttpException($message);
                             }
 
                             throw new InvalidArgumentException('Invalid fileExistsOption');

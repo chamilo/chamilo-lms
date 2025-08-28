@@ -121,6 +121,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.push_notification_settings',
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
+                'message.allow_message_tool',
             ];
 
             $user = $this->userHelper->getCurrent();

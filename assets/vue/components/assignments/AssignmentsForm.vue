@@ -2,7 +2,7 @@
   <form @submit.prevent="onSubmit">
     <BaseInputText
       v-model="v$.title.$model"
-      :error-text="v$.title.$errors.map((error) => error.$message).join('<br>')"
+      :error-text="v$.title.$errors.map((e) => e.$message).join('<br>')"
       :is-invalid="v$.title.$error"
       :label="t('Assignment name')"
     />
@@ -31,8 +31,8 @@
 
       <div v-if="chkAddToGradebook">
         <BaseSelect
-          v-model="v$.gradebookId.$model"
-          :error-text="v$.gradebookId.$errors.map((error) => error.$message).join('<br>')"
+          v-model="assignment.gradebookId"
+          :error-text="v$.gradebookId.$errors.map((e) => e.$message).join('<br>')"
           :is-invalid="v$.gradebookId.$error"
           :label="t('Select assessment')"
           :options="gradebookCategories"
@@ -42,9 +42,9 @@
         />
 
         <BaseInputNumber
-          id="qualification"
-          v-model="v$.weight.$model"
-          :error-text="v$.weight.$errors.map((error) => error.$message).join('<br>')"
+          id="weight"
+          v-model="assignment.weight"
+          :error-text="v$.weight.$errors.map((e) => e.$message).join('<br>')"
           :is-invalid="v$.weight.$error"
           :label="t('Weight inside assessment')"
           :min="0"
@@ -62,8 +62,8 @@
       <BaseCalendar
         v-if="chkExpiresOn"
         id="expires_on"
-        v-model="v$.expiresOn.$model"
-        :error-text="v$.expiresOn.$errors.map((error) => error.$message).join('<br>')"
+        v-model="assignment.expiresOn"
+        :error-text="v$.expiresOn.$errors.map((e) => e.$message).join('<br>')"
         :is-invalid="v$.expiresOn.$error"
         :label="t('Posted sending deadline')"
         show-time
@@ -79,8 +79,8 @@
       <BaseCalendar
         v-if="chkEndsOn"
         id="ends_on"
-        v-model="v$.endsOn.$model"
-        :error-text="v$.endsOn.$errors.map((error) => error.$message).join('<br>')"
+        v-model="assignment.endsOn"
+        :error-text="v$.endsOn.$errors.map((e) => e.$message).join('<br>')"
         :is-invalid="v$.endsOn.$error"
         :label="t('Ends at (completely closed)')"
       />
@@ -93,14 +93,13 @@
       />
 
       <BaseSelect
-        v-model="v$.allowTextAssignment.$model"
-        :error-text="v$.allowTextAssignment.$errors.map((error) => error.$message).join('<br>')"
-        :is-invalid="v$.allowTextAssignment.$error"
-        :label="t('Document type')"
+        v-model="assignment.allowTextAssignment"
         :options="documentTypes"
+        option-label="label"
+        option-value="value"
         id="allow-text-assignment"
         name="allow_text_assignment"
-        option-label="name"
+        label=""
       />
     </BaseAdvancedSettingsButton>
 
@@ -124,46 +123,42 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
+import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import useVuelidate from "@vuelidate/core"
 import { computed, reactive, ref, watchEffect } from "vue"
 import { maxValue, minValue, required } from "@vuelidate/validators"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
-import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
   defaultAssignment: {
     type: Object,
-    required: false,
-    default: () => null,
+    default: null,
   },
   isFormLoading: {
     type: Boolean,
-    required: false,
-    default: () => false,
+    default: false,
   },
 })
 
 const emit = defineEmits(["submit"])
 
-const route = useRoute()
-const router = useRouter()
 const { t } = useI18n()
 const { cid, sid, gid } = useCidReq()
+const route = useRoute()
 
 const showAdvancedSettings = ref(false)
-
 const chkAddToGradebook = ref(false)
 const chkExpiresOn = ref(false)
 const chkEndsOn = ref(false)
 
 const gradebookCategories = ref([{ name: "Default", id: 1 }])
 const documentTypes = ref([
-  { name: t("Allow files or online text"), value: 0 },
-  { name: t("Allow only text"), value: 1 },
-  { name: t("Allow only files"), value: 2 },
+  { label: t("Allow files or online text"), value: 0 },
+  { label: t("Allow only text"), value: 1 },
+  { label: t("Allow only files"), value: 2 },
 ])
 
 const assignment = reactive({
@@ -175,127 +170,95 @@ const assignment = reactive({
   expiresOn: new Date(),
   endsOn: new Date(),
   addToCalendar: false,
-  allowTextAssignment: documentTypes.value[2],
+  allowTextAssignment: 2,
 })
 
 watchEffect(() => {
-  const defaultAssignment = props.defaultAssignment
+  const def = props.defaultAssignment
+  if (!def) return
 
-  if (!defaultAssignment) {
-    return
-  }
+  assignment.title = def.title
+  assignment.description = def.description
+  assignment.qualification = def.qualification
+  assignment.addToCalendar = def.assignment.eventCalendarId > 0
 
-  assignment.title = defaultAssignment.title
-  assignment.description = defaultAssignment.description
-
-  assignment.qualification = defaultAssignment.qualification
-  assignment.addToCalendar = defaultAssignment.assignment.eventCalendarId > 0
-
-  if (defaultAssignment.weight > 0) {
+  if (def.weight > 0) {
     chkAddToGradebook.value = true
-    assignment.weight = defaultAssignment.weight
+    assignment.weight = def.weight
   }
-
-  if (defaultAssignment.assignment.expiresOn) {
+  if (def.assignment.expiresOn) {
     chkExpiresOn.value = true
-    assignment.expiresOn = new Date(defaultAssignment.assignment.expiresOn)
+    assignment.expiresOn = new Date(def.assignment.expiresOn)
   }
-
-  if (defaultAssignment.assignment.endsOn) {
+  if (def.assignment.endsOn) {
     chkEndsOn.value = true
-    assignment.endsOn = new Date(defaultAssignment.assignment.endsOn)
+    assignment.endsOn = new Date(def.assignment.endsOn)
   }
 
-  assignment.allowTextAssignment = documentTypes.value.find(
-    (documentType) => documentType.value === defaultAssignment.allowTextAssignment,
-  )
+  assignment.allowTextAssignment = def.allowTextAssignment
 
   if (
-    defaultAssignment.qualification ||
-    defaultAssignment.assignment.eventCalendarId ||
-    defaultAssignment.weight ||
-    defaultAssignment.assignment.expiresOn ||
-    defaultAssignment.assignment.endsOn ||
-    defaultAssignment.allowTextAssignment
+    def.qualification ||
+    def.assignment.eventCalendarId ||
+    def.weight ||
+    def.assignment.expiresOn ||
+    def.assignment.endsOn ||
+    def.allowTextAssignment !== undefined
   ) {
     showAdvancedSettings.value = true
   }
 })
 
 const rules = computed(() => {
-  const localRules = {
-    title: { required, $autoDirty: true },
-  }
-
+  const r = { title: { required, $autoDirty: true } }
   if (showAdvancedSettings.value) {
     if (chkAddToGradebook.value) {
-      localRules.gradebookId = { required }
-
-      localRules.weight = { required }
+      r.gradebookId = { required }
+      r.weight = { required }
     }
-
     if (chkExpiresOn.value) {
-      localRules.expiresOn = { required, $autoDirty: true }
-
-      if (chkEndsOn.value) {
-        localRules.expiresOn.maxValue = maxValue(assignment.endsOn)
-      }
+      r.expiresOn = { required, $autoDirty: true }
+      if (chkEndsOn.value) r.expiresOn.maxValue = maxValue(assignment.endsOn)
     }
-
     if (chkEndsOn.value) {
-      localRules.endsOn = { required, $autoDirty: true }
-
-      if (chkExpiresOn.value) {
-        localRules.endsOn.minValue = minValue(assignment.expiresOn)
-      }
+      r.endsOn = { required, $autoDirty: true }
+      if (chkExpiresOn.value) r.endsOn.minValue = minValue(assignment.expiresOn)
     }
-
-    localRules.allowTextAssignment = { required }
+    r.allowTextAssignment = { required }
   }
-
-  return localRules
+  return r
 })
 
 const v$ = useVuelidate(rules, assignment)
 
-const onSubmit = async () => {
-  const result = await v$.value.$validate()
-  if (!result) return
+async function onSubmit() {
+  const valid = await v$.value.$validate()
+  if (!valid) return
 
-  const publicationStudent = {
+  const payload = {
     title: assignment.title,
     description: assignment.description,
-    parentResourceNode: route.params.node * 1,
-    resourceLinkList: [
-      {
-        cid,
-        sid,
-        gid,
-        visibility: RESOURCE_LINK_PUBLISHED,
-      },
-    ],
+    parentResourceNode: Number(route.params.node),
+    resourceLinkList: [{ cid, sid, gid, visibility: RESOURCE_LINK_PUBLISHED }],
     qualification: assignment.qualification,
     addToCalendar: assignment.addToCalendar,
-    allowTextAssignment: assignment.allowTextAssignment.value,
+    allowTextAssignment: assignment.allowTextAssignment,
   }
 
   if (chkAddToGradebook.value) {
-    publicationStudent.gradebookCategoryId = assignment.gradebookId.id
-    publicationStudent.weight = assignment.weight
+    payload.gradebookCategoryId = assignment.gradebookId.id
+    payload.weight = assignment.weight
   }
-
   if (chkExpiresOn.value) {
-    publicationStudent.expiresOn = assignment.expiresOn.toISOString()
+    payload.expiresOn = assignment.expiresOn.toISOString()
   }
-
   if (chkEndsOn.value) {
-    publicationStudent.endsOn = assignment.endsOn.toISOString()
+    payload.endsOn = assignment.endsOn.toISOString()
   }
-
   if (props.defaultAssignment?.["@id"]) {
-    publicationStudent["@id"] = props.defaultAssignment["@id"]
+    payload["@id"] = props.defaultAssignment["@id"]
   }
 
-  emit("submit", publicationStudent)
+  emit("submit", payload)
 }
 </script>

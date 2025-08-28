@@ -65,7 +65,7 @@ if ($form->validate()) {
         $message = get_lang('Field added.');
     } else {
         $field_id = add_specific_field($field_name);
-        $message = get_lang('Field succesfully added');
+        $message = get_lang('Field successfully added');
     }
     header('Location: specific_fields.php?message='.$message);
     //exit ();

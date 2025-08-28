@@ -33,7 +33,7 @@ Display::display_header($tool_name);
 
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(
@@ -90,7 +90,7 @@ $db_courses = Database::store_result(Database::query($sql));
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
             <label class="block text-sm font-bold text-gray-90 mb-2"><?php echo get_lang('Course list'); ?></label>
-            <input type="text" id="courseFilter" onkeyup="filterSelect('courseFilter', 'courseSelect')" placeholder="<?php echo get_lang('Search course'); ?>"
+            <input type="text" id="courseFilter" onkeyup="filterSelect('courseFilter', 'courseSelect')" placeholder="<?php echo get_lang('Search courses'); ?>"
                    class="mb-2 w-full rounded-md border border-gray-25 p-2 text-sm focus:outline-none">
             <select name="course_list[]" id="courseSelect" multiple size="20"
                     class="w-full h-[400px] rounded-md border border-gray-25 p-2 text-sm focus:outline-none">

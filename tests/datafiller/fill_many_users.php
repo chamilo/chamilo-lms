@@ -47,7 +47,7 @@ function fill_many_users($num)
                 null,
                 $user['active']
             );
-            $output[$i]['line-info'] = ($res ? get_lang('Inserted') : get_lang('NotInserted')).' '.$user['username'].$i;
+            $output[$i]['line-info'] = ($res ? get_lang('Inserted') : get_lang('Not inserted')).' '.$user['username'].$i;
             $i++;
 
             if (($i % $batchSize) === 0) {

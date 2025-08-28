@@ -259,7 +259,7 @@ if ($translate) {
     $htmlHeadXtra[] = '<script>
     $(document).ready(function() {
         $("#extra_language").select2({
-            placeholder: "'.get_lang('Select a language').'",
+            placeholder: "'.get_lang('Please select a language').'",
             allowClear: true
         });
 

@@ -77,7 +77,8 @@ class SessionRepository extends ServiceEntityRepository
                 'user' => $user,
                 'url' => $url,
             ])
-            ->orderBy('s.displayStartDate', 'ASC')
+            ->orderBy('s.category', 'ASC') // by default sort by category, display date, title and position
+            ->addOrderBy('s.displayStartDate', 'ASC')
             ->addOrderBy('s.title', 'ASC')
             ->addOrderBy('s.position', 'ASC')
         ;

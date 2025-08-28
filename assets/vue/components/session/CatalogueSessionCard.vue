@@ -48,7 +48,7 @@
         class="text-sm text-blue-600 cursor-pointer underline"
         @click="showCourseDialog = true"
       >
-        {{ courseCount }} {{ $t("course") }}<span v-if="courseCount !== 1">s</span>
+        {{ courseCount }} {{ $t("Course") }}<span v-if="courseCount !== 1">s</span>
       </div>
 
       <div
@@ -165,7 +165,7 @@
           </li>
         </template>
         <template v-else>
-          <li class="text-gray-500 italic">{{ $t("No courses available") }}</li>
+          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
         </template>
       </ul>
     </Dialog>
@@ -197,7 +197,7 @@
           </li>
         </template>
         <template v-else>
-          <li class="text-gray-500 italic">{{ $t("No courses available") }}</li>
+          <li class="text-gray-500 italic">{{ $t("No course available") }}</li>
         </template>
       </ul>
     </Dialog>
@@ -210,7 +210,7 @@
   >
     <p
       class="text-sm text-gray-700 whitespace-pre-line"
-      v-html="session.description || $t('No description available')"
+      v-html="session.description || $t('No description')"
     />
   </Dialog>
   <CatalogueRequirementModal

@@ -78,7 +78,7 @@ if ($global) {
         while ($row = Database::fetch_array($result)) {
             $exerciseList[$row['id']] = $row['title'];
         }
-        $form->addSelect('exercise_id', get_lang('Exercise'), $exerciseList);
+        $form->addSelect('exercise_id', get_lang('Test'), $exerciseList);
     }
 }
 

@@ -28,7 +28,7 @@ $interbreadcrumb[] = [
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'social/promoted_messages.php',
-    'name' => get_lang('PromotedMessages'),
+    'name' => get_lang('Promoted messages'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('List')];
 //$menu = SocialManager::show_social_menu('messages');

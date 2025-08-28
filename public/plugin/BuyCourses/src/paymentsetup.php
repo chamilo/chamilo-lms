@@ -22,7 +22,7 @@ if (isset($_GET['action'], $_GET['id'])) {
         $plugin->deleteTransferAccount($_GET['id']);
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemRemoved'), 'success')
+            Display::return_message(get_lang('The learning object has been removed'), 'success')
         );
 
         header('Location: '.api_get_self());

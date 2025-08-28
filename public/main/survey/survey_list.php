@@ -425,7 +425,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 if ($result) {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('Survey %s multiplicated'), $title),
+                            sprintf(get_lang('Survey %s multiplied'), $title),
                             'confirmation',
                             false
                         )
@@ -433,7 +433,7 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
                 } else {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('Survey %s not multiplicated'), $title),
+                            sprintf(get_lang('Survey %s not multiplied'), $title),
                             'warning',
                             false
                         )
@@ -505,7 +505,7 @@ switch ($action) {
     case 'copy_survey':
         if (!empty($surveyId) && api_is_allowed_to_edit()) {
             SurveyManager::copySurvey($surveyId);
-            Display::addFlash(Display::return_message(get_lang('SurveyCopied'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Survey copied'), 'confirmation', false));
             header('Location: '.$listUrl);
             exit;
         }

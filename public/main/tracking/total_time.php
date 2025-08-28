@@ -136,22 +136,22 @@ Display::display_header($nameTools, 'Tracking');
 
 /* MAIN CODE */
 
-$actionsLeft = Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('StudentsReporting'));
+$actionsLeft = Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners report'));
 $actionsLeft .= Display::url(
     Display::getMdiIcon(ToolIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group reporting')),
     'course_log_groups.php?'.api_get_cidreq()
 );
 $actionsLeft .= Display::url(
-    Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CourseReporting')),
+    Display::getMdiIcon(ToolIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course reporting data')),
     'course_log_tools.php?'.api_get_cidreq()
 );
 
 /*$actionsLeft .= Display::url(
-    Display::getMdiIcon(ObjectIcon::RESOURCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ResourcesReporting')),
+    Display::getMdiIcon(ObjectIcon::RESOURCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reporting')),
     'course_log_resources.php?'.api_get_cidreq()
 );*/
 $actionsLeft .= Display::url(
-    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExamReporting')),
+    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Exams reports')),
     api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
 );
 
@@ -252,7 +252,7 @@ if (api_is_platform_admin(true) ||
     }
 }
 
-$html .= Display::page_subheader2(get_lang('Learners list'));
+$html .= Display::page_subheader2(get_lang('Learner list'));
 
 // PERSON_NAME_DATA_EXPORT is buggy
 $is_western_name_order = api_is_western_name_order();

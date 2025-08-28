@@ -125,7 +125,7 @@ class LearningCalendarPlugin extends Plugin
 
         $extraField = new ExtraField('lp_item');
         $params = [
-            'display_text' => $this->get_lang('Learning calendarOneDayMarker'),
+            'display_text' => $this->get_lang('Learning calendar one day marker'),
             'variable' => 'calendar',
             'visible_to_self' => 1,
             'changeable' => 1,
@@ -834,8 +834,8 @@ class LearningCalendarPlugin extends Plugin
 
         if (!empty($controlList)) {
             $listToString = json_encode($controlList);
-            $date = $this->get_lang('Date');
-            $controlPoint = $this->get_lang('NumberOfDays');
+            $date = get_lang('Date');
+            $controlPoint = get_lang('Number of days');
 
             $html .= '<div id="control_point_chart"></div>';
             $html .= '<script>

@@ -8,11 +8,22 @@
   >
     <div class="space-y-4">
       <div class="bg-gray-100 p-3 rounded">
-        <h4 class="font-bold text-md">{{ props.item.title }}</h4>
+        <h4 class="font-bold text-md">{{ props.item.publicationParent?.title || t("Original assignment") }}</h4>
         <div
           class="text-sm text-gray-700 prose max-w-none"
-          v-html="props.item.description"
-        ></div>
+          v-html="props.item.publicationParent?.description"
+        />
+      </div>
+
+      <div
+        v-if="flags.allowText && props.item.description"
+        class="bg-white border p-3 rounded"
+      >
+        <h5 class="font-semibold text-sm">{{ t("Student's submission") }}</h5>
+        <div
+          class="text-sm text-gray-800 whitespace-pre-wrap"
+          v-text="props.item.description"
+        />
       </div>
 
       <Textarea
@@ -35,7 +46,7 @@
             step="0.1"
           />
           <template v-if="maxQualification">
-            <span class="text-xs text-gray-600"> {{ t("Max grade") }}: {{ maxQualification }} </span>
+            <span class="text-xs text-gray-600"> {{ t("Max score") }}: {{ maxQualification }} </span>
           </template>
         </template>
 
@@ -56,6 +67,7 @@
 
       <div class="flex items-center gap-2">
         <BaseCheckbox
+          v-if="props.flags.allowText"
           id="sendmail"
           v-model="sendMail"
           :label="t('Send mail to student')"
@@ -81,32 +93,32 @@
       class="mt-6 border-t pt-4 space-y-4 max-h-[300px] overflow-auto"
     >
       <div
-        v-for="comment in comments"
-        :key="comment['@id']"
+        v-for="commentItem in comments"
+        :key="commentItem['@id']"
         class="bg-gray-10 border rounded p-3 space-y-2"
       >
         <div class="flex justify-between items-center">
           <span class="font-semibold text-sm">
-            {{ comment.user?.fullName || comment.user?.fullname || "Unknown User" }}
+            {{ commentItem.user?.fullName || commentItem.user?.fullname || "Unknown User" }}
           </span>
           <span class="text-gray-50 text-xs">
-            {{ formatDate(comment.sentAt) }}
+            {{ relativeDatetime(commentItem.sentAt) }}
           </span>
         </div>
         <p class="text-gray-90 whitespace-pre-line text-sm">
-          {{ comment.comment }}
+          {{ commentItem.comment }}
         </p>
         <div
-          v-if="comment.file && comment.downloadUrl"
+          v-if="commentItem.file && commentItem.downloadUrl"
           class="flex items-center gap-1 text-sm"
         >
           <i class="pi pi-paperclip text-gray-50"></i>
           <a
-            :href="comment.downloadUrl"
+            :href="commentItem.downloadUrl"
             target="_blank"
             class="text-blue-50 underline break-all"
           >
-            {{ comment.file }}
+            {{ commentItem.file }}
           </a>
         </div>
       </div>
@@ -115,9 +127,10 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { ref, watch, computed } from "vue"
 import { useNotification } from "../../composables/notification"
 import { useI18n } from "vue-i18n"
+import { useFormatDate } from "../../composables/formatDate"
 import Textarea from "primevue/textarea"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
@@ -129,28 +142,31 @@ import { useSecurityStore } from "../../store/securityStore"
 const props = defineProps({
   modelValue: Boolean,
   item: Object,
+  flags: {
+    type: Object,
+    default: () => ({ allowText: true }),
+  },
 })
 
 const emit = defineEmits(["update:modelValue", "commentSent"])
 
+const { t } = useI18n()
+const notification = useNotification()
 const visible = ref(false)
 const comment = ref("")
 const sendMail = ref(false)
 const selectedFile = ref(null)
-const { t } = useI18n()
-const notification = useNotification()
 const qualification = ref(null)
+const submitting = ref(false)
 const route = useRoute()
 const parentResourceNodeId = parseInt(route.params.node)
 const securityStore = useSecurityStore()
 const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
 const isStudentView = route.query.isStudentView === "true"
 const forceStudentView = !isEditor || isStudentView
-const maxQualification = computed(() =>
-  props.item?.publicationParent?.qualification ?? null
-)
-const submitting = ref(false)
 
+const { relativeDatetime } = useFormatDate()
+const comments = ref([])
 watch(
   () => props.modelValue,
   async (newVal) => {
@@ -165,18 +181,7 @@ watch(
   },
 )
 
-const comments = ref([])
-
-function formatDate(dateStr) {
-  if (!dateStr) return ""
-  const now = new Date()
-  const date = new Date(dateStr)
-  const diffMs = date - now
-  const diffMinutes = Math.round(diffMs / 60000)
-
-  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" })
-  return rtf.format(diffMinutes, "minute")
-}
+const maxQualification = computed(() => props.item?.publicationParent?.qualification ?? null)
 
 function onHide() {
   emit("update:modelValue", false)
@@ -194,9 +199,8 @@ async function submit() {
   if (submitting.value) return
   submitting.value = true
 
-  const trimmedComment = comment.value.trim()
-
-  const hasComment = trimmedComment.length > 0
+  const trimmed = comment.value.trim()
+  const hasComment = trimmed.length > 0
   const hasFile = !!selectedFile.value
   const hasQualificationChange = qualification.value !== props.item.qualification
 
@@ -212,8 +216,8 @@ async function submit() {
       notification.showSuccessNotification(t("Score updated successfully"))
       emit("commentSent")
       close()
-    } catch (error) {
-      notification.showErrorNotification(error)
+    } catch (e) {
+      notification.showErrorNotification(e)
     } finally {
       submitting.value = false
     }
@@ -230,7 +234,7 @@ async function submit() {
     }
 
     if (hasComment) {
-      formData.append("comment", trimmedComment)
+      formData.append("comment", trimmed)
     }
 
     await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, sendMail.value)
@@ -240,8 +244,8 @@ async function submit() {
     comment.value = ""
     selectedFile.value = null
     emit("commentSent")
-  } catch (error) {
-    notification.showErrorNotification(error)
+  } catch (e) {
+    notification.showErrorNotification(e)
   } finally {
     submitting.value = false
   }

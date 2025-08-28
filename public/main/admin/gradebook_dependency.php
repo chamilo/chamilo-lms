@@ -47,7 +47,7 @@ $toolbar = Display::url(
 
 if (empty($dependencies)) {
     Display::addFlash(
-        Display::return_message(get_lang('ThisAssessmentsDoesntHaveDependencies'))
+        Display::return_message(get_lang('This gradebook has no dependency'))
     );
 }
 

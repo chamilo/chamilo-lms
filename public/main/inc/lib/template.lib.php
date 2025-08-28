@@ -932,12 +932,12 @@ class Template
         $form->addHidden('acceptCookies', '1');
         $form->addHtml(
             '<div class="cookieUsageValidation">
-                '.get_lang('YouAcceptCookies').'
+                '.get_lang('By continuing to use this site, you declare you accept its use of cookies.').'
                 <button class="btn btn-link" onclick="$(this).next().toggle(\'slow\'); $(this).toggle(\'slow\')" type="button">
                     ('.get_lang('More').')
                 </button>
                 <div style="display:none; margin:20px 0;">
-                    '.get_lang('HelpCookieUsageValidation').'
+                    '.get_lang("In order for this site to work and be able to measure the use of content, this platform uses cookies.<br /><br />\nIf needed, the Help section of your browser indicates how to configure cookies.<br /><br />\nFor more information on cookies, you can visit the <a href=\"http://www.aboutcookies.org/\">About Cookies</a> website.").'
                 </div>
                 <button class="btn btn-link" onclick="$(this).parents(\'form\').submit()" type="button">
                     ('.get_lang('Accept').')

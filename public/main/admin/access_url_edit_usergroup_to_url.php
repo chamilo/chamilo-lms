@@ -68,7 +68,7 @@ Display::display_header($tool_name);
 
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(
@@ -131,7 +131,7 @@ Display::page_subheader2($tool_name);
                 type="text"
                 id="originFilter"
                 onkeyup="filterSelect('originFilter', 'origin_users')"
-                placeholder="<?php echo get_lang('Search group'); ?>"
+                placeholder="<?php echo get_lang('Search groups'); ?>"
                 class="mb-2 w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
             />
             <select
@@ -174,7 +174,7 @@ Display::page_subheader2($tool_name);
                 type="text"
                 id="destFilter"
                 onkeyup="filterSelect('destFilter', 'destination_users')"
-                placeholder="<?php echo get_lang('Search group'); ?>"
+                placeholder="<?php echo get_lang('Search groups'); ?>"
                 class="mb-2 w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none"
             />
             <select

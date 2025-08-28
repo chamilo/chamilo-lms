@@ -18,13 +18,13 @@ Session::erase('sr_vertex');
 $httpRequest = HttpRequest::createFromGlobals();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Platform Admin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $type = $httpRequest->query->has('type')
     ? $httpRequest->query->getInt('type', SequenceResource::SESSION_TYPE)
     : $httpRequest->request->getInt('type', SequenceResource::SESSION_TYPE);
 
-$tpl = new Template(get_lang('Resources Sequencing'));
+$tpl = new Template(get_lang('Resources sequencing'));
 $em = Database::getManager();
 $sequenceRepository = $em->getRepository(Sequence::class);
 
@@ -33,7 +33,7 @@ $currentUrl = api_get_self().'?type='.$type;
 $formSequence = new FormValidator('sequence_form', 'post', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
 $formSequence->addText('name', get_lang('Sequence'), true, ['cols-size' => [3, 8, 1]]);
 $formSequence->applyFilter('name', 'html_filter');
-$formSequence->addButtonCreate(get_lang('Add sequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
+$formSequence->addButtonCreate(get_lang('Add new sequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
 
 $em = Database::getManager();
 
@@ -44,7 +44,7 @@ if ($formSequence->validate()) {
     $sequence->setTitle($values['name']);
     $em->persist($sequence);
     $em->flush();
-    Display::addFlash(Display::return_message(get_lang('Saved')));
+    Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$currentUrl);
     exit;
 }
@@ -121,7 +121,7 @@ $form->addSelect(
 );
 
 $form->addButtonCreate(
-    get_lang('Set as requirement'),
+    get_lang('Set as a requirement'),
     'set_requirement',
     false,
     ['class' => 'mt-2']

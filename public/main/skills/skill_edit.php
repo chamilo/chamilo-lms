@@ -31,7 +31,7 @@ $skillInfo = $objSkill->getSkillInfo($skillId);
 
 $em = Database::getManager();
 $skill = $em->find(Skill::class, $skillId);
-$skill->setLocale(Container::getParameter('locale'));
+$skill->setTranslatableLocale(Container::getParameter('locale'));
 $em->refresh($skill);
 
 if (empty($skillInfo)) {

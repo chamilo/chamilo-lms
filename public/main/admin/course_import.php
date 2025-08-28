@@ -180,6 +180,10 @@ $tool_name = get_lang('Import courses list').' CSV';
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
+$csvCustomError = '';
+$topStaticErrorHtml = '';
+$delimiterError = false;
+$errors = [];
 Display::display_header($tool_name);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -194,16 +198,24 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
             echo Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error');
         } else {
-            $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
-
-            $errors = validate_courses_data($courses);
-            if (0 == count($errors)) {
-                save_courses_data($courses);
+            $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+            if (true !== $check) {
+                $csvCustomError = $check;
+                $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+                $delimiterError = true;
+            } else {
+                $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
+                $errors = validate_courses_data($courses);
+                if (0 == count($errors)) {
+                    save_courses_data($courses);
+                }
             }
         }
     }
 }
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 if (isset($errors) && 0 != count($errors)) {
     $error_message = '<ul>';
     foreach ($errors as $index => $error_course) {
@@ -231,13 +243,13 @@ $form->display();
 
 $content = '
 <div style="clear: both;"></div>
-<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <b>bold</b> are mandatory.').') :</p>
+<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote>
 <pre>
-<b>Code</b>;<b>Title</b>;<b>CourseCategory</b>;<b>CourseCategoryName</b>;Teacher;Language
-BIO0015;Biology;BIO;Science;teacher1;english
-BIO0016;Maths;MATH;Engineerng;teacher2|teacher3;english
-BIO0017;Language;LANG;;;english
+<b>Code</b>,<b>Title</b>,<b>CourseCategory</b>,<b>CourseCategoryName</b>,Teacher,Language
+BIO0015,Biology,BIO,Science,teacher1,english
+BIO0016,Maths,MATH,Engineerng,teacher2|teacher3,english
+BIO0017,Language,LANG,, ,english
 </pre>
 </blockquote>';
 echo Display::prose($content);

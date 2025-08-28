@@ -237,9 +237,9 @@ class IndexManager
 
         if ($allow) {
             $items[] = [
-                'icon' => Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('StudentPublications')),
+                'icon' => Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments')),
                 'link' => api_get_path(WEB_CODE_PATH).'work/publications.php',
-                'title' => get_lang('MyStudentPublications'),
+                'title' => get_lang('My assignments'),
             ];
         }
 
@@ -842,7 +842,7 @@ class IndexManager
         if ($isHrm) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
-                'title' => get_lang('HrmAssignedUsersCourse list'),
+                'title' => get_lang('Human Resources Manager assigned users course list'),
             ];
         }
 

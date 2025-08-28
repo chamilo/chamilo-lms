@@ -11,7 +11,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;
 
-$nameTools = get_lang('Backup and import and import');
+$nameTools = get_lang('Backup and import');
 api_protect_course_script(true);
 api_block_anonymous_users();
 
@@ -26,28 +26,28 @@ echo Display::page_header($nameTools);
 ?>
 
 <div class="sectiontitle">
-    <?php echo Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, get_lang('Backup and import and import')); ?>&nbsp;&nbsp;
-    <?php echo get_lang('Backup and import and import'); ?>
+    <?php echo Display::getMdiIcon(ActionIcon::IMPORT_ARCHIVE, get_lang('Backup and import')); ?>&nbsp;&nbsp;
+    <?php echo get_lang('Backup and import'); ?>
 </div>
 <div class="sectioncomment">
     <ul>
         <li>
             <a href="../course_copy/create_backup.php?<?php echo api_get_cidreq(); ?>">
-                <?php echo get_lang('Create a backup and import and import'); ?>
+                <?php echo get_lang('Create a backup'); ?>
             </a><br/>
-            <?php echo get_lang('Create a backup and import and importInfo'); ?>
+            <?php echo get_lang('Create a backup. You can select the learning objects to integrate in the backup file.'); ?>
         </li>
         <li>
             <a href="../course_copy/import_backup.php?<?php echo api_get_cidreq(); ?>">
-                <?php echo get_lang('Import backup and import and import'); ?>
+                <?php echo get_lang('Import backup'); ?>
             </a><br/>
-            <?php echo get_lang('Import backup and import and importInfo'); ?>
+            <?php echo get_lang('Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server.'); ?>
         </li>
         <li>
             <a href="../course_copy/import_moodle.php?<?php echo api_get_cidreq(); ?>">
                 <?php echo get_lang('Import from Moodle'); ?>
             </a><br/>
-            <?php echo get_lang('Import from MoodleInfo'); ?>
+            <?php echo get_lang('Import a Moodle course backup file (.mbz) into this Chamilo course'); ?>
         </li>
     </ul>
 </div>
@@ -57,7 +57,7 @@ echo Display::page_header($nameTools);
     <a href="../course_copy/copy_course.php?<?php echo api_get_cidreq(); ?>">
         <?php echo get_lang('Copy course'); ?></a>
 </div>
-<div class="sectioncomment"><?php echo get_lang('DescriptionCopy course'); ?>
+<div class="sectioncomment"><?php echo get_lang('Duplicate the course or some learning objects in another course. You need 2 courses to use this feature: an original course and a target course.'); ?>
 </div>
 
 <div class="sectiontitle">

@@ -33,7 +33,7 @@ $languages = $languageRepo->getAllAvailable(true)->getQuery()->getResult();
 $form = new FormValidator('translate', 'POST', $currentUrl);
 $form->addHidden('id', $fieldId);
 
-$extraField->setLocale(Container::getParameter('locale'));
+$extraField->setTranslatableLocale(Container::getParameter('locale'));
 $em->refresh($extraField);
 
 $form->addHeader($extraField->getDisplayText());
@@ -65,7 +65,7 @@ $type = \ExtraField::getExtraFieldTypeFromInt($extraField->getItemType());
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type='.$type,
-    'name' => get_lang('Fields'),
+    'name' => get_lang('Extra fields'),
 ];
 
 $interbreadcrumb[] = [
@@ -94,7 +94,7 @@ if ($form->validate()) {
     api_location($currentUrl);
 }
 
-$tpl = new Template(get_lang('Translations'));
+$tpl = new Template(get_lang('Translation'));
 $tpl->assign('form', $form->returnForm());
 $template = $tpl->get_template('extrafield/translate.html.twig');
 $content = $tpl->fetch($template);

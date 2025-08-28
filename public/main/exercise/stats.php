@@ -272,7 +272,7 @@ if ($exportPdf) {
     $fileName = get_lang('Report').'_'.api_get_course_id().'_'.api_get_local_time();
     $params = [
         'filename' => $fileName,
-        'pdf_title' => $objExercise->selectTitle(true).'<br>'.get_lang('ReportByQuestion'),
+        'pdf_title' => $objExercise->selectTitle(true).'<br>'.get_lang('Report by question'),
         'pdf_description' => get_lang('Report'),
         'format' => 'A4',
         'orientation' => 'P',
@@ -296,7 +296,7 @@ $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_ci
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list'))
     .'</a>';
 $actions .= Display::url(
-    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ExportToPDF')),
+    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
     'stats.php?exerciseId='.$exerciseId.'&export_pdf=1&'.api_get_cidreq()
 );
 $actions = Display::toolbarAction('exercise_report', [$actions]);

@@ -41,7 +41,7 @@ $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 
 $form->addRule(
     ['start_date', 'end_date'],
-    get_lang('Start DateShouldBeBeforeEnd Date'),
+    get_lang('The first date should be before the end date'),
     'date_compare',
     'lte'
 );

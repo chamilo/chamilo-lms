@@ -182,8 +182,8 @@ if ($allowDocumentGroupAccess) {
     $form->addGroup(
         $group,
         '',
-        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DocumentsAccess')
-        ).'<span>'.get_lang('DocumentsAccess').'</span>',
+        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Document access')
+        ).'<span>'.get_lang('Document access').'</span>',
         null,
         false
     );

@@ -572,14 +572,14 @@ class Compilatio
                     break;
                 case 'ANALYSE_PROCESSING':
                     $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
-                        .get_lang('AnalyseInProgress')
+                        .get_lang('Compilatio analysis in progress')
                         ."</div>";
                     $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
-                        .get_lang('AnalysePercentage')
+                        .get_lang('(Percentage of file analysis)')
                         ."</div>";
                     $text = [];
                     $text['analysisinqueue'] = get_lang('Pending Analysis');
-                    $text['analysisinfinalization'] = get_lang('AnalyseEnding');
+                    $text['analysisinfinalization'] = get_lang('Analysis ending...');
                     $text['refresh'] = get_lang('Refresh');
                     $actionCompilatio .= self::getProgressionAnalyseDocv31(
                         $status,

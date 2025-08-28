@@ -159,7 +159,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
             if ($show_output) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('The file upload has failed.SizeIsZero'),
+                        get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
                         'error'
                     )
                 );
@@ -693,4 +693,21 @@ function create_unexisting_directory(
     }
 
     return false;
+}
+
+function processChunkedFile(array $file): array
+{
+    if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+        // to rename and move the finished file
+        $tmpFile = disable_dangerous_file(
+            api_replace_dangerous_char($file['name'])
+        );
+
+        $chunkedFile = api_get_path(SYS_ARCHIVE_PATH).$tmpFile;
+        $file['tmp_name'] = $chunkedFile;
+        $file['size'] = filesize($chunkedFile);
+        $file['copy_file'] = true;
+    }
+
+    return $file;
 }

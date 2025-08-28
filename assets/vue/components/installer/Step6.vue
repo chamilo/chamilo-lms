@@ -362,7 +362,7 @@
     <div class="formgroup-inline">
       <div class="field">
         <Button
-          :label="t('Contact Support')"
+          :label="t('Contact support')"
           class="p-button-danger mt-4"
           type="button"
           @click="btnSupportOnClick"

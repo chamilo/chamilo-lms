@@ -101,7 +101,7 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('Profiling')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
     if ('true' !== api_get_setting('profile.disable_gdpr')) {
-        $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consents list')];
+        $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consent list')];
     }
     if ('true' === api_get_setting('admin.show_link_request_hrm_user')) {
         $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('Student linking requests')];
@@ -176,7 +176,7 @@ if (api_is_platform_admin()) {
 
     $items[] = ['url' => 'course_export.php', 'label' => get_lang('Export courses')];
     $items[] = ['url' => 'course_import.php', 'label' => get_lang('Import courses list')];
-    $items[] = ['url' => 'course_category.php', 'label' => get_lang('Courses categories')];
+    $items[] = ['url' => 'course_category.php', 'label' => get_lang('Course categories')];
     $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('Add a user to a course')];
     $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('Import users list')];
 
@@ -207,7 +207,7 @@ if (api_is_platform_admin()) {
         get_lang('Sessions management')
     );
     $blocks['sessions']['label'] = get_lang('Sessions management');
-    $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions.');
+    $blocks['sessions']['description'] = get_lang('Create course packages for a certain time with training sessions');
     $blocks['sessions']['class'] = 'block-admin-sessions';
 
     if (api_is_platform_admin()) {
@@ -280,7 +280,7 @@ if (api_is_platform_admin()) {
             ICON_SIZE_MEDIUM,
             get_lang('Skills')
         );
-        $blocks['skills']['label'] = get_lang('Skills and gradebook');
+        $blocks['skills']['label'] = get_lang('Skills and gradebooks');
         $blocks['skills']['description'] = get_lang('Manage the skills of your users, through courses and badges');
         $blocks['skills']['class'] = 'block-admin-skills';
 
@@ -318,7 +318,7 @@ if (api_is_platform_admin()) {
         if (!$allow) {
             $items[] = [
                 'url' => 'gradebook_list.php',
-                'label' => get_lang('List of qualifications'),
+                'label' => get_lang('Gradebooks'),
             ];
         }
         $blocks['skills']['items'] = $items;
@@ -404,7 +404,7 @@ if (api_is_platform_admin()) {
         $items[] = ['url' => 'legal_add.php', 'label' => get_lang('Terms and Conditions')];
     }
 
-    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools')];
+    $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools (LTI)')];
 
     $blocks['platform']['items'] = $items;
     $blocks['platform']['extra'] = null;
@@ -436,7 +436,7 @@ if (api_is_platform_admin()) {
     ];
     /*$items[] = [
         'url' => 'periodic_export.php',
-        'label' => get_lang('PeriodicExport'),
+        'label' => get_lang('Periodic export'),
     ];*/
     $items[] = [
         'url' => 'system_status.php',
@@ -569,7 +569,7 @@ if (api_is_platform_admin()) {
         ICON_SIZE_MEDIUM,
         'Chamilo.org'
     );
-    $blocks['version_check']['label'] = get_lang('Version Check');
+    $blocks['version_check']['label'] = get_lang('Version check');
     $blocks['version_check']['extra'] = '<div class="admin-block-version"></div>';
     $blocks['version_check']['search_form'] = null;
     $blocks['version_check']['items'] = '<div class="block-admin-version_check"></div>';

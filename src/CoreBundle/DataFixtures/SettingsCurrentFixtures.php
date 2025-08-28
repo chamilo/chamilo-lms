@@ -3068,6 +3068,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Send email notification to admin when a user is created.',
                 ],
                 [
+                    'name' => 'show_conditions_to_user',
+                    'title' => 'Show specific registration conditions',
+                    'comment' => "Show multiple conditions to user during sign up process. Provide an array with each element containing 'variable' (internal extra field name), 'display_text' (simple text for a checkbox), 'text_area' (long text of conditions).",
+                ],
+                [
                     'name' => 'user_import_settings',
                     'title' => 'Options for user import',
                     'comment' => 'Array of options to apply as default parameters in the CSV/XML user import.',

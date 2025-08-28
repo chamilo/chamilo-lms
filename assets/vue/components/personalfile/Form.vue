@@ -53,7 +53,7 @@ export default {
       has(this.violations, "title") && errors.push(this.violations.title)
 
       if (this.v$.item.title.required) {
-        return this.$t("Field is required")
+        return this.$t("Required field")
       }
 
       return errors

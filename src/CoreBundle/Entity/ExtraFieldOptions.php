@@ -131,12 +131,7 @@ class ExtraFieldOptions
         return $this;
     }
 
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    public function setLocale(string $locale): self
+    public function setTranslatableLocale(string $locale): self
     {
         $this->locale = $locale;
 

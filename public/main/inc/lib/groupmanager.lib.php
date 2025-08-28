@@ -2143,7 +2143,7 @@ class GroupManager
                 if (api_get_configuration_value('extra')) {
                     $group_name2 = '<a
                         href="group_space_tracking.php?'.api_get_cidreq(true, false).'&gid='.$groupId.'">'.
-                        get_lang('suivi_de').''.stripslashes($group->getTitle()).'</a>';
+                        '...'.stripslashes($group->getTitle()).'</a>';
                 }
 
                 /*
@@ -2272,14 +2272,14 @@ class GroupManager
 
                 if ($surveyGroupExists) {
                     $edit_actions .= Display::url(
-                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportSurveyResults')),
+                        Display::getMdiIcon(ToolIcon::SURVEY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export survey results')),
                         $url.'group_overview.php?action=export_surveys&'.api_get_cidreq(true, false).'&id='.$groupId
                     ).'&nbsp;';
                 }
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&group_id='.$groupId.'"
-                    onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('FillGroup').'">'.
-                    Display::getMdiIcon(ActionIcon::FILL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('FillGroup')).'</a>&nbsp;';
+                    onclick="javascript: if(!confirm('."'".$confirmMessage."'".')) return false;" title="'.get_lang('Fill the group randomly with course students').'">'.
+                    Display::getMdiIcon(ActionIcon::FILL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Fill the group randomly with course students')).'</a>&nbsp;';
 
                 $edit_actions .= '<a
                     href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&group_id='.$groupId.'"
@@ -2755,7 +2755,7 @@ class GroupManager
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('Group tutors')
+                get_lang('Coaches')
             ).'</a>',
         ];
 
@@ -2776,7 +2776,7 @@ class GroupManager
         $users = self::getTutors($group);
         if (!empty($users)) {
             $content .= '<ul>';
-            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
+            $content .= "<li>".Display::tag('h4', get_lang('Coaches'))."</li><ul>";
             foreach ($users as $user) {
                 $userInfo = api_get_user_info($user['user_id']);
                 $content .= '<li title="'.$userInfo['username'].'">'.
@@ -2790,7 +2790,7 @@ class GroupManager
         $users = self::getStudents($group['iid']);
         if (!empty($users)) {
             $content .= '<ul>';
-            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
+            $content .= "<li>".Display::tag('h4', get_lang('Learners'))."</li><ul>";
             foreach ($users as $user) {
                 $userInfo = api_get_user_info($user['user_id']);
                 $content .= '<li title="'.$userInfo['username'].'">'.
@@ -2829,7 +2829,7 @@ class GroupManager
         // Check groups with no categories.
         $groups = self::get_group_list(null, $course, null, api_get_session_id(), false, true);
         if (!empty($groups)) {
-            $content .= '<h2>'.get_lang('NoCategorySelected').'</h2>';
+            $content .= '<h2>'.get_lang('No category selected').'</h2>';
             $content .= '<ul>';
             foreach ($groups as $group) {
                 if (!empty($group['category_id'])) {

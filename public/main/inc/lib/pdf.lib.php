@@ -925,7 +925,7 @@ class PDF
 
         $notFoundImagePath = Display::return_icon(
             'closed-circle.png',
-            get_lang('FileNotFound'),
+            get_lang('The file was not found'),
             [],
             ICON_SIZE_TINY,
             false,

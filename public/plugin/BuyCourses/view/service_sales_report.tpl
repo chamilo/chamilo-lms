@@ -11,8 +11,8 @@
            role="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
     </li>
 </ul>
-</br>
-</br>
+<br>
+<br>
 <div class="row">
     <div class="col-md-3 col-sm-12 col-xs-12">
         <h4><b>{{ 'Filter'|get_lang }}</b></h4>

@@ -68,9 +68,10 @@ abstract class Question
         UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
         DRAGGABLE => ['Draggable.php', 'Draggable'],
         MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
-        //MEDIA_QUESTION => array('media_question.class.php' , 'MediaQuestion')
+        MEDIA_QUESTION => ['MediaQuestion.php', 'MediaQuestion'],
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
+        PAGE_BREAK       => ['PageBreakQuestion.php', 'PageBreakQuestion'],
     ];
 
     /**
@@ -210,6 +211,10 @@ abstract class Question
                         }
                     }
                 }
+
+                $objQuestion->parent_id = isset($object->parent_media_id)
+                    ? (int) $object->parent_media_id
+                    : 0;
 
                 return $objQuestion;
             }
@@ -544,7 +549,8 @@ abstract class Question
                     ->setType($this->type)
                     ->setExtra($this->extra)
                     ->setLevel((int) $this->level)
-                    ->setFeedback($this->feedback);
+                    ->setFeedback($this->feedback)
+                    ->setParentMediaId($this->parent_id);
 
                 if (!empty($categoryId)) {
                     $category = $questionCategoryRepo->find($categoryId);
@@ -586,13 +592,9 @@ abstract class Question
                 ->setExtra($this->extra)
                 ->setLevel((int) $this->level)
                 ->setFeedback($this->feedback)
+                ->setParentMediaId($this->parent_id)
                 ->setParent($courseEntity)
-                ->addCourseLink(
-                    $courseEntity,
-                    api_get_session_entity(),
-                    api_get_group_entity()
-                )
-            ;
+                ->addCourseLink($courseEntity, api_get_session_entity(), api_get_group_entity());
 
             $em->persist($question);
             $em->flush();
@@ -843,6 +845,7 @@ abstract class Question
     public function removeFromList($exerciseId, $courseId = 0)
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $id = (int) $this->id;
         $exerciseId = (int) $exerciseId;
 
@@ -880,6 +883,11 @@ abstract class Question
                         question_id = $id AND
                         quiz_id = $exerciseId";
             Database::query($sql);
+
+            $reset = "UPDATE $tableQuestion
+                  SET parent_media_id = NULL
+                  WHERE parent_media_id = $id";
+            Database::query($reset);
 
             return true;
         }
@@ -935,6 +943,11 @@ abstract class Question
                     }
                 }
             }
+
+            $reset = "UPDATE $TBL_QUESTIONS
+                  SET parent_media_id = NULL
+                  WHERE parent_media_id = $id";
+            Database::query($reset);
 
             $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
                     WHERE question_id = ".$id;
@@ -1233,9 +1246,9 @@ abstract class Question
         $form->addHtml('<div id="advanced_params_options" style="display:none">');
 
         if (isset($zoomOptions['options'])) {
-            $form->addElement('text', 'imageZoom', get_lang('ImageURL'));
-            $form->addElement('text', 'imageWidth', get_lang('PixelWidth'));
-            $form->addButton('btn_create_img', get_lang('AddToEditor'), 'plus', 'info', 'small', 'create_img_link');
+            $form->addElement('text', 'imageZoom', get_lang('Image URL'));
+            $form->addElement('text', 'imageWidth', get_lang('px width'));
+            $form->addButton('btn_create_img', get_lang('Add to editor'), 'plus', 'info', 'small', 'create_img_link');
         }
 
         $form->addHtmlEditor(
@@ -1260,10 +1273,18 @@ abstract class Question
                 get_lang('Category'),
                 TestCategory::getCategoriesIdAndName()
             );
+
+            $courseMedias = self::prepare_course_media_select($exercise->iId);
+            $form->addSelect(
+                'parent_id',
+                get_lang('Attach to media'),
+                $courseMedias
+            );
+
             if (EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM == $exercise->getQuestionSelectionType() &&
                 ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'))
             ) {
-                $form->addCheckBox('mandatory', get_lang('IsMandatory'));
+                $form->addCheckBox('mandatory', get_lang('Mandatory?'));
             }
 
             //global $text;
@@ -1310,9 +1331,6 @@ abstract class Question
 
                     break;
             }
-            //Medias
-            //$course_medias = self::prepare_course_media_select(api_get_course_int_id());
-            //$form->addSelect('parent_id', get_lang('Attach to media'), $course_medias);
         }
 
         $form->addElement('html', '</div>');
@@ -1356,13 +1374,15 @@ abstract class Question
         $extraField->addElements($form, $this->iid);
 
         // default values
-        $defaults = [];
-        $defaults['questionName'] = $this->question;
-        $defaults['questionDescription'] = $this->description;
-        $defaults['questionLevel'] = $this->level;
-        $defaults['questionCategory'] = $this->category;
-        $defaults['feedback'] = $this->feedback;
-        $defaults['mandatory'] = $this->mandatory;
+        $defaults = [
+            'questionName'        => $this->question,
+            'questionDescription' => $this->description,
+            'questionLevel'       => $this->level,
+            'questionCategory'    => $this->category,
+            'feedback'            => $this->feedback,
+            'mandatory'           => $this->mandatory,
+            'parent_id'           => $this->parent_id,
+        ];
 
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
@@ -1387,6 +1407,7 @@ abstract class Question
      */
     public function processCreation(FormValidator $form, Exercise $exercise)
     {
+        $this->parent_id = (int) $form->getSubmitValue('parent_id');
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));
         $this->updateLevel($form->getSubmitValue('questionLevel'));
@@ -1619,7 +1640,7 @@ abstract class Question
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
                 if (true == $score['revised']) {
-                    $scoreLabel = get_lang('Revised');
+                    $scoreLabel = get_lang('Reviewed');
                     $class = '';
                 } else {
                     $scoreLabel = get_lang('Not reviewed');
@@ -1727,7 +1748,7 @@ abstract class Question
         }
 
         if ($exercise->hideComment && HOT_SPOT == $this->type) {
-            $header .= Display::return_message(get_lang('ResultsOnlyAvailableOnline'));
+            $header .= Display::return_message(get_lang('Results only available online'));
 
             return $header;
         }
@@ -1896,19 +1917,35 @@ abstract class Question
      *
      * @return array
      */
-    public static function prepare_course_media_select($course_id)
+    public static function prepare_course_media_select(int $quizId): array
     {
-        $medias = self::get_course_medias($course_id);
-        $media_list = [];
-        $media_list[0] = get_lang('Not linked to media');
+        $tableQuestion     = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tableRelQuestion  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-        if (!empty($medias)) {
-            foreach ($medias as $media) {
-                $media_list[$media['id']] = empty($media['question']) ? get_lang('Untitled') : $media['question'];
-            }
+        $medias = Database::select(
+            '*',
+            "$tableQuestion q
+         JOIN $tableRelQuestion rq ON rq.question_id = q.iid",
+            [
+                'where' => [
+                    'rq.quiz_id = ? AND (q.parent_media_id IS NULL OR q.parent_media_id = 0) AND q.type = ?'
+                    => [$quizId, MEDIA_QUESTION],
+                ],
+                'order' => 'question ASC',
+            ]
+        );
+
+        $mediaList = [
+            0 => get_lang('Not linked to media'),
+        ];
+
+        foreach ($medias as $media) {
+            $mediaList[$media['question_id']] = empty($media['question'])
+                ? get_lang('Untitled')
+                : $media['question'];
         }
 
-        return $media_list;
+        return $mediaList;
     }
 
     /**

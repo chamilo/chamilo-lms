@@ -471,52 +471,52 @@ function display_requirements(
 
     $extensions = [];
     $extensions[] = [
-        'title' => get_lang('Session support'),
+        'title' => sprintf(get_lang('%s support'), 'Session'),
         'url' => 'https://php.net/manual/en/book.session.php',
         'status' => checkExtension(
             'session',
             get_lang('Yes'),
-            get_lang('Sessions extension not available')
+            sprintf(get_lang('%s extension not available'), 'Sessions')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('MySQL Functions support'),
+        'title' => sprintf(get_lang('%s support'), 'MySQL'),
         'url' => 'https://php.net/manual/en/book.mysql.php',
         'status' => checkExtension(
             'pdo_mysql',
             get_lang('Yes'),
-            get_lang('MySQL extension not available')
+            sprintf(get_lang('%s extension not available'), 'MySQL')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Zip support'),
+        'title' => sprintf(get_lang('%s support'), 'Zip'),
         'url' => 'https://php.net/manual/en/book.zip.php',
         'status' => checkExtension(
             'zip',
             get_lang('Yes'),
-            get_lang('Extension not available')
+            sprintf(get_lang('%s extension not available'), 'Zip')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Zlib support'),
+        'title' => sprintf(get_lang('%s support'), 'Zlib'),
         'url' => 'https://php.net/manual/en/book.zlib.php',
         'status' => checkExtension(
             'zlib',
             get_lang('Yes'),
-            get_lang('Zlib extension not available')
+            sprintf(get_lang('%s extension not available'), 'Zlib')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Perl-compatible regular expressions support'),
+        'title' => sprintf(get_lang('%s support'), 'Perl-compatible regular expressions'),
         'url' => 'https://php.net/manual/en/book.pcre.php',
         'status' => checkExtension(
             'pcre',
             get_lang('Yes'),
-            get_lang('PCRE extension not available')
+            sprintf(get_lang('%s extension not available'), 'PCRE')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('XML support'),
+        'title' => sprintf(get_lang('%s support'), 'XML'),
         'url' => 'https://php.net/manual/en/book.xml.php',
         'status' => checkExtension(
             'xml',
@@ -525,7 +525,7 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Internationalization support'),
+        'title' => sprintf(get_lang('%s support'), 'Internationalisation'),
         'url' => 'https://php.net/manual/en/book.intl.php',
         'status' => checkExtension(
             'intl',
@@ -534,7 +534,7 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('JSON support'),
+        'title' => sprintf(get_lang('%s support'), 'JSON'),
         'url' => 'https://php.net/manual/en/book.json.php',
         'status' => checkExtension(
             'json',
@@ -543,16 +543,16 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('GD support'),
+        'title' => sprintf(get_lang('%s support'), 'GD'),
         'url' => 'https://php.net/manual/en/book.image.php',
         'status' => checkExtension(
             'gd',
             get_lang('Yes'),
-            get_lang('GD Extension not available')
+            sprintf(get_lang('%s extension not available'), 'GD')
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('cURL support'),
+        'title' => sprintf(get_lang('%s support'), 'cURL'),
         'url' => 'https://php.net/manual/en/book.curl.php',
         'status' => checkExtension(
             'curl',
@@ -561,27 +561,27 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Multibyte string support'),
+        'title' => sprintf(get_lang('%s support'), 'Multibyte string'),
         'url' => 'https://php.net/manual/en/book.mbstring.php',
         'status' => checkExtension(
             'mbstring',
             get_lang('Yes'),
-            get_lang('MBString extension not available'),
+            sprintf(get_lang('%s extension not available'), 'MBString'),
             true
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Exif support'),
+        'title' => sprintf(get_lang('%s support'), 'Exif'),
         'url' => 'https://php.net/manual/en/book.exif.php',
         'status' => checkExtension(
             'exif',
             get_lang('Yes'),
-            get_lang('Exif extension not available'),
+            sprintf(get_lang('%s extension not available'), 'Exif'),
             true
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Zend OpCache support'),
+        'title' => sprintf(get_lang('%s support'), 'Zend OpCache'),
         'url' => 'https://php.net/opcache',
         'status' => checkExtension(
             'Zend OPcache',
@@ -592,7 +592,7 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('APCu support'),
+        'title' => sprintf(get_lang('%s support'), 'APCu'),
         'url' => 'https://php.net/apcu',
         'status' => checkExtension(
             'apcu',
@@ -603,7 +603,7 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Iconv support'),
+        'title' => sprintf(get_lang('%s support'), 'Iconv'),
         'url' => 'https://php.net/manual/en/book.iconv.php',
         'status' => checkExtension(
             'iconv',
@@ -613,17 +613,17 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('LDAP support'),
+        'title' => sprintf(get_lang('%s support'), 'LDAP'),
         'url' => 'https://php.net/manual/en/book.ldap.php',
         'status' => checkExtension(
             'ldap',
             get_lang('Yes'),
-            get_lang('LDAP Extension not available'),
+            sprintf(get_lang('%s extension not available'), 'LDAP'),
             true
         ),
     ];
     $extensions[] = [
-        'title' => get_lang('Xapian support'),
+        'title' => sprintf(get_lang('%s support'), 'Xapian'),
         'url' => 'https://xapian.org/',
         'status' => checkExtension(
             'xapian',

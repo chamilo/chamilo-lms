@@ -9,17 +9,20 @@ export default {
       name: "CCalendarEventShow",
       path: "show",
       component: () => import("../views/ccalendarevent/CCalendarEventShow.vue"),
+      meta: { breadcrumb: "Event" },
     },
     {
       name: "CCalendarEventCreate",
       path: "new",
       component: () => import("../views/ccalendarevent/CCalendarEventCreate.vue"),
+      meta: { breadcrumb: "Add event" },
     },
     {
       name: "CCalendarEventList",
       path: "",
       component: () => import("../views/ccalendarevent/CCalendarEventList.vue"),
       props: (route) => ({ type: route.query.type }),
+      meta: { breadcrumb: "" },
     },
   ],
 }

@@ -1,14 +1,14 @@
 <template>
-  <SectionHeader :title="t('Layout Templates')">
+  <SectionHeader :title="t('Layout templates')">
     <div class="flex gap-4">
       <BaseButton
-        :label="t('Create Template')"
+        :label="t('Create template')"
         icon="file-add"
         type="success"
         @click="goToCreate"
       />
       <BaseButton
-        :label="t('Back to Layouts')"
+        :label="t('Back to layouts')"
         icon="arrow-left"
         type="secondary"
         @click="goToLayouts"
@@ -86,7 +86,7 @@
   <!-- Dialog to show JSON -->
   <BaseDialogConfirmCancel
     v-model:is-visible="isJsonDialogVisible"
-    :title="t('Layout JSON Details')"
+    :title="t('Layout JSON details')"
     hide-cancel
     confirm-label="Copy JSON"
     @confirm-clicked="copyJsonToClipboard"
@@ -98,7 +98,7 @@
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isDeleteDialogVisible"
-    :title="t('Confirm Deletion')"
+    :title="t('Confirm deletion')"
     @confirm-clicked="deleteTemplate"
     @cancel-clicked="isDeleteDialogVisible = false"
   >

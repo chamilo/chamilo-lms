@@ -17,7 +17,7 @@ $form->addElement(
     'submit',
     get_lang('Unsubscribe'),
     [
-        'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.Confirm")))."')) return false;",
+        'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.")))."')) return false;",
     ]
 );
 $content = $form->returnForm();
@@ -27,10 +27,7 @@ if ($form->validate()) {
     $result = UserManager::delete_user($user_info['user_id']);
     if ($result) {
         $message = Display::return_message(
-            sprintf(
-                get_lang('If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.Success'),
-                $user_info['username']
-            )
+                get_lang('If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.')
         );
         $content = null;
         online_logout($user_info['user_id'], false);

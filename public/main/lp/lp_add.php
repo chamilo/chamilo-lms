@@ -36,12 +36,25 @@ function activate_end_date() {
 
 /* Constants and variables */
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$isStudentView = $_REQUEST['isStudentView'] ?? null;
-$lpId = $_REQUEST['lp_id'] ?? null;
+$is_allowed_to_edit = api_is_allowed_to_create_course();
+$isStudentView = filter_var($_REQUEST['isStudentView'] ?? 'false', FILTER_VALIDATE_BOOLEAN);
+$lpId = (int)($_REQUEST['lp_id'] ?? 0);
 
-if ((!$is_allowed_to_edit) || $isStudentView) {
-    header('location:lp_controller.php?action=view&lp_id='.$lpId.'&'.api_get_cidreq());
+if (!$is_allowed_to_edit || $isStudentView) {
+    $course = api_get_course_entity(api_get_course_int_id());
+    $nodeId = method_exists($course,'getResourceNode') && $course->getResourceNode()
+        ? (int)$course->getResourceNode()->getId()
+        : 0;
+
+    $cid = (int)($_REQUEST['cid'] ?? api_get_course_int_id());
+    $sid = (int)($_REQUEST['sid'] ?? api_get_session_id());
+    $qs = ['cid' => $cid, 'isStudentView' => 'true'];
+    if ($sid > 0) $qs['sid'] = $sid;
+    if (isset($_REQUEST['gid']))       $qs['gid'] = (int)$_REQUEST['gid'];
+    if (isset($_REQUEST['gradebook'])) $qs['gradebook'] = (int)$_REQUEST['gradebook'];
+
+    $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
+    header('Location: '.$listUrl);
     exit;
 }
 
@@ -219,7 +232,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Create new learning path'), 'Path');
 
 $actions = '<a href="lp_controller.php?'.api_get_cidreq().'">'.
-    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', '', 32, get_lang('Return to learning paths'))
+    Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', '', 32, get_lang('Back to learning paths'))
     .'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 

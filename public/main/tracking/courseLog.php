@@ -118,7 +118,7 @@ $columnsToHide = json_encode($columnsToHide);
 $csv_content = [];
 $visibleIcon = Display::return_icon(
     'visible.png',
-    get_lang('HideColumn'),
+    get_lang('Hide column'),
     ['align' => 'absmiddle', 'hspace' => '3px']
 );
 
@@ -379,7 +379,7 @@ $class = new UserGroupModel();
 //$classes = $class->getUserGroupInCourse($options);
 $classes = $class->get_all();
 
-$bestScoreLabel = get_lang('Score').' - '.get_lang('BestAttempt');
+$bestScoreLabel = get_lang('Score').' - '.get_lang('Best attempt');
 
 // Show the charts part only if there are students subscribed to this course/session
 if ($nbStudents > 0 || isset($parameters['user_active'])) {
@@ -584,7 +584,7 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     }
 }
 
-$html .= Display::page_subheader2(get_lang('Learners list'));
+$html .= Display::page_subheader2(get_lang('Learner list'));
 
 $bestScoreLabel = get_lang('Score').' - '.get_lang('Only best attempts');
 if ($nbStudents > 0) {
@@ -749,7 +749,7 @@ if ($nbStudents > 0) {
             $exercise = new Exercise();
             $exercise->read($exerciseId);
             if ($exercise->iId) {
-                $title = get_lang('Exercise').': '.$exercise->get_formated_title();
+                $title = get_lang('Test').': '.$exercise->get_formated_title();
                 $table->set_header(
                     $headerCounter++,
                     $title,
@@ -762,7 +762,7 @@ if ($nbStudents > 0) {
     }
 
     $table->set_header($headerCounter++, get_lang('Assignments'), false);
-    $headers['student_publication'] = get_lang('Assignment');
+    $headers['student_publication'] = get_lang('Assignments');
     $table->set_header($headerCounter++, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
     $table->set_header($headerCounter++, get_lang('Classes'));
@@ -779,15 +779,15 @@ if ($nbStudents > 0) {
     $headers['first_login'] = get_lang('First access to course');
     $table->set_header($headerCounter++, get_lang('Latest access in course'), false);
     $headers['latest_login'] = get_lang('Latest access in course');
-    $table->set_header($headerCounter++, get_lang('Lp Finalization Date'), false);
-    $headers['lp_finalization_date'] = get_lang('Lp Finalization Date');
-    $table->set_header($headerCounter++, get_lang('Quiz Finalization Date'), false);
-    $headers['quiz_finalization_date'] = get_lang('Quiz Finalization Date');
+    $table->set_header($headerCounter++, get_lang("Last lp's finalization date"), false);
+    $headers['lp_finalization_date'] = get_lang("Last lp's finalization date");
+    $table->set_header($headerCounter++, get_lang('Last quiz finalization date'), false);
+    $headers['quiz_finalization_date'] = get_lang('Last quiz finalization date');
 
     $counter = $headerCounter;
     if ('true' === api_get_setting('show_email_addresses')) {
-        $table->set_header($counter, get_lang('Email'), false);
-        $headers['email'] = get_lang('Email');
+        $table->set_header($counter, get_lang('E-mail'), false);
+        $headers['email'] = get_lang('E-mail');
         $counter++;
     }
     if (isset($_GET['additional_profile_field'])) {
@@ -1086,19 +1086,19 @@ if ($export_csv) {
             $csv_headers[] = $exerciseLabel;
         }
     }
-    $csv_headers[] = get_lang('Student_publication');
+    $csv_headers[] = get_lang('Assignments');
     $csv_headers[] = get_lang('Messages');
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
     } else {
-        $csv_headers[] = get_lang('RegistrationDate');
+        $csv_headers[] = get_lang('Registration date');
     }
 
     $csv_headers[] = get_lang('First access to course');
     $csv_headers[] = get_lang('Latest access in course');
-    $csv_headers[] = get_lang('Lp Finalization Date');
-    $csv_headers[] = get_lang('Quiz Finalization Date');
+    $csv_headers[] = get_lang("Last lp's finalization date");
+    $csv_headers[] = get_lang('Last quiz finalization date');
 
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {

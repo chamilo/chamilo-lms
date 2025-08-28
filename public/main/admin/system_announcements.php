@@ -245,13 +245,13 @@ if ($action_todo) {
         $form->addHtml('</div>');
     }
 
-    // Add Picture Announcements
+    // Add Announcement picture (new feature, correct paths and lang vars)
     try {
         /*$form->addFile(
             'picture',
             [
-                get_lang('Add Picture'),
-                get_lang('The image must have a maximum dimension of 950 x 712 pixelss'),
+                get_lang('Add a picture'),
+                get_lang('The image must have a maximum dimension of 950 x 712 pixels'),
             ],
             ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '4/3']
         );

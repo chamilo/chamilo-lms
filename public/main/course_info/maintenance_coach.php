@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Backup and import and import for session coach.
+ * Backup and import for session coach.
  *
  * @author Julio Montoya <julio.montoya@beeznest.com>
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 $this_section = SECTION_COURSES;
 
-$nameTools = get_lang('Backup and import and import');
+$nameTools = get_lang('Backup and import');
 
 api_protect_course_script(true);
 api_block_anonymous_users();
@@ -32,8 +32,8 @@ echo Display::page_subheader(
         'ch-tool-icon',
         null,
         ICON_SIZE_SMALL,
-        get_lang('Backup and import and import')
-    ).'&nbsp;&nbsp;'.get_lang('Backup and import and import')
+        get_lang('Backup and import')
+    ).'&nbsp;&nbsp;'.get_lang('Backup and import')
 );
 
 $url = api_get_path(WEB_CODE_PATH).'course_copy/copy_course_session_selected.php?'.api_get_cidreq();
@@ -44,7 +44,7 @@ $link = Display::url(get_lang('Copy course'), $url);
     <ul>
         <li>
             <?php echo $link; ?><br/>
-            <?php echo get_lang('DescriptionCopy course'); ?>
+            <?php echo get_lang('Duplicate the course or some learning objects in another course. You need 2 courses to use this feature: an original course and a target course.'); ?>
         </li>
     </ul>
 </div>

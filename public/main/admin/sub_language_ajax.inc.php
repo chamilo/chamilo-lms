@@ -17,5 +17,5 @@ if (isset($_POST['content'], $_POST['filename'], $_POST['msgidEncoded'])) {
     $response = SubLanguageManager::updateOrAddMsgid($filename, $msgid, $content);
     echo json_encode($response);
 } else {
-    echo json_encode(["success" => false, "error" => get_lang('POST data missing')]);
+    echo json_encode(["success" => false, "error" => get_lang('Missing POST data')]);
 }

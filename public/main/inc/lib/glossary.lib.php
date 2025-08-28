@@ -511,12 +511,12 @@ class GlossaryManager
         if (!api_is_allowed_to_edit(true, true, true)) {
             if ('ASC' === $orderList) {
                 $actionsLeft .= Display::url(
-                    Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort Descending')),
+                    Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Descending')),
                     $url.'&'.http_build_query(['order' => 'DESC'])
                 );
             } else {
                 $actionsLeft .= Display::url(
-                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sort Ascending')),
+                    Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Ascending')),
                     $url.'&'.http_build_query(['order' => 'ASC'])
                 );
             }
@@ -564,7 +564,7 @@ class GlossaryManager
                 $content .= Display::noDataView(
                     get_lang('Glossary'),
                     Display::getMdiIcon(ObjectIcon::GLOSSARY, 'ch-tool-icon', null, ICON_SIZE_BIG),
-                    get_lang('Add glossary'),
+                    get_lang('Add'),
                     $url.'&'.http_build_query(['action' => 'addglossary'])
                 );
             }

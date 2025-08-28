@@ -188,7 +188,7 @@ if (api_is_western_name_order()) {
     $table->set_header(2, get_lang('Last name'));
     $table->set_header(3, get_lang('First name'));
 }
-$table->set_header(4, get_lang('e-mail'));
+$table->set_header(4, get_lang('E-mail'));
 $table->set_header(5, get_lang('Detail'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');

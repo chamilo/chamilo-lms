@@ -128,7 +128,7 @@ class DashboardController
             $enabled_blocks = $_POST['enabled_blocks'];
             $columns = $_POST['columns'];
             DashboardManager::store_user_blocks($this->user_id, $enabled_blocks, $columns);
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
         header('Location: '.api_get_path(WEB_CODE_PATH).'Dashboard/index.php');
         exit;
@@ -141,7 +141,7 @@ class DashboardController
     public function close_user_block($path)
     {
         DashboardManager::close_user_block($this->user_id, $path);
-        Display::addFlash(Display::return_message(get_lang('Saved')));
+        Display::addFlash(Display::return_message(get_lang('Saved.')));
         header('Location: '.api_get_path(WEB_CODE_PATH).'Dashboard/index.php');
         exit;
     }

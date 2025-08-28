@@ -505,7 +505,9 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')
 $reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['reload_import']);
 
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
-
+$csv_custom_error = '';
+$topStaticErrorHtml = '';
+$fatalError = false;
 if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
@@ -525,32 +527,35 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && 0 !== $_FILES['import_fil
             $ext_import_file == $allowed_file_mimetype[0]
         ) {
             Session::erase('user_import_data_'.$userId);
-            $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
-            $users = parse_csv_data(
-                $users,
-                $_FILES['import_file']['name'],
-                $sendMail,
-                $checkUniqueEmail,
-                $resume
-            );
-            $users = validate_data($users, $checkUniqueEmail);
-            $error_kind_file = false;
+            if (true !== ($csv_custom_error = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true))) {
+                $error_kind_file = true;
+                $fatalError = true;
+                $users = [];
+            } else {
+                $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
+                $users = parse_csv_data(
+                    $users,
+                    $_FILES['import_file']['name'],
+                    $sendMail,
+                    $checkUniqueEmail,
+                    $resume
+                );
+                $users = validate_data($users, $checkUniqueEmail);
+                $error_kind_file = false;
+            }
         } elseif (0 === strcmp($file_type, 'xml') && $ext_import_file == $allowed_file_mimetype[1]) {
             $users = parse_xml_data($_FILES['import_file']['tmp_name']);
             $users = validate_data($users, $checkUniqueEmail);
             $error_kind_file = false;
         }
 
-        processUsers($users, $sendMail);
+        if (!$fatalError) {
+            processUsers($users, $sendMail);
+        }
 
-        if ($error_kind_file) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('You must import a file corresponding to the selected format'),
-                    'error',
-                    false
-                )
-            );
+        if ($error_kind_file || $fatalError) {
+            $msg = $csv_custom_error ?: get_lang('You must import a file corresponding to the selected format');
+            $topStaticErrorHtml = Display::return_message($msg, 'error', false);
         } else {
             $reload = '';
             if ($resume) {
@@ -581,9 +586,9 @@ if (!empty($importData)) {
     $isResume = $importData['resume'];
 
     $formContinue = new FormValidator('user_import_continue', 'post', api_get_self());
-    $label = get_lang('Results and feedback and feedback');
+    $label = get_lang('Results and feedback');
     if ($isResume) {
-        $label = get_lang('ContinueLastImport');
+        $label = get_lang('Continue last import');
     }
     $formContinue->addHeader($label);
     $formContinue->addLabel(get_lang('File'), $importData['filename']);
@@ -618,11 +623,11 @@ if (!empty($importData)) {
     if ($isResume) {
         $resumeStop = $importData['counter'] >= count($importData['complete_list']);
         if (false == $resumeStop) {
-            $formContinue->addButtonImport(get_lang('ContinueImport'), 'import_continue');
+            $formContinue->addButtonImport(get_lang('Proceed with the import'), 'import_continue');
         }
     }
 
-    $formContinue->addHtml(get_lang('Results and feedback and feedback').'<br />'.$importData['log_messages']);
+    $formContinue->addHtml(get_lang('Results and feedback').'<br />'.$importData['log_messages']);
 
     if ($formContinue->validate()) {
         $users = parse_csv_data(
@@ -647,11 +652,13 @@ if (!empty($importData)) {
 }
 
 Display::display_header($tool_name);
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 $form = new FormValidator('user_import', 'post', api_get_self());
 $form->addHeader($tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $group = [
     $form->createElement(
         'radio',

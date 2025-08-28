@@ -73,7 +73,7 @@ if ($form->validate()) {
     if ($check) {
         Security::clear_token();
         $values = $form->getSubmitValues();
-        $text = nl2br($values['email_text']).'<br /><br /><br />'.get_lang('EmailSentFromLMS').' '.api_get_path(
+        $text = nl2br($values['email_text']).'<br /><br /><br />'.get_lang('E-mail sent from the platform').' '.api_get_path(
                 WEB_PATH
             );
         $email_administrator = $values['dest'];
@@ -102,7 +102,7 @@ if ($form->validate()) {
             get_lang('Anonymous')
         );
         }
-        Display::addFlash(Display::return_message(get_lang('MessageSent')));
+        Display::addFlash(Display::return_message(get_lang('Message Sent')));
         $orig = Session::read('origin_url');
         Session::erase('origin_url');
         header('Location:'.$orig);
@@ -112,6 +112,6 @@ if ($form->validate()) {
 
 $form->addHidden('sec_token', Security::get_token());
 
-Display::display_header(get_lang('SendEmail'));
+Display::display_header(get_lang('Send email'));
 $form->display();
 Display::display_footer();

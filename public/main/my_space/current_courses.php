@@ -249,7 +249,7 @@ foreach ($array as $row_table) {
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/index.php">'.Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?export=1">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Current coursesReport')).'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'my_space/current_courses.php?export=1">'.Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Current courses report')).'</a> ';
 echo '</div>';
 echo '<div style="overflow:auto;">';
 echo $table->toHtml();

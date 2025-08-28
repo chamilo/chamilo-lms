@@ -71,7 +71,7 @@ if (isset($_REQUEST['action']) && 'delete' == $_REQUEST['action']) {
 
 // Displaying the header
 Display::display_header(get_lang('Specific search fields'));
-echo Display::addFlash(Display::return_message(get_lang('Specific search fieldsIntro')));
+echo Display::addFlash(Display::return_message(get_lang('Here you can define the fields you want to use for indexing content. When you are indexing one element you should add one or many terms on each field comma-separated.')));
 
 if (!empty($_GET['message'])) {
     Display::addFlash(Display::return_message($_GET['message'], 'confirm'));

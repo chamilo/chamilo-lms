@@ -34,25 +34,25 @@ function validate_data($users)
             if (!UserManager::is_username_empty($user['NewUserName'])) {
                 // 2.1. Check whether username is too long.
                 if (UserManager::is_username_too_long($user['NewUserName'])) {
-                    $errors[$user['UserName']][] = get_lang('UserNameTooLong');
+                    $errors[$user['UserName']][] = get_lang('This login is too long');
                 }
                 // 2.2. Check whether the username was used twice in import file.
                 if (isset($usernames[$user['NewUserName']])) {
-                    $errors[$user['UserName']][] = get_lang('UserNameUsedTwice');
+                    $errors[$user['UserName']][] = get_lang('Login is used twice');
                 }
                 $usernames[$user['UserName']] = 1;
                 // 2.3. Check whether username is allready occupied.
                 if (!UserManager::is_username_available($user['NewUserName']) &&
                     $user['NewUserName'] != $user['UserName']
                 ) {
-                    $errors[$user['UserName']][] = get_lang('UserNameNotAvailable');
+                    $errors[$user['UserName']][] = get_lang('This login is not available');
                 }
             }
         }
 
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
-            $errors[$user['UserName']][] = get_lang('WrongStatus');
+            $errors[$user['UserName']][] = get_lang("This status doesn't exist");
         }
 
         // 4. Check ClassId
@@ -64,7 +64,7 @@ function validate_data($users)
                 }
                 $info = $usergroup->get($id);
                 if (empty($info)) {
-                    $errors[$user['UserName']][] = sprintf(get_lang('ClassIdDoesntExists'), $id);
+                    $errors[$user['UserName']][] = sprintf(get_lang('Class ID does not exist'), $id);
                 } else {
                     $classExistList[] = $info['id'];
                 }
@@ -74,7 +74,7 @@ function validate_data($users)
         // 5. Check authentication source
         if (!empty($user['AuthSource'])) {
             if (!in_array($user['AuthSource'], $defined_auth_sources)) {
-                $errors[$user['UserName']][] = get_lang('AuthSourceNotAvailable');
+                $errors[$user['UserName']][] = get_lang('Authentication source unavailable.');
             }
         }
     }
@@ -209,7 +209,7 @@ function updateUsers(
 
             $userUpdated = api_get_user_info($user_id);
             Display::addFlash(
-                Display::return_message(get_lang('UserUpdated').': '.$userUpdated['complete_name_with_username'])
+                Display::return_message(get_lang('User updated').': '.$userUpdated['complete_name_with_username'])
             );
         }
     }
@@ -228,7 +228,7 @@ function parse_csv_data($file)
 {
     $data = Import::csv_reader($file);
     if (empty($data)) {
-        throw new Exception(get_lang('NoDataAvailable'));
+        throw new Exception(get_lang('No data available'));
     }
     $users = [];
     foreach ($data as $row) {
@@ -236,7 +236,7 @@ function parse_csv_data($file)
             $row['Courses'] = explode('|', trim($row['Courses']));
         }
         if (!isset($row['UserName'])) {
-            throw new Exception(get_lang('ThisFieldIsRequired').': UserName');
+            throw new Exception(get_lang('Required field').': UserName');
         }
         $users[] = $row;
     }
@@ -273,16 +273,16 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('Update user list fromm XML/CSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Platform admin')];
+$tool_name = get_lang('Update user list from XML/CSV');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 
 $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addHeader($tool_name);
-$form->addFile('import_file', get_lang('Import file location'), ['accept' => 'text/csv', 'id' => 'import_file']);
-$form->addCheckBox('reset_password', '', get_lang('Auto-generate password'));
+$form->addFile('import_file', get_lang('Import file'), ['accept' => 'text/csv', 'id' => 'import_file']);
+$form->addCheckBox('reset_password', '', get_lang('Automatically generate a new password'));
 
 $group = [
     $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1),
@@ -305,7 +305,7 @@ if ($form->validate()) {
 
         if ('csv' !== $uploadInfo['extension']) {
             Display::addFlash(
-                Display::return_message(get_lang('You must import a file according to selected option'), 'error')
+                Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error')
             );
 
             header('Location: '.api_get_self());
@@ -356,7 +356,7 @@ if ($form->validate()) {
         header('Location: '.api_get_self());
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('Link expired'), 'warning', false));
+        Display::addFlash(Display::return_message(get_lang('Link expired, please try again.'), 'warning', false));
         header('Location: '.api_get_self());
         exit;
     }
@@ -392,7 +392,7 @@ $content = '
 <div class="max-w-full mb-8">
   <div class="p-6 bg-white border border-gray-200 rounded-lg shadow-sm">
     <h2 class="text-xl font-bold mb-4">'
-    . get_lang('CSV must look like') .
+    . get_lang('CSV must look as follows: ') .
     ' <span class="font-medium">(' . get_lang('Mandatory fields') . ')</span>
     </h2>
     <div class="overflow-x-auto bg-gray-20 p-4 rounded-md">

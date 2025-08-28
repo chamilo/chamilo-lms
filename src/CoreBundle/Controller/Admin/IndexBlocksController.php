@@ -330,7 +330,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-course-category',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_category.php']),
-            'label' => $this->translator->trans('Courses categories'),
+            'label' => $this->translator->trans('Course categories'),
         ];
         $items[] = [
             'class' => 'item-course-subscription',
@@ -344,7 +344,7 @@ class IndexBlocksController extends BaseController
         ];
         // $items[] = [
         //    'url'=>'course_intro_pdf_import.php',
-        //    'label' => $this->translator->$this->trans('ImportPDFIntroToCourses'),
+        //    'label' => $this->translator->$this->trans('Import PDF introductions into courses'),
         // ];
 
         if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_enable_grade_model')) {
@@ -431,7 +431,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-page-layouts',
             'route' => ['name' => 'PageLayoutList'],
-            'label' => $this->translator->trans('Page Layouts'),
+            'label' => $this->translator->trans('Page layouts'),
         ];
         $items[] = [
             'class' => 'item-registration-page',

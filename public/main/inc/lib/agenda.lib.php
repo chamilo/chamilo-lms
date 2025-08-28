@@ -2281,7 +2281,7 @@ class Agenda
             'weekly' => get_lang('Weekly'),
             'monthlyByDate' => get_lang('Monthly, by date'),
             //monthlyByDay"> get_lang('Monthly, by day');
-            //monthlyByDayR' => get_lang('Monthly, by dayR'),
+            //monthlyByDayR' => get_lang('Monthly, by day, restricted'),
             'yearly' => get_lang('Yearly'),
         ];
     }
@@ -2526,7 +2526,7 @@ class Agenda
 
             if (api_is_student_boss() || api_is_platform_admin()) {
                 $actionsLeft .= Display::url(
-                    Display::getMdiIcon(ObjectIcon::AGENDA_USER_EVENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('MyStudentsSchedule')),
+                    Display::getMdiIcon(ObjectIcon::AGENDA_USER_EVENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('My students schedule')),
                     $codePath.'my_space/calendar_plan.php'
                 );
             }

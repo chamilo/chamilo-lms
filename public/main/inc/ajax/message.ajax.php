@@ -58,7 +58,7 @@ switch ($action) {
                     $sessionInfo = api_get_session_info($sessionId);
                     if (!empty($sessionInfo)) {
                         $courseNotification = sprintf(
-                            get_lang('This e-mail was sent via course %sInSessionX'),
+                            get_lang('This e-mail was sent via course %s in session %s'),
                             $courseInfo['title'],
                             $sessionInfo['name']
                         );

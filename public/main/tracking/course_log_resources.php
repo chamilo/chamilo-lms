@@ -52,7 +52,7 @@ if ($export_csv || $exportXls) {
     array_unshift(
         $csvData,
         [
-            get_lang('tool'),
+            get_lang('Tool'),
             get_lang('Event type'),
             get_lang('Session'),
             get_lang('Username'),
@@ -151,7 +151,7 @@ $parameters = [
 ];
 
 $table->set_additional_parameters($parameters);
-$table->set_header(0, get_lang('tool'));
+$table->set_header(0, get_lang('Tool'));
 $table->set_header(1, get_lang('Event type'));
 $table->set_header(2, get_lang('Session'), false);
 $table->set_header(3, get_lang('Username'), true, 'width=65px');

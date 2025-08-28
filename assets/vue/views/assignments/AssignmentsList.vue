@@ -26,7 +26,7 @@
 
   <BaseDialog
     v-model:visible="isDialogVisible"
-    :title="t('Student Progress')"
+    :title="t('Student progress')"
     size="large"
     is-visible
   >

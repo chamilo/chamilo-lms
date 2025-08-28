@@ -157,9 +157,11 @@ class ProcessUserDataRequestsCommand extends Command
                 continue;
             }
 
-            $content = $this->translator->trans(
-                'The user %name% is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %link%',
-                ['%name%' => $userInfo['complete_name'], '%link%' => $link]
+            $content = \sprintf(
+                $this->translator->trans(
+                    'The user %s is waiting for an action about his/her personal data request. To manage personal data requests you can follow this link: %s',
+                ),
+                [$userInfo['complete_name'], $link]
             );
 
             if ($email) {

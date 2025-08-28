@@ -55,10 +55,10 @@ switch ($action) {
                 $courseList[] = [$course->getTitle()];
             }
 
-            $header = [get_lang('Course Title')];
+            $header = [get_lang('Course title')];
             Export::arrayToCsvSimple($courseList, $name, false, $header);
         } else {
-            Display::addFlash(Display::return_message(get_lang('No courses found for this category'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('No course found in this category'), 'warning'));
             header('Location: '.api_get_path(WEB_CODE_PATH).'admin/course_category.php'.(
                 !empty($parentId) ? '?id='.(int) $parentId : ''
                 ));
@@ -134,7 +134,7 @@ switch ($action) {
         break;
 }
 
-$tool_name = get_lang('Courses categories');
+$tool_name = get_lang('Course categories');
 $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),

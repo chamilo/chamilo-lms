@@ -10,7 +10,7 @@
     </div>
 
     <hr />
-    <h1 class="text-2xl font-bold">{{ t("Add Users") }} - {{ publicationTitle }}</h1>
+    <h1 class="text-2xl font-bold">{{ t("Add users") }} - {{ publicationTitle }}</h1>
 
     <div class="m-4">
       <h2 class="text-xl font-semibold mb-2">{{ t("Users added") }}</h2>

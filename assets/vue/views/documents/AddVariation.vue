@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 space-y-8">
-    <SectionHeader :title="t('Add File Variation')">
+    <SectionHeader :title="t('Add file variation')">
       <BaseButton
         :label="t('Back to Documents')"
         icon="back"
@@ -13,7 +13,7 @@
       v-if="originalFile"
       class="bg-gray-100 p-4 rounded-md shadow-md"
     >
-      <h3 class="text-lg font-semibold">{{ t("Original File") }}</h3>
+      <h3 class="text-lg font-semibold">{{ t("Original file") }}</h3>
       <p>
         <strong>{{ t("Title:") }}</strong> {{ originalFile.originalName }}
       </p>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="space-y-6">
-      <h3 class="text-xl font-bold">{{ t("Upload New Variation") }}</h3>
+      <h3 class="text-xl font-bold">{{ t("Upload new variation") }}</h3>
 
       <form
         @submit.prevent="uploadVariation"
@@ -64,7 +64,7 @@
     </div>
 
     <div>
-      <h3 class="text-xl font-bold mb-4">{{ t("Current Variations") }}</h3>
+      <h3 class="text-xl font-bold mb-4">{{ t("Current variations") }}</h3>
       <DataTable
         :value="variations"
         class="w-full"
@@ -87,7 +87,7 @@
         </Column>
         <Column
           field="updatedAt"
-          :header="t('Updated At')"
+          :header="t('Updated at')"
         />
         <Column
           field="url"

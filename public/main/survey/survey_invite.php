@@ -103,7 +103,7 @@ CourseManager::addUserGroupMultiSelect($form, [], true);
 
 $form->addTextarea(
     'additional_users',
-    [get_lang('Additional users'), get_lang('Additional usersComment')],
+    [get_lang('Additional users'), get_lang('You can invite additional users to fill the survey. To do so you can type their e-mail addresses here separated by either , (comma) or ; (semi-column)')],
     //['rows' => 5]
 );
 

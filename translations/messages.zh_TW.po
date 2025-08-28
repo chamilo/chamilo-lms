@@ -620,10 +620,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1604,7 +1604,7 @@ msgstr "未能確認檔案包格式，請檢查其中有否包含錯誤。問題
 msgid "Move the current forum"
 msgstr "移動當前討論區"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr ""
 
 msgid "Please provide a subject or message"
@@ -1721,7 +1721,7 @@ msgstr "課程預設為開放. 你可以自定義開放級別."
 msgid "Public - access allowed for the whole world"
 msgstr "開放 - 允許任何人訪問"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "開放 - 僅供本平台已註冊的使用者"
 
 msgid "Student %s is no subscribed to this course"
@@ -1751,7 +1751,7 @@ msgstr "添加鏈接"
 msgid "has been deleted"
 msgstr "已刪除"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "刪除課程將永久刪除這門課程的所有內容(文檔、鏈接...) 及所有成員的註冊訊息(不會刪除他們在其他課程的註冊訊息)。<P>確定要刪除課程嗎？"
 
 msgid "YES"
@@ -2518,9 +2518,6 @@ msgstr "這是本門課程所屬部門或分類"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "如果您對課程代碼有疑問的話，請詢問"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "<a>教學大綱</a>如果您的課程沒有代碼，請創建一個，例如︰如果您的課程內容是關於改革管理的，可以取課程代碼為<i>INNOVATION</i>"
 
 msgid "SCORM Path builder"
 msgstr "Scorm 編輯器"
@@ -3375,9 +3372,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -3492,7 +3486,7 @@ msgstr "創建課程類別"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "你是否想刪除這個課程類別？本類別中的課程會被移送到類別外層。"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "課程類別"
 
 msgid "Courses in this category"
@@ -4500,10 +4494,10 @@ msgstr "這使用者沒有加入班級"
 msgid "This class isn't subscribed in a course"
 msgstr "這班級沒有選修課程"
 
-msgid "tool"
+msgid "Tool"
 msgstr "工具"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "項目數量"
 
 msgid "Documents and folders"
@@ -4665,7 +4659,7 @@ msgstr "請加入通告內容"
 msgid "Please give a notice title"
 msgstr "請加入通告標題"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "請加入連結名稱"
 
 msgid "Insert this link"
@@ -5067,7 +5061,7 @@ msgstr "完成創建學期單元"
 msgid "Videoconference RTMTP protocol port"
 msgstr "視像會議 RTMTP 協定埠"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "學期單元名稱快將出現"
 
 msgid "No classes have been created"
@@ -5217,7 +5211,7 @@ msgstr "若敫用本項目，按下電郵地址時會開啟線上電郵編輯器
 msgid "Include header line?"
 msgstr ""
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr ""
 
 msgid "List of users subscribed to course"
@@ -5451,7 +5445,7 @@ msgstr ""
 msgid "Multiple selection drop-down"
 msgstr ""
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr ""
 
 msgid "Grades thresholds colouring"
@@ -5703,7 +5697,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5749,9 +5743,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -6342,16 +6333,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6423,10 +6411,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6584,9 +6572,6 @@ msgstr "僅教師使用"
 
 msgid "Define Headings"
 msgstr "定義標題"
-
-msgid "Back to users list"
-msgstr "返回清單"
 
 msgid "change rights of"
 msgstr "更改權限"
@@ -7005,9 +6990,6 @@ msgstr "小組所屬班別"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "使用本選項，你可以在選修你的課程的班別中建立小組。"
 
-msgid "Back to Groups list"
-msgstr ""
-
 msgid "A new forum has now been created"
 msgstr "已建立新討論區"
 
@@ -7284,7 +7266,7 @@ msgstr "移動當前檔案"
 msgid "Edit the current document"
 msgstr "編輯當前檔案"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "警告﹗"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7677,7 +7659,7 @@ msgstr "返回題目清單"
 msgid "Answers to the question"
 msgstr "題目的答案"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "警告﹗這個題目和答案已經用於多個測驗，你確定要修改它嗎？"
 
 msgid "in all tests"
@@ -7826,9 +7808,6 @@ msgstr ""
 
 msgid "Exercise added"
 msgstr ""
-
-msgid "Assesment settings"
-msgstr "評分設定"
 
 msgid "active"
 msgstr "顯示"
@@ -8412,9 +8391,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8495,9 +8471,6 @@ msgstr "線上使用者"
 
 msgid "Remove"
 msgstr "移除"
-
-msgid "Back to courses list"
-msgstr "返回課程清單"
 
 msgid "Links"
 msgstr "連結"
@@ -8594,9 +8567,6 @@ msgstr "名"
 
 msgid "Last name"
 msgstr "姓"
-
-msgid "e-mail"
-msgstr "電子郵件"
 
 msgid "Slideshow conversion"
 msgstr "轉換投映片"
@@ -8898,7 +8868,7 @@ msgstr "語言"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "對不起，這課程編號已經存在，請選另外一個。"
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "群組清單"
 
 msgid "The target folder does not exist"
@@ -9357,9 +9327,6 @@ msgstr ""
 msgid "My inactive sessions"
 msgstr ""
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr ""
-
 msgid "My learners"
 msgstr "我的學員"
 
@@ -9390,7 +9357,7 @@ msgstr "沒有資源可供循環使用"
 msgid "Could not open"
 msgstr "不能開啟"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr ""
 
 msgid "This course could not be found"
@@ -9522,8 +9489,8 @@ msgstr "未有連結曾被探訪"
 msgid "No document downloaded"
 msgstr "未有文件曾被下載"
 
-msgid "clicks"
-msgstr "按下"
+msgid "%d clicks"
+msgstr "%d 按下"
 
 msgid "Search results"
 msgstr "搜尋結果"
@@ -9606,7 +9573,7 @@ msgstr ""
 msgid "The file is too big to upload."
 msgstr "檔案太大不能上傳"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。"
 
 msgid "Assessments"
@@ -9666,7 +9633,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -10194,7 +10161,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"
@@ -10210,9 +10177,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -10539,7 +10503,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11550,7 +11514,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13102,7 +13066,7 @@ msgid "Forums Help"
 msgstr "論壇幫助"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "論壇是異步討論工具. 電子郵件是一對一的對話方式, 而論壇則使得公共對話或者半公共(組)對話成為可能.<p>從技術上講, 用戶只要使用瀏覽器就可以使用Dokeos論壇.</p><p>要組織論壇, 請點擊'論壇管理'. 論壇按照類和子類以如下方式組織起來:</p><p><b>分類 > 論壇 > 話題 > 回復</b></p>為使學生的討論有一個清晰的結構, 預先組織分類和論壇是必要的, 然後讓學生來發表話題和回復. IILearn論壇的默認設置只包含一個'Public'分類,一個論去樣例和一個話題.<p>所以首先要做的事是刪除話題樣例, 更新第一個論壇的名稱. 接下來,可以在'public'分類中按照小組或主題創建新的論壇來滿足課程學習環境的需要.</p><p>不要混淆分類和論壇, 也不要忘記空的類別 (不含有論壇) 對學生是不可見的.</p><p>論壇簡介可以是它的用戶列表, 目標, 任務, 主題等等...</p> <p>小組論壇不能通過論壇工具創建, 但可以通過小組工具創建. 使用小組工具你可以決定所創建的論壇是私有論壇還是公開論壇.</p> <b>教育學的高級應用</b><p>一些教師/教練員使用論壇發佈作業. 學生/學員提交作業答案. 教師/教練員點擊編輯器按鈕(黃色的筆), 然後啟動所見即所得編輯器判作業 (使用顏色和下劃線指出錯誤和正確的例子), 其他學生/學員從這個改正中受益."
+msgstr "論壇是異步討論工具. 電子郵件是一對一的對話方式, 而論壇則使得公共對話或者半公共(組)對話成為可能.<p>從技術上講, 用戶只要使用瀏覽器就可以使用Chamilo論壇.</p><p>要組織論壇, 請點擊'論壇管理'. 論壇按照類和子類以如下方式組織起來:</p><p><b>分類 > 論壇 > 話題 > 回復</b></p>為使學生的討論有一個清晰的結構, 預先組織分類和論壇是必要的, 然後讓學生來發表話題和回復. IILearn論壇的默認設置只包含一個'Public'分類,一個論去樣例和一個話題.<p>所以首先要做的事是刪除話題樣例, 更新第一個論壇的名稱. 接下來,可以在'public'分類中按照小組或主題創建新的論壇來滿足課程學習環境的需要.</p><p>不要混淆分類和論壇, 也不要忘記空的類別 (不含有論壇) 對學生是不可見的.</p><p>論壇簡介可以是它的用戶列表, 目標, 任務, 主題等等...</p> <p>小組論壇不能通過論壇工具創建, 但可以通過小組工具創建. 使用小組工具你可以決定所創建的論壇是私有論壇還是公開論壇.</p> <b>教育學的高級應用</b><p>一些教師/教練員使用論壇發佈作業. 學生/學員提交作業答案. 教師/教練員點擊編輯器按鈕(黃色的筆), 然後啟動所見即所得編輯器判作業 (使用顏色和下劃線指出錯誤和正確的例子), 其他學生/學員從這個改正中受益."
 
 msgid "Dropbox Help"
 msgstr "投遞箱"
@@ -13332,7 +13296,7 @@ msgstr "請輸入問題"
 msgid "Number of question"
 msgstr "問題數量"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "編號已經存在"
 
 msgid "Save and exit"
@@ -13383,13 +13347,13 @@ msgstr "編輯問題"
 msgid "This type does not exist"
 msgstr "這類型不存在"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "已成功創建統計調查"
 
 msgid "You can now add questions to your survey"
 msgstr "你現在可在問卷中加入問題"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "已成功更新統計調查"
 
 msgid "The question has been added."
@@ -13587,7 +13551,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -13710,7 +13674,7 @@ msgstr "有沒有課程手冊、文章系列、相關文獻或網址連結清單
 msgid "Short description of the course materials."
 msgstr "課程材料簡介"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr ""
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14235,9 +14199,6 @@ msgstr ""
 msgid "Delete all papers"
 msgstr ""
 
-msgid "Back to Assignments list"
-msgstr ""
-
 msgid "Edit and mark paper"
 msgstr ""
 
@@ -14349,10 +14310,10 @@ msgstr "手冊"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -14364,8 +14325,8 @@ msgstr "安裝語言"
 msgid "Please read the following requirements thoroughly."
 msgstr ""
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "警告！<br />安裝器發現你的系統中已有一個 Chamilo 平台"
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "警告！ 安裝器發現你的系統中已有一個 Chamilo 平台"
 
 msgid "New installation"
 msgstr "新安裝"
@@ -14497,12 +14458,6 @@ msgid "Please go back to Step"
 msgstr "請回到步驟"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-msgstr ""
-
-msgid "MBString extension not available"
-msgstr ""
-
-msgid "MySQL extension not available"
 msgstr ""
 
 msgid "Optional parameters"
@@ -15147,7 +15102,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"
@@ -15621,7 +15576,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15690,7 +15645,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -17388,7 +17343,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17433,13 +17388,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -17796,7 +17751,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18126,15 +18081,6 @@ msgstr ""
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr ""
 
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
-msgstr ""
-
 msgid "To social group"
 msgstr ""
 
@@ -18402,7 +18348,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -18606,13 +18552,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -18891,7 +18831,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19035,7 +18975,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -21291,7 +21231,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22845,7 +22785,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22920,13 +22860,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23466,10 +23403,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23772,10 +23709,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24009,7 +23946,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24075,10 +24012,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

@@ -36,7 +36,7 @@ function check_unzip() {
 }
 </script>";
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }

@@ -90,7 +90,7 @@ const recordAudio = () => {
 
 const saveAudio = async () => {
   if (recordName.value === "") {
-    recordError.value = t("It is necessary a file name before save recorded audio")
+    recordError.value = t("A file name is required to save the recorded audio")
     return
   }
 

@@ -77,7 +77,7 @@ switch ($request->query->getAlpha('action')) {
             $em->flush();
 
             Display::addFlash(
-                Display::return_message(get_lang('ItemAdded'), 'success')
+                Display::return_message(get_lang('Item added'), 'success')
             );
 
             header('Location: '.$pageBaseUrl);
@@ -118,7 +118,7 @@ switch ($request->query->getAlpha('action')) {
             $em->flush();
 
             Display::addFlash(
-                Display::return_message(get_lang('ItemUpdated'), 'success')
+                Display::return_message(get_lang('Item updated'), 'success')
             );
 
             header('Location: '.$pageBaseUrl);
@@ -145,7 +145,7 @@ switch ($request->query->getAlpha('action')) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemDeleted'), 'success')
+            Display::return_message(get_lang('Item deleted'), 'success')
         );
 
         header('Location: '.$pageBaseUrl);
@@ -158,7 +158,7 @@ switch ($request->query->getAlpha('action')) {
             Display::return_icon('add.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
             $pageBaseUrl.'?action=add'
         );
-        $pageContent = Display::return_message(get_lang('NoData'), 'warning');
+        $pageContent = Display::return_message(get_lang('No data available'), 'warning');
 
         $auths = $em->getRepository(XApiLrsAuth::class)->findAll();
 
@@ -169,7 +169,7 @@ switch ($request->query->getAlpha('action')) {
             $table->setHeaderContents($row, 0, get_lang('Username'));
             $table->setHeaderContents($row, 1, get_lang('Password'));
             $table->setHeaderContents($row, 2, get_lang('Enabled'));
-            $table->setHeaderContents($row, 3, get_lang('CreatedAt'));
+            $table->setHeaderContents($row, 3, get_lang('Created at'));
             $table->setHeaderContents($row, 4, get_lang('Actions'));
 
             foreach ($auths as $auth) {

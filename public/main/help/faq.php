@@ -40,7 +40,7 @@ if (!empty($_GET['edit']) && 'true' == $_GET['edit'] && api_is_platform_admin())
             fwrite($fp, $content);
             fclose($fp);
         } else {
-            echo Display::return_message(get_lang('File not writeable'), 'warning');
+            echo Display::return_message(sprintf(get_lang('Could not write to %s'), $faq_file), 'warning');
         }
         echo $content;
     } else {

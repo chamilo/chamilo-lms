@@ -192,6 +192,8 @@ if ($isCli) {
         $container->get('request_stack')->push($request);
         $container->get('translator')->setLocale($request->getLocale());
 
+        $container->get('stof_doctrine_extensions.tool.locale_synchronizer')->setLocale($request->getLocale());
+
         /** @var FlashBag $flashBag */
         $flashBag = $request->getSession()->getFlashBag();
         $saveFlashBag = !empty($flashBag->keys()) ? $flashBag->all() : null;

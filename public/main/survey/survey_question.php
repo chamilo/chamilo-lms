@@ -161,7 +161,7 @@ class survey_question
         switch ($type) {
             case 'open':
                 $toolName = get_lang('Open');
-                $questionComment = get_lang('QuestionTags');
+                $questionComment = get_lang("You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiply questions. On the survey list page, in the action field, you have a button to multiply a question that will look for the {{class_name}} tag, duplicate the question for all the classes subscribed to the course, and rename it with the name of the class. It will also add a page ending to make a new page for each class. Then it will look for the {{student_full_name}} tag and duplicate the question for all the students in the class (for each class) and rename it with the student's full name.");
                 $allowParent = true;
                 break;
             case 'yesno':

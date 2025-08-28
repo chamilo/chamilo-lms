@@ -103,7 +103,7 @@ function loadGraph() {
                     attr(\"href\", url+'&export=excel')
                     .attr('class', 'btn btn--plain')
                     .attr('target', '_blank')
-                    .html('".addslashes(get_lang('ExportAsXLS'))."');
+                    .html('".addslashes(get_lang('Export to XLS'))."');
 
                 $('#messages').append(exportLink);
 
@@ -164,7 +164,7 @@ $form->display();
                 $stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$data['times'].'<br />';
                 echo $stats;
             } else {
-                echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+                echo Display::return_message(get_lang('No data available'), 'warning');
             }
             ?>
         </div>

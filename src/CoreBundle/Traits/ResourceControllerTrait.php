@@ -50,13 +50,13 @@ trait ResourceControllerTrait
     public function denyAccessUnlessValidResource(?ResourceInterface $resource = null): void
     {
         if (null === $resource) {
-            throw new EntityNotFoundException($this->trans("Resource doesn't exists."));
+            throw new EntityNotFoundException($this->trans("The resource doesn't exist."));
         }
 
         $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
-            throw new EntityNotFoundException($this->trans("Resource doesn't have a node."));
+            throw new EntityNotFoundException($this->trans("The resource doesn't have a node."));
         }
     }
 

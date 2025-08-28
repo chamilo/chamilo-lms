@@ -8,7 +8,7 @@
           size="normal"
           type="black"
           @click="redirectToAttendanceList"
-          :title="t('Go Back')"
+          :title="t('Go back')"
         />
         <template v-if="canEdit">
           <BaseButton
@@ -16,7 +16,7 @@
             size="normal"
             type="info"
             @click="redirectToCalendarList"
-            :title="t('Go to Calendar')"
+            :title="t('Go to calendar')"
           />
           <BaseButton
             icon="file-pdf"
@@ -33,7 +33,7 @@
           <BaseButton
             icon="qrcode"
             type="secondary"
-            :title="t('Generate QR Code')"
+            :title="t('Generate QR code')"
             @click="generateQrCode"
           />
         </template>
@@ -81,7 +81,7 @@
           v-if="filteredDates.length > 0"
           class="mb-4 text-sm text-gray-700"
         >
-          {{ t("To attend:") }}
+          {{ t("To attend") }}
           <span class="bg-orange-500 text-white px-2 py-1 rounded ml-2">
             {{ signedCount }}/{{ totalCount }} ({{ Math.round((signedCount / totalCount) * 100) }}%)
           </span>
@@ -123,7 +123,7 @@
               icon="comment"
               size="small"
               type="info"
-              :title="t('View Comment')"
+              :title="t('View comment')"
               @click="openCommentDialog(currentUserId, date.id)"
             />
             <BaseButton
@@ -170,9 +170,9 @@
                 <tr class="bg-gray-15 h-28">
                   <th class="p-3 border border-gray-25 text-left">#</th>
                   <th class="p-3 border border-gray-25 text-left">{{ t("Photo") }}</th>
-                  <th class="p-3 border border-gray-25 text-left">{{ t("Last Name") }}</th>
-                  <th class="p-3 border border-gray-25 text-left w-32">{{ t("First Name") }}</th>
-                  <th class="p-3 border border-gray-25 text-left">{{ t("Not Attended") }}</th>
+                  <th class="p-3 border border-gray-25 text-left">{{ t("Last name") }}</th>
+                  <th class="p-3 border border-gray-25 text-left w-32">{{ t("First name") }}</th>
+                  <th class="p-3 border border-gray-25 text-left">{{ t("Not attended") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -224,7 +224,7 @@
                           icon="calendar"
                           class="text-warning"
                         />
-                        <span>{{ t("There is no class scheduled today.") }}</span>
+                        <span>{{ t("There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.") }}</span>
                         <BaseButton
                           icon="calendar-plus"
                           type="info"
@@ -366,7 +366,7 @@
                           @click="selectState(user.id, date.id, null)"
                         >
                           <div class="w-5 h-5 rounded-full bg-gray-30"></div>
-                          <span>{{ t("Remove State") }}</span>
+                          <span>{{ t("Remove state") }}</span>
                         </div>
                       </div>
                       <div
@@ -400,7 +400,7 @@
         <div class="mt-4 flex justify-end">
           <BaseButton
             v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
-            :label="isSaving ? t('Saving...') : t('Save Attendance')"
+            :label="isSaving ? t('Saving...') : t('Save attendance')"
             icon="check"
             type="success"
             @click="saveAttendanceSheet"
@@ -685,10 +685,10 @@ const fetchAttendanceTitle = async () => {
     isLoading.value = true
     const attendanceId = route.params.id
     const response = await attendanceService.getAttendance(attendanceId)
-    attendanceTitle.value = response.title || t("Unknown Attendance")
+    attendanceTitle.value = response.title || t("Unknown attendance")
   } catch (error) {
     console.error("Error fetching attendance title:", error)
-    attendanceTitle.value = t("Unknown Attendance")
+    attendanceTitle.value = t("Unknown attendance")
   } finally {
     isLoading.value = false
   }
@@ -986,7 +986,7 @@ const generateQrCode = async () => {
     qrImageUrl.value = window.URL.createObjectURL(new Blob([response], { type: "image/png" }))
     showQrDialog.value = true
   } catch (error) {
-    alert(t("Failed to generate QR Code"))
+    alert(t("Failed to generate QR code"))
     console.error(error)
   }
 }

@@ -47,7 +47,7 @@ lp_upload_quiz_main();
 function lp_upload_quiz_actions()
 {
     return '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
 }
 
 function lp_upload_quiz_main()
@@ -274,7 +274,8 @@ function lp_upload_quiz_action_handling()
 
     // Variables
     $type = 2;
-    $random = $active = $results = $max_attempt = $expired_time = 0;
+    $random = $results = $max_attempt = $expired_time = 0;
+    $active = 1;
     // Make sure feedback is enabled (3 to disable), otherwise the fields
     // added to the XLS are not shown, which is confusing
     $feedback = 0;
@@ -572,7 +573,7 @@ function lp_upload_quiz_action_handling()
             }
         }
     }
-    Display::addFlash(Display::return_message(get_lang('FileImported')));
+    Display::addFlash(Display::return_message(get_lang('File imported')));
 
     if (isset($_SESSION['oLP']) && isset($_GET['lp_id'])) {
         $previous = $_SESSION['oLP']->select_previous_item_id();

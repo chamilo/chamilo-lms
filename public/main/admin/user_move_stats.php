@@ -23,7 +23,7 @@ function compare_data($result_message)
         if ('TRACK_E_EXERCISES' == $table) {
             $title = get_lang('Tests');
         } elseif ('TRACK_E_EXERCISES_IN_LP' == $table) {
-            $title = get_lang('TestsInLp');
+            $title = get_lang('Tests in learning paths');
         } elseif ('LP_VIEW' == $table) {
             $title = get_lang('Learning paths');
         }

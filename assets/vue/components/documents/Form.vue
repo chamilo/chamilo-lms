@@ -8,13 +8,13 @@
           :class="{ 'p-invalid': v$.item.title.$invalid }"
         />
         <label
-          v-t="'Title'"
+          v-text="t('Title')"
           for="item_title"
         />
       </div>
       <small
         v-if="v$.item.title.$invalid || v$.item.title.$pending.$response"
-        v-t="v$.item.title.required.$message"
+        v-text="v$.item.title.required.$message"
         class="p-error"
       />
     </div>

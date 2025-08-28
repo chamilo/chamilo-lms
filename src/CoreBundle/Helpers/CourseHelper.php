@@ -193,23 +193,23 @@ class CourseHelper
         $institutionName = $this->getDefaultSetting('platform.institution');
         $courseName = $course->getTitle();
 
-        $subject = $this->translator->trans('New Course Created in')."$siteName - $institutionName";
+        $subject = $this->translator->trans('New course created on %s')." $siteName - $institutionName";
 
-        $greeting = $this->translator->trans('email.greeting');
-        $intro = $this->translator->trans('email.course_created_intro');
-        $courseNameLabel = $this->translator->trans('email.course_name');
+        $greeting = $this->translator->trans('Dear %s,');
+        $intro = $this->translator->trans('This message is to inform you that a new course has been created on %s');
+        $courseNameLabel = $this->translator->trans('Course name');
 
-        $message = "$greeting $recipientName,\n\n";
+        $message = \sprintf($greeting, $recipientName)."\n\n";
         $message .= "$intro $siteName - $institutionName.\n";
         $message .= "$courseNameLabel $courseName\n";
-        $message .= $this->translator->trans('Course name: ').$course->getTitle()."\n";
+        $message .= $this->translator->trans('Course name').': '.$course->getTitle()."\n";
 
         foreach ($course->getCategories() as $category) {
-            $message .= $this->translator->trans('Category: ').$category->getCode()."\n";
+            $message .= $this->translator->trans('Category').': '.$category->getCode()."\n";
         }
 
-        $message .= $this->translator->trans('Coach: ').$course->getTutorName()."\n";
-        $message .= $this->translator->trans('Language: ').$course->getCourseLanguage();
+        $message .= $this->translator->trans('Coach').': '.$course->getTutorName()."\n";
+        $message .= $this->translator->trans('Language').': '.$course->getCourseLanguage();
 
         $email = (new Email())
             ->from($recipientEmail)
@@ -553,10 +553,10 @@ class CourseHelper
         $questionId = $question->id;
 
         $answer = new Answer($questionId, $courseInfo['real_id']);
-        $answer->createAnswer($this->translator->trans('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, $this->translator->trans('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
-        $answer->createAnswer($this->translator->trans('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, $this->translator->trans('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
-        $answer->createAnswer($this->translator->trans('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, $this->translator->trans('Indeed'), 5, 3);
-        $answer->createAnswer($this->translator->trans('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, $this->translator->trans('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
+        $answer->createAnswer($this->translator->trans("Ridiculise one's interlocutor in order to have him concede he is wrong."), 0, $this->translator->trans('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
+        $answer->createAnswer($this->translator->trans("Admit one's own errors to invite one's interlocutor to do the same."), 0, $this->translator->trans('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
+        $answer->createAnswer($this->translator->trans("Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know."), 1, $this->translator->trans('Indeed. Socratic irony is an interrogative method. The Greek "eirotao" means "ask questions"'), 5, 3);
+        $answer->createAnswer($this->translator->trans("Use the Principle of Non Contradiction to force one's interlocutor into a dead end."), 1, $this->translator->trans("This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses."), 5, 4);
         $answer->save();
 
         // Forums.
@@ -581,7 +581,7 @@ class CourseHelper
         $params = [
             'post_title' => $this->translator->trans('Example Thread'),
             'forum_id' => $forumId,
-            'post_text' => $this->translator->trans('Example ThreadContent'),
+            'post_text' => $this->translator->trans('Example content'),
             'calification_notebook_title' => '',
             'numeric_calification' => '',
             'weight_calification' => '',

@@ -98,7 +98,14 @@ const layout = computed(() => {
     return CustomDashboardLayout
   }
 
-  return router.currentRoute.value.meta.layout ? `${router.currentRoute.value.meta.layout}Layout` : DashboardLayout
+  if (router.currentRoute.value.meta.layout) {
+    switch (router.currentRoute.value.meta.layout) {
+      case "Empty":
+        return EmptyLayout
+    }
+  }
+
+  return DashboardLayout
 })
 
 const legacyContainer = ref(null)

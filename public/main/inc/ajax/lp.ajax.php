@@ -33,30 +33,36 @@ switch ($action) {
     case 'get_lp_export_items':
         $lpItems = [];
         if ($lp) {
-            $items = learnpath::get_flat_ordered_items_list($lp);
-            $lpItemRepo = Container::getLpItemRepository();
+            $entries      = learnpath::get_flat_ordered_items_list($lp, 0, true);
+            $lpItemRepo   = Container::getLpItemRepository();
             $documentRepo = Container::getDocumentRepository();
-            foreach ($items as $itemId) {
-                $item = $lpItemRepo->find($itemId);
 
-                if ('document' !== $item->getItemType()) {
+            foreach ($entries as $entry) {
+                $iid           = (int) $entry['iid'];
+                $exportAllowed = !empty($entry['export_allowed']);
+                if (!$exportAllowed) {
                     continue;
                 }
 
-                $document = $documentRepo->find((int) $item->getPath());
-                if (!$document instanceof CDocument) {
+                /** @var CLpItem|null $item */
+                $item = $lpItemRepo->find($iid);
+                if (!$item || $item->getItemType() !== 'document') {
                     continue;
                 }
 
-                // Only export if it's a valid HTML file
+                $doc = $documentRepo->find((int) $item->getPath());
+                if (!$doc instanceof CDocument) {
+                    continue;
+                }
+
                 try {
-                    $content = $documentRepo->getResourceFileContent($document);
-                    if (!is_string($content) || !preg_match('/^\s*<(?!!--|!doctype|html|body)/i', $content)) {
+                    $content = $documentRepo->getResourceFileContent($doc);
+                    if (!is_string($content) || stripos(ltrim($content), '<') !== 0) {
                         continue;
                     }
 
                     $lpItems[] = [
-                        'id' => $item->getIid(),
+                        'id'    => $item->getIid(),
                         'title' => $item->getTitle(),
                     ];
                 } catch (\Throwable $e) {

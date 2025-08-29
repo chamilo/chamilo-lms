@@ -2,13 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Social map with user geolocation (PluginHelper + Repository-based, APCu-safe)
- * - Validates plugin enabled for current access URL
- * - Reads config from access_url_rel_plugin.configuration
- * - Auto-creates missing extra fields (admin only)
- * - Supports JSON {"lat","lng"} and legacy "label::lat,lng" or "lat,lng"
- * - LEFT JOIN: shows markers if user filled at least one field
- * - Cache: APCu if available, otherwise FilesystemAdapter
+ * Social map with user geolocation
+ * - Checks Google Maps plugin enabled + configured for current access URL
+ * - Reads API key and extra field list from access_url_rel_plugin.configuration
+ * - Accepts values as JSON {"lat","lng"}, "label::lat,lng" or "lat,lng"
+ * - LEFT JOIN so a user appears if at least one field has coords
+ * - Caches result set (APCu -> filesystem)
  */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -23,9 +22,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-/* --------------------------------------------------
- * Helpers
- * -------------------------------------------------- */
+/* ----------------------- helpers ----------------------- */
 function extractLatLng($raw) {
     if (empty($raw)) return [null, null];
     $raw = trim((string) $raw);
@@ -55,7 +52,7 @@ function resolveGeoType(): int {
     if (defined('ExtraField::FIELD_TYPE_GEOLOCALIZATION')) return constant('ExtraField::FIELD_TYPE_GEOLOCALIZATION');
     if (defined('ExtraField::FIELD_TYPE_GEOLOCATION'))   return constant('ExtraField::FIELD_TYPE_GEOLOCATION');
     if (defined('ExtraField::FIELD_TYPE_TEXT'))          return constant('ExtraField::FIELD_TYPE_TEXT');
-    return 1; // fallback (TEXT)
+    return 1; // TEXT fallback
 }
 
 function ensureGeoExtraField(ExtraField $ef, ?string $var, string $label): ?array {
@@ -80,121 +77,82 @@ function ensureGeoExtraField(ExtraField $ef, ?string $var, string $label): ?arra
     return null;
 }
 
-/* --------------------------------------------------
- * Services
- * -------------------------------------------------- */
+/* ----------------------- services ----------------------- */
 $pluginHelper    = Container::$container->get(PluginHelper::class);
 $accessUrlHelper = Container::$container->get(AccessUrlHelper::class);
 $pluginRepo      = Container::$container->get(AccessUrlRelPluginRepository::class);
 
-/* --------------------------------------------------
- * Validate plugin enabled for current URL
- * -------------------------------------------------- */
+/* ---------------- validate plugin enabled --------------- */
 $PLUGIN_NAME = 'google_maps';
-
-/* Check plugin is enabled for the current access URL */
 if (!$pluginHelper->isPluginEnabled($PLUGIN_NAME)) {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('Social'));
-        echo Display::return_message(
-            'Google Maps plugin is not enabled for this portal URL. Go to Administration → Plugins and enable it.',
-            'warning'
-        );
+        echo Display::return_message('Google Maps plugin is not enabled for this portal URL. Enable it in Administration → Plugins.', 'warning');
         echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">Open Plugins admin</a></p>';
         Display::display_footer();
     } else {
-        error_log('[social/map] DENY: plugin_disabled_in_url');
         api_not_allowed(true);
     }
     exit;
 }
 
-/* --------------------------------------------------
- * Load plugin configuration from DB (by current URL)
- * -------------------------------------------------- */
+/* ---------------- load plugin config for URL ------------ */
 $currentUrl = $accessUrlHelper->getCurrent();
 if ($currentUrl === null) {
-    error_log('[social/map] DENY: no current access URL');
     api_not_allowed(true);
 }
-
 $rel = $pluginRepo->findOneByPluginName($PLUGIN_NAME, $currentUrl->getId());
 if (!$rel || !$rel->isActive()) {
-    error_log('[social/map] DENY: plugin relation not active for url_id='.$currentUrl->getId());
     api_not_allowed(true);
 }
-
 $config = $rel->getConfiguration();
 if (is_string($config)) {
-    $decoded = json_decode($config, true);
-    if (json_last_error() === JSON_ERROR_NONE) {
-        $config = $decoded;
-    }
+    $tmp = json_decode($config, true);
+    if (json_last_error() === JSON_ERROR_NONE) $config = $tmp;
 }
 if (!is_array($config)) $config = [];
 
 $enabledRaw = $config['enable_api'] ?? null;
-$apiKey     = (string) ($config['api_key'] ?? '');
+$apiKey     = trim((string)($config['api_key'] ?? ''));
 
-/* Accept common truthy string/number values */
-$localization = ($enabledRaw === true)
-    || ($enabledRaw === 1)
-    || ($enabledRaw === '1')
-    || ($enabledRaw === 'true')
-    || ($enabledRaw === 'on')
-    || ($enabledRaw === 'yes');
+/* truthy parsing for enable_api */
+$localization = ($enabledRaw === true) || ($enabledRaw === 1) || ($enabledRaw === '1') || ($enabledRaw === 'true') || ($enabledRaw === 'on') || ($enabledRaw === 'yes');
 
 if (!$localization || $apiKey === '') {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('Social'));
-        echo Display::return_message(
-            'Google Maps plugin is not configured. Enable the API and set your API key in Administration → Plugins → Google Maps.',
-            'warning'
-        );
-        echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">Open Plugins admin</a></p>';
+        echo Display::return_message('Google Maps plugin not configured. Turn on API and set API key in Administration → Plugins → Google Maps.', 'warning');
+        echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">'.get_lang('Open Plugins admin').'</a></p>';
         Display::display_footer();
     } else {
-        error_log('[social/map] DENY: plugin_not_configured (enable_api='.var_export($enabledRaw,true).', api_key_present='.(int)($apiKey!=='').')');
         api_not_allowed(true);
     }
     exit;
 }
 
-/* --------------------------------------------------
- * Fields to use (from plugin.extra_field_name or legacy setting)
- * -------------------------------------------------- */
-$pluginFieldsCsv = (string) ($config['extra_field_name'] ?? '');
+/* ---------------- fields to use ------------------------ */
+$pluginFieldsCsv = (string)($config['extra_field_name'] ?? '');
 $vars = array_values(array_filter(array_map('trim', explode(',', $pluginFieldsCsv))));
-
 if (empty($vars)) {
     $fieldsSetting = api_get_setting('profile.allow_social_map_fields', true);
     if (!$fieldsSetting || empty($fieldsSetting['fields']) || !is_array($fieldsSetting['fields'])) {
-        error_log('[social/map] DENY: no fields configured (plugin.extra_field_name empty, allow_social_map_fields empty)');
         api_not_allowed(true);
     }
     $vars = array_values($fieldsSetting['fields']);
 }
-
-/* Keep at most 2 distinct variables */
 $vars = array_values(array_unique(array_filter($vars)));
-$var1 = $vars[0] ?? null; // e.g. terms_villedustage
-$var2 = $vars[1] ?? null; // e.g. terms_ville
+$var1 = $vars[0] ?? null;
+$var2 = $vars[1] ?? null;
 
-/* --------------------------------------------------
- * Ensure extra fields exist (admin can auto-create), then continue if at least one is present
- * -------------------------------------------------- */
+/* ---------------- ensure extrafields exist -------------- */
 $extraField = new ExtraField('user');
 $info1 = ensureGeoExtraField($extraField, $var1, $var1 ?: 'Geolocation A');
 $info2 = ensureGeoExtraField($extraField, $var2, $var2 ?: 'Geolocation B');
-
 if (empty($info1) && empty($info2)) {
-    error_log('[social/map] DENY: missing both extrafields and cannot create (vars='.json_encode($vars).')');
     api_not_allowed(true);
 }
 
-/* --------------------------------------------------
- * Query users (LEFT JOIN per existing field) - allow users with at least one value
- * -------------------------------------------------- */
+/* ---------------- build query --------------------------- */
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
 $select = "u.id, u.firstname, u.lastname";
@@ -217,7 +175,6 @@ if (!empty($info2)) {
 }
 
 if (empty($conds)) {
-    error_log('[social/map] DENY: no join conditions built');
     api_not_allowed(true);
 }
 
@@ -227,48 +184,26 @@ $sql = "SELECT $select
         WHERE u.active = 1
           AND (".implode(' OR ', $conds).")";
 
-/* --------------------------------------------------
- * Cache with fallback (APCu → Filesystem)
- * -------------------------------------------------- */
-$useApcu = false;
-if (function_exists('apcu_enabled')) {
-    $useApcu = apcu_enabled();
-} else {
-    $useApcu = extension_loaded('apcu') && (PHP_SAPI !== 'cli' || (bool)ini_get('apc.enable_cli'));
-}
+/* ---------------- caching (APCu -> FS) ------------------ */
+$useApcu = function_exists('apcu_enabled') ? apcu_enabled() : (extension_loaded('apcu') && (PHP_SAPI !== 'cli' || (bool)ini_get('apc.enable_cli')));
 
-if ($useApcu) {
-    $cache = new ApcuAdapter('social_map');
-} else {
-    // Filesystem fallback
-    $cacheDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'chamilo_cache';
-    if (!is_dir($cacheDir)) {
-        @mkdir($cacheDir, 0775, true);
-    }
-    $cache = new FilesystemAdapter('social_map', 300, $cacheDir);
-}
+$cache = $useApcu
+    ? new ApcuAdapter('social_map')
+    : new FilesystemAdapter('social_map', 300, rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'chamilo_cache');
 
-$cacheKey = sprintf(
-    'places:url%d:f1_%s:f2_%s',
-    (int) $currentUrl->getId(),
-    (string) ($info1['id'] ?? 0),
-    (string) ($info2['id'] ?? 0)
-);
-
+$cacheKey = sprintf('places:url%d:f1_%s:f2_%s', (int)$currentUrl->getId(), (string)($info1['id'] ?? 0), (string)($info2['id'] ?? 0));
 $item = $cache->getItem($cacheKey);
 if (!$item->isHit()) {
     $result = Database::query($sql);
     $data   = Database::store_result($result, 'ASSOC');
     $item->set($data);
-    $item->expiresAfter(300); // 5 minutes
+    $item->expiresAfter(300);
     $cache->save($item);
 } else {
     $data = $item->get();
 }
 
-/* --------------------------------------------------
- * Parse coordinates and prepare payload for the template
- * -------------------------------------------------- */
+/* ---------------- massage rows -------------------------- */
 $guessType = static function (?string $var): ?string {
     if (!$var) return null;
     $v = strtolower($var);
@@ -318,19 +253,15 @@ $data = array_values(array_filter($data, static function ($r) {
         || isset($r['stage_lat'],$r['stage_long']);
 }));
 
-/* --------------------------------------------------
- * Assets + render
- * -------------------------------------------------- */
+/* ---------------- render ------------------------------- */
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/markerclusterer.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'map/oms.min.js"></script>';
 
 $tpl = new Template(null);
 $tpl->assign('url', api_get_path(WEB_PATH).'social');
 $tpl->assign('places', json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-$tpl->assign('api_key', $apiKey);       // typical variable name used by templates
-$tpl->assign('gmap_api_key', $apiKey);  // also assign the legacy name, just in case
-
-/* Labels (avoid notices if only one field exists) */
+$tpl->assign('api_key', $apiKey);
+$tpl->assign('gmap_api_key', $apiKey);
 $tpl->assign('field_1', !empty($info1) ? ($info1['display_text'] ?? $var1 ?? '') : '');
 $tpl->assign('field_2', !empty($info2) ? ($info2['display_text'] ?? $var2 ?? '') : '');
 

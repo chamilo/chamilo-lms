@@ -25,18 +25,24 @@
                 </div>
 
                 {% if badge.allow_download_export %}
-                    <div class="mt-4 flex justify-center space-x-4">
-                        <p class="text-center">
-                            <a href="{{ badge.personal_badge }}" class="btn btn--primary">
+                    <div class="mt-4 max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="text-center">
+                            <a
+                                    href="{{ badge.personal_badge }}"
+                                    class="btn btn--primary w-full inline-block"
+                            >
                                 <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
                             </a>
-                        </p>
-                        <hr>
-                        <p class="text-center">
-                            <a href="#" class="btn btn--success" id="badge-export-button-{{ badge.issue_info.id }}">
+                        </div>
+                        <div class="text-center">
+                            <a
+                                    href="#"
+                                    class="btn btn--success w-full inline-block"
+                                    id="badge-export-button-{{ badge.issue_info.id }}"
+                            >
                                 <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                             </a>
-                        </p>
+                        </div>
                     </div>
                     {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
                         <div class="mt-4 text-center">
@@ -127,16 +133,40 @@
                         {% endif %}
                     </div>
                 </div>
-            {% else %}
+            {% elseif badge.issue_info.comments|length > 0 %}
                 <hr class="my-4" />
-                <p class="text-lg font-semibold flex justify-between">
+                <p class="text-lg font-semibold flex flex-col sm:flex-row sm:justify-between gap-2">
                     <span>
-                        <em class="fa fa-comment-o fa-fw"></em> {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
+                        <em class="fa fa-comment-o fa-fw"></em>
+                        {{ '%s comments'|trans|format(badge.issue_info.comments|length) }}
                     </span>
                     <span>
-                        <em class="fa fa-thumbs-o-up fa-fw"></em> {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
+                        <em class="fa fa-thumbs-o-up fa-fw"></em>
+                        {{ 'Average rating %s'|trans|format(badge.issue_info.feedback_average) }}
                     </span>
                 </p>
+                <div class="mt-3 space-y-3">
+                    {% for comment in badge.issue_info.comments %}
+                        <article class="flex items-start justify-between gap-4 border rounded p-3">
+                            <div class="min-w-0">
+                                <h4 class="font-bold truncate">
+                                    {{ comment.giver_complete_name ?? comment.giver_name ?? '—' }}
+                                </h4>
+                                <p class="text-sm text-gray-600">{{ comment.datetime }}</p>
+                                {% if comment.text %}
+                                    <p class="mt-2 whitespace-pre-line">{{ comment.text }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center justify-end shrink-0">
+                                {% if comment.value %}
+                                    <span class="inline-flex items-center gap-1 text-sm font-semibold">
+                                        <em class="fa fa-certificate fa-fw"></em> {{ comment.value }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
     </div>

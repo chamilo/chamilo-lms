@@ -17,7 +17,7 @@ class ch_multipleresponse extends survey_question
             'horizontal' => get_lang('Horizontal'),
             'vertical' => get_lang('Vertical'),
         ];
-        $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
+        $this->getForm()->addRadio('horizontalvertical', get_lang('Display'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);

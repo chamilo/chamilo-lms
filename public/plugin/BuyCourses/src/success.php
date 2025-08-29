@@ -65,7 +65,7 @@ if ($form->validate()) {
 
     if ('Success' !== $confirmPayments['ACK']) {
         $erroMessage = vsprintf(
-            $plugin->get_lang('ErrorOccurred'),
+            get_lang('An error occured'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
         );
         Display::addFlash(

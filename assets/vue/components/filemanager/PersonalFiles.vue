@@ -210,7 +210,7 @@
 
     <Dialog
       v-model:visible="dialog"
-      :header="$t('New folder')"
+      :header="$t('Add a new folder')"
       :modal="true"
       :style="{ width: '450px' }"
       class="p-fluid"

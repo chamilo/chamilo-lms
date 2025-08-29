@@ -76,6 +76,25 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
+
+        if (MEDIA_QUESTION === $answerType) {
+            $mediaHtml = $objQuestionTmp->selectDescription();
+            if (!empty($mediaHtml)) {
+                echo '<div class="media-content wysiwyg">'. $mediaHtml .'</div>';
+            }
+            return 0;
+        }
+
+        if (PAGE_BREAK === $answerType) {
+            $description = $objQuestionTmp->selectDescription();
+            if (!$only_questions && !empty($description)) {
+                echo '<div class="page-break-content wysiwyg">'
+                    . $description .
+                    '</div>';
+            }
+            return 0;
+        }
+
         $s = '';
         if (HOT_SPOT != $answerType &&
             HOT_SPOT_DELINEATION != $answerType &&
@@ -1644,7 +1663,7 @@ HOTSPOT;
         $headers = [
             get_lang('Course'),
             get_lang('Session'),
-            get_lang('Quiz'),
+            get_lang('Test'),
             get_lang('Link to test edition'),
         ];
 
@@ -1712,7 +1731,7 @@ HOTSPOT;
             if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                 $current_time = time();
                 $expired_time = api_strtotime(
-                    $_SESSION['expired_time'][$current_expired_time_key],
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s'),
                     'UTC'
                 );
                 $total_time_allowed = $expired_time + 30;
@@ -2341,7 +2360,7 @@ HOTSPOT;
 
                             $sendMailUrl =  api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=send_email&exerciseId='.$exercise_id.'&attemptId='.$results[$i]['exe_id'];
                             $emailLink = '<a href="'.$sendMailUrl.'">'
-                                .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by email'))
+                                .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by e-mail'))
                                 .'</a>';
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
@@ -4144,8 +4163,8 @@ EOT;
         // check the default value of option
         $tabSelected = [$default => " selected='selected' "];
         $res = "<select name='$name' id='$name' onchange='".$onchange."' >";
-        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('AllGroups')." --</option>";
-        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('NotInAGroup')." -</option>";
+        $res .= "<option value='-1'".$tabSelected["-1"].">-- ".get_lang('All groups')." --</option>";
+        $res .= "<option value='0'".$tabSelected["0"].">- ".get_lang('Not in a group')." -</option>";
         $groups = GroupManager::get_group_list();
         $currentCatId = 0;
         $countGroups = count($groups);
@@ -4236,7 +4255,7 @@ EOT;
         if ($objExercise->getResultAccess()) {
             if (false === $objExercise->hasResultsAccess($exercise_stat_info)) {
                 echo Display::return_message(
-                    sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
+                    sprintf(get_lang('You have passed the %s minutes limit to see the results.'), $objExercise->getResultsAccess())
                 );
 
                 return false;
@@ -4426,6 +4445,7 @@ EOT;
 
         $countPendingQuestions = 0;
         $result = [];
+        $panelsByParent = [];
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
@@ -4610,15 +4630,43 @@ EOT;
 
                 $calculatedScore['question_content'] = $questionContent;
                 $attemptResult[] = $calculatedScore;
+                $parentId = intval($objQuestionTmp->parent_id ?: 0);
+                $panelsByParent[$parentId][] = Display::panel($questionContent);
+            }
 
-                if ($objExercise->showExpectedChoice()) {
-                    $exerciseContent .= Display::panel($questionContent);
-                } else {
-                    // $show_all_but_expected_answer should not happen at
-                    // the same time as $show_results
-                    if ($show_results && !$show_only_score) {
-                        $exerciseContent .= Display::panel($questionContent);
+            foreach ($panelsByParent as $pid => $panels) {
+                if ($pid !== 0) {
+                    $mediaQ = Question::read($pid, $objExercise->course);
+                    echo '<div class="media-group">';
+                    echo '<div class="media-content">';
+                    ob_start();
+                    $objExercise->manage_answer(
+                        $exeId,
+                        $pid,
+                        null,
+                        'exercise_show',
+                        [],
+                        false,
+                        true,
+                        $show_results,
+                        $objExercise->selectPropagateNeg()
+                    );
+                    echo ob_get_clean();
+                    echo '</div>';
+                    if (!empty($mediaQ->description)) {
+                        echo '<div class="media-description">'
+                            . $mediaQ->description
+                            . '</div>';
                     }
+                    echo '<div class="media-children">';
+                }
+
+                foreach ($panels as $panelHtml) {
+                    echo $panelHtml;
+                }
+
+                if ($pid !== 0) {
+                    echo '</div></div>';
                 }
             }
         }
@@ -4709,7 +4757,6 @@ EOT;
             $exerciseContent
         );
 
-        echo $totalScoreText;
         echo $certificateBlock;
 
         // Ofaj change BT#11784
@@ -5810,9 +5857,9 @@ EOT;
                 $exerciseNotification = $extraFieldData['value'];
             }
 
-            $subject = sprintf(get_lang('WrongAttemptXInCourseX'), $attemptCountToSend, $courseInfo['title']);
+            $subject = sprintf(get_lang('Failure on attempt %s at %s'), $attemptCountToSend, $courseInfo['title']);
             if ($exercisePassed) {
-                $subject = sprintf(get_lang('ExerciseValidationInCourseX'), $courseInfo['title']);
+                $subject = sprintf(get_lang('Validation of exercise at %s'), $courseInfo['title']);
             }
 
             if ($exercisePassed) {
@@ -5997,7 +6044,7 @@ EOT;
                                         );
 
                                         @$pdf = new PDF();
-                                        $filename = get_lang('Exercise');
+                                        $filename = get_lang('Test');
                                         $pdfPath = @$pdf->content_to_pdf(
                                             "<html><body>$pdfContent</body></html>",
                                             null,

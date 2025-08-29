@@ -94,12 +94,12 @@ if ($validateCategory) {
     api_location($url.'&num='.$currentQuestion);
 }
 
-$nameTools = get_lang('Exercises');
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
+$nameTools = get_lang('Tests');
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 $hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
 
 if (!$hideHeaderAndFooter) {
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
 } else {
     Display::display_reduced_header();
 }
@@ -107,14 +107,14 @@ if (!$hideHeaderAndFooter) {
 // I'm in a preview mode as course admin. Display the action menu.
 if (!$hideHeaderAndFooter && api_is_course_admin()) {
     $actions = '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->iId.'">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBackToQuestionList')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Go back to the questions list')).'</a>';
     $actions .= '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->iId.'">'.
-        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('ModifyExercise')).'</a>';
+        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit test name and settings')).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 }
 echo Display::page_header($categoryObj->name);
 echo '<p>'.Security::remove_XSS($categoryObj->description).'</p>';
-echo '<p>'.get_lang('BlockCategoryExplanation').'</p>';
+echo '<p>'.get_lang("You finished the questions related to this question category, it's your last chance to go back and revise those questions. Once you click on follow exercise you will go to the next question category and will not be able to go back to this part of the test.").'</p>';
 
 $categoryList = Session::read('categoryList');
 $disableAllQuestions = '';
@@ -170,24 +170,24 @@ echo Display::div($table, ['class' => 'question-check-test']);
 $exerciseActions = '';
 if (!in_array($categoryId, $blockedCategories)) {
     $exerciseActions = '&nbsp;'.Display::url(
-        get_lang('GoBack'),
+        get_lang('Go back'),
         'javascript://',
         ['onclick' => 'goBack();', 'class' => 'btn btn--plain']
     );
 }
 if ($objExercise->review_answers) {
     $exerciseActions .= Display::url(
-        get_lang('ReviewQuestions'),
+        get_lang('Review selected questions'),
         'javascript://',
         ['onclick' => 'reviewQuestions();', 'class' => 'btn btn--primary']
     );
     $exerciseActions .= '&nbsp;'.Display::url(
-        get_lang('SelectAll'),
+        get_lang('Select all'),
     'javascript://',
         ['onclick' => 'selectAll();', 'class' => 'btn btn--plain']
 );
     $exerciseActions .= '&nbsp;'.Display::url(
-        get_lang('UnSelectAll'),
+        get_lang('Unselect all'),
         'javascript://',
         ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
     );
@@ -198,13 +198,13 @@ end($categoryList);
 // This is the last category
 if (key($categoryList) === $categoryId) {
     $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('EndTest'),
+    get_lang('End test'),
     'javascript://',
     ['onclick' => 'final_submit();', 'class' => 'btn btn--warning']
     );
 } else {
     $exerciseActions .= '&nbsp;'.Display::url(
-        get_lang('ContinueTest'),
+        get_lang('Proceed with the test'),
         'javascript://',
         ['onclick' => 'continueExercise();', 'class' => 'btn btn--primary']
     );

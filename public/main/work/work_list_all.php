@@ -174,7 +174,7 @@ Display::display_header(null);
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to Assignments list')).'</a>';
+Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Assignment list'))).'</a>';
 
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfCourse) {
     $blockAddDocuments = ('true' === api_get_setting('work.block_student_publication_add_documents'));
@@ -519,7 +519,7 @@ if ($allowAntiPlagiarism) {
         .'" onclick="javascript: setCheckbox(false, \''
         .'gbox_results'
         .'\'); return false;">'
-        .get_lang('UnSelect all')
+        .get_lang('Unselect all')
         .'</a> ';
     $html .= '</div>';
     $html .= '<div class="btn-group">

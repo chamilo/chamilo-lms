@@ -1,5 +1,5 @@
-# authentication configuration for each Access URL
-# Access URL Id / authentication method / params
+# This YAML file defines the configuration for the available user authentication methods in Chamilo LMS v2, organized by access URL.
+# Read more https://github.com/chamilo/chamilo-lms/wiki/External-Authentication-configuration
 parameters:
     authentication:
         default:
@@ -24,7 +24,7 @@ parameters:
                     resource_owner_teacher_status_field: null
                     resource_owner_sessadmin_status_field: null
                     resource_owner_hr_status_field: null
-                    resource_owner_status_status_field: null
+                    resource_owner_student_status_field: null
                     resource_owner_anon_status_field: null
                     resource_owner_urls_field: null
 

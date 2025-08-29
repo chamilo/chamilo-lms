@@ -409,7 +409,7 @@ class Dropbox_SentWork extends Dropbox_Work
             $dest_user_id = $res['dest_user_id'];
             $user_info = api_get_user_info($dest_user_id);
             if (!$user_info) {
-                $this->recipients[] = ['id' => -1, 'name' => get_lang('Unknown', '')];
+                $this->recipients[] = ['id' => -1, 'name' => get_lang('Unknown')];
             } else {
                 $this->recipients[] = [
                     'id' => $dest_user_id,

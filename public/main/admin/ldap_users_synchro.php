@@ -39,14 +39,14 @@ $users = $sessions = [];
 $page = intval($_GET['page']);
 $action = $_REQUEST['action'];
 
-$tool_name = get_lang('Synchro LDAP : Import Etudiants/Etapes dans session');
+$tool_name = get_lang('LDAP synchronization: Import learners/steps into course sessions');
 Display::display_header($tool_name);
 //Display::page_subheader2($tool_name);
 
 ?>
 		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
 			<select name="action">
-			<option value="synchro"><?php echo get_lang('Synchro LDAP : Import Etudiants/Etapes dans toutes les sessions'); ?></option>
+			<option value="synchro"><?php echo get_lang('LDAP synchronization: Import learners/steps in all sessions'); ?></option>
 			</select>
 			<input type="submit" value="<?php echo get_lang('Validate'); ?>">
 		</form>

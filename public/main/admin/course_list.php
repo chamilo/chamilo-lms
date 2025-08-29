@@ -328,7 +328,7 @@ function get_course_visibility_icon(int $visibility): string
             null,
             22,
             get_lang(
-                'Private access (access authorized to group members only) access (access authorized to group members only)'
+                'Private'
             )
         ),
         2 => Display::getMdiIcon(
@@ -336,7 +336,7 @@ function get_course_visibility_icon(int $visibility): string
             'ch-tool-icon',
             null,
             22,
-            get_lang(' Open - access allowed for users registered on the platform')
+            get_lang('Open - access allowed for users registered on the platform')
         ),
         3 => Display::getMdiIcon(
             StateIcon::PUBLIC_VISIBILITY,
@@ -443,8 +443,8 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $el = $form->addSelectLanguage('keyword_language', get_lang('Course language'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
-    $form->addElement('radio', 'keyword_visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-    $form->addElement('radio', 'keyword_visibility', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+    $form->addElement('radio', 'keyword_visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('Hidden - Completely hidden to all users except the administrators'), COURSE_VISIBILITY_HIDDEN);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('All'), '%');

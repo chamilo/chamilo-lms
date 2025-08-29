@@ -941,7 +941,7 @@ class Thematic
     {
         $question = [];
         $question[1] = get_lang('What should the end results be when the learner has completed the course? What are the activities performed during the course?');
-        $question[2] = get_lang('Skills to acquireQuestions');
+        $question[2] = get_lang('What skills are to be acquired bu the end of this thematic section?');
         $question[3] = get_lang('What methods and activities help achieve the objectives of the course?  What would the schedule be?');
         $question[4] = get_lang('What infrastructure is necessary to achieve the goals of this topic normally?');
         $question[5] = get_lang('How will learners be assessed? Are there strategies to develop in order to master the topic?');

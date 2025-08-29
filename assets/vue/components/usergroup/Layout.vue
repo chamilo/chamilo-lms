@@ -15,7 +15,7 @@
         <div class="flex flex-col items-center p-2 user-invite-card">
           <div class="w-full">
             <div class="bg-gray-200 border-b border-gray-300 rounded-t-lg text-center">
-              <h2 class="text-xl font-semibold">{{ t("Pending Group Invitations") }}</h2>
+              <h2 class="text-xl font-semibold">{{ t("Pending group invitations") }}</h2>
             </div>
             <div class="pbg-white">
               <div

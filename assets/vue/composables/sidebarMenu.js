@@ -233,12 +233,12 @@ export function useSidebarMenu() {
     if (showTabs.value.indexOf("diagnostics") > -1) {
       const subItems = [
         {
-          label: t("Diagnosis Management"),
+          label: t("Diagnosis management"),
           url: "/main/search/load_search.php",
           visible: securityStore.isStudentBoss,
         },
         {
-          label: t("Diagnostic Form"),
+          label: t("Diagnosis"),
           url: "/main/search/search.php",
         },
       ].filter((item) => item.visible !== false)
@@ -279,7 +279,7 @@ export function useSidebarMenu() {
           class: "pl-4",
         },
         {
-          label: t("Courses to restart"),
+          label: t("Restartable courses"),
           route: { name: "AdminRestartCourses" },
           icon: "mdi mdi-history",
           class: "pl-4",
@@ -288,7 +288,7 @@ export function useSidebarMenu() {
 
       items.push({
         icon: "mdi mdi-account-cog",
-        label: t("Session admin"),
+        label: t("Session administrator"),
         items: sessionAdminItems,
       })
     }

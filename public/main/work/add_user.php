@@ -119,7 +119,7 @@ if (!empty($userToAddList)) {
     }
     echo '</ul>';
 } else {
-    echo Display::return_message(get_lang('NoUsers to add'), 'warning');
+    echo Display::return_message(get_lang('No users to add'), 'warning');
 }
 
 echo '<hr /><div class="clear"></div>';

@@ -628,10 +628,10 @@ msgstr "Kategórie kurzov na %s stránke:"
 msgid "Course categories available"
 msgstr "Kategórie kurzov k dispozícii"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "Skupina teraz patrí do vybranej stránky"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Musíte vybrať aspoň jednu skupinu a jednu stránku"
 
 msgid "Agenda list"
@@ -809,7 +809,7 @@ msgid "This tool allows you to create glossary terms for this course, which can 
 msgstr "Tento nástroj vám umožní vytvoriť slovník termínov pre tento kurz, ktoré potom môžu byť použité z nástroja dokumentov"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "Fórum je diskusný nástroj pre asynchrónne písomné práce.  Na rozdiel od e-mailu, fórum je pre verejnosť, alebo polo-verejné, skupinové diskusie. </br> </br>"
+msgstr "Fórum je diskusný nástroj pre asynchrónne písomné práce.  Na rozdiel od e-mailu, fórum je pre verejnosť, alebo polo-verejné, skupinové diskusie. <br> <br>"
 
 msgid "Forum help"
 msgstr "Fórum pomoc"
@@ -1612,7 +1612,7 @@ msgstr "Formát tohto súboru nemôže byť uznaný. Skontrolujte prosím, či s
 msgid "Move the current forum"
 msgstr "Presunúť aktuálne fórum"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Upozornenie! Ak upravíte obsah vo výučbovom objekte, môžete zmeniť hlásenia kurzu alebo poškodiť učebný objekt."
 
 msgid "Please provide a subject or message"
@@ -1729,7 +1729,7 @@ msgstr "Štandardne je Váš kurz verejný. Hore však môžete definovať úrov
 msgid "Public - access allowed for the whole world"
 msgstr "Otvorené - prístup povolený každému"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Otvorené - prístup povolený používateľom registrovaným na platforme"
 
 msgid "Student %s is no subscribed to this course"
@@ -1759,7 +1759,7 @@ msgstr "Pridať na domovskú stránku odkaz"
 msgid "has been deleted"
 msgstr "bol vymazaný"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Zmazanie tohto kurzu nevratne odstráni všetok obsah ( dokumenty, odkazy) ktorý obsahuje a odhlási všetkých účastníkov (neodstráni ich z ostatných kurzov). Tiež zmaže všetky virtuálne kurzy, prepojené na tento kurz. <p>Naozaj zmazať tento kurz?"
 
 msgid "YES"
@@ -2526,9 +2526,6 @@ msgstr "Toto je oddelenie alebo iná katgória, kde je kurz začlenený."
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Ak máte pochybnosti ohľadne kódu kurzu, poraďte sa"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Program kurzu</a>. Ak váš kurz nemá kód z akéhokoľvek dôvodu, vymyslite si ho. Napríklad ak je kurz o riadení inovácií, dajte mu kód <i>INOVÁCIA</i>"
 
 msgid "SCORM Path builder"
 msgstr "Nástroj na vytvorenie Scorm učebnej osnovy"
@@ -3383,9 +3380,6 @@ msgstr "Vytvoriť poznámku"
 msgid "Edit my personal note"
 msgstr "Upraviť moje osobné poznámky"
 
-msgid "Back to note list"
-msgstr "Späť na zoznam poznámok"
-
 msgid "Notebook management"
 msgstr "Správa knihy poznámok"
 
@@ -3500,7 +3494,7 @@ msgstr "Vytvor kategóriu kurzov"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Naozaj chcete zmazať kategóriu kurzov? Kurzy v tejto kategórii budú presunuté do nadradenej kategórie"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kategórie kurzov"
 
 msgid "Courses in this category"
@@ -4508,10 +4502,10 @@ msgstr "Tento používateľ nie je zaradený v žiadnej triede"
 msgid "This class isn't subscribed in a course"
 msgstr "Táto trieda nie je zaradená v žiadnom kurze"
 
-msgid "tool"
+msgid "Tool"
 msgstr "nástroj"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "počet položiek"
 
 msgid "Documents and folders"
@@ -4673,7 +4667,7 @@ msgstr "Prosím zadajte text oznamu"
 msgid "Please give a notice title"
 msgstr "Prosím zadajte názov oznamu"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Prosím zadajte názov odkazu"
 
 msgid "Insert this link"
@@ -5075,7 +5069,7 @@ msgstr "Ukončiť tvorbu stretnutia"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Port video konferenčného RTMTP protokolu"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Názov stretnutia bude o chvíľu existovať"
 
 msgid "No classes have been created"
@@ -5225,7 +5219,7 @@ msgstr "Keď je táto možnosť aktivovaná, klikom na e-mailovú adresu sa otvo
 msgid "Include header line?"
 msgstr "Pridať riadok záhlavia CSV?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
 msgstr "Áno, pridať CSV hlavičku<br>"
 
 msgid "List of users subscribed to course"
@@ -5459,7 +5453,7 @@ msgstr "Roztváracia ponuka"
 msgid "Multiple selection drop-down"
 msgstr "Viacnásobný výber drop-down"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Pole úspešne pridané"
 
 msgid "Grades thresholds colouring"
@@ -5711,7 +5705,7 @@ msgstr "Importovať LDAP používateľov do kurzu"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importovať LDAP používateľov a etapu do stretnutia"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "LDAP synchronizácia: Importovať študentov/etapy do stretnutia"
 
 msgid "Assessments tab"
@@ -5758,9 +5752,6 @@ msgstr "Identifikačná hodnota tútora"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Keď je identifikačná hodnota učiteľa zadaná, tak musí byť vo vnútri jedného z čiastkových prvkov učiteľského poľa, aby bol považovaný za trénera. Pokiaľ necháte toto pole prázdne, potom je podmienkou existencia poľa pre tohto LDAP používateľa, aby bol považovaný za trénera. Napríklad: pole môže byť \"člen\" a hodnota vyhľadávania môže byť \"CN=G_TRAINER,OU=Trainer\"."
-
-msgid "is not writeable"
-msgstr "nie je možné prepísať"
 
 msgid "The field is successfully moved down"
 msgstr "Pole bolo úspešne presunuté nadol"
@@ -6350,16 +6341,13 @@ msgstr "Kurzy z pôvodného stretnutia"
 msgid "Courses from the destination session"
 msgstr "Kurzy z cieľového stretnutia"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Nápoveda pre kópiu kurzov od stretnutia do stretnutia"
-
 msgid "Type of copy"
 msgstr "Typ kópie"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopírovať z kurzu v stretnutí do iného stretnutia"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Musíte vybrať kurz z pôvodného stretnutia"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6431,10 +6419,10 @@ msgstr "Zobraziť údaje stretnutia komentára"
 msgid "Subscription sessions in the category"
 msgstr "Zapísané stretnutie v kategórií"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Zoznam stretnutí v platforme"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Zoznam stretnutí v kategóriách"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6592,9 +6580,6 @@ msgstr "len pre lektorov"
 
 msgid "Define Headings"
 msgstr "Definovať nadpisy"
-
-msgid "Back to users list"
-msgstr "Spať na zoznam používateľov"
 
 msgid "change rights of"
 msgstr "zmeniť práva"
@@ -7013,9 +6998,6 @@ msgstr "Skupiny z tried"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Použitím tejto možnosti môžete vytvoriť skupiny na základe tried zapísaných do Vášho kurzu."
 
-msgid "Back to Groups list"
-msgstr "Späť do zoznamu skupín"
-
 msgid "A new forum has now been created"
 msgstr "Nové fórum bolo vytvorené"
 
@@ -7292,7 +7274,7 @@ msgstr "Premiestniť aktuálny dokument"
 msgid "Edit the current document"
 msgstr "Upraviť aktuálny dokument"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Upozornenie !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7685,7 +7667,7 @@ msgstr "Späť na zoznam otázok"
 msgid "Answers to the question"
 msgstr "Odpovede na otázku"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Upozornenie ! Tto otázka a jej odpovede sú použité vo viacerých testoch. Chcete ich zmeniť"
 
 msgid "in all tests"
@@ -7834,9 +7816,6 @@ msgstr "Dosiahli ste maximálny počet pokusov pre tento test. Ak ste lektorom, 
 
 msgid "Exercise added"
 msgstr "Cvičenie bolo pridané"
-
-msgid "Assesment settings"
-msgstr "Nastavenie hodnotenia"
 
 msgid "active"
 msgstr "aktívny"
@@ -8420,9 +8399,6 @@ msgstr "Administrátor dosiahol časový limit"
 msgid "Last score of a exercise"
 msgstr "Posledné bodové hodnotenie cvičenia"
 
-msgid "Back to result list"
-msgstr "Späť do zoznamu výsledkov"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Ak upravíte skóre otázky, pamätajte, že toto cvičenie bolo pridané do kurzu"
 
@@ -8503,9 +8479,6 @@ msgstr "Používatelia online"
 
 msgid "Remove"
 msgstr "Odstrániť"
-
-msgid "Back to courses list"
-msgstr "Späť na zoznam mojích kurzov"
 
 msgid "Links"
 msgstr "Odkazy"
@@ -8602,9 +8575,6 @@ msgstr "Krstné meno"
 
 msgid "Last name"
 msgstr "Priezvisko"
-
-msgid "e-mail"
-msgstr "E-mail"
 
 msgid "Slideshow conversion"
 msgstr "Konverzia pre slideshow"
@@ -8906,7 +8876,7 @@ msgstr "jazyk"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Prepáčte, ale tento kód kurzu je už použitý. Zvolte prosím iný."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Zoznam skupín"
 
 msgid "The target folder does not exist"
@@ -9365,9 +9335,6 @@ msgstr "Moje aktívne stretnutia"
 msgid "My inactive sessions"
 msgstr "Moje neaktívne stretnutia"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Rozšírenie bolo aktivované ale zatiaľ nemôže byť použité."
-
 msgid "My learners"
 msgstr "Moji študenti"
 
@@ -9398,7 +9365,7 @@ msgstr "Žiadny zdroj k recyklácii"
 msgid "Could not open"
 msgstr "Nie je možné otvoriť"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Prístupová doba"
 
 msgid "This course could not be found"
@@ -9530,8 +9497,8 @@ msgstr "Žiadna linka nebola navštívená"
 msgid "No document downloaded"
 msgstr "Žiadny dokument nebol stiahnutý"
 
-msgid "clicks"
-msgstr "Kliknutia"
+msgid "%d clicks"
+msgstr "%d Kliknutia"
 
 msgid "Search results"
 msgstr "Výsledky vyhľadávania"
@@ -9614,7 +9581,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr "Súbor je príliš veľký."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Nahrávanie súboru bolo neúspešné. Prosím skúste to znova alebo kontaktujte administrátora portálu."
 
 msgid "Assessments"
@@ -9674,7 +9641,7 @@ msgstr "hodiny"
 msgid "minutes"
 msgstr "minúty"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokument vytvorený"
 
 msgid "The forum has been added"
@@ -10202,7 +10169,7 @@ msgstr "Viac informácií"
 msgid "Make invisible"
 msgstr "Skryť"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Zviditeľniť"
 
 msgid "Image"
@@ -10219,9 +10186,6 @@ msgstr "Poslať správu"
 
 msgid "Menu"
 msgstr "Ponuka"
-
-msgid "Back to user list"
-msgstr "Späť na zoznam používateľov"
 
 msgid "Graphic not available"
 msgstr "Grafika nie je k dispozícii"
@@ -10547,7 +10511,7 @@ msgstr "Zviditeľniť klasifikačný hárok"
 msgid "Who changed it"
 msgstr "Kto to zmenil"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Hodnotenie bolo úspešne upravené"
 
 msgid "Incorrect data"
@@ -11558,7 +11522,7 @@ msgstr "Teraz je stránka viditeľná pre všetkých používateľov"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Hlavná stránka môže byť zmenená len lektorom"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Prístup na stránku lektora"
 
 msgid "Now discussion is visible by trainers only"
@@ -13340,7 +13304,7 @@ msgstr "Prosím zadajte otázku"
 msgid "Number of question"
 msgstr "Počet otázok"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Tento kód už existuje"
 
 msgid "Save and exit"
@@ -13391,13 +13355,13 @@ msgstr "Upraviť otázku"
 msgid "This type does not exist"
 msgstr "Tento typ neexistuje"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Prieskum je úspešne vytvorený"
 
 msgid "You can now add questions to your survey"
 msgstr "Teraz môžete do svojho prieskumu pridať otázky"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Prieskum je úspešne aktualizovaný"
 
 msgid "The question has been added."
@@ -13595,7 +13559,7 @@ msgstr "Tento kód prieskumu už existuje. To znamená, že prieskum pravdepodob
 msgid "This survey code soon exists in this language"
 msgstr "Tento kód prieskumu bude onedlho existovať v tomto jazyku"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Odpovede používateľov na tento prieskum sú úspešne odstránené."
 
 msgid "Delete this user's answers"
@@ -13718,7 +13682,7 @@ msgstr "Je tam učebnica, zborník dokumentov, bibliografia, zoznam odkazov na i
 msgid "Short description of the course materials."
 msgstr "Krátky popis materiálov kurzu."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Sú tam lektori, tútori, technická pomoc, asistenti, počítačové učebne?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14243,9 +14207,6 @@ msgstr "Známka nemôže prekročiť maximálne skóre"
 msgid "Delete all papers"
 msgstr "Odstrániť všetky papiere"
 
-msgid "Back to Assignments list"
-msgstr "Späť do zoznamu zadaní"
-
 msgid "Edit and mark paper"
 msgstr "Upraviť a označiť média"
 
@@ -14340,7 +14301,7 @@ msgid "Add a Link help"
 msgstr "Pridať odkaz - pomoc"
 
 msgid "<p>Chamilo is a modular tool. You can hide and show tools whenever you want, according to the requirements of your project or to a particular chronological part of it. But you can also add tools or pages to your home page that you have created yourself or that come from outwith your Chamilo portal. That way, you can customise your course home page to make it your own.</p><p>In so doing, you will doubtless want to add your own links to the page. Links can be of two types:<ul><li><b>External link</b>: you create a link on your home page to a website situated outside your course area. In this case, you will select 'Target= In a new window' because you don't want that website to replace your Chamilo environment.</li><li><b>Internal link</b>: you link to a page or a tool inside your Chamilo course. To do this, first go to the relevant page (or document, or tool), copy its URL from the address bar of your browser (CTRL+C), then you go to 'Add link' and  paste this URL in the URL field, giving it whatever name you want. In this case, you will select 'Target=Same window' because you want to keep the Chamilo banner on top and the link page in the same environment.</li></ul>Once created, links cannot be edited. To modify them, the only solution is to deactivate and delete them, then start over.</p>"
-msgstr "<p>Dokeos je modulárny nástroj. Môžete skryť a ukázať nástroje kedykoľvek budete chcieť v závislosti od Vášho projektu alebo jeho rôznych časových fáz. Tiež však môžete pridať na Vašu domovskú stránku nástroje alebo stránky, ktoré ste vytvorili alebo ktoré prišli zvonku Vášho Chamilo portálu. Týmto spôsobom vytvoríte z domovskej stránky Vášho kurzu VAŠU stránku.</p> <p>Pre takéto získanie stránky, pridajte na ňu odkazy. Sú dva typy odkazov:<ul><li><b>Externý odkaz</b>: vytvorte na vašej domovskej stránke odkaz na web stránku umiestnenú mimo priestoru kurzu. V tomto prípade vyberte „Cieľ = v novom okne“ aby web stránka nahradila Chamilo prostredie.</li> <li><b>Interný odkaz</b>: odkazuje na stránku alebo nástroj v rámci Vášho Chamilo kurzu. Najskôr choďte na stránku, dokument alebo nástroj, skopírujte URL z lišty vo Vašom prehliadači (CTRL+C), potom choďte na možnosť „Pridať odkaz“, vložte nakopírovanú URL a zadajte názov. V tomto prípade vyberte možnosť „Cieľ = To isté okno“. To ponechá Chamilo banner hore a zostanete v tom istom prostredí.</li></ul> Akonáhle odkazy vytvoríte, nemôžu byť tieto odkazy upravené. Ak ich chcete zmeniť, jediným riešením je ich deaktivovať, zmazať a začať odznova.</p>"
+msgstr "<p>Chamilo je modulárny nástroj. Môžete skryť a ukázať nástroje kedykoľvek budete chcieť v závislosti od Vášho projektu alebo jeho rôznych časových fáz. Tiež však môžete pridať na Vašu domovskú stránku nástroje alebo stránky, ktoré ste vytvorili alebo ktoré prišli zvonku Vášho Chamilo portálu. Týmto spôsobom vytvoríte z domovskej stránky Vášho kurzu VAŠU stránku.</p> <p>Pre takéto získanie stránky, pridajte na ňu odkazy. Sú dva typy odkazov:<ul><li><b>Externý odkaz</b>: vytvorte na vašej domovskej stránke odkaz na web stránku umiestnenú mimo priestoru kurzu. V tomto prípade vyberte „Cieľ = v novom okne“ aby web stránka nahradila Chamilo prostredie.</li> <li><b>Interný odkaz</b>: odkazuje na stránku alebo nástroj v rámci Vášho Chamilo kurzu. Najskôr choďte na stránku, dokument alebo nástroj, skopírujte URL z lišty vo Vašom prehliadači (CTRL+C), potom choďte na možnosť „Pridať odkaz“, vložte nakopírovanú URL a zadajte názov. V tomto prípade vyberte možnosť „Cieľ = To isté okno“. To ponechá Chamilo banner hore a zostanete v tom istom prostredí.</li></ul> Akonáhle odkazy vytvoríte, nemôžu byť tieto odkazy upravené. Ak ich chcete zmeniť, jediným riešením je ich deaktivovať, zmazať a začať odznova.</p>"
 
 msgid "Clear content"
 msgstr "Vymazať obsah"
@@ -14357,11 +14318,11 @@ msgstr "Príručka"
 msgid "You should write a message"
 msgstr "Mali by ste napísať správu"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Táto správa vás informuje, že bol vytvorený nový kurz na platforme"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Táto správa vás informuje, že bol vytvorený nový kurz na %s"
 
-msgid "New course created in"
-msgstr "Nový kurz vytvorený v"
+msgid "New course created on %s"
+msgstr "Nový kurz vytvorený v %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Lektor je nastavený teraz ako vy. Toto nastavenie môžete zmeniť neskôr v nastavení konfigurácie kurzu"
@@ -14372,8 +14333,8 @@ msgstr "Jazyk inštalácie"
 msgid "Please read the following requirements thoroughly."
 msgstr "Čítajte dôkladne"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Upozornenie!<br />Inštalačný program zistil existujúcu Chamilo platformu v systéme."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Upozornenie! Inštalačný program zistil existujúcu Chamilo platformu v systéme."
 
 msgid "New installation"
 msgstr "Nová inštalácia"
@@ -14506,12 +14467,6 @@ msgstr "Prosím choďte späť na etapu"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Upgrade skript obnoví a aktualizuje Chamilo databázu(y). Za týmto účelom bude tento skript používať databázy a nastavenie definované nižšie. Pretože náš softvér beží na širokej škále systémov a pretože všetky z nich nemusia byť testované, dôrazne odporúčame vykonať úplnú zálohu databázy, pred tým ako budete pokračovať s upgradom!"
-
-msgid "MBString extension not available"
-msgstr "MBString rozšírenie nedostupné"
-
-msgid "MySQL extension not available"
-msgstr "MySQL rozšírenie nedostupné"
 
 msgid "Optional parameters"
 msgstr "Nepovinné parametre"
@@ -15155,7 +15110,7 @@ msgstr "Nie sú k dispozícii ďalšie polia"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Začnete písať, keď klinete na túto lištu overiť značku"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Inštalovať Chamilo"
 
 msgid "Chamilo URL"
@@ -15629,7 +15584,7 @@ msgstr "Priradenie zoznamu kurzov do stretnutia administrátora"
 msgid "Assign sessions to platform administrator"
 msgstr "Priradenie stretnutia administrátorovi platformy"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Priradenie stretnutia do stretnutia administrátora"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15698,7 +15653,7 @@ msgstr "Tématický"
 msgid "Thematic plan"
 msgstr "Tématický plán"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Upraviť najprv tému"
 
 msgid "Edit thematic advance"
@@ -16200,7 +16155,7 @@ msgid "<p>Go ahead and browse our course catalog %s to register to any course yo
 msgstr "Nehanbite sa a prechádzajte zoznam kurzov %s. Zaregistrujte sa do kurzu, ak sa vám páči. Akonáhle sa zaregistrujete, uvidíte priebeh kurzu %s, namiesto tejto správy."
 
 msgid "<p>Hello <strong>%s</strong> and welcome,</p>"
-msgstr "Dobrý deň a vitajte %s!</br><br>"
+msgstr "Dobrý deň a vitajte %s!<br><br>"
 
 msgid "Unsubscribe users already added"
 msgstr "Odhlásení používatelia už pridaní"
@@ -17396,8 +17351,8 @@ msgstr "Vytvoriť sociálnu skupinu"
 msgid "Not logged in for some time"
 msgstr "Nie ste prihlásený nejakú dobu"
 
-msgid "Last %i months"
-msgstr "Posledné %i mesiace"
+msgid "Last %d months"
+msgstr "Posledné %d mesiace"
 
 msgid "Never connected"
 msgstr "Nikdy pripojený"
@@ -17441,13 +17396,13 @@ msgstr "Položka skopírovaná"
 msgid "My statistics"
 msgstr "Moja štatistika"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Cvičenie k dispozícií"
 
 msgid "Exercises taken"
 msgstr "Prijaté cvičenie"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Priemerný výsledok cvičenia"
 
 msgid "Learning path progress"
@@ -17804,7 +17759,7 @@ msgstr "Tento používateľ nemá súvisiace URL"
 msgid "Extra data"
 msgstr "Ďalšie údaje"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Cvičenie v učebnej osnove"
 
 msgid "Id"
@@ -18134,15 +18089,6 @@ msgstr "Vitajte v inštalácií Chamilo"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Vaša PHP verzia nezodpovedá požiadavkám pre tento softvér. Skontrolujte prosím, či máte najnovšiu verziu a skúste to znova."
 
-msgid "Sessions extension not available"
-msgstr "Rozšírenie spojenia nie je k dispozícií"
-
-msgid "Zlib extension not available"
-msgstr "Zlib rozšírenie nie je k dispozícií"
-
-msgid "PCRE extension not available"
-msgstr "PCRE rozšírenie nie je k dispozícií"
-
 msgid "To social group"
 msgstr "Pre sociálnu skupinu"
 
@@ -18415,7 +18361,7 @@ msgstr "Certifikát"
 msgid "Online link to certificate"
 msgstr "Online link k certifikátu"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Nové cvičenie"
 
 msgid "My average"
@@ -18619,14 +18565,8 @@ msgstr "otázka"
 msgid "questions"
 msgstr "otázky"
 
-msgid "Back to test list"
-msgstr "Späť do testu"
-
 msgid "Category description"
 msgstr "Popis kategórie"
-
-msgid "Back to category list"
-msgstr "Späť do kategórie"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Názov kategórie už existuje. Použite prosím iný názov."
@@ -18904,7 +18844,7 @@ msgstr "Overené"
 msgid "Not validated"
 msgstr "Neoverené"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Posúdené"
 
 msgid "Select a question to revise"
@@ -19048,7 +18988,7 @@ msgstr "Zobrazí globálne panel nástrojov v hornej časti stránky na určený
 msgid "Session list"
 msgstr "Zoznam stretnutie"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Zoznam študentov"
 
 msgid "Learners who're taking the exercise right now"
@@ -21304,7 +21244,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22858,7 +22798,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22933,13 +22873,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23479,10 +23416,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23785,10 +23722,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24022,7 +23959,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24088,10 +24025,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

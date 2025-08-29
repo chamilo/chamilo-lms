@@ -549,7 +549,7 @@ $form->addElement('header', get_lang('Advanced search'));
 $form->addText('keyword_firstname', get_lang('First name'), false);
 $form->addText('keyword_lastname', get_lang('Last name'), false);
 $form->addText('keyword_username', get_lang('Login'), false);
-$form->addText('keyword_email', get_lang('e-mail'), false);
+$form->addText('keyword_email', get_lang('E-mail'), false);
 $form->addText('keyword_officialcode', get_lang('Code'), false);
 
 $status_options = [];
@@ -594,7 +594,7 @@ if (api_is_western_name_order()) {
     $table->set_header(4, get_lang('First name'));
 }
 $table->set_header(5, get_lang('Login'));
-$table->set_header(6, get_lang('e-mail'));
+$table->set_header(6, get_lang('E-mail'));
 $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('active'));
 $table->set_header(9, get_lang('Registration date'));

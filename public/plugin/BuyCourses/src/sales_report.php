@@ -105,13 +105,13 @@ $form->addHtml('<div id="report-by-status" '.('0' !== $selectedFilterType ? 'sty
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-user" '.('1' !== $selectedFilterType ? 'style="display:none"' : '').'>');
-$form->addText('user', get_lang('UserName'), false);
+$form->addText('user', get_lang('Username'), false);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-date" '.('2' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addDateRangePicker('date', get_lang('Date'), false);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-email" '.('3' !== $selectedFilterType ? 'style="display:none"' : '').'>');
-$form->addText('email', get_lang('Email'), false);
+$form->addText('email', get_lang('E-mail'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
@@ -151,7 +151,7 @@ $template = new Template($templateName);
 
 $toolbar = Display::url(
     Display::getMdiIcon('file-excel-outline').
-    get_lang('GenerateReport'),
+    get_lang('Generate report'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php',
     ['class' => 'btn btn--primary']
 );

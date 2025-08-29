@@ -299,7 +299,7 @@ if ('learnpath' !== $origin) {
     } else {
         $actions .= '<span style="float:right;">'.search_link().'</span>';
         $actions .= '<a href="'.$forumUrl.'index.php?'.api_get_cidreq().'">'
-            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back toForumOverview'))
+            .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum overview'))
             .'</a>';
     }
 }
@@ -455,7 +455,7 @@ if (is_array($threads)) {
                         .'&id_attach='.$id_attach.'">'
                         .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                     if (api_resource_is_locked_by_gradebook($thread->getIid(), LINK_FORUM_THREAD)) {
-                        $iconsEdit .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This option is not available because this activity is contained by an assessment'));
+                        $iconsEdit .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('This option is not available because this activity is contained by an assessment.'));
                     } else {
                         $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
@@ -504,7 +504,7 @@ if (is_array($threads)) {
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {
                 $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=liststd&content=thread&id={$threadId}".'">'.
-                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Learners list'))
+                    Display::getMdiIcon(ToolIcon::MEMBER, 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Learner list'))
                     .'</a>';
             }
             $html .= $iconsEdit;

@@ -123,7 +123,7 @@ class LinkAddEditForm extends FormValidator
         // ELEMENT: min_score
         $this->addFloat(
             'min_score',
-            get_lang('Minimum Score'),
+            get_lang('Minimum score'),
             true,
             [
                 'size' => '4',

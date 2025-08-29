@@ -27,10 +27,10 @@ $list = [];
 $header = [];
 
 $header[] = get_lang('Username');
-$header[] = get_lang('FirstName');
-$header[] = get_lang('LastName');
-$header[] = get_lang('Email');
-$header[] = get_lang('OfficialCode');
+$header[] = get_lang('First name');
+$header[] = get_lang('Last name');
+$header[] = get_lang('E-mail');
+$header[] = get_lang('Official code');
 
 foreach ($categories as $categoryInfo) {
     $header[] = 'Aciertos: '.$categoryInfo->getTitle();

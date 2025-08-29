@@ -35,7 +35,7 @@ $htmlHeadXtra[] = '<script>
                         localStorage.setItem("redirectTo", textareaId);
                         window.location.reload(true);
                     } else {
-                        alert("Error: " + (data.error || "'.get_lang('Error, try it again').'"));
+                        alert("Error: " + (data.error || "'.get_lang('An unexpected error occurred. Please try again later.').'"));
                         $this.prop("disabled", false).text("'.get_lang('Save').'");
                     }
                 },

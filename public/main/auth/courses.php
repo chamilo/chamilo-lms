@@ -43,7 +43,7 @@ $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
-    $nameTools = get_lang('CourseManagement');
+    $nameTools = get_lang('Course catalog');
 } else {
     if (!in_array(
         $action,
@@ -51,7 +51,7 @@ if (empty($nameTools)) {
     )) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
-            'name' => get_lang('CourseManagement'),
+            'name' => get_lang('Course catalog'),
         ];
     }
     $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
@@ -61,7 +61,7 @@ $auth = new Auth();
 $userId = api_get_user_id();
 $currentUrl = api_get_path(WEB_CODE_PATH).'auth/courses.php?category_code='.$categoryCode.'&search_term='.$searchTerm;
 $content = '';
-$toolTitle = get_lang('CourseCatalog');
+$toolTitle = get_lang('Course catalog');
 
 $courseCatalogSettings = [
     'info_url' => 'course_description_popup',
@@ -98,7 +98,7 @@ switch ($action) {
             $result = $auth->remove_user_from_course($_GET['course_code']);
             if ($result) {
                 Display::addFlash(
-                    Display::return_message(get_lang('YouAreNowUnsubscribed'))
+                    Display::return_message(get_lang('You have been unsubscribed from this course'))
                 );
             }
         }
@@ -142,7 +142,7 @@ switch ($action) {
             header('Location: '.api_get_self());
             exit;
         }
-        $message = get_lang('CourseRequiresPassword').' ';
+        $message = get_lang('This course requires a password').' ';
         $message .= $courseInfo['title'].' ('.$courseInfo['visual_code'].') ';
 
         $action = api_get_self().'?action=subscribe_course_validation&sec_token='.
@@ -156,7 +156,7 @@ switch ($action) {
         $form->addElement('hidden', 'sec_token', Security::getTokenFromSession());
         $form->addElement('hidden', 'subscribe_user_with_password', $courseInfo['code']);
         $form->addElement('text', 'course_registration_code');
-        $form->addButtonSave(get_lang('SubmitRegistrationCode'));
+        $form->addButtonSave(get_lang('Submit registration code'));
         $content = $form->returnForm();
 
         if ($form->validate()) {
@@ -181,7 +181,7 @@ switch ($action) {
                 header('Location: '.api_get_self());
                 exit;
             } else {
-                Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect')), 'warning');
+                Display::addFlash(Display::return_message(get_lang('The course password is incorrect')), 'warning');
                 header('Location: '.$action);
                 exit;
             }
@@ -211,7 +211,7 @@ switch ($action) {
 
         $select = $form->addSelect(
             'category_code',
-            get_lang('CourseCategories'),
+            get_lang('Course categories'),
             [],
             ['placeholder' => get_lang('Please select an option')]
         );
@@ -244,7 +244,7 @@ switch ($action) {
 
         $sortKeySelect = $form->addSelect(
             'sortKeys',
-            get_lang('SortKeys'),
+            get_lang('Sort by'),
             CoursesAndSessionsCatalog::courseSortOptions(),
             ['multiple' => true]
         );
@@ -515,7 +515,7 @@ switch ($action) {
                     if ($userRegisteredInCourse) {
                         $course['already_registered_formatted'] = Display::url(
                             Display::getMdiIcon('external-link', 'mdi-tool-icon-button').'&nbsp;'.
-                            get_lang('GoToCourse'),
+                            get_lang('Go to the course'),
                             $courseUrl.$course['directory'].'/index.php?id_session=0',
                             ['class' => 'btn btn--primary']
                         );
@@ -554,7 +554,7 @@ switch ($action) {
                 if (!isset($_REQUEST['subscribe_user_with_password']) &&
                     !isset($_REQUEST['subscribe_course'])
                 ) {
-                    Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('No results found'), 'warning'));
                 }
             }
         }

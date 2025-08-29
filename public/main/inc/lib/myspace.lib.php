@@ -31,7 +31,7 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=session',
-                'content' => get_lang('Course sessions overview'),
+                'content' => get_lang('Sessions overview'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'my_space/admin_view.php?display=course',
@@ -819,7 +819,7 @@ class MySpace
         $csv_row = [];
         $csv_row[] = $displayText;
 
-        $csv_row[] = get_lang('CountOfSubscribedUsers');
+        $csv_row[] = get_lang('Subscribed users count');
         $csv_content[] = $csv_row;
 
         foreach ($companys as $entity => $student) {
@@ -833,7 +833,7 @@ class MySpace
 
         $csv_row = [];
         // user official code
-        $csv_row[] = get_lang('GeneralTotal');
+        $csv_row[] = get_lang('General total');
         $csv_row[] = $total;
         $csv_content[] = $csv_row;
         Export::arrayToCsv($csv_content, 'reporting_company_resume');
@@ -858,13 +858,13 @@ class MySpace
         $table = '<div class="table-responsive"><table class="table table-hover table-striped table-bordered data_table">';
 
         $displayText = get_lang('Company');
-        $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('CountOfSubscribedUsers')." </th></tr></thead><tbody>";
+        $table .= "<thead><tr><th class=\"th-header\">$displayText</th><th class=\"th-header\"> ".get_lang('Subscribed users count')." </th></tr></thead><tbody>";
 
         foreach ($companys as $entity => $student) {
             $table .= "<tr><td>$entity</td><td>".count($student)."</td></tr>";
             $total += count($student);
         }
-        $table .= "<tr><td>".get_lang('GeneralTotal')."</td><td>$total</td></tr>";
+        $table .= "<tr><td>".get_lang('General total')."</td><td>$total</td></tr>";
         $table .= '</tbody></table></div>';
 
         if (!empty($startDate) or !empty($endDate)) {
@@ -882,23 +882,22 @@ class MySpace
         }
         $form->addDatePicker(
             'startDate',
-            get_lang('DateStart'),
+            get_lang('Start date'),
             [
                 'value' => $startDate,
             ]);
         $form->addDatePicker(
             'endDate',
-            get_lang('DateEnd'),
+            get_lang('End date'),
             [
                 'value' => $endDate,
             ]);
         $form->addButtonSearch(get_lang('Search'));
         if (0 != count($companys)) {
-            //$form->addButtonSave(get_lang('Ok'), 'export');
             $form
                 ->addButton(
                     'export_csv',
-                    get_lang('ExportAsCSV'),
+                    get_lang('CSV export'),
                     'check',
                     'primary',
                     null,
@@ -1000,16 +999,16 @@ class MySpace
                 "<thead>".
                 "<tr>".
                 "<th class=\"th-header\">".get_lang('Author')."</th>".
-                "<th class=\"th-header\">".get_lang('LearningPathList')."</th>".
-                "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
-                "<th class=\"th-header\">".get_lang('StudentList')."</th>".
+                "<th class=\"th-header\">".get_lang('Learning path list')."</th>".
+                "<th class=\"th-header\">".get_lang('Subscribed users count')."</th>".
+                "<th class=\"th-header\">".get_lang('Learner list')."</th>".
                 "</tr>".
                 "</thead>".
                 "<tbody>";
             $index = 0;
             //icons for show and hode
-            $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
-            $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
+            $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('Show/Hide'));
+            $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Show/Hide'));
             $teacherNameTemp = '';
             foreach ($data as $teacherName => $reportData) {
                 $lpCount = 0;
@@ -1033,7 +1032,7 @@ class MySpace
                         "<div id='$hiddenField' class='hidden'>";
                     foreach ($row['studentList'] as $student) {
                         $reportLink = Display::url(
-                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Stats')),
+                            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 22, get_lang('Statistics')),
                             api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&student='.
                             $student['id']
                             .'&id_session='.$lpInfo['session_id']
@@ -1051,7 +1050,7 @@ class MySpace
                 $table .=
                     "<tr>".
                     "<td></td>".
-                    "<td><strong>".get_lang('LearnpathsTotal')." $lpCount</strong></td>".
+                    "<td><strong>".get_lang('Total learning paths')." $lpCount</strong></td>".
                     "<td><strong>$totalStudent</strong></td>".
                     "<td></td>".
                     "</tr>";
@@ -1074,23 +1073,22 @@ class MySpace
             }
             $form->addDatePicker(
                 'startDate',
-                get_lang('DateStart'),
+                get_lang('Start date'),
                 [
                     'value' => $startDate,
                 ]);
             $form->addDatePicker(
                 'endDate',
-                get_lang('DateEnd'),
+                get_lang('End date'),
                 [
                     'value' => $endDate,
                 ]);
             $form->addButtonSearch(get_lang('Search'));
             if (0 != count($data)) {
-                //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
                         'export_csv',
-                        get_lang('ExportAsCSV'),
+                        get_lang('CSV export'),
                         'check',
                         'primary',
                         null,
@@ -1109,9 +1107,9 @@ class MySpace
             $csv_content = [];
             $csv_row = [];
             $csv_row[] = get_lang('Author');
-            $csv_row[] = get_lang('LearningPathList');
-            $csv_row[] = get_lang('CountOfSubscribedUsers');
-            $csv_row[] = get_lang('StudentList');
+            $csv_row[] = get_lang('Learning path list');
+            $csv_row[] = get_lang('Subscribed users count');
+            $csv_row[] = get_lang('Learner list');
             $csv_content[] = $csv_row;
             foreach ($data as $teacherName => $reportData) {
                 foreach ($reportData as $lpName => $row) {
@@ -1172,7 +1170,7 @@ class MySpace
                 "<table class='table table-hover table-striped table-bordered data_table'>".
                 "<thead>".
                 "<tr>".
-                "<th class=\"th-header\">".get_lang('NoDataAvailable')."</th>".
+                "<th class=\"th-header\">".get_lang('No data available')."</th>".
                 "</tr>".
                 "</thead>".
                 "</tbody>".
@@ -1256,17 +1254,17 @@ class MySpace
                     "<thead>".
                     "<tr>".
                     "<th class=\"th-header\">".get_lang('Author')."</th>".
-                    "<th class=\"th-header\">".get_lang('ContentList')."</th>".
+                    "<th class=\"th-header\">".get_lang('Content list')."</th>".
                     "<th class=\"th-header\">".get_lang('Tariff')."</th>".
-                    "<th class=\"th-header\">".get_lang('CountOfSubscribedUsers')."</th>".
-                    "<th class=\"th-header\">".get_lang('ToInvoice')."</th>".
-                    "<th class=\"th-header\">".get_lang('StudentList')."</th>".
+                    "<th class=\"th-header\">".get_lang('Subscribed users count')."</th>".
+                    "<th class=\"th-header\">".get_lang('To invoice')."</th>".
+                    "<th class=\"th-header\">".get_lang('Learner list')."</th>".
                     "</tr>".
                     "</thead>".
                     "<tbody>";
                 //Icon Constant
-                $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
-                $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('ShowOrHide'));
+                $iconAdd = Display::getMdiIcon('plus', 'ch-tool-icon', null, 22, get_lang('Show/Hide'));
+                $iconRemove = Display::getMdiIcon('delete', 'ch-tool-icon', null, 22, get_lang('Show/Hide'));
 
                 $lastAuthor = '';
                 $total = 0;
@@ -1352,24 +1350,23 @@ class MySpace
             }
             $form->addDatePicker(
                 'startDate',
-                get_lang('DateStart'),
+                get_lang('Start date'),
                 [
                     'value' => $startDate,
                 ]);
             $form->addDatePicker(
                 'endDate',
-                get_lang('DateEnd'),
+                get_lang('End date'),
                 [
                     'value' => $endDate,
                 ]);
             $form->addButtonSearch(get_lang('Search'));
 
             if (0 != count($printData)) {
-                //$form->addButtonSave(get_lang('Ok'), 'export');
                 $form
                     ->addButton(
                         'export_csv',
-                        get_lang('ExportAsCSV'),
+                        get_lang('CSV export'),
                         'check',
                         'primary',
                         null,
@@ -1389,11 +1386,11 @@ class MySpace
             $csv_row = [];
 
             $csv_row[] = get_lang('Author');
-            $csv_row[] = get_lang('ContentList');
+            $csv_row[] = get_lang('Content list');
             $csv_row[] = get_lang('Tariff');
-            $csv_row[] = get_lang('CountOfSubscribedUsers');
-            $csv_row[] = get_lang('ToInvoice');
-            $csv_row[] = get_lang('StudentList');
+            $csv_row[] = get_lang('Subscribed users count');
+            $csv_row[] = get_lang('To invoice');
+            $csv_row[] = get_lang('Learner list');
             $csv_content[] = $csv_row;
             foreach ($printData as $authorId => $lpItemData) {
                 $autor = $authors[$authorId];
@@ -2387,14 +2384,14 @@ class MySpace
         $csv_row[] = get_lang('Time');
         $csv_row[] = get_lang('Progress');
         $csv_row[] = get_lang('Average score in learning paths');
-        $csv_row[] = get_lang('AvgExercisesScore');
-        $csv_row[] = get_lang('AvgMessages');
-        $csv_row[] = get_lang('AvgAssignments');
+        $csv_row[] = get_lang('Tests score');
+        $csv_row[] = get_lang('Messages per learner');
+        $csv_row[] = get_lang('Assignments');
         $csv_row[] = get_lang('Total score obtained for tests');
         $csv_row[] = get_lang('Total possible score for tests');
         $csv_row[] = get_lang('Number of tests answered');
         $csv_row[] = get_lang('Total score percentage for tests');
-        $csv_row[] = get_lang('FirstLogin');
+        $csv_row[] = get_lang('First connection');
         $csv_row[] = get_lang('Latest login');
         $csv_content[] = $csv_row;
 
@@ -2875,7 +2872,7 @@ class MySpace
             }
             // 2. Check whether the username is too long.
             if (UserManager::is_username_too_long($user['UserName'])) {
-                $user['error'] = get_lang('UserNameTooLong');
+                $user['error'] = get_lang('This login is too long');
                 $errors[] = $user;
             }
 
@@ -2975,7 +2972,7 @@ class MySpace
                     get_lang('Sincerely').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
                     get_lang('Administrator')." ".api_get_setting('siteName')."\nT. ".
-                    api_get_setting('administratorTelephone')."\n".get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
+                    api_get_setting('administratorTelephone')."\n".get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
                     api_get_person_name($user['First name'], $user['Last name'], null, PERSON_NAME_EMAIL_ADDRESS),
@@ -3155,7 +3152,7 @@ class MySpace
             [
                 '' => get_lang('Select'),
                 STUDENT => get_lang('Learner'),
-                COURSEMANAGER => get_lang('CourseAdministrator'),
+                COURSEMANAGER => get_lang('Teacher'),
                 DRH => get_lang('Human Resources Manager'),
             ],
             ['id' => 'profile']
@@ -3215,17 +3212,17 @@ class MySpace
                     'display' => 'accessoverview',
                 ]
             );
-            $table->set_header(0, get_lang('LoginDate'), true);
+            $table->set_header(0, get_lang('Login date'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
-                $table->set_header(2, get_lang('FirstName'), true);
-                $table->set_header(3, get_lang('LastName'), true);
+                $table->set_header(2, get_lang('First name'), true);
+                $table->set_header(3, get_lang('Last name'), true);
             } else {
-                $table->set_header(2, get_lang('LastName'), true);
-                $table->set_header(3, get_lang('FirstName'), true);
+                $table->set_header(2, get_lang('Last name'), true);
+                $table->set_header(3, get_lang('First name'), true);
             }
             $table->set_header(4, get_lang('IP'), false);
-            $table->set_header(5, get_lang('TimeLoggedIn'), false);
+            $table->set_header(5, get_lang('Time connected (hh:mm)'), false);
         }
 
         $template = new Template(
@@ -3695,7 +3692,7 @@ class MySpace
             return '<img src="'.$imgPath.'">';
         } else {
             return api_convert_encoding(
-                '<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>',
+                '<div id="messages" class="warning-message">'.get_lang('Graphic not available').'</div>',
             'UTF-8'
         );
         }
@@ -3816,7 +3813,7 @@ class MySpace
                 $studentId = (int) $row['to_user_id'];
                 $company = isset($row['company']) ? $row['company'] : '';
                 if ('' == $company) {
-                    $company = get_lang('NoEntity');
+                    $company = get_lang('No organization');
                 }
                 // $lpId = $row['ref'];
                 if (0 != $lpId && 0 != $studentId) {

@@ -33,7 +33,7 @@ if (empty($result)) {
 $nameTools = get_lang('Tests management');
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     'url' => 'admin.php?exerciseId='.$exercise->iId.'&'.api_get_cidreq(),
@@ -150,7 +150,7 @@ foreach ($headers as $header) {
     $column++;
 }
 
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, get_lang('Test'));
 echo $formToString;
 echo $table->return_table();
 Display::display_footer();

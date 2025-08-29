@@ -123,7 +123,7 @@ if (!api_is_student_boss()) {
 }
 
 $content .= '</div>';
-$content .= '<h1 class="page-header">'.get_lang('Corporate reportResumed').'</h1>';
+$content .= '<h1 class="page-header">'.get_lang('Corporate report, short version').'</h1>';
 $content .= Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);

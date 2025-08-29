@@ -135,6 +135,8 @@ $usergroup = new UserGroupModel();
 $usergroup->protectScript();
 
 $tool_name = get_lang('Add users to a class').' CSV';
+$csvCustomError = '';
+$topStaticErrorHtml = '';
 
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
@@ -147,21 +149,29 @@ $form = new FormValidator('class_user_import');
 $form->addElement('header', $tool_name);
 $form->addElement('file', 'import_file', get_lang('CSV file import location'));
 //$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
-$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from course if his name is not in the list'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from all group-related entities if his/her name is not in the list'));
 $form->addButtonImport(get_lang('Import'));
 
 $errors = [];
 if ($form->validate()) {
-    $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
-    $errors = validate_data($users_classes);
-    if (0 == count($errors)) {
-        $deleteUsersNotInList = isset($_REQUEST['unsubscribe']) && !empty($_REQUEST['unsubscribe']) ? true : false;
-        $return = save_data($users_classes, $deleteUsersNotInList);
+    $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+    if (true !== $check) {
+        $csvCustomError = $check;
+        $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+    } else {
+        $users_classes = parse_csv_data($_FILES['import_file']['tmp_name']);
+        $errors = validate_data($users_classes);
+        if (0 == count($errors)) {
+            $deleteUsersNotInList = !empty($_REQUEST['unsubscribe']);
+            $return = save_data($users_classes, $deleteUsersNotInList);
+        }
     }
 }
 
 Display::display_header($tool_name);
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 if (isset($return) && $return) {
     echo $return;
 }
@@ -179,9 +189,9 @@ $form->display();
 ?>
 <p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <pre>
-<b>UserName</b>;<b>ClassName</b>
-jdoe;class01
-adam;class01
+<b>UserName</b>,<b>ClassName</b>
+jdoe,class01
+adam,class01
 </pre>
 <?php
 Display::display_footer();

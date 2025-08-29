@@ -231,7 +231,7 @@ class ExerciseResult
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
                 // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
-                $return[$i]['status'] = 1 === $revised ? get_lang('Validated') : (0 === $revised ? get_lang('NotValidated') : get_lang('Unclosed'));
+                $return[$i]['status'] = 1 === $revised ? get_lang('Validated') : (0 === $revised ? get_lang('Not validated') : get_lang('Unclosed'));
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 
@@ -340,7 +340,7 @@ class ExerciseResult
         }
 
         $data .= get_lang('Login').';';
-        $data .= get_lang('e-mail').';';
+        $data .= get_lang('E-mail').';';
         $data .= get_lang('Groups').';';
 
         if ($export_user_fields) {
@@ -504,7 +504,7 @@ class ExerciseResult
             }
 
             $list[0][] = get_lang('Login');
-            $list[0][] = get_lang('e-mail');
+            $list[0][] = get_lang('E-mail');
         }
 
         $list[0][] = get_lang('Groups');

@@ -159,7 +159,7 @@ function process_uploaded_file($uploadedFileData, $show_output = true)
             if ($show_output) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('The file upload has failed.SizeIsZero'),
+                        get_lang('There was a problem uploading your document: the received file had a 0 bytes size on the server. Please, review your local file for any corruption or damage, then try again.'),
                         'error'
                     )
                 );

@@ -1281,11 +1281,11 @@ class Bbb
         $isVisible = $meetingInfo['visibility'] != 0;
         $linkVisibility = $isVisible
             ? Display::url(
-                Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeInvisible')),
+                Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make invisible')),
                 $this->unPublishUrl($meetingInfo)
             )
             : Display::url(
-                Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('MakeVisible')),
+                Display::getMdiIcon(StateIcon::INACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Make visible')),
                 $this->publishUrl($meetingInfo)
             );
 
@@ -1317,7 +1317,7 @@ class Bbb
                 return $links;
             } else {
                 $links[] = Display::url(
-                    Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('GoToCourse')),
+                    Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Go to the course')),
                     $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
                 );
 
@@ -1331,7 +1331,7 @@ class Bbb
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(
-                Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AddToCalendar')),
+                Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add to calendar')),
                 $this->addToCalendarUrl($meetingInfo, $recordInfo)
             );
         }
@@ -1341,13 +1341,13 @@ class Bbb
         if ($hide == false) {
             if ($meetingInfo['has_video_m4v']) {
                 $links[] = Display::url(
-                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DownloadFile')),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download file')),
                     $recordInfo['playbackFormatUrl'].'/capture.m4v',
                     ['target' => '_blank']
                 );
             } else {
                 $links[] = Display::url(
-                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('DownloadFile')),
+                    Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download file')),
                     '#',
                     [
                         'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
@@ -1367,7 +1367,7 @@ class Bbb
             $links[] = $linkVisibility;
         } else {
             $links[] = Display::url(
-                Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('GoToCourse')),
+                Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Go to the course')),
                 $this->getListingUrl($meetingInfo['c_id'], $meetingInfo['session_id'], $meetingInfo['group_id'])
             );
         }

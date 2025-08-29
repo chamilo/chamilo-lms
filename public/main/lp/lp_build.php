@@ -67,13 +67,13 @@ if (isset($is_success) && true === $is_success) {
     $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$learnPath->get_id(),
         get_lang("Add learning object or activity"),
-        get_lang('Add learning object or activityComment'),
+        get_lang('Add tests, activities and multimedia content'),
         ObjectIcon::RESOURCE
     );
     $rightColumn .= show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnPath->get_id(),
         get_lang("Ranking"),
-        get_lang('RankingComment'),
+        '',
         ActionIcon::PREVIEW_CONTENT
     );
     $rightColumn .= '</ul>';

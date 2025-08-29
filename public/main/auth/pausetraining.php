@@ -22,7 +22,7 @@ $justification = '';
 $plugin = PauseTraining::create();
 
 $form = new FormValidator('pausetraining');
-$form->addHeader($plugin->get_lang('PauseTraining'));
+$form->addHeader($plugin->get_lang('Pause training'));
 
 $extraField = new ExtraField('user');
 
@@ -41,7 +41,7 @@ $return = $extraField->addElements(
 
 $form->addRule(
     ['extra_start_pause_date', 'extra_end_pause_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
+    get_lang('The first date should be before the end date'),
     'date_compare',
     'lte'
 );
@@ -65,7 +65,7 @@ if ($form->validate()) {
 $tabs = SocialManager::getHomeProfileTabs('pausetraining');
 $content = $tabs.$form->returnForm();
 
-$tpl = new Template(get_lang('ModifyProfile'));
+$tpl = new Template(get_lang('Profile'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 

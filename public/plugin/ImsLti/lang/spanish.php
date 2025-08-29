@@ -75,3 +75,4 @@ $strings['ReplacementUserIdHelp'] = 'El user_id (sub) actual en los parametros d
 $strings['AddInCourses'] = 'Añadir a cursos';
 $strings['AddInAllCourses'] = 'Aãndir a todos los cursos';
 $strings['AddInSessions'] = 'Añadir a sesiones';
+$strings["BaseToolsCanBeAddedInSessionsOnly"] = "Las herramientas base pueden ser añadidas únicamente en sesiones";

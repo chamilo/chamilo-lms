@@ -52,7 +52,7 @@ if (!empty($sqlList)) {
     }
     $content .= '</pre>';
 } else {
-    Display::addFlash(Display::return_message(get_lang('Nothing else to update')));
+    Display::addFlash(Display::return_message(get_lang('Nothing left to update.')));
 }
 
 Display::display_header(get_lang('Synchronize the database with the schema'));

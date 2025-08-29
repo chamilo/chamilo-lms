@@ -284,7 +284,7 @@ const steps = ref([
   },
   {
     step: 3,
-    stepTitle: t("Licence"),
+    stepTitle: t("License"),
   },
   {
     step: 4,

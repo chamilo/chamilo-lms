@@ -75,7 +75,7 @@ class UserForm extends FormValidator
         $this->addElement(
             'static',
             'email',
-            get_lang('e-mail'),
+            get_lang('E-mail'),
             '<a href="mailto:'.$this->user_info['email'].'">'.$this->user_info['email'].'</a>'
         );
         $this->addElement('static', 'ofcode', get_lang('Code'), $this->user_info['official_code']);

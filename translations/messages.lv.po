@@ -621,10 +621,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1605,7 +1605,7 @@ msgstr "Pakotnes formāts nav atpazīstams. Lūdzu pārliecinieties, ka tā ir p
 msgid "Move the current forum"
 msgstr "Pārvietot šo diskusiju"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "UZMANĪBU! Rediģējot mācību objekta saturu, jūs variet izmainīt kursa senāku kursa atskaiti, vai bojāt pašu mācību objektu."
 
 msgid "Please provide a subject or message"
@@ -1722,7 +1722,7 @@ msgstr "Pēc noklusējuma, Jūsu apmācības kurss ir publisks, bet Jūs varat n
 msgid "Public - access allowed for the whole world"
 msgstr "Atklātā pieeja - iespējama no jebkuras vietas pasaulē!"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Daļēji atklātā pieeja - iespējama lietotājiem, kas reģistrējušies portālā"
 
 msgid "Student %s is no subscribed to this course"
@@ -1752,7 +1752,7 @@ msgstr "Pievienot hipersaiti sākumlapā"
 msgid "has been deleted"
 msgstr "tika izdzēsts"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "zdzēšot šo sadaļu, tiks neatgriezeniski dzēsts viss saturs (dokumenti, saites, ...), un tiks atteikta reģistrācija visiem dalībniekiem (nedzēšot tos no citām sadaļām). Tāpat tiks dzēsti arī visi virtuālie kursi, kas ir saistīti ar šo kursu.<p>Vai Jūs tiešām vēlaties dzēst šo kursu un tā saturu?"
 
 msgid "YES"
@@ -2519,9 +2519,6 @@ msgstr "Departaments, kategorija vai kāda cita struktūrvienība, zem kura būs
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Lūdzu <b>konsulējaties ar atbildīgo personu, par kursa kodu.</b> Tas ir svarīgi!"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Kursa programa</a>. Ja nezinat kursa kodu, lai kāds būtu iemesls tam, izdomājit to. Piemēram <i>INNOVATION</i> ja kurss saucas <i>Innovation Management</i>"
 
 msgid "SCORM Path builder"
 msgstr "Mācību programmas SCORM veidošanas instruments"
@@ -3376,9 +3373,6 @@ msgstr "Veidot piezīmi"
 msgid "Edit my personal note"
 msgstr "Rediģēt manas personīgās piezīmes"
 
-msgid "Back to note list"
-msgstr "Atpakaļ uz piezīmju sarakstu"
-
 msgid "Notebook management"
 msgstr "Piezīmju grāmatas vadība"
 
@@ -3493,7 +3487,7 @@ msgstr "Izveidot kursu kategoriju (mapi)"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Vai tiešām vēlaties izdzēst šo kursu kategoriju?<br>Kursi, kas ir šajā kategorijā, tiks pārvietoti ārpus kursu kategoriju saraksta."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Kursu kategorijas"
 
 msgid "Courses in this category"
@@ -4501,10 +4495,10 @@ msgstr "Šis lietotājs nav reģistrējies šajā klasē"
 msgid "This class isn't subscribed in a course"
 msgstr "Šī klase nav pievienota šim kursam"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Instruments"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "lietu skaits"
 
 msgid "Documents and folders"
@@ -4666,7 +4660,7 @@ msgstr "Lūdzu rakstiet piezīmes tekstu"
 msgid "Please give a notice title"
 msgstr "Lūdzu rakstiet piezīmes virsrakstu"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Lūdzu rakstiet vietnes (saites) nosaukumu"
 
 msgid "Insert this link"
@@ -5068,7 +5062,7 @@ msgstr "Beigt sesijas izveidi"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Videokonferences RTMTP protokola ports"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Sesijas nosaukums jau eksistē"
 
 msgid "No classes have been created"
@@ -5218,8 +5212,8 @@ msgstr "Ja šī opcija ir aktivizēta, noklikšķinot uz e-pasta adreses, tiks a
 msgid "Include header line?"
 msgstr "Pievienot CSV galveni?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Jā, pievienot CSV galveni. Tā definēs lauku, kurš ir svarīgs, ja Jūs vēlaties importēt failu citā Chamilo portālā."
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Tā definēs lauku, kurš ir svarīgs, ja Jūs vēlaties importēt failu citā Chamilo portālā."
 
 msgid "List of users subscribed to course"
 msgstr "Lietotāju saraksts, kuri ir pierakstījušies uz apmācībām"
@@ -5452,7 +5446,7 @@ msgstr "Lauka tips - atzīmēt no izkrītošās izvēles"
 msgid "Multiple selection drop-down"
 msgstr "Lauka tips - vairākkārtēja izkrītošā izvēle"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Lauks ir veiksmīgi pievienots"
 
 msgid "Grades thresholds colouring"
@@ -5704,7 +5698,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5751,9 +5745,6 @@ msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr ""
-
-msgid "is not writeable"
-msgstr "Nav ierakstāms"
 
 msgid "The field is successfully moved down"
 msgstr "Lauks veiksmīgi tika pārvietots uz leju"
@@ -6343,16 +6334,13 @@ msgstr "Kursi oriģinālajā sesijā"
 msgid "Courses from the destination session"
 msgstr "Kursi no galamērķa sesijas"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Palīg instruments kursu iekšējai pārvietošanai / kopēšanai no sesijas uz sesiju"
-
 msgid "Type of copy"
 msgstr "Kopēšanas iespējas"
 
 msgid "Copy from course in session to another session"
 msgstr "Kopēt kursu no vienas sesijas otrā"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6424,10 +6412,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6585,9 +6573,6 @@ msgstr "Tikai Lektoram"
 
 msgid "Define Headings"
 msgstr "Definēt virsrakstus"
-
-msgid "Back to users list"
-msgstr "Atgriezties Lietotāju sarakstā"
 
 msgid "change rights of"
 msgstr "tiesību maiņa"
@@ -7006,9 +6991,6 @@ msgstr "Klašu grupas"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Lietojot šo opciju, Jūs variet veidot grupas no klasēm, kuras ir pierakstītas Jūsu kursam"
 
-msgid "Back to Groups list"
-msgstr "Atpakaļ uz Grupu sarakstu"
-
 msgid "A new forum has now been created"
 msgstr "Tikko tika izveidota jauna diskusiju telpa"
 
@@ -7285,7 +7267,7 @@ msgstr "Pārvietot konkrēto dokumentu"
 msgid "Edit the current document"
 msgstr "Rediģēt konkrēto dokumentu"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "<b>UZMANĪBU</b> !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7678,7 +7660,7 @@ msgstr "Atgriezties testu izstrādes sākumā"
 msgid "Answers to the question"
 msgstr "Atbildes uz jautājumu"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Uzmanību! Šis jautājums un tā atbildes tiek izmantotas vairākos testos. Vai Jūs vēlētos tās rediģēt ?"
 
 msgid "in all tests"
@@ -7827,9 +7809,6 @@ msgstr "Jūs esat iztērējis šī testa pieļaujamo mēģinājumu skaitu. Tā k
 
 msgid "Exercise added"
 msgstr "Uzdevums pievienots"
-
-msgid "Assesment settings"
-msgstr "Novērtēšanas iestatījumi"
 
 msgid "active"
 msgstr "aktīvs"
@@ -8413,9 +8392,6 @@ msgstr "Sasniegts laika limits (admin)"
 msgid "Last score of a exercise"
 msgstr "Testa pēdējais rezultāts"
 
-msgid "Back to result list"
-msgstr "Atpakaļ uz rezultātu sarakstu"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Ja rediģējat jautājuma vērtējumu, atcerieties, ka šis tests ir pievienots kursā"
 
@@ -8496,9 +8472,6 @@ msgstr "Lietotāji tiešsaistē"
 
 msgid "Remove"
 msgstr "Izņemt"
-
-msgid "Back to courses list"
-msgstr "Atpakaļ uz manu kursu sarakstu"
 
 msgid "Links"
 msgstr "Ievietot Hipersaišu arhīvā esošas tīmekļa hipersaites"
@@ -8595,9 +8568,6 @@ msgstr "Vārds"
 
 msgid "Last name"
 msgstr "Uzvārds"
-
-msgid "e-mail"
-msgstr "e-pasts"
 
 msgid "Slideshow conversion"
 msgstr "Slaidu demonstrācijas konvertācija"
@@ -8899,7 +8869,7 @@ msgstr "valoda"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Hmm, bet šis kursa kods jau eksistē. Lūdzu izvēlies citu codu."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "grupas saraksts"
 
 msgid "The target folder does not exist"
@@ -9358,9 +9328,6 @@ msgstr "Manas aktīvās sesijas"
 msgid "My inactive sessions"
 msgstr "Manas neaktīvās sesijas"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Šis paplašinājums ir aktivizēts, bet šajā brīdī nav pielietojams"
-
 msgid "My learners"
 msgstr "Mani Kursanti"
 
@@ -9391,7 +9358,7 @@ msgstr "Nav resursu pārstrādāšanai"
 msgid "Could not open"
 msgstr "Nevarēja atvērt"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Atkārtošanās laiks"
 
 msgid "This course could not be found"
@@ -9523,8 +9490,8 @@ msgstr "Hipersaite nav apmeklēta"
 msgid "No document downloaded"
 msgstr "Dokuments nav lejupielādēts"
 
-msgid "clicks"
-msgstr "Klikšķi"
+msgid "%d clicks"
+msgstr "%d Klikšķi"
 
 msgid "Search results"
 msgstr "Meklēšanas rezultāti"
@@ -9607,7 +9574,7 @@ msgstr "OpenID URL"
 msgid "The file is too big to upload."
 msgstr "Fails, ko Jūs augšupielādējat ir pārāk liels attiecībā pret pašreizējiem platformas iestatījumiem (% MB). Lūdzu, sazinieties ar portāla administratoru, lai apspriestu šo jautājumu."
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Fails, ko jūs augšupielādējāt, netika saņemts. Lūdzu, mēģiniet vēlāk vēlreiz, vai sazinieties par šo jautājumu ar portāla administratoru."
 
 msgid "Assessments"
@@ -9667,7 +9634,7 @@ msgstr "Stundas"
 msgid "minutes"
 msgstr "Minūtes"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Dokuments izveidots"
 
 msgid "The forum has been added"
@@ -10195,7 +10162,7 @@ msgstr "Vairāk informācijas"
 msgid "Make invisible"
 msgstr "Padarīt neredzamu"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Padarīt redzamu"
 
 msgid "Image"
@@ -10212,9 +10179,6 @@ msgstr "Sūtīt ziņu"
 
 msgid "Menu"
 msgstr "Izvēlne"
-
-msgid "Back to user list"
-msgstr "Atpakaļ uz lietotāju sarakstu"
 
 msgid "Graphic not available"
 msgstr "Grafiks nav pieejams"
@@ -10540,7 +10504,7 @@ msgstr "Novērtējuma redzamība"
 msgid "Who changed it"
 msgstr "Kurš ir veicis izmaiņas"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "Novērtējums ir veiksmīgi rediģēts"
 
 msgid "Incorrect data"
@@ -11551,7 +11515,7 @@ msgstr "Tagad lapa ir redzama visiem lietotājiem"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "Galveno lapu var rediģēt tikai Lektors"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Pieeja Lektora lapai"
 
 msgid "Now discussion is visible by trainers only"
@@ -13333,7 +13297,7 @@ msgstr "Lūdzu ievadiet jautājumu"
 msgid "Number of question"
 msgstr "Jautājuma numurs"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Šis kods jau eksistē"
 
 msgid "Save and exit"
@@ -13384,13 +13348,13 @@ msgstr "Pievienot jautājumu aptaujai"
 msgid "This type does not exist"
 msgstr "Šis veids neeksistē"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Aptauja veiksmīgi ir izveidota"
 
 msgid "You can now add questions to your survey"
 msgstr "Tagad Jūs varat pievienot Jūsu aptaujai jautājumus"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Aptauja veiksmīgi ir atjaunināta"
 
 msgid "The question has been added."
@@ -13588,7 +13552,7 @@ msgstr "Šīs aptaujas kods jau pastāv. Ir iespējams, ka aptauja pastāv arī 
 msgid "This survey code soon exists in this language"
 msgstr "Šādā valodā jau eksistē šis aptaujas kods"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Lietotāju atbildes šajā aptaujā ir veiksmīgi pārvietotas"
 
 msgid "Delete this user's answers"
@@ -13711,7 +13675,7 @@ msgstr "<br><b>Informējiet Kursantu :</b><br>Vai ir pieejams kursa materiāls d
 msgid "Short description of the course materials."
 msgstr "Kursa materiālu īss apraksts."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "<br><b>Informējiet Kursantu :</b><br>Aprakstiet, kādi Pasniedzēji, metodiķi, tehniskais atbalsts, laboranti, datorklases un citi resursi ir pieejami Kursa apguvē."
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14236,9 +14200,6 @@ msgstr "Marķējums nevar būt lielāks par maksimālo vērtējumu"
 msgid "Delete all papers"
 msgstr "Dzēst visus iesniegtos darbus"
 
-msgid "Back to Assignments list"
-msgstr "Atgriezties uz patstāvīgo darbu sarakstu"
-
 msgid "Edit and mark paper"
 msgstr "Rediģēt un vērtēt patstāvīgo darbu"
 
@@ -14294,10 +14255,10 @@ msgid "<p><b>Introduction</b></p><p>This tool allows you to create and manage wo
 msgstr "<p><b>Ievads </b></p> <p>Šis rīks ļauj izveidot un pārvaldīt darba grupas. Veidošanas sākumā(Izveidot grupas), grupas ir tukšas. Ir daudz veidu, kā tās aizpildīt:<ul><li> automātiski (\"Aizpildīt grupas\"(pēc nejaušības principa)),</li> <li> ar roku (\"Rediģēt\"), </li> <li>lietotāju paš-piereģistrēšanās (Grupu uzstādījumi : \"Pašpiereģistrēšanās atļauta...\").</li> </ul>  Šie trīs veidi var tikt kombinēti.Piemēram, jūs varat palūgt lietotājiem vispirms piereģistrēties pašiem. Pēc tam, atklājot, ka kāds nav piereģistrējies, izvēlēties automātisko aizpildīšanos. Jūs varat rediģēt katru grupu, lai izveidotu lietotāju skaitu pēc vai pirms pašpiereģistrēsanās un/vai automātiskās aizpildīšanās.</p> <p>Grupu aizpildīšana, gan automātiska, gan ar roku, darbojas tikai tad, ja lietotājs ir piereģistrējies. Lietotāju saraksts ir redzams <b> Lietotāji rīkā</b>.  </p><hr noshade size=1> <p><b>Izveidot grupas </b></p> <p>Lai izveidotu jaunas grupas, noklikšķiniet  uz\"Izveidot jaunu grupu(as)\" un nosaki veidojamo grupu skaitu. </p><hr noshade size=1> <p><b>Grupu uzstādījumi </b></p> <p>  Jūs varat noteikt Grupu uzstādījumus vispārīgi (visām grupām).<b> Grupās lietotājiem ir atļauts piereģistrēties pašiem</b>:<p>Jūs varat izveidot tukšās grupas, kurās lietotāji piereģistrēsies paši. Ja jūs definējāt maksimālo grupas dalībnieku skaitu, pilnajās grupās netiks piereģistrēts jauns lietotājs. Šī metode ir laba tiem pasniedzējiem, kuri, veidojot grupas, nezina lietotāju sarakstu.</p> <b>Rīki</b>:</p> <p>Katrai grupai ir sava diskusiju sadaļa(publiska vai privāta) vai dokumentu sadaļa (kopējs datņu pārvaldnieks),vai (vairākumā gadījumu) abi.</p> <hr noshade size=1> <p><b>Rediģēšana ar roku</b></p><p>Kad grupas ir izveidotas (Izveidot grupas), lapas augšpusē jūs redzat grupu sarakstu ar dažādu informāciju un funkcijām.<ul><li><b>Rediģēt</b> lai ar roku varētu izmainītu grupas nosaukumu, aprakstu, pasniedzējus, dalībnieku sarakstu.</li> <li><b>Dzēst</b> izdzēš grupu.</li></ul> <hr noshade size=1>"
 
 msgid "<p>The tests tool allows you to create tests containing as many questions as you like.<br><br> You can choose from a range of question formats clearly displayed at the top of the page when you create a test including (for example):<br><br><ul>  <li>Multiple choice (single or multiple answers)</li>  <li>Matching</li>  <li>Fill in the blanks etc.</li></ul>A test can include any number and combination of questions and question formats.</p><hr><b>Test creation</b><p>To create a test, click on the \"New test\" link.<br><br>Type a name for the test, as well as an optional description.<br><br>You can add various elements to this, including audio or video files, e.g. for listening comprehension, but take care to make such files as small as possible to optimise download time (e.g. use mp3 rather than wav files - they're far smaller but perfectly good quality). <br><br>You can also choose between two modes of presentation:<br><br><ul>  <li>Questions on an single page</li>  <li>One question per page (sequentially)</li></ul>and opt for questions to be randomly organised when the test is run.<br><br>Finally, save your test. You will be taken to the question administration.</p><hr><b>Adding a question</b><p>You can now add a question to the newly created test. You can if you wish include a description and/or an image. To create the test types mentioned above, follow the following steps: </p><hr><b>Multiple choice</b><p>In order to create a MAQ / MCQ :<br><br><ul>  <li>Define the answers for your question. You can add or delete an answer by clicking on the right-hand button</li>  <li>Check the left box for the correct answer(s)</li>  <li>Add an optional comment. This comment won't be seen by the user until he/she has answered the question</li>  <li>Give a weighting to each answer. The weighting can be any positive or negative integer (or zero)</li>  <li>Save your answers</li></ul></p><hr><b>Fill in the blanks</b><p>This allows you to create a cloze passage. The purpose is to prompt the user to find words that you have removed from the text.<br><br>To remove a word from the text, and thus create a blank, put brackets [like this] around it.<br><br>Once the text has been typed and blanks defined, you can add a comment that will be seen by the learner depending on the reply to the question.<br><br>Save your text, and you will be taken to the next step allowing you to assign a weighting to each blank. For example, if the question is worth 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.</p><hr><b>Matching</b><p>This answer type can be chosen so as to create a question where the user will have to connect elements from list A with elements from list B.<br><br>It can also be used to ask the user to arrange elements in a given order.<br><br>First, define the options from which the user will be able to choose the best answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect elements from the first list with those of the second list via the drop-down menu.<br><br>Note: Several elements from the first unit might point to the same element in the second unit.<br><br>Assign a weighting to each correct match, and save your answer.</p><hr><b>Modifying a test</b><p>In order to modify a test, the principle is the same as for creating a test. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow the instructions above.</p><hr><b>Deleting a test</b><p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p><hr><b>Enabling a test</b><p>For a test can be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p><hr><b>Running the test</b><p>You can try out your test by clicking on its name in the tests list.</p><hr><b>Random questions</b><p>Whenever you create/modify a test, you can decide if you want questions to be drawn in a random order from amongst all test questions.<br><br>By enabling this option, questions will be drawn in a different order every time a user runs the test.<br><br>If you have got a large number of questions, you can opt to randomly draw only x-number of questions from the questions available.</p><hr><b>Questions pool</b><p>When you delete a test, its questions are not removed from the database, so they can be recycled back into another test via the questions pool.<br><br>The questions pool also allows you to re-use the same question in several tests.<br><br>By default, all the questions pertaining to your course are hidden. You can display the questions related to a test, by chosing 'filter' in the drop-down menu.<br><br>Orphan questions are questions that don not belong to any test.</p><hr><b>HotPotatoes Tests</b><p>You can import HotPotatoes tests into a Chamilo portal, to use in the Tests tool. The results of these tests are stored the same way as the results of Chamilo tests and as such can be readily monitored using the Reporting tool. In the case of simple tests, we recommend you use html or htm format; if your test contains pictures, a zip file upload is the most convenient way.</p><p>Note: You can also include HotPotatoes Tests as a step in the Learning Path.</p><b>Method of import</b><ul>  <li>Select the file on your computer using the Browse button <input type=submit value=Browse name=submit2>\ton the right of your screen.</li>\t\t<li>\t\t\tLaunch the upload with the Upload Button <input type=submit value=Upload name=submit2>.\t\t</li>\t\t<li>\t\t\tYou can open the test by clicking onto its name.\t\t</li>\t</ul>\t<br><b>Useful link</b><br><ul><li>Hot Potatoes home page :  <ahref=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li></li></ul>"
-msgstr "<p>Kontroldarbu rīks ļauj jums izveidot testus ar tik jautājumiem, cik jūs paši vēlaties.<br><br> Ir daudz dažādu atbilžu variantu, ko iespējams izveidot jūsu pārbaudījumiem:<br><br> <ul> <li> Vairāki atbilžu varianti(Viena atbilde pareiza)</li> <li>Vairāki atbilžu varianti(vairākas pareizās atbildes)</li> <li>Savietošana</li> <li>Aizpildi tukšās vietas</li> </ul> Testā apkopots konkrēts jautājumu skaits.</p> <hr> <b>Testa izveidošana</b> <p>Lai izveidotu testu,noklikšķiniet uz saites \"Jauns tests\".<br><br> Ierakstiet pārbaudījuma nosaukumu,kā arī var uzrakstīt tā aprakstu.<br><br> Jūs varat pievienot audio un video datnes, klausīšanās uzdevumiem utml. Lai lejupielāde caur tīmekli būtu ātrāka un vieglāka, neizvēlieties pārāk lielas datnes. WAV formāta vietā izvēlies mp3, jo tās ir mazāka  formāta datnes. <br> <br> Jūs varat izvēlēties arī 2 dažādus testa veidus:<br><br> <ul> <li>Jautajumi vienā lapā</li> <li>Viens jautājums lapā(secīgi)</li> </ul> un atzīmē, ja vēlies, lai jautajumi tiktu sakārtoti pēc nejaušības principa ikreiz, kad tiks atvērts tests.<br><br> Tad saglabājiet testu. Pēc tam jūs dosieties uz jautājumu adminitrēšanu.</p><hr> <b>Jautājuma pievienošana</b> <p>Tagad jūs varat pievienot jautājumus iepriekšizveidotajam testam. Aprakstu varat veidot, vari arī neveidot, tāpat, pēc izvēles, varat pielikt vai nelikt bildi jautājumam. </p> <hr> <b>Vairāki atbilžu varianti</b> <p>Lai izveidotu vairāku atbilžu vaiantu jautājumus:<br><br> <ul> <li>Formulējiet atbildes uz tavu jautajumu. Jūs varat pievienot vai izdzēst atbildi noklikšķinot peles labo pogu </li> <li>Atzīmējiet kreisajā lodziņā pie pareizās(-ām) atbildes(-ēm))</li> <li>Pēc izvēles varat pievienot komentāru. Šis komentārs lietotājam nebūs redzams, kamēr viņš neatbildēs uz jautājumu.</li> <li>Novērtējiet katru atbildi. Vērtējums var būt pozitīvs, negatīvs vai nulle</li> <li>Saglabājiet savas atbildes</li> </ul></p> <hr> <b>Aizpildi tukšās vietas</b> <p> Tas ļauj jums izveidot tekstu ar tukšām vietām. Šī uzdevuma nolūks ir likt lietotājam atrast vārdus, kurus Jūs esiet izmetuši no teksta.<br><br> Lai izmestu vārdu no teksta, izveidojot tukšumu, ielieciet šo vārdu kvadrātiekavās  [piemēram tā].<br><br> Kad teksts ir uzrakstīts un noteiktas tukšās vietas, Jūs varat pievienot komentārus, ko students redzēs kad ierakstīs atbildi.<br><br> Saglabājiet tekstu. Tad jūs nonāksiet pie nākama soļa, kur varēsiet novērtēt katru tukšo vietu. Piemēram, ja par uzdevumu var saņemt 10 punktus un tajā ir 5 tukšās vietas, par katru pareizi aizpildīto students saņem 2 punktus.</p><hr> <b>Savietošana</b> <p> Sis atbilžu variants var tikt izvēlēts, veidojot uzdevumu, kura studentam jāsavieno elementus no kolonnas U1 ar atbilstošiem kolonnas U2 elementiem.<br><br> Tas var tikt arī lietots uzdevumā, kurā jāsakārto elementi kada konkrētā secībā.<br><br> Vispirms definējiet iespējamos atbilžu variantus, starp kuriem būs jāizvēlas lietotājam. Pēc tam definējiet jautājumu, kurš tiks saistīts ar vienu no no iepriekšdefinētajām izvēlēm. Visbeidzot  savieno savieno  elementus no vienas kolonnas ar atbilstošiem otrās kolonnas elementiem.<br><br> Piezīme : Daži elementi no pirmās kolonnas var norādīt uz tādu pašu elementu otrajā kolonna.<br><br> Novērtē katru pareizi atrasto pāri, un saglabā savu atbildi.</p> <hr> <b>Testa pārveidošana</b> <p>Lai parveidotu testu, jāievēro tie paši principi, kādi bija veidojot testu.Jums tikai jānoklikšķina uz attēla <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> blakus pārveidojamam testam un jāseko iepriekšminetajām instrukcijām.</p> <hr> <b>Testa dzēšana</b> <p>Lai izdzēstu testu, noklikšķiniet uz <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> blakus dzēšamajam testam.</p> <hr> <b>Testa atļaušana</b><p>Lai sāktu lietot testu, jums tas ir jāatļauj noklikšķinot uz attēla <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> blakus pārbaudījuma nosaukumam. </p> <hr> <b>Pārbaudījuma palaišana</b> <p> Jūs varat pārbaudīt savu uzdevumu noklikšķinot uz tā nosaukuma testu sarakstā.</p> <hr> <b>Nejauši izvēlēti jautājumi</b> <p> Parbaudes veidošanas/pārveidošanas laikā, jūs varat norādīt, ka vēlaties nejaušu jautājumu secību testā.<br><br> Atļaujot šo opciju, jautājumi tiks parādīti citādākā secībā ikreiz, kad lietotājs sāks pildīt testu.<br><br> Ja jums ir daudz jautajumu, jūs varat norādīt x jautājumu skaitu, kas tiks parādīti nejaušā kārtībā.</p> <hr> <b>Jautājumu fonds</b> <p>Kad jūs izdzēšat testu, tā jautajumi netiek izdzēsti no datubāzes un var tikt lietoti jaunā pārbaudījumāt.<br><br> Jautājumu fonds pieļauj vienu jautājumu lietot dažādos testos.<br><br> Noklusējumā visi jautājumi ir paslēpti. Jūs varat padarīt redzamu ar pārbaudījumu saistītos jautājumu izvēloties \"Filter\".<br><br> Bāreņjautajumi ir jautājumi, kuri nav iekļauti nevienā testā.</p> Pievienot jautajumu <hr><b>Sarežģītie testi</b> <p> Tu vari importēt sarežģītus testus Dokeos portālā, šajā kontroldarbu rīkā. Šo testu rezultāti tiek uzglabāti tāpat kā Dokeos testi. Jūs varat izpētīt rezultātus Lietotāju izsekošanā. Lietojot atsevišķus testus, mēs iesakām lietot html vai htm formātu, ja jūsu testos ir bildes, zip datnes formāts ir piemērotākais.</p> <p>"
+msgstr "<p>Kontroldarbu rīks ļauj jums izveidot testus ar tik jautājumiem, cik jūs paši vēlaties.<br><br> Ir daudz dažādu atbilžu variantu, ko iespējams izveidot jūsu pārbaudījumiem:<br><br> <ul> <li> Vairāki atbilžu varianti(Viena atbilde pareiza)</li> <li>Vairāki atbilžu varianti(vairākas pareizās atbildes)</li> <li>Savietošana</li> <li>Aizpildi tukšās vietas</li> </ul> Testā apkopots konkrēts jautājumu skaits.</p> <hr> <b>Testa izveidošana</b> <p>Lai izveidotu testu,noklikšķiniet uz saites \"Jauns tests\".<br><br> Ierakstiet pārbaudījuma nosaukumu,kā arī var uzrakstīt tā aprakstu.<br><br> Jūs varat pievienot audio un video datnes, klausīšanās uzdevumiem utml. Lai lejupielāde caur tīmekli būtu ātrāka un vieglāka, neizvēlieties pārāk lielas datnes. WAV formāta vietā izvēlies mp3, jo tās ir mazāka  formāta datnes. <br> <br> Jūs varat izvēlēties arī 2 dažādus testa veidus:<br><br> <ul> <li>Jautajumi vienā lapā</li> <li>Viens jautājums lapā(secīgi)</li> </ul> un atzīmē, ja vēlies, lai jautajumi tiktu sakārtoti pēc nejaušības principa ikreiz, kad tiks atvērts tests.<br><br> Tad saglabājiet testu. Pēc tam jūs dosieties uz jautājumu adminitrēšanu.</p><hr> <b>Jautājuma pievienošana</b> <p>Tagad jūs varat pievienot jautājumus iepriekšizveidotajam testam. Aprakstu varat veidot, vari arī neveidot, tāpat, pēc izvēles, varat pielikt vai nelikt bildi jautājumam. </p> <hr> <b>Vairāki atbilžu varianti</b> <p>Lai izveidotu vairāku atbilžu vaiantu jautājumus:<br><br> <ul> <li>Formulējiet atbildes uz tavu jautajumu. Jūs varat pievienot vai izdzēst atbildi noklikšķinot peles labo pogu </li> <li>Atzīmējiet kreisajā lodziņā pie pareizās(-ām) atbildes(-ēm))</li> <li>Pēc izvēles varat pievienot komentāru. Šis komentārs lietotājam nebūs redzams, kamēr viņš neatbildēs uz jautājumu.</li> <li>Novērtējiet katru atbildi. Vērtējums var būt pozitīvs, negatīvs vai nulle</li> <li>Saglabājiet savas atbildes</li> </ul></p> <hr> <b>Aizpildi tukšās vietas</b> <p> Tas ļauj jums izveidot tekstu ar tukšām vietām. Šī uzdevuma nolūks ir likt lietotājam atrast vārdus, kurus Jūs esiet izmetuši no teksta.<br><br> Lai izmestu vārdu no teksta, izveidojot tukšumu, ielieciet šo vārdu kvadrātiekavās  [piemēram tā].<br><br> Kad teksts ir uzrakstīts un noteiktas tukšās vietas, Jūs varat pievienot komentārus, ko students redzēs kad ierakstīs atbildi.<br><br> Saglabājiet tekstu. Tad jūs nonāksiet pie nākama soļa, kur varēsiet novērtēt katru tukšo vietu. Piemēram, ja par uzdevumu var saņemt 10 punktus un tajā ir 5 tukšās vietas, par katru pareizi aizpildīto students saņem 2 punktus.</p><hr> <b>Savietošana</b> <p> Sis atbilžu variants var tikt izvēlēts, veidojot uzdevumu, kura studentam jāsavieno elementus no kolonnas U1 ar atbilstošiem kolonnas U2 elementiem.<br><br> Tas var tikt arī lietots uzdevumā, kurā jāsakārto elementi kada konkrētā secībā.<br><br> Vispirms definējiet iespējamos atbilžu variantus, starp kuriem būs jāizvēlas lietotājam. Pēc tam definējiet jautājumu, kurš tiks saistīts ar vienu no no iepriekšdefinētajām izvēlēm. Visbeidzot  savieno savieno  elementus no vienas kolonnas ar atbilstošiem otrās kolonnas elementiem.<br><br> Piezīme : Daži elementi no pirmās kolonnas var norādīt uz tādu pašu elementu otrajā kolonna.<br><br> Novērtē katru pareizi atrasto pāri, un saglabā savu atbildi.</p> <hr> <b>Testa pārveidošana</b> <p>Lai parveidotu testu, jāievēro tie paši principi, kādi bija veidojot testu.Jums tikai jānoklikšķina uz attēla <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> blakus pārveidojamam testam un jāseko iepriekšminetajām instrukcijām.</p> <hr> <b>Testa dzēšana</b> <p>Lai izdzēstu testu, noklikšķiniet uz <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> blakus dzēšamajam testam.</p> <hr> <b>Testa atļaušana</b><p>Lai sāktu lietot testu, jums tas ir jāatļauj noklikšķinot uz attēla <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> blakus pārbaudījuma nosaukumam. </p> <hr> <b>Pārbaudījuma palaišana</b> <p> Jūs varat pārbaudīt savu uzdevumu noklikšķinot uz tā nosaukuma testu sarakstā.</p> <hr> <b>Nejauši izvēlēti jautājumi</b> <p> Parbaudes veidošanas/pārveidošanas laikā, jūs varat norādīt, ka vēlaties nejaušu jautājumu secību testā.<br><br> Atļaujot šo opciju, jautājumi tiks parādīti citādākā secībā ikreiz, kad lietotājs sāks pildīt testu.<br><br> Ja jums ir daudz jautajumu, jūs varat norādīt x jautājumu skaitu, kas tiks parādīti nejaušā kārtībā.</p> <hr> <b>Jautājumu fonds</b> <p>Kad jūs izdzēšat testu, tā jautajumi netiek izdzēsti no datubāzes un var tikt lietoti jaunā pārbaudījumāt.<br><br> Jautājumu fonds pieļauj vienu jautājumu lietot dažādos testos.<br><br> Noklusējumā visi jautājumi ir paslēpti. Jūs varat padarīt redzamu ar pārbaudījumu saistītos jautājumu izvēloties \"Filter\".<br><br> Bāreņjautajumi ir jautājumi, kuri nav iekļauti nevienā testā.</p> Pievienot jautajumu <hr><b>Sarežģītie testi</b> <p> Tu vari importēt sarežģītus testus Chamilo portālā, šajā kontroldarbu rīkā. Šo testu rezultāti tiek uzglabāti tāpat kā Chamilo testi. Jūs varat izpētīt rezultātus Lietotāju izsekošanā. Lietojot atsevišķus testus, mēs iesakām lietot html vai htm formātu, ja jūsu testos ir bildes, zip datnes formāts ir piemērotākais.</p> <p>"
 
 msgid "The Course tool supports two approaches :<ul><li>Create a new course (allowing you to author your own content)</li><li>Import SCORM course</li></ul><img src=\"../img/path_help.gif\"><p><b>What is a Learning Path?</b></p><p>A Learning Path allows for the presentation of a sequence of learning experiences or activities arranged in distinct sections (in this sense, the Learning Path is what distinguishes a 'course' from a mere repository of random documents). It can be content-based (serving as a table of contents) or activities-based, serving as an agenda or program of action necessary to understand and apply a particular area of knowledge or skill.</p><p>In addition to being  structured, a Learning Path can also be <i>sequential</i>, meaning that the completion of certain steps constitute pre-requisites for accessing others (i.e. 'you cannot go to learning object 2 before learning object 1'). Your sequence can be <i>suggestive</i> (simply displaying steps one after the other) or <i>prescriptive</i> (involving pre-requisites so that learners are required to follow steps in a particular order).</p><p><b>How do I create my own Learning Path (Course)?</b></p><p>Proceed to the 'Learning Path' section.  There you can create as many courses/paths as you wish by clicking the <i>Create a new course</i> tool. You will need to choose a name for the course/path (e.g. <i>Unit 1</i> if you plan to create several units within the overall course). To begin with, the course is empty, waiting for you to add sections and learning objects to it.<br>If you set a course to Visible, it will appear as a new tool on the course homepage. This makes it easier and clearer for students to access.</p><p><b>What learning objects can I add?</b></p><p>All Chamilo tools, activities and content that you consider useful and relevant to your course can be added :<br><ul><li>Separate documents (texts, pictures, Office docs, ...)</li><li>Forums as a whole</li><li>Topics</li><li>Links</li><li>Chamilo Tests</li><li>HotPotatoes Tests<br />(note :tests made invisible on the homepage, but included in a path, become visible for learners only as they work through the course.)</li><li>Assignments</li><li>External links</li></ul></p><p><b>Other features</b></p><p>Learners can be asked to follow your course in a given order, as you can set <u>pre-requisites</u>. This means for example that learners cannot go to e.g. Quiz 2 until they have read e.g. Document 1. All learning objects have a status:<i>completed</i> or <i>incomplete</i>, so the progress of learners is clearly reported.</p><p>If you alter the original title of a learning object, the new name will appear in the course, but the original title will not be deleted. So if you want test8.doc to appear as 'Final Exam' in the path, you do not have to rename the file, you can use the new title in the path. It is also useful to give new titles to links which are too long.</p><p>When you're finished, don't forget to check Display mode, (showing, as in learner view, the table of contents on the left and the learning objects on the right,one at a time.)</p><br><p><b>What is a SCORM course and how do I import one?</b></p><p>The learning path tool allows you to upload SCORM-compliant courses.</p><p>SCORM  (<i>Sharable Content Object Reference Model</i>) is a public standard followed by major e-Learning companies like NETg, Macromedia, Microsoft, Skillsoft, etc. They act at three levels:</p><ul><li><b>Economy</b> : SCORM renders whole courses or small content units reusable on different Learning Management Systems (LMS) through the separation of content and context,</li><li><b>Pedagogy</b> : SCORM integrates the notion of pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You cannot go to chapter 2 before passing Quiz 1\"),</li><li><b>Technology</b> : SCORM generates a table of contents as an abstraction layer located outside the content and the LMS. It helps both communicate with each other. Mainly communicated are <i>bookmarks</i>(\"Where is John in the course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much time did John spent in chapter 1?\").</li></ul><b>How can I create a SCORM-compliant Learning Path?</b><br><br>The obvious way is to use the Chamilo Authoring tool. However, you may prefer to create complete SCORM compliant websites locally on your own computer before uploading it onto your Chamilo platform. In this case, we recommend the use of a sophisticated tool such as Lectora®, eXe Learning® or Reload®<br></p><p>"
-msgstr "Mācību plānam ir divas funkcijas: <ul><li>Izveidot mācību plānu</li> <li>augšupielādēt Scorm vai IMS formāta mācību plānu</li></ul> <img src=\"../img/path_help.gif\"> <p><b> Kas ir mācību plāns?</b> </p><p>Mācību plāns ir moduļos iekļauta mācīšanās pa soļiem. Tas var būt uz saturu balstīts(izskatās kā satura rādītājs) vai uz uzdevumiem balstīts, kā darāmo darbu saraksts vai programma, lai saprastu un izmēģinatu praksē zināšanas.</p><p> Lai būtu strukturēts, mācību plānam jābūt secīgam. Tas nozīmē, ka daži soļi izveidos pirmsrekvizītus citiem(\"tu nevari uzsākt soli 2 pirms 1 soļa\") . Tavam rezultātam jābūt ierosinošam(parādi soļus vienu pēc otra) vai pavēlšām (tu pievieno pirmsrekvizītus, tāpēc cilvēki spiesti sekot secībai). </p> <p><b>Kā izveidot savu mācību plānu?</b></p> <p> Pirmais solis ir nonākt Mācību plāna cēlāja sadaļā. Mācību plāna logā ir saite uz to. Tur tu vari izveidot daudz saites klikšķinot uz <i>Pievienot jaunu mācību plānu</i>. Bet tie ir tukši, kamēr tu tiem nepievieno moduļus un soļus.<br>Ja tu padari saiti redzamu, kursa mājaslapā tā parādīsies kā jauns rīks. Tādējādi piekļūšana tam ir vieglāka.</p> <p> <b>Kādi ir šī plāna  soļi? (Kādas vienības var tiek pievienotas?)</b></p> <p>Visi Dokeos rīki, uzdevmi un saturs, ko tu uzskatīji par lietderīgu un pievienoji savam iedomātajam plānam vai tikt pievienoti :<br><ul> <li>Saraksta vienības</li> <li>Sadalīt dokumentus (teksts, attēli, Office dokumenti, ...)</li> <li>Paziņojuma vienības</li> <li>Diskusijas kā kopums</li> <li>Temati</li> <li>Individuālo tematu ziņojumi</li> <li>Saites</li> <li>Dokeos testi</li> <li>Sarežģītie testi <br>(atceries : tie neredzamie testi, kurus norādi mācību plānā, kļūst studentiem redzami, bet tikai plāna rīkā)</li> <li>Paziņojumu lapa</li> <li>Aizvietotājkastes lapa</li> <li>Ārējās saites,kas norāda ārpus Dokeos sistēmas</li></ul> </p> <p><b> Citas Mācību plāna iezīmes</b> </p> <p> Studentam būs jāseko mācību plānam noteiktaja secībā, kuru tu vari uzstādīt ar <u>pirmsrekvizītiem</u>. Tas nozīmē, ka studenti nevarēs iet uz 2.kontroldarbu pirms tie nebūs izlasījuši Dokumentu1. Visām vienībām ir piešķirts statuss: pabeigts vai nepabeigts,tādējādi ir iespējams noteikt studenta virzīšanos uz priekšu.</p><p>Ja tu mainīsi soļa oriģīnālo nosaukumu, šis nosaukums parādīsies mācību plānā, taču oriģinālais nosaukums netiks izdzēsts. Tātad, ja tu mācību planā vēlies test8.doc pārsaukt par \"Pēdējo pārbaudījumu\", tev nav jāpārsauc dokuments, bet vari izmantot jauno nosaukumu mācību planā. Ir lietderīgi dot jaunu nosaukumus tām saitēm, kuru nosaukums ir pārak garš. </p><p> Kad tas ir pabeigts, neaizmirsti pārbaudīt studenta skatu, kurā satura rādītājs atrodas pa kreisi un plāna soļi parasti viens aiz otra atrodas labaja pusē.</p><br><p><b> Kas ir Scorm vai IMS formāta Mācību plans un kā to augšupielādet(importēt)?</b> </p> <p>Mācību plāna rīks ļauj ielādēt SCORM un IMS kursu saturu.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) ir standarts, ko ievēro galvenās eApmācības kompānijas.NETg, Macromedia, Microsoft, Skillsoft, utt. un piedalās 3 līmeņos: </p> <ul> <li><b>Ekonomikā</b> : Scorm ļauj izmantot visu kursu vai nelielu tā daļu izmantot citām apmācības pārvaldības sistēmām atdalot saturu un kontekstu,</li> <li><b>Pedagoģija</b> : Scorm integrē pirmsrekvizītus vai <i>secīgumu</i> (<i>piem. </i>\"Tu nevari doties uz 2nodaļu pirms neesi nokartojis 1.kontroldarbu.\"),</li> <li><b>Tehnoloģijas</b> : Scorm ģenerē satura rādītāju kā abstrakciju līmeni, kas atrodas ārpus satura un ārpus mācīšanās pārvaldības sistēmām(MPS).  Tas palīdz MPS un saturam komunicēt savā starpā.Galvenokārt komunicēsanās ir:<i>grāmatzīmes </i>(\"Cik tālu Jānis ir apguvis kursu?\"), <i>vērtēšana</i> (\"Kā Jānis nokārtoja kontroldarbu?\") un <i>laiks</i> (\"Cik daudz laika Jānis pavadīja apgūstot 1.paragrāfu?\").</li> </ul> <b>Kā izveidot SCORM mācību plānu?</b><br> <br> Visdabiskākais veids ir izmantot Dokeos Mācību plāna cēlāju. Kaut gan tu vari izveidot Scorm pielāgojamas tīmekļa vietnes uz tava datora pirms ielādēšanas dokeos platformā. Šajā gadījuma mēs iesakām lietot sarežģītu rīku kā Lectora® vai Parlādēt® <br></p><p> <b>Noderīgas saites</b><br> <ul> <li>Adlnet : authority responsible for Scorm normalisation, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Pārlādēt : Open Source free Scorm player and editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm publisher authoring software, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Piezīme :</b></p><p> Mācību plānā tiek uzskatīti visi <i>pašuzbūvēti mācību plāni</i> un visi ielādetie <i>Scorm formāta mācību plāni</i>. </p>"
+msgstr "Mācību plānam ir divas funkcijas: <ul><li>Izveidot mācību plānu</li> <li>augšupielādēt Scorm vai IMS formāta mācību plānu</li></ul> <img src=\"../img/path_help.gif\"> <p><b> Kas ir mācību plāns?</b> </p><p>Mācību plāns ir moduļos iekļauta mācīšanās pa soļiem. Tas var būt uz saturu balstīts(izskatās kā satura rādītājs) vai uz uzdevumiem balstīts, kā darāmo darbu saraksts vai programma, lai saprastu un izmēģinatu praksē zināšanas.</p><p> Lai būtu strukturēts, mācību plānam jābūt secīgam. Tas nozīmē, ka daži soļi izveidos pirmsrekvizītus citiem(\"tu nevari uzsākt soli 2 pirms 1 soļa\") . Tavam rezultātam jābūt ierosinošam(parādi soļus vienu pēc otra) vai pavēlšām (tu pievieno pirmsrekvizītus, tāpēc cilvēki spiesti sekot secībai). </p> <p><b>Kā izveidot savu mācību plānu?</b></p> <p> Pirmais solis ir nonākt Mācību plāna cēlāja sadaļā. Mācību plāna logā ir saite uz to. Tur tu vari izveidot daudz saites klikšķinot uz <i>Pievienot jaunu mācību plānu</i>. Bet tie ir tukši, kamēr tu tiem nepievieno moduļus un soļus.<br>Ja tu padari saiti redzamu, kursa mājaslapā tā parādīsies kā jauns rīks. Tādējādi piekļūšana tam ir vieglāka.</p> <p> <b>Kādi ir šī plāna  soļi? (Kādas vienības var tiek pievienotas?)</b></p> <p>Visi Chamilo rīki, uzdevmi un saturs, ko tu uzskatīji par lietderīgu un pievienoji savam iedomātajam plānam vai tikt pievienoti :<br><ul> <li>Saraksta vienības</li> <li>Sadalīt dokumentus (teksts, attēli, Office dokumenti, ...)</li> <li>Paziņojuma vienības</li> <li>Diskusijas kā kopums</li> <li>Temati</li> <li>Individuālo tematu ziņojumi</li> <li>Saites</li> <li>Chamilo testi</li> <li>Sarežģītie testi <br>(atceries : tie neredzamie testi, kurus norādi mācību plānā, kļūst studentiem redzami, bet tikai plāna rīkā)</li> <li>Paziņojumu lapa</li> <li>Aizvietotājkastes lapa</li> <li>Ārējās saites,kas norāda ārpus Chamilo sistēmas</li></ul> </p> <p><b> Citas Mācību plāna iezīmes</b> </p> <p> Studentam būs jāseko mācību plānam noteiktaja secībā, kuru tu vari uzstādīt ar <u>pirmsrekvizītiem</u>. Tas nozīmē, ka studenti nevarēs iet uz 2.kontroldarbu pirms tie nebūs izlasījuši Dokumentu1. Visām vienībām ir piešķirts statuss: pabeigts vai nepabeigts,tādējādi ir iespējams noteikt studenta virzīšanos uz priekšu.</p><p>Ja tu mainīsi soļa oriģīnālo nosaukumu, šis nosaukums parādīsies mācību plānā, taču oriģinālais nosaukums netiks izdzēsts. Tātad, ja tu mācību planā vēlies test8.doc pārsaukt par \"Pēdējo pārbaudījumu\", tev nav jāpārsauc dokuments, bet vari izmantot jauno nosaukumu mācību planā. Ir lietderīgi dot jaunu nosaukumus tām saitēm, kuru nosaukums ir pārak garš. </p><p> Kad tas ir pabeigts, neaizmirsti pārbaudīt studenta skatu, kurā satura rādītājs atrodas pa kreisi un plāna soļi parasti viens aiz otra atrodas labaja pusē.</p><br><p><b> Kas ir Scorm vai IMS formāta Mācību plans un kā to augšupielādet(importēt)?</b> </p> <p>Mācību plāna rīks ļauj ielādēt SCORM un IMS kursu saturu.</p> <p>SCORM (<i>Sharable Content Object Reference Model</i>) ir standarts, ko ievēro galvenās eApmācības kompānijas.NETg, Macromedia, Microsoft, Skillsoft, utt. un piedalās 3 līmeņos: </p> <ul> <li><b>Ekonomikā</b> : Scorm ļauj izmantot visu kursu vai nelielu tā daļu izmantot citām apmācības pārvaldības sistēmām atdalot saturu un kontekstu,</li> <li><b>Pedagoģija</b> : Scorm integrē pirmsrekvizītus vai <i>secīgumu</i> (<i>piem. </i>\"Tu nevari doties uz 2nodaļu pirms neesi nokartojis 1.kontroldarbu.\"),</li> <li><b>Tehnoloģijas</b> : Scorm ģenerē satura rādītāju kā abstrakciju līmeni, kas atrodas ārpus satura un ārpus mācīšanās pārvaldības sistēmām(MPS).  Tas palīdz MPS un saturam komunicēt savā starpā.Galvenokārt komunicēsanās ir:<i>grāmatzīmes </i>(\"Cik tālu Jānis ir apguvis kursu?\"), <i>vērtēšana</i> (\"Kā Jānis nokārtoja kontroldarbu?\") un <i>laiks</i> (\"Cik daudz laika Jānis pavadīja apgūstot 1.paragrāfu?\").</li> </ul> <b>Kā izveidot SCORM mācību plānu?</b><br> <br> Visdabiskākais veids ir izmantot Chamilo Mācību plāna cēlāju. Kaut gan tu vari izveidot Scorm pielāgojamas tīmekļa vietnes uz tava datora pirms ielādēšanas dokeos platformā. Šajā gadījuma mēs iesakām lietot sarežģītu rīku kā Lectora® vai Parlādēt® <br></p><p> <b>Noderīgas saites</b><br> <ul> <li>Adlnet : authority responsible for Scorm normalisation, <a href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li> <li>Pārlādēt : Open Source free Scorm player and editor, <a href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li> <li>Lectora : Scorm publisher authoring software, <a href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br> <li>HotPotatoes home page, <a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br> </li> </ul> <p><b> Piezīme :</b></p><p> Mācību plānā tiek uzskatīti visi <i>pašuzbūvēti mācību plāni</i> un visi ielādetie <i>Scorm formāta mācību plāni</i>. </p>"
 
 msgid "<p>The Course Description tool prompts you to comprehensively describe your course in a systematic way. This description can be used to provide learners with an overview of what awaits them, and can be helpful when you review and evaluate your course. </p> The items merely offer suggestions. If you want to write your own course description, simply create your own headings and descriptions by selecting the  'Other' tool. </p> Otherwise, to complete a description of the course, click on each image, fill it with your text/content and submit. </p>"
 msgstr "<p>Šis rīks palīdzēs aprakstīt tavu kursu. Tas var palīdzēt nākošajiem studentiem uzzināt, ko viņi var sagaidīt no šī kursa. Tā arī ir iespēja pārdomāt kursa plānu.</p>Šeit dotie norādījumi ir tikai priekšlikumi. Ja jūs vēlaties veidot paši savu kursa aprakstu, ar jūsu pašu norādījumiem, izmantojiet \"Citus\" norādījumus un piešķiriet tam virsrakstu.</p> <p> Lai aizpildītu kursa aprakstu, atzīmējiet  Izveidot un rediģējiet formu  > paritiniet uz leju izvēlni un atzīmējiet savus izvēlētos nosacījumu punktus >aizpildiet formas > Apstipriniet. Jūs vienmēr varat rediģēt vai izdzest katra punkta saturu noklikšķinot uz zīmuļa vai sarkanā krusta ikonas.</p>"
@@ -14306,7 +14267,7 @@ msgid "<p>The Links tool allows you to create a library of resources for your st
 msgstr "<p>Saišu rīki ļauj jums izveidot resursu bibliotēku jūsu studentiem. It īpaši  par jūsu veidotajiem resursiem.</p><p>Kad saraksts kļūst lielāks, būtu lietderīgi izveidot kategorijas, lai palīdzetu studentiem sameklēt nepieciešamo informāciju pareizajā vietā. Jūs varat rediģēt katru saiti, lai ievietotu to jaunā kategorijā(vispirms jāizveido kategorija).</p><p>Apraksta laukā var tikt sniegta gan informācija par mērķa tīmekļa lapām, gan arī apraksts, ko jūs vēlaties, lai students dara ar šo saiti. Piemēram, jūs norādījāt uz Aristoteļa mājaslapu. Apraksta laukā studentiem var tikt uzdots nosakidrot atšķirību starp sintēzi un analīzi."
 
 msgid "<p> As soon as you log in to the system, you will be taken to your own main  page. Here you will see the following: <li> <b> My Courses </b> in the centre of the page, lists the courses in which you are enrolled, with an option for you to create new courses (using the button in the right menu) </li> In the header section, <b> My Profile </b> allows you to change your password, upload your photo to the system or change your username, </li> <b> My Calendar </b>: contains the events within the courses for which you are registered, </li> in the right menu: <b> Edit my list of courses </b> allows you to enroll in courses as learner, (provided the trainer/teacher has authorized entry. here you can also unsubscribe from a course, </li> Links <b> Support Forum </b> and <b> Documentation </b> refer you to the main Chamilo site, where you can ask questions or find up to date information about Chamilo. </li> </ ul> To enter a course (left side of the screen), click on its title. Your profile may vary from course to course. It could be that you are a teacher in one course and a learner in another. In courses for which you are responsible, you have access to the editing tools designed for authoring and managing students, while in courses where you learn, you access a more limited range of tools appropriate for undertaking the course.</p> The form  your own main page takes can vary from one platform to another depending on the options enabled by the system administrator. Thus, for example, there may be some cases where you do not have access to course creation even as a teacher, because this particular function is managed by others within your institution. </p>"
-msgstr "<p>Kad esi pieteicies platformā, tu atrodies <i>personīgajā sākumlapā</i>.</p> <p> Galvenajā laukā (centrā) tu redzi \"<b>Manu kursu saraksts</b>\", visu tavu izvēlēto kursu sarakstu. Atkarībā no tava lietotāja tiesībām, tev ir iespēja veidot jaunus kursus (ar labās rokas izvēlni). </p> <p> Augšējā karodziņā tu redzi <ul><li>\"<b>Manas e-mapes</b>\": to lieto, lai nomainītu paroli, lietotājvārdu, bildi vai citus uzstādījumus. Tu vari pārbaudīt savas platformas statistiku;</li> <li>\"<b>Mans plānotājs</b>\": te tu vari atrast visu kursu un notikumu, kuros esi piereģistrējies, grafiku.</li></ul> </p> <p> <b>Rediģēt manu kursu sarakstu</b>, labās rokas izvēlnē tu vari izvēlēties kursus, kurus mācīties, ja vien pasniedzēji ir tos atvēruši, lai varētu tiem pieteikties. Šī saite ļauj tev arī atteikties no kursiem.</p> <p> Saites <b>Atbalsta diskusijas</b> un <b>Dokumentācija</b> norāda uz Dokeos galveno lapu, kurā tu vari uzdot tehniskus vai pedagoģiskus jautājumus,atrast vairāk informācijas.</li> Lai ieietu kursā(galvenais lauks sākumlapā), noklikšķini uz tā nosaukuma. Tavs profils katrā kursā var atšķirties. Ir iespējams, ka vienā kursā tu esi pasniedzējs, bet otrā students. </p>"
+msgstr "<p>Kad esi pieteicies platformā, tu atrodies <i>personīgajā sākumlapā</i>.</p> <p> Galvenajā laukā (centrā) tu redzi \"<b>Manu kursu saraksts</b>\", visu tavu izvēlēto kursu sarakstu. Atkarībā no tava lietotāja tiesībām, tev ir iespēja veidot jaunus kursus (ar labās rokas izvēlni). </p> <p> Augšējā karodziņā tu redzi <ul><li>\"<b>Manas e-mapes</b>\": to lieto, lai nomainītu paroli, lietotājvārdu, bildi vai citus uzstādījumus. Tu vari pārbaudīt savas platformas statistiku;</li> <li>\"<b>Mans plānotājs</b>\": te tu vari atrast visu kursu un notikumu, kuros esi piereģistrējies, grafiku.</li></ul> </p> <p> <b>Rediģēt manu kursu sarakstu</b>, labās rokas izvēlnē tu vari izvēlēties kursus, kurus mācīties, ja vien pasniedzēji ir tos atvēruši, lai varētu tiem pieteikties. Šī saite ļauj tev arī atteikties no kursiem.</p> <p> Saites <b>Atbalsta diskusijas</b> un <b>Dokumentācija</b> norāda uz Chamilo galveno lapu, kurā tu vari uzdot tehniskus vai pedagoģiskus jautājumus,atrast vairāk informācijas.</li> Lai ieietu kursā(galvenais lauks sākumlapā), noklikšķini uz tā nosaukuma. Tavs profils katrā kursā var atšķirties. Ir iespējams, ka vienā kursā tu esi pasniedzējs, bet otrā students. </p>"
 
 msgid "<p> The Agenda tool appears both as a calendar within each course and as a personal diary tool for each student providing an overview of events in the courses in which they are enrolled. (Groups can also have their own Agenda.) </ p> Users can use the Agenda, which displays course content and activites, as a reference tool to organise their day to day or week to week learning.<p>In addition to being visible in the agenda, new events are indicated to the learner whenever he/she logs in. The system sees what has been added since his/her last visit and icons appear on the portal home page beside the courses indicating new events and announcements.</p> </p> If you want to organize students' work in a time-related way, it is best to use the Learning Paths tool as a way of charting a logical progression through various activites and content through the presentation of a formal table of contents.</p>"
 msgstr "<p> Plānotājs parādās gan pie katra kursa, gan kā mākslīgais studenta rīks (\"Mans plānotājs\" augšējā karodziņā).</p> <p>Kursā plānotājs parādās kā notikumu saraksts. Tu vari pievienot dokumentus vai darbības datumam, lai plānotājs kļūtu par hronoloģisku tavu mācību aktivitāšu programmu.</p> <p> Lai tiktu iekļauti plānotajā, jaunie notikumi tieki norādīti studentiem, kad  viņi nākamajā reizē piesakās kursā. Sistēma pasaka, kas tika pievienots plānotājam (un Paziņojumiem) kopš viņa/-as iepriekšējās vizītes : ikonas parādās portāla mājaslapā izņemot kursus, kur tika pievienoti notikumi un paziņojumi.</p> <p> Ja tu vēlies arī turpmak veidot loģiskas, strukturētas apmācības aktivitātes, mēs iesakām izmantot Mācību plānu, kas piedāvā tādus pašus principus ar plašākām iespējām.Mācību plānu var apskatīt kā satura rādītāja rīka+Plānotāja+secīguma (noteikta kārtība) un līdzsekošanas sintēzi.</p>"
@@ -14350,11 +14311,11 @@ msgstr "Dokumentācija"
 msgid "You should write a message"
 msgstr "Jums vajadzētu rakstīt ziņu"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Šī ziņa informē Jūs, par jauna Kursa izveidi platformā:"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Šī ziņa informē Jūs, par jauna Kursa izveidi %s"
 
-msgid "New course created in"
-msgstr "Ir izveidots jauns kurss, vidē:"
+msgid "New course created on %s"
+msgstr "Ir izveidots jauns kurss, vidē %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Patreiz, kā kursa veidotājs, esat noteikts Jūs. Vēlāk, Jūs varat mainīt šo iestatījumu, mācību kursa konfigurācijas uzstādījumos, sadaļā <b>Administrācija / Kursa iestatījumi</b>"
@@ -14365,8 +14326,8 @@ msgstr "Instalācijas valoda"
 msgid "Please read the following requirements thoroughly."
 msgstr "Lasiet uzmanīgi"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Uzmanību!<br>Instalētājs atrada jūsu sistēmā eksistējošu Chamilo platformu"
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Uzmanību! Instalētājs atrada jūsu sistēmā eksistējošu Chamilo platformu"
 
 msgid "New installation"
 msgstr "Jauna instalācija"
@@ -14499,12 +14460,6 @@ msgstr "Lūdzu atgriezties uz Soli Nr."
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Atjaunināšanas skripts pārrakstīs un atjaunos Chamilo datubāzi (-es). Lai to izdarītu, šis skripts izmantos datubāzes un iestatījumus, kas noteiktas zemāk. sakarā ar to, ka mūsu programma darbojas plašā sistēmu spektrā un iespējams, ka  visas no tām varētu nebūt pārbaudītas, mēs iesakām jums veikt pilnu dublējumkopiju datu bāzes, pirms Jūs turpināt atjaunināt!"
-
-msgid "MBString extension not available"
-msgstr "MBString papla"
-
-msgid "MySQL extension not available"
-msgstr "MySQL papla"
 
 msgid "Optional parameters"
 msgstr "Izvēles parametri"
@@ -15148,7 +15103,7 @@ msgstr "Papildus lauki nav pieejami"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Sāciet rakstīt, tad noklikšķiniet uz šīs joslas, lai apstiprinātu adresātu."
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instalēt Chamilo"
 
 msgid "Chamilo URL"
@@ -15622,7 +15577,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15691,7 +15646,7 @@ msgstr "Tematiskā plāna nodaļas"
 msgid "Thematic plan"
 msgstr "Tematiskā plāna elementi"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Rediģēt tematiskā plāna elementus"
 
 msgid "Edit thematic advance"
@@ -16985,7 +16940,7 @@ msgid "User folder"
 msgstr "Lietotāja mape"
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThe users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group."
-msgstr "NFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Lietotāju mapē atrodas mape katram Lietotājam, kas saņēmis pieeju šai mapei:<br>a) caur Dokumentu instrumentu, jeb, <br>b)kad tas ir veicis jebkāda dokumenta vai faila apmaiņu kursa ietvaros, tiešsaistes redaktorā.<br>Ja netiek realizētas nekādas aktivitātes saistībā ar dokumentiem un failiem, tad Lietotāja mape netiek izveidota.<br><br>Grupu gadījumos, dokumenti, kas tiek nosūtīti online redaktora ietvaros, tiek  izvietoti izveidotajā grupas mapē. Pieeja šai mapei ir tikai šīs grupas locekļiem.<br><br>Pēc noklusējuma,  Lietotāju mape un tajā iekļautās Lietotāju individuālās mapes, ir paslēptas visiem studentiem, bet katrs students var redzēt savu mapes saturu, izmantojot tiešsaistes redaktoru. Tomēr, ja students zina citā studenta faila, vai mapes adresi, viņam ir iespēja tai piekļūt.</br><br>Ja Lietotāja mape ir redzama, tad citi Lietotāji var redzēt, ko tā satur. <br><br>Students, kuram pieder mape, var arī (caur dokumentu instrumentu un tikai viņa mapē): izveidot un rediģēt web dokumentus, konvertēt dokumentu par veidni personīgai lietošanai, veidot vai rediģēt zīmējumi SVG un PNG formātos, sūtīt dokumentus, veidot mapes, pārvietot mapes un failus, dzēst mapes un failus, kā arī lejupielādēt rezerves kopiju (backup) viņa mapē. <br><br>Tai pašā laikā, dokumentu instruments  tiešsaistes redaktorā ir sinhronizēts ar failu pārvaldnieku, tāpēc izmaiņas dokumentos, izraisīs izmaiņas jebkurā no tiem.<br><br>Lietotāju mape nav tikai vieta kur ievietot failus, tā kļūst par dokumentu plūsmas menedžeri visā mācību procesa garumā.<br><br>Tāpat arī jāatceras, ka jebkurš lietotājs, var pārkopēt failu, kas ir redzams Dokumentu instrumenta  jebkurā mapē, neatkarīgi no tā,  vai viņš ir, vai nav dokumenta īpašnieks, savā mapē, vai Sociālā tīkla dokumentu vietnē, kas Lietotājam ir pieejama visu mācību laiku, arī citu kursu apguvē."
+msgstr "NFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Lietotāju mapē atrodas mape katram Lietotājam, kas saņēmis pieeju šai mapei:<br>a) caur Dokumentu instrumentu, jeb, <br>b)kad tas ir veicis jebkāda dokumenta vai faila apmaiņu kursa ietvaros, tiešsaistes redaktorā.<br>Ja netiek realizētas nekādas aktivitātes saistībā ar dokumentiem un failiem, tad Lietotāja mape netiek izveidota.<br><br>Grupu gadījumos, dokumenti, kas tiek nosūtīti online redaktora ietvaros, tiek  izvietoti izveidotajā grupas mapē. Pieeja šai mapei ir tikai šīs grupas locekļiem.<br><br>Pēc noklusējuma,  Lietotāju mape un tajā iekļautās Lietotāju individuālās mapes, ir paslēptas visiem studentiem, bet katrs students var redzēt savu mapes saturu, izmantojot tiešsaistes redaktoru. Tomēr, ja students zina citā studenta faila, vai mapes adresi, viņam ir iespēja tai piekļūt.<br><br>Ja Lietotāja mape ir redzama, tad citi Lietotāji var redzēt, ko tā satur. <br><br>Students, kuram pieder mape, var arī (caur dokumentu instrumentu un tikai viņa mapē): izveidot un rediģēt web dokumentus, konvertēt dokumentu par veidni personīgai lietošanai, veidot vai rediģēt zīmējumi SVG un PNG formātos, sūtīt dokumentus, veidot mapes, pārvietot mapes un failus, dzēst mapes un failus, kā arī lejupielādēt rezerves kopiju (backup) viņa mapē. <br><br>Tai pašā laikā, dokumentu instruments  tiešsaistes redaktorā ir sinhronizēts ar failu pārvaldnieku, tāpēc izmaiņas dokumentos, izraisīs izmaiņas jebkurā no tiem.<br><br>Lietotāju mape nav tikai vieta kur ievietot failus, tā kļūst par dokumentu plūsmas menedžeri visā mācību procesa garumā.<br><br>Tāpat arī jāatceras, ka jebkurš lietotājs, var pārkopēt failu, kas ir redzams Dokumentu instrumenta  jebkurā mapē, neatkarīgi no tā,  vai viņš ir, vai nav dokumenta īpašnieks, savā mapē, vai Sociālā tīkla dokumentu vietnē, kas Lietotājam ir pieejama visu mācību laiku, arī citu kursu apguvē."
 
 msgid "INFORMATION VISIBLE TO THE TEACHER ONLY:\nThis folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all."
 msgstr "INFORMĀCIJA, KAS REDZAMA TIKAI LEKTORIEM :<br>Šajā mapē atrodas visas sesijas, kas ir  bijušas atvērtas tērzēšanas laikā. <br>Kaut arī tērzēšanas sesijas bieži vien var būt maznozīmīgas, tomēr citas var būt patiesi interesantas un vērts tās iekļaut, kā papildu darba dokumentu. <br>Lai to izdarītu, nemainot šīs mapes redzamību, padariet failu redzamu un saistīt to vietu, kuru jūs uzskatāt par piemērotu. Nav ieteicams padarīt šo mapi redzamu visiem."
@@ -17389,7 +17344,7 @@ msgstr "Izveidot sociālo grupu"
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17434,13 +17389,13 @@ msgstr "Saturs pārkopēts"
 msgid "My statistics"
 msgstr "Mana statistika"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Pieejamie uzdevumu / testi"
 
 msgid "Exercises taken"
 msgstr "Izpildītie uzdevumi / testi"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Vidējie rezultāti uzdevumos / testos"
 
 msgid "Learning path progress"
@@ -17797,7 +17752,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18127,15 +18082,6 @@ msgstr "Laipni lūdzam Chamilo uzstādītājā"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "Jūsu PHP versija nesakrīt prasību attiecībā uz šo programmatūru. Lūdzu, pārbaudiet vai jums ir pieejama jaunākā versija, tad mēģiniet vēlreiz."
 
-msgid "Sessions extension not available"
-msgstr "Sesijas paplašinājums nav pieejams"
-
-msgid "Zlib extension not available"
-msgstr "Zlib paplašinājums nav pieejams"
-
-msgid "PCRE extension not available"
-msgstr "PCRE paplašinājums nav pieejams"
-
 msgid "To social group"
 msgstr "Uz sociālo grupu"
 
@@ -18403,7 +18349,7 @@ msgstr "Sertifikācija"
 msgid "Online link to certificate"
 msgstr "Links tiešsaistes sertifikācijai"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Jauni uzdevumi"
 
 msgid "My average"
@@ -18607,14 +18553,8 @@ msgstr "Jautājuma zemākais gadījums"
 msgid "questions"
 msgstr "Jautājuma zemākais gadījums"
 
-msgid "Back to test list"
-msgstr "Atgriezties uz Testu sarakstu"
-
 msgid "Category description"
 msgstr "Kategoriju apraksts"
-
-msgid "Back to category list"
-msgstr "Atgriezties Kategoriju sarakstā"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Tāds pievienotās Kategorijas nosaukums jau eksistē"
@@ -18892,7 +18832,7 @@ msgstr "Apstiprināts"
 msgid "Not validated"
 msgstr "Nav apstiprināts"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Izskatīts"
 
 msgid "Select a question to revise"
@@ -19036,7 +18976,7 @@ msgstr ""
 msgid "Session list"
 msgstr "Sesiju saraksts"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Lietotāju saraksts"
 
 msgid "Learners who're taking the exercise right now"
@@ -21292,7 +21232,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22846,7 +22786,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22921,13 +22861,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23467,10 +23404,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23773,10 +23710,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24010,7 +23947,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24076,10 +24013,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

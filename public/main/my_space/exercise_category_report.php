@@ -115,8 +115,8 @@ if ($form->validate() && !empty($courseInfo)) {
     }
 
     $columns[] = get_lang('Session');
-    $columns[] = get_lang('SessionStart Date');
-    $columns[] = get_lang('Start Date');
+    $columns[] = get_lang('Session start date');
+    $columns[] = get_lang('Start date');
     $columns[] = get_lang('Score');
 
     if (!empty($categoryList)) {

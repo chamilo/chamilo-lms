@@ -126,8 +126,8 @@ $table = new SortableTableFromArray(
 );
 $table->set_additional_parameters(['code' => $courseInfo['code']]);
 $table->set_other_tables(['user_table', 'class_table']);
-$table->set_header(0, get_lang('tool'), true);
-$table->set_header(1, get_lang('number of items'), true);
+$table->set_header(0, get_lang('Tool'), true);
+$table->set_header(1, get_lang('Number of items'), true);
 $table->display();*/
 
 /*
@@ -180,7 +180,7 @@ if (Database::num_rows($res) > 0) {
         $table->set_header(1, get_lang('Last name'), true);
         $table->set_header(2, get_lang('First name'), true);
     }
-    $table->set_header(3, get_lang('e-mail'), true);
+    $table->set_header(3, get_lang('E-mail'), true);
     $table->set_header(4, get_lang('Status'), true);
     $table->set_header(5, '', false);
     $table->display();

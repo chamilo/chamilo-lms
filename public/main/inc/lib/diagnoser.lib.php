@@ -593,22 +593,22 @@ class Diagnoser
             'zlib' => [
                 'link' => 'https://php.net/zlib',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'curl' => [
                 'link' => 'https://php.net/curl',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'fileinfo' => [
                 'link' => 'https://php.net/fileinfo',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'xsl' => [
                 'link' => 'https://php.net/xsl',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'Zend OPcache' => [
                 'link' => 'https://php.net/opcache',
@@ -633,12 +633,12 @@ class Diagnoser
             'openssl' => [ //required only for DKIM e-mail signatures
                 'link' => 'https://php.net/openssl',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'bcmath' => [
                 'link' => 'https://php.net/bcmath',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
         ];
 
@@ -845,7 +845,7 @@ class Diagnoser
         $res = $connection->query('SELECT id, code, directory, disk_quota, last_visit FROM course ORDER BY last_visit DESC, code LIMIT 500');
         $systemPath = api_get_path(SYS_COURSE_PATH);
         $webPath = api_get_path(WEB_COURSE_PATH);
-        $courseHomeIcon = Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CourseHome'));
+        $courseHomeIcon = Display::getMdiIcon(ObjectIcon::HOME, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Course homepage'));
         $courseEditIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
         $windows = api_is_windows_os();
         $courseEditPath = api_get_path(WEB_CODE_PATH).'admin/course_edit.php?id=';

@@ -41,7 +41,7 @@ class Portfolio extends BaseActivity
                 LanguageMap::create(
                     [
                         $langIso => sprintf(
-                            get_lang('XUserPortfolioItems'),
+                            get_lang("%s's portfolio items"),
                             $this->owner->getCompleteNameWithUsername()
                         ),
                     ]

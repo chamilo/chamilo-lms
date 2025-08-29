@@ -116,7 +116,7 @@ class CidReqListener
             $twig->addGlobal('course', $course);
 
             if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
-                throw new NotAllowedException($this->translator->trans('You\'re not allowed in this course'));
+                throw new NotAllowedException($this->translator->trans("You're not allowed in this course"));
             }
 
             // Checking if sid is used.
@@ -138,7 +138,7 @@ class CidReqListener
                     // Check if user is allowed to this course-session
                     // See SessionVoter.php
                     if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
-                        throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this session'));
+                        throw new AccessDeniedException($this->translator->trans("You're not allowed in this session"));
                     }
                     $sessionHandler->set('session_name', $session->getTitle());
                     $sessionHandler->set('sid', $session->getId());
@@ -168,7 +168,7 @@ class CidReqListener
                 $group->setParent($course);
 
                 if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
-                    throw new AccessDeniedException($this->translator->trans('You\'re not allowed in this group'));
+                    throw new AccessDeniedException($this->translator->trans("You're not allowed in this group"));
                 }
 
                 $sessionHandler->set('gid', $groupId);

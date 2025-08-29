@@ -22,8 +22,8 @@ $parameters['sec_token'] = Security::get_token();
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">';
-echo Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('EditTerms and Conditions'));
-echo get_lang('EditTerms and Conditions').'</a>&nbsp;&nbsp;';
+echo Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit terms and conditions'));
+echo get_lang('Edit terms and conditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
 $em = Database::getManager();

@@ -411,7 +411,7 @@ function onIframeLoaded(iframe) {
                                     flex-direction: column;
                                     z-index: 9999;
                                 ">
-                <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video finished!') ?></p>
+                <p style="font-size: 24px; margin-bottom: 10px;"><?php echo get_lang('Video completed!') ?></p>
                 `;
 
                 if (olms.lms_auto_forward_video == 1) {
@@ -429,7 +429,7 @@ function onIframeLoaded(iframe) {
                                             border: none;
                                             color: white;
                                             cursor: pointer;
-                                        "><?php echo get_lang('Next lesson') ?></button>
+                                        "><?php echo get_lang('Next learning object') ?></button>
                     </div>
                 `;
 

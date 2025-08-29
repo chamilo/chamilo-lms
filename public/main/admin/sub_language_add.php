@@ -52,7 +52,7 @@ if ('definenewsublanguage' === $requestAction) {
         'sub_language_add.php?id='.Security::remove_XSS($_GET['id']).'&action=definenewsublanguage'
     );
     $form->addHeader(
-        get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )'
+        get_lang('Create a sub-language for this language').' ( '.strtolower($language_name).' )'
     );
     $form->addText('original_name', get_lang('Original name'), true, ['class' => 'input_titles']);
     $form->addText('english_name', get_lang('English name'), true, ['class' => 'input_titles']);
@@ -192,7 +192,7 @@ if ('definenewsublanguage' === $requestAction) {
 
         if ($removed) {
             Display::addFlash(
-                Display::return_message(get_lang('The sub language has been removed.'))
+                Display::return_message(get_lang('The sub language has been removed'))
             );
             api_location(api_get_path(WEB_CODE_PATH).'admin/languages.php');
         }

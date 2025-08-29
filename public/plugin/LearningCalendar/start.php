@@ -34,7 +34,7 @@ switch ($action) {
                 'author_id' => api_get_user_id(),
             ];
             Database::insert('learning_calendar', $params);
-            Display::addFlash(Display::return_message(get_lang('Saved..')));
+            Display::addFlash(Display::return_message(get_lang('Saved.')));
             header('Location: start.php');
             exit;
         }
@@ -72,7 +72,7 @@ switch ($action) {
     case 'copy':
         $result = $plugin->copyCalendar($calendarId);
         if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Saved..')));
+            Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
         header('Location: start.php');
         exit;

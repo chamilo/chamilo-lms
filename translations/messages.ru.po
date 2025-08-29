@@ -621,10 +621,10 @@ msgstr ""
 msgid "Course categories available"
 msgstr ""
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr ""
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr ""
 
 msgid "Agenda list"
@@ -1605,7 +1605,7 @@ msgstr "Формат посылки не может быть распознан.
 msgid "Move the current forum"
 msgstr "Переместить текущий форум"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Предупреждение!<br /> Когда Вы редактируете содержимое scorm шага, Вы можете случайно изменить отчет учебного плана или повредить шаг."
 
 msgid "Please provide a subject or message"
@@ -1722,7 +1722,7 @@ msgstr "По умолчянию Ваш курс является публичн�
 msgid "Public - access allowed for the whole world"
 msgstr "Открытый доступ разрешен для всех"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Открытый доступ разрешен для пользователей, зарегистрированных на платформе"
 
 msgid "Student %s is no subscribed to this course"
@@ -1752,7 +1752,7 @@ msgstr "Добавить ссылку на домашнюю страницу к�
 msgid "has been deleted"
 msgstr "было удалено"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "Удаляя данный сайт, вы удалите все учебные материалы, ссылки, которые он содержит. Кроме того, будет закрыт доступ всем членам курса, которые были на него подписаны (но Вы их не удаляете из других курсов). <p>Вы действительно хотите очистить все пространство курса?"
 
 msgid "YES"
@@ -2519,9 +2519,6 @@ msgstr "Это раздел, куда курс передается"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Если Вы сомневаетесь по поводу кода курса, проконсультируйтесь"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Программа курса</a>. Если Ваш курс не имеет кода, какой бы не была причина, придумайте его. Например <i>ИННОВАЦИЯ</i>, если курс об инновациях в управлении"
 
 msgid "SCORM Path builder"
 msgstr "Строитель плана Scorm"
@@ -3376,9 +3373,6 @@ msgstr ""
 msgid "Edit my personal note"
 msgstr ""
 
-msgid "Back to note list"
-msgstr ""
-
 msgid "Notebook management"
 msgstr ""
 
@@ -3493,7 +3487,7 @@ msgstr "Создать раздел курса"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Вы уверины, что хотите удалить этот раздел курсов? Курсы внутри этого раздела будут перемещены вне данного раздела."
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Разделы курса"
 
 msgid "Courses in this category"
@@ -4358,7 +4352,7 @@ msgid "Allow teachers to create categories in the Groups tool?"
 msgstr "Позволять администратору курса создавать категории в модуле групп?"
 
 msgid "You can determine the platform languages in a different part of the platform administration, namely: <a href=\"languages.php\">Chamilo Platform Languages</a>"
-msgstr "Вы можете устанавливать языки платформы в разных частях управления платформой, а именно  <a href=\"languages.php\">Dokeos Platform Languages</a>"
+msgstr "Вы можете устанавливать языки платформы в разных частях управления платформой, а именно  <a href=\"languages.php\">Chamilo Platform Languages</a>"
 
 msgid "Production Server"
 msgstr "Выпускающий сервер"
@@ -4501,10 +4495,10 @@ msgstr "Этот пользователь не записан в класс"
 msgid "This class isn't subscribed in a course"
 msgstr "Этот класс не подписан на курс"
 
-msgid "tool"
+msgid "Tool"
 msgstr "инструмент"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "количество элементов"
 
 msgid "Documents and folders"
@@ -4666,7 +4660,7 @@ msgstr "Пожалуйста, дайте сопроводительный тек
 msgid "Please give a notice title"
 msgstr "Пожалуйста, дайте название уведомлению"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Пожалуйста, дайте имя ссылки"
 
 msgid "Insert this link"
@@ -5068,7 +5062,7 @@ msgstr "Завершить создание сессии"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Порт протокола видеоконференции RTMTP"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Название сессии скоро существовать"
 
 msgid "No classes have been created"
@@ -5218,8 +5212,8 @@ msgstr "Если эта опция активирована, то кликнит
 msgid "Include header line?"
 msgstr "Добавить полосу заголовка в файле CSV?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Да, добавить CSV заголовок<br />Эта линия определяет поля и необходима, когда вы хотите импортировать файл в разные порталы Chamilo"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Эта линия определяет поля и необходима, когда вы хотите импортировать файл в разные порталы Chamilo"
 
 msgid "List of users subscribed to course"
 msgstr "Список пользователей подписанных на курс"
@@ -5452,7 +5446,7 @@ msgstr "Выбрать ниспадающий просмотр"
 msgid "Multiple selection drop-down"
 msgstr "Множественный выбор ниспадающего просмотра"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "Поле успешно добавлено"
 
 msgid "Grades thresholds colouring"
@@ -5704,7 +5698,7 @@ msgstr ""
 msgid "Import LDAP users and a step into a session"
 msgstr ""
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr ""
 
 msgid "Assessments tab"
@@ -5750,9 +5744,6 @@ msgid "Tutor identification value"
 msgstr ""
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
-msgstr ""
-
-msgid "is not writeable"
 msgstr ""
 
 msgid "The field is successfully moved down"
@@ -6343,16 +6334,13 @@ msgstr ""
 msgid "Courses from the destination session"
 msgstr ""
 
-msgid "Help for the copy of courses from session to session"
-msgstr ""
-
 msgid "Type of copy"
 msgstr ""
 
 msgid "Copy from course in session to another session"
 msgstr ""
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr ""
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6424,10 +6412,10 @@ msgstr ""
 msgid "Subscription sessions in the category"
 msgstr ""
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr ""
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr ""
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6585,9 +6573,6 @@ msgstr "только для преподавателя"
 
 msgid "Define Headings"
 msgstr "Определить заголовки (рубрики)"
-
-msgid "Back to users list"
-msgstr "Вернуться к списку пользователей"
 
 msgid "change rights of"
 msgstr "изменить права"
@@ -7006,9 +6991,6 @@ msgstr "Группы из классов"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Используя эту опцию, Вы можете создать группы, основанные на классах, подписанных на Ваш курс."
 
-msgid "Back to Groups list"
-msgstr ""
-
 msgid "A new forum has now been created"
 msgstr "Новый форум создан"
 
@@ -7285,7 +7267,7 @@ msgstr "Переместить данный документ"
 msgid "Edit the current document"
 msgstr "Редактировать текущий документ"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "Предупреждение!"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7678,7 +7660,7 @@ msgstr "Вернуться к списку вопросов"
 msgid "Answers to the question"
 msgstr "Ответы на вопросы"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr "Предупреждение! Этот вопрос и ответы на него  использованы в нескольких тестах. Не хотите ли изменить их?"
 
 msgid "in all tests"
@@ -7827,9 +7809,6 @@ msgstr ""
 
 msgid "Exercise added"
 msgstr ""
-
-msgid "Assesment settings"
-msgstr "Настройки оценки"
 
 msgid "active"
 msgstr "активный"
@@ -8413,9 +8392,6 @@ msgstr ""
 msgid "Last score of a exercise"
 msgstr ""
 
-msgid "Back to result list"
-msgstr ""
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr ""
 
@@ -8496,9 +8472,6 @@ msgstr "Пользователи онлайн (на связи)"
 
 msgid "Remove"
 msgstr "Удалить"
-
-msgid "Back to courses list"
-msgstr "Вернуться к моему списку курсов"
 
 msgid "Links"
 msgstr "Ссылки"
@@ -8595,9 +8568,6 @@ msgstr "Имя"
 
 msgid "Last name"
 msgstr "Фамилия"
-
-msgid "e-mail"
-msgstr "Адрес эл. почты"
 
 msgid "Slideshow conversion"
 msgstr "Преобразование Показа слайдов"
@@ -8899,7 +8869,7 @@ msgstr "язык"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Извините, но такой код курса уже существует. Пожалуйста, выберите другой."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Список группы"
 
 msgid "The target folder does not exist"
@@ -9358,9 +9328,6 @@ msgstr "Мои активные сессии"
 msgid "My inactive sessions"
 msgstr "Мои неактивные сессии"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Это расширение активно, но на настоящий момент им оперировать нельзя"
-
 msgid "My learners"
 msgstr "Мои студенты"
 
@@ -9391,7 +9358,7 @@ msgstr "Нет ресурсов для повторного использова
 msgid "Could not open"
 msgstr "Не может быть открыт"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Частота"
 
 msgid "This course could not be found"
@@ -9523,8 +9490,8 @@ msgstr "Нет посещенных ссылок"
 msgid "No document downloaded"
 msgstr "Нет загрущенных документов"
 
-msgid "clicks"
-msgstr "щелчки"
+msgid "%d clicks"
+msgstr "%d щелчки"
 
 msgid "Search results"
 msgstr "Результаты поиска"
@@ -9607,7 +9574,7 @@ msgstr "URL-адрес ID_Доступа"
 msgid "The file is too big to upload."
 msgstr "Файл слишком большой для загрузки"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "Файл, который Вы загружали, не был получен. Пожалуйста, попробуйте загрузить его еще раз позже или свяжитесь с администратором этого портала."
 
 msgid "Assessments"
@@ -9667,7 +9634,7 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "Documented created"
+msgid "Document created"
 msgstr ""
 
 msgid "The forum has been added"
@@ -10195,7 +10162,7 @@ msgstr ""
 msgid "Make invisible"
 msgstr ""
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr ""
 
 msgid "Image"
@@ -10211,9 +10178,6 @@ msgid "Send a message"
 msgstr ""
 
 msgid "Menu"
-msgstr ""
-
-msgid "Back to user list"
 msgstr ""
 
 msgid "Graphic not available"
@@ -10540,7 +10504,7 @@ msgstr ""
 msgid "Who changed it"
 msgstr ""
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr ""
 
 msgid "Incorrect data"
@@ -11551,7 +11515,7 @@ msgstr ""
 msgid "The Main Page can be edited by a teacher only"
 msgstr ""
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr ""
 
 msgid "Now discussion is visible by trainers only"
@@ -13333,7 +13297,7 @@ msgstr "Пожалуйста, введите вопрос"
 msgid "Number of question"
 msgstr "Номер вопроса"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Такой код уже существует"
 
 msgid "Save and exit"
@@ -13384,13 +13348,13 @@ msgstr "Редактировать вопрос"
 msgid "This type does not exist"
 msgstr "Такого типа не существует"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "Опросник успешно создан"
 
 msgid "You can now add questions to your survey"
 msgstr "Сейчас Вы можете добавить вопросы в Ваш опросник"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "Опросник был успешно обновлен"
 
 msgid "The question has been added."
@@ -13588,7 +13552,7 @@ msgstr ""
 msgid "This survey code soon exists in this language"
 msgstr ""
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr ""
 
 msgid "Delete this user's answers"
@@ -13711,7 +13675,7 @@ msgstr "Есть ли учебник, набор публикаций, библ�
 msgid "Short description of the course materials."
 msgstr "Краткое описание материалов курса."
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Есть ли преподаватели, наставники, техническая поддержка, социальные ассистенты, компьютерные комнаты?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14236,9 +14200,6 @@ msgstr ""
 msgid "Delete all papers"
 msgstr ""
 
-msgid "Back to Assignments list"
-msgstr ""
-
 msgid "Edit and mark paper"
 msgstr ""
 
@@ -14350,10 +14311,10 @@ msgstr "Руководство"
 msgid "You should write a message"
 msgstr ""
 
-msgid "This message is to inform you that has created a new course on platform"
+msgid "This message is to inform you that a new course has been created on %s"
 msgstr ""
 
-msgid "New course created in"
+msgid "New course created on %s"
 msgstr ""
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
@@ -14365,8 +14326,8 @@ msgstr "Язык установки"
 msgid "Please read the following requirements thoroughly."
 msgstr "Читать полностью и тщательно"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Предупреждение!<br />Исталлятор обнаружил существующую платформу Chamilo в Вашей системе."
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "Предупреждение! Исталлятор обнаружил существующую платформу Chamilo в Вашей системе."
 
 msgid "New installation"
 msgstr "Новая установка"
@@ -14499,12 +14460,6 @@ msgstr "Пожалуйста, вернитесь к Шагу"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "Модернизированный шрифт оправиться и обновит базы данных Chamilo. Для того, чтобы это сделать, этот шрифт будет использовать базы данных и настройки определенные внизу. Поскольку наши компьютерные программы работают на широком спектре систем и не все они тестируются, мы настоятельно рекомендуем сделать полную резервную копию Вашей базы данных перед тем, как начать модернизацию!"
-
-msgid "MBString extension not available"
-msgstr "Расширение MBString не доступно"
-
-msgid "MySQL extension not available"
-msgstr "Расширение MySQL не доступно"
 
 msgid "Optional parameters"
 msgstr "Необязательные параметры"
@@ -15148,7 +15103,7 @@ msgstr ""
 msgid "Start to type, then click on this bar to validate tag"
 msgstr ""
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr ""
 
 msgid "Chamilo URL"
@@ -15622,7 +15577,7 @@ msgstr ""
 msgid "Assign sessions to platform administrator"
 msgstr ""
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr ""
 
 msgid "Assigned sessions list to platform administrator"
@@ -15691,7 +15646,7 @@ msgstr ""
 msgid "Thematic plan"
 msgstr ""
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr ""
 
 msgid "Edit thematic advance"
@@ -17389,7 +17344,7 @@ msgstr ""
 msgid "Not logged in for some time"
 msgstr ""
 
-msgid "Last %i months"
+msgid "Last %d months"
 msgstr ""
 
 msgid "Never connected"
@@ -17434,13 +17389,13 @@ msgstr ""
 msgid "My statistics"
 msgstr ""
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr ""
 
 msgid "Exercises taken"
 msgstr ""
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr ""
 
 msgid "Learning path progress"
@@ -17797,7 +17752,7 @@ msgstr ""
 msgid "Extra data"
 msgstr ""
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr ""
 
 msgid "Id"
@@ -18127,15 +18082,6 @@ msgstr ""
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr ""
 
-msgid "Sessions extension not available"
-msgstr ""
-
-msgid "Zlib extension not available"
-msgstr ""
-
-msgid "PCRE extension not available"
-msgstr ""
-
 msgid "To social group"
 msgstr ""
 
@@ -18403,7 +18349,7 @@ msgstr ""
 msgid "Online link to certificate"
 msgstr ""
 
-msgid "New exercises"
+msgid "New tests"
 msgstr ""
 
 msgid "My average"
@@ -18607,13 +18553,7 @@ msgstr ""
 msgid "questions"
 msgstr ""
 
-msgid "Back to test list"
-msgstr ""
-
 msgid "Category description"
-msgstr ""
-
-msgid "Back to category list"
 msgstr ""
 
 msgid "This category name already exists. Please use another name."
@@ -18892,7 +18832,7 @@ msgstr ""
 msgid "Not validated"
 msgstr ""
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr ""
 
 msgid "Select a question to revise"
@@ -19036,7 +18976,7 @@ msgstr ""
 msgid "Session list"
 msgstr ""
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr ""
 
 msgid "Learners who're taking the exercise right now"
@@ -21292,7 +21232,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr ""
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22846,7 +22786,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22921,13 +22861,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23467,10 +23404,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23773,10 +23710,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24010,7 +23947,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24076,10 +24013,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"

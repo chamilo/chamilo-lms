@@ -120,7 +120,7 @@ class GradebookTable extends SortableTable
                 $this->set_header($column++, get_lang('Ranking'), false, 'width="50px"');
             }
             if (in_array(2, $this->loadStats)) {
-                $this->set_header($column++, get_lang('Best scoree'), false, 'width="140px"');
+                $this->set_header($column++, get_lang('Best score'), false, 'width="140px"');
             }
             if (in_array(3, $this->loadStats)) {
                 $this->set_header($column++, get_lang('Average'), false, 'width="140px"');

@@ -33,7 +33,7 @@ switch ($action) {
 
                 $res = $mailTemplate->save($values);
                 if ($res) {
-                    Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirm'));
+                    Display::addFlash(Display::return_message(get_lang('Item added'), 'confirm'));
                 }
             }
             header('Location: '.api_get_self());
@@ -70,7 +70,7 @@ switch ($action) {
             $res = $mailTemplate->update($values);
             if ($res) {
                 Display::addFlash(
-                        Display::return_message(get_lang('ItemUpdated').': '.$values['title'], 'confirm')
+                        Display::return_message(get_lang('Item updated').': '.$values['title'], 'confirm')
                     );
             }
             //}
@@ -142,7 +142,7 @@ switch ($action) {
         }
         return \'&nbsp;<a href="?action=edit&id=\'+options.rowId+\'"><i class=\"mdi mdi-pencil mdi-24px\"></i></a>'.
             '&nbsp;<a href="?action=set_default&id=\'+options.rowId+\'" title=\"'.get_lang('Default').'\">\'+ defaultIcon + \'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'"><i class=\"mdi mdi-delete mdi-24px\"></i></a> \';
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'"><i class=\"mdi mdi-delete mdi-24px\"></i></a> \';
         }';
 
         $content = $mailTemplate->display();

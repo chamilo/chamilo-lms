@@ -406,8 +406,8 @@ if ($session->getShowDescription() && $allow) {
 // All Learnpaths grid settings (First tab, first subtab)
 $columns_courses = [
     get_lang('Title'),
-    get_lang('NumberOfPublishedTests'),
-    get_lang('NumberOfPublishedLps'),
+    get_lang('# of published exercises'),
+    get_lang('# of published Learning Paths'),
 ];
 $column_model_courses = [
     ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true'],

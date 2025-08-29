@@ -1,4 +1,4 @@
-import { createApp } from "vue"
+import { createApp, watch } from "vue"
 import App from "./App.vue"
 import i18n from "./i18n"
 import router from "./router"
@@ -30,9 +30,6 @@ import makeCrudModule from "./store/modules/crud"
 import VueFlatPickr from "vue-flatpickr-component"
 import "flatpickr/dist/flatpickr.css"
 import "@mdi/font/css/materialdesignicons.css"
-
-import DashboardLayout from "./components/layout/DashboardLayout.vue"
-import EmptyLayout from "./components/layout/EmptyLayout.vue"
 
 // Prime
 import PrimeVue from "primevue/config"
@@ -188,8 +185,6 @@ app.component("Button", Button)
 app.component("Column", Column)
 app.component("ColumnGroup", ColumnGroup)
 app.component("Toolbar", Toolbar)
-app.component("DashboardLayout", DashboardLayout)
-app.component("EmptyLayout", EmptyLayout)
 app.component("BaseAppLink", BaseAppLink)
 
 app.config.globalProperties.axios = axios
@@ -217,5 +212,24 @@ app
   .use(store)
   .use(pinia)
   .use(i18n)
+
+function applyPrimeLocale() {
+  const t = i18n.global.t
+  const cfg = app.config.globalProperties.$primevue?.config
+  if (!cfg) return
+  cfg.locale = {
+    ...(cfg.locale ?? {}),
+    emptyMessage: t("No available options"),
+    emptyFilterMessage: t("No available options"),
+  }
+}
+applyPrimeLocale()
+
+try {
+  const loc = i18n.global.locale
+  if (loc && typeof loc === "object" && "value" in loc) {
+    watch(loc, applyPrimeLocale)
+  }
+} catch {}
 
 app.mount("#app")

@@ -106,7 +106,7 @@ if (0 != count($errors)) {
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');
 $form->addElement('hidden', 'id_session', $id_session);
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('Import file'));
 $form->addRule('import_file', get_lang('Required field'), 'required');
 $allowed_file_types = ['xml', 'csv'];
 $form->addRule('import_file', get_lang('Invalid extension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);

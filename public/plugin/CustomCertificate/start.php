@@ -21,12 +21,12 @@ if ($enable) {
         $url = $webCoursePath.$_course['path'].'/index.php'.($session ? '?id_session='.$session->getId() : '');
 
         Display::addFlash(
-            Display::return_message($plugin->get_lang('OnlyAdminPlatform'))
+            Display::return_message($plugin->get_lang('Portal Administrators only'))
         );
 
         header('Location: '.$url);
         exit;
     }
 } else {
-    api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
+    api_not_allowed(true, $plugin->get_lang('Disabled'));
 }

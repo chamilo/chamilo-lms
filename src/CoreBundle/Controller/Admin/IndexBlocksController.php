@@ -120,6 +120,13 @@ class IndexBlocksController extends BaseController
                 ];
             }
 
+            $json['security'] = [
+                'id' => 'block-admin-security',
+                'editable' => false,
+                'items' => $this->getItemsSecurity(),
+                'extraContent' => $this->getExtraContent('block-admin-security'),
+            ];
+
             /* Chamilo.org */
             $json['chamilo'] = [
                 'id' => 'block-admin-chamilo',
@@ -145,6 +152,17 @@ class IndexBlocksController extends BaseController
         $json = $adminBlockEvent->getData();
 
         return $this->json($json);
+    }
+
+    private function getItemsSecurity(): array
+    {
+        return [
+            [
+                'class' => 'item-security-login-attempts',
+                'url'   => $this->generateUrl('admin_security_login_attempts'),
+                'label' => $this->translator->trans('Login attempts'),
+            ],
+        ];
     }
 
     private function getItemsUsers(): array
@@ -330,7 +348,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-course-category',
             'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_category.php']),
-            'label' => $this->translator->trans('Courses categories'),
+            'label' => $this->translator->trans('Course categories'),
         ];
         $items[] = [
             'class' => 'item-course-subscription',
@@ -344,7 +362,7 @@ class IndexBlocksController extends BaseController
         ];
         // $items[] = [
         //    'url'=>'course_intro_pdf_import.php',
-        //    'label' => $this->translator->$this->trans('ImportPDFIntroToCourses'),
+        //    'label' => $this->translator->$this->trans('Import PDF introductions into courses'),
         // ];
 
         if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_enable_grade_model')) {
@@ -431,7 +449,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-page-layouts',
             'route' => ['name' => 'PageLayoutList'],
-            'label' => $this->translator->trans('Page Layouts'),
+            'label' => $this->translator->trans('Page layouts'),
         ];
         $items[] = [
             'class' => 'item-registration-page',
@@ -605,6 +623,12 @@ class IndexBlocksController extends BaseController
             'class' => 'item-resources-info',
             'url' => '/admin/resources_info',
             'label' => $this->translator->trans('Resources by type'),
+        ];
+
+        $items[] = [
+            'class' => 'item-cleanup-temp-uploads',
+            'url' => '/admin/cleanup-temp-uploads',
+            'label' => $this->translator->trans('Clean uploaded temp files'),
         ];
 
         return $items;

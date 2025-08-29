@@ -1515,7 +1515,7 @@ class HTML_QuickForm extends HTML_Common
             if (false === $check) {
                 // Redirect to the same URL + show token not validated message.
                 $url = $this->getAttribute('action');
-                Display::addFlash(Display::return_message(get_lang('NotValidated'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('Not validated'), 'warning'));
                 api_location($url);
 
                 return false;

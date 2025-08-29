@@ -44,7 +44,7 @@ $form = new FormValidator('require_user_linking');
 $form->addUserAvatar('hrm', get_lang('Human Resources Manager'), 'medium');
 $form->addSelectAjax(
     'users',
-    [get_lang('Link me to student'), get_lang('Link me to studentComment')],
+    [get_lang('Link me to student'), get_lang('Please select the student you want to request a link to, so the administrators can review and approve your request. Please note that proper administrative procedures should have been followed first to ensure the admin can legally accept your request.')],
     $requestOptions,
     [
         'multiple' => 'multiple',

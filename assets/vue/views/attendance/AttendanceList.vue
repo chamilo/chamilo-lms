@@ -7,7 +7,7 @@
           icon="file-add"
           size="normal"
           type="black"
-          :title="t('Add Attendance')"
+          :title="t('Add attendance')"
           @click="redirectToCreateAttendance"
         />
       </template>

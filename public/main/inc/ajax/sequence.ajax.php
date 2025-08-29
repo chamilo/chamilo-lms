@@ -47,7 +47,7 @@ switch ($action) {
                 $graphImage = $graphviz->createImageSrc($graph);
                 echo Display::img(
                     $graphImage,
-                    get_lang('Graph Dependency Tree'),
+                    get_lang('Dependency tree graph'),
                     ['class' => 'center-block'],
                     false
                 );
@@ -58,7 +58,7 @@ switch ($action) {
                     .' because GraphViz command "dot" could not be executed '
                     .'- Make sure graphviz is installed.'
                 );
-                echo '<p class="text-center"><small>'.get_lang('Missing chart library please checkLog')
+                echo '<p class="text-center"><small>'.get_lang('Missing chart library, please check web server logs.')
                     .'</small></p>';
             }
         }
@@ -127,7 +127,7 @@ switch ($action) {
             [
                 'class' => 'sequence-id text-gray-800 font-semibold text-sm hover:underline',
                 'type' => 'button',
-                'title' => get_lang('UseAsReference'),
+                'title' => get_lang('Use as reference'),
             ]
         );
         $link .= $linkDelete;

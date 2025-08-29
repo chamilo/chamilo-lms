@@ -333,7 +333,7 @@ class CourseDescriptionController
 
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('The description has been added')
+                        get_lang('Course Description added')
                     )
                 );
                 $url = api_get_path(WEB_CODE_PATH).'course_description/index.php?'.api_get_cidreq();

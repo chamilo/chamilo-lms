@@ -191,7 +191,7 @@ $filters = [
     ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('First name')],
     ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('Last name')],
     ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('Code')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('e-mail')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('E-mail')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
@@ -461,7 +461,7 @@ echo Display::input('hidden', 'add_type', null);
             <strong><?php echo get_lang('Users in group'); ?></strong>
             <?php if(!empty($relation)) { ?>
                 <span class="text-sm mb-1 text-gray-600">
-                    - <?php echo get_lang('Currently showing users for role').': <strong>'.UserGroupModel::getRoleName($relation).'</strong>'; ?>
+                    - <?php echo sprintf(get_lang('Currently showing users for role: <strong>%s</strong>'), UserGroupModel::getRoleName($relation)); ?>
                 </span>
             <?php } ?>
             <?php echo Display::select(

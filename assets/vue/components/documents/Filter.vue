@@ -2,7 +2,7 @@
   <q-input
     id="search_filter"
     v-model="item.title"
-    :placeholder="$t('title')"
+    :placeholder="$t('Title')"
     type="text"
   />
 </template>

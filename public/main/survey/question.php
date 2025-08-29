@@ -88,7 +88,7 @@ $actions .= '<a href="'.$surveyUrl.'">'.
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
-    api_not_allowed(true, Display::return_message(get_lang('TypeDoesNotExist'), 'error', false));
+    api_not_allowed(true, Display::return_message(get_lang('This type does not exist'), 'error', false));
 }
 
 // Displaying the form for adding or editing the question

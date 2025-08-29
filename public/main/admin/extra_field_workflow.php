@@ -201,7 +201,7 @@ if (!empty($roleId)) {
     );
     $group[] = $form->addButton(
         'unselect_all',
-        get_lang('UnSelect all'),
+        get_lang('Unselect all'),
         'check',
         'default',
         'default',

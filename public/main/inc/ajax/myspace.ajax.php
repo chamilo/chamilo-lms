@@ -163,7 +163,7 @@ switch ($action) {
                 null,
                 'stat_table'
             );
-            $table->set_header(1, get_lang('LoginDate'), false);
+            $table->set_header(1, get_lang('Login date'), false);
             $table->set_header(2, get_lang('Duration'), false);
             $table->set_header(3, get_lang('IP'), false);
             $result['result'] = $table->return_table();
@@ -187,15 +187,15 @@ switch ($action) {
             $result['graph_result'] = MySpace::grapher($connections, $start_date, $end_date, $type);
         } else {
             $result['result'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
             $result['graph_result'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
             $result['stats'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
         }

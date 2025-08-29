@@ -2,125 +2,116 @@
 
 {% autoescape false %}
     <div class="question-result">
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="bg-white border border-gray-25 rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6">
                 {% if 'editor.save_titles_as_html'|api_get_setting == 'true' %}
-                    {{ data.title }}
+                    <div class="prose max-w-none mb-4">{{ data.title|raw }}</div>
                 {% else %}
-                    <h3>{{ data.title }}</h3>
+                    <h3 class="text-xl font-semibold text-gray-90 mb-4">{{ data.title }}</h3>
                 {% endif %}
 
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="user-avatar">
-                            <img src="{{ data.avatar }}">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-1/3 flex-shrink-0 flex flex-col items-center md:items-start space-y-4">
+                        <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-primary">
+                            <img src="{{ data.avatar }}" alt="{{ data.username }}" class="object-cover w-full h-full">
                         </div>
-                        <div class="user-info">
-                            <strong>{{ data.name_url }}</strong>
-                            <br />
+                        <div class="text-center md:text-left">
+                            <p class="font-medium text-gray-90">{{ data.name_url|raw }}</p>
                             {% if signature %}
-                                <img src="{{ signature }}" />
+                                <img src="{{ signature }}" alt="{{ 'Signature'|trans }}" class="mt-2 w-32">
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-md-9">
-                        <div class="group-data">
-                            <div class="list-data username">
-                                <span class="item">{{ 'Username'|trans }}</span>
-                                {{ 'ToolIcon::MEMBER' | mdi_icon }} {{ data.username }}
+                    <div class="w-full md:w-2/3 space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex items-center space-x-2">
+                                {{ 'ToolIcon::MEMBER'|mdi_icon }}
+                                <span class="font-semibold">{{ 'Username'|trans }}:</span>
+                                <span>{{ data.username }}</span>
                             </div>
 
                             {% if data.start_date %}
-                                <div class="list-data start-date">
-                                    <span class="item">{{ 'Start date'|trans }}</span>
-                                    {{ 'ToolIcon::AGENDA' | mdi_icon }}
-                                    {{ data.start_date }}
+                                <div class="flex items-center space-x-2">
+                                    {{ 'ToolIcon::AGENDA'|mdi_icon }}
+                                    <span class="font-semibold">{{ 'Start date'|trans }}:</span>
+                                    <span>{{ data.start_date }}</span>
                                 </div>
                             {% endif %}
 
                             {% if data.duration %}
-                                <div class="list-data duration">
-                                    <span class="item">{{ 'Duration'|trans }}</span>
-                                    {{ 'alarm' | mdi_icon }}
-                                    {{ data.duration }}
+                                <div class="flex items-center space-x-2">
+                                    {{ 'alarm'|mdi_icon }}
+                                    <span class="font-semibold">{{ 'Duration'|trans }}:</span>
+                                    <span>{{ data.duration }}</span>
                                 </div>
                             {% endif %}
 
                             {% if data.ip %}
-                                <div class="list-data ip">
-                                    <span class="item">{{ 'IP'|trans }}</span>
-                                    {{ 'laptop' | mdi_icon }}
-                                    {{ data.ip }}
+                                <div class="flex items-center space-x-2">
+                                    {{ 'laptop'|mdi_icon }}
+                                    <span class="font-semibold">{{ 'IP'|trans }}:</span>
+                                    <span>{{ data.ip }}</span>
                                 </div>
                             {% endif %}
-
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
                             {% if allow_signature %}
-                                <div class="list-data">
-                                    <span class="item"></span>
-                                    <a id="sign" class="btn btn--primary" href="javascript:void(0)">
-                                        <em class="fas fa-pencil-alt"></em> {{ 'Sign'| get_plugin_lang('ExerciseSignaturePlugin') }}
-                                    </a>
-                                </div>
+                                <button id="sign"
+                                        class="px-4 py-2 rounded-md bg-primary text-primary-button-text hover:opacity-90 transition">
+                                    <em class="fas fa-pencil-alt"></em>
+                                    {{ 'Sign'|get_plugin_lang('ExerciseSignaturePlugin') }}
+                                </button>
                             {% endif %}
 
                             {% if allow_export_pdf %}
-                                <br />
-                                <div class="list-data">
-                                    <span class="item"></span>
-                                    <a href="{{ export_url }}" class="btn btn--plain">
-                                        {{ 'ActionIcon::EXPORT_PDF'|mdi_icon_t(32, 'ch-tool-icon', 'Export response report') }}
-                                        {{ 'Export response report'| trans }}
-                                    </a>
-                                </div>
+                                <a href="{{ export_url }}"
+                                   class="px-4 py-2 rounded-md border border-secondary hover:bg-secondary/10 transition flex items-center space-x-1">
+                                    {{ 'ActionIcon::EXPORT_PDF'|mdi_icon_t(24, 'ch-tool-icon', 'Export response report') }}
+                                    <span>{{ 'Export response report'|trans }}</span>
+                                </a>
                             {% endif %}
                         </div>
-                        <hr />
-                        <div id="quiz_saved_answers_container">
-                            {% if data.number_of_answers_saved != data.number_of_answers %}
-                                <span class="label label-warning">
-                            <strong>{{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </span>
-                            {% else %}
-                                <span class="label label-success">
-                            <strong>{{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}</strong>
-                        </span>
-                            {% endif %}
 
-                            {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
-                                {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
-                                <form class="form-horizontal" action="#" id="quiz_confirm_saved_answers_form">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="quiz_confirm_saved_answers_check"
-                                                        {% if not enable_form %}disabled{% endif %} {% if data.track_confirmation.confirmed %}checked{% endif %}
-                                                    >
-                                                    {{ 'I accept the number of saved responses in this section.'|trans }}
-                                                </label>
-                                            </div>
-                                            {% if enable_form %}
-                                                <span class="help-block">
-                                                    {{ 'If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator.'|trans }}
-                                                </span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    {% if enable_form %}
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
-                                                <button type="submit" class="btn btn--primary" disabled>
-                                                    <span class="fa fa-save fa-fw" aria-hidden="true"></span> {{ 'Save'|trans }}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </form>
+                        <hr class="border-gray-20 my-4">
+                        <div class="flex items-center space-x-2">
+                            {% if data.number_of_answers_saved != data.number_of_answers %}
+                                <span class="inline-block px-2 py-1 text-sm font-semibold bg-warning text-warning-button-text rounded">
+                {{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}
+              </span>
+                            {% else %}
+                                <span class="inline-block px-2 py-1 text-sm font-semibold bg-success text-success-button-text rounded">
+                {{ '%d / %d answers saved.'|trans|format(data.number_of_answers_saved, data.number_of_answers) }}
+              </span>
                             {% endif %}
                         </div>
+                        {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
+                            {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
+                            <form id="quiz_confirm_saved_answers_form" class="space-y-4 mt-4">
+                                <label class="flex items-start space-x-2">
+                                    <input type="checkbox"
+                                           name="quiz_confirm_saved_answers_check"
+                                           {% if not enable_form %}disabled{% endif %}
+                                            {% if data.track_confirmation.confirmed %}checked{% endif %}
+                                           class="form-checkbox h-5 w-5 text-primary">
+                                    <span class="text-body-2">{{ 'I accept the number of saved responses in this section.'|trans }}</span>
+                                </label>
+
+                                {% if enable_form %}
+                                    <p class="text-tiny text-gray-50">
+                                        {{ 'If you are not satisfied, do not check the acceptance box and consult the course manager or the platform administrator.'|trans }}
+                                    </p>
+                                    <div>
+                                        <input type="hidden" name="tc_id" value="{{ data.track_confirmation.id }}">
+                                        <button type="submit"
+                                                class="px-4 py-2 rounded-md bg-primary text-primary-button-text disabled:opacity-50"
+                                                disabled>
+                                            <span class="fa fa-save fa-fw"></span>
+                                            {{ 'Save'|trans }}
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

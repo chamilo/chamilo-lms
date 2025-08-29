@@ -793,7 +793,22 @@ class learnpath
 
         $course = api_get_course_entity();
         $session = api_get_session_entity();
+        /* @var CLp $lp */
         $lp = Container::getLpRepository()->find($this->lp_id);
+
+        // 1) Detach the asset to avoid FK constraint
+        $asset = $lp->getAsset();
+        if ($asset) {
+            $lp->setAsset(null);
+            $em = Database::getManager();
+            $em->persist($lp);
+            $em->flush();
+        }
+
+        // 2) Now delete the asset and its folder
+        if ($asset) {
+            Container::getAssetRepository()->delete($asset);
+        }
 
         Database::getManager()
             ->getRepository(ResourceLink::class)
@@ -2559,7 +2574,7 @@ class learnpath
      *
      * @return array Ordered list of item IDs (empty array on error)
      */
-    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0)
+    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0, $withExportFlag = false)
     {
         $parent = (int) $parent;
         $lpItemRepo = Container::getLpItemRepository();
@@ -2577,32 +2592,41 @@ class learnpath
         $criteria = new Criteria();
         $criteria
             ->where($criteria->expr()->neq('path', 'root'))
-            ->orderBy(
-                [
-                    'displayOrder' => Criteria::ASC,
-                ]
-            );
+            ->orderBy(['displayOrder' => Criteria::ASC]);
         $items = $lp->getItems()->matching($criteria);
-        $items = $items->filter(
-            function (CLpItem $element) use ($parent) {
-                if ('root' === $element->getPath()) {
-                    return false;
-                }
-
-                if (null !== $element->getParent()) {
-                    return $element->getParent()->getIid() === $parent;
-                }
+        $items = $items->filter(function (CLpItem $element) use ($parent) {
+            if ('root' === $element->getPath()) {
                 return false;
-
             }
-        );
+            if (null !== $element->getParent()) {
+                return $element->getParent()->getIid() === $parent;
+            }
+            return false;
+        });
+
+        if (!$withExportFlag) {
+            $ids = [];
+            foreach ($items as $item) {
+                $itemId = $item->getIid();
+                $ids[] = $itemId;
+                $subIds = self::get_flat_ordered_items_list($lp, $itemId, false);
+                foreach ($subIds as $subId) {
+                    $ids[] = $subId;
+                }
+            }
+            return $ids;
+        }
+
         $list = [];
         foreach ($items as $item) {
             $itemId = $item->getIid();
-            $sublist = self::get_flat_ordered_items_list($lp, $itemId);
-            $list[] = $itemId;
-            foreach ($sublist as $subItem) {
-                $list[] = $subItem;
+            $list[] = [
+                'iid'            => $itemId,
+                'export_allowed' => $item->isExportAllowed() ? 1 : 0,
+            ];
+            $subList = self::get_flat_ordered_items_list($lp, $itemId, true);
+            foreach ($subList as $subEntry) {
+                $list[] = $subEntry;
             }
         }
 
@@ -4352,215 +4376,201 @@ class learnpath
 
     public function showBuildSideBar($updateAudio = false, $dropElementHere = false, $type = null)
     {
-        $sureToDelete = trim(get_lang('Are you sure to delete?'));
+        $sureToDelete = trim(get_lang('Are you sure to delete'));
         $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$this->get_id().'&'.api_get_cidreq();
 
         $content = '
-        <script>
-            /*
-            Script to manipulate Learning Path items with Drag and drop
-             */
-            $(function() {
-                function refreshTree() {
-                    var params = "&a=get_lp_item_tree";
-                    $.get(
-                        "'.$ajax_url.'",
-                        params,
-                        function(result) {
-                            serialized = [];
-                            $("#lp_item_list").html(result);
-                            nestedSortable();
+    <script>
+    $(function() {
+        function enforceFinalAtEndDOM() {
+            var $root = $("#lp_item_list");
+            $root.find("li.final-item").each(function() {
+                $root.append(this);
+            });
+        }
+
+        function refreshTree() {
+            var params = "&a=get_lp_item_tree";
+            $.get(
+                "'.$ajax_url.'",
+                params,
+                function(result) {
+                    $("#lp_item_list").html(result);
+                    enforceFinalAtEndDOM();
+                    nestedSortable();
+                }
+            );
+        }
+
+        const nestedQuery = ".nested-sortable";
+        const identifier  = "id";
+        const root        = document.getElementById("lp_item_list");
+
+        function serialize(sortable) {
+            var out    = [];
+            var finals = [];
+            var children = [].slice.call(sortable.children);
+
+            for (var i = 0; i < children.length; i++) {
+                var li = children[i];
+                if (!li || !li.dataset) continue;
+
+                var id = li.dataset[identifier];
+                if (!id) continue;
+
+                var isFinal =
+                    li.classList.contains("final-item") ||
+                    li.dataset.type === "final_item" ||
+                    li.dataset.fixed === "final";
+
+                var parentLi = $(li).closest("ul.nested-sortable").closest("li")[0];
+                var parentId = (parentLi && parentLi.dataset) ? parentLi.dataset[identifier] : null;
+                var rec = { id: id, parent_id: isFinal ? null : parentId };
+                var nested = li.querySelector(nestedQuery);
+                if (nested && !isFinal) {
+                    out = out.concat( serialize(nested) );
+                }
+
+                (isFinal ? finals : out).push(rec);
+            }
+
+            return out.concat(finals);
+        }
+
+        function nestedSortable() {
+            let lists = document.getElementsByClassName("nested-sortable");
+            Array.prototype.forEach.call(lists, function(ul) {
+                Sortable.create(ul, {
+                    group: "nested",
+                    put: ["nested-sortable", ".lp_resource", ".nested-source"],
+                    animation: 150,
+                    swapThreshold: 0.65,
+                    dataIdAttr: "data-id",
+                    filter: ".disable_drag",
+                    onMove: function (evt) {
+                        var t = evt.dragged && evt.dragged.dataset ? evt.dragged.dataset.type : null;
+                        if (t === "final_item") return false;
+                    },
+                    onEnd: function(evt) {
+                        if (evt.item && (evt.item.classList.contains("final-item") || evt.item.dataset.type === "final_item")) {
+                            enforceFinalAtEndDOM();
+                            return;
                         }
-                    );
-                }
+                        enforceFinalAtEndDOM();
 
-                const nestedQuery = ".nested-sortable";
-                const identifier = "id";
-                const root = document.getElementById("lp_item_list");
+                        let list  = serialize(root);
+                        let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
 
-                var serialized = [];
-                function serialize(sortable) {
-                  var children = [].slice.call(sortable.children);
-                  for (var i in children) {
-                    var nested = children[i].querySelector(nestedQuery);
-                    var parentId = $(children[i]).parent().parent().attr("id");
-                    var id = children[i].dataset[identifier];
-                    if (typeof id === "undefined") {
-                        return;
-                    }
-                    serialized.push({
-                      id: children[i].dataset[identifier],
-                      parent_id: parentId
-                    });
-
-                    if (nested) {
-                        serialize(nested);
-                    }
-                  }
-
-                  return serialized;
-                }
-
-                function nestedSortable() {
-                    let left = document.getElementsByClassName("nested-sortable");
-                    Array.prototype.forEach.call(left, function(resource) {
-                        Sortable.create(resource, {
-                            group: "nested",
-                            put: ["nested-sortable", ".lp_resource", ".nested-source"],
-                            animation: 150,
-                            //fallbackOnBody: true,
-                            swapThreshold: 0.65,
-                            dataIdAttr: "data-id",
-                            store: {
-                                set: function (sortable) {
-                                    var order = sortable.toArray();
-                                    console.log(order);
-                                }
-                            },
-                            onEnd: function(evt) {
-                                console.log("onEnd");
-                                let list = serialize(root);
-                                let order = "&a=update_lp_item_order&new_order=" + JSON.stringify(list);
-                                $.get(
-                                    "'.$ajax_url.'",
-                                    order,
-                                    function(reponse) {
-                                        $("#message").html(reponse);
-                                        refreshTree();
-                                    }
-                                );
-                            },
-                        });
-                    });
-                }
-
-                nestedSortable();
-
-                let resources = document.getElementsByClassName("lp_resource");
-                Array.prototype.forEach.call(resources, function(resource) {
-                    Sortable.create(resource, {
-                        group: "nested",
-                        put: ["nested-sortable"],
-                        filter: ".disable_drag",
-                        animation: 150,
-                        fallbackOnBody: true,
-                        swapThreshold: 0.65,
-                        dataIdAttr: "data-id",
-                        onRemove: function(evt) {
-                            console.log("onRemove");
-                            var itemEl = evt.item;
-                            var newIndex = evt.newIndex;
-                            var id = $(itemEl).attr("id");
-                            var parent_id = $(itemEl).parent().parent().attr("id");
-                            var type =  $(itemEl).find(".link_with_id").attr("data_type");
-                            var title = $(itemEl).find(".link_with_id").text();
-
-                            let previousId = 0;
-                            if (0 !== newIndex) {
-                                previousId = $(itemEl).prev().attr("id");
+                        $.get(
+                            "'.$ajax_url.'",
+                            order,
+                            function(reponse) {
+                                $("#message").html(reponse);
+                                refreshTree();
                             }
-                            var params = {
-                                "a": "add_lp_item",
-                                "id": id,
-                                "parent_id": parent_id,
-                                "previous_id": previousId,
-                                "type": type,
-                                "title" : title
-                            };
-                            console.log(params);
-                            $.ajax({
-                                type: "GET",
-                                url: "'.$ajax_url.'",
-                                data: params,
-                                success: function(itemId) {
-                                    $(itemEl).attr("id", itemId);
-                                    $(itemEl).attr("data-id", itemId);
-                                    let list = serialize(root);
-                                    let listInString = JSON.stringify(list);
-                                    if (typeof listInString === "undefined") {
-                                        listInString = "";
-                                    }
-                                    let order = "&a=update_lp_item_order&new_order=" + listInString;
-                                    $.get(
-                                        "'.$ajax_url.'",
-                                        order,
-                                        function(reponse) {
-                                            $("#message").html(reponse);
-                                            refreshTree();
-                                        }
-                                    );
-                                }
-                            });
-                        },
-                    });
+                        );
+                    },
                 });
             });
-        </script>';
+        }
+
+        nestedSortable();
+
+        let resources = document.getElementsByClassName("lp_resource");
+        Array.prototype.forEach.call(resources, function(resource) {
+            Sortable.create(resource, {
+                group: "nested",
+                put: ["nested-sortable"],
+                filter: ".disable_drag",
+                animation: 150,
+                fallbackOnBody: true,
+                swapThreshold: 0.65,
+                dataIdAttr: "data-id",
+                onRemove: function(evt) {
+                    var itemEl   = evt.item;
+                    var newIndex = evt.newIndex;
+                    var id       = $(itemEl).attr("id");
+                    var parentId = $(itemEl).parent().parent().attr("id");
+                    var type     = $(itemEl).find(".link_with_id").attr("data_type");
+                    var title    = $(itemEl).find(".link_with_id").text();
+
+                    let previousId = 0;
+                    if (0 !== newIndex) {
+                        previousId = $(itemEl).prev().attr("id");
+                    }
+
+                    var params = {
+                        "a": "add_lp_item",
+                        "id": id,
+                        "parent_id": parentId,
+                        "previous_id": previousId,
+                        "type": type,
+                        "title" : title
+                    };
+
+                    $.ajax({
+                        type: "GET",
+                        url: "'.$ajax_url.'",
+                        data: params,
+                        success: function(itemId) {
+                            $(itemEl).attr("id", itemId);
+                            $(itemEl).attr("data-id", itemId);
+
+                            enforceFinalAtEndDOM();
+
+                            let list = serialize(root);
+                            let listInString = JSON.stringify(list) || "[]";
+                            let order = "&a=update_lp_item_order&new_order=" + listInString;
+
+                            $.get(
+                                "'.$ajax_url.'",
+                                order,
+                                function(reponse) {
+                                    $("#message").html(reponse);
+                                    refreshTree();
+                                }
+                            );
+                        }
+                    });
+                },
+            });
+        });
+    });
+    </script>';
 
         $content .= "
-        <script>
-            function confirmation(name) {
-                if (confirm('$sureToDelete ' + name)) {
-                    return true;
-                } else {
-                    return false;
+    <script>
+        function confirmation(name) {
+            return confirm('$sureToDelete ' + name);
+        }
+        function refreshTree() {
+            var params = '&a=get_lp_item_tree';
+            $.get(
+                '".$ajax_url."',
+                params,
+                function(result) {
+                    $('#lp_item_list').html(result);
                 }
-            }
-            function refreshTree() {
-                var params = '&a=get_lp_item_tree';
-                $.get(
-                    '".$ajax_url."',
-                    params,
-                    function(result) {
-                        $('#lp_item_list').html(result);
-                    }
-                );
-            }
+            );
+        }
 
-            $(function () {
-                //$('.scrollbar-inner').scrollbar();
-                /*$('#subtab').on('click', 'a:first', function() {
-                    window.location.reload();
-                });
-                $('#subtab ').on('click', 'a:first', function () {
-                    window.location.reload();
-                });*/
+        $(function () {
+            expandColumnToggle('#hide_bar_template', { selector: '#lp_sidebar' }, { selector: '#doc_form' });
 
-                expandColumnToggle('#hide_bar_template', {
-                    selector: '#lp_sidebar'
-                }, {
-                    selector: '#doc_form'
-                });
-
-                $('.lp-btn-associate-forum').on('click', function (e) {
-                    var associate = confirm('".get_lang('ConfirmAssociateForumToLPItem')."');
-                    if (!associate) {
-                        e.preventDefault();
-                    }
-                });
-
-                $('.lp-btn-dissociate-forum').on('click', function (e) {
-                    var dissociate = confirm('".get_lang('ConfirmDissociateForumToLPItem')."');
-                    if (!dissociate) {
-                        e.preventDefault();
-                    }
-                });
-
-                // hide the current template list for new documment until it tab clicked
-                $('#frmModel').hide();
+            $('.lp-btn-associate-forum').on('click', function (e) {
+                var ok = confirm('".get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?')."');
+                if (!ok) e.preventDefault();
             });
 
-            // document template for new document tab handler
-            /*$(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {
-                var id = e.target.id;
-                if (id == 'subtab2') {
-                    $('#frmModel').show();
-                } else {
-                    $('#frmModel').hide();
-                }
-            });*/
+            $('.lp-btn-dissociate-forum').on('click', function (e) {
+                var ok = confirm('".get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?')."');
+                if (!ok) e.preventDefault();
+            });
 
-          function deleteItem(event) {
+            $('#frmModel').hide();
+        });
+
+        function deleteItem(event) {
             var id = $(event).attr('data-id');
             var title = $(event).attr('data-title');
             var params = '&a=delete_item&id=' + id;
@@ -4574,7 +4584,7 @@ class learnpath
                 );
             }
         }
-        </script>";
+    </script>";
 
         $content .= $this->return_new_tree($updateAudio, $dropElementHere);
         $documentId = isset($_GET['path_item']) ? (int) $_GET['path_item'] : 0;
@@ -4657,11 +4667,18 @@ class learnpath
                 return '</ul>';
             },
             'childOpen' => function($child) {
-                $id = $child['iid'];
+                $id   = $child['iid'];
+                $type = $child['itemType'] ?? ($child['item_type'] ?? '');
+                $isFinal = (TOOL_LP_FINAL_ITEM === $type);
+                $extraClass = $isFinal ? ' final-item disable_drag' : '';
+                $extraAttr  = $isFinal ? ' data-fixed="final"' : '';
+
                 return '<li
                     id="'.$id.'"
                     data-id="'.$id.'"
-                    class=" flex flex-col list-group-item nested-'.$child['lvl'].'">';
+                    data-type="'.$type.'"
+                    '.$extraAttr.'
+                    class="flex flex-col list-group-item nested-'.$child['lvl'].$extraClass.'">';
             },
             'childClose' => '',
             'nodeDecorator' => function ($node) use ($mainUrl, $previewImage, $upIcon, $downIcon) {
@@ -4829,7 +4846,7 @@ class learnpath
 
         /*if ($backToBuild) {
             $back = Display::url(
-                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('GoBack')),
+                Display::getMdiIcon('arrow-left-bold-box', 'ch-tool-icon', null, 32, get_lang('Go back')),
                 "lp_controller.php?action=add_item&type=step&lp_id=$lpId&".api_get_cidreq()
             );
         }*/
@@ -5031,7 +5048,8 @@ class learnpath
         $title = '',
         $extension = 'html',
         $parentId = 0,
-        $creatorId = 0
+        $creatorId = 0,
+        $docFiletype = 'file'
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : $creatorId;
         $sessionId = api_get_session_id();
@@ -5063,26 +5081,6 @@ class learnpath
                 api_get_path(REL_PATH).'courses/',
                 $content
             );
-
-            // Change the path of mp3 to absolute.
-            // The first regexp deals with :// urls.
-            /*$content = preg_replace(
-                "|(flashvars=\"file=)([^:/]+)/|",
-                "$1".api_get_path(
-                    REL_COURSE_PATH
-                ).$courseInfo['path'].'/document/',
-                $content
-            );*/
-            // The second regexp deals with audio/ urls.
-            /*$content = preg_replace(
-                "|(flashvars=\"file=)([^/]+)/|",
-                "$1".api_get_path(
-                    REL_COURSE_PATH
-                ).$courseInfo['path'].'/document/$2/',
-                $content
-            );*/
-            // For flv player: To prevent edition problem with firefox,
-            // we have to use a strange tip (don't blame me please).
             $content = str_replace(
                 '</body>',
                 '<style type="text/css">body{}</style></body>',
@@ -5093,7 +5091,7 @@ class learnpath
         $document = DocumentManager::addDocument(
             $courseInfo,
             null,
-            'file',
+            $docFiletype,
             '',
             $tmp_filename,
             '',
@@ -5359,7 +5357,7 @@ class learnpath
             Display::getMdiIcon('inbox-full', 'ch-tool-icon-gradient', '', 64, get_lang('Assignments')),
             Display::getMdiIcon('comment-quote', 'ch-tool-icon-gradient', '', 64, get_lang('Forums')),
             Display::getMdiIcon('bookmark-multiple', 'ch-tool-icon-gradient', '', 64, get_lang('Add section')),
-            Display::getMdiIcon('form-dropdown', 'ch-tool-icon-gradient', '', 64, get_lang('Add survey')),
+            Display::getMdiIcon('form-dropdown', 'ch-tool-icon-gradient', '', 64, get_lang('Create survey')),
             Display::getMdiIcon('certificate', 'ch-tool-icon-gradient', '', 64, get_lang('Certificate')),
         ];
         $content = '';
@@ -5671,6 +5669,17 @@ class learnpath
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
+        if ($action === 'edit' && $lpItem !== null) {
+            $form->addElement(
+                'checkbox',
+                'export_allowed',
+                get_lang('Allow PDF export for this item')
+            );
+            $form->setDefaults([
+                'export_allowed' => $lpItem->isExportAllowed() ? 1 : 0
+            ]);
+        }
+
         switch ($action) {
             case 'add':
                 $folders = DocumentManager::get_all_document_folders(
@@ -5686,11 +5695,11 @@ class learnpath
                     $form,
                     'directory_parent_id'
                 );
-
                 if ($data) {
-                    $defaults['directory_parent_id'] = $data->getIid();
+                    $form->setDefaults([
+                        'directory_parent_id' => $data->getIid()
+                    ]);
                 }
-
                 break;
         }
 
@@ -5698,6 +5707,8 @@ class learnpath
 
         return $form->returnForm();
     }
+
+
 
     /**
      * @param array  $courseInfo
@@ -6336,13 +6347,14 @@ class learnpath
             null,
             null,
             $showInvisibleFiles,
-            true,
+            false,
             false,
             true,
             false,
             [],
             [],
-            ['file', 'folder']
+            ['file', 'folder'],
+            true
         );
 
         $form = new FormValidator(
@@ -6453,10 +6465,11 @@ class learnpath
             false,
             [],
             [],
-            'video'
+            'video',
+            true
         );
 
-        return $documentTree ?: get_lang('No videos found');
+        return $documentTree ?: get_lang('No video found');
     }
 
     /**
@@ -6553,7 +6566,7 @@ class learnpath
         $return .= '</li>';
 
         $previewIcon = Display::getMdiIcon('magnify-plus-outline', 'ch-tool-icon', null, 22, get_lang('Preview'));
-        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Exercise'));
+        $quizIcon = Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 16, get_lang('Test'));
         $moveIcon = Display::getMdiIcon('cursor-move', 'ch-tool-icon', '', 16, get_lang('Move'));
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         foreach ($exercises as $exercise) {
@@ -6723,7 +6736,7 @@ class learnpath
         $return .= '<li class="list-group-item lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
-            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Student publication'));
+            $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Assignments'));
             foreach ($works as $work) {
                 $workId = $work['iid'];
                 $link = Display::url(
@@ -6922,14 +6935,14 @@ class learnpath
 
         // First add link
         $return .= '<li class="list-group-item lp_resource_element disable_drag">';
-        $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('CreateNewSurvey'));
+        $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('Create survey'));
         $return .= Display::url(
-            get_lang('Create a new survey'),
+            get_lang('Create survey'),
             api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'add',
                 'lp_id' => $this->lp_id,
             ]),
-            ['title' => get_lang('Create a new survey')]
+            ['title' => get_lang('Create survey')]
         );
         $return .= '</li>';
 
@@ -7075,38 +7088,87 @@ class learnpath
         );
     }
 
+    public static function getQuotaInfo(string $localFilePath): array
+    {
+        $post_max_raw   = ini_get('post_max_size');
+        $post_max_bytes = (int) rtrim($post_max_raw, 'MG') * (str_ends_with($post_max_raw,'G') ? 1024**3 : 1024**2);
+        $upload_max_raw = ini_get('upload_max_filesize');
+        $upload_max_bytes = (int) rtrim($upload_max_raw, 'MG') * (str_ends_with($upload_max_raw,'G') ? 1024**3 : 1024**2);
+
+        $em     = Database::getManager();
+        $course = api_get_course_entity(api_get_course_int_id());
+
+        $nodes  = Container::getResourceNodeRepository()->findByResourceTypeAndCourse('file', $course);
+        $root   = null;
+        foreach ($nodes as $n) {
+            if ($n->getParent() === null) {
+                $root = $n; break;
+            }
+        }
+        $docsSize = $root
+            ? Container::getDocumentRepository()->getFolderSize($root, $course)
+            : 0;
+
+        $assetRepo = Container::getAssetRepository();
+        $fs        = $assetRepo->getFileSystem();
+        $scormSize = 0;
+        foreach (Container::getLpRepository()->findScormByCourse($course) as $lp) {
+            if ($asset = $lp->getAsset()) {
+                $folder = $assetRepo->getFolder($asset);
+                if ($folder && $fs->directoryExists($folder)) {
+                    $scormSize += self::getFolderSize($folder);
+                }
+            }
+        }
+
+        $uploadedSize = filesize($localFilePath);
+        $existingTotal = $docsSize + $scormSize;
+        $combined = $existingTotal + $uploadedSize;
+
+        $quotaMb = DocumentManager::get_course_quota();
+        $quotaBytes = $quotaMb * 1024 * 1024;
+
+        return [
+            'post_max'      => $post_max_bytes,
+            'upload_max'    => $upload_max_bytes,
+            'docs_size'     => $docsSize,
+            'scorm_size'    => $scormSize,
+            'existing_total'=> $existingTotal,
+            'uploaded_size' => $uploadedSize,
+            'combined'      => $combined,
+            'quota_bytes'   => $quotaBytes,
+        ];
+    }
+
     /**
      * Verify document size.
-     *
-     * @param string $s
-     *
-     * @return bool
      */
-    public static function verify_document_size($s)
+    public static function verify_document_size(string $localFilePath): bool
     {
-        $post_max = ini_get('post_max_size');
-        if ('M' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-        $upl_max = ini_get('upload_max_filesize');
-        if ('M' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-
-        $repo = Container::getDocumentRepository();
-        $documents_total_space = $repo->getTotalSpace(api_get_course_int_id());
-
-        $course_max_space = DocumentManager::get_course_quota();
-        $total_size = filesize($s) + $documents_total_space;
-        if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {
+        $info = self::getQuotaInfo($localFilePath);
+        if ($info['uploaded_size'] > $info['post_max']
+            || $info['uploaded_size'] > $info['upload_max']
+            || $info['combined']    > $info['quota_bytes']
+        ) {
+            Container::getSession()->set('quota_info', $info);
             return true;
         }
 
         return false;
+    }
+
+    private static function getFolderSize(string $path): int
+    {
+        $size     = 0;
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)
+        );
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $size += $file->getSize();
+            }
+        }
+        return $size;
     }
 
     /**
@@ -7797,7 +7859,7 @@ class learnpath
         $form->addButtonSave($buttonText);
         $form->addHtml(
             Display::return_message(
-                'Variables :</br></br> <b>((certificate))</b> </br> <b>((skill))</b>',
+                'Variables :<br><br> <b>((certificate))</b> <br> <b>((skill))</b>',
                 'normal',
                 false
             )
@@ -7828,14 +7890,22 @@ class learnpath
                 $documentId = $this->create_document(
                     $this->course_info,
                     $values['content_lp_certificate'],
-                    $values['title']
-                );
-                $this->add_item(
-                    null,
-                    $lastItemId,
-                    'final_item',
-                    $documentId,
                     $values['title'],
+                    'html',
+                    0,
+                    0,
+                    'certificate'
+                );
+
+                $lpItemRepo = Container::getLpItemRepository();
+                $root       = $lpItemRepo->getRootItem($this->get_id());
+
+                $this->add_item(
+                    $root,
+                    $lastItemId,
+                    TOOL_LP_FINAL_ITEM,
+                    $documentId,
+                    $values['title']
                 );
 
                 Display::addFlash(
@@ -8870,7 +8940,7 @@ class learnpath
         $lpItems = $lpItemRepo->findBy(['lp' => $this->lp_id]);
 
         if (empty($lpItems)) {
-            Display::addFlash(Display::return_message(get_lang('No items found'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('No item found'), 'error'));
             return;
         }
 
@@ -8891,7 +8961,7 @@ class learnpath
             ->getResult();
 
         if (empty($trackExercises)) {
-            Display::addFlash(Display::return_message(get_lang('No exercise attempts found'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('No test attempt found'), 'error'));
             return;
         }
 

@@ -64,9 +64,9 @@ switch ($action) {
           $copySessionContent
         );
         if ($result) {
-            Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+            Display::addFlash(Display::return_message(get_lang('Item copied')));
         } else {
-            Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('There was an error.'), 'error'));
         }
         $url = 'session_list.php';
         if ('custom' !== $listType) {
@@ -80,9 +80,9 @@ switch ($action) {
             $sessionIdCopied = SessionManager::copy((int) $id);
             if ($sessionIdCopied) {
                 $sessionInfo = api_get_session_info($sessionIdCopied);
-                Display::addFlash(Display::return_message(get_lang('ItemCopied').' - '.$sessionInfo['name']));
+                Display::addFlash(Display::return_message(get_lang('Item copied').' - '.$sessionInfo['name']));
             } else {
-                Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('There was an error.'), 'error'));
             }
         }
         $url = 'session_list.php';
@@ -231,8 +231,8 @@ if (!isset($_GET['keyword'])) {
 $hideSearch = ('true' === api_get_setting('session.hide_search_form_in_session_list'));
 $copySessionContentLink = '';
 if ($addSessionContent) {
-    $copySessionContentLink = ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
-        Display::return_icon('copy.png', get_lang('CopyWithSessionContent')).'</a>';
+    $copySessionContentLink = ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;" href="session_list.php?copy_session_content=1&list_type='.$listType.'&action=copy&idChecked=\'+options.rowId+\'">'.
+        Display::return_icon('copy.png', get_lang('Copy with session content')).'</a>';
 }
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
@@ -405,18 +405,18 @@ $extra_params['multiselect'] = true;
                     if (list.length) {
                         window.location.replace('<?php echo $copyUrl; ?>&id='+list.join(','));
                     } else {
-                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                        alert("<?php echo addslashes(get_lang('Please select an option')); ?>");
                     }
                 }
             }).navButtonAdd('#sessions_pager',{
-                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Export courses reports'))); ?>",
+                caption:"<?php echo addslashes(Display::return_icon('save_pack.png', get_lang('Courses reports'))); ?>",
                 buttonicon:"ui-icon ui-icon-plus",
                 onClickButton: function(a) {
                     var list = $("#sessions").jqGrid('getGridParam', 'selarrrow');
                     if (list.length) {
                         window.location.replace('<?php echo $exportUrl; ?>&id='+list.join(','));
                     } else {
-                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                        alert("<?php echo addslashes(get_lang('Please select an option')); ?>");
                     }
                 },
                 position:"last"
@@ -428,7 +428,7 @@ $extra_params['multiselect'] = true;
                     if (list.length) {
                         window.location.replace('<?php echo $exportCsvUrl; ?>&id='+list.join(','));
                     } else {
-                        alert("<?php echo addslashes(get_lang('Select an option')); ?>");
+                        alert("<?php echo addslashes(get_lang('Please select an option')); ?>");
                     }
                 },
                 position:"last"

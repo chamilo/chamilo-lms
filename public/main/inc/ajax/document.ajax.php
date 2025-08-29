@@ -141,7 +141,7 @@ switch ($action) {
 
             $doc = new CDocument();
             $doc->setTitle($filename)
-                ->setFiletype('file')
+                ->setFiletype(strpos($mimetype, 'video/') === 0 ? 'video' : 'file')
                 ->setComment('')
                 ->setReadonly(false)
                 ->setCreator(api_get_user_entity())
@@ -158,7 +158,7 @@ switch ($action) {
                 'url'    => $repo->getResourceFileUrl($doc),
                 'size'   => format_file_size($filesize),
                 'type'   => api_htmlentities($mimetype),
-                'result' => Display::return_icon('accept.png', get_lang('Uploaded'))
+                'result' => Display::return_icon('accept.png', get_lang('Uploaded.'))
             ];
         };
 

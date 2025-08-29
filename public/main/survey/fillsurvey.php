@@ -502,7 +502,7 @@ if ('' != $survey->getFormFields() &&
 
     if (isset($list['email']) && 1 == $list['email']) {
         //    EMAIL
-        $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
+        $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
         if ('true' !== api_get_setting('profile', 'email')) {
             $form->freeze('email');
         }

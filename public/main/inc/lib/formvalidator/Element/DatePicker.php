@@ -95,86 +95,161 @@ class DatePicker extends HTML_QuickForm_text
 
     /**
      * Get the necessary javascript for this datepicker.
-     *
-     * @return string
      */
     private function getElementJS(): string
     {
         $localeCode = $this->getLocaleCode();
         $id = $this->getAttribute('id');
 
-        $altFormat = ($localeCode === 'en') ? 'F d, Y' : 'd F, Y';
+        $baseLang = strtolower(explode('-', $localeCode)[0] ?? $localeCode);
+        $altFormat = ($baseLang === 'en') ? 'F d, Y' : 'd F, Y';
 
         return "<script>
-        document.addEventListener('DOMContentLoaded', function () {
-            function initializeFlatpickr() {
-                const fp = flatpickr('#{$id}_container', {
-                    locale: '{$localeCode}',
+            window.addEventListener('load', function () {
+              var container = document.getElementById('{$id}_container');
+              if (!container) return;
+
+              function cap(s){ return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+              // Build a flatpickr locale object using Intl (no external l10n files)
+              function buildFlatpickrLocale(loc) {
+                try {
+                  var fmtWeekLong  = new Intl.DateTimeFormat(loc, { weekday: 'long' });
+                  var fmtWeekShort = new Intl.DateTimeFormat(loc, { weekday: 'short' });
+                  var fmtMonthLong = new Intl.DateTimeFormat(loc, { month: 'long' });
+                  var fmtMonthShort= new Intl.DateTimeFormat(loc, { month: 'short' });
+
+                  // Weekdays 0..6 starting on Sunday (as flatpickr expects)
+                  var sun = new Date(Date.UTC(2020, 0, 5));
+                  var weekdaysLong = [], weekdaysShort = [];
+                  for (var i=0;i<7;i++){
+                    var d = new Date(sun); d.setUTCDate(sun.getUTCDate()+i);
+                    weekdaysLong.push(cap(fmtWeekLong.format(d)));
+                    weekdaysShort.push(cap(fmtWeekShort.format(d)));
+                  }
+
+                  // Months 0..11
+                  var monthsLong = [], monthsShort = [];
+                  for (var m=0;m<12;m++){
+                    var dm = new Date(Date.UTC(2020, m, 1));
+                    monthsLong.push(cap(fmtMonthLong.format(dm)));
+                    monthsShort.push(cap(fmtMonthShort.format(dm)));
+                  }
+
+                  // First day of week (fallback to Monday)
+                  var firstDay = 1;
+                  try {
+                    if (window.Intl && Intl.Locale) {
+                      var inf = new Intl.Locale(loc);
+                      if (inf.weekInfo && inf.weekInfo.firstDay) {
+                        firstDay = (inf.weekInfo.firstDay === 7) ? 0 : inf.weekInfo.firstDay; // 0=Sun
+                      }
+                    }
+                  } catch(e){}
+
+                  return {
+                    weekdays: { shorthand: weekdaysShort, longhand: weekdaysLong },
+                    months:   { shorthand: monthsShort,  longhand: monthsLong  },
+                    firstDayOfWeek: firstDay,
+                    weekAbbreviation: 'Wk',
+                    rangeSeparator: ' \u2013 ',
+                    time_24hr: true
+                  };
+                } catch(e) {
+                  return 'en';
+                }
+              }
+
+              function initialize() {
+                try {
+                  if (!window.flatpickr) return;
+
+                  // If already initialized, destroy before re-init (in case something set EN earlier)
+                  var input = container.querySelector('[data-input]');
+                  if (input && input._flatpickr) { input._flatpickr.destroy(); }
+
+                  var loc = buildFlatpickrLocale('{$localeCode}');
+
+                  // Set as global default when possible
+                  if (typeof flatpickr.localize === 'function' && typeof loc === 'object') {
+                    flatpickr.localize(loc);
+                  }
+                  if (flatpickr.l10ns && typeof loc === 'object') {
+                    flatpickr.l10ns['{$localeCode}'] = loc;
+                  }
+
+                  var instance = flatpickr('#{$id}_container', {
+                    locale: loc,
                     altInput: true,
                     altFormat: '{$altFormat}',
                     enableTime: false,
                     dateFormat: 'Y-m-d',
                     time_24hr: true,
                     wrap: true
-                });
+                  });
 
-                $('label[for=\"".$id."\"]').hide().addClass('datepicker-label');
-            }
-
-            function loadLocale() {
-                if ('{$localeCode}' !== 'en') {
-                    var script = document.createElement('script');
-                    script.src = '/build/flatpickr/l10n/{$localeCode}.js';
-                    script.onload = initializeFlatpickr;
-                    document.head.appendChild(script);
-                } else {
-                    initializeFlatpickr();
+                  try {
+                    if (instance && instance.l10n && typeof loc === 'object') {
+                      Object.assign(instance.l10n, loc);
+                      instance.redraw();
+                    }
+                  } catch(e){}
+                } catch(e) {
+                  console.error('[DatePicker] flatpickr init error', e);
                 }
-            }
+              }
 
-            loadLocale();
-        });
-    </script>";
+              initialize();
+
+              // Hide original label if present (kept from your original code)
+              try {
+                var lbl = document.querySelector('label[for=\"{$id}\"]');
+                if (lbl) { lbl.style.display = 'none'; lbl.classList.add('datepicker-label'); }
+              } catch(e){}
+            });
+            </script>";
     }
 
     /**
-     * Retrieves the locale code based on user and course settings.
-     * Extracts the ISO language code from user or course settings and checks
-     * its availability in the list of supported locales. Returns 'en' if the language
-     * is not available.
-     *
-     * @return string Locale code (e.g., 'es', 'en', 'fr').
+     * Returns a normalized 2-letter locale to be used by JS/Intl.
+     * Priority: course > user > platform.
      */
     private function getLocaleCode(): string
     {
-        $locale = api_get_setting('language.platform_language');
-        $request = Container::getRequest();
-        if ($request) {
-            $locale = $request->getLocale();
+        $raw = '';
+
+        if (class_exists('\Chamilo\CoreBundle\Framework\Container')) {
+            $req = Container::getRequest();
+            if ($req && $req->getLocale()) {
+                $raw = $req->getLocale();
+            }
         }
 
-        $userInfo = api_get_user_info();
-        if (is_array($userInfo) && !empty($userInfo['language']) && ANONYMOUS != $userInfo['status']) {
-            $locale = $userInfo['language'];
+        if ($raw === '' && !empty($_SESSION['_locale']) && is_string($_SESSION['_locale'])) {
+            $raw = $_SESSION['_locale'];
         }
 
-        $courseInfo = api_get_course_info();
-        if (isset($courseInfo)) {
-            $locale = $courseInfo['language'];
+        if ($raw === '') {
+            $raw = (string) api_get_language_isocode();
         }
 
-        $localeCode = explode('_', $locale)[0];
-        $availableLocales = [
-            'ar', 'ar-dz', 'at', 'az', 'be', 'bg', 'bn', 'bs', 'cat', 'ckb', 'cs', 'cy', 'da', 'de',
-            'eo', 'es', 'et', 'fa', 'fi', 'fo', 'fr', 'ga', 'gr', 'he', 'hi', 'hr', 'hu', 'hy',
-            'id', 'is', 'it', 'ja', 'ka', 'km', 'ko', 'kz', 'lt', 'lv', 'mk', 'mn', 'ms', 'my',
-            'nl', 'nn', 'no', 'pa', 'pl', 'pt', 'ro', 'ru', 'si', 'sk', 'sl', 'sq', 'sr', 'sr-cyr',
-            'sv', 'th', 'tr', 'uk', 'uz', 'uz_latn', 'vn', 'zh', 'zh-tw'
-        ];
-        if (!in_array($localeCode, $availableLocales)) {
-            $localeCode = 'en';
+        $s = str_replace('_', '-', trim($raw));
+        if ($s === '') {
+            return 'en-US';
         }
 
-        return $localeCode;
+        if (preg_match('/^([A-Za-z]{2,3})-([A-Za-z]{2})$/', $s, $m)) {
+            return strtolower($m[1]).'-'.strtoupper($m[2]);
+        }
+
+        if (preg_match('/^([A-Za-z]{2,3})$/', $s, $m)) {
+            return strtolower($m[1]);
+        }
+
+        if (preg_match('/^([A-Za-z]{2,3})[-_].+$/', $s, $m)) {
+            return strtolower($m[1]);
+        }
+
+        return 'en-US';
     }
 }

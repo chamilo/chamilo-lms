@@ -36,7 +36,7 @@
 
     <BaseInputText
       v-model="searchTerm"
-      :label="t('Search term...')"
+      :label="t('Search term')"
       class="mb-4"
       @update:model-value="debouncedSearch"
     />
@@ -201,7 +201,7 @@ async function confirmDeleteTerm(term) {
 async function deleteTerm() {
   try {
     await glossaryService.deleteTerm(termToDelete.value.iid)
-    notifications.showSuccessNotification(t("Term deleted"))
+    notifications.showSuccessNotification(t("Term removed"))
     termToDelete.value = null
     isDeleteItemDialogVisible.value = false
     await fetchGlossaries()

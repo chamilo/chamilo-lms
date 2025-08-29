@@ -237,12 +237,12 @@ $(function() {
 });
 </script>';
 
-$userForm->addStartPanel('diagnostic', get_lang('Diagnostic Form'));
-$userForm->addHtml(get_lang('Diagnostic Introduction'));
+$userForm->addStartPanel('diagnostic', get_lang('Skills and objectives assessment'));
+$userForm->addHtml(get_lang('Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!'));
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('filiere', get_lang('Filiere'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Filiere Explanation').'</p>');
+$userForm->addStartPanel('filiere', get_lang('I would like to choose a sector'));
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers specialized course session. Your answers will allow you to access the sessions corresponding to your field if it exists.<br><br>Check one or more answers or fill in the blank.').'</p>');
 
 $fieldsToShow = [
     'statusocial',
@@ -288,8 +288,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[filiere]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('dispo', get_lang('Disponibilite Avant'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Disponibilite Avant Explanation').'</p>');
+$userForm->addStartPanel('dispo', get_lang('Availability before my internship/mobility'));
+$userForm->addHtml('<p class="text-info">'.get_lang('The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability').'</p>');
 
 $extra = $extraFieldSession->addElements(
     $userForm,
@@ -307,7 +307,7 @@ $extra = $extraFieldSession->addElements(
 if ($userForm->hasElement('extra_access_start_date')) {
     $userForm->addRule(
         ['extra_access_start_date', 'extra_access_end_date'],
-        get_lang('StartDateMustBeBeforeTheEndDate'),
+        get_lang('Start date must be before the end date'),
         'compare_datetime_text',
         '< allow_empty'
     );
@@ -343,8 +343,8 @@ $userForm->addButtonSave(get_lang('Save'), 'submit_partial[dispo]');
 $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('dispo_pendant_stage', get_lang('Disponibilite Pendant Mon Stage'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Disponibilite Pendant Mon Stage Explanation').'</p>');
+$userForm->addStartPanel('dispo_pendant_stage', get_lang('Availability during my internship/mobility'));
+$userForm->addHtml('<p class="text-info">'.get_lang('You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability').'</p>');
 
 $fieldsToShow = [
     'datedebutstage',
@@ -371,7 +371,7 @@ $extra = $extraField->addElements(
 if ($userForm->hasElement('extra_datedebutstage')) {
     $userForm->addRule(
         ['extra_datedebutstage', 'extra_datefinstage'],
-        get_lang('StartDateMustBeBeforeTheEndDate'),
+        get_lang('Start date must be before the end date'),
         'compare_datetime_text',
         '< allow_empty'
     );
@@ -382,12 +382,12 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[dispo_pendant_stage]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('theme_obj', get_lang('Themes Objectifs'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Themes Objectifs Explanation').'</p>');
+$userForm->addStartPanel('theme_obj', get_lang('The topics that interest me / My learning objectives'));
+$userForm->addHtml("<p class=\"text-info\">".get_lang("The platform offers numerous resources and thematic learning courses to develop your skills. Now it's time to take stock of your interests to be offer you a personalized course program.")."</p>");
 
 $introductionTextList = [
-    'domaine' => get_lang('Domaine Introduction'),
-    $theme => get_lang('Theme Field Introduction'),
+    'domaine' => get_lang('The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>'),
+    $theme => get_lang('Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>'),
 ];
 
 $fieldsToShow = [
@@ -409,16 +409,16 @@ $extra = $extraFieldSession->addElements(
     ['domaine' => 3, $theme => 5], // $separateExtraMultipleSelect
     [
         'domaine' => [
-            get_lang('Domaine').' 1',
-            get_lang('Domaine').' 2',
-            get_lang('Domaine').' 3',
+            sprintf(get_lang('Domain %s'),'1'),
+            sprintf(get_lang('Domain %s'),'2'),
+            sprintf(get_lang('Domain %s'),'3'),
         ],
         $theme => [
-            get_lang('ThemeField').' 1',
-            get_lang('ThemeField').' 2',
-            get_lang('ThemeField').' 3',
-            get_lang('ThemeField').' 4',
-            get_lang('ThemeField').' 5',
+            sprintf(get_lang('Topic %s'),'1'),
+            sprintf(get_lang('Topic %s'),'2'),
+            sprintf(get_lang('Topic %s'),'3'),
+            sprintf(get_lang('Topic %s'),'4'),
+            sprintf(get_lang('Topic %s'),'5'),
         ],
     ],
     true, //$addEmptyOptionSelects
@@ -430,8 +430,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[theme_obj]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('niveau_langue', get_lang('Niveau Langue'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Niveau Langue Explanation').'</p>');
+$userForm->addStartPanel('niveau_langue', get_lang('My language level'));
+$userForm->addHtml('<p class="text-info">'.get_lang("The platform's resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>").'</p>');
 
 $fieldsToShow = [
     //'competenceniveau'
@@ -460,8 +460,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[niveau_langue]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('obj_apprentissage', get_lang('Objectifs Apprentissage'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Objectifs Apprentissage Explanation').'</p>');
+$userForm->addStartPanel('obj_apprentissage', get_lang('My learning goals'));
+$userForm->addHtml('<p class="text-info">'.get_lang('What do you want to learn? What area do you want to improve in? You can write your answers freely here.').'</p>');
 $fieldsToShow = [
     'objectif_apprentissage',
 ];
@@ -484,8 +484,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[obj_apprentissage]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('methode_travail', get_lang('Methode Travail'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Methode Travail Explanation').'</p>');
+$userForm->addStartPanel('methode_travail', get_lang('My working method'));
+$userForm->addHtml('<p class="text-info">'.get_lang("On the platform, you'll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that's tailored to your work style.").'</p>');
 
 $fieldsToShow = [
     'methode_de_travaille',
@@ -510,8 +510,8 @@ $jqueryExtra .= $extra['jquery_ready_content'];
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[methode_travail]');
 $userForm->addEndPanel();
 
-$userForm->addStartPanel('environnement', get_lang('Mon Environnement De Travail'));
-$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail').'</p>');
+$userForm->addStartPanel('environnement', get_lang('My work environment'));
+$userForm->addHtml('<p class="text-info">'.get_lang('My work environment').'</p>');
 
 $fieldsToShow = [
     'outil_de_travail_ordinateur',
@@ -522,7 +522,7 @@ $fieldsToShow = [
     'outil_de_travail_smartphone_so',
 ];
 
-$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro1'));
+$userForm->addLabel(null, get_lang('To work on the platform, I use:'));
 
 $extra = $extraField->addElements(
     $userForm,
@@ -537,7 +537,7 @@ $extra = $extraField->addElements(
     $adminPermissions
 );
 
-$userForm->addLabel(null, get_lang('Mon Environnement De Travail Explanation Intro2'));
+$userForm->addLabel(null, ' ');
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
@@ -561,7 +561,7 @@ $extra = $extraField->addElements(
 );
 
 $jqueryExtra .= $extra['jquery_ready_content'];
-$userForm->addHtml('<p class="text-info">'.get_lang('Mon Environnement De Travail Renvoi FAQ').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform.').'</p>');
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[environnement]');
 $userForm->addEndPanel();
 
@@ -738,9 +738,9 @@ if ($userForm->validate()) {
     if ($superiorUserList && false === $isPartial) {
         $url = api_get_path(WEB_PATH).'/main/search/load_search.php?user_id='.$userInfo['user_id'];
         $urlContact = api_get_path(WEB_CODE_PATH).'messages/inbox.php?f=social';
-        $subject = sprintf(get_lang('Diagnosis From User %s'), $userInfo['complete_name']);
+        $subject = sprintf(get_lang('Diagnosis of user %s'), $userInfo['complete_name']);
         $message = sprintf(
-            get_lang('Diagnosis From User %s lang %s with link %s Contact at %s'),
+            get_lang('Diagnosis of user %s (language: %s) with link %s. Contact at %s'),
             $userInfo['complete_name'],
             $userInfo['language'],
             $url,

@@ -65,10 +65,10 @@ class Notification extends Model
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
 
-        if ($smtpFromEmail = api_get_setting('mail.mailer_from_name')) {
+        if ($smtpFromEmail = api_get_setting('mail.mailer_from_email')) {
             $this->adminEmail = $smtpFromEmail;
 
-            if ($smtpFromName = api_get_setting('mail.mailer_from_email')) {
+            if ($smtpFromName = api_get_setting('mail.mailer_from_name')) {
                 $this->adminName = $smtpFromName;
             }
         } else {
@@ -314,14 +314,12 @@ class Notification extends Model
                     case self::NOTIFY_INVITATION_AT_ONCE:
                     case self::NOTIFY_GROUP_AT_ONCE:
                         $extraHeaders = [];
-                        if (isset($senderInfo['email'])) {
-                            $extraHeaders = [
-                                'reply_to' => [
-                                    'name' => $senderInfo['complete_name'],
-                                    'mail' => $senderInfo['email'],
-                                ],
-                            ];
-                        }
+                        $extraHeaders = [
+                            'reply_to' => [
+                                'name' => $this->adminName,
+                                'mail' => $this->adminEmail,
+                            ],
+                        ];
 
                         if (!empty($userInfo['email'])) {
                             api_mail_html(
@@ -329,8 +327,8 @@ class Notification extends Model
                                 $userInfo['mail'],
                                 Security::filter_terms($titleToNotification),
                                 Security::filter_terms($content),
-                                !empty($senderInfo['complete_name']) ? $senderInfo['complete_name'] : $this->adminName,
-                                !empty($senderInfo['email']) ? $senderInfo['email'] : $this->adminEmail,
+                                $this->adminName,
+                                $this->adminEmail,
                                 $extraHeaders,
                                 $attachments,
                                 false

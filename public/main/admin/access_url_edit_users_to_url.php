@@ -135,7 +135,7 @@ if (!empty($message)) {
 
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(
@@ -146,12 +146,12 @@ echo Display::url(
 $urlAddCsv = Container::getRouter()->generate('chamilo_core_access_url_users_import');
 $urlRemoveCsv = Container::getRouter()->generate('chamilo_core_access_url_users_remove');
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::IMPORT_USERS_TO_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign users from CSV')),
+    Display::getMdiIcon(ActionIcon::IMPORT_USERS_TO_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign users to URLs from CSV')),
     $urlAddCsv
 );
 
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::REMOVE_USERS_FROM_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Remove users from CSV')),
+    Display::getMdiIcon(ActionIcon::REMOVE_USERS_FROM_URL, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Remove users from URLs with a CSV file')),
     $urlRemoveCsv
 );
 echo '</div>';

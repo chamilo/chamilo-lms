@@ -83,7 +83,7 @@ $form->addButtonCreate(get_lang('Create a question'), 'SubmitCreate a question')
 $form->addRule('exercise', get_lang('Required field'), 'required');
 $form->addRule('exercise', get_lang('You have to select a test'), 'numeric');
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
-$form->addRule('question_type_hidden', get_lang('InvalidQuestion type'), 'validquestiontype');
+$form->addRule('question_type_hidden', get_lang('Invalid question type'), 'validquestiontype');
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -108,7 +108,7 @@ if ($form->validate()) {
 } else {
     Display::display_header($nameTools);
     $actions = '<a href="exercise.php?show=test">'.
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to tests list')).'</a>';
+        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, sprintf(get_lang('Back to %s'), get_lang('Test list'))).'</a>';
     echo Display::toolbarAction('toolbar', [$actions]);
 
     $form->display();

@@ -70,7 +70,7 @@ if (isset($_GET['action'])) {
                 }*/
             }
 
-            Display::addFlash(Display::return_message(get_lang('NoSurveyAvailable')));
+            Display::addFlash(Display::return_message(get_lang('No survey available')));
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq());
             exit;
@@ -85,7 +85,7 @@ if (isset($_GET['action'])) {
         case 'export_pdf':
             $content = GroupManager::getOverview($course, $keyword);
             $pdf = new PDF();
-            $extra = '<div style="text-align:center"><h2>'.get_lang('Groups list').'</h2></div>';
+            $extra = '<div style="text-align:center"><h2>'.get_lang('Group list').'</h2></div>';
             $extra .= '<strong>'.get_lang('Course').': </strong>'.$course->getTitle().' ('.$course->getCode().')';
 
             $content = $extra.$content;

@@ -182,7 +182,7 @@ if ($is_allowedToEdit && !empty($action)) {
             api_set_more_memory_and_time_limits();
             $objExerciseTmp->copyExercise();
             Display::addFlash(Display::return_message(
-                get_lang('Test copied'),
+                get_lang('Exercise copied'),
                 'confirmation'
             ));
 
@@ -303,7 +303,7 @@ if ('learnpath' !== $origin) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Test'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
-        echo Display::return_message(get_lang('TestEdited'), 'confirmation');
+        echo Display::return_message(get_lang('Test name and settings have been saved.'), 'confirmation');
     }
 } else {
     Display::display_reduced_header();
@@ -337,7 +337,7 @@ if ($is_allowedToEdit && 'learnpath' !== $origin) {
 
     if (api_is_allowed_to_edit(null, true) && 'true' === api_get_course_setting('exercise_generator')) {
         $actionsLeft .= '<a href="exercise_aiken_generator.php?'.api_get_cidreq().'">'.
-            Display::getMdiIcon('robot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AI Aiken Generator')).'</a>';
+            Display::getMdiIcon('robot', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AI Aiken generator')).'</a>';
     }
     //echo Display::url(Display::getMdiIcon('eye', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category

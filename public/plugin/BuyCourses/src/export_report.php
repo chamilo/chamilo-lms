@@ -13,9 +13,9 @@ api_protect_admin_script();
 $plugin = BuyCoursesPlugin::create();
 $form = new FormValidator('export_validate');
 
-$form->addDatePicker('date_start', get_lang('DateStart'), false);
-$form->addDatePicker('date_end', get_lang('DateEnd'), false);
-$form->addButton('export_sales', get_lang('ExportExcel'), 'check', 'primary');
+$form->addDatePicker('date_start', get_lang('Start date'), false);
+$form->addDatePicker('date_end', get_lang('End date'), false);
+$form->addButton('export_sales', get_lang('Excel export'), 'check', 'primary');
 $salesStatus = [];
 
 if ($form->validate()) {
@@ -51,7 +51,7 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('ExportReport');
 $toolbar = Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('GoBack')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/sales_report.php'
 );
 $template = new Template($templateName);

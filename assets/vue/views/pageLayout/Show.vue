@@ -1,5 +1,5 @@
 <template>
-  <SectionHeader :title="t('Page Layout Details')">
+  <SectionHeader :title="t('Page layout details')">
     <BaseButton
       icon="back"
       type="gray"

@@ -1,5 +1,6 @@
 <script>
 window.user = {{ user_json is defined ? user_json | raw : '{}' }};
+window.is_login_url = {{ is_login_url }};
 window.access_url_id = {{ access_url_id | default(1) }};
 window.languages = {{ languages_json is defined ? languages_json | raw : '{}' }};
 {% if legacy_breadcrumb is defined %}

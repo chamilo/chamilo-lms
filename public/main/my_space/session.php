@@ -92,7 +92,7 @@ switch ($action) {
             $first = Tracking::get_first_connection_date($studentId);
             $last = Tracking::get_last_connection_date($studentId);
             $timeSpentContent = '';
-            $pdfTitle = get_lang('AttestationOfAttendance');
+            $pdfTitle = get_lang('Attestation of attendance');
             if ('attendance' === $type) {
                 $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
                 $column = 0;
@@ -230,7 +230,7 @@ switch ($action) {
             $tpl->assign(
                 'subtitle',
                 sprintf(
-                    get_lang('InSessionXYouHadTheFollowingResults'),
+                    get_lang('In session %s, you had the following results'),
                     $sessionEntity->getTitle()
                 )
             );
@@ -343,14 +343,14 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::SURVEY_DOODLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessionsPlanCalendar')),
+            Display::getMdiIcon(ObjectIcon::SURVEY_DOODLE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Sessions plan calendar')),
             api_get_path(WEB_CODE_PATH)."calendar/planification.php"
         );
     }
 
     if (api_is_drh()) {
         $menu_items[] = Display::url(
-            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('SessionFilterReport')),
+            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Filter certificates in sessions')),
             api_get_path(WEB_CODE_PATH).'my_space/session_filter.php'
         );
     }

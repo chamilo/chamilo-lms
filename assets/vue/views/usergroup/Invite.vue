@@ -1,12 +1,12 @@
 <template>
   <div class="invite-friends-container invite-friends">
     <div class="invite-friends-header">
-      <h2>{{ t("Invite Friends to Group") }}</h2>
+      <h2>{{ t("Invite friends to group") }}</h2>
     </div>
     <div class="invite-friends-body">
       <div class="friends-list">
         <div class="list-header">
-          <h3>{{ t("Available Friends") }}</h3>
+          <h3>{{ t("Available friends") }}</h3>
         </div>
         <div class="list-content">
           <div
@@ -33,7 +33,7 @@
       </div>
       <div class="selected-friends-list">
         <div class="list-header">
-          <h3>{{ t("Selected Friends") }}</h3>
+          <h3>{{ t("Selected friends") }}</h3>
         </div>
         <div class="list-content">
           <div
@@ -64,12 +64,12 @@
         class="send-invites-btn"
         @click="sendInvitations"
       >
-        {{ t("Send Invitations") }}
+        {{ t("Sent invitations") }}
       </button>
     </div>
     <div class="invited-friends-list mt-4">
       <div class="list-header">
-        <h3>{{ t("Users Already Invited") }}</h3>
+        <h3>{{ t("Users already invited") }}</h3>
       </div>
       <div class="invited-users-grid mt-4">
         <div

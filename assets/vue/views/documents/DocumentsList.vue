@@ -221,7 +221,7 @@
             icon="file-replace"
             size="small"
             type="secondary"
-            :title="t('Add File Variation')"
+            :title="t('Add file variation')"
             @click="goToAddVariation(slotProps.data)"
           />
 

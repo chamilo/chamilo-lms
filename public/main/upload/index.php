@@ -36,7 +36,7 @@ function check_unzip() {
 }
 </script>";
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_create_course();
 if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
@@ -167,6 +167,20 @@ echo Display::return_message(
     'normal',
     false
 );
+
+$quotaInfo = Session::read('quota_info');
+if (!empty($quotaInfo)) {
+    $msg = sprintf(
+        "Upload failed: file %d bytes, PHP post_max=%d, upload_max=%d, total after upload=%d, quota=%d",
+        $quotaInfo['uploaded_size'],
+        $quotaInfo['post_max'],
+        $quotaInfo['upload_max'],
+        $quotaInfo['combined'],
+        $quotaInfo['quota_bytes']
+    );
+    echo Display::return_message(htmlentities($msg), 'error');
+    Session::erase('quota_info');
+}
 $form->display();
 
 Display::display_footer();

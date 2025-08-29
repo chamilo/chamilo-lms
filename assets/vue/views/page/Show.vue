@@ -20,11 +20,8 @@
           />
           <dl v-text="item.creator.username" />
 
-          <dt
-            v-t="'Locale'"
-            class="font-semibold"
-          />
-          <dl v-text="item.locale" />
+          <dt v-t="'Language'" class="font-semibold" />
+          <dl>{{ languageLabel }}</dl>
 
           <dt
             v-t="'Enabled'"
@@ -67,6 +64,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
 import pageService from "../../services/page"
 import { useNotification } from "../../composables/notification"
+import { useLocale } from "../../composables/locale"
 
 const { relativeDatetime } = useFormatDate()
 
@@ -82,6 +80,18 @@ const isLoading = ref(true)
 const item = ref()
 
 const layoutMenuItems = inject("layoutMenuItems")
+
+const { getLanguageName, fetchLanguageNameFromApi } = useLocale()
+const languageLabel = ref("-")
+
+watch(item, (val) => {
+  if (!val) return
+  const iso = val.locale
+  languageLabel.value = getLanguageName(iso)
+  fetchLanguageNameFromApi(iso)
+    .then((name) => { if (name) languageLabel.value = name })
+    .catch(() => {})
+})
 
 watch(item, () => {
   if (!isAdmin.value) {

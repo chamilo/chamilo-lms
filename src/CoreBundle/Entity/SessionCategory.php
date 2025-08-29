@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 class SessionCategory implements Stringable
 {
-    #[Groups(['session_category:read', 'session_rel_user:read'])]
+    #[Groups(['session_category:read', 'session_rel_user:read', 'user_subscriptions:sessions'])]
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
     #[ORM\Id]
     #[ORM\GeneratedValue]

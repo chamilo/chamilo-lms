@@ -196,7 +196,7 @@ if (!empty($userJustifications)) {
 $tabs = SocialManager::getHomeProfileTabs('justification');
 $justification = $tabs.$formValidator->returnForm().$userJustificationList;
 
-$tpl = new Template(get_lang('ModifyProfile'));
+$tpl = new Template(get_lang('Profile'));
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
 $tpl->assign('social_menu_block', '');

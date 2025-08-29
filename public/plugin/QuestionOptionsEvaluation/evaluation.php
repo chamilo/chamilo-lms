@@ -9,7 +9,7 @@ api_protect_course_script();
 $exerciseId = isset($_REQUEST['exercise']) ? (int) $_REQUEST['exercise'] : 0;
 
 if (empty($exerciseId)) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }
@@ -17,7 +17,7 @@ if (empty($exerciseId)) {
 $exercise = new Exercise();
 
 if (!$exercise->read($exerciseId, false)) {
-    echo Display::return_message(get_lang('ExerciseNotFound'), 'error');
+    echo Display::return_message(get_lang('Test not found or not visible'), 'error');
 
     exit;
 }
@@ -25,7 +25,7 @@ if (!$exercise->read($exerciseId, false)) {
 $plugin = QuestionOptionsEvaluationPlugin::create();
 
 if ($plugin->get('enable') !== 'true') {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }

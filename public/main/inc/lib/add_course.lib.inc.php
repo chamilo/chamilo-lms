@@ -248,7 +248,7 @@ class AddCourse
 
         self::insertCourseSettings($course);
         self::createGroupCategory($course);
-        
+
         if ($fillWithExemplaryContent ?? api_get_setting('example_material_course_creation') !== 'false') {
             $gradebook = self::createRootGradebook($course);
             self::insertExampleContent($course, $authorId, $gradebook);
@@ -526,7 +526,7 @@ class AddCourse
         $answer = new Answer($questionId, $courseInfo['real_id']);
         $answer->createAnswer(get_lang('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, get_lang('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
         $answer->createAnswer(get_lang('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, get_lang('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
-        $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
+        $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed. Socratic irony is an interrogative method. The Greek "eirotao" means "ask questions"'), 5, 3);
         $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
         $answer->save();
         // Forums.
@@ -551,7 +551,7 @@ class AddCourse
         $params = [
             'post_title' => get_lang('Example Thread'),
             'forum_id' => $forumId,
-            'post_text' => get_lang('Example ThreadContent'),
+            'post_text' => get_lang('Example content'),
             'calification_notebook_title' => '',
             'numeric_calification' => '',
             'weight_calification' => '',
@@ -933,9 +933,9 @@ class AddCourse
                         api_get_setting('administratorSurname')
                     );
                     $iname = api_get_setting('Institution');
-                    $subject = get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
+                    $subject = sprintf(get_lang('New course created on %s'), $siteName.' - '.$iname);
                     $message = get_lang('Dear').' '.$recipient_name.",\n\n".
-                        get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
+                        sprintf(get_lang('This message is to inform you that a new course has been created on %s'), $siteName.' - '.$iname)."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
 
                     if ($course->getCategories()->count() > 0) {

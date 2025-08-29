@@ -104,7 +104,7 @@ class FrmAdd extends FormValidator
         );
         $this->addSelect(
             'document_target',
-            get_lang('LinkTarget'),
+            get_lang("Link's target"),
             ['iframe' => 'iframe', 'window' => 'window']
         );
 

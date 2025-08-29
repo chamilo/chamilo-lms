@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use ChamiloSession as Session;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 $kernel = null;
@@ -155,6 +156,30 @@ if ($isNotAllowedHere && !($isCreatingIntroPage && $isPlatformAdmin)) {
     );
 }
 
+$settingConditions = api_get_setting('profile.show_conditions_to_user', true);
+$extraConditions = 'false' !== $settingConditions ? $settingConditions : [];
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    // Create user extra fields for the conditions
+    $userExtraField = new ExtraField('user');
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        $exists = $userExtraField->get_handler_field_info_by_field_variable($condition['variable']);
+        if (false == $exists) {
+            $params = [
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'variable' => $condition['variable'],
+                'display_text' => $condition['display_text'],
+                'default_value' => '',
+                'visible_to_self' => 0,
+                'visible_to_others' => 0,
+                'changeable' => 0,
+                'filter' => 0,
+            ];
+            $userExtraField->save($params);
+        }
+    }
+}
+
 $form = new FormValidator('registration');
 $userAlreadyRegisteredShowTerms = false;
 $termRegistered = Session::read('term_and_condition');
@@ -204,7 +229,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     'false' !== api_get_setting('allow_registration')
 ) {
     // EMAIL
-    $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
+    $form->addElement('text', 'email', get_lang('E-mail'), ['size' => 40]);
     if ('true' === api_get_setting('registration', 'email')) {
         $form->addRule('email', get_lang('Required field'), 'required');
     }
@@ -229,9 +254,9 @@ if (false === $userAlreadyRegisteredShowTerms &&
         }
     }
 
-    $LastnameLabel = get_lang('LastName');
+    $LastnameLabel = get_lang('Last name');
     if ('true' === api_get_setting('profile.registration_add_helptext_for_2_names')) {
-        $LastnameLabel = [$LastnameLabel, get_lang('InsertTwoNames')];
+        $LastnameLabel = [$LastnameLabel, get_lang('Insert your two names')];
     }
     if (api_is_western_name_order()) {
         // FIRST NAME and LAST NAME
@@ -432,7 +457,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     ) {
         $form->addHtmlEditor(
             'teach',
-            get_lang('What I am able to teach'),
+            get_lang('What I can teach'),
             false,
             false,
             ['ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130']
@@ -618,6 +643,19 @@ if (!empty($_GET['openid_msg']) && 'idnotfound' == $_GET['openid_msg']) {
     $content .= Display::return_message(get_lang('This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID'));
 }
 
+if ($extraConditions) {
+    $form->addCheckBox(
+        'extra_platformuseconditions',
+        null,
+        get_lang('Platform use conditions')
+    );
+    $form->addRule(
+        'extra_platformuseconditions',
+        get_lang('Required field'),
+        'required'
+    );
+}
+
 $blockButton = false;
 $termActivated = false;
 $showTerms = false;
@@ -673,6 +711,36 @@ if ($blockButton) {
 
 $course_code_redirect = Session::read('course_redirect');
 $sessionToRedirect = Session::read('session_redirect');
+
+if ($extraConditions && $extraFieldsLoaded) {
+    // Set conditions as "required" and also change the labels
+    foreach ($extraConditions as $condition) {
+        $name = 'extra_'.$condition['variable'];
+        if (method_exists($form, 'elementExists') && !$form->elementExists($name)) {
+            continue;
+        }
+
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement($name);
+        $children = $element->getElements();
+        /** @var HTML_QuickForm_checkbox $child */
+        foreach ($children as $child) {
+            $child->setText(get_lang($condition['display_text']));
+        }
+        $form->setRequired($element);
+        if (!empty($condition['text_area'])) {
+            $element->setLabel(
+                [
+                    '',
+                    '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.
+                    get_lang(nl2br($condition['text_area'])).
+                    '</div>',
+                ]
+            );
+        }
+    }
+}
+
 $tpl = new Template($toolName);
 $textAfterRegistration = '';
 if ($form->validate()) {
@@ -912,7 +980,7 @@ if ($form->validate()) {
     if ('AppCache' == get_class($kernel)) {
         $kernel = $kernel->getKernel();
     }
-    /** @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
+    /** @var ContainerInterface $container */
     $container = $kernel->getContainer();
     $entityManager = $container->get('doctrine.orm.default_entity_manager');
     $userRepository = $entityManager->getRepository(User::class);

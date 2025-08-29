@@ -628,10 +628,10 @@ msgstr "Categories de cursos en el lloc %s:"
 msgid "Course categories available"
 msgstr "Categories de cursos disponibles"
 
-msgid "The group now belongs to the selected site"
+msgid "The group now belongs to the selected URL."
 msgstr "El grup ara pertany al grup seleccionat"
 
-msgid "You need to select at least one group and one site"
+msgid "You need to select at least one group and one URL."
 msgstr "Heu de seleccionar com a mínim un grup i un lloc"
 
 msgid "Agenda list"
@@ -1612,7 +1612,7 @@ msgstr "El format d'aquest paquet no ha estat reconegut. Per favor, comprovi aqu
 msgid "Move the current forum"
 msgstr "Moure el foro actual"
 
-msgid "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
+msgid "Warning! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object."
 msgstr "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte."
 
 msgid "Please provide a subject or message"
@@ -1729,7 +1729,7 @@ msgstr "El vostre curs és públic per defecte, però podeu definir a continuaci
 msgid "Public - access allowed for the whole world"
 msgstr "Obert - Accés autoritzat per tothom"
 
-msgid " Open - access allowed for users registered on the platform"
+msgid "Open - access allowed for users registered on the platform"
 msgstr "Obert - Accés autoritzat als usuaris enregistrats de la plataforma"
 
 msgid "Student %s is no subscribed to this course"
@@ -1759,7 +1759,7 @@ msgstr "Afegiu un enllaç a la pàgina principal"
 msgid "has been deleted"
 msgstr "ha estat esborrat"
 
-msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?"
+msgid "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <br>Do you really want to delete the course?"
 msgstr "En esborrar el lloc web d'aquest curs s'esborraran permanentment tots els documents que conté i tots els seus membres deixaran d'estar-hi inscrits. Voleu realment esborrar aquest curs?"
 
 msgid "YES"
@@ -2526,9 +2526,6 @@ msgstr "Aquesta és la facultat, departament o escola on s'imparteix el curs"
 
 msgid "If you are unsure of your course code, consult the training details."
 msgstr "Si dubteu sobre el títol o el codi del vostre curs, consulteu,"
-
-msgid "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management"
-msgstr "Programa del curs</a>. Si el teu curs no té codi, per la raó que sigui, inventa'n un. Per exemple<i>INNOVACIÓ</i> si el curs és sobre Gestió de la Innovació"
 
 msgid "SCORM Path builder"
 msgstr " Constructor de paquets SCORM"
@@ -3383,9 +3380,6 @@ msgstr "Afegir nota"
 msgid "Edit my personal note"
 msgstr "Modificar nota"
 
-msgid "Back to note list"
-msgstr "Tornar a la llista d'anotacions"
-
 msgid "Notebook management"
 msgstr "Administració de nota personal"
 
@@ -3500,7 +3494,7 @@ msgstr "Crear una categoria de curs"
 msgid "Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories"
 msgstr "Esteu segur que voleu esborrar aquesta categoria de curs? Els cursos dins d'aquesta categoria apareixeran a la llista sense catalogar"
 
-msgid "Courses categories"
+msgid "Course categories"
 msgstr "Categories de cursos"
 
 msgid "Courses in this category"
@@ -4508,10 +4502,10 @@ msgstr "Aquest usuari no està inscrit a cap classe"
 msgid "This class isn't subscribed in a course"
 msgstr "Aquesta classe no està inscrita a cap curs"
 
-msgid "tool"
+msgid "Tool"
 msgstr "Eina"
 
-msgid "number of items"
+msgid "Number of items"
 msgstr "nombre d'elements"
 
 msgid "Documents and folders"
@@ -4673,7 +4667,7 @@ msgstr "Si usplau, introduïu el text de la notícia"
 msgid "Please give a notice title"
 msgstr "Si us plau, introduïu el títol de la notícia"
 
-msgid "Plese give a link name"
+msgid "Please give a link name"
 msgstr "Si us plau, introduïu el nom de l'enllaç"
 
 msgid "Insert this link"
@@ -5075,7 +5069,7 @@ msgstr "Acabar la creació de la sessió"
 msgid "Videoconference RTMTP protocol port"
 msgstr "Port del protocol RTMPT per la videoconferència"
 
-msgid "Session name already exists"
+msgid "Session title already exists"
 msgstr "Aquest nom de sessió ja existeix"
 
 msgid "No classes have been created"
@@ -5225,8 +5219,8 @@ msgstr "Si aquesta opció està activa, cliqueu sobre una adreça de correu-e i 
 msgid "Include header line?"
 msgstr "Afegir la línia de capçalera del CSV ?"
 
-msgid "Yes, add the headers<br />This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
-msgstr "Sí, afegir les capçaleres CSVAquesta línia defineix tots els camps i es necessita quan vulgui importar l'arxiu en una altra plataforma Chamilo"
+msgid "This will put the fields names on the first line. It is necessary when you want to import the file later on in a Chamilo portal."
+msgstr "Aquesta línia defineix tots els camps i es necessita quan vulgui importar l'arxiu en una altra plataforma Chamilo"
 
 msgid "List of users subscribed to course"
 msgstr "Llistat d'usuaris subscrits al curs"
@@ -5459,7 +5453,7 @@ msgstr "Desplegable"
 msgid "Multiple selection drop-down"
 msgstr "Desplegable amb elecció múltiple"
 
-msgid "Field succesfully added"
+msgid "Field successfully added"
 msgstr "El camp ha estat afegit"
 
 msgid "Grades thresholds colouring"
@@ -5711,7 +5705,7 @@ msgstr "Importar usuaris LDAP en un curs"
 msgid "Import LDAP users and a step into a session"
 msgstr "Importar usuaris LDAP i una etapa en aquesta sessió"
 
-msgid "LDAP synchro: Import learners/steps into course sessions"
+msgid "LDAP synchronization: Import learners/steps into course sessions"
 msgstr "Sincronització LDAP: Importar usuaris/etapes a les sessions"
 
 msgid "Assessments tab"
@@ -5758,9 +5752,6 @@ msgstr "Valor d'identificació d'un professor"
 
 msgid "When a check is done on the tutor field given above, this value has to be inside one of the tutor fields sub-elements for the user to be considered as a trainer. If you leave this field blank, the only condition is that the field exists for this LDAP user to be considered as a trainer. As an example, the field could be \"memberof\" and the value to search for could be \"CN=G_TRAINER,OU=Trainer\"."
 msgstr "Quan es realitzi una comprovació en el camp professor que apareix dalt, per tal que l'usuari sigui considerat professor, el valor que se li doni cal que sigui un dels subelements del camp professor. Si deixeu aquest camp en blanc, l'única condició per tal que sigui considerat professor és que en aquest usuari LDAP existeixi el camp. Per exemple, el camp pot ser \"memberof\" i el valor de cerca pot ser \"CN=G_TRAINER,OU=Trainer\""
-
-msgid "is not writeable"
-msgstr "no es pot escriure"
 
 msgid "The field is successfully moved down"
 msgstr "El camp ha estat mogut cap avall"
@@ -6350,16 +6341,13 @@ msgstr "Cursos  de la sessió d'origen"
 msgid "Courses from the destination session"
 msgstr "Cursos de la sessió de destinació"
 
-msgid "Help for the copy of courses from session to session"
-msgstr "Si vols copiar un curs d'una sessió a altre curs d'altra sessió has de seleccionar primer un curs de la llesta cursos d'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs"
-
 msgid "Type of copy"
 msgstr "Tipus de còpia"
 
 msgid "Copy from course in session to another session"
 msgstr "Copiar cursos d'una a altra sessió"
 
-msgid "You must select a course from original session"
+msgid "You must select a course from the original session and select a destination session"
 msgstr "Has de seleccionar un curs de la sessió original"
 
 msgid "Maybe you want to delete the user, instead of unsubscribing him from all courses...?"
@@ -6431,10 +6419,10 @@ msgstr "Mostrar comentaris de dades de la sessió"
 msgid "Subscription sessions in the category"
 msgstr "Inscriure sessions a una categoria"
 
-msgid "List of session in the platform"
+msgid "List of sessions on the platform"
 msgstr "Llista de sessions de la plataforma"
 
-msgid "List of sesiones in the categories"
+msgid "List of sessions in the categories"
 msgstr "Llista de sessions en la categoria"
 
 msgid "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list."
@@ -6592,9 +6580,6 @@ msgstr "Només professors"
 
 msgid "Define Headings"
 msgstr "Definir encapçalaments"
-
-msgid "Back to users list"
-msgstr "Tornar a la llista d'usuaris"
 
 msgid "change rights of"
 msgstr "Canviar drets de"
@@ -7013,9 +6998,6 @@ msgstr "Grups de classes"
 msgid "Using this option, you can create groups based on the classes subscribed to your course."
 msgstr "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs."
 
-msgid "Back to Groups list"
-msgstr "Tornar a la llista de grups"
-
 msgid "A new forum has now been created"
 msgstr "El nou fòrum ha estat creat"
 
@@ -7292,7 +7274,7 @@ msgstr "Moure el document actual"
 msgid "Edit the current document"
 msgstr "Editar el document actual"
 
-msgid "Warning !"
+msgid "Warning!"
 msgstr "¡ Compte !"
 
 msgid "When you edit an existing document in Courses, the new version of the document will not overwrite the old version but will be saved as a new document. If you want to edit a document definitively, you can do that with the document tool."
@@ -7685,7 +7667,7 @@ msgstr "Tornar a la llista de preguntes"
 msgid "Answers to the question"
 msgstr "Contesta la pregunta"
 
-msgid "Warning ! This question and its answers are used in several tests. Would you like to Edit them"
+msgid "Warning! This question and its answers are used in several tests. Would you like to Edit them"
 msgstr " Advertiment! Aquesta pregunta i les seves respostes s'utilitzen en unes quantes proves. Li agradaria modificar-les?"
 
 msgid "in all tests"
@@ -7834,9 +7816,6 @@ msgstr "Ha arribat al nombre màxim d'intents permesos en aquest exercici. No ob
 
 msgid "Exercise added"
 msgstr "Exercici afegit"
-
-msgid "Assesment settings"
-msgstr "Detalls de la puntuació"
 
 msgid "active"
 msgstr "Actiu"
@@ -8420,9 +8399,6 @@ msgstr "Ha arribat a el límit de temps per a realitzar aquest exercici"
 msgid "Last score of a exercise"
 msgstr "Última puntuació obtinguda"
 
-msgid "Back to result list"
-msgstr "Tornar a la llista de resultats"
-
 msgid "If you edit a question score, please remember that this Exercise was added in a Course"
 msgstr "Si edita la puntuació d'aquesta pregunta modificarà el resultat de l'exercici, recordi que aquest exercici està agregat també a una Lliçó"
 
@@ -8503,9 +8479,6 @@ msgstr "Usuaris connectats"
 
 msgid "Remove"
 msgstr "Esborra"
-
-msgid "Back to courses list"
-msgstr "Retorna a la llista dels meus cursos"
 
 msgid "Links"
 msgstr "Enllaços"
@@ -8602,9 +8575,6 @@ msgstr "Nom"
 
 msgid "Last name"
 msgstr "Cognom"
-
-msgid "e-mail"
-msgstr "Correu electrònic"
 
 msgid "Slideshow conversion"
 msgstr "Conversió de la presentació"
@@ -8906,7 +8876,7 @@ msgstr "idioma"
 msgid "Sorry, but that course code already exists. Please choose another one."
 msgstr "Trist, però aquell codi de curs ja existeix. Si us plau esculli'n un altre."
 
-msgid "Groups list"
+msgid "Group list"
 msgstr "Llista de grups"
 
 msgid "The target folder does not exist"
@@ -9365,9 +9335,6 @@ msgstr "Les meues sessions actives"
 msgid "My inactive sessions"
 msgstr "Les meves sessions no actives"
 
-msgid "This extension has been actived but can't be operational for the moment."
-msgstr "Aquesta extensió ha estat activada però, ara com ara, no pot estar operativa."
-
 msgid "My learners"
 msgstr "Els meus estudiants"
 
@@ -9398,7 +9365,7 @@ msgstr "No hi ha recursos per a reciclar"
 msgid "Could not open"
 msgstr "No pot obrir-se"
 
-msgid "Frequentation time"
+msgid "Time in course"
 msgstr "Temps de freqüenciació"
 
 msgid "This course could not be found"
@@ -9530,8 +9497,8 @@ msgstr "No s'ha visitat cap enllaç"
 msgid "No document downloaded"
 msgstr "No s'ha descarregat cap document"
 
-msgid "clicks"
-msgstr "clics"
+msgid "%d clicks"
+msgstr "%d clics"
 
 msgid "Search results"
 msgstr "Cercar resultats"
@@ -9614,7 +9581,7 @@ msgstr "URL OpenID"
 msgid "The file is too big to upload."
 msgstr "¡ El fitxer enviat és massa gran !"
 
-msgid "The file you uploaded was not received succesfully. Please try again later or contact the administrator of this portal."
+msgid "The file you uploaded was not received successfully. Please try again later or contact the administrator of this portal."
 msgstr "L'enviament de l'arxiu no s'ha pogut realitzar. Per favor, intenti'l de nou més tard o posi's en contacte amb l'administrador de la plataforma."
 
 msgid "Assessments"
@@ -9674,7 +9641,7 @@ msgstr "hores"
 msgid "minutes"
 msgstr "minuts"
 
-msgid "Documented created"
+msgid "Document created"
 msgstr "Document creat"
 
 msgid "The forum has been added"
@@ -10202,7 +10169,7 @@ msgstr "Més informació"
 msgid "Make invisible"
 msgstr "Fer invisible"
 
-msgid "Make Visible"
+msgid "Make visible"
 msgstr "Fer visible"
 
 msgid "Image"
@@ -10219,9 +10186,6 @@ msgstr "Enviar missatge"
 
 msgid "Menu"
 msgstr "Menú"
-
-msgid "Back to user list"
-msgstr "Tornar a la llista d'usuaris"
 
 msgid "Graphic not available"
 msgstr "Gràfic no disponible"
@@ -10547,7 +10511,7 @@ msgstr "Visibilitat de la avaluació"
 msgid "Who changed it"
 msgstr "Qui ho va modificar"
 
-msgid "The evaluation has been succesfully edited"
+msgid "The evaluation has been successfully edited"
 msgstr "L'avaluació ha estat modificada"
 
 msgid "Incorrect data"
@@ -11286,7 +11250,7 @@ msgid "The wiki page has been saved."
 msgstr "La nova pàgina ha estat guardada"
 
 msgid " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Working as a team\" title=\"Working as a team\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>"
-msgstr "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Dokeos\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text"
+msgstr "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Chamilo\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text"
 
 msgid "Wiki pages"
 msgstr "Pàgines wiki del curs"
@@ -11558,7 +11522,7 @@ msgstr "La pàgina ara és visible per tots els usuaris"
 msgid "The Main Page can be edited by a teacher only"
 msgstr "La pàgina principal del Wiki del curs només pot ser modificada per un professor"
 
-msgid "Acces to trainer page"
+msgid "Access to trainer page"
 msgstr "Accés a la pàgina del professor"
 
 msgid "Now discussion is visible by trainers only"
@@ -13340,7 +13304,7 @@ msgstr "Per favor, introdueixi una pregunta"
 msgid "Number of question"
 msgstr "Nombre de qüestions"
 
-msgid "This code already exist"
+msgid "This code already exists"
 msgstr "Aquest codi ja existeix"
 
 msgid "Save and exit"
@@ -13391,13 +13355,13 @@ msgstr "Editar qüestió"
 msgid "This type does not exist"
 msgstr "Aquest tipus no existeix"
 
-msgid "The survey has been created succesfully"
+msgid "The survey has been created successfully"
 msgstr "L'enquesta ha estat creada"
 
 msgid "You can now add questions to your survey"
 msgstr "Ara pot afegir les preguntes"
 
-msgid "The survey has been updated succesfully"
+msgid "The survey has been updated successfully"
 msgstr "L'enquesta ha estat actualitzada"
 
 msgid "The question has been added."
@@ -13595,7 +13559,7 @@ msgstr "Aquest codi de l'enquesta ja existeix. Probablement això sigui degut al
 msgid "This survey code soon exists in this language"
 msgstr "Aquest codi d'enquesta ja existeix en aquest idioma"
 
-msgid "The user's answers to the survey have been succesfully removed."
+msgid "The user's answers to the survey have been successfully removed."
 msgstr "Les respostes de l'usuari han estat eliminades satisfactòriament"
 
 msgid "Delete this user's answers"
@@ -13718,7 +13682,7 @@ msgstr "Existeix una guia del curs, una col·lecció de documents, una bibliogra
 msgid "Short description of the course materials."
 msgstr "Breu descripció dels materials del curs"
 
-msgid "Consider the cpirses, coaches, a technical helpdesk, course managers, and/or materials available."
+msgid "Consider the courses, coaches, a technical helpdesk, teachers, and/or materials available."
 msgstr "Qui són els professors, tutors, servei d'assistència tècnica, assistents socials, etc ? Quins són els recursos físics dels quals disposa el curs: sala d'ordinadors, etc ?"
 
 msgid "Identify and describe the different contact persons and technical devices available."
@@ -14243,9 +14207,6 @@ msgstr "La qualificació no pot ser superior a la qualificació màxima"
 msgid "Delete all papers"
 msgstr "Eliminar tot"
 
-msgid "Back to Assignments list"
-msgstr "Tornar a la llista de tasques"
-
 msgid "Edit and mark paper"
 msgstr "Editar i marcar la tasca"
 
@@ -14357,11 +14318,11 @@ msgstr "Manual"
 msgid "You should write a message"
 msgstr "Escriviu un missatge"
 
-msgid "This message is to inform you that has created a new course on platform"
-msgstr "Aquest missatge és per informar-lo que s'ha creat un curs nou a la plataforma"
+msgid "This message is to inform you that a new course has been created on %s"
+msgstr "Aquest missatge és per informar-lo que s'ha creat un curs nou a %s"
 
-msgid "New course created in"
-msgstr "Curs nou creat en"
+msgid "New course created on %s"
+msgstr "Curs nou creat en %s"
 
 msgid "The teacher is set as you for now. You can change this setting later in the course configuration settings"
 msgstr "Per ara, està definit com professor. Podreu canviar el professor a la pàgina de configuració del curs"
@@ -14372,8 +14333,8 @@ msgstr "Idioma d'instal·lació"
 msgid "Please read the following requirements thoroughly."
 msgstr "Llegiu amb atenció"
 
-msgid "Warning!<br />The installer has detected an existing Chamilo platform on your system."
-msgstr "Atenció !"
+msgid "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr ""
 
 msgid "New installation"
 msgstr "Instal·lació nova"
@@ -14506,12 +14467,6 @@ msgstr "Torneu al Pas"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
 msgstr "El programa d'actualització recuperarà i actualitzarà les bases de dades de Chamilo. Per realitzar això, el programa utilitzarà les bases de dades i la configuració definides més avall. Degut a que el nostre programari funciona en una àmplia gamma de sistemes i no ha estat possible provar-lo en tots, li recomanem que realitzeu una còpia de seguretat completa de la seva base de dades abans de procedir amb la instal·lació !"
-
-msgid "MBString extension not available"
-msgstr "Extensió MBString no disponible"
-
-msgid "MySQL extension not available"
-msgstr "Extensió MySQL no disponible"
 
 msgid "Optional parameters"
 msgstr "Paràmetres opcionals"
@@ -15155,7 +15110,7 @@ msgstr "No hi ha camps addicionals disponibles"
 msgid "Start to type, then click on this bar to validate tag"
 msgstr "Comenceu a escriure, a continuació, feu clic sobre aquesta barra per validar l'etiqueta"
 
-msgid "Install chamilo"
+msgid "Install Chamilo"
 msgstr "Instal·la Chamilo"
 
 msgid "Chamilo URL"
@@ -15629,7 +15584,7 @@ msgstr "Llista de cursos assignats a l'administrador de sessions"
 msgid "Assign sessions to platform administrator"
 msgstr "Assigna sessions a l'administrador de la plataforma"
 
-msgid "assign sessions to sessions administrator"
+msgid "Assign sessions to sessions administrator"
 msgstr "Assigna sessions a l'administrador de sessions"
 
 msgid "Assigned sessions list to platform administrator"
@@ -15698,7 +15653,7 @@ msgstr "Unitat didàctica"
 msgid "Thematic plan"
 msgstr "Programació de la unitat didàctica"
 
-msgid "Edit tematic advance"
+msgid "Edit thematicadvance"
 msgstr "Edita la programació de la unitat didàctica"
 
 msgid "Edit thematic advance"
@@ -17396,8 +17351,8 @@ msgstr "Crea un grup social"
 msgid "Not logged in for some time"
 msgstr "No connectats per un temps"
 
-msgid "Last %i months"
-msgstr "Últims %i mesos"
+msgid "Last %d months"
+msgstr "Últims %d mesos"
 
 msgid "Never connected"
 msgstr "Mai connectats"
@@ -17441,13 +17396,13 @@ msgstr "Element copiat"
 msgid "My statistics"
 msgstr "Les meves estadístiques"
 
-msgid "Exercises available"
+msgid "Tests available"
 msgstr "Exercicis disponibles"
 
 msgid "Exercises taken"
 msgstr "Exercicis realitzats"
 
-msgid "Average exercise result"
+msgid "Average test result"
 msgstr "Resultat mig de l'exercici"
 
 msgid "Learning path progress"
@@ -17804,7 +17759,7 @@ msgstr "Aquest usuari no té una URL relacionada."
 msgid "Extra data"
 msgstr "Informació addicional"
 
-msgid "Exercises in learning paths"
+msgid "Tests in learning paths"
 msgstr "Exercicis en lliçons"
 
 msgid "Id"
@@ -18134,15 +18089,6 @@ msgstr "Benvingut a l'instal·lador de Chamilo"
 msgid "Your PHP version does not match the requirements for this software. Please check you have the latest version, then try again."
 msgstr "La seva versió de PHP no coincideix amb els requeriments per aquest programari. Comproveu que disposeu de l'última versió i torneu a provar-ho."
 
-msgid "Sessions extension not available"
-msgstr "Extensió Sessions no disponible"
-
-msgid "Zlib extension not available"
-msgstr "Extensió Zlib no disponible"
-
-msgid "PCRE extension not available"
-msgstr "Extensió PCRE no disponible"
-
 msgid "To social group"
 msgstr "Per a un grup social"
 
@@ -18415,7 +18361,7 @@ msgstr "Certificació"
 msgid "Online link to certificate"
 msgstr "Vincle al certificat en línia"
 
-msgid "New exercises"
+msgid "New tests"
 msgstr "Exercici nou"
 
 msgid "My average"
@@ -18619,14 +18565,8 @@ msgstr "pregunta"
 msgid "questions"
 msgstr "preguntes"
 
-msgid "Back to test list"
-msgstr "Torna a la llista d'exercicis"
-
 msgid "Category description"
 msgstr "Descripció de la categoria"
-
-msgid "Back to category list"
-msgstr "Torna a la llista de categories"
 
 msgid "This category name already exists. Please use another name."
 msgstr "Aquest nom de categoria ja existeix. Indiqueu un altre nom."
@@ -18904,7 +18844,7 @@ msgstr "Corregit"
 msgid "Not validated"
 msgstr "Sense corregir"
 
-msgid "Revised"
+msgid "Reviewed"
 msgstr "Revisat"
 
 msgid "Select a question to revise"
@@ -19048,7 +18988,7 @@ msgstr "Mostra als usuaris, segons el seu perfil, una barra global a la part sup
 msgid "Session list"
 msgstr "Llista de sessions"
 
-msgid "Learners list"
+msgid "Learner list"
 msgstr "Llista d'estudiants"
 
 msgid "Learners who're taking the exercise right now"
@@ -21304,7 +21244,7 @@ msgstr ""
 msgid "You must first fill your profile to enable the terms and conditions validation."
 msgstr "Ha de completar el seu perfil per accedir a la validació del contracte."
 
-msgid "Diagnostic"
+msgid "Diagnosis"
 msgstr ""
 
 msgid "Allow show the user Skype account"
@@ -22858,7 +22798,7 @@ msgstr ""
 msgid "Explain in this box why you want your account deleted"
 msgstr ""
 
-msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
+msgid "You can ask below for your legal agreement to be deleted or your account to be deleted.<br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.<br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data."
 msgstr ""
 
 msgid "Personal data protection"
@@ -22933,13 +22873,10 @@ msgstr ""
 msgid "Create a new Doodle type survey"
 msgstr ""
 
-msgid "Remove multiplicated questions"
+msgid "Remove multiplied questions"
 msgstr ""
 
-msgid "Multiplicate questions"
-msgstr ""
-
-msgid "You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions."
+msgid "Multiply questions"
 msgstr ""
 
 msgid "Create meeting poll"
@@ -23479,10 +23416,10 @@ msgstr ""
 msgid "Hi %s <br/><br/>As group tutor for the group %s you are invited to participate at the following survey :"
 msgstr ""
 
-msgid "Survey %s multiplicated"
+msgid "Survey %s multiplied"
 msgstr ""
 
-msgid "Survey %s not multiplicated"
+msgid "Survey %s not multiplied"
 msgstr ""
 
 msgid "Export survey results"
@@ -23785,10 +23722,10 @@ msgstr ""
 msgid "Absent"
 msgstr ""
 
-msgid "Internal database error"
+msgid "Internal database error: %s"
 msgstr ""
 
-msgid "Wrong number of days"
+msgid "Wrong number of days: %s: %s"
 msgstr ""
 
 msgid "Subscription not allowed"
@@ -24022,7 +23959,7 @@ msgstr ""
 msgid "Students with incorrect answers"
 msgstr ""
 
-msgid "List of contents"
+msgid "Content list"
 msgstr ""
 
 msgid "Tariff"
@@ -24088,10 +24025,10 @@ msgstr ""
 msgid "The"
 msgstr ""
 
-msgid "Multiplicate questions by class"
+msgid "Multiply questions by class"
 msgstr ""
 
-msgid "Multiplicate questions by user"
+msgid "Multiply questions by user"
 msgstr ""
 
 msgid "Questions about next user"
@@ -25059,3 +24996,6 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "Les preguntes orals respostes són: %s"
+
+msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
+msgstr "Si vols copiar un curs d'una sessió a altre curs d'altra sessió has de seleccionar primer un curs de la llesta cursos d'origen de la sessió. Pots copiar continguts de les eines descripció del curs, documents, glossari, enllaços, exercicis i lliçons de forma directa o seleccionant els components del curs"

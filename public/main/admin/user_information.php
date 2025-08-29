@@ -153,7 +153,7 @@ $table->setHeaderContents(0, 0, get_lang('Information'));
 $csvContent[] = [get_lang('Information')];
 $data = [
     get_lang('Name') => $completeName,
-    get_lang('e-mail') => $user->getEmail(),
+    get_lang('E-mail') => $user->getEmail(),
     get_lang('Phone') => $user->getPhone(),
     get_lang('Course code') => $user->getOfficialCode(),
     //get_lang('Online') => !empty($user['user_is_online']) ? Display::return_icon('online.png') : Display::return_icon('offline.png'),
@@ -377,7 +377,7 @@ if (count($sessions) > 0) {
         $dates = SessionManager::parseSessionDates($session);
 
         $certificateLink = Display::url(
-            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CertificateOfAchievement')),
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Certificate of achievement')),
             api_get_path(WEB_CODE_PATH).'my_space/session.php?'
             .http_build_query(
                 [
@@ -530,9 +530,9 @@ if (api_is_multiple_url_enabled()) {
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'send_legal':
-            $subject = get_lang('Send legal agreementSubject');
+            $subject = get_lang('Legal conditions');
             $content = sprintf(
-                get_lang('Send legal agreementDescriptionToUrlX'),
+                get_lang('Please accept our legal conditions here: %s'),
                 api_get_path(WEB_PATH)
             );
             MessageManager::send_message_simple($userId, $subject, $content);
@@ -614,7 +614,7 @@ $fullUrl = UserManager::getUserPicture(
 );
 
 if ($studentBossList) {
-    echo Display::page_subheader(get_lang('Superior (n+1)List'));
+    echo Display::page_subheader(get_lang('Superior (n+1)'));
     echo $studentBossListToString;
 }
 

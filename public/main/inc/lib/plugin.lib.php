@@ -451,38 +451,33 @@ class AppPlugin
     public function getPluginInfo($pluginName, $forced = false)
     {
         $plugin_info = [];
-        $pluginPath = api_get_path(SYS_PLUGIN_PATH);
-        $pluginDirs = [
-            $pluginName,
-            strtolower($pluginName),
-            ucfirst(strtolower($pluginName)),
-        ];
+        $pluginPath  = api_get_path(SYS_PLUGIN_PATH);
 
-        $plugin_file = null;
-
-        foreach ($pluginDirs as $dir) {
+        $pluginDir = null;
+        foreach ([$pluginName, strtolower($pluginName), ucfirst(strtolower($pluginName))] as $dir) {
             $path = $pluginPath . "$dir/plugin.php";
-            if (file_exists($path)) {
-                $plugin_file = $path;
+            if (is_file($path)) {
+                require_once $path;
+                $pluginDir = $dir;
                 break;
             }
         }
 
-        if ($plugin_file) {
-            require $plugin_file;
+        $instance = null;
+        if (isset($plugin_info['plugin_class']) && class_exists($plugin_info['plugin_class'], false)) {
+            $cls = $plugin_info['plugin_class'];
+            $instance = method_exists($cls, 'create') ? $cls::create() : new $cls();
+            if (method_exists($instance, 'get_info')) {
+                $plugin_info = $instance->get_info();
+            }
         }
 
-        $plugin = Container::getPluginRepository()->findOneByTitle($pluginName);
-
-        if (!$plugin) {
-            return [];
+        $repo   = Container::getPluginRepository();
+        $entity = $repo->findOneByTitle($pluginName) ?: $repo->findOneByTitle(ucfirst(strtolower($pluginName)));
+        if ($entity) {
+            $configByUrl = $entity->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+            $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
         }
-
-        $configByUrl = $plugin->getConfigurationsByAccessUrl(
-            Container::getAccessUrlUtil()->getCurrent()
-        );
-
-        $plugin_info['settings'] = $configByUrl?->getConfiguration() ?? [];
 
         return $plugin_info;
     }
@@ -552,23 +547,31 @@ class AppPlugin
     /**
      * @param int $courseId
      */
-    public function install_course_plugins($courseId)
+    public function install_course_plugins(int $courseId): void
     {
         $pluginList = $this->getInstalledPluginListObject();
+        if (empty($pluginList)) {
+            return;
+        }
 
-        if (!empty($pluginList)) {
-            /** @var Plugin $obj */
-            foreach ($pluginList as $obj) {
-                $pluginName = $obj->get_name();
-                $plugin_path = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+        $accessUrl = Container::getAccessUrlUtil()->getCurrent();
+        $pluginRepo = Container::getPluginRepository();
 
-                if (file_exists($plugin_path)) {
-                    require $plugin_path;
-                    if (isset($plugin_info) && isset($plugin_info['plugin_class']) && $obj->isCoursePlugin) {
-                        $obj->course_install($courseId);
-                    }
-                }
+        /** @var Plugin $obj */
+        foreach ($pluginList as $obj) {
+            if (empty($obj->isCoursePlugin)) {
+                continue;
             }
+
+            $entity = $pluginRepo->findOneByTitle($obj->get_name());
+            $rel    = $entity?->getConfigurationsByAccessUrl($accessUrl);
+            if (!$rel || !$rel->isActive()) {
+                continue;
+            }
+
+            $obj->get_settings(true);
+
+            $obj->course_install($courseId);
         }
     }
 

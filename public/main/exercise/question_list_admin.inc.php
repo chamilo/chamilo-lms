@@ -127,6 +127,15 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 </script>
 <?php
 
+if ($objExercise->selectType() === ONE_PER_PAGE
+    && $objExercise->hasQuestionWithType(PAGE_BREAK)
+) {
+    echo Display::return_message(
+        get_lang('This exercise contains page-break questions, which will only take effect if the exercise is set to “All questions on one page".'),
+        'warning'
+    );
+}
+
 // Filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
 

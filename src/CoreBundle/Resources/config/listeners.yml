@@ -87,8 +87,13 @@ services:
 
     # When the User entity is created/updated        -
     Chamilo\CoreBundle\Entity\Listener\UserListener:
-        tags:
-            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+      arguments:
+        - '@Chamilo\CoreBundle\Repository\Node\UserRepository'
+        - '@security.helper'
+        - '@translator'
+        - '@Chamilo\CoreBundle\Helpers\AccessUrlHelper'
+      tags:
+        - { name: doctrine.orm.entity_listener, entity_manager: default, lazy: true }
 
     Chamilo\CoreBundle\Entity\Listener\UserRelUserListener:
         tags:
@@ -103,6 +108,10 @@ services:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
     Chamilo\CoreBundle\Entity\Listener\LanguageListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, entity_manager: default, lazy: true }
+
+    Chamilo\CoreBundle\Entity\Listener\AccessUrlListener:
         tags:
             - { name: doctrine.orm.entity_listener, entity_manager: default, lazy: true }
 

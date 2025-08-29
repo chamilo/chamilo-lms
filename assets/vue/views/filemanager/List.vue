@@ -9,7 +9,7 @@
         class="px-4 py-2 -mb-px font-semibold border-b-2"
         @click="changeTab('personalFiles')"
       >
-        {{ t("Personal Files") }}
+        {{ t("My files") }}
       </button>
       <button
         v-if="isAllowedToEdit && courseIsSet"

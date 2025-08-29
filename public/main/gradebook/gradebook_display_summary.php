@@ -168,7 +168,7 @@ switch ($action) {
             $comment = $commentInfo['comment'];
         }
         $ajaxPath = api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=add_gradebook_comment';
-        $save = Display::return_message(get_lang('Saved'));
+        $save = Display::return_message(get_lang('Saved.'));
         echo '<script>
             $(function() {
                 $("form").on("submit", function(e) {

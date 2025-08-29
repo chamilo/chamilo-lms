@@ -26,7 +26,7 @@ function validate_data($skills)
     foreach ($skills as $index => $skill) {
         foreach ($mandatory_fields as $field) {
             if (empty($skill[$field])) {
-                $skill['error'] = get_lang(ucfirst($field).'Mandatory');
+                $skill['error'] = get_lang(ucfirst($field).' mandatory');
                 $errors[] = $skill;
             }
         }
@@ -116,6 +116,10 @@ set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = [];
 $error_message = '';
+$csvCustomError = '';
+$topStaticErrorHtml = '';
+$delimiterError = false;
+$errors = [];
 
 if (!empty($_POST['formSent']) && 0 !== $_FILES['import_file']['size']) {
     $file_type = $_POST['file_type'];
@@ -129,9 +133,20 @@ if (!empty($_POST['formSent']) && 0 !== $_FILES['import_file']['size']) {
 
     if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (0 === strcmp($file_type, 'csv') && $ext_import_file == $allowed_file_mimetype[0]) {
-            $skills = parse_csv_data($_FILES['import_file']['tmp_name']);
-            $errors = validate_data($skills);
-            $error_kind_file = false;
+            $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+            if (true !== $check) {
+                $csvCustomError = $check;
+                $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
+                $delimiterError = true;
+                $error_kind_file = true;
+                $skills = [];
+                $errors = [];
+                $error_message = '';
+            } else {
+                $skills = parse_csv_data($_FILES['import_file']['tmp_name']);
+                $errors = validate_data($skills);
+                $error_kind_file = false;
+            }
         } else {
             $error_kind_file = true;
         }
@@ -139,57 +154,63 @@ if (!empty($_POST['formSent']) && 0 !== $_FILES['import_file']['size']) {
         $error_kind_file = true;
     }
 
-    // List skill id with error.
-    $skills_to_insert = $skill_id_error = [];
-    if (is_array($errors)) {
-        foreach ($errors as $my_errors) {
-            $skill_id_error[] = $my_errors['SkillName'];
-        }
-    }
-    if (is_array($skills)) {
-        foreach ($skills as $my_skill) {
-            if (isset($my_skill['title']) && !in_array($my_skill['title'], $skill_id_error)) {
-                $skills_to_insert[] = $my_skill;
+    if (!$delimiterError) {
+        // List skill id with error.
+        $skills_to_insert = $skill_id_error = [];
+        if (is_array($errors)) {
+            foreach ($errors as $my_errors) {
+                $skill_id_error[] = $my_errors['SkillName'];
             }
         }
-    }
-
-    if (0 === strcmp($file_type, 'csv')) {
-        save_data($skills_to_insert);
-    } else {
-        $error_message = get_lang('You must import a file corresponding to the selected format');
-    }
-
-    if (count($errors) > 0) {
-        $see_message_import = get_lang('Only skills that were not registered were imported');
-    } else {
-        $see_message_import = get_lang('File imported');
-    }
-
-    if (0 != count($errors)) {
-        $warning_message = '<ul>';
-        foreach ($errors as $index => $error_skill) {
-            $warning_message .= '<li><b>'.$error_skill['error'].'</b>: ';
-            $warning_message .= '<strong>'.$error_skill['SkillName'].'</strong>&nbsp;('.$error_skill['SkillName'].')';
-            $warning_message .= '</li>';
+        if (is_array($skills)) {
+            foreach ($skills as $my_skill) {
+                if (isset($my_skill['title']) && !in_array($my_skill['title'], $skill_id_error)) {
+                    $skills_to_insert[] = $my_skill;
+                }
+            }
         }
-        $warning_message .= '</ul>';
-    }
 
-    if ($error_kind_file) {
-        $error_message = get_lang('You must import a file corresponding to the selected format');
+        if (0 === strcmp($file_type, 'csv') && !$error_kind_file) {
+            save_data($skills_to_insert);
+        } elseif (!$error_kind_file) {
+            $error_message = get_lang('You must import a file corresponding to the selected format');
+        }
+
+        if (count($errors) > 0) {
+            $see_message_import = get_lang('Only skills that were not registered were imported');
+        } else {
+            $see_message_import = get_lang('File imported');
+        }
+
+        if (0 != count($errors)) {
+            $warning_message = '<ul>';
+            foreach ($errors as $index => $error_skill) {
+                $warning_message .= '<li><b>'.$error_skill['error'].'</b>: ';
+                $warning_message .= '<strong>'.$error_skill['SkillName'].'</strong>&nbsp;('.$error_skill['SkillName'].')</li>';
+            }
+            $warning_message .= '</ul>';
+        }
+
+        if ($error_kind_file) {
+            $error_message = get_lang('You must import a file corresponding to the selected format');
+        }
+    } else {
+        $see_message_import = '';
     }
 }
 
 $interbreadcrumb[] = ["url" => 'skill_list.php', "name" => get_lang('Manage skills')];
 
 Display :: display_header($tool_name);
-
-if (!empty($error_message)) {
-    echo Display::return_message($error_message, 'error');
-}
-if (!empty($see_message_import)) {
-    echo Display::return_message($see_message_import, 'normal');
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+} else {
+    if (!empty($error_message)) {
+        echo Display::return_message($error_message, 'error');
+    }
+    if (!empty($see_message_import)) {
+        echo Display::return_message($see_message_import);
+    }
 }
 
 $objSkill = new SkillModel();
@@ -198,7 +219,7 @@ echo $objSkill->getToolBar();
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('file', 'import_file', get_lang('CSV import'));
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -218,8 +239,8 @@ $form->display();
 $contents = '
 <p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <pre>
-    <b>id</b>;<b>parent_id</b>;<b>title</b>;<b>description</b>
-    <b>2</b>;<b>1</b>;<b>Chamilo Expert</b>;Chamilo is an open source LMS;<br />
+<b>id</b>,<b>parent_id</b>,<b>title</b>,<b>description</b>
+<b>2</b>,<b>1</b>,<b>Chamilo Expert</b>,Chamilo is an open source LMS
 </pre>
 ';
 echo Display::prose($contents);

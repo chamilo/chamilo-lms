@@ -908,6 +908,16 @@ img.course-tool__icon {
   }
 }
 
+.ghosting { opacity: .6; }
+.chosen   { outline: 2px solid #ddd; }
+.dragging { outline: 2px solid var(--support-5, #f60); }
+
+.media-group       { border:2px solid #337ab7; background:#f5fafd; padding:1rem; margin:2rem 0; border-radius:4px; }
+.media-content     { margin-bottom:1rem; }
+.media-description { font-style:italic; margin-bottom:1rem; }
+.media-children    { margin-left:1rem; }
+.media-group h4   { margin-top:0; color:#23527c; }
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";

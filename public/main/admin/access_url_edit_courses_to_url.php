@@ -128,7 +128,7 @@ Display::display_header($tool_name);
 
 echo '<div class="flex gap-2 items-center mb-4 mt-4">';
 echo Display::url(
-    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to URL list')),
+    Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back')),
     api_get_path(WEB_CODE_PATH).'admin/access_urls.php'
 );
 echo Display::url(
@@ -237,7 +237,7 @@ $url_list = UrlManager::get_url_data();
                         id="course_to_add"
                         onkeyup="xajax_search_courses(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)"
                         class="w-full border rounded px-2 py-1 mb-2"
-                        placeholder="<?php echo get_lang('Search course'); ?>"
+                        placeholder="<?php echo get_lang('Search courses'); ?>"
                     />
                     <div id="ajax_list_courses" class="text-sm text-gray-600"></div>
                 <?php else: ?>

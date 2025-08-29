@@ -39,7 +39,7 @@ foreach ($tools as $tool) {
     }
 }
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
 
 $htmlHeadXtra[] = api_get_css(
     api_get_path(WEB_PLUGIN_PATH).'ImsLti/assets/style.css'

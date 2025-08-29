@@ -423,7 +423,7 @@ class CourseCategory
             }
 
             $editIcon = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'));
-            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('ExportAsCSV'));
+            $exportIcon = Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CSV export'));
             $deleteIcon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $urlId = api_get_current_access_url_id();
 
@@ -884,7 +884,7 @@ class CourseCategory
             case 'subscribe_user_with_password':
             case 'display_random_courses':
             case 'display_courses':
-                $nameTools = get_lang('Courses catalog');
+                $nameTools = get_lang('Courses catalogue');
                 break;
             case 'display_sessions':
                 $nameTools = get_lang('Course sessions');

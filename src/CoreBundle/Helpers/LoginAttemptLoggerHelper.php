@@ -53,8 +53,8 @@ class LoginAttemptLoggerHelper
         }
 
         $statusText = $this->translator->trans($status ? 'succeeded' : 'failed');
-        $infoText = $this->translator->trans('info');
-        $clientText = $this->translator->trans('client');
+        $infoText = $this->translator->trans('Info');
+        $clientText = $this->translator->trans('Client');
         $loginMessage = $this->translator->trans('Login %status% for username %username%', ['%status%' => $statusText, '%username%' => $username]);
 
         $logMessage = \sprintf(

@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
+use Chamilo\CoreBundle\Controller\Api\GetStatsAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\Listener\UserListener;
@@ -54,6 +55,48 @@ use UserManager;
                 'description' => 'Get details of one specific user, including name, e-mail and role.',
             ],
             security: "is_granted('VIEW', object)",
+        ),
+        new Get(
+            uriTemplate: '/users/{id}/courses/{courseId}/stats/{metric}',
+            requirements: [
+                'id' => '\d+',
+                'courseId' => '\d+',
+                'metric' => 'avg-lp-progress|certificates|gradebook-global',
+            ],
+            controller: GetStatsAction::class,
+            openapiContext: [
+                'summary' => 'User-course statistics, switch by {metric}',
+                'parameters' => [
+                    [
+                        'name' => 'courseId',
+                        'in' => 'path',
+                        'required' => true,
+                        'schema' => ['type' => 'integer'],
+                        'description' => 'Course ID',
+                    ],
+                    [
+                        'name' => 'metric',
+                        'in' => 'path',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'string',
+                            'enum' => ['avg-lp-progress', 'certificates', 'gradebook-global'],
+                        ],
+                        'description' => 'Metric selector',
+                    ],
+                    [
+                        'name' => 'sessionId',
+                        'in' => 'query',
+                        'required' => false,
+                        'schema' => ['type' => 'integer'],
+                        'description' => 'Optional Session ID',
+                    ],
+                ],
+            ],
+            security: "is_granted('ROLE_USER')",
+            output: false,
+            read: false,
+            name: 'stats_user_course_metric'
         ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
@@ -1476,6 +1519,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    /**
+     * @return Collection<int, AccessUrlRelUser>
+     */
     public function getPortals(): Collection
     {
         return $this->portals;

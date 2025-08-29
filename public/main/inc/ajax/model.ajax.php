@@ -1226,7 +1226,7 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('e-mail'),
+            get_lang('E-mail'),
             get_lang('Man hours'),
             get_lang('Generated certificate'),
             get_lang('Approved'),
@@ -1859,7 +1859,7 @@ switch ($action) {
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('CertificateOfAchievement')
+                get_lang('Certificate of achievement')
             );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
@@ -1903,7 +1903,7 @@ switch ($action) {
                     ['target' => '_blank']
                 );
                 $detailButtons[] = Display::url(
-                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('WorksReport')),
+                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments report')),
                     api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(

@@ -21,7 +21,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('Forbidden'));
+        throw new Exception(get_lang('Not allowed'));
     }
 
     /** @var ImsLtiTool $tool */

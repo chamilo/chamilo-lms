@@ -9,6 +9,7 @@
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
 
 $course_plugin = 'bbb'; // Needed to load plugin lang variables.
@@ -431,6 +432,16 @@ if (
     }
 }
 
+$messagesAboveForm = '';
+try {
+    $messagesAboveForm .= Display::getFlash();
+    $sess = Container::getSession()->get('bbb_preupload_message');
+    if ($sess) {
+        $messagesAboveForm .= Display::return_message($sess['text'], $sess['type'], false);
+        Container::getSession()->remove('bbb_preupload_message');
+    }
+} catch (\Throwable $e) {}
+
 // Links + start form (with pre-upload document picker).
 $urlList = [];
 if ($conferenceManager && $allowToEdit) {
@@ -561,13 +572,26 @@ if ($conferenceManager && $allowToEdit) {
 </script>';
 
     $form->addElement('html', $preuploadHtml);
+    $form->addElement('html', '<script>
+  (function(){
+    if (location.hash === "#bbb-pre-pop") {
+      var btn = document.getElementById("bbb-pre-btn");
+      if (btn) { setTimeout(function(){ btn.click(); }, 0); }
+    }
+  })();
+</script>');
     $form->addElement(
         'submit',
         'start_meeting',
         $plugin->get_lang('EnterConference'),
         'class="btn btn--primary btn-large"'
     );
-    $formToString = $form->returnForm();
+    $formHtml = $form->returnForm();
+    if (!empty($messagesAboveForm)) {
+        $formHtml = $messagesAboveForm.$formHtml;
+        $messagesAboveForm = '';
+    }
+    $formToString = $formHtml;
 } else {
     // Fallback: plain "Enter conference" link for non-managers (if allowed by context/template).
     $urlList[] = Display::url(
@@ -588,13 +612,12 @@ $tpl->assign('conference_manager', $conferenceManager);
 $tpl->assign('max_users_limit', $maxUsers);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
-$tpl->assign('message', $message);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
 $tpl->assign('can_see_share_link', $canSeeShareableConferenceLink);
 $tpl->assign('plugin', $plugin);
 $tpl->assign('is_course_context', api_get_course_int_id() > 0);
-
+$tpl->assign('message', $message);
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 
 // Admin toolbar.

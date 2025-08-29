@@ -2710,4 +2710,50 @@ class Display
             '.$jsConditionalFunction
             .');';
     }
+
+    /**
+     * Renders and consumes messages stored with Display::addFlash().
+     * Returns HTML ready to inject into the view (alert-*).
+     *
+     * @return html string with all Flash messages (or '' if none)
+     */
+    public static function getFlash(): string
+    {
+        $html = '';
+
+        try {
+            $flashBag = Container::getSession()->getFlashBag();
+            $all = $flashBag->all();
+
+            foreach ($all as $type => $messages) {
+                switch ($type) {
+                    case 'success':
+                        $displayType = 'success';
+                        break;
+                    case 'warning':
+                        $displayType = 'warning';
+                        break;
+                    case 'danger':
+                    case 'error':
+                        $displayType = 'error';
+                        break;
+                    case 'info':
+                    case 'primary':
+                    default:
+                        $displayType = 'info';
+                        break;
+                }
+
+                foreach ((array) $messages as $msg) {
+                    if (is_string($msg) && $msg !== '') {
+                        $html .= self::return_message($msg, $displayType, false);
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            error_log('Display::getFlash error: '.$e->getMessage());
+        }
+
+        return $html;
+    }
 }

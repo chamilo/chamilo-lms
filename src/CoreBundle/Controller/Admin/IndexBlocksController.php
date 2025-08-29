@@ -614,12 +614,6 @@ class IndexBlocksController extends BaseController
         ];
 
         $items[] = [
-            'class' => 'item-branding',
-            'route' => ['name' => 'AdminBranding'],
-            'label' => $this->translator->trans('Branding'),
-        ];
-
-        $items[] = [
             'class' => 'item-file-info',
             'url' => '/admin/files_info',
             'label' => $this->translator->trans('File info'),

@@ -643,7 +643,7 @@
     "Please contact support with the error details": "Please contact support with the error details",
     "Click the image to crop it (1:1 ratio, 120x120 px recommended)": "Click the image to crop it (1:1 ratio, 120x120 px recommended)",
     "Use the crop tool to select a 1:1 region": "Use the crop tool to select a 1:1 region",
-    "All messages here are automatically marked as promoted": "All messages here are automatically marked as promoted",
+    "All messages here are automatically marked as promoted.": "All messages here are automatically marked as promoted.",
     "Checking push subscription": "Checking push subscription",
     "You're subscribed to push notifications in this browser": "You're subscribed to push notifications in this browser",
     "Push notifications are not enabled in this browser": "Push notifications are not enabled in this browser",
@@ -699,5 +699,12 @@
     "You should create the \\\"Term and Conditions\\\" for all the available languages": "You should create the \\\"Term and Conditions\\\" for all the available languages",
     "You don\\'t have any course yet": "You don\\'t have any course yet",
     "You have received a new friend request": "You have received a new friend request",
+    "DiagnosticfinalizationmessageTitle": "Diagnostic finalization",
+    "DiagnosticfinalizationmessageContent": "Hi {0}, I'm {1} and I'm reviewing your diagnostic to define the course you will be following.",
+    "Diagnosis Management": "Diagnosis Management",
+    "Links": "\u041f\u043e\u0441\u0438\u043b\u0430\u043d\u043d\u044f",
+    "Tests": "\u0422\u0435\u0441\u0442\u0438",
+    "Announcements": "\u041e\u0433\u043e\u043b\u043e\u0448\u0435\u043d\u043d\u044f",
+    "Forum": "\u0424\u043e\u0440\u0443\u043c\u0438",
     "Contact support": "Contact support"
 }

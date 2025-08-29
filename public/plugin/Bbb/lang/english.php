@@ -76,3 +76,5 @@ $strings['meeting_duration'] = 'Meeting duration (in minutes)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Allow students to start conference in their groups.';
 $strings['hide_conference_link'] = 'Hide conference link in course tool';
 $strings['hide_conference_link_comment'] = 'Show or hide a block with a link to the videoconference next to the join button, to allow users to copy it and paste it in another browser window or invite others. Authentication will still be necessary to access non-public conferences.';
+$strings['delete_recordings_on_course_delete'] = 'Delete recordings when course is removed';
+$strings['defaultVisibilityInCourseHomepage'] = 'Default visibility in course home page';

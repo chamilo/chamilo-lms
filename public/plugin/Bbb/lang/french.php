@@ -69,3 +69,5 @@ $strings['bbb_force_record_generation'] = 'Forcer la génération de l\'enregist
 $strings['ThereIsNoVideoConferenceActive'] = "Il n'y a aucune vidéoconférence actuellement active";
 $strings['meeting_duration'] = 'Durée de la conférence (en minutes)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Permettre aux apprenants de démarrer les vidéoconferénces de leurs groupes';
+$strings['delete_recordings_on_course_delete'] = 'Supprimer les enregistrements lors de la suppression du cours';
+$strings['defaultVisibilityInCourseHomepage'] = 'Visibilité par défaut sur la page d\'accueil du cours';

@@ -33,8 +33,19 @@ $prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
 
 $em = Container::getEntityManager();
 
-$content = '';
-$currentUrl = api_get_self()."?plugin={$plugin->getTitle()}";
+$currentUrl = api_get_self().'?plugin='.$plugin->getTitle();
+$backUrl    = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins';
+
+$headerHtml = '
+<div class="mb-4 flex items-center justify-between">
+  <h2 class="text-2xl font-semibold text-gray-90">'.htmlspecialchars($pluginInfo['title'] ?? $plugin->getTitle(), ENT_QUOTES).'</h2>
+  <a href="'.$backUrl.'" class="btn btn--sm btn--plain" title="'.get_lang('Back').'">
+    <i class="mdi mdi-arrow-left"></i> '.get_lang('Back to plugins').'
+  </a>
+</div>
+';
+
+$content = $headerHtml;
 
 if (isset($pluginInfo['settings_form'])) {
     /** @var FormValidator $form */
@@ -44,7 +55,6 @@ if (isset($pluginInfo['settings_form'])) {
         if (isset($pluginInfo['settings'])) {
             $form->setDefaults($pluginInfo['settings']);
         }
-        $content = Display::page_header($pluginInfo['title']);
         $content .= $form->toHtml();
     }
 } else {
@@ -98,8 +108,8 @@ if (isset($form)) {
                     $objPlugin->uninstall_course_fields_in_all_courses();
                 }
             } elseif ($newEnabled && $newDefaultVis !== $prevDefaultVis) {
-                    $objPlugin->uninstall_course_fields_in_all_courses();
-                    $objPlugin->install_course_fields_in_all_courses();
+                $objPlugin->uninstall_course_fields_in_all_courses();
+                $objPlugin->install_course_fields_in_all_courses();
             }
         }
 

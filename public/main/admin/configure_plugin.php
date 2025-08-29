@@ -33,11 +33,9 @@ $prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
 
 $em = Container::getEntityManager();
 
-// URLs útiles
 $currentUrl = api_get_self().'?plugin='.$plugin->getTitle();
 $backUrl    = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins';
 
-// Header con botón “Back to plugins”
 $headerHtml = '
 <div class="mb-4 flex items-center justify-between">
   <h2 class="text-2xl font-semibold text-gray-90">'.htmlspecialchars($pluginInfo['title'] ?? $plugin->getTitle(), ENT_QUOTES).'</h2>
@@ -57,7 +55,6 @@ if (isset($pluginInfo['settings_form'])) {
         if (isset($pluginInfo['settings'])) {
             $form->setDefaults($pluginInfo['settings']);
         }
-        // En lugar de Display::page_header(), ya tenemos $headerHtml
         $content .= $form->toHtml();
     }
 } else {

@@ -292,27 +292,23 @@ class BbbPlugin extends Plugin
      */
     public function install(): void
     {
-        $entityManager = Database::getManager();
+        $em = Database::getManager();
 
         $pluginRepo = Container::getPluginRepository();
         $plugin = $pluginRepo->findOneByTitle($this->get_name());
 
         if (!$plugin) {
-            // Create the plugin only if it does not exist
             $plugin = new \Chamilo\CoreBundle\Entity\Plugin();
             $plugin->setTitle($this->get_name());
-            $plugin->setInstalled(true);
-            $plugin->setInstalledVersion($this->get_version());
-            $plugin->setSource(\Chamilo\CoreBundle\Entity\Plugin::SOURCE_OFFICIAL);
-
-            $entityManager->persist($plugin);
-            $entityManager->flush();
         } else {
-            // Ensure Doctrine manages it in the current UnitOfWork
-            $plugin = $entityManager->merge($plugin);
+            $plugin = $em->merge($plugin);
         }
 
-        // Check if the plugin has relations for access URLs
+        $plugin->setInstalled(true);
+        $plugin->setInstalledVersion($this->get_version());
+        $plugin->setSource(\Chamilo\CoreBundle\Entity\Plugin::SOURCE_OFFICIAL);
+        $em->persist($plugin);
+
         $accessUrlRepo = Container::getAccessUrlRepository();
         $accessUrlRelPluginRepo = Container::getAccessUrlRelPluginRepository();
 
@@ -332,32 +328,49 @@ class BbbPlugin extends Plugin
 
                 $configuration = [];
                 foreach ($this->fields as $name => $type) {
-                    $defaultValue = '';
-
                     if (is_array($type)) {
-                        $defaultValue = $type['type'] === 'boolean' ? 'false' : '';
+                        $configuration[$name] = $type['type'] === 'boolean' ? 'false' : '';
                     } else {
-                        switch ($type) {
-                            case 'boolean':
-                            case 'checkbox':
-                                $defaultValue = 'false';
-                                break;
-                            default:
-                                $defaultValue = '';
-                                break;
-                        }
+                        $configuration[$name] = in_array($type, ['boolean','checkbox'], true) ? 'false' : '';
                     }
-
-                    $configuration[$name] = $defaultValue;
                 }
-
                 $rel->setConfiguration($configuration);
 
-                $entityManager->persist($rel);
+                $em->persist($rel);
             }
         }
 
-        $entityManager->flush();
+        $em->flush();
+    }
+
+    /**
+     * Uninstalls the plugin.
+     * - Removes AccessUrl relations
+     * - Marks the plugin as not installed
+     * - Keeps course-level settings/data intact (safer for future re-installs)
+     */
+    public function uninstall(): void
+    {
+        $em = Database::getManager();
+
+        $pluginRepo = Container::getPluginRepository();
+        $relRepo = Container::getAccessUrlRelPluginRepository();
+
+        $plugin = $pluginRepo->findOneByTitle($this->get_name());
+
+        if (!$plugin) {
+            return;
+        }
+
+        $rels = $relRepo->findBy(['plugin' => $plugin]);
+        foreach ($rels as $rel) {
+            $em->remove($rel);
+        }
+
+        $plugin->setInstalled(false);
+
+        $em->persist($plugin);
+        $em->flush();
     }
 
     public function canCurrentUserSeeGlobalConferenceLink(): bool

@@ -304,10 +304,6 @@ if (!empty($_GET['category'])) {
             break;
         case 'Plugins':
             echo '<div class="tab_wrapper">';
-            echo '<ul class="nav nav-tabs" id="tabs" role="tablist">';
-            echo '<li class="nav-item"><a id="plugin-tab-1" class="nav-link active" href="#tab1" aria-controls="tab1" aria-selected="true">'.get_lang('Plugins').'</a></li>';
-            echo '</ul>';
-
             echo '<div class="tab-content" id="tabs-content">';
             echo '<div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="plugin-tab-1">';
             handlePlugins();

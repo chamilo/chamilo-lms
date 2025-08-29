@@ -176,8 +176,8 @@ function handlePlugins()
             : '<span class="badge badge--default">'.get_lang('Not installed').'</span>';
 
         echo '<tr class="border-t border-gray-25 hover:bg-gray-15 transition duration-200">';
-        echo '<td class="p-3 font-medium">'.$plugin_info['title'].'</td>';
-        echo '<td class="p-3">'.$plugin_info['version'].'</td>';
+        echo '<td class="p-3 font-medium">'.htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES).'</td>';
+        echo '<td class="p-3">'.htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES).'</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
         echo '<td class="p-3 text-center">';
 
@@ -191,12 +191,12 @@ function handlePlugins()
             $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
             echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
-                    data-plugin="'.$pluginName.'" data-action="'.$toggleAction.'">
+                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="'.$toggleAction.'">
                     <i class="'.$toggleIcon.'"></i> '.$toggleText.'
                   </button>';
 
             echo '<button class="plugin-action btn btn--sm btn--danger"
-                    data-plugin="'.$pluginName.'" data-action="uninstall">
+                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="uninstall">
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
 
@@ -212,7 +212,7 @@ function handlePlugins()
             );
         } else {
             echo '<button class="plugin-action btn btn--sm btn--success"
-                    data-plugin="'.$pluginName.'" data-action="install">
+                    data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="install">
                     <i class="mdi mdi-download"></i> '.get_lang('Install').'
                   </button>';
         }
@@ -224,23 +224,91 @@ function handlePlugins()
 
     echo '</tbody></table>';
 
-    echo '<script>
-    $(document).ready(function () {
-        $(".plugin-action").click(function () {
-            var pluginName = $(this).data("plugin");
-            var action = $(this).data("action");
+    echo '<div id="page-loader" class="hidden fixed inset-0 bg-black/30 z-40">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-white text-sm text-center">
+                <i class="mdi mdi-loading mdi-spin text-3xl block mb-2"></i>
+                '.get_lang('Processing').'…
+              </div>
+            </div>
+          </div>';
 
-            $.post("'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php", { a: action, plugin: pluginName }, function(response) {
-                var data = JSON.parse(response);
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert("Error: " + data.error);
-                }
-            });
-        });
+    echo '<script>
+(function($){
+  function showToast(message, type) {
+    var bg = type === "success" ? "bg-green-600" : (type === "warning" ? "bg-yellow-600" : "bg-red-600");
+    var $toast = $("<div/>", {
+      class: "fixed top-4 right-4 z-50 text-white px-4 py-3 rounded shadow " + bg,
+      text: message
+    }).appendTo("body");
+    setTimeout(function(){ $toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
+  }
+
+  function actionLabel(a) {
+    switch(a){
+      case "install": return "'.get_lang('Installing').'";
+      case "uninstall": return "'.get_lang('Uninstalling').'";
+      case "enable": return "'.get_lang('Enabling').'";
+      case "disable": return "'.get_lang('Disabling').'";
+      default: return "'.get_lang('Processing').'";
+    }
+  }
+
+  function showPageLoader(show){
+    $("#page-loader").toggleClass("hidden", !show);
+  }
+
+  $(document).ready(function () {
+    $(".plugin-action").on("click", function () {
+      var $btn = $(this);
+      if ($btn.data("busy")) return;
+
+      var pluginName = $btn.data("plugin");
+      var action = $btn.data("action");
+      var originalHtml = $btn.html();
+
+      $btn.data("busy", true)
+          .attr("aria-busy", "true")
+          .addClass("opacity-60 cursor-not-allowed")
+          .html(\'<i class="mdi mdi-loading mdi-spin"></i> \' + actionLabel(action) + "...");
+      $.ajax({
+        type: "POST",
+        url: "'.api_get_path(WEB_AJAX_PATH).'plugin.ajax.php",
+        data: { a: action, plugin: pluginName },
+        dataType: "json",
+        timeout: 120000,
+        beforeSend: function(){
+          showToast(actionLabel(action) + "…", "warning");
+        },
+        success: function(data){
+          if (data && data.success) {
+            showToast("'.get_lang('Done').': " + action.toUpperCase(), "success");
+            setTimeout(function(){ location.reload(); }, 500);
+          } else {
+            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : "'.get_lang('Unknown error').'";
+            showToast("'.get_lang('Error').': " + msg, "error");
+            $btn.html(originalHtml);
+          }
+        },
+        error: function(xhr){
+          var msg = "'.get_lang('Request failed').'";
+          try {
+            var j = JSON.parse(xhr.responseText);
+            if (j && (j.error || j.message)) msg = j.error || j.message;
+          } catch(e) {}
+          showToast("'.get_lang('Error').': " + msg, "error");
+          $btn.html(originalHtml);
+        },
+        complete: function(){
+          $btn.data("busy", false)
+              .removeAttr("aria-busy")
+              .removeClass("opacity-60 cursor-not-allowed");
+        }
+      });
     });
-    </script>';
+  });
+})(jQuery);
+</script>';
 }
 
 /**

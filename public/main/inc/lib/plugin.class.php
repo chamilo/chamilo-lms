@@ -77,6 +77,18 @@ class Plugin
 
         global $language_files;
         $language_files[] = 'plugin_'.$this->get_name();
+
+        if ($this->isCoursePlugin) {
+            if (!isset($this->fields['defaultVisibilityInCourseHomepage'])) {
+                $this->fields['defaultVisibilityInCourseHomepage'] = [
+                    'type' => 'select',
+                    'options' => [
+                        'visible' => 'Visible',
+                        'hidden'  => 'Hidden',
+                    ],
+                ];
+            }
+        }
     }
 
     /**
@@ -639,12 +651,19 @@ class Plugin
      */
     public function install_course_fields_in_all_courses($add_tool_link = true)
     {
-        // Update existing courses to add plugin settings
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $table ORDER BY id";
+        $accessUrlId = api_get_current_access_url_id();
+
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableRel    = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $sql = "SELECT c.id
+            FROM $tableCourse c
+            INNER JOIN $tableRel r ON r.c_id = c.id
+            WHERE r.access_url_id = ".(int)$accessUrlId."
+            ORDER BY c.id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $this->install_course_fields($row['id'], $add_tool_link);
+            $this->install_course_fields((int)$row['id'], $add_tool_link);
         }
     }
 
@@ -653,13 +672,20 @@ class Plugin
      */
     public function uninstall_course_fields_in_all_courses()
     {
-        // Update existing courses to add conference settings
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id FROM $table
-                ORDER BY id";
+        $accessUrlId = api_get_current_access_url_id();
+
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableRel    = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $sql = "SELECT c.id
+            FROM $tableCourse c
+            INNER JOIN $tableRel r ON r.c_id = c.id
+            WHERE r.access_url_id = ".(int)$accessUrlId."
+            ORDER BY c.id";
+
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $this->uninstall_course_fields($row['id']);
+            $this->uninstall_course_fields((int)$row['id']);
         }
     }
 
@@ -960,7 +986,13 @@ class Plugin
      */
     public function isIconVisibleByDefault()
     {
-        return true;
+        $v = $this->get('defaultVisibilityInCourseHomepage');
+
+        if (null === $v) {
+            return true;
+        }
+
+        return in_array($v, ['visible', 'true', true, 1, '1'], true);
     }
 
     /**

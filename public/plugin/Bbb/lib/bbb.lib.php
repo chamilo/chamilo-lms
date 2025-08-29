@@ -543,18 +543,27 @@ class Bbb
         while ($status === false) {
             $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
 
-            if (is_array($result) && (string) ($result['returncode'] ?? '') === 'SUCCESS') {
+            if ((string)($result['returncode'] ?? '') === 'SUCCESS') {
                 if ($this->plugin->get('allow_regenerate_recording') === 'true' && !empty($result['internalMeetingID'])) {
                     $meeting->setInternalMeetingId($result['internalMeetingID']);
                     $em->flush();
                 }
-
                 return $this->joinMeeting($meetingName, true);
             }
 
-            // Break condition to avoid infinite loop if API keeps failing
+            if ((string)($result['returncode'] ?? '') === 'FAILED') {
+                if ((int)($result['httpCode'] ?? 0) === 413) {
+                    if ($this->debug) {
+                        error_log('BBB createMeeting failed (413): payload too large');
+                    }
+                } else if ($this->debug) {
+                    error_log('BBB createMeeting failed: '.json_encode($result));
+                }
+                break;
+            }
+
             if ($this->debug) {
-                error_log('BBB createMeeting failed, response: '.print_r($result, true));
+                error_log('BBB createMeeting unexpected response: '.print_r($result, true));
             }
             break;
         }

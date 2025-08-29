@@ -96,7 +96,48 @@ if ($bbb->pluginEnabled) {
                             }
                         }
 
+                        $maxTotalMb = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', api_get_course_info());
+                        if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
+
+                        $totalBytes = 0;
+                        if (!empty($_POST['documents']) && is_array($_POST['documents'])) {
+                            $docs = [];
+                            foreach ($_POST['documents'] as $raw) {
+                                $json = html_entity_decode($raw);
+                                $doc  = json_decode($json, true);
+                                if (!is_array($doc) || empty($doc['url'])) { continue; }
+                                $totalBytes += (int)($doc['size'] ?? 0);
+                                $docs[] = [
+                                    'url'         => $doc['url'],
+                                    'filename'    => $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH)),
+                                    'downloadable'=> true,
+                                    'removable'   => true,
+                                ];
+                            }
+
+                            if ($totalBytes > ($maxTotalMb * 1024 * 1024)) {
+                                $message = Display::return_message(
+                                    sprintf(get_lang('The total size of selected documents exceeds %d MB.'), $maxTotalMb),
+                                    'error'
+                                );
+                                $tpl->assign('message', $message);
+                                $tpl->assign('content', $message);
+                                $tpl->display_one_col_template();
+                                exit;
+                            }
+
+                            if (!empty($docs)) {
+                                $meetingParams['documents'] = $docs;
+                            }
+                        }
+
                         $url = $bbb->createMeeting($meetingParams);
+                        if (!$url) {
+                            $message = Display::return_message(
+                                get_lang('The selected documents exceed the upload limit of the video-conference server. Try fewer/smaller files or contact your administrator.'),
+                                'error'
+                            );
+                        }
                     }
                 }
 

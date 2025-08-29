@@ -8,6 +8,7 @@
 
 use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
+use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CourseBundle\Entity\CGroup;
 
 $course_plugin = 'bbb'; // Needed to load plugin lang variables.
@@ -435,51 +436,129 @@ $urlList = [];
 if ($conferenceManager && $allowToEdit) {
     $form = new FormValidator('start_conference', 'post', $conferenceUrl);
     $form->addElement('hidden', 'action', 'start');
-    $ajaxUrl = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents&'.api_get_cidreq();
+    $ajaxUrl     = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents&'.api_get_cidreq();
+    $maxTotalMb  = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', $courseInfo);
+    if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
 
-    // Pre-upload UI: fetch available course docs and render as checkboxes.
+    $title      = htmlspecialchars(get_lang('Pre-upload Documents'), ENT_QUOTES);
+    $help       = htmlspecialchars(get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.'), ENT_QUOTES);
+    $loadingTxt = htmlspecialchars(get_lang('Loading'), ENT_QUOTES);
+    $noDocsTxt  = htmlspecialchars(get_lang('No documents found'), ENT_QUOTES);
+    $failTxt    = htmlspecialchars(get_lang('Failed to load documents'), ENT_QUOTES);
+    $maxLabel   = htmlspecialchars(sprintf(get_lang('Max total: %d MB'), $maxTotalMb), ENT_QUOTES);
+
+    $iconHtml = Display::getMdiIcon(
+        ActionIcon::UPLOAD,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        $title
+    );
+
     $preuploadHtml = '
-    <details id="preupload-documents" class="mt-4 border rounded p-3 bg-gray-100">
-      <summary class="font-semibold cursor-pointer">'.get_lang('Pre-upload Documents').'</summary>
-      <div class="mt-2 text-gray-700">
-        <p class="text-sm mb-2">'.get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.').'</p>
-        <div id="preupload-list">'.get_lang('Loading').'…</div>
-      </div>
-    </details>
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var det = document.getElementById("preupload-documents");
-      if (!det) return;
-      det.addEventListener("toggle", function once() {
-        if (!det.open) return;
-        det.removeEventListener("toggle", once);
-        fetch("'.$ajaxUrl.'", {credentials:"same-origin"})
-          .then(function(r){ return r.json(); })
-          .then(function(docs){
-            var c = document.getElementById("preupload-list");
-            if (!Array.isArray(docs) || !docs.length) {
-              c.innerHTML = \'<p class="text-sm text-gray-500">'.addslashes(get_lang('No documents found.')).'</p>\';
-              return;
-            }
-            var filtered = docs.filter(function(doc){
-              return (doc.filename || "").match(/\\.(pdf|ppt|pptx|odp)$/i);
-            });
-            if (!filtered.length) {
-              c.innerHTML = \'<p class="text-sm text-gray-500">'.addslashes(get_lang('No documents found.')).'</p>\';
-              return;
-            }
-            c.innerHTML = filtered.map(function(doc){
-              var data = JSON.stringify({url:doc.url, filename:doc.filename}).replace(/"/g, "&quot;");
-              return \'<label class="block"><input type="checkbox" name="documents[]" value="\' + data + \'"> \' + (doc.filename || "") + \'</label>\';
-            }).join("");
-          })
-          .catch(function(){
-            document.getElementById("preupload-list").innerHTML =
-              \'<p class="text-sm text-red-500">'.addslashes(get_lang('Failed to load documents.')).'</p>\';
-          });
-      });
+<div class="bbb-preupload" style="position:relative;">
+  <button type="button" id="bbb-pre-btn"
+          class="btn btn--icon"
+          title="'.$title.'"
+          style="position:absolute; right:0; top:-8px;">
+    '.$iconHtml.'
+  </button>
+
+  <div id="bbb-pre-pop" class="hidden"
+       style="position:absolute; right:0; top:28px; z-index:50;
+              width:340px; background:#fff; border:1px solid #e5e7eb;
+              border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,.12);
+              padding:10px;">
+    <div class="text-sm" style="margin-bottom:6px; color:#475569;">'.$help.'</div>
+    <div id="preupload-list"
+         class="text-sm"
+         style="max-height:220px; overflow:auto; border:1px solid #eef2f7;
+                border-radius:6px; padding:8px; color:#0f172a;">
+      '.$loadingTxt.'…
+    </div>
+    <div class="text-xs" style="margin-top:6px; color:#64748b;">
+      '.$maxLabel.' — <span id="preupload-total">0</span> MB
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var btn   = document.getElementById("bbb-pre-btn");
+  var pop   = document.getElementById("bbb-pre-pop");
+  var list  = document.getElementById("preupload-list");
+  var loaded = false;
+  var ajax   = "'.$ajaxUrl.'";
+  var maxMb  = '.$maxTotalMb.';
+
+  function esc(t){
+    return String(t).replace(/[&<>\"\\\']/g, function(s){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;","\\\'":"&#39;"}[s];
     });
-    </script>';
+  }
+
+  function togglePop(){
+    if (pop.classList.contains("hidden")) {
+      pop.classList.remove("hidden");
+      if (!loaded) {
+        loaded = true;
+        fetch(ajax, {credentials:"same-origin"})
+          .then(function(r){ return r.json(); })
+          .then(renderList)
+          .catch(function(){
+            list.innerHTML = \'<p class="text-sm" style="color:#dc2626">'.$failTxt.'</p>\';
+          });
+      }
+    } else {
+      pop.classList.add("hidden");
+    }
+  }
+
+  function clickOutside(e){
+    if (!pop.contains(e.target) && !btn.contains(e.target)) {
+      pop.classList.add("hidden");
+    }
+  }
+
+  function renderList(docs){
+    var items = Array.isArray(docs) ? docs.filter(function(d){
+      return (d.filename||"").match(/\\.(pdf|ppt|pptx|odp)$/i);
+    }) : [];
+
+    if (!items.length) {
+      list.innerHTML = \'<p class="text-sm" style="color:#64748b">'.$noDocsTxt.'</p>\';
+      return;
+    }
+
+    list.innerHTML = items.map(function(doc){
+      var data = JSON.stringify({url:doc.url, filename:doc.filename, size:doc.size}).replace(/"/g,"&quot;");
+      return \'<label class="flex items-center gap-2" style="display:flex;align-items:center;gap:.5rem;margin:.25rem 0;">\'
+           + \'<input type="checkbox" class="h-4 w-4" name="documents[]" value="\' + data + \'" />\'
+           + \'<span class="truncate">\' + esc(doc.filename||"") + \'</span>\'
+           + \'</label>\';
+    }).join("");
+
+    list.addEventListener("change", recalcTotal, true);
+  }
+
+  function recalcTotal(){
+    var boxes = list.querySelectorAll(\'input[type="checkbox"]:checked\');
+    var total = 0;
+    boxes.forEach(function(b){
+      try { var o = JSON.parse(b.value.replace(/&quot;/g, \'"\')); total += (o.size||0); } catch(e){}
+    });
+    var mb = (total/1048576).toFixed(1);
+    var out = document.getElementById("preupload-total");
+    if (out) out.textContent = mb;
+
+    var submit = document.querySelector(\'form[name="start_conference"] [type="submit"]\');
+    if (submit) submit.disabled = (total > maxMb * 1048576);
+  }
+
+  if (btn) btn.addEventListener("click", togglePop);
+  document.addEventListener("click", clickOutside);
+})();
+</script>';
 
     $form->addElement('html', $preuploadHtml);
     $form->addElement(

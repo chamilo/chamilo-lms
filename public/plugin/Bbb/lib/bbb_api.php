@@ -38,6 +38,7 @@ Versions:
 */
 
 use BigBlueButton\BigBlueButton;
+use BigBlueButton\Exceptions\BadResponseException;
 use BigBlueButton\Parameters\Config\DocumentOptionsStore;
 use BigBlueButton\Parameters\CreateMeetingParameters;
 use BigBlueButton\Parameters\JoinMeetingParameters;
@@ -104,48 +105,66 @@ class BigBlueButtonBN
      */
     public function createMeetingWithXmlResponseArray(array $p): array
     {
-        $cp = new CreateMeetingParameters($p['meetingId'], $p['meetingName']);
-        $cp->setAttendeePassword($p['attendeePw']);
-        $cp->setModeratorPassword($p['moderatorPw']);
-        if (!empty($p['welcomeMsg']))  $cp->setWelcomeMessage($p['welcomeMsg']);
-        if (isset($p['dialNumber']))   $cp->setDialNumber($p['dialNumber']);
-        if (isset($p['voiceBridge']))  $cp->setVoiceBridge((int)$p['voiceBridge']);
-        if (isset($p['webVoice']))     $cp->setWebVoice($p['webVoice']);
-        if (isset($p['logoutUrl']))    $cp->setLogoutUrl($p['logoutUrl']);
-        if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
-        if (isset($p['record']))       $cp->setRecord((bool)$p['record']);
-        if (isset($p['duration']))     $cp->setDuration((int)$p['duration']);
+        try {
+            $cp = new CreateMeetingParameters($p['meetingId'], $p['meetingName']);
+            $cp->setAttendeePassword($p['attendeePw']);
+            $cp->setModeratorPassword($p['moderatorPw']);
+            if (!empty($p['welcomeMsg']))  $cp->setWelcomeMessage($p['welcomeMsg']);
+            if (isset($p['dialNumber']))   $cp->setDialNumber($p['dialNumber']);
+            if (isset($p['voiceBridge']))  $cp->setVoiceBridge((int)$p['voiceBridge']);
+            if (isset($p['webVoice']))     $cp->setWebVoice($p['webVoice']);
+            if (isset($p['logoutUrl']))    $cp->setLogoutUrl($p['logoutUrl']);
+            if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
+            if (isset($p['record']))       $cp->setRecord((bool)$p['record']);
+            if (isset($p['duration']))     $cp->setDuration((int)$p['duration']);
 
-        if (!empty($p['documents']) && is_array($p['documents'])) {
-            foreach ($p['documents'] as $doc) {
-                $options = new DocumentOptionsStore();
-                $options->addAttribute('removable', (bool) $doc['removable']);
-                $cp->addPresentation(
-                    $doc['filename'],
-                    file_get_contents($doc['url']),
-                    $doc['filename'],
-                    $options
-                );
-
+            if (!empty($p['documents']) && is_array($p['documents'])) {
+                foreach ($p['documents'] as $doc) {
+                    $opts = new DocumentOptionsStore();
+                    $opts->addAttribute('removable', (bool)($doc['removable'] ?? true));
+                    $cp->addPresentation(
+                        $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH) ?: 'document'),
+                        file_get_contents($doc['url']),
+                        $doc['filename'] ?? 'document',
+                        $opts
+                    );
+                }
             }
+
+            $r   = $this->client->createMeeting($cp);
+            $xml = $r->getRawXml();
+
+            return [
+                'returncode'           => (string)$xml->returncode,
+                'message'              => (string)$xml->message,
+                'messageKey'           => (string)$xml->messageKey,
+                'meetingId'            => (string)$xml->meetingID,
+                'attendeePw'           => (string)$xml->attendeePW,
+                'moderatorPw'          => (string)$xml->moderatorPW,
+                'hasBeenForciblyEnded' => (string)$xml->hasBeenForciblyEnded,
+                'createTime'           => (string)$xml->createTime,
+                'internalMeetingID'    => (string)$xml->internalMeetingID,
+            ];
+        } catch (BadResponseException $e) {
+            $http = 0;
+            if (preg_match('/HTTP code:\s*(\d+)/i', $e->getMessage(), $m)) {
+                $http = (int)$m[1];
+            }
+            return [
+                'returncode' => 'FAILED',
+                'messageKey' => $http === 413 ? 'requestEntityTooLarge' : 'badResponse',
+                'message'    => $http === 413
+                    ? 'One or more presentations exceed the upload limit on the video-conference server.'
+                    : $e->getMessage(),
+                'httpCode'   => $http,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'returncode' => 'FAILED',
+                'messageKey' => 'unexpectedError',
+                'message'    => $e->getMessage(),
+            ];
         }
-
-        /** @var CreateMeetingResponse $r */
-        $r   = $this->client->createMeeting($cp);
-        $xml = $r->getRawXml();
-
-        // Map XML fields to array
-        return [
-            'returncode'           => (string) $xml->returncode,
-            'message'              => (string) $xml->message,
-            'messageKey'           => (string) $xml->messageKey,
-            'meetingId'            => (string) $xml->meetingID,
-            'attendeePw'           => (string) $xml->attendeePW,
-            'moderatorPw'          => (string) $xml->moderatorPW,
-            'hasBeenForciblyEnded' => (string) $xml->hasBeenForciblyEnded,
-            'createTime'           => (string) $xml->createTime,
-            'internalMeetingID'    => (string) $xml->internalMeetingID,
-        ];
     }
 
     /**

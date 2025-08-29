@@ -90,10 +90,7 @@ const progressTextClass = computed(() => {
             <i class="mdi mdi-chart-box-outline text-xl" />
           </button>
           <button class="row-start-1 col-start-2 opacity-70 hover:opacity-100" :title="t('Visibility')" :aria-label="t('Visibility')" @click="emit('toggle-visible', lp)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" stroke-width="1.7"/>
-              <circle cx="12" cy="12" r="3" stroke-width="1.7"/>
-            </svg>
+            <i class="mdi mdi-eye-outline text-xl" />
           </button>
           <button
             class="row-start-1 col-start-3 opacity-70 hover:opacity-100"

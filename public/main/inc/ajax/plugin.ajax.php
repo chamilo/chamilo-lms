@@ -4,6 +4,8 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
 use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Entity\CDocument;
 
 /**
  * Responses to AJAX calls.
@@ -49,8 +51,97 @@ if ($action === 'md_to_html') {
     exit;
 }
 
+/**
+ * From here on, everything returns JSON.
+ */
 header('Content-Type: application/json; charset=utf-8');
 api_block_anonymous_users();
+
+if ($action === 'list_documents') {
+    try {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $courseId = api_get_course_int_id();
+        $isAdmin  = api_is_platform_admin();
+
+        // Require edit rights inside a course; otherwise only admins can list globally
+        if ($courseId > 0) {
+            if (!api_is_allowed_to_edit()) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Forbidden']);
+                exit;
+            }
+        } else {
+            if (!$isAdmin) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Forbidden (admin required for global listing)']);
+                exit;
+            }
+        }
+
+        $em   = Database::getManager();
+        $repo = $em->getRepository(ResourceNode::class);
+
+        $qb = $em->createQueryBuilder()
+            ->select('DISTINCT d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->innerJoin('rn.resourceFiles', 'rf')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('d.filetype = :type')
+            ->setParameter('type', 'file');
+
+        if ($courseId > 0) {
+            $qb->andWhere('IDENTITY(rl.course) = :cId')
+                ->setParameter('cId', (int)$courseId);
+        }
+
+        $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
+        $limit = max(1, min($limit, 2000));
+        $qb->setMaxResults($limit)
+            ->orderBy('d.iid', 'DESC');
+
+        $docs = $qb->getQuery()->getResult();
+        $out  = [];
+
+        $sysBase = rtrim(str_replace('/public/', '', api_get_path(SYS_PATH)), '/');
+        foreach ($docs as $doc) {
+            $files = $doc->getResourceNode()->getResourceFiles();
+            if ($files->isEmpty()) {
+                continue;
+            }
+
+            $file = $files->first();
+            $orig = $file->getOriginalName();
+            $ext  = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
+            if (!in_array($ext, ['pdf','ppt','pptx','odp'], true)) {
+                continue;
+            }
+
+            $relPath  = $repo->getFilename($file); // e.g. "/a1/b2/file.pdf"
+            $diskPath = $sysBase . '/var/upload/resource' . $relPath;
+
+            // Only list entries that truly exist on disk
+            if (!is_file($diskPath) || !is_readable($diskPath)) {
+                continue;
+            }
+
+            $out[] = [
+                'id'       => $doc->getIid(),
+                'url'      => $diskPath,
+                'filename' => $orig,
+                'size'     => @filesize($diskPath) ?: null,
+            ];
+        }
+
+        echo json_encode($out);
+    } catch (\Throwable $e) {
+        error_log('[plugin.ajax list_documents] '.$e->getMessage());
+        http_response_code(500);
+        echo json_encode(['error' => 'Internal error']);
+    }
+    exit;
+}
 
 try {
     if (!api_is_platform_admin()) {
@@ -165,6 +256,7 @@ try {
                 }
             }
 
+            // If it is a course plugin, propagate enable/disable to all courses
             if ($instance && !empty($instance->isCoursePlugin)) {
                 if ($action === 'enable') {
                     $instance->install_course_fields_in_all_courses(true);

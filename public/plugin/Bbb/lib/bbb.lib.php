@@ -41,6 +41,7 @@ class Bbb
     private $sessionId;
     private $groupId;
     private $maxUsersLimit;
+    private $urlWithProtocol = '';
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -144,16 +145,54 @@ class Bbb
                 $urlWithProtocol = $this->protocol.$bbb_host;
             }
 
-            // Setting BBB api
-            define('CONFIG_SECURITY_SALT', $this->salt);
-            define('CONFIG_SERVER_URL_WITH_PROTOCOL', $urlWithProtocol);
-            define('CONFIG_SERVER_BASE_URL', $this->url);
-            define('CONFIG_SERVER_PROTOCOL', $this->protocol);
+            // Normalize final URL with protocol to the /bigbluebutton/ endpoint
+            if (!str_ends_with($urlWithProtocol, '/bigbluebutton/')) {
+                $urlWithProtocol = rtrim($urlWithProtocol, '/').'/bigbluebutton/';
+            }
+            $this->urlWithProtocol = $urlWithProtocol;
 
-            $this->api = new BigBlueButtonBN();
-            $this->pluginEnabled = true;
+            // Define constants safely (optional legacy compatibility)
+            if (!defined('CONFIG_SERVER_BASE_URL')) {
+                define('CONFIG_SERVER_BASE_URL', $this->url);
+            }
+            if (!defined('CONFIG_SERVER_PROTOCOL')) {
+                define('CONFIG_SERVER_PROTOCOL', $this->protocol);
+            }
+            if (!defined('CONFIG_SERVER_URL_WITH_PROTOCOL')) {
+                define('CONFIG_SERVER_URL_WITH_PROTOCOL', $this->urlWithProtocol);
+            }
+            if (!defined('CONFIG_SECURITY_SALT')) {
+                // IMPORTANT: use $this->salt, not $this->securitySalt
+                define('CONFIG_SECURITY_SALT', (string) $this->salt);
+            }
+
+            // Initialize API object only if we have both URL and salt
+            if (!empty($this->urlWithProtocol) && !empty($this->salt)) {
+                $this->api = new BigBlueButtonBN($this->urlWithProtocol, $this->salt);
+                $this->pluginEnabled = true;
+            } else {
+                $this->api = null;
+                $this->pluginEnabled = false;
+            }
+
             $this->logoutUrl = $this->getListingUrl();
         }
+    }
+
+    private function ensureApi(): bool
+    {
+        if ($this->api instanceof BigBlueButtonBN) {
+            return true;
+        }
+        $url = $this->urlWithProtocol ?: (defined('CONFIG_SERVER_URL_WITH_PROTOCOL') ? constant('CONFIG_SERVER_URL_WITH_PROTOCOL') : '');
+        $salt = $this->salt ?: (defined('CONFIG_SECURITY_SALT') ? constant('CONFIG_SECURITY_SALT') : '');
+
+        if ($url && $salt) {
+            $this->api = new BigBlueButtonBN($url, $salt);
+            return $this->api instanceof BigBlueButtonBN;
+        }
+
+        return false;
     }
 
     /**
@@ -376,36 +415,48 @@ class Bbb
      */
     public function createMeeting($params)
     {
-        $params['c_id'] = api_get_course_int_id();
-        $params['session_id'] = api_get_session_id();
+        // Ensure API is available
+        if (!$this->ensureApi()) {
+            if ($this->debug) {
+                error_log('BBB API not initialized in createMeeting().');
+            }
+            return false;
+        }
+
+        // Normalize input
+        $params = is_array($params) ? $params : [];
+
+        // Context defaults
+        $params['c_id']       = $params['c_id']       ?? api_get_course_int_id();
+        $params['session_id'] = $params['session_id'] ?? api_get_session_id();
 
         if ($this->hasGroupSupport()) {
-            $params['group_id'] = api_get_group_id();
+            $params['group_id'] = $params['group_id'] ?? api_get_group_id();
         }
 
         if ($this->isGlobalConferencePerUserEnabled() && !empty($this->userId)) {
             $params['user_id'] = (int) $this->userId;
         }
 
-        $params['attendee_pw'] = $params['attendee_pw'] ?? $this->getUserMeetingPassword();
-        $attendeePassword = $params['attendee_pw'];
+        // Passwords
+        $params['attendee_pw']  = $params['attendee_pw']  ?? $this->getUserMeetingPassword();
         $params['moderator_pw'] = $params['moderator_pw'] ?? $this->getModMeetingPassword();
-        $moderatorPassword = $params['moderator_pw'];
+        $attendeePassword  = (string) $params['attendee_pw'];
+        $moderatorPassword = (string) $params['moderator_pw'];
 
+        // Recording and limits
         $params['record'] = api_get_course_plugin_setting('bbb', 'big_blue_button_record_and_store') == 1 ? 1 : 0;
         $max = api_get_course_plugin_setting('bbb', 'big_blue_button_max_students_allowed');
-        $max = isset($max) ? $max : -1;
+        $max = isset($max) ? (int) $max : -1;
 
-        $params['status'] = 1;
-        // Generate a pseudo-global-unique-id to avoid clash of conferences on
-        // the same BBB server with several Chamilo portals
-        $params['remote_id'] = uniqid(true, true);
-        // Each simultaneous conference room needs to have a different
-        // voice_bridge composed of a 5 digits number, so generating a random one
-        $params['voice_bridge'] = rand(10000, 99999);
-        $params['created_at'] = api_get_utc_datetime();
-        $params['access_url'] = $this->accessUrl;
+        // Meeting identifiers
+        $params['status']     = 1;
+        $params['remote_id']  = $params['remote_id']  ?? uniqid(true, true);
+        $params['voice_bridge']= $params['voice_bridge'] ?? rand(10000, 99999);
+        $params['created_at'] = $params['created_at'] ?? api_get_utc_datetime();
+        $params['access_url'] = $params['access_url'] ?? $this->accessUrl;
 
+        // Persist meeting entity
         $em = Database::getManager();
         $meeting = new ConferenceMeeting();
 
@@ -414,7 +465,7 @@ class Bbb
             ->setSession(api_get_session_entity($params['session_id']))
             ->setAccessUrl(api_get_url_entity($params['access_url']))
             ->setGroup($this->hasGroupSupport() ? api_get_group_entity($params['group_id']) : null)
-            ->setUser($this->isGlobalConferencePerUserEnabled() ? api_get_user_entity($params['user_id']) : null)
+            ->setUser($this->isGlobalConferencePerUserEnabled() ? api_get_user_entity($params['user_id'] ?? 0) : null)
             ->setRemoteId($params['remote_id'])
             ->setTitle($params['meeting_name'] ?? $this->getCurrentVideoConferenceName())
             ->setAttendeePw($attendeePassword)
@@ -442,42 +493,70 @@ class Bbb
             api_get_session_id()
         );
 
+        // Compute BBB params
         $meetingName = $meeting->getTitle();
-        $record = $meeting->isRecord() ? 'true' : 'false';
-        $duration = 300;
+        $record      = $meeting->isRecord() ? 'true' : 'false';
+        $duration    = 300;
         $meetingDuration = (int) $this->plugin->get('meeting_duration');
         if (!empty($meetingDuration)) {
             $duration = $meetingDuration;
         }
 
+        // Normalize optional "documents" to avoid undefined index warnings
+        $documents = [];
+        if (!empty($params['documents']) && is_array($params['documents'])) {
+            foreach ($params['documents'] as $doc) {
+                if (!is_array($doc)) {
+                    continue;
+                }
+                $url = $doc['url'] ?? null;
+                if (!$url) {
+                    continue;
+                }
+                $documents[] = [
+                    'url'          => (string) $url,
+                    'filename'     => $doc['filename'] ?? (basename(parse_url($url, PHP_URL_PATH) ?: 'document')),
+                    'downloadable' => array_key_exists('downloadable', $doc) ? (bool) $doc['downloadable'] : true,
+                    'removable'    => array_key_exists('removable', $doc) ? (bool) $doc['removable'] : true,
+                ];
+            }
+        }
+
         $bbbParams = [
-            'meetingId' => $meeting->getRemoteId(),
-            'meetingName' => $meetingName,
-            'attendeePw' => $attendeePassword,
-            'moderatorPw' => $moderatorPassword,
-            'welcomeMsg' => $meeting->getWelcomeMsg(),
-            'dialNumber' => '',
-            'voiceBridge' => $meeting->getVoiceBridge(),
-            'webVoice' => '',
-            'logoutUrl' => $this->logoutUrl . '&action=logout&remote_id=' . $meeting->getRemoteId(),
+            'meetingId'       => $meeting->getRemoteId(),
+            'meetingName'     => $meetingName,
+            'attendeePw'      => $attendeePassword,
+            'moderatorPw'     => $moderatorPassword,
+            'welcomeMsg'      => $meeting->getWelcomeMsg(),
+            'dialNumber'      => '',
+            'voiceBridge'     => $meeting->getVoiceBridge(),
+            'webVoice'        => '',
+            'logoutUrl'       => $this->logoutUrl . '&action=logout&remote_id=' . $meeting->getRemoteId(),
             'maxParticipants' => $max,
-            'record' => $record,
-            'duration' => $duration,
+            'record'          => $record,
+            'duration'        => $duration,
+            'documents'       => $documents, // safe default (empty array) if none provided
         ];
 
+        // Try to create meeting until success (kept as in original logic)
         $status = false;
-        $finalMeetingUrl = null;
-
         while ($status === false) {
             $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
-            if (isset($result) && strval($result['returncode']) === 'SUCCESS') {
-                if ($this->plugin->get('allow_regenerate_recording') === 'true') {
+
+            if (is_array($result) && (string) ($result['returncode'] ?? '') === 'SUCCESS') {
+                if ($this->plugin->get('allow_regenerate_recording') === 'true' && !empty($result['internalMeetingID'])) {
                     $meeting->setInternalMeetingId($result['internalMeetingID']);
                     $em->flush();
                 }
 
                 return $this->joinMeeting($meetingName, true);
             }
+
+            // Break condition to avoid infinite loop if API keeps failing
+            if ($this->debug) {
+                error_log('BBB createMeeting failed, response: '.print_r($result, true));
+            }
+            break;
         }
 
         return false;
@@ -566,6 +645,12 @@ class Bbb
      */
     public function joinMeeting($meetingName)
     {
+        if (!$this->ensureApi()) {
+            if ($this->debug) {
+                error_log('BBB API not initialized in joinMeeting().');
+            }
+            return false;
+        }
         if ($this->debug) {
             error_log("joinMeeting: $meetingName");
         }
@@ -636,9 +721,15 @@ class Bbb
                 'username' => $this->userCompleteName,
                 'password' => $pass,
                 'userID' => api_get_user_id(),
+                'moderatorPw' => $this->getModMeetingPassword(),
+                'userID'      => api_get_user_id(),
                 'webVoiceConf' => '',
             ];
             $url = $this->api->getJoinMeetingURL($joinParams);
+            if (preg_match('#^https?://#i', $url)) {
+                return $url;
+            }
+
             return $this->protocol . $url;
         }
 
@@ -705,21 +796,29 @@ class Bbb
     public function getMeetingInfo($params)
     {
         try {
+            // Guard against null API
+            if (!$this->ensureApi()) {
+                if ($this->debug) {
+                    error_log('BBB API not initialized (missing URL or salt).');
+                }
+                return false;
+            }
+
             $result = $this->api->getMeetingInfoWithXmlResponseArray($params);
             if ($result == null) {
                 if ($this->debug) {
                     error_log("Failed to get any response. Maybe we can't contact the BBB server.");
                 }
+                return false;
             }
 
             return $result;
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             if ($this->debug) {
-                error_log('Caught exception: ', $e->getMessage(), "\n");
+                error_log('BBB getMeetingInfo error: '.$e->getMessage());
             }
+            return false;
         }
-
-        return false;
     }
 
 
@@ -964,6 +1063,13 @@ class Bbb
         $isAdminReport = false,
         $dateRange = []
     ) {
+        if (!$this->ensureApi()) {
+            if ($this->debug) {
+                error_log('BBB API not initialized in getMeetings().');
+            }
+            return [];
+        }
+
         $em = Database::getManager();
         $repo = $em->getRepository(ConferenceMeeting::class);
         $manager = $this->isConferenceManager();

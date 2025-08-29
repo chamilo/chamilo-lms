@@ -28,6 +28,8 @@ $pluginConfiguration = $plugin->getConfigurationsByAccessUrl($accessUrl);
 
 $appPlugin = new AppPlugin();
 $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true);
+$prevDefaultVis = $pluginInfo['settings']['defaultVisibilityInCourseHomepage'] ?? null;
+$prevToolEnable = $pluginInfo['settings']['tool_enable'] ?? null;
 
 $em = Container::getEntityManager();
 
@@ -79,6 +81,27 @@ if (isset($form)) {
             api_get_utc_datetime(),
             api_get_user_id()
         );
+
+        $newDefaultVis = $values['defaultVisibilityInCourseHomepage'] ?? $prevDefaultVis;
+        $newToolEnable = $values['tool_enable'] ?? $prevToolEnable;
+        $toBool = fn($v) => in_array($v, ['1', 1, true, 'true', 'on'], true);
+        $prevEnabled = $toBool($prevToolEnable);
+        $newEnabled  = $toBool($newToolEnable);
+
+        $objPlugin->get_settings(true);
+        if (!empty($objPlugin->isCoursePlugin)) {
+            $didToggle = ($newEnabled !== $prevEnabled);
+            if ($didToggle) {
+                if ($newEnabled) {
+                    $objPlugin->install_course_fields_in_all_courses();
+                } else {
+                    $objPlugin->uninstall_course_fields_in_all_courses();
+                }
+            } elseif ($newEnabled && $newDefaultVis !== $prevDefaultVis) {
+                    $objPlugin->uninstall_course_fields_in_all_courses();
+                    $objPlugin->install_course_fields_in_all_courses();
+            }
+        }
 
         $objPlugin->performActionsAfterConfigure();
 

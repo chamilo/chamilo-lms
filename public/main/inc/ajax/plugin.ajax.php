@@ -59,17 +59,24 @@ api_block_anonymous_users();
 
 if ($action === 'list_documents') {
     try {
-        $courseId = api_get_course_int_id();
-        if ($courseId <= 0) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Course context required']);
-            exit;
-        }
+        header('Content-Type: application/json; charset=utf-8');
 
-        if (!api_is_allowed_to_edit()) {
-            http_response_code(403);
-            echo json_encode(['error' => 'Forbidden']);
-            exit;
+        $courseId = api_get_course_int_id();
+        $isAdmin  = api_is_platform_admin();
+
+        // Require edit rights inside a course; otherwise only admins can list globally
+        if ($courseId > 0) {
+            if (!api_is_allowed_to_edit()) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Forbidden']);
+                exit;
+            }
+        } else {
+            if (!$isAdmin) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Forbidden (admin required for global listing)']);
+                exit;
+            }
         }
 
         $em   = Database::getManager();
@@ -82,13 +89,22 @@ if ($action === 'list_documents') {
             ->innerJoin('rn.resourceFiles', 'rf')
             ->innerJoin('rn.resourceLinks', 'rl')
             ->where('d.filetype = :type')
-            ->andWhere('rl.course = :c')
-            ->setParameter('type', 'file')
-            ->setParameter('c', $courseId);
+            ->setParameter('type', 'file');
+
+        if ($courseId > 0) {
+            $qb->andWhere('IDENTITY(rl.course) = :cId')
+                ->setParameter('cId', (int)$courseId);
+        }
+
+        $limit = isset($_GET['limit']) ? (int) $_GET['limit'] : 500;
+        $limit = max(1, min($limit, 2000));
+        $qb->setMaxResults($limit)
+            ->orderBy('d.iid', 'DESC');
 
         $docs = $qb->getQuery()->getResult();
         $out  = [];
 
+        $sysBase = rtrim(str_replace('/public/', '', api_get_path(SYS_PATH)), '/');
         foreach ($docs as $doc) {
             $files = $doc->getResourceNode()->getResourceFiles();
             if ($files->isEmpty()) {
@@ -98,19 +114,23 @@ if ($action === 'list_documents') {
             $file = $files->first();
             $orig = $file->getOriginalName();
             $ext  = strtolower(pathinfo($orig, PATHINFO_EXTENSION));
-            if (!in_array($ext, ['pdf', 'ppt', 'pptx', 'odp'], true)) {
+            if (!in_array($ext, ['pdf','ppt','pptx','odp'], true)) {
                 continue;
             }
 
-            // System path (current behavior). Replace with a signed absolute URL if needed.
-            $path    = '/var/upload/resource' . $repo->getFilename($file);
-            $base    = str_replace('/public/', '', api_get_path(SYS_PATH));
-            $sysPath = $base . $path;
+            $relPath  = $repo->getFilename($file); // e.g. "/a1/b2/file.pdf"
+            $diskPath = $sysBase . '/var/upload/resource' . $relPath;
+
+            // Only list entries that truly exist on disk
+            if (!is_file($diskPath) || !is_readable($diskPath)) {
+                continue;
+            }
 
             $out[] = [
                 'id'       => $doc->getIid(),
-                'url'      => $sysPath,
+                'url'      => $diskPath,
                 'filename' => $orig,
+                'size'     => @filesize($diskPath) ?: null,
             ];
         }
 

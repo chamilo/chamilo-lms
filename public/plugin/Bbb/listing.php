@@ -10,11 +10,11 @@ use Chamilo\CoreBundle\Entity\ConferenceActivity;
 use Chamilo\CoreBundle\Entity\ConferenceMeeting;
 use Chamilo\CourseBundle\Entity\CGroup;
 
-$course_plugin = 'bbb'; //needed in order to load the plugin lang variables
+$course_plugin = 'bbb'; // Needed to load plugin lang variables.
 $isGlobal = isset($_GET['global']) ? true : false;
 $isGlobalPerUser = isset($_GET['user_id']) ? (int) $_GET['user_id'] : false;
 
-// If global setting is used then we delete the course sessions (cidReq/id_session)
+// If global setting is used then we delete the course sessions (cidReq/id_session).
 if ($isGlobalPerUser || $isGlobal) {
     $cidReset = true;
 }
@@ -36,8 +36,10 @@ $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 $course = api_get_course_entity();
 
+// Instantiate BBB helper (it should lazy-initialize the underlying API internally).
 $bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
 
+// Basic access control: global conferences require authenticated users, otherwise protect course context.
 $conferenceManager = $bbb->isConferenceManager();
 if ($bbb->isGlobalConference()) {
     api_block_anonymous_users();
@@ -45,13 +47,10 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
+// Allow students to start conferences in groups if course setting allows it.
 $allowStudentAsConferenceManager = false;
 if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
-    $groupEnabled = '1' === api_get_course_plugin_setting(
-            'bbb',
-            'bbb_enable_conference_in_groups',
-            $courseInfo
-        );
+    $groupEnabled = '1' === api_get_course_plugin_setting('bbb', 'bbb_enable_conference_in_groups', $courseInfo);
     if ($groupEnabled) {
         $group = api_get_group_entity($groupId);
         $isSubscribed = GroupManager::isUserInGroup(api_get_user_id(), $group);
@@ -65,8 +64,8 @@ if (!empty($courseInfo) && !empty($groupId) && !api_is_allowed_to_edit()) {
     }
 }
 
+// Only conference managers can edit, unless student-start-in-groups is enabled (then still disable edit UI).
 $allowToEdit = $conferenceManager;
-// Disable students edit permissions.
 if ($allowStudentAsConferenceManager) {
     $allowToEdit = false;
 }
@@ -82,12 +81,12 @@ if ($conferenceManager && $allowToEdit) {
             }
             $courseInfo = api_get_course_info();
             $agenda = new Agenda('course');
-            $id = (int) $_GET['id'];
+            $id = (int) ($_GET['id'] ?? 0);
             $title = sprintf($plugin->get_lang('VideoConferenceXCourseX'), $id, $course->getTitle());
-            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url']);
+            $content = Display::url($plugin->get_lang('GoToTheVideoConference'), $_GET['url'] ?? '#');
 
             $eventId = $agenda->addEvent(
-                $_REQUEST['start'],
+                $_REQUEST['start'] ?? null,
                 null,
                 'true',
                 $title,
@@ -101,7 +100,7 @@ if ($conferenceManager && $allowToEdit) {
             }
             break;
         case 'copy_record_to_link_tool':
-            $result = $bbb->copyRecordingToLinkTool($_GET['id']);
+            $result = $bbb->copyRecordingToLinkTool($_GET['id'] ?? '');
             if ($result) {
                 $message = Display::return_message($plugin->get_lang('VideoConferenceAddedToTheLinkTool'), 'success');
             } else {
@@ -112,8 +111,8 @@ if ($conferenceManager && $allowToEdit) {
             if ('true' !== $plugin->get('allow_regenerate_recording')) {
                 api_not_allowed(true);
             }
-            $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
-            $result = $bbb->regenerateRecording($_GET['id'], $recordId);
+            $recordId = $_GET['record_id'] ?? '';
+            $result = $bbb->regenerateRecording($_GET['id'] ?? '', $recordId);
             if ($result) {
                 $message = Display::return_message(get_lang('Success'), 'success');
             } else {
@@ -123,9 +122,9 @@ if ($conferenceManager && $allowToEdit) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         case 'delete_record':
-            $result = $bbb->deleteRecording($_GET['id']);
+            $result = $bbb->deleteRecording($_GET['id'] ?? '');
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
@@ -135,15 +134,16 @@ if ($conferenceManager && $allowToEdit) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         case 'end':
-            $bbb->endMeeting($_GET['id']);
+            $bbb->endMeeting($_GET['id'] ?? '');
             $message = Display::return_message(
                 $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang('MeetingClosedComment'),
                 'success',
                 false
             );
 
+            // Optional VM autoscaling (if configured).
             if (file_exists(__DIR__.'/config.vm.php')) {
                 require __DIR__.'/../../vendor/autoload.php';
                 require __DIR__.'/lib/vm/AbstractVM.php';
@@ -159,27 +159,27 @@ if ($conferenceManager && $allowToEdit) {
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         case 'publish':
-            $bbb->publishMeeting($_GET['id']);
+            $bbb->publishMeeting($_GET['id'] ?? '');
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         case 'unpublish':
-            $bbb->unpublishMeeting($_GET['id']);
+            $bbb->unpublishMeeting($_GET['id'] ?? '');
             Display::addFlash(Display::return_message(get_lang('Updated')));
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         case 'logout':
             if ('true' === $plugin->get('allow_regenerate_recording')) {
                 $setting = api_get_course_plugin_setting('bbb', 'bbb_force_record_generation', $courseInfo);
-                $allow = 1 == $setting ? true : false;
+                $allow = (int) $setting === 1;
                 if ($allow) {
-                    $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
+                    $result = $bbb->getMeetingByRemoteId($_GET['remote_id'] ?? '');
                     if (!empty($result)) {
-                        $result = $bbb->regenerateRecording($result['id']);
+                        $result = $bbb->regenerateRecording($result['id'] ?? null);
                         if ($result) {
                             Display::addFlash(Display::return_message(get_lang('Success')));
                         } else {
@@ -189,7 +189,7 @@ if ($conferenceManager && $allowToEdit) {
                 }
             }
 
-            $remoteId = Database::escape_string($_GET['remote_id']);
+            $remoteId = Database::escape_string($_GET['remote_id'] ?? '');
             $meetingData = $meetingRepository->findOneByRemoteIdAndAccessUrl($remoteId, api_get_current_access_url_id());
 
             if (empty($meetingData) || !is_array($meetingData)) {
@@ -197,77 +197,75 @@ if ($conferenceManager && $allowToEdit) {
             } else {
                 $meetingId = $meetingData['id'];
 
-                // If creator -> update
-                if ($meetingData['user_id'] == api_get_user_id()) {
+                // If creator -> update room activity tracking.
+                if (($meetingData['user_id'] ?? 0) == api_get_user_id()) {
                     $pass = $bbb->getModMeetingPassword($courseCode);
 
-                    $meetingBBB = $bbb->getMeetingInfo(
-                        [
-                            'meetingId' => $remoteId,
-                            'password' => $pass,
-                        ]
-                    );
+                    $meetingBBB = $bbb->getMeetingInfo([
+                        'meetingId' => $remoteId,
+                        'password' => $pass,
+                    ]);
 
                     if (false === $meetingBBB) {
-                        //checking with the remote_id didn't work, so just in case and
-                        // to provide backwards support, check with the id
+                        // Backward support using internal meeting id.
                         $params = [
                             'meetingId' => $meetingId,
-                            //  -- REQUIRED - The unique id for the meeting
                             'password' => $pass,
-                            //  -- REQUIRED - The moderator password for the meeting
                         ];
                         $meetingBBB = $bbb->getMeetingInfo($params);
                     }
 
-                    if (!empty($meetingBBB)) {
-                        if (isset($meetingBBB['returncode'])) {
-                            $status = (string) $meetingBBB['returncode'];
-                            switch ($status) {
-                                case 'FAILED':
-                                    $bbb->endMeeting($meetingId, $courseCode);
-                                    break;
-                                case 'SUCCESS':
-                                    $i = 0;
-                                    while ($i < $meetingBBB['participantCount']) {
-                                        $participantId = $meetingBBB[$i]['userId'];
-                                        $qb = $activityRepo->createQueryBuilder('a')
-                                            ->where('a.meeting = :meetingId')
-                                            ->andWhere('a.participant = :participantId')
-                                            ->andWhere('a.close = :close')
-                                            ->orderBy('a.id', 'DESC')
-                                            ->setMaxResults(1)
-                                            ->setParameters([
-                                                'meetingId' => $meetingId,
-                                                'participantId' => $participantId,
-                                                'close' => \BbbPlugin::ROOM_OPEN,
-                                            ]);
+                    if (!empty($meetingBBB) && isset($meetingBBB['returncode'])) {
+                        $status = (string) $meetingBBB['returncode'];
+                        switch ($status) {
+                            case 'FAILED':
+                                $bbb->endMeeting($meetingId, $courseCode);
+                                break;
 
-                                        $result = $qb->getQuery()->getArrayResult();
-                                        $roomData = $result[0] ?? null;
+                            case 'SUCCESS':
+                                // Close last open activity records for all participants.
+                                $count = (int) ($meetingBBB['participantCount'] ?? 0);
+                                for ($i = 0; $i < $count; $i++) {
+                                    $participantId = $meetingBBB[$i]['userId'] ?? null;
+                                    if ($participantId === null) {
+                                        continue;
+                                    }
 
-                                        if (!empty($roomData)) {
-                                            $roomId = $roomData['id'];
-                                            if (!empty($roomId)) {
-                                                $activity = $activityRepo->find($roomId);
-                                                if ($activity) {
-                                                    $activity->setOutAt(new \DateTime());
-                                                    $em->flush();
-                                                }
+                                    $qb = $activityRepo->createQueryBuilder('a')
+                                        ->where('a.meeting = :meetingId')
+                                        ->andWhere('a.participant = :participantId')
+                                        ->andWhere('a.close = :close')
+                                        ->orderBy('a.id', 'DESC')
+                                        ->setMaxResults(1)
+                                        ->setParameters([
+                                            'meetingId' => $meetingId,
+                                            'participantId' => $participantId,
+                                            'close' => BbbPlugin::ROOM_OPEN,
+                                        ]);
+
+                                    $result = $qb->getQuery()->getArrayResult();
+                                    $roomData = $result[0] ?? null;
+
+                                    if (!empty($roomData)) {
+                                        $roomId = $roomData['id'] ?? null;
+                                        if (!empty($roomId)) {
+                                            $activity = $activityRepo->find($roomId);
+                                            if ($activity instanceof ConferenceActivity) {
+                                                $activity->setOutAt(new \DateTime());
+                                                $em->flush();
                                             }
                                         }
-                                        $i++;
                                     }
-                                    break;
-                            }
+                                }
+                                break;
                         }
                     }
                 }
 
-                // Update out_at field of user
+                // Update out_at field for current user.
                 $roomData = $activityRepo->findOneArrayByMeetingAndParticipant($meetingId, $userId);
                 if (!empty($roomData)) {
-                    $roomId = $roomData['id'];
+                    $roomId = $roomData['id'] ?? null;
                     if (!empty($roomId)) {
                         $activity = $activityRepo->find($roomId);
                         if ($activity instanceof ConferenceActivity) {
@@ -288,14 +286,14 @@ if ($conferenceManager && $allowToEdit) {
 
             header('Location: '.$bbb->getListingUrl());
             exit;
-            break;
+
         default:
             break;
     }
 } else {
+    // Non-manager logout path: close any open activity for the user.
     if ('logout' == $action) {
-        // Update out_at field of user
-        $remoteId = Database::escape_string($_GET['remote_id']);
+        $remoteId = Database::escape_string($_GET['remote_id'] ?? '');
         $meetingData = $meetingRepository->findOneByRemoteIdAndAccessUrl($remoteId, api_get_current_access_url_id());
 
         if (empty($meetingData) || !is_array($meetingData)) {
@@ -338,28 +336,29 @@ if ($conferenceManager && $allowToEdit) {
     }
 }
 
-$meetings = $bbb->getMeetings(
-    api_get_course_int_id(),
-    api_get_session_id(),
-    $groupId
-);
+// Safely fetch meetings (BBB helper should return array or empty on failure).
+$meetings = $bbb->getMeetings(api_get_course_int_id(), api_get_session_id(), $groupId);
+if (!is_array($meetings)) {
+    $meetings = [];
+}
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-$usersOnline = $bbb->getUsersOnlineInCurrentRoom();
-$maxUsers = $bbb->getMaxUsersLimit();
-$status = $bbb->isServerRunning();
-$videoConferenceName = $bbb->getCurrentVideoConferenceName();
-$meetingExists = $bbb->meetingExists($videoConferenceName);
-$showJoinButton = false;
 
-// Only conference manager can see the join button
+// Defensive casting for UI counters.
+$usersOnline = (int) $bbb->getUsersOnlineInCurrentRoom();
+$maxUsers = (int) $bbb->getMaxUsersLimit();
+$status = (bool) $bbb->isServerRunning();
+
+$videoConferenceName = (string) $bbb->getCurrentVideoConferenceName();
+$meetingExists = $bbb->meetingExists($videoConferenceName) ? true : false;
+
+$showJoinButton = false;
+// Only conference manager can see the join button (except global-per-user mode).
 $userCanSeeJoinButton = $conferenceManager;
 if ($bbb->isGlobalConference() && $bbb->isGlobalConferencePerUserEnabled()) {
-    // Any user can see the "join button" BT#12620
     $userCanSeeJoinButton = true;
 }
-
 if (($meetingExists || $userCanSeeJoinButton) && (0 == $maxUsers || $maxUsers > $usersOnline)) {
     $showJoinButton = true;
 }
@@ -367,9 +366,11 @@ $conferenceUrl = $bbb->getConferenceUrl();
 $courseInfo = api_get_course_info();
 $formToString = '';
 
-if (false === $bbb->isGlobalConference() &&
-    !empty($courseInfo) &&
-    'true' === $plugin->get('enable_conference_in_course_groups')
+// Group selector UI (if enabled by setting).
+if (
+    false === $bbb->isGlobalConference()
+    && !empty($courseInfo)
+    && 'true' === $plugin->get('enable_conference_in_course_groups')
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gid=0';
 
@@ -406,7 +407,8 @@ if (false === $bbb->isGlobalConference() &&
 
     if ($groups) {
         $meetingsInGroup = $bbb->getAllMeetingsInCourse(api_get_course_int_id(), api_get_session_id(), 1);
-        $meetingsGroup = array_column($meetingsInGroup, 'status', 'group_id');
+        $meetingsGroup = is_array($meetingsInGroup) ? array_column($meetingsInGroup, 'status', 'group_id') : [];
+        $groupList = [];
         $groupList[0] = get_lang('Select');
         foreach ($groups as $groupData) {
             if ($groupData instanceof CGroup) {
@@ -428,18 +430,20 @@ if (false === $bbb->isGlobalConference() &&
     }
 }
 
-$urlList[] = '';
+// Links + start form (with pre-upload document picker).
+$urlList = [];
 if ($conferenceManager && $allowToEdit) {
     $form = new FormValidator('start_conference', 'post', $conferenceUrl);
     $form->addElement('hidden', 'action', 'start');
-    $ajaxUrl = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents';
+    $ajaxUrl = api_get_path(WEB_PATH).'main/inc/ajax/plugin.ajax.php?plugin=bbb&a=list_documents&'.api_get_cidreq();
 
+    // Pre-upload UI: fetch available course docs and render as checkboxes.
     $preuploadHtml = '
     <details id="preupload-documents" class="mt-4 border rounded p-3 bg-gray-100">
-      <summary class="font-semibold cursor-pointer">' . get_lang('Pre-upload Documents') . '</summary>
+      <summary class="font-semibold cursor-pointer">'.get_lang('Pre-upload Documents').'</summary>
       <div class="mt-2 text-gray-700">
-        <p class="text-sm mb-2">' . get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.') . '</p>
-        <div id="preupload-list">' . get_lang('Loading') . '…</div>
+        <p class="text-sm mb-2">'.get_lang('Select the PDF or PPTX files you want to pre-load as slides for the conference.').'</p>
+        <div id="preupload-list">'.get_lang('Loading').'…</div>
       </div>
     </details>
     <script>
@@ -449,37 +453,33 @@ if ($conferenceManager && $allowToEdit) {
       det.addEventListener("toggle", function once() {
         if (!det.open) return;
         det.removeEventListener("toggle", once);
-        fetch("' . $ajaxUrl . '", {credentials:"same-origin"})
-          .then(r => r.json())
-          .then(docs => {
+        fetch("'.$ajaxUrl.'", {credentials:"same-origin"})
+          .then(function(r){ return r.json(); })
+          .then(function(docs){
             var c = document.getElementById("preupload-list");
-            if (!docs.length) {
-              c.innerHTML = \'<p class="text-sm text-gray-500">' . addslashes(get_lang('No documents found.')) . '</p>\';
+            if (!Array.isArray(docs) || !docs.length) {
+              c.innerHTML = \'<p class="text-sm text-gray-500">'.addslashes(get_lang('No documents found.')).'</p>\';
               return;
             }
             var filtered = docs.filter(function(doc){
-              return doc.filename.match(/\\.pdf$/i) || doc.filename.match(/\\.pptx$/i);
+              return (doc.filename || "").match(/\\.(pdf|ppt|pptx|odp)$/i);
             });
             if (!filtered.length) {
-              c.innerHTML = \'<p class="text-sm text-gray-500">' . addslashes(get_lang('No documents found.')) . '</p>\';
+              c.innerHTML = \'<p class="text-sm text-gray-500">'.addslashes(get_lang('No documents found.')).'</p>\';
               return;
             }
             c.innerHTML = filtered.map(function(doc){
-              var data = JSON.stringify({url:doc.url, filename:doc.filename})
-                             .replace(/"/g, "&quot;");
-              return \'<label class="block"><input type="checkbox" name="documents[]" value="\' +
-                     data +
-                     \'"> \' + doc.filename + \'</label>\';
+              var data = JSON.stringify({url:doc.url, filename:doc.filename}).replace(/"/g, "&quot;");
+              return \'<label class="block"><input type="checkbox" name="documents[]" value="\' + data + \'"> \' + (doc.filename || "") + \'</label>\';
             }).join("");
           })
-          .catch(function() {
+          .catch(function(){
             document.getElementById("preupload-list").innerHTML =
-              \'<p class="text-sm text-red-500">' . addslashes(get_lang('Failed to load documents.')) . '</p>\';
+              \'<p class="text-sm text-red-500">'.addslashes(get_lang('Failed to load documents.')).'</p>\';
           });
       });
     });
-    </script>
-    ';
+    </script>';
 
     $form->addElement('html', $preuploadHtml);
     $form->addElement(
@@ -489,8 +489,8 @@ if ($conferenceManager && $allowToEdit) {
         'class="btn btn--primary btn-large"'
     );
     $formToString = $form->returnForm();
-}
-else {
+} else {
+    // Fallback: plain "Enter conference" link for non-managers (if allowed by context/template).
     $urlList[] = Display::url(
         $plugin->get_lang('EnterConference'),
         $conferenceUrl,
@@ -498,6 +498,7 @@ else {
     );
 }
 
+// Render template.
 $tpl = new Template($tool_name);
 
 $tpl->assign('allow_to_edit', $allowToEdit);
@@ -517,6 +518,7 @@ $tpl->assign('is_course_context', api_get_course_int_id() > 0);
 
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 
+// Admin toolbar.
 $actionLinks = '';
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(

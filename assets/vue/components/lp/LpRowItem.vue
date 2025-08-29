@@ -124,9 +124,7 @@ const progressTextClass = computed(() => {
                 :title="t('More')"
                 :aria-label="t('More')"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-                </svg>
+                <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
               </span>
             </template>
             <template #menu>

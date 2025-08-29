@@ -16,7 +16,7 @@
               class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
               :aria-label="t('More actions')"
             >
-              ⋮
+              <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
             </button>
           </template>
           <template #menu>

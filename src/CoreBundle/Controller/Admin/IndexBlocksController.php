@@ -561,9 +561,9 @@ class IndexBlocksController extends BaseController
     {
         $items = [];
         $items[] = [
-            'class' => 'item-clean-cache',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/archive_cleanup.php']),
-            'label' => $this->translator->trans('Cleanup of cache and temporary files'),
+            'class' => 'item-cleanup-temp-uploads',
+            'url' => '/admin/cleanup-temp-uploads',
+            'label' => $this->translator->trans('Clean uploaded temp files'),
         ];
 
         $items[] = [
@@ -623,12 +623,6 @@ class IndexBlocksController extends BaseController
             'class' => 'item-resources-info',
             'url' => '/admin/resources_info',
             'label' => $this->translator->trans('Resources by type'),
-        ];
-
-        $items[] = [
-            'class' => 'item-cleanup-temp-uploads',
-            'url' => '/admin/cleanup-temp-uploads',
-            'label' => $this->translator->trans('Clean uploaded temp files'),
         ];
 
         return $items;

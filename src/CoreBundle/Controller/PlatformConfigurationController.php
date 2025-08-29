@@ -122,7 +122,8 @@ class PlatformConfigurationController extends AbstractController
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
                 'message.allow_message_tool',
-                'hide_scorm_export_link'
+                'course.hide_scorm_export_link',
+                'ai_helpers.enable_ai_helpers',
             ];
 
             $user = $this->userHelper->getCurrent();
@@ -181,6 +182,7 @@ class PlatformConfigurationController extends AbstractController
             'enable_exercise_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_exercise_auto_launch'),
             'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
+            'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

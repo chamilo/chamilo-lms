@@ -38,10 +38,14 @@ $user_id = api_get_user_id();
 $course = api_get_course_entity($course_id);
 $session = api_get_session_entity($sessionId);
 $lpRepo = Container::getLpRepository();
+$lp = $lpRepo->find($lp_id);
+if (!$lp) {
+    api_not_allowed(true);
+}
 /** @var learnpath $oLP */
 $oLP = Session::read('oLP');
 // Check if the learning path is visible for student - (LP requisites)
-if (!api_is_platform_admin()) {
+if (!api_is_allowed_to_create_course()) {
     if (!api_is_allowed_to_edit(null, true, false, false) &&
         !learnpath::is_lp_visible_for_student($lp, api_get_user_id(), $course)
     ) {

@@ -989,10 +989,11 @@ switch ($action) {
             $oLP->save_current();
             $oLP->save_last();
 
-            Display::display_reduced_header();
+            Display::display_no_header();
             $output = require 'lp_stats.php';
             echo $output;
             Display::display_reduced_footer();
+            exit;
         }
         break;
     case 'list':

@@ -87,9 +87,7 @@ const progressTextClass = computed(() => {
       <div class="ml-auto flex-column items-center">
         <div class="flex  gap-x-3">
           <button class="row-start-1 col-start-1 opacity-70 hover:opacity-100" :title="t('Reports')" :aria-label="t('Reports')" @click="emit('report', lp)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M4 19h16M6 17V7m6 10V5m6 12v-8" stroke-width="1.7" stroke-linecap="round"/>
-            </svg>
+            <i class="mdi mdi-chart-box-outline text-xl" />
           </button>
           <button class="row-start-1 col-start-2 opacity-70 hover:opacity-100" :title="t('Visibility')" :aria-label="t('Visibility')" @click="emit('toggle-visible', lp)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">

@@ -90,6 +90,8 @@ $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Setting the name of the tool.
 $tool_name = get_lang('Import class list via CSV');
+$csvCustomError = '';
+$topStaticErrorHtml = '';
 
 set_time_limit(0);
 
@@ -107,27 +109,34 @@ $form->addGroup($group, '', get_lang('File type'), null);
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
-    $classes = Import::csvToArray($_FILES['import_file']['tmp_name']);
-    $errors = validate_data($classes);
-    if (0 == count($errors)) {
-        $number_of_added_classes = save_data($classes);
-        Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added'), 'normal'));
+    $check = Import::assertCommaSeparated($_FILES['import_file']['tmp_name'], true);
+    if (true !== $check) {
+        $csvCustomError = $check;
+        $topStaticErrorHtml = Display::return_message($csvCustomError, 'error', false);
     } else {
-        $error_message = get_lang('Errors when importing file');
-        $error_message .= '<ul>';
-        foreach ($errors as $index => $error_class) {
-            $error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')';
-            $error_message .= '</li>';
+        $classes = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
+        $errors = validate_data($classes);
+        if (0 == count($errors)) {
+            $number_of_added_classes = save_data($classes);
+            Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added')));
+        } else {
+            $error_message = get_lang('Errors when importing file');
+            $error_message .= '<ul>';
+            foreach ($errors as $index => $error_class) {
+                $error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')</li>';
+            }
+            $error_message .= '</ul>';
+            $error_message .= get_lang('Error');
+            Display::addFlash(Display::return_message($error_message, 'error', false));
         }
-        $error_message .= '</ul>';
-        $error_message .= get_lang('Error');
-        Display::addFlash(Display::return_message($error_message, 'error', false));
     }
 }
 
 // Displaying the header.
 Display::display_header($tool_name);
-
+if (!empty($topStaticErrorHtml)) {
+    echo $topStaticErrorHtml;
+}
 $form->display();
 ?>
 <div class="max-w-full mb-8">
@@ -143,8 +152,8 @@ $form->display();
     <div class="overflow-x-auto bg-gray-20 p-4 rounded-md">
       <pre class="bg-gray-100 p-4 font-mono text-sm text-gray-800 whitespace-pre-wrap mb-0">
 <b>title,description,</b>users
-"User group 1","Description",admin,username1,username2
-      </pre>
+"User group 1","Description","admin,username1,username2"
+</pre>
     </div>
   </div>
 </div>

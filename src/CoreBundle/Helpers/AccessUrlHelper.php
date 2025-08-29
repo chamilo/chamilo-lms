@@ -10,10 +10,10 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Pdp\Rules;
-use Pdp\TopLevelDomains;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 use const PHP_SAPI;
+use const PHP_URL_HOST;
 
 readonly class AccessUrlHelper
 {

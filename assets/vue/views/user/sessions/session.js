@@ -16,37 +16,29 @@ export function useSession(type) {
     page: 1,
   }
 
-  function getUncategorizedSessions(sessions) {
-    return sessions.filter((session) => isEmpty(session.category))
+  function loadUncategorizedSessions(sessions) {
+    uncategorizedSessions.value.push(...sessions.filter((session) => isEmpty(session.category)))
   }
 
   /**
    * @param {Object[]} sessions
-   * @returns {Object[]}
    */
-  function getCategories(sessions) {
-    let categoryList = []
-
+  function loadCategories(sessions) {
     sessions.forEach((session) => {
       if (session.category) {
-        const alreadyAdded = categoryList.findIndex((cat) => cat["@id"] === session.category["@id"]) >= 0
+        const alreadyAdded = categories.value.findIndex((cat) => cat["@id"] === session.category["@id"]) >= 0
 
         if (!alreadyAdded) {
-          categoryList.push(session.category)
+          categories.value.push(session.category)
         }
       }
     })
-
-    return categoryList
   }
 
   /**
    * @param {Array<object>} sessions
-   * @returns {Map<string, { sessions }>}
    */
-  function getCategoriesWithSessions(sessions) {
-    let categoriesIn = new Map()
-
+  function loadCategoriesWithSessions(sessions) {
     sessions.forEach(function (session) {
       if (isEmpty(session.category)) {
         return
@@ -54,16 +46,14 @@ export function useSession(type) {
 
       let sessionsInCategory = []
 
-      if (categoriesIn.has(session.category["@id"])) {
-        sessionsInCategory = categoriesIn.get(session.category["@id"]).sessions
+      if (categoriesWithSessions.value.has(session.category["@id"])) {
+        sessionsInCategory = categoriesWithSessions.value.get(session.category["@id"]).sessions
       }
 
       sessionsInCategory.push(session)
 
-      categoriesIn.set(session.category["@id"], { sessions: sessionsInCategory })
+      categoriesWithSessions.value.set(session.category["@id"], { sessions: sessionsInCategory })
     })
-
-    return categoriesIn
   }
 
   async function getSessions() {
@@ -77,9 +67,9 @@ export function useSession(type) {
 
         paginationParams = nextPageParams ? { ...nextPageParams } : null
 
-        uncategorizedSessions.value.push(...getUncategorizedSessions(items))
-        categories.value.push(...getCategories(items))
-        categoriesWithSessions.value = getCategoriesWithSessions(items)
+        loadUncategorizedSessions(items)
+        loadCategories(items)
+        loadCategoriesWithSessions(items)
       } finally {
         isLoading.value = false
       }

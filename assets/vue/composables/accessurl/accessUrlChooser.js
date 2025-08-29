@@ -9,12 +9,12 @@ export function useAccessUrlChooser() {
 
   const { showErrorNotification } = useNotification()
 
-  const visible = computed(() => securityStore.showAccessUrlChooser)
+  const loadComponent = computed(() => !!(securityStore.isAuthenticated && window.is_login_url))
   const isLoading = ref(true)
   const accessUrls = ref([])
 
   async function init() {
-    if (!securityStore.showAccessUrlChooser) {
+    if (!loadComponent.value) {
       return
     }
 
@@ -26,7 +26,9 @@ export function useAccessUrlChooser() {
       if (1 === items.length) {
         isLoading.value = false
 
-        await doRedirectToPortal(items[0].url)
+        if (!securityStore.isAdmin) {
+          await doRedirectToPortal(items[0].url)
+        }
       }
     } catch (error) {
       showErrorNotification(error)
@@ -50,7 +52,7 @@ export function useAccessUrlChooser() {
   init().then(() => {})
 
   return {
-    visible,
+    loadComponent,
     isLoading,
     accessUrls,
     doRedirectToPortal,

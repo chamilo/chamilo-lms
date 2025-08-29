@@ -76,6 +76,25 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
+
+        if (MEDIA_QUESTION === $answerType) {
+            $mediaHtml = $objQuestionTmp->selectDescription();
+            if (!empty($mediaHtml)) {
+                echo '<div class="media-content wysiwyg">'. $mediaHtml .'</div>';
+            }
+            return 0;
+        }
+
+        if (PAGE_BREAK === $answerType) {
+            $description = $objQuestionTmp->selectDescription();
+            if (!$only_questions && !empty($description)) {
+                echo '<div class="page-break-content wysiwyg">'
+                    . $description .
+                    '</div>';
+            }
+            return 0;
+        }
+
         $s = '';
         if (HOT_SPOT != $answerType &&
             HOT_SPOT_DELINEATION != $answerType &&
@@ -1712,7 +1731,7 @@ HOTSPOT;
             if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
                 $current_time = time();
                 $expired_time = api_strtotime(
-                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y:m:d H:i:s'),
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s'),
                     'UTC'
                 );
                 $total_time_allowed = $expired_time + 30;
@@ -4426,6 +4445,7 @@ EOT;
 
         $countPendingQuestions = 0;
         $result = [];
+        $panelsByParent = [];
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
@@ -4610,15 +4630,43 @@ EOT;
 
                 $calculatedScore['question_content'] = $questionContent;
                 $attemptResult[] = $calculatedScore;
+                $parentId = intval($objQuestionTmp->parent_id ?: 0);
+                $panelsByParent[$parentId][] = Display::panel($questionContent);
+            }
 
-                if ($objExercise->showExpectedChoice()) {
-                    $exerciseContent .= Display::panel($questionContent);
-                } else {
-                    // $show_all_but_expected_answer should not happen at
-                    // the same time as $show_results
-                    if ($show_results && !$show_only_score) {
-                        $exerciseContent .= Display::panel($questionContent);
+            foreach ($panelsByParent as $pid => $panels) {
+                if ($pid !== 0) {
+                    $mediaQ = Question::read($pid, $objExercise->course);
+                    echo '<div class="media-group">';
+                    echo '<div class="media-content">';
+                    ob_start();
+                    $objExercise->manage_answer(
+                        $exeId,
+                        $pid,
+                        null,
+                        'exercise_show',
+                        [],
+                        false,
+                        true,
+                        $show_results,
+                        $objExercise->selectPropagateNeg()
+                    );
+                    echo ob_get_clean();
+                    echo '</div>';
+                    if (!empty($mediaQ->description)) {
+                        echo '<div class="media-description">'
+                            . $mediaQ->description
+                            . '</div>';
                     }
+                    echo '<div class="media-children">';
+                }
+
+                foreach ($panels as $panelHtml) {
+                    echo $panelHtml;
+                }
+
+                if ($pid !== 0) {
+                    echo '</div></div>';
                 }
             }
         }
@@ -4709,7 +4757,6 @@ EOT;
             $exerciseContent
         );
 
-        echo $totalScoreText;
         echo $certificateBlock;
 
         // Ofaj change BT#11784

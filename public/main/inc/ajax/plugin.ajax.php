@@ -3,30 +3,30 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Michelf\MarkdownExtra;
-use Chamilo\CoreBundle\Entity\Plugin;
+use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
 
 /**
  * Responses to AJAX calls.
  */
 require_once __DIR__.'/../global.inc.php';
 
-api_block_anonymous_users();
+$action = $_REQUEST['a'] ?? '';
 
-$action = $_REQUEST['a'];
-$em = Database::getManager();
-$pluginRepository = $em->getRepository(Plugin::class);
+if ($action === 'md_to_html') {
+    header('Content-Type: text/html; charset=utf-8');
+    api_block_anonymous_users();
 
-$accessUrlUtil = Container::getAccessUrlUtil();
-$currentAccessUrl = $accessUrlUtil->getCurrent();
-
-switch ($action) {
-    case 'md_to_html':
+    try {
         $plugin = $_GET['plugin'] ?? '';
         $appPlugin = new AppPlugin();
 
         $pluginPaths = $appPlugin->read_plugins_from_path();
-        if (!in_array($plugin, $pluginPaths)) {
-            echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error', false);
+        if (!in_array($plugin, $pluginPaths, true)) {
+            echo Display::return_message(
+                get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
+                'error',
+                false
+            );
             exit;
         }
 
@@ -41,78 +41,153 @@ switch ($action) {
             }
         }
         echo $html;
-        break;
+    } catch (\Throwable $e) {
+        error_log('[plugin.ajax md_to_html] '.$e->getMessage());
+        http_response_code(500);
+        echo Display::return_message(get_lang('Internal error.'), 'error', false);
+    }
+    exit;
+}
 
-    case 'install':
-    case 'uninstall':
-    case 'enable':
-    case 'disable':
-        $pluginTitle = $_POST['plugin'] ?? '';
-        $plugin_info = [
-            'version' => '0.0.1',
-            'title' => $pluginTitle,
-        ];
+header('Content-Type: application/json; charset=utf-8');
+api_block_anonymous_users();
 
-        $criteria = ['title' => $pluginTitle];
+try {
+    if (!api_is_platform_admin()) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Forbidden']);
+        exit;
+    }
 
-        if ($accessUrlUtil->isMultiple()) {
-            $criteria['accessUrlId'] = $currentAccessUrl->getId();
+    if (!in_array($action, ['install','uninstall','enable','disable'], true)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Invalid action']);
+        exit;
+    }
+
+    $pluginTitle = $_POST['plugin'] ?? '';
+    if ($pluginTitle === '') {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Missing plugin parameter']);
+        exit;
+    }
+
+    $em = Database::getManager();
+    $pluginRepository = $em->getRepository(PluginEntity::class);
+
+    $accessUrlUtil = Container::getAccessUrlUtil();
+    $currentAccessUrl = $accessUrlUtil->getCurrent();
+
+    $version = '0.0.0';
+    $plugin_info = [];
+    $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginTitle.'/plugin.php';
+    if (is_file($pluginPath) && is_readable($pluginPath)) {
+        require $pluginPath;
+        if (!empty($plugin_info['version'])) {
+            $version = (string) $plugin_info['version'];
         }
+    }
 
-        $plugin = $pluginRepository->findOneBy($criteria);
+    $pluginEntity = $pluginRepository->findOneBy(['title' => $pluginTitle]);
 
-        if (empty($plugin)) {
-            if ('install' === $action) {
-                $plugin = new Plugin();
-            } else {
-                die(json_encode(['error' => 'Plugin not found']));
-            }
-        }
+    if (!$pluginEntity && $action !== 'install') {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'error' => 'Plugin not found']);
+        exit;
+    }
 
-        $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginTitle.'/plugin.php';
+    $appPlugin = new AppPlugin();
 
-        if (is_file($pluginPath) && is_readable($pluginPath)) {
-            require $pluginPath;
-        }
-
-        $appPlugin = new AppPlugin();
-
-        if ($action === 'install') {
-            // Call the install logic inside the plugin itself.
+    switch ($action) {
+        case 'install':
             $appPlugin->install($pluginTitle);
 
-            $plugin
-                ->setTitle($pluginTitle)
-                ->setInstalledVersion($plugin_info['version'])
-                ->setInstalled(true)
-            ;
-
-            if (AppPlugin::isOfficial($pluginTitle)) {
-                $plugin->setSource(Plugin::SOURCE_OFFICIAL);
+            if (!$pluginEntity) {
+                $pluginEntity = new PluginEntity();
             }
 
-            // ✅ Removed: persist($plugin) here
-            // The install() method of the plugin handles persistence already.
-        } elseif ($plugin && $action === 'uninstall') {
+            $pluginEntity
+                ->setTitle($pluginTitle)
+                ->setInstalled(true)
+                ->setInstalledVersion($version);
+
+            if (AppPlugin::isOfficial($pluginTitle)) {
+                $pluginEntity->setSource(PluginEntity::SOURCE_OFFICIAL);
+            }
+
+            $em->persist($pluginEntity);
+            break;
+
+        case 'uninstall':
             $appPlugin->uninstall($pluginTitle);
 
-            $plugin->uninstall($currentAccessUrl);
-        } elseif (('enable' === $action || 'disable' === $action)
-            && $plugin && $plugin->isInstalled()
-        ) {
-            match($action) {
-                'enable' => $plugin->enable($currentAccessUrl),
-                'disable' => $plugin->disable($currentAccessUrl),
-            };
-        } else {
-            die(json_encode(['error' => 'Cannot enable an uninstalled plugin']));
+            $pluginEntity->uninstall($currentAccessUrl);
+            $em->persist($pluginEntity);
+            break;
+
+        case 'enable':
+        case 'disable':
+            if (!$pluginEntity || !$pluginEntity->isInstalled()) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Cannot enable/disable an uninstalled plugin']);
+                exit;
+            }
+
+            if ($action === 'enable') {
+                $pluginEntity->enable($currentAccessUrl);
+            } else {
+                $pluginEntity->disable($currentAccessUrl);
+            }
+            $em->persist($pluginEntity);
+            break;
+    }
+
+    $em->flush();
+
+    if (in_array($action, ['enable','disable','uninstall'], true)) {
+        try {
+            $info = $appPlugin->getPluginInfo($pluginTitle, true);
+            $pluginClass = $info['plugin_class'] ?? null;
+
+            if (!$pluginClass) {
+                $guess = ucfirst(strtolower($pluginTitle)).'Plugin';
+                if (class_exists($guess, false)) {
+                    $pluginClass = $guess;
+                }
+            }
+
+            $instance = null;
+            if ($pluginClass && class_exists($pluginClass, false)) {
+                if (method_exists($pluginClass, 'create')) {
+                    $instance = $pluginClass::create();
+                } else {
+                    $instance = new $pluginClass();
+                }
+            }
+
+            if ($instance && !empty($instance->isCoursePlugin)) {
+                if ($action === 'enable') {
+                    $instance->install_course_fields_in_all_courses(true);
+                } else {
+                    $instance->uninstall_course_fields_in_all_courses();
+                }
+            }
+        } catch (\Throwable $postEx) {
+            error_log('[plugin.ajax post] '.$postEx->getMessage());
         }
+    }
 
-        $em->flush();
+    echo json_encode([
+        'success' => true,
+        'message' => "Plugin action '{$action}' applied to '{$pluginTitle}'.",
+    ]);
+} catch (\Throwable $e) {
+    error_log('[plugin.ajax] '.$e->getMessage().' | '.$e->getTraceAsString());
 
-        echo json_encode(['success' => true, 'message' => "Plugin action '$action' applied to '$pluginTitle'."]);
-        break;
-
-    default:
-        echo json_encode(['error' => 'Invalid action']);
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Internal error while processing plugin action. Check logs.',
+    ]);
+    exit;
 }

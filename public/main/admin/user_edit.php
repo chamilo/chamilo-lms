@@ -372,6 +372,19 @@ $(function () {
 });
 </script>';
 
+// Freeze user conditions, admin cannot updated them
+$extraConditions = api_get_setting('profile.show_conditions_to_user', true);
+if ($extraConditions && isset($extraConditions['conditions'])) {
+    $extraConditions = $extraConditions['conditions'];
+    foreach ($extraConditions as $condition) {
+        /** @var HTML_QuickForm_group $element */
+        $element = $form->getElement('extra_'.$condition['variable']);
+        if ($element) {
+            $element->freeze();
+        }
+    }
+}
+
 // Submit button
 $form->addButtonSave(get_lang('Save'));
 

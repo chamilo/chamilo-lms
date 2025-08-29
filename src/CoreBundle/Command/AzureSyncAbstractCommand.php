@@ -36,8 +36,8 @@ abstract class AzureSyncAbstractCommand extends Command
     public function __construct(
         protected readonly ClientRegistry $clientRegistry,
         AuthenticationConfigHelper $configHelper,
-        readonly protected AzureAuthenticatorHelper $azureHelper,
-        readonly protected AzureSyncStateRepository $syncStateRepo,
+        protected readonly AzureAuthenticatorHelper $azureHelper,
+        protected readonly AzureSyncStateRepository $syncStateRepo,
         protected readonly EntityManagerInterface $entityManager,
         protected readonly UserRepository $userRepository,
         protected readonly UsergroupRepository $usergroupRepository,

@@ -8,10 +8,6 @@ export const useSecurityStore = defineStore("security", () => {
   const isLoading = ref(true)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
-  const showAccessUrlChooser = computed(() => {
-    return !!(isAuthenticated.value && window.is_login_url)
-  })
-
   /**
    * @param {Object} newUserInfo
    */
@@ -91,6 +87,5 @@ export const useSecurityStore = defineStore("security", () => {
     isSessionAdmin,
     isAdmin,
     checkSession,
-    showAccessUrlChooser,
   }
 })

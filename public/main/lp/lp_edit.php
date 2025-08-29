@@ -350,7 +350,7 @@ if ($form->validate()) {
     $lp
         ->setTitle($_REQUEST['lp_name'])
         ->setAuthor($_REQUEST['lp_author'] ?? '')
-        ->setTheme($_REQUEST['lp_theme'])
+        ->setTheme($_REQUEST['lp_theme'] ?? '')
         ->setHideTocFrame($hide_toc_frame)
         ->setPrerequisite($_POST['prerequisites'] ?? 0)
         ->setAccumulateWorkTime($_REQUEST['accumulate_work_time'] ?? 0)

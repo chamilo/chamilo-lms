@@ -40,7 +40,12 @@ class CertificateController extends AbstractController
         $matchedPath = '';
         foreach ($candidates as $cand) {
             $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
-            if ($row) { $certificate = $row; $matchedPath = $cand; break; }
+            if ($row) {
+                $certificate = $row;
+                $matchedPath = $cand;
+
+                break;
+            }
         }
         if (!$certificate) {
             throw new NotFoundHttpException('The requested certificate does not exist.');
@@ -68,7 +73,12 @@ class CertificateController extends AbstractController
         $pfMatch = '';
         foreach ($candidates as $cand) {
             $row = $personalFileRepo->findOneBy(['title' => $cand]);
-            if ($row) { $pf = $row; $pfMatch = $cand; break; }
+            if ($row) {
+                $pf = $row;
+                $pfMatch = $cand;
+
+                break;
+            }
         }
         if (!$pf) {
             throw new NotFoundHttpException('The certificate file was not found.');
@@ -93,7 +103,12 @@ class CertificateController extends AbstractController
         $matchedPath = '';
         foreach ($candidates as $cand) {
             $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
-            if ($row) { $certificate = $row; $matchedPath = $cand; break; }
+            if ($row) {
+                $certificate = $row;
+                $matchedPath = $cand;
+
+                break;
+            }
         }
         if (!$certificate) {
             throw $this->createNotFoundException('The requested certificate does not exist.');
@@ -119,7 +134,12 @@ class CertificateController extends AbstractController
         $pfMatch = '';
         foreach ($candidates as $cand) {
             $row = $personalFileRepo->findOneBy(['title' => $cand]);
-            if ($row) { $pf = $row; $pfMatch = $cand; break; }
+            if ($row) {
+                $pf = $row;
+                $pfMatch = $cand;
+
+                break;
+            }
         }
         if (!$pf) {
             throw $this->createNotFoundException('The certificate file was not found.');

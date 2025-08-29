@@ -379,6 +379,14 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_DATETIME,
             ],
             [
+                'variable' => 'gdpr',
+                'display_text' => 'GDPR compliance',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
+                'visible_to_self' => false,
+                'changeable' => true,
+            ],
+            [
                 'variable' => 'isFromNewLogin',
                 'display_text' => 'Is from new login',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
@@ -403,6 +411,14 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'Moodle password',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
+            ],
+            [
+                'variable' => 'my_terms',
+                'display_text' => 'My terms',
+                'item_type' => ExtraField::USER_FIELD_TYPE,
+                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+                'visible_to_self' => true,
+                'changeable' => true,
             ],
             [
                 'variable' => 'new_tracking_system',
@@ -540,11 +556,17 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_villedustage',
-                'display_text' => 'City of internship\'s terms',
+                'display_text' => "City of internship's terms",
                 'item_type' => ExtraField::USER_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
+                    ? ExtraField::FIELD_TYPE_GEOLOCALIZATION
+                    : (\defined(ExtraField::class.'::FIELD_TYPE_GEOLOCATION')
+                        ? ExtraField::FIELD_TYPE_GEOLOCATION
+                        : ExtraField::FIELD_TYPE_TEXT),
+                'visible_to_self' => true,
+                'visible_to_others' => true,
+                'changeable' => true,
             ],
-
             [
                 'variable' => 'timezone',
                 'display_text' => 'Timezone',
@@ -567,9 +589,16 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'terms_ville',
-                'display_text' => 'City\'s terms',
+                'display_text' => "City's terms",
                 'item_type' => ExtraField::USER_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
+                'value_type' => \defined(ExtraField::class.'::FIELD_TYPE_GEOLOCALIZATION')
+                    ? ExtraField::FIELD_TYPE_GEOLOCALIZATION
+                    : (\defined(ExtraField::class.'::FIELD_TYPE_GEOLOCATION')
+                        ? ExtraField::FIELD_TYPE_GEOLOCATION
+                        : ExtraField::FIELD_TYPE_TEXT),
+                'visible_to_self' => true,
+                'visible_to_others' => true,
+                'changeable' => true,
             ],
             [
                 'variable' => 'time',

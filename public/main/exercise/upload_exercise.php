@@ -274,7 +274,8 @@ function lp_upload_quiz_action_handling()
 
     // Variables
     $type = 2;
-    $random = $active = $results = $max_attempt = $expired_time = 0;
+    $random = $results = $max_attempt = $expired_time = 0;
+    $active = 1;
     // Make sure feedback is enabled (3 to disable), otherwise the fields
     // added to the XLS are not shown, which is confusing
     $feedback = 0;

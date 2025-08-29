@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Security\Authenticator;
 
+use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,19 +27,12 @@ class LoginTokenAuthenticator extends AbstractAuthenticator
         protected readonly JWTTokenManagerInterface $jwtManager,
     ) {}
 
-    /**
-     * @inheritDoc
-     */
     public function supports(Request $request): ?bool
     {
-        return $request->attributes->get('_route') === 'login_token_check'
-            && $request->headers->has('Authorization')
-        ;
+        return 'login_token_check' === $request->attributes->get('_route')
+            && $request->headers->has('Authorization');
     }
 
-    /**
-     * @inheritDoc
-     */
     public function authenticate(Request $request): Passport
     {
         $authHeader = $request->headers->get('Authorization');
@@ -56,30 +50,23 @@ class LoginTokenAuthenticator extends AbstractAuthenticator
             if (!$username) {
                 throw new AuthenticationException('Token does not contain a username.');
             }
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new AuthenticationException('Invalid JWT token: '.$e->getMessage());
         }
 
         return new SelfValidatingPassport(
             new UserBadge(
                 $username,
-                fn(string $username) => $this->userProvider->loadUserByIdentifier($username)
+                fn (string $username) => $this->userProvider->loadUserByIdentifier($username)
             )
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $message = strtr($exception->getMessage(), $exception->getMessageData());

@@ -67,17 +67,21 @@ class Import
     }
 
     /**
-     * Check if the CSV appears to be comma-separated.
+     * Check if the CSV is comma-separated.
+     * - Default (returnMessage=false): returns bool (true = OK, false = not comma).
+     * - With returnMessage=true: returns true (OK) OR a string with the error message.
      */
-    public static function assertCommaSeparated(string $filePath): bool
+    public static function assertCommaSeparated(string $filePath, bool $returnMessage = false): bool|string
     {
         $det = self::detectCsvSeparator($filePath);
 
-        if ($det === null) {
+        if ($det === null || $det === ',') {
             return true;
         }
 
-        return $det === ',';
+        $msg = 'Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated).';
+
+        return $returnMessage ? get_lang($msg) : false;
     }
 
     /**

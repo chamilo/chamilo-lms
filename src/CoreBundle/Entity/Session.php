@@ -54,6 +54,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,
+                    description: 'User identifier',
                 ),
             ],
             paginationEnabled: false,
@@ -71,6 +72,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,
+                    description: 'User identifier',
                 ),
             ],
             normalizationContext: [
@@ -87,6 +89,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriVariables: [
                 'id' => new Link(
                     fromClass: User::class,
+                    description: 'User identifier',
                 ),
             ],
             normalizationContext: [

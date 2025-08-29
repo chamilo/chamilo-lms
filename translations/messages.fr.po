@@ -4976,7 +4976,7 @@ msgid "Start date"
 msgstr "Date de début"
 
 msgid "End date"
-msgstr "date de fin"
+msgstr "Date de fin"
 
 msgid "Coach name"
 msgstr "Nom du coach"
@@ -30397,3 +30397,27 @@ msgstr "En remplissant ce formulaire, vous acceptez que l'éditeur officiel de C
 
 msgid "Please note that you are NOT REQUIRED to fill this form. If you want to remain anonymous, we will lose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click Next."
 msgstr "Il n'y a AUCUNE OBLIGATION de remplir ce formulaire pour utiliser pleinement Chamilo. Si vous souhaitez rester anonyme, nous perdrons l'opportunité de vous offrir la panoplie complète de privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur Suivant pour continuer l'installation de Chamilo."
+
+msgid "New folder"
+msgstr "Nouveau dossier"
+
+msgid "No available options"
+msgstr "Aucune option disponible"
+
+msgid "Event"
+msgstr "Événement"
+
+msgid "Color"
+msgstr "Couleur"
+
+msgid "All messages here are automatically marked as promoted."
+msgstr "Tous les messages ici sont automatiquement marqués comme officiels."
+
+msgid "Semicolon (;) delimiter detected. This version of Chamilo requires comma (,) as the CSV separator. Please export your file again as CSV (comma-separated)."
+msgstr "Délimiteur point-virgule (;) détecté. Cette version de Chamilo nécessite une virgule (,) comme séparateur CSV. Veuillez réexporter votre fichier au format CSV (séparé par des virgules)."
+
+msgid "Skills History"
+msgstr "Historique des compétences"
+
+msgid "Badge"
+msgstr "Badge"

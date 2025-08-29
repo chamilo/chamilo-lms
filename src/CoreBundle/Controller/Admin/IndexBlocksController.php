@@ -120,6 +120,13 @@ class IndexBlocksController extends BaseController
                 ];
             }
 
+            $json['security'] = [
+                'id' => 'block-admin-security',
+                'editable' => false,
+                'items' => $this->getItemsSecurity(),
+                'extraContent' => $this->getExtraContent('block-admin-security'),
+            ];
+
             /* Chamilo.org */
             $json['chamilo'] = [
                 'id' => 'block-admin-chamilo',
@@ -145,6 +152,17 @@ class IndexBlocksController extends BaseController
         $json = $adminBlockEvent->getData();
 
         return $this->json($json);
+    }
+
+    private function getItemsSecurity(): array
+    {
+        return [
+            [
+                'class' => 'item-security-login-attempts',
+                'url'   => $this->generateUrl('admin_security_login_attempts'),
+                'label' => $this->translator->trans('Login attempts'),
+            ],
+        ];
     }
 
     private function getItemsUsers(): array
@@ -611,6 +629,12 @@ class IndexBlocksController extends BaseController
             'class' => 'item-resources-info',
             'url' => '/admin/resources_info',
             'label' => $this->translator->trans('Resources by type'),
+        ];
+
+        $items[] = [
+            'class' => 'item-cleanup-temp-uploads',
+            'url' => '/admin/cleanup-temp-uploads',
+            'label' => $this->translator->trans('Clean uploaded temp files'),
         ];
 
         return $items;

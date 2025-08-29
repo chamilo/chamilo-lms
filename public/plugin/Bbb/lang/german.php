@@ -63,3 +63,5 @@ $strings['MaxXUsersReachedManager'] = 'The limit of %s simultaneous users has be
 $strings['MaxUsersInConferenceRoom'] = 'Max simultaneous users in a conference room';
 $strings['global_conference_allow_roles'] = "Globaler Konferenz-Link nur für diese Benutzerrollen sichtbar";
 $strings['CreatedAt'] = "Erstellt am";
+$strings['delete_recordings_on_course_delete'] = 'Aufzeichnungen löschen, wenn der Kurs gelöscht wird';
+$strings['defaultVisibilityInCourseHomepage'] = 'Standardsichtbarkeit auf der Kursstartseite';

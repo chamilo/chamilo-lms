@@ -122,6 +122,7 @@ class PlatformConfigurationController extends AbstractController
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
                 'message.allow_message_tool',
+                'hide_scorm_export_link'
             ];
 
             $user = $this->userHelper->getCurrent();

@@ -7,47 +7,41 @@
           :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"
           @change="onStudentViewChange"
         />
-        <button
-          v-if="canEdit"
-          class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
-          :aria-label="t('More actions')"
-          @click.stop.prevent="moreOpen = !moreOpen"
+        <BaseDropdownMenu v-if="canEdit"
+          class="relative flex items-center gap-2"
+          :dropdown-id="'top-menu'"
         >
-          ⋮
-        </button>
-        <div
-          v-if="canEdit && moreOpen"
-          class="absolute right-0 top-11 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1"
-          @mousedown.stop
-          @click.stop
-        >
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('new', e)">
-            {{ t('New learning path') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('import', e)">
-            {{ t('Import') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('rapid', e)">
-            {{ t('Chamilo RAPID') }}
-          </button>
-          <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click.stop.prevent="(e) => handleTopMenu('category', e)">
-            {{ t('Add category') }}
-          </button>
-        </div>
+          <template #button>
+            <button
+              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
+              :aria-label="t('More actions')"
+            >
+              <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
+            </button>
+          </template>
+          <template #menu>
+            <div class="absolute right-0 z-50 w-56 bg-white border border-gray-25 rounded-xl shadow-md p-1">
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('new', $event)">
+                {{ t('New learning path') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('import', $event)">
+                {{ t('Import') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('rapid', $event)">
+                {{ t('Chamilo RAPID') }}
+              </button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="handleTopMenu('category', $event)">
+                {{ t('Add category') }}
+              </button>
+            </div>
+          </template>
+        </BaseDropdownMenu>
       </div>
     </div>
 
     <div v-if="loading" class="space-y-4 animate-pulse">
-      <div class="h-22 bg-gray-15 rounded-2xl" />
-      <div class="h-22 bg-gray-15 rounded-2xl" />
-      <div class="h-22 bg-gray-15 rounded-2xl" />
       <div class="mt-4">
-        <div class="h-6 w-48 bg-gray-15 rounded mb-3" />
-        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-          <div class="h-36 bg-gray-15 rounded-2xl" />
-        </div>
+      <div class="h-36 bg-gray-15 rounded-2xl" />
       </div>
     </div>
 
@@ -90,12 +84,13 @@
           @end="onEndUncat"
         >
           <template #item="{ element }">
-            <LpRowItem
+            <LpRowItem 
               :lp="element"
               :canEdit="canEdit"
               :buildDates="buildDates"
               :ringDash="ringDash"
               :ringValue="ringValue"
+              :canExportScorm="canExportScorm"
               @open="openLegacy"
               @edit="goEdit"
               @report="onReport"
@@ -104,6 +99,7 @@
               @toggle-visible="onToggleVisible"
               @toggle-publish="onTogglePublish"
               @delete="onDelete"
+              @export-scorm="onExportScorm"
             />
           </template>
         </Draggable>
@@ -118,6 +114,7 @@
         :canEdit="canEdit"
         :ringDash="ringDash"
         :ringValue="ringValue"
+        :canExportScorm="canExportScorm"
         @open="openLegacy"
         @edit="goEdit"
         @report="onReport"
@@ -126,6 +123,7 @@
         @toggle-visible="onToggleVisible"
         @toggle-publish="onTogglePublish"
         @delete="onDelete"
+        @export-scorm="onExportScorm"
         @reorder="(ids) => onReorderCategory(cat, ids)"
       />
     </template>
@@ -133,7 +131,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, onBeforeUnmount, ref, nextTick } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
@@ -144,8 +142,8 @@ import Draggable from "vuedraggable"
 import LpRowItem from "../../components/lp/LpRowItem.vue"
 import LpCategorySection from "../../components/lp/LpCategorySection.vue"
 import StudentViewButton from "../../components/StudentViewButton.vue"
-import { nextTick } from "vue"
 import { useI18n } from "vue-i18n"
+import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 
 const { t } = useI18n()
 const draggingUncat = ref(false)
@@ -157,11 +155,15 @@ const securityStore = useSecurityStore()
 
 const loading = ref(true)
 const error = ref(null)
-const moreOpen = ref(false)
 
 const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
+
+const canExportScorm = computed(() => {
+  const isScormEnabled = platformConfig.getSetting("hide_scorm_export_link") !== "true"
+  return canEdit.value && isScormEnabled
+})
 
 const items = ref([])
 const categories = ref([])
@@ -403,5 +405,23 @@ async function onEndUncat() {
   } finally {
     draggingUncat.value = false
   }
+}
+
+const onExportScorm = (lp) => {
+  if (!canExportScorm.value) return
+  
+  const params = new URLSearchParams({
+    action: 'export',
+    lp_id: lp.iid,
+    cid: cid.value,
+  })
+  
+  if (sid.value) { 
+    params.append('sid', sid.value)
+  }
+
+  const exportUrl = `/main/lp/lp_controller.php?${params.toString()}`
+  
+  window.location.href = exportUrl
 }
 </script>

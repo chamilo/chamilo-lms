@@ -409,6 +409,29 @@ class BbbPlugin extends Plugin
         return false;
     }
 
+    /**
+     * Make sure the current user can see the "share" link under the join
+     * button in the course tool page.
+     * The method is called "show" while the setting is "hide" because we favor
+     * minimal disruption in the introduction of new settings (so by default,
+     * the link is shown to respect older versions' behavior).
+     * @return bool
+     */
+    public function showShareLink(): bool
+    {
+        if (api_get_course_int_id() > 0) {
+            // If not in a course context, we always share the link
+            // (hiding is only for within courses)
+            $hideLink = $this->get('hide_conference_link');
+            if (!empty($hideLink)) {
+                if ('true' === $hideLink) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public function get_name(): string
     {
         return 'Bbb';

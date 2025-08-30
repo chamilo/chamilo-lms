@@ -635,7 +635,7 @@ abstract class Question
                 $questionRepo->addFileFromFileRequest($question, 'imageUpload');
 
                 // If hotspot, create first answer
-                if (HOT_SPOT == $type || HOT_SPOT_ORDER == $type) {
+                if (in_array($type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_ORDER])) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setQuestion($question)
@@ -1776,7 +1776,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && HOT_SPOT == $this->type) {
+        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
             $header .= Display::return_message(get_lang('Results only available online'));
 
             return $header;

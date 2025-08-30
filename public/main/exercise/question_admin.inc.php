@@ -1,7 +1,7 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
 /**
  * This script allows to manage the statements of questions.
  * It is included from the script admin.php.
@@ -52,40 +52,54 @@ if (is_object($objQuestion)) {
 
     // FORM VALIDATION
     if (isset($_POST['submitQuestion']) && $form->validate()) {
-        // Question
         $objQuestion->processCreation($form, $objExercise);
         $objQuestion->processAnswersCreation($form, $objExercise);
-        // TODO: maybe here is the better place to index this tool, including answers text
-        // redirect
-        if (HOT_SPOT != $objQuestion->type &&
-            HOT_SPOT_DELINEATION != $objQuestion->type
-        ) {
-            if (isset($_GET['editQuestion'])) {
-                if (empty($exerciseId)) {
-                    Display::addFlash(Display::return_message(get_lang('Item updated')));
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
-                    header("Location: $url");
-                    exit;
-                }
 
+        if (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
+            $params = [
+                'exerciseId' => $exerciseId,
+                'page'       => $page,
+                'mad_admin'  => $objQuestion->id,
+            ];
+            $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'&'.http_build_query($params);
+            header("Location: $url");
+            exit;
+        }
+
+        if (in_array($objQuestion->type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
+            echo '<script>window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            exit;
+        }
+
+        if (isset($_GET['editQuestion'])) {
+            if (empty($exerciseId)) {
                 Display::addFlash(Display::return_message(get_lang('Item updated')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
-                header("Location: $url");
-                exit;
-            } else {
-                // New question
-                $page = 1;
-                $length = (int) api_get_setting('exercise.question_pagination_length');
-                if ($length > 0) {
-                    $page = round($objExercise->getQuestionCount() / $length);
-                }
-                Display::addFlash(Display::return_message(get_lang('Item added')));
-                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+                $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
                 header("Location: $url");
                 exit;
             }
+
+            Display::addFlash(Display::return_message(get_lang('Item updated')));
+            $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+            // Force fresh objects on next request (avoid stale session state)
+            Session::erase('objQuestion');
+            Session::erase('objAnswer');
+            // Keep exercise around if you need it later
+            Session::write('objExercise', $objExercise);
+
+            // Now redirect to MAD admin
+            header('Location: '.$url);
+            exit;
         } else {
-            echo '<script>window.location.href="admin.php?exerciseId='.$exerciseId.'&page='.$page.'&hotspotadmin='.$objQuestion->id.'&'.api_get_cidreq().'"</script>';
+            $page = 1;
+            $length = (int) api_get_setting('exercise.question_pagination_length');
+            if ($length > 0) {
+                $page = round($objExercise->getQuestionCount() / $length);
+            }
+            Display::addFlash(Display::return_message(get_lang('Item added')));
+            $url = api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page;
+            header("Location: $url");
+            exit;
         }
     } else {
         if (isset($questionName)) {
@@ -97,7 +111,6 @@ if (is_object($objQuestion)) {
         if (!empty($msgErr)) {
             echo Display::return_message($msgErr);
         }
-        // display the form
         $form->display();
     }
 }

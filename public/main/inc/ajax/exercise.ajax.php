@@ -705,7 +705,7 @@ switch ($action) {
                     $session_id,
                     $my_question_id
                 );
-                if (HOT_SPOT === $objQuestionTmp->type) {
+                if (in_array($objQuestionTmp->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
                     Event::delete_attempt_hotspot(
                         $exeId,
                         api_get_user_id(),

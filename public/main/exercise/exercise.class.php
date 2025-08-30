@@ -3709,6 +3709,9 @@ class Exercise
         }
 
         if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION], true)) {
+            if (MULTIPLE_ANSWER_DROPDOWN_COMBINATION == $answerType) {
+                $questionScore = $questionWeighting;
+            }
             // Load student's selected choices
             if ($from_database) {
                 $studentChoices = Database::store_result(
@@ -3775,6 +3778,7 @@ class Exercise
         $answerDestination = null;
         $userAnsweredQuestion = false;
         $correctAnswerId = [];
+        $matchingCorrectAnswers = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3916,6 +3920,7 @@ class Exercise
 
                     break;
                 case MULTIPLE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -3935,7 +3940,9 @@ class Exercise
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
-                        if (isset($studentChoice)) {
+                        if (isset($studentChoice)
+                            || (MULTIPLE_ANSWER_DROPDOWN == $answerType && in_array($answerAutoId, $choice))
+                        ) {
                             $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }
@@ -4038,6 +4045,7 @@ class Exercise
 
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
                     $str = '';
                     $answerFromDatabase = '';
                     if ($from_database) {
@@ -4634,6 +4642,7 @@ class Exercise
                                         }
 
                                         if (isset($real_list[$i_answer_correct_answer])) {
+                                            $matchingCorrectAnswers[$questionId]['from_database']['correct'][$i_answer_correct_answer] = $real_list[$i_answer_correct_answer];
                                             $user_answer = Display::span(
                                                 $real_list[$i_answer_correct_answer],
                                                 ['style' => 'color: #008000; font-weight: bold;']
@@ -4779,13 +4788,14 @@ class Exercise
                             }
                             $counterAnswer++;
                         }
-
+                        $matchingCorrectAnswers[$questionId]['from_database']['count_options'] = count($options);
                         break 2; // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
+                                $matchingCorrectAnswers[$questionId]['form_values']['correct'][$answerAutoId] = $choice[$answerAutoId];
                                 $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
@@ -4800,10 +4810,12 @@ class Exercise
                             }
                             $matching[$answerAutoId] = $choice[$answerAutoId];
                         }
+                        $matchingCorrectAnswers[$questionId]['form_values']['count_options'] = count($choice);
                     }
 
                     break;
                 case HOT_SPOT:
+                case HOT_SPOT_COMBINATION:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
@@ -5648,18 +5660,6 @@ class Exercise
 
                             break;
                         case FILL_IN_BLANKS:
-                            ExerciseShowFunctions::display_fill_in_blanks_answer(
-                                $this,
-                                $feedback_type,
-                                $answer,
-                                $exeId,
-                                $questionId,
-                                $results_disabled,
-                                $showTotalScoreAndUserChoicesInLastAttempt,
-                                $str
-                            );
-
-                            break;
                         case FILL_IN_BLANKS_COMBINATION:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $this,
@@ -5670,26 +5670,6 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt,
                                 $str
-                            );
-                            break;
-
-                        case HOT_SPOT_COMBINATION:
-                            $correctAnswerId = 0;
-                            foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
-                                if ($hotspot->getHotspotAnswerId() == $answerId) {
-                                    break;
-                                }
-                            }
-                            ExerciseShowFunctions::display_hotspot_answer(
-                                $this,
-                                $feedback_type,
-                                $answerId,
-                                $answer,
-                                $studentChoice,
-                                $answerComment,
-                                $results_disabled,
-                                $answerId,
-                                $showTotalScoreAndUserChoicesInLastAttempt
                             );
                             break;
                         case CALCULATED_ANSWER:
@@ -5732,6 +5712,7 @@ class Exercise
                                 </table>';
                             break;
                         case HOT_SPOT:
+                        case HOT_SPOT_COMBINATION:
                             $correctAnswerId = 0;
 
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
@@ -5955,7 +5936,7 @@ class Exercise
                 $exeId,
                 $questionId,
                 $questionWeighting,
-                $choice,
+                (array) ($choice ?? []),
                 $nbrAnswers
             );
         }
@@ -6001,7 +5982,7 @@ class Exercise
             //  we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user
             //  some results that haven't been stored in the database yet
-            if (HOT_SPOT == $answerType || HOT_SPOT_ORDER == $answerType || HOT_SPOT_DELINEATION == $answerType) {
+            if (in_array($answerType, [HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, HOT_SPOT_COMBINATION])) {
                 if ($debug) {
                     error_log('$from AND this is a hotspot kind of question ');
                 }
@@ -10308,7 +10289,11 @@ class Exercise
                 if ($question) {
                     switch ($question->type) {
                         case FILL_IN_BLANKS:
+                        case FILL_IN_BLANKS_COMBINATION:
                             $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                            if ($option['answer'] === "0") {
+                                $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
+                            }
                             break;
                     }
                 }

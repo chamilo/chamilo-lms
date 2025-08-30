@@ -98,6 +98,7 @@ class ExerciseLib
         $s = '';
         if (HOT_SPOT != $answerType &&
             HOT_SPOT_DELINEATION != $answerType &&
+             HOT_SPOT_COMBINATION != $answerType &&
             ANNOTATION != $answerType
         ) {
             // Question is not a hotspot
@@ -137,6 +138,11 @@ class ExerciseLib
             $objAnswerTmp = new Answer($questionId, $course_id, $exercise);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $quizQuestionOptions = Question::readQuestionOption($questionId, $course_id);
+            $selectableOptions = [];
+
+            for ($i = 1; $i <= $objAnswerTmp->nbrAnswers; $i++) {
+                $selectableOptions[$objAnswerTmp->iid[$i]] = $objAnswerTmp->answer[$i];
+            }
 
             // For "matching" type here, we need something a little bit special
             // because the match between the suggestions and the answers cannot be
@@ -247,6 +253,18 @@ class ExerciseLib
                     );
                     $form->addHtml('</div>');
                     $s .= $form->returnForm();
+                    break;
+                case MULTIPLE_ANSWER_DROPDOWN:
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
+                    if ($debug_mark_answer) {
+                        $s .= '<p><strong>'
+                            .(
+                                MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                    ? '<span class="pull-right">'.get_lang('Weighting').'</span>'
+                                    : ''
+                            )
+                            .get_lang('CorrectAnswer').'</strong></p>';
+                    }
                     break;
             }
 
@@ -1379,7 +1397,73 @@ HTML;
                             $matching_correct_answer++;
                         }
                         break;
+                    case MULTIPLE_ANSWER_DROPDOWN:
+                    case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
+                        if ($debug_mark_answer && $answerCorrect) {
+                            $s .= '<p>'
+                                .(
+                                    MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                        ? '<span class="pull-right">'.$objAnswerTmp->weighting[$answerId].'</span>'
+                                        : ''
+                                )
+                                .Display::returnFontAwesomeIcon('check-square-o', '', true);
+                            $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
+                        }
+                        break;
                 }
+            }
+
+            if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION]) && !$debug_mark_answer) {
+                $userChoiceList = array_unique($userChoiceList);
+                $input_id = "choice-$questionId";
+                $clear_id = "clear-$questionId";
+
+                $s .= Display::input('hidden', "choice2[$questionId]", '0')
+                    .'<div class="mb-4">'
+                    .'<div class="flex items-center justify-between mb-2">'
+                    .'<label for="'.$input_id.'" class="text-sm font-medium text-gray-90">'
+                    .get_lang('Select your answers')
+                    .'</label>'
+                    .'<button type="button" id="'.$clear_id.'" '
+                    .'class="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium '
+                    .'bg-primary text-white hover:opacity-90 border border-primary">'
+                    .'<span class="fa fa-times" aria-hidden="true"></span>'
+                    .'<span>'.get_lang('Clear').'</span>'
+                    .'</button>'
+                    .'</div>'
+                    .Display::select(
+                        "choice[$questionId][]",
+                        $selectableOptions,
+                        $userChoiceList,
+                        [
+                            'id'       => $input_id,
+                            'multiple' => 'multiple',
+                            'class'    => 'w-full', // full width before Select2 mounts
+                        ],
+                        false
+                    )
+                    .'</div>'
+                    .'<script>
+            $(function () {
+                var $el = $("#'.$input_id.'");
+                if (!$.fn.select2) return;
+
+                $el.select2({
+                    width: "100%",
+                    placeholder: { id: "-2", text: "'.get_lang('None').'" },
+                    allowClear: true,
+                    selectOnClose: false,
+                    containerCssClass: "select2-tw",
+                    selectionCssClass: "select2-tw",
+                    dropdownCssClass: "select2-tw-dd"
+                });
+
+                $("#'.$clear_id.'").on("click", function(e){
+                    e.preventDefault();
+                    $el.val(null).trigger("change");
+                });
+            });
+        </script>';
             }
 
             if ($show_comment) {
@@ -1421,7 +1505,7 @@ HTML;
 //                $s .= '</div>';
             }
 
-            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+            if (in_array($answerType, [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION])) {
                 $s .= '</div>'; //drag_question
             }
 
@@ -1492,7 +1576,7 @@ HTML;
             </div>
         </div>
         <script>
-            new ".(HOT_SPOT == $answerType ? "HotspotQuestion" : "DelineationQuestion")."({
+            new ".(in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION]) ? "HotspotQuestion" : "DelineationQuestion")."({
                 questionId: $questionId,
                 exerciseId: $exerciseId,
                 exeId: 0,
@@ -6349,7 +6433,7 @@ EOT;
     {
         $nbrCorrect = 0;
         $nbrOptions = 0;
-
+        $choice = is_array($choice) ? $choice : [];
         switch ($answerType) {
             case FILL_IN_BLANKS_COMBINATION:
                 if (!empty($listCorrectAnswers)) {
@@ -6393,18 +6477,16 @@ EOT;
             case MATCHING_COMBINATION:
             case MATCHING_DRAGGABLE_COMBINATION:
                 if (isset($listCorrectAnswers['form_values'])) {
-                    if (!empty($listCorrectAnswers['form_values']['correct'])) {
-                        $nbrCorrect = count((array) $listCorrectAnswers['form_values']['correct']);
-                    }
-                    if (isset($listCorrectAnswers['form_values']['count_options'])) {
+                    if (isset($listCorrectAnswers['form_values']['correct'])) {
+                        $nbrCorrect = count($listCorrectAnswers['form_values']['correct']);
                         $nbrOptions = (int) $listCorrectAnswers['form_values']['count_options'];
                     }
-                } elseif (isset($listCorrectAnswers['from_database'])) {
-                    if (!empty($listCorrectAnswers['from_database']['correct'])) {
-                        $nbrCorrect = count((array) $listCorrectAnswers['from_database']['correct']);
-                    }
-                    if (isset($listCorrectAnswers['from_database']['count_options'])) {
-                        $nbrOptions = (int) $listCorrectAnswers['from_database']['count_options'];
+                } else {
+                    if (isset($listCorrectAnswers['from_database'])) {
+                        if (isset($listCorrectAnswers['from_database']['correct'])) {
+                            $nbrCorrect = count($listCorrectAnswers['from_database']['correct']);
+                            $nbrOptions = (int) $listCorrectAnswers['from_database']['count_options'];
+                        }
                     }
                 }
                 break;

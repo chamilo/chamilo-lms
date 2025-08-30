@@ -66,7 +66,9 @@ class Matching extends Question
                     if ($answer->isCorrect($i)) {
                         $nb_matches++;
                         $defaults['answer['.$nb_matches.']'] = $answer->selectAnswer($i);
-                        $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        if (MATCHING === $this->type) {
+                            $defaults['weighting['.$nb_matches.']'] = float_format($answer->selectWeighting($i), 1);
+                        }
                         $defaults['matches['.$nb_matches.']'] = $answer->correct[$i];
                     } else {
                         $nb_options++;
@@ -97,17 +99,22 @@ class Matching extends Question
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
 
+        $thWeighting = '';
+        if (MATCHING === $this->type) {
+            $thWeighting = '<th width="10%">'.get_lang('Score').'</th>';
+        }
+
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th width="5%">'.get_lang('N°').'</th>
-                    <th width="70%">'.get_lang('Answer').'</th>
-                    <th width="15%">'.get_lang('Matches To').'</th>
-                    <th width="10%">'.get_lang('Score').'</th>
-                </tr>
-            </thead>
-            <tbody>';
+        <thead>
+            <tr>
+                <th width="5%">'.get_lang('N°').'</th>
+                <th width="70%">'.get_lang('Answer').'</th>
+                <th width="15%">'.get_lang('Matches To').'</th>
+                '.$thWeighting.'
+            </tr>
+        </thead>
+        <tbody>';
 
         $form->addHeader(get_lang('Match them'));
         $form->addHtml($html);
@@ -157,12 +164,16 @@ class Matching extends Question
                 $matches,
                 ['id' => 'matches_'.$i]
             );
-            $form->addText(
-                "weighting[$i]",
-                null,
-                true,
-                ['id' => 'weighting_'.$i, 'value' => 10]
-            );
+            if (MATCHING === $this->type) {
+                $form->addText(
+                    "weighting[$i]",
+                    null,
+                    true,
+                    ['id' => 'weighting_'.$i, 'value' => 10]
+                );
+            } else {
+                $form->addHidden("weighting[$i]", "0");
+            }
             $form->addHtml('</tr>');
         }
 
@@ -209,6 +220,14 @@ class Matching extends Question
 
         $form->addHtml('</table>');
 
+        if (MATCHING_COMBINATION === $this->type) {
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+
+            if (!empty($this->id)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
+
         global $text;
         $group = [];
         // setting the save button here and not in the question class.php
@@ -251,19 +270,29 @@ class Matching extends Question
         // Insert the answers
         for ($i = 1; $i <= $nb_matches; $i++) {
             $position++;
-            $answer = $form->getSubmitValue('answer['.$i.']');
+            $answer  = $form->getSubmitValue('answer['.$i.']');
             $matches = $form->getSubmitValue('matches['.$i.']');
-            $weighting = $form->getSubmitValue('weighting['.$i.']');
-            $this->weighting += $weighting;
+            $rowWeight = (MATCHING === $this->type)
+                ? (float) $form->getSubmitValue('weighting['.$i.']')
+                : 0.0;
+
+            if (MATCHING === $this->type) {
+                $this->weighting += $rowWeight;
+            }
 
             $objAnswer->createAnswer(
                 $answer,
                 $matches,
                 '',
-                $weighting,
+                $rowWeight,
                 $position
             );
         }
+
+        if (MATCHING_COMBINATION === $this->type) {
+            $this->weighting = (float) $form->getSubmitValue('questionWeighting');
+        }
+
         $objAnswer->save();
         $this->save($exercise);
     }

@@ -1352,18 +1352,14 @@ if ($objExercise->review_answers) {
                 if ($current_question != $i) {
                     continue;
                 } else {
-                    if (HOT_SPOT == $objQuestionTmp->selectType() ||
-                        HOT_SPOT_DELINEATION == $objQuestionTmp->selectType()
-                    ) {
+                    if (in_array($selectType, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
                         $number_of_hotspot_questions++;
                     }
 
                     break;
                 }
             } else {
-                if (HOT_SPOT == $objQuestionTmp->selectType() ||
-                    HOT_SPOT_DELINEATION == $objQuestionTmp->selectType()
-                ) {
+                if (in_array($selectType, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION])) {
                     $number_of_hotspot_questions++;
                 }
             }

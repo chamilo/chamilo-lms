@@ -670,7 +670,7 @@ class Answer
         $questionRepo = Container::getQuestionRepository();
         /** @var CQuizQuestion $question */
         $question = $questionRepo->find($questionId);
-        $questionType = $question->getType();
+        $questionType = $this->getQuestionType();
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
             $answer = (string) $this->new_answer[$i];

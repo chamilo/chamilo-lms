@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use ChamiloSession as Session;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 $kernel = null;
@@ -714,25 +715,28 @@ $sessionToRedirect = Session::read('session_redirect');
 if ($extraConditions && $extraFieldsLoaded) {
     // Set conditions as "required" and also change the labels
     foreach ($extraConditions as $condition) {
+        $name = 'extra_'.$condition['variable'];
+        if (method_exists($form, 'elementExists') && !$form->elementExists($name)) {
+            continue;
+        }
+
         /** @var HTML_QuickForm_group $element */
-        $element = $form->getElement('extra_'.$condition['variable']);
-        if ($element) {
-            $children = $element->getElements();
-            /** @var HTML_QuickForm_checkbox $child */
-            foreach ($children as $child) {
-                $child->setText(get_lang($condition['display_text']));
-            }
-            $form->setRequired($element);
-            if (!empty($condition['text_area'])) {
-                $element->setLabel(
-                    [
-                        '',
-                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.
-                        get_lang(nl2br($condition['text_area'])).
-                        '</div>',
-                    ]
-                );
-            }
+        $element = $form->getElement($name);
+        $children = $element->getElements();
+        /** @var HTML_QuickForm_checkbox $child */
+        foreach ($children as $child) {
+            $child->setText(get_lang($condition['display_text']));
+        }
+        $form->setRequired($element);
+        if (!empty($condition['text_area'])) {
+            $element->setLabel(
+                [
+                    '',
+                    '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.
+                    get_lang(nl2br($condition['text_area'])).
+                    '</div>',
+                ]
+            );
         }
     }
 }
@@ -976,7 +980,7 @@ if ($form->validate()) {
     if ('AppCache' == get_class($kernel)) {
         $kernel = $kernel->getKernel();
     }
-    /** @var \Symfony\Component\DependencyInjection\ContainerInterface $container */
+    /** @var ContainerInterface $container */
     $container = $kernel->getContainer();
     $entityManager = $container->get('doctrine.orm.default_entity_manager');
     $userRepository = $entityManager->getRepository(User::class);

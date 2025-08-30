@@ -1,12 +1,14 @@
 <script setup>
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
+import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 
 const { t } = useI18n()
 
 const props = defineProps({
   lp: { type: Object, required: true },
   canEdit: { type: Boolean, default: false },
+  canExportScorm: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
@@ -14,13 +16,22 @@ const props = defineProps({
 
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete"
+  "toggle-visible","toggle-publish","delete","export-scorm"
 ])
 
 const dateText = computed(() => {
   const v = props.buildDates ? props.buildDates(props.lp) : ""
   return typeof v === "string" ? v.trim() : ""
 })
+
+const progressBgClass = computed(() => {
+  return props.ringValue(props.lp.progress) === 100 ? 'bg-success' : 'bg-support-5'
+})
+
+const progressTextClass = computed(() => {
+  return props.ringValue(props.lp.progress) === 100 ? 'text-success' : 'text-support-5'
+})
+
 </script>
 
 <template>
@@ -73,71 +84,75 @@ const dateText = computed(() => {
     </div>
 
     <template v-if="canEdit">
-      <div class="ml-auto grid grid-cols-[auto_auto_auto_auto] grid-rows-[auto_auto] items-center gap-x-3">
-        <button class="row-start-1 col-start-1 opacity-70 hover:opacity-100" :title="t('Reports')" :aria-label="t('Reports')" @click="emit('report', lp)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M4 19h16M6 17V7m6 10V5m6 12v-8" stroke-width="1.7" stroke-linecap="round"/>
-          </svg>
-        </button>
-
-        <button class="row-start-1 col-start-2 opacity-70 hover:opacity-100" :title="t('Visibility')" :aria-label="t('Visibility')" @click="emit('toggle-visible', lp)">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" stroke-width="1.7"/>
-            <circle cx="12" cy="12" r="3" stroke-width="1.7"/>
-          </svg>
-        </button>
-
-        <button
-          class="row-start-1 col-start-3 opacity-70 hover:opacity-100"
-          :title="t('Settings')"
-          :aria-label="t('Settings')"
-          @click="emit('settings', lp)"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm8.5 3.5a7 7 0 0 0-.18-1.59l2.02-1.57-2-3.46-2.39.78A7 7 0 0 0 15.6 3l-.36-2.5h-4.5L10.4 3a7 7 0 0 0-2.95 1.19l-2.38-.78-2 3.46 2.02 1.57c-.12.52-.18 1.06-.18 1.59s.06 1.07.18 1.59Z" stroke-width="1.2"/>
-          </svg>
-        </button>
-
-        <details class="row-start-1 col-start-4 relative z-10">
-          <summary
-            class="list-none w-8 h-8 rounded-lg border border-gray-25 grid place-content-center hover:bg-gray-15 cursor-pointer"
-            :title="t('More')"
-            :aria-label="t('More')"
+      <div class="ml-auto flex-column items-center">
+        <div class="flex  gap-x-3">
+          <button class="row-start-1 col-start-1 opacity-70 hover:opacity-100" :title="t('Reports')" :aria-label="t('Reports')" @click="emit('report', lp)">
+            <i class="mdi mdi-chart-box-outline text-xl" />
+          </button>
+          <button class="row-start-1 col-start-2 opacity-70 hover:opacity-100" :title="t('Visibility')" :aria-label="t('Visibility')" @click="emit('toggle-visible', lp)">
+            <i class="mdi mdi-eye-outline text-xl" />
+          </button>
+          <button
+            class="row-start-1 col-start-3 opacity-70 hover:opacity-100"
+            :title="t('Settings')"
+            :aria-label="t('Settings')"
+            @click="emit('settings', lp)"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-            </svg>
-          </summary>
-
-          <div
-            class="absolute right-0 top-full mt-2 z-50 w-52 bg-white border border-gray-25 rounded-xl shadow-xl p-1"
-            @mousedown.stop
-            @click.stop
+            <i class="mdi mdi-cog-outline text-xl" />
+          </button>
+            <button
+            v-if="canExportScorm"
+            class="row-start-1 col-start-4 opacity-70 hover:opacity-100"
+            :title="t('SCORM Export')"
+            :aria-label="t('SCORM Export')"
+            @click="emit('export-scorm', lp)"
+            >
+              <i class="mdi mdi-archive-arrow-down text-xl" />
+          </button>
+          <BaseDropdownMenu
+            :dropdown-id="`row-${lp.iid}`"
+            class="row-start-1 col-start-5 relative"
           >
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
-          </div>
-        </details>
+            <template #button>
+              <span
+                class="list-none w-8 h-8 rounded-lg border border-gray-25 grid place-content-center hover:bg-gray-15 cursor-pointer"
+                :title="t('More')"
+                :aria-label="t('More')"
+              >
+                <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
+              </span>
+            </template>
+            <template #menu>
+              <div class="absolute right-0 z-50 w-52 bg-white border border-gray-25 rounded-xl shadow-xl p-1">
+                <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
+                <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
+                <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
+                <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+              </div>
+            </template>
+          </BaseDropdownMenu>
+        </div>
 
         <div class="row-start-2 col-start-1 col-end-5 flex items-center gap-2 justify-self-end mt-5">
           <span class="text-caption text-gray-50">
             {{ ringValue(lp.progress) === 100 ? t('Completed') : t('Progress') }}
           </span>
           <div class="relative w-10 h-10">
-            <svg viewBox="0 0 40 40" class="w-10 h-10">
-              <circle cx="20" cy="20" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />
+            <svg viewBox="0 0 37 37" class="w-10 h-10">
+              <circle cx="18.5" cy="19" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />
               <circle
-                cx="20" cy="20" r="16" stroke-width="3.5" fill="none"
+                cx="21" cy="18.5" r="16" stroke-width="3.5" fill="none"
                 :stroke-dasharray="ringDash(lp.progress)"
                 stroke-linecap="round"
-                class="text-support-5"
+                :class="progressTextClass"
                 stroke="currentColor"
                 transform="rotate(-90 20 20)"
               />
             </svg>
-            <span class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-support-5 ring-2 ring-white" aria-hidden/>
+            <span 
+              class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white" 
+              :class="progressBgClass" 
+              aria-hidden/>
             <div class="absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90">
               {{ ringValue(lp.progress) }}%
             </div>

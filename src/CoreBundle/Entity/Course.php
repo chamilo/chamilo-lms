@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -36,6 +37,38 @@ use Symfony\Component\Validator\Constraints as Assert;
     types: ['https://schema.org/Course'],
     operations: [
         new Get(security: "is_granted('VIEW', object)"),
+        new Get(
+            uriTemplate: '/courses/{id}/stats/{metric}',
+            requirements: [
+                'id' => '\d+',
+                'metric' => 'course-avg-score|course-avg-progress',
+            ],
+            controller: GetCourseStatsAction::class,
+            openapiContext: [
+                'summary' => 'Course-wide statistics, switched by {metric}',
+                'parameters' => [
+                    [
+                        'name' => 'metric',
+                        'in' => 'path',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'string',
+                            'enum' => ['course-avg-score', 'course-avg-progress'],
+                        ],
+                        'description' => 'Metric selector',
+                    ],
+                    [
+                        'name' => 'sessionId',
+                        'in' => 'query',
+                        'required' => false,
+                        'schema' => ['type' => 'integer'],
+                        'description' => 'Optional Session ID',
+                    ],
+                ],
+            ],
+            read: false,
+            deserialize: false,
+        ),
         new Post(security: "is_granted('ROLE_USER')"),
         new GetCollection(security: "is_granted('ROLE_USER')"),
         new GetCollection(

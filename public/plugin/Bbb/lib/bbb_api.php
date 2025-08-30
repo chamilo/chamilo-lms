@@ -37,637 +37,371 @@ Versions:
 					    -- See included samples for usage examples
 */
 
+use BigBlueButton\BigBlueButton;
+use BigBlueButton\Exceptions\BadResponseException;
+use BigBlueButton\Parameters\Config\DocumentOptionsStore;
+use BigBlueButton\Parameters\CreateMeetingParameters;
+use BigBlueButton\Parameters\JoinMeetingParameters;
+use BigBlueButton\Parameters\EndMeetingParameters;
+use BigBlueButton\Parameters\IsMeetingRunningParameters;
+use BigBlueButton\Parameters\GetMeetingInfoParameters;
+use BigBlueButton\Parameters\GetRecordingsParameters;
+use BigBlueButton\Parameters\PublishRecordingsParameters;
+use BigBlueButton\Parameters\DeleteRecordingsParameters;
+use BigBlueButton\Enum\Role;
+use BigBlueButton\Responses\CreateMeetingResponse;
+use BigBlueButton\Responses\IsMeetingRunningResponse;
+use BigBlueButton\Responses\GetMeetingsResponse;
+use BigBlueButton\Responses\GetMeetingInfoResponse;
+use BigBlueButton\Responses\GetRecordingsResponse;
+use BigBlueButton\Responses\PublishRecordingsResponse;
+use BigBlueButton\Responses\DeleteRecordingsResponse;
+
+/**
+ * Adapter for Chamilo Video Conference (Bbb) to use the official BigBlueButton PHP client 2.x.
+ */
 class BigBlueButtonBN
 {
-	private $_securitySalt;
-	private $_bbbServerBaseUrl;
-	private $_bbbServerProtocol;
+    private BigBlueButton $client;
 
-	public function __construct()
+    public function __construct(string $baseUrl, string $secret, array $curlOpts = [])
     {
-        /*
-        Establish just our basic elements in the constructor:
-        */
-		// BASE CONFIGS - set these for your BBB server in config.php and they will
-		// simply flow in here via the constants:
-		$this->_securitySalt 		= CONFIG_SECURITY_SALT;
-		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;
-		$this->_bbbServerProtocol 	= CONFIG_SERVER_PROTOCOL;
-	}
+        // Initialize the official BBB client with server URL, secret and optional cURL options
+        $this->client = new BigBlueButton($baseUrl, $secret, ['curl' => $curlOpts]);
+    }
 
-	private function _processXmlResponse($url)
+    /**
+     * Build a create meeting URL.
+     *
+     * @param array $p  meetingId, meetingName, attendeePw, moderatorPw, and optional settings
+     * @return string   URL to call the BBB create API
+     */
+    public function getCreateMeetingUrl(array $p): string
     {
-        /*
-        A private utility method used by other public methods to process XML responses.
-        */
-		if (extension_loaded('curl')) {
-			$ch = curl_init() or die ( curl_error($ch) );
-			$timeout = 10;
-			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt( $ch, CURLOPT_URL, $this->_bbbServerProtocol.$url );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            // Following redirect required to use Scalelite, BBB's Load Balancer
-			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true);
-			$data = curl_exec( $ch );
-			curl_close( $ch );
+        // Prepare parameters object
+        $cp = new CreateMeetingParameters($p['meetingId'], $p['meetingName']);
+        $cp->setAttendeePassword($p['attendeePw']);
+        $cp->setModeratorPassword($p['moderatorPw']);
 
-			if ($data) {
-				return (new SimpleXMLElement($data));
-            } else {
-				return false;
+        // Optional settings
+        if (!empty($p['welcomeMsg']))     $cp->setWelcomeMessage($p['welcomeMsg']);
+        if (isset($p['dialNumber']))      $cp->setDialNumber($p['dialNumber']);
+        if (isset($p['voiceBridge']))     $cp->setVoiceBridge((int)$p['voiceBridge']);
+        if (isset($p['webVoice']))        $cp->setWebVoice($p['webVoice']);
+        if (isset($p['logoutUrl']))       $cp->setLogoutUrl($p['logoutUrl']);
+        if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
+        if (isset($p['record']))          $cp->setRecord((bool)$p['record']);
+        if (isset($p['duration']))        $cp->setDuration((int)$p['duration']);
+
+        // Delegate to the official client
+        return $this->client->getCreateMeetingUrl($cp);
+    }
+
+    /**
+     * Create a meeting and return the XML response as an array.
+     *
+     * @param array $p
+     * @return array
+     */
+    public function createMeetingWithXmlResponseArray(array $p): array
+    {
+        try {
+            $cp = new CreateMeetingParameters($p['meetingId'], $p['meetingName']);
+            $cp->setAttendeePassword($p['attendeePw']);
+            $cp->setModeratorPassword($p['moderatorPw']);
+            if (!empty($p['welcomeMsg']))  $cp->setWelcomeMessage($p['welcomeMsg']);
+            if (isset($p['dialNumber']))   $cp->setDialNumber($p['dialNumber']);
+            if (isset($p['voiceBridge']))  $cp->setVoiceBridge((int)$p['voiceBridge']);
+            if (isset($p['webVoice']))     $cp->setWebVoice($p['webVoice']);
+            if (isset($p['logoutUrl']))    $cp->setLogoutUrl($p['logoutUrl']);
+            if (isset($p['maxParticipants'])) $cp->setMaxParticipants((int)$p['maxParticipants']);
+            if (isset($p['record']))       $cp->setRecord((bool)$p['record']);
+            if (isset($p['duration']))     $cp->setDuration((int)$p['duration']);
+
+            if (!empty($p['documents']) && is_array($p['documents'])) {
+                foreach ($p['documents'] as $doc) {
+                    $opts = new DocumentOptionsStore();
+                    $opts->addAttribute('removable', (bool)($doc['removable'] ?? true));
+                    $cp->addPresentation(
+                        $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH) ?: 'document'),
+                        file_get_contents($doc['url']),
+                        $doc['filename'] ?? 'document',
+                        $opts
+                    );
+                }
             }
-		}
-		return (simplexml_load_file($url));
-	}
 
-	private function _requiredParam($param) {
-		/* Process required params and throw errors if we don't get values */
-		if ((isset($param)) && ($param != '')) {
-			return $param;
-		}
-		elseif (!isset($param)) {
-			throw new Exception('Missing parameter.');
-		}
-		else {
-			throw new Exception(''.$param.' is required.');
-		}
-	}
+            $r   = $this->client->createMeeting($cp);
+            $xml = $r->getRawXml();
 
-	private function _optionalParam($param) {
-		/* Pass most optional params through as set value, or set to '' */
-		/* Don't know if we'll use this one, but let's build it in case. */
-		if ((isset($param)) && ($param != '')) {
-			return $param;
-		}
-		else {
-			$param = '';
-			return $param;
-		}
-	}
+            return [
+                'returncode'           => (string)$xml->returncode,
+                'message'              => (string)$xml->message,
+                'messageKey'           => (string)$xml->messageKey,
+                'meetingId'            => (string)$xml->meetingID,
+                'attendeePw'           => (string)$xml->attendeePW,
+                'moderatorPw'          => (string)$xml->moderatorPW,
+                'hasBeenForciblyEnded' => (string)$xml->hasBeenForciblyEnded,
+                'createTime'           => (string)$xml->createTime,
+                'internalMeetingID'    => (string)$xml->internalMeetingID,
+            ];
+        } catch (BadResponseException $e) {
+            $http = 0;
+            if (preg_match('/HTTP code:\s*(\d+)/i', $e->getMessage(), $m)) {
+                $http = (int)$m[1];
+            }
+            return [
+                'returncode' => 'FAILED',
+                'messageKey' => $http === 413 ? 'requestEntityTooLarge' : 'badResponse',
+                'message'    => $http === 413
+                    ? 'One or more presentations exceed the upload limit on the video-conference server.'
+                    : $e->getMessage(),
+                'httpCode'   => $http,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'returncode' => 'FAILED',
+                'messageKey' => 'unexpectedError',
+                'message'    => $e->getMessage(),
+            ];
+        }
+    }
 
-	/* __________________ BBB ADMINISTRATION METHODS _________________ */
-	/* The methods in the following section support the following categories of the BBB API:
-	-- create
-	-- join
-	-- end
-	*/
-
-	public function getCreateMeetingUrl($creationParams) {
-		/*
-		USAGE:
-		(see $creationParams array in createMeetingArray method.)
-		*/
-		$this->_meetingId = $this->_requiredParam($creationParams['meetingId']);
-		$this->_meetingName = $this->_requiredParam($creationParams['meetingName']);
-		// Set up the basic creation URL:
-		$creationUrl = $this->_bbbServerBaseUrl."api/create?";
-		// Add params:
-		$params =
-		'name='.urlencode($this->_meetingName).
-		'&meetingID='.urlencode($this->_meetingId).
-		'&attendeePW='.urlencode($creationParams['attendeePw']).
-		'&moderatorPW='.urlencode($creationParams['moderatorPw']).
-		'&dialNumber='.urlencode($creationParams['dialNumber']).
-		'&voiceBridge='.urlencode($creationParams['voiceBridge']).
-		'&webVoice='.urlencode($creationParams['webVoice']).
-		'&logoutURL='.urlencode($creationParams['logoutUrl']).
-		'&maxParticipants='.urlencode($creationParams['maxParticipants']).
-		'&record='.urlencode($creationParams['record']).
-		'&duration='.urlencode($creationParams['duration']);
-		//'&meta_category='.urlencode($creationParams['meta_category']);
-		$welcomeMessage = $creationParams['welcomeMsg'];
-		if(trim($welcomeMessage))
-			$params .= '&welcome='.urlencode($welcomeMessage);
-		// Return the complete URL:
-		return ( $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt) );
-	}
-
-	public function createMeetingWithXmlResponseArray($creationParams)
+    /**
+     * Generate a join meeting URL.
+     *
+     * @param array $p  meetingId, username, password, moderatorPw, userID, webVoiceConf
+     * @return string
+     */
+    public function getJoinMeetingURL(array $p): string
     {
-		/*
-		USAGE:
-		$creationParams = array(
-			'name' => 'Meeting Name',	-- A name for the meeting (or username)
-			'meetingId' => '1234',		-- A unique id for the meeting
-			'attendeePw' => 'ap',  		-- Set to 'ap' and use 'ap' to join = no user pass required.
-			'moderatorPw' => 'mp', 		-- Set to 'mp' and use 'mp' to join = no user pass required.
-			'welcomeMsg' => '', 		-- ''= use default. Change to customize.
-			'dialNumber' => '', 		-- The main number to call into. Optional.
-			'voiceBridge' => '', 		-- 5 digits PIN to join voice. Required.
-			'webVoice' => '', 			-- Alphanumeric to join voice. Optional.
-			'logoutUrl' => '', 			-- Default in bigbluebutton.properties. Optional.
-			'maxParticipants' => '-1', 	-- Optional. -1 = unlimitted. Not supported in BBB. [number]
-			'record' => 'false', 		-- New. 'true' will tell BBB to record the meeting.
-			'duration' => '0', 			-- Default = 0 which means no set duration in minutes. [number]
-			'meta_category' => '', 		-- Use to pass additional info to BBB server. See API docs to enable.
-		);
-		*/
-		$xml = $this->_processXmlResponse($this->getCreateMeetingURL($creationParams));
+        // 1) Determine role: if password matches moderatorPw, user is moderator
+        $role = Role::VIEWER;
+        if (
+            !empty($p['password']) &&
+            !empty($p['moderatorPw']) &&
+            $p['password'] === $p['moderatorPw']
+        ) {
+            $role = Role::MODERATOR;
+        }
 
-        if ($xml) {
-            if ($xml->meetingID) {
-                return [
-                    'returncode' => $xml->returncode->__toString(),
-                    'message' => $xml->message->__toString(),
-                    'messageKey' => $xml->messageKey->__toString(),
-                    'meetingId' => $xml->meetingID->__toString(),
-                    'attendeePw' => $xml->attendeePW->__toString(),
-                    'moderatorPw' => $xml->moderatorPW->__toString(),
-                    'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
-                    'createTime' => $xml->createTime->__toString(),
-                    'internalMeetingID' => $xml->internalMeetingID->__toString(),
+        // 2) Construct parameters object (password passed in constructor)
+        $jp = new JoinMeetingParameters(
+            $p['meetingId'],
+            $p['username'],
+            $p['password']
+        );
+
+        // 3) Assign the role explicitly
+        $jp->setRole($role);
+
+        // 4) Optional parameters
+        if (!empty($p['userID'])) {
+            $jp->setUserId((string) $p['userID']);
+        }
+        if (!empty($p['webVoiceConf'])) {
+            $jp->setWebVoiceConf($p['webVoiceConf']);
+        }
+
+        // 5) Delegate to the official client (returns full URL with protocol)
+        return $this->client->getJoinMeetingUrl($jp);
+    }
+
+    /**
+     * Generate an end meeting URL.
+     *
+     * @param array $p  meetingId, password
+     * @return string
+     */
+    public function getEndMeetingURL(array $p): string
+    {
+        // Only moderators can end
+        $ep = new EndMeetingParameters($p['meetingId'], Role::MODERATOR);
+        $ep->setPassword($p['password']);
+        return $this->client->getEndMeetingURL($ep);
+    }
+
+    /**
+     * Call endMeeting and return XML response as array.
+     *
+     * @param array $p
+     * @return array
+     */
+    public function endMeetingWithXmlResponseArray(array $p): array
+    {
+        $ep = new EndMeetingParameters($p['meetingId'], Role::MODERATOR);
+        $ep->setPassword($p['password']);
+        /** @var \BigBlueButton\Responses\EndMeetingResponse $r */
+        $r = $this->client->endMeeting($ep);
+
+        return [
+            'returncode' => $r->getReturnCode(),
+            'message'    => $r->getMessage(),
+            'messageKey' => $r->getMessageKey(),
+        ];
+    }
+
+    /**
+     * Build URL to check if meeting is running.
+     */
+    public function getIsMeetingRunningUrl(string $meetingId): string
+    {
+        $p = new IsMeetingRunningParameters($meetingId);
+        return $this->client->getIsMeetingRunningUrl($p);
+    }
+
+    /**
+     * Check if meeting is running and return result as array.
+     */
+    public function isMeetingRunningWithXmlResponseArray(string $meetingId): array
+    {
+        $p = new IsMeetingRunningParameters($meetingId);
+        /** @var IsMeetingRunningResponse $r */
+        $r = $this->client->isMeetingRunning($p);
+
+        return [
+            'returncode' => $r->getReturnCode(),
+            'running'    => $r->isRunning(),
+        ];
+    }
+
+    /**
+     * List all meetings (raw XML to array).
+     */
+    public function getMeetingsWithXmlResponseArray(): array
+    {
+        /** @var GetMeetingsResponse $r */
+        $r   = $this->client->getMeetings();
+        $xml = $r->getRawXml();
+
+        $out = [
+            'returncode' => (string) $xml->returncode,
+            'messageKey' => (string) $xml->messageKey,
+            'message'    => (string) $xml->message,
+        ];
+
+        if (isset($xml->meetings->meeting)) {
+            foreach ($xml->meetings->meeting as $m) {
+                $out[] = [
+                    'meetingId'   => (string) $m->meetingID,
+                    'meetingName' => (string) $m->meetingName,
+                    'createTime'  => (string) $m->createTime,
+                    'running'     => (string) $m->running,
                 ];
-            } else {
-                return [
-                    'returncode' => $xml->returncode->__toString(),
-                    'message' => $xml->message->__toString(),
-                    'messageKey' => $xml->messageKey->__toString(),
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Get detailed meeting info as array.
+     */
+    public function getMeetingInfoWithXmlResponseArray(array $p): array
+    {
+        /** @var GetMeetingInfoResponse $r */
+        $r   = $this->client->getMeetingInfo(
+            new GetMeetingInfoParameters($p['meetingId'])
+        );
+        $xml = $r->getRawXml();
+
+        $out = [
+            'returncode'           => (string) $xml->returncode,
+            'messageKey'           => (string) $xml->messageKey,
+            'message'              => (string) $xml->message,
+            'meetingName'          => (string) $xml->meetingName,
+            'meetingId'            => (string) $xml->meetingID,
+            'createTime'           => (string) $xml->createTime,
+            'voiceBridge'          => (string) $xml->voiceBridge,
+            'attendeePw'           => (string) $xml->attendeePW,
+            'moderatorPw'          => (string) $xml->moderatorPW,
+            'running'              => (string) $xml->running,
+            'recording'            => (string) $xml->recording,
+            'hasBeenForciblyEnded' => (string) $xml->hasBeenForciblyEnded,
+            'startTime'            => (string) $xml->startTime,
+            'endTime'              => (string) $xml->endTime,
+            'participantCount'     => (string) $xml->participantCount,
+            'maxUsers'             => (string) $xml->maxUsers,
+            'moderatorCount'       => (string) $xml->moderatorCount,
+            'internalMeetingID'    => (string) $xml->internalMeetingID,
+        ];
+
+        if (isset($xml->attendees->attendee)) {
+            foreach ($xml->attendees->attendee as $a) {
+                $out[] = [
+                    'userId'   => (string) $a->userID,
+                    'fullName' => (string) $a->fullName,
+                    'role'     => (string) $a->role,
                 ];
             }
-        } else {
-            return null;
         }
-	}
 
-	public function getJoinMeetingURL($joinParams) {
-		/*
-		NOTE: At this point, we don't use a corresponding joinMeetingWithXmlResponse here because the API
-		doesn't respond on success, but you can still code that method if you need it. Or, you can take the URL
-		that's returned from this method and simply send your users off to that URL in your code.
-		USAGE:
-		$joinParams = array(
-			'meetingId' => '1234',		-- REQUIRED - A unique id for the meeting
-			'username' => 'Jane Doe',	-- REQUIRED - The name that will display for the user in the meeting
-			'password' => 'ap',			-- REQUIRED - The attendee or moderator password, depending on what's passed here
-			'createTime' => '',			-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-			'userID' => '',				-- OPTIONAL - string
-			'webVoiceConf' => ''		-- OPTIONAL - string
-		);
-		*/
-		$this->_meetingId = $this->_requiredParam($joinParams['meetingId']);
-		$this->_username = $this->_requiredParam($joinParams['username']);
-		$this->_password = $this->_requiredParam($joinParams['password']);
-		// Establish the basic join URL:
-		$joinUrl = $this->_bbbServerBaseUrl."api/join?";
-		// Add parameters to the URL:
-		$params =
-		'meetingID='.urlencode($this->_meetingId).
-		'&fullName='.urlencode($this->_username).
-		'&password='.urlencode($this->_password).
-		'&userID='.urlencode($joinParams['userID']).
-		'&webVoiceConf='.urlencode($joinParams['webVoiceConf']);
-		// Only use createTime if we really want to use it. If it's '', then don't pass it:
-		if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {
-			$params .= '&createTime='.urlencode($joinParams['createTime']);
-		}
+        return $out;
+    }
 
-		if (isset($joinParams['interface']) && (int) $joinParams['interface'] === BbbPlugin::INTERFACE_HTML5) {
-			$bbbHost = api_remove_trailing_slash(CONFIG_SERVER_URL_WITH_PROTOCOL);
-			if (preg_match('#/bigbluebutton$#', $bbbHost)) {
-			    $bbbHost = preg_replace('#/bigbluebutton$#', '', $bbbHost);
+    /**
+     * Fetch recordings list as array.
+     */
+    public function getRecordingsWithXmlResponseArray(array $p): array
+    {
+        /** @var GetRecordingsResponse $r */
+        $r   = $this->client->getRecordings(
+            (new GetRecordingsParameters())->setMeetingId($p['meetingId'])
+        );
+        $xml = $r->getRawXml();
+
+        $out = [
+            'returncode' => (string) $xml->returncode,
+            'messageKey' => (string) $xml->messageKey,
+            'message'    => (string) $xml->message,
+        ];
+
+        if (isset($xml->recordings->recording)) {
+            foreach ($xml->recordings->recording as $rec) {
+                $out[] = [
+                    'recordId'             => (string) $rec->recordID,
+                    'meetingId'            => (string) $rec->meetingID,
+                    'name'                 => (string) $rec->name,
+                    'published'            => (string) $rec->published,
+                    'startTime'            => (string) $rec->startTime,
+                    'endTime'              => (string) $rec->endTime,
+                    'playbackFormatType'   => (string) $rec->playback->format->type,
+                    'playbackFormatUrl'    => (string) $rec->playback->format->url,
+                    'playbackFormatLength' => (string) $rec->playback->format->length,
+                ];
             }
-            $params .= '&redirectClient=true&clientURL='.$bbbHost.'/html5client/join';
         }
 
-		// Return the URL:
-		$url = $joinUrl.$params.'&checksum='.sha1('join'.$params.$this->_securitySalt);
+        return $out;
+    }
 
-		return $url;
-	}
+    /**
+     * Publish or unpublish recordings.
+     */
+    public function publishRecordingsWithXmlResponseArray(array $p): array
+    {
+        /** @var PublishRecordingsResponse $r */
+        $q = new PublishRecordingsParameters($p['recordId'], (bool) $p['publish']);
+        $r = $this->client->publishRecordings($q);
 
-	public function getEndMeetingURL($endParams) {
-		/* USAGE:
-		$endParams = array (
-			'meetingId' => '1234',		-- REQUIRED - The unique id for the meeting
-			'password' => 'mp'			-- REQUIRED - The moderator password for the meeting
-		);
-		*/
-		$this->_meetingId = $this->_requiredParam($endParams['meetingId']);
-		$this->_password = $this->_requiredParam($endParams['password']);
-		$endUrl = $this->_bbbServerBaseUrl."api/end?";
-		$params =
-		'meetingID='.urlencode($this->_meetingId).
-		'&password='.urlencode($this->_password);
-		return ($endUrl.$params.'&checksum='.sha1("end".$params.$this->_securitySalt));
-	}
+        return [
+            'returncode' => $r->getReturnCode(),
+            'published'  => $r->isPublished(),
+        ];
+    }
 
-	public function endMeetingWithXmlResponseArray($endParams) {
-		/* USAGE:
-		$endParams = array (
-			'meetingId' => '1234',		-- REQUIRED - The unique id for the meeting
-			'password' => 'mp'			-- REQUIRED - The moderator password for the meeting
-		);
-		*/
-		$xml = $this->_processXmlResponse($this->getEndMeetingURL($endParams));
-		if ($xml) {
-			return array(
-				'returncode' => $xml->returncode->__toString(),
-				'message' => $xml->message->__toString(),
-				'messageKey' => $xml->messageKey->__toString()
-				);
-		}
-		else {
-			return null;
-		}
+    /**
+     * Delete recordings by ID.
+     */
+    public function deleteRecordingsWithXmlResponseArray(array $p): array
+    {
+        /** @var DeleteRecordingsResponse $r */
+        $q = new DeleteRecordingsParameters($p['recordId']);
+        $r = $this->client->deleteRecordings($q);
 
-	}
-
-	/* __________________ BBB MONITORING METHODS _________________ */
-	/* The methods in the following section support the following categories of the BBB API:
-	-- isMeetingRunning
-	-- getMeetings
-	-- getMeetingInfo
-	*/
-	public function getIsMeetingRunningUrl($meetingId) {
-		/* USAGE:
-		$meetingId = '1234'		-- REQUIRED - The unique id for the meeting
-		*/
-		$this->_meetingId = $this->_requiredParam($meetingId);
-		$runningUrl = $this->_bbbServerBaseUrl."api/isMeetingRunning?";
-		$params =
-		'meetingID='.urlencode($this->_meetingId);
-		return ($runningUrl.$params.'&checksum='.sha1("isMeetingRunning".$params.$this->_securitySalt));
-	}
-
-	public function isMeetingRunningWithXmlResponseArray($meetingId) {
-		/* USAGE:
-		$meetingId = '1234'		-- REQUIRED - The unique id for the meeting
-		*/
-		$xml = $this->_processXmlResponse($this->getIsMeetingRunningUrl($meetingId));
-		if($xml) {
-			return array(
-				'returncode' => $xml->returncode->__toString(),
-				'running' => $xml->running->__toString() 	// -- Returns true/false.
-			);
-		}
-		else {
-			return null;
-		}
-	}
-
-	public function getGetMeetingsUrl() {
-		/* Simply formulate the getMeetings URL
-		We do this in a separate function so we have the option to just get this
-		URL and print it if we want for some reason.
-		*/
-		$getMeetingsUrl = $this->_bbbServerBaseUrl."api/getMeetings?checksum=".sha1("getMeetings".$this->_securitySalt);
-		return $getMeetingsUrl;
-	}
-
-	public function getMeetingsWithXmlResponseArray() {
-		/* USAGE:
-		We don't need to pass any parameters with this one, so we just send the query URL off to BBB
-		and then handle the results that we get in the XML response.
-		*/
-		$xml = $this->_processXmlResponse($this->getGetMeetingsUrl());
-		if($xml) {
-			// If we don't get a success code, stop processing and return just the returncode:
-			if ($xml->returncode != 'SUCCESS') {
-				$result = array(
-					'returncode' => $xml->returncode->__toString()
-				);
-				return $result;
-			}
-			elseif ($xml->messageKey == 'noMeetings') {
-				/* No meetings on server, so return just this info: */
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				return $result;
-			}
-			else {
-				// In this case, we have success and meetings. First return general response:
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				// Then interate through meeting results and return them as part of the array:
-				foreach ($xml->meetings->meeting as $m) {
-					$result[] = array(
-						'meetingId' => $m->meetingID->__toString(),
-						'meetingName' => $m->meetingName->__toString(),
-						'createTime' => $m->createTime->__toString(),
-						'attendeePw' => $m->attendeePW->__toString(),
-						'moderatorPw' => $m->moderatorPW->__toString(),
-						'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded->__toString(),
-						'running' => $m->running->__toString()
-					);
-				}
-				return $result;
-			}
-		}
-		else {
-			return null;
-		}
-
-	}
-
-	public function getMeetingInfoUrl($infoParams) {
-		/* USAGE:
-		$infoParams = array(
-			'meetingId' => '1234',		-- REQUIRED - The unique id for the meeting
-			'password' => 'mp'			-- REQUIRED - The moderator password for the meeting
-		);
-		*/
-		$this->_meetingId = $this->_requiredParam($infoParams['meetingId']);
-		$this->_password = $this->_requiredParam($infoParams['password']);
-		$infoUrl = $this->_bbbServerBaseUrl."api/getMeetingInfo?";
-		$params =
-		'meetingID='.urlencode($this->_meetingId).
-		'&password='.urlencode($this->_password);
-		return ($infoUrl.$params.'&checksum='.sha1("getMeetingInfo".$params.$this->_securitySalt));
-	}
-
-	public function getMeetingInfoWithXmlResponseArray($infoParams) {
-		/* USAGE:
-		$infoParams = array(
-			'meetingId' => '1234',		-- REQUIRED - The unique id for the meeting
-			'password' => 'mp'			-- REQUIRED - The moderator password for the meeting
-		);
-		*/
-		$xml = $this->_processXmlResponse($this->getMeetingInfoUrl($infoParams));
-		if($xml) {
-			// If we don't get a success code or messageKey, find out why:
-			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				return $result;
-			} else {
-				// In this case, we have success and meeting info:
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'meetingName' => $xml->meetingName->__toString(),
-					'meetingId' => $xml->meetingID->__toString(),
-					'createTime' => $xml->createTime->__toString(),
-					'voiceBridge' => $xml->voiceBridge->__toString(),
-					'attendeePw' => $xml->attendeePW->__toString(),
-					'moderatorPw' => $xml->moderatorPW->__toString(),
-					'running' => $xml->running->__toString(),
-					'recording' => $xml->recording->__toString(),
-					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
-					'startTime' => $xml->startTime->__toString(),
-					'endTime' => $xml->endTime->__toString(),
-					'participantCount' => $xml->participantCount->__toString(),
-					'maxUsers' => $xml->maxUsers->__toString(),
-					'moderatorCount' => $xml->moderatorCount->__toString(),
-                    'internalMeetingID' => $xml->internalMeetingID->__toString()
-				);
-
-				// Then interate through attendee results and return them as part of the array:
-				foreach ($xml->attendees->attendee as $a) {
-					$result[] = array(
-						'userId' => $a->userID->__toString(),
-						'fullName' => $a->fullName->__toString(),
-						'role' => $a->role->__toString()
-					);
-				}
-				return $result;
-			}
-		}
-		else {
-			return null;
-		}
-
-	}
-
-	/* __________________ BBB RECORDING METHODS _________________ */
-	/* The methods in the following section support the following categories of the BBB API:
-	-- getRecordings
-	-- publishRecordings
-	-- deleteRecordings
-	*/
-
-	public function getRecordingsUrl($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'meetingId' => '1234',		-- OPTIONAL - comma separate if multiple ids
-		);
-		*/
-		$recordingsUrl = $this->_bbbServerBaseUrl."api/getRecordings?";
-		$params = 'meetingID='.urlencode($recordingParams['meetingId']);
-		return ($recordingsUrl.$params.'&checksum='.sha1("getRecordings".$params.$this->_securitySalt));
-
-	}
-
-	public function getRecordingsWithXmlResponseArray($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'meetingId' => '1234',		-- OPTIONAL - comma separate if multiple ids
-		);
-		NOTE: 'duration' DOES work when creating a meeting, so if you set duration
-		when creating a meeting, it will kick users out after the duration. Should
-		probably be required in user code when 'recording' is set to true.
-		*/
-		$xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
-		if($xml) {
-			// If we don't get a success code or messageKey, find out why:
-			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				return $result;
-			}
-			else {
-				// In this case, we have success and recording info:
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-
-				foreach ($xml->recordings->recording as $r) {
-					$result[] = array(
-						'recordId' => $r->recordID->__toString(),
-						'meetingId' => $r->meetingID->__toString(),
-						'name' => $r->name->__toString(),
-						'published' => $r->published->__toString(),
-						'startTime' => $r->startTime->__toString(),
-						'endTime' => $r->endTime->__toString(),
-						'playbackFormatType' => $r->playback->format->type->__toString(),
-						'playbackFormatUrl' => $r->playback->format->url->__toString(),
-						'playbackFormatLength' => $r->playback->format->length->__toString(),
-						'metadataTitle' => $r->metadata->title->__toString(),
-						'metadataSubject' => $r->metadata->subject->__toString(),
-						'metadataDescription' => $r->metadata->description->__toString(),
-						'metadataCreator' => $r->metadata->creator->__toString(),
-						'metadataContributor' => $r->metadata->contributor->__toString(),
-						'metadataLanguage' => $r->metadata->language->__toString(),
-						// Add more here as needed for your app depending on your
-						// use of metadata when creating recordings.
-						);
-					}
-				return $result;
-			}
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * @param $array recordingParams
-	 *
-	 * @return array|null
-	 */
-	public function getRecordings($recordingParams)
-	{
-		/* USAGE:
-		$recordingParams = array(
-			'meetingId' => '1234',		-- OPTIONAL - comma separate if multiple ids
-		);
-		NOTE: 'duration' DOES work when creating a meeting, so if you set duration
-		when creating a meeting, it will kick users out after the duration. Should
-		probably be required in user code when 'recording' is set to true.
-		*/
-		$xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
-		if($xml) {
-			// If we don't get a success code or messageKey, find out why:
-			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				return $result;
-			}
-			else {
-				// In this case, we have success and recording info:
-				$result = array(
-					'returncode' => $xml->returncode->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'message' => $xml->message->__toString()
-				);
-				$result['records'] = [];
-				if (!empty($xml->recordings->recording)) {
-					foreach ($xml->recordings->recording as $r) {
-						$result['records'][] = array(
-							'recordId' => $r->recordID->__toString(),
-							'meetingId' => $r->meetingID->__toString(),
-							'name' => $r->name->__toString(),
-							'published' => $r->published->__toString(),
-							'startTime' => $r->startTime->__toString(),
-							'endTime' => $r->endTime->__toString(),
-							'playbackFormatType' => $r->playback->format->type->__toString(),
-							'playbackFormatUrl' => $r->playback->format->url->__toString(),
-							'playbackFormatLength' => $r->playback->format->length->__toString(),
-							'metadataTitle' => $r->metadata->title->__toString(),
-							'metadataSubject' => $r->metadata->subject->__toString(),
-							'metadataDescription' => $r->metadata->description->__toString(),
-							'metadataCreator' => $r->metadata->creator->__toString(),
-							'metadataContributor' => $r->metadata->contributor->__toString(),
-							'metadataLanguage' => $r->metadata->language->__toString(),
-						);
-					}
-				}
-
-				return $result;
-			}
-		}
-
-		return null;
-	}
-
-	public function getPublishRecordingsUrl($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'recordId' => '1234',		-- REQUIRED - comma separate if multiple ids
-			'publish' => 'true',		-- REQUIRED - boolean: true/false
-		);
-		*/
-		$recordingsUrl = $this->_bbbServerBaseUrl."api/publishRecordings?";
-		$params =
-		'recordID='.urlencode($recordingParams['recordId']).
-		'&publish='.urlencode($recordingParams['publish']);
-		return ($recordingsUrl.$params.'&checksum='.sha1("publishRecordings".$params.$this->_securitySalt));
-
-	}
-
-	public function publishRecordingsWithXmlResponseArray($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'recordId' => '1234',		-- REQUIRED - comma separate if multiple ids
-			'publish' => 'true',		-- REQUIRED - boolean: true/false
-		);
-		*/
-		$xml = $this->_processXmlResponse($this->getPublishRecordingsUrl($recordingParams));
-		if($xml) {
-			return array(
-				'returncode' => $xml->returncode->__toString(),
-				'published' => $xml->published->__toString() 	// -- Returns true/false.
-			);
-		}
-		else {
-			return null;
-		}
-
-
-	}
-
-	public function getDeleteRecordingsUrl($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'recordId' => '1234',		-- REQUIRED - comma separate if multiple ids
-		);
-		*/
-		$recordingsUrl = $this->_bbbServerBaseUrl."api/deleteRecordings?";
-		$params =
-		'recordID='.urlencode($recordingParams['recordId']);
-		return ($recordingsUrl.$params.'&checksum='.sha1("deleteRecordings".$params.$this->_securitySalt));
-	}
-
-	public function deleteRecordingsWithXmlResponseArray($recordingParams) {
-		/* USAGE:
-		$recordingParams = array(
-			'recordId' => '1234',		-- REQUIRED - comma separate if multiple ids
-		);
-		*/
-
-		$xml = $this->_processXmlResponse($this->getDeleteRecordingsUrl($recordingParams));
-		if($xml) {
-			return array(
-				'returncode' => $xml->returncode->__toString(),
-				'deleted' => $xml->deleted->__toString() 	// -- Returns true/false.
-			);
-		}
-		else {
-			return null;
-		}
-
-	}
-
-	/** USAGE:
-	 * $recordingParams = array(
-	 * 'recordId' => '1234',        -- REQUIRED - comma separate if multiple ids
-	 * );
-	 */
-	public function generateRecording($recordingParams)
-	{
-	    if (empty($recordingParams)) {
-	        return false;
-        }
-
-		$recordingsUrl = $this->_bbbServerBaseUrl.'../demo/regenerateRecord.jsp?';
-		$params = 'recordID='.urlencode($recordingParams['recordId']);
-		$url = $recordingsUrl.$params.'&checksum='.sha1('regenerateRecord'.$params.$this->_securitySalt);
-
-        $ch = curl_init() or die ( curl_error($ch) );
-        $timeout = 10;
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $data = curl_exec( $ch );
-        curl_close( $ch );
-
-        return true;
-	}
+        return [
+            'returncode' => $r->getReturnCode(),
+            'deleted'    => $r->isDeleted(),
+        ];
+    }
 }

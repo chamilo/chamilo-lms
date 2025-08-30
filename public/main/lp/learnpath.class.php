@@ -793,7 +793,22 @@ class learnpath
 
         $course = api_get_course_entity();
         $session = api_get_session_entity();
+        /* @var CLp $lp */
         $lp = Container::getLpRepository()->find($this->lp_id);
+
+        // 1) Detach the asset to avoid FK constraint
+        $asset = $lp->getAsset();
+        if ($asset) {
+            $lp->setAsset(null);
+            $em = Database::getManager();
+            $em->persist($lp);
+            $em->flush();
+        }
+
+        // 2) Now delete the asset and its folder
+        if ($asset) {
+            Container::getAssetRepository()->delete($asset);
+        }
 
         Database::getManager()
             ->getRepository(ResourceLink::class)
@@ -2559,7 +2574,7 @@ class learnpath
      *
      * @return array Ordered list of item IDs (empty array on error)
      */
-    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0)
+    public static function get_flat_ordered_items_list(CLp $lp, $parent = 0, $withExportFlag = false)
     {
         $parent = (int) $parent;
         $lpItemRepo = Container::getLpItemRepository();
@@ -2577,32 +2592,41 @@ class learnpath
         $criteria = new Criteria();
         $criteria
             ->where($criteria->expr()->neq('path', 'root'))
-            ->orderBy(
-                [
-                    'displayOrder' => Criteria::ASC,
-                ]
-            );
+            ->orderBy(['displayOrder' => Criteria::ASC]);
         $items = $lp->getItems()->matching($criteria);
-        $items = $items->filter(
-            function (CLpItem $element) use ($parent) {
-                if ('root' === $element->getPath()) {
-                    return false;
-                }
-
-                if (null !== $element->getParent()) {
-                    return $element->getParent()->getIid() === $parent;
-                }
+        $items = $items->filter(function (CLpItem $element) use ($parent) {
+            if ('root' === $element->getPath()) {
                 return false;
-
             }
-        );
+            if (null !== $element->getParent()) {
+                return $element->getParent()->getIid() === $parent;
+            }
+            return false;
+        });
+
+        if (!$withExportFlag) {
+            $ids = [];
+            foreach ($items as $item) {
+                $itemId = $item->getIid();
+                $ids[] = $itemId;
+                $subIds = self::get_flat_ordered_items_list($lp, $itemId, false);
+                foreach ($subIds as $subId) {
+                    $ids[] = $subId;
+                }
+            }
+            return $ids;
+        }
+
         $list = [];
         foreach ($items as $item) {
             $itemId = $item->getIid();
-            $sublist = self::get_flat_ordered_items_list($lp, $itemId);
-            $list[] = $itemId;
-            foreach ($sublist as $subItem) {
-                $list[] = $subItem;
+            $list[] = [
+                'iid'            => $itemId,
+                'export_allowed' => $item->isExportAllowed() ? 1 : 0,
+            ];
+            $subList = self::get_flat_ordered_items_list($lp, $itemId, true);
+            foreach ($subList as $subEntry) {
+                $list[] = $subEntry;
             }
         }
 
@@ -5645,6 +5669,17 @@ class learnpath
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
+        if ($action === 'edit' && $lpItem !== null) {
+            $form->addElement(
+                'checkbox',
+                'export_allowed',
+                get_lang('Allow PDF export for this item')
+            );
+            $form->setDefaults([
+                'export_allowed' => $lpItem->isExportAllowed() ? 1 : 0
+            ]);
+        }
+
         switch ($action) {
             case 'add':
                 $folders = DocumentManager::get_all_document_folders(
@@ -5660,11 +5695,11 @@ class learnpath
                     $form,
                     'directory_parent_id'
                 );
-
                 if ($data) {
-                    $defaults['directory_parent_id'] = $data->getIid();
+                    $form->setDefaults([
+                        'directory_parent_id' => $data->getIid()
+                    ]);
                 }
-
                 break;
         }
 
@@ -5672,6 +5707,8 @@ class learnpath
 
         return $form->returnForm();
     }
+
+
 
     /**
      * @param array  $courseInfo
@@ -7051,38 +7088,87 @@ class learnpath
         );
     }
 
+    public static function getQuotaInfo(string $localFilePath): array
+    {
+        $post_max_raw   = ini_get('post_max_size');
+        $post_max_bytes = (int) rtrim($post_max_raw, 'MG') * (str_ends_with($post_max_raw,'G') ? 1024**3 : 1024**2);
+        $upload_max_raw = ini_get('upload_max_filesize');
+        $upload_max_bytes = (int) rtrim($upload_max_raw, 'MG') * (str_ends_with($upload_max_raw,'G') ? 1024**3 : 1024**2);
+
+        $em     = Database::getManager();
+        $course = api_get_course_entity(api_get_course_int_id());
+
+        $nodes  = Container::getResourceNodeRepository()->findByResourceTypeAndCourse('file', $course);
+        $root   = null;
+        foreach ($nodes as $n) {
+            if ($n->getParent() === null) {
+                $root = $n; break;
+            }
+        }
+        $docsSize = $root
+            ? Container::getDocumentRepository()->getFolderSize($root, $course)
+            : 0;
+
+        $assetRepo = Container::getAssetRepository();
+        $fs        = $assetRepo->getFileSystem();
+        $scormSize = 0;
+        foreach (Container::getLpRepository()->findScormByCourse($course) as $lp) {
+            if ($asset = $lp->getAsset()) {
+                $folder = $assetRepo->getFolder($asset);
+                if ($folder && $fs->directoryExists($folder)) {
+                    $scormSize += self::getFolderSize($folder);
+                }
+            }
+        }
+
+        $uploadedSize = filesize($localFilePath);
+        $existingTotal = $docsSize + $scormSize;
+        $combined = $existingTotal + $uploadedSize;
+
+        $quotaMb = DocumentManager::get_course_quota();
+        $quotaBytes = $quotaMb * 1024 * 1024;
+
+        return [
+            'post_max'      => $post_max_bytes,
+            'upload_max'    => $upload_max_bytes,
+            'docs_size'     => $docsSize,
+            'scorm_size'    => $scormSize,
+            'existing_total'=> $existingTotal,
+            'uploaded_size' => $uploadedSize,
+            'combined'      => $combined,
+            'quota_bytes'   => $quotaBytes,
+        ];
+    }
+
     /**
      * Verify document size.
-     *
-     * @param string $s
-     *
-     * @return bool
      */
-    public static function verify_document_size($s)
+    public static function verify_document_size(string $localFilePath): bool
     {
-        $post_max = ini_get('post_max_size');
-        if ('M' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($post_max, -1, 1)) {
-            $post_max = intval(substr($post_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-        $upl_max = ini_get('upload_max_filesize');
-        if ('M' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024;
-        } elseif ('G' == substr($upl_max, -1, 1)) {
-            $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
-        }
-
-        $repo = Container::getDocumentRepository();
-        $documents_total_space = $repo->getTotalSpace(api_get_course_int_id());
-
-        $course_max_space = DocumentManager::get_course_quota();
-        $total_size = filesize($s) + $documents_total_space;
-        if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {
+        $info = self::getQuotaInfo($localFilePath);
+        if ($info['uploaded_size'] > $info['post_max']
+            || $info['uploaded_size'] > $info['upload_max']
+            || $info['combined']    > $info['quota_bytes']
+        ) {
+            Container::getSession()->set('quota_info', $info);
             return true;
         }
 
         return false;
+    }
+
+    private static function getFolderSize(string $path): int
+    {
+        $size     = 0;
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS)
+        );
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $size += $file->getSize();
+            }
+        }
+        return $size;
     }
 
     /**

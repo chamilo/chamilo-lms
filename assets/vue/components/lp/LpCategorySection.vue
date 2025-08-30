@@ -3,6 +3,7 @@ import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import Draggable from "vuedraggable"
 import LpCardItem from "./LpCardItem.vue"
+import BaseDropdownMenu from "../basecomponents/BaseDropdownMenu.vue"
 import lpService from "../../services/lpService"
 import { useI18n } from "vue-i18n"
 
@@ -13,12 +14,13 @@ const props = defineProps({
   category: { type: Object, required: true },
   list: { type: Array, default: () => [] },
   canEdit: { type: Boolean, default: false },
+  canExportScorm: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete",
+  "toggle-visible","toggle-publish","delete","export-scorm",
   "reorder"
 ])
 
@@ -105,25 +107,32 @@ function onChangeCat() {
 
       <div class="flex items-center gap-2">
         <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Lessons') }}</div>
-        <details v-if="canEdit" class="relative z-30">
-          <summary
-            class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-            :title="t('Category options')" :aria-label="t('Category options')"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/>
-            </svg>
-          </summary>
-          <div class="absolute right-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50" @mousedown.stop @click.stop>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatEdit">{{ t('Edit category') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatAddUsers">{{ t('Add users to category') }}</button>
-            <div class="my-1 h-px bg-gray-15"></div>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatToggleVisibility">{{ t('Toggle visibility') }}</button>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatTogglePublish">{{ t('Publish / Unpublish') }}</button>
-            <div class="my-1 h-px bg-gray-15"></div>
-            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="onCatDelete">{{ t('Delete') }}</button>
-          </div>
-        </details>
+        
+        <BaseDropdownMenu v-if="canEdit"
+          :dropdown-id="`category-${category.iid}`"
+          class="relative z-30"
+        >
+          <template #button>
+            <span
+              class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
+              :title="t('Category options')" 
+              :aria-label="t('Category options')"
+            >
+              <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
+            </span>
+          </template>
+          <template #menu>
+            <div class="absolute right-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50">
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatEdit">{{ t('Edit category') }}</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatAddUsers">{{ t('Add users to category') }}</button>
+              <div class="my-1 h-px bg-gray-15"></div>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatToggleVisibility">{{ t('Toggle visibility') }}</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatTogglePublish">{{ t('Publish / Unpublish') }}</button>
+              <div class="my-1 h-px bg-gray-15"></div>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="onCatDelete">{{ t('Delete') }}</button>
+            </div>
+          </template>
+        </BaseDropdownMenu>
 
         <button
           v-if="localList.length"
@@ -167,6 +176,7 @@ function onChangeCat() {
             :canEdit="canEdit"
             :ringDash="ringDash"
             :ringValue="ringValue"
+            :canExportScorm="canExportScorm"
             @open="$emit('open', element)"
             @edit="$emit('edit', element)"
             @report="$emit('report', element)"

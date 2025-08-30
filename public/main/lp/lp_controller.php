@@ -593,6 +593,18 @@ switch ($action) {
             if (isset($_POST['content_lp'])) {
                 $oLP->edit_document($courseInfo);
             }
+
+            $exportAllowed = (isset($_POST['export_allowed']) && '1' === $_POST['export_allowed']);
+            $repo = Container::getLpItemRepository();
+            /** @var CLpItem $item */
+            $item = $repo->find((int) $_REQUEST['id']);
+            if ($item) {
+                $item->setExportAllowed($exportAllowed);
+                $em = Database::getManager();
+                $em->persist($item);
+                $em->flush();
+            }
+
             $is_success = true;
             $extraFieldValues = new ExtraFieldValue('lp_item');
             $extraFieldValues->saveFieldValues($_POST);
@@ -977,10 +989,11 @@ switch ($action) {
             $oLP->save_current();
             $oLP->save_last();
 
-            Display::display_reduced_header();
+            Display::display_no_header();
             $output = require 'lp_stats.php';
             echo $output;
             Display::display_reduced_footer();
+            exit;
         }
         break;
     case 'list':

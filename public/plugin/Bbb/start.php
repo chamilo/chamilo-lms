@@ -5,6 +5,9 @@
 /**
  * This script initiates a video conference session, calling the BigBlueButton API.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../../../vendor/autoload.php';
 
 $course_plugin = 'Bbb'; //needed in order to load the plugin lang variables
@@ -18,6 +21,31 @@ if ($isGlobalPerUser || $isGlobal) {
 }
 
 require_once __DIR__.'/config.php';
+
+function bbb_flash_redirect(string $htmlMessage, Bbb $bbb): void
+{
+    Display::addFlash($htmlMessage);
+    try {
+        $type = 'info';
+        if (preg_match('/alert-([a-z]+)/', $htmlMessage, $m)) {
+            $type = $m[1] === 'danger' ? 'error' : $m[1];
+        }
+        $text = $htmlMessage;
+        if (preg_match('/<div[^>]*>(.*?)<\/div>/si', $htmlMessage, $m)) {
+            $text = trim($m[1]);
+        }
+        Container::getSession()->set('bbb_preupload_message', ['type' => $type, 'text' => $text]);
+    } catch (\Throwable $e) {}
+
+    $url = $bbb->getListingUrl().'#bbb-pre-pop';
+    if (!headers_sent()) {
+        header($_SERVER['SERVER_PROTOCOL'].' 303 See Other');
+        header('Location: '.$url);
+    } else {
+        echo '<script>window.location.href='.json_encode($url).';</script>';
+    }
+    exit;
+}
 
 $logInfo = [
     'tool' => 'Videoconference',
@@ -77,7 +105,69 @@ if ($bbb->pluginEnabled) {
                     }
                 } else {
                     if ($bbb->isConferenceManager()) {
+                        if (!empty($_POST['documents']) && is_array($_POST['documents'])) {
+                            $docs = [];
+                            foreach ($_POST['documents'] as $raw) {
+                                $json = html_entity_decode($raw);
+                                $doc  = json_decode($json, true);
+                                if (is_array($doc) && !empty($doc['url'])) {
+                                    $docs[] = [
+                                        'url'         => $doc['url'],
+                                        'filename'    => $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH)),
+                                        'downloadable'=> true,
+                                        'removable'   => true
+                                    ];
+                                }
+                            }
+                            if (!empty($docs)) {
+                                $meetingParams['documents'] = $docs;
+                            }
+                        }
+
+                        $maxTotalMb = (int) api_get_course_plugin_setting('bbb', 'bbb_preupload_max_total_mb', api_get_course_info());
+                        if ($maxTotalMb <= 0) { $maxTotalMb = 20; }
+
+                        $totalBytes = 0;
+                        if (!empty($_POST['documents']) && is_array($_POST['documents'])) {
+                            $docs = [];
+                            foreach ($_POST['documents'] as $raw) {
+                                $json = html_entity_decode($raw);
+                                $doc  = json_decode($json, true);
+                                if (!is_array($doc) || empty($doc['url'])) { continue; }
+                                $totalBytes += (int)($doc['size'] ?? 0);
+                                $docs[] = [
+                                    'url'         => $doc['url'],
+                                    'filename'    => $doc['filename'] ?? basename(parse_url($doc['url'], PHP_URL_PATH)),
+                                    'downloadable'=> true,
+                                    'removable'   => true,
+                                ];
+                            }
+
+                            if ($totalBytes > ($maxTotalMb * 1024 * 1024)) {
+                                bbb_flash_redirect(
+                                    Display::return_message(
+                                        sprintf(get_lang('The total size of selected documents exceeds %d MB.'), $maxTotalMb),
+                                        'error'
+                                    ),
+                                    $bbb
+                                );
+                            }
+
+                            if (!empty($docs)) {
+                                $meetingParams['documents'] = $docs;
+                            }
+                        }
+
                         $url = $bbb->createMeeting($meetingParams);
+                        if (!$url) {
+                            bbb_flash_redirect(
+                                Display::return_message(
+                                    get_lang('The selected documents exceed the upload limit of the video-conference server. Try fewer/smaller files or contact your administrator.'),
+                                    'error'
+                                ),
+                                $bbb
+                            );
+                        }
                     }
                 }
 
@@ -109,4 +199,5 @@ if ($bbb->pluginEnabled) {
 }
 
 $tpl->assign('message', $message);
+$tpl->assign('content', $message);
 $tpl->display_one_col_template();

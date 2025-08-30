@@ -2339,8 +2339,18 @@ class SessionManager
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at)
                         VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."')";
                 } else {
+                    if (null != ($accessStartDate = $session->getAccessStartDate())) {
+                        $accessStartDate = "'".$accessStartDate->format('Y-m-d H:i:s')."'";
+                    } else {
+                        $accessStartDate = "NULL";
+                    }
+                    if (null != ($accessEndDate = $session->getAccessEndDate())) {
+                        $accessEndDate = "'".$accessEndDate->format('Y-m-d H:i:s')."'";
+                    } else {
+                        $accessEndDate = "NULL";
+                    }
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, registered_at, access_start_date, access_end_date)
-                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', '".$session->getAccessStartDate()->format('Y-m-d H:i:s')."', '".$session->getAccessEndDate()->format('Y-m-d H:i:s')."')";
+                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
                 }
                 Database::query($sql);
                 Event::addEvent(

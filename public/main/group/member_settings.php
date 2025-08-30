@@ -14,7 +14,7 @@ $current_group = GroupManager::get_group_properties($group_id);
 $groupEntity = api_get_group_entity($group_id);
 
 $nameTools = get_lang('Edit this group');
-$interbreadcrumb[] = ['url' => 'group.php', 'name' => get_lang('Groups')];
+$interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $groupEntity->getTitle()];
 
 $is_group_member = GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity);

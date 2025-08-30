@@ -4,7 +4,7 @@
 class PageBreakQuestion extends Question
 {
     public $typePicture = 'page_break.png';
-    public $explanationLangVar = 'PageBreak';
+    public $explanationLangVar = 'Page break';
 
     public function __construct()
     {
@@ -17,7 +17,7 @@ class PageBreakQuestion extends Question
     {
         $form->addText(
             'questionName',
-            get_lang('Page Title'),
+            get_lang('Title'),
             false,
             ['maxlength' => 255]
         );
@@ -27,7 +27,7 @@ class PageBreakQuestion extends Question
         ];
         $form->addHtmlEditor(
             'questionDescription',
-            get_lang('Page Introduction'),
+            get_lang('Description'),
             false,
             false,
             $editorConfig

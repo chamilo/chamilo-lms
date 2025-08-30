@@ -211,8 +211,13 @@ if (api_is_allowed_to_edit(false, true) ||
         }*/
     }
 
-    $enabled = api_get_plugin_setting('bbb', 'tool_enable');
-    if ('true' === $enabled) {
+    $pluginRepo = Container::getPluginRepository();
+    $plugin = $pluginRepo->findOneByTitle('bbb');
+    $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+    $isInstalled = $plugin && $plugin->isInstalled();
+    $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+
+    if ($isInstalled && $isEnabled) {
         $bbb = new Bbb();
         if ($bbb->hasGroupSupport()) {
             $actions_array[] = [
@@ -222,8 +227,12 @@ if (api_is_allowed_to_edit(false, true) ||
         }
     }
 
-    $enabled = api_get_plugin_setting('zoom', 'tool_enable');
-    if ('true' === $enabled) {
+    $plugin = $pluginRepo->findOneByTitle('zoom');
+    $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
+    $isInstalled = $plugin && $plugin->isInstalled();
+    $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+
+    if ($isInstalled && $isEnabled) {
         $actions_array[] = [
             'url' => api_get_path(WEB_PLUGIN_PATH).'zoom/start.php?'.api_get_cidreq(),
             'content' => Display::getMdiIcon(ToolIcon::VIDEOCONFERENCE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Videoconference')),

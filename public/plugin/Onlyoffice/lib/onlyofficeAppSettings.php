@@ -92,7 +92,7 @@ class OnlyofficeAppsettings extends SettingsManager
         $plugin = Database::getManager()->getRepository(PluginEntity::class)->findOneBy(['title' => 'Onlyoffice']);
         $configuration = $plugin?->getConfigurationsByAccessUrl(
             Container::getAccessUrlUtil()->getCurrent()
-        );
+        )->getConfiguration();
 
         $value = null;
         if (null !== $this->newSettings) {

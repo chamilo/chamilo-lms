@@ -23,7 +23,6 @@ if ($isGlobalPerUser || $isGlobal) {
 require_once __DIR__.'/config.php';
 
 $plugin = BbbPlugin::create();
-$canSeeShareableConferenceLink = $plugin->canCurrentUserSeeGlobalConferenceLink();
 $tool_name = $plugin->get_lang('Videoconference');
 $em = Database::getManager();
 $meetingRepository = $em->getRepository(ConferenceMeeting::class);
@@ -37,6 +36,7 @@ $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 $course = api_get_course_entity();
+$canSeeShareableJoinLink = $plugin->showShareLink();
 
 // Instantiate BBB helper (it should lazy-initialize the underlying API internally).
 $bbb = new Bbb('', '', $isGlobal, $isGlobalPerUser);
@@ -614,9 +614,8 @@ $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $showJoinButton);
 $tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
-$tpl->assign('can_see_share_link', $canSeeShareableConferenceLink);
+$tpl->assign('can_see_share_link', $canSeeShareableJoinLink);
 $tpl->assign('plugin', $plugin);
-$tpl->assign('is_course_context', api_get_course_int_id() > 0);
 $tpl->assign('message', $message);
 $content = $tpl->fetch('Bbb/view/listing.tpl');
 

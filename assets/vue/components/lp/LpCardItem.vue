@@ -9,12 +9,13 @@ const props = defineProps({
   lp: { type: Object, required: true },
   canEdit: { type: Boolean, default: false },
   canExportScorm: {type: Boolean, default: false},
+  canExportPdf: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings", "build",
-  "toggle-visible","toggle-publish","delete","export-scorm"
+  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf"
 ])
 
 const dateText = computed(() => {
@@ -135,8 +136,17 @@ const progressTextClass = computed(() => {
         >
           <i class="mdi mdi-archive-arrow-down text-xl" />
         </button>
+        <button
+          v-if="canExportPdf"
+          class="row-start-1 col-start-5 opacity-70 hover:opacity-100"
+          :title="t('PDF Export')"
+          :aria-label="t('PDF Export')"
+          @click="emit('export-pdf', lp)"
+        >
+          <i class="mdi mdi-file-pdf-box text-xl" />
+        </button>
         <div class="relative w-8 h-8">
-          <BaseDropdownMenu v-if="canEdit" 
+          <BaseDropdownMenu v-if="canEdit"
           :dropdown-id="`card-${lp.iid}`"
           class="absolute"
           >

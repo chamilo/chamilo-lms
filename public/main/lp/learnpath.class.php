@@ -5669,16 +5669,20 @@ class learnpath
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
+        $form->addElement(
+            'checkbox',
+            'export_allowed',
+            get_lang('Allow PDF export for this item')
+        );
+
+        $defaultExportAllowed = 1;
         if ($action === 'edit' && $lpItem !== null) {
-            $form->addElement(
-                'checkbox',
-                'export_allowed',
-                get_lang('Allow PDF export for this item')
-            );
-            $form->setDefaults([
-                'export_allowed' => $lpItem->isExportAllowed() ? 1 : 0
-            ]);
+            $defaultExportAllowed = $lpItem->isExportAllowed() ? 1 : 0;
         }
+
+        $form->setDefaults([
+            'export_allowed' => $defaultExportAllowed,
+        ]);
 
         switch ($action) {
             case 'add':

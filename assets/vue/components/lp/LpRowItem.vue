@@ -9,6 +9,7 @@ const props = defineProps({
   lp: { type: Object, required: true },
   canEdit: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
+  canExportPdf: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
@@ -16,7 +17,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete","export-scorm"
+  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf"
 ])
 
 const dateText = computed(() => {
@@ -109,6 +110,15 @@ const progressTextClass = computed(() => {
             >
               <i class="mdi mdi-archive-arrow-down text-xl" />
           </button>
+          <button
+            v-if="canExportPdf"
+            class="row-start-1 col-start-5 opacity-70 hover:opacity-100"
+            :title="t('PDF Export')"
+            :aria-label="t('PDF Export')"
+            @click="emit('export-pdf', lp)"
+          >
+            <i class="mdi mdi-file-pdf-box text-xl" />
+          </button>
           <BaseDropdownMenu
             :dropdown-id="`row-${lp.iid}`"
             class="row-start-1 col-start-5 relative"
@@ -149,9 +159,9 @@ const progressTextClass = computed(() => {
                 transform="rotate(-90 20 20)"
               />
             </svg>
-            <span 
-              class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white" 
-              :class="progressBgClass" 
+            <span
+              class="absolute -top-0.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full ring-2 ring-white"
+              :class="progressBgClass"
               aria-hidden/>
             <div class="absolute inset-0 grid place-content-center text-tiny font-semibold text-gray-90">
               {{ ringValue(lp.progress) }}%

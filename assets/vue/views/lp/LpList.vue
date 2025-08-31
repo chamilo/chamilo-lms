@@ -132,6 +132,7 @@
               :ringDash="ringDash"
               :ringValue="ringValue"
               :canExportScorm="canExportScorm"
+              :canExportPdf="canExportPdf"
               @open="openLegacy"
               @edit="goEdit"
               @report="onReport"
@@ -141,6 +142,7 @@
               @toggle-publish="onTogglePublish"
               @delete="onDelete"
               @export-scorm="onExportScorm"
+              @export-pdf="onExportPdf"
             />
           </template>
         </Draggable>
@@ -156,6 +158,7 @@
         :ringDash="ringDash"
         :ringValue="ringValue"
         :canExportScorm="canExportScorm"
+        :canExportPdf="canExportPdf"
         @open="openLegacy"
         @edit="goEdit"
         @report="onReport"
@@ -164,11 +167,19 @@
         @toggle-visible="onToggleVisible"
         @toggle-publish="onTogglePublish"
         @delete="onDelete"
-        @export-scorm="onExportScorm"
+        @export-pdf="onExportPdf"
         @reorder="(ids) => onReorderCategory(cat, ids)"
       />
     </template>
   </div>
+  <ExportPdfDialog
+    v-if="showExportDialog && exportTarget"
+    :show="showExportDialog"
+    :lp-id="exportTarget.iid"
+    :cid="cid"
+    :sid="sid"
+    @close="onCloseExportDialog"
+  />
 </template>
 
 <script setup>
@@ -186,6 +197,7 @@ import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
+import ExportPdfDialog from "../../components/lp/ExportPdfDialog.vue"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -218,9 +230,17 @@ const canUseAi = computed(() => {
   return !!(canEdit.value && aiHelpersEnabled.value && lpGeneratorEnabled.value)
 })
 
+const showExportDialog = ref(false)
+const exportTarget = ref(null)
+
 const canExportScorm = computed(() => {
   const isScormEnabled = platformConfig.getSetting("hide_scorm_export_link") !== "true"
   return canEdit.value && isScormEnabled
+})
+
+const canExportPdf = computed(() => {
+  const hidden = platformConfig.getSetting("course.hide_scorm_pdf_link") === "true"
+  return canEdit.value && !hidden
 })
 
 const items = ref([])
@@ -237,6 +257,16 @@ const hasImageRF = (lp) => {
   if (Array.isArray(rfs) && rfs.length) return rfs.some((f) => f?.image === true)
   if (lp.firstResourceFile?.image) return true
   return false
+}
+
+const onExportPdf = (lp) => {
+  if (!canExportPdf.value) return
+  exportTarget.value = lp
+  showExportDialog.value = true
+}
+const onCloseExportDialog = () => {
+  showExportDialog.value = false
+  exportTarget.value = null
 }
 
 const load = async () => {

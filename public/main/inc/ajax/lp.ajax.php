@@ -72,7 +72,7 @@ switch ($action) {
         }
 
         header('Content-Type: application/json');
-        echo json_encode(['items' => $lpItems]);
+        echo json_encode(['items' => $lpItems], JSON_UNESCAPED_UNICODE);
         exit;
     case 'get_lp_list_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;

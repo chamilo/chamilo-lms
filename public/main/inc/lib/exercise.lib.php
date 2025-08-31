@@ -129,7 +129,7 @@ class ExerciseLib
                 }
             }
 
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION]) && $freeze) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER]) && $freeze) {
                 return '';
             }
 
@@ -227,6 +227,103 @@ class ExerciseLib
                     );
                     $form->setDefaults(["choice[".$questionId."]" => $fck_content]);
                     $s .= $form->returnForm();
+                    break;
+                case UPLOAD_ANSWER:
+                    $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=upload_answer&question_id='.$questionId;
+                    $multipleForm = new FormValidator(
+                        'drag_drop',
+                        'post',
+                        '#',
+                        '',
+                        ['enctype' => 'multipart/form-data', 'id' => 'drag_drop']
+                    );
+
+                    $iconDelete = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
+                    $multipleForm->addMultipleUpload($url);
+
+                    $s .= '<script>
+                        function setRemoveLink(dataContext) {
+                            var removeLink = $("<a>", {
+                                html: "&nbsp;'.addslashes($iconDelete).'",
+                                href: "#",
+                                click: function(e) {
+                                  e.preventDefault();
+                                  dataContext.parent().remove();
+                                }
+                            });
+                            dataContext.append(removeLink);
+                        }
+
+                        $(function() {
+                            $("#input_file_upload").bind("fileuploaddone", function (e, data) {
+                                $.each(data.result.files, function (index, file) {
+                                    // El backend ahora devuelve asset_id y url
+                                    if (file.asset_id) {
+                                        var input = $("<input>", {
+                                            type: "hidden",
+                                            name: "uploadAsset['.$questionId.'][]",
+                                            value: file.asset_id
+                                        });
+                                        $(data.context.children()[index]).parent().append(input);
+                                        // set the remove link
+                                        setRemoveLink($(data.context.children()[index]).parent());
+                                    }
+                                });
+                            });
+                        });
+                    </script>';
+                    $sessionKey = 'upload_answer_assets_'.$questionId;
+                    $assetIds = (array) ChamiloSession::read($sessionKey);
+
+                    if (!empty($assetIds)) {
+                        $icon = Display::return_icon('file_txt.gif');
+                        $default = "";
+                        $assetRepo = \Chamilo\CoreBundle\Framework\Container::getAssetRepository();
+                        $basePath = rtrim(api_get_path(WEB_PATH), "/");
+
+                        foreach ($assetIds as $id) {
+                            try {
+                                $asset = $assetRepo->find(\Symfony\Component\Uid\Uuid::fromRfc4122((string)$id));
+                            } catch (\Throwable $e) {
+                                $asset = null;
+                            }
+                            if (!$asset) { continue; }
+
+                            $title = Security::remove_XSS($asset->getTitle());
+                            $urlAsset = $basePath.$assetRepo->getAssetUrl($asset);
+
+                            $default .= Display::tag(
+                                "a",
+                                Display::div(
+                                    Display::div($icon, ['class' => 'col-sm-4'])
+                                    . Display::div($title, ['class' => 'col-sm-5 file_name'])
+                                    . Display::tag("input", "", [
+                                        "type" => "hidden",
+                                        "name" => "uploadAsset['.$questionId.'][]",
+                                        "value" => (string)$id
+                                    ])
+                                    . Display::div("", ["class" => "col-sm-3"]),
+                                    ["class" => "row"]
+                                ),
+                                ["target" => "_blank", "class" => "panel-image", "href" => $urlAsset]
+                            );
+                        }
+
+                        $s .= '<script>
+                            $(function() {
+                                if ($("#files").length > 0) {
+                                    $("#files").html("'.addslashes($default).'");
+                                    var links = $("#files").children();
+                                    links.each(function(index) {
+                                        var dataContext = $(links[index]).find(".row");
+                                        setRemoveLink(dataContext);
+                                    });
+                                }
+                            });
+                        </script>';
+                    }
+
+                    $s .= $multipleForm->returnForm();
                     break;
                 case ORAL_EXPRESSION:
                     // Add nanog
@@ -4684,7 +4781,7 @@ EOT;
                 if ($show_results) {
                     $score = $calculatedScore;
                 }
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                     $reviewScore = [
                         'score' => $my_total_score,
                         'comments' => Event::get_comments($exeId, $questionId),
@@ -5391,6 +5488,32 @@ EOT;
             );
         }
 
+        return $html;
+    }
+
+    public static function getUploadAnswerFiles(int $trackExerciseId, int $questionId, bool $returnUrls = false)
+    {
+        $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+        if (!$trackExercise) { return $returnUrls ? [] : ''; }
+        $attempt = $trackExercise->getAttemptByQuestionId($questionId);
+        if (!$attempt) { return $returnUrls ? [] : ''; }
+
+        $assetRepo = Container::getAssetRepository();
+        $basePath = rtrim(api_get_path(WEB_PATH), '/');
+
+        if ($returnUrls) {
+            $urls = [];
+            foreach ($attempt->getAttemptFiles() as $af) {
+                $urls[] = $basePath.$assetRepo->getAssetUrl($af->getAsset());
+            }
+            return $urls;
+        }
+
+        $html = '';
+        foreach ($attempt->getAttemptFiles() as $af) {
+            $url = $basePath.$assetRepo->getAssetUrl($af->getAsset());
+            $html .= Display::url(basename($url), $url, ['target' => '_blank']).'<br />';
+        }
         return $html;
     }
 

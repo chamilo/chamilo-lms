@@ -91,6 +91,7 @@ abstract class Question
         // — Special
         READING_COMPREHENSION        => ['ReadingComprehension.php', 'ReadingComprehension'],
         PAGE_BREAK                   => ['PageBreakQuestion.php', 'PageBreakQuestion'],
+        UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
     ];
 
     /**
@@ -128,7 +129,6 @@ abstract class Question
             FILL_IN_BLANKS_COMBINATION,
             FREE_ANSWER,
             UPLOAD_ANSWER,
-            ANSWER_IN_OFFICE_DOC,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
             ANNOTATION,
@@ -1665,6 +1665,7 @@ abstract class Question
 
         switch ($this->type) {
             case FREE_ANSWER:
+            case UPLOAD_ANSWER:
             case ORAL_EXPRESSION:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
@@ -2028,6 +2029,8 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => 'MultipleAnswerDropdownCombination',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {

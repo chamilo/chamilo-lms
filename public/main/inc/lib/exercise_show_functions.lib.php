@@ -106,6 +106,97 @@ class ExerciseShowFunctions
     }
 
     /**
+     * Shows the answer to an upload question.
+     *
+     * @param float|null $questionScore   Only used to check if > 0
+     * @param int        $resultsDisabled Unused
+     */
+    public static function displayUploadAnswer(
+        string $feedbackType,
+        string $answer,
+        int $exeId,
+        int $questionId,
+               $questionScore = null,
+               $resultsDisabled = 0
+    ) {
+        $urls = [];
+
+        $trackExercise = Container::getTrackEExerciseRepository()->find($exeId);
+        if (null !== $trackExercise) {
+            $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
+            if (null !== $questionAttempt) {
+                $assetRepo = Container::getAssetRepository();
+                $basePath  = rtrim(api_get_path(WEB_PATH), '/');
+
+                foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
+                    $asset = $attemptFile->getAsset();
+                    if (null !== $asset) {
+                        $urls[] = $basePath.$assetRepo->getAssetUrl($asset);
+                    }
+                }
+            }
+        }
+
+        if (!empty($urls)) {
+            echo '<tr><td>';
+            echo '<ul class="max-w-3xl rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden divide-y divide-gray-200">';
+
+            foreach ($urls as $url) {
+                $path = parse_url($url, PHP_URL_PATH);
+                $name = $path ? basename($path) : $url;
+                $safeName = api_htmlentities($name);
+                $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+                // Simple inline icon per file type (SVGs kept tiny)
+                switch ($ext) {
+                    case 'pdf':
+                        $icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8l6-6V4a2 2 0 00-2-2H4z"/><path d="M12 14v4l4-4h-4z"/></svg>';
+                        break;
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                    case 'gif':
+                    case 'webp':
+                        $icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V8l-5-5H4z"/><path d="M8 13l2-2 3 3H5l2-3z"/></svg>';
+                        break;
+                    case 'csv':
+                    case 'xlsx':
+                    case 'xls':
+                        $icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8l6-6V4a2 2 0 00-2-2H4z"/><text x="7" y="14" font-size="7" fill="white">X</text></svg>';
+                        break;
+                    default:
+                        $icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8l6-6V4a2 2 0 00-2-2H4z"/></svg>';
+                        break;
+                }
+
+                echo '<li class="flex items-center justify-between px-4 py-3 hover:bg-gray-20 transition">';
+                echo '  <div class="flex items-center gap-3 min-w-0">';
+                echo '      <span class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-gray-100 text-gray-600">'.$icon.'</span>';
+                echo '      <a class="truncate font-medium text-blue-600 hover:text-blue-700 hover:underline max-w-[36ch]" href="'.$url.'" target="_blank" rel="noopener noreferrer" title="'.$safeName.'">'.$safeName.'</a>';
+                echo '  </div>';
+                echo '  <div class="flex items-center gap-2">';
+                echo '      <a class="text-sm text-blue-600 hover:text-blue-800" href="'.$url.'" download>Download</a>';
+                echo '  </div>';
+                echo '</li>';
+            }
+
+            echo '</ul>';
+            echo '</td></tr>';
+        }
+
+        if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
+            $comments = Event::get_comments($exeId, $questionId);
+            if ($questionScore > 0 || !empty($comments)) {
+                // Handled elsewhere
+            } else {
+                echo '<tr>';
+                echo Display::tag('td', ExerciseLib::getNotCorrectedYetText());
+                echo '</tr>';
+            }
+        }
+    }
+
+    /**
      * Shows the answer to a free-answer question, as HTML.
      *
      * @param string    Answer text

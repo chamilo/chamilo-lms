@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
@@ -638,7 +639,9 @@ switch ($action) {
                     $myChoiceDegreeCertainty = $choiceDegreeCertainty[$my_question_id];
                 }
             }
-
+            if ($objQuestionTmp->type === UPLOAD_ANSWER) {
+                $my_choice = 'assets:' . count($uploadAnswerAssetIds[$my_question_id] ?? []);
+            }
             // Getting free choice data.
             if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && 'all' == $type) {
                 $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
@@ -1056,6 +1059,86 @@ switch ($action) {
         }
         echo 0;
         break;
+    case 'upload_answer':
+        api_block_anonymous_users();
+
+        $questionId = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : 0;
+        if (!$questionId) {
+            echo json_encode(['files' => [], 'error' => 'Missing question_id']);
+            exit;
+        }
+
+        if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
+            if (!empty($_FILES)) {
+                $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
+                $files = $_FILES['files'];
+                $fileList = [];
+                foreach ($files as $name => $array) {
+                    foreach ($array as $i => $data) {
+                        $fileList[$i][$name] = $data;
+                    }
+                }
+                foreach ($fileList as $file) {
+                    $tmpFile = disable_dangerous_file(api_replace_dangerous_char($file['name']));
+                    file_put_contents($tempDirectory.$tmpFile, fopen($file['tmp_name'], 'r'), FILE_APPEND);
+                }
+            }
+            echo json_encode(['files' => $_FILES, 'errorStatus' => 0]);
+            exit;
+        }
+
+        if (!empty($_FILES)) {
+            $files = $_FILES['files'];
+            $fileList = [];
+            foreach ($files as $name => $array) {
+                foreach ($array as $i => $data) {
+                    $fileList[$i][$name] = $data;
+                }
+            }
+
+            $resultList = [];
+            $assetRepo = Container::getAssetRepository();
+            $em = Container::getEntityManager();
+            $basePath = rtrim(api_get_path(WEB_PATH), '/');
+
+            foreach ($fileList as $file) {
+                $originalName = api_replace_dangerous_char(disable_dangerous_file($file['name'] ?? 'file.bin'));
+                $tmpPath = $file['tmp_name'];
+                if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                    $tmpPath = api_get_path(SYS_ARCHIVE_PATH).($file['name'] ?? $originalName);
+                }
+
+                $asset = (new Asset())
+                    ->setCategory(Asset::EXERCISE_ATTEMPT)
+                    ->setTitle($originalName);
+
+                $assetRepo->createFromRequest($asset, ['tmp_name' => $tmpPath]);
+
+                if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
+                    @unlink($tmpPath);
+                }
+
+                $key = 'upload_answer_assets_'.$questionId;
+                $current = (array) ChamiloSession::read($key);
+                $current[] = (string) $asset->getId();
+                ChamiloSession::write($key, array_values(array_unique($current)));
+
+                $resultList[] = [
+                    'name'     => api_htmlentities($originalName),
+                    'asset_id' => (string) $asset->getId(),
+                    'url'      => $basePath.$assetRepo->getAssetUrl($asset),
+                    'size'     => isset($file['size']) ? format_file_size((int) $file['size']) : '',
+                    'type'     => api_htmlentities($file['type'] ?? ''),
+                    'result'   => Display::return_icon('accept.png', get_lang('Uploaded')),
+                ];
+            }
+
+            echo json_encode(['files' => $resultList]);
+            exit;
+        }
+
+        echo json_encode(['files' => [], 'error' => 'No files']);
+        exit;
     case 'audio-recording-help':
         $content = get_lang('While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.');
 

@@ -445,6 +445,7 @@ foreach ($questionList as $questionId) {
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
+        case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
         case MATCHING_COMBINATION:
@@ -617,7 +618,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed && 'export' != $action) {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $url_name = get_lang('Edit individual feedback and grade the open question');
             } else {
                 $url_name = get_lang('Add individual feedback');
@@ -710,7 +711,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed && 'export' != $action) {
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
@@ -868,7 +869,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
         $scoreToReview = [
             'score' => $my_total_score,
             'comments' => isset($comnt) ? $comnt : null,

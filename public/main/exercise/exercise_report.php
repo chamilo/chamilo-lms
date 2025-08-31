@@ -501,7 +501,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
         );
 
         $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::SEND_ALL_EMAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send all by email')),
+            Display::getMdiIcon(ActionIcon::SEND_ALL_EMAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send all results/corrections by email')),
             api_get_self().'?'.api_get_cidreq().'&action=send_all_emails&exerciseId='.$exercise_id
         );
 

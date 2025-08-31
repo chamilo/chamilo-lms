@@ -28887,7 +28887,7 @@ msgstr ""
 msgid "Suggest with AI"
 msgstr ""
 
-msgid "Send all by email"
+msgid "Send all results/corrections by email"
 msgstr ""
 
 msgid "Export all attempts"

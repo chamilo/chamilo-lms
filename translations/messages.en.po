@@ -28919,8 +28919,8 @@ msgstr "AI suggestion"
 msgid "Suggest with AI"
 msgstr "Suggest with AI"
 
-msgid "Send all by email"
-msgstr "Send all by email"
+msgid "Send all results/corrections by email"
+msgstr "Send all results/corrections by email"
 
 msgid "Export all attempts"
 msgstr "Export all attempts"

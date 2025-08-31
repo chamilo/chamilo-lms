@@ -163,7 +163,7 @@ switch ($action) {
         $exercise_id = (int) $_GET['exercise_id'];
         $page = (int) $_REQUEST['page']; //page
         $limit = (int) $_REQUEST['rows']; //quantity of rows
-        $sidx = $_REQUEST['sidx']; //index to filter
+        $sidx = (int) $_REQUEST['sidx']; //index to filter
         $sord = $_REQUEST['sord']; //asc or desc
 
         if (!in_array($sord, ['asc', 'desc'])) {
@@ -240,7 +240,7 @@ switch ($action) {
                 ) as aa
                 ON aa.exe_user_id = u.id
                 WHERE u.active <> ".USER_SOFT_DELETED."
-                ORDER BY `$sidx` $sord
+                ORDER BY $sidx $sord
                 LIMIT $start, $limit";
 
         $result = Database::query($sql);

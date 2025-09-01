@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 
@@ -3442,24 +3443,24 @@ class CourseManager
     /**
      * Lists details of the course description.
      *
-     * @param array        The course description
-     * @param string    The encoding
-     * @param bool        If true is displayed if false is hidden
+     * @param array<int, CCourseDescription> $descriptions        The course description
+     * @param string $charset The encoding
+     * @param bool $action_show If true is displayed if false is hidden
      *
      * @return string The course description in html
      */
     public static function get_details_course_description_html(
-        $descriptions,
-        $charset,
-        $action_show = true
-    ) {
+        array $descriptions,
+        string $charset,
+        bool $action_show = true
+    ): ?string {
         $data = null;
-        if (isset($descriptions) && count($descriptions) > 0) {
+        if (count($descriptions) > 0) {
             foreach ($descriptions as $description) {
                 $data .= '<div class="sectiontitle">';
                 if (api_is_allowed_to_edit() && $action_show) {
                     //delete
-                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(
+                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->getIid().'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(
                         get_lang('ConfirmYourChoice'),
                                 ENT_QUOTES,
                         $charset
@@ -3471,7 +3472,7 @@ class CourseManager
                     );
                     $data .= '</a> ';
                     //edit
-                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->id.'">';
+                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->getIid().'">';
                     $data .= Display::return_icon(
                         'edit.png',
                         get_lang('Edit'),
@@ -3480,10 +3481,10 @@ class CourseManager
                     );
                     $data .= '</a> ';
                 }
-                $data .= $description->title;
+                $data .= $description->getTitle();
                 $data .= '</div>';
                 $data .= '<div class="sectioncomment">';
-                $data .= Security::remove_XSS($description->content);
+                $data .= Security::remove_XSS($description->getContent());
                 $data .= '</div>';
             }
         } else {

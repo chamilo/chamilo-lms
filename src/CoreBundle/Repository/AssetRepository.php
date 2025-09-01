@@ -171,11 +171,41 @@ class AssetRepository extends ServiceEntityRepository
             return;
         }
 
-        // If this is a SCORM package, delete its directory and all its contents
+        // If it is a SCORM package, try to remove its on-disk content (folder or ZIP)
         if (Asset::SCORM === $asset->getCategory()) {
-            $folder = $this->getFolder($asset); // e.g. "/scorm/MyScormPackage/"
-            if ($folder && $this->filesystem->directoryExists($folder)) {
-                $this->filesystem->deleteDirectory($folder);
+            $path = $this->getFolder($asset); // may be an extracted folder or a .zip file
+
+            if ($path) {
+                try {
+                    if ($this->filesystem->directoryExists($path)) {
+                        $this->filesystem->deleteDirectory($path);
+                    } elseif ($this->filesystem->fileExists($path)) {
+                        $this->filesystem->delete($path);
+                    } else {
+                        // Local filesystem fallbacks (log only on true failure)
+                        if (@is_dir($path)) {
+                            $it = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
+                            $ri = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+                            foreach ($ri as $file) {
+                                $ok = $file->isDir()
+                                    ? @rmdir($file->getPathname())
+                                    : @unlink($file->getPathname());
+                                if (!$ok) {
+                                    error_log('[AssetRepository::delete] Failed to remove path: '.$file->getPathname());
+                                }
+                            }
+                            if (!@rmdir($path)) {
+                                error_log('[AssetRepository::delete] Failed to remove directory: '.$path);
+                            }
+                        } elseif (@is_file($path)) {
+                            if (!@unlink($path)) {
+                                error_log('[AssetRepository::delete] Failed to remove file: '.$path);
+                            }
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    error_log('[AssetRepository::delete] Exception while removing SCORM path '.$path.' - '.$e->getMessage());
+                }
             }
         }
 

@@ -83,6 +83,7 @@
         :error-text="v$.endsOn.$errors.map((e) => e.$message).join('<br>')"
         :is-invalid="v$.endsOn.$error"
         :label="t('Ends at (completely closed)')"
+        show-time
       />
 
       <BaseCheckbox

@@ -15,12 +15,13 @@ const props = defineProps({
   list: { type: Array, default: () => [] },
   canEdit: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
+  canExportPdf: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete","export-scorm",
+  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf",
   "reorder"
 ])
 
@@ -107,7 +108,7 @@ function onChangeCat() {
 
       <div class="flex items-center gap-2">
         <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Lessons') }}</div>
-        
+
         <BaseDropdownMenu v-if="canEdit"
           :dropdown-id="`category-${category.iid}`"
           class="relative z-30"
@@ -115,7 +116,7 @@ function onChangeCat() {
           <template #button>
             <span
               class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-              :title="t('Category options')" 
+              :title="t('Category options')"
               :aria-label="t('Category options')"
             >
               <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
@@ -177,6 +178,7 @@ function onChangeCat() {
             :ringDash="ringDash"
             :ringValue="ringValue"
             :canExportScorm="canExportScorm"
+            :canExportPdf="canExportPdf"
             @open="$emit('open', element)"
             @edit="$emit('edit', element)"
             @report="$emit('report', element)"
@@ -185,6 +187,7 @@ function onChangeCat() {
             @toggle-visible="$emit('toggle-visible', element)"
             @toggle-publish="$emit('toggle-publish', element)"
             @delete="$emit('delete', element)"
+            @export-pdf="$emit('export-pdf', element)"
           />
         </template>
       </Draggable>

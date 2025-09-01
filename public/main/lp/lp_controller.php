@@ -346,6 +346,23 @@ switch ($action) {
             $description = $_POST['description'] ?? '';
             $prerequisites = $_POST['prerequisites'] ?? '';
             $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
+            $exportAllowed = (isset($_POST['export_allowed']) && $_POST['export_allowed'] === '1');
+
+            $saveExportFlag = static function ($itemId) use ($exportAllowed, $oLP) {
+                if (empty($itemId)) {
+                    return;
+                }
+                $repo = Container::getLpItemRepository();
+                $em   = Database::getManager();
+
+                /** @var CLpItem|null $it */
+                $it = $repo->find((int) $itemId);
+                if ($it ) {
+                    $it->setExportAllowed($exportAllowed);
+                    $em->persist($it);
+                    $em->flush();
+                }
+            };
 
             if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'])) {
                 if (isset($_POST['path']) && !empty($_GET['id'])) {
@@ -368,7 +385,7 @@ switch ($action) {
                     $type = 'video';
                 }
 
-                $oLP->add_item(
+                $createdItemId = $oLP->add_item(
                     $parent,
                     $previous,
                     $type,
@@ -377,6 +394,7 @@ switch ($action) {
                     $description,
                     $prerequisites
                 );
+                $saveExportFlag($createdItemId);
             } elseif (TOOL_READOUT_TEXT == $_POST['type']) {
                 if (isset($_POST['path']) && 'true' != $_GET['edit']) {
                     $document_id = $_POST['path'];
@@ -391,7 +409,7 @@ switch ($action) {
                     }
                 }
 
-                $oLP->add_item(
+                $createdItemId = $oLP->add_item(
                     $parent,
                     $previous,
                     TOOL_READOUT_TEXT,
@@ -400,10 +418,11 @@ switch ($action) {
                     $description,
                     $prerequisites
                 );
+                $saveExportFlag($createdItemId);
             } else {
                 // For all other item types than documents,
                 // load the item using the item type and path rather than its ID.
-                $oLP->add_item(
+                $createdItemId = $oLP->add_item(
                     $parent,
                     $previous,
                     $type,
@@ -413,6 +432,7 @@ switch ($action) {
                     $prerequisites,
                     $maxTimeAllowed
                 );
+                $saveExportFlag($createdItemId);
             }
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);

@@ -30421,3 +30421,6 @@ msgstr "Historique des compétences"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Loading..."
+msgstr "Chargement..."

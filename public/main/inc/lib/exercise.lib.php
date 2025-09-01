@@ -6202,27 +6202,31 @@ EOT;
         int    $sessionId,
         string $exportFolderPath
     ): void {
-        // 1) Retrieve the HTML for this attempt and convert it to PDF
+        // Retrieve the HTML for this attempt and convert it to PDF
         $html = self::getAttemptPdfHtml($exeId, $courseId, $sessionId);
 
-        // 2) Determine filename and path based on user information
+        // Determine filename and path based on user information
         $track   = self::get_exercise_track_exercise_info($exeId);
         $userId  = $track['exe_user_id'] ?? 0;
         $user    = api_get_user_info($userId);
         $pdfName = api_replace_dangerous_char(
             ($user['firstname'] ?? 'user') . '_' .
             ($user['lastname']  ?? 'unknown') .
-            '_attempt' . $exeId . '.pdf'
+            '_attemptId' . $exeId . '.pdf'
         );
         $filePath = rtrim($exportFolderPath, '/') . '/' . $pdfName;
 
-        // 3) Ensure the directory exists
+        if (file_exists($filePath)) {
+            return;
+        }
+
+        // Ensure the directory exists
         $dir = dirname($filePath);
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
         }
 
-        // 4) Use Chamilo's PDF class to generate and save the file
+        // Use Chamilo's PDF class to generate and save the file
         $params = [
             'filename'    => $pdfName,
             'course_code' => api_get_course_id(),
@@ -6249,7 +6253,7 @@ EOT;
         array $filterDates = [],
         string $mainPath    = ''
     ) {
-        // 1) Retrieve all attempt records for this exercise
+        // Retrieve all attempt records for this exercise
         $exerciseObj = new Exercise($courseId);
         $results     = $exerciseObj->getExerciseAndResult($courseId, $sessionId, $exerciseId);
         if (empty($results)) {
@@ -6263,7 +6267,7 @@ EOT;
             return false;
         }
 
-        // 2) Prepare a temporary folder for the PDFs
+        // Prepare a temporary folder for the PDFs
         $exportName       = 'S' . $sessionId . '-C' . $courseId . '-T' . $exerciseId;
         $baseDir          = api_get_path(SYS_ARCHIVE_PATH);
         $exportFolderPath = $baseDir . 'pdfexport-' . $exportName;
@@ -6272,7 +6276,7 @@ EOT;
         }
         mkdir($exportFolderPath, 0755, true);
 
-        // 3) Generate a PDF for each attempt
+        // Generate a PDF for each attempt
         foreach ($results as $row) {
             $exeId = (int) $row['exe_id'];
             self::saveFileExerciseResultPdfDirect(
@@ -6283,7 +6287,7 @@ EOT;
             );
         }
 
-        // 4) Create the ZIP archive containing all generated PDFs
+        // Create the ZIP archive containing all generated PDFs
         $zipFilePath = $baseDir . 'pdfexport-' . $exportName . '.zip';
         $zip = new \ZipArchive();
         if ($zip->open($zipFilePath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
@@ -6303,7 +6307,7 @@ EOT;
         $zip->close();
         rmdirr($exportFolderPath);
 
-        // 5) Send the ZIP file to the browser or move it to mainPath
+        // Send the ZIP file to the browser or move it to mainPath
         if (!empty($mainPath)) {
             @rename($zipFilePath, $mainPath . '/pdfexport-' . $exportName . '.zip');
         } else {

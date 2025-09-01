@@ -3481,7 +3481,7 @@ class CourseManager
                     );
                     $data .= '</a> ';
                 }
-                $data .= $description->getTitle();
+                $data .= Security::remove_XSS($description->getTitle());
                 $data .= '</div>';
                 $data .= '<div class="sectioncomment">';
                 $data .= Security::remove_XSS($description->getContent());

@@ -9543,6 +9543,7 @@ class Exercise
                     'cid' => api_get_course_int_id(),
                     'sid' => api_get_session_id(),
                     'category_id' => $categoryId,
+                    'sec_token'   => Security::get_token(),
                 ]
             );
 

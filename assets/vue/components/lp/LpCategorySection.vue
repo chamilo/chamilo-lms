@@ -93,16 +93,21 @@ function onChangeCat() {
     <header class="relative bg-support-6 rounded-t-2xl flex items-center justify-between pl-0 pr-4 py-3">
       <span class="pointer-events-none absolute inset-y-0 -left-1.5 w-1.5 bg-support-5 rounded-l-2xl" aria-hidden />
       <div class="flex items-center gap-3">
-        <button
-          v-if="canEdit"
-          class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
-          :title="t('Drag category')" :aria-label="t('Drag category')"
-        >
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
-            <circle cx="4" cy="3" r="1.2" /><circle cx="4" cy="7" r="1.2" /><circle cx="4" cy="11" r="1.2" />
-            <circle cx="10" cy="3" r="1.2" /><circle cx="10" cy="7" r="1.2" /><circle cx="10" cy="11" r="1.2" />
-          </svg>
-        </button>
+        <template v-if="canEdit">
+          <button
+            class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
+            :title="t('Drag category')" :aria-label="t('Drag category')"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
+              <circle cx="4" cy="3" r="1.2" /><circle cx="4" cy="7" r="1.2" /><circle cx="4" cy="11" r="1.2" />
+              <circle cx="10" cy="3" r="1.2" /><circle cx="10" cy="7" r="1.2" /><circle cx="10" cy="11" r="1.2" />
+            </svg>
+          </button>
+        </template>
+        <template v-else>
+          <span class="inline-block w-8 h-8" aria-hidden></span>
+        </template>
+
         <h2 class="text-body-1 font-semibold text-gray-90">{{ displayTitle }}</h2>
       </div>
 

@@ -172,10 +172,35 @@ const progressTextClass = computed(() => {
     </template>
 
     <template v-else>
-      <div class="ml-auto flex items-center gap-2">
+      <div class="ml-auto flex items-center gap-3">
+        <div
+          role="toolbar"
+          aria-label="Student actions"
+          class="flex items-center gap-2"
+        >
+          <button
+            v-if="canExportPdf"
+            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
+            :title="t('PDF Export')"
+            :aria-label="t('PDF Export')"
+            @click="emit('export-pdf', lp)"
+          >
+            <i class="mdi mdi-file-pdf-box text-xl" />
+          </button>
+
+          <button
+            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
+            :title="t('Open')"
+            :aria-label="t('Open')"
+            @click="emit('open', lp)"
+          >
+            <i class="mdi mdi-open-in-new text-lg" />
+          </button>
+        </div>
+
         <span class="text-caption text-gray-50">
-          {{ ringValue(lp.progress) === 100 ? t('Completed') : t('Progress') }}
-        </span>
+      {{ ringValue(lp.progress) === 100 ? t('Completed') : t('Progress') }}
+    </span>
         <div class="relative w-10 h-10">
           <svg viewBox="0 0 40 40" class="w-10 h-10">
             <circle cx="20" cy="20" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />

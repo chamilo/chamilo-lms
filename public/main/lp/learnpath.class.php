@@ -5669,28 +5669,9 @@ class learnpath
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
-        $form->addElement(
-            'checkbox',
-            'export_allowed',
-            get_lang('Allow PDF export for this item')
-        );
-
-        $defaultExportAllowed = 1;
-        if ($action === 'edit' && $lpItem !== null) {
-            $defaultExportAllowed = $lpItem->isExportAllowed() ? 1 : 0;
-        }
-
-        $form->setDefaults([
-            'export_allowed' => $defaultExportAllowed,
-        ]);
-
         switch ($action) {
             case 'add':
-                $folders = DocumentManager::get_all_document_folders(
-                    $courseInfo,
-                    0,
-                    true
-                );
+                $folders = DocumentManager::get_all_document_folders($courseInfo, 0, true);
                 DocumentManager::build_directory_selector(
                     $folders,
                     '',
@@ -5700,9 +5681,7 @@ class learnpath
                     'directory_parent_id'
                 );
                 if ($data) {
-                    $form->setDefaults([
-                        'directory_parent_id' => $data->getIid()
-                    ]);
+                    $form->setDefaults(['directory_parent_id' => $data->getIid()]);
                 }
                 break;
         }
@@ -5711,8 +5690,6 @@ class learnpath
 
         return $form->returnForm();
     }
-
-
 
     /**
      * @param array  $courseInfo

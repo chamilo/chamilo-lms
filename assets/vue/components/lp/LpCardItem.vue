@@ -169,6 +169,32 @@ const progressTextClass = computed(() => {
           </BaseDropdownMenu>
         </div>
       </div>
+      <div v-else class="ml-auto flex items-center gap-2">
+        <div
+          role="toolbar"
+          aria-label="Student actions"
+          class="flex items-center gap-2"
+        >
+          <button
+            v-if="canExportPdf"
+            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
+            :title="t('PDF Export')"
+            :aria-label="t('PDF Export')"
+            @click="emit('export-pdf', lp)"
+          >
+            <i class="mdi mdi-file-pdf-box text-xl" />
+          </button>
+
+          <button
+            class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
+            :title="t('Open')"
+            :aria-label="t('Open')"
+            @click="emit('open', lp)"
+          >
+            <i class="mdi mdi-open-in-new text-lg" />
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -79,7 +79,7 @@
     </div>
 
     <div
-      v-else-if="items.length === 0"
+      v-else-if="!hasAnyVisible"
       class="flex flex-col items-center justify-center py-20 text-center"
     >
       <div class="w-24 h-24 rounded-full bg-support-1 flex items-center justify-center mb-4 text-support-3">
@@ -101,6 +101,7 @@
         {{ t("Create your first learning path to start organizing course content.") }}
       </p>
       <button
+        v-if="canEdit"
         class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
         @click="handleTopMenu('new', $event)"
       >
@@ -240,13 +241,14 @@ const canExportScorm = computed(() => {
 
 const canExportPdf = computed(() => {
   const hidden = platformConfig.getSetting("course.hide_scorm_pdf_link") === "true"
-  return canEdit.value && !hidden
+  return !hidden
 })
 
 const items = ref([])
 const categories = ref([])
 const uncatList = ref([])
 const catLists = ref({})
+const visibilityMap = ref({})
 
 onMounted(() => {
   platformConfig.studentView = route.query?.isStudentView === "true"
@@ -267,6 +269,50 @@ const onExportPdf = (lp) => {
 const onCloseExportDialog = () => {
   showExportDialog.value = false
   exportTarget.value = null
+}
+
+async function loadVisibilityFor(lpIds) {
+  if (canEdit.value) {
+    visibilityMap.value = {}
+    return
+  }
+  if (!Array.isArray(lpIds) || lpIds.length === 0) {
+    visibilityMap.value = {}
+    return
+  }
+
+  const params = new URLSearchParams({
+    a: "lp_visibility_map",
+    lp_ids: lpIds.join(","),
+    cid: String(cid.value || 0),
+  })
+  if (sid.value) params.append("sid", String(sid.value))
+
+  const res = await fetch(`/main/inc/ajax/lp.ajax.php?${params.toString()}`, {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+    credentials: "same-origin",
+  })
+  const data = await res.json().catch(() => ({}))
+  visibilityMap.value = data.map || {}
+}
+
+function isVisibleForStudent(lp) {
+  if (canEdit.value) return true
+  return !!visibilityMap.value[lp.iid]
+}
+
+const withCidSid = (url) => {
+  if (!url) return url
+  try {
+    const isAbs = url.startsWith('http://') || url.startsWith('https://')
+    const abs = isAbs ? url : (window.location.origin + url)
+    const u = new URL(abs)
+    if (cid.value) u.searchParams.set('cid', String(cid.value))
+    if (sid.value) u.searchParams.set('sid', String(sid.value))
+    return isAbs ? u.toString() : (u.pathname + u.search)
+  } catch {
+    return url
+  }
 }
 
 const load = async () => {
@@ -307,8 +353,10 @@ const load = async () => {
     const raw = res["hydra:member"] ?? res ?? []
     items.value = raw.map((lp) => ({
       ...lp,
-      coverUrl: hasImageRF(lp) && lp.contentUrl ? lp.contentUrl : null,
+      coverUrl: hasImageRF(lp) && lp.contentUrl ? withCidSid(lp.contentUrl) : null,
     }))
+
+    await loadVisibilityFor(items.value.map((lp) => lp.iid))
 
     rebuildListsFromItems()
   } catch (e) {
@@ -323,15 +371,20 @@ onMounted(load)
 const categorizedGroups = computed(() => {
   const rows = []
   for (const cat of categories.value) {
-    rows.push([cat, catLists.value[cat.iid] ?? []])
+    const list = catLists.value[cat.iid] ?? []
+    if (canEdit.value || list.length) {
+      rows.push([cat, list])
+    }
   }
   return rows
 })
 
 function rebuildListsFromItems() {
+  const source = canEdit.value ? items.value : items.value.filter(isVisibleForStudent)
+
   const uncat = []
   const byCat = {}
-  for (const lp of items.value) {
+  for (const lp of source) {
     const catId = lp.category?.iid
     if (!catId) {
       uncat.push(lp)
@@ -343,6 +396,13 @@ function rebuildListsFromItems() {
   uncatList.value = uncat
   catLists.value = byCat
 }
+
+const hasAnyVisible = computed(() => {
+  if (canEdit.value) return items.value.length > 0
+  const anyUncat = uncatList.value.length > 0
+  const anyCat = Object.values(catLists.value).some((arr) => Array.isArray(arr) && arr.length > 0)
+  return anyUncat || anyCat
+})
 
 function applyOrderWithinContext(predicate, orderedIds) {
   const originalIndex = new Map(items.value.map((it, i) => [it.iid, i]))
@@ -518,7 +578,7 @@ const onExportScorm = (lp) => {
   if (!canExportScorm.value) return
   const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: cid.value })
   if (sid.value) params.append("sid", sid.value)
-  const exportUrl = `/main/lp/lp_controller.php?${params.toString()}`
-  window.location.href = exportUrl
+
+  window.location.href = `/main/lp/lp_controller.php?${params.toString()}`
 }
 </script>

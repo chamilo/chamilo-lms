@@ -7229,10 +7229,10 @@ msgid "Add tests, activities and multimedia content"
 msgstr "Ajoutez des activités, tests et des contenus multimédia à votre cours"
 
 msgid "Title"
-msgstr "nom"
+msgstr "Titre"
 
 msgid "Prerequisites"
-msgstr "Prérequis"
+msgstr "Pré-requis"
 
 msgid "Up"
 msgstr "Monter"

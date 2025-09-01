@@ -813,6 +813,23 @@ class UserManager
             return false;
         }
 
+        $fallbackUser = $repository->getFallbackUser();
+        $fallbackId = (int) $fallbackUser->getId();
+        if ($destroy) {
+            if ($fallbackId && $fallbackId !== $user_id) {
+                $em = Database::getManager();
+                $em->createQuery(
+                    'UPDATE ' . User::class . ' u
+                     SET u.creatorId = :newCreator
+                     WHERE u.creatorId = :oldCreator AND u.id <> :fallbackId'
+                            )
+                    ->setParameter('newCreator', $fallbackId)
+                    ->setParameter('oldCreator', $user_id)
+                    ->setParameter('fallbackId', $fallbackId)
+                    ->execute();
+            }
+        }
+
         $repository->deleteUser($user, $destroy);
 
         if ($destroy) {
@@ -824,13 +841,24 @@ class UserManager
                 api_get_user_id()
             );
 
-            Event::addEvent(
-                LOG_USER_DELETE,
-                LOG_USER_OBJECT,
-                api_get_user_info($user_id),
-                api_get_utc_datetime(),
-                api_get_user_id()
-            );
+            // Log one event per affected user AFTER the deletion
+            if (!empty($affectedIds) && $fallbackId && $fallbackId !== $user_id) {
+                $nowUtc = api_get_utc_datetime();
+                $actor  = api_get_user_id();
+                foreach ($affectedIds as $affectedId) {
+                    Event::addEvent(
+                        LOG_USER_CREATOR_DELETED,
+                        LOG_USER_ID,
+                        [
+                            'user_id'        => $affectedId,
+                            'old_creator_id' => $user_id,
+                            'new_creator_id' => $fallbackId,
+                        ],
+                        $nowUtc,
+                        $actor
+                    );
+                }
+            }
         }
 
         return true;

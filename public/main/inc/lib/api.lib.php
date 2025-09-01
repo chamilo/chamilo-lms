@@ -209,6 +209,7 @@ const LOG_RESOURCE_LINK = 'resource_link_id';
 const LOG_RESOURCE_NODE_AND_RESOURCE_LINK = 'resource_node_id_and_resource_link_id';
 
 define('LOG_USER_DELETE', 'user_deleted');
+define('LOG_USER_CREATOR_DELETED', 'user_creator_deleted');
 define('LOG_USER_PREDELETE', 'user_predeleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_USER_UPDATE', 'user_updated');

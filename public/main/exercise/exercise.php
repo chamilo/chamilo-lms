@@ -80,11 +80,14 @@ $nameTools = get_lang('Tests');
 // Simple actions
 if ($is_allowedToEdit && !empty($action)) {
     $objExerciseTmp = new Exercise();
-    $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
-    $result = $objExerciseTmp->read($exerciseId);
+    $isBulk = in_array($action, ['delete','enable','disable','visible','invisible'], true)
+        && !empty($_POST['id']);
 
-    if (empty($result)) {
-        api_not_allowed(true);
+    if (!$isBulk) {
+        if (empty($exerciseId) || !$objExerciseTmp->read($exerciseId)) {
+            api_not_allowed(true);
+        }
+        $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
     }
 
     switch ($action) {
@@ -114,14 +117,32 @@ if ($is_allowedToEdit && !empty($action)) {
 
             break;
         case 'delete':
-            // deletes an exercise
-            if ($allowDelete) {
-                $result = $objExerciseTmp->delete();
-                if ($result) {
-                    Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
+            if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { api_not_allowed(true); }
+            if (!Security::check_token($_REQUEST['sec_token'] ?? null)) {
+                Display::addFlash(Display::return_message(get_lang('Security token invalid'), 'error'));
+                header('Location: '.$currentUrl); exit;
+            }
+            if (!$allowDelete) { api_not_allowed(true); }
+
+            $idsRaw = $_POST['id'] ?? null;
+            $ids = $idsRaw ? (is_array($idsRaw) ? $idsRaw : explode(',', (string)$idsRaw))
+                : ($exerciseId ? [$exerciseId] : []);
+            $ids = array_filter(array_map('intval', $ids));
+
+            $deleted = 0; $skipped = 0;
+            foreach ($ids as $id) {
+                if ($objExerciseTmp->read($id) && $objExerciseTmp->delete()) {
+                    $deleted++;
+                } else {
+                    $skipped++;
                 }
             }
-            break;
+
+            Display::addFlash(Display::return_message(
+                sprintf(get_lang('%d items deleted (%d skipped)'), $deleted, $skipped),
+                $deleted ? 'confirmation' : 'warning'
+            ));
+            header('Location: '.$currentUrl); exit;
         case 'enable':
             if ($limitTeacherAccess && !api_is_platform_admin()) {
                 // Teacher change exercise

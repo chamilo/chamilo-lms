@@ -8,6 +8,7 @@ use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use ChamiloSession as Session;
 
@@ -407,6 +408,62 @@ switch ($action) {
         }
 
         echo json_encode($result);
+        exit;
+    case 'filter_visible_lp_categories':
+        header('Content-Type: application/json; charset=utf-8');
+
+        $idsParam  = isset($_GET['ids']) ? (string) $_GET['ids'] : '';
+        $ids       = array_filter(array_map('intval', explode(',', $idsParam)));
+        $courseId  = isset($_GET['cid']) ? (int) $_GET['cid'] : (int) api_get_course_int_id();
+        $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : (int) api_get_session_id();
+
+        $course  = api_get_course_entity($courseId);
+        $session = $sessionId ? api_get_session_entity($sessionId) : null;
+        $user    = api_get_user_entity();
+
+        $repo = Container::getLpCategoryRepository();
+
+        $visibleIds = [];
+        foreach ($ids as $id) {
+            /** @var CLpCategory|null $cat */
+            $cat = $repo->find($id);
+            if (!$cat) {
+                continue;
+            }
+
+            if (learnpath::categoryIsVisibleForStudent($cat, $user, $course, $session)) {
+                $visibleIds[] = (int) $id;
+            }
+        }
+
+        echo json_encode(['ids' => $visibleIds], JSON_UNESCAPED_UNICODE);
+        exit;
+    case 'lp_visibility_map':
+        header('Content-Type: application/json; charset=UTF-8');
+
+        $courseId  = isset($_GET['cid']) ? (int) $_GET['cid'] : api_get_course_int_id();
+        $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : api_get_session_id();
+
+        $course  = api_get_course_entity($courseId);
+        $session = $sessionId ? Container::getSessionRepository()->find($sessionId) : null;
+
+        $rawIds = (string) ($_GET['lp_ids'] ?? '');
+        $ids = array_values(array_filter(array_map('intval', preg_split('/[,\s]+/', $rawIds)), static fn($x) => $x > 0));
+
+        $repo = Container::getLpRepository();
+        $userId = api_get_user_id();
+
+        $map = [];
+        foreach ($ids as $id) {
+            $lp = $repo->find($id);
+            if (!$lp) {
+                $map[(string) $id] = false;
+                continue;
+            }
+            $map[(string) $id] = (bool) learnpath::is_lp_visible_for_student($lp, $userId, $course, $session);
+        }
+
+        echo json_encode(['map' => $map], JSON_UNESCAPED_UNICODE);
         exit;
     default:
         echo '';

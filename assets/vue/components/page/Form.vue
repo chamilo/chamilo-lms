@@ -16,19 +16,16 @@
       :label="t('Friendly URL')"
     />
 
-    <p
-      class="text-sm m-2 text-gray-500"
-      v-if="pageId"
-    >
-      {{ t("Preview") }}:
-      <a
-        :href="`/pages/${pageId}/preview`"
-        target="_blank"
-        class="text-blue-600 underline"
-      >
-        {{ window.location.origin + `/pages/${pageId}/preview` }}
-      </a>
-    </p>
+    <div class="text-right my-3">
+      <Button
+        v-if="pageId || v$.item.content.$model"
+        class="p-button-secondary"
+        icon="mdi mdi-eye"
+        :label="t('Preview')"
+        type="button"
+        @click="openPreview"
+      />
+    </div>
 
     <BaseCheckbox
       id="enabled"
@@ -77,6 +74,52 @@
         @click="btnSaveOnClick"
       />
     </div>
+
+    <Dialog
+      v-model:visible="previewVisible"
+      :header="t('Preview')"
+      :modal="true"
+      :style="{ width: '85vw', maxWidth: '1100px' }"
+    >
+      <div v-if="pageId" class="mb-3 flex items-center gap-2">
+        <InputText
+          :value="window.location.origin + previewUrl"
+          readonly
+          class="w-full cursor-pointer"
+          @focus="$event.target.select()"
+        />
+        <Button
+          class="p-button-text p-button-sm"
+          icon="mdi mdi-content-copy"
+          :title="t('Copy link')"
+          @click="copyPreviewUrl"
+        />
+        <Button
+          class="p-button-text p-button-sm"
+          icon="mdi mdi-open-in-new"
+          :title="t('Open in new tab')"
+          @click="openPreviewInNewTab"
+        />
+      </div>
+
+      <div v-if="pageId">
+        <iframe
+          :src="previewUrlWithBust"
+          style="width: 100%; height: 70vh; border: 0"
+          @load="onPreviewLoaded"
+        ></iframe>
+      </div>
+      <div v-else class="prose prose-lg max-w-none">
+        <h1 class="text-3xl font-bold mb-4">
+          {{ v$.item.title.$model || t('Untitled page') }}
+        </h1>
+        <article v-html="v$.item.content.$model"></article>
+      </div>
+
+      <template #footer>
+        <Button class="p-button-primary" :label="t('Close')" @click="previewVisible = false" />
+      </template>
+    </Dialog>
   </div>
 </template>
 
@@ -93,33 +136,50 @@ import pageCategoryService from "../../services/pageCategoryService"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 
 const props = defineProps({
-  modelValue: {
-    type: Object,
-    default: () => {},
-  },
+  modelValue: { type: Object, default: () => ({}) },
 })
 
 const emit = defineEmits(["update:modelValue", "submit"])
 
 const { t } = useI18n()
 
-let locales = ref(
+const locales = ref(
   (window.languages || []).map((l) => ({
     originalName: l.originalName || l.original_name || l.english_name,
     isocode: l.isocode,
-  })),
+  }))
 )
-
-let categories = ref([])
-
+const categories = ref([])
 const findAllPageCategories = async () => (categories.value = await pageCategoryService.findAll())
 
 const pageId = computed(() => {
-  const rawId = props.modelValue?.["@id"]
-  if (!rawId) return null
-  const matches = rawId.match(/\/(\d+)$/)
-  return matches ? matches[1] : null
+  const raw = props.modelValue?.['@id'] || ''
+  const m = raw.match(/\/(\d+)(?:\?.*)?$/)
+  return m ? m[1] : null
 })
+
+const previewVisible = ref(false)
+const cacheBust = ref(0)
+const previewUrl = computed(() => (pageId.value ? `/pages/${pageId.value}/preview` : ''))
+const previewUrlWithBust = computed(() => (previewUrl.value ? `${previewUrl.value}?_=${cacheBust.value}` : ''))
+
+function openPreview() {
+  cacheBust.value = Date.now()
+  previewVisible.value = true
+}
+function openPreviewInNewTab() {
+  if (previewUrl.value) window.open(previewUrl.value, '_blank')
+}
+async function copyPreviewUrl() {
+  if (!previewUrl.value) return
+  const full = window.location.origin + previewUrl.value
+  try {
+    await navigator.clipboard.writeText(full)
+  } catch {
+    window.prompt(t('Copy this link'), full)
+  }
+}
+function onPreviewLoaded() {}
 
 findAllPageCategories()
 
@@ -160,13 +220,10 @@ watch(
     }
 
     if (!isEmpty(newValue.category) && !isEmpty(newValue.category["@id"])) {
-      emit("update:modelValue", {
-        ...newValue,
-        category: newValue.category["@id"],
-      })
+      emit("update:modelValue", { ...newValue, category: newValue.category["@id"] })
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 
 function btnSaveOnClick() {

@@ -59,7 +59,12 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'public_page_show', requirements: ['slug' => '^[^_].+'], methods: ['GET'])]
+    #[Route(
+        '/{slug}',
+        name: 'public_page_show',
+        requirements: ['slug' => '[a-z0-9]+(?:-[a-z0-9]+)*'],
+        methods: ['GET']
+    )]
     public function show(string $slug, PageRepository $pageRepo): Response
     {
         $accessUrl = $this->accessUrlHelper->getCurrent();
@@ -79,7 +84,12 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/preview', name: 'admin_page_preview', methods: ['GET'])]
+    #[Route(
+        '/{id<\d+>}/preview',
+        name: 'admin_page_preview',
+        methods: ['GET'],
+        priority: 10
+    )]
     #[IsGranted('ROLE_ADMIN')]
     public function preview(int $id, PageRepository $pageRepo): Response
     {

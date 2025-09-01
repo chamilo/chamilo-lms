@@ -7094,11 +7094,46 @@ class learnpath
         $fs        = $assetRepo->getFileSystem();
         $scormSize = 0;
         foreach (Container::getLpRepository()->findScormByCourse($course) as $lp) {
-            if ($asset = $lp->getAsset()) {
-                $folder = $assetRepo->getFolder($asset);
-                if ($folder && $fs->directoryExists($folder)) {
-                    $scormSize += self::getFolderSize($folder);
+            $asset = $lp->getAsset();
+            if (!$asset) {
+                continue;
+            }
+
+            // Path may point to an extracted folder or a .zip file
+            $path = $assetRepo->getFolder($asset);
+            if (!$path) {
+                continue;
+            }
+
+            try {
+                if ($fs->directoryExists($path)) {
+                    // Extracted SCORM folder
+                    $scormSize += self::getFolderSize($path);
+                    continue;
                 }
+                if ($fs->fileExists($path)) {
+                    // SCORM .zip file
+                    $scormSize += (int) $fs->fileSize($path);
+                    continue;
+                }
+
+                // Local filesystem fallbacks
+                if (@is_dir($path)) {
+                    $scormSize += self::getFolderSize($path);
+                    continue;
+                }
+                if (@is_file($path)) {
+                    $size = @filesize($path);
+                    if ($size !== false) {
+                        $scormSize += (int) $size;
+                        continue;
+                    }
+                }
+
+                // Only log when we truly cannot resolve the size
+                error_log('[Learnpath::getQuotaInfo] Unable to resolve SCORM size (path not found or unreadable): '.$path);
+            } catch (\Throwable $e) {
+                error_log('[Learnpath::getQuotaInfo] Exception while resolving SCORM size for path '.$path.' - '.$e->getMessage());
             }
         }
 

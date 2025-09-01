@@ -27,7 +27,7 @@
                     <th>{{ 'Title'|trans }}</th>
                     <th>{{ 'Count'|trans }}</th>
                     <th>{{ 'Resources'|trans }}</th>
-                    <th>{{ 'First created'|trans }}</th>
+                    <th>{{ 'Created at'|trans }}</th>
                     <th>{{ 'Link'|trans }}</th>
                 </tr>
                 </thead>
@@ -49,7 +49,7 @@
                             </ul>
                         </td>
                         <td>{{ course.firstCreatedAt|date('Y-m-d H:i') }}</td>
-                        <td><a href="{{ course.url }}" target="_blank">{{ 'Open'|trans }}</a></td>
+                        <td><a href="{{ course.url }}" target="_blank">{{ 'Go to the course'|trans }}</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

@@ -432,7 +432,7 @@
     }
   }
 
-  &.type-19 {
+  &.type-19, &.type-25 {
     @apply mb-4;
 
     .drag_question {
@@ -577,4 +577,21 @@
   .ui-resizable-handle:hover {
     @apply bg-primary;
   }
+}
+
+.qtype-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(2, auto);
+  gap: 0.5rem 0.5rem;
+  align-items: center;
+  width: 100%;
+  padding: .5rem;
+  overflow-x: auto;
+}
+
+.qtype-grid > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

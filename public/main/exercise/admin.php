@@ -284,6 +284,9 @@ $htmlHeadXtra[] = $template->fetch($templateName);
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_PATH).'build/libs/select2/css/select2.min.css">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PATH).'build/libs/select2/js/select2.min.js"></script>';
+$htmlHeadXtra[] = '<script>$(function(){ if ($.fn.select2){ $(".ch-select2").select2({width:"100%"}); } });</script>';
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseStored', 'ItemUpdated', 'ItemAdded'])) {
@@ -460,8 +463,24 @@ if (isset($_GET['hotspotadmin'])) {
     require 'hotspot_admin.inc.php';
 }
 
-if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
-    // question list management
+if (isset($_GET['mad_admin'])) {
+    $qid = (int) $_GET['mad_admin'];
+    $objQuestion = Question::read($qid);
+    if (!$objQuestion) {
+        api_not_allowed();
+    }
+
+    require 'multiple_answer_dropdown_admin.php';
+    exit;
+}
+
+if (
+    !$newQuestion
+    && !$modifyQuestion
+    && !$editQuestion
+    && !isset($_GET['hotspotadmin'])
+    && !isset($_GET['mad_admin'])
+) {
     require 'question_list_admin.inc.php';
 }
 

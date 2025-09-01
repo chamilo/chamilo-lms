@@ -62,7 +62,9 @@ class FillBlanks extends Question
             }
         }
 
+        $questionTypes = [FILL_IN_BLANKS => 'fillblanks', FILL_IN_BLANKS_COMBINATION => 'fillblanks_combination'];
         echo '<script>
+            var questionType = "'.$questionTypes[$this->type].'";
             var firstTime = true;
             var originalOrder = new Array();
             var blankSeparatorStart = "'.$blankSeparatorStart.'";
@@ -121,7 +123,9 @@ class FillBlanks extends Question
                 fields += "<div class=\"col-sm-8\">";
                 fields += "<table class=\"data_table\">";
                 fields += "<tr><th style=\"width:220px\">'.get_lang('Word to find').'</th>";
-                fields += "<th style=\"width:50px\">'.get_lang('Score').'</th>";
+                if (questionType == "fillblanks") {
+                    fields += "<th style=\"width:50px\">'.get_lang('Score').'</th>";
+                }
                 fields += "<th>'.get_lang('Input size of box to fill').'</th></tr>";
 
                 if (blanks != null) {
@@ -157,7 +161,12 @@ class FillBlanks extends Question
 
                         fields += "<tr>";
                         fields += "<td>"+blanksWithColor+"</td>";
-                        fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
+                        if (questionType == "fillblanks") {
+                            fields += "<td><input class=\"form-control\" style=\"width:60px\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td>";
+                        } else {
+                          fields += "<input value=\"0\" type=\"hidden\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" />";
+                        }
+
                         fields += "<td>";
                         fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"-\" onclick=\"changeInputSize(-1, "+i+")\">&nbsp;";
                         fields += "<input class=\"btn btn--plain\" type=\"button\" value=\"+\" onclick=\"changeInputSize(1, "+i+")\">&nbsp;";
@@ -392,7 +401,13 @@ class FillBlanks extends Question
 
         global $text;
         // setting the save button here and not in the question class.php
-        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('Please define at least one blank with the selected marker').'</div>');
+        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
+        if (FILL_IN_BLANKS_COMBINATION === $this->type) {
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+            if (!empty($this->iid)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
@@ -404,6 +419,9 @@ class FillBlanks extends Question
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processAnswersCreation($form, $exercise)
     {
         $answer = $form->getSubmitValue('answer');
@@ -483,6 +501,10 @@ class FillBlanks extends Question
                 $this->weighting += (float) $form->getSubmitValue('weighting['.$i.']');
             }
 
+            if (FILL_IN_BLANKS_COMBINATION === $this->type) {
+                $this->weighting = $form->getSubmitValue('questionWeighting');
+            }
+
             // input width
             $answer .= ':';
             for ($i = 0; $i < $nb; $i++) {
@@ -518,6 +540,9 @@ class FillBlanks extends Question
         $objAnswer->save();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

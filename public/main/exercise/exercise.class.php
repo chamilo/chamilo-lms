@@ -3564,6 +3564,7 @@ class Exercise
         $feedback_type = $this->getFeedbackType();
         $results_disabled = $this->selectResultsDisabled();
         $questionDuration = (int) $questionDuration;
+        $hotspotsSavedEarly = false;
 
         if ($debug) {
             error_log('<------ manage_answer ------> ');
@@ -3601,6 +3602,7 @@ class Exercise
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $studentChoiceDegree = null;
+        $listCorrectAnswers = [];
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
@@ -3651,7 +3653,8 @@ class Exercise
         if (FREE_ANSWER == $answerType ||
             ORAL_EXPRESSION == $answerType ||
             CALCULATED_ANSWER == $answerType ||
-            ANNOTATION == $answerType
+            ANNOTATION == $answerType ||
+            UPLOAD_ANSWER == $answerType
         ) {
             $nbrAnswers = 1;
         }
@@ -3695,7 +3698,7 @@ class Exercise
         $organs_at_risk_hit = 0;
         $questionScore = 0;
         $orderedHotSpots = [];
-        if (HOT_SPOT == $answerType || ANNOTATION == $answerType) {
+        if (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION, ANNOTATION], true)) {
             $orderedHotSpots = $em->getRepository(TrackEHotspot::class)->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
@@ -3706,6 +3709,69 @@ class Exercise
             );
         }
 
+        if (in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION], true)) {
+            if (MULTIPLE_ANSWER_DROPDOWN_COMBINATION == $answerType) {
+                $questionScore = $questionWeighting;
+            }
+            // Load student's selected choices
+            if ($from_database) {
+                $studentChoices = Database::store_result(
+                    Database::query(
+                        "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exeId AND question_id = $questionId"
+                    ),
+                    'ASSOC'
+                );
+                $studentChoices = array_column($studentChoices, 'answer');
+            } else {
+                $studentChoices = array_values((array) $choice);
+            }
+
+            // Compute the list of correct choice IDs
+            $correctChoices = array_keys(array_filter(
+                $answerMatching, // iid => answer text
+                function ($answerIdKey) use ($objAnswerTmp) {
+                    // Safeguards in case arrays are not initialized
+                    $iidList = is_array($objAnswerTmp->iid) ? $objAnswerTmp->iid : [];
+                    $pos = array_search($answerIdKey, $iidList, true);
+                    return $pos !== false && !empty($objAnswerTmp->correct[$pos]);
+                },
+                ARRAY_FILTER_USE_KEY
+            ));
+
+            // Scoring
+            if (MULTIPLE_ANSWER_DROPDOWN_COMBINATION === $answerType) {
+                // All-or-nothing scoring
+                $questionScore = (float) $questionWeighting;
+                if (array_diff($studentChoices, $correctChoices) || array_diff($correctChoices, $studentChoices)) {
+                    $questionScore = 0.0;
+                }
+            } else { // MULTIPLE_ANSWER_DROPDOWN
+                // Partial scoring using per-choice weighting
+                $questionScore = 0.0;
+                $iidList    = is_array($objAnswerTmp->iid) ? $objAnswerTmp->iid : [];
+                $correctArr = is_array($objAnswerTmp->correct) ? $objAnswerTmp->correct : [];
+                $weights    = is_array($objAnswerTmp->weighting) ? $objAnswerTmp->weighting : [];
+
+                foreach ((array) $studentChoices as $choiceId) {
+                    $pos = array_search($choiceId, $iidList, true);
+                    if ($pos !== false && !empty($correctArr[$pos])) {
+                        $questionScore += (float) ($weights[$pos] ?? 0);
+                    }
+                }
+            }
+
+            // Render (UI)
+            if ($show_result) {
+                echo ExerciseShowFunctions::displayMultipleAnswerDropdown(
+                    $this,
+                    $objAnswerTmp,
+                    $correctChoices,
+                    $studentChoices,
+                    $showTotalScoreAndUserChoicesInLastAttempt
+                );
+            }
+        }
+
         if ($debug) {
             error_log('-- Start answer loop --');
         }
@@ -3713,6 +3779,7 @@ class Exercise
         $answerDestination = null;
         $userAnsweredQuestion = false;
         $correctAnswerId = [];
+        $matchingCorrectAnswers = [];
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answer = $objAnswerTmp->selectAnswer($answerId);
             $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -3854,6 +3921,7 @@ class Exercise
 
                     break;
                 case MULTIPLE_ANSWER:
+                case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -3873,7 +3941,9 @@ class Exercise
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
                         $real_answers[$answerId] = (bool) $studentChoice;
 
-                        if (isset($studentChoice)) {
+                        if (isset($studentChoice)
+                            || (MULTIPLE_ANSWER_DROPDOWN == $answerType && in_array($answerAutoId, $choice))
+                        ) {
                             $correctAnswerId[] = $answerAutoId;
                             $questionScore += $answerWeighting;
                         }
@@ -3976,6 +4046,7 @@ class Exercise
 
                     break;
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
                     $str = '';
                     $answerFromDatabase = '';
                     if ($from_database) {
@@ -4388,6 +4459,7 @@ class Exercise
                     }
 
                     break;
+                case UPLOAD_ANSWER:
                 case FREE_ANSWER:
                     if ($from_database) {
                         $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
@@ -4463,6 +4535,13 @@ class Exercise
                     }
 
                     break;
+                case MULTIPLE_ANSWER_DROPDOWN:
+                    $totalScore += $answerWeighting;
+                    break;
+                case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
+                    break;
+                case MATCHING_COMBINATION:
+                case MATCHING_DRAGGABLE_COMBINATION:
                 case DRAGGABLE:
                 case MATCHING_DRAGGABLE:
                 case MATCHING:
@@ -4565,6 +4644,7 @@ class Exercise
                                         }
 
                                         if (isset($real_list[$i_answer_correct_answer])) {
+                                            $matchingCorrectAnswers[$questionId]['from_database']['correct'][$i_answer_correct_answer] = $real_list[$i_answer_correct_answer];
                                             $user_answer = Display::span(
                                                 $real_list[$i_answer_correct_answer],
                                                 ['style' => 'color: #008000; font-weight: bold;']
@@ -4606,6 +4686,8 @@ class Exercise
                                 switch ($answerType) {
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
+                                    case MATCHING_COMBINATION:
+                                    case MATCHING_DRAGGABLE_COMBINATION:
                                         if (RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK == $this->results_disabled) {
                                             if (false === $showTotalScoreAndUserChoicesInLastAttempt && empty($s_user_answer)) {
                                                 break;
@@ -4629,7 +4711,7 @@ class Exercise
                                         if ($this->showExpectedChoice()) {
                                             if ($this->showExpectedChoiceColumn()) {
                                                 echo '<td>';
-                                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION])) {
                                                     if (isset($real_list[$i_answer_correct_answer]) &&
                                                         true == $showTotalScoreAndUserChoicesInLastAttempt
                                                     ) {
@@ -4642,7 +4724,7 @@ class Exercise
                                             }
                                             echo '<td class="text-center">'.$status.'</td>';
                                         } else {
-                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
                                                     true === $showTotalScoreAndUserChoicesInLastAttempt
                                                 ) {
@@ -4689,7 +4771,7 @@ class Exercise
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
                                             echo '<td>';
-                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
                                                     true === $showTotalScoreAndUserChoicesInLastAttempt
                                                 ) {
@@ -4708,13 +4790,14 @@ class Exercise
                             }
                             $counterAnswer++;
                         }
-
+                        $matchingCorrectAnswers[$questionId]['from_database']['count_options'] = count($options);
                         break 2; // break the switch and the "for" condition
                     } else {
                         if ($answerCorrect) {
                             if (isset($choice[$answerAutoId]) &&
                                 $answerCorrect == $choice[$answerAutoId]
                             ) {
+                                $matchingCorrectAnswers[$questionId]['form_values']['correct'][$answerAutoId] = $choice[$answerAutoId];
                                 $correctAnswerId[] = $answerAutoId;
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
@@ -4729,10 +4812,12 @@ class Exercise
                             }
                             $matching[$answerAutoId] = $choice[$answerAutoId];
                         }
+                        $matchingCorrectAnswers[$questionId]['form_values']['count_options'] = count($choice);
                     }
 
                     break;
                 case HOT_SPOT:
+                case HOT_SPOT_COMBINATION:
                     if ($from_database) {
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
@@ -4846,6 +4931,7 @@ class Exercise
                                 $choice[$answerAutoId] = 1;
                                 $choice[$answerIid] = 1;
                             }
+                            $studentChoice = $choiceIsValid ? 1 : 0;
                         }
                     }
 
@@ -4912,6 +4998,177 @@ class Exercise
                     $_SESSION['hotspot_dest'][$questionId][1] = $answer_delineation_destination;
 
                     break;
+                case FILL_IN_BLANKS_COMBINATION:
+                        $answerFromDatabase = '';
+                        if ($from_database) {
+                            $sql = "SELECT answer
+                            FROM $TBL_TRACK_ATTEMPT
+                            WHERE exe_id = $exeId AND question_id = $questionId";
+                            $result = Database::query($sql);
+                            $answerFromDatabase = Database::result($result, 0, 'answer');
+                        }
+
+                        // Teacher definition and weights
+                        $info = FillBlanks::getAnswerInfo($answer);
+                        $listCorrectAnswers = $info; // keep words, weighting, switchable
+                        $switchableAnswerSet = $info['switchable'];
+                        $answerWeighting = $info['weighting'];
+
+                        // Student choices
+                        if ($from_database && $answerFromDatabase !== '') {
+                            $studentInfo = FillBlanks::getAnswerInfo($answerFromDatabase, true);
+                            $choice = $studentInfo['student_answer'] ?? [];
+                        }
+
+                        // Evaluate each blank and fill student_answer/student_score only
+                        if (!$switchableAnswerSet) {
+                            // Fixed positions
+                            $count = count($info['words']);
+                            for ($i = 0; $i < $count; $i++) {
+                                $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
+                                if (!$from_database) {
+                                    $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
+                                }
+                                $correctAnswer = $info['words'][$i];
+
+                                // Resolve menu placeholders when present (for display)
+                                $studentAnswerToShow = $studentAnswer;
+                                $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer);
+                                if (FillBlanks::FILL_THE_BLANK_MENU == $type && $studentAnswer !== '') {
+                                    $menu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                    foreach ($menu as $opt) {
+                                        if (sha1($opt) === $studentAnswer) {
+                                            $studentAnswerToShow = $opt;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                $ok = FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database);
+                                $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
+                                $listCorrectAnswers['student_score'][$i]  = $ok ? 1 : 0;
+                            }
+                        } else {
+                            // Switchable answers: any student entry can match any teacher word once
+                            $studentTemp = (array) ($choice ?? []);
+                            $teacherTemp = $info['words'];
+
+                            $count = max(count($studentTemp), count($teacherTemp));
+                            for ($i = 0; $i < $count; $i++) {
+                                $studentAnswer = isset($studentTemp[$i]) ? trim($studentTemp[$i]) : '';
+                                $studentAnswerToShow = $studentAnswer;
+
+                                if ($studentAnswer !== '') {
+                                    if (!$from_database) {
+                                        $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
+                                    }
+                                    $found = false;
+                                    foreach ($teacherTemp as $j => $correctAnswer) {
+                                        if ($found) {
+                                            continue;
+                                        }
+                                        if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {
+                                            // consume this teacher slot
+                                            $teacherTemp[$j] = '';
+                                            $found = true;
+                                        }
+                                    }
+
+                                    // Resolve menu placeholder for display
+                                    if ($studentAnswerToShow !== '') {
+                                        $type = FillBlanks::getFillTheBlankAnswerType($correctAnswer ?? '');
+                                        if (FillBlanks::FILL_THE_BLANK_MENU == $type) {
+                                            $menu = FillBlanks::getFillTheBlankMenuAnswers($correctAnswer, false);
+                                            foreach ($menu as $opt) {
+                                                if (sha1($opt) === $studentAnswer) {
+                                                    $studentAnswerToShow = $opt;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    $listCorrectAnswers['student_answer'][$i] = $studentAnswerToShow;
+                                    $listCorrectAnswers['student_score'][$i]  = $found ? 1 : 0;
+                                } else {
+                                    $listCorrectAnswers['student_answer'][$i] = '';
+                                    $listCorrectAnswers['student_score'][$i]  = 0;
+                                }
+                            }
+                        }
+
+                        // Build the annotated answer string for display
+                        $answer = FillBlanks::getAnswerInStudentAttempt($listCorrectAnswers);
+                    break;
+                case HOT_SPOT_COMBINATION:
+                        if ($from_database) {
+                            $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                            // Try by auto id
+                            $sql = "SELECT hotspot_correct
+                                FROM $TBL_TRACK_HOTSPOT
+                                WHERE hotspot_exe_id = $exeId
+                                  AND hotspot_question_id = $questionId
+                                  AND hotspot_answer_id = $answerAutoId
+                                ORDER BY hotspot_id ASC";
+                            $result = Database::query($sql);
+                            if (Database::num_rows($result)) {
+                                $studentChoice = (int) Database::result($result, 0, 'hotspot_correct');
+                                $choice[$answerAutoId] = $studentChoice ? 1 : 0;
+                            } else {
+                                // Fallback to legacy ids
+                                $studentChoice = 0;
+                                if (!empty($answerIid)) {
+                                    $sql = "SELECT hotspot_correct
+                                        FROM $TBL_TRACK_HOTSPOT
+                                        WHERE hotspot_exe_id = $exeId
+                                          AND hotspot_question_id = $questionId
+                                          AND hotspot_answer_id = $answerIid
+                                        ORDER BY hotspot_id ASC";
+                                    $result = Database::query($sql);
+                                    if (Database::num_rows($result)) {
+                                        $studentChoice = (int) Database::result($result, 0, 'hotspot_correct');
+                                    }
+                                }
+                                $choice[$answerAutoId] = $studentChoice ? 1 : 0;
+                                $choice[$answerIid]    = $choice[$answerAutoId];
+                            }
+                        } else {
+                            // Validate coordinate inside the expected shape and mark $choice
+                            if (!isset($choice[$answerAutoId]) && !isset($choice[$answerIid])) {
+                                $choice[$answerAutoId] = 0;
+                                $choice[$answerIid]    = 0;
+                                $studentChoice = 0;
+                            } else {
+                                $studentChoicePoint = $choice[$answerAutoId] ?? $choice[$answerIid] ?? '';
+                                $isValid = false;
+
+                                if (!empty($studentChoicePoint)) {
+                                    $hotspotType = $objAnswerTmp->selectHotspotType($answerId);
+                                    $hotspotCoordinates = $objAnswerTmp->selectHotspotCoordinates($answerId);
+                                    $choicePoint = Geometry::decodePoint($studentChoicePoint);
+
+                                    switch ($hotspotType) {
+                                        case 'square':
+                                            $props = Geometry::decodeSquare($hotspotCoordinates);
+                                            $isValid = Geometry::pointIsInSquare($props, $choicePoint);
+                                            break;
+                                        case 'circle':
+                                            $props = Geometry::decodeEllipse($hotspotCoordinates);
+                                            $isValid = Geometry::pointIsInEllipse($props, $choicePoint);
+                                            break;
+                                        case 'poly':
+                                            $props = Geometry::decodePolygon($hotspotCoordinates);
+                                            $isValid = Geometry::pointIsInPolygon($props, $choicePoint);
+                                            break;
+                                    }
+                                }
+
+                                $choice[$answerAutoId] = $isValid ? 1 : 0;
+                                $choice[$answerIid]    = $choice[$answerAutoId];
+                                $studentChoice         = $choice[$answerAutoId];
+                            }
+                        }
+                    break;
                 case ANNOTATION:
                     if ($from_database) {
                         $sql = "SELECT answer, marks
@@ -4938,7 +5195,7 @@ class Exercise
             if ($show_result) {
                 if ('exercise_result' === $from) {
                     // Display answers (if not matching type, or if the answer is correct)
-                    if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE]) ||
+                    if (!in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION]) ||
                         $answerCorrect
                     ) {
                         if (in_array(
@@ -5010,7 +5267,7 @@ class Exercise
                                 $results_disabled,
                                 $showTotalScoreAndUserChoicesInLastAttempt
                             );
-                        } elseif (FILL_IN_BLANKS == $answerType) {
+                        } elseif (in_array($answerType, [FILL_IN_BLANKS, FILL_IN_BLANKS_COMBINATION])) {
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $this,
                                 $feedback_type,
@@ -5043,6 +5300,15 @@ class Exercise
                                 $questionScore,
                                 $results_disabled
                             );
+                        } elseif ($answerType == UPLOAD_ANSWER) {
+                            ExerciseShowFunctions::displayUploadAnswer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
                         } elseif (ORAL_EXPRESSION == $answerType) {
                             // to store the details of open questions in an array to be used in mail
                             /** @var OralExpression $objQuestionTmp */
@@ -5055,7 +5321,7 @@ class Exercise
                                 $questionScore,
                                 true
                             );
-                        } elseif (HOT_SPOT == $answerType) {
+                        } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION], true)) {
                             $correctAnswerId = 0;
                             /** @var TrackEHotspot $hotspot */
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
@@ -5238,7 +5504,7 @@ class Exercise
                                     error_log(__LINE__.' first', 0);
                                 }
                             }
-                        } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                        } elseif (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION])) {
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
                             echo Display::tag(
@@ -5405,6 +5671,7 @@ class Exercise
 
                             break;
                         case FILL_IN_BLANKS:
+                        case FILL_IN_BLANKS_COMBINATION:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
                                 $this,
                                 $feedback_type,
@@ -5415,7 +5682,6 @@ class Exercise
                                 $showTotalScoreAndUserChoicesInLastAttempt,
                                 $str
                             );
-
                             break;
                         case CALCULATED_ANSWER:
                             ExerciseShowFunctions::display_calculated_answer(
@@ -5441,6 +5707,16 @@ class Exercise
                             );
 
                             break;
+                        case UPLOAD_ANSWER:
+                            echo ExerciseShowFunctions::displayUploadAnswer(
+                                $feedback_type,
+                                $choice,
+                                $exeId,
+                                $questionId,
+                                $questionScore,
+                                $results_disabled
+                            );
+                            break;
                         case ORAL_EXPRESSION:
                             /** @var OralExpression $objQuestionTmp */
                             echo '<tr>
@@ -5457,6 +5733,7 @@ class Exercise
                                 </table>';
                             break;
                         case HOT_SPOT:
+                        case HOT_SPOT_COMBINATION:
                             $correctAnswerId = 0;
 
                             foreach ($orderedHotSpots as $correctAnswerId => $hotspot) {
@@ -5620,6 +5897,8 @@ class Exercise
                         case DRAGGABLE:
                         case MATCHING_DRAGGABLE:
                         case MATCHING:
+                        case MATCHING_COMBINATION:
+                        case MATCHING_DRAGGABLE_COMBINATION:
                             echo '<tr>';
                             echo Display::tag('td', $answerMatching[$answerId]);
                             echo Display::tag(
@@ -5660,6 +5939,39 @@ class Exercise
             }
         }
 
+        if (FILL_IN_BLANKS_COMBINATION === $answerType) {
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $listCorrectAnswers,
+                $exeId,
+                $questionId,
+                $questionWeighting
+            );
+        }
+
+        if (HOT_SPOT_COMBINATION === $answerType) {
+            $listCoords = $exerciseResultCoordinates[$questionId] ?? [];
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $listCoords,
+                $exeId,
+                $questionId,
+                $questionWeighting,
+                (array) ($choice ?? []),
+                $nbrAnswers
+            );
+        }
+
+        if (in_array($answerType, [MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION], true)) {
+            $questionScore = ExerciseLib::getUserQuestionScoreGlobal(
+                $answerType,
+                $matchingCorrectAnswers[$questionId] ?? [],
+                $exeId,
+                $questionId,
+                $questionWeighting
+            );
+        }
+
         //we add the total score after dealing with the answers
         if (MULTIPLE_ANSWER_COMBINATION == $answerType ||
             MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType
@@ -5691,7 +6003,7 @@ class Exercise
             //  we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user
             //  some results that haven't been stored in the database yet
-            if (HOT_SPOT == $answerType || HOT_SPOT_ORDER == $answerType || HOT_SPOT_DELINEATION == $answerType) {
+            if (in_array($answerType, [HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, HOT_SPOT_COMBINATION])) {
                 if ($debug) {
                     error_log('$from AND this is a hotspot kind of question ');
                 }
@@ -5846,7 +6158,38 @@ class Exercise
 
             $relPath = api_get_path(WEB_CODE_PATH);
 
-            if (HOT_SPOT == $answerType || HOT_SPOT_ORDER == $answerType) {
+            if ($save_results
+                && in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION], true)
+                && !empty($exerciseResultCoordinates[$questionId])
+            ) {
+                Database::delete(
+                    Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT),
+                    [
+                        'hotspot_exe_id = ? AND hotspot_question_id = ? AND c_id = ?' => [
+                            $exeId, $questionId, api_get_course_int_id(),
+                        ],
+                    ]
+                );
+
+                foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
+                    $hotspotValue = !empty($choice[$idx]) ? 1 : 0;
+                    Event::saveExerciseAttemptHotspot(
+                        $this,
+                        $exeId,
+                        $quesId,
+                        $idx,
+                        $hotspotValue,
+                        $val,
+                        false,
+                        $this->id,
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                }
+                $hotspotsSavedEarly = true;
+            }
+
+            if (in_array($answerType, [HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_COMBINATION], true)) {
                 // We made an extra table for the answers
                 if ($show_result) {
                     echo '</table></td></tr>';
@@ -5976,9 +6319,16 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif (MULTIPLE_ANSWER == $answerType || GLOBAL_MULTIPLE_ANSWER == $answerType) {
+            } elseif (in_array($answerType, [
+                MULTIPLE_ANSWER,
+                GLOBAL_MULTIPLE_ANSWER,
+                MULTIPLE_ANSWER_DROPDOWN,
+                MULTIPLE_ANSWER_DROPDOWN_COMBINATION
+            ], true)) {
                 if (0 != $choice) {
-                    $reply = array_keys($choice);
+                    $reply = in_array($answerType, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION], true)
+                        ? array_values((array) $choice)
+                        : array_keys((array) $choice);
                     for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt(
@@ -6036,7 +6386,13 @@ class Exercise
                         $questionDuration
                     );
                 }
-            } elseif (in_array($answerType, [MATCHING, DRAGGABLE, MATCHING_DRAGGABLE])) {
+            } elseif (in_array($answerType, [
+                MATCHING,
+                DRAGGABLE,
+                MATCHING_DRAGGABLE,
+                MATCHING_COMBINATION,
+                MATCHING_DRAGGABLE_COMBINATION
+            ], true)) {
                 if (isset($matching)) {
                     foreach ($matching as $j => $val) {
                         Event::saveQuestionAttempt(
@@ -6065,6 +6421,26 @@ class Exercise
                     false,
                     $questionDuration
                 );
+            } elseif ($answerType == UPLOAD_ANSWER) {
+                $answer = '';
+                $questionAttemptId = Event::saveQuestionAttempt(
+                    $this,
+                    0,
+                    $answer,
+                    $quesId,
+                    $exeId,
+                    0,
+                    $this->id,
+                    false,
+                    $questionDuration
+                );
+
+                if (false !== $questionAttemptId) {
+                    $postedAssets = isset($_REQUEST['uploadAsset'][$questionId])
+                        ? (array) $_REQUEST['uploadAsset'][$questionId]
+                        : [];
+                    UploadAnswer::saveAssetInQuestionAttempt($questionAttemptId, $postedAssets);
+                }
             } elseif (ORAL_EXPRESSION == $answerType) {
                 $answer = $choice;
                 /** @var OralExpression $objQuestionTmp */
@@ -6101,7 +6477,7 @@ class Exercise
                     false,
                     $questionDuration
                 );
-            } elseif (HOT_SPOT == $answerType || ANNOTATION == $answerType) {
+            } elseif (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION, ANNOTATION], true)) {
                 $answer = [];
                 if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
                     if ($debug) {
@@ -8277,12 +8653,15 @@ class Exercise
                     if ($onlyCorrect) {
                         switch ($objAnswer->getQuestionType()) {
                             case FILL_IN_BLANKS:
+                            case FILL_IN_BLANKS_COMBINATION:
                                 $isCorrect = FillBlanks::isCorrect($answer['answer']);
 
                                 break;
                             case MATCHING:
+                            case MATCHING_COMBINATION:
                             case DRAGGABLE:
                             case MATCHING_DRAGGABLE:
+                            case MATCHING_DRAGGABLE_COMBINATION:
                                 $isCorrect = Matching::isCorrect(
                                     $answer['position'],
                                     $answer['answer'],
@@ -9952,7 +10331,11 @@ class Exercise
                 if ($question) {
                     switch ($question->type) {
                         case FILL_IN_BLANKS:
+                        case FILL_IN_BLANKS_COMBINATION:
                             $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
+                            if ($option['answer'] === "0") {
+                                $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
+                            }
                             break;
                     }
                 }

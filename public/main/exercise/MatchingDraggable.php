@@ -12,6 +12,9 @@ class MatchingDraggable extends Question
     public $typePicture = 'matchingdrag.png';
     public $explanationLangVar = 'Match by dragging';
 
+    /**
+     * Class constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +22,9 @@ class MatchingDraggable extends Question
         $this->isContent = $this->getIsContent();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createAnswersForm($form)
     {
         $defaults = [];
@@ -90,14 +96,19 @@ class MatchingDraggable extends Question
         $form->addElement('hidden', 'nb_matches', $nb_matches);
         $form->addElement('hidden', 'nb_options', $nb_options);
 
+        $thWeighting = '';
+        if (MATCHING_DRAGGABLE === $this->type) {
+            $thWeighting = '<th width="10">'.get_lang('Weighting').'</th>';
+        }
+
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="10">'.get_lang('N°').'</th>
+                    <th width="10">'.get_lang('Number').'</th>
                     <th width="85%">'.get_lang('Answer').'</th>
                     <th width="15%">'.get_lang('Matches To').'</th>
-                    <th width="10">'.get_lang('Score').'</th>
+                    '.$thWeighting.'
                 </tr>
             </thead>
             <tbody>';
@@ -146,7 +157,11 @@ class MatchingDraggable extends Question
             );
 
             $form->addSelect("matches[$i]", null, $matches);
-            $form->addText("weighting[$i]", null, true, ['style' => 'width: 60px;', 'value' => 10]);
+            if (MATCHING_DRAGGABLE === $this->type) {
+                $form->addText("weighting[$i]", null, true, ['style' => 'width: 60px;', 'value' => 10]);
+            } else {
+                $form->addHidden("weighting[$i]", "0");
+            }
             $form->addHtml('</tr>');
         }
 
@@ -190,6 +205,15 @@ class MatchingDraggable extends Question
         }
 
         $form->addHtml('</table>');
+
+        if (MATCHING_DRAGGABLE_COMBINATION === $this->type) {
+            //only 1 answer the all deal ...
+            $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
+            if (!empty($this->iid)) {
+                $defaults['questionWeighting'] = $this->weighting;
+            }
+        }
+
         global $text;
         $group = [];
         // setting the save button here and not in the question class.php
@@ -214,6 +238,9 @@ class MatchingDraggable extends Question
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processAnswersCreation($form, $exercise)
     {
         $nb_matches = $form->getSubmitValue('nb_matches');
@@ -245,10 +272,18 @@ class MatchingDraggable extends Question
                 $position
             );
         }
+
+        if (MATCHING_DRAGGABLE_COMBINATION == $this->type) {
+            $this->weighting = $form->getSubmitValue('questionWeighting');
+        }
+
         $objAnswer->save();
         $this->save($exercise);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);

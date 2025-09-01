@@ -727,9 +727,9 @@ EOT;
     /**
      * Returns a button with the primary color and an upload icon.
      *
-     * @param string $label         Text appearing on the button
-     * @param string $name          Element name (for form treatment purposes)
-     * @param bool   $createElement Whether to use the create or add method
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -750,9 +750,9 @@ EOT;
     /**
      * Returns a button with the primary color and a download icon.
      *
-     * @param string $label         Text appearing on the button
-     * @param string $name          Element name (for form treatment purposes)
-     * @param bool   $createElement Whether to use the create or add method
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -773,9 +773,9 @@ EOT;
     /**
      * Returns a button with the primary color and a magnifier icon.
      *
-     * @param string $label         Text appearing on the button
-     * @param string $name          Element name (for form treatment purposes)
-     * @param bool   $createElement Whether to use the create or add method
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -796,9 +796,9 @@ EOT;
     /**
      * Returns a button with the primary color and a copy (double sheet) icon.
      *
-     * @param string $label         Text appearing on the button
-     * @param string $name          Element name (for form treatment purposes)
-     * @param bool   $createElement Whether to use the create or add method
+     * @param string $label Text appearing on the button
+     * @param string $name Element name (for form treatment purposes)
+     * @param bool $createElement Whether to use the create or add method
      *
      * @return HTML_QuickForm_button
      */
@@ -820,7 +820,7 @@ EOT;
      * @param string $name
      * @param string $label
      * @param string $text
-     * @param array  $attributes
+     * @param array $attributes
      *
      * @return HTML_QuickForm_checkbox
      */
@@ -832,8 +832,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array  $options
-     * @param array  $attributes
+     * @param array $options
+     * @param array $attributes
      *
      * @return HTML_QuickForm_group
      */
@@ -857,8 +857,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array  $options
-     * @param array  $attributes
+     * @param array $options
+     * @param array $attributes
      *
      * @return HTML_QuickForm_group
      */
@@ -886,9 +886,9 @@ EOT;
      * @param $name
      * @param $label
      * @param $collection
-     * @param array  $attributes
-     * @param bool   $addNoneOption
-     * @param string $textCallable  set a function getStringValue() by default __toString()
+     * @param array $attributes
+     * @param bool $addNoneOption
+     * @param string $textCallable set a function getStringValue() by default __toString()
      *
      * @return HTML_QuickForm_element
      */
@@ -899,7 +899,8 @@ EOT;
         $attributes = [],
         $addNoneOption = false,
         $textCallable = ''
-    ) {
+    )
+    {
         $options = [];
 
         if ($addNoneOption) {
@@ -927,7 +928,7 @@ EOT;
     /**
      * @param string $label
      * @param string $text
-     * @param bool   $createElement
+     * @param bool $createElement
      *
      * @return HTML_QuickForm_Element
      */
@@ -955,13 +956,13 @@ EOT;
     }
 
     /**
-     * @param string       $name
+     * @param string $name
      * @param string|array $label
-     * @param array        $attributes
-     *
-     * @throws Exception if the file doesn't have an id
+     * @param array $attributes
      *
      * @return HTML_QuickForm_file
+     * @throws Exception if the file doesn't have an id
+     *
      */
     public function addFile($name, $label, $attributes = [])
     {
@@ -974,24 +975,24 @@ EOT;
                 }
                 $this->addHtml(
                     '
-                <div class="form-group row" id="'.$id.'-form-group" style="display: none;">
+                <div class="form-group row" id="' . $id . '-form-group" style="display: none;">
                     <div class="offset-md-2 col-sm-8">
                         <div class="card-cropper">
-                            <div id="'.$id.'_crop_image" class="cropCanvas">
-                                <img id="'.$id.'_preview_image">
+                            <div id="' . $id . '_crop_image" class="cropCanvas">
+                                <img id="' . $id . '_preview_image">
                             </div>
-                            <button class="btn btn--primary" type="button" name="cropButton" id="'.$id.'_crop_button">
-                                <em class="fa fa-crop"></em> '.get_lang('Crop your picture').'
+                            <button class="btn btn--primary" type="button" name="cropButton" id="' . $id . '_crop_button">
+                                <em class="fa fa-crop"></em> ' . get_lang('Crop your picture') . '
                             </button>
                         </div>
                     </div>
                 </div>'
                 );
-                $this->addHidden($id.'_crop_result', '');
-                $this->addHidden($id.'_crop_result_for_resource', '');
-                $this->addHidden($id.'_crop_image_base_64', '');
+                $this->addHidden($id . '_crop_result', '');
+                $this->addHidden($id . '_crop_result_for_resource', '');
+                $this->addHidden($id . '_crop_image_base_64', '');
             }
-        } catch (HTML_Quick | Form_Error $e) {
+        } catch (HTML_Quick|Form_Error $e) {
             var_dump($e->getMessage());
         }
 
@@ -1018,8 +1019,8 @@ EOT;
         $javascript = '
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                const buttons = document.querySelectorAll("#card_'.$id.' a");
-                const menus = document.querySelectorAll("#collapse_'.$id.'");
+                const buttons = document.querySelectorAll("#card_' . $id . ' a");
+                const menus = document.querySelectorAll("#collapse_' . $id . '");
 
                 buttons.forEach((button, index) => {
                     button.addEventListener("click", function() {
@@ -1046,22 +1047,22 @@ EOT;
         }
         $html = '
         <div class="display-panel-collapse field">
-            <div class="display-panel-collapse__header" id="card_'.$id.'">
+            <div class="display-panel-collapse__header" id="card_' . $id . '">
                 <a role="button"
                     class="mdi mdi-chevron-down"
                     data-toggle="collapse"
-                    data-target="#collapse_'.$id.'"
-                    aria-expanded="'.(($open) ? 'true' : 'false').'"
-                    aria-controls="collapse_'.$id.'"
+                    data-target="#collapse_' . $id . '"
+                    aria-expanded="' . (($open) ? 'true' : 'false') . '"
+                    aria-controls="collapse_' . $id . '"
                 >
-                    '.$htmlIcon.'&nbsp;'.$title.'
+                    ' . $htmlIcon . '&nbsp;' . $title . '
                 </a>
             </div>
             <div
-                id="collapse_'.$id.'"
-                class="display-panel-collapse__collapsible '.(($open) ? 'active' : '').'"
+                id="collapse_' . $id . '"
+                class="display-panel-collapse__collapsible ' . (($open) ? 'active' : '') . '"
             >
-                <div id="collapse_contant_'.$id.'"  class="card-body ">';
+                <div id="collapse_contant_' . $id . '"  class="card-body ">';
 
         $this->addHtml($html);
     }
@@ -1074,9 +1075,9 @@ EOT;
     /**
      * Draws a panel of options see the course_info/infocours.php page.
      *
-     * @param string $name      internal name
-     * @param string $title     visible title
-     * @param array  $groupList list of group or elements
+     * @param string $name internal name
+     * @param string $title visible title
+     * @param array $groupList list of group or elements
      */
     public function addPanelOption($name, $title, $groupList, $icon, $open)
     {
@@ -1099,12 +1100,12 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string       $name
-     * @param string|array $label      The label for the form-element
-     * @param bool         $required   (optional) Is the form-element required (default=true)
-     * @param bool         $fullPage   (optional) When it is true, the editor loads completed html code for a full page
-     * @param array        $config     (optional) Configuration settings for the online editor
-     * @param array        $attributes
+     * @param string $name
+     * @param string|array $label The label for the form-element
+     * @param bool $required (optional) Is the form-element required (default=true)
+     * @param bool $fullPage (optional) When it is true, the editor loads completed html code for a full page
+     * @param array $config (optional) Configuration settings for the online editor
+     * @param array $attributes
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
@@ -1116,7 +1117,8 @@ EOT;
         $fullPage = false,
         $config = [],
         $attributes = []
-    ) {
+    )
+    {
         $attributes['rows'] = $config['rows'] ?? 15;
         $attributes['cols'] = $config['cols'] ?? 80;
         $attributes['cols-size'] = $config['cols-size'] ?? [];
@@ -1156,7 +1158,8 @@ EOT;
      * @param string $html
      * @return string
      */
-    function attr_on_filter($html) {
+    function attr_on_filter($html)
+    {
         $pattern = '/\s+on\w+\s*=\s*(?:"[^"]*"|\'[^\']*\'|[^\s>]+)/i';
         return preg_replace($pattern, '', $html);
     }
@@ -1175,8 +1178,8 @@ EOT;
 
         if ($geolocalization && false === $gMapsPlugin->javascriptIncluded) {
             $gmapsApiKey = $gMapsPlugin->get('api_key');
-            $url = '//maps.googleapis.com/maps/api/js?key='.$gmapsApiKey;
-            $this->addHtml('<script type="text/javascript" src="'.$url.'" ></script>');
+            $url = '//maps.googleapis.com/maps/api/js?key=' . $gmapsApiKey;
+            $this->addHtml('<script type="text/javascript" src="' . $url . '" ></script>');
             $gMapsPlugin->javascriptIncluded = true;
         }
 
@@ -1188,9 +1191,9 @@ EOT;
         );
 
         $this->addHidden(
-            $name.'_coordinates',
+            $name . '_coordinates',
             '',
-            ['id' => $name.'_coordinates']
+            ['id' => $name . '_coordinates']
         );
 
         $this->applyFilter($name, 'stripslashes');
@@ -1212,7 +1215,7 @@ EOT;
     }
 
     /**
-     * @param string       $name
+     * @param string $name
      * @param string|array $label
      *
      * @return mixed
@@ -1235,16 +1238,16 @@ EOT;
         $this->with_progress_bar = true;
         $id = $this->getAttribute('id');
 
-        $this->updateAttributes("onsubmit=\"javascript: addProgress('".$id."')\"");
-        $this->addHtml('<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/upload.js" type="text/javascript"></script>');
+        $this->updateAttributes("onsubmit=\"javascript: addProgress('" . $id . "')\"");
+        $this->addHtml('<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
     }
 
     /**
      * This function has been created for avoiding changes directly within QuickForm class.
      * When we use it, the element is threated as 'required' to be dealt during validation.
      *
-     * @param array  $elements The array of elements
-     * @param string $message  The message displayed
+     * @param array $elements The array of elements
+     * @param string $message The message displayed
      */
     public function add_multiple_required_rule($elements, $message)
     {
@@ -1275,7 +1278,7 @@ EOT;
             $element->setLayout($this->getLayout());
             $elementError = parent::getElementError($element->getName());
             if (!is_null($elementError)) {
-                $returnValue .= Display::return_message($elementError, 'warning').'<br />';
+                $returnValue .= Display::return_message($elementError, 'warning') . '<br />';
                 break;
             }
         }
@@ -1286,7 +1289,7 @@ EOT;
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
             // @todo improve UI
             $returnValue .= '<br />
-            <div id="loading_div_'.$id.'" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
+            <div id="loading_div_' . $id . '" class="loading_div" style="display:none;margin-left:40%; margin-top:10px; height:50px;">
                 <div class="wobblebar-loader"></div>
             </div>
             ';
@@ -1325,10 +1328,10 @@ EOT;
     /**
      * Adds a input of type url to the form.
      *
-     * @param string $name       The label for the form-element
-     * @param string $label      The element name
-     * @param bool   $required   Optional. Is the form-element required (default=true)
-     * @param array  $attributes Optional. List of attributes for the form-element
+     * @param string $name The label for the form-element
+     * @param string $label The element name
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addUrl($name, $label, $required = true, $attributes = [])
     {
@@ -1345,17 +1348,18 @@ EOT;
      * Adds a text field for letters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name       The element name
-     * @param string $label      The label for the form-element
-     * @param bool   $required   Optional. Is the form-element required (default=true)
-     * @param array  $attributes Optional. List of attributes for the form-element
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersOnly(
         $name,
         $label,
         $required = false,
         $attributes = []
-    ) {
+    )
+    {
         $attributes = array_merge(
             $attributes,
             [
@@ -1391,8 +1395,8 @@ EOT;
     /**
      * @param string $name
      * @param string $label
-     * @param array  $attributes
-     * @param bool   $required
+     * @param array $attributes
+     * @param bool $required
      *
      * @return HTML_QuickForm_element
      */
@@ -1411,17 +1415,18 @@ EOT;
      * Adds a text field for alphanumeric characters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name       The element name
-     * @param string $label      The label for the form-element
-     * @param bool   $required   Optional. Is the form-element required (default=true)
-     * @param array  $attributes Optional. List of attributes for the form-element
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumeric(
         $name,
         $label,
         $required = false,
         $attributes = []
-    ) {
+    )
+    {
         $attributes = array_merge(
             $attributes,
             [
@@ -1457,11 +1462,11 @@ EOT;
     /**
      * @param string $name
      * @param $label
-     * @param bool  $required
+     * @param bool $required
      * @param array $attributes
-     * @param bool  $allowNegative
-     * @param int   $minValue
-     * @param null  $maxValue
+     * @param bool $allowNegative
+     * @param int $minValue
+     * @param null $maxValue
      */
     public function addFloat(
         $name,
@@ -1471,7 +1476,8 @@ EOT;
         $allowNegative = false,
         $minValue = null,
         $maxValue = null
-    ) {
+    )
+    {
         $this->addElement(
             'FloatNumber',
             $name,
@@ -1537,17 +1543,18 @@ EOT;
      * Adds a text field for letters and spaces to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name       The element name
-     * @param string $label      The label for the form-element
-     * @param bool   $required   Optional. Is the form-element required (default=true)
-     * @param array  $attributes Optional. List of attributes for the form-element
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextLettersAndSpaces(
         $name,
         $label,
         $required = false,
         $attributes = []
-    ) {
+    )
+    {
         $attributes = array_merge(
             $attributes,
             [
@@ -1584,17 +1591,18 @@ EOT;
      * Adds a text field for alphanumeric and spaces characters to the form.
      * A trim-filter is attached to the field.
      *
-     * @param string $name       The element name
-     * @param string $label      The label for the form-element
-     * @param bool   $required   Optional. Is the form-element required (default=true)
-     * @param array  $attributes Optional. List of attributes for the form-element
+     * @param string $name The element name
+     * @param string $label The label for the form-element
+     * @param bool $required Optional. Is the form-element required (default=true)
+     * @param array $attributes Optional. List of attributes for the form-element
      */
     public function addTextAlphanumericAndSpaces(
         $name,
         $label,
         $required = false,
         $attributes = []
-    ) {
+    )
+    {
         $attributes = array_merge(
             $attributes,
             [
@@ -1631,45 +1639,203 @@ EOT;
      * @param string $url
      * @param string $urlToRedirect after upload redirect to this page
      */
-    public function addMultipleUpload($url, $urlToRedirect = '')
+    public function addMultipleUpload(string $url, string $urlToRedirect = ''): void
     {
         $inputName = 'input_file_upload';
         $this->addMultipleUploadJavascript($url, $inputName, $urlToRedirect);
 
         $this->addHtml('
-            <div class="description-upload">
-            '.get_lang('Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!').'
+        <div class="description-upload text-sm text-gray-600 mb-3">
+            Click on the box below to select files from your computer (you can use CTRL + click to select multiple files), or drag and drop files directly over the box below.
+        </div>
+
+        <span class="btn btn--success fileinput-button mb-3">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add files</span>
+            <input id="' . $inputName . '" type="file" name="files[]" multiple>
+        </span>
+
+        <div id="dropzone" class="rounded-lg border border-dashed border-gray-300 bg-white hover:bg-gray-20 transition p-6 text-center cursor-pointer">
+            <div class="button-load text-gray-700">Click or drag and drop files here to upload</div>
+        </div>
+
+        <div id="upload-status" class="hidden mt-4">
+            <div class="flex items-center gap-2 text-sm text-gray-600">
+                <svg class="animate-spin h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"></path>
+                </svg>
+                <span id="upload-status-text">Uploading…</span>
+                <span id="upload-percent" class="ml-1 font-medium">0%</span>
             </div>
-            <span class="btn btn--success fileinput-button">
-                <i class="glyphicon glyphicon-plus"></i>
-                <span>'.get_lang('Add files').'</span>
-                <!-- The file input field used as target for the file upload widget -->
-                <input id="'.$inputName.'" type="file" name="files[]" multiple>
-            </span>
-            <div id="dropzone">
-                <div class="button-load">
-                '.get_lang('Click or drag and drop files here to upload them').'
-                </div>
-            </div>
-            <br />
-            <!-- The global progress bar -->
-            <div id="progress" class="progress">
-                <div class="progress-bar progress-bar-success"></div>
-            </div>
-            <div id="files" class="files"></div>
-        ');
+        </div>
+
+        <div id="progress" class="progress w-full h-2 bg-gray-200 rounded mt-2 hidden">
+            <div class="progress-bar progress-bar-success h-2 w-0"></div>
+        </div>
+
+        <div id="files" class="files mt-4"></div>
+    ');
     }
+
+    private function addMultipleUploadJavascript(string $url, string $inputName, string $urlToRedirect = ''): void
+    {
+        $icon = Display::getMdiIcon('text-box-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL);
+
+        $this->addHtml("
+    <script>
+    $(function () {
+        'use strict';
+
+        // Prevent default form submit
+        $('#" . $this->getAttribute('id') . "').on('submit', function() { return false; });
+
+        // Click-to-open input
+        $('#dropzone').on('click', function() { $('#" . $inputName . "').click(); });
+
+        var url = '" . $url . "';
+
+        // Optional manual upload button (kept for compatibility)
+        var uploadButton = $('<button/>')
+            .addClass('btn btn--primary')
+            .prop('disabled', true)
+            .text('Uploading…')
+            .on('click', function () {
+                var \$this = $(this), data = \$this.data();
+                \$this
+                    .off('click')
+                    .text('Cancel')
+                    .on('click', function () {
+                        \$this.remove();
+                        data.abort();
+                    });
+                data.submit().always(function () { \$this.remove(); });
+            });
+
+        var \$input = $('#" . $inputName . "');
+
+        function showUploadingUI() {
+            $('#upload-status').removeClass('hidden');
+            $('#progress').removeClass('hidden');
+            $('#upload-status-text').text('Uploading…');
+        }
+
+        function setProgress(pct) {
+            $('#progress .progress-bar').css('width', pct + '%');
+            $('#upload-percent').text(pct + '%');
+        }
+
+        function finishUploadingUI(success) {
+            $('#upload-status-text').text(success ? 'Upload complete' : 'Upload failed');
+            if (success) {
+                setProgress(100);
+            }
+            setTimeout(function () {
+                $('#upload-status').addClass('hidden');
+                $('#progress').addClass('hidden');
+                setProgress(0);
+            }, 1500);
+        }
+
+        \$input.fileupload({
+            url: url,
+            dataType: 'json',
+            disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
+            previewMaxWidth: 300,
+            previewMaxHeight: 169,
+            previewCrop: true,
+            dropzone: $('#dropzone')
+        })
+        .on('fileuploadadd', function (e, data) {
+            setProgress(0);
+            showUploadingUI();
+            data.context = $('<div class=\"row\" />').appendTo('#files');
+            $.each(data.files, function (index, file) {
+                var node = $('<div class=\"col-sm-5 file_name truncate\">').text(file.name);
+                node.appendTo(data.context);
+            });
+        })
+        .on('fileuploadstart', function () {
+            showUploadingUI();
+        })
+        .on('fileuploadprocessalways', function (e, data) {
+            var index = data.index;
+            var file = data.files[index];
+            var node = $(data.context.children()[index]);
+            if (file.preview) {
+                data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
+            } else {
+                data.context.prepend($('<div class=\"col-sm-4\">').html('" . $icon . "'));
+            }
+            if (index + 1 === data.files.length) {
+                data.context.find('button').text('Upload').prop('disabled', !!data.files.error);
+            }
+        })
+        .on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            setProgress(progress);
+        })
+        .on('fileuploaddone', function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                if (file.error) {
+                    var link = $('<div>').attr({class : 'panel-image'});
+                    $(data.context.children()[index]).parent().wrap(link);
+                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                    var message = $('<div class=\"col-sm-3\">').html(
+                        $('<span class=\"alert alert-danger\"/>').text(file.error)
+                    );
+                    $(data.context.children()[index]).parent().append(message);
+                    return;
+                }
+                if (file.url) {
+                    var link = $('<a>').attr({target: '_blank', class : 'panel-image'}).prop('href', file.url);
+                    $(data.context.children()[index]).parent().wrap(link);
+                }
+                $(data.context.children()[index]).parent().find('.file_name').html(file.name);
+                var message = $('<div class=\"col-sm-3\">').html(
+                    $('<span class=\"alert alert-success\"/>').text('File uploaded')
+                );
+                $(data.context.children()[index]).parent().append(message);
+            });
+            $('#dropzone').removeClass('hover');
+        })
+        .on('fileuploadstop', function () {
+            finishUploadingUI(true);
+        })
+        .on('fileuploadfail', function (e, data) {
+            $.each(data.files, function (index) {
+                var error = $('<div class=\"col-sm-3\">').html(
+                    $('<span class=\"alert alert-danger\"/>').text('The file upload has failed.')
+                );
+                $(data.context.children()[index]).parent().append(error);
+            });
+            $('#dropzone').removeClass('hover');
+            finishUploadingUI(false);
+        })
+        .prop('disabled', !$.support.fileInput)
+        .parent()
+        .addClass($.support.fileInput ? undefined : 'disabled');
+
+        $('#dropzone').on('dragover', function () { $('#dropzone').addClass('hover'); });
+        $('#dropzone').on('dragleave', function () { $('#dropzone').removeClass('hover'); });
+
+        // Hide the legacy button if desired
+        $('.fileinput-button').hide();
+    });
+    </script>");
+    }
+
 
     /**
      * @param string $elementName
-     * @param string $groupName   if element is inside a group
+     * @param string $groupName if element is inside a group
      *
      * @throws Exception
      */
     public function addPasswordRule($elementName, $groupName = '')
     {
         if ('true' == api_get_setting('security.check_password')) {
-            $message = get_lang('this password  is too simple. Use a pass like this').': '.api_generate_password();
+            $message = get_lang('this password  is too simple. Use a pass like this') . ': ' . api_generate_password();
 
             if (!empty($groupName)) {
                 $groupObj = $this->getElement($groupName);
@@ -1705,14 +1871,14 @@ EOT;
      * Add an element with user ID and avatar to the form.
      * It needs a Chamilo\CoreBundle\Entity\User as value. The exported value is the Chamilo\CoreBundle\Entity\User ID.
      *
-     * @see \UserAvatar
-     *
      * @param string $name
      * @param string $label
      * @param string $imageSize Optional. Small, medium or large image
-     * @param string $subtitle  Optional. The subtitle for the field
+     * @param string $subtitle Optional. The subtitle for the field
      *
      * @return \UserAvatar
+     * @see \UserAvatar
+     *
      */
     public function addUserAvatar($name, $label, $imageSize = 'small', $subtitle = '')
     {
@@ -1741,18 +1907,18 @@ EOT;
                 }
             }
 
-            $url = api_get_path(WEB_AJAX_PATH).'mail.ajax.php?a=select_option';
-            $typeNoDots = 'email_template_option_'.str_replace('.tpl', '', $type);
+            $url = api_get_path(WEB_AJAX_PATH) . 'mail.ajax.php?a=select_option';
+            $typeNoDots = 'email_template_option_' . str_replace('.tpl', '', $type);
             $this->addSelect(
-                'email_template_option['.$type.']',
+                'email_template_option[' . $type . ']',
                 $name,
                 $options,
                 ['id' => $typeNoDots]
             );
 
-            $templateNoDots = 'email_template_'.str_replace('.tpl', '', $type);
-            $templateNoDotsBlock = 'email_template_block_'.str_replace('.tpl', '', $type);
-            $this->addHtml('<div id="'.$templateNoDotsBlock.'" style="display:none">');
+            $templateNoDots = 'email_template_' . str_replace('.tpl', '', $type);
+            $templateNoDotsBlock = 'email_template_block_' . str_replace('.tpl', '', $type);
+            $this->addHtml('<div id="' . $templateNoDotsBlock . '" style="display:none">');
             $this->addTextarea(
                 $templateNoDots,
                 get_lang('Preview'),
@@ -1803,148 +1969,6 @@ EOT;
             get_lang('The email address is not complete or contains some invalid characters'),
             'email'
         );
-    }
-
-    private function addMultipleUploadJavascript(string $url, string $inputName, string $urlToRedirect = ''): void
-    {
-        $toastText = addslashes(get_lang('Files uploaded. Reloading in 5 seconds...'));
-        $redirectJs = '';
-        if (!empty($urlToRedirect)) {
-            $redirectJs = "window.location.replace('$urlToRedirect');";
-        }
-        $icon = Display::getMdiIcon('text-box-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL);
-        $this->addHtml("
-        <script>
-        $(function () {
-            'use strict';
-            $('#".$this->getAttribute('id')."').submit(function() {
-                return false;
-            });
-
-            $('#dropzone').on('click', function() {
-                $('#".$inputName."').click();
-            });
-
-            var url = '".$url."';
-            var uploadButton = $('<button/>')
-                .addClass('btn btn--primary')
-                .prop('disabled', true)
-                .text('".addslashes(get_lang('Loading'))."')
-                .on('click', function () {
-                    var \$this = $(this),
-                    data = \$this.data();
-                    \$this
-                        .off('click')
-                        .text('".addslashes(get_lang('Cancel'))."')
-                        .on('click', function () {
-                            \$this.remove();
-                            data.abort();
-                        });
-                    data.submit().always(function () {
-                        \$this.remove();
-                    });
-                });
-
-            $('#".$inputName."').fileupload({
-                url: url,
-                dataType: 'json',
-                // Enable image resizing, except for Android and Opera,
-                // which actually support image resizing, but fail to
-                // send Blob objects via XHR requests:
-                disableImageResize: /Android(?!.*Chrome)|Opera/.test(window.navigator.userAgent),
-                previewMaxWidth: 300,
-                previewMaxHeight: 169,
-                previewCrop: true,
-                dropzone: $('#dropzone'),
-            }).on('fileuploadadd', function (e, data) {
-                $('#progress .progress-bar').css('width', '0%');
-                data.context = $('<div class=\"row\" />').appendTo('#files');
-                $.each(data.files, function (index, file) {
-                    var node = $('<div class=\"col-sm-5 file_name\">').text(file.name);
-                    node.appendTo(data.context);
-                });
-            }).on('fileuploadprocessalways', function (e, data) {
-                var index = data.index,
-                    file = data.files[index],
-                    node = $(data.context.children()[index]);
-                if (file.preview) {
-                    data.context.prepend($('<div class=\"col-sm-4\">').html(file.preview));
-                } else {
-                    data.context.prepend($('<div class=\"col-sm-4\">').html('".$icon."'));
-                }
-                if (index + 1 === data.files.length) {
-                    data.context.find('button')
-                        .text('Upload')
-                        .prop('disabled', !!data.files.error);
-                }
-            }).on('fileuploadprogressall', function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .progress-bar').css(
-                    'width',
-                    progress + '%'
-                );
-            }).on('fileuploaddone', function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    if (file.error) {
-                        var link = $('<div>')
-                            .attr({class : 'panel-image'})                            ;
-                        $(data.context.children()[index]).parent().wrap(link);
-                        // Update file name with new one from Chamilo
-                        $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                        var message = $('<div class=\"col-sm-3\">').html(
-                            $('<span class=\"message-image-danger\"/>').text(file.error)
-                        );
-                        $(data.context.children()[index]).parent().append(message);
-
-                        return;
-                    }
-                    if (file.url) {
-                        var link = $('<a>')
-                            .attr({target: '_blank', class : 'panel-image'})
-                            .prop('href', file.url);
-                        $(data.context.children()[index]).parent().wrap(link);
-                    }
-                    // Update file name with new one from Chamilo
-                    $(data.context.children()[index]).parent().find('.file_name').html(file.name);
-                    var message = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"alert alert-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
-                    );
-                    $(data.context.children()[index]).parent().append(message);
-                });
-                $('#dropzone').removeClass('hover');
-
-                var toast = $('<div id=\"upload-toast\" class=\"fixed bottom-4 right-4 bg-primary text-white px-4 py-2 rounded shadow-lg\">{$toastText}</div>');
-                $('body').append(toast);
-                setTimeout(function(){
-                    $('#upload-toast').fadeOut(300, function(){
-                        $(this).remove();
-                        location.reload();
-                    });
-                }, 2000);
-
-                ".$redirectJs."
-            }).on('fileuploadfail', function (e, data) {
-                $.each(data.files, function (index) {
-                    var failedMessage = '".addslashes(get_lang('The file upload has failed.'))."';
-                    var error = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"alert alert-danger\"/>').text(failedMessage)
-                    );
-                    $(data.context.children()[index]).parent().append(error);
-                });
-                $('#dropzone').removeClass('hover');
-            }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
-
-            $('#dropzone').on('dragover', function (e) {
-                // dragleave callback implementation
-                $('#dropzone').addClass('hover');
-            });
-
-            $('#dropzone').on('dragleave', function (e) {
-                $('#dropzone').removeClass('hover');
-            });
-            $('.fileinput-button').hide();
-        });
-        </script>");
     }
 }
 

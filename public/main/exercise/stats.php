@@ -145,6 +145,7 @@ if (!empty($question_list)) {
             // Overwriting values depending on the question
             switch ($questionObj->type) {
                 case FILL_IN_BLANKS:
+                case FILL_IN_BLANKS_COMBINATION:
                     $answerInfo = substr($answerInfo, 0, strpos($answerInfo, '::'));
                     $correctAnswer = $isCorrect;
                     $answers = $objExercise->fill_in_blank_answer_to_array($answerInfo);
@@ -206,6 +207,7 @@ if (!empty($question_list)) {
 
                     break;
                 case HOT_SPOT:
+                case HOT_SPOT_COMBINATION:
                     if (1 == $answerId) {
                         $data[$id]['name'] = cut($questionObj->question, 100);
                     } else {

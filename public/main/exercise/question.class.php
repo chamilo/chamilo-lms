@@ -44,34 +44,54 @@ abstract class Question
     public $export = false;
     public $code;
     public static $questionTypes = [
-        UNIQUE_ANSWER => ['unique_answer.class.php', 'UniqueAnswer'],
-        MULTIPLE_ANSWER => ['multiple_answer.class.php', 'MultipleAnswer'],
-        FILL_IN_BLANKS => ['fill_blanks.class.php', 'FillBlanks'],
-        MATCHING => ['matching.class.php', 'Matching'],
-        FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
-        ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
-        HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
-        HOT_SPOT_DELINEATION => ['HotSpotDelineation.php', 'HotSpotDelineation'],
-        MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
-        UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
-        MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
-        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
-            'MultipleAnswerTrueFalseDegreeCertainty.php',
-            'MultipleAnswerTrueFalseDegreeCertainty',
-        ],
+        // — Single-choice
+        UNIQUE_ANSWER                => ['unique_answer.class.php', 'UniqueAnswer'],
+        UNIQUE_ANSWER_IMAGE          => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
+        UNIQUE_ANSWER_NO_OPTION      => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
+
+        // — Multiple-choice (all variants together)
+        MULTIPLE_ANSWER              => ['multiple_answer.class.php', 'MultipleAnswer'],
+        GLOBAL_MULTIPLE_ANSWER       => ['global_multiple_answer.class.php', 'GlobalMultipleAnswer'],
+        MULTIPLE_ANSWER_DROPDOWN     => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
+        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination'],
+        MULTIPLE_ANSWER_COMBINATION  => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
+        MULTIPLE_ANSWER_TRUE_FALSE   => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
-            'multiple_answer_combination_true_false.class.php',
-            'MultipleAnswerCombinationTrueFalse',
+            'multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'
         ],
-        GLOBAL_MULTIPLE_ANSWER => ['global_multiple_answer.class.php', 'GlobalMultipleAnswer'],
-        CALCULATED_ANSWER => ['calculated_answer.class.php', 'CalculatedAnswer'],
-        UNIQUE_ANSWER_IMAGE => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
-        DRAGGABLE => ['Draggable.php', 'Draggable'],
-        MATCHING_DRAGGABLE => ['MatchingDraggable.php', 'MatchingDraggable'],
-        MEDIA_QUESTION => ['MediaQuestion.php', 'MediaQuestion'],
-        ANNOTATION => ['Annotation.php', 'Annotation'],
-        READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
-        PAGE_BREAK       => ['PageBreakQuestion.php', 'PageBreakQuestion'],
+        MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
+            'MultipleAnswerTrueFalseDegreeCertainty.php', 'MultipleAnswerTrueFalseDegreeCertainty'
+        ],
+
+        // — Matching / draggable
+        MATCHING                     => ['matching.class.php', 'Matching'],
+        MATCHING_COMBINATION         => ['MatchingCombination.php', 'MatchingCombination'],
+        DRAGGABLE                    => ['Draggable.php', 'Draggable'],
+        MATCHING_DRAGGABLE           => ['MatchingDraggable.php', 'MatchingDraggable'],
+        MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination'],
+
+        // — Fill-in-the-blanks / calculated
+        FILL_IN_BLANKS               => ['fill_blanks.class.php', 'FillBlanks'],
+        FILL_IN_BLANKS_COMBINATION   => ['FillBlanksCombination.php', 'FillBlanksCombination'],
+        CALCULATED_ANSWER            => ['calculated_answer.class.php', 'CalculatedAnswer'],
+
+        // — Open answers / expression
+        FREE_ANSWER                  => ['freeanswer.class.php', 'FreeAnswer'],
+        ORAL_EXPRESSION              => ['oral_expression.class.php', 'OralExpression'],
+
+        // — Hotspot
+        HOT_SPOT                     => ['hotspot.class.php', 'HotSpot'],
+        HOT_SPOT_COMBINATION         => ['HotSpotCombination.php', 'HotSpotCombination'],
+        HOT_SPOT_DELINEATION         => ['HotSpotDelineation.php', 'HotSpotDelineation'],
+
+        // — Media / annotation
+        MEDIA_QUESTION               => ['MediaQuestion.php', 'MediaQuestion'],
+        ANNOTATION                   => ['Annotation.php', 'Annotation'],
+
+        // — Special
+        READING_COMPREHENSION        => ['ReadingComprehension.php', 'ReadingComprehension'],
+        PAGE_BREAK                   => ['PageBreakQuestion.php', 'PageBreakQuestion'],
+        UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
     ];
 
     /**
@@ -101,10 +121,14 @@ abstract class Question
         // See BT#12611
         $this->questionTypeWithFeedback = [
             MATCHING,
+            MATCHING_COMBINATION,
             MATCHING_DRAGGABLE,
+            MATCHING_DRAGGABLE_COMBINATION,
             DRAGGABLE,
             FILL_IN_BLANKS,
+            FILL_IN_BLANKS_COMBINATION,
             FREE_ANSWER,
+            UPLOAD_ANSWER,
             ORAL_EXPRESSION,
             CALCULATED_ANSWER,
             ANNOTATION,
@@ -611,7 +635,7 @@ abstract class Question
                 $questionRepo->addFileFromFileRequest($question, 'imageUpload');
 
                 // If hotspot, create first answer
-                if (HOT_SPOT == $type || HOT_SPOT_ORDER == $type) {
+                if (in_array($type, [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_ORDER])) {
                     $quizAnswer = new CQuizAnswer();
                     $quizAnswer
                         ->setQuestion($question)
@@ -983,7 +1007,7 @@ abstract class Question
                 LOG_QUESTION_ID,
                 $this->iid
             );
-        //$this->removePicture();
+            //$this->removePicture();
         } else {
             // just removes the exercise from the list
             $this->removeFromList($deleteFromEx, $courseId);
@@ -1116,14 +1140,17 @@ abstract class Question
     /**
      * @return array
      */
-    public static function getQuestionTypeList()
+    public static function getQuestionTypeList(): array
     {
+        $list = self::$questionTypes;
+
         if ('true' !== api_get_setting('enable_quiz_scenario')) {
-            self::$questionTypes[HOT_SPOT_DELINEATION] = null;
-            unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
+            unset($list[HOT_SPOT_DELINEATION]);
         }
 
-        return self::$questionTypes;
+        ksort($list, SORT_NUMERIC);
+
+        return $list;
     }
 
     /**
@@ -1448,16 +1475,15 @@ abstract class Question
      *
      * @param Exercise $objExercise
      */
-    public static function displayTypeMenu($objExercise)
+    public static function displayTypeMenu(Exercise $objExercise)
     {
         if (empty($objExercise)) {
             return '';
         }
 
         $feedbackType = $objExercise->getFeedbackType();
-        $exerciseId = $objExercise->id;
+        $exerciseId   = $objExercise->id;
 
-        // 1. by default we show all the question types
         $questionTypeList = self::getQuestionTypeList();
 
         if (!isset($feedbackType)) {
@@ -1467,18 +1493,18 @@ abstract class Question
         switch ($feedbackType) {
             case EXERCISE_FEEDBACK_TYPE_DIRECT:
                 $questionTypeList = [
-                    UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
+                    UNIQUE_ANSWER        => self::$questionTypes[UNIQUE_ANSWER],
                     HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
                 ];
 
                 break;
             case EXERCISE_FEEDBACK_TYPE_POPUP:
                 $questionTypeList = [
-                    UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
-                    MULTIPLE_ANSWER => self::$questionTypes[MULTIPLE_ANSWER],
-                    DRAGGABLE => self::$questionTypes[DRAGGABLE],
+                    UNIQUE_ANSWER        => self::$questionTypes[UNIQUE_ANSWER],
+                    MULTIPLE_ANSWER      => self::$questionTypes[MULTIPLE_ANSWER],
+                    DRAGGABLE            => self::$questionTypes[DRAGGABLE],
                     HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
-                    CALCULATED_ANSWER => self::$questionTypes[CALCULATED_ANSWER],
+                    CALCULATED_ANSWER    => self::$questionTypes[CALCULATED_ANSWER],
                 ];
 
                 break;
@@ -1489,50 +1515,53 @@ abstract class Question
         }
 
         echo '<div class="card">';
-        echo '<div class="card-body">';
-        echo '<ul class="question_menu">';
+        echo '  <div class="card-body">';
+        echo '    <ul class="qtype-menu flex flex-wrap gap-x-2 gap-y-2 items-center justify-start w-full">';
         foreach ($questionTypeList as $i => $type) {
             /** @var Question $type */
             $type = new $type[1]();
-            $img = $type->getTypePicture();
-            $explanation = $type->getExplanation();
-            echo '<li>';
-            echo '<div class="icon-image">';
+            $img  = $type->getTypePicture();
+            $expl = $type->getExplanation();
+
+            echo '      <li class="flex items-center justify-center">';
+
             $icon = Display::url(
-                Display::return_icon($img, $explanation, null, ICON_SIZE_BIG),
-                'admin.php?'.api_get_cidreq().'&'
-                    .http_build_query(['newQuestion' => 'yes', 'answerType' => $i, 'exerciseId' => $exerciseId]),
-                ['title' => $explanation]
+                Display::return_icon($img, $expl, null, ICON_SIZE_BIG),
+                'admin.php?' . api_get_cidreq() . '&' . http_build_query([
+                    'newQuestion' => 'yes',
+                    'answerType'  => $i,
+                    'exerciseId'  => $exerciseId,
+                ]),
+                ['title' => $expl, 'class' => 'block']
             );
 
-            if (false === $objExercise->force_edit_exercise_in_lp) {
-                if (true == $objExercise->exercise_was_added_in_lp) {
-                    $img = pathinfo($img);
-                    $img = $img['filename'].'_na.'.$img['extension'];
-                    $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
-                }
+            if (false === $objExercise->force_edit_exercise_in_lp && $objExercise->exercise_was_added_in_lp) {
+                $img  = pathinfo($img);
+                $img  = $img['filename'].'_na.'.$img['extension'];
+                $icon = Display::return_icon($img, $expl, null, ICON_SIZE_BIG);
             }
             echo $icon;
-            echo '</div>';
-            echo '</li>';
+            echo '      </li>';
         }
 
-        echo '<li>';
-        echo '<div class="icon_image">';
-        if (true == $objExercise->exercise_was_added_in_lp) {
-            echo Display::getMdiIcon('database', 'ch-tool-icon-disabled mt-4', null, ICON_SIZE_BIG, get_lang('Recycle existing questions'));
+        echo '      <li class="flex items-center justify-center">';
+        if ($objExercise->exercise_was_added_in_lp) {
+            echo Display::getMdiIcon('database', 'ch-tool-icon-disabled', null, ICON_SIZE_BIG, get_lang('Recycle existing questions'));
         } else {
-            if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-                echo $url = '<a href="question_pool.php?'.api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
-            } else {
-                echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
-            }
-            echo Display::getMdiIcon('database', 'ch-tool-icon mt-4', 'display: block; height: auto;', ICON_SIZE_BIG, get_lang('Recycle existing questions'));
+            $href = in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
+                ? 'question_pool.php?' . api_get_cidreq() . "&type=1&fromExercise={$exerciseId}"
+                : 'question_pool.php?' . api_get_cidreq() . "&fromExercise={$exerciseId}";
+
+            echo Display::url(
+                Display::getMdiIcon('database', 'ch-tool-icon', null, ICON_SIZE_BIG, get_lang('Recycle existing questions')),
+                $href,
+                ['class' => 'block', 'title' => get_lang('Recycle existing questions')]
+            );
         }
-        echo '</a>';
-        echo '</div></li>';
-        echo '</ul>';
-        echo '</div>';
+        echo '      </li>';
+
+        echo '    </ul>';
+        echo '  </div>';
         echo '</div>';
     }
 
@@ -1636,6 +1665,7 @@ abstract class Question
 
         switch ($this->type) {
             case FREE_ANSWER:
+            case UPLOAD_ANSWER:
             case ORAL_EXPRESSION:
             case ANNOTATION:
                 $score['revised'] = isset($score['revised']) ? $score['revised'] : false;
@@ -1747,7 +1777,7 @@ abstract class Question
             $header .= $message.'<br />';
         }
 
-        if ($exercise->hideComment && HOT_SPOT == $this->type) {
+        if ($exercise->hideComment && in_array($this->type, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
             $header .= Display::return_message(get_lang('Results only available online'));
 
             return $header;
@@ -1999,6 +2029,8 @@ abstract class Question
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',
             MULTIPLE_ANSWER => 'MultipleAnswer',
+            MULTIPLE_ANSWER_DROPDOWN => 'MultipleAnswerDropdown',
+            MULTIPLE_ANSWER_DROPDOWN_COMBINATION => 'MultipleAnswerDropdownCombination',
         ];
         $swappedAnswer = new $answerClasses[$this->type]();
         foreach ($this as $key => $value) {

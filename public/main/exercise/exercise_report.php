@@ -277,7 +277,7 @@ if (isset($_REQUEST['comments']) &&
             $marksFromDatabase = $questionListData[$questionId]['marks'];
         }
 
-        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+        if (in_array($question->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
             // From the form.
             $params['marks'] = $marks;
             if ($marksFromDatabase != $marks) {

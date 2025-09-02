@@ -169,7 +169,7 @@ class ChamiloExtension extends AbstractExtension
                 'minChar' => $minRequirements['numeric'],
                 'pattern' => '[0-9]',
                 'helpText' => \sprintf(
-                    get_lang('Minimum %s numerical (0-9) characters'),
+                    get_lang('Minimum %s numeric characters'),
                     $minRequirements['numeric']
                 ),
             ];
@@ -186,45 +186,74 @@ class ChamiloExtension extends AbstractExtension
             ];
         }
 
+        // JS: count occurrences, show only unmet rules, hide initially and when all pass
         return "<script>
-        (function($) {
-            $.fn.passwordCheckerChange = function(options) {
-                var settings = $.extend({
-                    rules: []
-                }, options );
+            (function($) {
+              $.fn.passwordCheckerChange = function(options) {
+                var settings = $.extend({ rules: [] }, options);
+                var GREEN = '#16a34a';
+                var RED   = '#dc2626';
+
+                function escapeHtml(s) {
+                  return $('<div>').text(s).html();
+                }
+                function count(pattern, value) {
+                  try {
+                    var re = new RegExp(pattern, 'g');
+                    var m = (value || '').match(re);
+                    return m ? m.length : 0;
+                  } catch (e) {
+                    return 0;
+                  }
+                }
 
                 return this.each(function() {
-                    var \$passwordInput = $(this);
-                    var \$requirements = $('#password-requirements');
+                  var \$passwordInput = $(this);
+                  var \$requirements  = $('#password-requirements');
+                  if (!\$requirements.length) return;
 
-                    function validatePassword(password) {
-                        var html = '';
-
-                        settings.rules.forEach(function(rule) {
-                            var isValid = new RegExp(rule.pattern).test(password) && password.length >= rule.minChar;
-                            var color = isValid ? 'green' : 'red';
-                            html += '<li style=\"color:' + color + '\">' + rule.helpText + '</li>';
-                        });
-
-                        \$requirements.html(html);
-                    }
-
-                    \$passwordInput.on('input', function() {
-                        validatePassword(\$passwordInput.val());
-                        \$requirements.show();
+                  function evaluate(password) {
+                    return settings.rules.map(function(rule) {
+                      var ok;
+                      if (rule.pattern === '.') {
+                        ok = (password || '').length >= (rule.minChar || 0);
+                      } else {
+                        ok = count(rule.pattern, password) >= (rule.minChar || 1);
+                      }
+                      return { ok: ok, text: rule.helpText };
                     });
+                  }
 
-                    \$passwordInput.on('blur', function() {
-                        \$requirements.hide();
-                    });
+                  function render(password) {
+                    if (!password) { \$requirements.hide().empty(); return; }
+
+                    var results = evaluate(password);
+
+                    var allOk = results.every(function(r){ return r.ok; });
+                    if (allOk) { \$requirements.hide().empty(); return; }
+
+                    var html = results.map(function(r) {
+                      var color = r.ok ? GREEN : RED;
+                      var icon  = r.ok ? '✓' : '✗';
+                      return '<li class=\"mt-1\" style=\"color:'+color+'\">'+icon+' '+escapeHtml(r.text)+'</li>';
+                    }).join('');
+                    \$requirements.html(html).show();
+                  }
+
+                  \$requirements.hide().empty();
+
+                  \$passwordInput.on('input', function() { render(\$passwordInput.val()); });
+                  \$passwordInput.on('blur',  function() {
+                    if (!\$passwordInput.val()) { \$requirements.hide().empty(); }
+                  });
                 });
-            };
-        }(jQuery));
+              };
+            }(jQuery));
 
-        $(function() {
-            $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).');
-        });
-        </script>';
+            $(function() {
+              $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).");
+            });
+            </script>";
     }
 
     /**

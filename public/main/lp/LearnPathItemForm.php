@@ -70,46 +70,10 @@ class LearnPathItemForm
             reset($arrLP);
         }
 
-        $arrHide = [];
-        // Position
-        /*for ($i = 0; $i < $count; $i++) {
-            if (($arrLP[$i]['parent_item_id'] == $parentItemId && $arrLP[$i]['id'] != $itemId) ||
-                TOOL_LP_FINAL_ITEM == $arrLP[$i]['item_type']
-            ) {
-                $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After').' "'.$arrLP[$i]['title'].'"';
-            }
-        }
-
-        $position = $form->addSelect(
-            'previous',
-            get_lang('Position'),
-            [],
-            ['id' => 'previous']
-        );
-
-        $position->addOption(get_lang('First position'), 0);
-
-        foreach ($arrHide as $key => $value) {
-            $padding = $value['padding'] ?? 20;
-            $position->addOption(
-                $value['value'],
-                $key,
-                'style="padding-left:'.$padding.'px;"'
-            );
-        }
-
-        $position->setSelected($previousItemId);
-
-        if (is_array($arrLP)) {
-            reset($arrLP);
-        }*/
-
         if (TOOL_LP_FINAL_ITEM == $itemType) {
             $parentSelect->freeze();
-            //$position->freeze();
         }
 
-        // Content.
         if (in_array($itemType, [TOOL_DOCUMENT, TOOL_LP_FINAL_ITEM, TOOL_READOUT_TEXT], true)) {
             $document = null;
             if (!empty($lpItem->getPath())) {
@@ -124,7 +88,10 @@ class LearnPathItemForm
                 'Height' => '500',
             ];
 
-            if (($document && $document->getResourceNode()->hasEditableTextContent()) || 'add' === $action) {
+            $isAdd = ($action === 'add');
+            $isEdit = ($action === 'edit');
+            $isDoc = ($lpItem->getItemType() === TOOL_DOCUMENT);
+            if (($document && $document->getResourceNode()->hasEditableTextContent()) || $isAdd) {
                 $renderer = $form->defaultRenderer();
                 $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp');
                 $form->addHtml('<div class="editor-lp">');
@@ -132,13 +99,30 @@ class LearnPathItemForm
                 $form->addHtml('</div>');
                 if ($document) {
                     $form->addHidden('document_id', $document->getIid());
-                    $content = $lp->display_document(
-                        $document,
-                        false,
-                        false
-                    );
+                    $content = $lp->display_document($document, false, false);
                     $form->setDefault('content_lp', $content);
                 }
+            }
+
+            $canShowExportFlag = false;
+            if ($isDoc) {
+                if ($isAdd) {
+                    $canShowExportFlag = true;
+                } elseif ($isEdit && $document) {
+                    $node = $document->getResourceNode();
+                    $file = $node?->getFirstResourceFile();
+                    $mime = (string) $file?->getMimeType();
+                    $isHtmlEditable = $node->hasEditableTextContent()
+                        || in_array($mime, ['text/html', 'application/xhtml+xml'], true);
+                    $canShowExportFlag = $isHtmlEditable;
+                }
+            }
+
+            if ($canShowExportFlag) {
+                $form->addElement('checkbox', 'export_allowed', get_lang('Allow PDF export for this item'));
+                $form->setDefaults([
+                    'export_allowed' => $isEdit ? ($lpItem->isExportAllowed() ? 1 : 0) : 1,
+                ]);
             }
         }
 

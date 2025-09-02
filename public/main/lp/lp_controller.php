@@ -348,20 +348,34 @@ switch ($action) {
             $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
             $exportAllowed = (isset($_POST['export_allowed']) && $_POST['export_allowed'] === '1');
 
-            $saveExportFlag = static function ($itemId) use ($exportAllowed, $oLP) {
-                if (empty($itemId)) {
-                    return;
-                }
-                $repo = Container::getLpItemRepository();
-                $em   = Database::getManager();
+            $saveExportFlag = static function (int $itemId) use ($exportAllowed) {
+                if (empty($itemId)) return;
 
+                $em   = Database::getManager();
+                $repo = Container::getLpItemRepository();
                 /** @var CLpItem|null $it */
-                $it = $repo->find((int) $itemId);
-                if ($it ) {
-                    $it->setExportAllowed($exportAllowed);
-                    $em->persist($it);
-                    $em->flush();
+                $it = $repo->find($itemId);
+                if (!$it) return;
+
+                $allowed = false;
+                if ($it->getItemType() === TOOL_DOCUMENT) {
+                    $docRepo = Container::getDocumentRepository();
+                    $docId   = (int) $it->getPath();
+                    /** @var CDocument|null $doc */
+                    $doc = $docRepo->find($docId);
+                    if ($doc) {
+                        $node = $doc->getResourceNode();
+                        $file = $node?->getFirstResourceFile();
+                        $mime = (string) $file?->getMimeType();
+                        $isHtmlEditable = $node->hasEditableTextContent()
+                            || in_array($mime, ['text/html', 'application/xhtml+xml'], true);
+                        $allowed = $isHtmlEditable && (bool) $exportAllowed;
+                    }
                 }
+
+                $it->setExportAllowed($allowed);
+                $em->persist($it);
+                $em->flush();
             };
 
             if (in_array($_POST['type'], [TOOL_DOCUMENT, 'video'])) {
@@ -762,20 +776,14 @@ switch ($action) {
     case 'export_to_pdf':
         $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
         if ('true' === $hideScormPdfLink) {
-            api_not_allowed(true);
-        }
-
-        // Teachers can export to PDF
-        if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($lp, $userId, $course)) {
-                api_not_allowed();
-            }
+           api_not_allowed(true);
         }
 
         if (!$lp_found) {
             $goList();
         } else {
             $selectedItems = isset($_GET['items']) ? explode(',', $_GET['items']) : [];
+            $selectedItems = array_values(array_filter(array_map('intval', $selectedItems), static function ($v) { return $v > 0; }));
             $result = ScormExport::exportToPdf($lpId, $courseInfo, $selectedItems);
             if (!$result) {
                 $goList();

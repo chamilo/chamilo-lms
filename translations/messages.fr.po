@@ -4694,7 +4694,7 @@ msgid "This will allow the use of a title for document names instead of document
 msgstr "Ceci permettra d'utiliser un titre pour le nom du document plutôt que nom_document.ext"
 
 msgid "Assignments"
-msgstr "Travaux d'étudiants"
+msgstr "Travaux"
 
 msgid "Deleted files cannot be restored"
 msgstr "Les fichiers effacés sont supprimés définitivement"
@@ -7229,10 +7229,10 @@ msgid "Add tests, activities and multimedia content"
 msgstr "Ajoutez des activités, tests et des contenus multimédia à votre cours"
 
 msgid "Title"
-msgstr "nom"
+msgstr "Titre"
 
 msgid "Prerequisites"
-msgstr "Prérequis"
+msgstr "Pré-requis"
 
 msgid "Up"
 msgstr "Monter"
@@ -30421,3 +30421,6 @@ msgstr "Historique des compétences"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Loading..."
+msgstr "Chargement..."

@@ -78,7 +78,7 @@ $buttonBack = isset($_POST['buttonBack']) ? true : false;
 $nbrAnswers = isset($_POST['nbrAnswers']) ? (int) $_POST['nbrAnswers'] : 0;
 
 if ($submitAnswers || $buttonBack) {
-    if (HOT_SPOT == $answerType) {
+    if (in_array($answerType, [HOT_SPOT, HOT_SPOT_COMBINATION])) {
         if ($debug > 0) {
             echo '$submitAnswers or $buttonBack was set'."<br />\n";
         }
@@ -129,6 +129,10 @@ if ($submitAnswers || $buttonBack) {
                     $questionWeighting += $weighting[$i];
                 }
 
+                if (HOT_SPOT_COMBINATION == $answerType) {
+                    $weighting[$i] = 0;
+                }
+
                 // creates answer
                 $objAnswer->createAnswer(
                     $reponse[$i],
@@ -144,6 +148,9 @@ if ($submitAnswers || $buttonBack) {
             $objAnswer->save();
 
             // sets the total weighting of the question
+            if (HOT_SPOT_COMBINATION == $answerType) {
+                $questionWeighting = (float) ($_POST['questionWeighting'] ?? 0);
+            }
             $objQuestion->updateWeighting($questionWeighting);
             $objQuestion->save($objExercise);
 
@@ -172,8 +179,10 @@ if ($submitAnswers || $buttonBack) {
 
             $editQuestion = $questionId;
             unset($modifyAnswers);
-            echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url
-                .'&message=ItemUpdated"</script>';
+            $redirect = $hotspot_admin_url.'&message=ItemUpdated';
+            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
+            echo '<script>location.replace("'.addslashes($redirect).'");</script>';
+            exit;
         }
 
         if ($debug > 0) {
@@ -370,8 +379,10 @@ if ($submitAnswers || $buttonBack) {
 
             $editQuestion = $questionId;
             unset($modifyAnswers);
-            echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url
-                .'&message=ItemUpdated"</script>';
+            $redirect = $hotspot_admin_url.'&message=ItemUpdated';
+            echo '<meta http-equiv="refresh" content="0;url='.htmlspecialchars($redirect, ENT_QUOTES).'">';
+            echo '<script>location.replace("'.addslashes($redirect).'");</script>';
+            exit;
         }
     }
 }
@@ -382,7 +393,9 @@ if (isset($modifyAnswers)) {
     }
 
     // construction of the Answer object
-    $objAnswer = new Answer($objQuestion->id);
+    $courseId  = api_get_course_int_id();
+    $objAnswer = new Answer($objQuestion->id, $courseId, $objExercise);
+    $objAnswer->read();
     Session::write('objAnswer', $objAnswer);
 
     if ($debug > 0) {
@@ -649,10 +662,15 @@ if (isset($modifyAnswers)) {
                     <?php
                     if (EXERCISE_FEEDBACK_TYPE_DIRECT == $objExercise->getFeedbackType()) {
                         echo '<th>'.get_lang('Comment').'</th>';
+                        if ($answerType == HOT_SPOT_DELINEATION) {
+                            echo '<th >'.get_lang('Scenario').'</th>';
+                        }
                     } else {
                         echo '<th colspan="2">'.get_lang('Comment').'</th>';
                     } ?>
-                    <th><?php echo get_lang('Score'); ?> *</th>
+                    <?php if (HOT_SPOT_COMBINATION !== $answerType) { ?>
+                        <th><?php echo get_lang('Score'); ?> *</th>
+                    <?php } ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -879,10 +897,14 @@ if (isset($modifyAnswers)) {
                                 <?php
                             }
                         }
-        if (HOT_SPOT == $answerType) {
+        if (in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
             ?>
-                            <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
-                                   value="<?php echo isset($weighting[$i]) ? $weighting[$i] : 10; ?>"/>
+                            <?php if (HOT_SPOT_COMBINATION === $answerType) { ?>
+                                <input class="form-control" type="hidden" name="weighting[<?php echo $i; ?>]" value="1" />
+                            <?php } else { ?>
+                                <input class="form-control" type="text" name="weighting[<?php echo $i; ?>]"
+                                       value="<?php echo $weighting[$i] ?? 10; ?>"/>
+                            <?php } ?>
                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]"
                                    value="<?php echo empty($hotspot_coordinates[$i])
                                        ? '0;0|0|0'
@@ -966,7 +988,17 @@ if (isset($modifyAnswers)) {
                 </tbody>
             </table>
         </div>
-
+        <?php if (HOT_SPOT_COMBINATION === $answerType) { ?>
+            <div class="form-group ">
+                <label for="question_admin_form_questionWeighting" class="col-sm-2 control-label">
+                    <span class="form_required">*</span>
+                    <?php echo get_lang('Score'); ?>
+                </label>
+                <div class="col-sm-8">
+                    <input value="<?php echo !empty($objQuestion->iid) ? $objQuestion->selectWeighting() : '10'; ?>" class="form-control required" name="questionWeighting" type="text" id="questionWeighting" required></div>
+                <div class="col-sm-2"></div>
+            </div>
+        <?php } ?>
         <?php if (HOT_SPOT_DELINEATION == $answerType): ?>
             <div class="mt-4">
                 <h4><?php echo get_lang('Adaptive behavior (success/failure)'); ?></h4>

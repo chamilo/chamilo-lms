@@ -670,7 +670,7 @@ class Answer
         $questionRepo = Container::getQuestionRepository();
         /** @var CQuizQuestion $question */
         $question = $questionRepo->find($questionId);
-        $questionType = $question->getType();
+        $questionType = $this->getQuestionType();
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
             $answer = (string) $this->new_answer[$i];
@@ -700,14 +700,12 @@ class Answer
                 $iid = $quizAnswer->getIid();
 
                 if ($iid) {
-                    if (in_array($questionType, [MATCHING, MATCHING_DRAGGABLE])) {
+                    if (in_array($questionType, [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION], true)) {
                         $answer = new self($this->questionId, $courseId, $this->exercise, false);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
 
-                        // Continue to avoid matching question bug if $correctAnswerId returns false
-                        // See : https://support.chamilo.org/issues/8334
-                        if (MATCHING == $questionType && !$correctAnswerId) {
+                        if (in_array($questionType, [MATCHING, MATCHING_COMBINATION], true) && !$correctAnswerId) {
                             continue;
                         }
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
@@ -756,6 +754,20 @@ class Answer
                     }
                 }
 
+                break;
+            case MATCHING_DRAGGABLE_COMBINATION:
+                foreach ($this->new_correct as $value => $status) {
+                    if (!empty($status)) {
+                        $correct = isset($answerList[$status]) ? $answerList[$status] : $status;
+                        $myAutoId = $answerList[$value];
+                        $sql = "UPDATE $answerTable
+                SET correct = '$correct'
+                WHERE
+                    iid = $myAutoId
+                ";
+                        Database::query($sql);
+                    }
+                }
                 break;
             case DRAGGABLE:
                 foreach ($this->new_correct as $value => $status) {
@@ -856,7 +868,7 @@ class Answer
         $onlyAnswers = [];
         $allAnswers = [];
 
-        if (in_array($newQuestion->type, [MATCHING, MATCHING_DRAGGABLE])) {
+        if (in_array($newQuestion->type, [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION], true)) {
             $temp = [];
             for ($i = 1; $i <= $this->nbrAnswers; $i++) {
                 $answer = [
@@ -960,7 +972,7 @@ class Answer
         }
 
         // Fix correct answers
-        if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+        if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION], true)) {
             $onlyAnswersFlip = array_flip($onlyAnswers);
             foreach ($correctAnswers as $answerIdItem => $correctAnswer) {
                 if (!isset($allAnswers[$correctAnswer]) || !isset($onlyAnswersFlip[$allAnswers[$correctAnswer]])) {
@@ -1020,4 +1032,31 @@ class Answer
 
         return $this->isCorrect($key) ? true : false;
     }
+
+    /**
+     * Get answers already added to question.
+     *
+     * @return array
+     */
+    public function getAnswers()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
+
+        $sql = "SELECT * FROM $table
+                WHERE question_id = $questionId
+                ORDER BY position";
+
+        $result = Database::query($sql);
+
+        $answers = [];
+
+        // while a record is found
+        while ($answer = Database::fetch_assoc($result)) {
+            $answers[] = $answer;
+        }
+
+        return $answers;
+    }
+
 }

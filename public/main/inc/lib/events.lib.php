@@ -443,7 +443,7 @@ class Event
     public static function saveQuestionAttempt(
         Exercise $exercise,
         float $score,
-        string $answer,
+                 $answer,
         int $question_id,
         int $exe_id,
         int $position,

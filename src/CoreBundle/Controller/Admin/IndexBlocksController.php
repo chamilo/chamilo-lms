@@ -446,11 +446,14 @@ class IndexBlocksController extends BaseController
             'route' => ['name' => 'PageList'],
             'label' => $this->translator->trans('Pages'),
         ];
+        /*
+         * Disabled until differentiated with Pages, and reviewed - see GH#6404
         $items[] = [
             'class' => 'item-page-layouts',
             'route' => ['name' => 'PageLayoutList'],
             'label' => $this->translator->trans('Page layouts'),
         ];
+        */
         $items[] = [
             'class' => 'item-registration-page',
             'url' => $this->generateUrl('legacy_main', ['name' => 'auth/registration.php', 'create_intro_page' => 1]),

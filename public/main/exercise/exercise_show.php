@@ -441,14 +441,20 @@ foreach ($questionList as $questionId) {
         case MULTIPLE_ANSWER:
         case MULTIPLE_ANSWER_TRUE_FALSE:
         case FILL_IN_BLANKS:
+        case FILL_IN_BLANKS_COMBINATION:
         case CALCULATED_ANSWER:
         case GLOBAL_MULTIPLE_ANSWER:
         case FREE_ANSWER:
+        case UPLOAD_ANSWER:
         case ORAL_EXPRESSION:
         case MATCHING:
+        case MATCHING_COMBINATION:
         case DRAGGABLE:
         case READING_COMPREHENSION:
         case MATCHING_DRAGGABLE:
+        case MATCHING_DRAGGABLE_COMBINATION:
+        case MULTIPLE_ANSWER_DROPDOWN:
+        case MULTIPLE_ANSWER_DROPDOWN_COMBINATION:
             $question_result = $objExercise->manage_answer(
                 $id,
                 $questionId,
@@ -486,6 +492,7 @@ foreach ($questionList as $questionId) {
             $totalScore += $questionResult['score'];
             break;
         case HOT_SPOT:
+        case HOT_SPOT_COMBINATION:
             if ($show_results || $showTotalScoreAndUserChoicesInLastAttempt) {
 //                echo '<table class="table table-bordered table-striped"><tr><td>';
             }
@@ -592,7 +599,7 @@ foreach ($questionList as $questionId) {
         echo '</table>';
     }
 
-    if ($show_results && HOT_SPOT != $answerType) {
+    if ($show_results && !in_array($answerType, [HOT_SPOT_COMBINATION, HOT_SPOT])) {
         echo '</table>';
     }
 
@@ -611,7 +618,7 @@ foreach ($questionList as $questionId) {
         if ($isFeedbackAllowed && 'export' != $action) {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $url_name = get_lang('Edit individual feedback and grade the open question');
             } else {
                 $url_name = get_lang('Add individual feedback');
@@ -704,7 +711,7 @@ foreach ($questionList as $questionId) {
         }
 
         if ($is_allowedToEdit && $isFeedbackAllowed && 'export' != $action) {
-            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+            if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
                 $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
@@ -862,7 +869,7 @@ foreach ($questionList as $questionId) {
         }
     }
 
-    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
+    if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
         $scoreToReview = [
             'score' => $my_total_score,
             'comments' => isset($comnt) ? $comnt : null,

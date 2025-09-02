@@ -5669,28 +5669,9 @@ class learnpath
             LearnPathItemForm::setForm($form, $action, $this, $lpItem);
         }
 
-        $form->addElement(
-            'checkbox',
-            'export_allowed',
-            get_lang('Allow PDF export for this item')
-        );
-
-        $defaultExportAllowed = 1;
-        if ($action === 'edit' && $lpItem !== null) {
-            $defaultExportAllowed = $lpItem->isExportAllowed() ? 1 : 0;
-        }
-
-        $form->setDefaults([
-            'export_allowed' => $defaultExportAllowed,
-        ]);
-
         switch ($action) {
             case 'add':
-                $folders = DocumentManager::get_all_document_folders(
-                    $courseInfo,
-                    0,
-                    true
-                );
+                $folders = DocumentManager::get_all_document_folders($courseInfo, 0, true);
                 DocumentManager::build_directory_selector(
                     $folders,
                     '',
@@ -5700,9 +5681,7 @@ class learnpath
                     'directory_parent_id'
                 );
                 if ($data) {
-                    $form->setDefaults([
-                        'directory_parent_id' => $data->getIid()
-                    ]);
+                    $form->setDefaults(['directory_parent_id' => $data->getIid()]);
                 }
                 break;
         }
@@ -5711,8 +5690,6 @@ class learnpath
 
         return $form->returnForm();
     }
-
-
 
     /**
      * @param array  $courseInfo
@@ -7117,11 +7094,46 @@ class learnpath
         $fs        = $assetRepo->getFileSystem();
         $scormSize = 0;
         foreach (Container::getLpRepository()->findScormByCourse($course) as $lp) {
-            if ($asset = $lp->getAsset()) {
-                $folder = $assetRepo->getFolder($asset);
-                if ($folder && $fs->directoryExists($folder)) {
-                    $scormSize += self::getFolderSize($folder);
+            $asset = $lp->getAsset();
+            if (!$asset) {
+                continue;
+            }
+
+            // Path may point to an extracted folder or a .zip file
+            $path = $assetRepo->getFolder($asset);
+            if (!$path) {
+                continue;
+            }
+
+            try {
+                if ($fs->directoryExists($path)) {
+                    // Extracted SCORM folder
+                    $scormSize += self::getFolderSize($path);
+                    continue;
                 }
+                if ($fs->fileExists($path)) {
+                    // SCORM .zip file
+                    $scormSize += (int) $fs->fileSize($path);
+                    continue;
+                }
+
+                // Local filesystem fallbacks
+                if (@is_dir($path)) {
+                    $scormSize += self::getFolderSize($path);
+                    continue;
+                }
+                if (@is_file($path)) {
+                    $size = @filesize($path);
+                    if ($size !== false) {
+                        $scormSize += (int) $size;
+                        continue;
+                    }
+                }
+
+                // Only log when we truly cannot resolve the size
+                error_log('[Learnpath::getQuotaInfo] Unable to resolve SCORM size (path not found or unreadable): '.$path);
+            } catch (\Throwable $e) {
+                error_log('[Learnpath::getQuotaInfo] Exception while resolving SCORM size for path '.$path.' - '.$e->getMessage());
             }
         }
 

@@ -92,7 +92,7 @@ class DateTimePicker extends HTML_QuickForm_text
                   var fmtMonthShort= new Intl.DateTimeFormat(loc, { month: 'short' });
 
                   // Weekdays: flatpickr expects 0..6 starting on Sunday
-                  var sun = new Date(Date.UTC(2020, 0, 5)); // a Sunday
+                  var sun = new Date(2020, 0, 5); // a Sunday
                   var weekdaysLong = [], weekdaysShort = [];
                   for (var i=0;i<7;i++){
                     var d = new Date(sun); d.setUTCDate(sun.getUTCDate()+i);
@@ -103,7 +103,7 @@ class DateTimePicker extends HTML_QuickForm_text
                   // Months 0..11
                   var monthsLong = [], monthsShort = [];
                   for (var m=0;m<12;m++){
-                    var dm = new Date(Date.UTC(2020, m, 1));
+                    var dm = new Date(2020, m, 1);
                     monthsLong.push(cap(fmtMonthLong.format(dm)));
                     monthsShort.push(cap(fmtMonthShort.format(dm)));
                   }

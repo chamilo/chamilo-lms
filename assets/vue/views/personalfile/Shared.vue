@@ -4,25 +4,18 @@
     icon="pi pi-chevron-left"
     @click="goBack"
   />
-  <DataTable
+  <BaseTable
     v-model:filters="filters"
-    v-model:selection="selectedItems"
+    v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :lazy="true"
-    :loading="isLoading"
-    :paginator="true"
-    :rows="10"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalItems"
-    :value="itemsShared"
-    class="p-datatable-sm"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    lazy
+    :is-loading="isLoading"
+    :total-items="totalItems"
+    :values="itemsShared"
     data-key="iid"
-    filter-display="menu"
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsive-layout="scroll"
-    @page="onPage($event)"
-    @sort="sortingChanged($event)"
+    filter-as-menu
+    @page="onPage"
+    @sort="sortingChanged"
   >
     <Column
       :header="$t('Title')"
@@ -81,7 +74,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 </template>
 
 <script>
@@ -97,11 +90,13 @@ import prettyBytes from "pretty-bytes"
 import { useI18n } from "vue-i18n"
 import { useSecurityStore } from "../../store/securityStore"
 import { storeToRefs } from "pinia"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 export default {
   name: "PersonalFileShared",
   servicePrefix: "PersonalFile",
   components: {
+    BaseTable,
     //8Toolbar,
     ActionCell,
     ResourceIcon,

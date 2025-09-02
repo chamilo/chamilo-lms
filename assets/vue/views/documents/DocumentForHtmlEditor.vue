@@ -19,25 +19,18 @@
     />
   </BaseToolbar>
 
-  <DataTable
+  <BaseTable
     v-model:filters="filters"
-    v-model:selection="selectedItems"
+    v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :lazy="true"
-    :loading="isLoading"
-    :paginator="true"
-    :rows="10"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalItems"
-    :value="items"
-    class="p-datatable-sm"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    :is-loading="isLoading"
+    :total-items="totalItems"
+    :values="items"
     data-key="iid"
-    filter-display="menu"
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsive-layout="scroll"
-    @page="onPage($event)"
-    @sort="sortingChanged($event)"
+    filter-as-menu
+    lazy
+    @page="onPage"
+    @sort="sortingChanged"
   >
     <Column
       :header="$t('Title')"
@@ -95,7 +88,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="itemDialog"
@@ -144,11 +137,13 @@ import { ref } from "vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { useDocumentActionButtons } from "../../composables/document/documentActionButtons"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 export default {
   name: "DocumentForHtmlEditor",
   servicePrefix: "Documents",
   components: {
+    BaseTable,
     BaseDialogConfirmCancel,
     BaseButton,
     BaseToolbar,

@@ -100,26 +100,19 @@
     />
   </SectionHeader>
 
-  <DataTable
+  <BaseTable
     v-model:filters="filters"
-    v-model:selection="selectedItems"
+    v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :lazy="true"
-    :loading="isLoading"
-    :paginator="true"
+    :is-loading="isLoading"
     :rows="options.itemsPerPage"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalItems"
-    :value="items"
-    class="mb-5"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    :total-items="totalItems"
+    :values="items"
     data-key="iid"
-    filter-display="menu"
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsive-layout="scroll"
-    striped-rows
-    @page="onPage($event)"
-    @sort="sortingChanged($event)"
+    filter-as-menu
+    lazy
+    @page="onPage"
+    @sort="sortingChanged"
   >
     <Column
       v-if="isCurrentTeacher"
@@ -264,7 +257,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <BaseToolbar
     v-if="securityStore.isAuthenticated && isCurrentTeacher"
@@ -510,6 +503,7 @@ import { useDocumentActionButtons } from "../../composables/document/documentAct
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { usePlatformConfig } from "../../store/platformConfig"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 const store = useStore()
 const route = useRoute()

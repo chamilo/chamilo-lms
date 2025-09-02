@@ -1,18 +1,13 @@
 <template>
   <div>
-    <DataTable
-      v-model:rows="loadParams.itemsPerPage"
-      :total-records="totalRecords"
-      :value="submissions"
-      :loading="loading"
-      lazy
-      paginator
-      data-key="@id"
-      striped-rows
-      :rows-per-page-options="[10, 20, 50]"
+    <BaseTable
+      :is-loading="loading"
       :multi-sort-meta="sortFields"
-      current-page-report-template="Showing {first} to {last} of {totalRecords}"
-      paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+      :rows="loadParams.itemsPerPage"
+      :total-items="totalRecords"
+      :values="submissions"
+      data-key="@id"
+      lazy
       @page="onPage"
       @sort="onSort"
     >
@@ -125,7 +120,7 @@
           </div>
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
 
     <CorrectAndRateModal
       v-model="showCorrectAndRateDialog"
@@ -147,6 +142,7 @@ import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import cStudentPublicationService from "../../services/cstudentpublication"
+import BaseTable from "../basecomponents/BaseTable.vue"
 
 const props = defineProps({
   assignmentId: { type: Number, required: true },

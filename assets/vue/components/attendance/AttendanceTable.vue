@@ -1,15 +1,9 @@
 <template>
-  <DataTable
-    :value="attendances"
-    :paginator="true"
-    :rows="10"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalRecords"
-    class="p-datatable-sm"
-    :loading="loading"
+  <BaseTable
+    :is-loading="loading"
+    :total-items="totalRecords"
+    :values="attendances"
     data-key="id"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
-    responsive-layout="scroll"
     @page="onPageChange"
   >
     <!-- Column for Name -->
@@ -90,12 +84,13 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 </template>
 <script setup>
 import { useRoute } from "vue-router"
 import { computed } from "vue"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseTable from "../basecomponents/BaseTable.vue"
 
 const route = useRoute()
 const securityStore = useSecurityStore()

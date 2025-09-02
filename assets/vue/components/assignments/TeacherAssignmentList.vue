@@ -1,20 +1,14 @@
 <template>
-  <DataTable
-    v-model:rows="loadParams.itemsPerPage"
-    v-model:selection="selected"
-    :loading="loading"
+  <BaseTable
+    v-model:selected-items="selected"
+    :is-loading="loading"
     :multi-sort-meta="sortFields"
-    :rows-per-page-options="[10, 20, 50]"
-    :total-records="totalRecords"
-    :value="assignments"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    :rows="loadParams.itemsPerPage"
+    :total-items="totalRecords"
+    :values="assignments"
     data-key="@id"
     lazy
-    paginator
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
     removable-sort
-    sort-mode="multiple"
-    striped-rows
     @page="onPage"
     @sort="onSort"
   >
@@ -132,7 +126,7 @@
         @click="onClickMultipleDelete()"
       />
     </template>
-  </DataTable>
+  </BaseTable>
 </template>
 
 <script setup>
@@ -152,6 +146,7 @@ import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseTable from "../basecomponents/BaseTable.vue"
 
 const { t } = useI18n()
 const route = useRoute()

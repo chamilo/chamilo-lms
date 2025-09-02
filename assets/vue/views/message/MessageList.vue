@@ -77,25 +77,18 @@
     </div>
 
     <div class="hidden md:block overflow-x-auto">
-      <DataTable
+      <BaseTable
         ref="dtMessages"
-        v-model:selection="selectedItems"
-        :loading="isLoading"
+        v-model:selected-items="selectedItems"
+        :is-loading="isLoading"
         :row-class="rowClass"
         :rows="initialRowsPerPage"
-        :rows-per-page-options="[10, 20, 50]"
         :sort-order="-1"
-        :total-records="totalItems"
-        :value="items"
-        class="w-full table-auto"
-        current-page-report-template="{first} to {last} of {totalRecords}"
+        :total-items="totalItems"
+        :values="items"
         data-key="@id"
         lazy
-        paginator
-        paginator-template="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-        responsive-layout="scroll"
         sort-field="sendDate"
-        striped-rows
         @page="onPage"
         @sort="sortingChanged"
       >
@@ -188,7 +181,7 @@
             />
           </template>
         </Column>
-      </DataTable>
+      </BaseTable>
     </div>
     <!-- List for small screens with pagination -->
     <div class="block md:hidden">
@@ -310,6 +303,7 @@ import InputText from "primevue/inputtext"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { usePlatformConfig } from "../../store/platformConfig"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 const route = useRoute()
 const router = useRouter()

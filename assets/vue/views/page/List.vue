@@ -1,23 +1,17 @@
 <template>
-  <DataTable
+  <BaseTable
     v-if="securityStore.isAdmin"
     v-model:filters="filters"
-    v-model:selection="selectedItems"
-    :lazy="true"
-    :loading="isLoading"
-    :paginator="true"
+    v-model:selected-items="selectedItems"
+    :is-loading="isLoading"
     :rows="options.itemsPerPage"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalItems"
-    :value="items"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    :total-items="totalItems"
+    :values="items"
     data-key="@id"
-    filter-display="menu"
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsive-layout="scroll"
-    striped-rows
-    @page="onPage($event)"
-    @sort="sortingChanged($event)"
+    filter-as-menu
+    lazy
+    @page="onPage"
+    @sort="sortingChanged"
   >
     <Column
       :exportable="false"
@@ -92,7 +86,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <Dialog
     v-model:visible="itemDialog"
@@ -232,6 +226,7 @@ import { useToast } from "primevue/usetoast"
 import { useSecurityStore } from "../../store/securityStore"
 import { useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 const router = useRouter()
 const store = useStore()

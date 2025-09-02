@@ -1,18 +1,13 @@
 <template>
   <div>
-    <DataTable
-      v-model:rows="loadParams.itemsPerPage"
-      :total-records="totalRecords"
-      :value="submissions"
-      :loading="loading"
-      lazy
-      paginator
-      data-key="@id"
-      striped-rows
-      :rows-per-page-options="[10, 20, 50]"
+    <BaseTable
+      :is-loading="loading"
       :multi-sort-meta="sortFields"
-      current-page-report-template="Showing {first} to {last} of {totalRecords}"
-      paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+      :rows="loadParams.itemsPerPage"
+      :total-items="totalRecords"
+      :values="submissions"
+      data-key="@id"
+      lazy
       @page="onPage"
       @sort="onSort"
     >
@@ -171,7 +166,7 @@
           </div>
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
 
     <UppyModalUploader
       :parentResourceNodeId="getResourceNodeId(selectedSubmission?.resourceNode)"
@@ -217,6 +212,7 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import EditStudentSubmissionForm from "./EditStudentSubmissionForm.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 import MoveSubmissionModal from "./MoveSubmissionModal.vue"
+import BaseTable from "../basecomponents/BaseTable.vue"
 
 const props = defineProps({
   assignmentId: {

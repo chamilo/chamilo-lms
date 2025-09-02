@@ -34,23 +34,16 @@
       </div>
     </div>
   </div>
-  <DataTable
-    v-model:filters="filters"
-    v-model:selection="selectedFiles"
+  <BaseTable
+    v-model:filters="filter"
+    v-model:selected-items="selectedFiles"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
-    :lazy="true"
-    :loading="isLoading"
-    :paginator="true"
-    :rows="10"
-    :rows-per-page-options="[5, 10, 20, 50]"
-    :total-records="totalFiles"
-    :value="files"
-    class="p-datatable-sm"
-    current-page-report-template="Showing {first} to {last} of {totalRecords}"
+    :is-loading="isLoading"
+    :total-items="totalFiles"
+    :values="files"
     data-key="iid"
-    filter-display="menu"
-    paginator-template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-    responsive-layout="scroll"
+    filter-as-menu
+    lazy
     @page="onFilesPage"
     @sort="sortingFilesChanged"
   >
@@ -129,7 +122,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <Dialog
     v-model:visible="dialog"
@@ -267,6 +260,7 @@ import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import prettyBytes from "pretty-bytes"
 import ResourceFileLink from "../../components/documents/ResourceFileLink.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 const { t } = useI18n()
 const { relativeDatetime } = useFormatDate()

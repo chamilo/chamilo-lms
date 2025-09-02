@@ -862,8 +862,10 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
             ->setRelationType($relationType)
         ;
 
+        $this->addUserSubscription($sessionRelUser);
+
         if ($this->duration <= 0) {
-            $isCoach = $this->hasCoach($user);
+            $isCoach = in_array($relationType, [self::COURSE_COACH, self::GENERAL_COACH]);
 
             $sessionRelUser
                 ->setAccessStartDate(
@@ -874,8 +876,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
                 )
             ;
         }
-
-        $this->addUserSubscription($sessionRelUser);
 
         return $this;
     }

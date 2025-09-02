@@ -1930,11 +1930,17 @@ class SessionManager
                 }
 
                 if (!empty($startDate)) {
-                    $sessionEntity->setAccessStartDate(api_get_utc_datetime($startDate, true, true));
+                    $sessionEntity->setAccessStartDate(
+                        api_get_utc_datetime($startDate, true, true),
+                        true
+                    );
                 }
 
                 if (!empty($endDate)) {
-                    $sessionEntity->setAccessEndDate(api_get_utc_datetime($endDate, true, true));
+                    $sessionEntity->setAccessEndDate(
+                        api_get_utc_datetime($endDate, true, true),
+                        true
+                    );
                 }
 
                 if (!empty($displayStartDate)) {
@@ -1946,11 +1952,17 @@ class SessionManager
                 }
 
                 if (!empty($coachStartDate)) {
-                    $sessionEntity->setCoachAccessStartDate(api_get_utc_datetime($coachStartDate, true, true));
+                    $sessionEntity->setCoachAccessStartDate(
+                        api_get_utc_datetime($coachStartDate, true, true),
+                        true
+                    );
                 }
 
                 if (!empty($coachEndDate)) {
-                    $sessionEntity->setCoachAccessEndDate(api_get_utc_datetime($coachEndDate, true, true));
+                    $sessionEntity->setCoachAccessEndDate(
+                        api_get_utc_datetime($coachEndDate, true, true),
+                        true
+                    );
                 }
 
                 if (!empty($sessionCategoryId)) {

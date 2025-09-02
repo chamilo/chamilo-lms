@@ -797,13 +797,33 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * @return Collection<int, SessionRelUser>
+     * @return Collection<int, User>
      */
     public function getGeneralCoaches(): Collection
     {
         return $this->getGeneralCoachesSubscriptions()
             ->map(fn (SessionRelUser $subscription) => $subscription->getUser())
         ;
+    }
+
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getCoachesSubscriptions(): Collection
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->in('relationType', [self::GENERAL_COACH, self::COURSE_COACH]));
+
+        return $this->users->matching($criteria);
+    }
+
+    /**
+     * @return Collection<int, SessionRelUser>
+     */
+    public function getStudentSubscriptions(): Collection
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('relationType', self::STUDENT));
+
+        return $this->users->matching($criteria);
     }
 
     /**
@@ -944,9 +964,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->accessStartDate;
     }
 
-    public function setAccessStartDate(?DateTime $accessStartDate): self
+    public function setAccessStartDate(?DateTime $accessStartDate, bool $updateCoachesDates = false): self
     {
         $this->accessStartDate = $accessStartDate;
+
+        if ($updateCoachesDates) {
+            foreach ($this->getStudentSubscriptions() as $studentSubscription) {
+                $studentSubscription->setAccessStartDate($this->accessStartDate);
+            }
+        }
 
         return $this;
     }
@@ -964,9 +990,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->accessEndDate;
     }
 
-    public function setAccessEndDate(?DateTime $accessEndDate): self
+    public function setAccessEndDate(?DateTime $accessEndDate, bool $updateCoachesDates = false): self
     {
         $this->accessEndDate = $accessEndDate;
+
+        if ($updateCoachesDates) {
+            foreach ($this->getStudentSubscriptions() as $studentSubscription) {
+                $studentSubscription->setAccessEndDate($this->accessEndDate);
+            }
+        }
 
         return $this;
     }
@@ -984,9 +1016,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->coachAccessStartDate;
     }
 
-    public function setCoachAccessStartDate(?DateTime $coachAccessStartDate): self
+    public function setCoachAccessStartDate(?DateTime $coachAccessStartDate, bool $updateCoachesDates = false): self
     {
         $this->coachAccessStartDate = $coachAccessStartDate;
+
+        if ($updateCoachesDates) {
+            foreach ($this->getCoachesSubscriptions() as $coachSubscription) {
+                $coachSubscription->setAccessStartDate($this->coachAccessStartDate ?: $this->accessStartDate);
+            }
+        }
 
         return $this;
     }
@@ -996,9 +1034,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->coachAccessEndDate;
     }
 
-    public function setCoachAccessEndDate(?DateTime $coachAccessEndDate): self
+    public function setCoachAccessEndDate(?DateTime $coachAccessEndDate, bool $updateCoachesDates = false): self
     {
         $this->coachAccessEndDate = $coachAccessEndDate;
+
+        if ($updateCoachesDates) {
+            foreach ($this->getCoachesSubscriptions() as $coachSubscription) {
+                $coachSubscription->setAccessEndDate($this->coachAccessEndDate ?: $this->accessEndDate);
+            }
+        }
 
         return $this;
     }
@@ -1381,7 +1425,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     }
 
     /**
-     * @return Collection<int, SessionRelCourseRelUser>
+     * @return Collection<int, User>
      */
     public function getCourseCoaches(): Collection
     {

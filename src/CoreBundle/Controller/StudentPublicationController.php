@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Repository\TrackEDefaultRepository;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationCorrection;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCorrectionRepository;
@@ -163,7 +164,8 @@ class StudentPublicationController extends AbstractController
     public function deleteSubmission(
         int $id,
         EntityManagerInterface $em,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        TrackEDefaultRepository $trackRepo
     ): JsonResponse {
         $submission = $repo->find($id);
 
@@ -173,7 +175,12 @@ class StudentPublicationController extends AbstractController
 
         $this->denyAccessUnlessGranted('DELETE', $submission->getResourceNode());
 
-        $em->remove($submission->getResourceNode());
+        $resourceNode = $submission->getResourceNode();
+        if ($resourceNode) {
+            $trackRepo->registerResourceEvent($resourceNode, 'deletion');
+        }
+
+        $em->remove($resourceNode);
         $em->flush();
 
         return new JsonResponse(null, 204);

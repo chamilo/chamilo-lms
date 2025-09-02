@@ -149,20 +149,26 @@ class ChangePasswordType extends AbstractType
         $errors = [];
         $req = Security::getPasswordRequirements()['min'];
 
-        if (\strlen($password) < $req['length']) {
+        $len      = \strlen($password);
+        $lower    = preg_match_all('/[a-z]/', $password);
+        $upper    = preg_match_all('/[A-Z]/', $password);
+        $digits   = preg_match_all('/\d/', $password);
+        $specials = preg_match_all('/[^a-zA-Z0-9]/', $password);
+
+        if ($len < $req['length']) {
             $errors[] = 'Password must be at least '.$req['length'].' characters long.';
         }
-        if ($req['lowercase'] > 0 && !preg_match('/[a-z]/', $password)) {
-            $errors[] = 'Password must contain at least '.$req['lowercase'].' lowercase characters.';
+        if ($req['lowercase'] > 0 && $lower < $req['lowercase']) {
+            $errors[] = 'Password must contain at least '.$req['lowercase'].' lowercase character(s).';
         }
-        if ($req['uppercase'] > 0 && !preg_match('/[A-Z]/', $password)) {
-            $errors[] = 'Password must contain at least '.$req['uppercase'].' uppercase characters.';
+        if ($req['uppercase'] > 0 && $upper < $req['uppercase']) {
+            $errors[] = 'Password must contain at least '.$req['uppercase'].' uppercase character(s).';
         }
-        if ($req['numeric'] > 0 && !preg_match('/[0-9]/', $password)) {
-            $errors[] = 'Password must contain at least '.$req['numeric'].' numeric characters.';
+        if ($req['numeric'] > 0 && $digits < $req['numeric']) {
+            $errors[] = 'Password must contain at least '.$req['numeric'].' numeric character(s).';
         }
-        if ($req['specials'] > 0 && !preg_match('/[\W]/', $password)) {
-            $errors[] = 'Password must contain at least '.$req['specials'].' special characters.';
+        if ($req['specials'] > 0 && $specials < $req['specials']) {
+            $errors[] = 'Password must contain at least '.$req['specials'].' special character(s).';
         }
 
         return $errors;

@@ -809,9 +809,18 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * @return Collection<int, SessionRelUser>
      */
-    public function getCoachesSubscriptions(): Collection
+    public function getCoachesSubscriptions(bool $includeSessionAdmin = false): Collection
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->in('relationType', [self::GENERAL_COACH, self::COURSE_COACH]));
+        $relationTypes = [
+            self::COURSE_COACH,
+            self::GENERAL_COACH,
+        ];
+
+        if ($includeSessionAdmin) {
+            $relationTypes[] = self::SESSION_ADMIN;
+        }
+
+        $criteria = Criteria::create()->where(Criteria::expr()->in('relationType', $relationTypes));
 
         return $this->users->matching($criteria);
     }
@@ -885,7 +894,7 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         $this->addUserSubscription($sessionRelUser);
 
         if ($this->duration <= 0) {
-            $isCoach = in_array($relationType, [self::COURSE_COACH, self::GENERAL_COACH]);
+            $isCoach = in_array($relationType, [self::COURSE_COACH, self::GENERAL_COACH, self::SESSION_ADMIN]);
 
             $sessionRelUser
                 ->setAccessStartDate(
@@ -1016,12 +1025,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->coachAccessStartDate;
     }
 
-    public function setCoachAccessStartDate(?DateTime $coachAccessStartDate, bool $updateCoachesDates = false): self
-    {
+    public function setCoachAccessStartDate(
+        ?DateTime $coachAccessStartDate,
+        bool $updateCoachesDates = false,
+        bool $updateAdminDates = false,
+    ): self {
         $this->coachAccessStartDate = $coachAccessStartDate;
 
         if ($updateCoachesDates) {
-            foreach ($this->getCoachesSubscriptions() as $coachSubscription) {
+            foreach ($this->getCoachesSubscriptions($updateAdminDates) as $coachSubscription) {
                 $coachSubscription->setAccessStartDate($this->coachAccessStartDate ?: $this->accessStartDate);
             }
         }
@@ -1034,12 +1046,15 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         return $this->coachAccessEndDate;
     }
 
-    public function setCoachAccessEndDate(?DateTime $coachAccessEndDate, bool $updateCoachesDates = false): self
-    {
+    public function setCoachAccessEndDate(
+        ?DateTime $coachAccessEndDate,
+        bool $updateCoachesDates = false,
+        bool $updateAdminDates = false,
+    ): self {
         $this->coachAccessEndDate = $coachAccessEndDate;
 
         if ($updateCoachesDates) {
-            foreach ($this->getCoachesSubscriptions() as $coachSubscription) {
+            foreach ($this->getCoachesSubscriptions($updateAdminDates) as $coachSubscription) {
                 $coachSubscription->setAccessEndDate($this->coachAccessEndDate ?: $this->accessEndDate);
             }
         }

@@ -1954,6 +1954,7 @@ class SessionManager
                 if (!empty($coachStartDate)) {
                     $sessionEntity->setCoachAccessStartDate(
                         api_get_utc_datetime($coachStartDate, true, true),
+                        true,
                         true
                     );
                 }
@@ -1961,6 +1962,7 @@ class SessionManager
                 if (!empty($coachEndDate)) {
                     $sessionEntity->setCoachAccessEndDate(
                         api_get_utc_datetime($coachEndDate, true, true),
+                        true,
                         true
                     );
                 }

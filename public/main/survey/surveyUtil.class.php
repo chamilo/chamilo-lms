@@ -241,10 +241,29 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                $surveysAnswered = SurveyManager::getInvitationsAnswered($survey->getCode(), api_get_course_int_id(), api_get_session_id());
-                if (count($surveysAnswered) > 0) {
-                    foreach ($surveysAnswered as $survey) {
-                        echo self::displayCompleteReport($survey, 0, true, true, !$survey->getAnonymous(), $survey->getLpItemId());
+                $surveysAnswered = SurveyManager::getInvitationsAnswered(
+                    $survey->getCode(),
+                    api_get_course_int_id(),
+                    api_get_session_id()
+                );
+
+                if (!empty($surveysAnswered)) {
+                    foreach ($surveysAnswered as $invitation) {
+                        $surveyEntity = $invitation->getSurvey();
+                        if (!$surveyEntity) {
+                            continue;
+                        }
+
+                        $showNames = ($surveyEntity->getAnonymous() === '0');
+
+                        echo SurveyUtil::displayCompleteReport(
+                            $surveyEntity,
+                            0,
+                            true,
+                            true,
+                            $showNames,
+                            (int) $invitation->getLpItemId()
+                        );
                     }
                 }
                 break;
@@ -301,9 +320,7 @@ class SurveyUtil
 
         if (false !== $result) {
             $message = get_lang('The user\'s answers to the survey have been successfully removed.').'<br />
-					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
-                .$survey_id.'">'.
-                get_lang('Go back').'</a>';
+					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id=' .$survey_id.'&'.api_get_cidreq().'">'.get_lang('Go back').'</a>';
             echo Display::return_message($message, 'confirmation', false);
         }
     }
@@ -564,10 +581,8 @@ class SurveyUtil
 
         $actions = '<a
             href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'),
-                '',
-                ICON_SIZE_MEDIUM
-            ).'</a>';
+            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview')).
+            '</a>';
         $actions .= Display::url(
             Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
             'javascript: void(0);',
@@ -762,7 +777,7 @@ class SurveyUtil
                         echo '<td>'.$value['option_text'].'</td>';
                         echo '<td>';
                         if (0 != $absolute_number) {
-                            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
+                            echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
                                 .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
                                 .$value['iid'].'">'.$absolute_number.'</a>';
                         } else {
@@ -831,7 +846,7 @@ class SurveyUtil
             echo '<ul>';
             while ($row = Database::fetch_assoc($result)) {
                 $user_info = api_get_user_info($row['user']);
-                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
+                echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action=userreport&survey_id='
                     .$surveyId.'&user='.$row['user'].'">'
                     .$user_info['complete_name_with_username']
                     .'</a></li>';
@@ -931,7 +946,7 @@ class SurveyUtil
                 echo '<td>'.$value->getOptionText().'</td>';
                 echo '<td>'.$i.'</td>';
 
-                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action
+                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
                     .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
                     .'&viewoption='.$optionId.'&value='.$i.'">'.$absolute_number.'</a></td>';
 
@@ -2083,12 +2098,14 @@ class SurveyUtil
         $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
         $yAxis = isset($_GET['yaxis']) ? Security::remove_XSS($_GET['yaxis']) : '';
 
-        $url = api_get_self().'?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action'])
+        $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.Security::remove_XSS($_GET['action'])
             .'&survey_id='.$surveyId.'&xaxis='.$xAxis.'&y='.$yAxis;
 
         $form = new FormValidator('compare', 'get', $url);
         $form->addHidden('action', Security::remove_XSS($_GET['action']));
         $form->addHidden('survey_id', $surveyId);
+        $form->addHidden('cid', api_get_course_int_id());
+        $form->addHidden('sid', api_get_session_id());
         $optionsX = ['----'];
         $optionsY = ['----'];
         $defaults = [];

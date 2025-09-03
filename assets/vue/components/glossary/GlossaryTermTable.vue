@@ -2,7 +2,7 @@
   <DataTable :value="glossaries">
     <Column
       :header="t('Term')"
-      field="name"
+      field="title"
     />
     <Column
       :header="t('Definition')"

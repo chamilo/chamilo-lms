@@ -106,7 +106,7 @@ if ('overview' === $action) {
     $tool_name = get_lang('Reporting');
 } else {
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId,
+        'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
         'name' => get_lang('Reporting'),
     ];
     switch ($action) {

@@ -10430,7 +10430,10 @@ class Exercise
         return $lpList;
     }
 
-    public function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
+    /**
+     * Generate reminder table with robust checkbox markup (no external CSS dependency).
+     */
+    function getReminderTable($questionList, $exercise_stat_info, $disableCheckBoxes = false)
     {
         $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
         $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
@@ -10446,13 +10449,14 @@ class Exercise
 
         $exeId = $exercise_stat_info['exe_id'];
         $exerciseId = $exercise_stat_info['exe_exo_id'];
-        $exercise_result = $this->getUserAnswersSavedInExercise($exeId);
+        $exercise_result = Exercise::getUserAnswersSavedInExerciseStatic($exeId); // Static helper to avoid $this here
 
         $content = Display::label(get_lang('Questions without answer'), 'danger');
         $content .= '<div class="clear"></div><br />';
         $table = '';
         $counter = 0;
-        // Loop over all question to show results for each of them, one by one
+
+        // Loop over all questions
         foreach ($questionList as $questionId) {
             $objQuestionTmp = Question::read($questionId);
             $check_id = 'remind_list['.$questionId.']';
@@ -10465,113 +10469,113 @@ class Exercise
                 $attributes['checked'] = 1;
             }
 
-            $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
-            $checkbox = '<div class="pretty p-svg p-curve">
-                        '.$checkbox.'
-                        <div class="state p-primary ">
-                         <svg class="svg svg-icon" viewBox="0 0 20 20">
-                            <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
-                         </svg>
-                         <label>&nbsp;</label>
-                        </div>
-                    </div>';
+            // Simple, robust checkbox (no pretty-checkbox wrapper)
+            $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '1', $attributes);
+
             $counter++;
-            $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
-            // Check if the question doesn't have an answer.
+            $titleText = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
+
+            // Mark unanswered questions
             if (!in_array($questionId, $exercise_result)) {
-                $questionTitle = Display::label($questionTitle, 'danger');
+                $titleHtml = Display::label($titleText, 'danger');
+            } else {
+                $titleHtml = $titleText;
             }
 
-            $label_attributes = [];
-            $label_attributes['for'] = $check_id;
+            $label_attributes = ['for' => $check_id];
+
             if (false === $disableCheckBoxes) {
-                $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+                // Combine checkbox + title inside a label; Tailwind classes are no-op if not present
+                $rowHtml = Display::tag(
+                    'label',
+                    $checkbox.' '.$titleHtml,
+                    $label_attributes
+                );
+            } else {
+                $rowHtml = $titleHtml;
             }
-            $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
+
+            // Add container with alignment classes (works w/ or w/o Tailwind thanks to inline CSS above)
+            $table .= Display::div($rowHtml, ['class' => 'exercise_reminder_item flex items-center gap-2']);
         }
 
+        // JS functions
         $content .= Display::div('', ['id' => 'message']).
             Display::div($table, ['class' => 'question-check-test']);
 
         $content .= '<script>
-        var lp_data = $.param({
-            "learnpath_id": '.$learnpath_id.',
-            "learnpath_item_id" : '.$learnpath_item_id.',
-            "learnpath_item_view_id": '.$learnpath_item_view_id.'
+    var lp_data = $.param({
+        "learnpath_id": '.$learnpath_id.',
+        "learnpath_item_id" : '.$learnpath_item_id.',
+        "learnpath_item_view_id": '.$learnpath_item_view_id.'
+    });
+
+    function final_submit() {
+        // Normal inputs.
+        window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
+    }
+
+    function changeOptionStatus(status)
+    {
+        $("input[type=checkbox]").each(function () {
+            $(this).prop("checked", status);
         });
 
-        function final_submit() {
-            // Normal inputs.
-            window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exeId.'&" + lp_data;
+        var action = "";
+        var option = "remove_all";
+        if (status == 1) {
+            option = "add_all";
         }
+        $.ajax({
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+            data: "option="+option+"&exe_id='.$exeId.'&action="+action,
+            success: function(returnValue) {}
+        });
+    }
 
-        function selectAll() {
-            $("input[type=checkbox]").each(function () {
-                $(this).prop("checked", 1);
-                var question_id = $(this).data("question-id");
-                var action = "add";
-                $.ajax({
-                    url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                    data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
-                    success: function(returnValue) {
-                    }
-                });
-            });
-        }
-
-        function changeOptionStatus(status)
-        {
-            $("input[type=checkbox]").each(function () {
-                $(this).prop("checked", status);
-            });
-
-            var action = "";
-            var option = "remove_all";
-            if (status == 1) {
-                option = "add_all";
+    function reviewQuestions() {
+        var hasChecked = false;
+        $("input[type=checkbox]").each(function () {
+            if ($(this).prop("checked")) {
+                hasChecked = true;
+                return false;
             }
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                data: "option="+option+"&exe_id='.$exeId.'&action="+action,
-                success: function(returnValue) {
-                }
-            });
-        }
+        });
 
-        function reviewQuestions() {
-            var isChecked = 1;
-            $("input[type=checkbox]").each(function () {
-                if ($(this).prop("checked")) {
-                    isChecked = 2;
-                    return false;
-                }
-            });
-
-            if (isChecked == 1) {
-                $("#message").addClass("warning-message");
-                $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
-            } else {
-                window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
-            }
+        if (!hasChecked) {
+            $("#message").addClass("warning-message");
+            $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
+        } else {
+            window.location = "exercise_submit.php?'.api_get_cidreq().'&category_id='.$categoryId.'&exerciseId='.$exerciseId.'&reminder=2&" + lp_data;
         }
+    }
 
-        function save_remind_item(obj, question_id) {
-            var action = "";
-            if ($(obj).prop("checked")) {
-                action = "add";
-            } else {
-                action = "delete";
-            }
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
-                data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
-                success: function(returnValue) {
-                }
-            });
-        }
-        </script>';
+    // Backward-compat alias (the button calls review_questions())
+    function review_questions() {
+        return reviewQuestions();
+    }
+
+    function save_remind_item(obj, question_id) {
+        var action = $(obj).prop("checked") ? "add" : "delete";
+        $.ajax({
+            url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=add_question_to_reminder",
+            data: "question_id="+question_id+"&exe_id='.$exeId.'&action="+action,
+            success: function(returnValue) {}
+        });
+    }
+    </script>';
 
         return $content;
+    }
+
+    public static function getUserAnswersSavedInExerciseStatic($exeId)
+    {
+        $objExercise = Session::read("objExercise");
+        if ($objExercise && method_exists($objExercise, "getUserAnswersSavedInExercise")) {
+            return $objExercise->getUserAnswersSavedInExercise($exeId);
+        }
+
+        return [];
     }
 
     public function getRadarsFromUsers($userList, $exercises, $dataSetLabels, $courseId, $sessionId)

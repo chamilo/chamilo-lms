@@ -51,16 +51,21 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
 if ($time_control) {
     // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time->format('Y-m-d H:i:s'), 'UTC') - time();
-    /*$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');*/
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
+// Load legacy exercise JS
 $htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
-$htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');
+
+// Minimal inline CSS to align checkboxes and text without external libs.
+// NOTE: Tailwind classes are also included in the markup. If Tailwind is present they will apply;
+// otherwise this CSS keeps things aligned.
+$htmlHeadXtra[] = '<style>
+.exercise_reminder_item label { display: flex; align-items: center; gap: .5rem; margin: .25rem 0; }
+.exercise_reminder_item input[type=checkbox] { margin: 0; }
+.question-check-test { margin-top: .5rem; }
+.form-actions { margin-top: 1rem; }
+</style>';
 
 $exe_id = 0;
 if (isset($_GET['exe_id'])) {
@@ -122,6 +127,7 @@ if (('true' === api_get_setting('exercise.block_category_questions')) &&
 
 echo $objExercise->getReminderTable($question_list, $exercise_stat_info);
 
+// Keep the original onclick but ensure the function exists (alias created below).
 $exerciseActions = Display::url(
     get_lang('Review selected questions'),
     'javascript://',
@@ -129,22 +135,22 @@ $exerciseActions = Display::url(
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('Select all'),
-    'javascript://',
-    ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn--plain']
-);
+        get_lang('Select all'),
+        'javascript://',
+        ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn--plain']
+    );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('Unselect all'),
-    'javascript://',
-    ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
-);
+        get_lang('Unselect all'),
+        'javascript://',
+        ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn--plain']
+    );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('End test'),
-    'javascript://',
-    ['onclick' => 'final_submit();', 'class' => 'btn btn--warning']
-);
+        get_lang('End test'),
+        'javascript://',
+        ['onclick' => 'final_submit();', 'class' => 'btn btn--warning']
+    );
 
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);

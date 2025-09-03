@@ -355,8 +355,9 @@ if ($inATest) {
         );
     }
 
+    $isHotspotEdit = is_object($objQuestion) && in_array((int)$objQuestion->selectType(), [HOT_SPOT, HOT_SPOT_COMBINATION, HOT_SPOT_DELINEATION], true);
     $alert = '';
-    if (false === $showPagination) {
+    if (false === $showPagination && !$isHotspotEdit) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
@@ -405,7 +406,9 @@ if ($inATest) {
             );
         }
     }
-    echo Display::return_message($alert, 'normal', false);
+    if (!empty($alert)) {
+        echo Display::return_message($alert, 'normal', false);
+    }
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.

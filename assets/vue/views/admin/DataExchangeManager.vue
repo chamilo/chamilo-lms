@@ -23,12 +23,10 @@
       {{ selectedThirdPartyName }}
     </p>
 
-    <DataTable
-      :value="exchanges"
-      :loading="loading"
+    <BaseTable
+      :is-loading="loading"
+      :values="exchanges"
       data-key="id"
-      class="mb-5"
-      striped-rows
     >
       <Column :header="t('Third party')">
         <template #body="{ data }">
@@ -70,7 +68,7 @@
           <span v-else>-</span>
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
 
     <BaseDialogConfirmCancel
       v-model:is-visible="showDialog"
@@ -128,6 +126,7 @@ import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useNotification } from "../../composables/notification"
 import adminService from "../../services/adminService"
 

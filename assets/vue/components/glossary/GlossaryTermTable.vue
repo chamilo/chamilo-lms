@@ -1,5 +1,8 @@
 <template>
-  <DataTable :value="glossaries">
+  <BaseTable
+    :text-for-empty="t('There is no terms that matches the search: %s', [searchTerm])"
+    :values="glossaries"
+  >
     <Column
       :header="t('Term')"
       field="title"
@@ -28,16 +31,13 @@
         />
       </template>
     </Column>
-
-    <template #empty>
-      {{ t("There is no terms that matches the search: {searchTerm}", { searchTerm: searchTerm }) }}
-    </template>
-  </DataTable>
+  </BaseTable>
 </template>
 
 <script setup>
-import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseTable from "../basecomponents/BaseTable.vue"
 
 const { t } = useI18n()
 

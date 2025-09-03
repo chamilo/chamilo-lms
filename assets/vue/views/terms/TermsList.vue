@@ -16,9 +16,9 @@
       {{ t("You should create the \"Term and Conditions\" for all the available languages.") }}
     </Message>
 
-    <DataTable
-      :loading="isLoading"
-      :value="terms"
+    <BaseTable
+      :is-loading="isLoading"
+      :values="terms"
     >
       <Column
         field="version"
@@ -51,16 +51,16 @@
           {{ formatDate(slotProps.data.date) }}
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue"
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useI18n } from "vue-i18n"
 import { useRouter } from "vue-router"
 import Message from "primevue/message"

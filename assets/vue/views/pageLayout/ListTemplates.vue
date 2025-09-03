@@ -16,11 +16,8 @@
     </div>
   </SectionHeader>
 
-  <DataTable
-    :value="templates"
-    :rows="10"
-    paginator
-    striped-rows
+  <BaseTable
+    :values="templates"
     data-key="id"
   >
     <Column headerStyle="width: 80px">
@@ -81,7 +78,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <!-- Dialog to show JSON -->
   <BaseDialogConfirmCancel
@@ -114,8 +111,8 @@ import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 
 import pageService from "../../services/pageService.js"

@@ -287,8 +287,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseMenu from "../../components/basecomponents/BaseMenu.vue"
 import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseTag from "../../components/basecomponents/BaseTag.vue"
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { useConfirm } from "primevue/useconfirm"
 import { useQuery } from "@vue/apollo-composable"
@@ -303,7 +303,6 @@ import InputText from "primevue/inputtext"
 import messageRelUserService from "../../services/messagereluser"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { usePlatformConfig } from "../../store/platformConfig"
-import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 const route = useRoute()
 const router = useRouter()

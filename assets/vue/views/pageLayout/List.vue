@@ -16,14 +16,9 @@
     </div>
   </SectionHeader>
 
-  <DataTable
-    :value="layouts"
-    :paginator="true"
-    :rows="10"
-    striped-rows
-    responsive-layout="scroll"
+  <BaseTable
+    :values="layouts"
     data-key="id"
-    paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
   >
     <Column headerStyle="width: 80px">
       <template #body="">
@@ -83,7 +78,7 @@
         </div>
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <BaseDialogConfirmCancel
     v-model:is-visible="isDeleteDialogVisible"
@@ -104,6 +99,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 
 import pageService from "../../services/pageService.js"
 

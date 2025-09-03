@@ -9,12 +9,10 @@
       />
     </SectionHeader>
 
-    <DataTable
-      :value="thirdParties"
-      :loading="loading"
+    <BaseTable
+      :is-loading="loading"
+      :values="thirdParties"
       data-key="id"
-      class="mb-5"
-      striped-rows
     >
       <Column
         :header="t('Name')"
@@ -46,7 +44,7 @@
           />
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
 
     <BaseDialogConfirmCancel
       v-model:is-visible="showCreateDialog"
@@ -123,6 +121,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import adminService from "../../services/adminService"
 
 const { t } = useI18n()

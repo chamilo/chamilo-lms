@@ -1,11 +1,8 @@
 <template>
-  <DataTable
-    :value="assignments"
-    :loading="loading"
-    :paginator="true"
-    :rows="10"
+  <BaseTable
+    :is-loading="loading"
+    :values="assignments"
     data-key="id"
-    striped-rows
   >
     <Column :header="t('Type')">
       <template #body>
@@ -58,7 +55,7 @@
         {{ abbreviatedDatetime(slotProps.data.sentDate) || "-" }}
       </template>
     </Column>
-  </DataTable>
+  </BaseTable>
 
   <CorrectAndRateModal
     v-model="showCorrectAndRateDialog"
@@ -69,7 +66,6 @@
 </template>
 
 <script setup>
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { ref, onMounted, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
@@ -78,6 +74,7 @@ import { useRouter } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
+import BaseTable from "../basecomponents/BaseTable.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 
 const { t } = useI18n()

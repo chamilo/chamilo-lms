@@ -200,9 +200,9 @@
 <script setup>
 import { nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseTable from "../basecomponents/BaseTable.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import cStudentPublicationService from "../../services/cstudentpublication"
@@ -212,7 +212,6 @@ import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/en
 import EditStudentSubmissionForm from "./EditStudentSubmissionForm.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 import MoveSubmissionModal from "./MoveSubmissionModal.vue"
-import BaseTable from "../basecomponents/BaseTable.vue"
 
 const props = defineProps({
   assignmentId: {

@@ -26,13 +26,10 @@
       <ProgressSpinner />
     </div>
 
-    <DataTable
+    <BaseTable
       v-else-if="users.length"
-      :value="users"
-      :paginator="true"
-      :rows="10"
+      :values="users"
       data-key="id"
-      striped-rows
     >
       <Column :header="t('Last name')">
         <template #body="slotProps">
@@ -56,7 +53,7 @@
           </a>
         </template>
       </Column>
-    </DataTable>
+    </BaseTable>
 
     <div
       v-else
@@ -72,7 +69,7 @@ import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import cstudentpublication from "../../services/cstudentpublication"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
-import DataTable from "primevue/datatable"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import Column from "primevue/column"
 import ProgressSpinner from "primevue/progressspinner"
 import { useCidReq } from "../../composables/cidReq"

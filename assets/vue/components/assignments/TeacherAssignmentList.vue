@@ -130,7 +130,6 @@
 </template>
 
 <script setup>
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import { computed, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
@@ -139,6 +138,7 @@ import { useCidReq } from "../../composables/cidReq"
 import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseTable from "../basecomponents/BaseTable.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
 import { useConfirm } from "primevue/useconfirm"
@@ -146,7 +146,6 @@ import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
-import BaseTable from "../basecomponents/BaseTable.vue"
 
 const { t } = useI18n()
 const route = useRoute()

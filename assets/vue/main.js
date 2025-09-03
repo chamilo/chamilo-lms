@@ -34,7 +34,6 @@ import "@mdi/font/css/materialdesignicons.css"
 // Prime
 import PrimeVue from "primevue/config"
 import DataView from "primevue/dataview"
-import DataTable from "primevue/datatable"
 import Select from "primevue/select"
 import Toolbar from "primevue/toolbar"
 
@@ -178,7 +177,6 @@ app.use(ToastService)
 app.use(ConfirmationService)
 app.component("Dialog", Dialog)
 app.component("DataView", DataView)
-app.component("DataTable", DataTable)
 app.component("Dropdown", Select)
 app.component("InputText", InputText)
 app.component("Button", Button)

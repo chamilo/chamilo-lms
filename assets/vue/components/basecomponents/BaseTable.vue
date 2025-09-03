@@ -68,6 +68,11 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  textForEmpty: {
+    type: String,
+    required: false,
+    default: null,
+  },
 })
 
 defineEmits(["page", "sort"])
@@ -123,6 +128,13 @@ defineExpose({
       v-if="slots.footer"
     >
       <slot name="footer" />
+    </template>
+
+    <template
+      #empty
+      v-if="textForEmpty"
+    >
+      {{ textForEmpty }}
     </template>
   </DataTable>
 </template>

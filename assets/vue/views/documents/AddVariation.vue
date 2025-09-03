@@ -65,10 +65,7 @@
 
     <div>
       <h3 class="text-xl font-bold mb-4">{{ t("Current variations") }}</h3>
-      <DataTable
-        :value="variations"
-        class="w-full"
-      >
+      <BaseTable :values="variations">
         <Column
           field="title"
           :header="t('Title')"
@@ -136,7 +133,7 @@
             />
           </template>
         </Column>
-      </DataTable>
+      </BaseTable>
     </div>
   </div>
 </template>
@@ -146,11 +143,11 @@ import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import axios from "axios"
-import DataTable from "primevue/datatable"
 import Column from "primevue/column"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseFileUpload from "../../components/basecomponents/BaseFileUpload.vue"
+import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import prettyBytes from "pretty-bytes"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"

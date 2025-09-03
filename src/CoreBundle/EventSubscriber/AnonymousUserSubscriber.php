@@ -24,7 +24,8 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  * Auto-login as an anonymous User entity ONLY within a public course context.
  * Keeps the anonymous session alive while the user stays around the course
  * (including auxiliary/XHR calls that may not carry cid), and clears it
- * when navigating away (top-level document navigation).
+ * when navigating away (top-level document navigation),
+ * except for whitelisted paths still considered within the course context.
  */
 class AnonymousUserSubscriber implements EventSubscriberInterface
 {
@@ -39,6 +40,15 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
     // TTL (in seconds) for the “public course anonymous session” window
     private const ACTIVE_TTL_SECONDS  = 600; // 10 minutes
+
+    /**
+     * Whitelist: only preserve the anonymous context on the contact pages.
+     * NOTE: We intentionally avoid whitelisting all LP paths here to keep scope tight.
+     */
+    private const ANON_WHITELIST_PREFIXES = [
+        '/contact',
+        '/main/lp/contact',
+    ];
 
     public function __construct(
         private readonly Security $security,
@@ -62,31 +72,30 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $hasSession  = $request->hasSession();
         $currentUser = $this->security->getUser();
 
-        // Are we currently in a public course scope?
+        // In a public course scope?
         $cid = $this->extractCid($request);
         if ($cid > 0 && $this->isCoursePublic($cid)) {
-            // Refresh the “active public course” context (TTL)
+            // Renew active context (TTL)
             if ($hasSession) {
-                $this->rememberActivePublicCid($request, $cid);
+                $this->rememberActivePublicCid($request, (int) $cid);
             }
 
-            // If there is a real user (non-anonymous), do nothing
+            // Real (non-anonymous) user → nothing to do
             if ($currentUser instanceof User && $currentUser->getStatus() !== User::ANONYMOUS) {
                 return;
             }
 
-            // If it's already an anonymous entity user, do nothing
+            // Already an anonymous entity user → nothing to do
             if ($currentUser instanceof User && $currentUser->getStatus() === User::ANONYMOUS) {
                 return;
             }
 
-            // 1.a) Log in as anonymous entity User (works with voters/Doctrine)
+            // Login as anonymous entity user
             $this->loginAnonymousEntity($request);
-
             return;
         }
 
-        // We are not in a public course (or there is no cid on this request)
+        // Not in a public course (or no cid on this request)
         if (!$hasSession) {
             return;
         }
@@ -97,26 +106,36 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $expiresAt = (int) ($session->get(self::S_ACTIVE_EXPIRES_AT, 0));
         $now       = time();
 
-        // If there is an active public course context and it has not expired,
-        //      DO NOT clear on XHR/assets. Only clear on top-level document navigation.
+        // There is an active context and it has not expired
         if ($activeCid > 0 && $isActive && $expiresAt > $now) {
             if ($this->isTopLevelNavigation($request)) {
-                // Navigated away from a course → clear the anonymous context
+                // Top-level navigation: keep anonymous if whitelisted, otherwise clear
+                if ($this->isWhitelistedPath($request)) {
+                    $this->rememberActivePublicCid($request, $activeCid);
+                    return;
+                }
                 $this->clearAnon($request);
+                return;
+            }
+
+            // Not a top-level navigation (XHR/assets).
+            // If it's a whitelisted path, renew TTL to avoid accidental expiration.
+            if ($this->isWhitelistedPath($request)) {
+                $this->rememberActivePublicCid($request, $activeCid);
             }
             return;
         }
 
-        // If there is no active context or it expired and the user is anonymous → clear only on navigation
+        // No active context (or expired): for an ANONYMOUS user, clear only on top-level navigation outside whitelist
         if ($currentUser instanceof User && $currentUser->getStatus() === User::ANONYMOUS) {
-            if ($this->isTopLevelNavigation($request)) {
+            if ($this->isTopLevelNavigation($request) && !$this->isWhitelistedPath($request)) {
                 $this->clearAnon($request);
             }
         }
     }
 
     /**
-     * Extract the course id from:
+     * Extract course id from:
      *  - Query ?cid=...
      *  - Path /course/{id}/...
      *  - Path /api/courses/{id}
@@ -148,7 +167,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         return $course?->isPublic() ?? false;
     }
 
-    /** Store the active public course context in session and renew TTL. */
+    /** Store/renew the active public course context in session. */
     private function rememberActivePublicCid(Request $request, int $cid): void
     {
         $session = $request->getSession();
@@ -210,7 +229,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $this->tokenStorage->setToken(new UsernamePasswordToken($user, self::FIREWALL_NAME, $roles));
     }
 
-    /** Clear token and session flags when navigating away from the course (top-level document navigation). */
+    /** Clear token and session flags. */
     private function clearAnon(Request $request): void
     {
         $this->tokenStorage->setToken(null);
@@ -247,11 +266,30 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         return str_contains($accept, 'text/html');
     }
 
+    /**
+     * Only contact-related paths preserve the anonymous context (tight scope).
+     * Examples matched:
+     *  - /contact
+     *  - /contact/
+     *  - /main/lp/contact
+     *  - /main/lp/contact/...
+     */
+    private function isWhitelistedPath(Request $request): bool
+    {
+        $path = $request->getPathInfo() ?? '/';
+        foreach (self::ANON_WHITELIST_PREFIXES as $prefix) {
+            if ($path === $prefix || str_starts_with($path, $prefix.'/')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private function getOrCreateAnonymousUserId(string $userIp): ?int
     {
-        $userRepo   = $this->em->getRepository(User::class);
-        $trackRepo  = $this->em->getRepository(TrackELogin::class);
-        $autoProv   = 'true' === $this->settings->getSetting('security.anonymous_autoprovisioning');
+        $userRepo  = $this->em->getRepository(User::class);
+        $trackRepo = $this->em->getRepository(TrackELogin::class);
+        $autoProv  = 'true' === $this->settings->getSetting('security.anonymous_autoprovisioning');
 
         if (!$autoProv) {
             $u = $userRepo->findOneBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);

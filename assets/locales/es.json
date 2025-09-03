@@ -95,7 +95,7 @@
     "No course available": "Sin cursos disponibles",
     "Loading courses. Please wait.": "Cargando lecciones. Por favor, espere.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Contact": "Contacto",
     "Registration": "Registro",
     "Current session tab": "Actual",

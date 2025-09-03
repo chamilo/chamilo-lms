@@ -95,7 +95,7 @@
     "No course available": "kein Kurs verf\u00fcgbar",
     "Loading courses. Please wait.": "Lade Kurse. Bitte warten.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Contact": "Kontakt",
     "Registration": "Selbst-Registrierung",
     "Current session tab": "Aktuell",

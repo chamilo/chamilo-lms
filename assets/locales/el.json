@@ -85,7 +85,7 @@
     "No course available": "\u0394\u03b5\u03bd \u03c5\u03c0\u03ac\u03c1\u03c7\u03b5\u03b9 \u03b4\u03b9\u03b1\u03b8\u03ad\u03c3\u03b9\u03bc\u03bf \u03bc\u03ac\u03b8\u03b7\u03bc\u03b1",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "\u0395\u03b3\u03b3\u03c1\u03b1\u03c6\u03ae",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

@@ -52,7 +52,7 @@
     "Go to the session": "Go to the session",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "\u0420\u0435\u0454\u0441\u0442\u0440\u0430\u0446\u0456\u044f",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

@@ -95,7 +95,7 @@
     "No course available": "geen cursus",
     "Loading courses. Please wait.": "Cursussen laden. Even geduld a.u.b.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Contact": "Contacteer",
     "Registration": "Registratie",
     "Current session tab": "Huidig",

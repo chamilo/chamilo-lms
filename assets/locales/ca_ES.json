@@ -92,7 +92,7 @@
     "No course available": "no hi ha curs",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Contact": "Contacte",
     "Registration": "Inscripci\u00f3",
     "Current session tab": "Current",

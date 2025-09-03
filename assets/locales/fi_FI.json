@@ -74,7 +74,7 @@
     "No course available": "ei kurssia",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "Rekister\u00f6inti",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

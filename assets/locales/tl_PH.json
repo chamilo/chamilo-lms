@@ -51,7 +51,7 @@
     "Start Date": "Petsa ng Simula",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "Rehistrasyon",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

@@ -96,7 +96,7 @@
     "No course available": "Pas de cours",
     "Loading courses. Please wait.": "Chargement des cours. Veuillez patienter.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Contact": "Contact",
     "Registration": "Inscription",
     "Current session tab": "En cours",

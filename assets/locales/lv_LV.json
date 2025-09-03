@@ -87,7 +87,7 @@
     "No course available": "Pieejamu kursu nav",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "Re\u0123istr\u0101cija platform\u0101",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

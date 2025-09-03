@@ -65,7 +65,7 @@
     "No course available": "ders bulunmuyor",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "Kay\u0131t \u0130\u015flemi",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

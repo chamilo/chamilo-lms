@@ -57,7 +57,7 @@
     "Start Date": "\u958b\u59cb\u65e5",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "\u767b\u9332",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

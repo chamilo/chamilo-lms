@@ -79,7 +79,7 @@
     "No course available": "mana yachachinayuq",
     "Loading courses. Please wait.": "Loading courses. Please wait.",
     "Loading sessions. Please wait.": "Loading sessions. Please wait.",
-    "There is no terms that matches the search: {searchTerm}": "There is no terms that matches the search: {searchTerm}",
+    "There is no terms that matches the search: %s": "There is no terms that matches the search: {0}",
     "Registration": "Registro",
     "Current session tab": "Current",
     "Upcoming session tab": "Upcoming",

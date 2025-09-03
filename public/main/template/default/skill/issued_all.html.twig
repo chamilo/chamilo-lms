@@ -25,24 +25,25 @@
                 </div>
 
                 {% if badge.allow_download_export %}
-                    <div class="mt-4 max-w-xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                        <div class="text-center">
-                            <a
-                                    href="{{ badge.personal_badge }}"
-                                    class="btn btn--primary w-full inline-block"
-                            >
-                                <em class="fa fa-download fa-fw"></em> {{ 'Download badges'|trans }}
-                            </a>
-                        </div>
-                        <div class="text-center">
-                            <a
-                                    href="#"
-                                    class="btn btn--success w-full inline-block"
-                                    id="badge-export-button-{{ badge.issue_info.id }}"
-                            >
-                                <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
-                            </a>
-                        </div>
+                    <div class="mt-4 mx-auto grid grid-cols-1 gap-3">
+                        <a
+                                href="{{ badge.personal_badge }}"
+                                class="btn btn--primary w-full block max-w-full text-center whitespace-normal break-words leading-snug"
+                                download
+                        >
+                            <em class="fa fa-download fa-fw" aria-hidden="true"></em>
+                            {{ 'Download badges'|trans }}
+                        </a>
+
+                        <button
+                                type="button"
+                                id="badge-export-button-{{ badge.issue_info.id }}"
+                                class="btn btn--success w-full block max-w-full text-center whitespace-normal break-words leading-snug"
+                                aria-label="{{ 'Export badge'|trans }}"
+                        >
+                            <em class="fa fa-external-link-square fa-fw" aria-hidden="true"></em>
+                            {{ 'Export badge'|trans }}
+                        </button>
                     </div>
                     {% if "display.hide_social_media_links"|api_get_setting == 'false' %}
                         <div class="mt-4 text-center">

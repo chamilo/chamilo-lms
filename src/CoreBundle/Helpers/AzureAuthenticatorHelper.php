@@ -272,16 +272,21 @@ readonly class AzureAuthenticatorHelper
             'session_admin' => function (User $user): void {
                 $user
                     ->setStatus(SESSIONADMIN)
-                    ->removeUserAsAdmin()
-                    ->setRoleFromStatus(SESSIONADMIN)
-                ;
+                    ->setRoleFromStatus(SESSIONADMIN);
+
+                if ($user->getAdmin()) {
+                    $user->removeUserAsAdmin();
+                }
             },
             'teacher' => function (User $user): void {
                 $user
                     ->setStatus(COURSEMANAGER)
-                    ->removeUserAsAdmin()
                     ->setRoleFromStatus(COURSEMANAGER)
                 ;
+
+                if ($user->getAdmin()) {
+                    $user->removeUserAsAdmin();
+                }
             },
         ];
     }

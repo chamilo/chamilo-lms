@@ -65,7 +65,37 @@ $table = new SortableTable(
     'DESC'
 );
 
-$table->set_additional_parameters(['project_id' => $projectId]);
+// Preserve current search parameters across pagination and page size changes
+$additionalParameters = [
+    'project_id' => $projectId,
+];
+
+$searchParams = [
+    // Simple search
+    'keyword',
+    'submit_simple',
+    // Advanced search
+    'submit_advanced',
+    'keyword_status',
+    'keyword_category',
+    'keyword_assigned_to',
+    'keyword_created_by',
+    'keyword_priority',
+    'keyword_course',
+    'keyword_unread',
+    'keyword_start_date_start',
+    'keyword_start_date_end',
+    // Extra supported keys used by TicketManager
+    'keyword_source',
+];
+
+foreach ($searchParams as $paramName) {
+    if (isset($_GET[$paramName]) && $_GET[$paramName] !== '') {
+        $additionalParameters[$paramName] = Security::remove_XSS($_GET[$paramName]);
+    }
+}
+
+$table->set_additional_parameters($additionalParameters);
 
 if ($table->per_page == 0) {
     $table->per_page = 20;
@@ -109,18 +139,33 @@ switch ($action) {
         $datos = $table->get_clean_html();
         $ticketTable = Database::get_main_table(TABLE_TICKET_TICKET);
         foreach ($datos as $ticket) {
-            $ticketId = 0;
+                        $ticketId = 0;
             if (preg_match('/ticket_id=(\d+)/', $ticket[0], $matches)) {
                 $ticketId = (int) $matches[1];
             }
             $ticketCode = '';
             $ticketTitle = '';
+            $ticketDate = '';
+            $ticketLastUpdate = '';
             if ($ticketId > 0) {
-                $sql = "SELECT code, subject FROM $ticketTable WHERE id = $ticketId";
+                $sql = "SELECT code, subject, start_date, sys_lastedit_datetime FROM $ticketTable WHERE id = $ticketId";
                 $rs = Database::query($sql);
                 if ($row = Database::fetch_array($rs)) {
                     $ticketCode = $row['code'];
                     $ticketTitle = $row['subject'];
+                    // Format dates for export as dd/mm/yy
+                    if (!empty($row['start_date'])) {
+                        $ts = strtotime($row['start_date']);
+                        if ($ts !== false) {
+                            $ticketDate = date('d/m/y', $ts);
+                        }
+                    }
+                    if (!empty($row['sys_lastedit_datetime'])) {
+                        $ts2 = strtotime($row['sys_lastedit_datetime']);
+                        if ($ts2 !== false) {
+                            $ticketLastUpdate = date('d/m/y', $ts2);
+                        }
+                    }
                 }
             }
 
@@ -128,8 +173,8 @@ switch ($action) {
                 utf8_decode($ticketCode),
                 utf8_decode($ticketTitle),
                 utf8_decode(api_html_entity_decode($ticket[1])),
-                utf8_decode(strip_tags($ticket[2])),
-                utf8_decode(strip_tags($ticket[3])),
+                utf8_decode(!empty($ticketDate) ? $ticketDate : strip_tags($ticket[2])),
+                utf8_decode(!empty($ticketLastUpdate) ? $ticketLastUpdate : strip_tags($ticket[3])),
                 utf8_decode(strip_tags($ticket[4])),
                 utf8_decode(strip_tags($ticket[5])),
                 utf8_decode(strip_tags($ticket[6])),

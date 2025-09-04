@@ -14,7 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     normalizationContext: ['groups' => ['third_party:read']],
     denormalizationContext: ['groups' => ['third_party:write']],
-    paginationEnabled: false
+    paginationEnabled: false,
+    security: "is_granted('ROLE_ADMIN')"
 )]
 #[ORM\Table(name: 'third_party')]
 #[ORM\Entity]
@@ -28,8 +29,8 @@ class ThirdParty
 
     #[Groups(['third_party:read', 'third_party:write'])]
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'text')]
-    protected string $name;
+    #[ORM\Column(name: 'title', type: 'text')]
+    protected string $title;
 
     #[Groups(['third_party:read', 'third_party:write'])]
     #[ORM\Column(type: 'text', nullable: true)]
@@ -40,11 +41,12 @@ class ThirdParty
     protected ?string $address = null;
 
     #[Groups(['third_party:read', 'third_party:write'])]
+    #[Assert\Url]
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $website = null;
 
     #[Groups(['third_party:read', 'third_party:write'])]
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(name: 'data_exchange_party', type: 'boolean')]
     protected bool $dataExchangeParty = false;
 
     #[Groups(['third_party:read', 'third_party:write'])]
@@ -56,14 +58,14 @@ class ThirdParty
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): static
+    public function setTitle(string $title): static
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }

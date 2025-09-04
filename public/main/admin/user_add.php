@@ -244,18 +244,23 @@ $status[SESSIONADMIN] = get_lang('Sessions administrator');
 $status[STUDENT_BOSS] = get_lang('Student\'s superior');
 $status[INVITEE] = get_lang('Invitee');
 
-$form->addSelect(
-    'status',
-    get_lang('Profile'),
-    $status,
+$form->addElement(
+    'select',
+    'roles',
+    get_lang('Roles'),
+    api_get_roles(),
     [
-        'id' => 'status_select',
-        'onchange' => 'javascript: updateStatus();',
+        'multiple' => 'multiple',
+        'size' => 8,
     ]
 );
+$form->addRule('roles', get_lang('Required field'), 'required');
 
 //drh list (display only if student)
-$display = (isset($_POST['status']) && STUDENT == $_POST['status']) || !isset($_POST['status']) ? 'block' : 'none';
+$display = 'none';
+if (isset($_POST['roles']) && is_array($_POST['roles'])) {
+    $display = in_array('ROLE_TEACHER', $_POST['roles']) || in_array('ROLE_SESSION_MANAGER', $_POST['roles']) ? 'block' : 'none';
+}
 
 if (api_is_platform_admin()) {
     // Platform admin
@@ -354,7 +359,6 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = 'true' !== api_get_setting('login_is_email') ? $user['username'] : '';
-        $status = (int) $user['status'];
         $language = $user['locale'];
         $picture = $_FILES['picture'];
         $platform_admin = 0;
@@ -397,6 +401,12 @@ if ($form->validate()) {
         }
 
         $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
+
+        $roles = $user['roles'] ?? [];
+        $status = api_status_from_roles($roles);
+        if ((int) ($user['admin']['platform_admin'] ?? 0) === 1) {
+            $status = COURSEMANAGER;
+        }
 
         $user_id = UserManager::create_user(
             $firstname,
@@ -454,6 +464,14 @@ if ($form->validate()) {
                     null,
                     $language
                 );
+            }
+
+            $repo = Container::getUserRepository();
+            $userEntity = $repo->find($user_id);
+
+            if ($userEntity) {
+                $userEntity->setRoles($roles);
+                $repo->updateUser($userEntity);
             }
 
             $extraFieldValues = new ExtraFieldValue('user');

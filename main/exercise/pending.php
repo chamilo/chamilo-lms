@@ -296,6 +296,22 @@ $form->addSelect(
     ]
 );
 
+$userOptions = [];
+if (!empty($filter_user)) {
+    $userInfo = api_get_user_info($filter_user);
+    if (!empty($userInfo)) {
+        $userOptions[$filter_user] = $userInfo['complete_name_with_username'];
+    }
+}
+$form->addSelectAjax(
+    'filter_by_user',
+    get_lang('User'),
+    $userOptions,
+    [
+        'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
+    ]
+);
+
 $status = [
     1 => get_lang('All'),
     2 => get_lang('Validated'),
@@ -445,8 +461,12 @@ function action_formatter(cellvalue, options, rowObject) {
     return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
 }';
 
-$extra_params['autowidth'] = 'true';
-$extra_params['height'] = 'auto';
+$extra_params = [
+    'autowidth' => 'true',
+    'height' => 'auto',
+    'sortname' => 'exe_date',
+    'sortorder' => 'asc',
+];
 $gridJs = Display::grid_js(
     'results',
     $url,

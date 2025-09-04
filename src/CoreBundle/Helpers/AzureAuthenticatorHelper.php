@@ -70,7 +70,7 @@ readonly class AzureAuthenticatorHelper
         }
 
         [
-            $firstNme,
+            $firstName,
             $lastName,
             $username,
             $email,
@@ -99,7 +99,7 @@ readonly class AzureAuthenticatorHelper
         }
 
         $user
-            ->setFirstname($firstNme)
+            ->setFirstname($firstName)
             ->setLastname($lastName)
             ->setEmail($email)
             ->setUsername($username)
@@ -230,7 +230,7 @@ readonly class AzureAuthenticatorHelper
         }
 
         // If the option is set to create users, create it
-        $firstNme = $azureUserData['givenName'];
+        $firstName = $azureUserData['givenName'];
         $lastName = $azureUserData['surname'];
         $email = $azureUserData['mail'];
         $username = $azureUserData['userPrincipalName'];
@@ -243,7 +243,7 @@ readonly class AzureAuthenticatorHelper
         ];
 
         return [
-            $firstNme,
+            $firstName,
             $lastName,
             $username,
             $email,

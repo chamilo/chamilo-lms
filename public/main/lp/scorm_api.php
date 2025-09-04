@@ -30,15 +30,25 @@ require_once __DIR__.'/../inc/global.inc.php';
 $oLP = Session::read('oLP');
 //$oLP = UnserializeApi::unserialize('lp', Session::read('lpobject'));
 if (!is_object($oLP)) {
-    error_log('New LP - scorm_api - Could not load oLP object', 0);
-    exit;
+    error_log('New LP - scorm_api - Could not load oLP object');
+    http_response_code(200);
+    echo "window.olms=window.olms||{};";
+    echo "window.checkCurrentItemPosition=window.checkCurrentItemPosition||function(){};";
+    echo "window.API=window.API||{LMSInitialize:function(){return 'false'},LMSGetValue:function(){return ''},LMSSetValue:function(){return 'false'},LMSCommit:function(){return 'false'},LMSFinish:function(){return 'false'}};";
+    echo "window.api=window.API;console.error('[SCORM] oLP not found');";
+    return;
 }
-/** @var learnpathItem $oItem */
-$oItem = $oLP->items[$oLP->current] ?? null;
 
+/** @var learnpathItem|null $oItem */
+$oItem = $oLP->items[$oLP->current] ?? null;
 if (!is_object($oItem)) {
-    error_log('New LP - scorm_api - Could not load oItem item', 0);
-    exit;
+    error_log('New LP - scorm_api - Could not load oItem item');
+    http_response_code(200);
+    echo "window.olms=window.olms||{};";
+    echo "window.checkCurrentItemPosition=window.checkCurrentItemPosition||function(){};";
+    echo "window.API=window.API||{LMSInitialize:function(){return 'false'}};";
+    echo "window.api=window.API;console.error('[SCORM] oItem not found');";
+    return;
 }
 $user = api_get_user_info();
 $userId = api_get_user_id();

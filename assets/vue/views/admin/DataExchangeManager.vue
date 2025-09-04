@@ -12,34 +12,29 @@
         :label="t('Add exchange')"
         icon="plus"
         type="success"
-        @click="showDialog = true"
+        @click="openCreate"
       />
     </SectionHeader>
 
-    <p
-      v-if="selectedThirdPartyName"
-      class="text-h3 text-gray-600 mb-4 ml-1"
-    >
+    <p v-if="selectedThirdPartyName" class="text-h3 text-gray-600 mb-4 ml-1">
       {{ selectedThirdPartyName }}
     </p>
 
-    <BaseTable
-      :is-loading="loading"
-      :values="exchanges"
-      data-key="id"
-    >
+    <BaseTable :is-loading="loading" :values="exchanges" data-key="id">
       <Column :header="t('Third party')">
         <template #body="{ data }">
-          {{ thirdParties.find((tp) => `/api/third_parties/${tp.id}` === data.thirdParty)?.name || "-" }}
+          {{
+            thirdParties.find((tp) => `/api/third_parties/${tp.id}` === data.thirdParty)?.title ||
+            '-'
+          }}
         </template>
       </Column>
-      <Column
-        :header="t('Date sent')"
-        field="sentAt"
-      />
+
+      <Column :header="t('Date sent')" field="sentAt" />
+
       <Column :header="t('All users?')">
         <template #body="{ data }">
-          {{ data.allUsers ? t("Yes") : t("No") }}
+          {{ data.allUsers ? t('Yes') : t('No') }}
         </template>
       </Column>
       <Column
@@ -47,10 +42,7 @@
         v-if="exchanges.some((e) => !e.allUsers)"
       >
         <template #body="{ data }">
-          <div
-            v-if="!data.allUsers && exchangeUsersMap[data['@id']]"
-            class="flex flex-wrap gap-1"
-          >
+          <div v-if="!data.allUsers && exchangeUsersMap[data['@id']]" class="flex flex-wrap gap-1">
             <span
               v-for="(user, index) in exchangeUsersMap[data['@id']].slice(0, 3)"
               :key="index"
@@ -58,24 +50,42 @@
             >
               {{ user.firstname }} {{ user.lastname }}
             </span>
-            <span
-              v-if="exchangeUsersMap[data['@id']].length > 3"
-              class="text-xs text-gray-600"
-            >
-              +{{ exchangeUsersMap[data["@id"]].length - 3 }} more
+            <span v-if="exchangeUsersMap[data['@id']].length > 3" class="text-xs text-gray-600">
+              +{{ exchangeUsersMap[data['@id']].length - 3 }} more
             </span>
           </div>
           <span v-else>-</span>
+        </template>
+      </Column>
+
+      <Column :header="t('Actions')">
+        <template #body="{ data }">
+          <div class="flex gap-2 flex-wrap">
+            <BaseButton
+              size="small"
+              type="secondary"
+              icon="edit"
+              :label="t('Edit')"
+              @click="openEdit(data)"
+            />
+            <BaseButton
+              size="small"
+              type="danger"
+              icon="delete"
+              :label="t('Delete')"
+              @click="openDelete(data)"
+            />
+          </div>
         </template>
       </Column>
     </BaseTable>
 
     <BaseDialogConfirmCancel
       v-model:is-visible="showDialog"
-      :title="t('Add data exchange')"
+      :title="dialogTitle"
       :confirm-label="t('Save')"
       :cancel-label="t('Cancel')"
-      @confirm-clicked="saveExchange"
+      @confirm-clicked="submitExchange"
       @cancel-clicked="resetForm"
     >
       <div class="p-fluid">
@@ -113,6 +123,18 @@
         />
       </div>
     </BaseDialogConfirmCancel>
+
+    <BaseDialogConfirmCancel
+      v-model:is-visible="showDeleteDialog"
+      :title="t('Delete data exchange')"
+      :confirm-label="t('Delete')"
+      :cancel-label="t('Cancel')"
+      @confirm-clicked="confirmDelete"
+    >
+      <p class="p-3">
+        {{ t('Are you sure you want to delete this data exchange?') }}
+      </p>
+    </BaseDialogConfirmCancel>
   </div>
 </template>
 <script setup>
@@ -133,14 +155,22 @@ import adminService from "../../services/adminService"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const { showSuccessNotification, showErrorNotification } = useNotification()
+
 const exchanges = ref([])
 const thirdParties = ref([])
 const users = ref([])
-const showDialog = ref(false)
+
 const loading = ref(false)
 const exchangeUsersMap = ref({})
-const { showSuccessNotification, showErrorNotification } = useNotification()
 const thirdPartyId = computed(() => parseInt(route.query.thirdPartyId))
+
+const showDialog = ref(false)
+const isEditing = ref(false)
+const editingExchangeIri = ref(null)
+
+const showDeleteDialog = ref(false)
+const deletingExchangeIri = ref(null)
 
 const form = ref({
   thirdPartyId: null,
@@ -150,8 +180,12 @@ const form = ref({
   selectedUsers: [],
 })
 
+const dialogTitle = computed(() =>
+  isEditing.value ? t("Edit data exchange") : t("Add data exchange"),
+)
+
 const selectedThirdPartyName = computed(() => {
-  return thirdParties.value.find((tp) => tp.id === thirdPartyId.value)?.name || null
+  return thirdParties.value.find((tp) => tp.id === thirdPartyId.value)?.title || null
 })
 
 const resetForm = () => {
@@ -162,6 +196,8 @@ const resetForm = () => {
     allUsers: true,
     selectedUsers: [],
   }
+  isEditing.value = false
+  editingExchangeIri.value = null
   showDialog.value = false
 }
 
@@ -175,9 +211,12 @@ const fetchThirdParties = async () => {
 
 const fetchExchanges = async () => {
   try {
+    loading.value = true
     exchanges.value = await adminService.fetchExchanges(thirdPartyId.value)
   } catch (e) {
     console.error("Error loading exchanges", e)
+  } finally {
+    loading.value = false
   }
 }
 
@@ -203,7 +242,11 @@ const fetchExchangeUsers = async () => {
       const key = item.dataExchange
       if (!grouped[key]) grouped[key] = []
       const fullUser = users.value.find((u) => `/api/users/${u.id}` === item.user)
-      grouped[key].push(fullUser || { firstname: "?", lastname: "?" })
+      grouped[key].push({
+        ...(fullUser || { firstname: "?", lastname: "?", id: null, name: "?" }),
+        _relId: item.id || item["@id"],
+        _userIri: item.user,
+      })
     })
     exchangeUsersMap.value = grouped
   } catch (e) {
@@ -211,36 +254,89 @@ const fetchExchangeUsers = async () => {
   }
 }
 
-const saveExchange = async () => {
+const openCreate = () => {
+  resetForm()
+  isEditing.value = false
+  showDialog.value = true
+}
+
+const openEdit = (row) => {
+  isEditing.value = true
+  editingExchangeIri.value = row["@id"] || `/api/third_party_data_exchanges/${row.id}`
+
+  form.value.thirdPartyId = thirdPartyId.value
+  form.value.sentAt = row.sentAt ? new Date(row.sentAt) : new Date()
+  form.value.description = row.description || ""
+  form.value.allUsers = !!row.allUsers
+
+  if (!form.value.allUsers) {
+    const assigned = exchangeUsersMap.value[editingExchangeIri.value] || []
+    form.value.selectedUsers = assigned.map((u) => u.id).filter((id) => id != null)
+  } else {
+    form.value.selectedUsers = []
+  }
+
+  showDialog.value = true
+}
+
+const submitExchange = async () => {
   try {
-    const { thirdPartyId, sentAt, description, allUsers, selectedUsers } = form.value
+    const { thirdPartyId: tpId, sentAt, description, allUsers, selectedUsers } = form.value
 
     if (!allUsers && selectedUsers.length === 0) {
       showErrorNotification(t("Please select at least one user."))
       return
     }
 
-    const exchangePayload = {
-      thirdParty: `/api/third_parties/${thirdPartyId}`,
+    const payload = {
+      thirdParty: `/api/third_parties/${tpId}`,
       sentAt,
       description,
       allUsers,
     }
 
-    const exchange = await adminService.createExchange(exchangePayload)
+    if (isEditing.value) {
+      await adminService.updateExchange(editingExchangeIri.value, payload)
 
-    if (!allUsers && selectedUsers.length > 0) {
-      const userPayload = selectedUsers.map((userId) => ({
-        user: `/api/users/${userId}`,
-        dataExchange: exchange["@id"],
-      }))
-      await adminService.assignExchangeUsers(userPayload)
+      const current = exchangeUsersMap.value[editingExchangeIri.value] || []
+      const currentIds = new Set(current.map((u) => u.id).filter((id) => id != null))
+      const newIds = new Set(selectedUsers)
+
+      const toAdd = [...newIds].filter((id) => !currentIds.has(id))
+      if (!allUsers && toAdd.length > 0) {
+        const addPayload = toAdd.map((userId) => ({
+          user: `/api/users/${userId}`,
+          dataExchange: editingExchangeIri.value,
+        }))
+        await adminService.assignExchangeUsers(addPayload)
+      }
+
+      const toRemoveIds = [...currentIds].filter((id) => !newIds.has(id))
+      if (toRemoveIds.length > 0) {
+        const toRemoveRels = current
+          .filter((u) => toRemoveIds.includes(u.id))
+          .map((u) => u._relId)
+          .filter(Boolean)
+        await Promise.all(toRemoveRels.map((rel) => adminService.deleteExchangeUser(rel)))
+      }
+
+      showSuccessNotification(t("Data exchange updated successfully."))
+    } else {
+      const exchange = await adminService.createExchange(payload)
+
+      if (!allUsers && selectedUsers.length > 0) {
+        const userPayload = selectedUsers.map((userId) => ({
+          user: `/api/users/${userId}`,
+          dataExchange: exchange["@id"],
+        }))
+        await adminService.assignExchangeUsers(userPayload)
+      }
+
+      showSuccessNotification(t("Data exchange successfully saved."))
     }
 
-    showSuccessNotification(t("Data exchange successfully saved."))
     await fetchExchanges()
     await fetchExchangeUsers()
-    showDialog.value = false
     resetForm()
   } catch (error) {
     console.error("Error saving data exchange", error)
@@ -248,23 +344,42 @@ const saveExchange = async () => {
   }
 }
 
-onMounted(() => {
+const openDelete = (row) => {
+  deletingExchangeIri.value = row["@id"] || `/api/third_party_data_exchanges/${row.id}`
+  showDeleteDialog.value = true
+}
+
+const confirmDelete = async () => {
+  try {
+    await adminService.deleteExchange(deletingExchangeIri.value)
+    showSuccessNotification(t("Data exchange deleted."))
+    showDeleteDialog.value = false
+    deletingExchangeIri.value = null
+    await fetchExchanges()
+    await fetchExchangeUsers()
+  } catch (e) {
+    console.error(e)
+    showErrorNotification(t("Error deleting data exchange."))
+  }
+}
+
+onMounted(async () => {
   if (!thirdPartyId.value) {
     showErrorNotification("Missing third party context.")
     router.push({ name: "ThirdPartyManager" })
     return
   }
-
-  fetchExchanges()
-  fetchThirdParties()
-  fetchUsers()
-  fetchExchangeUsers()
+  await fetchThirdParties()
+  await fetchUsers()
+  await fetchExchanges()
+  await fetchExchangeUsers()
 })
 
 watch(
   () => route.query.thirdPartyId,
-  () => {
-    fetchExchanges()
+  async () => {
+    await fetchExchanges()
+    await fetchExchangeUsers()
   },
 )
 

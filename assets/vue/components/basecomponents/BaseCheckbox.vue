@@ -2,50 +2,34 @@
   <div class="field-checkbox">
     <Checkbox
       :binary="true"
-      :input-id="id"
-      :model-value="modelValue"
+      :inputId="id"
       :name="name"
-      @update:model-value="$emit('update:modelValue', $event)"
-    >
-      <template #icon="{ checked }">
-        <BaseIcon
-          v-if="checked"
-          class="bg-primary text-white rounded"
-          icon="confirm"
-          size="small"
-        />
-      </template>
-    </Checkbox>
-    <label
-      :for="id"
-      class="ml-2 cursor-pointer"
-      >{{ label }}</label
-    >
+      v-model="proxy"
+    />
+    <label :for="id" class="ml-2 cursor-pointer">{{ label }}</label>
   </div>
 </template>
 
 <script setup>
-import Checkbox from "primevue/checkbox"
-import BaseIcon from "./BaseIcon.vue"
+import { computed } from 'vue'
+import Checkbox from 'primevue/checkbox'
 
-defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  modelValue: {
-    type: null,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
+const props = defineProps({
+  id: { type: String, required: true },
+  modelValue: { type: Boolean, required: true },
+  name: { type: String, required: true },
+  label: { type: String, required: true },
 })
 
-defineEmits(["update:modelValue"])
+const emit = defineEmits(['update:modelValue'])
+const proxy = computed({
+  get: () => !!props.modelValue,
+  set: (val) => emit('update:modelValue', !!val),
+})
 </script>
+<style scoped>
+.p-checkbox .p-checkbox-box {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+</style>

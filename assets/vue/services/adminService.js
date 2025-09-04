@@ -43,4 +43,29 @@ export default {
 
   assignExchangeUsers: (userPayload) =>
     Promise.all(userPayload.map((p) => baseService.post("/api/third_party_data_exchange_users", p))),
+
+  updateThirdParty: (id, payload) =>
+    baseService.put(`/api/third_parties/${id}`, payload),
+
+  deleteThirdParty: (idOrIri) =>
+    baseService.delete(
+      typeof idOrIri === "string" && idOrIri.startsWith("/api/")
+        ? idOrIri
+        : `/api/third_parties/${idOrIri}`,
+    ),
+
+  updateExchange: (idOrIri, payload) =>
+    baseService.put(
+      idOrIri.startsWith("/api/")
+        ? idOrIri
+        : `/api/third_party_data_exchanges/${idOrIri}`,
+      payload,
+    ),
+
+  deleteExchange: (idOrIri) =>
+    baseService.delete(
+      idOrIri.startsWith("/api/")
+        ? idOrIri
+        : `/api/third_party_data_exchanges/${idOrIri}`,
+    ),
 }

@@ -188,6 +188,15 @@ class CopyUnhashedAssetsPlugin {
             path.join(cssPath, "document.css")
           )
         }
+        const editorContentCssFile = fs.readdirSync(cssPath).find((f) =>
+          f.match(/^editor_content\.[a-f0-9]+\.css$/)
+        )
+        if (editorContentCssFile) {
+          fs.copyFileSync(
+            path.join(cssPath, editorContentCssFile),
+            path.join(cssPath, "editor_content.css")
+          )
+        }
       }
 
       // === COPY legacy_framereadyloader.js without hash ===

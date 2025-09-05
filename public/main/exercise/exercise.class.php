@@ -9213,6 +9213,13 @@ class Exercise
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
 
+        if (!empty($sessionId)) {
+            $qb->andWhere('(links.session = :sess OR links.session IS NULL)')
+                ->setParameter('sess', $session);
+        } else {
+            $qb->andWhere('links.session IS NULL');
+        }
+
         if (!empty($categoryId)) {
             $qb->andWhere($qb->expr()->eq('resource.quizCategory', $categoryId));
         } else {
@@ -9267,12 +9274,8 @@ class Exercise
             $qb->setParameter('keyword', '%'.$keyword.'%');
         }
 
-        // Only for administrators
         if (!$is_allowedToEdit) {
-            $qb
-                ->leftJoin('resource.resourceNode', 'rn')
-                ->leftJoin('rn.resourceLinks', 'rl')
-                ->andWhere('rl.visibility = :published')
+            $qb->andWhere('links.visibility = :published')
                 ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
         }
 
@@ -9316,30 +9319,26 @@ class Exercise
 
                 $sessionId = api_get_session_id();
                 $allowToEditBaseCourse = true;
-                $visibility = $visibilityInCourse = $exerciseEntity->isVisible($course);
-                $visibilityInSession = false;
-                if (!empty($sessionId)) {
-                    // If we are in a session, the test is invisible
-                    // in the base course, it is included in a LP
-                    // *and* the setting to show it is *not*
-                    // specifically set to true, then hide it.
-                    if (false === $visibility) {
-                        if (!$visibilitySetting) {
-                            if ($exercise->exercise_was_added_in_lp) {
-                                continue;
-                            }
-                        }
+                $visibleBase = $exerciseEntity->isVisible($course);
+                $visibleSess = !empty($sessionId) ? $exerciseEntity->isVisible($course, $session) : null;
+                if ($visibleSess === true) {
+                    $visibleForStudent = true;
+                } elseif ($visibleSess === false) {
+                    $visibleForStudent = false;
+                } else {
+                    $visibleForStudent = $visibleBase;
+                }
+
+                $visibleForTeacher = true;
+
+                if (!$is_allowedToEdit && !empty($sessionId)) {
+                    $visibilitySetting = ('true' === api_get_setting('lp.show_hidden_exercise_added_to_lp'));
+                    if (!$visibleBase && !$visibilitySetting && $exercise->exercise_was_added_in_lp) {
+                        continue;
                     }
-
-                    $visibility = $visibilityInSession = $exerciseEntity->isVisible($course, $session);
                 }
 
-                // Validation when belongs to a session
-                $isBaseCourseExercise = true;
-                if (!($visibilityInCourse && $visibilityInSession)) {
-                    $isBaseCourseExercise = false;
-                }
-
+                $isBaseCourseExercise = $visibleBase && ($visibleSess === null || $visibleSess === true);
                 if (!empty($sessionId) && $isBaseCourseExercise) {
                     $allowToEditBaseCourse = false;
                 }
@@ -9414,10 +9413,7 @@ class Exercise
                         );
                     }
 
-                    $style = '';
-                    if (!$visibility) {
-                        $style = 'color:grey';
-                    }
+                    $style = $visibleForStudent ? '' : 'color:grey';
 
                     $title = $cut_title;
 
@@ -9710,12 +9706,7 @@ class Exercise
                     $currentRow['count_questions'] = $number_of_questions;
                 } else {
                     // Student only.
-                    $visibility = $exerciseEntity->isVisible($course, null);
-                    if (false === $visibility && !empty($sessionId)) {
-                        $visibility = $exerciseEntity->isVisible($course, $session);
-                    }
-
-                    if (false === $visibility) {
+                    if (!$visibleForStudent) {
                         continue;
                     }
 

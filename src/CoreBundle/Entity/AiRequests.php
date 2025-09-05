@@ -12,7 +12,12 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Table(name: 'ai_requests')]
+#[ORM\Table(
+    name: 'ai_requests',
+    indexes: [
+        new ORM\Index(columns: ['tool_name', 'tool_item_id'], name: 'idx_ai_requests_lookup'),
+    ]
+)]
 #[ORM\Entity(repositoryClass: AiRequestsRepository::class)]
 class AiRequests
 {
@@ -28,6 +33,9 @@ class AiRequests
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', length: 255)]
     private string $toolName;
+
+    #[ORM\Column(type: 'bigint', nullable: true)]
+    private ?int $toolItemId = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(type: 'datetime')]
@@ -49,6 +57,12 @@ class AiRequests
     #[Assert\NotBlank]
     #[ORM\Column(type: 'string', length: 50)]
     private string $aiProvider;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $aiModel = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $aiEndpoint = null;
 
     public function __construct()
     {
@@ -80,6 +94,18 @@ class AiRequests
     public function setToolName(string $toolName): self
     {
         $this->toolName = $toolName;
+
+        return $this;
+    }
+
+    public function getToolItemId(): ?int
+    {
+        return $this->toolItemId;
+    }
+
+    public function setToolItemId(?int $toolItemId): self
+    {
+        $this->toolItemId = $toolItemId;
 
         return $this;
     }
@@ -145,6 +171,30 @@ class AiRequests
     public function setAiProvider(string $aiProvider): self
     {
         $this->aiProvider = $aiProvider;
+
+        return $this;
+    }
+
+    public function getAiModel(): ?string
+    {
+        return $this->aiModel;
+    }
+
+    public function setAiModel(?string $aiModel): self
+    {
+        $this->aiModel = $aiModel;
+
+        return $this;
+    }
+
+    public function getAiEndpoint(): ?string
+    {
+        return $this->aiEndpoint;
+    }
+
+    public function setAiEndpoint(?string $aiEndpoint): self
+    {
+        $this->aiEndpoint = $aiEndpoint;
 
         return $this;
     }

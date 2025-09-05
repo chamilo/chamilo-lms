@@ -643,10 +643,15 @@ switch ($action) {
                 $my_choice = 'assets:' . count($uploadAnswerAssetIds[$my_question_id] ?? []);
             }
             // Getting free choice data.
-            if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION]) && 'all' == $type) {
-                $my_choice = isset($_REQUEST['free_choice'][$my_question_id]) && !empty($_REQUEST['free_choice'][$my_question_id])
-                    ? $_REQUEST['free_choice'][$my_question_id]
-                    : null;
+            if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION])) {
+                if ('all' === $type) {
+                    $my_choice = $_REQUEST['free_choice'][$my_question_id] ?? $my_choice;
+                } elseif ('simple' === $type && isset($_REQUEST['free_choice'][$my_question_id]) && $_REQUEST['free_choice'][$my_question_id] !== '') {
+                    $my_choice = $_REQUEST['free_choice'][$my_question_id];
+                }
+                if (is_string($my_choice)) {
+                    $my_choice = trim($my_choice);
+                }
             }
 
             if ('all' === $type) {

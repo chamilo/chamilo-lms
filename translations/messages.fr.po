@@ -11229,7 +11229,7 @@ msgid "Login request"
 msgstr "Demande de login"
 
 msgid "Admin"
-msgstr "admin"
+msgstr "Admin"
 
 msgid "User of course"
 msgstr "normal"

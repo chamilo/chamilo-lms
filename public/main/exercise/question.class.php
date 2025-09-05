@@ -217,22 +217,20 @@ abstract class Question
                 }
 
                 if ($getExerciseList) {
-                    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
+                    $tblQuiz   = Database::get_course_table(TABLE_QUIZ_TEST);
+                    $sessionId = (int) api_get_session_id();
+                    $sessionJoin = $sessionId > 0 ? "rl.session_id = $sessionId" : "rl.session_id IS NULL";
+
                     $sql = "SELECT DISTINCT q.quiz_id
-                            FROM $TBL_EXERCISE_QUESTION q
-                            INNER JOIN $tblQuiz e
-                            ON e.iid = q.quiz_id
-                            WHERE
-                                q.question_id = $id AND
-                                e.active >= 0";
-
+            FROM $TBL_EXERCISE_QUESTION q
+            INNER JOIN $tblQuiz e  ON e.iid = q.quiz_id
+            INNER JOIN resource_node rn ON rn.id = e.resource_node_id
+            INNER JOIN resource_link rl ON rl.resource_node_id = rn.id AND $sessionJoin
+            WHERE q.question_id = $id
+              AND rl.deleted_at IS NULL";
                     $result = Database::query($sql);
-
-                    // fills the array with the exercises which this question is in
-                    if ($result) {
-                        while ($obj = Database::fetch_object($result)) {
-                            $objQuestion->exerciseList[] = $obj->quiz_id;
-                        }
+                    while ($obj = Database::fetch_object($result)) {
+                        $objQuestion->exerciseList[] = (int) $obj->quiz_id;
                     }
                 }
 

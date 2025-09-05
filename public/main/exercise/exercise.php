@@ -117,14 +117,8 @@ if ($is_allowedToEdit && !empty($action)) {
 
             break;
         case 'delete':
-            if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') { api_not_allowed(true); }
-            if (!Security::check_token($_REQUEST['sec_token'] ?? null)) {
-                Display::addFlash(Display::return_message(get_lang('Security token invalid'), 'error'));
-                header('Location: '.$currentUrl); exit;
-            }
             if (!$allowDelete) { api_not_allowed(true); }
-
-            $idsRaw = $_POST['id'] ?? null;
+            $idsRaw = $_REQUEST['id'] ?? null;
             $ids = $idsRaw ? (is_array($idsRaw) ? $idsRaw : explode(',', (string)$idsRaw))
                 : ($exerciseId ? [$exerciseId] : []);
             $ids = array_filter(array_map('intval', $ids));

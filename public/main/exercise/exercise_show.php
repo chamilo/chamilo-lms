@@ -21,7 +21,9 @@ $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
-$exportTypeAllResults = ('export' === $_GET['action'] && (in_array($_GET['export_type'], ['all_results', 'result_pdf'])));
+$action     = $_GET['action'] ?? ($_REQUEST['action'] ?? null);
+$exportType = $_GET['export_type'] ?? null;
+$exportTypeAllResults = ($action === 'export' && in_array($exportType, ['all_results', 'result_pdf'], true));
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -87,7 +89,6 @@ if (empty($questionList)) {
 if (empty($objExercise)) {
     $objExercise = Session::read('objExercise');
 }
-$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
@@ -1047,7 +1048,7 @@ if ('export' === $action) {
         'orientation' => 'P',
     ];
     $pdf = new PDF('A4', $params['orientation'], $params);
-    if ('all_results' === $_GET['export_type']) {
+    if ($exportType === 'all_results') {
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
         $exportName = 'S'.$sessionId.'-C'.$courseId.'-T'.$exercise_id;

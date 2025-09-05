@@ -45,94 +45,101 @@ class ExerciseResult
         $exercise_id = 0
     ) {
         $return = [];
-        $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_TABLE_LP_MAIN = Database::get_course_table(TABLE_LP_MAIN);
-        $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
-        $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
+        $TBL_TABLE_LP_MAIN      = Database::get_course_table(TABLE_LP_MAIN);
+        $TBL_USER               = Database::get_main_table(TABLE_MAIN_USER);
+        $TBL_TRACK_EXERCISES    = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
 
-        $cid = api_get_course_id();
-        $course_id = api_get_course_int_id();
-        $user_id = (int) $user_id;
-        $sessionId = api_get_session_id();
+        $cid        = api_get_course_id();
+        $course_id  = api_get_course_int_id();
+        $user_id    = (int) $user_id;
+        $sessionId  = api_get_session_id();
 
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
-        $session_id_and = $sessionCondition;
-        $exercise_id = (int) $exercise_id;
+        $session_id_and   = $sessionCondition;
+        $exercise_id      = (int) $exercise_id;
 
         if (!empty($exercise_id)) {
             $session_id_and .= " AND exe_exo_id = $exercise_id ";
         }
 
         if (empty($user_id)) {
-            $user_id_and = null;
+            $user_id_and = '';
             $sql = "SELECT
                     firstname,
                     lastname,
                     official_code,
-                    ce.title as extitle,
-                    te.score as exresult ,
-                    te.max_score as exweight,
-                    te.exe_date as exdate,
-                    te.exe_id as exid,
-                    email as exemail,
-                    te.start_date as exstart,
-                    steps_counter as exstep,
-                    exe_user_id as excruid,
-                    te.exe_duration as duration,
-                    te.orig_lp_id as orig_lp_id,
-                    tlm.name as lp_name,
+                    ce.title       AS extitle,
+                    te.score       AS exresult,
+                    te.max_score   AS exweight,
+                    te.exe_date    AS exdate,
+                    te.exe_id      AS exid,
+                    email          AS exemail,
+                    te.start_date  AS exstart,
+                    steps_counter  AS exstep,
+                    exe_user_id    AS excruid,
+                    te.exe_duration AS duration,
+                    te.orig_lp_id  AS orig_lp_id,
+                    tlm.name       AS lp_name,
                     user.username,
-                    te.status as exstatus
+                    te.status      AS exstatus
                 FROM $TBL_EXERCISES AS ce
                 INNER JOIN $TBL_TRACK_EXERCISES AS te
-                ON (te.exe_exo_id = ce.iid)
+                    ON te.exe_exo_id = ce.iid
                 INNER JOIN $TBL_USER AS user
-                ON (user.id = exe_user_id)
+                    ON user.id = exe_user_id
                 LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
+                    ON tlm.iid = te.orig_lp_id
+                INNER JOIN resource_node rn
+                    ON rn.id = ce.resource_node_id
+                INNER JOIN resource_link rl
+                    ON rl.resource_node_id = rn.id
                 WHERE
-                    ce.c_id = $course_id AND
-                    te.c_id = ce.c_id $user_id_and  $session_id_and AND
-                    ce.active <>-1";
+                    te.c_id = $course_id
+                    $user_id_and
+                    $session_id_and
+                    AND rl.deleted_at IS NULL";
         } else {
             $user_id_and = ' AND te.exe_user_id = '.api_get_user_id().' ';
-            $orderBy = 'lastname';
-            if (api_is_western_name_order()) {
-                $orderBy = 'firstname';
-            }
-            // get only this user's results
+            $orderBy = api_is_western_name_order() ? 'firstname' : 'lastname';
+
             $sql = "SELECT
-                        firstname,
-                        lastname,
-                        official_code,
-                        ce.title as extitle,
-                        te.score as exresult,
-                        te.max_score as exweight,
-                        te.exe_date as exdate,
-                        te.exe_id as exid,
-                        email as exemail,
-                        te.start_date as exstart,
-                        steps_counter as exstep,
-                        exe_user_id as excruid,
-                        te.exe_duration as duration,
-                        ce.results_disabled as exdisabled,
-                        te.orig_lp_id as orig_lp_id,
-                        tlm.name as lp_name,
-                        user.username,
-                        te.status as exstatus
-                    FROM $TBL_EXERCISES  AS ce
-                    INNER JOIN $TBL_TRACK_EXERCISES AS te
-                    ON (te.exe_exo_id = ce.iid)
-                    INNER JOIN $TBL_USER AS user
-                    ON (user.id = exe_user_id)
-                    LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
-                    ON (tlm.iid = te.orig_lp_id AND tlm.c_id = ce.c_id)
-                    WHERE
-                        ce.c_id = $course_id AND
-                        te.c_id = ce.c_id $user_id_and $session_id_and AND
-                        ce.active <>-1 AND
-                    ORDER BY $orderBy, te.c_id ASC, ce.title ASC, te.exe_date DESC";
+                    firstname,
+                    lastname,
+                    official_code,
+                    ce.title       AS extitle,
+                    te.score       AS exresult,
+                    te.max_score   AS exweight,
+                    te.exe_date    AS exdate,
+                    te.exe_id      AS exid,
+                    email          AS exemail,
+                    te.start_date  AS exstart,
+                    steps_counter  AS exstep,
+                    exe_user_id    AS excruid,
+                    te.exe_duration AS duration,
+                    ce.results_disabled AS exdisabled,
+                    te.orig_lp_id  AS orig_lp_id,
+                    tlm.name       AS lp_name,
+                    user.username,
+                    te.status      AS exstatus
+                FROM $TBL_EXERCISES AS ce
+                INNER JOIN $TBL_TRACK_EXERCISES AS te
+                    ON te.exe_exo_id = ce.iid
+                INNER JOIN $TBL_USER AS user
+                    ON user.id = exe_user_id
+                LEFT JOIN $TBL_TABLE_LP_MAIN AS tlm
+                    ON tlm.iid = te.orig_lp_id
+                INNER JOIN resource_node rn
+                    ON rn.id = ce.resource_node_id
+                INNER JOIN resource_link rl
+                    ON rl.resource_node_id = rn.id
+                WHERE
+                    te.c_id = $course_id
+                    $user_id_and
+                    $session_id_and
+                    AND rl.deleted_at IS NULL
+                ORDER BY $orderBy, te.c_id ASC, ce.title ASC, te.exe_date DESC";
         }
 
         $results = [];
@@ -193,16 +200,12 @@ class ExerciseResult
                 if ('incomplete' === $result['exstatus']) {
                     $revised = -1;
                 } else {
-                    //revised or not
                     $sql_exe = "SELECT exe_id
-                                FROM $tblTrackAttemptQualify
-                                WHERE
-                                    author != '' AND
-                                    exe_id = ".(int) ($result['exid']).'
-                                LIMIT 1';
+                            FROM $tblTrackAttemptQualify
+                            WHERE author != '' AND exe_id = ".(int) $result['exid']."
+                            LIMIT 1";
                     $query = Database::query($sql_exe);
-
-                    if (Database:: num_rows($query) > 0) {
+                    if (Database::num_rows($query) > 0) {
                         $revised = 1;
                     }
                 }
@@ -218,28 +221,26 @@ class ExerciseResult
                 $return[$i] = [];
                 if (empty($user_id)) {
                     $return[$i]['official_code'] = $result['official_code'];
-                    $return[$i]['firstname'] = $results[$i]['firstname'];
-                    $return[$i]['lastname'] = $results[$i]['lastname'];
-                    $return[$i]['user_id'] = $results[$i]['excruid'];
-                    $return[$i]['email'] = $results[$i]['exemail'];
-                    $return[$i]['username'] = $results[$i]['username'];
+                    $return[$i]['firstname']     = $result['firstname'];
+                    $return[$i]['lastname']      = $result['lastname'];
+                    $return[$i]['user_id']       = $result['excruid'];
+                    $return[$i]['email']         = $result['exemail'];
+                    $return[$i]['username']      = $result['username'];
                 }
-                $return[$i]['title'] = $result['extitle'];
-                $return[$i]['start_date'] = api_get_local_time($result['exstart']);
-                $return[$i]['end_date'] = api_get_local_time($result['exdate']);
-                $return[$i]['duration'] = $result['duration'];
-                $return[$i]['result'] = $result['exresult'];
-                $return[$i]['max'] = $result['exweight'];
-                // Revised: 1 = revised, 0 = not revised, -1 = not even finished by user
-                $return[$i]['status'] = 1 === $revised ? get_lang('Validated') : (0 === $revised ? get_lang('Not validated') : get_lang('Unclosed'));
-                $return[$i]['lp_id'] = $result['orig_lp_id'];
-                $return[$i]['lp_name'] = $result['lp_name'];
 
-                if (in_array($result['excruid'], $studentsUserIdList)) {
-                    $return[$i]['is_user_subscribed'] = get_lang('Yes');
-                } else {
-                    $return[$i]['is_user_subscribed'] = get_lang('No');
-                }
+                $return[$i]['title']      = $result['extitle'];
+                $return[$i]['start_date'] = api_get_local_time($result['exstart']);
+                $return[$i]['end_date']   = api_get_local_time($result['exdate']);
+                $return[$i]['duration']   = $result['duration'];
+                $return[$i]['result']     = $result['exresult'];
+                $return[$i]['max']        = $result['exweight'];
+                $return[$i]['status']     = (1 === $revised) ? get_lang('Validated')
+                    : ((0 === $revised) ? get_lang('Not validated') : get_lang('Unclosed'));
+                $return[$i]['lp_id']      = $result['orig_lp_id'];
+                $return[$i]['lp_name']    = $result['lp_name'];
+
+                $return[$i]['is_user_subscribed'] =
+                    in_array($result['excruid'], $studentsUserIdList) ? get_lang('Yes') : get_lang('No');
 
                 $userWithResults[$result['excruid']] = 1;
                 $i++;
@@ -254,27 +255,26 @@ class ExerciseResult
                 foreach ($students as $student) {
                     if (!in_array($student['user_id'], $userWithResults)) {
                         $i = $latestId;
-                        $isWestern = api_is_western_name_order();
 
                         if (empty($user_id)) {
                             $return[$i]['official_code'] = $student['official_code'];
-                            $return[$i]['firstname'] = $student['firstname'];
-                            $return[$i]['lastname'] = $student['lastname'];
-
-                            $return[$i]['user_id'] = $student['user_id'];
-                            $return[$i]['email'] = $student['email'];
-                            $return[$i]['username'] = $student[$i]['username'];
+                            $return[$i]['firstname']     = $student['firstname'];
+                            $return[$i]['lastname']      = $student['lastname'];
+                            $return[$i]['user_id']       = $student['user_id'];
+                            $return[$i]['email']         = $student['email'];
+                            $return[$i]['username']      = $student['username'] ?? '';
                         }
-                        $return[$i]['title'] = null;
-                        $return[$i]['start_date'] = null;
-                        $return[$i]['end_date'] = null;
-                        $return[$i]['duration'] = null;
-                        $return[$i]['result'] = null;
-                        $return[$i]['max'] = null;
-                        $return[$i]['status'] = get_lang('Not attempted');
-                        $return[$i]['lp_id'] = null;
-                        $return[$i]['lp_name'] = null;
-                        $return[$i]['is_user_subscribed'] = get_lang('Yes');
+
+                        $return[$i]['title']               = null;
+                        $return[$i]['start_date']          = null;
+                        $return[$i]['end_date']            = null;
+                        $return[$i]['duration']            = null;
+                        $return[$i]['result']              = null;
+                        $return[$i]['max']                 = null;
+                        $return[$i]['status']              = get_lang('Not attempted');
+                        $return[$i]['lp_id']               = null;
+                        $return[$i]['lp_name']             = null;
+                        $return[$i]['is_user_subscribed']  = get_lang('Yes');
 
                         $latestId++;
                     }

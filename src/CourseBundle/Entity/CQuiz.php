@@ -55,9 +55,6 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     #[ORM\Column(name: 'random_answers', type: 'boolean', nullable: false)]
     protected bool $randomAnswers;
 
-    #[ORM\Column(name: 'active', type: 'integer', nullable: false)]
-    protected int $active;
-
     #[ORM\Column(name: 'results_disabled', type: 'integer', nullable: false)]
     protected int $resultsDisabled;
 
@@ -183,7 +180,6 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
         $this->preventBackwards = 0;
         $this->random = 0;
         $this->randomAnswers = false;
-        $this->active = 1;
         $this->resultsDisabled = 0;
         $this->maxAttempt = 1;
         $this->feedbackType = 0;
@@ -294,18 +290,6 @@ class CQuiz extends AbstractResource implements ResourceInterface, ResourceShowC
     public function getRandomAnswers(): bool
     {
         return $this->randomAnswers;
-    }
-
-    public function setActive(int $active): self
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    public function getActive(): int
-    {
-        return $this->active;
     }
 
     public function setResultsDisabled(int $resultsDisabled): self

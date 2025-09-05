@@ -3363,7 +3363,7 @@ class Tracking
                     $lp = Container::getLpRepository()->find($lp_id);
                     // Start Exercise in LP total_time
                     // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
-                    $list = learnpath::get_flat_ordered_items_list($lp, 0, $courseId);
+                    $list = learnpath::get_flat_ordered_items_list($lp, 0);
                     foreach ($list as $item) {
                         $itemId = is_array($item) ? (int) ($item['iid'] ?? $item['id'] ?? 0) : (int) $item;
                         if ($itemId <= 0) {

@@ -2234,43 +2234,47 @@ HOTSPOT;
                 $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
-                    user.user_id,
-                    $first_and_last_name,
-                    official_code,
-                    ce.title,
-                    username,
-                    te.score,
-                    te.max_score,
-                    te.exe_date,
-                    te.exe_id,
-                    te.session_id,
-                    email as exemail,
-                    te.start_date,
-                    ce.expired_time,
-                    steps_counter,
-                    exe_user_id,
-                    te.exe_duration,
-                    te.status as completion_status,
-                    propagate_neg,
-                    revised,
-                    group_name,
-                    group_id,
-                    orig_lp_id,
-                    te.user_ip";
+                user.user_id,
+                $first_and_last_name,
+                official_code,
+                ce.title,
+                username,
+                te.score,
+                te.max_score,
+                te.exe_date,
+                te.exe_id,
+                te.session_id,
+                email as exemail,
+                te.start_date,
+                ce.expired_time,
+                steps_counter,
+                exe_user_id,
+                te.exe_duration,
+                te.status as completion_status,
+                propagate_neg,
+                revised,
+                group_name,
+                user.group_id AS group_id,
+                orig_lp_id,
+                te.user_ip";
             }
 
             $sql = " $sql_select
-                FROM $TBL_EXERCISES AS ce
-                INNER JOIN $sql_inner_join_tbl_track_exercices AS te
-                ON (te.exe_exo_id = ce.iid)
-                INNER JOIN $sql_inner_join_tbl_user AS user
-                ON (user.user_id = exe_user_id)
-                WHERE
-                    te.c_id = $courseId $session_id_and AND
-                    ce.active <> -1
-                    $exercise_where
-                    $extra_where_conditions
-                ";
+            FROM $TBL_EXERCISES AS ce
+            INNER JOIN $sql_inner_join_tbl_track_exercices AS te
+            ON (te.exe_exo_id = ce.iid)
+            INNER JOIN $sql_inner_join_tbl_user AS user
+            ON (user.user_id = exe_user_id)
+            INNER JOIN resource_node rn
+                ON rn.id = ce.resource_node_id
+            INNER JOIN resource_link rl
+                ON rl.resource_node_id = rn.id
+            WHERE
+                te.c_id = $courseId $session_id_and AND
+                rl.deleted_at IS NULL
+                $exercise_where
+                $extra_where_conditions
+            ";
         }
 
         if (empty($sql)) {
@@ -2553,10 +2557,10 @@ HOTSPOT;
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                             $delete_link = '<a
-                                href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
-                                onclick=
-                                "javascript:if(!confirm(\''.sprintf(addslashes(get_lang('Delete attempt?')), $results[$i]['username'], $dt).'\')) return false;"
-                                >';
+                            href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
+                            onclick=
+                            "javascript:if(!confirm(\''.sprintf(addslashes(get_lang('Delete attempt?')), $results[$i]['username'], $dt).'\')) return false;"
+                            >';
                             $delete_link .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, addslashes(get_lang('Delete'))).'</a>';
 
                             if (api_is_drh() && !api_is_platform_admin()) {
@@ -3308,22 +3312,23 @@ EOT;
         int $sessionId = 0,
         bool $onlyActiveExercises = true
     ): array {
-
-        if (!($courseId > 0)) {
+        if ($courseId <= 0) {
             return [];
         }
 
-        $course = api_get_course_entity($courseId);
+        $course  = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
         $repo = Container::getQuizRepository();
 
         $qb = $repo->getResourcesByCourse($course, $session);
 
+        $qb->andWhere('resourceLink.endVisibilityAt IS NULL');
+
         if ($onlyActiveExercises) {
-            $qb->andWhere('resource.active = 1');
+            $qb->andWhere('resourceLink.visibility = 2');
         } else {
-            $qb->andWhere('resource.active IN (1, 0)');
+            $qb->andWhere('resourceLink.visibility IN (0,2)');
         }
 
         $qb->orderBy('resource.title', 'ASC');

@@ -266,7 +266,7 @@ class ExerciseLink extends AbstractLink
         } else {
             $sql = "SELECT * FROM $tblHp hp
                     INNER JOIN $tblDoc doc
-                    ON (hp.title = doc.path AND doc.c_id = hp.c_id)
+                    ON (hp.title = doc.path)
                     WHERE
                         hp.c_id = $courseId AND
                         doc.iid = $exerciseId";
@@ -578,7 +578,6 @@ class ExerciseLink extends AbstractLink
                     // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
                         WHERE
-                            c_id = '.$this->course_id.' AND
                             iid = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);

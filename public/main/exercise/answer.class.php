@@ -69,19 +69,15 @@ class Answer
         // clears $new_* arrays
         $this->cancel();
 
-        if (!empty($course_id)) {
-            $courseInfo = api_get_course_info_by_id($course_id);
-        } else {
-            $courseInfo = api_get_course_info();
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
         }
 
-        $this->course = $courseInfo;
-        $this->course_id = $courseInfo['real_id'];
-
+        $this->course = api_get_course_info_by_id($course_id);
         if (empty($exercise)) {
             // fills arrays
-            $objExercise = new Exercise($this->course_id);
-            $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+            $objExercise = new Exercise($course_id);
+            $exerciseId = $_REQUEST['exerciseId'] ?? null;
             $objExercise->read($exerciseId, false);
         } else {
             $objExercise = $exercise;
@@ -887,7 +883,7 @@ class Answer
             }
 
             foreach ($temp as $answer) {
-                if ($this->course['id'] != $courseInfo['id']) {
+                if (!empty($this->course['id']) && ($this->course['id'] != $courseInfo['id'])) {
                     // check resources inside html from ckeditor tool and copy correct urls into recipient course
                     $answer['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
                         $answer['answer'],
@@ -929,7 +925,7 @@ class Answer
             }
         } else {
             for ($i = 1; $i <= $this->nbrAnswers; $i++) {
-                if ($this->course['id'] != $courseInfo['id']) {
+                if (!empty($this->course['id']) && ($this->course['id'] != $courseInfo['id'])) {
                     $this->answer[$i] = DocumentManager::replaceUrlWithNewCourseCode(
                         $this->answer[$i],
                         $this->course['id'],

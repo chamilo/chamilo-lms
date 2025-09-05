@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
@@ -146,13 +147,13 @@ class Exercise
         $this->hideExpectedAnswer = false;
         $this->disableHideCorrectAnsweredQuestions = false;
 
-        if (!empty($courseId)) {
-            $courseInfo = api_get_course_info_by_id($courseId);
-        } else {
-            $courseInfo = api_get_course_info();
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
         }
-        $this->course_id = $courseInfo['real_id'];
-        $this->course = $courseInfo;
+
+        $this->course = api_get_course_info_by_id($course_id);
+        $this->course_id = $course_id;
+
         $this->sessionId = api_get_session_id();
 
         // ALTER TABLE c_quiz_question ADD COLUMN feedback text;
@@ -195,7 +196,6 @@ class Exercise
             }
             $this->random = $object->random;
             $this->random_answers = $object->random_answers;
-            $this->active = $object->active;
             $this->results_disabled = $object->results_disabled;
             $this->attempts = $object->max_attempt;
             $this->feedback_type = $object->feedback_type;
@@ -1575,7 +1575,6 @@ class Exercise
         $feedback_type = isset($this->feedback_type) ? (int) $this->feedback_type : 0;
         $random = $this->random;
         $random_answers = $this->random_answers;
-        $active = $this->active;
         $propagate_neg = (int) $this->propagate_neg;
         $saveCorrectAnswers = isset($this->saveCorrectAnswers) ? (int) $this->saveCorrectAnswers : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
@@ -1623,7 +1622,6 @@ class Exercise
             ->setType($type)
             ->setRandom((int) $random)
             ->setRandomAnswers((bool) $random_answers)
-            ->setActive((int) $active)
             ->setResultsDisabled($results_disabled)
             ->setMaxAttempt($attempts)
             ->setFeedbackType($feedback_type)
@@ -1809,6 +1807,7 @@ class Exercise
         $repo = Container::getQuizRepository();
         /** @var CQuiz $exercise */
         $exercise = $repo->find($exerciseId);
+        /** @var ResourceLinkRepository $linksRepo */
         $linksRepo = Container::$container->get(ResourceLinkRepository::class);
 
         if (null === $exercise) {
@@ -1823,11 +1822,6 @@ class Exercise
         if ($locked) {
             return false;
         }
-
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET active='-1'
-                WHERE iid = $exerciseId";
-        Database::query($sql);
 
         $course = api_get_course_entity();
         $session = api_get_session_entity();
@@ -8447,8 +8441,7 @@ class Exercise
         $sql = "SELECT * FROM $tbl_quiz cq
                 WHERE
                     cq.c_id = %s AND
-                    (cq.session_id = %s OR cq.session_id = 0) AND
-                    cq.active = 0
+                    (cq.session_id = %s OR cq.session_id = 0)
                 ORDER BY cq.iid";
         $sql = sprintf($sql, $courseId, $sessionId);
 
@@ -9275,10 +9268,12 @@ class Exercise
         }
 
         // Only for administrators
-        if ($is_allowedToEdit) {
-            $qb->andWhere($qb->expr()->neq('resource.active', -1));
-        } else {
-            $qb->andWhere($qb->expr()->eq('resource.active', 1));
+        if (!$is_allowedToEdit) {
+            $qb
+                ->leftJoin('resource.resourceNode', 'rn')
+                ->leftJoin('rn.resourceLinks', 'rl')
+                ->andWhere('rl.visibility = :published')
+                ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
         }
 
         $qb->setFirstResult($from);
@@ -9601,7 +9596,7 @@ class Exercise
                                 $visibility = Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.')
                                 );
                             } else {
-                                if (0 === $exerciseEntity->getActive() || 0 == $visibility) {
+                                if (!$visibility) {
                                     $visibility = Display::url(
                                         Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Activate')
                                         ),

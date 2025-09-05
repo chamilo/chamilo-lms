@@ -85,8 +85,8 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     private function addNotDeletedQueryBuilder(?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
-
-        $qb->andWhere('resource.active <> -1');
+        $qb->andWhere('links.deletedAt IS NULL');
+        $qb->andWhere('links.endVisibilityAt IS NULL');
 
         return $qb;
     }
@@ -106,31 +106,18 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     }
 
     /**
-     * Adds resource.active filter.
-     *
-     * The active parameter can be one of the following values.
-     *
-     * - null = no filter
-     * - -1 = deleted exercises
-     * - 0 = inactive exercises
-     * - 1 = active exercises
-     * - 2 = all exercises (active and inactive)
+     * If $active is provided (any value), enforce links.visibility = 2 (visible).
+     * If $active is null, do not add a visibility filter here.
      */
     private function addActiveQueryBuilder(?int $active = null, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
 
         if (null !== $active) {
-            if (2 === $active) {
-                $qb
-                    ->andWhere('resource.active = 1 OR resource.active = 0')
-                ;
-            } else {
-                $qb
-                    ->andWhere('resource.active = :active')
-                    ->setParameter('active', $active)
-                ;
-            }
+            $qb
+                ->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', 2)
+            ;
         }
 
         return $qb;

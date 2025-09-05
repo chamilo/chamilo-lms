@@ -3327,16 +3327,32 @@ class Tracking
             $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             $courseId = $course->getId();
 
+            if (!empty($lp_ids) && is_array($lp_ids)) {
+                if (is_array(reset($lp_ids))) {
+                    $lp_ids = array_filter(array_map(static function ($x) {
+                        if (isset($x['iid'])) {
+                            return (int) $x['iid'];
+                        }
+                        if (isset($x['id'])) {
+                            return (int) $x['id'];
+                        }
+                        return null;
+                    }, $lp_ids), static fn($v) => !is_null($v));
+                } else {
+                    $lp_ids = array_map('intval', $lp_ids);
+                }
+            }
+
             // Compose a filter based on optional learning paths list given
             $condition_lp = '';
-            if (count($lp_ids) > 0) {
+            if (!empty($lp_ids)) {
                 $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
             }
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
             $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                    WHERE 1=1 $condition_lp";
+                WHERE 1=1 $condition_lp";
             $result = Database::query($sql);
             $session_condition = api_get_session_condition($sessionId);
 
@@ -3348,45 +3364,50 @@ class Tracking
                     // Start Exercise in LP total_time
                     // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
                     $list = learnpath::get_flat_ordered_items_list($lp, 0, $courseId);
-                    foreach ($list as $itemId) {
+                    foreach ($list as $item) {
+                        $itemId = is_array($item) ? (int) ($item['iid'] ?? $item['id'] ?? 0) : (int) $item;
+                        if ($itemId <= 0) {
+                            continue;
+                        }
+
                         $sql = "SELECT max(view_count)
-                                FROM $lpViewTable
-                                WHERE
-                                    c_id = $courseId AND
-                                    lp_id = $lp_id AND
-                                    user_id = $student_id
-                                    $session_condition";
+                            FROM $lpViewTable
+                            WHERE
+                                c_id = $courseId AND
+                                lp_id = $lp_id AND
+                                user_id = $student_id
+                                $session_condition";
                         $res = Database::query($sql);
                         $view = '';
                         if (Database::num_rows($res) > 0) {
                             $myrow = Database::fetch_array($res);
                             $view = $myrow[0];
                         }
-                        $viewCondition = null;
+                        $viewCondition = '';
                         if (!empty($view)) {
                             $viewCondition = " AND v.view_count = $view  ";
                         }
                         $sql = "SELECT
-                            iv.iid,
-                            iv.total_time as mytime,
-                            i.iid as myid,
-                            iv.view_count as iv_view_count,
-                            path
-                        FROM $lpItemTable as i
-                        INNER JOIN $lpItemViewTable as iv
-                        ON (i.iid = iv.lp_item_id)
-                        INNER JOIN $lpViewTable as v
-                        ON (iv.lp_view_id = v.iid)
-                        WHERE
-                            v.c_id = $courseId AND
-                            i.iid = $itemId AND
-                            i.lp_id = $lp_id  AND
-                            v.user_id = $student_id AND
-                            item_type = 'quiz' AND
-                            path <> '' AND
-                            v.session_id = $sessionId
-                            $viewCondition
-                        ORDER BY iv.view_count DESC ";
+                                iv.iid,
+                                iv.total_time as mytime,
+                                i.iid as myid,
+                                iv.view_count as iv_view_count,
+                                path
+                            FROM $lpItemTable as i
+                            INNER JOIN $lpItemViewTable as iv
+                                ON (i.iid = iv.lp_item_id)
+                            INNER JOIN $lpViewTable as v
+                                ON (iv.lp_view_id = v.iid)
+                            WHERE
+                                v.c_id = $courseId AND
+                                i.iid = $itemId AND
+                                i.lp_id = $lp_id  AND
+                                v.user_id = $student_id AND
+                                item_type = 'quiz' AND
+                                path <> '' AND
+                                v.session_id = $sessionId
+                                $viewCondition
+                            ORDER BY iv.view_count DESC ";
 
                         $resultRow = Database::query($sql);
                         if (Database::num_rows($resultRow)) {
@@ -3395,29 +3416,30 @@ class Tracking
                             $lpItemViewId = $row['iid'];
                             $sessionCondition = api_get_session_condition($sessionId);
                             $sql = 'SELECT SUM(exe_duration) exe_duration
-                                    FROM '.$trackExercises.'
-                                    WHERE
-                                        exe_exo_id="'.$row['path'].'" AND
-                                        exe_user_id="'.$student_id.'" AND
-                                        orig_lp_id = "'.$lp_id.'" AND
-                                        orig_lp_item_id = "'.$row['myid'].'" AND
-                                        c_id = '.$courseId.' AND
-                                        status <> "incomplete"
-                                        '.$sessionCondition.'
-                                     ORDER BY exe_date DESC ';
+                                FROM '.$trackExercises.'
+                                WHERE
+                                    exe_exo_id="'.Database::escape_string($row['path']).'" AND
+                                    exe_user_id="'.$student_id.'" AND
+                                    orig_lp_id = "'.$lp_id.'" AND
+                                    orig_lp_item_id = "'.$row['myid'].'" AND
+                                    c_id = '.$courseId.' AND
+                                    status <> "incomplete"
+                                    '.$sessionCondition.'
+                                 ORDER BY exe_date DESC ';
 
                             $sumScoreResult = Database::query($sql);
                             $durationRow = Database::fetch_assoc($sumScoreResult);
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
-                                if ($exeDuration != $totalTimeInLpItemView &&
+                                if (
+                                    $exeDuration != $totalTimeInLpItemView &&
                                     !empty($lpItemViewId) &&
                                     !empty($exeDuration)
                                 ) {
                                     // Update c_lp_item_view.total_time
                                     $sqlUpdate = "UPDATE $lpItemViewTable
-                                                  SET total_time = '$exeDuration'
-                                                  WHERE iid = ".$lpItemViewId;
+                                              SET total_time = '".Database::escape_string($exeDuration)."'
+                                              WHERE iid = ".$lpItemViewId;
                                     Database::query($sqlUpdate);
                                 }
                             }
@@ -3428,20 +3450,18 @@ class Tracking
 
                     // Calculate total time
                     $sql = "SELECT SUM(total_time)
-                            FROM $lpItemViewTable AS item_view
-                            INNER JOIN $lpViewTable AS view
-                            ON (
-                                item_view.lp_view_id = view.iid
-                            )
-                            WHERE
-                                view.c_id = $courseId AND
-                                view.lp_id = $lp_id AND
-                                view.user_id = $student_id AND
-                                session_id = $sessionId";
+                        FROM $lpItemViewTable AS item_view
+                        INNER JOIN $lpViewTable AS view
+                            ON (item_view.lp_view_id = view.iid)
+                        WHERE
+                            view.c_id = $courseId AND
+                            view.lp_id = $lp_id AND
+                            view.user_id = $student_id AND
+                            session_id = $sessionId";
 
                     $rs = Database::query($sql);
                     if (Database::num_rows($rs) > 0) {
-                        $total_time += Database::result($rs, 0, 0);
+                        $total_time += (int) Database::result($rs, 0, 0);
                     }
                 }
             }

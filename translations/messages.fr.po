@@ -4273,7 +4273,7 @@ msgid "Upgrade Chamilo"
 msgstr "Mise à jour de la plateforme"
 
 msgid "Website"
-msgstr "Chamilo sur le web"
+msgstr "Site web"
 
 msgid "Documentation"
 msgstr "Documentation"

@@ -26,6 +26,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
                 'task_grader' => 'false',
                 'content_analyser' => 'false',
                 'image_generator' => 'false',
+                'disclose_ai_assistance' => 'true',
             ])
         ;
     }
@@ -48,6 +49,7 @@ class AiHelpersSettingsSchema extends AbstractSettingsSchema
             ->add('task_grader', YesNoType::class)
             ->add('content_analyser', YesNoType::class)
             ->add('image_generator', YesNoType::class)
+            ->add('disclose_ai_assistance', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

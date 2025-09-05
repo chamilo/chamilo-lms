@@ -4888,7 +4888,7 @@ msgid "Invalid extension"
 msgstr " امتداد غير صحيح"
 
 msgid "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of chamilo course, total number of chamilo users, ...) (see <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />"
-msgstr " <br />  :إذا كنت لا ترغب في الظهور على هذه القائمة عليك أن تأشّر على المربع أدناه. إنّ عملية التسجيل أسهل ما يكون: ما عليك إلاّ النقر على هذا الزر  .(<a href=\"http://www.chamilo.org/community.php.\">http://www.chamilo.org/community.php.</a>)  عند التسجيل ستظهر أيضا على قائمة العال .(<a href=\"see http://www.chamilo.org/stats/\">see http://www.chamilo.org/stats/</a> أنظر إلى )  (...إنّ المعلومات التي يحصل عليها عند النّقرعلى هذا الزر هي للإستخدام الداخلي فقط. و المعلومات الموثوق بها فقط هي التي تكون متاحة للعامّة (العدد الكلي لحرم المؤسسات، العدد الكلي لطلبة طيبة-دوكيوس، العدد الكلي لمقررات طيبة دوكيوس .dokeos.com لتمكين التحقق التلقائي من النسخ يجب تسجيل حرم مؤسستك في الموقع"
+msgstr " <br />  :إذا كنت لا ترغب في الظهور على هذه القائمة عليك أن تأشّر على المربع أدناه. إنّ عملية التسجيل أسهل ما يكون: ما عليك إلاّ النقر على هذا الزر  .(<a href=\"http://www.chamilo.org/community.php.\">http://www.chamilo.org/community.php.</a>)  عند التسجيل ستظهر أيضا على قائمة العال .(<a href=\"see http://www.chamilo.org/stats/\">see http://www.chamilo.org/stats/</a> أنظر إلى )  (...إنّ المعلومات التي يحصل عليها عند النّقرعلى هذا الزر هي للإستخدام الداخلي فقط. و المعلومات الموثوق بها فقط هي التي تكون متاحة للعامّة (العدد الكلي لحرم المؤسسات، العدد الكلي لطلبة طيبة-دوكيوس، العدد الكلي لمقررات طيبة دوكيوس .chamilo.org لتمكين التحقق التلقائي من النسخ يجب تسجيل حرم مؤسستك في الموقع"
 
 msgid "After approval"
 msgstr " بعد الموافقة"
@@ -7295,9 +7295,6 @@ msgstr "AICC و SCORM استيراد"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr " .للاستمرار يمكن إضافة وحدة أو فقرة أو خطوة إلى المسار التعليمي و هذا من القائمة اليسرى"
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr ".يمكن إضافة وحدة أو فقرة أو خطوة إلى المسار التعليمي من القائمة اليسرى"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr ".قد تم إضافة الشروط إلى الخطوة الحالية"
@@ -10766,9 +10763,6 @@ msgstr "رأي"
 
 msgid "Intranet"
 msgstr "انترانت"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "فشلت عملية تسجيل الدخول - إذا لم تكن مسجلا . يمكنك التسجيل  عبر  <a href=claroline/auth/inscription.php>نموذج التسجيل </a>"
 
 msgid "My account"
 msgstr "حسابي الشخصي"

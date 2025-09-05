@@ -3228,7 +3228,7 @@ msgid "Database Password"
 msgstr "Databaslösenord"
 
 msgid "Main Chamilo database (DB)"
-msgstr "Claroline huvudDB"
+msgstr "Chamilo huvudDB"
 
 msgid "all fields required"
 msgstr "alla fält krävs"
@@ -3259,7 +3259,7 @@ msgid "Your portal name"
 msgstr "Ditt campus-namn"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "\t\t\t\tInstallationsscriptet kommer att skapa huvuddatabasen för claroline. Var snäll och notera att Claroline \t\t\t\tbehöver skapa många databaser. Om du bara är tillåten för en  \t\t\t\tDB för din webbsajt av din Värdservice, kommer Claroline inte att fungera."
+msgstr "\t\t\t\tInstallationsscriptet kommer att skapa huvuddatabasen för Chamilo. Var snäll och notera att Chamilo \t\t\t\tbehöver skapa många databaser. Om du bara är tillåten för en  \t\t\t\tDB för din webbsajt av din Värdservice, kommer Chamilo inte att fungera."
 
 msgid "Time spent by students in courses"
 msgstr ""
@@ -3304,7 +3304,7 @@ msgid "Encrypt user passwords in database"
 msgstr "Kryptera användarnas lösenord i DB"
 
 msgid "Use one or several DB for Chamilo"
-msgstr "Använd en eller flera DB för Claroline"
+msgstr "Använd en eller flera DB för Chamilo"
 
 msgid "Allow self-registration"
 msgstr "Tillåt självregistrering"
@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Uppgradera Chamilo"
 
 msgid "Website"
-msgstr "Chamilo webbsida"
+msgstr "Webbsida"
 
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -4879,7 +4879,7 @@ msgid "Invalid extension"
 msgstr "Ogiltigt tillägg"
 
 msgid "In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of chamilo course, total number of chamilo users, ...) (see <a href=\"http://www.chamilo.org/stats/\">http://www.chamilo.org/stats/</a>. When registering you will also appear on the worldwide list (<a href=\"http://www.chamilo.org/community.php\">http://www.chamilo.org/community.php</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />"
-msgstr "För att kunna aktivera automatisk versionskontroll måste man registrera sin kursportal på chamilo.comInformationen som skickas när du aktiverar med knappen används bara för internt bruk. Endast sammanslagna data kommer att visas upp (totalt antal kursportaler, totalt antal chamilokurser, totalt antal studenter, osv) på <a href=\"http://www.chamilo.org/stats/\">dokeos.com/stats</a>.  När du registrerar din portal kommer den också att bli synlig i listan med <a href=\"http://www.chamilo.org/community.php\">dokeosportaler i världen</a>. Om du inte vill visa upp din portal där måste du markera valet nedanför. Hur man registrerar sin portal? Det är enkelt, klicka bara på knappen:<br />"
+msgstr "För att kunna aktivera automatisk versionskontroll måste man registrera sin kursportal på chamilo.comInformationen som skickas när du aktiverar med knappen används bara för internt bruk. Endast sammanslagna data kommer att visas upp (totalt antal kursportaler, totalt antal chamilokurser, totalt antal studenter, osv) på <a href=\"http://www.chamilo.org/stats/\">chamilo.org/stats</a>.  När du registrerar din portal kommer den också att bli synlig i listan med <a href=\"http://www.chamilo.org/community.php\">chamiloportaler i världen</a>. Om du inte vill visa upp din portal där måste du markera valet nedanför. Hur man registrerar sin portal? Det är enkelt, klicka bara på knappen:<br />"
 
 msgid "After approval"
 msgstr "Efter godkännande"
@@ -7285,9 +7285,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr "SCORM- eller AICC-paket att ladda upp"
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10723,7 +10720,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr ""
 
 msgid "Login failed - incorrect login or password."
-msgstr "Ogiltig inloggning. Om du inte är registrerad fyll i <a href='claroline/auth/inscription.php'>registreringsformuläret</a></font color>"
+msgstr ""
 
 msgid "Pass"
 msgstr "Lösenord"
@@ -10757,9 +10754,6 @@ msgstr "Synpunkt"
 
 msgid "Intranet"
 msgstr "Intranät"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Inloggningen misslyckades - om du inte är registrerad, kan du göra det genom att använda <a href=claroline/auth/inscription.php>registreringsformuläret</a>"
 
 msgid "My account"
 msgstr "Användare"
@@ -13066,7 +13060,7 @@ msgid "Forums Help"
 msgstr "Hjälp Forum"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "Forumet är ett textbaserat asynkront diskussionsforum. Där emejl tillåter en ett-till-ett-dialog, forumet tillåter publik eller semipublik dialog.</p><p>I tekniska termer behöver studenterna bara en webbläsare för att använda Clarolines forum.</P><p>För att organisera forumet klicka på 'admin'. Diskussioner är organiserade i olika nivåer:</p><p><b>Kategori > Forum > Ämne > Svar</b></p>För att ge eleverna struktur i diskussionerna är det nödvändigt att i förhand skapa forum och några ämnen och lämna resterande ämnen och svar till dem. Som standard, har Claroline forum innehållsmässigt skapat kategorin 'Publik', som ett demo.forum med ett demo.ämne.</p><p>Det första som du bör gör är att radera demoämnet och modifiera det första forumets namn. Därefter bör du skapa i den 'publika' kategorin, andra efter grupp eller efter tema, anpassat efter dina undervisningsbehov.</p><p>Blanda inte kategorier och forum och glöm inte att tomma kategorier (utan forum) inte visas för eleven.</p><p>Beskrivningen av ett forum kan vara en lista över medlemmarna, måldefinitionen, en uppgift eller ett tema...</p> <p>Grupp forum bör inte skapas genom Forumverktyget utan genom Gruppverktyget. Där är du tillåten att avgöra om forumet är privat eller publikt.</p> <b>Pedagogiskt avancerad användning</b> <p>Några lärare/ Tränare  använder forumet för att skicka rättelser. En student / elev publicerar ett dokument. Läraren korrigerar den genom att klicka på Ändra knappen (gul penna) och med WYSYWIG verktyget ändrar den (använd färger och understrykningar för att visa fel och rättningar tex.) de andra studenterna/eleverna tjänar på dessa korrektioner."
+msgstr "Forumet är ett textbaserat asynkront diskussionsforum. Där emejl tillåter en ett-till-ett-dialog, forumet tillåter publik eller semipublik dialog.</p><p>I tekniska termer behöver studenterna bara en webbläsare för att använda chamilos forum.</P><p>För att organisera forumet klicka på 'admin'. Diskussioner är organiserade i olika nivåer:</p><p><b>Kategori > Forum > Ämne > Svar</b></p>För att ge eleverna struktur i diskussionerna är det nödvändigt att i förhand skapa forum och några ämnen och lämna resterande ämnen och svar till dem. Som standard, har Chamilo forum innehållsmässigt skapat kategorin 'Publik', som ett demo.forum med ett demo.ämne.</p><p>Det första som du bör gör är att radera demoämnet och modifiera det första forumets namn. Därefter bör du skapa i den 'publika' kategorin, andra efter grupp eller efter tema, anpassat efter dina undervisningsbehov.</p><p>Blanda inte kategorier och forum och glöm inte att tomma kategorier (utan forum) inte visas för eleven.</p><p>Beskrivningen av ett forum kan vara en lista över medlemmarna, måldefinitionen, en uppgift eller ett tema...</p> <p>Grupp forum bör inte skapas genom Forumverktyget utan genom Gruppverktyget. Där är du tillåten att avgöra om forumet är privat eller publikt.</p> <b>Pedagogiskt avancerad användning</b> <p>Några lärare/ Tränare  använder forumet för att skicka rättelser. En student / elev publicerar ett dokument. Läraren korrigerar den genom att klicka på Ändra knappen (gul penna) och med WYSYWIG verktyget ändrar den (använd färger och understrykningar för att visa fel och rättningar tex.) de andra studenterna/eleverna tjänar på dessa korrektioner."
 
 msgid "Dropbox Help"
 msgstr "Dropbox"

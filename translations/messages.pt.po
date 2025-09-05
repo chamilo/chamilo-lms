@@ -4176,7 +4176,7 @@ msgid "Upgrade Chamilo"
 msgstr "Upgrade/actualizar o Chamilo"
 
 msgid "Website"
-msgstr "Página web do Chamilo"
+msgstr "Página web"
 
 msgid "Documentation"
 msgstr "Documentação"
@@ -7294,9 +7294,6 @@ msgstr "Importar curso SCORM"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Para continuar adicione uma secção ou um objecto de aprendizagem ou uma actividade ao curso."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Bem-vindo à ferramenta de autoría de cursos do Chamilo !</big></p> <ul> <li><b>Construir</b> : Adicionar objectos de aprendizagem e actividades ao curso</li> <li><b>Organizar</b> : Adicionar comentários audio e ordenar os objectos de aprendizagem na tabela de conteúdos</li> <li><b>Apresentar</b> : Visualizar o curso no modo de visualização do aluno</li> <li><b>Adicionar secções</b> : Capítulo 1, Capítulo 2 ou Semana 1, Semana 2...</li> <li><b>Adicionar objectos de aprendizagem ou actividades</b> : actividades, exercícios, videos, páginas multimedia</li> </ul> </html></body>"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Foram adicionados pré-requisitos para o objecto de aprendizagem actual."
@@ -10765,9 +10762,6 @@ msgstr "Opinião"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "O login/acesso falhou - se não se encontra registado, pode registar-se utilizando o <a href=claroline/auth/inscription.php>formulário de registo</a>"
 
 msgid "My account"
 msgstr "A minha conta"

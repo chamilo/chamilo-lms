@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Chamilo frissítése"
 
 msgid "Website"
-msgstr "Chamilo honlap"
+msgstr "Honlap"
 
 msgid "Documentation"
 msgstr "Dokumentáció"
@@ -7286,9 +7286,6 @@ msgstr "SCORM, AICC és PowerPoint importálása"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "A következőkben hozzáadhat modult, felyezetet vagy lépést a tanulási útvonalához a bal menüből."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Hozzáadhat modult, felyezetet vagy lépést a tanulási útvonalához a bal menüből."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "A jelenlegi lépéshez megadott előfeltételek hozzárendelve."
@@ -10735,7 +10732,7 @@ msgid "<b>Warning :</b> This course does not exist"
 msgstr "<b>Figyelem :</b> Ez a kurzus nem létezik"
 
 msgid "click here to get this course from your old portal"
-msgstr "kattintson ide, ha ezt a kurzust a Claroline 1.4.2-ből akarja betölteni"
+msgstr ""
 
 msgid "Support forum"
 msgstr "Fórum támogatása"
@@ -10757,9 +10754,6 @@ msgstr "Vélemény"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Belépés sikertelen - ha még nem regisztrálta magát, megteheti a <a href=claroline/auth/inscription.php>regisztrációs űrlap</a> kitöltésével."
 
 msgid "My account"
 msgstr "Felhasználó"

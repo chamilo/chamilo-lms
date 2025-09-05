@@ -4169,7 +4169,7 @@ msgid "Upgrade Chamilo"
 msgstr "Upgrade Chamilo"
 
 msgid "Website"
-msgstr "Chamilo web"
+msgstr "Web"
 
 msgid "Documentation"
 msgstr "Dokumentacija"
@@ -4799,7 +4799,7 @@ msgid "Chamilo LIVE is a videoconferencing tool that offers: Slides sharing, whi
 msgstr ""
 
 msgid "Chamilo RAPID"
-msgstr "DOKEOS RAPID Oogie-Woogie konvertor"
+msgstr "Chamilo RAPID Oogie-Woogie konvertor"
 
 msgid "Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching."
 msgstr ""
@@ -7286,9 +7286,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10758,9 +10755,6 @@ msgstr "Mišljenje"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Prijava nije uspela – ako se niste registrovali to možete učiniti preko <a href=claroline/auth/inscription.php>Formulara za prijavu</a>"
 
 msgid "My account"
 msgstr "Korisnik"

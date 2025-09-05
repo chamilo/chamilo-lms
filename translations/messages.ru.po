@@ -4169,7 +4169,7 @@ msgid "Upgrade Chamilo"
 msgstr "Обновить Chamilo"
 
 msgid "Website"
-msgstr "Вебсайт Chamilo"
+msgstr "Вебсайт"
 
 msgid "Documentation"
 msgstr "Документация"
@@ -7287,9 +7287,6 @@ msgstr "Импорт SCORM и AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Чтобы продолжить, Вы можете добавить главу или шаг в свой учебный план из меню слева."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Вы можете добавить главу или шаг в свой учебный план из меню слева."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Предварительные условия в данный шаг добавлены."
@@ -10758,9 +10755,6 @@ msgstr "Мнение"
 
 msgid "Intranet"
 msgstr "Интранет"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Вход не удался - если Вы не зарегистрированы, Вы можете сделать это используя <a href=claroline/auth/inscription.php>регистрационная форма</a>"
 
 msgid "My account"
 msgstr "Пользователь"

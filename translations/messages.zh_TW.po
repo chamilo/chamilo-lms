@@ -4165,10 +4165,10 @@ msgid "Backup"
 msgstr "維護工具"
 
 msgid "Upgrade Chamilo"
-msgstr "升級IILearn"
+msgstr "升級Chamilo"
 
 msgid "Website"
-msgstr "DEKEOS網站"
+msgstr "網站"
 
 msgid "Documentation"
 msgstr "文獻"
@@ -7286,9 +7286,6 @@ msgstr "匯入 SCORM/ＡＩＣＣ"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "您可以繼續從左邊選單添加模塊、章節或步驟到學習路徑。"
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "您可以從左邊選單添加章節或步驟到學習路徑。"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "當前步驟已添加了前提。"
@@ -10757,9 +10754,6 @@ msgstr "意見"
 
 msgid "Intranet"
 msgstr "內聯網"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "登錄失敗－如果你還沒有註冊，你可以點擊<A href=claroline/auth/inscription.php>註冊用戶</A>"
 
 msgid "My account"
 msgstr "用戶"

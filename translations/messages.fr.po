@@ -7492,9 +7492,6 @@ msgstr "Import AICC, SCORM et PARCOURS"
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Pour continuer, vous pouvez ajouter un chapitre ou une étape à votre parcours depuis le menu de gauche"
 
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Vous pouvez ajouter un chapitre ou une étape à votre parcours depuis le menu de gauche"
-
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Les pré-requis pour cette étape ont bien été ajoutés."
 
@@ -10992,9 +10989,6 @@ msgstr "Opinion"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Échec du login - si vous n'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=claroline/auth/inscription.php>formulaire d'enregistrement</a>"
 
 msgid "My account"
 msgstr "Menu perso"

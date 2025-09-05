@@ -3210,7 +3210,7 @@ msgid "Your company short name"
 msgstr "Organisation short name"
 
 msgid "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data."
-msgstr "Use this script only after backup. Claroline team is not responsible if you lost or corrupted data"
+msgstr "Use this script only after backup. Chamilo team is not responsible if you lost or corrupted data"
 
 msgid "Allow self-registration as a trainer"
 msgstr ""
@@ -3228,7 +3228,7 @@ msgid "Database Password"
 msgstr "Database Password"
 
 msgid "Main Chamilo database (DB)"
-msgstr "Main claroline DB"
+msgstr "Main Chamilo DB"
 
 msgid "all fields required"
 msgstr "all fields required"
@@ -3259,7 +3259,7 @@ msgid "Your portal name"
 msgstr "Your campus' name"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "\t\t\t\tInstall script will create claroline main DB. Please note that Claroline \t\t\t\twill need to create many DBs (unless you select option \"One\" below). If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Claroline will not work."
+msgstr "\t\t\t\tInstall script will create chamilo main DB. Please note that Chamilo \t\t\t\twill need to create many DBs (unless you select option \"One\" below). If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Chamilo will not work."
 
 msgid "Time spent by students in courses"
 msgstr ""
@@ -3304,7 +3304,7 @@ msgid "Encrypt user passwords in database"
 msgstr "Encrypt user passwords in database"
 
 msgid "Use one or several DB for Chamilo"
-msgstr "Use one or several DB for Claroline"
+msgstr "Use one or several DB for Chamilo"
 
 msgid "Allow self-registration"
 msgstr "Allow self-registration"
@@ -4165,10 +4165,10 @@ msgid "Backup"
 msgstr "Penyelenggaraan"
 
 msgid "Upgrade Chamilo"
-msgstr "Upgrade Claroline"
+msgstr "Upgrade Chamilo"
 
 msgid "Website"
-msgstr "Website Claroline"
+msgstr "Website"
 
 msgid "Documentation"
 msgstr "Dokumentasi"
@@ -7285,9 +7285,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10723,7 +10720,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr ""
 
 msgid "Login failed - incorrect login or password."
-msgstr "ID Pengguna dan Katalaluan anda tidak sah.Sila login semula atau <a href=claroline/auth/inscription.php>daftar</a> sebagai pengguna baru.</font color>"
+msgstr ""
 
 msgid "Pass"
 msgstr "Katalaluan"
@@ -10756,9 +10753,6 @@ msgid "Opinion"
 msgstr ""
 
 msgid "Intranet"
-msgstr ""
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
 msgstr ""
 
 msgid "My account"

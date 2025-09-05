@@ -3174,7 +3174,7 @@ msgid "new link(s) created."
 msgstr "สร้างรายการเชื่อมโยงให้แล้ว"
 
 msgid "The file should look like:<blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Important links;<b>Name 1</b>;Description 1;<b>http://www.bbb.net/...</b>;;<b>Name 2</b>;\"Description 2\";</pre></blockquote>If URL and category are equal to those of an existing link, its title and description are updated. In all other cases a new link is created.<br><br>Bold = mandatory. Fields can be in any order, names in upper- or lowercase. Additional fields are added to description. Separator: comma or semicolon. Values may be quoted, but not the field names. Some [b]HTML tags[/b] can be imported in the description field."
-msgstr "ไฟล์ต้องควรจะเป็นดังนี้: <blockquote><pre> <b>ที่อยู่เว็ปไซท์</b>;ประเภท;<b>ชื่อเรื่อง</b>;คำอธิบาย; <b>http://www.tinnabutr.com/dokeos</b>;รายการเชื่อมโยงที่น่าสนใจ;<b>ชื่อที่ 1</b>;คำอธิบายที่ 1; <b>http://www.wittycomputer.com/prachid</b>;;<b>ชิ่อเรื่องที่ 2</b>;\"คำอธิบายที่ 2\"; </pre></blockquote>หากมีชื่อ ที่อยู่เว็ป และคำอธิบายอยู่เดิมแล้วก็จะถือว่าเป็นการปรับปรุงข้อมูลใหม่.<br><br> ตัวหนา = ส่วนที่รับคำสั่ง. การพิมพ์รับค่าได้ทั้งตัวใหญ่ตัวเล็ก หากต้องการใส่หลายค่าในแต่ละตารางแสดงข้อมูลให้แยกคำด้วยเครื่องหมาย, หรือ ; [b]โค๊ดคำสั่งของ HTML tags[/b] สามารถนำเข้าไฟล์ มาใส่ไว้ในตาราง."
+msgstr "ไฟล์ต้องควรจะเป็นดังนี้: <blockquote><pre> <b>ที่อยู่เว็ปไซท์</b>;ประเภท;<b>ชื่อเรื่อง</b>;คำอธิบาย; <b>http://www.example.com</b>;รายการเชื่อมโยงที่น่าสนใจ;<b>ชื่อที่ 1</b>;คำอธิบายที่ 1; <b>http://www.example.com</b>;;<b>ชิ่อเรื่องที่ 2</b>;\"คำอธิบายที่ 2\"; </pre></blockquote>หากมีชื่อ ที่อยู่เว็ป และคำอธิบายอยู่เดิมแล้วก็จะถือว่าเป็นการปรับปรุงข้อมูลใหม่.<br><br> ตัวหนา = ส่วนที่รับคำสั่ง. การพิมพ์รับค่าได้ทั้งตัวใหญ่ตัวเล็ก หากต้องการใส่หลายค่าในแต่ละตารางแสดงข้อมูลให้แยกคำด้วยเครื่องหมาย, หรือ ; [b]โค๊ดคำสั่งของ HTML tags[/b] สามารถนำเข้าไฟล์ มาใส่ไว้ในตาราง."
 
 msgid "Link has been updated"
 msgstr "ปรับแก้การเชื่อมโยงแล้ว"
@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "ปรับรุ่น Chamilo"
 
 msgid "Website"
-msgstr "เว็ปไซท์Chamilo"
+msgstr "เว็ปไซท์"
 
 msgid "Documentation"
 msgstr "การจัดเอกสาร"
@@ -7285,9 +7285,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10758,9 +10755,6 @@ msgstr "ความคิดเห็น"
 msgid "Intranet"
 msgstr "เครือข่ายภายใน"
 
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "การเข้าสู่ระบบล้มเหลว หากยังไม่ลงทะเบียน กรุณาคลิกที่<a href=claroline/auth/inscription.php>แบบฟอร์มการลงทะเบียนนี้</a>"
-
 msgid "My account"
 msgstr "เมนูของผู้เข้าใช้ระบบ"
 
@@ -13066,7 +13060,7 @@ msgid "Forums Help"
 msgstr "ระบบช่วยเหลือ 'กระดานข่าว'"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "กระดานข่าวเป็นรูปแบบของการสนทนาแบบกลุ่ม ซึ่งจะแตกต่างจากอีเมล์ ที่สามารถพูดคุยได้แค่ตัวต่อตัวเท่านั้น</p><p>เทคนิคการใช้กระดานข่าว - นักศึกษาเพียงแค่ใช้ browser เปิดอ่าน , เขียน , หรือตอบกระทู้ที่ต้องการ</P><p>สำหรับการดูแลจัดการกระดานข่าว, คลิกที่ 'admin'(ใต้หัวข้อกระดานข่าว) เพื่อเข้าสู่ระบบจัดการกระดานข่าว ซึ่งมีเมนูคำสั่งต่างๆดังนี้:</p><p><b>สร้างหมวดหมู่ > สร้างกระดานข่าว > เขียนกระทู้ > ตอบหรือลบกระทู้</b></p>การกำหนดรูปแบบของการสนทนา หรือการเปิดกระดานข่าวของท่าน เพื่อให้นักศึกษาใช้งานท่านจะต้องทำการสร้างหมวดหมู่ และสร้างกระดานข่าว ในหัวข้อที่ท่านต้องการขึ้นมาก่อน จากนั้นจึงทิ้งกระดานให้ว่างไว้ เพื่อให้นักศึกษาสามารถเข้ามาตั้งกระทู้ และพูดคุยปรึกษากันในกลุ่มได้ <p>claroline forum ได้สร้างกระดานข่าวหมวดหมู่ 'Public' เพื่อเป็นตัวอย่างสำหรับการถามตอบกระทู้</p><p> สิ่งแรกที่ควรทำคือ ทำการลบกระทู้ตัวอย่างทิ้ง และปรับปรุงแก้ไขชื่อของกระดานเสียใหม่  ท่านอาจเปิดกระดานอื่นๆ เพิ่มเติมได้อีกตามความเหมาะสมของบทเรียนของท่าน<p> แต่อย่ารวมทุกกระดานไว้ในหมวดหมู่เดียวกัน และอย่าลืมว่าหมวดหมู่ที่ไม่มีกระดานข่าวอยู่ภายใน จะไม่ถูกแสดงให้นักศึกษาเห็น </p><p>คำอธิบายของกระดานข่าวนั้นๆ จะช่วยให้นักศึกษา เกิดความเข้าใจได้ง่าย ในการเข้าร่วมใช้งาน"
+msgstr "กระดานข่าวเป็นรูปแบบของการสนทนาแบบกลุ่ม ซึ่งจะแตกต่างจากอีเมล์ ที่สามารถพูดคุยได้แค่ตัวต่อตัวเท่านั้น</p><p>เทคนิคการใช้กระดานข่าว - นักศึกษาเพียงแค่ใช้ browser เปิดอ่าน , เขียน , หรือตอบกระทู้ที่ต้องการ</P><p>สำหรับการดูแลจัดการกระดานข่าว, คลิกที่ 'admin'(ใต้หัวข้อกระดานข่าว) เพื่อเข้าสู่ระบบจัดการกระดานข่าว ซึ่งมีเมนูคำสั่งต่างๆดังนี้:</p><p><b>สร้างหมวดหมู่ > สร้างกระดานข่าว > เขียนกระทู้ > ตอบหรือลบกระทู้</b></p>การกำหนดรูปแบบของการสนทนา หรือการเปิดกระดานข่าวของท่าน เพื่อให้นักศึกษาใช้งานท่านจะต้องทำการสร้างหมวดหมู่ และสร้างกระดานข่าว ในหัวข้อที่ท่านต้องการขึ้นมาก่อน จากนั้นจึงทิ้งกระดานให้ว่างไว้ เพื่อให้นักศึกษาสามารถเข้ามาตั้งกระทู้ และพูดคุยปรึกษากันในกลุ่มได้ <p>chamilo forum ได้สร้างกระดานข่าวหมวดหมู่ 'Public' เพื่อเป็นตัวอย่างสำหรับการถามตอบกระทู้</p><p> สิ่งแรกที่ควรทำคือ ทำการลบกระทู้ตัวอย่างทิ้ง และปรับปรุงแก้ไขชื่อของกระดานเสียใหม่  ท่านอาจเปิดกระดานอื่นๆ เพิ่มเติมได้อีกตามความเหมาะสมของบทเรียนของท่าน<p> แต่อย่ารวมทุกกระดานไว้ในหมวดหมู่เดียวกัน และอย่าลืมว่าหมวดหมู่ที่ไม่มีกระดานข่าวอยู่ภายใน จะไม่ถูกแสดงให้นักศึกษาเห็น </p><p>คำอธิบายของกระดานข่าวนั้นๆ จะช่วยให้นักศึกษา เกิดความเข้าใจได้ง่าย ในการเข้าร่วมใช้งาน"
 
 msgid "Dropbox Help"
 msgstr "กล่องรับส่งงาน"

@@ -4169,7 +4169,7 @@ msgid "Upgrade Chamilo"
 msgstr "Zaktualizuj Chamilo"
 
 msgid "Website"
-msgstr "Strona internetowa Chamilo"
+msgstr "Strona internetowa"
 
 msgid "Documentation"
 msgstr "Dokumentacja"
@@ -7287,9 +7287,6 @@ msgstr "Import plików SCORM i AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Aby kontynuować dodaj moduł, przedmiot nauczania lub czynność do kursu."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Możesz dodać rozdział lub krok do ścieżki nauki w menu po lewej stronie."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Wymagania do bieżącego przedmiotu nauczania zostały dodane."
@@ -10724,7 +10721,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr ""
 
 msgid "Login failed - incorrect login or password."
-msgstr "Niewłaściwa nazwa użytkownika. Jeśli nie jesteś zarejestowany, wypełnij <a href='claroline/auth/inscription.php'>formularz rejestracyjny</a></font color>"
+msgstr ""
 
 msgid "Pass"
 msgstr "Hasło"
@@ -10758,9 +10755,6 @@ msgstr "Opinia"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Niepoprawna nazwa użytkownika - jeśli nie jesteś zarejestrowany(-a), zrób to za pomocą  <a href=claroline/auth/inscription.php>formularza rejestracyjnego</a>"
 
 msgid "My account"
 msgstr "Moje konto"

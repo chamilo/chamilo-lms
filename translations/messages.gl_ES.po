@@ -3267,7 +3267,7 @@ msgid "Your portal name"
 msgstr "Nome do seu portal"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "O script de instalación creará a(s) base(s) de datos principal(is) de Chamilo. Por favor, lembre que Clarolinenecesitará crear varias BBDD. Se o seu fornecedor de servizos só lle permite usar unha base de datos, Chamilo non funcionará a non ser que escolla a opción \"Unha base de datos\"."
+msgstr "O script de instalación creará a(s) base(s) de datos principal(is) de Chamilo. Por favor, lembre que Chamilo necesitará crear unha BBDD."
 
 msgid "Time spent by students in courses"
 msgstr "Tempo adicado polos estudantes nos cursos"
@@ -4173,10 +4173,10 @@ msgid "Backup"
 msgstr "Mantemento"
 
 msgid "Upgrade Chamilo"
-msgstr "Actualizar Claroline"
+msgstr "Actualizar Chamilo"
 
 msgid "Website"
-msgstr "Sitio Web de Claroline"
+msgstr "Sitio Web"
 
 msgid "Documentation"
 msgstr "Documentación"
@@ -7294,9 +7294,6 @@ msgstr "Importación de SCORM e AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Para continuar pode engadir un módulo, capítulo ou paso á rota de aprendizaxe desde o menú da esquerda."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Pode engadir un módulo, capítulo ou paso á rota de aprendizaxe desde o menú da esquerda."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Engadíronse os pré-requisitos para o paso actual."
@@ -10731,7 +10728,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr "Por activar esta opción, os administradores de sesións poderán ver, nas páxinas de administración, exclúsivamente os usuarios que eles mesmos crearon."
 
 msgid "Login failed - incorrect login or password."
-msgstr "Login non válido. Se non está inscrito,cubra o <a href='claroline/auth/inscription.php'>formulario de inscripción</a></font color>"
+msgstr "Login non válido. Se non está inscrito,cubra o <a href='/main/auth/registration.php'>formulario de inscripción</a></font color>"
 
 msgid "Pass"
 msgstr "Clave de acceso"
@@ -10766,8 +10763,8 @@ msgstr "opinión"
 msgid "Intranet"
 msgstr "Intranet"
 
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Fallou a entrada - se vostede non está rexistrado, pode facelo cubrindo o  <a href=claroline/auth/inscription.php>formulario de rexistro</a>"
+msgid "Login failed - if you are not registered, you can do so using the <a href='/main/auth/registration.php'>registration form</a>"
+msgstr "Fallou a entrada - se vostede non está rexistrado, pode facelo cubrindo o  <a href='/main/auth/registration.php'>formulario de rexistro</a>"
 
 msgid "My account"
 msgstr "Usuario"

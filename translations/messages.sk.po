@@ -4176,7 +4176,7 @@ msgid "Upgrade Chamilo"
 msgstr "Aktualizovať Chamilo"
 
 msgid "Website"
-msgstr "Chamilo webová stránka"
+msgstr "Webová stránka"
 
 msgid "Documentation"
 msgstr "Dokumentácia"
@@ -7294,9 +7294,6 @@ msgstr "SCORM a AICC import"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Pre pokračovanie môžete pridať kapitolu alebo vstúpiť do Vašej učebnej osnovy z ľavého menu."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Vitajte v Chamilo kurze!<br><br>"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Predpoklady k aktuálnej etape boli pridané."
@@ -10765,9 +10762,6 @@ msgstr "Názor"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Prihlásenie zlyhalo - ak nie ste registrovaný, môžete tak urobiť  pomocou <a href=claroline/auth/inscription.php>registračného formuláru</a>"
 
 msgid "My account"
 msgstr "Moje konto"

@@ -4176,7 +4176,7 @@ msgid "Upgrade Chamilo"
 msgstr "Atualização do Chamilo"
 
 msgid "Website"
-msgstr "Portal Chamilo"
+msgstr "Portal"
 
 msgid "Documentation"
 msgstr "Documentação"
@@ -7294,9 +7294,6 @@ msgstr "Importar curso SCORM"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Para continuar a adicionar uma seção ou uma rota de aprendizagem ou atividade para o seu curso."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Bem-vindo ao curso de ferramenta de autoria Chamilo!</big></p>        <ul>            <li><b>Build</b> : Adicionar uma Rota e atividades para o seu curso de aprendizagem</li>            <li><b>Organize</b> : Adicionar comentários de áudio e  rota de aprendizagem ordem na tabela de conteúdos</li>            <li><b>Display</b> : Assista o curso do ponto de vista do aluno</li>            <li><b>Adicionar seção</b> : Capítulo 1, Capítulo 2 ou Semana 1, Semana 2...</li>            <li>Adicionar  rota de aprendizagem ou de atividade </b>: atividades, testes, vídeos, páginas multimídia</li>        </ul></html></body>"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Os pré-requisitos para a presente etapa foram acrescentados."
@@ -10765,9 +10762,6 @@ msgstr "Opinião"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Acesso não autorizado - se você não está registrado, você pode fazê-lo usando o <a href=claroline/auth/inscription.php>Formulário de Registro</a>"
 
 msgid "My account"
 msgstr "Usuário"

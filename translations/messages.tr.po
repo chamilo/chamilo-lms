@@ -3210,7 +3210,7 @@ msgid "Your company short name"
 msgstr "Institution short name"
 
 msgid "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data."
-msgstr "Bu komutu yedekleme yaptıktan sonra kullanın.Bilgilerinizin kaybolmasından veya hasar görmesinden DOKEOS takımı sorumlu değildir."
+msgstr "Bu komutu yedekleme yaptıktan sonra kullanın.Bilgilerinizin kaybolmasından veya hasar görmesinden Chamilo takımı sorumlu değildir."
 
 msgid "Allow self-registration as a trainer"
 msgstr "Ders Yetkilisi olarak kayıt olma izni ver"
@@ -3228,7 +3228,7 @@ msgid "Database Password"
 msgstr "Veritabanı Parolası"
 
 msgid "Main Chamilo database (DB)"
-msgstr "Main claroline DB"
+msgstr "Main Chamilo DB"
 
 msgid "all fields required"
 msgstr "tüm alanların doldurulması zorunludur"
@@ -3259,7 +3259,7 @@ msgid "Your portal name"
 msgstr "Kampüsünüzün adı"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "\t\t\t\tInstall script will create claroline main DB. Please note that Claroline \t\t\t\twill need to create many DBs. If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Claroline will not work."
+msgstr "\t\t\t\tInstall script will create chamilo main DB. Please note that Chamilo \t\t\t\twill need to create many DBs. If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Chamilo will not work."
 
 msgid "Time spent by students in courses"
 msgstr ""
@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Chamilo u güncelle"
 
 msgid "Website"
-msgstr "Chamilo sitesi"
+msgstr "Sitesi"
 
 msgid "Documentation"
 msgstr "Belgeler"
@@ -7285,9 +7285,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10723,7 +10720,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr ""
 
 msgid "Login failed - incorrect login or password."
-msgstr "Giriş yapılamadı.Kullanıcı ismi veya şifre hatalı.<BR>Eğer kayıtlı değilseniz, <a href=claroline/auth/inscription.php> buradan kayıt olabilirsiniz</a></font color>"
+msgstr ""
 
 msgid "Pass"
 msgstr "Şifre"
@@ -10757,9 +10754,6 @@ msgstr "Görüş"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Giriş başarısız, kayıtlı değilseniz <a href=claroline/auth/inscription.php>buradan kayıt olabilirsiniz.</a>"
 
 msgid "My account"
 msgstr "Kullanıcı"
@@ -13066,19 +13060,19 @@ msgid "Forums Help"
 msgstr "Yardım Forumları"
 
 msgid "<p> The forum is an discussion tool for asynchronous written work.  In contrast to e-mail, a forum is for public, or semi-public, group discussion. </p>To use the Chamilo forum, members can simply use their browser - they do not require any distinct client software. </p>To organize forums, click on the Forums tool. Discussions are organized hierarchically according to the following structure: </ p><b> Category> Forum> Topic> Post</ b> </ p> To ensure members can participate in the forum tidily and effectively, it is essential in the first instance to create categories and forums; it's then up to the participants to create topics and posts. By default, the forum contains a single (public) category, an example topic and an example post. You can add forums to the category,  change its title or create other categories within which you could then create new forums. (Don't confuse categories and forums, and remember that a category that contains no forum is useless and is not displayed.)</p>\n<p>The forum description might include a list of its members, a definition of its purpose, a target a task, a theme etc.</p><p>Group forums should not be created via the Forum tool but instead via the Groups tool, where you can determine whether your group forums should be private or public, at the same time providing a location for sharing groups of documents.</p><b> Teaching Tips</ b></ p> A learning forum is not quite the same as the forums you are used to seeing on the internet. For one thing, it is not possible for learners to alter their posts once they have been published as the course is logically archived to allow tracking of what has been said in the past. Furthermore, Chamilo forums allow for specific uses  relevant to teaching. For example, some teachers/trainers publish corrections directly within forums in the following way: <li> A learner is asked to post a report directly into the forum, </ li> The teacher corrects it by clicking Edit (yellow pencil) and marking it using the graphics editor (color, underlining, etc.) </ li> Finally, other learners benefit from viewing the corrections was made on the production of one of of them, </ li> Note that the same principle can be applied between learners, but will require his copying/pasting the message of his fellow student because students / trainees can not edit one another's posts. <. li> </ ul>"
-msgstr "The forum is a written and asynchronous discussion tool. Where email allows one-to-one dialogue, forums allow public or semi-public  dialogue.</p><p>Technically speaking, the students need only their browser to use claroline forums.</P><p>To organise forums, click on 'Administer'. Discussions are organised in sets and subsets as following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure your students discussions, it is necessary to organise catgories and forums beforehand, leaving the creation of topics and answers to them. By default, the claroline forum contains only the category 'Public', a sample forum ans a sample topic.</p><p>The first thing you should do is deleting the sample topic and modify the first forum's name. Then, you can create, in the 'public' category, other forums, by groups or by themes, to fit your learning scenario requirements.</p><p>Don't mix Categories and forums, and don't forget that an empty category (without forums) does not appear on the student view.</p><p>The description of a forum can be the list of its members, the definition of a goal, a task, a theme..."
+msgstr ""
 
 msgid "Dropbox Help"
 msgstr "Gelen Giden Kutusu"
 
 msgid "<p>The dropbox tool is a Content Management Tool facilitating peer-to-peer data exchange. It accepts any filetype (Word, Excel, PDF etc.) It will overwrite existing files with the same name only if directed to do so.<br /> <br /> Learners can can only send a file to their teacher, unless the system administrator has enabled sharing between users. A course manager, however, can opt to to send a file to all course users. <br /> <br />The system administrator can configure the dropbox so that a user can receive but not send files.<br /> <br /> If the file list gets too long, some or all files can be deleted from the list, although the  file itself remaims available to other users until all users have deleted  it.<br /> </p><p>In the received folder, the dropbox tool displays files that have been sent to you and in the sent folder it shows files sent to other course members.</p><p>To send a document to more than one person, you need to hold CTRLand check the multiple select box(i.e.the  field showing the list of members).</p>"
-msgstr "<p>The dropbox is a Content Management Tool dedicated to peer-to-peer data exchange.Any file type is accepted : Word, Excel, PDF etc. It will manage versions in the sens that it will avoid destruction of a document by a document having the same name.</p> <p>The dropbox shows the files that were sent to you (the received folder) and the files that you sent to other members of this course (the sent folder). </p><p>If the list of received or sent files gets too long, you can delete all or some files from the list. The file itself is not removed as long as the other party can see it.</p> <p>To send a document to more than one person, you need to use CTRL+clic in the multiple select box. The multiple select box is the form field showing the list of members.</p>"
+msgstr ""
 
 msgid "Homepage Help"
 msgstr "Help Home Page"
 
 msgid "<p>The Course Homepage displays a range of tools (introductory text,  description, documents manager etc.) This page is modular in the sense that you can hide or show any of the tools in learner view with a single click on the 'eye' icon (hidden tools can be reactivated any time. </p><b>Navigation</b><p>In order to browse the course, you can simply click on the icons; a 'breadcrumb' navigation tool at the top of the page allows you to retrace your steps back to the course homepage.</p><b>Best practice</b><p>To help motivate learners, it is helpful to make you course appear 'alive' by suggesting that there is always someone present 'behind the screen'. An effective way to make this impression is to update the introductory text (just click on the yellow pencil) at least once a week with the latest news, deadlines etc.</p><p>When you construct your course, try the following steps:<ol><li>In the Course Settings, make course acccess private and subscription available only to trainers. That way, nobody can enter your course area during construction,</li><li>Use whatever tools you need to 'fill' your area with content, activities, guidelines, tests etc.,</li><li>Now hide all tools so your home page is empty in learner view by clicking on the eyes to make the icons grey. </li><li>Use the Learning Path tool to create a learning path to structure the way learners will follow it and learn within it. That way, although you will be using the other tools, you don't initially need to show them on the homepage. </li><li>Click on the eye icon beside the path you created to show it on your home page.</li><li>your course is ready to view. Its homepage will display an introductory text followed by a single link to lead learners into and through the course. Click on the Learner View button (top right) to see the course from the learner's point of view.<I></I></li></ol>"
-msgstr "For more convenience, claroline tools contain default entries. There is a small example in every tool to help you grasp quickly how it works. It is up to you to modify the example or to delete it.</p><p>For instance, here on the Home Page of your course website,there is a small introduction text saying 'This is the introduction text of your course. To replace it by your own text, click below on modify.' Click on modify, edit it and Ok. It's that simple. Every tool has the same logic: add, delete, modify, which is the logic of dynamic websites.</p><p>When you first create your website, most of the tools are active. Here again, it is up to you to deactivate the ones you don't need. You just have to click on 'deactivate'. Then it goes down to the grey section of your homepage an becomes invisible to your students.  However, you can reactivate it whenever you want, making it visible to the students once more.</p><p>You can add your own pages to your Home Page. These pages must be HTML pages (which can be created by any Word Processor or Web Composer). Use 'Upload page and link to Homepage' to send your page to the server. The standard header of your website will be automatically merged with your new document, so that you just need to concentrate on the content. If you want to link from your Home towards existaing websites or pages existing anywhere on the web (even inside your own site), use 'Add link on Homepage' The pages you have added to the Home page can deactivated then deleted, where the standard tools can be deactivated, but not deleted.</p><p>Once your course website is ready, go to 'Modify course info' and decide what level of confidentiality you want. By default, your course is hidden (because you work on it).</p>"
+msgstr ""
 
 msgid "Chamilo LIVE Help"
 msgstr "Canlı Konferans Sistemi Yardımı"

@@ -1541,7 +1541,7 @@ msgid "Next"
 msgstr "Següent"
 
 msgid "Chamilo SCORM player"
-msgstr "Visualitzador de continguts DOKEOS"
+msgstr "Visualitzador de continguts Chamilo"
 
 msgid "My progress"
 msgstr "La meva situació"
@@ -4176,7 +4176,7 @@ msgid "Upgrade Chamilo"
 msgstr "Actualitzar Chamilo"
 
 msgid "Website"
-msgstr "Lloc web de Chamilo"
+msgstr "Lloc web"
 
 msgid "Documentation"
 msgstr "Documentació"
@@ -4302,7 +4302,7 @@ msgid "E-learning portal name"
 msgstr "Títol del campus Chamilo"
 
 msgid "The Name of your Chamilo Portal (appears in the header)"
-msgstr "El nom del teu Campus de DOKEOS (apareix a l'encapçalament)"
+msgstr "El nom del teu Campus de Chamilo (apareix a l'encapçalament)"
 
 msgid "Portal Administrator: e-mail"
 msgstr "Administrador de la platafomra:e-mail"
@@ -7294,9 +7294,6 @@ msgstr "Importar SCORM i AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Per continuar, podeu afegir un apartat o un recurs al vostre itinerari formatiu a partir del menú de l'esquerra."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Des del menú de l'esquerra podeu afegir un apartat o un recurs al vostre itinerari formatiu."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "El requisits previs per aquest recurs han estat afegits satisfactòriament."
@@ -10765,9 +10762,6 @@ msgstr "Dona'ns la teva opinió"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Accés denegat. Si no està registrat ompli el <a href=claroline/auth/inscription.php>formulari de registre</a>"
 
 msgid "My account"
 msgstr "Usuari"

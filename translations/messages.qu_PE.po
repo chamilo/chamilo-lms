@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Kunanyachiy Chamilota"
 
 msgid "Website"
-msgstr "Chamilo-manta web raphin"
+msgstr "Web raphin"
 
 msgid "Documentation"
 msgstr "Qelqa khipukuna"
@@ -7286,9 +7286,6 @@ msgstr "Importación SCORM y AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Rinallapaqqa, lloqe ajllanamanta yapawaq sutichasqata imaymanatawan yachanaykiman."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Yapay sutichaqakunata imaymanakunatawan yachanaman"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Los prerrequisitos de este elemento han sido añadidos."
@@ -10757,9 +10754,6 @@ msgstr "Niy"
 
 msgid "Intranet"
 msgstr "Ukhu llika"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Mana  kayman haykunachu. Sichus manaraq suti qelqakunkiraqchu chayqa hunt'achiy kayta <a href=claroline/auth/inscription.php>formulario nisqa suti qelqanapaq</a>"
 
 msgid "My account"
 msgstr "Haykuqkuna"

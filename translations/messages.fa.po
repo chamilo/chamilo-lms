@@ -7287,9 +7287,6 @@ msgstr ""
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr ""
 
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr ""
-
 msgid "Prerequisites to the current learning object have been added."
 msgstr ""
 
@@ -10758,9 +10755,6 @@ msgstr "نظر"
 msgid "Intranet"
 msgstr "اینترانت"
 
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "نام کاربری یا کلمه ورود مورد نظر شما برای سیستم شناخته شده نیست. اگر تاکنون ثبت نام نکرده اید می توانید با رفتن به <a href=claroline/auth/inscription.php>قسمت ثبت نام</a> این کار را انجام دهید"
-
 msgid "My account"
 msgstr "مشخصات من"
 
@@ -10777,7 +10771,7 @@ msgid "Portal news"
 msgstr "پیام های سیستم"
 
 msgid "Not Registered"
-msgstr "اگر تا کنون دراین محیط آموزشی ثبت نام نکرده اید، لطفاً با استفاده از <a href=\"claroline/auth/inscription.php\"> فرم ثبت نام </a> این کار را انجام دهید"
+msgstr "اگر تا کنون دراین محیط آموزشی ثبت نام نکرده اید، لطفاً با استفاده از <a href=\"/main/auth/inscription.php\"> فرم ثبت نام </a> این کار را انجام دهید"
 
 msgid "Register for course"
 msgstr "ثبت نام درس"

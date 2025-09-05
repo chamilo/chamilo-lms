@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Chamilo 업그레이드"
 
 msgid "Website"
-msgstr "Dokes 웹사이트"
+msgstr "웹사이트"
 
 msgid "Documentation"
 msgstr "문서"
@@ -7285,9 +7285,6 @@ msgid "Import AICC, SCORM and Chamilo learning path"
 msgstr ""
 
 msgid "To continue add a section or a learning object or activity to your course."
-msgstr ""
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
 msgstr ""
 
 msgid "Prerequisites to the current learning object have been added."
@@ -10757,9 +10754,6 @@ msgstr "오피니언"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "로그인 실패 - 만약 가입이 안되어있다면, <a href=claroline/auth/inscription.php>registration form</a>을 통해 가입하십시요."
 
 msgid "My account"
 msgstr "유저"

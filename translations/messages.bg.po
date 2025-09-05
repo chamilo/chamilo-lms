@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Обновяване на Chamilo"
 
 msgid "Website"
-msgstr "Chamilo уеб-сайт"
+msgstr "уеб-сайт"
 
 msgid "Documentation"
 msgstr "Документация"
@@ -7286,9 +7286,6 @@ msgstr "Импортиране на курсове по стандартите S
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "За да продължите, можете да добавите модул или стъпка във вашата пътека за обучение чрез менюто вляво."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Можете да добавите модулили стъпка във вашата пътека за обучение чрез менюто вляво."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Изискванията са добавени към текущата стъпка."
@@ -10757,9 +10754,6 @@ msgstr "Мнение"
 
 msgid "Intranet"
 msgstr "Интранет"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Неуспешно влизане в портала - ако нямате регистрация, можете да я придобиете чрез <a href=main/auth/inscription.php>формуляра за регистрация</a>."
 
 msgid "My account"
 msgstr "Потребител"

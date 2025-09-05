@@ -7296,9 +7296,6 @@ msgstr "ייבוא ​​נתיב למידה של AICC, SCORM ו-Chamilo"
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "כדי להמשיך הוסף קטע או אובייקט למידה או פעילות לקורס שלך."
 
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr " <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated /practicerAnim.gif\" alt=\"practicerAnim.gif\" />ברוכים הבאים לכלי יצירת הקורס של Chamilo !</big></p> <ul> <li><b>Build</b> : הוסף למידה אובייקטים ופעילויות לקורס שלך</li> <li><b>ארגן</b> : הוסף הערות שמע והזמנת אובייקטי למידה בתוכן העניינים</li> <li><b>תצוגה</b> : צפה בקורס מנקודת מבטו של הלומד</li> <li><b>הוסף קטע</b> : פרק 1, פרק 2 או שבוע 1, שבוע 2...</li> <li><b>הוסף אובייקט למידה או פעילות</b> : פעילויות, מבחנים, סרטונים, דפי מולטימדיה</li> </ul></html></body>"
-
 msgid "Prerequisites to the current learning object have been added."
 msgstr "דרישות מוקדמות לאובייקט הלמידה הנוכחי נוספו."
 
@@ -10766,9 +10763,6 @@ msgstr "דעות"
 
 msgid "Intranet"
 msgstr "אינטראנט"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "הכניסה נכשלה - אם אינך רשום, תוכל לעשות זאת באמצעות <a href=claroline/auth/inscription.php>טופס הרישום</a>"
 
 msgid "My account"
 msgstr "החשבון שלי"

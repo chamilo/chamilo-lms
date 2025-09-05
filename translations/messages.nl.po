@@ -4195,7 +4195,7 @@ msgid "Upgrade Chamilo"
 msgstr "Chamilo upgraden"
 
 msgid "Website"
-msgstr "Chamilowebsite"
+msgstr "Website"
 
 msgid "Documentation"
 msgstr "Documentatie"
@@ -7320,9 +7320,6 @@ msgstr "AICC en SCORM importeren"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Om verder te gaan kunt u een hoofdstuk of een stap of een activiteit aan uw leerpad toevoegen via het linkermenu."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "U kunt een hoofdstuk of een stap toevoegen aan uw leerpad via het linker menu."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "De vereisten voor deze stap zijn toegevoegd."
@@ -10798,9 +10795,6 @@ msgstr "Mening"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Indien u nog niet ingeschreven bent, gelieve het <a href=\"claroline/auth/inscription.php\">registratieformulier</a> in te vullen."
 
 msgid "My account"
 msgstr "Gebruiker"

@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Actualizar Chamilo"
 
 msgid "Website"
-msgstr "Web de Chamilo"
+msgstr "Web"
 
 msgid "Documentation"
 msgstr "Documentación"
@@ -7286,9 +7286,6 @@ msgstr "Importación SCORM y AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Pa siguir, nel menú izquierdu, pue amestar al so itinerariu d'aprendizaxe un módulu o un elementu."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Dende'l menú izquierdu pue amestar al so itinerariu d'aprendizaxe un módulu o un elementu."
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Los requisitos previos d'esti elementu amestárense."
@@ -10757,9 +10754,6 @@ msgstr "Opinión"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Entrada denegada. Si nun ta rexistráu, complete'l <a href=claroline/auth/inscription.php>formulariu de rexistru</a>"
 
 msgid "My account"
 msgstr "Usuariu"

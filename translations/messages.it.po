@@ -4177,7 +4177,7 @@ msgid "Upgrade Chamilo"
 msgstr "Aggiorna Chamilo"
 
 msgid "Website"
-msgstr "Sito Chamilo"
+msgstr "Sito"
 
 msgid "Documentation"
 msgstr "Documentazione"
@@ -7295,9 +7295,6 @@ msgstr "Importa modulo SCORM"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Per proseguire puoi aggiungere Capitoli o Elementi tramite il menù in alto a sinistra."
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "<p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"../img/gallery/creative.png\" alt=\"practicerAnim.gif\" />Benvenuti nel sistema autore di Chamilo !</big></p> <ul> <li><b>Crea</b> : Aggiungi capitoli ed elementi al modulo che hai creato</li> <li><b>Ordina</b> : Ordina le diverse parti nel menù a sinistra e aggiungi un commento audio</li> <li><b>Vedi</b> : Visualizza il modulo dal punto di vista del corsista</li> <li><b>Nuovo capitolo</b> : Capitolo 1, Capitolo 2 o Settimana 1, Settimana 2...</li> <li><b>Nuovo elemento</b> : Aggiungi documenti, test ed attività anche attraverso modelli di pagina, gallerie di immagini e media</li> </ul> <br> <br> <br> <br><br> <br> <br> <br> <br>"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Sono stati aggiunti dei prerequisiti per il presente elemento"
@@ -10766,9 +10763,6 @@ msgstr "Opinione"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Login fallito - se non sei registrato, puoi farlo usando il <a href='main/auth/inscription.php'>modulo di registrazione</a>"
 
 msgid "My account"
 msgstr "Utente"

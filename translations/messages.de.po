@@ -4229,7 +4229,7 @@ msgid "Upgrade Chamilo"
 msgstr "Chamilo-Update"
 
 msgid "Website"
-msgstr "Chamilo Webseite"
+msgstr "Webseite"
 
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -7347,9 +7347,6 @@ msgstr "Import von SCORM-Kursen"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "Als nächstes können Sie ein Modul, Kapitel oder einen Schritt über das Menü links zu Ihrem Lernpfad hinzufügen"
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Sie könnenein Modul, Kapitel oder einen Schritt zu ihrem Lernpfad über das Menü links hinzufügen"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Vorbedingungen für aktuellen Schritt wurden hinzugefügt"
@@ -10818,9 +10815,6 @@ msgstr "Meinung"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Login ist ungültig - falls Sie noch nicht registriert sind, melden Sie sich bitte über <a href=main/auth/inscription.php>Registrierung</a> an."
 
 msgid "My account"
 msgstr "Mein Profil"

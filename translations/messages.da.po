@@ -1935,7 +1935,7 @@ msgid "Click on this link for a full removal of the course from the server.<br /
 msgstr "Klik på dette link hvis du vil fjerne ethvert spor af kurset på serveren. <br><br> Denne funktion skal omgåes med forsigtighed"
 
 msgid "Duplicate the course or some learning objects in another course. You need 2 courses to use this feature: an original course and a target course."
-msgstr "DOKEOS gør det muligt at kopiere hele eller dele af en eksisterende kursusside på en anden kursusside, der som udgangspunkt er tom. <br><br> Den eneste forudsætning for dette er, at det oprindelige kursus skal indholde nogle dokumenter, meddelelser eller fora. Derudover skal kursussiden, hvortil dette skal kopieres, ikke indeholde disse elementer!"
+msgstr "Chamilo gør det muligt at kopiere hele eller dele af en eksisterende kursusside på en anden kursusside, der som udgangspunkt er tom. <br><br> Den eneste forudsætning for dette er, at det oprindelige kursus skal indholde nogle dokumenter, meddelelser eller fora. Derudover skal kursussiden, hvortil dette skal kopieres, ikke indeholde disse elementer!"
 
 msgid "This tool empties the course. It removes documents, forums, links. And allows you to select what parts you want to remove or decide to remove the whole."
 msgstr "Denne funktion fjerne de udvalgte eller samtlige elementer fra kursussiden. Funktionen fjerner dokumenter, fora, links mv. Denne procedure kan f.eks. gennemføre ved afslutningen af et semester. Du bør selvfølgeligvære opmærksom på at gemme det kursusmateriale, som du ønsker at beholde, inden du \"genbruger\" siden."
@@ -3210,7 +3210,7 @@ msgid "Your company short name"
 msgstr "Organisation forkortelse"
 
 msgid "Use this script only after backup. The Chamilo team is not responsible for lost or corrupted data."
-msgstr "brug kun dette script efter backup. Claroline team er ikke ansavrlige for tabte eller ødelagte data"
+msgstr "brug kun dette script efter backup. Chamilo team er ikke ansavrlige for tabte eller ødelagte data"
 
 msgid "Allow self-registration as a trainer"
 msgstr "Tillad selv-registrering som kursus-opretter"
@@ -3228,7 +3228,7 @@ msgid "Database Password"
 msgstr "Database Adgangskode"
 
 msgid "Main Chamilo database (DB)"
-msgstr "Hoved claroline DB"
+msgstr "Hoved Chamilo DB"
 
 msgid "all fields required"
 msgstr "alle felter behøves"
@@ -3259,7 +3259,7 @@ msgid "Your portal name"
 msgstr "Dit universitets navn"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
-msgstr "\t\t\t\tInstall script opretter claroline hoved DB. Venligst bemærk at Claroline \t\t\t\thar brug for at oprette mange DBs (medmindre du har valgt \"En\" forneden). If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Claroline will not work."
+msgstr "\t\t\t\tInstall script opretter Chamilo hoved DB. Venligst bemærk at Chamilo \t\t\t\thar brug for at oprette mange DBs (medmindre du har valgt \"En\" forneden). If you are allowed only one \t\t\t\tDB for your website by your Hosting Services, Chamilo will not work."
 
 msgid "Time spent by students in courses"
 msgstr ""
@@ -3304,7 +3304,7 @@ msgid "Encrypt user passwords in database"
 msgstr "Krypter brugeradgangskoderne i databasen"
 
 msgid "Use one or several DB for Chamilo"
-msgstr "Brug en af flere DB til Claroline"
+msgstr "Brug en af flere DB til Chamilo"
 
 msgid "Allow self-registration"
 msgstr "Tillad selv-registrering"
@@ -4168,7 +4168,7 @@ msgid "Upgrade Chamilo"
 msgstr "Opgrader Chamilo"
 
 msgid "Website"
-msgstr "Chamilo website"
+msgstr "Website"
 
 msgid "Documentation"
 msgstr "Dokumentation"
@@ -4978,7 +4978,7 @@ msgid "Public pages compliance to WAI"
 msgstr "Offentlig side, der efterlever WAI"
 
 msgid "WAI (Web Accessibility Initiative) is an initiative to make the web more accessible. By selecting this option, the public pages of Chamilo will become more accessible. This also means that some content on the portal's public pages might appear differently."
-msgstr "WAI (Web Accessibility Initiative) står for et initiativ i forhold til at gøre internettet mere tilgængeligt. Ved at vælge denne mulighed, bliver DOKEOS siderne mere tilgængelige. Dette betyder derudover, at indholdet på de åbne kursussider kan fremstå anderledes."
+msgstr "WAI (Web Accessibility Initiative) står for et initiativ i forhold til at gøre internettet mere tilgængeligt. Ved at vælge denne mulighed, bliver Chamilo siderne mere tilgængelige. Dette betyder derudover, at indholdet på de åbne kursussider kan fremstå anderledes."
 
 msgid "Version check"
 msgstr "Tjek af version"
@@ -7286,9 +7286,6 @@ msgstr "Importer SCORM og AICC"
 
 msgid "To continue add a section or a learning object or activity to your course."
 msgstr "For at fortsætte kan du tilføje et kapitel eller et trin i læringsstien"
-
-msgid "     <html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Welcome to the Chamilo course authoring tool !</big></p>        <ul>            <li><b>Build</b> : Add learning objects and activities to your course</li>            <li><b>Organize</b> : Add audio comments and order learning objects in the table of contents</li>            <li><b>Display</b> : Watch the course from learner's viewpoint</li>            <li><b>Add section</b> : Chapter 1, Chapter 2 or Week 1, Week 2...</li>            <li><b>Add learning object or activity</b> : activities, tests, videos, multimedia pages</li>        </ul></html></body>"
-msgstr "Du kan via menuen til venstre tilføje et kapitel eller et trin i din læringssti"
 
 msgid "Prerequisites to the current learning object have been added."
 msgstr "Betingelserne til det aktuelle trin er blevet tilføjet"
@@ -10723,7 +10720,7 @@ msgid "By enabling this option, session admins will only be able to see, in the 
 msgstr ""
 
 msgid "Login failed - incorrect login or password."
-msgstr "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger."
+msgstr "Fejl ved login."
 
 msgid "Pass"
 msgstr "Adgangskode"
@@ -10757,9 +10754,6 @@ msgstr "Mening"
 
 msgid "Intranet"
 msgstr "Intranet"
-
-msgid "Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>"
-msgstr "Fejl med login - hvis du ikke er registreret, kan du bruge bruge denne <a href=claroline/auth/inscription.php>registreringsformular</a>"
 
 msgid "My account"
 msgstr "Deltagere"

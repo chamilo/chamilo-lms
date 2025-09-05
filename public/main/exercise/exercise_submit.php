@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -180,7 +181,7 @@ if (!is_object($objExercise)) {
     exit;
 }
 
-if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+if (Container::getPluginHelper()->isPluginEnabled('Positioning')) {
     $plugin = Positioning::create();
     if ($plugin->blockFinalExercise(api_get_user_id(), $objExercise->iId, api_get_course_int_id(), $sessionId)) {
         api_not_allowed(true);

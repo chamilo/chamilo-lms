@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 class NotificationEvent extends Model
 {
     const ACCOUNT_EXPIRATION = 1;
@@ -138,7 +140,7 @@ class NotificationEvent extends Model
         $userInfo = api_get_user_info($userId);
         $events = $this->get_all();
         $extraFieldData = $this->getUserExtraData(api_get_user_id());
-        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
+        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
 
         $userJustificationList = [];
         if ($allowJustification) {

@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Questions per quiz user attempts.
+ * Answers to questions in quiz, per user attempts.
  */
 #[ApiResource(
     operations: [

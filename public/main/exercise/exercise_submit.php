@@ -1441,11 +1441,25 @@ if ($allowBlockCategory &&
                 var remind_list = $(\'*[name*="remind_list"]\').serialize();
                 var hotspot     = $(\'*[name*="hotspot[\'+qid+\']"]\').serialize();
                 var dc          = $(\'*[name*="choiceDegreeCertainty[\'+qid+\']"]\').serialize();
-                var dataStr     = "'.$params.'&type=simple&question_id="+qid
-                                  +"&"+my_choice
-                                  + (hotspot     ? "&"+hotspot     : "")
-                                  + (remind_list ? "&"+remind_list : "")
-                                  + (dc          ? "&"+dc          : "");
+
+                var editorContent = getContentFromEditor("choice"+qid);
+                var free_choice = "";
+                if (editorContent) {
+                    var obj = {};
+                    obj["choice["+qid+"]"] = editorContent;
+                    my_choice = $.param(obj);
+                    var fo = {};
+                    fo["free_choice["+qid+"]"] = editorContent;
+                    free_choice = $.param(fo);
+                }
+
+                var dataStr = "'.$params.'&type=simple&question_id="+qid
+                              +"&"+my_choice
+                              + (hotspot     ? "&"+hotspot     : "")
+                              + (remind_list ? "&"+remind_list : "")
+                              + (dc          ? "&"+dc          : "")
+                              + (free_choice ? "&"+free_choice : "");
+
                 return $.ajax({
                     type: "POST",
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",

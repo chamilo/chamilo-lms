@@ -161,4 +161,64 @@ final class PluginHelper
 
         return empty($results);
     }
+
+    /**
+     * Return the whole configuration array for a plugin in the current Access URL,
+     * or null if not found.
+     */
+    public function getPluginConfiguration(string $pluginName): ?array
+    {
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        if (!$accessUrl instanceof AccessUrl) {
+            return null;
+        }
+
+        $realTitle = $this->resolveTitle($pluginName);
+        if (null === $realTitle) {
+            return null;
+        }
+
+        $rel = $this->pluginRelRepo->findOneByPluginName($realTitle, $accessUrl->getId());
+        if (!$rel) {
+            return null;
+        }
+
+        $cfg = $rel->getConfiguration();
+        return \is_array($cfg) ? $cfg : null;
+    }
+
+    /**
+     * Get a single configuration value from the plugin configuration JSON.
+     * Tries both the plain key ($key) and the legacy-prefixed key ($pluginName.'_'.$key).
+     * Falls back to legacy plugin::get($key) if available.
+     */
+    public function getPluginConfigValue(string $pluginName, string $key, mixed $default = null): mixed
+    {
+        // Special case for legacy callers expecting "tool_enable"
+        if ($key === 'tool_enable') {
+            return $this->isPluginEnabled($pluginName) ? 'true' : 'false';
+        }
+
+        $cfg = $this->getPluginConfiguration($pluginName);
+
+        if (\is_array($cfg)) {
+            // try plain key
+            if (\array_key_exists($key, $cfg)) {
+                return $cfg[$key];
+            }
+            // try legacy-prefixed key (some migrations removed this, but keep BC)
+            $prefixed = $pluginName . '_' . $key;
+            if (\array_key_exists($prefixed, $cfg)) {
+                return $cfg[$prefixed];
+            }
+        }
+
+        // Fallback to legacy plugin object if present
+        $legacy = $this->loadLegacyPlugin($pluginName);
+        if ($legacy && \method_exists($legacy, 'get')) {
+            return $legacy->get($key) ?? $default;
+        }
+
+        return $default;
+    }
 }

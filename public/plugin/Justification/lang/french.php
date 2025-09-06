@@ -2,7 +2,6 @@
 
 $strings['plugin_title'] = "Justification Plugin";
 $strings['plugin_comment'] = "Demande des documents à valeur de justification administrative.";
-$strings['tool_enable'] = "Activer le plugin";
 
 $strings['ValidityDuration'] = "Durée de validité en jour";
 $strings['DateManualOn'] = "Autoriser la modification de la date";

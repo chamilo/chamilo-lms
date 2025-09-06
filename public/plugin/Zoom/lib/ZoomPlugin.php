@@ -52,7 +52,6 @@ class ZoomPlugin extends Plugin
             '0.3',
             'Sébastien Ducoulombier, Julio Montoya',
             [
-                'tool_enable' => 'boolean',
                 'apiKey' => 'text',
                 'apiSecret' => 'text',
                 'verificationToken' => 'text',

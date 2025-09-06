@@ -10,7 +10,6 @@ class PauseTraining extends Plugin
             '0.1',
             'Julio Montoya',
             [
-                'tool_enable' => 'boolean',
                 'allow_users_to_edit_pause_formation' => 'boolean',
                 'cron_alert_users_if_inactive_days' => 'text', // Example: "5" or "5,10,15"
                 'sender_id' => 'user',

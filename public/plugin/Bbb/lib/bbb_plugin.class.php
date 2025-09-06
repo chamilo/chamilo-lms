@@ -39,7 +39,6 @@ class BbbPlugin extends Plugin
             '2.9',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos, Jose Angel Ruiz',
             [
-                'tool_enable' => 'boolean',
                 'host' => 'text',
                 'salt' => 'text',
                 'enable_global_conference' => 'boolean',

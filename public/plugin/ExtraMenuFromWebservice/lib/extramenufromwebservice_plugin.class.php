@@ -13,7 +13,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
     protected function __construct()
     {
         $settings = [
-            'tool_enable' => 'boolean',
             'authentication_url' => 'text',
             'authentication_email' => 'text',
             'authentication_password' => 'text',
@@ -46,7 +45,6 @@ class ExtraMenuFromWebservicePlugin extends Plugin
     public function uninstall()
     {
         $settings = [
-            'tool_enable',
             'authentication_url',
             'authentication_email',
             'authentication_password',

@@ -5,7 +5,6 @@
 $strings['plugin_title'] = 'Conexión de notificación externa';
 $strings['plugin_comment'] = 'Activar un sistema de notificaciones externo';
 
-$strings['tool_enable'] = 'Activado';
 $strings['auth_url'] = 'Punto de conexión de autenticación';
 $strings['auth_url_help'] = 'URL para API de autenticación';
 $strings['auth_username'] = 'Nombre de usuario para autenticación';

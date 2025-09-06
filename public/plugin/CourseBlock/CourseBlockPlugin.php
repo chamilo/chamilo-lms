@@ -36,7 +36,6 @@ class CourseBlockPlugin extends Plugin
             '0.1',
             'Julio Montoya',
             [
-                'tool_enable' => 'boolean',
             ]
         );
     }

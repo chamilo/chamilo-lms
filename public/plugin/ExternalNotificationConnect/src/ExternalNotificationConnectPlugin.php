@@ -27,7 +27,6 @@ class ExternalNotificationConnectPlugin extends Plugin
         ];
 
         $settings = [
-            'tool_enable' => 'boolean',
             self::SETTING_AUTH_URL => 'text',
             self::SETTING_AUTH_USERNAME => 'text',
             self::SETTING_AUTH_PASSWORD => 'text',

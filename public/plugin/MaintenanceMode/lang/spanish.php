@@ -2,7 +2,6 @@
 
 $strings['plugin_title'] = 'Modo de mantenimiento';
 $strings['plugin_comment'] = 'Poner Chamilo en estado de mantenimiento';
-$strings['tool_enable'] = 'Activar plugin';
 
 $strings['MaintenanceModeIsOff'] = 'El modo de mantenimiento no está activado';
 $strings['MaintenanceModeIsOn'] = 'El modo de mantenimiento está activado';

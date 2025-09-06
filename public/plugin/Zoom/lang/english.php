@@ -5,7 +5,6 @@
 $strings['plugin_title'] = "Zoom Videoconference";
 $strings['plugin_comment'] = "Zoom Videoconference integration in courses and sessions";
 
-$strings['tool_enable'] = 'Zoom videoconference tool enabled';
 $strings['apiKey'] = 'API Key';
 $strings['apiSecret'] = 'API Secret';
 $strings['verificationToken'] = 'Verification Token';
@@ -15,46 +14,6 @@ $strings['enableGlobalConference'] = 'Enable global conference';
 $strings['enableGlobalConferencePerUser'] = 'Enable global conference per user';
 $strings['globalConferenceAllowRoles'] = "Global conference link only visible for these user roles";
 $strings['globalConferencePerUserAllowRoles'] = "Global conference per user link only visible for these user roles";
-
-$strings['tool_enable_help'] = "Choose whether you want to enable the Zoom videoconference tool.
-Once enabled, it will show as an additional course tool in all courses' homepage :
-teachers will be able to <strong>launch</strong> a conference and student to <strong>join</strong> it.
-<br/>
-This plugin requires a Zoom account to manage meetings.
-The Zoom API uses JSON Web Tokens (JWT) to authenticate account-level access.
-<br/>
-JWT apps provide an <strong>API <em>Key</em> and <em>Secret</em></strong> required to authenticate with JWT.
-
-To get them, create a <em>JWT App</em> :
-<br/>1. log into <a href=\"https://zoom.us/profile\">your Zoom profile page</a>
-<br/>2. click on <em>Advanced / Application Marketplace</em>
-<br/>3. click on <em><a href=\"https://marketplace.zoom.us/develop/create\">Develop / build App</a></em>
-<br/>4. choose <em>JWT / Create</em>
-<br/>5. Information: fill in fields about your \"App\"
-(application and company names, contact name and email address)
-<br/>6. Click on <em>Continue</em>
-<br/>7. App Credentials: <strong>copy your API Key and Secret to these fields below</strong>
-<br/>8. click on <em>Continue</em>
-<br/>9. Feature:
-enable <em>Event Subscriptions</em> to add a new one with endpoint URL
-<code>https://your.chamilo.url/plugin/zoom/endpoint.php</code>
-and add these event types:
-<br/>- Start Meeting
-<br/>- End Meeting
-<br/>- Participant/Host joined meeting
-<br/>- Participant/Host left meeting
-<br/>- All Recordings have completed
-<br/>- Recording transcript files have completed
-<br/>then click on <em>Done</em> then on <em>Save</em>
-and <strong>copy your Verification Token to the field below</strong>.
-<br/>10. click on <em>Continue</em>
-<br/>
-<strong>Attention</strong>:
-<br/>Zoom is <em>NOT</em> free software and specific rules apply to personal data protection.
-Please check with Zoom and make sure they satisfy you and learning users.";
-
-$strings['enableParticipantRegistration_help'] = "Requires a paying Zoom profile.
-Will not work for a <em>basic</em> profile.";
 
 $strings['enableCloudRecording_help'] = "Requires a paying Zoom profile.
 Will not work for a <em>basic</em> profile.";

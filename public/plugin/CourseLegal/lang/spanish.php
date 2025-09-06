@@ -2,9 +2,6 @@
 
 $strings['plugin_title'] = 'Acuerdo de curso';
 $strings['plugin_comment'] = 'Agrega un acuerdo a cada curso (funciona con cursos en sesiones de formación)';
-$strings['tool_enable'] = 'Activar la configuración del plugin en los cursos';
-$strings['tool_enable_help'] = 'Una vez activado, tendrá que configurar el plugin dentro de la página de configuración del curso, y luego desde la página principal del curso (un botón aparecerá solo al profesor)';
-
 $strings['CourseLegal'] = 'Acuerdo legal de curso';
 $strings['WebAgreement'] = 'Acuerdo por Web';
 $strings['MailAgreement'] = 'Acuerdo por correo electrónico';

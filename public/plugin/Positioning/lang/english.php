@@ -2,7 +2,6 @@
 
 $strings['plugin_title'] = 'Positioning';
 $strings['plugin_comment'] = 'Adds positioning tests to the course homepage';
-$strings['tool_enable'] = 'Enable plugin';
 $strings['block_course_if_initial_exercise_not_attempted'] = 'Block other course tools';
 $strings['block_course_if_initial_exercise_not_attempted_help'] = 'When this option is enabled, if an initial positioning test has been configured, the learner will not be able to use the rest of the course on the course homepage until he/she has completed the initial test.';
 $strings['average_percentage_to_unlock_final_exercise'] = 'End test unlock threshold';

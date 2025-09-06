@@ -36,10 +36,6 @@ $strings['host_help'] = 'Este es el nombre del servidor donde su servidor BigBlu
 $strings['salt'] = 'Clave BigBlueButton';
 $strings['salt_help'] = 'Esta es la llave de seguridad de su servidor BigBlueButton (llamada "salt" en inglés), que permitirá a su servidor de autentifica la instalación de Chamilo (como autorizada). Refiérese a la documentación de BigBlueButton para ubicarla, o use el comando "bbb-conf --salt" si tiene acceso al servidor en línea de comando.';
 
-$strings['tool_enable'] = 'Herramienta de videoconferencia BigBlueButton activada';
-$strings['tool_enable_help'] = "Escoja si desea activar la herramienta de videoconferencia BigBlueButton.
-    Una vez activada, se mostrará como una herramienta adicional en todas las páginas principales de cursos, y los profesores podrán iniciar una conferencia en cualquier momento. Los estudiantes no podrían lanzar una conferencia, solo juntarse a una existente. Si no tiene un servidor de videoconferencia BigBlueButton, por favor <a target=\"_blank\" href=\"http://bigbluebutton.org/\">configure uno</a> antes de seguir, o pida una cotización a uno de los proveedores oficiales de Chamilo. BigBlueButton es una herramienta de software libre (y gratuita), pero su instalación requiere de competencias que quizás no sean inmediatamente disponibles para todos. Puede instalarla usted mismo o buscar ayuda profesional. Esta ayuda podría no obstante generar algunos costos (por lo menos el tiempo de la persona quien lo ayude). En el puro espíritu del software libre, le ofrecemos las herramientas para hacer su trabajo más simple, en la medida de nuestras posibilidades, y le recomendamos profesionales (los proveedores oficiales de Chamilo) para ayudarlo en caso esto fuera demasiado complicado.<br />";
-
 $strings['big_blue_button_welcome_message'] = 'Mensaje de bienvenida de BigBlueButton';
 $strings['enable_global_conference'] = 'Activar la conferencia global';
 $strings['enable_global_conference_per_user'] = 'Activar la conferencia global por usuario';

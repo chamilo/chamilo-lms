@@ -21,7 +21,6 @@ class H5pImportPlugin extends Plugin
     protected function __construct()
     {
         $settings = [
-            'tool_enable' => 'boolean',
             'frame' => 'boolean',
             'embed' => 'boolean',
             'copyright' => 'boolean',

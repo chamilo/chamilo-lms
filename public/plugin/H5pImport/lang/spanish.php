@@ -1,7 +1,6 @@
 <?php
 $strings['plugin_title'] = "H5P import";
 $strings['plugin_comment'] = "Este plugin permite importar paquetes en formato H5P e insertarlos como elementos en una lección. Abra el README.md para instrucciones de instalación.";
-$strings['tool_enable'] = "Activar plugin";
 $strings['frame'] = "Frame";
 $strings['frame_help'] = "Mostrar marco y botones debajo de H5P";
 $strings['embed'] = "Insertar";

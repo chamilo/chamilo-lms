@@ -5,7 +5,6 @@
 $strings['plugin_title'] = 'External Notification Connect';
 $strings['plugin_comment'] = 'Activate external notification system';
 
-$strings['tool_enable'] = 'Enabled';
 $strings['auth_url'] = 'Authentication endpoint';
 $strings['auth_url_help'] = 'URL for authentication API';
 $strings['auth_username'] = 'Username for authentication';

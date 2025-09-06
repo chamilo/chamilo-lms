@@ -3,8 +3,6 @@
 $strings['plugin_title'] = "Justification Plugin";
 $strings['plugin_comment'] = "Requires documents from students as administrative justification.";
 
-$strings['tool_enable'] = "Enable";
-
 $strings['ValidityDuration'] = "Validity Duration";
 $strings['DateManualOn'] = "Date Manual On";
 $strings['JustificationCode'] = "Justification code";

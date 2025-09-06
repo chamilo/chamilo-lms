@@ -2,7 +2,6 @@
 
 $strings['plugin_title'] = 'Maintenance mode';
 $strings['plugin_comment'] = 'Put chamilo in maintenance mode';
-$strings['tool_enable'] = 'Enable plugin';
 
 $strings['IPAdmin'] = "Admin's IP";
 $strings['MaintenanceModeIsOff'] = 'Maintenance mode is off';

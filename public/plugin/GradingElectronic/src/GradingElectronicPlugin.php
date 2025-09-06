@@ -18,7 +18,6 @@ class GradingElectronicPlugin extends Plugin
             '0.8',
             'Angel Fernando Quiroz Campos, Julio Montoya',
             [
-                'tool_enable' => 'boolean',
             ]
         );
     }

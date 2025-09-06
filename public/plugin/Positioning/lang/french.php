@@ -2,7 +2,6 @@
 
 $strings['plugin_title'] = 'Positionnement';
 $strings['plugin_comment'] = 'Ajoute des tests de positionnement sur la page d\'accueil des cours';
-$strings['tool_enable'] = 'Activer le plugin';
 $strings['block_course_if_initial_exercise_not_attempted'] = 'Bloquer les autres outils du cours';
 $strings['block_course_if_initial_exercise_not_attempted_help'] = 'Lorsque cette option est activée, si un test de positionnement initial a été configuré, l\'apprenant ne pourra pas utiliser le reste des outils du cours jusqu\'à ce qu\'il/elle ait complété le test.';
 $strings['average_percentage_to_unlock_final_exercise'] = 'Limite de déblocage du test final';

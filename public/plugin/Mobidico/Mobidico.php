@@ -13,7 +13,6 @@ class Mobidico extends Plugin
             'O.1',
             'Julio Montoya',
             [
-                'tool_enable' => 'boolean',
                 'api_key' => 'text',
                 'mobidico_url' => 'text',
             ]

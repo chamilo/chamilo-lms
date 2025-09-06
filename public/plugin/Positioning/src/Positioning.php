@@ -16,7 +16,6 @@ class Positioning extends Plugin
             '1.0',
             'Julio Montoya',
             [
-                'tool_enable' => 'boolean',
                 'block_course_if_initial_exercise_not_attempted' => 'boolean',
                 'average_percentage_to_unlock_final_exercise' => 'text',
             ]

@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
+$allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
 
 if (!$allowJustification) {
     api_not_allowed(true);

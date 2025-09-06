@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -19,13 +20,13 @@ if (empty($course_code)) {
 $course_info = api_get_course_info($course_code);
 $course_legal = $course_info['legal'];
 
-$enabled = api_get_plugin_setting('courselegal', 'tool_enable');
+$enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
 $pluginExtra = null;
 $pluginLegal = false;
 
 if ('true' === $enabled) {
     $pluginLegal = true;
-    require_once api_get_path(SYS_PLUGIN_PATH).'courselegal/config.php';
+    require_once api_get_path(SYS_PLUGIN_PATH).'CourseLegal/config.php';
     $plugin = CourseLegalPlugin::create();
     $data = $plugin->getData($course_info['real_id'], $session_id);
 

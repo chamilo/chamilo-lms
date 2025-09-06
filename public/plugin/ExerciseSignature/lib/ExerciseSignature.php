@@ -2,6 +2,8 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 class ExerciseSignaturePlugin extends Plugin
 {
     public function __construct()
@@ -32,7 +34,7 @@ class ExerciseSignaturePlugin extends Plugin
             return false;
         }
 
-        if ('true' === api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+        if (Container::getPluginHelper()->isPluginEnabled('ExerciseSignature')) {
             $extraFieldValue = new ExtraFieldValue('exercise');
             $result = $extraFieldValue->get_values_by_handler_and_field_variable($exercise->iId, 'signature_activated');
             if ($result && isset($result['value']) && 1 === (int) $result['value']) {

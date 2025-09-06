@@ -2774,58 +2774,29 @@ function api_get_setting_in_list($variable, $option)
 }
 
 /**
- * @param string $plugin
- * @param string $variable
- *
- * @return string
+ * Legacy helper: read plugin setting.
+ * Now reads from access_url_rel_plugin.configuration (JSON) via PluginHelper.
+ * Keeps BC for 'tool_enable' returning 'true'/'false' strings.
  */
 function api_get_plugin_setting($plugin, $variable)
 {
-    $variableName = $plugin.'_'.$variable;
-    //$result = api_get_setting($variableName);
-    $params = [
-        'category = ? AND subkey = ? AND variable = ?' => [
-            'Plugins',
-            $plugin,
-            $variableName,
-        ],
-    ];
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
-    $result = Database::select(
-        'selected_value',
-        $table,
-        ['where' => $params],
-        'one'
-    );
-    if ($result) {
-        $value = $result['selected_value'];
-        $serializedValue = @unserialize($result['selected_value'], []);
-        if (false !== $serializedValue) {
-            $value = $serializedValue;
-        }
+    $helper = \Chamilo\CoreBundle\Framework\Container::getPluginHelper();
 
-        return $value;
+    // Preserve legacy expectation for tool_enable as string 'true'/'false'
+    if ($variable === 'tool_enable') {
+        return $helper->isPluginEnabled((string) $plugin) ? 'true' : 'false';
     }
 
-    return null;
-    /// Old code
+    $value = $helper->getPluginConfigValue((string) $plugin, (string) $variable, null);
 
-    $variableName = $plugin.'_'.$variable;
-    $result = api_get_setting($variableName);
-
-    if (isset($result[$plugin])) {
-        $value = $result[$plugin];
-
-        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
-
-        if (false !== $unserialized) {
-            $value = $unserialized;
-        }
-
-        return $value;
+    // BC: many legacy callers expect strings; normalize booleans to 'true'/'false'
+    if (\is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
 
-    return null;
+    // If the value is serialized in old code paths, keep it as-is.
+    // For arrays/objects coming from JSON config, return them directly.
+    return $value;
 }
 
 /**

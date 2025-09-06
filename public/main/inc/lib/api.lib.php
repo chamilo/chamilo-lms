@@ -3010,21 +3010,12 @@ function api_is_course_session_coach($user_id, $courseId, $session_id)
 
 /**
  * Checks whether the current user is a course or session coach.
- *
- * @param int $session_id
- * @param int $courseId
- * @param bool  Check whether we are in student view and, if we are, return false
- * @param int $userId
- *
- * @return bool True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $courseId = null, $check_student_view = true, $userId = 0)
+function api_is_coach(int $session_id = 0, ?int $courseId = null, bool $check_student_view = true, int $userId = 0): bool
 {
-    $userId = empty($userId) ? api_get_user_id() : (int) $userId;
+    $userId = empty($userId) ? api_get_user_id() :  $userId;
 
-    if (!empty($session_id)) {
-        $session_id = (int) $session_id;
-    } else {
+    if (empty($session_id)) {
         $session_id = api_get_session_id();
     }
 
@@ -3033,9 +3024,7 @@ function api_is_coach($session_id = 0, $courseId = null, $check_student_view = t
         return false;
     }
 
-    if (!empty($courseId)) {
-        $courseId = (int) $courseId;
-    } else {
+    if (empty($courseId)) {
         $courseId = api_get_course_int_id();
     }
 
@@ -3294,110 +3283,148 @@ function api_display_tool_view_option()
 }
 
 /**
- * Function that removes the need to directly use is_courseAdmin global in
- * tool scripts. It returns true or false depending on the user's rights in
- * this particular course.
- * Optionally checking for tutor and coach roles here allows us to use the
- * student_view feature altogether with these roles as well.
+ * Determines whether the current user is allowed to edit the current context.
  *
- * @param bool  Whether to check if the user has the tutor role
- * @param bool  Whether to check if the user has the coach role
- * @param bool  Whether to check if the user has the session coach role
- * @param bool  check the student view or not
+ * This includes checks for platform admin, course admin, tutor, coach,
+ * session coach, and optionally verifies if the user is in student view mode.
+ * If not in a course context, it falls back to a role-based permission system.
  *
- * @author Roan Embrechts
- * @author Patrick Cool
- * @author Julio Montoya
+ * @param bool $tutor             Allow if the user is a tutor.
+ * @param bool $coach             Allow if the user is a coach and setting allows it.
+ * @param bool $session_coach     Allow if the user is a session coach.
+ * @param bool $check_student_view Check if student view mode is active.
  *
- * @version 1.1, February 2004
- *
- * @return bool true: the user has the rights to edit, false: he does not
+ * @return bool True if the user is allowed to edit, false otherwise.
  */
 function api_is_allowed_to_edit(
-    $tutor = false,
-    $coach = false,
-    $session_coach = false,
-    $check_student_view = true
-) {
+    bool $tutor = false,
+    bool $coach = false,
+    bool $session_coach = false,
+    bool $check_student_view = true
+): bool {
     $allowSessionAdminEdit = 'true' === api_get_setting('session.session_admins_edit_courses_content');
-    // Admins can edit anything.
-    if (api_is_platform_admin($allowSessionAdminEdit)) {
-        //The student preview was on
-        if ($check_student_view && api_is_student_view_active()) {
-            return false;
-        }
+    $sessionId = api_get_session_id();
+    $sessionVisibility = api_get_session_visibility($sessionId);
+    $studentView = api_is_student_view_active();
+    $isAllowed = false;
 
-        return true;
+    // If platform admin, allow unless student view is active
+    if (api_is_platform_admin($allowSessionAdminEdit)) {
+        if ($check_student_view && $studentView) {
+            $isAllowed = false;
+        } else {
+            return true;
+        }
     }
 
-    $sessionId = api_get_session_id();
-
+    // Respect session course read-only mode from extra field
     if ($sessionId && 'true' === api_get_setting('session.session_courses_read_only_mode')) {
         $efv = new ExtraFieldValue('course');
-        $lockExrafieldField = $efv->get_values_by_handler_and_field_variable(
+        $lock = $efv->get_values_by_handler_and_field_variable(
             api_get_course_int_id(),
             'session_courses_read_only_mode'
         );
-
-        if (!empty($lockExrafieldField['value'])) {
+        if (!empty($lock['value'])) {
             return false;
         }
     }
 
-    $is_allowed_coach_to_edit = api_is_coach(null, null, $check_student_view);
-    $session_visibility = api_get_session_visibility($sessionId);
-    $is_courseAdmin = api_is_course_admin();
+    $isCourseAdmin = api_is_course_admin();
+    $isCoach = api_is_coach(0, null, $check_student_view);
 
-    if (!$is_courseAdmin && $tutor) {
-        // If we also want to check if the user is a tutor...
-        $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
+    if (!$isCourseAdmin && $tutor) {
+        $isCourseAdmin = api_is_course_tutor();
     }
 
-    if (!$is_courseAdmin && $coach) {
-        // If we also want to check if the user is a coach...';
-        // Check if session visibility is read only for coaches.
-        if (SESSION_VISIBLE_READ_ONLY == $session_visibility) {
-            $is_allowed_coach_to_edit = false;
+    if (!$isCourseAdmin && $coach) {
+        if (SESSION_VISIBLE_READ_ONLY == $sessionVisibility) {
+            $isCoach = false;
         }
-
         if ('true' === api_get_setting('allow_coach_to_edit_course_session')) {
-            // Check if coach is allowed to edit a course.
-            $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
+            $isCourseAdmin = $isCoach;
         }
     }
 
-    if (!$is_courseAdmin && $session_coach) {
-        $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
+    if (!$isCourseAdmin && $session_coach) {
+        $isCourseAdmin = $isCoach;
     }
 
-    // Check if the student_view is enabled, and if so, if it is activated.
+    // Handle student view mode
     if ('true' === api_get_setting('student_view_enabled')) {
-        $studentView = api_is_student_view_active();
         if (!empty($sessionId)) {
-            // Check if session visibility is read only for coaches.
-            if (SESSION_VISIBLE_READ_ONLY == $session_visibility) {
-                $is_allowed_coach_to_edit = false;
+            if (SESSION_VISIBLE_READ_ONLY == $sessionVisibility) {
+                $isCoach = false;
+            }
+            if ('true' === api_get_setting('allow_coach_to_edit_course_session')) {
+                $isAllowed = $isCoach;
             }
 
-            $is_allowed = false;
-            if ('true' === api_get_setting('allow_coach_to_edit_course_session')) {
-                // Check if coach is allowed to edit a course.
-                $is_allowed = $is_allowed_coach_to_edit;
-            }
             if ($check_student_view) {
-                $is_allowed = $is_allowed && false === $studentView;
+                $isAllowed = $isAllowed && !$studentView;
             }
         } else {
-            $is_allowed = $is_courseAdmin;
+            $isAllowed = $isCourseAdmin;
             if ($check_student_view) {
-                $is_allowed = $is_courseAdmin && false === $studentView;
+                $isAllowed = $isCourseAdmin && !$studentView;
             }
         }
 
-        return $is_allowed;
+        if ($isAllowed) {
+            return true;
+        }
     } else {
-        return $is_courseAdmin;
+        if ($isCourseAdmin) {
+            return true;
+        }
     }
+
+    // Final fallback: permission-based system (only if nothing before returned true)
+    $courseId = api_get_course_id();
+    $inCourse = !empty($courseId) && $courseId != -1;
+
+    if (!$inCourse) {
+        $userRoles = api_get_user_roles();
+        $feature = api_detect_feature_context();
+        $permission = $feature.':edit';
+
+        return api_get_permission($permission, $userRoles);
+    }
+
+    return $isAllowed;
+}
+
+/**
+ * Returns the current main feature (module) based on the current script path.
+ * Used to determine permissions for non-course tools.
+ */
+function api_detect_feature_context(): string
+{
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    $script = basename($script);
+
+    $map = [
+        'user_list.php' => 'user',
+        'user_add.php' => 'user',
+        'user_edit.php' => 'user',
+        'session_list.php' => 'session',
+        'session_add.php' => 'session',
+        'session_edit.php' => 'session',
+        'skill_list.php' => 'skill',
+        'skill_edit.php' => 'skill',
+        'badge_list.php' => 'badge',
+        'settings.php' => 'settings',
+        'course_list.php' => 'course',
+    ];
+
+    if (isset($map[$script])) {
+        return $map[$script];
+    }
+
+    if (preg_match('#/main/([a-z_]+)/#i', $_SERVER['SCRIPT_NAME'], $matches)) {
+        return $matches[1];
+    }
+
+    return 'unknown';
 }
 
 /**
@@ -6334,15 +6361,120 @@ function api_set_default_visibility(
     }
 }
 
-function api_get_roles()
+/**
+ * Returns available role codes => translated labels.
+ * Uses DI PermissionHelper and caches results.
+ */
+function api_get_roles(): array
 {
-    $hierarchy = Container::$container->getParameter('security.role_hierarchy.roles');
-    $roles = [];
-    array_walk_recursive($hierarchy, function ($role) use (&$roles) {
-        $roles[$role] = $role;
-    });
+    static $cache = null;
+    if ($cache !== null) {
+        return $cache;
+    }
 
-    return $roles;
+    $codes = Container::$container
+        ->get(\Chamilo\CoreBundle\Helpers\PermissionHelper::class)
+        ->getUserRoles(); // list of role codes from DB
+
+    // Built-in labels fallbacks. DB codes are used as keys.
+    $labels = [
+        'ROLE_STUDENT'          => get_lang('Learner'),
+        'STUDENT'               => get_lang('Learner'),
+        'ROLE_TEACHER'          => get_lang('Teacher'),
+        'TEACHER'               => get_lang('Teacher'),
+        'ROLE_HR'               => get_lang('Human Resources Manager'),
+        'HR'                    => get_lang('Human Resources Manager'),
+        'ROLE_SESSION_MANAGER'  => get_lang('Session administrator'),
+        'SESSION_MANAGER'       => get_lang('Session administrator'),
+        'ROLE_STUDENT_BOSS'     => get_lang('Superior (n+1)'),
+        'STUDENT_BOSS'          => get_lang('Superior (n+1)'),
+        'ROLE_INVITEE'          => get_lang('Invitee'),
+        'INVITEE'               => get_lang('Invitee'),
+        'ROLE_QUESTION_MANAGER' => get_lang('Question manager'),
+        'QUESTION_MANAGER'      => get_lang('Question manager'),
+        'ROLE_ADMIN'            => get_lang('Admin'),
+        'ADMIN'                 => get_lang('Admin'),
+        'ROLE_PLATFORM_ADMIN'   => get_lang('Administrator'),
+        'PLATFORM_ADMIN'        => get_lang('Administrator'),
+        'ROLE_SUPER_ADMIN'      => get_lang('Super admin'),
+        'SUPER_ADMIN'           => get_lang('Super admin'),
+        'ROLE_GLOBAL_ADMIN'     => get_lang('Global admin'),
+        'GLOBAL_ADMIN'          => get_lang('Global admin'),
+        'ROLE_ANONYMOUS'        => 'Anonymous',
+        'ANONYMOUS'             => 'Anonymous',
+        'ROLE_USER'             => 'User',
+        'USER'                  => 'User',
+    ];
+
+    $out = [];
+    foreach ((array) $codes as $code) {
+        $canon = strtoupper(trim((string) $code));
+        $label =
+            ($labels[$canon] ?? null) ??
+            ($labels['ROLE_'.$canon] ?? null) ??
+            ucwords(strtolower(str_replace('_', ' ', preg_replace('/^ROLE_/', '', $canon))));
+        $out[$code] = $label;
+    }
+
+    ksort($out, SORT_STRING);
+    return $cache = $out;
+}
+
+/**
+ * Normalizes a role code to canonical "ROLE_*" uppercase form.
+ */
+function api_normalize_role_code(string $code): string
+{
+    $code = strtoupper(trim($code));
+    return str_starts_with($code, 'ROLE_') ? $code : 'ROLE_'.$code;
+}
+
+/**
+ * Priority when deriving legacy status from roles (first match wins).
+ */
+function api_roles_priority(): array
+{
+    return [
+        'ROLE_SESSION_MANAGER',
+        'ROLE_HR',
+        'ROLE_TEACHER',
+        'ROLE_STUDENT_BOSS',
+        'ROLE_INVITEE',
+        'ROLE_STUDENT',
+    ];
+}
+
+/**
+ * Canonical role -> legacy status map.
+ */
+function api_role_status_map(): array
+{
+    return [
+        'ROLE_SESSION_MANAGER' => SESSIONADMIN,
+        'ROLE_HR'              => DRH,
+        'ROLE_TEACHER'         => COURSEMANAGER,
+        'ROLE_STUDENT_BOSS'    => STUDENT_BOSS,
+        'ROLE_INVITEE'         => INVITEE,
+        'ROLE_STUDENT'         => STUDENT,
+    ];
+}
+
+/**
+ * Returns legacy status from a set of roles using priority.
+ * Defaults to STUDENT if none matched.
+ */
+function api_status_from_roles(array $roles): int
+{
+    $norm = array_map('api_normalize_role_code', $roles);
+    $priority = api_roles_priority();
+    $map = api_role_status_map();
+
+    foreach ($priority as $p) {
+        if (in_array($p, $norm, true)) {
+            return $map[$p];
+        }
+    }
+    return STUDENT;
 }
 
 function api_get_user_roles(): array

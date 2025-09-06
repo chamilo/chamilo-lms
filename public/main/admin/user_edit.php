@@ -250,26 +250,22 @@ $group[] = $form->createElement(
 $form->addGroup($group, 'password', null, null, false);
 $form->addPasswordRule('password', 'password');
 
-// Status
-$status = [];
-$status[COURSEMANAGER] = get_lang('Trainer');
-$status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Human Resources Manager');
-$status[SESSIONADMIN] = get_lang('Sessions administrator');
-$status[STUDENT_BOSS] = get_lang('Student\'s superior');
-$status[INVITEE] = get_lang('Invitee');
-
-$form->addSelect(
-    'status',
-    get_lang('Profile'),
-    $status,
+$form->addElement(
+    'select',
+    'roles',
+    get_lang('Roles'),
+    api_get_roles(),
     [
-        'id' => 'status_select',
-        'onchange' => 'javascript: display_drh_list();',
+        'multiple' => 'multiple',
+        'size' => 8,
     ]
 );
+$form->addRule('roles', get_lang('Required field'), 'required');
 
-$display = isset($user_data['status']) && (STUDENT == $user_data['status'] || (isset($_POST['status']) && STUDENT == $_POST['status'])) ? 'block' : 'none';
+$display = 'none';
+if (isset($_POST['roles']) && is_array($_POST['roles'])) {
+    $display = in_array('ROLE_TEACHER', $_POST['roles']) || in_array('ROLE_SESSION_MANAGER', $_POST['roles']) ? 'block' : 'none';
+}
 
 // Platform admin
 if (api_is_platform_admin()) {
@@ -402,6 +398,9 @@ if (!$hideFields) {
         $user_data['expiration_date'] = api_get_local_time($expiration_date);
     }
 }
+$availableRoles = array_keys(api_get_roles());
+$userRoles = array_intersect($userObj->getRoles(), $availableRoles);
+$user_data['roles'] = $userRoles;
 $form->setDefaults($user_data);
 
 $error_drh = false;
@@ -415,9 +414,9 @@ if ($form->validate()) {
         exit();
     }
 
-    $is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
-
-    if (DRH == $user['status'] && $is_user_subscribed_in_course) {
+    $roles = $user['roles'] ?? [];
+    $newStatus = api_status_from_roles($roles);
+    if ($newStatus === DRH && CourseManager::is_user_subscribed_in_course((int) $user_id)) {
         $error_drh = true;
     } else {
         $picture_element = $form->getElement('picture');
@@ -445,7 +444,6 @@ if ($form->validate()) {
         $email = $user['email'];
         $phone = $user['phone'];
         $username = $user['username'] ?? $userInfo['username'];
-        $status = (int) $user['status'];
         $platform_admin = 0;
         // Only platform admin can change user status to admin.
         if (api_is_platform_admin()) {
@@ -462,23 +460,21 @@ if ($form->validate()) {
         }
         $active = isset($user['active']) ? (int) $user['active'] : USER_SOFT_DELETED;
 
-        //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1
-        if (1 == $platform_admin) {
-            $status = COURSEMANAGER;
-        }
-
         if ('true' === api_get_setting('login_is_email')) {
             $username = $email;
         }
 
         $template = $user['email_template_option'] ?? [];
+        if ((int) ($user['platform_admin'] ?? 0) === 1) {
+            $newStatus = COURSEMANAGER;
+        }
 
         $incompatible = false;
         $conflicts = [];
-        $oldStatus = $userObj->getStatus();
-        $newStatus = (int) $user['status'];
+        $oldStatus = (int) $userObj->getStatus();
+
         if ($oldStatus !== $newStatus) {
-            $isNowStudent = $newStatus === STUDENT;
+            $isNowStudent = ($newStatus === STUDENT);
             if ($isNowStudent) {
                 $courseTeacherCount = $userObj->getCourses()->count();
                 $coachSessions = $userObj->getSessionsAsGeneralCoach();
@@ -525,7 +521,7 @@ if ($form->validate()) {
             $password,
             $auth_source,
             $email,
-            $status,
+            $newStatus,
             $official_code,
             $phone,
             $picture_uri,
@@ -542,7 +538,7 @@ if ($form->validate()) {
             $template
         );
 
-        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        $studentBossListSent = $user['student_boss'] ?? [];
         UserManager::subscribeUserToBossList(
             $user_id,
             $studentBossListSent,
@@ -559,13 +555,20 @@ if ($form->validate()) {
             }
         }
 
+        $repo = Container::getUserRepository();
+        $userEntity = $repo->find($user_id);
+        if ($userEntity) {
+            $userEntity->setRoles($roles);
+            $repo->updateUser($userEntity);
+        }
+
         $extraFieldValue = new ExtraFieldValue('user');
         $extraFieldValue->saveFieldValues($user);
         $userInfo = api_get_user_info($user_id);
         $message = get_lang('User updated').': '.Display::url(
-            $userInfo['complete_name_with_username'],
-            api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
-        );
+                $userInfo['complete_name_with_username'],
+                api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+            );
 
         Session::erase('system_timezone');
 

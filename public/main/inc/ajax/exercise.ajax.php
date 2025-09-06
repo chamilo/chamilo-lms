@@ -1043,7 +1043,7 @@ switch ($action) {
         break;
     case 'sign_attempt':
         api_block_anonymous_users();
-        if ('true' !== api_get_plugin_setting('exercise_signature', 'tool_enable')) {
+        if (!Container::getPluginHelper()->isPluginEnabled('ExerciseSignature')) {
             exit;
         }
 

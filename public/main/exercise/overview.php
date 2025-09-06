@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Exercise preview.
@@ -32,7 +33,7 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-if ('true' === api_get_plugin_setting('positioning', 'tool_enable')) {
+if (Container::getPluginHelper()->isPluginEnabled('Positioning')) {
     $plugin = Positioning::create();
     if ($plugin->blockFinalExercise(api_get_user_id(), $exercise_id, $courseId, $sessionId)) {
         api_not_allowed(true);

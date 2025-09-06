@@ -4,11 +4,12 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/config.php';
 
 // Course legal
-$enabled = api_get_plugin_setting('courselegal', 'tool_enable');
+$enabled = Container::getPluginHelper()->isPluginEnabled('CourseLegal');
 
 if ('true' != $enabled) {
     api_not_allowed(true);

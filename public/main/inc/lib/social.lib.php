@@ -1868,7 +1868,7 @@ class SocialManager extends UserManager
                 'content' => get_lang('Profile'),
             ],
         ];
-        $allowJustification = 'true' === api_get_plugin_setting('justification', 'tool_enable');
+        $allowJustification = Container::getPluginHelper()->isPluginEnabled('Justification');
         if ($allowJustification) {
             $plugin = Justification::create();
             $headers[] = [
@@ -1877,8 +1877,8 @@ class SocialManager extends UserManager
             ];
         }
 
-        $allowPauseTraining = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
-        $allowEdit = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
+        $allowPauseTraining = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
+        $allowEdit = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
         if ($allowPauseTraining && $allowEdit) {
             $plugin = PauseTraining::create();
             $headers[] = [

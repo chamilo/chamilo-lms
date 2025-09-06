@@ -352,6 +352,13 @@ class Plugin
      */
     public function get(string $name): mixed
     {
+        if ('tool_enable' === $name) {
+            $isEnabled = Container::getPluginHelper()
+                ->isPluginEnabled($this->getCamelCaseName());
+
+            return $isEnabled ? 'true' : 'false';
+        }
+
         $settings = $this->get_settings();
 
         if (isset($settings[$name])) {

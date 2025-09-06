@@ -2,13 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users(true);
 
-$allow = 'true' === api_get_plugin_setting('pausetraining', 'tool_enable');
-$allowPauseFormation = 'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
+$allow = Container::getPluginHelper()->isPluginEnabled('PauseTraining');
+$allowPauseFormation = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
 if (false === $allow || false === $allowPauseFormation) {
     api_not_allowed(true);

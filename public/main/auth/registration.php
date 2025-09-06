@@ -43,7 +43,7 @@ if ('false' !== $allowedFieldsConfiguration) {
 }
 
 $pluginTccDirectoryPath = api_get_path(SYS_PLUGIN_PATH) . 'logintcc';
-$isTccEnabled = (is_dir($pluginTccDirectoryPath) && 'true' === api_get_plugin_setting('logintcc', 'tool_enable'));
+$isTccEnabled = (is_dir($pluginTccDirectoryPath) && Container::getPluginHelper()->isPluginEnabled('logintcc'));
 $webserviceUrl = '';
 $hash = '';
 

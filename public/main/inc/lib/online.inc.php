@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -211,7 +212,7 @@ function online_logout($user_id = null, $logout_redirect = false)
     session_regenerate_id();
     Session::destroy();
 
-    $pluginKeycloak = 'true' === api_get_plugin_setting('keycloak', 'tool_enable');
+    $pluginKeycloak = Container::getPluginHelper()->isPluginEnabled('keycloak');
     if ($pluginKeycloak && in_array('keycloak', $uinfo['auth_sources'])) {
         $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?slo';
         header('Location: '.$pluginUrl);

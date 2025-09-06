@@ -167,8 +167,8 @@ class MessageManager
         $sendEmail = true;
         // Disabling messages depending the pausetraining plugin.
         $allowPauseFormation =
-            'true' === api_get_plugin_setting('pausetraining', 'tool_enable') &&
-            'true' === api_get_plugin_setting('pausetraining', 'allow_users_to_edit_pause_formation');
+            Container::getPluginHelper()->isPluginEnabled('PauseTraining') &&
+            'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         if ($allowPauseFormation) {
             $extraFieldValue = new ExtraFieldValue('user');

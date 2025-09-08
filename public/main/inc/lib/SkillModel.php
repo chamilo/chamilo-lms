@@ -850,7 +850,7 @@ class SkillModel extends Model
         $isHierarchicalTable = ('true' === api_get_setting('skill.skills_hierarchical_view_in_user_tracking'));
         $allowLevels = api_get_setting('skill.skill_levels_names', true);
 
-        $tableResult = '<div id="skillList" class="bg-white p-6 shadow-lg rounded-lg mt-4 mb-14">';
+        $tableResult = '<div id="skillList" class="bg-white p-6 shadow-lg rounded-lg mt-4 mb-4">';
         if ($isHierarchicalTable) {
             $tableResult = '<div class="table-responsive">';
         }

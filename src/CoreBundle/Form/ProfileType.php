@@ -34,27 +34,31 @@ class ProfileType extends AbstractType
         $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
         $visibleOptions = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
 
+        $expandMap = [
+            'name'    => ['firstname', 'lastname'],
+            'surname' => ['lastname'],
+        ];
+        $expand = static function (array $keys) use ($expandMap): array {
+            $out = [];
+            foreach ($keys as $k) {
+                $out = array_merge($out, $expandMap[$k] ?? [$k]);
+            }
+            return array_values(array_unique($out));
+        };
+
+        $visible  = $expand($visibleOptions);
+        $editable = $expand($changeableOptions);
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true));
 
         $fieldsMap = [
-            'name' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
-            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official Code'],
-            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'Email'],
-            'picture' => [
-                'field' => 'illustration',
-                'type' => IllustrationType::class,
-                'label' => 'Picture',
-                'mapped' => false,
-            ],
-            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
-            'password' => [
-                'field' => 'password',
-                'type' => PasswordType::class,
-                'label' => 'Password',
-                'mapped' => false,
-                'required' => false,
-            ],
-            'language' => [
+            'firstname'    => ['field' => 'firstname',     'type' => TextType::class,   'label' => 'Firstname'],
+            'lastname'     => ['field' => 'lastname',      'type' => TextType::class,   'label' => 'Lastname'],
+            'officialcode' => ['field' => 'official_code', 'type' => TextType::class,   'label' => 'Official Code'],
+            'email'        => ['field' => 'email',         'type' => EmailType::class,  'label' => 'Email'],
+            'picture'      => ['field' => 'illustration',  'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],
+            'login'        => ['field' => 'login',         'type' => TextType::class,   'label' => 'Login'],
+            'password'     => ['field' => 'password',      'type' => PasswordType::class, 'label' => 'Password', 'mapped' => false, 'required' => false],
+            'language'     => [
                 'field' => 'locale',
                 'type' => ChoiceType::class,
                 'label' => 'Language',
@@ -68,8 +72,8 @@ class ProfileType extends AbstractType
         ];
 
         foreach ($fieldsMap as $key => $fieldConfig) {
-            if (\in_array($key, $visibleOptions, true)) {
-                $isEditable = \in_array($key, $changeableOptions, true);
+            if (\in_array($key, $visible, true)) {
+                $isEditable = \in_array($key, $editable, true);
 
                 $options = [
                     'label' => $fieldConfig['label'],

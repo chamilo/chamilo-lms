@@ -1210,8 +1210,6 @@ if ($allowAll) {
         $sessionId
     );
 }
-
-echo '<br /><br />';
 echo '<div class="row">
         <div class="col-sm-5">';
 if (!empty($userGroups)) {
@@ -1923,8 +1921,23 @@ if (empty($details)) {
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
         $repo = Container::getQuizRepository();
-        $qb = $repo->findAllByCourse($course, $session, null, 2, false);
-        $exerciseList = $qb->getQuery()->getResult();
+        $exerciseInSession = $repo->findAllByCourse($course, $session, null, null, false)
+            ->getQuery()->getResult();
+
+        $exerciseGlobal = [];
+        if ((int) $sessionId > 0) {
+            $exerciseGlobal = $repo->findAllByCourse($course, null, null, null, false)
+                ->getQuery()->getResult();
+        }
+        $seen = [];
+        $exerciseList = [];
+        foreach (array_merge($exerciseInSession, $exerciseGlobal) as $quiz) {
+            $id = $quiz->getIid();
+            if (!isset($seen[$id])) {
+                $seen[$id] = true;
+                $exerciseList[] = $quiz;
+            }
+        }
 
         if ($exerciseList) {
             /** @var CQuiz $exercise */

@@ -3297,11 +3297,11 @@ function api_display_tool_view_option()
  * @return bool True if the user is allowed to edit, false otherwise.
  */
 function api_is_allowed_to_edit(
-    bool $tutor = false,
-    bool $coach = false,
-    bool $session_coach = false,
-    bool $check_student_view = true
-): bool {
+    $tutor = false,
+    $coach = false,
+    $session_coach = false,
+    $check_student_view = true
+) {
     $allowSessionAdminEdit = 'true' === api_get_setting('session.session_admins_edit_courses_content');
     $sessionId = api_get_session_id();
     $sessionVisibility = api_get_session_visibility($sessionId);

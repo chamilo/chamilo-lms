@@ -59,7 +59,7 @@ Install the software stack and Chamilo using the commands below.
 
 ~~~~
 apt update && apt -y upgrade
-apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+apt install -y apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 mysql -e "GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY 'chamilo2';"
 cd /var/www && wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-alpha.2/chamilo-2.0.0-alpha.2.tar.gz
 tar zxf chamilo-2.0.0-alpha.2.tar.gz
@@ -89,7 +89,7 @@ On Ubuntu 24.04+, the following should take care of all dependencies (certbot is
 Replace 'chamilo2' by the database name and user you want, and '{password}' by a more secure password.
 ~~~~
 sudo apt update && apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
 mysql> exit
@@ -125,7 +125,7 @@ The following is the section above, but with more details and hedge cases.
 ~~~~
 sudo apt update
 sudo apt -y upgrade
-sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
+sudo apt install apache2 libapache2-mod-php mariadb-client mariadb-server redis php-pear php-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl certbot
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
 mysql> exit
@@ -139,7 +139,7 @@ sudo apt -y upgrade
 sudo apt -y install ca-certificates curl gnupg software-properties-common
 sudo add-apt-repository ppa:ondrej/php
 sudo apt update
-sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,mbstring,mysql,redis,soap,xml,zip} git unzip curl
+sudo apt install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis php-pear php8.3-{apcu,bcmath,cli,curl,dev,gd,intl,ldap,mbstring,mysql,redis,soap,xml,zip} git unzip curl
 sudo mysql
 mysql> GRANT ALL PRIVILEGES ON chamilo2.* TO chamilo2@localhost IDENTIFIED BY '{password}';
 mysql> exit

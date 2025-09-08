@@ -165,8 +165,9 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
         // Place colour icons in front of courses.
         $showVisualCode = $course['visual_code'] != $courseCode ? Display::label($course['visual_code'], 'info') : null;
+        $courseHomeUrl = api_get_path(WEB_PATH).'course/'.$courseId.'/home';
         $course[1] = get_course_visibility_icon($course['visibility']).PHP_EOL
-            .Display::url(Security::remove_XSS($course[1]), $coursePath.$course['directory'].'/index.php').PHP_EOL
+            .Display::url(Security::remove_XSS($course['col1'] ?? $course[1]), $courseHomeUrl).PHP_EOL
             .$showVisualCode;
         $course[5] = SUBSCRIBE_ALLOWED == $course[5] ? get_lang('Yes') : get_lang('No');
         $course[6] = UNSUBSCRIBE_ALLOWED == $course[6] ? get_lang('Yes') : get_lang('No');

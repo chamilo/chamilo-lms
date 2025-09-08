@@ -593,7 +593,18 @@ function modify_deleted_filter(int $user_id, string $url_params, array $row): st
 function modify_filter($user_id, $url_params, $row): string
 {
     $_admins_list = Session::read('admin_list', []);
-    $is_admin = in_array($user_id, $_admins_list);
+    $repo = Container::getUserRepository();
+    $userEntity = $repo->find($user_id);
+    $userRoles = $userEntity ? $userEntity->getRoles() : [];
+
+    $isAdminByRole = in_array('ROLE_PLATFORM_ADMIN', $userRoles, true)
+        || in_array('ROLE_SUPER_ADMIN', $userRoles, true)
+        || in_array('ROLE_GLOBAL_ADMIN', $userRoles, true)
+        || in_array('ROLE_ADMIN', $userRoles, true);
+
+    $is_admin = $isAdminByRole
+        || UserManager::is_admin($user_id)
+        || in_array($user_id, $_admins_list, true);
 
     $repo = Container::getUserRepository();
     $userEntity = $repo->find($user_id);

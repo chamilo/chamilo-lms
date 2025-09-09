@@ -20,7 +20,7 @@
           @click="goBack"
         />
 
-        <template v-if="forceStudentView && !isAfterDeadline">
+        <template v-if="forceStudentView && !isPastExpiry">
           <div class="ml-auto flex gap-2">
             <BaseButton
               v-if="allowTextFlag && !allowFileFlag"
@@ -55,7 +55,7 @@
           </div>
         </template>
 
-        <template v-else>
+        <template v-else-if="isEditor && !isStudentView">
           <BaseIcon
             icon="file-add"
             size="big"
@@ -109,10 +109,17 @@
       </div>
 
       <div
-        v-if="forceStudentView && isAfterDeadline"
+        v-if="forceStudentView && isAfterEndDate"
         class="text-red-600 border border-red-300 p-4 rounded bg-red-50"
       >
         {{ t("You can no longer submit. The deadline has passed.") }}
+      </div>
+
+      <div
+        v-else-if="forceStudentView && isPastExpiry"
+        class="text-amber-700 border border-amber-300 p-4 rounded bg-amber-50"
+      >
+        {{ t("Submissions are closed. You can no longer submit new work.") }}
       </div>
 
       <h2 class="text-2xl font-bold">{{ assignment.title }}</h2>
@@ -148,6 +155,7 @@
         <StudentSubmissionList
           v-if="forceStudentView"
           :assignment-id="assignmentId"
+          :is-after-deadline="isAfterEndDate"
           :flags="{ allowText: allowTextFlag, allowFile: allowFileFlag }"
         />
         <TeacherSubmissionList
@@ -193,9 +201,17 @@ const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
 
-const isAfterDeadline = computed(() =>
-  assignment.value?.assignment?.endsOn ? new Date() > new Date(assignment.value.assignment.endsOn) : false,
-)
+function fromApiLocal(str) {
+  if (!str) return null
+  const s = String(str).includes("T") ? String(str) : String(str).replace(" ", "T")
+  return new Date(s)
+}
+
+const expiresOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.expiresOn))
+const endsOnDate    = computed(() => fromApiLocal(assignment.value?.assignment?.endsOn))
+const isPastExpiry   = computed(() => (expiresOnDate.value ? new Date() > expiresOnDate.value : false))
+const isAfterEndDate = computed(() => (endsOnDate.value ? new Date() > endsOnDate.value : false))
+const isAfterDeadline = isAfterEndDate
 
 const allowTextFlag = computed(
   () => assignment.value?.allowTextAssignment === 0 || assignment.value?.allowTextAssignment === 1,

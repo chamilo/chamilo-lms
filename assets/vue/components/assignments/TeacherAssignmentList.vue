@@ -48,15 +48,23 @@
       field="assignment.expiresOn"
     >
       <template #body="slotProps">
-        <span v-if="slotProps.data.assignment">
-          {{ abbreviatedDatetime(slotProps.data.assignment.expiresOn) }}
-        </span>
-        <span
-          v-else
-          class="text-gray-400 italic"
-        >
-          No deadline
-        </span>
+    <span v-if="slotProps.data.assignment?.expiresOn">
+      {{ formatStored(slotProps.data.assignment.expiresOn) }}
+    </span>
+        <span v-else class="text-gray-400 italic">No deadline</span>
+      </template>
+    </Column>
+
+    <Column
+      :header="t('End date')"
+      :sortable="true"
+      field="assignment.endsOn"
+    >
+      <template #body="slotProps">
+    <span v-if="slotProps.data.assignment?.endsOn">
+      {{ formatStored(slotProps.data.assignment.endsOn) }}
+    </span>
+        <span v-else class="text-gray-400 italic">—</span>
       </template>
     </Column>
     <Column :header="t('Number submitted')">
@@ -348,5 +356,15 @@ const canEdit = (item) => {
   const isBaseCourse = !sessionId
 
   return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
+}
+
+function formatStored(val) {
+  if (!val) return "—"
+  const s = String(val)
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
+  if (m) {
+    return `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}`
+  }
+  return abbreviatedDatetime(s)
 }
 </script>

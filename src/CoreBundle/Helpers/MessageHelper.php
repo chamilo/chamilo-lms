@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 use const PHP_SAPI;
@@ -297,39 +298,69 @@ class MessageHelper
 
     private function sendEmailNotification(User $receiver, User $sender, string $subject, string $content, array $attachmentList): void
     {
-        if (empty($receiver->getEmail())) {
-            throw new Exception('The receiver does not have a valid email address.');
+        $toAddress = $receiver->getEmail();
+        if (!filter_var($toAddress, FILTER_VALIDATE_EMAIL)) {
+            return;
         }
 
-        $smtpFromEmail = $this->settingsManager->getSetting('mail.mailer_from_name');
+        $from = $this->buildFromAddress();
 
-        if (empty($smtpFromEmail)) {
-            $smtpFromEmail = $this->settingsManager->getSetting('platform.administrator_email');
+        try {
+            $email = (new Email())
+                ->from($from)
+                ->to(new Address($toAddress, $receiver->getFullname() ?: $receiver->getUsername()))
+                ->subject($subject)
+                ->text($content)
+                ->html($content);
+
+            foreach ($attachmentList as $att) {
+                $file = $att['file'] ?? null;
+                if ($file instanceof UploadedFile && UPLOAD_ERR_OK === $file->getError()) {
+                    $email->attachFromPath($file->getRealPath(), $file->getClientOriginalName());
+                }
+            }
+
+            $this->mailer->send($email);
+        } catch (\Throwable $e) {
+            error_log('Failed to send email: ' . $e->getMessage());
         }
+    }
+    /**
+     * Constructs the FROM as an Address, prioritizing configuration;
+     * If there is no valid value, infers the current domain and uses noreply@{domain}.
+     */
+    private function buildFromAddress(): Address
+    {
+        $fromName = $this->settingsManager->getSetting('mail.mailer_from_name')
+            ?: $this->settingsManager->getSetting('platform.site_name', true)
+                ?: 'Chamilo';
 
-        if (empty($smtpFromEmail)) {
-            $smtpFromEmail = 'noreply@chamilo.local';
-        }
-
-        $email = (new Email())
-            ->from($smtpFromEmail)
-            ->to($receiver->getEmail())
-            ->subject($subject)
-            ->text($content)
-            ->html($content)
-        ;
-
-        foreach ($attachmentList as $attachment) {
-            if ($attachment instanceof UploadedFile) {
-                $email->attachFromPath($attachment->getRealPath(), $attachment->getClientOriginalName());
+        $candidates = [
+            $this->settingsManager->getSetting('mail.mailer_from_email'),
+            $this->settingsManager->getSetting('mail.mailer_from_address'),
+            $this->settingsManager->getSetting('platform.administrator_email'),
+        ];
+        foreach ($candidates as $cand) {
+            if ($cand && filter_var($cand, FILTER_VALIDATE_EMAIL)) {
+                return new Address($cand, $fromName);
             }
         }
 
-        try {
-            $this->mailer->send($email);
-        } catch (Exception $e) {
-            error_log('Failed to send email: '.$e->getMessage());
+        $host = null;
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        if ($accessUrl && method_exists($accessUrl, 'getUrl')) {
+            $host = parse_url((string) $accessUrl->getUrl(), PHP_URL_HOST);
         }
+        if (!$host) {
+            $req = $this->requestStack->getCurrentRequest();
+            $host = $req?->getHost();
+        }
+
+        if (!$host || !str_contains($host, '.')) {
+            $host = 'example.org';
+        }
+
+        return new Address('noreply@' . $host, $fromName);
     }
 
     /**

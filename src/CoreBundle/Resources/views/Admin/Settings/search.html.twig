@@ -1,43 +1,177 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 {% from '@ChamiloCore/Admin/Settings/actions.html.twig' import update %}
 {% set namespace = app.request.get('namespace') %}
+{% set content_width = 'max-w-4xl mx-auto' %}
 
 {% block content %}
     <div class="flex">
         <div class="w-1/5">
-        {% include '@ChamiloCore/Admin/Settings/menu.html.twig' %}
+            {% include '@ChamiloCore/Admin/Settings/menu.html.twig' %}
         </div>
         <div class="w-4/5">
             <div class="q-card p-4">
-                <form class="w-full form-horizontal"
-                      action="{{ path('chamilo_platform_settings_search', {'keyword': keyword}) }}"
-                      method="post"
-                >
-                    {{ form_widget(search_form) }}
-                </form>
-                <hr />
-                <div class="row">
+
+                {{ form_start(search_form, {
+                    action: path('chamilo_platform_settings_search'),
+                    method: 'POST',
+                    attr: { class: 'w-full form-horizontal' }
+                }) }}
+                {{ form_widget(search_form) }}
+                {{ form_end(search_form) }}
+
+                <div class="my-6 row">
                     {% for category, form in form_list %}
-                    <div class="col-md-12">
-                        <h4>{{ category | trans }}</h4>
-                        <div class="box box-primary">
-                            <div class="box-body">
-                                {{ form_errors(form) }}
-                                <form
-                                    class="form-horizontal"
-                                    action="{{ path('chamilo_platform_settings', {'namespace': category, 'keyword': keyword} ) }}"
-                                    method="post"
-                                    novalidate
-                                >
-                                    {{ form_rest(form) }}
-                                    {{ update() }}
-                                </form>
+                        <div class="col-md-12">
+
+                            <div class="{% if not loop.first %}mt-12 {% endif %}mb-4 pb-2 border-b border-gray-25">
+                                <h3 class="text-gray-90 text-h6 font-semibold tracking-wide uppercase">
+                                    {{ category|trans }}
+                                </h3>
+                            </div>
+
+                            <div class="box box-primary">
+                                <div class="box-body">
+
+                                    {{ form_errors(form) }}
+
+                                    <div class="{{ content_width }}">
+
+                                        {{ form_start(form, {
+                                            action: path('chamilo_platform_settings', { 'namespace': category, 'keyword': keyword }),
+                                            method: 'POST',
+                                            attr: { class: 'form-horizontal', novalidate: 'novalidate' }
+                                        }) }}
+
+                                        {% for field in form %}
+                                            {% set fieldName = field.vars.name %}
+                                            {% set isHidden  = 'hidden' in field.vars.block_prefixes %}
+                                            {% if isHidden %}
+                                                {{ form_widget(field) }}
+                                            {% else %}
+                                                <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition">
+                                                    <div class="flex justify-between items-start mb-3 border-l-4 border-primary pl-4">
+                                                        <h4 class="text-gray-90 text-body-1 font-semibold">{{ field.vars.label|trans }}</h4>
+
+                                                        {% set templateId = null %}
+                                                        {% if template_map is defined and template_map[fieldName] is defined %}
+                                                            {% set templateId = template_map[fieldName] %}
+                                                        {% elseif template_map_by_category is defined
+                                                            and template_map_by_category[category] is defined
+                                                            and template_map_by_category[category][fieldName] is defined %}
+                                                            {% set templateId = template_map_by_category[category][fieldName] %}
+                                                        {% endif %}
+
+                                                        {% if templateId %}
+                                                            <a href="javascript:void(0)" class="text-info hover:text-info-dark show-template flex items-center gap-2"
+                                                               data-template-id="{{ templateId }}" title="{{ 'Show JSON Template'|trans }}">
+                                                                <i class="mdi mdi-information-outline text-info text-lg"></i>
+                                                                <span class="text-body-2">{{ 'Show JSON Template'|trans }}</span>
+                                                            </a>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="mb-2">
+                                                        {{ form_widget(field, { attr: {
+                                                            class: 'w-full rounded border border-gray-25 focus:border-primary focus:ring focus:ring-primary/30 transition'
+                                                        } }) }}
+                                                    </div>
+
+                                                    {% if field.vars.help is not empty %}
+                                                        <p class="text-gray-50 text-body-2 italic pl-3">{{ field.vars.help|raw }}</p>
+                                                    {% endif %}
+
+                                                    {{ form_errors(field) }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {{ form_rest(form) }}
+
+                                        <div class="mt-4 mb-10">
+                                            {{ update() }}
+                                        </div>
+
+                                        {{ form_end(form, { render_rest: false }) }}
+
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="jsonTemplateOverlay" class="fixed inset-0 bg-gray-90/50 hidden z-40"></div>
+
+    <div id="jsonTemplateModal" class="fixed inset-0 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg border border-gray-50 shadow-2xl max-w-3xl w-full mx-4">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-25">
+                <h2 class="text-lg font-bold text-gray-90" id="jsonTemplateModalLabel">
+                    {{ 'JSON Template'|trans }}
+                </h2>
+                <button id="closeJsonTemplateModal" class="text-gray-50 hover:text-gray-90 text-2xl leading-none">
+                    &times;
+                </button>
+            </div>
+            <div class="p-6">
+                <div id="jsonTemplateDescription" class="mb-4 text-gray-90 border-gray-20 text-body-2"></div>
+                <pre id="jsonTemplateContent" class="bg-gray-15 p-4 rounded text-sm text-gray-90 overflow-auto max-h-[50vh]"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        function openTemplate(templateId) {
+          if (!templateId) return;
+          fetch('/admin/settings/template/' + templateId)
+            .then(r => r.json())
+            .then(data => {
+              if (!data.json_example) {
+                alert('{{ "Template not found."|trans }}');
+                return;
+              }
+              document.getElementById('jsonTemplateModalLabel').innerText =
+                data.variable || '{{ "JSON Template"|trans }}';
+              document.getElementById('jsonTemplateDescription').innerText =
+                data.description || '';
+              try {
+                const obj = JSON.parse(data.json_example);
+                document.getElementById('jsonTemplateContent').innerText =
+                  JSON.stringify(obj, null, 2);
+              } catch (e) {
+                document.getElementById('jsonTemplateContent').innerText = data.json_example;
+              }
+              document.getElementById('jsonTemplateOverlay').classList.remove('hidden');
+              document.getElementById('jsonTemplateModal').classList.remove('hidden');
+            });
+        }
+
+        function closeModal() {
+          document.getElementById('jsonTemplateOverlay').classList.add('hidden');
+          document.getElementById('jsonTemplateModal').classList.add('hidden');
+        }
+
+        document.addEventListener('click', function (e) {
+          const link = e.target.closest('.show-template');
+          if (link) {
+            e.preventDefault();
+            openTemplate(link.dataset.templateId);
+            return;
+          }
+
+          if (e.target.id === 'jsonTemplateOverlay' || e.target.id === 'closeJsonTemplateModal') {
+            e.preventDefault();
+            closeModal();
+          }
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape') closeModal();
+        });
+      })();
+    </script>
 {% endblock %}

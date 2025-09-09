@@ -90,9 +90,7 @@ class Bbb
             $this->groupSupport = $this->plugin->get('enable_conference_in_course_groups') === 'true' ? true : false;
             if ($this->groupSupport) {
                 // Platform check
-                $bbbSetting = api_get_plugin_setting('bbb', 'enable_conference_in_course_groups');
-                $bbbSetting = isset($bbbSetting['bbb']) ? $bbbSetting['bbb'] === 'true' : false;
-
+                $bbbSetting = api_get_plugin_setting('bbb', 'enable_conference_in_course_groups') === 'true';
                 if ($bbbSetting) {
                     // Course check
                     $courseInfo = api_get_course_info();
@@ -276,33 +274,28 @@ class Bbb
      *
      * @return bool
      */
-    public static function showGlobalConferenceLink($userInfo)
+    private static function normalizeSettingToArray($value): array
     {
-        if (empty($userInfo)) {
-            return false;
+        if (is_array($value)) {
+            return $value;
         }
-        $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
-        $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
-        if ($setting === 'true' && $settingLink === 'true') {
-            //$content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
-            $allowedRoles = api_get_plugin_setting(
-                'bbb',
-                'global_conference_allow_roles'
+        if (is_string($value)) {
+            $value = trim($value);
+            if ($value === '') {
+                return [];
+            }
+            $decoded = json_decode($value, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+            return array_values(
+                array_filter(
+                    array_map('trim', explode(',', $value)),
+                    'strlen'
+                )
             );
-
-            if (api_is_platform_admin()) {
-                $userInfo['status'] = PLATFORM_ADMIN;
-            }
-
-            $showGlobalLink = true;
-            if (!empty($allowedRoles)) {
-                if (!in_array($userInfo['status'], $allowedRoles)) {
-                    $showGlobalLink = false;
-                }
-            }
-
-            return $showGlobalLink;
         }
+        return [];
     }
 
     /**
@@ -2133,6 +2126,38 @@ class Bbb
                 ->setParameter('id', $meetingId)
                 ->getQuery()
                 ->execute();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function showGlobalConferenceLink($userInfo)
+    {
+        if (empty($userInfo)) {
+            return false;
+        }
+
+        $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
+        $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
+
+        if ($setting === 'true' && $settingLink === 'true') {
+            $allowedRoles = api_get_plugin_setting('bbb', 'global_conference_allow_roles');
+            $allowedRoles = self::normalizeSettingToArray($allowedRoles);
+
+            if (api_is_platform_admin()) {
+                $userInfo['status'] = PLATFORM_ADMIN;
+            }
+
+            if (!empty($allowedRoles)) {
+                $needle = (string) $userInfo['status'];
+                $haystack = array_map('strval', $allowedRoles);
+
+                if (!in_array($needle, $haystack, true)) {
+                    return false;
+                }
+            }
 
             return true;
         }

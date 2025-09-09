@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackEAccess;
+use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\PluginBundle\EmbedRegistry\Entity\Embed;
 use Doctrine\ORM\Tools\SchemaTool;
 
@@ -61,8 +63,9 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
-     * @throws \Doctrine\ORM\Tools\ToolsException
+     * Create DB schema for this plugin if not present.
      *
+     * @throws \Doctrine\ORM\Tools\ToolsException
      * @throws \Doctrine\DBAL\Exception
      */
     public function install()
@@ -74,14 +77,12 @@ class EmbedRegistryPlugin extends Plugin
         }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema(
-            [
-                $em->getClassMetadata(Embed::class),
-            ]
-        );
+        $schemaTool->createSchema([$em->getClassMetadata(Embed::class)]);
     }
 
     /**
+     * Drop DB schema if present.
+     *
      * @throws \Doctrine\DBAL\Exception
      */
     public function uninstall()
@@ -93,14 +94,12 @@ class EmbedRegistryPlugin extends Plugin
         }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->dropSchema(
-            [
-                $em->getClassMetadata(Embed::class),
-            ]
-        );
+        $schemaTool->dropSchema([$em->getClassMetadata(Embed::class)]);
     }
 
     /**
+     * After (re)configuring the plugin, (re)create tool links if enabled.
+     *
      * @return EmbedRegistryPlugin
      */
     public function performActionsAfterConfigure()
@@ -110,7 +109,8 @@ class EmbedRegistryPlugin extends Plugin
         $this->deleteCourseToolLinks();
 
         if ('true' === $this->get(self::SETTING_ENABLED)) {
-            $courses = $em->createQuery('SELECT c.id FROM ChamiloCoreBundle:Course c')->getResult();
+            // Use FQCN instead of "ChamiloCoreBundle:Course".
+            $courses = $em->createQuery('SELECT c.id FROM '.Course::class.' c')->getResult();
 
             foreach ($courses as $course) {
                 $this->createLinkToCourseTool($this->getToolTitle(), $course['id']);
@@ -121,69 +121,93 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
+     * Hook called when a course is deleted.
+     * We only have the course ID here, but e.course is a relation,
+     * so we must compare using IDENTITY(e.course) = :courseId.
+     *
      * @param int $courseId
      */
     public function doWhenDeletingCourse($courseId)
     {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloPluginBundle:EmbedRegistry\Embed e WHERE e.course = :course')
-            ->execute(['course' => (int) $courseId]);
+        $em = Database::getManager();
+
+        // IMPORTANT: Use FQCN and IDENTITY() for relation-to-id comparison.
+        $em->createQuery(
+            'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.course) = :courseId'
+        )
+            ->setParameter('courseId', (int) $courseId)
+            ->execute();
     }
 
     /**
+     * Hook called when a session is deleted.
+     * We only have the session ID here, but e.session is a relation,
+     * so we must compare using IDENTITY(e.session) = :sessionId.
+     *
      * @param int $sessionId
      */
     public function doWhenDeletingSession($sessionId)
     {
-        Database::getManager()
-            ->createQuery('DELETE FROM ChamiloPluginBundle:EmbedRegistry\Embed e WHERE e.session = :session')
-            ->execute(['session' => (int) $sessionId]);
+        $em = Database::getManager();
+
+        // IMPORTANT: Use FQCN and IDENTITY() for relation-to-id comparison.
+        $em->createQuery(
+            'DELETE FROM '.Embed::class.' e WHERE IDENTITY(e.session) = :sessionId'
+        )
+            ->setParameter('sessionId', (int) $sessionId)
+            ->execute();
     }
 
     /**
+     * Get the currently active embed (by date range) for a course and optional session.
+     * DO NOT compare an entity relation to a scalar id in DQL; bind the entity itself.
+     *
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
-     * @return Embed
+     * @return Embed|null
      */
     public function getCurrentEmbed(Course $course, Session $session = null)
     {
-        $embedRepo = Database::getManager()->getRepository('ChamiloPluginBundle:EmbedRegistry\Embed');
-        $qb = $embedRepo->createQueryBuilder('e');
-        $query = $qb
+        $em = Database::getManager();
+        $repo = $em->getRepository(Embed::class);
+        $qb = $repo->createQueryBuilder('e');
+
+        $qb
             ->where('e.displayStartDate <= :now')
             ->andWhere('e.displayEndDate >= :now')
-            ->andWhere(
-                $qb->expr()->eq('e.course', $course->getId())
-            );
+            ->andWhere('e.course = :course')
+            ->setParameter('now', new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->setParameter('course', $course);
 
-        $query->andWhere(
-            $session
-                ? $qb->expr()->eq('e.session', $session->getId())
-                : $qb->expr()->isNull('e.session')
-        );
+        if ($session) {
+            $qb->andWhere('e.session = :session')
+                ->setParameter('session', $session);
+        } else {
+            $qb->andWhere('e.session IS NULL');
+        }
 
-        $query = $query
+        return $qb
             ->orderBy('e.displayStartDate', 'DESC')
             ->setMaxResults(1)
-            ->setParameters(['now' => api_get_utc_datetime(null, false, true)])
-            ->getQuery();
-
-        return $query->getOneOrNullResult();
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**
+     * Human-readable date range for an embed.
+     *
      * @return string
      */
     public function formatDisplayDate(Embed $embed)
     {
         $startDate = sprintf(
             '<time datetime="%s">%s</time>',
-            $embed->getDisplayStartDate()->format(DateTime::W3C),
+            $embed->getDisplayStartDate()->format(\DateTimeInterface::W3C),
             api_convert_and_format_date($embed->getDisplayStartDate())
         );
         $endDate = sprintf(
             '<time datetime="%s">%s</time>',
-            $embed->getDisplayEndDate()->format(DateTime::W3C),
+            $embed->getDisplayEndDate()->format(\DateTimeInterface::W3C),
             api_convert_and_format_date($embed->getDisplayEndDate())
         );
 
@@ -191,6 +215,8 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
+     * URL to view a single embed in the plugin.
+     *
      * @return string
      */
     public function getViewUrl(Embed $embed)
@@ -199,39 +225,43 @@ class EmbedRegistryPlugin extends Plugin
     }
 
     /**
+     * Count distinct users who accessed this plugin within the embed date window.
+     * NOTE: TrackEAccess uses scalar fields (cId, accessSessionId), so pass integers.
+     *
      * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return int
      */
     public function getMembersCount(Embed $embed)
     {
-        $dql = 'SELECT COUNT(DISTINCT tea.accessUserId) FROM ChamiloCoreBundle:TrackEAccess tea
+        $dql = 'SELECT COUNT(DISTINCT tea.accessUserId) FROM '.TrackEAccess::class.' tea
                 WHERE
                     tea.accessTool = :tool AND
                     (tea.accessDate >= :start_date AND tea.accessDate <= :end_date) AND
-                    tea.cId = :course';
+                    tea.cId = :courseId';
 
         $params = [
             'tool' => 'plugin_'.$this->get_name(),
             'start_date' => $embed->getDisplayStartDate(),
             'end_date' => $embed->getDisplayEndDate(),
-            'course' => $embed->getCourse(),
+            // IMPORTANT: cId is an integer field, not a relation.
+            'courseId' => $embed->getCourse()->getId(),
         ];
 
         if ($embed->getSession()) {
-            $dql .= ' AND tea.accessSessionId = :session ';
-
-            $params['session'] = $embed->getSession();
+            $dql .= ' AND tea.accessSessionId = :sessionId ';
+            $params['sessionId'] = $embed->getSession()->getId();
         }
 
-        $count = Database::getManager()
+        return (int) Database::getManager()
             ->createQuery($dql)
             ->setParameters($params)
             ->getSingleScalarResult();
-
-        return $count;
     }
 
+    /**
+     * Track a plugin access event (raw SQL-level insert is fine here).
+     */
     public function saveEventAccessTool()
     {
         $tableAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -246,11 +276,18 @@ class EmbedRegistryPlugin extends Plugin
         Database::insert($tableAccess, $params);
     }
 
+    /**
+     * Remove tool links created for this plugin in course tools.
+     * Use FQCN (CTool::class) instead of "ChamiloCourseBundle:CTool".
+     */
     private function deleteCourseToolLinks()
     {
         Database::getManager()
-            ->createQuery('DELETE FROM ChamiloCourseBundle:CTool t WHERE t.category = :category AND t.link LIKE :link')
-            ->execute(['category' => 'plugin', 'link' => 'EmbedRegistry/start.php%']);
+            ->createQuery(
+                'DELETE FROM '.CTool::class.' t WHERE t.category = :category AND t.link LIKE :link'
+            )
+            ->setParameters(['category' => 'plugin', 'link' => 'EmbedRegistry/start.php%'])
+            ->execute();
     }
 
     public function get_name()

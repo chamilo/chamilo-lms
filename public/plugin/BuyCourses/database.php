@@ -68,7 +68,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
     $currencyTable->addColumn(
         'iso_code',
         'string',
-        ['length' => 3]
+        ['length' => 4]
     );
     $currencyTable->addColumn('status', 'boolean');
     $currencyTable->addUniqueIndex(['country_code']);
@@ -719,6 +719,8 @@ $currencies = [
     ['VU', 'Vanuatu', 'VUV', 'VUT', 0],
     ['WF', 'Wallis and Futuna', 'XPF', 'WLF', 0],
     ['WS', 'Samoa', 'WST', 'WSM', 0],
+    ['XB', 'World (cryptocurrency)', 'BTC', 'BTC', 0],
+    ['XD', 'World (cryptocurrency)', 'DOGE', 'DOGE', 0],
     ['XK', 'Kosovo', 'EUR', 'XKX', 0],
     ['YE', 'Yemen', 'YER', 'YEM', 0],
     ['YT', 'Mayotte', 'EUR', 'MYT', 0],

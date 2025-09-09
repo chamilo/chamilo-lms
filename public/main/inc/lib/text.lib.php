@@ -723,6 +723,10 @@ function implode_with_key($glue, $array)
             if (empty($value)) {
                 $value = 'null';
             }
+            if (is_array($value)) {
+                // We don't supported embedded arrays here yet. Will show as "{array}".
+                $value = 'array';
+            }
             $string .= $key." : ".$value." $glue ";
         }
 

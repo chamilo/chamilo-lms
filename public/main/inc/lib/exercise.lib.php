@@ -278,7 +278,7 @@ class ExerciseLib
                     if (!empty($assetIds)) {
                         $icon = Display::return_icon('file_txt.gif');
                         $default = "";
-                        $assetRepo = \Chamilo\CoreBundle\Framework\Container::getAssetRepository();
+                        $assetRepo = Container::getAssetRepository();
                         $basePath = rtrim(api_get_path(WEB_PATH), "/");
 
                         foreach ($assetIds as $id) {
@@ -1736,12 +1736,18 @@ HOTSPOT;
                 $questionRepo = Container::getQuestionRepository();
                 $questionEntity = $questionRepo->find($questionId);
                 if ($freeze) {
-                    echo Display::img(
-                        $questionRepo->getHotSpotImageUrl($questionEntity),
-                        $objQuestionTmp->selectTitle(),
-                        ['width' => '600px']
-                    );
-
+                    echo '
+            <div id="annotation-canvas-'.$questionId.'" class="annotation-canvas center-block"></div>
+            <script>
+                AnnotationQuestion({
+                    questionId: '.(int)$questionId.',
+                    exerciseId: 0,
+                    relPath: \''.$relPath.'\',
+                    courseId: '.(int)$course_id.',
+                    mode: "preview"
+                });
+            </script>
+        ';
                     return 0;
                 }
             }
@@ -1803,7 +1809,7 @@ HOTSPOT;
             unset($objAnswerTmp, $objQuestionTmp);
         }
 
-        return $nbrAnswers;
+            return $nbrAnswers;
     }
 
     /**

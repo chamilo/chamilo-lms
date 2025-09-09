@@ -33,15 +33,15 @@ final class Version20201216110722 extends AbstractMigrationChamilo
 
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
-        // The title of the attendance table is used to create the slug in the resource_node tbale.
+        // The title of the attendance table is used to create the slug in the resource_node table.
         // Before creating a new registry in resource_node, Doctrine is looking for all the registries that start with the same name
         // It then find the last one depending on the name and create new one with the "title-number"
-        // where title is the title of the attendance and the number is the max number all ready existing + 1
+        // where title is the title of the attendance and the number is the max number already existing + 1
         // Since in Chamilo 1.11.x the name of the first attendance is created automatically we have a lot of attendance with the same name
         // This make the migration to take a really long time if we have many attendance because this process is taking more and more time
         // when creating more registry with the same name.
         // So to avoid this process taking so much time :
-        // * Save temporarly the title and the id of all the attendance in a PHP Array
+        // * Save temporarily the title and the id of all the attendance in a PHP Array
         // * we modify the title of the attendance to make it unique during the migration by adding the iid at the end
         // * We then process the migration
         // * At the end we restore the title without the iid and also the resource_node.title

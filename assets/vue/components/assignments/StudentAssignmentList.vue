@@ -30,12 +30,6 @@
       </template>
     </Column>
 
-    <Column :header="t('End date')">
-      <template #body="slotProps">
-        {{ formatStored(slotProps.data.assignment?.endsOn) }}
-      </template>
-    </Column>
-
     <Column :header="t('Feedback')">
       <template #body="slotProps">
         <div

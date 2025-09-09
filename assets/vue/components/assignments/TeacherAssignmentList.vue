@@ -34,15 +34,6 @@
       </template>
     </Column>
     <Column
-      :header="t('Sent date')"
-      :sortable="true"
-      field="sentDate"
-    >
-      <template #body="slotProps">
-        {{ abbreviatedDatetime(slotProps.data.sentDate) }}
-      </template>
-    </Column>
-    <Column
       :header="t('Deadline')"
       :sortable="true"
       field="assignment.expiresOn"

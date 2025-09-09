@@ -766,7 +766,7 @@ class Plugin
                 ],
         ];
 
-        $checkDuplicate = Database::select('*', 'settings_current', $checkCondition);
+        $checkDuplicate = Database::select('*', TABLE_MAIN_SETTINGS, $checkCondition);
         if (!empty($checkDuplicate)) {
             return false;
         }
@@ -797,7 +797,7 @@ class Plugin
             'access_url_changeable' => 1,
             'access_url_locked' => 0,
         ];
-        $resp = Database::insert('settings_current', $attributes);
+        $resp = Database::insert(TABLE_MAIN_SETTINGS, $attributes);
 
         // Save the id
         $settings = $this->get_settings();
@@ -807,7 +807,7 @@ class Plugin
         $whereCondition = [
             'id = ?' => key($settings),
         ];
-        Database::update('settings_current', $setData, $whereCondition);
+        Database::update(TABLE_MAIN_SETTINGS, $setData, $whereCondition);
 
         return $resp;
     }
@@ -835,7 +835,7 @@ class Plugin
             $whereCondition = [
                 'variable = ? AND subkey = ?' => ['show_tabs', $key],
             ];
-            $resp = Database::delete('settings_current', $whereCondition);
+            $resp = Database::delete(TABLE_MAIN_SETTINGS, $whereCondition);
 
             //if there is more than one tab
             //re enumerate them
@@ -874,7 +874,7 @@ class Plugin
         $whereCondition = [
             'variable = ? AND subkey = ?' => ['show_tabs', $key],
         ];
-        $resp = Database::update('settings_current', $attributes, $whereCondition);
+        $resp = Database::update(TABLE_MAIN_SETTINGS, $attributes, $whereCondition);
 
         return $resp;
     }

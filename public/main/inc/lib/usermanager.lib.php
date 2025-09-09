@@ -815,19 +815,32 @@ class UserManager
 
         $fallbackUser = $repository->getFallbackUser();
         $fallbackId = (int) $fallbackUser->getId();
-        if ($destroy) {
-            if ($fallbackId && $fallbackId !== $user_id) {
-                $em = Database::getManager();
-                $em->createQuery(
-                    'UPDATE ' . User::class . ' u
-                     SET u.creatorId = :newCreator
+        $affectedIds = [];
+        if ($destroy && $fallbackId && $fallbackId !== $user_id) {
+            $em = Database::getManager();
+            $rows = $em->createQuery(
+                'SELECT u.id
+                     FROM ' . User::class . ' u
                      WHERE u.creatorId = :oldCreator AND u.id <> :fallbackId'
-                            )
-                    ->setParameter('newCreator', $fallbackId)
-                    ->setParameter('oldCreator', $user_id)
-                    ->setParameter('fallbackId', $fallbackId)
-                    ->execute();
-            }
+            )
+                ->setParameter('oldCreator', $user_id)
+                ->setParameter('fallbackId', $fallbackId)
+                ->getScalarResult();
+
+            $affectedIds = array_map(
+                static fn(array $r): int => (int) $r['id'],
+                $rows
+            );
+
+            $em->createQuery(
+                'UPDATE ' . User::class . ' u
+                 SET u.creatorId = :newCreator
+                 WHERE u.creatorId = :oldCreator AND u.id <> :fallbackId'
+            )
+                ->setParameter('newCreator', $fallbackId)
+                ->setParameter('oldCreator', $user_id)
+                ->setParameter('fallbackId', $fallbackId)
+                ->execute();
         }
 
         $repository->deleteUser($user, $destroy);
@@ -835,8 +848,8 @@ class UserManager
         if ($destroy) {
             Event::addEvent(
                 LOG_USER_DELETE,
-                LOG_USER_ID,
-                $user_id,
+                LOG_USER_OBJECT,
+                api_get_user_info($user_id),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );

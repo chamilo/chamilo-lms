@@ -44,42 +44,70 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/search_settings', name: 'chamilo_platform_settings_search')]
-    public function searchSetting(Request $request): Response
+    public function searchSetting(Request $request, AccessUrlHelper $accessUrlHelper): Response
     {
-        $manager = $this->getSettingsManager();
-        $formList = [];
-        $keyword = $request->query->get('keyword');
+        $manager   = $this->getSettingsManager();
+
+        $url = $accessUrlHelper->getCurrent();
+        $manager->setUrl($url);
+
+        $formList  = [];
+        $templateMap = [];
+        $templateMapByCategory = [];
+        $settings  = [];
+
+        $keyword = trim((string) $request->query->get('keyword', ''));
 
         $searchForm = $this->getSearchForm();
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $values = $searchForm->getData();
-            $keyword = $values['keyword'];
+            $values  = $searchForm->getData();
+            $keyword = trim((string) ($values['keyword'] ?? ''));
         }
 
-        if (empty($keyword)) {
-            throw $this->createNotFoundException();
+        $schemas = $manager->getSchemas();
+
+        if ($keyword === '') {
+            return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
+                'keyword'                  => $keyword,
+                'schemas'                  => $schemas,
+                'settings'                 => $settings,
+                'form_list'                => $formList,
+                'search_form'              => $searchForm->createView(),
+                'template_map'             => $templateMap,
+                'template_map_by_category' => $templateMapByCategory,
+            ]);
+        }
+
+        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
+        $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
+        foreach ($settingsWithTemplate as $s) {
+            if ($s->getValueTemplate()) {
+                $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
+            }
         }
 
         $settingsFromKeyword = $manager->getParametersFromKeywordOrderedByCategory($keyword);
-
-        $settings = [];
         if (!empty($settingsFromKeyword)) {
             foreach ($settingsFromKeyword as $category => $parameterList) {
                 if (empty($category)) {
                     continue;
                 }
 
-                $list = [];
+                $variablesInCategory = [];
                 foreach ($parameterList as $parameter) {
-                    $list[] = $parameter->getVariable();
+                    $var = $parameter->getVariable();
+                    $variablesInCategory[] = $var;
+                    if (isset($templateMap[$var])) {
+                        $templateMapByCategory[$category][$var] = $templateMap[$var];
+                    }
                 }
-                $settings = $manager->load($category, null);
+                $settings    = $manager->load($category);
                 $schemaAlias = $manager->convertNameSpaceToService($category);
-                $form = $this->getSettingsFormFactory()->create($schemaAlias);
+                $form        = $this->getSettingsFormFactory()->create($schemaAlias);
 
                 foreach (array_keys($settings->getParameters()) as $name) {
-                    if (!\in_array($name, $list, true)) {
+                    if (!in_array($name, $variablesInCategory, true)) {
                         $form->remove($name);
                         $settings->remove($name);
                     }
@@ -89,18 +117,15 @@ class SettingsController extends BaseController
             }
         }
 
-        $schemas = $manager->getSchemas();
-
-        return $this->render(
-            '@ChamiloCore/Admin/Settings/search.html.twig',
-            [
-                'keyword' => $keyword,
-                'schemas' => $schemas,
-                'settings' => $settings,
-                'form_list' => $formList,
-                'search_form' => $searchForm,
-            ]
-        );
+        return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
+            'keyword'                  => $keyword,
+            'schemas'                  => $schemas,
+            'settings'                 => $settings,
+            'form_list'                => $formList,
+            'search_form'              => $searchForm->createView(),
+            'template_map'             => $templateMap,
+            'template_map_by_category' => $templateMapByCategory,
+        ]);
     }
 
     /**
@@ -114,44 +139,15 @@ class SettingsController extends BaseController
         $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
-        $searchForm = $this->getSearchForm();
 
-        $keyword = '';
-        $settingsFromKeyword = null;
-
-        $searchForm->handleRequest($request);
-        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $values = $searchForm->getData();
-            $keyword = $values['keyword'];
-            $settingsFromKeyword = $manager->getParametersFromKeyword(
-                $schemaAlias,
-                $keyword
-            );
-        }
-
-        $keywordFromGet = $request->query->get('keyword');
-        if ($keywordFromGet) {
-            $keyword = $keywordFromGet;
-            $searchForm->setData([
-                'keyword' => $keyword,
-            ]);
-            $settingsFromKeyword = $manager->getParametersFromKeyword(
-                $schemaAlias,
-                $keywordFromGet
-            );
-        }
-
+        $keyword = (string) $request->query->get('keyword', '');
         $settings = $manager->load($namespace);
-        $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
-        if (!empty($keyword)) {
-            $params = $settings->getParameters();
-            foreach (array_keys($params) as $name) {
-                if (!\array_key_exists($name, $settingsFromKeyword)) {
-                    $form->remove($name);
-                }
-            }
-        }
+        $form = $this->getSettingsFormFactory()->create(
+            $schemaAlias,
+            null,
+            ['allow_extra_fields' => true]
+        );
 
         $form->setData($settings);
         $form->handleRequest($request);
@@ -169,7 +165,7 @@ class SettingsController extends BaseController
 
             $this->addFlash($messageType, $message);
 
-            if (!empty($keyword)) {
+            if ($keyword !== '') {
                 return $this->redirectToRoute('chamilo_platform_settings_search', [
                     'keyword' => $keyword,
                 ]);
@@ -193,17 +189,14 @@ class SettingsController extends BaseController
             }
         }
 
-        return $this->render(
-            '@ChamiloCore/Admin/Settings/default.html.twig',
-            [
-                'schemas' => $schemas,
-                'settings' => $settings,
-                'form' => $form->createView(),
-                'keyword' => $keyword,
-                'search_form' => $searchForm,
-                'template_map' => $templateMap,
-            ]
-        );
+        return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
+            'schemas'     => $schemas,
+            'settings'    => $settings,
+            'form'        => $form->createView(),
+            'keyword'     => $keyword,
+            'search_form' => $this->getSearchForm()->createView(),
+            'template_map'=> $templateMap,
+        ]);
     }
 
     /**

@@ -131,7 +131,7 @@ class ResourceNodeVoter extends Voter
                 $question = $questionRepo->findOneBy(['resourceNode' => $resourceNode]);
                 if ($question) {
                     // Check if it's a Hotspot-type question
-                    if (\in_array($question->getType(), [6, 7, 8], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION
+                    if (\in_array($question->getType(), [6, 7, 8, 20], true)) { // HOT_SPOT, HOT_SPOT_ORDER, HOT_SPOT_DELINEATION, ANNOTATION
                         $rel = $this->entityManager
                             ->getRepository(CQuizRelQuestion::class)
                             ->findOneBy(['question' => $question])

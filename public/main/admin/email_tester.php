@@ -46,7 +46,7 @@ if ($form->validate()) {
         $values['subject'],
         $values['content'],
         UserManager::formatUserFullName($user),
-        $settingsManager->getSetting('mail.mailer_from_name')
+        $settingsManager->getSetting('mail.mailer_from_email')
     );
 
     Display::addFlash(

@@ -26,7 +26,13 @@
 
     <Column :header="t('Deadline')">
       <template #body="slotProps">
-        {{ abbreviatedDatetime(slotProps.data.assignment?.expiresOn) || "-" }}
+        {{ formatStored(slotProps.data.assignment?.expiresOn) }}
+      </template>
+    </Column>
+
+    <Column :header="t('End date')">
+      <template #body="slotProps">
+        {{ formatStored(slotProps.data.assignment?.endsOn) }}
       </template>
     </Column>
 
@@ -70,7 +76,7 @@ import Column from "primevue/column"
 import { ref, onMounted, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useCidReq } from "../../composables/cidReq"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
@@ -80,7 +86,8 @@ import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
 const router = useRouter()
-const { cid, sid } = useCidReq()
+const route = useRoute()
+const { cid, sid, gid } = useCidReq()
 
 const assignments = ref([])
 const loading = ref(false)
@@ -118,12 +125,44 @@ onMounted(async () => {
   }
 })
 
+function getNodeIdFromAssignment(item) {
+  const rn = item?.resourceNode
+  if (rn && typeof rn === "object" && "id" in rn) {
+    return Number(rn.id)
+  }
+
+  if (typeof rn === "string") {
+    const m = rn.match(/(\d+)$/)
+    if (m) return Number(m[1])
+  }
+
+  if (item?.resourceNodeId) {
+    return Number(item.resourceNodeId)
+  }
+
+  if (route.params.node) {
+    return Number(route.params.node)
+  }
+
+  return 0
+}
+
 function goToAssignmentDetail(assignment) {
   if (!assignment?.id) return
+  const nodeId = getNodeIdFromAssignment(assignment)
+
   router.push({
     name: "AssignmentDetail",
-    params: { id: assignment.id },
-    query: { cid, sid },
+    params: { id: assignment.id, node: nodeId },
+    query: { cid, ...(sid && { sid }), ...(gid && { gid }) },
   })
+}
+
+function formatStored(val) {
+  if (!val) return "—"
+  const s = String(val)
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/)
+  if (m) return `${m[3]}/${m[2]}/${m[1]} ${m[4]}:${m[5]}`
+  return abbreviatedDatetime(s)
 }
 </script>

@@ -20,7 +20,7 @@
           @click="goBack"
         />
 
-        <template v-if="forceStudentView && !isPastExpiry">
+        <template v-if="forceStudentView && !isAfterEndDate">
           <div class="ml-auto flex gap-2">
             <BaseButton
               v-if="allowTextFlag && !allowFileFlag"
@@ -114,14 +114,6 @@
       >
         {{ t("You can no longer submit. The deadline has passed.") }}
       </div>
-
-      <div
-        v-else-if="forceStudentView && isPastExpiry"
-        class="text-amber-700 border border-amber-300 p-4 rounded bg-amber-50"
-      >
-        {{ t("Submissions are closed. You can no longer submit new work.") }}
-      </div>
-
       <h2 class="text-2xl font-bold">{{ assignment.title }}</h2>
       <div class="bg-gray-10 border border-gray-25 rounded-lg shadow-sm">
         <div
@@ -209,7 +201,6 @@ function fromApiLocal(str) {
 
 const expiresOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.expiresOn))
 const endsOnDate    = computed(() => fromApiLocal(assignment.value?.assignment?.endsOn))
-const isPastExpiry   = computed(() => (expiresOnDate.value ? new Date() > expiresOnDate.value : false))
 const isAfterEndDate = computed(() => (endsOnDate.value ? new Date() > endsOnDate.value : false))
 const isAfterDeadline = isAfterEndDate
 

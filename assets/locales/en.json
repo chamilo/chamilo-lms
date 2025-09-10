@@ -1042,7 +1042,7 @@
     "Loading layout": "Loading layout",
     "Loading courses": "Loading courses",
     "No courses available": "No courses available",
-    "No favorite courses": "No favorite courses",
+    "No favorite courses.": "No favorite courses.",
     "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled.": "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled.",
     "User not found": "User not found",
     "An error occurred while sending the course": "An error occurred while sending the course",

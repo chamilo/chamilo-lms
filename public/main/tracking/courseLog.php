@@ -47,6 +47,45 @@ if ('true' === api_get_setting('lp.lp_show_max_progress_or_average_enable_course
     }
 }
 
+if (!empty($_GET['ajax']) && (int) $_GET['ajax'] === 1 && (($_GET['fragment'] ?? '') === 'non_registered')) {
+    $nrUsers = Statistics::getNonRegisteredActiveUsersInCourse($courseId, (int) $sessionId);
+
+    $out  = '';
+    $out .= Display::page_subheader2(get_lang('Users active in this course (not enrolled)'));
+    $out .= Display::tag('p', get_lang('These users accessed the course without an official subscription.'));
+
+    if (!empty($nrUsers)) {
+        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
+        $col = 0;
+        $table->setHeaderContents(0, $col++, get_lang('Name'));
+        if ('true' === api_get_setting('show_email_addresses')) {
+            $table->setHeaderContents(0, $col++, get_lang('E-mail'));
+        }
+        $table->setHeaderContents(0, $col++, get_lang('Last access'));
+
+        $row = 1;
+        foreach ($nrUsers as $u) {
+            $fullname = Security::remove_XSS(trim(($u['firstname'] ?? '').' '.($u['lastname'] ?? '')));
+            $email = Security::remove_XSS($u['email'] ?? '');
+            $last  = Security::remove_XSS($u['lastAccess'] ?? '');
+
+            $col = 0;
+            $table->setCellContents($row, $col++, Display::tag('strong', $fullname));
+            if ('true' === api_get_setting('show_email_addresses')) {
+                $table->setCellContents($row, $col++, $email);
+            }
+            $table->setCellContents($row, $col++, $last);
+            $row++;
+        }
+        $out .= $table->toHtml();
+    } else {
+        $out .= Display::tag('p', get_lang('No users found.'));
+    }
+
+    echo $out;
+    exit;
+}
+
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
@@ -167,6 +206,50 @@ $js = "<script>
 </script>";
 $htmlHeadXtra[] = $js;
 
+$labelShow = addslashes(get_lang('Show users active (not enrolled)'));
+$labelHide = addslashes(get_lang('Hide users active (not enrolled)'));
+$ajaxUrl   = api_get_self().'?'.http_build_query([
+        'ajax'     => 1,
+        'fragment' => 'non_registered',
+        'cid'      => (int) $courseId,
+        'sid'      => (int) $sessionId,
+    ]);
+
+$js_nonreg = "<script>
+$(function() {
+  var btn   = $('#toggle-non-registered-users');
+  var block = $('#non-registered-users-block');
+  var lblShow = '{$labelShow}';
+  var lblHide = '{$labelHide}';
+  var url = '{$ajaxUrl}';
+
+  btn.on('click', function(e){
+    e.preventDefault();
+    var open = btn.data('open') === 1;
+
+    if (open) {
+      block.slideUp(150);
+      btn.data('open', 0).text(lblShow);
+    } else {
+      if (!block.data('loaded')) {
+        $.get(url, function(html){
+          block.html(html).data('loaded', 1).hide().slideDown(150);
+          btn.data('open', 1).text(lblHide);
+          document.getElementById('non-registered-users-block')
+                  .scrollIntoView({behavior: 'smooth', block: 'start'});
+        });
+      } else {
+        block.slideDown(150);
+        btn.data('open', 1).text(lblHide);
+        document.getElementById('non-registered-users-block')
+                .scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+    }
+  });
+});
+</script>";
+$htmlHeadXtra[] = $js_nonreg;
+
 // Database table definitions.
 //@todo remove this calls
 $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
@@ -266,6 +349,8 @@ $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
+
+$showNonRegistered = isset($_GET['show_non_registered']) ? (int) $_GET['show_non_registered'] : 0;
 
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
@@ -846,6 +931,14 @@ if ($nbStudents > 0) {
 } else {
     $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
 }
+
+$labelShowBtn = get_lang('Show users active (not enrolled)');
+$html .= '<div class="mt-3">';
+$html .= '<button type="button" class="btn btn--info" id="toggle-non-registered-users" data-open="0">'
+    . Security::remove_XSS($labelShowBtn) . '</button>';
+$html .= '</div>';
+
+$html .= '<div id="non-registered-users-block" style="display:none; margin-top:10px;"></div>';
 
 $groupContent = '';
 echo Display::panel($html, $titleSession);

@@ -30493,3 +30493,6 @@ msgstr "Session prolongée"
 
 msgid "Ended"
 msgstr "Terminé le"
+
+msgid "Incomplete courses"
+msgstr "Cours non terminés"

@@ -1950,71 +1950,38 @@ class Statistics
     }
 
     /**
-     * Returns users who have activity in open courses without being officially enrolled.
+     * Users with activity in this course but not officially enrolled (optionally in a session).
      */
-    public static function getUsersWithActivityButNotRegistered(int $sessionId = 0): array
+    public static function getNonRegisteredActiveUsersInCourse(int $courseId, int $sessionId = 0): array
     {
         $em = Database::getManager();
 
         $qb = $em->createQueryBuilder();
-        $qb->select('t.accessUserId AS userId, t.cId AS courseId, MAX(t.accessDate) AS lastAccess')
+        $qb->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname, u.email AS email, MAX(t.accessDate) AS lastAccess')
             ->from(TrackEAccess::class, 't')
-            ->where('t.accessUserId IS NOT NULL')
-            ->andWhere('t.cId IS NOT NULL')
-            ->groupBy('t.accessUserId, t.cId');
+            ->join(User::class, 'u', 'WITH', 'u.id = t.accessUserId')
+            ->leftJoin(
+                CourseRelUser::class,
+                'cu',
+                'WITH',
+                'cu.user = u AND cu.course = :courseId'.($sessionId > 0 ? ' AND cu.session = :sessionId' : '')
+            )
+            ->where('t.cId = :courseId')
+            ->andWhere('t.accessUserId IS NOT NULL')
+            ->andWhere('cu.id IS NULL')
+            ->groupBy('u.id, u.firstname, u.lastname, u.email')
+            ->orderBy('lastAccess', 'DESC')
+            ->setParameter('courseId', $courseId);
 
         if ($sessionId > 0) {
-            $qb->andWhere('t.sessionId = :sessionId')
-                ->setParameter('sessionId', $sessionId);
+            $qb->andWhere('t.sessionId = :sessionId')->setParameter('sessionId', $sessionId);
         }
 
-        $results = $qb->getQuery()->getArrayResult();
-
-        $nonRegistered = [];
-
-        foreach ($results as $row) {
-            $userId = $row['userId'];
-            $courseId = $row['courseId'];
-
-            $course = $em->getRepository(Course::class)->find($courseId);
-            if (!$course) {
-                continue;
-            }
-
-            if (!\in_array($course->getVisibility(), [Course::OPEN_PLATFORM, Course::OPEN_WORLD], true)) {
-                continue;
-            }
-
-            $isRegistered = $em->createQueryBuilder()
-                ->select('1')
-                ->from(CourseRelUser::class, 'cu')
-                ->where('cu.user = :userId AND cu.course = :courseId')
-                ->setParameter('userId', $userId)
-                ->setParameter('courseId', $courseId);
-
-            if ($sessionId > 0) {
-                $isRegistered->andWhere('cu.session = :sessionId')
-                    ->setParameter('sessionId', $sessionId);
-            }
-
-            if (empty($isRegistered->getQuery()->getResult())) {
-                $user = $em->getRepository(User::class)->find($userId);
-                if (!$user) {
-                    continue;
-                }
-
-                $nonRegistered[] = [
-                    'id' => $user->getId(),
-                    'firstname' => $user->getFirstname(),
-                    'lastname' => $user->getLastname(),
-                    'email' => $user->getEmail(),
-                    'courseTitle' => $course->getTitle(),
-                    'courseCode' => $course->getCode(),
-                    'lastAccess' => $row['lastAccess'] ? (new \DateTime($row['lastAccess']))->format('Y-m-d H:i:s') : '',
-                ];
-            }
+        $rows = $qb->getQuery()->getArrayResult();
+        foreach ($rows as &$r) {
+            $r['lastAccess'] = !empty($r['lastAccess']) ? (new \DateTime($r['lastAccess']))->format('Y-m-d H:i:s') : '';
         }
 
-        return $nonRegistered;
+        return $rows;
     }
 }

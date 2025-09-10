@@ -785,49 +785,6 @@ switch ($report) {
         }
         // courses for each course category
         $content .= Statistics::printStats(get_lang('Courses'), $courses);
-
-        $content .= '
-            <button class="btn btn--info mb-3" onclick="toggleNonRegisteredUsers()">
-                '.get_lang('Show/Hide users active in open courses (not enrolled)').'
-            </button>
-
-            <div id="non-registered-users-block" style="display: none; margin-top: 10px;">
-        ';
-
-        $sessionId = api_get_session_id();
-        $userList = Statistics::getUsersWithActivityButNotRegistered($sessionId);
-
-        if (!empty($userList)) {
-            $content .= Display::page_subheader2(get_lang('Users active in open courses (not enrolled)'));
-            $content .= Display::tag('p', get_lang('The following users have accessed one or more courses without being officially registered. They generated activity in open courses but are not listed in the course subscription tables.'));
-            $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-            $table->setHeaderContents(0, 0, get_lang('Name'));
-            $table->setHeaderContents(0, 1, get_lang('Course'));
-            $table->setHeaderContents(0, 2, get_lang('Latest access'));
-            $row = 1;
-            foreach ($userList as $user) {
-                $name = Display::tag('strong', $user['firstname'].' '.$user['lastname']);
-                $course = Display::tag('em', $user['courseTitle'].' ('.$user['courseCode'].')');
-                $access = Security::remove_XSS($user['lastAccess']);
-
-                $table->setCellContents($row, 0, $name);
-                $table->setCellContents($row, 1, $course);
-                $table->setCellContents($row, 2, $access);
-                $row++;
-            }
-            $content .= $table->toHtml();
-        } else {
-            $content .= Display::tag('p', get_lang('No user found with activity in open courses without enrollment.'));
-        }
-        $content .= '</div>';
-        $content .= '
-        <script>
-            function toggleNonRegisteredUsers() {
-                const block = document.getElementById("non-registered-users-block");
-                block.style.display = block.style.display === "none" ? "block" : "none";
-            }
-        </script>';
-
         break;
     case 'tools':
         $content .= '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';

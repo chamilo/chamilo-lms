@@ -71,7 +71,7 @@
       >
         {{
           t(
-            'This list displays users from all access URLs because the setting "session_admin_access_to_all_users_on_all_urls" is enabled.',
+            'This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled.',
           )
         }}
       </p>

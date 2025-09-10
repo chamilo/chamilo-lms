@@ -30446,8 +30446,8 @@ msgstr "Rechercher un apprenant"
 msgid "Create new user"
 msgstr "Créer un nouvel utilisateur"
 
-msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled"
-msgstr "Cette liste affiche les utilisateurs de toutes les URL d'accès car le paramètre « session_admin_access_to_all_users_on_all_urls » est activé"
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled."
+msgstr "Cette liste affiche les utilisateurs de toutes les URL d'accès car le paramètre « session_admin_access_to_all_users_on_all_urls » est activé."
 
 msgid "Matching students"
 msgstr "Apprenants trouvés"

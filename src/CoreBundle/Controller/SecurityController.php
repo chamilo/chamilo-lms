@@ -220,6 +220,16 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @see LoginTokenAuthenticator
+     */
+    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'])]
+    public function loginLdapCheck(): Response
+    {
+        // this response was managed in LoginTokenAuthenticator class
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
      * Validates the provided TOTP code for the given user.
      *
      * @param mixed $user

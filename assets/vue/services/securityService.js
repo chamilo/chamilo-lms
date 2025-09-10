@@ -17,7 +17,7 @@ async function login({ login, password, _remember_me, totp = null }) {
     payload.totp = totp
   }
 
-  return await baseService.post("/login_json", payload)
+  return await baseService.post("/login/ldap/check", payload)
 }
 
 /**

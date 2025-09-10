@@ -9721,7 +9721,7 @@ msgid "Past"
 msgstr "Passée"
 
 msgid "Active"
-msgstr "Active"
+msgstr "Actif"
 
 msgid "Not yet begun"
 msgstr "A venir"
@@ -30418,3 +30418,78 @@ msgstr "Badge"
 
 msgid "Loading..."
 msgstr "Chargement..."
+
+msgid "Favorite courses"
+msgstr "Cours préférés"
+
+msgid "No favorite courses."
+msgstr "Pas de cours préféré."
+
+msgid "Completed courses"
+msgstr "Cours finis"
+
+msgid "Incomplete Courses"
+msgstr "Cours non finis"
+
+msgid "Restartable courses"
+msgstr "Cours à recommencer"
+
+msgid "Available courses in this URL"
+msgstr "Cours disponible sur cette URL"
+
+msgid "Register student"
+msgstr "Inscrire un apprenant"
+
+msgid "Search student"
+msgstr "Rechercher un apprenant"
+
+msgid "Create new user"
+msgstr "Créer un nouvel utilisateur"
+
+msgid "This list displays users from all access URLs because the setting \"session_admin_access_to_all_users_on_all_urls\" is enabled"
+msgstr "Cette liste affiche les utilisateurs de toutes les URL d'accès car le paramètre « session_admin_access_to_all_users_on_all_urls » est activé"
+
+msgid "Matching students"
+msgstr "Apprenants trouvés"
+
+msgid "Local user"
+msgstr "Utilisateur local"
+
+msgid "External user"
+msgstr "Utilisateur externe"
+
+msgid "Inactive"
+msgstr "Inactif"
+
+msgid "Send course invitation"
+msgstr "Envoyer invitation au cours"
+
+msgid "Password (leave blank to auto)"
+msgstr "Mot de passe (laisser vide pour auto)"
+
+msgid "Send access details to user by email"
+msgstr "Envoyer les détails d'accès à l'utilisateur par e-mail"
+
+msgid "Course sent to"
+msgstr "Cours envoyé à"
+
+msgid "User created"
+msgstr "Utilisateur créé"
+
+msgid "Could not create user"
+msgstr "L'utilisateur n'a pas pu être créé"
+
+msgid "Issued at"
+msgstr "Généré le"
+
+msgid "Session period"
+msgstr "Période de la session"
+
+msgid "Extend one week"
+msgstr "Prolonger d'une semaine"
+
+msgid "Session extended"
+msgstr "Session prolongée"
+
+msgid "Ended"
+msgstr "Terminé le"

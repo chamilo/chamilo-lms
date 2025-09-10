@@ -147,7 +147,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     /**
      * @var Collection<int, CStudentPublication>
      */
-    #[ORM\OneToMany(mappedBy: 'publicationParent', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'publicationParent', targetEntity: self::class, cascade: ['remove'], orphanRemoval: true)]
     protected Collection $children;
 
     /**
@@ -168,7 +168,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     protected User $user;
 
     #[Groups(['c_student_publication:write', 'student_publication:read'])]
-    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist'])]
+    #[ORM\OneToOne(mappedBy: 'publication', targetEntity: CStudentPublicationAssignment::class, cascade: ['persist', 'remove'])]
     #[Assert\Valid]
     protected ?CStudentPublicationAssignment $assignment = null;
 

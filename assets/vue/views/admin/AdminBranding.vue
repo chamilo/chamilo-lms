@@ -97,7 +97,7 @@
 
         <div class="flex items-center gap-2">
           <button class="btn btn--primary" @click="uploadHeader" :disabled="isSaving">
-            {{ isSaving ? t('Saving…') : t('Save header logo') }}
+            {{ isSaving ? t('Saving...') : t('Save header logo') }}
           </button>
         </div>
       </div>
@@ -306,12 +306,12 @@ function onPick(e, key, opts = {}) {
   if (!f) return
 
   if (key.endsWith('Png') && f.type !== 'image/png') {
-    alert(t('PNG required'))
+    alert(t('PNG format required'))
     e.target.value = ''
     return
   }
   if (key.endsWith('Svg') && !(f.type === 'image/svg+xml' || f.name.toLowerCase().endsWith('.svg'))) {
-    alert(t('SVG required'))
+    alert(t('SVG format required'))
     e.target.value = ''
     return
   }

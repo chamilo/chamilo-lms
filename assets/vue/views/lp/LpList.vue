@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold text-gray-90">{{ t("Learning Path") }}</h1>
+      <h1 class="text-2xl font-bold text-gray-90">{{ t("Learning path") }}</h1>
       <div class="relative flex items-center gap-2">
         <StudentViewButton
           :key="route.query.isStudentView === 'true' ? 'sv-on' : 'sv-off'"

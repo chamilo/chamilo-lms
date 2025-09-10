@@ -566,7 +566,7 @@ class IndexBlocksController extends BaseController
         $items[] = [
             'class' => 'item-cleanup-temp-uploads',
             'url' => '/admin/cleanup-temp-uploads',
-            'label' => $this->translator->trans('Clean uploaded temp files'),
+            'label' => $this->translator->trans('Clean temporary files'),
         ];
 
         $items[] = [

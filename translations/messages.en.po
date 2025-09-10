@@ -30577,3 +30577,99 @@ msgstr "Question media"
 
 msgid "Loading..."
 msgstr "Loading..."
+
+msgid "ex. localhost"
+msgstr "ex. localhost"
+
+msgid "ex. 3306"
+msgstr "ex. 3306"
+
+msgid "ex. root"
+msgstr "ex. root"
+
+msgid "CREATE TABLE works"
+msgstr "CREATE TABLE works"
+
+msgid "ALTER TABLE works"
+msgstr "ALTER TABLE works"
+
+msgid "DROP COLUMN works"
+msgstr "DROP COLUMN works"
+
+msgid "Theme selected as current"
+msgstr "Theme selected as current"
+
+msgid "Color theme created"
+msgstr "Color theme created"
+
+msgid "You are editing logos for visual theme"
+msgstr "You are editing logos for visual theme"
+
+msgid "Header logo"
+msgstr "Header logo"
+
+msgid "Effective preview"
+msgstr "Effective preview"
+
+msgid "Using default theme logo"
+msgstr "Using default theme logo"
+
+msgid "Files in current theme"
+msgstr "Files in current theme"
+
+msgid "No SVG uploaded"
+msgstr "No SVG uploaded"
+
+msgid "Remove SVG"
+msgstr "Remove SVG"
+
+msgid "No PNG uploaded"
+msgstr "No PNG uploaded"
+
+msgid "Remove PNG"
+msgstr "Remove PNG"
+
+msgid "Save header logo"
+msgstr "Save header logo"
+
+msgid "Email logo"
+msgstr "Email logo"
+
+msgid "Save email logo"
+msgstr "Save email logo"
+
+msgid "PNG format required"
+msgstr "PNG format required"
+
+msgid "SVG format required"
+msgstr "SVG format required"
+
+msgid "Select at least one file"
+msgstr "Select at least one file"
+
+msgid "Upload failed"
+msgstr "Upload failed"
+
+msgid "Deletion failed"
+msgstr "Deletion failed"
+
+msgid "Drag to reorder"
+msgstr "Drag to reorder"
+
+msgid "Clean temporary files"
+msgstr "Clean temporary files"
+
+msgid "Learning path title here"
+msgstr "Learning path title here"
+
+msgid "Publish / Hide"
+msgstr "Publish / Hide"
+
+msgid "Select which items to include in the PDF"
+msgstr "Select which items to include in the PDF"
+
+msgid "Open in a new tab"
+msgstr "Open in a new tab"
+
+msgid "Delete third party"
+msgstr "Delete third party"

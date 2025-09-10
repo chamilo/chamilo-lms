@@ -151,7 +151,7 @@ onMounted(() => {
             >
               <div class="flex items-center justify-between">
                 <div class="text-body-2 text-gray-70">
-                  {{ t("Select which items to include in the PDF.") }}
+                  {{ t("Select which items to include in the PDF") }}
                 </div>
                 <button
                   class="px-3 py-1.5 rounded-lg border border-gray-25 hover:bg-gray-15"

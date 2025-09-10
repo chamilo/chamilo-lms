@@ -30542,3 +30542,99 @@ msgstr ""
 
 msgid "Loading..."
 msgstr ""
+
+msgid "ex. localhost"
+msgstr ""
+
+msgid "ex. 3306"
+msgstr ""
+
+msgid "ex. root"
+msgstr ""
+
+msgid "CREATE TABLE works"
+msgstr ""
+
+msgid "ALTER TABLE works"
+msgstr ""
+
+msgid "DROP COLUMN works"
+msgstr ""
+
+msgid "Theme selected as current"
+msgstr ""
+
+msgid "Color theme created"
+msgstr ""
+
+msgid "You are editing logos for visual theme"
+msgstr ""
+
+msgid "Header logo"
+msgstr ""
+
+msgid "Effective preview"
+msgstr ""
+
+msgid "Using default theme logo"
+msgstr ""
+
+msgid "Files in current theme"
+msgstr ""
+
+msgid "No SVG uploaded"
+msgstr ""
+
+msgid "Remove SVG"
+msgstr ""
+
+msgid "No PNG uploaded"
+msgstr ""
+
+msgid "Remove PNG"
+msgstr ""
+
+msgid "Save header logo"
+msgstr ""
+
+msgid "Email logo"
+msgstr ""
+
+msgid "Save email logo"
+msgstr ""
+
+msgid "PNG format required"
+msgstr ""
+
+msgid "SVG format required"
+msgstr ""
+
+msgid "Select at least one file"
+msgstr ""
+
+msgid "Upload failed"
+msgstr ""
+
+msgid "Deletion failed"
+msgstr ""
+
+msgid "Drag to reorder"
+msgstr ""
+
+msgid "Clean temporary files"
+msgstr ""
+
+msgid "Learning path title here"
+msgstr ""
+
+msgid "Publish / Hide"
+msgstr ""
+
+msgid "Select which items to include in the PDF"
+msgstr ""
+
+msgid "Open in a new tab"
+msgstr ""
+
+msgid "Delete third party"
+msgstr ""

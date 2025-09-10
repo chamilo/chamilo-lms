@@ -64,7 +64,7 @@ const progressTextClass = computed(() => {
             @click="emit('open', lp)"
             :title="t('Open')"
           >
-            {{ lp.title || t('LP title here') }}
+            {{ lp.title || t('Learning path title here') }}
           </button>
         </h3>
 
@@ -72,7 +72,7 @@ const progressTextClass = computed(() => {
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
             <circle cx="12" cy="12" r="3"/>
           </svg>
-          <span class="font-medium">{{ t('Pre-requisite:') }}</span>
+          <span class="font-medium">{{ t('Prerequisites') }}</span>
           <span class="text-support-5">{{ lp.prerequisiteName }}</span>
         </div>
       </div>
@@ -130,8 +130,8 @@ const progressTextClass = computed(() => {
         <button
           v-if="canExportScorm"
           class="row-start-1 col-start-4 opacity-70 hover:opacity-100"
-          :title="t('SCORM Export')"
-          :aria-label="t('SCORM Export')"
+          :title="t('Export as SCORM')"
+          :aria-label="t('Export as SCORM')"
           @click="emit('export-scorm', lp)"
         >
           <i class="mdi mdi-archive-arrow-down text-xl" />
@@ -139,8 +139,8 @@ const progressTextClass = computed(() => {
         <button
           v-if="canExportPdf"
           class="row-start-1 col-start-5 opacity-70 hover:opacity-100"
-          :title="t('PDF Export')"
-          :aria-label="t('PDF Export')"
+          :title="t('Export to PDF')"
+          :aria-label="t('Export to PDF')"
           @click="emit('export-pdf', lp)"
         >
           <i class="mdi mdi-file-pdf-box text-xl" />
@@ -161,8 +161,8 @@ const progressTextClass = computed(() => {
             <template #menu>
               <div class="absolute right-0 w-44 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-10 mb-2" style="bottom: calc(-100% + 2.5rem)">
                   <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
-                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Unpublish') }}</button>
-                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit items (Build)') }}</button>
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Hide') }}</button>
+                  <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit learnpath') }}</button>
                   <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
               </div>
             </template>
@@ -178,8 +178,8 @@ const progressTextClass = computed(() => {
           <button
             v-if="canExportPdf"
             class="opacity-80 hover:opacity-100 w-9 h-9 rounded-lg border border-gray-25 grid place-content-center"
-            :title="t('PDF Export')"
-            :aria-label="t('PDF Export')"
+            :title="t('Export to PDF')"
+            :aria-label="t('Export to PDF')"
             @click="emit('export-pdf', lp)"
           >
             <i class="mdi mdi-file-pdf-box text-xl" />

@@ -25,7 +25,7 @@ const emit = defineEmits([
   "reorder"
 ])
 
-const displayTitle = computed(() => props.title || t("Learning Path Category"))
+const displayTitle = computed(() => props.title || t("Learning path categories"))
 
 const localList = ref([...(props.list ?? [])])
 const dragging = ref(false)
@@ -68,7 +68,7 @@ const onCatTogglePublish = () => {
 }
 const onCatDelete = () => {
   const label = (props.category.title || "").trim() || t("Category")
-  const msg = `${t("Are you sure to delete:")} ${label}?`
+  const msg = `${t("Are you sure you want to delete")} ${label}?`
   if (confirm(msg)) {
     goCat("delete_lp_category")
   }
@@ -96,7 +96,7 @@ function onChangeCat() {
         <template v-if="canEdit">
           <button
             class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
-            :title="t('Drag category')" :aria-label="t('Drag category')"
+            :title="t('Drag to reorder')" :aria-label="t('Drag to reorder')"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
               <circle cx="4" cy="3" r="1.2" /><circle cx="4" cy="7" r="1.2" /><circle cx="4" cy="11" r="1.2" />
@@ -133,7 +133,7 @@ function onChangeCat() {
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatAddUsers">{{ t('Add users to category') }}</button>
               <div class="my-1 h-px bg-gray-15"></div>
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatToggleVisibility">{{ t('Toggle visibility') }}</button>
-              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatTogglePublish">{{ t('Publish / Unpublish') }}</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatTogglePublish">{{ t('Publish / Hide') }}</button>
               <div class="my-1 h-px bg-gray-15"></div>
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="onCatDelete">{{ t('Delete') }}</button>
             </div>

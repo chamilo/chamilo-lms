@@ -97,7 +97,7 @@
         <Button
           class="p-button-text p-button-sm"
           icon="mdi mdi-open-in-new"
-          :title="t('Open in new tab')"
+          :title="t('Open in a new tab')"
           @click="openPreviewInNewTab"
         />
       </div>

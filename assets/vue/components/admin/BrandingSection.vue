@@ -96,7 +96,7 @@
 
       <div class="flex items-center gap-2">
         <button class="btn btn--primary" @click="uploadHeader" :disabled="isSaving">
-          {{ isSaving ? t('Saving…') : t('Save header logo') }}
+          {{ isSaving ? t('Saving...') : t('Save header logo') }}
         </button>
       </div>
     </div>
@@ -193,7 +193,7 @@
 
       <div class="flex items-center gap-2">
         <button class="btn btn--primary" @click="uploadEmail" :disabled="isSaving">
-          {{ isSaving ? t('Saving…') : t('Save email logo') }}
+          {{ isSaving ? t('Saving...') : t('Save email logo') }}
         </button>
       </div>
     </div>
@@ -274,9 +274,9 @@ const isSaving = ref(false)
 function onPick(e, key, opts = {}) {
   const f = e.target.files?.[0]
   if (!f) return
-  if (key.endsWith("Png") && f.type !== "image/png") { alert(t("PNG required")); e.target.value=""; return }
+  if (key.endsWith("Png") && f.type !== "image/png") { alert(t("PNG format required")); e.target.value=""; return }
   if (key.endsWith("Svg") && !(f.type === "image/svg+xml" || f.name.toLowerCase().endsWith(".svg"))) {
-    alert(t("SVG required")); e.target.value=""; return
+    alert(t("SVG format required")); e.target.value=""; return
   }
   if (key === "headerPng" || key === "emailPng") {
     const img = new Image()
@@ -333,7 +333,7 @@ async function removeFile(type) {
     await themeLogoService.remove(props.slug, type)
     bust()
   } catch (e) {
-    alert(e?.message || t("Delete failed"))
+    alert(e?.message || t("Deletion failed"))
   } finally {
     isSaving.value = false
   }

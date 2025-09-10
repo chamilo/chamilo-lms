@@ -50,7 +50,7 @@ class CStudentPublicationAssignment implements Stringable
     #[ORM\Column(name: 'enable_qualification', type: 'boolean', nullable: false)]
     protected bool $enableQualification;
 
-    #[ORM\OneToOne(inversedBy: 'assignment', targetEntity: CStudentPublication::class)]
+    #[ORM\OneToOne(inversedBy: 'assignment', targetEntity: CStudentPublication::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected CStudentPublication $publication;
 

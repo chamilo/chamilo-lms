@@ -65,22 +65,6 @@ class BbbPlugin extends Plugin
                 'meeting_duration' => 'text',
                 'delete_recordings_on_course_delete' => 'boolean',
                 'hide_conference_link' => 'boolean',
-                'webhooks_enabled' => 'boolean',
-                'webhooks_scope' => [
-                    'type' => 'select',
-                    'options' => [
-                        'per_meeting' => 'Per meeting',
-                        'global'      => 'Global',
-                    ],
-                ],
-                'webhooks_hash_algo' => [
-                    'type' => 'select',
-                    'options' => [
-                        'sha256' => 'SHA-256',
-                        'sha1'   => 'SHA-1',
-                    ],
-                ],
-                'webhooks_event_filter' => 'text',
             ]
         );
 
@@ -349,13 +333,6 @@ class BbbPlugin extends Plugin
                         $configuration[$name] = in_array($type, ['boolean','checkbox'], true) ? 'false' : '';
                     }
                 }
-
-                // Explicit defaults for webhooks
-                $configuration['webhooks_enabled']      = $configuration['webhooks_enabled']      ?? 'false';
-                $configuration['webhooks_scope']        = $configuration['webhooks_scope']        ?? 'per_meeting';
-                $configuration['webhooks_hash_algo']    = $configuration['webhooks_hash_algo']    ?? 'sha256';
-                $configuration['webhooks_event_filter'] = $configuration['webhooks_event_filter'] ?? '';
-
                 $rel->setConfiguration($configuration);
 
                 $em->persist($rel);
@@ -429,67 +406,6 @@ class BbbPlugin extends Plugin
         }
 
         return false;
-    }
-
-    public function webhooksEnabled(): bool
-    {
-        return $this->get('webhooks_enabled') === 'true';
-    }
-    public function webhooksScope(): string
-    {
-        $v = (string) ($this->get('webhooks_scope') ?? 'per_meeting');
-        return in_array($v, ['per_meeting','global'], true) ? $v : 'per_meeting';
-    }
-    public function webhooksHashAlgo(): string
-    {
-        $v = (string) ($this->get('webhooks_hash_algo') ?? 'sha256');
-        return in_array($v, ['sha256','sha1'], true) ? $v : 'sha256';
-    }
-    public function webhooksEventFilter(): string
-    {
-        return (string) ($this->get('webhooks_event_filter') ?? '');
-    }
-
-    public function checkWebhooksHealth(): array
-    {
-        if (!$this->webhooksEnabled()) {
-            return ['enabled' => false, 'ok' => false, 'reason' => 'disabled'];
-        }
-        $host = rtrim((string) $this->get('host'), '/');
-        $salt = (string) $this->get('salt');
-        if ($host === '' || $salt === '') {
-            return ['enabled' => true, 'ok' => false, 'reason' => 'missing_config'];
-        }
-
-        if (!preg_match('#/bigbluebutton$#', $host)) {
-            $host .= '/bigbluebutton';
-        }
-
-        $call = 'hooks/list';
-        $query = ''; // no params
-        $checksum = sha1($call.$query.$salt);
-        $url = $host.'/api/'.$call.'?checksum='.$checksum;
-
-        $xml = @simplexml_load_file($url);
-        if ($xml && (string)($xml->returncode ?? '') === 'SUCCESS') {
-            return ['enabled' => true, 'ok' => true];
-        }
-        $reason = '';
-        if ($xml && isset($xml->messageKey)) $reason = (string)$xml->messageKey;
-        return ['enabled' => true, 'ok' => false, 'reason' => $reason ?: 'no_response'];
-    }
-
-    public function getWebhooksAdminWarningHtml(): ?string
-    {
-        $h = $this->checkWebhooksHealth();
-        if ($h['enabled'] && !$h['ok']) {
-            $msg = 'Webhooks are not installed on the BBB server — running in reduced mode (basic callbacks only).';
-            if (!empty($h['reason'])) {
-                $msg .= ' [' . htmlspecialchars($h['reason'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ']';
-            }
-            return '<div class="alert alert-warning" role="alert">'.$msg.'</div>';
-        }
-        return null;
     }
 
     /**

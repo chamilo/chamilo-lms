@@ -7,12 +7,12 @@
         <strong>{{ $t("Matching courses") }}:</strong>
         {{ totalVisibleCourses }}
       </div>
-      <div class="flex gap-3 items-center">
+      <div class="flex gap-3">
         <Button
           :label="$t('Clear filter results')"
           class="p-button-outlined"
           icon="pi pi-filter-slash"
-          @click="clearFilter"
+          @click="clearFilter()"
         />
         <Button
           :label="$t('Advanced search')"
@@ -20,7 +20,13 @@
           icon="pi pi-sliders-h"
           @click="showAdvancedSearch = !showAdvancedSearch"
         />
-
+        <Button
+          v-if="showAdvancedSearch"
+          :label="$t('Apply advanced filters')"
+          icon="pi pi-check"
+          class="p-button-sm p-button-success"
+          @click="applyAdvancedSearch"
+        />
         <Dropdown
           v-if="allSortOptions.length"
           v-model="sortField"
@@ -40,23 +46,80 @@
         </div>
       </div>
     </div>
+    <div
+      v-if="showAdvancedSearch"
+      class="p-4 border border-gray-300 rounded bg-white mb-6"
+    >
+      <div class="grid sm:grid-cols-3 gap-4 mb-4">
+        <InputText
+          v-if="courseCatalogueSettings.filters?.by_title"
+          v-model="advancedFilters.title"
+          :placeholder="$t('Filter by title')"
+        />
+        <InputText
+          v-if="courseCatalogueSettings.filters?.by_category"
+          v-model="advancedFilters.category"
+          :placeholder="$t('Filter by category')"
+        />
+        <Dropdown
+          v-if="courseCatalogueSettings.filters?.by_language && languages.length > 1"
+          v-model="advancedFilters.language"
+          :options="languages"
+          optionLabel="originalName"
+          optionValue="isocode"
+          :placeholder="$t('Filter by language')"
+          class="w-full"
+        />
+      </div>
 
-    <!-- Advanced search form -->
-    <div v-if="showAdvancedSearch" class="p-4 border border-gray-300 rounded bg-white mb-6">
-      <AdvancedCourseFilters
-        :key="advancedFormKey"
-        :fields="extraFields"
-        :allowTitle="courseCatalogueSettings.filters?.by_title ?? true"
-        @apply="onAdvancedApply"
-        @clear="onAdvancedClear"
-      />
+      <div
+        class="grid sm:grid-cols-3 gap-4 mb-4"
+        v-if="searchExtraFields.length > 0"
+      >
+        <template
+          v-for="field in searchExtraFields"
+          :key="field.variable"
+        >
+          <InputText
+            v-if="[1, 15, 17].includes(field.value_type)"
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+          />
+          <Textarea
+            v-else-if="field.value_type === 2"
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+            autoResize
+          />
+          <Calendar
+            v-else-if="field.value_type === 6"
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+            dateFormat="yy-mm-dd"
+            showIcon
+          />
+          <InputText
+            v-else
+            v-model="advancedFilters[field.variable]"
+            :placeholder="formatLabel(field)"
+            class="w-full"
+          />
+        </template>
+      </div>
     </div>
-
-    <div v-if="status" class="text-center text-gray-500 py-6">
+    <div
+      v-if="status"
+      class="text-center text-gray-500 py-6"
+    >
       {{ $t("Loading courses. Please wait.") }}
     </div>
-
-    <div v-else-if="!filteredCourses.length" class="text-center text-gray-500 py-6">
+    <div
+      v-else-if="!filteredCourses.length"
+      class="text-center text-gray-500 py-6"
+    >
       {{ $t("No course available") }}
     </div>
 
@@ -73,7 +136,10 @@
       />
     </div>
 
-    <div v-if="loadingMore" class="text-center text-gray-400 py-4">
+    <div
+      v-if="loadingMore"
+      class="text-center text-gray-400 py-4"
+    >
       {{ $t("Loading more courses...") }}
     </div>
   </div>
@@ -82,7 +148,6 @@
 import { computed, onMounted, ref, watch } from "vue"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
-import Dropdown from "primevue/dropdown"
 import { FilterMatchMode } from "@primevue/core/api"
 import { useNotification } from "../../composables/notification"
 import { useLanguage } from "../../composables/language"
@@ -93,114 +158,24 @@ import { useRouter } from "vue-router"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useI18n } from "vue-i18n"
 import courseService from "../../services/courseService"
-import AdvancedCourseFilters from "../../components/course/AdvancedCourseFilters.vue"
 
 const { t } = useI18n()
 const sortField = ref("title")
 
-const router = useRouter()
-const securityStore = useSecurityStore()
-const platformConfigStore = usePlatformConfig()
-const courseCatalogueSettings = computed(() => {
-  let raw = platformConfigStore.getSetting("catalog.course_catalog_settings")
-  if (!raw || raw === false || raw === "false") return {}
-  try {
-    if (typeof raw === "string") raw = JSON.parse(raw)
-    if (typeof raw.courses === "object") return raw.courses
-    return raw
-  } catch (e) {
-    console.error("Invalid catalogue settings format", e)
-    return {}
-  }
+const formatLabel = (field) => {
+  if (field.display_text) return field.display_text
+  return field.variable
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (l) => l.toUpperCase())
+}
+
+const standardSortOptions = computed(() => {
+  return courseCatalogueSettings.value.standard_sort_options ?? {}
 })
 
-const isAnonymous = !securityStore.isAuthenticated
-const isPrivilegedUser =
-  securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
-
-const allowCatalogueAccess = computed(() => {
-  if (isAnonymous) return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
-  if (isPrivilegedUser) return true
-  if (securityStore.isStudent) return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
-  return false
+const extraSortOptions = computed(() => {
+  return courseCatalogueSettings.value.extra_field_sort_options ?? {}
 })
-
-if (!allowCatalogueAccess.value) {
-  if (!securityStore.user?.id) {
-    router.push({ name: "Login" })
-  } else if (securityStore.isStudent) {
-    router.push({ name: "Home" })
-  } else {
-    router.push({ name: "Index" })
-  }
-  throw new Error("Catalogue access denied by settings")
-}
-
-const currentUserId = securityStore.user?.id ?? null
-const status = ref(false)
-const courses = ref([])
-const filteredCourses = ref([])
-const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } })
-
-const rowsPerScroll = 9
-const visibleCount = ref(rowsPerScroll)
-const loadingMore = ref(false)
-
-const extraFields = ref([])
-const { showErrorNotification } = useNotification()
-const { languageList } = useLanguage()
-const languages = languageList
-
-const loadExtraFields = async () => {
-  try {
-    const response = await fetch("/catalogue/course-extra-fields")
-    if (!response.ok) throw new Error("Failed to load extra fields")
-    extraFields.value = await response.json()
-  } catch (error) {
-    console.error("Error loading extra fields", error)
-  }
-}
-
-const load = async () => {
-  status.value = true
-  try {
-    courses.value = await courseService.loadCourseCatalogue()
-
-    const ids = courses.value.map(c => c.id).join(',')
-    if (ids) {
-      const res = await fetch(`/catalogue/course-extra-field-values?ids=${ids}`)
-      const extraByCourse = await res.json()
-      courses.value = courses.value.map(c => ({
-        ...c,
-        extra_fields: extraByCourse[c.id] || {}
-      }))
-    }
-
-    if (currentUserId) {
-      const votes = await userRelCourseVoteService.getUserVotes({
-        userId: currentUserId,
-        urlId: window.access_url_id,
-      })
-      for (const vote of votes) {
-        let courseId
-        if (typeof vote.course === "object" && vote.course !== null) {
-          courseId = vote.course.id
-        } else if (typeof vote.course === "string") {
-          courseId = parseInt(vote.course.split("/").pop())
-        }
-        const course = courses.value.find((c) => c.id === courseId)
-        if (course) course.userVote = vote
-      }
-    }
-  } catch (error) {
-    showErrorNotification(error)
-  } finally {
-    status.value = false
-  }
-}
-
-const standardSortOptions = computed(() => courseCatalogueSettings.value.standard_sort_options ?? {})
-const extraSortOptions = computed(() => courseCatalogueSettings.value.extra_field_sort_options ?? {})
 
 const allSortOptions = computed(() => {
   const standard = Object.entries(standardSortOptions.value).map(([key, value]) => ({
@@ -223,189 +198,198 @@ const cardExtraFields = computed(() => {
   return extraFields.value.filter((field) => allowed.includes(field.variable))
 })
 
+const showAdvancedSearch = ref(false)
+const advancedFilters = ref({
+  title: "",
+  category: "",
+  language: "",
+})
+
+const extraFields = ref([])
+const { showErrorNotification } = useNotification()
+const { languageList } = useLanguage()
+const languages = languageList
+const router = useRouter()
+const securityStore = useSecurityStore()
+
+const platformConfigStore = usePlatformConfig()
+const courseCatalogueSettings = computed(() => {
+  let raw = platformConfigStore.getSetting("catalog.course_catalog_settings")
+  if (!raw || raw === false || raw === "false") return {}
+  try {
+    if (typeof raw === "string") {
+      raw = JSON.parse(raw)
+    }
+
+    if (typeof raw.courses === "object") {
+      return raw.courses
+    }
+
+    return raw
+  } catch (e) {
+    console.error("Invalid catalogue settings format", e)
+    return {}
+  }
+})
+
+const searchExtraFields = computed(() => {
+  const allowed = courseCatalogueSettings.value.extra_fields_in_search_form ?? []
+  return extraFields.value.filter((field) => allowed.includes(field.variable))
+})
+
 const showCourseTitle = computed(() => courseCatalogueSettings.value.hide_course_title !== true)
 
-const showAdvancedSearch = ref(false)
-const advancedPayload = ref({})
-const advancedFormKey = ref(0)
+const redirectAfterSubscription = computed(
+  () => courseCatalogueSettings.value.redirect_after_subscription ?? "course_catalog",
+)
 
-function onAdvancedApply(payload) {
-  advancedPayload.value = payload || {}
-  applyAdvancedSearch()
+const onUserSubscribed = ({ courseId, newUser }) => {
+  const index = courses.value.findIndex((c) => c.id === courseId)
+  if (index !== -1) {
+    const oldCourse = courses.value[index]
+    const updatedCourse = {
+      ...oldCourse,
+      subscribed: true,
+      users: [...(oldCourse.users || []), newUser],
+    }
+
+    courses.value[index] = updatedCourse
+    const filteredIndex = filteredCourses.value.findIndex((c) => c.id === courseId)
+    if (filteredIndex !== -1) {
+      filteredCourses.value[filteredIndex] = updatedCourse
+    }
+    applyAdvancedSearch()
+    if (redirectAfterSubscription.value === "course_home") {
+      router.push({ name: "CourseHome", params: { id: courseId } })
+    }
+  }
 }
 
-function onAdvancedClear() {
-  advancedPayload.value = {}
-  applyAdvancedSearch()
-}
-
-function normalizeString(x) {
-  return (x ?? "").toString().trim().toLowerCase()
-}
-
-function splitCandidates(str) {
-  return normalizeString(str)
-    .split(/[:;,\|]+/)
-    .map((s) => s.trim())
-    .filter(Boolean)
-}
-
-function optionLabelBy({ field, idOrValue }) {
-  if (!field?.options?.length) return null
-  const found = field.options.find(
-    (o) => String(o.id) === String(idOrValue) || String(o.value) === String(idOrValue),
-  )
-  return found?.label ?? null
-}
-
-function optionLabelsForArray({ field, arr }) {
-  const out = []
-  for (const v of arr || []) {
-    const lbl = optionLabelBy({ field, idOrValue: v })
-    out.push(normalizeString(lbl ?? v))
-  }
-  return out
-}
-
-function matchesExtraField(course, field, payload) {
-  const courseVal = course?.extra_fields?.[field.variable]
-  if (courseVal == null) return false
-
-  let courseTokens = []
-  if (Array.isArray(courseVal)) {
-    courseTokens = courseVal.map(normalizeString)
-  } else if (typeof courseVal === "object") {
-    courseTokens = Object.values(courseVal).map(normalizeString)
-  } else {
-    courseTokens = splitCandidates(courseVal)
-  }
-
-  const tokensContain = (needle) =>
-    courseTokens.some((tok) => tok.includes(normalizeString(needle)))
-
-  const vt = Number(field.value_type)
-
-  // SELECT simple
-  if (vt === 4) {
-    const sel = payload[`extra_${field.variable}`]
-    if (!sel) return true
-    const label = optionLabelBy({ field, idOrValue: sel }) ?? sel
-    return tokensContain(label) || tokensContain(sel)
-  }
-
-  // MULTISELECT
-  if (vt === 5) {
-    const arr = payload[`extra_${field.variable}`]
-    if (!arr || !arr.length) return true
-    const labels = optionLabelsForArray({ field, arr })
-    return labels.every((lbl) => tokensContain(lbl))
-  }
-
-  // DATE / DATETIME
-  if (vt === 6 || vt === 7) {
-    const sel = payload[`extra_${field.variable}`]
-    if (!sel) return true
-    const dateStr =
-      sel instanceof Date
-        ? `${sel.getFullYear()}-${String(sel.getMonth() + 1).padStart(2, "0")}-${String(sel.getDate()).padStart(2, "0")}`
-        : String(sel)
-    return tokensContain(dateStr)
-  }
-
-  // DOUBLE SELECT
-  if (vt === 8) {
-    const first = payload[`extra_${field.variable}`]
-    const second = payload[`extra_${field.variable}_second`]
-    if (!first && !second) return true
-
-    const firstLbl = first ? optionLabelBy({ field, idOrValue: first }) : null
-    const secondLbl = second ? optionLabelBy({ field, idOrValue: second }) : null
-
-    const okFirst = !first || tokensContain(firstLbl ?? first)
-    const okSecond = !second || tokensContain(secondLbl ?? second)
-    return okFirst && okSecond
-  }
-
-  // TAGS
-  if (vt === 10) {
-    const arr = payload[`extra_${field.variable}`]
-    if (!arr || !arr.length) return true
-    const want = arr.map(normalizeString)
-    return want.every((w) => tokensContain(w))
-  }
-
-  // CHECKBOX
-  if (vt === 13) {
-    const v = payload[`extra_${field.variable}`]
-    if (v == null) return true
-    const expected = v === true || v === 1 || v === "1"
-    const yes = ["1", "yes", "true", "on"]
-    const courseHasYes = courseTokens.some((x) => yes.includes(x))
-    return expected ? courseHasYes : !courseHasYes
-  }
-
-  // SELECT + TEXT
-  if (vt === 26) {
-    const first = payload[`extra_${field.variable}`]
-    const text = payload[`extra_${field.variable}_second`]
-    const okFirst = !first || tokensContain(optionLabelBy({ field, idOrValue: first }) ?? first)
-    const okText = !text || tokensContain(text)
-    return okFirst && okText
-  }
-
-  // TRIPLE SELECT
-  if (vt === 27) {
-    const l1 = payload[`extra_${field.variable}`]
-    const l2 = payload[`extra_${field.variable}_second`]
-    const l3 = payload[`extra_${field.variable}_third`]
-    if (!l1 && !l2 && !l3) return true
-    const labels = [l1, l2, l3].filter(Boolean).map((x) => optionLabelBy({ field, idOrValue: x }) ?? x)
-    return labels.every((lbl) => tokensContain(lbl))
-  }
-
-  // DURATION
-  if (vt === 28) {
-    const sel = payload[`extra_${field.variable}`]
-    if (!sel) return true
-    return tokensContain(sel)
-  }
-
-  // Fallback (TEXT/INT/FLOAT/etc.)
-  const val = payload[`extra_${field.variable}`]
-  if (!val) return true
-  return tokensContain(val)
-}
-
-function applyAdvancedSearch() {
-  const keyword = normalizeString(filters.value.global.value)
-  const adv = advancedPayload.value || {}
-
+const applyAdvancedSearch = () => {
   filteredCourses.value = courses.value.filter((course) => {
+    const keyword = filters.value.global.value?.toLowerCase()
     const matchesGlobal =
-      !keyword ||
-      normalizeString(course.title).includes(keyword) ||
-      normalizeString(course.description).includes(keyword)
+      !keyword || course.title?.toLowerCase().includes(keyword) || course.description?.toLowerCase().includes(keyword)
 
     const matchesTitle =
-      !adv.title || normalizeString(course.title).includes(normalizeString(adv.title))
+      !advancedFilters.value.title || course.title?.toLowerCase().includes(advancedFilters.value.title.toLowerCase())
 
-    const advHasExtra = Object.keys(adv).some((k) => k.startsWith("extra_"))
-    const matchesExtras = !advHasExtra
-      ? true
-      : extraFields.value.every((field) => {
-        const present =
-          adv.hasOwnProperty(`extra_${field.variable}`) ||
-          adv.hasOwnProperty(`extra_${field.variable}_second`) ||
-          adv.hasOwnProperty(`extra_${field.variable}_third`)
-        return present ? matchesExtraField(course, field, adv) : true
-      })
+    const matchesCategory =
+      !advancedFilters.value.category ||
+      course.categories?.some((cat) => cat.title?.toLowerCase().includes(advancedFilters.value.category.toLowerCase()))
 
-    return matchesGlobal && matchesTitle && matchesExtras
+    const matchesLanguage =
+      !advancedFilters.value.language ||
+      course.courseLanguage?.toLowerCase().includes(advancedFilters.value.language?.toLowerCase())
+
+    const matchesExtras = extraFields.value.every((field) => {
+      const val = advancedFilters.value[field.variable]
+      if (!val) return true
+      const fieldValue = course.extra_fields?.[field.variable]
+      return typeof fieldValue === "string" ? fieldValue.toLowerCase().includes(val.toLowerCase()) : true
+    })
+
+    return matchesGlobal && matchesTitle && matchesCategory && matchesLanguage && matchesExtras
   })
 
   visibleCount.value = rowsPerScroll
 }
 
+const isAnonymous = !securityStore.isAuthenticated
+const isPrivilegedUser =
+  securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM || securityStore.isSessionAdmin
+
+const allowCatalogueAccess = computed(() => {
+  if (isAnonymous) {
+    return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
+  }
+
+  if (isPrivilegedUser) {
+    return true
+  }
+
+  if (securityStore.isStudent) {
+    return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
+  }
+
+  return false
+})
+
+if (!allowCatalogueAccess.value) {
+  if (!securityStore.user?.id) {
+    router.push({ name: "Login" })
+  } else if (securityStore.isStudent) {
+    router.push({ name: "Home" })
+  } else {
+    router.push({ name: "Index" })
+  }
+  throw new Error("Catalogue access denied by settings")
+}
+
+const currentUserId = securityStore.user?.id ?? null
+const status = ref(false)
+const courses = ref([])
+const filters = ref({ global: { value: null, matchMode: FilterMatchMode.CONTAINS } })
+
+const rowsPerScroll = 9
+const visibleCount = ref(rowsPerScroll)
+const loadingMore = ref(false)
+
+const loadExtraFields = async () => {
+  try {
+    const response = await fetch("/catalogue/course-extra-fields")
+    if (!response.ok) throw new Error("Failed to load extra fields")
+    extraFields.value = await response.json()
+  } catch (error) {
+    console.error("Error loading extra fields", error)
+  }
+}
+
+const load = async () => {
+  status.value = true
+  try {
+    courses.value = await courseService.loadCourseCatalogue()
+
+    if (currentUserId) {
+      const votes = await userRelCourseVoteService.getUserVotes({
+        userId: currentUserId,
+        urlId: window.access_url_id,
+      })
+
+      for (const vote of votes) {
+        let courseId
+        if (typeof vote.course === "object" && vote.course !== null) {
+          courseId = vote.course.id
+        } else if (typeof vote.course === "string") {
+          courseId = parseInt(vote.course.split("/").pop())
+        }
+
+        const course = courses.value.find((c) => c.id === courseId)
+        if (course) {
+          course.userVote = vote
+        }
+      }
+    }
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    status.value = false
+  }
+}
+
+onMounted(async () => {
+  window.addEventListener("scroll", handleScroll)
+  await loadExtraFields()
+  await load()
+  applyAdvancedSearch()
+})
+
+const clearFilter = () => {
+  filters.value.global.value = null
+  visibleCount.value = rowsPerScroll
+}
+
+const filteredCourses = ref([])
 const visibleCoursesBase = computed(() => {
   const hidePrivate = platformConfigStore.getSetting("catalog.course_catalog_hide_private") === "true"
   const sortOpt = allSortOptions.value.find((opt) => opt.value === sortField.value)
@@ -454,10 +438,13 @@ const visibleCoursesBase = computed(() => {
   return list
 })
 
-const visibleCourses = computed(() => visibleCoursesBase.value.slice(0, visibleCount.value))
+const visibleCourses = computed(() => {
+  return visibleCoursesBase.value.slice(0, visibleCount.value)
+})
+
 const totalVisibleCourses = computed(() => visibleCoursesBase.value.length)
 
-function handleScroll() {
+const handleScroll = () => {
   if (loadingMore.value) return
 
   const threshold = 150
@@ -476,29 +463,12 @@ function handleScroll() {
   }
 }
 
-watch(() => filters.value.global.value, () => {
-  visibleCount.value = rowsPerScroll
-  applyAdvancedSearch()
-})
-
-watch(sortField, () => {
-  visibleCount.value = rowsPerScroll
-})
-
-onMounted(async () => {
-  window.addEventListener("scroll", handleScroll)
-  await loadExtraFields()
-  await load()
-  applyAdvancedSearch()
-})
-
-function clearFilter() {
-  filters.value.global.value = null
-  advancedPayload.value = {}
-  advancedFormKey.value++
-  visibleCount.value = rowsPerScroll
-  applyAdvancedSearch()
-}
+watch(
+  () => filters.value.global.value,
+  () => {
+    visibleCount.value = rowsPerScroll
+  },
+)
 
 const saveOrUpdateVote = async (course, value) => {
   try {
@@ -537,31 +507,9 @@ const saveOrUpdateVote = async (course, value) => {
   }
 }
 
-function onRatingChange({ value, course }) {
+const onRatingChange = ({ value, course }) => {
   if (value > 0 && currentUserId) {
     saveOrUpdateVote(course, value)
-  }
-}
-
-function onUserSubscribed({ courseId, newUser }) {
-  const index = courses.value.findIndex((c) => c.id === courseId)
-  if (index !== -1) {
-    const oldCourse = courses.value[index]
-    const updatedCourse = {
-      ...oldCourse,
-      subscribed: true,
-      users: [...(oldCourse.users || []), newUser],
-    }
-    courses.value[index] = updatedCourse
-    const filteredIndex = filteredCourses.value.findIndex((c) => c.id === courseId)
-    if (filteredIndex !== -1) {
-      filteredCourses.value[filteredIndex] = updatedCourse
-    }
-    applyAdvancedSearch()
-    const redirectAfterSubscription = courseCatalogueSettings.value.redirect_after_subscription ?? "course_catalog"
-    if (redirectAfterSubscription === "course_home") {
-      router.push({ name: "CourseHome", params: { id: courseId } })
-    }
   }
 }
 </script>

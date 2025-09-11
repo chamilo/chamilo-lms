@@ -55,7 +55,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         ?array $attributes = []
     ) {
         $this->labelClass = $attributes['label-class'] ?? '';
-        $this->radioClass = $attributes['radio-class'] ?? 'field-radiobutton2';
+        $this->radioClass = $attributes['radio-class'] ?? 'field-radiobutton';
 
         if (isset($attributes['label-class'])) {
             unset($attributes['label-class']);

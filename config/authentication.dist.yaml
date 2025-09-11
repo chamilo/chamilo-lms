@@ -63,3 +63,20 @@ parameters:
                     script_users_delta: false
                     script_usergroups_delta: false
                     group_filter_regex: ''
+
+            ldap:
+                enabled: false
+                title: 'LDAP'
+                connection_string: 'ldap://localhost:393'
+                protocol_version: 3
+                referrals: false
+                dn_string: '{user_identifier}'
+                query_string: null
+                base_dn: 'dc=example,dc=org'
+                search_dn: 'cn=admin,dc=example,dc=org'
+                search_password: 'adminpassword'
+                default_roles: ['ROLE_STUDENT']
+                uid_key: 'uid'
+                filter: null
+                password_attribute: 'userPassword'
+                extra_fields: [ 'givenName', 'sn', 'uid', 'mail', 'userPassword' ]

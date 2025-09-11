@@ -83,7 +83,7 @@
             :options="toDropdown(level1(f))"
             optionLabel="label" optionValue="id" showClear class="w-full"
           />
-          <InputText v-model="model.extra[`${f.variable}_second`]" :placeholder="$t('Type value')" />
+          <InputText v-model="model.extra[`${f.variable}_second`]" :placeholder="$t('Enter a value here')" />
         </div>
       </div>
 
@@ -135,7 +135,7 @@
       <!-- TAGS -->
       <div v-else-if="isTag(f)">
         <label class="block text-sm font-medium mb-1">{{ f.title }}</label>
-        <Chips v-model="model.extra[f.variable]" :placeholder="$t('Add tags…')" />
+        <Chips v-model="model.extra[f.variable]" :placeholder="$t('Add tags')" />
       </div>
 
       <!-- TEXT / INTEGER / FLOAT / DURATION  -->
@@ -147,7 +147,7 @@
 
     <div class="md:col-span-4 flex flex-wrap gap-2 justify-end">
       <Button type="button" class="p-button-outlined" :label="$t('Clear')" @click="clear" />
-      <Button type="submit" :label="$t('Apply filters')" icon="pi pi-filter" />
+      <Button type="submit" :label="$t('Apply advanced filters')" icon="pi pi-filter" />
     </div>
   </form>
 </template>

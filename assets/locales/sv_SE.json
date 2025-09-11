@@ -745,6 +745,7 @@
     "Please click on the link below corresponding to the URL you wish to access": "Please click on the link below corresponding to the URL you wish to access",
     "You do not currently have access to any URL": "You do not currently have access to any URL",
     "Maximum number of subscriptions allowed": "Maximum number of subscriptions allowed",
+    "An error occurred": "An error occurred",
     "You don\\'t have any course content yet": "You don\\'t have any course content yet",
     "This course is locked": "This course is locked",
     "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as \\'reply-to\\' header": "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as \\'reply-to\\' header",
@@ -860,5 +861,15 @@
     "Select which items to include in the PDF": "Select which items to include in the PDF",
     "Open in a new tab": "Open in a new tab",
     "Delete third party": "Delete third party",
-    "Learning path": "Utbildningsv\u00e4g"
+    "Learning path": "Utbildningsv\u00e4g",
+    "Category options": "Category options",
+    "Copy link": "Copy link",
+    "Security tools and reports": "Security tools and reports",
+    "This field cannot be empty": "This field cannot be empty",
+    "This is not a valid URL. Example: https://example.com": "This is not a valid URL. Example: https://example.com",
+    "Are you sure you want to delete this?": "Are you sure you want to delete this?",
+    "Color theme": "Color theme",
+    "Logos will be applied to the current visual theme: ": "Logos will be applied to the current visual theme: ",
+    "Switch the active theme if you want to upload logos for a different one.": "Switch the active theme if you want to upload logos for a different one.",
+    "Create new learning path": "L\u00e4gg till ny inl\u00e4rningsv\u00e4g"
 }

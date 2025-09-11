@@ -30640,3 +30640,36 @@ msgstr "This is not a valid URL. Example: https://example.com"
 
 msgid "Are you sure you want to delete this?"
 msgstr "Are you sure you want to delete this?"
+
+msgid "Color theme"
+msgstr "Color theme"
+
+msgid "Logos will be applied to the current visual theme: "
+msgstr "Logos will be applied to the current visual theme: "
+
+msgid "Switch the active theme if you want to upload logos for a different one."
+msgstr "Switch the active theme if you want to upload logos for a different one."
+
+msgid "Uploaded"
+msgstr "Uploaded"
+
+msgid "Back to plugins"
+msgstr "Back to plugins"
+
+msgid "Installing"
+msgstr "Installing"
+
+msgid "Processing"
+msgstr "Processing"
+
+msgid "Uninstalling"
+msgstr "Uninstalling"
+
+msgid "Enabling"
+msgstr "Enabling"
+
+msgid "Disabling"
+msgstr "Disabling"
+
+msgid "Allow PDF exports for this item"
+msgstr "Allow PDF exports for this item"

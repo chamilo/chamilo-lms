@@ -126,7 +126,7 @@
 
     <BaseDialogConfirmCancel
       v-model:is-visible="showDeleteDialog"
-      :title="t('Delete data exchange')"
+      :title="t('Delete')"
       :confirm-label="t('Delete')"
       :cancel-label="t('Cancel')"
       @confirm-clicked="confirmDelete"

@@ -29,7 +29,7 @@
                 class="w-full text-left px-3 py-2 rounded hover:bg-gray-15"
                 @click="handleTopMenu('new', $event)"
               >
-                {{ t("New learning path") }}
+                {{ t("Create new learning path") }}
               </button>
               <button
                 v-if="canUseAi"
@@ -105,7 +105,7 @@
         class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
         @click="handleTopMenu('new', $event)"
       >
-        + {{ t("New Learning Path") }}
+        + {{ t("Create new Learning Path") }}
       </button>
     </div>
 

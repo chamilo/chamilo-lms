@@ -855,6 +855,7 @@
     "Please click on the link below corresponding to the URL you wish to access": "Please click on the link below corresponding to the URL you wish to access",
     "You do not currently have access to any URL": "You do not currently have access to any URL",
     "Maximum number of subscriptions allowed": "Maximum number of subscriptions allowed",
+    "An error occurred": "An error occurred",
     "You don\\'t have any course content yet": "You don\\'t have any course content yet",
     "This course is locked": "This course is locked",
     "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as \\'reply-to\\' header": "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as \\'reply-to\\' header",
@@ -977,5 +978,18 @@
     "Select which items to include in the PDF": "Select which items to include in the PDF",
     "Open in a new tab": "Open in a new tab",
     "Delete third party": "Delete third party",
-    "Learning path": "\u039c\u03bf\u03bd\u03bf\u03c0\u03ac\u03c4\u03b9 \u03b3\u03bd\u03ce\u03c3\u03b7\u03c2"
+    "Learning path": "\u039c\u03bf\u03bd\u03bf\u03c0\u03ac\u03c4\u03b9 \u03b3\u03bd\u03ce\u03c3\u03b7\u03c2",
+    "Category options": "Category options",
+    "Expand": "\u0395\u03c0\u03ad\u03ba\u03c4\u03b1\u03c3\u03b7",
+    "Collapse": "\u03a3\u03cd\u03bc\u03c0\u03c4\u03b9\u03be\u03b7",
+    "Copy link": "Copy link",
+    "Untitled": "\u03a7\u03c9\u03c1\u03af\u03c2 \u03a4\u03af\u03c4\u03bb\u03bf",
+    "Security tools and reports": "Security tools and reports",
+    "This field cannot be empty": "This field cannot be empty",
+    "This is not a valid URL. Example: https://example.com": "This is not a valid URL. Example: https://example.com",
+    "Are you sure you want to delete this?": "Are you sure you want to delete this?",
+    "Color theme": "Color theme",
+    "Logos will be applied to the current visual theme: ": "Logos will be applied to the current visual theme: ",
+    "Switch the active theme if you want to upload logos for a different one.": "Switch the active theme if you want to upload logos for a different one.",
+    "Create new learning path": "\u03a0\u03c1\u03bf\u03c3\u03b8\u03ae\u03ba\u03b7 \u03bd\u03ad\u03bf\u03c5 \u03bc\u03bf\u03bd\u03bf\u03c0\u03b1\u03c4\u03b9\u03bf\u03cd \u03b3\u03bd\u03ce\u03c3\u03b7\u03c2"
 }

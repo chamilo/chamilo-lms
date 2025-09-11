@@ -47,7 +47,7 @@
     <div class="mt-10 scroll-mt-24" id="branding">
       <SectionHeader :title="t('Branding (logos)')" size="6" />
       <p class="text-sm opacity-80 mb-4">
-        {{ t('Logos will be applied to the current visual theme:') }}
+        {{ t('Logos will be applied to the current visual theme: ') }}
         <code class="px-2 py-1 bg-gray-100 rounded">{{ effectiveSlug }}</code>.
         {{ t('Switch the active theme if you want to upload logos for a different one.') }}
       </p>

@@ -47,49 +47,8 @@ if ('true' === api_get_setting('lp.lp_show_max_progress_or_average_enable_course
     }
 }
 
-if (!empty($_GET['ajax']) && (int) $_GET['ajax'] === 1 && (($_GET['fragment'] ?? '') === 'non_registered')) {
-    $nrUsers = Statistics::getNonRegisteredActiveUsersInCourse($courseId, (int) $sessionId);
-
-    $out  = '';
-    $out .= Display::page_subheader2(get_lang('Users active in this course (not enrolled)'));
-    $out .= Display::tag('p', get_lang('These users accessed the course without an official subscription.'));
-
-    if (!empty($nrUsers)) {
-        $table = new HTML_Table(['class' => 'table table-hover table-striped data_table']);
-        $col = 0;
-        $table->setHeaderContents(0, $col++, get_lang('Name'));
-        if ('true' === api_get_setting('show_email_addresses')) {
-            $table->setHeaderContents(0, $col++, get_lang('E-mail'));
-        }
-        $table->setHeaderContents(0, $col++, get_lang('Last access'));
-
-        $row = 1;
-        foreach ($nrUsers as $u) {
-            $fullname = Security::remove_XSS(trim(($u['firstname'] ?? '').' '.($u['lastname'] ?? '')));
-            $email = Security::remove_XSS($u['email'] ?? '');
-            $last  = Security::remove_XSS($u['lastAccess'] ?? '');
-
-            $col = 0;
-            $table->setCellContents($row, $col++, Display::tag('strong', $fullname));
-            if ('true' === api_get_setting('show_email_addresses')) {
-                $table->setCellContents($row, $col++, $email);
-            }
-            $table->setCellContents($row, $col++, $last);
-            $row++;
-        }
-        $out .= $table->toHtml();
-    } else {
-        $out .= Display::tag('p', get_lang('No users found.'));
-    }
-
-    echo $out;
-    exit;
-}
-
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
-
-//$htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 
 $this_section = SECTION_COURSES;
 if ('myspace' === $from) {
@@ -206,49 +165,36 @@ $js = "<script>
 </script>";
 $htmlHeadXtra[] = $js;
 
-$labelShow = addslashes(get_lang('Show users active (not enrolled)'));
-$labelHide = addslashes(get_lang('Hide users active (not enrolled)'));
-$ajaxUrl   = api_get_self().'?'.http_build_query([
-        'ajax'     => 1,
-        'fragment' => 'non_registered',
-        'cid'      => (int) $courseId,
-        'sid'      => (int) $sessionId,
-    ]);
-
-$js_nonreg = "<script>
-$(function() {
-  var btn   = $('#toggle-non-registered-users');
-  var block = $('#non-registered-users-block');
-  var lblShow = '{$labelShow}';
-  var lblHide = '{$labelHide}';
-  var url = '{$ajaxUrl}';
-
-  btn.on('click', function(e){
-    e.preventDefault();
-    var open = btn.data('open') === 1;
-
-    if (open) {
-      block.slideUp(150);
-      btn.data('open', 0).text(lblShow);
-    } else {
-      if (!block.data('loaded')) {
-        $.get(url, function(html){
-          block.html(html).data('loaded', 1).hide().slideDown(150);
-          btn.data('open', 1).text(lblHide);
-          document.getElementById('non-registered-users-block')
-                  .scrollIntoView({behavior: 'smooth', block: 'start'});
-        });
-      } else {
-        block.slideDown(150);
-        btn.data('open', 1).text(lblHide);
-        document.getElementById('non-registered-users-block')
-                .scrollIntoView({behavior: 'smooth', block: 'start'});
-      }
-    }
+$htmlHeadXtra[] = <<<CSSJS
+<style>
+  #advanced_search_options{
+    background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin:12px 0;
+  }
+  #advanced_search_options .form-group{
+    display:grid;grid-template-columns:240px 1fr;gap:8px;align-items:center;margin-bottom:10px;
+  }
+  #advanced_search_options .form-group>label{font-weight:600;margin:0;}
+  #advanced_search_options .form-control,#advanced_search_options select{max-width:100%;}
+  @media (max-width: 992px){ #advanced_search_options .form-group{grid-template-columns:1fr;} }
+  #advanced_search_options .has-long-list>div:last-child{
+    max-height:260px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px;padding:8px;background:#fff;
+  }
+  @media (min-width: 992px){
+    #advanced_search_options .has-long-list>div:last-child{column-count:2;column-gap:16px;}
+    #advanced_search_options .has-long-list .radio, #advanced_search_options .has-long-list .checkbox{break-inside:avoid;}
+  }
+  /* Para que el ancla #free-users no quede tapado por headers fijos */
+  #free-users{scroll-margin-top:80px;}
+</style>
+<script>
+  $(function(){
+    $('#advanced_search_options .form-group').each(function(){
+      var _inputs = $(this).find('input[type=checkbox], input[type=radio]');
+      if (_inputs.length > 6) { $(this).addClass('has-long-list'); }
+    });
   });
-});
-</script>";
-$htmlHeadXtra[] = $js_nonreg;
+</script>
+CSSJS;
 
 // Database table definitions.
 //@todo remove this calls
@@ -314,7 +260,6 @@ Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
 $defaultExtraFields = [];
-$defaultExtraFieldsFromSettings = [];
 $defaultExtraFieldsFromSettings = api_get_setting('course.course_log_default_extra_fields', true);
 if (!empty($defaultExtraFieldsFromSettings) && isset($defaultExtraFieldsFromSettings['extra_fields'])) {
     $defaultExtraFields = $defaultExtraFieldsFromSettings['extra_fields'];
@@ -351,6 +296,10 @@ if (isset($_GET['users_tracking_per_page'])) {
 }
 
 $showNonRegistered = isset($_GET['show_non_registered']) ? (int) $_GET['show_non_registered'] : 0;
+$freeUsers = [];
+if ($showNonRegistered) {
+    $freeUsers = Statistics::getNonRegisteredActiveUsersInCourse($courseId, (int) $sessionId);
+}
 
 $actionsRight .= '<a
     href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
@@ -491,21 +440,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
     $select->addOptGroup($groupIdList, get_lang('Group'));
     $formClass->addButtonSearch(get_lang('Search'));
 
-    // Groups
-    /*$formGroup = new FormValidator(
-        'groups',
-        'get',
-        api_get_self().'?'.api_get_cidreq().'&'.$additionalParams
-    );
-    $formGroup->addHidden('cidReq', $courseCode);
-    $formGroup->addHidden('id_session', $sessionId);
-    $groupIdList = ['--'];
-    foreach ($groupList as $group) {
-        $groupIdList[$group['id']] = $group['title'];
-    }
-    $formGroup->addSelect('group_id', get_lang('Group'), $groupIdList);
-    $formGroup->addButtonSearch(get_lang('Search'));*/
-
     // Extra fields
     $formExtraField = new FormValidator(
         'extra_fields',
@@ -518,7 +452,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
             $fieldId = Security::remove_XSS($fieldId);
             $formExtraField->addHidden('additional_profile_field[]', $fieldId);
-            //$formGroup->addHidden('additional_profile_field[]', $fieldId);
             $formClass->addHidden('additional_profile_field[]', $fieldId);
         }
     }
@@ -575,16 +508,6 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         }
     }
 
-    /*if ($formGroup->validate()) {
-        $groupId = (int) $formGroup->getSubmitValue('group_id');
-        if (!empty($groupId)) {
-            $whereCondition = " AND gu.group_id = $groupId ";
-            $tableGroup = Database::get_course_table(TABLE_GROUP_USER);
-            $joins = " INNER JOIN $tableGroup gu ON (user.id = gu.user_id) ";
-            $conditions = ['where' => $whereCondition, 'inject_joins' => $joins];
-        }
-    }*/
-
     if ($formExtraField->validate()) {
         $extraResult = $extraField->processExtraFieldSearch($_REQUEST, $formExtraField, 'user');
         if (!empty($extraResult)) {
@@ -622,14 +545,9 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
             $averageStudentTestScore = substr($userTracking[7], 0, -1);
             $averageStudentsTestScore .= $averageStudentTestScore;
 
-            if ('100' === $averageStudentTestScore) {
-                $reducedAverage = 9;
-            } else {
-                $reducedAverage = floor((float) $averageStudentTestScore / 10);
-            }
-            if (isset($scoresDistribution[$reducedAverage])) {
-                $scoresDistribution[$reducedAverage]++;
-            }
+            $reducedAverage = ('100' === $averageStudentTestScore) ? 9 : floor((float)$averageStudentTestScore / 10);
+            if (isset($scoresDistribution[$reducedAverage])) { $scoresDistribution[$reducedAverage]++; }
+
             $scoreStudent = (float) substr($userTracking[5], 0, -1) + (float) substr($userTracking[7], 0, -1);
             [$hours, $minutes, $seconds] = preg_split('/:/', $userTracking[4]);
             $minutes = round((3600 * (int) $hours + 60 * (int) $minutes + (int) $seconds) / 60);
@@ -687,8 +605,6 @@ if ($nbStudents > 0) {
     $mainForm->addHtml($formExtraField->returnForm());
     $mainForm->addHtml('</div>');
 
-    //$html .= $formClass->returnForm();
-    //$html .= $formExtraField->returnForm();
     $html .= $mainForm->returnForm();
 
     $getLangXDays = get_lang('%s days');
@@ -827,19 +743,13 @@ if ($nbStudents > 0) {
 
     $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
     $exerciseResultHeaders = [];
-    if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
-        isset($addExerciseOption['courses'][$courseCode])
-    ) {
+    if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) && isset($addExerciseOption['courses'][$courseCode])) {
         foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
             $exercise = new Exercise();
             $exercise->read($exerciseId);
             if ($exercise->iId) {
                 $title = get_lang('Test').': '.$exercise->get_formated_title();
-                $table->set_header(
-                    $headerCounter++,
-                    $title,
-                    false
-                );
+                $table->set_header($headerCounter++, $title, false);
                 $exerciseResultHeaders[] = $title;
                 $headers['exercise_'.$exercise->iId] = $title;
             }
@@ -929,19 +839,22 @@ if ($nbStudents > 0) {
     $html .= $table->return_table();
     $html .= '</div>';
 } else {
-    $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
+    if (empty($freeUsers)) {
+        $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
+    }
 }
 
-$labelShowBtn = get_lang('Show users active (not enrolled)');
-$html .= '<div class="mt-3">';
-$html .= '<button type="button" class="btn btn--info" id="toggle-non-registered-users" data-open="0">'
-    . Security::remove_XSS($labelShowBtn) . '</button>';
-$html .= '</div>';
-
-$html .= '<div id="non-registered-users-block" style="display:none; margin-top:10px;"></div>';
-
-$groupContent = '';
 echo Display::panel($html, $titleSession);
+
+$freeAnchor = 'free-users';
+$toggleUrl  = api_get_self().'?'.api_get_cidreq().'&show_non_registered='.($showNonRegistered ? 0 : 1).'#'.$freeAnchor;
+$toggleLbl  = $showNonRegistered
+    ? get_lang('Hide free users (not enrolled)')
+    : get_lang('Show free users (not enrolled)');
+
+echo '<div id="'.$freeAnchor.'" class="mb-2" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
+    .'<a class="btn btn--info" href="'.$toggleUrl.'">'.Security::remove_XSS($toggleLbl).'</a>'
+    .'</div>';
 
 $groupTable = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table']);
 $column = 0;
@@ -957,202 +870,256 @@ $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2
 /** @var CQuiz[] $exercises */
 $exercises = $qb->getQuery()->getResult();
 
+// --- Helpers para convertir % a número ---
+$percentVal = static function ($v): float {
+    if ($v === '' || $v === null) return 0.0;
+    if (is_numeric($v)) return (float)$v;
+    return (float) str_replace('%','', trim((string)$v));
+};
+
 if (!empty($groupList)) {
-    $totalTime = null;
-    $totalLpProgress = null;
-    $totalScore = null;
-    $totalAverageTime = null;
-    $totalBestScoreAverageNotInLP = 0;
+    // Totales ponderados por #usuarios
     $row = 1;
+    $totalSeconds = 0;          // suma de segundos (inscritos + free si se muestran)
+    $totalUsers   = 0;          // #usuarios considerados en total
+    $sumProgress  = 0.0;        // suma de % progreso * usuarios
+    $sumBest      = 0.0;        // suma de % ejercicios * usuarios
+
     foreach ($groupList as $groupInfo) {
-        $column = 0;
-        $groupTable->setCellContents($row, $column++, $groupInfo['title']);
+        $col = 0;
+        $groupTable->setCellContents($row, $col++, $groupInfo['title']);
+
+        $timeStr = $avgTimeStr = $progStr = $bestStr = '';
+
         $usersInGroup = GroupManager::getStudents($groupInfo['iid']);
-
-        $time = null;
-        $lpProgress = null;
-        $score = null;
-        $averageTime = null;
-        $bestScoreAverageNotInLP = null;
         if (!empty($usersInGroup)) {
-            $usersInGroup = array_column($usersInGroup, 'user_id');
-            $userInGroupCount = count($usersInGroup);
-            $timeInSeconds = Tracking::get_time_spent_on_the_course(
-                $usersInGroup,
-                $courseId,
-                $sessionId
+            $uids = array_column($usersInGroup, 'user_id');
+            $count = count($uids);
+
+            // Tiempo del grupo
+            $secs = Tracking::get_time_spent_on_the_course($uids, $courseId, $sessionId);
+            if ($secs) {
+                $timeStr    = api_time_to_hms($secs);
+                $avgTimeStr = api_time_to_hms($secs / $count);
+            }
+
+            // Progreso del grupo (una sola llamada, no dentro de un foreach)
+            $groupProgressNum = $percentVal(
+                Tracking::get_avg_student_progress($uids, $course, [], $session)
             );
-            $totalTime += $timeInSeconds;
-            if (!empty($timeInSeconds)) {
-                $time = api_time_to_hms($timeInSeconds);
-                $averageTime = $timeInSeconds / $userInGroupCount;
-                $totalAverageTime += $averageTime;
-                $averageTime = api_time_to_hms($averageTime);
-            }
+            $progStr = round($groupProgressNum, 2).' %';
 
-            $totalGroupLpProgress = 0;
-            foreach ($usersInGroup as $studentId) {
-                $lpProgress = Tracking::get_avg_student_progress(
-                    $usersInGroup,
-                    $course,
-                    [],
-                    $session
-                );
-                $totalGroupLpProgress += $lpProgress;
-            }
-
-            if (empty($totalGroupLpProgress)) {
-                $totalGroupLpProgress = '';
-            } else {
-                $lpProgress = $totalGroupLpProgress / $userInGroupCount;
-                $totalLpProgress += $totalGroupLpProgress;
-            }
-
-            if (!empty($exercises)) {
+            // Promedio de mejores notas (fuera de LP) del grupo
+            $groupBestNum = 0.0;
+            if (!empty($exercises) && $count) {
+                $bestSum = 0.0;
                 foreach ($exercises as $exerciseData) {
-                    foreach ($usersInGroup as $userId) {
+                    foreach ($uids as $u) {
                         $results = Event::get_best_exercise_results_by_user(
                             $exerciseData->getIid(),
                             $courseId,
-                            0,
-                            $userId
+                            0, // no-session en esta consulta
+                            $u
                         );
-                        $best = 0;
+                        $best = 0.0;
                         if (!empty($results)) {
-                            foreach ($results as $result) {
-                                if (!empty($result['max_score'])) {
-                                    $score = $result['score'] / $result['max_score'];
-                                    if ($score > $best) {
-                                        $best = $score;
-                                    }
+                            foreach ($results as $r) {
+                                if (!empty($r['max_score'])) {
+                                    $sc = $r['score'] / $r['max_score'];
+                                    if ($sc > $best) { $best = $sc; }
                                 }
                             }
                         }
-                        $bestScoreAverageNotInLP += $best;
+                        $bestSum += $best;
                     }
                 }
-                $bestScoreAverageNotInLP = round(
-                    $bestScoreAverageNotInLP / count($exercises) * 100 / $userInGroupCount,
-                    2
-                );
+                $groupBestNum = round(($bestSum / max(count($exercises),1)) * 100 / $count, 2);
+            }
+            $bestStr = $groupBestNum ? ($groupBestNum.' %') : '';
 
-                $totalBestScoreAverageNotInLP += $bestScoreAverageNotInLP;
-            }
-
-            if (empty($score)) {
-                $score = '';
-            }
-            if (empty($lpProgress)) {
-                $lpProgress = '';
-            }
-            if (empty($bestScoreAverageNotInLP)) {
-                $bestScoreAverageNotInLP = '';
-            }
+            // Acumular a totales ponderados SOLO con inscritos del grupo
+            $totalSeconds += $secs;
+            $totalUsers   += $count;
+            $sumProgress  += $groupProgressNum * $count;
+            $sumBest      += $groupBestNum     * $count;
         }
 
-        $groupTable->setCellContents($row, $column++, $time);
-        $groupTable->setCellContents($row, $column++, $averageTime);
-        $groupTable->setCellContents($row, $column++, $lpProgress);
-        $groupTable->setCellContents($row, $column++, $bestScoreAverageNotInLP);
+        $groupTable->setCellContents($row, $col++, $timeStr);
+        $groupTable->setCellContents($row, $col++, $avgTimeStr);
+        $groupTable->setCellContents($row, $col++, $progStr);
+        $groupTable->setCellContents($row, $col++, $bestStr);
         $row++;
     }
 
-    $column = 0;
-    $totalTime = api_time_to_hms($totalTime);
-    $totalAverageTime = api_time_to_hms($totalAverageTime);
-    $groupTable->setCellContents($row, $column++, get_lang('Total'));
-    $groupTable->setCellContents($row, $column++, $totalTime);
-    $groupTable->setCellContents($row, $column++, $totalAverageTime);
-    $groupTable->setCellContents($row, $column++, round($totalLpProgress / count($groupList), 2).'% ');
-    $groupTable->setCellContents($row, $column++, round($totalBestScoreAverageNotInLP / count($groupList), 2).'% ');
-} else {
-    $userIdList = Session::read('user_id_list');
+    // Inyectar no inscritos (free). Si están visibles, también cuentan para el Total.
+    if ($showNonRegistered && !empty($freeUsers)) {
+        foreach ($freeUsers as $fu) {
+            $col = 0;
+            $uid  = (int) ($fu['id'] ?? 0);
+            $name = Security::remove_XSS(trim(($fu['firstname'] ?? '').' '.($fu['lastname'] ?? ''))).' (free)';
 
-    if (!empty($userIdList)) {
-        $studentIdList = $userIdList;
-    } else {
-        $studentIdList = array_column($studentList, 'user_id');
-    }
-    $nbStudents = count($studentIdList);
+            $secs = Tracking::get_time_spent_on_the_course([$uid], $courseId, $sessionId);
+            $timeStr    = $secs ? api_time_to_hms($secs) : '';
+            $avgTimeStr = $timeStr;
 
-    $timeInSeconds = Tracking::get_time_spent_on_the_course(
-        $studentIdList,
-        $courseId,
-        $sessionId
-    );
-    $averageTime = null;
-    $time = null;
-    if (!empty($timeInSeconds)) {
-        $time = api_time_to_hms($timeInSeconds);
-        $averageTime = $timeInSeconds / $nbStudents;
-        $averageTime = api_time_to_hms($averageTime);
-    }
-    $totalLpProgress = 0;
-    foreach ($studentIdList as $studentId) {
-        $lpProgress = Tracking::get_avg_student_progress(
-            $studentId,
-            $course,
-            [],
-            $session
-        );
-        $totalLpProgress += $lpProgress;
-    }
+            $lpNum = $percentVal(Tracking::get_avg_student_progress($uid, $course, [], $session));
+            $progStr = $lpNum !== null ? round($lpNum, 2).' %' : '';
 
-    if (empty($nbStudents)) {
-        $lpProgress = '0 %';
-    } else {
-        $lpProgress = round($totalLpProgress / $nbStudents, 2).' %';
-    }
-    $totalBestScoreAverageNotInLP = 0;
-    $bestScoreAverageNotInLP = 0;
-    if (!empty($exercises)) {
-        foreach ($exercises as $i => $exerciseData) {
-            $exerciseList[$i]['iid'] = $exerciseData->getIid();
-            foreach ($studentIdList as $userId) {
-                $results = Event::get_best_exercise_results_by_user(
-                    $exerciseData->getIid(),
-                    $courseId,
-                    $sessionId,
-                    $userId
-                );
-                $best = 0;
-                if (!empty($results)) {
-                    foreach ($results as $result) {
-                        if (!empty($result['max_score'])) {
-                            $score = $result['score'] / $result['max_score'];
-                            if ($score > $best) {
-                                $best = $score;
+            $bestNum = 0.0;
+            if (!empty($exercises)) {
+                $sumBestFree = 0.0; $countE = 0;
+                foreach ($exercises as $exerciseData) {
+                    $results = Event::get_best_exercise_results_by_user(
+                        $exerciseData->getIid(),
+                        $courseId,
+                        $sessionId,
+                        $uid
+                    );
+                    $best = 0.0;
+                    if (!empty($results)) {
+                        foreach ($results as $r) {
+                            if (!empty($r['max_score'])) {
+                                $sc = $r['score'] / $r['max_score'];
+                                if ($sc > $best) { $best = $sc; }
                             }
                         }
                     }
+                    $sumBestFree += $best; $countE++;
                 }
-
-                $bestScoreAverageNotInLP += $best;
+                if ($countE > 0) { $bestNum = round(($sumBestFree / $countE) * 100, 2); }
             }
+            $bestStr = $bestNum ? ($bestNum.' %') : '';
+
+            // Sumarlos a totales cuando están visibles
+            $totalSeconds += $secs;
+            $totalUsers   += 1;
+            $sumProgress  += $lpNum;
+            $sumBest      += $bestNum;
+
+            $groupTable->setCellContents($row, $col++, $name);
+            $groupTable->setCellContents($row, $col++, $timeStr);
+            $groupTable->setCellContents($row, $col++, $avgTimeStr);
+            $groupTable->setCellContents($row, $col++, $progStr);
+            $groupTable->setCellContents($row, $col++, $bestStr);
+            $row++;
         }
-        if (!empty($nbStudents)) {
-            $bestScoreAverageNotInLP = round(
-                $bestScoreAverageNotInLP / count($exercises) * 100 / $nbStudents,
-                2
-            ).' %';
-        }
-        $bestScoreAverageNotInLP = (string) TrackingCourseLog::calcBestScoreAverageNotInLP(
-            $exerciseList,
-            $studentIdList,
-            (int) $courseInfo['real_id'],
-            $sessionId,
-            true
-        );
     }
 
-    $row = 1;
-    $column = 0;
-    $groupTable->setCellContents($row, $column++, get_lang('Total'));
-    $groupTable->setCellContents($row, $column++, $time);
-    $groupTable->setCellContents($row, $column++, $averageTime);
-    $groupTable->setCellContents($row, $column++, $lpProgress);
-    $groupTable->setCellContents($row, $column++, $bestScoreAverageNotInLP);
+    // Fila Total (coherente con lo visible)
+    $avgSecondsAll   = $totalUsers ? ($totalSeconds / $totalUsers) : 0;
+    $totalAvgTimeStr = api_time_to_hms($avgSecondsAll);
+    $totalProgStr    = $totalUsers ? (round($sumProgress / $totalUsers, 2).' %') : '';
+    $totalBestStr    = $totalUsers ? (round($sumBest     / $totalUsers, 2).' %') : '';
+
+    $col = 0;
+    $groupTable->setCellContents($row, $col++, get_lang('Total'));
+    $groupTable->setCellContents($row, $col++, api_time_to_hms($totalSeconds));
+    $groupTable->setCellContents($row, $col++, $totalAvgTimeStr);
+    $groupTable->setCellContents($row, $col++, $totalProgStr);
+    $groupTable->setCellContents($row, $col++, $totalBestStr);
+
+} else {
+    // ====== SIN GRUPOS ======
+    // Construimos el universo de usuarios a considerar en el total
+    $studentIdList = Session::read('user_id_list');
+    $studentIdList = !empty($studentIdList) ? $studentIdList : array_column($studentList, 'user_id');
+
+    if ($showNonRegistered && !empty($freeUsers)) {
+        foreach ($freeUsers as $fu) {
+            $studentIdList[] = (int) ($fu['id'] ?? 0);
+        }
+    }
+
+    $nbAll = count($studentIdList);
+
+    // Tiempo total / promedio por usuario
+    $totalSeconds   = Tracking::get_time_spent_on_the_course($studentIdList, $courseId, $sessionId);
+    $avgSecondsAll  = $nbAll ? $totalSeconds / $nbAll : 0;
+
+    // Progreso promedio por usuario
+    $sumProgress = 0.0;
+    foreach ($studentIdList as $uid) {
+        $sumProgress += $percentVal(Tracking::get_avg_student_progress($uid, $course, [], $session));
+    }
+    $avgProgress = $nbAll ? round($sumProgress / $nbAll, 2) : 0.0;
+
+    // Promedio de mejores notas por usuario
+    $bestSum = 0.0;
+    if (!empty($exercises)) {
+        foreach ($studentIdList as $uid) {
+            $sumE = 0.0; $countE = 0;
+            foreach ($exercises as $exerciseData) {
+                $results = Event::get_best_exercise_results_by_user(
+                    $exerciseData->getIid(), $courseId, $sessionId, $uid
+                );
+                $best = 0.0;
+                if (!empty($results)) {
+                    foreach ($results as $r) {
+                        if (!empty($r['max_score'])) {
+                            $sc = $r['score'] / $r['max_score'];
+                            if ($sc > $best) { $best = $sc; }
+                        }
+                    }
+                }
+                $sumE += $best; $countE++;
+            }
+            if ($countE > 0) { $bestSum += ($sumE / $countE) * 100; }
+        }
+    }
+    $avgBest = $nbAll ? round($bestSum / $nbAll, 2) : 0.0;
+
+    // Fila Total
+    $row = 1; $col = 0;
+    $groupTable->setCellContents($row, $col++, get_lang('Total'));
+    $groupTable->setCellContents($row, $col++, api_time_to_hms($totalSeconds));
+    $groupTable->setCellContents($row, $col++, api_time_to_hms($avgSecondsAll));
+    $groupTable->setCellContents($row, $col++, $avgProgress.' %');
+    $groupTable->setCellContents($row, $col++, $avgBest.' %');
+
+    // Filas “free” (opcionalmente visibles). OJO: ya están incluidas en los totales.
+    if ($showNonRegistered && !empty($freeUsers)) {
+        foreach ($freeUsers as $fu) {
+            $col = 0; $row++;
+            $uid  = (int) ($fu['id'] ?? 0);
+            $name = Security::remove_XSS(trim(($fu['firstname'] ?? '').' '.($fu['lastname'] ?? ''))).' (free)';
+
+            $secs = Tracking::get_time_spent_on_the_course([$uid], $courseId, $sessionId);
+            $timeU = $secs ? api_time_to_hms($secs) : '';
+            $avgTimeU = $timeU;
+
+            $lpU = $percentVal(Tracking::get_avg_student_progress($uid, $course, [], $session));
+            $lpU = round($lpU, 2).' %';
+
+            $bestAvgU = '';
+            if (!empty($exercises)) {
+                $sumBestU = 0.0; $countE = 0;
+                foreach ($exercises as $exerciseData) {
+                    $results = Event::get_best_exercise_results_by_user(
+                        $exerciseData->getIid(), $courseId, $sessionId, $uid
+                    );
+                    $best = 0.0;
+                    if (!empty($results)) {
+                        foreach ($results as $r) {
+                            if (!empty($r['max_score'])) {
+                                $sc = $r['score'] / $r['max_score'];
+                                if ($sc > $best) { $best = $sc; }
+                            }
+                        }
+                    }
+                    $sumBestU += $best; $countE++;
+                }
+                if ($countE > 0) { $bestAvgU = round(($sumBestU / $countE) * 100, 2).' %'; }
+            }
+
+            $groupTable->setCellContents($row, $col++, $name);
+            $groupTable->setCellContents($row, $col++, $timeU);
+            $groupTable->setCellContents($row, $col++, $avgTimeU);
+            $groupTable->setCellContents($row, $col++, $lpU);
+            $groupTable->setCellContents($row, $col++, $bestAvgU);
+        }
+    }
 }
+
 
 echo Display::panel($groupTable->toHtml(), '');
 
@@ -1201,8 +1168,6 @@ if ($export_csv) {
     ob_end_clean();
 
     $csvContentInSession = Session::read('csv_content', []);
-
-    // Adding headers before the content.
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {
@@ -1216,6 +1181,7 @@ if ($export_csv) {
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');
     exit;
 }
+
 Display::display_footer();
 
 function sort_by_order($a, $b)

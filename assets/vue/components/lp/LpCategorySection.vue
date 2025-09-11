@@ -112,7 +112,7 @@ function onChangeCat() {
       </div>
 
       <div class="flex items-center gap-2">
-        <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Lessons') }}</div>
+        <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Learning paths') }}</div>
 
         <BaseDropdownMenu v-if="canEdit"
           :dropdown-id="`category-${category.iid}`"
@@ -121,8 +121,8 @@ function onChangeCat() {
           <template #button>
             <span
               class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-              :title="t('Category options')"
-              :aria-label="t('Category options')"
+              :title="t('Options')"
+              :aria-label="t('Options')"
             >
               <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
             </span>
@@ -130,7 +130,7 @@ function onChangeCat() {
           <template #menu>
             <div class="absolute right-0 top-full mt-2 w-60 bg-white border border-gray-25 rounded-xl shadow-xl p-1 z-50">
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatEdit">{{ t('Edit category') }}</button>
-              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatAddUsers">{{ t('Add users to category') }}</button>
+              <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatAddUsers">{{ t('Subscribe users to category') }}</button>
               <div class="my-1 h-px bg-gray-15"></div>
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatToggleVisibility">{{ t('Toggle visibility') }}</button>
               <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="onCatTogglePublish">{{ t('Publish / Hide') }}</button>
@@ -145,7 +145,7 @@ function onChangeCat() {
           :aria-expanded="isOpen ? 'true' : 'false'"
           :aria-controls="panelId"
           class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 transition"
-          :title="t('Expand / Collapse')"
+          :title="t('Expand') / t('Collapse')"
           @click="toggleOpen"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"

@@ -3581,9 +3581,6 @@ msgstr ""
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr ""
 
-msgid " Zip file uploaded and uncompressed"
-msgstr ""
-
 msgid "The zip file can not contain .PHP files"
 msgstr ""
 
@@ -5141,7 +5138,7 @@ msgstr "Tento kurz neexistuje"
 msgid "This user doesn't exist"
 msgstr "Tenhle uživatel neexistuje"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "ale vyskytly se problémy"
 
 msgid "This login was cut"
@@ -7037,9 +7034,6 @@ msgstr ""
 msgid "Change order"
 msgstr ""
 
-msgid "Add prerequisities"
-msgstr ""
-
 msgid "Edit name & desc."
 msgstr ""
 
@@ -7062,9 +7056,6 @@ msgid "Previous learning object"
 msgstr ""
 
 msgid "Next learning object"
-msgstr ""
-
-msgid "you need first accomplish"
 msgstr ""
 
 msgid "Section name"
@@ -7101,9 +7092,6 @@ msgid "Edit section description/name"
 msgstr ""
 
 msgid "Delete section"
-msgstr ""
-
-msgid "No sectionss added yet."
 msgstr ""
 
 msgid "Add learning objects to this section"
@@ -7202,31 +7190,7 @@ msgstr ""
 msgid "After"
 msgstr ""
 
-msgid "Prerequisities (limit)"
-msgstr ""
-
 msgid "This HotPotatoes test has been closed."
-msgstr ""
-
-msgid "Completion limit (minimum points)"
-msgstr ""
-
-msgid " you need first accomplish"
-msgstr ""
-
-msgid "At least 1 step is missing from"
-msgstr ""
-
-msgid " which is set as prerequisities."
-msgstr ""
-
-msgid " you must reach minimum"
-msgstr ""
-
-msgid " points in"
-msgstr ""
-
-msgid "Now you have :"
 msgstr ""
 
 msgid "back to normal screen"
@@ -11201,7 +11165,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12428,7 +12392,7 @@ msgstr "Soubor"
 msgid "Error during the delete of document"
 msgstr "Chyba během mazání dokumentu"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Během aktualizace viditelnosti se vyskytl problém"
 
 msgid "Folder deleted"
@@ -12499,12 +12463,6 @@ msgstr "Analýza"
 
 msgid "Analyze description"
 msgstr "Popis analýzy"
-
-msgid "Synthetize"
-msgstr "Syntéza"
-
-msgid "Synthetize description"
-msgstr "Popis syntézy"
 
 msgid "Text page"
 msgstr "Textová stránka"
@@ -12752,7 +12710,7 @@ msgstr ""
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr ""
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr ""
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13361,7 +13319,7 @@ msgstr ""
 msgid "Dropdown"
 msgstr ""
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr ""
 
 msgid "Survey invitations"
@@ -15060,9 +15018,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24864,9 +24819,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

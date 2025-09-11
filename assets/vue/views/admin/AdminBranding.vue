@@ -193,7 +193,7 @@
 
         <div class="flex items-center gap-2">
           <button class="btn btn--primary" @click="uploadEmail" :disabled="isSaving">
-            {{ isSaving ? t('Saving…') : t('Save email logo') }}
+            {{ isSaving ? t('Saving...') : t('Save email logo') }}
           </button>
         </div>
       </div>

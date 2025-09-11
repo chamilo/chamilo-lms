@@ -766,7 +766,7 @@ function Xajax()
 				catch(e)
 				{
 					if (xajaxDebug)
-						alert("While trying to '"+cmdFullname+"' (command number "+i+"), the following error occured:\n"
+						alert("While trying to '"+cmdFullname+"' (command number "+i+"), the following error occurred:\n"
 							+ e.name+": "+e.message+"\n"
 							+ (id&&!objElement?"Object with id='"+id+"' wasn't found.\n":""));
 				}

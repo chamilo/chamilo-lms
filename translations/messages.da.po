@@ -3588,9 +3588,6 @@ msgstr "Dette er et Scorm formateret kursus. For at afspille det, klik her: <inp
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Dette er Scorm indhold<br><input type='button' name='scormbutton' value='Kør det !' onclick='openscorm();'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr " Zip fil er lagt ud og pakket ud"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Zip fil må ikke indeholde .PHP filer"
 
@@ -5148,7 +5145,7 @@ msgstr "Kursussiden findes ikke"
 msgid "This user doesn't exist"
 msgstr "Brugerprofilen findes ikke"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "men der opstod problemer"
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Titel & Beskrivelse"
 msgid "Change order"
 msgstr "Rette rækkefølge"
 
-msgid "Add prerequisities"
-msgstr "Tilføj betingelser"
-
 msgid "Edit name & desc."
 msgstr "Ret titel & beskr."
 
@@ -7070,9 +7064,6 @@ msgstr "Forrige"
 
 msgid "Next learning object"
 msgstr "Næste"
-
-msgid "you need first accomplish"
-msgstr "skal du først gennemføre"
 
 msgid "Section name"
 msgstr "Trintitel"
@@ -7109,9 +7100,6 @@ msgstr "Ret kapitelbeskrivelse/-titel"
 
 msgid "Delete section"
 msgstr "Slet kapitel"
-
-msgid "No sectionss added yet."
-msgstr "Der er ingen kapitler er tilføjet endnu"
 
 msgid "Add learning objects to this section"
 msgstr "Tilføj trin til dette kapitel"
@@ -7209,32 +7197,8 @@ msgstr "Dokumentet er ikke redigerbart"
 msgid "After"
 msgstr "Efter"
 
-msgid "Prerequisities (limit)"
-msgstr "Betingelser (grænse)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Denne HotPotatoes test er lukket"
-
-msgid "Completion limit (minimum points)"
-msgstr "Niveau for bestået (minimum point)"
-
-msgid " you need first accomplish"
-msgstr "skal du først fuldføre"
-
-msgid "At least 1 step is missing from"
-msgstr "Minimum 1 trin mangler i"
-
-msgid " which is set as prerequisities."
-msgstr "som er angivet som betingelser"
-
-msgid " you must reach minimum"
-msgstr "som minimum skal du opnå"
-
-msgid " points in"
-msgstr "point i"
-
-msgid "Now you have :"
-msgstr "Du har nu:"
 
 msgid "back to normal screen"
 msgstr "tilbage til normal visning"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr "Fil"
 msgid "Error during the delete of document"
 msgstr "Fejl opstod under sletning af dokument. Prøv igen."
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Der opstod et problem, idet indstillingen for synlighed blev ændret. Prøv igen."
 
 msgid "Folder deleted"
@@ -12505,12 +12469,6 @@ msgid "Analyze"
 msgstr ""
 
 msgid "Analyze description"
-msgstr ""
-
-msgid "Synthetize"
-msgstr ""
-
-msgid "Synthetize description"
 msgstr ""
 
 msgid "Text page"
@@ -12759,7 +12717,7 @@ msgstr "Vælg venligst den bruger, som skal modtage filen."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Tilføjelsen fejlede: Forkert format. Kontakt venligst din systemansvarlige."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Der opstod en fejl. Kontakt venligst din system-ansvarlige."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr "Svarmuligheder"
 msgid "Dropdown"
 msgstr "Dropdown/rul ned"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Side slut"
 
 msgid "Survey invitations"
@@ -15067,9 +15025,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

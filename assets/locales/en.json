@@ -372,7 +372,7 @@
     "Add new glossary term": "Add new glossary term",
     "List view": "List view",
     "Table view": "Table view",
-    "Export to Documents": "Export to Documents",
+    "Export to documents": "Export to documents",
     "Could not delete term": "Could not delete term",
     "Exported to documents": "Exported to documents",
     "Could not export to documents": "Could not export to documents",
@@ -1102,5 +1102,14 @@
     "Select which items to include in the PDF": "Select which items to include in the PDF",
     "Open in a new tab": "Open in a new tab",
     "Delete third party": "Delete third party",
-    "Learning path": "Learning path"
+    "Learning path": "Learning path",
+    "Category options": "Category options",
+    "Expand": "Expand",
+    "Collapse": "Collapse",
+    "Copy link": "Copy link",
+    "Untitled": "Untitled",
+    "Security tools and reports": "Security tools and reports",
+    "This field cannot be empty": "This field cannot be empty",
+    "This is not a valid URL. Example: https://example.com": "This is not a valid URL. Example: https://example.com",
+    "Are you sure you want to delete this?": "Are you sure you want to delete this?"
 }

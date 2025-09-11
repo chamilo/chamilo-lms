@@ -5,7 +5,7 @@ export default {
   state: {
     show: false,
     color: "error",
-    text: "An error occurred",
+    text: "An error occurred.",
     subText: "",
     timeout: 6000,
   },

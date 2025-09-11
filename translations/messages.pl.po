@@ -3589,9 +3589,6 @@ msgstr "To jest kurs w formacie SCORM. Aby uruchomić naciśnij:<input type=butt
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "To jest zawartość SCORM<br><input type=button name=scormbutton value='Uruchom !' ='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr " Plik zip załadowany i rozpakowany"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Plik zip nie może zawierać plików .PHP"
 
@@ -5149,7 +5146,7 @@ msgstr "Taki kurs nie istnieje"
 msgid "This user doesn't exist"
 msgstr "Taki użytkownik nie istnieje"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "ale wystąpiły problemy"
 
 msgid "This login was cut"
@@ -7045,9 +7042,6 @@ msgstr "Tytuł i opis"
 msgid "Change order"
 msgstr "Zmień kolejność"
 
-msgid "Add prerequisities"
-msgstr "Dodaj wymagania"
-
 msgid "Edit name & desc."
 msgstr "Edytuj tytuł i opis"
 
@@ -7071,9 +7065,6 @@ msgstr "Poprzedni"
 
 msgid "Next learning object"
 msgstr "Następny"
-
-msgid "you need first accomplish"
-msgstr "musisz wcześniej ukończyć"
 
 msgid "Section name"
 msgstr "Nazwa kroku"
@@ -7110,9 +7101,6 @@ msgstr "Edytuj opis/tytuł modułu"
 
 msgid "Delete section"
 msgstr "Usuń moduł"
-
-msgid "No sectionss added yet."
-msgstr "Nie dodano jeszcze żadnych modułów."
 
 msgid "Add learning objects to this section"
 msgstr "Dodaj kroki do tego modułu"
@@ -7210,32 +7198,8 @@ msgstr "Tego dokumentu nie można edytować"
 msgid "After"
 msgstr "Po"
 
-msgid "Prerequisities (limit)"
-msgstr "Wymagania (ograniczenie)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Ten test HotPotatoes jest zako&#324;czony."
-
-msgid "Completion limit (minimum points)"
-msgstr "Warunek zaliczenia (minimalna ilość punktów)"
-
-msgid " you need first accomplish"
-msgstr "najpierw musisz ukończyć"
-
-msgid "At least 1 step is missing from"
-msgstr "Conajmniej jednego kroku brakuje z"
-
-msgid " which is set as prerequisities."
-msgstr "który jest ustawiony jako warunek wstępny."
-
-msgid " you must reach minimum"
-msgstr "musisz osiągnąć minimum"
-
-msgid " points in"
-msgstr "punktów w"
-
-msgid "Now you have :"
-msgstr "Teraz masz:"
 
 msgid "back to normal screen"
 msgstr "powrót do standardowego ekranu"
@@ -11209,7 +11173,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12436,7 +12400,7 @@ msgstr "Plik"
 msgid "Error during the delete of document"
 msgstr "Błąd podczas usuwania dokumentu"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Wystąpił problem podczas aktualizacji widoczności"
 
 msgid "Folder deleted"
@@ -12507,12 +12471,6 @@ msgstr "Analizuj"
 
 msgid "Analyze description"
 msgstr "Analizuj opis"
-
-msgid "Synthetize"
-msgstr "Połącz"
-
-msgid "Synthetize description"
-msgstr "Połącz opis"
 
 msgid "Text page"
 msgstr "Strona tekstu"
@@ -12760,7 +12718,7 @@ msgstr "Wybierz użytkownika, któremu wyślesz plik."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Wysyłanie nie powiodło się. Zły format danych. Skontaktuj się z administratorem."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Wystąpił błąd. Skontaktuj się z administratorem."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13369,8 +13327,8 @@ msgstr "Opcje odpowiedzi"
 msgid "Dropdown"
 msgstr "Rozwijane"
 
-msgid "Page break (distinct questions)"
-msgstr "Koniec strony (osobne pytania)"
+msgid "Page break"
+msgstr "Koniec strony"
 
 msgid "Survey invitations"
 msgstr "Zaproszenia do ankiet"
@@ -15069,9 +15027,6 @@ msgstr "Użytkownik nie jest zarejestrowany na kursie"
 
 msgid "Edit my profile"
 msgstr "Edytuj mój profil"
-
-msgid "Groupe description"
-msgstr "Opis grupy"
 
 msgid "Installation"
 msgstr "Instalacja"
@@ -24877,9 +24832,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

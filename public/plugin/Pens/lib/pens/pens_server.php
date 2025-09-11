@@ -161,7 +161,7 @@ class PENSServer extends PENSController
      *
      * @return string Path to the package on the hard drive
      *
-     * @throws PENSException if an exception occured
+     * @throws PENSException if an exception occurred
      */
     protected function collectPackage($request)
     {
@@ -196,7 +196,7 @@ class PENSServer extends PENSController
         if (false === curl_exec($ch)) {
             $errno = curl_errno($ch);
             curl_close($ch);
-            // Error occured. Throw an exception
+            // Error occurred. Throw an exception
             switch ($errno) {
                 case CURLE_UNSUPPORTED_PROTOCOL:
                     throw new PENSException(1301);
@@ -298,7 +298,7 @@ class PENSServer extends PENSController
     }
 
     /**
-     * Sends a receipt. Returns a PENSResponse in case of success, null if a problem occured.
+     * Sends a receipt. Returns a PENSResponse in case of success, null if a problem occurred.
      *
      * @param PENSRequest  $request Original collect request
      * @param PENSResponse $receipt Response to send in the receipt
@@ -322,7 +322,7 @@ class PENSServer extends PENSController
     }
 
     /**
-     * Sends an alert to the client. Returns a PENSResponse in case of success, null if a problem occured.
+     * Sends an alert to the client. Returns a PENSResponse in case of success, null if a problem occurred.
      *
      * @param PENSRequest  $request Original collect request
      * @param PENSResponse $alert   Response to send in the alert

@@ -219,7 +219,7 @@ if (0 == $survey_data['survey_type']) {
             $urlQuestion.'&type=selectivedisplay&survey_id='.$survey_id
         );
         $questions .= Display::url(
-            Display::getMdiIcon('format-page-break', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Page break (distinct questions)')),
+            Display::getMdiIcon('format-page-break', 'ch-toolbar-icon', null, ICON_SIZE_BIG, get_lang('Page break')),
             $urlQuestion.'&type=pagebreak&survey_id='.$survey_id
         );
     }

@@ -111,7 +111,7 @@
       </div>
       <div v-else class="prose prose-lg max-w-none">
         <h1 class="text-3xl font-bold mb-4">
-          {{ v$.item.title.$model || t('Untitled page') }}
+          {{ v$.item.title.$model || t('Untitled') }}
         </h1>
         <article v-html="v$.item.content.$model"></article>
       </div>
@@ -176,7 +176,7 @@ async function copyPreviewUrl() {
   try {
     await navigator.clipboard.writeText(full)
   } catch {
-    window.prompt(t('Copy this link'), full)
+    window.prompt(t('Copy link'), full)
   }
 }
 function onPreviewLoaded() {}

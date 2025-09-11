@@ -3597,9 +3597,6 @@ msgstr "Tole je tečaj v Scorm obliki. Zaženi tečaj s pritiskom na : <input ty
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Tole je Scorm vsebina<br /><input type=button name=scormbutton value='Zaženi jo !' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr " Datoteka ZIP je bila naložena in estrahirana"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Datoteka ZIP file ne sme vsebovati datotek .PHP"
 
@@ -5157,7 +5154,7 @@ msgstr "Ta tečaj ne obstaja"
 msgid "This user doesn't exist"
 msgstr "Ta uporabnik ne obstaja"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "vendar so se pojavili problemi"
 
 msgid "This login was cut"
@@ -7053,9 +7050,6 @@ msgstr "Naslov & opis"
 msgid "Change order"
 msgstr "Menjaj vrstni red"
 
-msgid "Add prerequisities"
-msgstr "Dodaj predzahteve"
-
 msgid "Edit name & desc."
 msgstr "Uredi naslov & opis"
 
@@ -7079,9 +7073,6 @@ msgstr "Prejšnji učni objekt"
 
 msgid "Next learning object"
 msgstr "Naslednji učni objekt"
-
-msgid "you need first accomplish"
-msgstr "moraš najprej dokončati"
 
 msgid "Section name"
 msgstr "Naslov razdelka"
@@ -7118,9 +7109,6 @@ msgstr "Uredi opis/naslov razdelka."
 
 msgid "Delete section"
 msgstr "Odstrani razdelek"
-
-msgid "No sectionss added yet."
-msgstr "Noben razdelek še ni bil dodan."
 
 msgid "Add learning objects to this section"
 msgstr "Dodaj korak temu razdelku"
@@ -7218,32 +7206,8 @@ msgstr "Tega dokumenta ni možno urejati"
 msgid "After"
 msgstr "Za"
 
-msgid "Prerequisities (limit)"
-msgstr "Predzahteve (omejitve)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Ta HotPotatoes test je bil zaprt."
-
-msgid "Completion limit (minimum points)"
-msgstr "Prag uspešnosti (najmajše število točk)"
-
-msgid " you need first accomplish"
-msgstr "moraš najprej dokončati"
-
-msgid "At least 1 step is missing from"
-msgstr "Najmanj 1 korak manjka od"
-
-msgid " which is set as prerequisities."
-msgstr "ki je postavljen kot predzahteva."
-
-msgid " you must reach minimum"
-msgstr "moraš doseči najmanj"
-
-msgid " points in"
-msgstr "točk v"
-
-msgid "Now you have :"
-msgstr "Do sedaj si dosegel :"
 
 msgid "back to normal screen"
 msgstr "nazaj na običajen pogled"
@@ -11217,7 +11181,7 @@ msgstr "Izpolnite obrazec za kreiranje poročila"
 msgid "Unknown format"
 msgstr "Neznan format"
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr "Pri kreiranju poročila je prišlo do napake"
 
 msgid "Wiki Search Results"
@@ -12444,7 +12408,7 @@ msgstr "Datoteka"
 msgid "Error during the delete of document"
 msgstr "Napaka med brisanjem dokumenta"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Med ažuriranjem vidnosti se je pojavil problem"
 
 msgid "Folder deleted"
@@ -12515,12 +12479,6 @@ msgstr "Analiza"
 
 msgid "Analyze description"
 msgstr "Opis analize"
-
-msgid "Synthetize"
-msgstr "Sinteza"
-
-msgid "Synthetize description"
-msgstr "Opis sinteze"
 
 msgid "Text page"
 msgstr "Besedilna stran"
@@ -12768,7 +12726,7 @@ msgstr "Izberite uporabnik kateremu želite poslati datoteko."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Napaka pri pošiljanju: nepravilna forma podatkov. Obrnite se na upravitelja sistema."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Napaka! Obrnite se na upravitelja sistema."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13377,7 +13335,7 @@ msgstr "Možnosti odgovora"
 msgid "Dropdown"
 msgstr "Padajoča izbira"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Prelom strani"
 
 msgid "Survey invitations"
@@ -15077,9 +15035,6 @@ msgstr "Uporabnik ni vpisan v tečaj"
 
 msgid "Edit my profile"
 msgstr "Uredi moj profil"
-
-msgid "Groupe description"
-msgstr "Opis skupine"
 
 msgid "Installation"
 msgstr "Namestitev"
@@ -24885,9 +24840,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

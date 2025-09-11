@@ -3651,9 +3651,6 @@ msgstr ""
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr ""
 
-msgid " Zip file uploaded and uncompressed"
-msgstr ""
-
 msgid "The zip file can not contain .PHP files"
 msgstr ""
 
@@ -5211,7 +5208,7 @@ msgstr ""
 msgid "This user doesn't exist"
 msgstr ""
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr ""
 
 msgid "This login was cut"
@@ -7107,9 +7104,6 @@ msgstr ""
 msgid "Change order"
 msgstr ""
 
-msgid "Add prerequisities"
-msgstr ""
-
 msgid "Edit name & desc."
 msgstr ""
 
@@ -7132,9 +7126,6 @@ msgid "Previous learning object"
 msgstr ""
 
 msgid "Next learning object"
-msgstr ""
-
-msgid "you need first accomplish"
 msgstr ""
 
 msgid "Section name"
@@ -7172,9 +7163,6 @@ msgstr "セクションの説明/名前を編集"
 
 msgid "Delete section"
 msgstr "セクションを削除"
-
-msgid "No sectionss added yet."
-msgstr ""
 
 msgid "Add learning objects to this section"
 msgstr ""
@@ -7272,31 +7260,7 @@ msgstr ""
 msgid "After"
 msgstr ""
 
-msgid "Prerequisities (limit)"
-msgstr ""
-
 msgid "This HotPotatoes test has been closed."
-msgstr ""
-
-msgid "Completion limit (minimum points)"
-msgstr ""
-
-msgid " you need first accomplish"
-msgstr ""
-
-msgid "At least 1 step is missing from"
-msgstr ""
-
-msgid " which is set as prerequisities."
-msgstr ""
-
-msgid " you must reach minimum"
-msgstr ""
-
-msgid " points in"
-msgstr ""
-
-msgid "Now you have :"
 msgstr ""
 
 msgid "back to normal screen"
@@ -11271,7 +11235,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12498,7 +12462,7 @@ msgstr "ファイル"
 msgid "Error during the delete of document"
 msgstr ""
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr ""
 
 msgid "Folder deleted"
@@ -12568,12 +12532,6 @@ msgid "Analyze"
 msgstr ""
 
 msgid "Analyze description"
-msgstr ""
-
-msgid "Synthetize"
-msgstr ""
-
-msgid "Synthetize description"
 msgstr ""
 
 msgid "Text page"
@@ -12822,7 +12780,7 @@ msgstr "ファイルを送信するユーザーを選択してください。"
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr ""
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr ""
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13431,8 +13389,8 @@ msgstr "選択肢"
 msgid "Dropdown"
 msgstr "ドロップダウン"
 
-msgid "Page break (distinct questions)"
-msgstr "ページの終了 (質問の区切り)"
+msgid "Page break"
+msgstr "ページの終了"
 
 msgid "Survey invitations"
 msgstr ""
@@ -15130,9 +15088,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24934,9 +24889,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

@@ -26,7 +26,7 @@
         @click="changeView(view)"
       />
       <BaseButton
-        :label="t('Export to Documents')"
+        :label="t('Export to documents')"
         icon="export"
         type="black"
         @click="exportToDocuments"

@@ -179,14 +179,14 @@ const errors = ref({
 })
 
 const dialogTitle = computed(() =>
-  isEditing.value ? t("Edit third party") : t("Add third party"),
+  isEditing.value ? t("Edit") : t("Add"),
 )
 
 const validateTitle = () => {
   errors.value.title = ""
   const v = (form.value.title || "").trim()
   if (!v) {
-    errors.value.title = t("This value should not be blank.")
+    errors.value.title = t("This field cannot be empty")
     return false
   }
   return true
@@ -219,7 +219,7 @@ const validateWebsite = () => {
   if (!form.value.website) return true
   const candidate = form.value.website
   if (!isValidHttpUrl(candidate)) {
-    errors.value.website = t("This value is not a valid URL. Example: https://example.com")
+    errors.value.website = t("This is not a valid URL. Example: https://example.com")
     return false
   }
   return true

@@ -79,8 +79,8 @@ function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $payment
 
     /**
      * Make the API call to PayPal
-     * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
-     * If an error occured, show the resulting errors.
+     * If the API call succeeded, then redirect the buyer to PayPal to begin to authorize payment.
+     * If an error occurred, show the resulting errors.
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
@@ -145,8 +145,8 @@ function CallMarkExpressCheckout(
 
     /**
      * Make the API call to PayPal
-     * If the API call succeded, then redirect the buyer to PayPal to begin to authorize payment.
-     * If an error occured, show the resulting errors.
+     * If the API call succeeded, then redirect the buyer to PayPal to begin to authorize payment.
+     * If an error occurred, show the resulting errors.
      */
     $resArray = hash_call("SetExpressCheckout", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
@@ -235,7 +235,7 @@ function ConfirmPayment($FinalPaymentAmt)
 
     /**
      * Make the call to PayPal to finalize payment
-     * If an error occured, show the resulting errors.
+     * If an error occurred, show the resulting errors.
      */
     $resArray = hash_call("DoExpressCheckoutPayment", $nvpstr);
 

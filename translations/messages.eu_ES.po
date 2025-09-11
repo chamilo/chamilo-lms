@@ -3588,9 +3588,6 @@ msgstr ""
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "SCORM edukia da hau:"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "Zip fitxategia deskargatu eta deskonprimatu da zerbitzarian"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Zip fitxategiak ezin du .PHP formatuko fitxategirik eduki"
 
@@ -5148,7 +5145,7 @@ msgstr "Ez dago ikastaro hau"
 msgid "This user doesn't exist"
 msgstr "Erabiltzaile hau ez da"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "baina arazoak gertatu dira"
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Izena eta azalpena"
 msgid "Change order"
 msgstr "Aldatu ordena"
 
-msgid "Add prerequisities"
-msgstr "Gehitu aurretik betebeharrekoak"
-
 msgid "Edit name & desc."
 msgstr "Editatu izena eta azalpena"
 
@@ -7070,9 +7064,6 @@ msgstr "Aurrekoa"
 
 msgid "Next learning object"
 msgstr "Hurrengoa"
-
-msgid "you need first accomplish"
-msgstr "lehenengoa, honakoa bete behar duzu:"
 
 msgid "Section name"
 msgstr "Atalaren titulua"
@@ -7109,9 +7100,6 @@ msgstr "Editatu atalaren izena edo azalpena"
 
 msgid "Delete section"
 msgstr "Kendu atala"
-
-msgid "No sectionss added yet."
-msgstr "Oraindik ez da atalik gehitu."
 
 msgid "Add learning objects to this section"
 msgstr "Gehitu ikaskuntza objektuak atal honi"
@@ -7209,32 +7197,8 @@ msgstr "Dokumentu hau ez da editagarria"
 msgid "After"
 msgstr "Honakoaren ondoren"
 
-msgid "Prerequisities (limit)"
-msgstr "Aurretik betebeharrekoak (muga)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "HotPotatoes azterketa hau amaitu da."
-
-msgid "Completion limit (minimum points)"
-msgstr "Osatzeko muga (gutxieneko puntuak)"
-
-msgid " you need first accomplish"
-msgstr "lehenengo, burutu behar duzu"
-
-msgid "At least 1 step is missing from"
-msgstr "Gutxienez, urrats bat falta da honetatik"
-
-msgid " which is set as prerequisities."
-msgstr "betekizun gisa ezarrita dago"
-
-msgid " you must reach minimum"
-msgstr "gutxienekoa lortu behar duzu"
-
-msgid " points in"
-msgstr "puntuak honakoan"
-
-msgid "Now you have :"
-msgstr "Orain honako hau duzu:"
 
 msgid "back to normal screen"
 msgstr "itzuli pantaila normalera"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr "Fitxategia"
 msgid "Error during the delete of document"
 msgstr "Errorea dokumentua ezabatzean"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Arazoa izan da ikusgaitasuna eguneratzen zen bitartean"
 
 msgid "Folder deleted"
@@ -12506,12 +12470,6 @@ msgstr "Analisia"
 
 msgid "Analyze description"
 msgstr "Analisiaren deskripzioa"
-
-msgid "Synthetize"
-msgstr "Sintesia"
-
-msgid "Synthetize description"
-msgstr "Sintesiaren deskripzioa"
 
 msgid "Text page"
 msgstr "Testudun orria"
@@ -12759,7 +12717,7 @@ msgstr "Mesedez, aukeratu erabiltzailea fitxategia bidaltzeko."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Bidalketak huts egin du: datuak gaizki daude. Mesedez, jarri harremanetan sistemako kudeatzailearekin."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Errore bat gertatu da. Mesedez, jarri harremanetan sistemako kudeatzailearekin."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,8 +13326,8 @@ msgstr "Erantzuteko aukerak"
 msgid "Dropdown"
 msgstr "Goitibeherako zerrenda"
 
-msgid "Page break (distinct questions)"
-msgstr "Orriaren amaiera (bereizi galderak)"
+msgid "Page break"
+msgstr "Orriaren amaiera"
 
 msgid "Survey invitations"
 msgstr "Inkesta egiteko gonbiteak"
@@ -15068,9 +15026,6 @@ msgstr "Ez da erabiltzailerik erregistratu ikastaroan"
 
 msgid "Edit my profile"
 msgstr "Editatu nire profila"
-
-msgid "Groupe description"
-msgstr "Taldearen deskripzioa"
 
 msgid "Installation"
 msgstr "Instalazioa"
@@ -24876,9 +24831,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

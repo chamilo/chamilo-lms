@@ -108,7 +108,7 @@ if ($isCli) {
 
         $response = $event->getResponse();
         if (!$response) {
-            $response = new Response('An error occurred', 500);
+            $response = new Response('An error occurred.', 500);
         }
 
         $response->send();

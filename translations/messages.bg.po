@@ -3588,9 +3588,6 @@ msgstr "Това е курс според стандарта SCORM. За да г
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Това е съдържание според стандарта SCORM<br/><input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "ZIP-файлът е качен и разкомпресиран."
-
 msgid "The zip file can not contain .PHP files"
 msgstr "ZIP-архивът не трябва да съдържа PHP-файлове."
 
@@ -5148,7 +5145,7 @@ msgstr "Курсът не съществува."
 msgid "This user doesn't exist"
 msgstr "Потребителят не съществува."
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr ", но се появиха проблеми."
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Заглавие и описание"
 msgid "Change order"
 msgstr "Подреждане"
 
-msgid "Add prerequisities"
-msgstr "Изисквания"
-
 msgid "Edit name & desc."
 msgstr "Редактиране на заглавие и описание"
 
@@ -7070,9 +7064,6 @@ msgstr "Предишна стъпка"
 
 msgid "Next learning object"
 msgstr "Следваща стъпка"
-
-msgid "you need first accomplish"
-msgstr "първо трябва да изпълните"
 
 msgid "Section name"
 msgstr "Име на стъпката"
@@ -7109,9 +7100,6 @@ msgstr "Редактиране заглавие и описание на мод�
 
 msgid "Delete section"
 msgstr "Изтриване на модула"
-
-msgid "No sectionss added yet."
-msgstr "Все още няма добавени модули."
 
 msgid "Add learning objects to this section"
 msgstr "Добавяне на стъпки към този модул"
@@ -7209,32 +7197,8 @@ msgstr "Този документ не може да се редактира."
 msgid "After"
 msgstr "след"
 
-msgid "Prerequisities (limit)"
-msgstr "Изисквания (условия)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Този тест (HotPotatoes) е приключен."
-
-msgid "Completion limit (minimum points)"
-msgstr "Праг за изпълнение (минимални точки)"
-
-msgid " you need first accomplish"
-msgstr ", трябва да сте изпълнили"
-
-msgid "At least 1 step is missing from"
-msgstr "Минимум 1 стъпка липсва от"
-
-msgid " which is set as prerequisities."
-msgstr ", която е определена като задължителна."
-
-msgid " you must reach minimum"
-msgstr ", трябва да постигнете минимум"
-
-msgid " points in"
-msgstr " точки резултат в"
-
-msgid "Now you have :"
-msgstr "Вашият точков резултат е"
 
 msgid "back to normal screen"
 msgstr "Нормален екран"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr "Файл"
 msgid "Error during the delete of document"
 msgstr "Грешка при изтриването на документа."
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Има проблем при промяната на видимостта на документа/папката."
 
 msgid "Folder deleted"
@@ -12506,12 +12470,6 @@ msgstr "Анализ"
 
 msgid "Analyze description"
 msgstr "Текст на анализа"
-
-msgid "Synthetize"
-msgstr "Обобщение"
-
-msgid "Synthetize description"
-msgstr "Текст на обощението"
 
 msgid "Text page"
 msgstr "Текст"
@@ -12759,7 +12717,7 @@ msgstr "Моля, изберете получател за файла."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Изпращането не е успешно. Данните от формуляра са неточни."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Грешка. Свържете се с администратора."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr "Опции за отговаряне"
 msgid "Dropdown"
 msgstr "Падащо меню"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Прекъсване на страницата"
 
 msgid "Survey invitations"
@@ -15068,9 +15026,6 @@ msgstr ""
 
 msgid "Edit my profile"
 msgstr "Редактиране на профила"
-
-msgid "Groupe description"
-msgstr "Описание на групата"
 
 msgid "Installation"
 msgstr "Инсталиране"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

@@ -100,7 +100,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $sessionList = $result['session_list'] ?? [];
 
             if (!empty($result['error_message'])) {
-                $errorMessage .= get_lang('but problems occured') . ' :<br />' . $result['error_message'];
+                $errorMessage .= get_lang('but problems occurred') . ' :<br />' . $result['error_message'];
             }
 
             if (!empty($insertedInCourse) && count($insertedInCourse) > 1) {

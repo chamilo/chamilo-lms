@@ -3588,9 +3588,6 @@ msgstr "Kay yachachinaqa SCORM nisqan. Qhawariyta munaspaqa, kayta q'apiy: <inpu
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Kay ima kaqqa SCORM nisqan<br><input type=button name=scormbutton value='Qallariy' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "Zip khipuqa kichakunña apachikunña ima servidor nisqapi"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Zip khipu ukhunpiqa manan kanqachu khipukuna .PHP siyuqqa"
 
@@ -5148,7 +5145,7 @@ msgstr "Kay yachachinaqa mana kanchu"
 msgid "This user doesn't exist"
 msgstr "Kay haykuqmasiqa mana kanchu"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "pero se han producido problemas"
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Sutinchayninwan nisqayninwan"
 msgid "Change order"
 msgstr "T'ijrapay sinrita"
 
-msgid "Add prerequisities"
-msgstr "Añadir prerrequisitos"
-
 msgid "Edit name & desc."
 msgstr "Editar título y descripción"
 
@@ -7070,9 +7064,6 @@ msgstr "Previo"
 
 msgid "Next learning object"
 msgstr "Siguiente"
-
-msgid "you need first accomplish"
-msgstr "primero necesita completar"
 
 msgid "Section name"
 msgstr "Sutinchaynin"
@@ -7109,9 +7100,6 @@ msgstr "Ruwapay sutichasqaq sutinchayninta nisqaynintawan"
 
 msgid "Delete section"
 msgstr "Pichay sutichasqata"
-
-msgid "No sectionss added yet."
-msgstr "Manan kashanchu sutichasqakuna yapasqaqa."
 
 msgid "Add learning objects to this section"
 msgstr "Yapay imaymanakunata kay sutichasqaman"
@@ -7209,32 +7197,8 @@ msgstr "Kay qelqa khipuqa manan ruwapachinapaqchu"
 msgid "After"
 msgstr "Después de"
 
-msgid "Prerequisities (limit)"
-msgstr "Prerrequisitos (límite)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Kay test HotPotatoes nisqaqa tukunña."
-
-msgid "Completion limit (minimum points)"
-msgstr "Límite de finalización (puntuación mínima)"
-
-msgid " you need first accomplish"
-msgstr "primero necesita terminar"
-
-msgid "At least 1 step is missing from"
-msgstr "1imaymanaraqpas pisiyashan"
-
-msgid " which is set as prerequisities."
-msgstr "establecido como requisito."
-
-msgid " you must reach minimum"
-msgstr "debe alcanzar un mínimo"
-
-msgid " points in"
-msgstr "puntos en"
-
-msgid "Now you have :"
-msgstr "Ud. tiene ahora :"
 
 msgid "back to normal screen"
 msgstr "volver a la pantalla normal"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr "Khipu"
 msgid "Error during the delete of document"
 msgstr "Pantay qelqa khipu wañuchishaqtin"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Waqllirun qawana kunayachikushaqtin"
 
 msgid "Folder deleted"
@@ -12506,12 +12470,6 @@ msgstr "Hamut'ana"
 
 msgid "Analyze description"
 msgstr "Hamut'aymanta nisqaynin"
-
-msgid "Synthetize"
-msgstr "Huch'uychana"
-
-msgid "Synthetize description"
-msgstr "Huch'uychanamanta nisqaynin"
 
 msgid "Text page"
 msgstr "Raphi qelqayuq"
@@ -12759,7 +12717,7 @@ msgstr "Ama hina kaychu ajllay, mayqen haykuqmasiman khiputa apachinki."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Apachiyqa waqllirun: formulario nisqapi qelqakuna pantasqan. Ama hina kachu sistemaq kachiqninta tapukuy."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Pantay rikurirun. Ama hina kachu, sistemaq kachiqninta tapukuy."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr "Kutichiymanta hokaqninkuna"
 msgid "Dropdown"
 msgstr "Mast'arikuq sinri"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Raphiq tukuynin"
 
 msgid "Survey invitations"
@@ -15067,9 +15025,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

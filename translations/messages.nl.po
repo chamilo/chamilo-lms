@@ -3615,9 +3615,6 @@ msgstr "Dit is een cursus in SCORM-formaat. Om hem af te spelen, klik hier: <inp
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Dit is een SCORM-pakket.<br /><input type=\"button\" name=\"scormbutton\" value=\"Afspelen\" onclick=\"openscorm()\" />"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "Het .zip bestand is opgestuurd en uitgepakt."
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Het .zip betand mag geen PHP-bestanden bevatten."
 
@@ -5180,7 +5177,7 @@ msgstr "Deze cursus bestaat niet"
 msgid "This user doesn't exist"
 msgstr "Deze gebruiker bestaat niet"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "maar er deden zich problemen voor"
 
 msgid "This login was cut"
@@ -7078,9 +7075,6 @@ msgstr "Titel & beschrijving"
 msgid "Change order"
 msgstr "Verander de volgorde"
 
-msgid "Add prerequisities"
-msgstr "Voeg voorkennisvereisten toe"
-
 msgid "Edit name & desc."
 msgstr "Wijzig titel & beschr."
 
@@ -7104,9 +7098,6 @@ msgstr "Vorige"
 
 msgid "Next learning object"
 msgstr "Volgende"
-
-msgid "you need first accomplish"
-msgstr "moet u eerst volgende les succesvol afwerken:"
 
 msgid "Section name"
 msgstr "Lestitel"
@@ -7143,9 +7134,6 @@ msgstr "Hoofdstukbeschrijving/-titel wijzigen"
 
 msgid "Delete section"
 msgstr "Hoofdstuk verwijderen"
-
-msgid "No sectionss added yet."
-msgstr "Nog geen hoofdstukken toegevoegd."
 
 msgid "Add learning objects to this section"
 msgstr "Item toevoegen aan dit hoofdstuk"
@@ -7243,32 +7231,8 @@ msgstr "Dit document kan niet gewijzigd worden"
 msgid "After"
 msgstr "Na"
 
-msgid "Prerequisities (limit)"
-msgstr "limiet"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Deze HotPotatoestest is gesloten."
-
-msgid "Completion limit (minimum points)"
-msgstr "Limit van voltooiing (minimumaantal punten)"
-
-msgid " you need first accomplish"
-msgstr "u moet eerst vervolledigen"
-
-msgid "At least 1 step is missing from"
-msgstr "Stap 1 is niet gevonden uit"
-
-msgid " which is set as prerequisities."
-msgstr "dat ingesteld is als vereiste voorkennis."
-
-msgid " you must reach minimum"
-msgstr "u moet het minimum bereiken"
-
-msgid " points in"
-msgstr "punten in"
-
-msgid "Now you have :"
-msgstr "Nu hebt u:"
 
 msgid "back to normal screen"
 msgstr "terug naar normaal scherm"
@@ -11249,7 +11213,7 @@ msgstr "Vul het formulier in om het rapport te bouwen"
 msgid "Unknown format"
 msgstr "Onbekend format"
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr "Er deed zich een fout voor tijdens het bouwen van het rapport"
 
 msgid "Wiki Search Results"
@@ -12476,7 +12440,7 @@ msgstr "Bestand"
 msgid "Error during the delete of document"
 msgstr "Fout bij het verwijderen van het document"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Er deed zich een probleem voor bij het bijwerken van de zichtbaarheid"
 
 msgid "Folder deleted"
@@ -12547,12 +12511,6 @@ msgstr "Analyseren"
 
 msgid "Analyze description"
 msgstr "Analyseer de beschrijving"
-
-msgid "Synthetize"
-msgstr "Samenvatten"
-
-msgid "Synthetize description"
-msgstr "Vat de beschrijving samen"
 
 msgid "Text page"
 msgstr "Tekst pagina"
@@ -12800,7 +12758,7 @@ msgstr "Gelieve een gebruiker te selecteren alvorens het bestand te zenden."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Submit is mislukt: de gegevens hebben niet het juiste formaat. Gelieve de platformbeheerder te contacteren."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Er is een fout opgetreden. Gelieve de platformbeheerder te contacteren."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13411,7 +13369,7 @@ msgstr "Antwoordmogelijkheden"
 msgid "Dropdown"
 msgstr "Uitschuiflijst"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Pagina einde"
 
 msgid "Survey invitations"
@@ -15113,9 +15071,6 @@ msgstr "Gebruiker niet geregistreerd in cursus"
 
 msgid "Edit my profile"
 msgstr "Wijzig mijn profiel"
-
-msgid "Groupe description"
-msgstr "Groepsomschrijving"
 
 msgid "Installation"
 msgstr "Installatie"
@@ -25873,9 +25828,6 @@ msgstr "Voormalige leerling"
 
 msgid "File size is too big"
 msgstr "Bestandsgrootte is te groot"
-
-msgid "An error occured"
-msgstr "Er is een fout opgetreden"
 
 msgid "Image for headers"
 msgstr "Site & e-mail banner"

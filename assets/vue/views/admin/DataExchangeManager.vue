@@ -132,7 +132,7 @@
       @confirm-clicked="confirmDelete"
     >
       <p class="p-3">
-        {{ t('Are you sure you want to delete this data exchange?') }}
+        {{ t('Are you sure you want to delete this?') }}
       </p>
     </BaseDialogConfirmCancel>
   </div>
@@ -181,7 +181,7 @@ const form = ref({
 })
 
 const dialogTitle = computed(() =>
-  isEditing.value ? t("Edit data exchange") : t("Add data exchange"),
+  isEditing.value ? t("Edit") : t("Add"),
 )
 
 const selectedThirdPartyName = computed(() => {
@@ -352,7 +352,7 @@ const openDelete = (row) => {
 const confirmDelete = async () => {
   try {
     await adminService.deleteExchange(deletingExchangeIri.value)
-    showSuccessNotification(t("Data exchange deleted."))
+    showSuccessNotification(t("Deleted"))
     showDeleteDialog.value = false
     deletingExchangeIri.value = null
     await fetchExchanges()

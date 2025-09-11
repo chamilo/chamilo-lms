@@ -3597,9 +3597,6 @@ msgstr "Acesta este un curs in format Scorm. Daca doresti sa il lansezi : apasa 
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Acesta este un continut Scorm<br><input type=button name=scormbutton value='Lanseaza ' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "Arhiva zip transferata si dezarhivata"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Arhiva zip nu poate contine fisiere .PHP"
 
@@ -5157,7 +5154,7 @@ msgstr "Acest curs nu exista"
 msgid "This user doesn't exist"
 msgstr "Acest utilizator nu exista"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "dar au aparut probleme"
 
 msgid "This login was cut"
@@ -7053,9 +7050,6 @@ msgstr "Titlu si descriere"
 msgid "Change order"
 msgstr "Schimba ordinea"
 
-msgid "Add prerequisities"
-msgstr "Adaugare prerechizite"
-
 msgid "Edit name & desc."
 msgstr "Editeaza titlu si descriere"
 
@@ -7079,9 +7073,6 @@ msgstr "Anterior"
 
 msgid "Next learning object"
 msgstr "Urmator"
-
-msgid "you need first accomplish"
-msgstr "se cere mai intai sa indeplinesti"
 
 msgid "Section name"
 msgstr "Titlu pasului"
@@ -7118,9 +7109,6 @@ msgstr "Editeaza descrierea/titlul modulului"
 
 msgid "Delete section"
 msgstr "Sterge modulul"
-
-msgid "No sectionss added yet."
-msgstr "Nici un modul adaugat inca."
 
 msgid "Add learning objects to this section"
 msgstr "Adauga pasi la acest modul"
@@ -7218,32 +7206,8 @@ msgstr "Acest document nu este editabil"
 msgid "After"
 msgstr "dupa"
 
-msgid "Prerequisities (limit)"
-msgstr "Prerechizite (limita)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Acest test HotPotatoes a fost inchis."
-
-msgid "Completion limit (minimum points)"
-msgstr "Limita de completare (puncte minime)"
-
-msgid " you need first accomplish"
-msgstr "se cere mai intai sa indepliniti"
-
-msgid "At least 1 step is missing from"
-msgstr "Minimum un pas lipseste din"
-
-msgid " which is set as prerequisities."
-msgstr "care sunt setate ca si prerechizite."
-
-msgid " you must reach minimum"
-msgstr "trebuie sa atingi minimul"
-
-msgid " points in"
-msgstr "puncte in"
-
-msgid "Now you have :"
-msgstr "Acuma ai :"
 
 msgid "back to normal screen"
 msgstr "inapoi la ecran normal"
@@ -11217,7 +11181,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12444,7 +12408,7 @@ msgstr "Fisier"
 msgid "Error during the delete of document"
 msgstr "Eroare in timpul stergerii documentului"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "A aparut o problema in timp ce actualizam vizibilitatea"
 
 msgid "Folder deleted"
@@ -12515,12 +12479,6 @@ msgstr "Analizeaza"
 
 msgid "Analyze description"
 msgstr "Descrierea analizarii"
-
-msgid "Synthetize"
-msgstr "Sintetizeaza"
-
-msgid "Synthetize description"
-msgstr "Descrierea sintetizarii"
 
 msgid "Text page"
 msgstr "Pagina de text"
@@ -12768,7 +12726,7 @@ msgstr "Te rog selecteaza un utilizator pentru a trimite fisierul."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Trimitere esuata: date eronate. Te rog contacteaza administratorul de sistem."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "A aparut o eroare. Te rog contacteaza administratorul de sistem."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13377,7 +13335,7 @@ msgstr "Variante de raspuns"
 msgid "Dropdown"
 msgstr "Lista derulanta"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Sfarsitul paginii"
 
 msgid "Survey invitations"
@@ -15077,9 +15035,6 @@ msgstr "Acest utilizator nu e inregistrat in acest training"
 
 msgid "Edit my profile"
 msgstr "Editati perfilul meu"
-
-msgid "Groupe description"
-msgstr "Descrierea grupului"
 
 msgid "Installation"
 msgstr "Instalare"
@@ -24885,9 +24840,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

@@ -3588,9 +3588,6 @@ msgstr "Tio ĉi estas Scorm-formata kursos. Por ludi ĝin, klaku ĉi tien: <inpu
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Tio ĉi estas SCORM-paketo.<br><input type=button name=scormbutton value='Ludi' onclick='openscorm()'>  XX"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "ZIP-dosiero estas transsendita kaj malkunpremita"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "La ZIP-dosiero ne povas enhavi php-dosierojn"
 
@@ -5148,7 +5145,7 @@ msgstr "Tiu kurso ne ekzistas"
 msgid "This user doesn't exist"
 msgstr "Tiu uzanto ne ekzistas"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "sed okazis problemoj"
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Titolo & priskribo"
 msgid "Change order"
 msgstr "Ŝanĝi la sinsekvon"
 
-msgid "Add prerequisities"
-msgstr "Aldoni antaŭsciajn postulojn"
-
 msgid "Edit name & desc."
 msgstr "Ŝanĝi titolon & priskribon"
 
@@ -7070,9 +7064,6 @@ msgstr "Antaŭa"
 
 msgid "Next learning object"
 msgstr "Sekvanta"
-
-msgid "you need first accomplish"
-msgstr "vi unue estu sukcese fininta jenan lecionon:"
 
 msgid "Section name"
 msgstr "Leciona titolo"
@@ -7109,9 +7100,6 @@ msgstr "Ŝanĝi ĉapitran priskribon/titolon"
 
 msgid "Delete section"
 msgstr "Forigi ĉapitron"
-
-msgid "No sectionss added yet."
-msgstr "Ankoraŭ ne ĉapitroj aldonitaj."
 
 msgid "Add learning objects to this section"
 msgstr "Aldoni elementon al ĉi-ĉapitro"
@@ -7209,32 +7197,8 @@ msgstr ""
 msgid "After"
 msgstr ""
 
-msgid "Prerequisities (limit)"
-msgstr "limigo"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "Ĉi-HotPotatoes-testo estas fermita."
-
-msgid "Completion limit (minimum points)"
-msgstr "Limigo de plenumo (minimumo da poentoj)"
-
-msgid " you need first accomplish"
-msgstr "vi unue kompletigu"
-
-msgid "At least 1 step is missing from"
-msgstr "Paŝo 1 ne estas trovita el"
-
-msgid " which is set as prerequisities."
-msgstr "..."
-
-msgid " you must reach minimum"
-msgstr "vi devas atingi la minimumon"
-
-msgid " points in"
-msgstr "..."
-
-msgid "Now you have :"
-msgstr "Vi havas nun:"
 
 msgid "back to normal screen"
 msgstr "reiri al normala ekrano"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr ""
 msgid "Error during the delete of document"
 msgstr ""
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr ""
 
 msgid "Folder deleted"
@@ -12505,12 +12469,6 @@ msgid "Analyze"
 msgstr ""
 
 msgid "Analyze description"
-msgstr ""
-
-msgid "Synthetize"
-msgstr ""
-
-msgid "Synthetize description"
 msgstr ""
 
 msgid "Text page"
@@ -12759,7 +12717,7 @@ msgstr "Bonvolu elekti uzulon antaŭ ol sendi la dosieron."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Sendo malsukcesis: datumoj havas neĝustan formaton. Bonvolu kontaktiĝi kun la platformmastrumanto."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Okazis eraro. Bonvolu kontaktiĝi kun la platformmastrumanto."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr ""
 msgid "Dropdown"
 msgstr ""
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr ""
 
 msgid "Survey invitations"
@@ -15067,9 +15025,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

@@ -3588,9 +3588,6 @@ msgstr "Ова е курс во Scorm формат. За да го пуштит�
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Ова е содржина на Scorm <br><input type=button name=scormbutton value='Превземи го !' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "Компресираната датотека е качена и декомпресирана"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Компрезирана (зипувана) даотека не може да содржи .PHP датотеки"
 
@@ -5148,7 +5145,7 @@ msgstr "Овој курс не постои"
 msgid "This user doesn't exist"
 msgstr "Овој корисник не постои"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "но проблеми се случиле"
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "Наслов & опис"
 msgid "Change order"
 msgstr "Измени го редоследот"
 
-msgid "Add prerequisities"
-msgstr "Додај предуслови"
-
 msgid "Edit name & desc."
 msgstr "Уредување на наслов & опис."
 
@@ -7070,9 +7064,6 @@ msgstr "Претходно"
 
 msgid "Next learning object"
 msgstr "Следно"
-
-msgid "you need first accomplish"
-msgstr "прво треба да довршите"
 
 msgid "Section name"
 msgstr "Наслов на чекорот"
@@ -7109,9 +7100,6 @@ msgstr "Уредување на опис/наслов на модулот"
 
 msgid "Delete section"
 msgstr "Избриши го модулот"
-
-msgid "No sectionss added yet."
-msgstr "Сеуште нема додено модули."
 
 msgid "Add learning objects to this section"
 msgstr "Додај чекори во овој модул"
@@ -7209,32 +7197,8 @@ msgstr "Документот не може да се уредува"
 msgid "After"
 msgstr "После"
 
-msgid "Prerequisities (limit)"
-msgstr "Предуслови (ограничување)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "&#1054;&#1074;&#1086;&#1112; HotPotatoes &#1090;&#1077;&#1089;&#1090; &#1073;&#1077;&#1096;&#1077; &#1079;&#1072;&#1090;&#1074;&#1086;&#1088;&#1077;&#1085;."
-
-msgid "Completion limit (minimum points)"
-msgstr "Ограничување на завршувањето (минимум поени)"
-
-msgid " you need first accomplish"
-msgstr "мора прво да довршите"
-
-msgid "At least 1 step is missing from"
-msgstr "Недостига најмалку 1 чекор од"
-
-msgid " which is set as prerequisities."
-msgstr "кој е зададен како предуслов."
-
-msgid " you must reach minimum"
-msgstr "морате да го достигнете минимумот"
-
-msgid " points in"
-msgstr "бодови во"
-
-msgid "Now you have :"
-msgstr "Сега имате:"
 
 msgid "back to normal screen"
 msgstr "назад на нормален екран"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr "Датотека"
 msgid "Error during the delete of document"
 msgstr "Грешка за време на бришњето на документот"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Се појавија проблеми за време на ажурирањето на видливоста"
 
 msgid "Folder deleted"
@@ -12505,12 +12469,6 @@ msgid "Analyze"
 msgstr ""
 
 msgid "Analyze description"
-msgstr ""
-
-msgid "Synthetize"
-msgstr ""
-
-msgid "Synthetize description"
 msgstr ""
 
 msgid "Text page"
@@ -12759,7 +12717,7 @@ msgstr "Ве молиме изберете корисник накого тре�
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Поднесувањето е неуспешно: Ве молиме контактиракте со управувачот на системот."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Се случи грешка. Ве молиме контактирајте со управувачот на системот."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr "Опции за одговор"
 msgid "Dropdown"
 msgstr "Паѓачко мени"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Крај на страната"
 
 msgid "Survey invitations"
@@ -15067,9 +15025,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

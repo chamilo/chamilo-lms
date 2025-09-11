@@ -330,7 +330,7 @@ switch ($action) {
             if (is_array($cargo)) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf(get_lang('An error occured'), $cargo['codigo'], $cargo['mensaje']),
+                        sprintf(get_lang('An error occurred.'), $cargo['codigo'], $cargo['mensaje']),
                         'error',
                         false
                     )

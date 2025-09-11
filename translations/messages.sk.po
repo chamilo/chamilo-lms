@@ -3596,9 +3596,6 @@ msgstr "Toto je kurz formátu Scorm. Ak ho chcete prehrať, kliknite sem: <input
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "Toto je Scorm obsah<br><input type=button name=scormbutton value='Spustiť !' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "ZIP súbor načítaný a dekomprimovaný"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "Súbor typu ZIP nemôže obsahovať .PHP súbory"
 
@@ -5156,7 +5153,7 @@ msgstr "Tento kurz neexistuje"
 msgid "This user doesn't exist"
 msgstr "Tento používateľ neexistuje"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "ale objavili sa problémy"
 
 msgid "This login was cut"
@@ -7052,9 +7049,6 @@ msgstr "Názov a popis"
 msgid "Change order"
 msgstr "Zmeniť poradie"
 
-msgid "Add prerequisities"
-msgstr "Pridať vstupné podmienky"
-
 msgid "Edit name & desc."
 msgstr "Upraviť názov a popis"
 
@@ -7078,9 +7072,6 @@ msgstr "Predošlý"
 
 msgid "Next learning object"
 msgstr "Nasledujúci"
-
-msgid "you need first accomplish"
-msgstr "najprv musíte úspešne dokončiť"
 
 msgid "Section name"
 msgstr "Názov etapy"
@@ -7117,9 +7108,6 @@ msgstr "Upraviť názov/popis časti"
 
 msgid "Delete section"
 msgstr "Zmazať časť"
-
-msgid "No sectionss added yet."
-msgstr "Žiadne časti neboli pridané."
 
 msgid "Add learning objects to this section"
 msgstr "Pridať etapy do tejto časti"
@@ -7217,32 +7205,8 @@ msgstr "Tento dokument nie je možné upraviť"
 msgid "After"
 msgstr "Po"
 
-msgid "Prerequisities (limit)"
-msgstr "Vstupné podmienky (limit)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "HotPotatoes test bol skon&#269;ený."
-
-msgid "Completion limit (minimum points)"
-msgstr "Limit pre splnenie (minimum bodov)"
-
-msgid " you need first accomplish"
-msgstr "najprv musíte dosiahnúť"
-
-msgid "At least 1 step is missing from"
-msgstr "Chýba minimálne jedna etapa z"
-
-msgid " which is set as prerequisities."
-msgstr ", ktoré sú nastavene ako vstupné podmienky."
-
-msgid " you must reach minimum"
-msgstr "musíte dosiahnúť minimum"
-
-msgid " points in"
-msgstr "bodov v"
-
-msgid "Now you have :"
-msgstr "Teraz máte:"
 
 msgid "back to normal screen"
 msgstr "späť na normálne rozloženie"
@@ -11216,7 +11180,7 @@ msgstr "Prosím, vyplňte formulár vytvoriť hlásenie"
 msgid "Unknown format"
 msgstr "Neznámy formát"
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr "Pri vytváraní zostavy došlo k chybe"
 
 msgid "Wiki Search Results"
@@ -12443,7 +12407,7 @@ msgstr "Súbor"
 msgid "Error during the delete of document"
 msgstr "Chyba počas mazania dokumentu"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Počas aktualizácie viditeľnosti sa vyskytol problém"
 
 msgid "Folder deleted"
@@ -12514,12 +12478,6 @@ msgstr "Analýza"
 
 msgid "Analyze description"
 msgstr "Popis analýzy"
-
-msgid "Synthetize"
-msgstr "Syntéza"
-
-msgid "Synthetize description"
-msgstr "Popis syntézy"
 
 msgid "Text page"
 msgstr "Textová stránka"
@@ -12767,7 +12725,7 @@ msgstr "Prosím vyberte používateľa, ktorému chcete súbor poslať ."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Odovzdanie neúspešné: dáta v nesprávnom formáte. Kontaktujte prosím svojho systémového administrátora."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Objavila sa chyba. Prosím, kontaktujte svojho systémového administrátora."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13376,7 +13334,7 @@ msgstr "Možnosti odpovede"
 msgid "Dropdown"
 msgstr "Rozbaľovacia ponuka"
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr "Koniec stránky"
 
 msgid "Survey invitations"
@@ -15076,9 +15034,6 @@ msgstr "Používateľ nie je registrovaný v kurze"
 
 msgid "Edit my profile"
 msgstr "Upraviť môj profil"
-
-msgid "Groupe description"
-msgstr "Popis skupiny"
 
 msgid "Installation"
 msgstr "Inštalácia"
@@ -24884,9 +24839,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

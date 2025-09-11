@@ -3588,9 +3588,6 @@ msgstr "이것은 Scorm 형식의 과정입니다. 실행하시려면, 이곳을
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr "이것은 Scorm 컨텐츠입니다<br><input type=button name=scormbutton value='Launch?it?!' onclick='openscorm()'>"
 
-msgid " Zip file uploaded and uncompressed"
-msgstr "압축 파일 올리고 압축 해제"
-
 msgid "The zip file can not contain .PHP files"
 msgstr "압축 파일은 .PHP 파일을 포함할 수 없습니다"
 
@@ -5148,7 +5145,7 @@ msgstr ""
 msgid "This user doesn't exist"
 msgstr ""
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr ""
 
 msgid "This login was cut"
@@ -7044,9 +7041,6 @@ msgstr "제목과 설명"
 msgid "Change order"
 msgstr "순서 변경"
 
-msgid "Add prerequisities"
-msgstr "선수조건 추가"
-
 msgid "Edit name & desc."
 msgstr "제목과 설명 수정"
 
@@ -7070,9 +7064,6 @@ msgstr "이전"
 
 msgid "Next learning object"
 msgstr "다음"
-
-msgid "you need first accomplish"
-msgstr "첫번째 성취가 필요합니다"
 
 msgid "Section name"
 msgstr "단계 제목"
@@ -7109,9 +7100,6 @@ msgstr "모듈 설명/제목 수정"
 
 msgid "Delete section"
 msgstr "모듈 삭제"
-
-msgid "No sectionss added yet."
-msgstr "추가된 모듈이 없습니다."
 
 msgid "Add learning objects to this section"
 msgstr "이 모듈에 단계 추가"
@@ -7209,32 +7197,8 @@ msgstr ""
 msgid "After"
 msgstr ""
 
-msgid "Prerequisities (limit)"
-msgstr "선수조건(제한사항)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr "HotPotatoes 테스트가 종료되었습니다."
-
-msgid "Completion limit (minimum points)"
-msgstr "합격 최저점"
-
-msgid " you need first accomplish"
-msgstr "첫번째 단계를 수행하시기 바랍니다"
-
-msgid "At least 1 step is missing from"
-msgstr "최소 1 단계를 놓쳤습니다"
-
-msgid " which is set as prerequisities."
-msgstr "선수조건으로 지정된 것 중."
-
-msgid " you must reach minimum"
-msgstr "최저점을 달성해야 합니다"
-
-msgid " points in"
-msgstr "도달할 점수"
-
-msgid "Now you have :"
-msgstr "현재 점수 :"
 
 msgid "back to normal screen"
 msgstr "일반 화면으로 돌아가기"
@@ -11208,7 +11172,7 @@ msgstr ""
 msgid "Unknown format"
 msgstr ""
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr ""
 
 msgid "Wiki Search Results"
@@ -12435,7 +12399,7 @@ msgstr ""
 msgid "Error during the delete of document"
 msgstr ""
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr ""
 
 msgid "Folder deleted"
@@ -12505,12 +12469,6 @@ msgid "Analyze"
 msgstr ""
 
 msgid "Analyze description"
-msgstr ""
-
-msgid "Synthetize"
-msgstr ""
-
-msgid "Synthetize description"
 msgstr ""
 
 msgid "Text page"
@@ -12759,7 +12717,7 @@ msgstr "파일을 전송할 유저를 선택하십시요."
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "등록 실패: 데이터 형식이 잘못되었습니다. 시스템 관리자에게 문의하십시요."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "에러가 발생하였습니다. 시스템 관리자에게 문의하십시요."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13368,7 +13326,7 @@ msgstr ""
 msgid "Dropdown"
 msgstr ""
 
-msgid "Page break (distinct questions)"
+msgid "Page break"
 msgstr ""
 
 msgid "Survey invitations"
@@ -15067,9 +15025,6 @@ msgid "User not registered in course"
 msgstr ""
 
 msgid "Edit my profile"
-msgstr ""
-
-msgid "Groupe description"
 msgstr ""
 
 msgid "Installation"
@@ -24871,9 +24826,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

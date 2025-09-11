@@ -3596,9 +3596,6 @@ msgstr ""
 msgid "This is a SCORM content<br><input type=button name=scormbutton value='Launch it !' ='openscorm()'>"
 msgstr ""
 
-msgid " Zip file uploaded and uncompressed"
-msgstr ""
-
 msgid "The zip file can not contain .PHP files"
 msgstr ""
 
@@ -5156,7 +5153,7 @@ msgstr "Το μάθημα δεν υπάρχει"
 msgid "This user doesn't exist"
 msgstr "Δεν υπάρχει ο χρήστης"
 
-msgid "but problems occured"
+msgid "but problems occurred"
 msgstr "αλλά υπήρξαν προβλήματα"
 
 msgid "This login was cut"
@@ -7052,9 +7049,6 @@ msgstr "Τίτλος και περιγραφή"
 msgid "Change order"
 msgstr "Αλλαγή σειράς"
 
-msgid "Add prerequisities"
-msgstr "Προσθήκη προϋποθέσεων"
-
 msgid "Edit name & desc."
 msgstr "Επεξεργασία τίτλου και περιγραφής"
 
@@ -7078,9 +7072,6 @@ msgstr "Προηγούμενο"
 
 msgid "Next learning object"
 msgstr "Επόμενο"
-
-msgid "you need first accomplish"
-msgstr "χρειάζεται πρώτα να κάνετε"
 
 msgid "Section name"
 msgstr "Τίτλος βήματος"
@@ -7117,9 +7108,6 @@ msgstr "Αλλαγή περιγραφής/ονόματος ενότητας"
 
 msgid "Delete section"
 msgstr "Διαγραφή ενότητας"
-
-msgid "No sectionss added yet."
-msgstr "Δεν προστέθηκαν ενότητες ακόμη."
 
 msgid "Add learning objects to this section"
 msgstr "Προσθήκη αντικειμένων μάθησης σε αυτή την ενότητα"
@@ -7217,32 +7205,8 @@ msgstr "Το έγγραφο δεν είναι επεξεργάσιμο"
 msgid "After"
 msgstr "Μετά"
 
-msgid "Prerequisities (limit)"
-msgstr "Προαπαιτήσεις (όριο)"
-
 msgid "This HotPotatoes test has been closed."
 msgstr ""
-
-msgid "Completion limit (minimum points)"
-msgstr ""
-
-msgid " you need first accomplish"
-msgstr "πρέπεε πρώτα να φέρετε εις πέρας"
-
-msgid "At least 1 step is missing from"
-msgstr ""
-
-msgid " which is set as prerequisities."
-msgstr ""
-
-msgid " you must reach minimum"
-msgstr ""
-
-msgid " points in"
-msgstr ""
-
-msgid "Now you have :"
-msgstr "Τώρα έχετε :"
 
 msgid "back to normal screen"
 msgstr "επιστροφή στην κανονική οθόνη"
@@ -11216,7 +11180,7 @@ msgstr "Παρακαλώ συμπληρώστε τη φόρμα για την δ
 msgid "Unknown format"
 msgstr "Άγνωστο format"
 
-msgid "An error occured while building the report"
+msgid "An error occurred while building the report"
 msgstr "Υπήρξε σφάλμα κατά ανάλυση της αναφοράς"
 
 msgid "Wiki Search Results"
@@ -12443,7 +12407,7 @@ msgstr "Αρχείο"
 msgid "Error during the delete of document"
 msgstr "Σφάλμα κατά τη διαγραφή του εγγράφου"
 
-msgid "A problem occured while updating visibility"
+msgid "A problem occurred while updating visibility"
 msgstr "Συνέβη ένα σφάλμα κατά την ενημέρωση της ορατότητας"
 
 msgid "Folder deleted"
@@ -12514,12 +12478,6 @@ msgstr "Ανάλυση"
 
 msgid "Analyze description"
 msgstr "Ανάλυση περιγραφής"
-
-msgid "Synthetize"
-msgstr "Σύνθεση"
-
-msgid "Synthetize description"
-msgstr "Σύνθεση περιγραφής"
 
 msgid "Text page"
 msgstr "Σελίδα κειμένου"
@@ -12767,7 +12725,7 @@ msgstr "Παρακαλούμε επιλέξτε το χρήστη στον οπ�
 msgid "Submit failed: bad form data. Please contact your system administrator."
 msgstr "Η αποστολή του αρχείου απέτυχε: Τα δεδομένα ήταν με λάθος μορφή. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας."
 
-msgid "An error has occured. Please contact your system administrator."
+msgid "An error has occurred. Please contact your system administrator."
 msgstr "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας."
 
 msgid "To play the media you will need to either update your browser to a recent version or update your <a href=\"http://get.adobe.com/flashplayer/\" target=\"_blank\">Flash plugin</a>. Check if the file has a correct extension."
@@ -13376,8 +13334,8 @@ msgstr "Answer options"
 msgid "Dropdown"
 msgstr "Dropdown"
 
-msgid "Page break (distinct questions)"
-msgstr "Page end (separate questions)"
+msgid "Page break"
+msgstr "Page break"
 
 msgid "Survey invitations"
 msgstr "Survey invitations"
@@ -15076,9 +15034,6 @@ msgstr "Ο χρήστης δεν έχει εγγραφεί στο μάθημα"
 
 msgid "Edit my profile"
 msgstr "Επεξεργασία του προφίλ μου"
-
-msgid "Groupe description"
-msgstr "Περιγραφή ομάδας"
 
 msgid "Installation"
 msgstr "Εγκατάστaση"
@@ -24884,9 +24839,6 @@ msgid "Ex-learner"
 msgstr ""
 
 msgid "File size is too big"
-msgstr ""
-
-msgid "An error occured"
 msgstr ""
 
 msgid "Image for headers"

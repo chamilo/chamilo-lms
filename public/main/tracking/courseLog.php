@@ -183,7 +183,6 @@ $htmlHeadXtra[] = <<<CSSJS
     #advanced_search_options .has-long-list>div:last-child{column-count:2;column-gap:16px;}
     #advanced_search_options .has-long-list .radio, #advanced_search_options .has-long-list .checkbox{break-inside:avoid;}
   }
-  /* Para que el ancla #free-users no quede tapado por headers fijos */
   #free-users{scroll-margin-top:80px;}
 </style>
 <script>
@@ -870,7 +869,6 @@ $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2
 /** @var CQuiz[] $exercises */
 $exercises = $qb->getQuery()->getResult();
 
-// --- Helpers para convertir % a número ---
 $percentVal = static function ($v): float {
     if ($v === '' || $v === null) return 0.0;
     if (is_numeric($v)) return (float)$v;
@@ -878,12 +876,11 @@ $percentVal = static function ($v): float {
 };
 
 if (!empty($groupList)) {
-    // Totales ponderados por #usuarios
     $row = 1;
-    $totalSeconds = 0;          // suma de segundos (inscritos + free si se muestran)
-    $totalUsers   = 0;          // #usuarios considerados en total
-    $sumProgress  = 0.0;        // suma de % progreso * usuarios
-    $sumBest      = 0.0;        // suma de % ejercicios * usuarios
+    $totalSeconds = 0;
+    $totalUsers   = 0;
+    $sumProgress  = 0.0;
+    $sumBest      = 0.0;
 
     foreach ($groupList as $groupInfo) {
         $col = 0;
@@ -896,20 +893,17 @@ if (!empty($groupList)) {
             $uids = array_column($usersInGroup, 'user_id');
             $count = count($uids);
 
-            // Tiempo del grupo
             $secs = Tracking::get_time_spent_on_the_course($uids, $courseId, $sessionId);
             if ($secs) {
                 $timeStr    = api_time_to_hms($secs);
                 $avgTimeStr = api_time_to_hms($secs / $count);
             }
 
-            // Progreso del grupo (una sola llamada, no dentro de un foreach)
             $groupProgressNum = $percentVal(
                 Tracking::get_avg_student_progress($uids, $course, [], $session)
             );
             $progStr = round($groupProgressNum, 2).' %';
 
-            // Promedio de mejores notas (fuera de LP) del grupo
             $groupBestNum = 0.0;
             if (!empty($exercises) && $count) {
                 $bestSum = 0.0;
@@ -937,7 +931,6 @@ if (!empty($groupList)) {
             }
             $bestStr = $groupBestNum ? ($groupBestNum.' %') : '';
 
-            // Acumular a totales ponderados SOLO con inscritos del grupo
             $totalSeconds += $secs;
             $totalUsers   += $count;
             $sumProgress  += $groupProgressNum * $count;
@@ -951,7 +944,6 @@ if (!empty($groupList)) {
         $row++;
     }
 
-    // Inyectar no inscritos (free). Si están visibles, también cuentan para el Total.
     if ($showNonRegistered && !empty($freeUsers)) {
         foreach ($freeUsers as $fu) {
             $col = 0;
@@ -990,7 +982,6 @@ if (!empty($groupList)) {
             }
             $bestStr = $bestNum ? ($bestNum.' %') : '';
 
-            // Sumarlos a totales cuando están visibles
             $totalSeconds += $secs;
             $totalUsers   += 1;
             $sumProgress  += $lpNum;
@@ -1005,7 +996,6 @@ if (!empty($groupList)) {
         }
     }
 
-    // Fila Total (coherente con lo visible)
     $avgSecondsAll   = $totalUsers ? ($totalSeconds / $totalUsers) : 0;
     $totalAvgTimeStr = api_time_to_hms($avgSecondsAll);
     $totalProgStr    = $totalUsers ? (round($sumProgress / $totalUsers, 2).' %') : '';
@@ -1019,8 +1009,6 @@ if (!empty($groupList)) {
     $groupTable->setCellContents($row, $col++, $totalBestStr);
 
 } else {
-    // ====== SIN GRUPOS ======
-    // Construimos el universo de usuarios a considerar en el total
     $studentIdList = Session::read('user_id_list');
     $studentIdList = !empty($studentIdList) ? $studentIdList : array_column($studentList, 'user_id');
 
@@ -1031,19 +1019,15 @@ if (!empty($groupList)) {
     }
 
     $nbAll = count($studentIdList);
-
-    // Tiempo total / promedio por usuario
     $totalSeconds   = Tracking::get_time_spent_on_the_course($studentIdList, $courseId, $sessionId);
     $avgSecondsAll  = $nbAll ? $totalSeconds / $nbAll : 0;
 
-    // Progreso promedio por usuario
     $sumProgress = 0.0;
     foreach ($studentIdList as $uid) {
         $sumProgress += $percentVal(Tracking::get_avg_student_progress($uid, $course, [], $session));
     }
     $avgProgress = $nbAll ? round($sumProgress / $nbAll, 2) : 0.0;
 
-    // Promedio de mejores notas por usuario
     $bestSum = 0.0;
     if (!empty($exercises)) {
         foreach ($studentIdList as $uid) {
@@ -1068,23 +1052,15 @@ if (!empty($groupList)) {
     }
     $avgBest = $nbAll ? round($bestSum / $nbAll, 2) : 0.0;
 
-    // Fila Total
-    $row = 1; $col = 0;
-    $groupTable->setCellContents($row, $col++, get_lang('Total'));
-    $groupTable->setCellContents($row, $col++, api_time_to_hms($totalSeconds));
-    $groupTable->setCellContents($row, $col++, api_time_to_hms($avgSecondsAll));
-    $groupTable->setCellContents($row, $col++, $avgProgress.' %');
-    $groupTable->setCellContents($row, $col++, $avgBest.' %');
-
-    // Filas “free” (opcionalmente visibles). OJO: ya están incluidas en los totales.
+    $row = 1;
     if ($showNonRegistered && !empty($freeUsers)) {
         foreach ($freeUsers as $fu) {
-            $col = 0; $row++;
+            $col = 0;
             $uid  = (int) ($fu['id'] ?? 0);
             $name = Security::remove_XSS(trim(($fu['firstname'] ?? '').' '.($fu['lastname'] ?? ''))).' (free)';
 
             $secs = Tracking::get_time_spent_on_the_course([$uid], $courseId, $sessionId);
-            $timeU = $secs ? api_time_to_hms($secs) : '';
+            $timeU    = $secs ? api_time_to_hms($secs) : '';
             $avgTimeU = $timeU;
 
             $lpU = $percentVal(Tracking::get_avg_student_progress($uid, $course, [], $session));
@@ -1116,8 +1092,16 @@ if (!empty($groupList)) {
             $groupTable->setCellContents($row, $col++, $avgTimeU);
             $groupTable->setCellContents($row, $col++, $lpU);
             $groupTable->setCellContents($row, $col++, $bestAvgU);
+            $row++;
         }
     }
+
+    $col = 0;
+    $groupTable->setCellContents($row, $col++, get_lang('Total'));
+    $groupTable->setCellContents($row, $col++, api_time_to_hms($totalSeconds));
+    $groupTable->setCellContents($row, $col++, api_time_to_hms($avgSecondsAll));
+    $groupTable->setCellContents($row, $col++, $avgProgress.' %');
+    $groupTable->setCellContents($row, $col++, $avgBest.' %');
 }
 
 

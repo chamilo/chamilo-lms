@@ -285,7 +285,7 @@ function handlePlugins()
             showToast("'.get_lang('Done').': " + action.toUpperCase(), "success");
             setTimeout(function(){ location.reload(); }, 500);
           } else {
-            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : "'.htmlentities(get_lang('Error')).'";
+            var msg = (data && (data.error || data.message)) ? (data.error || data.message) : "'.get_lang('Error').'";
             showToast("'.get_lang('Error').': " + msg, "error");
             $btn.html(originalHtml);
           }

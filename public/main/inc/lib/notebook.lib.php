@@ -56,6 +56,7 @@ class NotebookManager
         $session = api_get_session_entity($sessionId);
 
         $notebook = new CNotebook();
+        $notebook->setParent($course);
         $notebook
             ->setTitle($values['note_title'])
             ->setDescription($values['note_comment'])
@@ -74,36 +75,31 @@ class NotebookManager
      *
      * @return array
      */
-    public static function get_note_information($notebook_id)
+    public static function get_note_information(int $notebook_id): array
     {
         if (empty($notebook_id)) {
             return [];
         }
 
-        // Database table definition
-        $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $course_id = api_get_course_int_id();
-        $notebook_id = (int) $notebook_id;
-
-        $sql = "SELECT
-                iid 		AS notebook_id,
-                title				AS note_title,
-                description 		AS note_comment,
-                session_id			AS session_id
-                FROM $table
-                WHERE iid = '".$notebook_id."' ";
-        $result = Database::query($sql);
-        if (1 != Database::num_rows($result)) {
+        $repo = Container::getNotebookRepository();
+        $note = $repo->find($notebook_id);
+        if (empty($note)) {
             return [];
         }
-
-        return Database::fetch_array($result);
+        /** @var CNotebook $note */
+        return [
+            'iid' => $note->getIid(),
+            'title' => $note->getTitle(),
+            'description' => $note->getDescription(),
+            'session_id' => api_get_session_id(),
+        ];
     }
 
     /**
+     * Updates a note
      * @param array $values
      */
-    public static function updateNote($values)
+    public static function updateNote($values): mixed
     {
         if (!is_array($values) || empty($values['note_title'])) {
             return false;
@@ -131,7 +127,7 @@ class NotebookManager
      *
      * @return bool
      */
-    public static function delete_note($notebook_id)
+    public static function delete_note($notebook_id): bool
     {
         $notebook_id = (int) $notebook_id;
 
@@ -153,15 +149,6 @@ class NotebookManager
         if (1 != $affected_rows) {
             return false;
         }
-
-        // Update item_property (delete)
-        /*api_item_property_update(
-            api_get_course_info(),
-            TOOL_NOTEBOOK,
-            $notebook_id,
-            'delete',
-            api_get_user_id()
-        );*/
 
         return true;
     }
@@ -217,43 +204,43 @@ class NotebookManager
             Session::write('notebook_view', 'creation_date');
         }
 
-        // Database table definition
-        $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $order_by = " ORDER BY `$notebookView` $sort_direction ";
+        //$order_by = " ORDER BY $notebookView $sort_direction ";
 
-        // Condition for the session
-        $condition_session = api_get_session_condition($sessionId);
-
-        $cond_extra = 'update_date' === $notebookView ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = $course_id AND
-                    user_id = '".api_get_user_id()."'
-                    $condition_session
-                    $cond_extra $order_by
-                ";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $repo = Container::getNotebookRepository();
+        $course = api_get_course_entity($course_id);
+        $session = api_get_session_entity($sessionId);
+
+        $notebooks = $repo->getResourcesByCourse($course, $session);
+
+        /** @var CNotebook $item */
+        foreach ($notebooks as $item) {
+            $notebookData = [
+                'id' => $item->getIid(),
+                'title' => $item->getTitle(),
+                'description' => $item->getDescription(),
+                'creation_date' => $item->getCreationDate(),
+                'update_date' => $item->getUpdateDate(),
+            ];
             // Validation when belongs to a session
-            $session_img = api_get_session_image($row['session_id'], $user);
+            $session_img = api_get_session_image($course_id, $user);
             $updateValue = '';
-            if ($row['update_date'] != $row['creation_date']) {
-                $updateValue = ', '.get_lang('Updated').': '.Display::dateToStringAgoAndLongDate($row['update_date']);
+            if ($notebookData['update_date'] != $notebookData['creation_date']) {
+                $updateValue = ', '.get_lang('Updated').': '.Display::dateToStringAgoAndLongDate($notebookData['update_date']);
             }
 
-            $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
+            $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$notebookData['id'].'">'.
                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
             $actions .= '<a
-                href="'.api_get_self().'?action=deletenote&notebook_id='.$row['notebook_id'].'"
-                onclick="return confirmation(\''.$row['title'].'\');">'.
+                href="'.api_get_self().'?action=deletenote&notebook_id='.$notebookData['id'].'"
+                onclick="return confirmation(\''.$notebookData['title'].'\');">'.
                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
 
             echo Display::panel(
-                $row['description'],
-                $row['title'].$session_img.' <div class="pull-right">'.$actions.'</div>',
-                get_lang('Creation date').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue
+                $notebookData['description'],
+                $notebookData['title'].$session_img.' <div class="pull-right">'.$actions.'</div>',
+                get_lang('Creation date').': '.Display::dateToStringAgoAndLongDate($notebookData['creation_date']).$updateValue
             );
         }
     }

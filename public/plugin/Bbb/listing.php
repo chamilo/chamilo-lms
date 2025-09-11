@@ -435,12 +435,34 @@ if (
 $messagesAboveForm = '';
 try {
     $messagesAboveForm .= Display::getFlash();
+
+    // Show admin warning if webhooks are enabled but not available on BBB server
+    if (api_is_platform_admin() && $plugin->webhooksEnabled()) {
+        // Optional: tiny 60s cache to avoid calling BBB on every refresh
+        $cacheKey = 'bbb_hooks_warning_cache';
+        $cached = Container::getSession()->get($cacheKey);
+        $warnHtml = null;
+
+        if ($cached && isset($cached['ts'], $cached['html']) && ($cached['ts'] > time() - 60)) {
+            $warnHtml = $cached['html'];
+        } else {
+            $warnHtml = $plugin->getWebhooksAdminWarningHtml(); // returns HTML or null
+            Container::getSession()->set($cacheKey, ['ts' => time(), 'html' => $warnHtml]);
+        }
+
+        if ($warnHtml) {
+            // Already HTML (English message inside the code)
+            $messagesAboveForm .= $warnHtml;
+        }
+    }
+
     $sess = Container::getSession()->get('bbb_preupload_message');
     if ($sess) {
         $messagesAboveForm .= Display::return_message($sess['text'], $sess['type'], false);
         Container::getSession()->remove('bbb_preupload_message');
     }
 } catch (\Throwable $e) {}
+
 
 // Links + start form (with pre-upload document picker).
 $urlList = [];

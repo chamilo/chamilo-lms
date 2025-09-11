@@ -1426,7 +1426,7 @@ class TicketManager
                         self::isUserSubscribedToTicket($ticketId, $follower->getId())
                     )
                 ) {
-                    $recipients[$follower->getId()] = $follower->getFullname();
+                    $recipients[$follower->getId()] = $follower->getFullName();
                 }
             }
         }

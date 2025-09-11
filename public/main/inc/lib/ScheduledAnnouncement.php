@@ -384,7 +384,7 @@ class ScheduledAnnouncement extends Model
                             $generalCoachEmail = [];
                             /** @var User $generalCoach */
                             foreach ($generalCoaches as $generalCoach) {
-                                $generalCoachName[] = $generalCoach->getFullname();
+                                $generalCoachName[] = $generalCoach->getFullName();
                                 $generalCoachEmail[] = $generalCoach->getEmail();
                             }
 

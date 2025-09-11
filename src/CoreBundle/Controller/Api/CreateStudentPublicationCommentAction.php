@@ -105,7 +105,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             $subject = \sprintf('New feedback for your submission "%s"', $submission->getTitle());
             $content = \sprintf(
                 'Hello %s, there is a new comment on your assignment submission "%s". Please review it in the platform.',
-                $receiverUser->getFullname(),
+                $receiverUser->getFullName(),
                 $submission->getTitle()
             );
 

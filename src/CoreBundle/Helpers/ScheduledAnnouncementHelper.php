@@ -219,7 +219,7 @@ class ScheduledAnnouncementHelper
         $generalCoachEmail = [];
 
         foreach ($generalCoaches as $coach) {
-            $generalCoachName[] = $coach->getFullname();
+            $generalCoachName[] = $coach->getFullName();
             $generalCoachEmail[] = $coach->getEmail();
         }
 

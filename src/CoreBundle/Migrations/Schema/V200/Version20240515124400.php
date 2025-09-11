@@ -66,7 +66,7 @@ final class Version20240515124400 extends AbstractMigrationChamilo
                             if ($firstResourceLink && $user) {
                                 $resourceLinkId = $firstResourceLink->getId();
                                 $url = $resourceNode->getResourceFiles()->first()->getOriginalName();
-                                echo "Resource link $resourceLinkId Down id {$download->getDownId()} for $url: user ".$user->getFullname()."\n";
+                                echo "Resource link $resourceLinkId Down id {$download->getDownId()} for $url: user ".$user->getFullName()."\n";
 
                                 $this->connection->executeUpdate('UPDATE track_e_downloads SET resource_link_id = ? WHERE down_id = ?', [$resourceLinkId, $download->getDownId()]);
                             }

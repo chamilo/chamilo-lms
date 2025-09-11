@@ -2405,7 +2405,7 @@ class SessionManager
             '@ChamiloCore/Mailer/Legacy/subject_subscription_to_boss_notification.html.twig',
             [
                 'locale' => $boss->getLocale(),
-                'boss_name' => $boss->getFullname(),
+                'boss_name' => $boss->getFullName(),
                 'student_name' => $user_info['complete_name'],
                 'session_name' => $session->getTitle(),
             ]
@@ -2415,7 +2415,7 @@ class SessionManager
             '@ChamiloCore/Mailer/Legacy/content_subscription_to_boss_notification.html.twig',
             [
                 'locale' => $boss->getLocale(),
-                'boss_name' => $boss->getFullname(),
+                'boss_name' => $boss->getFullName(),
                 'student_name' => $user_info['complete_name'],
                 'session_name' => $session->getTitle(),
             ]
@@ -2423,7 +2423,7 @@ class SessionManager
 
         // Send email
         api_mail_html(
-            $boss->getFullname(),
+            $boss->getFullName(),
             $boss->getEmail(),
             $subject,
             $content,
@@ -10632,7 +10632,7 @@ class SessionManager
     {
         return api_get_session_entity($sessionId)
             ->getGeneralCoaches()
-            ->map(fn(User $user) => $user->getFullname())
+            ->map(fn(User $user) => $user->getFullName())
             ->getValues();
     }
 

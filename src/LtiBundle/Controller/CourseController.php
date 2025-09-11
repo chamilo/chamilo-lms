@@ -625,7 +625,7 @@ class CourseController extends ToolBaseController
             '$User.username' => $user->getUsername(),
 
             '$Person.sourcedId' => false,
-            '$Person.name.full' => $user->getFullname(),
+            '$Person.name.full' => $user->getFullName(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
             '$Person.name.middle' => false,

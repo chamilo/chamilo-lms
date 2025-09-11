@@ -43,7 +43,7 @@ class ImsLti
             '$Person.sourcedId' => $isLti1p3
                 ? self::getPersonSourcedId($domain, $user)
                 : "$domain:".ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
-            '$Person.name.full' => $user->getFullname(),
+            '$Person.name.full' => $user->getFullName(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
             '$Person.address.street1' => $user->getAddress(),

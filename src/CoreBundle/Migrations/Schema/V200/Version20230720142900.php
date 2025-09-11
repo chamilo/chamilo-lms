@@ -62,7 +62,7 @@ class Version20230720142900 extends AbstractMigrationChamilo
         $this->entityManager->persist($fallbackUser);
         $this->entityManager->flush();
 
-        error_log('Fallback user created: '.$fallbackUser->getFullname());
+        error_log('Fallback user created: '.$fallbackUser->getFullName());
 
         $repo->updateUser($fallbackUser);
     }

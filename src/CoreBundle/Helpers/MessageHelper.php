@@ -308,7 +308,7 @@ class MessageHelper
         try {
             $email = (new Email())
                 ->from($from)
-                ->to(new Address($toAddress, $receiver->getFullname() ?: $receiver->getUsername()))
+                ->to(new Address($toAddress, $receiver->getFullName() ?: $receiver->getUsername()))
                 ->subject($subject)
                 ->text($content)
                 ->html($content);

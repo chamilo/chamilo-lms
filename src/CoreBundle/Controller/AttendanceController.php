@@ -175,13 +175,13 @@ class AttendanceController extends AbstractController
             ;
 
             $teacher = $rel instanceof SessionRelCourseRelUser
-                ? $rel->getUser()?->getFullname()
+                ? $rel->getUser()?->getFullName()
                 : null;
         } else {
             $rel = $course?->getTeachersSubscriptions()?->first();
 
             $teacher = $rel instanceof CourseRelUser
-                ? $rel->getUser()?->getFullname()
+                ? $rel->getUser()?->getFullName()
                 : null;
         }
 

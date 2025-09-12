@@ -179,12 +179,29 @@ const receiverType = route.query.receiverType ? parseInt(route.query.receiverTyp
 store.dispatch("message/load", id).then((responseItem) => {
   item.value = responseItem
 
-  myReceiver.value = findMyReceiver(responseItem, receiverType)
+  const rawRt = route.query.receiverType ? Number(route.query.receiverType) : undefined
+  myReceiver.value = rawRt
+    ? findMyReceiver(responseItem, rawRt)
+    : findMyReceiver(responseItem, MESSAGE_TYPE_INBOX)
+
+  if (!myReceiver.value) {
+    const all = [...responseItem.receiversTo, ...responseItem.receiversCc, ...responseItem.receiversSender]
+    myReceiver.value = all.find(({ receiver }) => receiver["@id"] === securityStore.user["@id"])
+  }
 
   if (myReceiver.value && !myReceiver.value.read) {
     messageRelUserService
       .update(myReceiver.value["@id"], { read: true })
-      .then(() => messageRelUserStore.findUnreadCount())
+      .then(() => {
+        messageRelUserStore.findUnreadCount()
+        window.dispatchEvent(new CustomEvent("message:read", {
+          detail: {
+            iri: responseItem["@id"],
+            receiverId: myReceiver.value.receiver["@id"],
+            receiverType: myReceiver.value.receiverType,
+          },
+        }))
+      })
   }
 })
 

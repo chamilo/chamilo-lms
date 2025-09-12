@@ -3030,16 +3030,31 @@ class Blog
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';
 
-                $my_image = '<a href="'.api_get_self().'?action=visibility&blog_id='.$info_log[3].'">';
+                $secToken = Security::get_existing_token('blog');
+
+                $my_image = '<a href="'.api_get_self().'?'
+                    .http_build_query([
+                        'action' => 'visibility',
+                        'blog_id' => $info_log[3],
+                        'blog_sec_token' => $secToken,
+                    ]).'">';
                 $my_image .= Display::return_icon($visibility_icon.'.png', get_lang($visibility_info));
                 $my_image .= "</a>";
 
-                $my_image .= '<a href="'.api_get_self().'?action=edit&blog_id='.$info_log[3].'">';
+                $my_image .= '<a href="'.api_get_self().'?'
+                    .http_build_query([
+                        'action' => 'edit',
+                        'blog_id' => $info_log[3],
+                    ]).'">';
                 $my_image .= Display::return_icon('edit.png', get_lang('EditBlog'));
                 $my_image .= "</a>";
 
-                $my_image .= '<a href="'.api_get_self().'?action=delete&blog_id='.$info_log[3].'" ';
-                $my_image .= 'onclick="javascript:if(!confirm(\''.addslashes(
+                $my_image .= '<a href="'.api_get_self().'?'
+                    .http_build_query([
+                        'action' => 'delete',
+                        'blog_id' => $info_log[3],
+                        'blog_sec_token' => $secToken,
+                    ]).'" onclick="javascript:if(!confirm(\''.addslashes(
                         api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                     ).'\')) return false;" >';
                 $my_image .= Display::return_icon('delete.png', get_lang('DeleteBlog'));

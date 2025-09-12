@@ -148,7 +148,7 @@
                   receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER,
                 },
               }"
-              class="text-primary"
+              :class="['text-primary', { 'font-bold': showingInbox && !findMyReceiver(slotProps.data)?.read }]"
             >
               {{ slotProps.data.title }}
             </BaseAppLink>
@@ -223,8 +223,14 @@
           <div class="mt-4">
             <div class="text-sm font-bold">{{ t("Title") }}:</div>
             <BaseAppLink
-              :to="{ name: 'MessageShow', query: { id: item['@id'] } }"
-              class="text-base text-blue-600"
+              :to="{
+                name: 'MessageShow',
+                query: {
+                  id: item['@id'],
+                  receiverType: showingInbox ? MESSAGE_TYPE_INBOX : MESSAGE_TYPE_SENDER,
+                },
+              }"
+              :class="['text-base text-blue-600', { 'font-bold': showingInbox && !findMyReceiver(item)?.read }]"
             >
               {{ item.title }}
             </BaseAppLink>
@@ -279,7 +285,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref } from "vue"
 import { useStore } from "vuex"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
@@ -499,6 +505,7 @@ function showInboxByTag(tag) {
 
   fetchPayload = {
     "order[sendDate]": "desc",
+    "receivers.receiver": securityStore.user["@id"],
     itemsPerPage: initialRowsPerPage,
     page: 1,
     "receivers.receiverType": MESSAGE_TYPE_INBOX,
@@ -515,6 +522,7 @@ function showUnread() {
 
   fetchPayload = {
     "order[sendDate]": "desc",
+    "receivers.receiver": securityStore.user["@id"],
     "receivers.read": false,
     itemsPerPage: initialRowsPerPage,
     page: 1,
@@ -653,4 +661,27 @@ function onResetSearch() {
 
   loadMessages()
 }
+
+let onMessageRead
+
+onMounted(() => {
+  onMessageRead = (ev) => {
+    const { iri, receiverId, receiverType } = ev.detail || {}
+    const msg = items.value?.find?.((m) => m["@id"] === iri)
+    if (!msg) return
+
+    const receivers = [...msg.receiversTo, ...msg.receiversCc, ...msg.receiversSender]
+    const mine = receivers.find((r) => r.receiver?.["@id"] === receiverId && r.receiverType === receiverType)
+    if (mine) {
+      mine.read = true
+    }
+  }
+  window.addEventListener("message:read", onMessageRead)
+})
+
+onBeforeUnmount(() => {
+  if (onMessageRead) {
+    window.removeEventListener("message:read", onMessageRead)
+  }
+})
 </script>

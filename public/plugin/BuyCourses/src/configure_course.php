@@ -112,7 +112,7 @@ if ($editingCourse) {
 
     foreach ($generalCoaches as $generalCoach) {
         $generalCoachesOptions[] = [
-            'text' => $generalCoach->getFullname(),
+            'text' => $generalCoach->getFullName(),
             'value' => $generalCoach->getId(),
         ];
         $defaultBeneficiaries[] = $generalCoach->getId();

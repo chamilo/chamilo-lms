@@ -111,7 +111,7 @@ try {
 
     // User info
     if ($tool->isSharingName()) {
-        $jwtContent['name'] = $user->getFullname();
+        $jwtContent['name'] = $user->getFullName();
         $jwtContent['given_name'] = $user->getFirstname();
         $jwtContent['family_name'] = $user->getLastname();
     }

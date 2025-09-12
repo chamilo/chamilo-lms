@@ -1659,7 +1659,7 @@ class CoursesAndSessionsCatalog
                             'id' => $coach->getId(),
                             'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'
                                 .http_build_query(['a' => 'get_user_popup', 'user_id' => $coach->getId()]),
-                            'name' => $coach->getFullname(),
+                            'name' => $coach->getFullName(),
                             'avatar' => UserManager::getUserPicture($coach->getId(), USER_IMAGE_SIZE_SMALL),
                         ]
                     ),

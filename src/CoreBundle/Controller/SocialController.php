@@ -216,11 +216,11 @@ class SocialController extends AbstractController
             foreach ($bossList as $bossId) {
                 $subjectEmail = \sprintf(
                     $translator->trans('User %s signed the agreement.'),
-                    $user->getFullname()
+                    $user->getFullName()
                 );
                 $contentEmail = \sprintf(
                     $translator->trans('User %s signed the agreement the %s.'),
-                    $user->getFullname(),
+                    $user->getFullName(),
                     api_get_local_time()
                 );
 

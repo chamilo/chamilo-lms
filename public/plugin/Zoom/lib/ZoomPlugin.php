@@ -1321,7 +1321,7 @@ class ZoomPlugin extends Plugin
         $currentUser = api_get_user_entity(api_get_user_id());
 
         $meeting->getMeetingInfoGet()->settings->contact_email = $currentUser->getEmail();
-        $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullname();
+        $meeting->getMeetingInfoGet()->settings->contact_name = $currentUser->getFullName();
         $meeting->getMeetingInfoGet()->settings->auto_recording = $this->getRecordingSetting();
         $meeting->getMeetingInfoGet()->settings->registrants_email_notification = false;
 

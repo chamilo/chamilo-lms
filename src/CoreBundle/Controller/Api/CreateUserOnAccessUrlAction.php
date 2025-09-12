@@ -124,7 +124,7 @@ class CreateUserOnAccessUrlAction
 
             $body = \sprintf(
                 $body,
-                $user->getFullname(),
+                $user->getFullName(),
                 $platformName,
                 $sessionUrl,
                 $user->getUsername(),

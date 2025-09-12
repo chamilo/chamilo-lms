@@ -130,7 +130,7 @@ class CatalogueController extends AbstractController
                     if ($userObj) {
                         $teachers[] = [
                             'id' => $userObj->getId(),
-                            'fullName' => $userObj->getFullname(),
+                            'fullName' => $userObj->getFullName(),
                         ];
                     }
                 }

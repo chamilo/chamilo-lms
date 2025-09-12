@@ -423,7 +423,7 @@ class Meeting
             }
         }
         if ($this->user) {
-            $introduction .= sprintf('<p>%s</p>', $this->user->getFullname());
+            $introduction .= sprintf('<p>%s</p>', $this->user->getFullName());
         } elseif ($this->isCourseMeeting()) {
             if (null === $this->session) {
                 $introduction .= sprintf('<p class="main">%s</p>', $this->course);

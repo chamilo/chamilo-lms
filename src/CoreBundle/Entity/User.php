@@ -747,6 +747,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'message:read',
         'user_subscriptions:sessions',
         'student_publication_rel_user:read',
+        'student_publication:read',
+        'student_publication_comment:read'
     ])]
     protected string $fullName;
 
@@ -1312,8 +1314,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
-    #[Groups(['user:read', 'student_publication:read', 'student_publication_comment:read'])]
-    public function getFullname(): string
+    public function getFullName(): string
     {
         if (empty($this->fullName)) {
             return \sprintf('%s %s', $this->getFirstname(), $this->getLastname());

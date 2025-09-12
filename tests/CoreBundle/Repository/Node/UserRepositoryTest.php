@@ -257,7 +257,7 @@ class UserRepositoryTest extends AbstractApiTest
         $this->assertCount(4, $user->getRoles());
 
         $this->assertSame('Joe Doe', $user->getCompleteNameWithClasses());
-        $this->assertSame('Joe Doe', $user->getFullname());
+        $this->assertSame('Joe Doe', $user->getFullName());
 
         $this->assertCount(0, $user->getCurrentlyAccessibleSessions());
         $this->assertSame('/img/icons/svg/identifier_admin.svg', $user->getIconStatus());

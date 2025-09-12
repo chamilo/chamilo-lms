@@ -97,7 +97,7 @@ class AnnouncementManager
 
             $session->getGeneralCoaches()
                 ->forAll(function (int $key, User $user) use (&$generalCoachName, &$generalCoachEmail) {
-                    $generalCoachName .= $user->getFullname().PHP_EOL;
+                    $generalCoachName .= $user->getFullName().PHP_EOL;
                     $generalCoachEmail .= $user->getEmail().PHP_EOL;
 
                     return true;

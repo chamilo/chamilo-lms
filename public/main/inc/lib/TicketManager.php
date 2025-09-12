@@ -2347,11 +2347,11 @@ class TicketManager
     /**
      * Returns a list of menu elements for the tickets system's configuration.
      *
-     * @param string $exclude The element to exclude from the list
+     * @param ?string $exclude The element to exclude from the list
      *
      * @return array
      */
-    public static function getSettingsMenuItems($exclude = null)
+    public static function getSettingsMenuItems(?string $exclude = null): array
     {
         $project = [
             'icon' => ObjectIcon::PROJECT,

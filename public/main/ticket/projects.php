@@ -166,7 +166,7 @@ $table->set_column_filter('3', 'modify_filter');
 Display::display_header('');
 
 $items = [
-    'icon' => 'new_folder.png',
+    'icon' => ActionIcon::ADD,
     'url' => 'projects.php?action=add',
     'content' => get_lang('Add project'),
 ];

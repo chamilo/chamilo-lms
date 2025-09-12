@@ -91,14 +91,14 @@ switch ($action) {
                 get_lang('Last update'),
                 get_lang('Category'),
                 get_lang('User'),
-                get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management'),
+                get_lang('Title'),
                 get_lang('Assigned to'),
                 get_lang('Status'),
                 get_lang('Description'),
             ],
         ];
-        $datos = $table->get_clean_html();
-        foreach ($datos as $ticket) {
+        $tickets = $table->get_clean_html();
+        foreach ($tickets as $ticket) {
             $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
             $ticket_rem = [
                 utf8_decode(strip_tags($ticket[0])),
@@ -336,7 +336,19 @@ if (!empty($projectId)) {
     $advancedSearchForm->addButtonSearch(get_lang('Advanced search'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
-    if ('true' === api_get_setting('ticket_allow_student_add')) {
+    // No project has been set and no project could be found for this URL.
+    if ($isAdmin) {
+        // The person is admin, so show links to manage projects/statuses/priorities.
+        $sections = TicketManager::getSettingsMenuItems();
+        $actions = '';
+        foreach ($sections as $item) {
+            $actions .= Display::url(
+                Display::getMdiIcon($item['icon'], 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $item['content']),
+                $item['url']
+            );
+        }
+        echo Display::toolbarAction('ticket', [$actions]);
+    } elseif ('true' === api_get_setting('ticket_allow_student_add')) {
         echo '<div class="actions">';
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'ticket/new_ticket.php?project_id='.$projectId.'">'.
                 Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).

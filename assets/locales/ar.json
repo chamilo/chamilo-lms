@@ -1103,5 +1103,10 @@
     "Color theme": "Color theme",
     "Logos will be applied to the current visual theme: ": "Logos will be applied to the current visual theme: ",
     "Switch the active theme if you want to upload logos for a different one.": "Switch the active theme if you want to upload logos for a different one.",
-    "Create new learning path": "\u0623\u0636\u0641 \u0645\u0633\u0627\u0631 \u062a\u0639\u0644\u0645 \u062c\u062f\u064a\u062f"
+    "Create new learning path": "\u0623\u0636\u0641 \u0645\u0633\u0627\u0631 \u062a\u0639\u0644\u0645 \u062c\u062f\u064a\u062f",
+    "Go to branding (logos)": "Go to branding (logos)",
+    "Visual theme (assets)": "Visual theme (assets)",
+    "Branding (logos)": "Branding (logos)",
+    "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
+    "Updated": "\u062a\u0645 \u0627\u0644\u062a\u062d\u062f\u064a\u062b"
 }

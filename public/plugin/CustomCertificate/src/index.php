@@ -607,7 +607,7 @@ $form->addFile(
 );
 $form->addProgress();
 if (!empty($infoCertificate['logo_left'])) {
-    $form->addElement('checkbox', 'remove_logo_left', null, get_lang('DelImage'));
+    $form->addElement('checkbox', 'remove_logo_left', null, get_lang('Remove picture'));
     $form->addElement(
         'html',
         '<label class="col-sm-2">&nbsp;</label>
@@ -860,7 +860,7 @@ $form->addRule(
 $form->addHtml('</div><div class="clearfix"></div>');
 $form->addHtml('</fieldset><br>');
 $form->addHtml('<div class="col-sm-6">');
-$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('BackgroundCertificate')).'</legend>');
+$form->addHtml('<fieldset><legend>'.strtoupper(get_lang('Background')).'</legend>');
 // background
 $form->addFile(
     'background',

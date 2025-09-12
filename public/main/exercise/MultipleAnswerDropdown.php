@@ -27,12 +27,12 @@ class MultipleAnswerDropdown extends Question
 
         $form->addTextarea(
             'list_text',
-            [get_lang('AnswerList'), get_lang('Enter list of answers one answer by line')],
+            [get_lang('Answer list'), get_lang('Enter a list of answers (one answer by line)')],
             ['rows' => 8]
         );
         $form->addFile(
             'list_file',
-            ['', get_lang('Or select Csv file with list of answers')],
+            ['', get_lang('Or select a CSV file with a list of answers')],
             ['accept' => 'text/csv']
         );
 
@@ -136,10 +136,10 @@ class MultipleAnswerDropdown extends Question
 
         $header .= '<table class="'.$tableClass.'"><thead><tr>';
 
-        $header .= '<th class="text-center">'.get_lang('Choice').'</th>';
+        $header .= '<th class="text-center">'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th class="text-center">'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th class="text-center">'.get_lang('Expected choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';

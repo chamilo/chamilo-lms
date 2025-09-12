@@ -105,7 +105,7 @@
         class="mt-4 px-4 py-2 border border-gray-25 rounded-xl text-gray-90 hover:bg-gray-15"
         @click="handleTopMenu('new', $event)"
       >
-        + {{ t("Create new Learning Path") }}
+        + {{ t("Create new learning path") }}
       </button>
     </div>
 
@@ -549,7 +549,7 @@ const onTogglePublish = (lp) => {
 }
 const onDelete = (lp) => {
   const label = (lp.title || "").trim() || t("Learning path")
-  const msg = `${t("Are you sure to delete:")} ${label}?`
+  const msg = `${t("Are you sure to delete")} ${label}?`
   if (confirm(msg)) {
     window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { cid: cid.value, sid: sid.value })
   }

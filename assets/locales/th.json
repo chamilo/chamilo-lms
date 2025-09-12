@@ -786,5 +786,9 @@
     "Color theme": "Color theme",
     "Logos will be applied to the current visual theme: ": "Logos will be applied to the current visual theme: ",
     "Switch the active theme if you want to upload logos for a different one.": "Switch the active theme if you want to upload logos for a different one.",
-    "Create new learning path": "\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e41\u0e1c\u0e19\u0e01\u0e32\u0e23\u0e40\u0e23\u0e35\u0e22\u0e19\u0e43\u0e2b\u0e21\u0e48"
+    "Create new learning path": "\u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e41\u0e1c\u0e19\u0e01\u0e32\u0e23\u0e40\u0e23\u0e35\u0e22\u0e19\u0e43\u0e2b\u0e21\u0e48",
+    "Go to branding (logos)": "Go to branding (logos)",
+    "Visual theme (assets)": "Visual theme (assets)",
+    "Branding (logos)": "Branding (logos)",
+    "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
 }

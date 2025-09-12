@@ -25,7 +25,7 @@ class MediaQuestion extends Question
         // Title for the media block
         $form->addText(
             'questionName',
-            get_lang('Media Title'),
+            get_lang('Title'),
             false,
             ['maxlength' => 255]
         );
@@ -37,7 +37,7 @@ class MediaQuestion extends Question
         ];
         $form->addHtmlEditor(
             'questionDescription',
-            get_lang('Media Content'),
+            get_lang('Content'),
             false,
             false,
             $editorConfig

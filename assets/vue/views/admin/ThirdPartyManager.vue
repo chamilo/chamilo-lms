@@ -286,10 +286,10 @@ const submitThirdParty = async () => {
   try {
     if (isEditing.value) {
       await adminService.updateThirdParty(editingId.value, form.value)
-      showSuccessNotification(t("Third party updated successfully."))
+      showSuccessNotification(t("Updated"))
     } else {
       await adminService.createThirdParty(form.value)
-      showSuccessNotification(t("Third party created successfully."))
+      showSuccessNotification(t("Created"))
     }
     showDialog.value = false
     resetForm()
@@ -328,7 +328,7 @@ const openDelete = (row) => {
 const confirmDeleteThirdParty = async () => {
   try {
     await adminService.deleteThirdParty(selectedThirdParty.value.id)
-    showSuccessNotification(t("Third party deleted."))
+    showSuccessNotification(t("Deleted"))
     showDeleteDialog.value = false
     selectedThirdParty.value = null
     await fetchThirdParties()

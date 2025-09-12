@@ -98,14 +98,14 @@ class MatchingDraggable extends Question
 
         $thWeighting = '';
         if (MATCHING_DRAGGABLE === $this->type) {
-            $thWeighting = '<th width="10">'.get_lang('Weighting').'</th>';
+            $thWeighting = '<th width="10">'.get_lang('Score').'</th>';
         }
 
         // DISPLAY MATCHES
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="10">'.get_lang('Number').'</th>
+                    <th width="10">'.get_lang('ID').'</th>
                     <th width="85%">'.get_lang('Answer').'</th>
                     <th width="15%">'.get_lang('Matches To').'</th>
                     '.$thWeighting.'

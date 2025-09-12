@@ -878,5 +878,10 @@
     "Color theme": "Color theme",
     "Logos will be applied to the current visual theme: ": "Logos will be applied to the current visual theme: ",
     "Switch the active theme if you want to upload logos for a different one.": "Switch the active theme if you want to upload logos for a different one.",
-    "Create new learning path": "\u6dfb\u52a0\u5b66\u4e60\u8def\u5f84"
+    "Create new learning path": "\u6dfb\u52a0\u5b66\u4e60\u8def\u5f84",
+    "Go to branding (logos)": "Go to branding (logos)",
+    "Visual theme (assets)": "Visual theme (assets)",
+    "Branding (logos)": "Branding (logos)",
+    "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
+    "Updated": "\u66f4\u65b0"
 }

@@ -30641,3 +30641,24 @@ msgstr ""
 
 msgid "Login attempts"
 msgstr ""
+
+msgid "Background"
+msgstr ""
+
+msgid "Use custom date"
+msgstr ""
+
+msgid "Achievement date"
+msgstr ""
+
+msgid "Go to branding (logos)"
+msgstr ""
+
+msgid "Visual theme (assets)"
+msgstr ""
+
+msgid "Branding (logos)"
+msgstr ""
+
+msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
+msgstr ""

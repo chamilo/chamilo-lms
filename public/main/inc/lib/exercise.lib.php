@@ -357,10 +357,10 @@ class ExerciseLib
                         $s .= '<p><strong>'
                             .(
                                 MULTIPLE_ANSWER_DROPDOWN == $answerType
-                                    ? '<span class="pull-right">'.get_lang('Weighting').'</span>'
+                                    ? '<span class="pull-right">'.get_lang('Score').'</span>'
                                     : ''
                             )
-                            .get_lang('CorrectAnswer').'</strong></p>';
+                            .get_lang('Correct answer').'</strong></p>';
                     }
                     break;
             }
@@ -1519,7 +1519,7 @@ HTML;
                     .'<div class="mb-4">'
                     .'<div class="flex items-center justify-between mb-2">'
                     .'<label for="'.$input_id.'" class="text-sm font-medium text-gray-90">'
-                    .get_lang('Select your answers')
+                    .get_lang('Please select an option')
                     .'</label>'
                     .'<button type="button" id="'.$clear_id.'" '
                     .'class="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium '

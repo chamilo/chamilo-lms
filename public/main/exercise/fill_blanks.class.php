@@ -401,7 +401,7 @@ class FillBlanks extends Question
 
         global $text;
         // setting the save button here and not in the question class.php
-        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
+        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('Please define at least one blank with the selected marker').'</div>');
         if (FILL_IN_BLANKS_COMBINATION === $this->type) {
             $form->addText('questionWeighting', get_lang('Score'), true, ['value' => 10]);
             if (!empty($this->iid)) {

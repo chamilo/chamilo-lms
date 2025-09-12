@@ -25,7 +25,7 @@ class UploadAnswer extends Question
     /** {@inheritdoc} */
     public function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Weighting'));
+        $form->addElement('text', 'weighting', get_lang('Score'));
         global $text;
         // Set the save button here (not in question.class.php)
         $form->addButtonSave($text, 'submitQuestion');

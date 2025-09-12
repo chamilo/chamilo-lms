@@ -30676,3 +30676,24 @@ msgstr "Allow PDF exports for this item"
 
 msgid "Login attempts"
 msgstr "Login attempts"
+
+msgid "Background"
+msgstr "Background"
+
+msgid "Use custom date"
+msgstr "Use custom date"
+
+msgid "Achievement date"
+msgstr "Achievement date"
+
+msgid "Go to branding (logos)"
+msgstr "Go to branding (logos)"
+
+msgid "Visual theme (assets)"
+msgstr "Visual theme (assets)"
+
+msgid "Branding (logos)"
+msgstr "Branding (logos)"
+
+msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
+msgstr "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."

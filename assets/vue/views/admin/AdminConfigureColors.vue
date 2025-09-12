@@ -18,7 +18,7 @@
         </span>
 
         <button class="btn btn--primary btn--small ml-auto" @click="goBranding">
-          {{ t('Go to Branding (logos)') }}
+          {{ t('Go to branding (logos)') }}
         </button>
       </div>
 

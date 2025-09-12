@@ -122,7 +122,7 @@ if (!$localization || $apiKey === '') {
     if (api_is_platform_admin()) {
         Display::display_header(get_lang('Social'));
         echo Display::return_message('Google Maps plugin not configured. Turn on API and set API key in Administration → Plugins → Google Maps.', 'warning');
-        echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">'.get_lang('Open Plugins admin').'</a></p>';
+        echo '<p><a href="'.api_get_path(WEB_CODE_PATH).'admin/plugins.php">'.get_lang('Back to plugins').'</a></p>';
         Display::display_footer();
     } else {
         api_not_allowed(true);

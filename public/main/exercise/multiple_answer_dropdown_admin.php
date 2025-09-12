@@ -176,7 +176,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
                     null,
                     [
                         // Select2 enhanced below
-                        'data-placeholder' => get_lang('Select an option'),
+                        'data-placeholder' => get_lang('Please select an option'),
                         'class'            => 'ch-select2 w-full',
                     ]
                 );
@@ -195,12 +195,12 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
                 <table class="min-w-full table-auto text-sm">
                     <thead class="bg-gray-15 text-gray-90">
                     <tr>
-                        <th class="px-3 py-2 text-right w-24"><?php echo get_lang('Number'); ?></th>
+                        <th class="px-3 py-2 text-right w-24"><?php echo get_lang('ID'); ?></th>
                         <th class="px-3 py-2 text-left" style="width: <?php echo $isGlobal ? '90%' : '70%'; ?>;">
                             <?php echo get_lang('Answer'); ?>
                         </th>
                         <?php if (!$isGlobal) { ?>
-                            <th class="px-3 py-2 text-right w-40"><?php echo get_lang('Weighting'); ?></th>
+                            <th class="px-3 py-2 text-right w-40"><?php echo get_lang('Score'); ?></th>
                         <?php } ?>
                         <th class="px-3 py-2 text-right w-24">&nbsp;</th>
                     </tr>
@@ -213,7 +213,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
         <?php if ($isGlobal) { ?>
             <div class="grid grid-cols-12 items-center gap-4">
                 <label for="weighting" class="col-span-12 sm:col-span-2 text-sm font-medium text-gray-90">
-                    <?php echo get_lang('Weighting'); ?>
+                    <?php echo get_lang('Score'); ?>
                 </label>
                 <div class="col-span-12 sm:col-span-8">
                     <input
@@ -254,7 +254,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
 
         $('.ch-select2').select2({
             width: '100%',
-            placeholder: '<?php echo addslashes(get_lang('Select an option')); ?>',
+            placeholder: '<?php echo addslashes(get_lang('Please select an option')); ?>',
             allowClear: true
         });
 

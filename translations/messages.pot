@@ -30638,3 +30638,6 @@ msgstr ""
 
 msgid "Allow PDF exports for this item"
 msgstr ""
+
+msgid "Login attempts"
+msgstr ""

@@ -169,7 +169,7 @@ class ChamiloExtension extends AbstractExtension
                 'minChar' => $minRequirements['numeric'],
                 'pattern' => '[0-9]',
                 'helpText' => \sprintf(
-                    get_lang('Minimum %s numeric characters'),
+                    get_lang('Minimum %s numerical (0-9) characters'),
                     $minRequirements['numeric']
                 ),
             ];

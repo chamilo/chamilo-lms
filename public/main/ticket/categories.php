@@ -25,6 +25,9 @@ $isAdmin = api_is_platform_admin();
 $this_section = 'tickets';
 Session::erase('this_section');
 
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+
 $table = new SortableTable(
     'TicketCategories',
     ['TicketManager', 'getCategoriesCount'],
@@ -37,8 +40,6 @@ if (0 == $table->per_page) {
 }
 
 $formToString = '';
-$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $project = TicketManager::getProject($projectId);
 if (empty($project)) {
@@ -59,13 +60,13 @@ $interbreadcrumb[] = [
 ];
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => get_lang('Projects'),
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php?project_id='.$projectId,
+    'name' => $project->getTitle(),
 ];
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'ticket/projects.php',
-    'name' => $project->getTitle(),
+    'url' => api_get_path(WEB_CODE_PATH).'ticket/categories.php?project_id='.$projectId,
+    'name' => get_lang('Categories'),
 ];
 
 switch ($action) {

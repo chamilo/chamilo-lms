@@ -59,7 +59,7 @@ $this_section = 'tickets';
 Session::erase('this_section');
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 1;
 
 $table = new SortableTable(
     'Tickets',

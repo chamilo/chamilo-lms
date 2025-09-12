@@ -23,20 +23,20 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class TicketManager
 {
-    public const PRIORITY_NORMAL = 'NRM';
-    public const PRIORITY_HIGH = 'HGH';
-    public const PRIORITY_LOW = 'LOW';
+    public const PRIORITY_NORMAL = 1;
+    public const PRIORITY_HIGH = 2;
+    public const PRIORITY_LOW = 3;
 
     public const SOURCE_EMAIL = 'MAI';
     public const SOURCE_PHONE = 'TEL';
     public const SOURCE_PLATFORM = 'PLA';
     public const SOURCE_PRESENTIAL = 'PRE';
 
-    public const STATUS_NEW = 'NAT';
-    public const STATUS_PENDING = 'PND';
-    public const STATUS_UNCONFIRMED = 'XCF';
-    public const STATUS_CLOSE = 'CLS';
-    public const STATUS_FORWARDED = 'REE';
+    public const STATUS_NEW = 1;
+    public const STATUS_PENDING = 2;
+    public const STATUS_UNCONFIRMED = 3;
+    public const STATUS_CLOSE = 4;
+    public const STATUS_FORWARDED = 5;
 
     public function __construct()
     {
@@ -69,7 +69,7 @@ class TicketManager
                 $table_support_category category
                 INNER JOIN $table_support_project project
                 ON project.id = category.project_id
-                WHERE project.id = $projectId AND project.access_url_id = $accessUrlId
+                WHERE project.id = $projectId
                 ORDER BY $order";
         $result = Database::query($sql);
         $types = [];
@@ -93,6 +93,11 @@ class TicketManager
         $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $sql = "SELECT id, title, description, total_tickets
                 FROM $table";
+
+        $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+        if (!empty($projectId)) {
+            $sql .= " WHERE project_id = $projectId ";
+        }
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
             $direction = 'ASC';
@@ -140,7 +145,10 @@ class TicketManager
 
         $sql = "SELECT count(id) count
                 FROM $table ";
-
+        $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+        if (!empty($projectId)) {
+            $sql .= " WHERE project_id = ".$projectId;
+        }
         $result = Database::query($sql);
         $category = Database::fetch_array($result);
 
@@ -820,7 +828,9 @@ class TicketManager
         $isAdmin = UserManager::is_admin($userId);
 
         if (!isset($_GET['project_id'])) {
-            return [];
+            $projectId = 1;
+        } else {
+            $projectId = (int) $_GET['project_id'];
         }
 
         switch ($column) {
@@ -878,7 +888,6 @@ class TicketManager
         ";
         $sql .= " AND ticket.access_url_id = $accessUrlId ";
 
-        $projectId = (int) $_GET['project_id'];
         $userIsAllowInProject = self::userIsAllowInProject($projectId);
 
         // Check if a role was set to the project
@@ -1059,7 +1068,9 @@ class TicketManager
         $userId = $userInfo['id'];
 
         if (!isset($_GET['project_id'])) {
-            return 0;
+            $projectId = 1;
+        } else {
+            $projectId = (int) $_GET['project_id'];
         }
 
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
@@ -1076,7 +1087,6 @@ class TicketManager
 
         $sql .= " AND ticket.access_url_id = $accessUrlId ";
 
-        $projectId = (int) $_GET['project_id'];
         $allowRoleList = self::getAllowedRolesFromProject($projectId);
 
         // Check if a role was set to the project
@@ -1347,7 +1357,7 @@ class TicketManager
                     status = 'LEI',
                     sys_lastedit_user_id ='".api_get_user_id()."',
                     sys_lastedit_datetime ='".$now."'
-                WHERE ticket_id ='$ticketId' ";
+                WHERE ticket_id = $ticketId ";
 
         if (api_is_platform_admin()) {
             $sql .= " AND sys_insert_user_id = '$userId'";
@@ -1358,8 +1368,8 @@ class TicketManager
         if (Database::affected_rows($result) > 0) {
             Database::query(
                 "UPDATE $table_support_tickets SET
-                    status_id = '".self::STATUS_PENDING."'
-                 WHERE id ='$ticketId' AND status_id = '".self::STATUS_NEW."'"
+                    status_id = ".self::STATUS_PENDING."
+                 WHERE id = $ticketId AND status_id = ".self::STATUS_NEW
             );
 
             return true;
@@ -1604,11 +1614,11 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE $table_support_tickets SET
-                    status_id = '".self::STATUS_CLOSE."',
-                    sys_lastedit_user_id ='$userId',
-                    sys_lastedit_datetime ='".$now."',
+                    status_id = ".self::STATUS_CLOSE.",
+                    sys_lastedit_user_id = $userId,
+                    sys_lastedit_datetime = '$now',
                     end_date ='$now'
-                WHERE id ='$ticketId'";
+                WHERE id = $ticketId";
         Database::query($sql);
 
         self::sendNotification(
@@ -1916,6 +1926,11 @@ class TicketManager
             ->getRepository(TicketStatus::class)
             ->findBy(['accessUrl' => $accessUrl]);
 
+        if (empty($items)) {
+            $items = Database::getManager()
+                ->getRepository(TicketStatus::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
         $list = [];
         /** @var TicketStatus $row */
         foreach ($items as $row) {
@@ -1971,6 +1986,11 @@ class TicketManager
             ->getRepository(TicketPriority::class)
             ->findBy(['accessUrl' => $accessUrl]);
 
+        if (empty($priorities)) {
+            $priorities = Database::getManager()
+                ->getRepository(TicketPriority::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
         $list = [];
         /** @var TicketPriority $row */
         foreach ($priorities as $row) {
@@ -1989,6 +2009,12 @@ class TicketManager
         $projects = Database::getManager()
             ->getRepository(TicketProject::class)
             ->findBy(['accessUrl' => $accessUrl]);
+
+        if (empty($projects)) {
+            $projects = Database::getManager()
+                ->getRepository(TicketProject::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
 
         $list = [];
         /** @var TicketProject $row */
@@ -2015,6 +2041,11 @@ class TicketManager
             ->getRepository(TicketProject::class)
             ->findBy(['accessUrl' => $accessUrl]);
 
+        if (empty($projects)) {
+            $projects = Database::getManager()
+                ->getRepository(TicketProject::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
         $list = [];
         /** @var TicketProject $row */
         foreach ($projects as $row) {
@@ -2121,6 +2152,12 @@ class TicketManager
         $items = Database::getManager()
             ->getRepository(TicketStatus::class)
             ->findBy(['accessUrl' => $accessUrl]);
+
+        if (empty($items)) {
+            $items = Database::getManager()
+                ->getRepository(TicketStatus::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
 
         $list = [];
         /** @var TicketStatus $row */
@@ -2245,6 +2282,12 @@ class TicketManager
         $items = Database::getManager()
             ->getRepository(TicketPriority::class)
             ->findBy(['accessUrl' => $accessUrl]);
+
+        if (empty($items)) {
+            $items = Database::getManager()
+                ->getRepository(TicketPriority::class)
+                ->findBy(['accessUrl' => NULL]);
+        }
 
         $list = [];
         /** @var TicketPriority $row */

@@ -103,7 +103,7 @@ function add_image_form() {
 }
 </script>';
 
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 1;
 
 $types = TicketManager::get_all_tickets_categories($projectId, 'category.title ASC');
 $htmlHeadXtra[] = '<script>
@@ -215,7 +215,7 @@ if (api_is_platform_admin()) {
 // Priority List
 $priorityList = TicketManager::getPriorityList();
 
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 1;
 
 $form = new FormValidator(
     'send_ticket',

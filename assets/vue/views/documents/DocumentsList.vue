@@ -105,7 +105,7 @@
     v-model:selected-items="selectedItems"
     :global-filter-fields="['resourceNode.title', 'resourceNode.updatedAt']"
     :is-loading="isLoading"
-    :rows="options.itemsPerPage"
+    v-model:rows="options.itemsPerPage"
     :total-items="totalItems"
     :values="items"
     data-key="iid"
@@ -578,6 +578,13 @@ const defaultCertificateId = ref(null)
 
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
+function resolveDefaultRows(total = 0) {
+  const raw = platformConfigStore.getSetting("platform.table_default_row", 10)
+  const def = Number(raw)
+  if (def === 0) return total || Number.MAX_SAFE_INTEGER // “All”
+  return Number.isFinite(def) && def > 0 ? def : 10
+}
+
 const canEdit = (item) => {
   const resourceLink = item.resourceLinkListFromEntity[0]
   const isSessionDocument = resourceLink.session && resourceLink.session["@id"] === `/api/sessions/${sid}`
@@ -611,8 +618,17 @@ onMounted(async () => {
   await store.dispatch("resourcenode/findResourceNode", { id: `/api/resource_nodes/${nodeId}` })
 
   await loadDefaultCertificate()
-  onUpdateOptions(options.value)
   await loadAllFolders()
+  options.value.itemsPerPage = resolveDefaultRows(totalItems.value || 0)
+  onUpdateOptions(options.value)
+})
+
+watch(totalItems, (n) => {
+  const def = Number(platformConfigStore.getSetting("platform.table_default_row", 10))
+  if (def === 0 && n) {
+    options.value.itemsPerPage = n
+    onUpdateOptions(options.value)
+  }
 })
 
 watch(
@@ -920,52 +936,20 @@ function btnEditOnClick(item) {
 
   if ("file" === item.filetype || "certificate" === item.filetype) {
     folderParams.getFile = true
-
-    if (
-      item.resourceNode.firstResourceFile &&
-      item.resourceNode.firstResourceFile.mimeType &&
-      "text/html" === item.resourceNode.firstResourceFile.mimeType
-    ) {
-      //folderParams.getFile = true;
-    }
-
-    router.push({
-      name: "DocumentsUpdateFile",
-      params: { id: item["@id"] },
-      query: folderParams,
-    })
+    router.push({ name: "DocumentsUpdateFile", params: { id: item["@id"] }, query: folderParams })
   }
 }
 
 function showSlideShowWithFirstImage() {
   let item = items.value.find((i) => isImage(i))
-  if (item === undefined) {
-    return
-  }
-  // Right now Vue prime datatable does not offer a method to click on a row in a table
-  // https://primevue.org/datatable/#api.datatable.methods
-  // so we click on the dom element that has the href on the item
-  document.querySelector(`a[href='${item.contentUrl}']`).click()
-  // start slideshow trusting the button to play is present
-  document.querySelector('button[class="fancybox-button fancybox-button--play"]').click()
+  if (!item) return
+  document.querySelector(`a[href='${item.contentUrl}']`)?.click()
+  document.querySelector('button.fancybox-button--play')?.click()
 }
 
 function showUsageDialog() {
-  // TODO retrieve usage data from server
   usageData.value = {
-    datasets: [
-      {
-        data: [83, 14, 5],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.7)",
-          "rgba(54, 162, 235, 0.7)",
-          "rgba(255, 206, 86, 0.7)",
-          "rgba(75, 192, 192, 0.7)",
-          "rgba(153, 102, 255, 0.7)",
-          "rgba(255, 159, 64, 0.7)",
-        ],
-      },
-    ],
+    datasets: [{ data: [83, 14, 5] }],
     labels: ["Course", "Teacher", "Available space"],
   }
   isFileUsageDialogVisible.value = true
@@ -1008,9 +992,7 @@ async function replaceDocument() {
   }
 
   const formData = new FormData()
-  console.log(selectedReplaceFile.value)
   formData.append("file", selectedReplaceFile.value)
-
   try {
     await axios.post(`/api/documents/${documentToReplace.value.iid}/replace`, formData, {
       headers: {
@@ -1101,7 +1083,7 @@ async function selectAsDefaultCertificate(certificate) {
       onUpdateOptions(options.value)
       notification.showSuccessNotification(t("Certificate set as default successfully"))
     }
-  } catch (error) {
+  } catch {
     notification.showErrorNotification(t("Error setting certificate as default"))
   }
 }
@@ -1111,7 +1093,7 @@ async function loadDefaultCertificate() {
     const response = await axios.get(`/gradebook/default_certificate/${cid}`)
     defaultCertificateId.value = response.data.certificateId
   } catch (error) {
-    if (error.response && error.response.status === 404) {
+    if (error.response?.status === 404) {
       console.error("Default certificate not found.")
       defaultCertificateId.value = null
     } else {

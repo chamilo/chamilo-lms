@@ -1,23 +1,19 @@
 <script setup>
-import { ref, useSlots } from "vue"
+import { ref, useSlots, computed } from "vue"
 import DataTable from "primevue/datatable"
+import { usePlatformConfig } from "../../store/platformConfig"
 
+const platformConfigStore = usePlatformConfig()
+
+/* v-models */
 const filters = defineModel("filters", { type: Object, required: false })
-
 const selectedItems = defineModel("selectedItems", { type: Array, required: false })
-
 const sortOrder = defineModel("sortOrder", { type: Number, required: false, default: null })
-
-const rows = defineModel("rows", { type: Number, required: false, default: 10 })
-
 const sortField = defineModel("sortField", { type: String, required: false, default: null })
+const multiSortMeta = defineModel("multiSortMeta", { type: Array, required: false, default: null })
+const rows = defineModel("rows", { type: Number, required: false })
 
-const multiSortMeta = defineModel("multiSortMeta", {
-  type: Array,
-  required: false,
-  default: null,
-})
-
+/* props */
 const props = defineProps({
   globalFilterFields: {
     type: Array,
@@ -75,6 +71,64 @@ const props = defineProps({
   },
 })
 
+/* ---------- helpers settings ---------- */
+const DEFAULT_FALLBACK_ROWS = 20
+
+function getSetting(key, fallback) {
+  const v = platformConfigStore.getSetting(key)
+  return (v === undefined || v === null || v === "") ? fallback : v
+}
+
+function parseRowList(val) {
+  if (!val) return [5, 10, 20, 50]
+  if (Array.isArray(val)) return val.map(Number).filter(Number.isFinite)
+  if (typeof val === "string") {
+    try {
+      const parsed = JSON.parse(val)
+      const arr = Array.isArray(parsed) ? parsed : parsed?.options
+      if (Array.isArray(arr)) return arr.map(Number).filter(Number.isFinite)
+    } catch {
+      const arr = val.split(",").map(s => Number(s.trim()))
+      if (arr.some(n => !Number.isNaN(n))) return arr
+    }
+  } else if (typeof val === "object" && val?.options) {
+    const arr = val.options
+    if (Array.isArray(arr)) return arr.map(Number).filter(Number.isFinite)
+  }
+  return [5, 10, 20, 50]
+}
+
+const rowListRaw = computed(() => getSetting("platform.table_row_list", [5, 10, 20, 50]))
+
+const defaultRowSetting = computed(() => {
+  const raw = getSetting("platform.table_default_row", DEFAULT_FALLBACK_ROWS)
+  const n = Number(raw)
+  if (!Number.isFinite(n) || n <= 0) return DEFAULT_FALLBACK_ROWS
+  return n
+})
+
+const rowsPerPageOptions = computed(() => {
+  const opts = parseRowList(rowListRaw.value)
+  const list = []
+  for (const raw of opts) {
+    const n = Number(raw)
+    if (!Number.isFinite(n) || n < 0) continue
+    if (n === 0) {
+      list.push(props.totalItems || Number.MAX_SAFE_INTEGER)
+    } else {
+      list.push(n)
+    }
+  }
+  return [...new Set(list)].sort((a, b) => a - b).slice(0, 10)
+})
+
+function initialRows() {
+  return defaultRowSetting.value
+}
+if (rows.value == null) {
+  rows.value = initialRows()
+}
+
 defineEmits(["page", "sort"])
 
 const slots = useSlots()
@@ -101,7 +155,7 @@ defineExpose({
     :lazy="lazy"
     :loading="isLoading"
     :removable-sort="removableSort"
-    :rows-per-page-options="[5, 10, 20, 50]"
+    :rows-per-page-options="rowsPerPageOptions"
     :sort-mode="sortMode"
     :total-records="totalItems"
     :value="values"

@@ -42,6 +42,7 @@
                                             attr: { class: 'form-horizontal', novalidate: 'novalidate' }
                                         }) }}
 
+                                        <input type="hidden" name="_partial" value="1"/>
                                         {% for field in form %}
                                             {% set fieldName = field.vars.name %}
                                             {% set isHidden  = 'hidden' in field.vars.block_prefixes %}

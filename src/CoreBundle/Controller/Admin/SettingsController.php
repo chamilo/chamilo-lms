@@ -150,7 +150,18 @@ class SettingsController extends BaseController
         );
 
         $form->setData($settings);
-        $form->handleRequest($request);
+
+        $isPartial =
+            $request->isMethod('PATCH') ||
+            strtoupper((string) $request->request->get('_method')) === 'PATCH' ||
+            $request->request->getBoolean('_partial', false);
+
+        if ($isPartial) {
+            $payload = $request->request->all($form->getName());
+            $form->submit($payload, false);
+        } else {
+            $form->handleRequest($request);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $messageType = 'success';

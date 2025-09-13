@@ -2,35 +2,29 @@
   <div>
     <BaseTable
       :is-loading="loading"
-      :multi-sort-meta="sortFields"
-      :rows="loadParams.itemsPerPage"
-      :total-items="totalRecords"
-      :values="submissions"
-      data-key="@id"
-      lazy
-      @page="onPage"
-      @sort="onSort"
+      v-model:multi-sort-meta="sortFields"
+      v-model:rows="loadParams.itemsPerPage"
+    :total-items="totalRecords"
+    :values="submissions"
+    data-key="@id"
+    lazy
+    @page="onPage"
+    @sort="onSort"
     >
-      <Column :header="t('Type')">
-        <template #body="{}">
-          <div class="flex justify-center">
-            <i class="pi pi-file" />
-          </div>
-        </template>
-      </Column>
+    <Column :header="t('Type')">
+      <template #body="{}">
+        <div class="flex justify-center">
+          <i class="pi pi-file" />
+        </div>
+      </template>
+    </Column>
 
-      <Column
-        field="title"
-        :header="t('Title')"
-      />
+    <Column field="title" :header="t('Title')" />
 
-      <Column :header="t('Feedback')">
-        <template #body="{ data }">
-          <div class="flex justify-center items-center gap-2">
-            <span
-              v-if="data.correctionTitle"
-              class="text-green-600"
-            >
+    <Column :header="t('Feedback')">
+      <template #body="{ data }">
+        <div class="flex justify-center items-center gap-2">
+            <span v-if="data.correctionTitle" class="text-green-600">
               <a
                 v-if="data.correctionDownloadUrl"
                 :href="data.correctionDownloadUrl"
@@ -40,31 +34,24 @@
               >
                 <i class="pi pi-check-circle"></i>
               </a>
-              <i
-                v-else
-                class="pi pi-check-circle"
-              ></i>
+              <i v-else class="pi pi-check-circle"></i>
             </span>
 
-            <span
-              v-if="flags.allowText && data.comments && data.comments.length > 0"
-              class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
-              @click="openCommentDialog(data)"
-            >
+          <span
+            v-if="flags.allowText && data.comments && data.comments.length > 0"
+            class="flex items-center gap-1 text-gray-600 text-sm cursor-pointer hover:underline"
+            @click="openCommentDialog(data)"
+          >
               <i class="pi pi-comment"></i> {{ data.comments.length }}
             </span>
-            <span
-              v-else
-              class="text-gray-400"
-              >—</span
-            >
-          </div>
-        </template>
-      </Column>
+          <span v-else class="text-gray-400">—</span>
+        </div>
+      </template>
+    </Column>
 
-      <Column :header="t('Score')">
-        <template #body="{ data }">
-          <template v-if="data.qualification !== null && data.publicationParent?.qualification">
+    <Column :header="t('Score')">
+      <template #body="{ data }">
+        <template v-if="data.qualification !== null && data.publicationParent?.qualification">
             <span
               :class="{
                 'bg-success/10 text-success font-semibold text-sm px-2 py-1 rounded':
@@ -75,51 +62,42 @@
             >
               {{ data.qualification.toFixed(1) }} / {{ data.publicationParent.qualification.toFixed(1) }}
             </span>
-          </template>
-          <template v-else>
-            <span class="text-gray-50">
-              {{ t("Not graded yet") }}
-            </span>
-          </template>
         </template>
-      </Column>
+        <template v-else>
+          <span class="text-gray-50">{{ t('Not graded yet') }}</span>
+        </template>
+      </template>
+    </Column>
 
-      <Column
-        field="sentDate"
-        :header="t('Date')"
-      >
-        <template #body="{ data }">
-          {{ abbreviatedDatetime(data.sentDate) }}
-        </template>
-      </Column>
+    <Column field="sentDate" :header="t('Date')">
+      <template #body="{ data }">
+        {{ abbreviatedDatetime(data.sentDate) }}
+      </template>
+    </Column>
 
-      <Column :header="t('Actions')">
-        <template #body="{ data }">
-          <div class="flex justify-center gap-2">
-            <BaseButton
-              v-if="flags.allowFile"
-              icon="save"
-              only-icon
-              :label="t('Download')"
-              @click="downloadSubmission(data)"
-              type="primary"
-            />
-            <BaseButton
-              v-if="flags.allowText"
-              icon="reply-all"
-              only-icon
-              :label="t('Comment')"
-              @click="correctAndRate(data)"
-              type="success"
-            />
-            <span
-              v-if="!flags.allowFile && !flags.allowText"
-              class="text-gray-400"
-              >—</span
-            >
-          </div>
-        </template>
-      </Column>
+    <Column :header="t('Actions')">
+      <template #body="{ data }">
+        <div class="flex justify-center gap-2">
+          <BaseButton
+            v-if="flags.allowFile"
+            icon="save"
+            only-icon
+            :label="t('Download')"
+            @click="downloadSubmission(data)"
+            type="primary"
+          />
+          <BaseButton
+            v-if="flags.allowText"
+            icon="reply-all"
+            only-icon
+            :label="t('Comment')"
+            @click="correctAndRate(data)"
+            type="success"
+          />
+          <span v-if="!flags.allowFile && !flags.allowText" class="text-gray-400">—</span>
+        </div>
+      </template>
+    </Column>
     </BaseTable>
 
     <CorrectAndRateModal
@@ -133,7 +111,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, watch, nextTick } from "vue"
+import { ref, reactive, watch, nextTick } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -162,14 +140,20 @@ const totalRecords = ref(0)
 const sortFields = ref([{ field: "sentDate", order: -1 }])
 const loadParams = reactive({
   page: 1,
-  itemsPerPage: 10,
+  itemsPerPage: null,
 })
 
 const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
 
-watch(loadParams, loadData)
-onMounted(loadData)
+watch(
+  loadParams,
+  () => {
+    if (!loadParams.itemsPerPage) return
+    loadData()
+  },
+  { deep: true, immediate: true }
+)
 
 async function loadData() {
   loading.value = true
@@ -191,15 +175,16 @@ async function loadData() {
 
 function onPage(event) {
   loadParams.page = event.page + 1
+  loadParams.itemsPerPage = event.rows
 }
 
 function onSort(event) {
   Object.keys(loadParams)
-    .filter((key) => key.startsWith("order["))
-    .forEach((key) => delete loadParams[key])
+    .filter((k) => k.startsWith("order["))
+    .forEach((k) => delete loadParams[k])
 
-  event.multiSortMeta.forEach((sortItem) => {
-    loadParams[`order[${sortItem.field}]`] = sortItem.order === 1 ? "asc" : "desc"
+  event.multiSortMeta.forEach((s) => {
+    loadParams[`order[${s.field}]`] = s.order === 1 ? "asc" : "desc"
   })
 }
 

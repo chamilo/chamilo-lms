@@ -732,84 +732,55 @@ class Plugin
     }
 
     /**
-     * Add a tab to platform.
-     *
-     * @param string $tabName
-     * @param string $url
-     * @param string $userFilter Optional. Filter tab type
-     *
-     * @return false|string
+     * Add a tab to the platform.
      */
-    public function addTab($tabName, $url, $userFilter = null)
+    public function addTab(string $tabName, string $url, ?string $userFilter = null): bool
     {
-        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
-        $sql = "SELECT *
-                FROM $table
-                WHERE
-                    variable = 'show_tabs' AND
-                    subkey LIKE 'custom_tab_%'";
-        $result = Database::query($sql);
-        $customTabsNum = Database::num_rows($result);
+        $settingsManager = Container::getSettingsManager();
 
-        $tabNum = $customTabsNum + 1;
+        $currentUrl = Container::getAccessUrlUtil()->getCurrent();
 
-        // Avoid Tab Name Spaces
-        $tabNameNoSpaces = preg_replace('/\s+/', '', $tabName);
-        $subkeytext = "Tabs".$tabNameNoSpaces;
+        $pluginInUrl = Container::getPluginRepository()
+            ->findOneByTitle($this->get_name())
+            ->getConfigurationsByAccessUrl($currentUrl)
+        ;
+        $pluginConf = $pluginInUrl->getConfiguration();
 
-        // Check if it is already added
-        $checkCondition = [
-            'where' => [
-                    "variable = 'show_tabs' AND subkeytext = ?" => [
-                        $subkeytext,
-                    ],
-                ],
-        ];
+        $showTabs = $pluginConf['show_tabs'] ?? [];
 
-        $checkDuplicate = Database::select('*', TABLE_MAIN_SETTINGS, $checkCondition);
-        if (!empty($checkDuplicate)) {
+        if (!isset($showTabs[$tabName])) {
+            $showTabs[$tabName] = $url;
+            $pluginConf['show_tabs'] = $showTabs;
+
+            $pluginInUrl->setConfiguration($pluginConf);
+        }
+
+        $showTabsSetting = $settingsManager->getSetting('platform.show_tabs', true);
+
+//        $subkey = 'custom_tab_'.$tabNum;
+//
+//        if (!empty($userFilter)) {
+//            switch ($userFilter) {
+//                case self::TAB_FILTER_NO_STUDENT:
+//                case self::TAB_FILTER_ONLY_STUDENT:
+//                    $subkey .= $userFilter;
+//                    break;
+//            }
+//        }
+
+        if (!in_array($tabName, $showTabsSetting)) {
+            $showTabsSetting[] = $tabName;
+        }
+
+        try {
+            $settingsManager->updateSetting('platform.show_tabs', $showTabsSetting);
+
+            Container::getEntityManager()->flush();
+        } catch (OptimisticLockException|ORMException) {
             return false;
         }
 
-        // End Check
-        $subkey = 'custom_tab_'.$tabNum;
-
-        if (!empty($userFilter)) {
-            switch ($userFilter) {
-                case self::TAB_FILTER_NO_STUDENT:
-                case self::TAB_FILTER_ONLY_STUDENT:
-                    $subkey .= $userFilter;
-                    break;
-            }
-        }
-
-        $currentUrlId = api_get_current_access_url_id();
-        $attributes = [
-            'variable' => 'show_tabs',
-            'subkey' => $subkey,
-            'type' => 'checkbox',
-            'category' => 'Platform',
-            'selected_value' => 'true',
-            'title' => $tabName,
-            'comment' => $url,
-            'subkeytext' => $subkeytext,
-            'access_url' => $currentUrlId,
-            'access_url_changeable' => 1,
-            'access_url_locked' => 0,
-        ];
-        $resp = Database::insert(TABLE_MAIN_SETTINGS, $attributes);
-
-        // Save the id
-        $settings = $this->get_settings();
-        $setData = [
-            'comment' => $subkey,
-        ];
-        $whereCondition = [
-            'id = ?' => key($settings),
-        ];
-        Database::update(TABLE_MAIN_SETTINGS, $setData, $whereCondition);
-
-        return $resp;
+        return true;
     }
 
     /**
@@ -819,46 +790,29 @@ class Plugin
      *
      * @return bool $resp Transaction response
      */
-    public function deleteTab($key)
+    public function deleteTab($tabName): bool
     {
-        $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
-        $sql = "SELECT *
-                FROM $table
-                WHERE variable = 'show_tabs'
-                AND subkey <> '$key'
-                AND subkey like 'custom_tab_%'
-                ";
-        $resp = $result = Database::query($sql);
-        $customTabsNum = Database::num_rows($result);
+        $settingsManager = Container::getSettingsManager();
 
-        if (!empty($key)) {
-            $whereCondition = [
-                'variable = ? AND subkey = ?' => ['show_tabs', $key],
-            ];
-            $resp = Database::delete(TABLE_MAIN_SETTINGS, $whereCondition);
+        $showTabsSetting = $settingsManager->getSetting('platform.show_tabs', true);
 
-            //if there is more than one tab
-            //re enumerate them
-            if (!empty($customTabsNum) && $customTabsNum > 0) {
-                $tabs = Database::store_result($result, 'ASSOC');
-                $i = 1;
-                foreach ($tabs as $row) {
-                    $newSubKey = "custom_tab_$i";
+        try {
+            if (in_array($tabName, $showTabsSetting)) {
+                $key = array_search($tabName, $showTabsSetting, true);
 
-                    if (false !== strpos($row['subkey'], self::TAB_FILTER_NO_STUDENT)) {
-                        $newSubKey .= self::TAB_FILTER_NO_STUDENT;
-                    } elseif (false !== strpos($row['subkey'], self::TAB_FILTER_ONLY_STUDENT)) {
-                        $newSubKey .= self::TAB_FILTER_ONLY_STUDENT;
-                    }
+                if ($key !== false) {
+                    unset($showTabsSetting[$key]);
 
-                    $attributes = ['subkey' => $newSubKey];
-                    $this->updateTab($row['subkey'], $attributes);
-                    $i++;
+                    $showTabsSetting = array_values($showTabsSetting);
                 }
             }
+
+            $settingsManager->updateSetting('platform.show_tabs', $showTabsSetting);
+        } catch (OptimisticLockException|ORMException) {
+            return false;
         }
 
-        return $resp;
+        return true;
     }
 
     /**
@@ -888,8 +842,7 @@ class Plugin
     public function manageTab($showTab, $filePath = 'index.php')
     {
         $langString = str_replace('Plugin', '', get_class($this));
-        $pluginName = strtolower($langString);
-        $pluginUrl = 'plugin/'.$pluginName.'/'.$filePath;
+        $pluginUrl = 'plugin/'.$langString.'/'.$filePath;
 
         if ('true' === $showTab) {
             $tabAdded = $this->addTab($langString, $pluginUrl);
@@ -898,19 +851,7 @@ class Plugin
                 echo "<script>location.href = '".Security::remove_XSS($_SERVER['REQUEST_URI'])."';</script>";
             }
         } else {
-            $settingsCurrentTable = Database::get_main_table(TABLE_MAIN_SETTINGS);
-            $conditions = [
-                'where' => [
-                    "variable = 'show_tabs' AND title = ? AND comment = ? " => [
-                        $langString,
-                        $pluginUrl,
-                    ],
-                ],
-            ];
-            $result = Database::select('subkey', $settingsCurrentTable, $conditions);
-            if (!empty($result)) {
-                $this->deleteTab($result[0]['subkey']);
-            }
+            $this->deleteTab($langString);
         }
     }
 

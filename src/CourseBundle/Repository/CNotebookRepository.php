@@ -13,6 +13,9 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CNotebook;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ResourceRepository<CNotebook>
+ */
 class CNotebookRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -22,8 +25,6 @@ class CNotebookRepository extends ResourceRepository
 
     /**
      * Get the user notebooks in a course.
-     *
-     * @return array
      */
     public function findByUser(
         User $user,
@@ -31,57 +32,24 @@ class CNotebookRepository extends ResourceRepository
         ?Session $session = null,
         string $orderField = 'creation_date',
         string $orderDirection = 'DESC'
-    ) {
-        switch ($orderField) {
-            case 'creation_date':
-                $orderField = 'N.creationDate';
+    ): array {
+        $qb = $this->getResourcesByCourse($course, $session);
 
-                break;
+        $alias = $qb->getRootAliases()[0] ?? 'n';
 
-            case 'update_date':
-                $orderField = 'N.updateDate';
+        $map = [
+            'creation_date' => 'creationDate',
+            'update_date'   => 'updateDate',
+            'title'         => 'title',
+        ];
+        $prop = $map[$orderField] ?? 'creationDate';
 
-                break;
+        $qb->andWhere($qb->expr()->eq($alias.'.user', ':owner'))
+            ->setParameter('owner', $user);
 
-            case 'title':
-                $orderField = 'N.title';
+        $direction = strtoupper($orderDirection) === 'ASC' ? 'ASC' : 'DESC';
 
-                break;
-        }
-
-        $qb = $this->createQueryBuilder('N');
-        $qb
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('N.userId', $user->getId()),
-                    $qb->expr()->eq('N.cId', $course->getId())
-                )
-            )
-        ;
-
-        if (null !== $session) {
-            $qb->andWhere(
-                $qb->expr()->eq('N.sessionId', $session->getId())
-            );
-        } else {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->eq('N.sessionId', 0),
-                    $qb->expr()->isNull('N.sessionId')
-                )
-            );
-        }
-
-        if ('N.updateDate' === $orderField) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->neq('N.updateDate', ''),
-                    $qb->expr()->isNotNull('N.updateDate')
-                )
-            );
-        }
-
-        $qb->orderBy($orderField, $orderDirection);
+        $qb->orderBy($alias.'.'.$prop, $direction);
 
         return $qb->getQuery()->getResult();
     }

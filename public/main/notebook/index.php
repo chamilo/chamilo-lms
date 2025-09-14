@@ -77,6 +77,8 @@ if ('addnote' === $action) {
 
     if (!empty($_GET['isStudentView'])) {
         NotebookManager::display_notes();
+        Display::display_footer();
+
         exit;
     }
 
@@ -96,7 +98,9 @@ if ('addnote' === $action) {
         'note_comment',
         get_lang('Note details'),
         null,
-        api_is_allowed_to_edit() ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300'] : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
+        api_is_allowed_to_edit()
+            ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
+            : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonCreate(get_lang('Create note'), 'SubmitNote');
 
@@ -135,6 +139,8 @@ if ('addnote' === $action) {
 
     if (!empty($_GET['isStudentView'])) {
         NotebookManager::display_notes();
+        Display::display_footer();
+
         exit;
     }
 
@@ -155,8 +161,8 @@ if ('addnote' === $action) {
         get_lang('Note details'),
         null,
         api_is_allowed_to_edit()
-        ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
-        : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
+            ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
+            : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
     $form->addButtonUpdate(get_lang('Edit my personal note'), 'SubmitNote');
 

@@ -86,7 +86,7 @@ class TicketFixtures extends Fixture
             TicketManager::STATUS_NEW => $this->translator->trans('New'),
             TicketManager::STATUS_PENDING => $this->translator->trans('Pending'),
             TicketManager::STATUS_UNCONFIRMED => $this->translator->trans('Unconfirmed'),
-            TicketManager::STATUS_CLOSE => $this->translator->trans('Close'),
+            TicketManager::STATUS_CLOSED => $this->translator->trans('Closed'),
             TicketManager::STATUS_FORWARDED => $this->translator->trans('Forwarded'),
         ];
 

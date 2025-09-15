@@ -30004,7 +30004,7 @@ msgid "Documents deleted"
 msgstr "Dokumente gelöscht"
 
 msgid "New folder"
-msgstr "Neue Datei"
+msgstr "Neuer Ordner"
 
 msgid "No available options"
 msgstr "Keine Optionen verfügbar"

@@ -35,7 +35,7 @@ class TicketManager
     public const STATUS_NEW = 1;
     public const STATUS_PENDING = 2;
     public const STATUS_UNCONFIRMED = 3;
-    public const STATUS_CLOSE = 4;
+    public const STATUS_CLOSED = 4;
     public const STATUS_FORWARDED = 5;
 
     public function __construct()
@@ -1614,7 +1614,7 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE $table_support_tickets SET
-                    status_id = ".self::STATUS_CLOSE.",
+                    status_id = ".self::STATUS_CLOSED.",
                     sys_lastedit_user_id = $userId,
                     sys_lastedit_datetime = '$now',
                     end_date ='$now'
@@ -1640,13 +1640,13 @@ class TicketManager
 
         $sql = "UPDATE $table
             SET
-                status_id = '".self::STATUS_CLOSE."',
+                status_id = '".self::STATUS_CLOSED."',
                 sys_lastedit_user_id ='$userId',
                 sys_lastedit_datetime ='$now',
                 end_date = '$now'
             WHERE
                 DATEDIFF('$now', sys_lastedit_datetime) > 7 AND
-                status_id != '".self::STATUS_CLOSE."' AND
+                status_id != '".self::STATUS_CLOSED."' AND
                 status_id != '".self::STATUS_NEW."' AND
                 status_id != '".self::STATUS_FORWARDED."' AND
                 access_url_id = $accessUrlId";
@@ -2440,7 +2440,7 @@ class TicketManager
             self::STATUS_NEW,
             self::STATUS_PENDING,
             self::STATUS_UNCONFIRMED,
-            self::STATUS_CLOSE,
+            self::STATUS_CLOSED,
             self::STATUS_FORWARDED,
         ];
     }
@@ -2454,7 +2454,7 @@ class TicketManager
             self::PRIORITY_NORMAL,
             self::PRIORITY_HIGH,
             self::PRIORITY_LOW,
-            self::STATUS_CLOSE,
+            self::STATUS_CLOSED,
             self::STATUS_FORWARDED,
         ];
     }

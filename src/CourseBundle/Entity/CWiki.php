@@ -363,7 +363,7 @@ class CWiki extends AbstractResource implements ResourceInterface, Stringable
         return $this->timeEdit;
     }
 
-    public function setTimeEdit(DateTime $timeEdit): static
+    public function setTimeEdit(?DateTime $timeEdit): static
     {
         $this->timeEdit = $timeEdit;
 

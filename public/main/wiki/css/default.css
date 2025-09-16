@@ -1,0 +1,74 @@
+/* ===== WIKI – skin clara, full width, sin :has() ===== */
+
+/* Fuerza tema claro y que este bloque gane */
+:root { color-scheme: light; }
+
+/* Contenedor ancho completo */
+#mainwiki{width:100%;max-width:none;margin:0 auto;padding:0 20px 28px}
+
+/* --- Toolbar (alineada) --- */
+#main_navigation{background:transparent;height:auto;padding:8px 0;border:0}
+#tabnav{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0;padding:0}
+
+/* Estilizo SOLO el icono (img). Los <a> vacíos ya no se ven */
+#tabnav img{
+    display:block; width:18px; height:18px;
+    padding:10px; border:1px solid #dce3ea; border-radius:12px;
+    background:#ffffff; box-shadow:0 1px 2px rgba(16,24,40,.06);
+    opacity:.95;
+}
+#tabnav a:hover img{background:#f1f5f9;border-color:#cbd5e1}
+
+/* Si hay anchors totalmente vacíos, ocultarlos por si acaso */
+#tabnav a:empty{display:none!important}
+
+/* --- Título (tarjeta clara) --- */
+#wikititle{
+    font-size:26px; font-weight:700; color:#0f172a !important;
+    background:linear-gradient(#ffffff,#f7f9fc) !important;
+    border:1px solid #e3e8ef !important; border-radius:14px;
+    padding:16px 22px; margin:10px 0 14px;
+    box-shadow:0 1px 2px rgba(16,24,40,.06);
+}
+
+/* --- Contenido (tarjeta) --- */
+#wikicontent{
+    background:#ffffff !important; border:1px solid #e3e8ef !important; border-radius:14px;
+    min-height:420px; padding:24px 26px;
+    box-shadow:0 1px 2px rgba(16,24,40,.06);
+    font-size:16px; line-height:1.65; color:#0f172a !important;
+}
+#wikicontent p{margin:14px 0}
+#wikicontent h2{font-size:22px;margin:26px 0 12px;border-bottom:1px solid #eaeef4;padding-bottom:6px}
+#wikicontent h3{font-size:18px;margin:18px 0 8px}
+#wikicontent a{color:#0ea5e9}
+#wikicontent a:hover{text-decoration:underline}
+#wikicontent img{max-width:100%;height:auto;border-radius:10px;display:block;margin:12px auto}
+#wikicontent hr{border:0;border-top:1px solid #e5e7eb;margin:26px 0}
+
+/* --- Footer (compacto) --- */
+#wikifooter{
+    margin-top:14px; background:#f8fafc !important; border:1px solid #e3e8ef !important; border-radius:14px;
+    padding:12px 16px; font-size:13px; color:#475569 !important;
+    box-shadow:0 1px 1px rgba(16,24,40,.05);
+}
+
+/* --- Diferencias --- */
+.diff{font-family:monospace;padding:10px;margin:10px 0;border:2px solid #aaa;border-radius:12px}
+.diffEqual{background:#fff}
+.diffMoved{background:#ffffaa}
+.diffAdded{background:#ccffcc}
+.diffDeleted{background:#ffaaaa}
+
+/* --- Enlaces wiki --- */
+a.wiki_link{border-bottom:1px dotted #cbd5e1}
+a.new_wiki_link{color:#ef4444;border-bottom:1px dotted #cbd5e1}
+
+/* --- Impresión: solo contenido --- */
+@media print{
+    #main_navigation,#wikititle,#wikifooter{display:none!important;}
+    #wikicontent{border:0;box-shadow:none;padding:0}
+}
+
+/* IMPORTANTE: elimina o comenta cualquier bloque @media (prefers-color-scheme: dark)
+   anterior, para que no reemplace estos colores. */

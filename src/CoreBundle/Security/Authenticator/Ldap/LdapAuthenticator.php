@@ -60,7 +60,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
             $this->accessUrlHelper->getCurrent()
         );
 
-        if (!$params['enabled']) {
+        if (!($params['enabled'] ?? false)) {
             return;
         }
 

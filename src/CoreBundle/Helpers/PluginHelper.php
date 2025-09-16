@@ -15,7 +15,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class PluginHelper
 {
-    /** @var array<string,string> normalized_title => OriginalTitle */
+    /**
+     * @var array<string,string> normalized_title => OriginalTitle
+     */
     private array $titleMap = [];
 
     public function __construct(
@@ -41,7 +43,7 @@ final class PluginHelper
         foreach ($all as $p) {
             /** @var PluginEntity $p */
             $title = $p->getTitle();
-            $norm  = self::normalize($title);
+            $norm = self::normalize($title);
             $this->titleMap[$norm] = $title;
         }
     }
@@ -62,7 +64,7 @@ final class PluginHelper
             strtolower($name),
             strtoupper($name),
             $studly,
-            self::normalize($studly)
+            self::normalize($studly),
         ]);
 
         foreach ($candidates as $cand) {
@@ -85,7 +87,7 @@ final class PluginHelper
         ]);
 
         foreach ($cands as $cand) {
-            $pluginPath  = $projectDir.'/public/plugin/'.$cand .'/src/'.$cand .'.php';
+            $pluginPath = $projectDir.'/public/plugin/'.$cand.'/src/'.$cand.'.php';
             $pluginClass = $cand;
 
             if (!file_exists($pluginPath)) {
@@ -131,6 +133,7 @@ final class PluginHelper
         }
 
         $rel = $this->pluginRelRepo->findOneByPluginName($realTitle, $accessUrl->getId());
+
         return $rel && $rel->isActive();
     }
 
@@ -184,6 +187,7 @@ final class PluginHelper
         }
 
         $cfg = $rel->getConfiguration();
+
         return \is_array($cfg) ? $cfg : null;
     }
 
@@ -195,7 +199,7 @@ final class PluginHelper
     public function getPluginConfigValue(string $pluginName, string $key, mixed $default = null): mixed
     {
         // Special case for legacy callers expecting "tool_enable"
-        if ($key === 'tool_enable') {
+        if ('tool_enable' === $key) {
             return $this->isPluginEnabled($pluginName) ? 'true' : 'false';
         }
 
@@ -207,7 +211,7 @@ final class PluginHelper
                 return $cfg[$key];
             }
             // try legacy-prefixed key (some migrations removed this, but keep BC)
-            $prefixed = $pluginName . '_' . $key;
+            $prefixed = $pluginName.'_'.$key;
             if (\array_key_exists($prefixed, $cfg)) {
                 return $cfg[$prefixed];
             }
@@ -215,7 +219,7 @@ final class PluginHelper
 
         // Fallback to legacy plugin object if present
         $legacy = $this->loadLegacyPlugin($pluginName);
-        if ($legacy && \method_exists($legacy, 'get')) {
+        if ($legacy && method_exists($legacy, 'get')) {
             return $legacy->get($key) ?? $default;
         }
 

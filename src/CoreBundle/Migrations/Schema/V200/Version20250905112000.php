@@ -42,10 +42,10 @@ final class Version20250905112000 extends AbstractMigrationChamilo
 
         foreach ($settings as $setting) {
             $variable = addslashes($setting['name']);
-            $title    = addslashes($setting['title']);
-            $comment  = addslashes($setting['comment']);
+            $title = addslashes($setting['title']);
+            $comment = addslashes($setting['comment']);
             $category = addslashes($setting['category']);
-            $default  = addslashes($setting['default']);
+            $default = addslashes($setting['default']);
 
             $sqlCheck = \sprintf(
                 "SELECT COUNT(*) AS count
@@ -56,7 +56,7 @@ final class Version20250905112000 extends AbstractMigrationChamilo
                 $variable
             );
 
-            $stmt   = $this->connection->executeQuery($sqlCheck);
+            $stmt = $this->connection->executeQuery($sqlCheck);
             $result = $stmt->fetchAssociative();
 
             if ($result && (int) $result['count'] > 0) {

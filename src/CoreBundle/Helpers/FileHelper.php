@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use InvalidArgumentException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
+use League\Flysystem\StorageAttributes;
+use RuntimeException;
+use Throwable;
 
 /**
  * Centralized helper for file operations using Flysystem.
@@ -25,18 +29,20 @@ final class FileHelper
      */
     private function normalize(string $path): string
     {
-        $path = ltrim(str_replace(["\\", "\0"], ['/', ''], $path), '/');
+        $path = ltrim(str_replace(['\\', "\0"], ['/', ''], $path), '/');
         $parts = [];
         foreach (explode('/', $path) as $seg) {
-            if ($seg === '' || $seg === '.') {
+            if ('' === $seg || '.' === $seg) {
                 continue;
             }
-            if ($seg === '..') {
+            if ('..' === $seg) {
                 array_pop($parts);
+
                 continue;
             }
             $parts[] = $seg;
         }
+
         return implode('/', $parts);
     }
 
@@ -76,6 +82,7 @@ final class FileHelper
     public function read(string $path): string
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem->read($path);
     }
 
@@ -100,6 +107,7 @@ final class FileHelper
     public function exists(string $path): bool
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem->fileExists($path);
     }
 
@@ -108,6 +116,7 @@ final class FileHelper
      * Equivalent to fopen() in read mode.
      *
      * @return resource
+     *
      * @throws FilesystemException
      */
     public function readStream(string $path)
@@ -115,8 +124,9 @@ final class FileHelper
         $path = $this->normalize($path);
         $stream = $this->resourceFilesystem->readStream($path);
         if (!\is_resource($stream)) {
-            throw new \RuntimeException("Unable to open stream for: {$path}");
+            throw new RuntimeException("Unable to open stream for: {$path}");
         }
+
         return $stream;
     }
 
@@ -125,13 +135,14 @@ final class FileHelper
      * Equivalent to fwrite() when working with streams.
      *
      * @param resource $stream
+     *
      * @throws FilesystemException
      */
     public function writeStream(string $path, $stream): void
     {
         $path = $this->normalize($path);
         if (!\is_resource($stream)) {
-            throw new \InvalidArgumentException('writeStream expects a valid stream resource.');
+            throw new InvalidArgumentException('writeStream expects a valid stream resource.');
         }
         $this->resourceFilesystem->writeStream($path, $stream);
     }
@@ -146,6 +157,7 @@ final class FileHelper
     {
         $path = $this->normalize($path);
         $stream = $this->readStream($path);
+
         try {
             fpassthru($stream);
         } finally {
@@ -175,6 +187,7 @@ final class FileHelper
     public function directoryExists(string $path): bool
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem->directoryExists($path);
     }
 
@@ -194,17 +207,21 @@ final class FileHelper
      * Lists files and directories under a given path as a flat array.
      * Equivalent to scandir(), opendir(), readdir().
      *
-     * @param string $path Path to list (empty string = root).
-     * @param bool   $deep true = recursive listing, false = shallow listing.
-     * @return array<int, \League\Flysystem\StorageAttributes>
+     * @param string $path path to list (empty string = root)
+     * @param bool   $deep true = recursive listing, false = shallow listing
+     *
+     * @return array<int, StorageAttributes>
+     *
      * @throws FilesystemException
      */
     public function listContents(string $path = '', bool $deep = false): array
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem
             ->listContents($path, $deep)
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
@@ -216,6 +233,7 @@ final class FileHelper
     public function fileSize(string $path): int
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem->fileSize($path);
     }
 
@@ -228,6 +246,7 @@ final class FileHelper
     public function lastModified(string $path): int
     {
         $path = $this->normalize($path);
+
         return $this->resourceFilesystem->lastModified($path);
     }
 
@@ -275,9 +294,10 @@ final class FileHelper
     public function mimeType(string $path): ?string
     {
         $path = $this->normalize($path);
+
         try {
             return $this->resourceFilesystem->mimeType($path);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
     }
@@ -286,8 +306,9 @@ final class FileHelper
      * Moves an uploaded file (local temp) into Flysystem storage.
      * Equivalent to UploadedFile::move() semantics (write + delete original).
      *
-     * @param string $tempPath   Local temporary path of the uploaded file.
-     * @param string $targetPath Target path in the filesystem.
+     * @param string $tempPath   local temporary path of the uploaded file
+     * @param string $targetPath target path in the filesystem
+     *
      * @throws FilesystemException
      */
     public function moveUploadedFile(string $tempPath, string $targetPath): void
@@ -296,7 +317,7 @@ final class FileHelper
 
         $stream = @fopen($tempPath, 'r');
         if (!\is_resource($stream)) {
-            throw new \RuntimeException("Cannot open temporary upload: {$tempPath}");
+            throw new RuntimeException("Cannot open temporary upload: {$tempPath}");
         }
 
         try {

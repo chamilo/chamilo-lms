@@ -6,7 +6,14 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use FilesystemIterator;
+use InvalidArgumentException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Cleans temporary upload artifacts inside %kernel.project_dir%/var/cache
@@ -14,10 +21,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 final class TempUploadHelper
 {
-    /** @var string[] Top-level directories to skip under var/cache */
+    /**
+     * @var string[] Top-level directories to skip under var/cache
+     */
     private array $excludeTop = ['dev', 'prod', 'test', 'pools'];
 
-    /** @var string[] Regex patterns to skip anywhere under var/cache */
+    /**
+     * @var string[] Regex patterns to skip anywhere under var/cache
+     */
     private array $excludePatterns = [
         '#/(vich_uploader|twig|doctrine|http_cache|profiler)/#i',
         '#/jms_[^/]+/#i',
@@ -35,6 +46,7 @@ final class TempUploadHelper
 
     /**
      * Stats for files that WOULD be targeted (i.e., excluding Symfony cache).
+     *
      * @return array{files:int,bytes:int}
      */
     public function stats(): array
@@ -42,18 +54,19 @@ final class TempUploadHelper
         $dir = $this->getTempDir();
         $this->assertBaseDir($dir);
 
-        $files = 0; $bytes = 0;
+        $files = 0;
+        $bytes = 0;
 
         if (!is_dir($dir) || !is_readable($dir)) {
             return ['files' => 0, 'bytes' => 0];
         }
 
-        $it = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $dir,
-                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
+                FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS
             ),
-            \RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
         foreach ($it as $f) {
@@ -62,6 +75,7 @@ final class TempUploadHelper
                 if ($f->isDir()) {
                     $it->next(); // let iterator move on
                 }
+
                 continue;
             }
             if ($f->isFile()) {
@@ -92,7 +106,8 @@ final class TempUploadHelper
         $dir = $this->getTempDir();
         $this->assertBaseDir($dir);
 
-        $deleted = 0; $bytes = 0;
+        $deleted = 0;
+        $bytes = 0;
 
         if (!is_dir($dir) || !is_readable($dir)) {
             return ['files' => 0, 'bytes' => 0];
@@ -100,12 +115,12 @@ final class TempUploadHelper
 
         $cutoff = $olderThanMinutes > 0 ? (time() - $olderThanMinutes * 60) : null;
 
-        $rii = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
+        $rii = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
                 $dir,
-                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
+                FilesystemIterator::SKIP_DOTS | FilesystemIterator::FOLLOW_SYMLINKS
             ),
-            \RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($rii as $f) {
@@ -114,6 +129,7 @@ final class TempUploadHelper
                 if ($f->isDir()) {
                     $rii->next();
                 }
+
                 continue;
             }
 
@@ -143,7 +159,7 @@ final class TempUploadHelper
 
     private function isProtected(string $basename): bool
     {
-        return $basename === '.htaccess' || $basename === '.gitignore';
+        return '.htaccess' === $basename || '.gitignore' === $basename;
     }
 
     /**
@@ -156,21 +172,21 @@ final class TempUploadHelper
             @mkdir($dir, 0775, true);
         }
         if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('Temp dir not writable: %s', $dir));
+            throw new InvalidArgumentException(\sprintf('Temp dir not writable: %s', $dir));
         }
     }
 
     /**
      * Decide if a file/dir should be excluded from cleanup.
      */
-    private function isExcluded(string $base, \SplFileInfo $f): bool
+    private function isExcluded(string $base, SplFileInfo $f): bool
     {
         $path = $f->getPathname();
-        $rel  = ltrim(str_replace('\\', '/', substr($path, strlen($base))), '/');
+        $rel = ltrim(str_replace('\\', '/', substr($path, \strlen($base))), '/');
 
         // Top-level directory name?
         $first = explode('/', $rel, 2)[0] ?? '';
-        if ($first !== '' && in_array($first, $this->excludeTop, true)) {
+        if ('' !== $first && \in_array($first, $this->excludeTop, true)) {
             return true;
         }
 

@@ -11,10 +11,14 @@ use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use FilesystemIterator;
 use League\Flysystem\FilesystemOperator;
 use PhpZip\ZipFile;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
+use Throwable;
 use Vich\UploaderBundle\Storage\FlysystemStorage;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
@@ -184,8 +188,8 @@ class AssetRepository extends ServiceEntityRepository
                     } else {
                         // Local filesystem fallbacks (log only on true failure)
                         if (@is_dir($path)) {
-                            $it = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
-                            $ri = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+                            $it = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
+                            $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
                             foreach ($ri as $file) {
                                 $ok = $file->isDir()
                                     ? @rmdir($file->getPathname())
@@ -203,7 +207,7 @@ class AssetRepository extends ServiceEntityRepository
                             }
                         }
                     }
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     error_log('[AssetRepository::delete] Exception while removing SCORM path '.$path.' - '.$e->getMessage());
                 }
             }

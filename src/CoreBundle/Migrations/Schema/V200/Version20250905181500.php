@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use PDO;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -26,38 +27,38 @@ final class Version20250905181500 extends AbstractMigrationChamilo
         $rows = $conn->fetchAllAssociative('SELECT id, active, configuration FROM access_url_rel_plugin');
 
         foreach ($rows as $row) {
-            $id     = (int) $row['id'];
+            $id = (int) $row['id'];
             $active = isset($row['active']) ? (int) $row['active'] : 0;
             $cfgRaw = $row['configuration'];
-            $cfg    = [];
+            $cfg = [];
 
             // configuration may be a JSON string (common) or an array (driver dependent)
-            if (is_string($cfgRaw) && $cfgRaw !== '') {
+            if (\is_string($cfgRaw) && '' !== $cfgRaw) {
                 $decoded = json_decode($cfgRaw, true);
-                if (is_array($decoded)) {
+                if (\is_array($decoded)) {
                     $cfg = $decoded;
                 }
-            } elseif (is_array($cfgRaw)) {
+            } elseif (\is_array($cfgRaw)) {
                 $cfg = $cfgRaw;
             }
 
-            if (!array_key_exists('tool_enable', $cfg)) {
+            if (!\array_key_exists('tool_enable', $cfg)) {
                 continue; // nothing to migrate for this row
             }
 
-            $val       = $cfg['tool_enable'];
+            $val = $cfg['tool_enable'];
             $newActive = null;
 
             // Normalize accepted legacy values
-            if ($val === true || $val === 1 || $val === '1') {
+            if (true === $val || 1 === $val || '1' === $val) {
                 $newActive = 1;
-            } elseif ($val === false || $val === 0 || $val === '0') {
+            } elseif (false === $val || 0 === $val || '0' === $val) {
                 $newActive = 0;
-            } elseif (is_string($val)) {
+            } elseif (\is_string($val)) {
                 $v = strtolower(trim($val));
-                if (in_array($v, ['true', 'on', 'yes', 'y'], true)) {
+                if (\in_array($v, ['true', 'on', 'yes', 'y'], true)) {
                     $newActive = 1;
-                } elseif (in_array($v, ['false', 'off', 'no', 'n'], true)) {
+                } elseif (\in_array($v, ['false', 'off', 'no', 'n'], true)) {
                     $newActive = 0;
                 }
             }
@@ -67,12 +68,12 @@ final class Version20250905181500 extends AbstractMigrationChamilo
             $payload = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
             // Update row: set active if we could infer it; otherwise just clean configuration
-            if ($newActive !== null) {
+            if (null !== $newActive) {
                 $conn->update(
                     'access_url_rel_plugin',
                     ['active' => $newActive, 'configuration' => $payload],
                     ['id' => $id],
-                    ['configuration' => \PDO::PARAM_STR]
+                    ['configuration' => PDO::PARAM_STR]
                 );
                 $this->write("Row {$id}: moved tool_enable => active={$newActive}; configuration cleaned.");
             } else {
@@ -80,7 +81,7 @@ final class Version20250905181500 extends AbstractMigrationChamilo
                     'access_url_rel_plugin',
                     ['configuration' => $payload],
                     ['id' => $id],
-                    ['configuration' => \PDO::PARAM_STR]
+                    ['configuration' => PDO::PARAM_STR]
                 );
                 $this->write("Row {$id}: tool_enable removed from configuration; active left unchanged={$active}.");
             }
@@ -95,22 +96,22 @@ final class Version20250905181500 extends AbstractMigrationChamilo
         $rows = $conn->fetchAllAssociative('SELECT id, active, configuration FROM access_url_rel_plugin');
 
         foreach ($rows as $row) {
-            $id     = (int) $row['id'];
+            $id = (int) $row['id'];
             $active = isset($row['active']) ? (int) $row['active'] : 0;
             $cfgRaw = $row['configuration'];
-            $cfg    = [];
+            $cfg = [];
 
-            if (is_string($cfgRaw) && $cfgRaw !== '') {
+            if (\is_string($cfgRaw) && '' !== $cfgRaw) {
                 $decoded = json_decode($cfgRaw, true);
-                if (is_array($decoded)) {
+                if (\is_array($decoded)) {
                     $cfg = $decoded;
                 }
-            } elseif (is_array($cfgRaw)) {
+            } elseif (\is_array($cfgRaw)) {
                 $cfg = $cfgRaw;
             }
 
             // Do not overwrite if it already exists (unlikely after up())
-            if (!array_key_exists('tool_enable', $cfg)) {
+            if (!\array_key_exists('tool_enable', $cfg)) {
                 $cfg['tool_enable'] = $active ? 'true' : 'false';
             }
 
@@ -120,7 +121,7 @@ final class Version20250905181500 extends AbstractMigrationChamilo
                 'access_url_rel_plugin',
                 ['configuration' => $payload],
                 ['id' => $id],
-                ['configuration' => \PDO::PARAM_STR]
+                ['configuration' => PDO::PARAM_STR]
             );
 
             $this->write("Row {$id}: restored configuration.tool_enable='".($active ? 'true' : 'false')."' from active.");

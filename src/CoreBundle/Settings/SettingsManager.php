@@ -1026,10 +1026,11 @@ class SettingsManager implements SettingsManagerInterface
     private function normalizeNullsBeforeResolve(array $parameters, SettingsBuilder $settingsBuilder): array
     {
         foreach ($parameters as $k => $v) {
-            if ($v === null && $settingsBuilder->isDefined($k)) {
+            if (null === $v && $settingsBuilder->isDefined($k)) {
                 unset($parameters[$k]);
             }
         }
+
         return $parameters;
     }
 }

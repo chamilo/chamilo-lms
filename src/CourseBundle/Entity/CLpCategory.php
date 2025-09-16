@@ -6,6 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -16,13 +21,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
-use Symfony\Component\Validator\Constraints as Assert;
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     shortName: 'LearningPathCategories',
@@ -67,12 +67,12 @@ class CLpCategory extends AbstractResource implements ResourceInterface, Resourc
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[Groups(['lp_category:read','lp:read'])]
+    #[Groups(['lp_category:read', 'lp:read'])]
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text')]
-    #[Groups(['lp_category:read','lp:read'])]
+    #[Groups(['lp_category:read', 'lp:read'])]
     protected string $title;
 
     /**

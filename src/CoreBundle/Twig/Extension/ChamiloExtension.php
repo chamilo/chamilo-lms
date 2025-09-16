@@ -246,9 +246,9 @@ class ChamiloExtension extends AbstractExtension
             }(jQuery));
 
             $(function() {
-              $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).");
+              $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).');
             });
-            </script>";
+            </script>';
     }
 
     /**

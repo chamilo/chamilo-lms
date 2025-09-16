@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Throwable;
 
 #[Route('/admin')]
 class AdminController extends BaseController
@@ -214,7 +215,7 @@ class AdminController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/cleanup-temp-uploads', name: 'admin_cleanup_temp_uploads_run', methods: ['POST'])]
     public function runCleanupTempUploads(
-        Request          $request,
+        Request $request,
         TempUploadHelper $tempUploadHelper,
     ): Response {
         // CSRF
@@ -224,21 +225,21 @@ class AdminController extends BaseController
         }
 
         // Read inputs
-        $olderThan = (int) ($request->request->get('older_than', 0));
-        $dryRun    = (bool) $request->request->get('dry_run', false);
+        $olderThan = (int) $request->request->get('older_than', 0);
+        $dryRun = (bool) $request->request->get('dry_run', false);
 
         // 1) Purge temp uploads/cache (configurable dir via helper parameter)
         $purge = $tempUploadHelper->purge(olderThanMinutes: $olderThan, dryRun: $dryRun);
 
         if ($dryRun) {
-            $this->addFlash('success', sprintf(
+            $this->addFlash('success', \sprintf(
                 'DRY RUN: %d files (%.2f MB) would be removed from %s.',
                 $purge['files'],
                 $purge['bytes'] / 1048576,
                 $tempUploadHelper->getTempDir()
             ));
         } else {
-            $this->addFlash('success', sprintf(
+            $this->addFlash('success', \sprintf(
                 'Temporary uploads/cache cleaned: %d files removed (%.2f MB) in %s.',
                 $purge['files'],
                 $purge['bytes'] / 1048576,
@@ -262,7 +263,7 @@ class AdminController extends BaseController
         try {
             ScriptHandler::dumpCssFiles();
             $this->addFlash('success', 'The styles and assets in the web/ folder have been refreshed.');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->addFlash('error', 'The styles and assets could not be refreshed. Ensure public/ is writable.');
             error_log($e->getMessage());
         }

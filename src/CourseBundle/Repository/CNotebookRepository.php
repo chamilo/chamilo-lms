@@ -39,15 +39,16 @@ class CNotebookRepository extends ResourceRepository
 
         $map = [
             'creation_date' => 'creationDate',
-            'update_date'   => 'updateDate',
-            'title'         => 'title',
+            'update_date' => 'updateDate',
+            'title' => 'title',
         ];
         $prop = $map[$orderField] ?? 'creationDate';
 
         $qb->andWhere($qb->expr()->eq($alias.'.user', ':owner'))
-            ->setParameter('owner', $user);
+            ->setParameter('owner', $user)
+        ;
 
-        $direction = strtoupper($orderDirection) === 'ASC' ? 'ASC' : 'DESC';
+        $direction = 'ASC' === strtoupper($orderDirection) ? 'ASC' : 'DESC';
 
         $qb->orderBy($alias.'.'.$prop, $direction);
 

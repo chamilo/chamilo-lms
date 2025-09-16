@@ -29,17 +29,17 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class AnonymousUserSubscriber implements EventSubscriberInterface
 {
-    private const FIREWALL_NAME       = 'main';
+    private const FIREWALL_NAME = 'main';
     private const MAX_ANONYMOUS_USERS = 5;
 
     // Session flags for the “active public course” context
-    private const S_ACTIVE_CID        = '_active_public_cid';
-    private const S_ACTIVE_PUBLIC     = '_active_public_flag';
+    private const S_ACTIVE_CID = '_active_public_cid';
+    private const S_ACTIVE_PUBLIC = '_active_public_flag';
     private const S_ACTIVE_EXPIRES_AT = '_active_public_expires_at';
-    private const S_SECURITY_TOKEN    = '_security_'.self::FIREWALL_NAME;
+    private const S_SECURITY_TOKEN = '_security_'.self::FIREWALL_NAME;
 
     // TTL (in seconds) for the “public course anonymous session” window
-    private const ACTIVE_TTL_SECONDS  = 600; // 10 minutes
+    private const ACTIVE_TTL_SECONDS = 600; // 10 minutes
 
     /**
      * Whitelist: only preserve the anonymous context on the contact pages.
@@ -59,7 +59,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [ KernelEvents::REQUEST => 'onKernelRequest' ];
+        return [KernelEvents::REQUEST => 'onKernelRequest'];
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -68,8 +68,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $request     = $event->getRequest();
-        $hasSession  = $request->hasSession();
+        $request = $event->getRequest();
+        $hasSession = $request->hasSession();
         $currentUser = $this->security->getUser();
 
         // In a public course scope?
@@ -81,17 +81,18 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             }
 
             // Real (non-anonymous) user → nothing to do
-            if ($currentUser instanceof User && $currentUser->getStatus() !== User::ANONYMOUS) {
+            if ($currentUser instanceof User && User::ANONYMOUS !== $currentUser->getStatus()) {
                 return;
             }
 
             // Already an anonymous entity user → nothing to do
-            if ($currentUser instanceof User && $currentUser->getStatus() === User::ANONYMOUS) {
+            if ($currentUser instanceof User && User::ANONYMOUS === $currentUser->getStatus()) {
                 return;
             }
 
             // Login as anonymous entity user
             $this->loginAnonymousEntity($request);
+
             return;
         }
 
@@ -100,11 +101,11 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $session   = $request->getSession();
-        $activeCid = (int) ($session->get(self::S_ACTIVE_CID, 0));
-        $isActive  = (bool) ($session->get(self::S_ACTIVE_PUBLIC, false));
-        $expiresAt = (int) ($session->get(self::S_ACTIVE_EXPIRES_AT, 0));
-        $now       = time();
+        $session = $request->getSession();
+        $activeCid = (int) $session->get(self::S_ACTIVE_CID, 0);
+        $isActive = (bool) $session->get(self::S_ACTIVE_PUBLIC, false);
+        $expiresAt = (int) $session->get(self::S_ACTIVE_EXPIRES_AT, 0);
+        $now = time();
 
         // There is an active context and it has not expired
         if ($activeCid > 0 && $isActive && $expiresAt > $now) {
@@ -112,9 +113,11 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                 // Top-level navigation: keep anonymous if whitelisted, otherwise clear
                 if ($this->isWhitelistedPath($request)) {
                     $this->rememberActivePublicCid($request, $activeCid);
+
                     return;
                 }
                 $this->clearAnon($request);
+
                 return;
             }
 
@@ -123,11 +126,12 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             if ($this->isWhitelistedPath($request)) {
                 $this->rememberActivePublicCid($request, $activeCid);
             }
+
             return;
         }
 
         // No active context (or expired): for an ANONYMOUS user, clear only on top-level navigation outside whitelist
-        if ($currentUser instanceof User && $currentUser->getStatus() === User::ANONYMOUS) {
+        if ($currentUser instanceof User && User::ANONYMOUS === $currentUser->getStatus()) {
             if ($this->isTopLevelNavigation($request) && !$this->isWhitelistedPath($request)) {
                 $this->clearAnon($request);
             }
@@ -164,10 +168,13 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
     {
         /** @var Course|null $course */
         $course = $this->em->getRepository(Course::class)->find($cid);
+
         return $course?->isPublic() ?? false;
     }
 
-    /** Store/renew the active public course context in session. */
+    /**
+     * Store/renew the active public course context in session.
+     */
     private function rememberActivePublicCid(Request $request, int $cid): void
     {
         $session = $request->getSession();
@@ -176,7 +183,9 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $session->set(self::S_ACTIVE_EXPIRES_AT, time() + self::ACTIVE_TTL_SECONDS);
     }
 
-    /** Log in as an anonymous entity User (create/reuse and set a UsernamePasswordToken). */
+    /**
+     * Log in as an anonymous entity User (create/reuse and set a UsernamePasswordToken).
+     */
     private function loginAnonymousEntity(Request $request): void
     {
         $userIp = $request->getClientIp() ?: '127.0.0.1';
@@ -191,37 +200,38 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             $trackLogin = (new TrackELogin())
                 ->setUserIp($userIp)
                 ->setLoginDate(new DateTime())
-                ->setUser($this->em->getReference(User::class, $anonId));
+                ->setUser($this->em->getReference(User::class, $anonId))
+            ;
             $this->em->persist($trackLogin);
             $this->em->flush();
         }
 
         // Set token
         $userRepo = $this->em->getRepository(User::class);
-        $user     = $userRepo->find($anonId);
+        $user = $userRepo->find($anonId);
         if (!$user) {
             return;
         }
 
         if ($request->hasSession()) {
             $request->getSession()->set('_user', [
-                'user_id'         => $user->getId(),
-                'username'        => $user->getUsername(),
-                'firstname'       => $user->getFirstname(),
-                'lastname'        => $user->getLastname(),
-                'firstName'       => $user->getFirstname(),
-                'lastName'        => $user->getLastname(),
-                'email'           => $user->getEmail(),
-                'official_code'   => $user->getOfficialCode(),
-                'picture_uri'     => $user->getPictureUri(),
-                'status'          => $user->getStatus(),
-                'active'          => $user->isActive(),
-                'theme'           => $user->getTheme(),
-                'language'        => $user->getLocale(),
-                'created_at'      => $user->getCreatedAt()->format('Y-m-d H:i:s'),
+                'user_id' => $user->getId(),
+                'username' => $user->getUsername(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'firstName' => $user->getFirstname(),
+                'lastName' => $user->getLastname(),
+                'email' => $user->getEmail(),
+                'official_code' => $user->getOfficialCode(),
+                'picture_uri' => $user->getPictureUri(),
+                'status' => $user->getStatus(),
+                'active' => $user->isActive(),
+                'theme' => $user->getTheme(),
+                'language' => $user->getLocale(),
+                'created_at' => $user->getCreatedAt()->format('Y-m-d H:i:s'),
                 'expiration_date' => $user->getExpirationDate() ? $user->getExpirationDate()->format('Y-m-d H:i:s') : null,
-                'last_login'      => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
-                'is_anonymous'    => true,
+                'last_login' => $user->getLastLogin() ? $user->getLastLogin()->format('Y-m-d H:i:s') : null,
+                'is_anonymous' => true,
             ]);
         }
 
@@ -229,7 +239,9 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
         $this->tokenStorage->setToken(new UsernamePasswordToken($user, self::FIREWALL_NAME, $roles));
     }
 
-    /** Clear token and session flags. */
+    /**
+     * Clear token and session flags.
+     */
     private function clearAnon(Request $request): void
     {
         $this->tokenStorage->setToken(null);
@@ -258,11 +270,12 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
 
         $mode = (string) $request->headers->get('Sec-Fetch-Mode', '');
         $dest = (string) $request->headers->get('Sec-Fetch-Dest', '');
-        if ($mode === 'navigate' && $dest === 'document') {
+        if ('navigate' === $mode && 'document' === $dest) {
             return true;
         }
 
         $accept = (string) $request->headers->get('Accept', '');
+
         return str_contains($accept, 'text/html');
     }
 
@@ -282,21 +295,23 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
                 return true;
             }
         }
+
         return false;
     }
 
     private function getOrCreateAnonymousUserId(string $userIp): ?int
     {
-        $userRepo  = $this->em->getRepository(User::class);
+        $userRepo = $this->em->getRepository(User::class);
         $trackRepo = $this->em->getRepository(TrackELogin::class);
-        $autoProv  = 'true' === $this->settings->getSetting('security.anonymous_autoprovisioning');
+        $autoProv = 'true' === $this->settings->getSetting('security.anonymous_autoprovisioning');
 
         if (!$autoProv) {
             $u = $userRepo->findOneBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
+
             return $u ? $u->getId() : $this->createAnonymousUser()->getId();
         }
 
-        $max  = (int) $this->settings->getSetting('admin.max_anonymous_users') ?: self::MAX_ANONYMOUS_USERS;
+        $max = (int) $this->settings->getSetting('admin.max_anonymous_users') ?: self::MAX_ANONYMOUS_USERS;
         $list = $userRepo->findBy(['status' => User::ANONYMOUS], ['createdAt' => 'ASC']);
 
         // Reuse by IP if there is a previous login record
@@ -321,7 +336,7 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
     private function createAnonymousUser(): User
     {
         $uniqueId = uniqid('anon_');
-        $email    = $uniqueId.'@localhost.local';
+        $email = $uniqueId.'@localhost.local';
 
         if ('true' === $this->settings->getSetting('profile.login_is_email')) {
             $uniqueId = $email;
@@ -337,7 +352,8 @@ class AnonymousUserSubscriber implements EventSubscriberInterface
             ->setEmail($email)
             ->setOfficialCode('anonymous')
             ->setCreatorId(1)
-            ->addRole('ROLE_ANONYMOUS');
+            ->addRole('ROLE_ANONYMOUS')
+        ;
 
         $this->em->persist($anonymousUser);
         $this->em->flush();

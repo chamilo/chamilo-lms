@@ -45,6 +45,9 @@ use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+
 class CourseHelper
 {
     public const MAX_COURSE_LENGTH_CODE = 40;
@@ -84,6 +87,7 @@ class CourseHelper
 
         if ($this->courseRepository->courseCodeExists($params['wanted_code'])) {
             $this->debugLog('createCourse:duplicateCode', ['wanted_code' => $params['wanted_code']]);
+
             throw new Exception('The course code already exists: '.$params['wanted_code']);
         }
 
@@ -105,7 +109,7 @@ class CourseHelper
     {
         $this->debugLog('registerCourse:start', [
             'exemplary_content_raw' => !empty($rawParams['exemplary_content']),
-            'has_template' => isset($rawParams['course_template']) && $rawParams['course_template'] !== '',
+            'has_template' => isset($rawParams['course_template']) && '' !== $rawParams['course_template'],
         ]);
 
         try {
@@ -144,7 +148,7 @@ class CourseHelper
             $course->addAccessUrl($accessUrl);
 
             if (!empty($params['categories'])) {
-                $this->debugLog('registerCourse:categoriesAttach', ['count' => count($params['categories'])]);
+                $this->debugLog('registerCourse:categoriesAttach', ['count' => \count($params['categories'])]);
                 foreach ($params['categories'] as $categoryId) {
                     $category = $this->courseCategoryRepository->find($categoryId);
                     if ($category) {
@@ -172,7 +176,7 @@ class CourseHelper
             }
 
             if (!empty($params['teachers'])) {
-                $this->debugLog('registerCourse:additionalTeachers', ['count' => count($params['teachers'])]);
+                $this->debugLog('registerCourse:additionalTeachers', ['count' => \count($params['teachers'])]);
                 foreach ($params['teachers'] as $teacherId) {
                     $teacher = $this->userRepository->find($teacherId);
                     if ($teacher) {
@@ -212,9 +216,11 @@ class CourseHelper
             }
 
             $this->debugLog('registerCourse:done', ['courseId' => $course->getId()]);
+
             return $course;
         } catch (Exception $e) {
             $this->debugLog('registerCourse:exception', ['msg' => $e->getMessage()]);
+
             throw $e;
         }
     }
@@ -327,8 +333,6 @@ class CourseHelper
         $this->entityManager->flush();
         $this->debugLog('fillCourse:end');
     }
-
-
 
     private function insertCourseSettings(Course $course): void
     {
@@ -444,10 +448,10 @@ class CourseHelper
         $this->debugLog('insertExampleContent:begin', ['courseId' => $course->getId()]);
 
         $files = [
-            ['path' => '/audio',          'title' => $this->translator->trans('Audio'),    'filetype' => 'folder', 'size' => 0],
-            ['path' => '/images',         'title' => $this->translator->trans('Images'),   'filetype' => 'folder', 'size' => 0],
-            ['path' => '/images/gallery', 'title' => $this->translator->trans('Gallery'),  'filetype' => 'folder', 'size' => 0],
-            ['path' => '/video',          'title' => $this->translator->trans('Video'),    'filetype' => 'folder', 'size' => 0],
+            ['path' => '/audio', 'title' => $this->translator->trans('Audio'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/images', 'title' => $this->translator->trans('Images'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/images/gallery', 'title' => $this->translator->trans('Gallery'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/video', 'title' => $this->translator->trans('Video'), 'filetype' => 'folder', 'size' => 0],
         ];
         $paths = [];
         $courseInfo = ['real_id' => $course->getId(), 'code' => $course->getCode()];
@@ -476,7 +480,7 @@ class CourseHelper
                     'title' => $file['title'],
                     'iid' => $iid,
                 ]);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->debugLog('insertExampleContent:document:root:error', [
                     'path' => $file['path'],
                     'msg' => $e->getMessage(),
@@ -536,7 +540,7 @@ class CourseHelper
                             'iid' => $iid,
                             'parentId' => $parentId,
                         ]);
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $this->debugLog('insertExampleContent:document:folder:error', [
                             'title' => $title,
                             'msg' => $e->getMessage(),
@@ -572,7 +576,7 @@ class CourseHelper
                             'parentId' => $parentId,
                             'size' => $file->getSize(),
                         ]);
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $this->debugLog('insertExampleContent:document:file:error', [
                             'title' => $title,
                             'msg' => $e->getMessage(),
@@ -608,12 +612,12 @@ class CourseHelper
             );
             $agendaAdded = true;
             $this->debugLog('insertExampleContent:agenda:ok');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('insertExampleContent:agenda:error', ['msg' => $e->getMessage()]);
         }
 
         try {
-            $link = new \Link();
+            $link = new Link();
             $link->setCourse($courseInfo);
             $links = [
                 [
@@ -643,12 +647,12 @@ class CourseHelper
                 $linksCreated++;
             }
             $this->debugLog('insertExampleContent:links:ok', ['linksCreated' => $linksCreated]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('insertExampleContent:links:error', ['msg' => $e->getMessage()]);
         }
 
         try {
-            $announcementId = \AnnouncementManager::add_announcement(
+            $announcementId = AnnouncementManager::add_announcement(
                 $courseInfo,
                 0,
                 $this->translator->trans('This is an announcement example'),
@@ -659,12 +663,12 @@ class CourseHelper
                 (new DateTime('now', new DateTimeZone('UTC')))->format('Y-m-d H:i:s')
             );
             $this->debugLog('insertExampleContent:announcement:ok', ['announcementId' => $announcementId]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('insertExampleContent:announcement:error', ['msg' => $e->getMessage()]);
         }
 
         try {
-            $exercise = new \Exercise($course->getId());
+            $exercise = new Exercise($course->getId());
             $exercise->exercise = $this->translator->trans('Sample test');
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
@@ -682,7 +686,7 @@ class CourseHelper
             $exerciseId = $exercise->id;
             $this->debugLog('insertExampleContent:exercise:created', ['exerciseId' => $exerciseId]);
 
-            $question = new \MultipleAnswer();
+            $question = new MultipleAnswer();
             $question->course = $courseInfo;
             $question->question = $this->translator->trans('Socratic irony is...');
             $question->description = $this->translator->trans('(more than one answer can be true)');
@@ -692,7 +696,7 @@ class CourseHelper
             $question->save($exercise);
             $questionId = $question->id;
 
-            $answer = new \Answer($questionId, $courseInfo['real_id']);
+            $answer = new Answer($questionId, $courseInfo['real_id']);
             $answer->createAnswer($this->translator->trans("Ridiculise one's interlocutor in order to have him concede he is wrong."), 0, $this->translator->trans('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
             $answer->createAnswer($this->translator->trans("Admit one's own errors to invite one's interlocutor to do the same."), 0, $this->translator->trans('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
             $answer->createAnswer($this->translator->trans("Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know."), 1, $this->translator->trans('Indeed. Socratic irony is an interrogative method. The Greek "eirotao" means "ask questions"'), 5, 3);
@@ -734,7 +738,7 @@ class CourseHelper
                 'childCategoryId' => $childGradebookCategory->getId(),
                 'refId' => $exerciseId,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('insertExampleContent:exercise:error', ['msg' => $e->getMessage()]);
         }
 
@@ -743,7 +747,7 @@ class CourseHelper
                 'forum_category_title' => $this->translator->trans('Example Forum Category'),
                 'forum_category_comment' => '',
             ];
-            $forumCategoryId = \saveForumCategory($params, $courseInfo, false);
+            $forumCategoryId = saveForumCategory($params, $courseInfo, false);
             $this->debugLog('insertExampleContent:forum:category', ['forumCategoryId' => $forumCategoryId]);
 
             $params = [
@@ -752,7 +756,7 @@ class CourseHelper
                 'forum_comment' => '',
                 'default_view_type_group' => ['default_view_type' => 'flat'],
             ];
-            $forumId = \store_forum($params, $courseInfo, true);
+            $forumId = store_forum($params, $courseInfo, true);
             $this->debugLog('insertExampleContent:forum:forum', ['forumId' => $forumId]);
 
             $repo = $this->entityManager->getRepository(CForum::class);
@@ -768,9 +772,9 @@ class CourseHelper
                 'forum_category' => $forumCategoryId,
                 'thread_peer_qualify' => 0,
             ];
-            $threadId = \saveThread($forumEntity, $params, $courseInfo, false);
+            $threadId = saveThread($forumEntity, $params, $courseInfo, false);
             $this->debugLog('insertExampleContent:forum:thread', ['threadId' => $threadId]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->debugLog('insertExampleContent:forum:error', ['msg' => $e->getMessage()]);
         }
 
@@ -1011,7 +1015,7 @@ class CourseHelper
         if (!$this->debug) {
             return;
         }
-        $suffix = $context ? ' ' . json_encode($context, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) : '';
-        error_log('[CourseHelper] ' . $message . $suffix);
+        $suffix = $context ? ' '.json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '';
+        error_log('[CourseHelper] '.$message.$suffix);
     }
 }

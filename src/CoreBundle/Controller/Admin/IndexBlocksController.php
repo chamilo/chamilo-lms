@@ -159,7 +159,7 @@ class IndexBlocksController extends BaseController
         return [
             [
                 'class' => 'item-security-login-attempts',
-                'url'   => $this->generateUrl('admin_security_login_attempts'),
+                'url' => $this->generateUrl('admin_security_login_attempts'),
                 'label' => $this->translator->trans('Login attempts'),
             ],
         ];

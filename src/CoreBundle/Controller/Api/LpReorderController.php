@@ -12,7 +12,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class LpReorderController
 {
-    public function __construct(private CLpRepository $lpRepo) {}
+    public function __construct(
+        private CLpRepository $lpRepo
+    ) {}
 
     public function __invoke(Request $request): JsonResponse
     {
@@ -21,11 +23,11 @@ final class LpReorderController
 
     public function reorder(Request $request): JsonResponse
     {
-        $data       = json_decode($request->getContent() ?: '[]', true);
-        $courseId   = isset($data['courseId']) ? (int) $data['courseId'] : null;
-        $sid        = array_key_exists('sid', $data) ? ($data['sid'] !== null ? (int)$data['sid'] : null) : null;
-        $order      = $data['order'] ?? $data['ids'] ?? null;
-        $categoryId = array_key_exists('categoryId', $data) ? ($data['categoryId'] !== null ? (int)$data['categoryId'] : null) : null;
+        $data = json_decode($request->getContent() ?: '[]', true);
+        $courseId = isset($data['courseId']) ? (int) $data['courseId'] : null;
+        $sid = \array_key_exists('sid', $data) ? (null !== $data['sid'] ? (int) $data['sid'] : null) : null;
+        $order = $data['order'] ?? $data['ids'] ?? null;
+        $categoryId = \array_key_exists('categoryId', $data) ? (null !== $data['categoryId'] ? (int) $data['categoryId'] : null) : null;
 
         if (!$courseId || !\is_array($order)) {
             return new JsonResponse(['error' => 'Invalid payload'], 400);

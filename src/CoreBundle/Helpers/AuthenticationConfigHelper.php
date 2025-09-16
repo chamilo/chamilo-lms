@@ -160,7 +160,6 @@ readonly class AuthenticationConfigHelper
         return array_filter($defaults, fn ($value) => null !== $value);
     }
 
-
     /**
      * @return array<string, mixed>
      */

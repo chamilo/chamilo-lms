@@ -71,16 +71,16 @@ class ExtraFieldType extends AbstractType
 
         // Determine Google Maps plugin state (enabled + API on)
         $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
-        $gMapsPlugin   = GoogleMapsPlugin::create();
-        $apiEnabled    = ('true' === $gMapsPlugin->get('enable_api'));
+        $gMapsPlugin = GoogleMapsPlugin::create();
+        $apiEnabled = ('true' === $gMapsPlugin->get('enable_api'));
 
         // Force-inject these two fields ONLY if Google Maps is active for this portal
         if ($pluginEnabled && $apiEnabled) {
             $forceVars = ['terms_villedustage', 'terms_ville'];
-            $existing  = array_map(static fn($ef) => $ef->getVariable(), $extraFields);
+            $existing = array_map(static fn ($ef) => $ef->getVariable(), $extraFields);
 
             foreach ($forceVars as $v) {
-                if (!in_array($v, $existing, true)) {
+                if (!\in_array($v, $existing, true)) {
                     $forced = $this->extraFieldRepository->findOneBy([
                         'variable' => $v,
                         'itemType' => $extraFieldType,
@@ -101,18 +101,18 @@ class ExtraFieldType extends AbstractType
 
         // Build form fields
         foreach ($extraFields as $extraField) {
-            $text     = $extraField->getDisplayText();
+            $text = $extraField->getDisplayText();
             $variable = $extraField->getVariable();
-            $value    = $data[$variable] ?? null;
+            $value = $data[$variable] ?? null;
 
             $isEditable = $extraField->isChangeable();
             $defaultOptions = [
-                'label'        => $text,
-                'required'     => false,
+                'label' => $text,
+                'required' => false,
                 'by_reference' => false,
-                'mapped'       => false,
-                'data'         => $value,
-                'attr'         => $isEditable ? [] : ['readonly' => true, 'class' => 'readonly-field'],
+                'mapped' => false,
+                'data' => $value,
+                'attr' => $isEditable ? [] : ['readonly' => true, 'class' => 'readonly-field'],
             ];
 
             switch ($extraField->getValueType()) {
@@ -122,23 +122,24 @@ class ExtraFieldType extends AbstractType
                     if ($pluginEnabled && $apiEnabled) {
                         $defaultOptions['data'] = [];
                         if (!empty($value)) {
-                            $parts       = explode('::', (string) $value);
+                            $parts = explode('::', (string) $value);
                             $coordinates = isset($parts[1]) ? explode(',', $parts[1]) : [];
                             $defaultOptions['data'] = [
-                                'address'   => $parts[0] ?? '',
-                                'latitude'  => $coordinates[0] ?? '',
+                                'address' => $parts[0] ?? '',
+                                'latitude' => $coordinates[0] ?? '',
                                 'longitude' => $coordinates[1] ?? '',
                             ];
                         }
                         $builder->add($variable, GoogleMapType::class, $defaultOptions);
                     } else {
                         // Fallback to TextType when plugin or API are not active (keeps the field usable)
-                        if (!empty($value) && is_string($value)) {
+                        if (!empty($value) && \is_string($value)) {
                             $defaultOptions['data'] = $value;
                         }
                         $defaultOptions['attr']['placeholder'] = 'address::lat,lng or lat,lng';
                         $builder->add($variable, TextType::class, $defaultOptions);
                     }
+
                     break;
 
                 case \ExtraField::FIELD_TYPE_TAG:
@@ -160,15 +161,15 @@ class ExtraFieldType extends AbstractType
                             $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                         }
 
-                        $defaultOptions['choices']     = $choices;
+                        $defaultOptions['choices'] = $choices;
                         $defaultOptions['choice_attr'] = $choicesAttributes;
-                        $defaultOptions['data']        = $choices;
+                        $defaultOptions['data'] = $choices;
                     }
 
                     $defaultOptions['attr'] = [
-                        'class'        => $class,
-                        'style'        => 'width:500px',
-                        'data.field_id'=> $extraField->getId(),
+                        'class' => $class,
+                        'style' => 'width:500px',
+                        'data.field_id' => $extraField->getId(),
                     ];
                     $builder->add($variable, ChoiceType::class, $defaultOptions);
 
@@ -236,7 +237,8 @@ class ExtraFieldType extends AbstractType
                 case \ExtraField::FIELD_TYPE_RADIO:
                 case \ExtraField::FIELD_TYPE_SELECT:
                     $defaultOptions['attr']['class'] = 'p-select p-component p-inputwrapper p-inputwrapper-filled';
-                // no break
+
+                    // no break
                 case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     if (empty($value)) {
                         $defaultOptions['data'] = null;
@@ -281,7 +283,7 @@ class ExtraFieldType extends AbstractType
                     switch ($extraField->getValueType()) {
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
                         case \ExtraField::FIELD_TYPE_GEOLOCALIZATION:
-                            if (!empty($newValue) && is_array($newValue)) {
+                            if (!empty($newValue) && \is_array($newValue)) {
                                 $newValue = ($newValue['address'] ?? '').'::'.($newValue['latitude'] ?? '').','.($newValue['longitude'] ?? '');
                             }
                             $this->extraFieldValuesRepository->updateItemData($extraField, $item, $newValue);
@@ -290,7 +292,7 @@ class ExtraFieldType extends AbstractType
 
                         case \ExtraField::FIELD_TYPE_TAG:
                             $formItem = $event->getForm()->get($variable);
-                            $options  = $formItem->getConfig()->getOptions();
+                            $options = $formItem->getConfig()->getOptions();
                             $options['choices'] = $newValue;
                             $event->getForm()->add($variable, ChoiceType::class, $options);
 

@@ -34,11 +34,12 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('c.title = :category')
             ->andWhere('p.locale = :locale')
             ->setParameters([
-                'enabled'  => true,
-                'url'      => $url,
+                'enabled' => true,
+                'url' => $url,
                 'category' => $categoryTitle,
-                'locale'   => $locale,
-            ]);
+                'locale' => $locale,
+            ])
+        ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -56,11 +57,12 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('c.title = :category')
             ->andWhere('p.locale LIKE :prefix')
             ->setParameters([
-                'enabled'  => true,
-                'url'      => $url,
+                'enabled' => true,
+                'url' => $url,
                 'category' => $categoryTitle,
-                'prefix'   => $localePrefix.'%',
-            ]);
+                'prefix' => $localePrefix.'%',
+            ])
+        ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -77,11 +79,12 @@ final class PageRepository extends ServiceEntityRepository
             ->andWhere('p.url = :url')
             ->andWhere('c.title = :category')
             ->setParameters([
-                'enabled'  => true,
-                'url'      => $url,
+                'enabled' => true,
+                'url' => $url,
                 'category' => $categoryTitle,
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return (bool) $qb->getQuery()->getOneOrNullResult();
     }

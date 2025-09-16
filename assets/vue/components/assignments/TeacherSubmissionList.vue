@@ -2,8 +2,8 @@
   <div>
     <BaseTable
       :is-loading="loading"
-      :multi-sort-meta="sortFields"
-      :rows="loadParams.itemsPerPage"
+      v-model:multi-sort-meta="sortFields"
+      v-model:rows="loadParams.itemsPerPage"
       :total-items="totalRecords"
       :values="submissions"
       data-key="@id"
@@ -198,7 +198,7 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, reactive, ref, watch } from "vue"
+import { nextTick, watch, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -230,7 +230,7 @@ const totalRecords = ref(0)
 const sortFields = ref([{ field: "sentDate", order: -1 }])
 const loadParams = reactive({
   page: 1,
-  itemsPerPage: 10,
+  itemsPerPage: null,
 })
 
 const showUploader = ref(false)
@@ -241,8 +241,14 @@ const showCorrectAndRateDialog = ref(false)
 const correctingItem = ref(null)
 const showMoveDialog = ref(false)
 
-watch(loadParams, loadData)
-onMounted(loadData)
+watch(
+  loadParams,
+  () => {
+    if (!loadParams.itemsPerPage) return
+    loadData()
+  },
+  { deep: true, immediate: true }
+)
 
 async function loadData() {
   loading.value = true
@@ -265,6 +271,7 @@ async function loadData() {
 
 function onPage(event) {
   loadParams.page = event.page + 1
+  loadParams.itemsPerPage = event.rows
 }
 
 function onSort(event) {
@@ -277,7 +284,7 @@ function onSort(event) {
   })
 }
 
-async function onCorrectionUploaded(file, response) {
+async function onCorrectionUploaded(file) {
   if (!file || !selectedSubmission.value) {
     showUploader.value = false
     selectedSubmission.value = null
@@ -287,11 +294,9 @@ async function onCorrectionUploaded(file, response) {
   notification.showSuccessNotification(t("Correction uploaded successfully!"))
 
   const uploadedFileName = file?.name || "Correction uploaded"
-
-  const foundIndex = submissions.value.findIndex((item) => item.iid === selectedSubmission.value.iid)
-
-  if (foundIndex !== -1) {
-    submissions.value[foundIndex].correctionTitle = uploadedFileName
+  const idx = submissions.value.findIndex((it) => it.iid === selectedSubmission.value.iid)
+  if (idx !== -1) {
+    submissions.value[idx].correctionTitle = uploadedFileName
   }
 
   showUploader.value = false
@@ -307,9 +312,8 @@ function getResourceNodeId(resourceNode) {
 
   const idString = typeof resourceNode === "string" ? resourceNode : resourceNode["@id"]
   if (!idString || typeof idString !== "string") return 0
-
-  const match = idString.match(/\/(\d+)$/)
-  return match ? parseInt(match[1], 10) : 0
+  const m = idString.match(/\/(\d+)$/)
+  return m ? parseInt(m[1], 10) : 0
 }
 
 function openUploader(submission) {
@@ -330,7 +334,7 @@ async function viewSubmission(item) {
   const resourceLink = item.firstResourceLink
 
   if (!resourceLink["@id"]) {
-    if (item.resourceLinkListFromEntity && item.resourceLinkListFromEntity.length > 0) {
+    if (item.resourceLinkListFromEntity?.length) {
       const firstLink = item.resourceLinkListFromEntity[0]
       if (firstLink.id) {
         resourceLink["@id"] = `/api/resource_links/${firstLink.id}`

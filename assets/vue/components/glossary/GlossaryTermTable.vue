@@ -2,6 +2,8 @@
   <BaseTable
     :text-for-empty="t('There is no terms that matches the search: %s', [searchTerm])"
     :values="glossaries"
+    :total-items="glossaries.length"
+    data-key="title"
   >
     <Column
       :header="t('Term')"
@@ -36,6 +38,7 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
+import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 

@@ -34,7 +34,7 @@ class CourseChatUtils
     private $repository;
 
     /** Debug flag */
-    private $debug = true;
+    private $debug = false;
 
     public function __construct($courseId, $userId, $sessionId, $groupId, ResourceNode $resourceNode, ResourceRepository $repository)
     {

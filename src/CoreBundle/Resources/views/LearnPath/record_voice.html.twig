@@ -137,7 +137,7 @@
                     formData.append('audio-title', audioTitle.val());
 
                     $.ajax({
-                        url: '{{ url('legacy_main', {name: 'inc/ajax/lp.ajax.php'}) ~ "?" ~ course_url_params ~ "&a=record_audio&lp_item_id="~ lp_item_id }}',
+                        url: '/main/inc/ajax/lp.ajax.php?{{ course_url_params ~ "&a=record_audio&lp_item_id="~ lp_item_id }}',
                         data: formData,
                         processData: false,
                         contentType: false,

@@ -34,13 +34,12 @@ final class CGlossaryRepository extends ResourceRepository implements ResourceWi
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
         $params = [
-            'name' => 'glossary/index.php',
             'glossary_id' => $resource->getResourceIdentifier(),
         ];
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }
 
-        return $router->generate('legacy_main', $params);
+        return '/main/glossary/index.php?'.http_build_query($params);
     }
 }

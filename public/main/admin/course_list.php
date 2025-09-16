@@ -506,7 +506,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $form->addButtonSearch(get_lang('Search courses'));
     $advanced = Display::toolbarButton(
         get_lang('Advanced search'),
-        Container::getRouter()->generate('legacy_main', ['name' => 'admin/course_list.php', 'search' => 'advanced']),
+        '/main/admin/course_list.php?'.http_build_query(['search' => 'advanced']),
         ActionIcon::SEARCH,
         'plain'
     );

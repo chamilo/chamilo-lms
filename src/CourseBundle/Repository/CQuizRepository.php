@@ -50,14 +50,13 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
     public function getLink(ResourceInterface $resource, RouterInterface $router, array $extraParams = []): string
     {
         $params = [
-            'name' => 'exercise/overview.php',
             'exerciseId' => $resource->getResourceIdentifier(),
         ];
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }
 
-        return $router->generate('legacy_main', $params);
+        return '/main/exercise/overview.php?'.http_build_query($params);
     }
 
     private function addDateFilterQueryBuilder(DateTime $dateTime, ?QueryBuilder $qb = null): QueryBuilder

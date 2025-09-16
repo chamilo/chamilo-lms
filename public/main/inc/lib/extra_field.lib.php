@@ -2415,10 +2415,7 @@ class ExtraField extends Model
         $form->addHeader($header);
 
         if ('edit' === $action) {
-            $translateUrl = Container::getRouter()->generate(
-                'legacy_main',
-                ['name' => 'extrafield/translate.php', 'extra_field' => $id]
-            );
+            $translateUrl = '/main/extrafield/translate.php?'.http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(
                 get_lang('Translate this term'),
                 $translateUrl,

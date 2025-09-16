@@ -87,14 +87,13 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
     {
         $params = [
             'lp_id' => $resource->getResourceIdentifier(),
-            'name' => 'lp/lp_controller.php',
             'action' => 'view',
         ];
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }
 
-        return $router->generate('legacy_main', $params);
+        return '/main/lp/lp_controller.php?'.http_build_query($params);
     }
 
     public function findAutoLaunchableLPByCourseAndSession(Course $course, ?Session $session = null): ?int

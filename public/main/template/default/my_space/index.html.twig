@@ -16,7 +16,7 @@
                 {{ 'ToolIcon::GROUP'|mdi_icon(64) }}&nbsp;{{ students }}
         </div>
         <div class="card-title text-center p-2 text-xl">
-            <a href="{{ url('legacy_main', {'name' : 'my_space/student.php'}) }}">
+            <a href="/main/my_space/student.php">
                 {{ 'Followed students' | trans }}
             </a>
         </div>
@@ -26,7 +26,7 @@
             {{ 'ObjectIcon::HRM_USER'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
         </div>
         <div class="card-title text-center p-2 text-xl">
-            <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ studentboss }}">
+            <a href="/main/my_space/users.php?status={{ studentboss }}">
                 {{ 'Followed student bosses' | trans }}
             </a>
         </div>
@@ -36,7 +36,7 @@
             {{ 'ObjectIcon::TEACHER'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
         </div>
         <div class="card-title text-center p-2 text-xl">
-            <a href="{{ url('legacy_main', {'name' : 'my_space/teachers.php'}) }}">
+            <a href="/main/my_space/teachers.php">
                 {{ 'Followed teachers' | trans }}
             </a>
         </div>
@@ -46,7 +46,7 @@
             {{ 'ObjectIcon::USER'|mdi_icon(64) }}&nbsp;{{ humanresources }}
         </div>
         <div class="card-title text-center p-2 text-xl">
-            <a href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}?status={{ drh }}">
+            <a href="/main/my_space/users.php?status={{ drh }}">
                 {{ 'Followed HR directors' | trans }}
             </a>
         </div>
@@ -59,12 +59,12 @@
                 <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ total_user }}</span>
             </div>
             <div class="">
-                <a class="hover:cursor-pointer underline" href="{{ url('legacy_main', {'name' : 'my_space/users.php'}) }}">
+                <a class="hover:cursor-pointer underline" href="/main/my_space/users.php">
                    {{ 'ObjectIcon::USER'|mdi_icon(16) }} {{ 'Followed users' | trans }}
                 </a>
                 {% if app.user.status == 1 %}
                     <a
-                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_users_to_user.php'}) }}?user={{ app.user.id }}"
+                            href="/main/admin/dashboard_add_users_to_user.php?user={{ app.user.id }}"
                             class="hover:cursor-pointer"
                     >
                         {{ 'ActionIcon::ADD'|mdi_icon(16) }}
@@ -80,7 +80,7 @@
             </div>
             <div class="easypiechart-link">
                 <a class="hover:cursor-pointer underline"
-                   href="{{ url('legacy_main', {'name' : 'my_space/course.php'}) }}"
+                   href="/main/my_space/course.php"
                 >
                 {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Assigned courses' | trans }}
                 </a>
@@ -93,9 +93,7 @@
                 <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.assigned_courses }}</span>
             </div>
             <div class="easypiechart-link">
-                <a class="hover:cursor-pointer underline"
-                   href="{{ url('legacy_main', {'name' : 'my_space/course.php?follow'}) }}"
-                >
+                <a class="hover:cursor-pointer underline" href="/main/my_space/course.php?follow">
                 {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Followed courses' | trans }}
                 </a>
             </div>
@@ -108,13 +106,13 @@
             </div>
             <div class="easypiechart-link">
                 <a class="hover:cursor-pointer underline"
-                   href="{{ url('legacy_main', {'name' : 'my_space/session.php'}) }}"
+                   href="/main/my_space/session.php"
                 >
                     {{ 'ObjectIcon::SESSION'|mdi_icon(16) }} {{ 'Followed sessions' | trans }}
                 </a>
                 {% if app.user.status == 1 %}
                     <a
-                            href="{{ url('legacy_main', {'name' : 'admin/dashboard_add_sessions_to_user.php'}) }}?user={{ app.user.id }}"
+                            href="/main/admin/dashboard_add_sessions_to_user.php?user={{ app.user.id }}"
                             class="hover:cursor-pointer">
                         {{ 'ActionIcon::ADD'|mdi_icon(16) }}
                     </a>

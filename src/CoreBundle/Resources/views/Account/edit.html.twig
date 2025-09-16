@@ -8,7 +8,7 @@
             let fieldId = '&field_id=' + $(this).attr('data.field_id');
             $(this).select2({
                 ajax: {
-                    url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'search_tags', 'type': 'user'}) }}' + fieldId,
+                    url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'name' : '', 'a': 'search_tags', 'type': 'user'}|url_encode }}' + fieldId,
                     processResults: function (data) {
                         return {
                             results: data.items
@@ -32,7 +32,7 @@
                 //let fieldId = '&tag_id=' + e.params.data.id;
                 let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
                 $.ajax({
-                    url: '{{ url('legacy_main', { 'name' : 'inc/ajax/extra_field.ajax.php', 'a': 'delete_tag', 'type': 'user'}) }}' + fieldId,
+                    url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId,
                     success: function(data) {
                     }
                 });

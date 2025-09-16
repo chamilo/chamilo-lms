@@ -118,7 +118,7 @@ class ResourceNode implements Stringable
     #[Groups(['resource_node:read', 'resource_node:write', 'document:write'])]
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'resourceNodes')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
-    protected ?User $creator;
+    protected ?User $creator = null;
 
     #[Groups(['resource_node:read', 'student_publication:read'])]
     #[MaxDepth(1)]
@@ -231,7 +231,7 @@ class ResourceNode implements Stringable
 
     public function hasCreator(): bool
     {
-        return null !== $this->creator;
+        return isset($this->creator) && null !== $this->creator;
     }
 
     public function getCreator(): ?User

@@ -154,7 +154,7 @@ define('TOOL_COURSE_RIGHTS_OVERVIEW', 'course_rights');
 define('TOOL_UPLOAD', 'file_upload');
 define('TOOL_COURSE_MAINTENANCE', 'course_maintenance');
 define('TOOL_SURVEY', 'survey');
-//define('TOOL_WIKI', 'wiki');
+define('TOOL_WIKI', 'wiki');
 define('TOOL_GLOSSARY', 'glossary');
 define('TOOL_GRADEBOOK', 'gradebook');
 define('TOOL_NOTEBOOK', 'notebook');
@@ -201,6 +201,8 @@ define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE', 'soc_gr_update_role');
 
 define('LOG_MESSAGE_DATA', 'message_data');
 define('LOG_MESSAGE_DELETE', 'msg_deleted');
+define('LOG_WIKI_ACCESS', 'wiki_page_view');
+define('LOG_WIKI_PAGE_ID', 'wiki_page_id');
 
 const LOG_RESOURCE_LINK_DELETE = 'resource_link_deleted';
 const LOG_RESOURCE_LINK_SOFT_DELETE = 'resource_link_soft_deleted';

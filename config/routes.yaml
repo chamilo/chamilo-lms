@@ -5,12 +5,6 @@ authentication_token:
     path: /api/authentication_token
     methods: ['POST']
 
-legacy_plugin:
-    path: /plugin/{name}
-    defaults: {_controller: 'ChamiloCoreBundle:Legacy:plugin'}
-    requirements:
-        name: .+
-
 #courses_vue:
 #    path: /courses/{wildcard}
 #    controller: Chamilo\CoreBundle\Controller\IndexController::resources

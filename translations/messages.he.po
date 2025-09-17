@@ -2153,7 +2153,7 @@ msgstr "גם מסמכים יתווספו"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "אם אתה רוצה לייצא קורס המכיל מבחן, עליך לוודא שהמבחנים המתאימים כלולים בייצוא, אז עליך לבחור אותם ברשימת המבחנים."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "ספריית האפליקציה /app/cache, המשמשת את הכלי הזה, אינה ניתנת לכתיבה. אנא צור קשר עם מנהל הפלטפורמה שלך."
 
 msgid "Target course"
@@ -17229,12 +17229,6 @@ msgstr "שנה שם והערה"
 msgid "Photo retouching"
 msgstr "ריטוש תמונה"
 
-msgid "Enable external Pixlr services"
-msgstr "אפשר שירותי Pixlr חיצוניים"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr מאפשר לך לערוך, להתאים ולסנן את התמונות שלך עם תכונות הדומות ל-Photoshop. זהו השלמה האידיאלית לעיבוד תמונות המבוססות על מפות סיביות"
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "הקידום <i>%s</i> הועבר לארכיון. לפעולה זו יש תוצאה של הפיכת כל ההפעלות הרשומות לקידום זה בלתי נראות. אתה יכול לבטל זאת על ידי ביטול הארכיון של קידום זה."
 
@@ -18270,16 +18264,16 @@ msgstr "קטגוריות הפורום"
 msgid "Cleanup of cache and temporary files"
 msgstr "ניקוי מטמון וקבצים זמניים"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "צ'מילו שומרת עותק של רוב הקבצים הזמניים שהוא מייצר (לגיבויים, ייצוא, עותקים וכו') לתוך ספריית האפליקציה/מטמון/ שלה. לאחר זמן מה, זה יכול להוסיף לכמות גדולה מאוד של שטח דיסק. בשימוש לחינם. לחץ על הכפתור למטה כדי לנקות את ספריית הארכיון שלך. פעולה זו צריכה להיות אוטומטית על ידי תהליך cron, אך אם זה לא אפשרי, אתה יכול להגיע לדף זה באופן קבוע כדי להסיר את כל הקבצים הזמניים מהספרייה.\nתכונה זו מנקה גם את קבצי המטמון של ערכת הנושא."
 
 msgid "Proceed with cleanup"
 msgstr "המשך בניקוי"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "ניקוי האפליקציה/מטמון/ספרייה בוצע בהצלחה."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "מסיבה כלשהי, לא ניתן היה לנקות את התיקייה chamilo/var/cache/. אנא נקה אותה "
 "באופן ידני: התחבר לשרת ומחק את כל הקבצים והקישורים הסימבוליים שנמצאים תחת "

@@ -54,7 +54,7 @@ if ($form->validate()) {
         Display::addFlash(Display::return_message(get_lang('Cleanup of cache and temporary files'), 'error'));
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('The app/cache/ directory cleanup has been executed successfully.'))
+            Display::return_message(get_lang('The var/cache/ directory cleanup has been executed successfully.'))
         );
     }
 
@@ -86,7 +86,7 @@ if ($form->validate()) {
 Display::display_header(get_lang('Cleanup of cache and temporary files'));
 echo Display::return_message(
     get_lang(
-        'Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory.'
+        'Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory.'
     ),
     'warning'
 );

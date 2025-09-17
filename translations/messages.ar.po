@@ -2153,7 +2153,7 @@ msgstr "ستضاف المستندات أيضًا"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "اذا اردت تصدير مقرر مشتملا على اختبار، فعليك التأكد من تضمين الاختبارات عند التصدير، لذا عليك تحديدها في قائمة الاختبارات"
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "لايمكن التعديل على هذه الاداة، يرجى مراسلة مدير النظام"
 
 msgid "Target course"
@@ -17229,12 +17229,6 @@ msgstr "اعادة التسمية والتعليق"
 msgid "Photo retouching"
 msgstr "تنقيح الصورة"
 
-msgid "Enable external Pixlr services"
-msgstr "Pixlr تمكين الخدمات الخارجية"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "تسمح لك اداة بكسلر في تعديل وتنقيح الصور مع خصائ مشابهة للفوتوشوب، فهو البرنامج النموذجي لتعديل الصور"
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "%s تم ارشفة الترقية، هذا الاجراء سوف يؤدي الى اخفاء كافة الدورات المرتبطة بهذه الترقية، ويمكن التراجع عن عملية الارشفة من خلال ازالة ارشفة الترويج"
 
@@ -18270,16 +18264,16 @@ msgstr "فئات المنتدى"
 msgid "Cleanup of cache and temporary files"
 msgstr "تنظيف ذاكرة التخزين المؤقت والملفات المؤقتة"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "يحتفظ نظام كاميلو بنسخة من جميع الملفات المؤقتة التي يولدها في مسار الذاكرة المؤقتة. ومع مرور الوقت سوف تتجمع كمية كبيرة من الملفات التي لا طائل منها، انقر الزر ادناه لتنظيف هذه الذاكرة المؤقتة، وينصح باجراء هذا التنظيف بصورة دورية"
 
 msgid "Proceed with cleanup"
 msgstr "الاستمرار بعملية التنظيف"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
-msgstr "app/cache/ ان التنظيف بنجاح لمسار"
+msgid "The var/cache/ directory cleanup has been executed successfully."
+msgstr "var/cache/ ان التنظيف بنجاح لمسار"
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "لسبب ما، لم يتم تنظيف دليل chamilo/var/cache/ بشكل صحيح. يرجى تنظيفه يدويًا: "
 "قم بالاتصال بالخادم وحذف جميع الملفات والروابط الرمزية تحت دليل chamilo/var/"

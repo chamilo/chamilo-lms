@@ -2144,7 +2144,7 @@ msgstr "Dokumentuak ere erantsiko dira"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Ariketak dituen ikastaro bat esportatu nahi baduzu, esportazioan dagozkion testuak ere ziur sartu direla egiaztatu beharko duzu, eta horretarako ariketa zerrendan hautatu beharko dituzu."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "Tresna honek erabiltzen duen artxibategiak direktorioak ez du indarrean idazteko gaitasuna. Jarri harremanetan plataformako kudeatzailearekin."
 
 msgid "Target course"
@@ -17220,12 +17220,6 @@ msgstr "Berrizendatu eta iruzkindu"
 msgid "Photo retouching"
 msgstr "Argazkiak berrukitzea"
 
-msgid "Enable external Pixlr services"
-msgstr "Gaitu kanpoko Pixlr zerbitzuak"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr zerbitzuek argazkiak editatzeko, doitzeko eta iragazteko aukerak emango dizkizute, Photoshop gaitasunen antzeko gaitasunak edukiz. Bit-mapetan oinarritutako irudiak tratatzeko osagarri ideala da."
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "%s promozioa gorde da artxiboan. Eragiketa honen eraginez, promozio honen barruan erregistratutako saio guztiak ikusezin bihurtu dira. Promozio hau artxibotik atereaz egin dezakezu atzera aldaketa honetan."
 
@@ -18261,16 +18255,16 @@ msgstr "Foro kategoriak"
 msgid "Cleanup of cache and temporary files"
 msgstr "Artxibo direktorioa garbitzea"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "Chamilok sortu diren aldi baterako fitxategi gehienen kopia bat gordetzen du (babeskopiak, esportazioak, kopiak eta abar), archive/ direktorioaren barruan. Denbora epe bat igaro ondoren, disko gogorrean oso espazio handia bete dezake, ezertarako balio ez duena. Klikatu azpiko botoia, eskuz zure archive direktorioa garbitzeko. Eragiketa hau automatikoki egin beharko litzateke Linuxen cron prozesu baten bidez, zure ingurunean ezin bada hau egin, noizean behin orri honetara etorri zaitezke direktoriotik aldi baterako fitxategi guztiak kentzeko."
 
 msgid "Proceed with cleanup"
 msgstr "Ekin garbitzeari"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "archive/ direktorioaren garbiketa ongi burutu da"
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Zerbaitengatik, ezin izan da chamilo/var/cache/ direktorioa garbitu. "
 "Mesedez, eskuz garbitu: konektatu zerbitzarira eta ezabatu chamilo/var/cache/"

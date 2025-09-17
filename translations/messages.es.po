@@ -2158,8 +2158,8 @@ msgstr "Los documentos también serán añadidos"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
-msgstr "El directorio \"app/cache/\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgstr "El directorio \"var/cache/\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma."
 
 msgid "Target course"
 msgstr "Curso de destino"
@@ -17250,12 +17250,6 @@ msgstr "Cambiar de nombre y comentar"
 msgid "Photo retouching"
 msgstr "Retoque fotográfico"
 
-msgid "Enable external Pixlr services"
-msgstr "Activar los servicios externos de Pixlr"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr le permitirá editar, ajustar y filtrar sus fotografías con prestaciones similares a las de Photoshop. Es el complemento ideal para tratar imágenes basadas en mapas de bits"
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "La promoción <i>%s</i> ha sido archivada. Esta acción tiene como consecuencia hacer invisibles todas las sesiones registradas a esta promoción. Puede deshacer este cambio desarchivando la promoción."
 
@@ -18291,16 +18285,16 @@ msgstr "Categorías de foro"
 msgid "Cleanup of cache and temporary files"
 msgstr "Limpieza de caché y archivos temporales"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
-msgstr "Chamilo guarda una copia de los archivos temporales que genera (para los backups, las exportaciones, las copias, etc) dentro del directorio app/cache/. Pasado un tiempo, todo esto puede llegar a ocupar bastante espacio en el disco duro. Si hace clic en el siguiente botón ejecutará una limpieza manual de este directorio. Esta operación debería ser realizada regularmente mediante la utilidad cron de Linux, pero si esto no es posible en su entorno puede utilizar esta página para eliminar todos los archivos temporales cada cierto tiempo."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgstr "Chamilo guarda una copia de los archivos temporales que genera (para los backups, las exportaciones, las copias, etc) dentro del directorio var/cache/. Pasado un tiempo, todo esto puede llegar a ocupar bastante espacio en el disco duro. Si hace clic en el siguiente botón ejecutará una limpieza manual de este directorio. Esta operación debería ser realizada regularmente mediante la utilidad cron de Linux, pero si esto no es posible en su entorno puede utilizar esta página para eliminar todos los archivos temporales cada cierto tiempo."
 
 msgid "Proceed with cleanup"
 msgstr "Ejecutar la limpieza"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
-msgstr "El contenido del directorio app/cache/ ha sido eliminado."
+msgid "The var/cache/ directory cleanup has been executed successfully."
+msgstr "El contenido del directorio var/cache/ ha sido eliminado."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Por alguna razón, no se pudo limpiar el directorio chamilo/var/cache/. Por "
 "favor, límpielo manualmente: conéctese al servidor y elimine todos los "

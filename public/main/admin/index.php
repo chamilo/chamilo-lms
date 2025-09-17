@@ -43,7 +43,7 @@ if (api_is_platform_admin()) {
         Display::addFlash(
             Display::return_message(
                 get_lang(
-                    'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+                    'The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
                 ),
                 'warning'
             )

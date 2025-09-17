@@ -293,39 +293,24 @@ class CWikiConf
      *
      * @return DateTime
      */
-    public function getStartdateAssig()
+    public function getStartdateAssig(): ?DateTime
     {
         return $this->startdateAssig;
     }
 
-    /**
-     * Set startdateAssig.
-     *
-     * @return CWikiConf
-     */
-    public function setStartdateAssig(DateTime $startdateAssig)
+    public function setStartdateAssig(?DateTime $startdateAssig): self
     {
         $this->startdateAssig = $startdateAssig;
 
         return $this;
     }
 
-    /**
-     * Get enddateAssig.
-     *
-     * @return DateTime
-     */
-    public function getEnddateAssig()
+    public function getEnddateAssig(): ?DateTime
     {
         return $this->enddateAssig;
     }
 
-    /**
-     * Set enddateAssig.
-     *
-     * @return CWikiConf
-     */
-    public function setEnddateAssig(DateTime $enddateAssig)
+    public function setEnddateAssig(?DateTime $enddateAssig): self
     {
         $this->enddateAssig = $enddateAssig;
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -15,8 +16,12 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Tracking;
+
+use const PATHINFO_FILENAME;
 
 /**
  * Helper for progress/grade/certificate aggregated statistics,
@@ -42,7 +47,7 @@ class TrackingStatsHelper
     public function getUserAvgLpProgress(User $user, Course $course, ?Session $session): array
     {
         // Load all LPs for the course (optionally scoped by session); "published" filter kept by default.
-        $qb  = $this->lpRepo->findAllByCourse($course, $session);
+        $qb = $this->lpRepo->findAllByCourse($course, $session);
         $lps = $qb->getQuery()->getResult();
 
         if (!$lps) {
@@ -52,8 +57,8 @@ class TrackingStatsHelper
         // Get the latest progress per LP for this user.
         //    Repository is expected to return a map for all LP ids (missing progress -> 0).
         $progressMap = $this->lpRepo->lastProgressForUser($lps, $user, $session);
-        $count       = \count($progressMap);
-        if ($count === 0) {
+        $count = \count($progressMap);
+        if (0 === $count) {
             return ['avg' => 0.0, 'count' => 0];
         }
 
@@ -77,7 +82,7 @@ class TrackingStatsHelper
     {
         // Locate the Gradebook Category that ties this course/session.
         $category = $this->em->getRepository(GradebookCategory::class)->findOneBy([
-            'course'  => $course,
+            'course' => $course,
             'session' => $session, // will match NULL if $session is null
         ]);
 
@@ -103,15 +108,15 @@ class TrackingStatsHelper
         $out = [];
         foreach ($rows as $r) {
             $issuedAt = !empty($r['created_at'])
-                ? (new \DateTime($r['created_at']))->format('c')
-                : (new \DateTime())->format('c');
+                ? (new DateTime($r['created_at']))->format('c')
+                : (new DateTime())->format('c');
 
             $downloadUrl = $this->buildCertificateUrlFromPath($r['path_certificate'] ?? null);
 
             $out[] = [
-                'id'          => (int) $r['id'],
-                'title'       => $title,
-                'issuedAt'    => $issuedAt,
+                'id' => (int) $r['id'],
+                'title' => $title,
+                'issuedAt' => $issuedAt,
                 'downloadUrl' => $downloadUrl,
             ];
         }
@@ -133,6 +138,7 @@ class TrackingStatsHelper
         if (!$hash) {
             return null;
         }
+
         // If you have a Symfony route, replace the line below with $router->generate(...)
         return '/certificates/'.$hash.'.html';
     }
@@ -154,7 +160,8 @@ class TrackingStatsHelper
             ->andWhere('c.visible = 1')
             ->andWhere('r.user = :user')
             ->setParameter('course', $course)
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+        ;
 
         if ($session) {
             $qb->andWhere('c.session = :session')->setParameter('session', $session);
@@ -164,7 +171,7 @@ class TrackingStatsHelper
 
         $row = $qb->getQuery()->getSingleResult();
         $score = (float) $row['score_sum'];
-        $max   = (float) $row['max_sum'];
+        $max = (float) $row['max_sum'];
 
         if ($max <= 0.0) {
             return ['score' => 0.0, 'max' => 0.0, 'percentage' => 0.0];
@@ -173,8 +180,8 @@ class TrackingStatsHelper
         $pct = ($score / $max) * 100.0;
 
         return [
-            'score'      => round($score, 2),
-            'max'        => round($max, 2),
+            'score' => round($score, 2),
+            'max' => round($max, 2),
             'percentage' => round($pct, 2),
         ];
     }
@@ -188,7 +195,7 @@ class TrackingStatsHelper
     {
         $participants = $this->getStudentParticipants($course, $session);
         $n = \count($participants);
-        if ($n === 0) {
+        if (0 === $n) {
             return ['avg' => 0.0, 'participants' => 0];
         }
 
@@ -208,7 +215,7 @@ class TrackingStatsHelper
     private function getUserAvgExerciseScore(User $user, Course $course, ?Session $session): float
     {
         // Uses the legacy method (as seen in myStudents).
-        $pct = \Tracking::get_avg_student_score(
+        $pct = Tracking::get_avg_student_score(
             $user->getId(),
             $course,
             [],       // all LPs
@@ -235,20 +242,21 @@ class TrackingStatsHelper
     {
         $participants = $this->getStudentParticipants($course, $session);
         $n = \count($participants);
-        if ($n === 0) {
+        if (0 === $n) {
             return ['avg' => 0.0, 'participants' => 0];
         }
 
         // Make LP query consistent with getUserAvgLpProgress (published filter = true)
         $lps = $this->lpRepo->findAllByCourse($course, $session)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         if (!$lps) {
             return ['avg' => 0.0, 'participants' => $n];
         }
 
-        $lpIds = array_map(static fn($lp) => (int) $lp->getIid(), $lps);
+        $lpIds = array_map(static fn ($lp) => (int) $lp->getIid(), $lps);
         $lpCount = \count($lpIds);
 
         $qb = $this->em->createQueryBuilder();
@@ -258,13 +266,14 @@ class TrackingStatsHelper
             ->andWhere($session ? 'v.session = :session' : 'v.session IS NULL')
             ->andWhere(
                 'v.iid = (
-                SELECT MAX(v2.iid) FROM ' . CLpView::class . ' v2
-                WHERE v2.user = v.user AND v2.lp = v.lp ' .
-                ($session ? 'AND v2.session = :session' : 'AND v2.session IS NULL') . '
+                SELECT MAX(v2.iid) FROM '.CLpView::class.' v2
+                WHERE v2.user = v.user AND v2.lp = v.lp '.
+                ($session ? 'AND v2.session = :session' : 'AND v2.session IS NULL').'
             )'
             )
             ->groupBy('v.user')
-            ->setParameter('lpIds', $lpIds);
+            ->setParameter('lpIds', $lpIds)
+        ;
 
         if ($session) {
             $qb->setParameter('session', $session);
@@ -305,7 +314,8 @@ class TrackingStatsHelper
                 ->setParameter('session', $session)
                 ->setParameter('active', User::ACTIVE)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
         }
 
         $conn = $this->em->getConnection();

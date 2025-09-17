@@ -15,12 +15,12 @@
                             {% if is_allowed_to_edit %}
                                 <div class="space-x-2">
                                     {% if is_granted('EDIT', description.resourceNode) %}
-                                        <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=edit&id={{ description.iid }}&{{ course_url_params }}" title="{{ 'Edit'|get_lang }}" class="text-primary hover:text-secondary">
+                                        <a href="/main/course_description/index.php?action=edit&id={{ description.iid }}&{{ course_url_params }}" title="{{ 'Edit'|get_lang }}" class="text-primary hover:text-secondary">
                                             {{ 'ActionIcon::EDIT'|mdi_icon }}
                                         </a>
                                     {% endif %}
                                     {% if is_granted('DELETE', description.resourceNode) %}
-                                        <a href="{{ url('legacy_main', {'name': 'course_description/index.php' }) }}?action=delete&id={{ description.iid }}&{{ course_url_params }}" onclick="javascript:return confirmation('{{ description.title | e('js')}}');" title="{{ 'Delete'|get_lang }}" class="text-danger hover:text-danger-dark">
+                                        <a href="/main/course_description/index.php?action=delete&id={{ description.iid }}&{{ course_url_params }}" onclick="javascript:return confirmation('{{ description.title | e('js')}}');" title="{{ 'Delete'|get_lang }}" class="text-danger hover:text-danger-dark">
                                             {{ 'ActionIcon::DELETE'|mdi_icon }}
                                         </a>
                                     {% endif %}

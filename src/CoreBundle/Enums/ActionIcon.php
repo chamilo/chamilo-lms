@@ -110,9 +110,7 @@ enum ActionIcon: string
     case SEND_SINGLE_EMAIL = 'email-outline';
     // Add an attachment
     case ADD_ATTACHMENT = 'paperclip-plus';
-    // ? See RESTORE_BACKUP
-    // case UPLOAD_CLOUD = 'cloud-upload';
-    // Three vertical dots to indicate the possibility to extend a menu/set of options
+    // Three vertical dots to indicate extended menu
     case VERTICAL_DOTS = 'dots-vertical';
     // Information icon - Get more info
     case INFORMATION = 'information';
@@ -166,14 +164,21 @@ enum ActionIcon: string
     case IMPORT_USERS_TO_URL = 'file-import';
     // Remove users from Access URL using CSV
     case REMOVE_USERS_FROM_URL = 'file-remove';
-
     case ADD_EVENT_REMINDER = 'alarm-plus';
-
     case SWAP_FILE = 'file-swap';
-
     case ADD_FILE_VARIATION = 'file-replace';
-
     case CLOSE = 'close';
-
     case MULTI_COURSE_URL_ASSIGN = 'playlist-plus';
+    case EMAIL_ON  = 'email-check-outline';
+    case EMAIL_OFF = 'email-off';
+    case NOTIFY_OFF = 'email-off-outline';
+    case HISTORY = 'history';
+    case LINKS   = 'link-variant';
+    case WIKI_ASSIGNMENT = 'briefcase-check';
+    case WIKI_WORK       = 'account-hard-hat';
+    case WIKI_TASK       = 'clipboard-text-outline';
+    case HOME = 'home-variant';
+    case LIST = 'format-list-bulleted';
+    case STAR = 'star';
+    case STAR_OUTLINE = 'star-outline';
 }

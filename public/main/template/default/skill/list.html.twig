@@ -48,25 +48,25 @@
                 <td>{{ skill.description }}</td>
                 <td class="text-right">
                     <div class="btn-group btn-group-sm" role="group" aria-label="">
-                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_edit.php', 'id' : skill.id }) }}"
+                        <a href="/main/skills/skill_edit.php?{{ { 'id' : skill.id }|url_encode }}"
                            class="btn btn--primary btn-sm" title="{{ "Edit"|trans }}">
                             {{ 'ActionIcon::EDIT'|mdi_icon }}
                         </a>
-                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_create.php', 'parent' : skill.id }) }}"
+                        <a href="/main/skills/skill_create.php?{{ { 'parent' : skill.id }|url_encode }}"
                            class="btn btn--plain btn-sm" title="{{ "Create child skill"|trans }}">
                             {{ 'ActionIcon::ADD'|mdi_icon }}
                         </a>
-                        <a href="{{ url('legacy_main', { 'name' : 'skills/skill_badge_create.php', 'id' : skill.id }) }}"
+                        <a href="/main/skills/skill_badge_create.php?{{ { 'id' : skill.id }|url_encode }}"
                            class="btn btn-light btn-sm" title="{{ "Create badge"|trans }}">
                             {{ 'ObjectIcon::BADGE'|mdi_icon }}
                         </a>
                         {% if skill.status == 0 %}
-                            <a href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'enable' }) }}"
+                            <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'enable' }|url_encode }}"
                                class="btn btn--success btn-sm" title="{{ 'Enable' }}">
                                 {{ 'StateIcon::INACTIVE'|mdi_icon }}
                             </a>
                         {% else %}
-                            <a href="{{ url('legacy_main', { 'name' : 'skills/skill_list.php', 'id' : skill.id, 'action': 'disable' }) }}"
+                            <a href="/main/skills/skill_list.php?{{ { 'id' : skill.id, 'action': 'disable' }|url_encode }}"
                                class="btn btn-sm" title="{{ 'Disable' }}">
                                 {{ 'StateIcon::ACTIVE'|mdi_icon }}
                             </a>
@@ -85,7 +85,7 @@
           var tagId = $("#tag-filter option:selected").val()
           $(location).attr(
             "href",
-            '{{ url('legacy_main', { 'name' : 'skills/skill_list.php'}) }}' + tagId
+            '/main/skills/skill_list.php?' + tagId
           )
         })
       })

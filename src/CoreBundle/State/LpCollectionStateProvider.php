@@ -26,38 +26,40 @@ final class LpCollectionStateProvider implements ProviderInterface
 
     public function supports(Operation $op, array $uriVariables = [], array $ctx = []): bool
     {
-        return $op->getClass() === CLp::class && $op->getName() === 'get_lp_collection_with_progress';
+        return CLp::class === $op->getClass() && 'get_lp_collection_with_progress' === $op->getName();
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         $f = $context['filters'] ?? [];
-        $parentNodeId = (int)($f['resourceNode.parent'] ?? 0);
+        $parentNodeId = (int) ($f['resourceNode.parent'] ?? 0);
         if ($parentNodeId <= 0) {
             return [];
         }
 
         $course = $this->em->createQuery(
             'SELECT c
-               FROM ' . Course::class . ' c
+               FROM '.Course::class.' c
                JOIN c.resourceNode rn
               WHERE rn.id = :nid'
         )
             ->setParameter('nid', $parentNodeId)
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
 
         if (!$course) {
             return [];
         }
 
-        $sid   = isset($f['sid']) ? (int)$f['sid'] : null;
+        $sid = isset($f['sid']) ? (int) $f['sid'] : null;
         $title = $f['title'] ?? null;
 
         $session = $sid ? $this->em->getReference(CoreSession::class, $sid) : null;
 
         $lps = $this->lpRepo->findAllByCourse($course, $session, $title)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         if (!$lps) {
             return [];
@@ -67,7 +69,7 @@ final class LpCollectionStateProvider implements ProviderInterface
         if ($user instanceof User) {
             $progress = $this->lpRepo->lastProgressForUser($lps, $user, $session);
             foreach ($lps as $lp) {
-                $lp->setProgress($progress[(int)$lp->getIid()] ?? 0);
+                $lp->setProgress($progress[(int) $lp->getIid()] ?? 0);
             }
         }
 

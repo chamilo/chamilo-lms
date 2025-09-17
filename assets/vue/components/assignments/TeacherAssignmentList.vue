@@ -2,8 +2,8 @@
   <BaseTable
     v-model:selected-items="selected"
     :is-loading="loading"
-    :multi-sort-meta="sortFields"
-    :rows="loadParams.itemsPerPage"
+    v-model:multi-sort-meta="sortFields"
+    v-model:rows="loadParams.itemsPerPage"
     :total-items="totalRecords"
     :values="assignments"
     data-key="@id"
@@ -11,120 +11,124 @@
     removable-sort
     @page="onPage"
     @sort="onSort"
-  >
-    <Column selection-mode="multiple" />
-    <Column
-      :header="t('Title')"
-      :sortable="true"
-      field="title"
     >
-      <template #body="slotProps">
-        <RouterLink
-          class="text-blue-600 hover:underline"
-          :to="getAssignmentDetailLink(slotProps.data)"
-        >
-          {{ slotProps.data.title }}
-        </RouterLink>
-        <BaseTag
-          v-if="slotProps.data.childFileCount > 0"
-          :label="`${slotProps.data.childFileCount}`"
-          type="success"
-          class="ml-2"
-        />
-      </template>
-    </Column>
-    <Column
-      :header="t('Deadline')"
-      :sortable="true"
-      field="assignment.expiresOn"
-    >
-      <template #body="slotProps">
-    <span v-if="slotProps.data.assignment?.expiresOn">
-      {{ formatStored(slotProps.data.assignment.expiresOn) }}
-    </span>
-        <span v-else class="text-gray-400 italic">No deadline</span>
-      </template>
-    </Column>
+  <Column selection-mode="multiple" />
 
-    <Column
-      :header="t('End date')"
-      :sortable="true"
-      field="assignment.endsOn"
-    >
-      <template #body="slotProps">
-    <span v-if="slotProps.data.assignment?.endsOn">
-      {{ formatStored(slotProps.data.assignment.endsOn) }}
-    </span>
-        <span v-else class="text-gray-400 italic">—</span>
-      </template>
-    </Column>
-    <Column :header="t('Number submitted')">
-      <template #body="slotProps">
-        <BaseTag
-          :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
-          type="success"
-        />
-      </template>
-    </Column>
-    <Column
-      :header="t('Actions')"
-      body-class="space-x-2"
-    >
-      <template #body="slotProps">
-        <div v-if="canEdit(slotProps.data)">
-          <BaseButton
-            :icon="
+  <Column
+    :header="t('Title')"
+    :sortable="true"
+    field="title"
+  >
+    <template #body="slotProps">
+      <RouterLink
+        class="text-blue-600 hover:underline"
+        :to="getAssignmentDetailLink(slotProps.data)"
+      >
+        {{ slotProps.data.title }}
+      </RouterLink>
+      <BaseTag
+        v-if="slotProps.data.childFileCount > 0"
+        :label="`${slotProps.data.childFileCount}`"
+        type="success"
+        class="ml-2"
+      />
+    </template>
+  </Column>
+
+  <Column
+    :header="t('Deadline')"
+    :sortable="true"
+    field="assignment.expiresOn"
+  >
+    <template #body="slotProps">
+        <span v-if="slotProps.data.assignment?.expiresOn">
+          {{ formatStored(slotProps.data.assignment.expiresOn) }}
+        </span>
+      <span v-else class="text-gray-400 italic">No deadline</span>
+    </template>
+  </Column>
+
+  <Column
+    :header="t('End date')"
+    :sortable="true"
+    field="assignment.endsOn"
+  >
+    <template #body="slotProps">
+        <span v-if="slotProps.data.assignment?.endsOn">
+          {{ formatStored(slotProps.data.assignment.endsOn) }}
+        </span>
+      <span v-else class="text-gray-400 italic">—</span>
+    </template>
+  </Column>
+
+  <Column :header="t('Number submitted')">
+    <template #body="slotProps">
+      <BaseTag
+        :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
+        type="success"
+      />
+    </template>
+  </Column>
+
+  <Column
+    :header="t('Actions')"
+    body-class="space-x-2"
+  >
+    <template #body="slotProps">
+      <div v-if="canEdit(slotProps.data)">
+        <BaseButton
+          :icon="
               RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink?.visibility
                 ? 'eye-on'
                 : RESOURCE_LINK_DRAFT === slotProps.data.firstResourceLink?.visibility
                   ? 'eye-off'
                   : ''
             "
-            :label="t('Visibility')"
-            only-icon
-            size="normal"
-            type="black"
-            @click="onClickVisibility(slotProps.data)"
-          />
-          <BaseButton
-            :label="t('Upload corrections package')"
-            icon="zip-unpack"
-            only-icon
-            size="normal"
-            type="success"
-            :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
-            @click="() => uploadCorrections(slotProps.data)"
-          />
-          <BaseButton
-            :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
-            :label="t('Download assignments package')"
-            icon="zip-pack"
-            only-icon
-            size="normal"
-            type="primary"
-            @click="() => downloadAssignments(slotProps.data)"
-          />
-          <BaseButton
-            :label="t('Edit')"
-            icon="edit"
-            only-icon
-            size="normal"
-            type="black"
-            @click="onClickEdit(slotProps.data)"
-          />
-        </div>
-      </template>
-    </Column>
-
-    <template #footer>
-      <BaseButton
-        :disabled="0 === selected.length || loading"
-        :label="t('Delete selected')"
-        icon="delete"
-        type="danger"
-        @click="onClickMultipleDelete()"
-      />
+          :label="t('Visibility')"
+          only-icon
+          size="normal"
+          type="black"
+          @click="onClickVisibility(slotProps.data)"
+        />
+        <BaseButton
+          :label="t('Upload corrections package')"
+          icon="zip-unpack"
+          only-icon
+          size="normal"
+          type="success"
+          :title="t('Each file name must match: YYYY-MM-DD_HH-MM_username_originalTitle.ext')"
+          @click="() => uploadCorrections(slotProps.data)"
+        />
+        <BaseButton
+          :disabled="0 === (slotProps.data.uniqueStudentAttemptsTotal || 0)"
+          :label="t('Download assignments package')"
+          icon="zip-pack"
+          only-icon
+          size="normal"
+          type="primary"
+          @click="() => downloadAssignments(slotProps.data)"
+        />
+        <BaseButton
+          :label="t('Edit')"
+          icon="edit"
+          only-icon
+          size="normal"
+          type="black"
+          @click="onClickEdit(slotProps.data)"
+        />
+      </div>
     </template>
+  </Column>
+
+  <template #footer>
+    <BaseButton
+      :disabled="0 === selected.length || loading"
+      :label="t('Delete selected')"
+      icon="delete"
+      type="danger"
+      @click="onClickMultipleDelete()"
+    />
+  </template>
   </BaseTable>
 </template>
 
@@ -168,19 +172,23 @@ const { abbreviatedDatetime } = useFormatDate()
 const sortFields = ref([{ field: "sentDate", order: -1 }])
 const loadParams = reactive({
   page: 1,
-  itemsPerPage: 10,
+  itemsPerPage: null,
 })
 
 const isAllowedToEdit = ref(false)
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
-  loadData()
 })
 
-watch(loadParams, () => {
-  loadData()
-})
+watch(
+  loadParams,
+  () => {
+    if (!loadParams.itemsPerPage) return
+    loadData()
+  },
+  { deep: true, immediate: true }
+)
 
 async function loadData() {
   loading.value = true
@@ -208,6 +216,7 @@ async function loadData() {
 
 const onPage = (event) => {
   loadParams.page = event.page + 1
+  loadParams.itemsPerPage = event.rows
 }
 
 const onSort = (event) => {

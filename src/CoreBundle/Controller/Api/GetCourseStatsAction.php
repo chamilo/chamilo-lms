@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -6,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Helpers\TrackingStatsHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
-use Chamilo\CoreBundle\Helpers\TrackingStatsHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -25,7 +26,7 @@ final class GetCourseStatsAction
 
     public function __invoke(int $id, string $metric, Request $request): JsonResponse
     {
-        /* @var Course $course */
+        /** @var Course $course */
         $course = $this->courseRepo->find($id);
         if (!$course) {
             throw new NotFoundHttpException('Course not found.');
@@ -43,9 +44,9 @@ final class GetCourseStatsAction
 
         // Switch by metric
         $payload = match ($metric) {
-            'course-avg-score'    => $this->statsHelper->getCourseAverageScore($course, $session),
+            'course-avg-score' => $this->statsHelper->getCourseAverageScore($course, $session),
             'course-avg-progress' => $this->statsHelper->getCourseAverageProgress($course, $session),
-            default               => throw new NotFoundHttpException('Metric not supported.'),
+            default => throw new NotFoundHttpException('Metric not supported.'),
         };
 
         return new JsonResponse($payload, 200);

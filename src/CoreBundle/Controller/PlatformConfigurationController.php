@@ -125,6 +125,8 @@ class PlatformConfigurationController extends AbstractController
                 'course.hide_scorm_export_link',
                 'ai_helpers.enable_ai_helpers',
                 'course.hide_scorm_pdf_link',
+                'platform.table_default_row',
+                'platform.table_row_list',
             ];
 
             $user = $this->userHelper->getCurrent();

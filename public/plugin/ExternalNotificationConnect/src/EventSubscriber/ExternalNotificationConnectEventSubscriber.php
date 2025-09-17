@@ -55,15 +55,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
             return;
         }
 
-        $url = Container::getRouter()
-            ->generate(
-                'legacy_main',
-                [
-                    'name' => 'portfolio/index.php?',
-                    'action' => 'view',
-                    'id' => $item->getId(),
-                ]
-            );
+        $url = '/main/portfolio/index.php?'.http_build_query(['action' => 'view', 'id' => $item->getId()]);
 
         try {
             $json = $this->doCreateRequest(
@@ -105,15 +97,7 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
             return;
         }
 
-        $url = Container::getRouter()
-            ->generate(
-                'legacy_main',
-                [
-                    'name' => 'portfolio/index.php?',
-                    'action' => 'view',
-                    'id' => $item->getId(),
-                ]
-            );
+        $url = '/main/portfolio/index.php?'.http_build_query(['action' => 'view', 'id' => $item->getId()]);
 
         try {
             $json = $this->doEditRequest(
@@ -228,16 +212,8 @@ class ExternalNotificationConnectEventSubscriber implements EventSubscriberInter
             return;
         }
 
-        $url = Container::getRouter()
-            ->generate(
-                'legacy_main',
-                [
-                    'name' => 'lp/lp_controller.php',
-                    'action' => 'view',
-                    'lp_id' => $lp->getIid(),
-                    'isStudentView' => 'true',
-                ]
-            );
+        $url = '/main/lp/lp_controller.php?'
+            .http_build_query(['action' => 'view', 'lp_id' => $lp->getIid(), 'isStudentView' => 'true']);
 
         try {
             $json = $this->doCreateRequest(

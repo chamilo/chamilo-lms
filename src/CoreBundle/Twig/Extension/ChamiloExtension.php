@@ -86,12 +86,7 @@ class ChamiloExtension extends AbstractExtension
 
     public function completeUserNameWithLink(User $user): string
     {
-        $url = $this->router->generate(
-            'legacy_main',
-            [
-                'name' => '/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id='.$user->getId(),
-            ]
-        );
+        $url = '/main/inc/ajax/user_manager.ajax.php?a=get_user_popup&user_id='.$user->getId();
 
         $name = $this->nameConventionHelper->getPersonName($user);
 
@@ -251,9 +246,9 @@ class ChamiloExtension extends AbstractExtension
             }(jQuery));
 
             $(function() {
-              $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).");
+              $('".$passwordInputId."').passwordCheckerChange(".json_encode($options).');
             });
-            </script>";
+            </script>';
     }
 
     /**

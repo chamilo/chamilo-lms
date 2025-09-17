@@ -130,16 +130,12 @@ final class CStudentPublicationPostStateProcessor implements ProcessorInterface
             $publication->getTitle()
         );
 
-        $publicationUrl = $this->router->generate(
-            'legacy_main',
-            [
-                'name' => 'work/work_list.php',
-                'cid' => $course->getId(),
-                'sid' => $session?->getId(),
-                'gid' => $group?->getIid(),
-                'id' => $publication->getIid(),
-            ]
-        );
+        $publicationUrl = '/main/work/work_list.php?'.http_build_query([
+            'cid' => $course->getId(),
+            'sid' => $session?->getId(),
+            'gid' => $group?->getIid(),
+            'id' => $publication->getIid(),
+        ]);
 
         $content = \sprintf(
             '<div><a href="%s">%s</a></div> %s',

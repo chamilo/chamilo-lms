@@ -8,7 +8,7 @@
                 </div>
                 <div class="user">
                     <a title="{{ item.complete_name }}"
-                       href="{{ url('legacy_main', {name:'social/profile.php'}) }}?u={{ item.id }}"
+                       href="/main/social/profile.php?u={{ item.id }}"
                        class="name">
                         {{ item.complete_name }}
                     </a>
@@ -21,8 +21,7 @@
                             <div class="course-info">
                                 <h5>
                                     <a title="{{ 'Course'|get_lang }} - {{ course.title }}"
-                                       href="{{
-                                        url('legacy_main', {name:'my_space/myStudents.php'}) ~ '?details=true&course=' ~ course.code ~ '&origin=tracking_course&id_session=0&student=' ~ item.id }}"
+                                       href="{{ '/main/my_space/myStudents.php?details=true&course=' ~ course.code ~ '&origin=tracking_course&id_session=0&student=' ~ item.id }}"
                                        target="_blank"
                                     >
                                         {{ course.title }}

@@ -9,7 +9,7 @@
                 <div class="panel-heading">
                     <h4>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ url('legacy_main', { 'name' : 'admin/careers.php', 'action' : 'edit', 'id' : item.id }) }}">
+                            <a href="/main/admin/careers.php?{{ { 'action' : 'edit', 'id' : item.id }|url_encode }}">
                                 {{ item.title }}
                             </a>
                         {% else %}
@@ -32,7 +32,7 @@
                                     <td class="promo" rowspan="{{ line }}">
                                         <h4 id="promotion-id-{{ prom.id }}">
                                             <a title="{{ prom.title }}"
-                                               href="{{ url('legacy_main', { 'name' : 'admin/promotions.php', 'action' : 'edit', 'id' : prom.id }) }}"
+                                               href="/main/admin/promotions.php?{{ { 'action' : 'edit', 'id' : prom.id }|url_encode }}"
                                            >
                                                 {{ prom.title }}
                                             </a>

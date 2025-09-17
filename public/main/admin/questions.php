@@ -360,10 +360,7 @@ $actionsLeft = Display::url(
     Container::getRouter()->generate('admin'),
 );
 
-$exportUrl = Container::getRouter()->generate(
-    'legacy_main',
-    ['name' => 'admin/questions.php', 'action' => 'export_pdf', ...$params]
-);
+$exportUrl = '/main/admin/questions.php?'.http_build_query(['action' => 'export_pdf', ...$params]);
 
 $actionsRight = Display::url(
     Display::return_icon('pdf.png', get_lang('Export to PDF'), [], ICON_SIZE_MEDIUM),

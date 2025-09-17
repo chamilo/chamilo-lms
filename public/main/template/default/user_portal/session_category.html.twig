@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-2">
                 {% if session_category.show_actions %}
-                    <a href="{{ url('legacy_main', { 'name' : 'session/session_category_edit.php', 'id' : session_category.id }) }}"
+                    <a href="/main/session/session_category_edit.php?{{ { 'id' : session_category.id }|url_encode }}"
                        class="thumbnail">
                         {{ 'ObjectIcon::SESSION'|mdi_icon(48, 'ch-tool-icon', session_category.title) }}
                     </a>
@@ -14,7 +14,7 @@
             <div class="col-md-10">
                 {% if session_category.show_actions %}
                     <div class="pull-right">
-                        <a href="{{ url('legacy_main', { 'name' : 'session/session_category_edit.php', 'id' : session_category.id }) }}">
+                        <a href="/main/session/session_category_edit.php?{{ { 'id' : session_category.id }|url_encode }}">
                             {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') }}
                         </a>
                     </div>

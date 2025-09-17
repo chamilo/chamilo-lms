@@ -60,7 +60,7 @@ class IndexBlocksController extends BaseController
 
         $json['users'] = [
             'id' => 'block-admin-users',
-            'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
+            'searchUrl' => '/main/admin/user_list.php',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsUsers(),
             'extraContent' => $this->getExtraContent('block-admin-users'),
@@ -69,7 +69,7 @@ class IndexBlocksController extends BaseController
         if ($this->isAdmin) {
             $json['courses'] = [
                 'id' => 'block-admin-courses',
-                'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'admin/course_list.php']),
+                'searchUrl' => '/main/admin/course_list.php',
                 'editable' => true,
                 'items' => $this->getItemsCourses(),
                 'extraContent' => $this->getExtraContent('block-admin-courses'),
@@ -139,7 +139,7 @@ class IndexBlocksController extends BaseController
         /* Sessions */
         $json['sessions'] = [
             'id' => 'block-admin-sessions',
-            'searchUrl' => $this->generateUrl('legacy_main', ['name' => 'session/session_list.php']),
+            'searchUrl' => '/main/session/session_list.php',
             'editable' => $this->isAdmin,
             'items' => $this->getItemsSessions(),
             'extraContent' => $this->getExtraContent('block-admin-sessions'),
@@ -159,7 +159,7 @@ class IndexBlocksController extends BaseController
         return [
             [
                 'class' => 'item-security-login-attempts',
-                'url'   => $this->generateUrl('admin_security_login_attempts'),
+                'url' => $this->generateUrl('admin_security_login_attempts'),
                 'label' => $this->translator->trans('Login attempts'),
             ],
         ];
@@ -170,80 +170,80 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-user-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
+            'url' => '/main/admin/user_list.php',
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
             'class' => 'item-user-add',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_add.php']),
+            'url' => '/main/admin/user_add.php',
             'label' => $this->translator->trans('Add a user'),
         ];
 
         if ($this->isAdmin) {
             $items[] = [
                 'class' => 'item-user-export',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_export.php']),
+                'url' => '/main/admin/user_export.php',
                 'label' => $this->translator->trans('Export users list'),
             ];
             $items[] = [
                 'class' => 'item-user-import',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_import.php']),
+                'url' => '/main/admin/user_import.php',
                 'label' => $this->translator->trans('Import users list'),
             ];
             $items[] = [
                 'class' => 'item-user-import-update',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_update_import.php']),
+                'url' => '/main/admin/user_update_import.php',
                 'label' => $this->translator->trans('Edit users list'),
             ];
             $items[] = [
                 'class' => 'item-user-import-anonymize',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_anonymize_import.php']),
+                'url' => '/main/admin/user_anonymize_import.php',
                 'label' => $this->translator->trans('Anonymise users list'),
             ];
 
             if (\count($this->extAuthSource['extldap']) > 0) {
                 $items[] = [
                     'class' => 'item-user-ldap-list',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_users_list.php']),
+                    'url' => '/main/admin/ldap_users_list.php',
                     'label' => $this->translator->trans('Import LDAP users into the platform'),
                 ];
             }
 
             $items[] = [
                 'class' => 'item-user-field',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_fields.php', 'type' => 'user']),
+                'url' => '/main/admin/extra_fields.php?'.http_build_query(['type' => 'user']),
                 'label' => $this->translator->trans('Profiling'),
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/usergroups.php']),
+                'url' => '/main/admin/usergroups.php',
                 'label' => $this->translator->trans('Classes'),
             ];
 
             if ('true' === $this->settingsManager->getSetting('admin.show_link_request_hrm_user')) {
                 $items[] = [
                     'class' => 'item-user-linking-requests',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_linking_requests.php']),
+                    'url' => '/main/admin/user_linking_requests.php',
                     'label' => $this->translator->trans('Student linking requests'),
                 ];
             }
         } else {
             $items[] = [
                 'class' => 'item-user-import',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_import.php']),
+                'url' => '/main/admin/user_import.php',
                 'label' => $this->translator->trans('Import users list'),
             ];
             $items[] = [
                 'class' => 'item-user-groups',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/usergroups.php']),
+                'url' => '/main/admin/usergroups.php',
                 'label' => $this->translator->trans('Classes'),
             ];
 
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_role')) {
                 $items = array_filter($items, function (array $item) {
                     $urls = [
-                        $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
-                        $this->generateUrl('legacy_main', ['name' => 'admin/user_add.php']),
+                        '/main/admin/user_list.php',
+                        '/main/admin/user_add.php',
                     ];
 
                     return \in_array($item['url'], $urls, true);
@@ -253,7 +253,7 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.limit_session_admin_list_users')) {
                 $items = array_filter($items, function (array $item): bool {
                     $urls = [
-                        $this->generateUrl('legacy_main', ['name' => 'admin/user_list.php']),
+                        '/main/admin/user_list.php',
                     ];
 
                     return !\in_array($item['url'], $urls, true);
@@ -263,12 +263,12 @@ class IndexBlocksController extends BaseController
             if ('true' === $this->settingsManager->getSetting('session.allow_session_admin_extra_access')) {
                 $items[] = [
                     'class' => 'item-user-import-update',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_update_import.php']),
+                    'url' => '/main/admin/user_update_import.php',
                     'label' => $this->translator->trans('Edit users list'),
                 ];
                 $items[] = [
                     'class' => 'item-user-export',
-                    'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_export.php']),
+                    'url' => '/main/admin/user_export.php',
                     'label' => $this->translator->trans('Export users list'),
                 ];
             }
@@ -308,56 +308,56 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-course-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_list.php']),
+            'url' => '/main/admin/course_list.php',
             'label' => $this->translator->trans('Course list'),
         ];
         $items[] = [
             'class' => 'item-course-add',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_add.php']),
+            'url' => '/main/admin/course_add.php',
             'label' => $this->translator->trans('Add course'),
         ];
 
         if ('true' === $this->settingsManager->getSetting('course.course_validation')) {
             $items[] = [
                 'class' => 'item-course-request',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_request_review.php']),
+                'url' => '/main/admin/course_request_review.php',
                 'label' => $this->translator->trans('Review incoming course requests'),
             ];
             $items[] = [
                 'class' => 'item-course-request-accepted',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_request_accepted.php']),
+                'url' => '/main/admin/course_request_accepted.php',
                 'label' => $this->translator->trans('Accepted course requests'),
             ];
             $items[] = [
                 'class' => 'item-course-request-rejected',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_request_rejected.php']),
+                'url' => '/main/admin/course_request_rejected.php',
                 'label' => $this->translator->trans('Rejected course requests'),
             ];
         }
 
         $items[] = [
             'class' => 'item-course-export',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_export.php']),
+            'url' => '/main/admin/course_export.php',
             'label' => $this->translator->trans('Export courses'),
         ];
         $items[] = [
             'class' => 'item-course-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_import.php']),
+            'url' => '/main/admin/course_import.php',
             'label' => $this->translator->trans('Import courses list'),
         ];
         $items[] = [
             'class' => 'item-course-category',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_category.php']),
+            'url' => '/main/admin/course_category.php',
             'label' => $this->translator->trans('Course categories'),
         ];
         $items[] = [
             'class' => 'item-course-subscription',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/subscribe_user2course.php']),
+            'url' => '/main/admin/subscribe_user2course.php',
             'label' => $this->translator->trans('Add a user to a course'),
         ];
         $items[] = [
             'class' => 'item-course-subscription-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/course_user_import.php']),
+            'url' => '/main/admin/course_user_import.php',
             'label' => $this->translator->trans('Import users list'),
         ];
         // $items[] = [
@@ -368,7 +368,7 @@ class IndexBlocksController extends BaseController
         if ('true' === $this->settingsManager->getSetting('gradebook.gradebook_enable_grade_model')) {
             $items[] = [
                 'class' => 'item-grade-model',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/grade_models.php']),
+                'url' => '/main/admin/grade_models.php',
                 'label' => $this->translator->trans('Grading model'),
             ];
         }
@@ -376,24 +376,24 @@ class IndexBlocksController extends BaseController
         if (\count($this->extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students.php']),
+                'url' => '/main/admin/ldap_import_students.php',
                 'label' => $this->translator->trans('Import LDAP users into a course'),
             ];
         }
 
         $items[] = [
             'class' => 'item-course-field',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_fields.php', 'type' => 'course']),
+            'url' => '/main/admin/extra_fields.php?'.http_build_query(['type' => 'course']),
             'label' => $this->translator->trans('Manage extra fields for courses'),
         ];
         $items[] = [
             'class' => 'item-question-bank',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/questions.php']),
+            'url' => '/main/admin/questions.php',
             'label' => $this->translator->trans('Questions'),
         ];
         $items[] = [
             'class' => 'item-resource-sequence',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php', 'type' => SequenceResource::COURSE_TYPE]),
+            'url' => '/main/admin/resource_sequence.php?'.http_build_query(['type' => SequenceResource::COURSE_TYPE]),
             'label' => $this->translator->trans('Resources sequencing'),
         ];
 
@@ -410,25 +410,22 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-language-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/languages.php']),
+            'url' => '/main/admin/languages.php',
             'label' => $this->translator->trans('Languages'),
         ];
         $items[] = [
             'class' => 'item-plugin-list',
-            'url' => $this->generateUrl(
-                'legacy_main',
-                ['name' => 'admin/settings.php', 'category' => 'Plugins']
-            ),
+            'url' => '/main/admin/settings.php?'.http_build_query(['category' => 'Plugins']),
             'label' => $this->translator->trans('Plugins'),
         ];
         $items[] = [
             'class' => 'item-region-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/settings.php', 'category' => 'Regions']),
+            'url' => '/main/admin/settings.php?'.http_build_query(['category' => 'Regions']),
             'label' => $this->translator->trans('Regions'),
         ];
         $items[] = [
             'class' => 'item-global-announcement',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/system_announcements.php']),
+            'url' => '/main/admin/system_announcements.php',
             'label' => $this->translator->trans('Portal news'),
         ];
         $items[] = [
@@ -438,7 +435,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-agenda-reminders',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/import_course_agenda_reminders.php']),
+            'url' => '/main/admin/import_course_agenda_reminders.php',
             'label' => $this->translator->trans('Import course events'),
         ];
         $items[] = [
@@ -456,22 +453,22 @@ class IndexBlocksController extends BaseController
         */
         $items[] = [
             'class' => 'item-registration-page',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'auth/registration.php', 'create_intro_page' => 1]),
+            'url' => '/main/auth/registration.php?'.http_build_query(['create_intro_page' => 1]),
             'label' => $this->translator->trans('Setting the registration page'),
         ];
         $items[] = [
             'class' => 'item-stats',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/statistics/index.php']),
+            'url' => '/main/admin/statistics/index.php',
             'label' => $this->translator->trans('Statistics'),
         ];
         $items[] = [
             'class' => 'item-stats-report',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'my_space/company_reports.php']),
+            'url' => '/main/my_space/company_reports.php',
             'label' => $this->translator->trans('Reports'),
         ];
         $items[] = [
             'class' => 'item-teacher-time-report',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/teacher_time_report.php']),
+            'url' => '/main/admin/teacher_time_report.php',
             'label' => $this->translator->trans('Teachers time report'),
         ];
 
@@ -487,14 +484,14 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-field',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_field_list.php']),
+            'url' => '/main/admin/extra_field_list.php',
             'label' => $this->translator->trans('Extra fields'),
         ];
 
         if (api_is_global_platform_admin()) {
             $items[] = [
                 'class' => 'item-access-url',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/access_urls.php']),
+                'url' => '/main/admin/access_urls.php',
                 'label' => $this->translator->trans('Configure multiple access URL'),
             ];
         }
@@ -517,14 +514,14 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-mail-template',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'mail_template/list.php']),
+            'url' => '/main/mail_template/list.php',
             'label' => $this->translator->trans('Mail templates'),
         ];
 
         if ('true' === api_get_setting('platform.notification_event')) {
             $items[] = [
                 'class' => 'item-notification-list',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'notification_event/list.php']),
+                'url' => '/main/notification_event/list.php',
                 'label' => $this->translator->trans('Notifications'),
             ];
         }
@@ -553,7 +550,7 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-system-template-admin',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/settings.php', 'category' => 'Templates']),
+            'url' => '/main/admin/settings.php?'.http_build_query(['category' => 'Templates']),
             'label' => $this->translator->trans('System templates'),
         ];
 
@@ -571,22 +568,22 @@ class IndexBlocksController extends BaseController
 
         $items[] = [
             'class' => 'item-special-export',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/special_exports.php']),
+            'url' => '/main/admin/special_exports.php',
             'label' => $this->translator->trans('Special exports'),
         ];
         /*$items[] = [
-            'url' => $this->>$this->generateUrl('legacy_main), ['name' => 'admin/periodic_export.php',
+            'url' => '/main/admin/periodic_export.php',
             'label' => $this->translator->$this->trans('Periodic export'),
         ];*/
         $items[] = [
             'class' => 'item-system-status',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/system_status.php']),
+            'url' => '/main/admin/system_status.php',
             'label' => $this->translator->trans('System status'),
         ];
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
             $items[] = [
                 'class' => 'item-data-filler',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/filler.php']),
+                'url' => '/main/admin/filler.php',
                 'label' => $this->translator->trans('Data filler'),
             ];
         }
@@ -594,19 +591,19 @@ class IndexBlocksController extends BaseController
         if (is_dir(api_get_path(SYS_TEST_PATH))) {
             $items[] = [
                 'class' => 'item-email-tester',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/email_tester.php']),
+                'url' => '/main/admin/email_tester.php',
                 'label' => $this->translator->trans('E-mail tester'),
             ];
         }
 
         $items[] = [
             'class' => 'item-ticket-system',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'ticket/tickets.php']),
+            'url' => '/main/ticket/tickets.php',
             'label' => $this->translator->trans('Tickets'),
         ];
 
         $items[] = [
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/cron_status.php']),
+            'url' => '/main/session/cron_status.php',
             'label' => $this->translator->trans('Update session status'),
         ];
 
@@ -641,33 +638,33 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-skill-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_import.php']),
+            'url' => '/main/skills/skills_import.php',
             'label' => $this->translator->trans('Skills import'),
         ];
         $items[] = [
             'class' => 'item-skill-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skill_list.php']),
+            'url' => '/main/skills/skill_list.php',
             'label' => $this->translator->trans('Manage skills'),
         ];
         $items[] = [
             'class' => 'item-skill-level',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skill.php']),
+            'url' => '/main/skills/skill.php',
             'label' => $this->translator->trans('Manage skills levels'),
         ];
 
         $items[] = [
             'class' => 'item-skill-ranking',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'social/skills_ranking.php']),
+            'url' => '/main/social/skills_ranking.php',
             'label' => $this->translator->trans('Skills ranking'),
         ];
         $items[] = [
             'class' => 'item-skill-gradebook',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'skills/skills_gradebook.php']),
+            'url' => '/main/skills/skills_gradebook.php',
             'label' => $this->translator->trans('Skills and assessments'),
         ];
 
         /*$items[] = [
-            'url' => $this->$this->generateUrl('legacy_main', ['name' => 'admin/skill_badge.php'),
+            'url' => '/main/admin/skill_badge.php',
             'label' => $this->translator->trans('Badges'),
         ];*/
 
@@ -679,7 +676,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-gradebook-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'gradebook_list.php']),
+            'url' => '/main/admin/gradebook_list.php',
             'label' => $this->translator->trans('List'),
         ];
 
@@ -691,7 +688,7 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-privacy-consent',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_list_consent.php']),
+            'url' => '/main/admin/user_list_consent.php',
             'label' => $this->translator->trans('User list'),
         ];
         $items[] = [
@@ -740,27 +737,27 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-installation-guide',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/installation_guide.html']),
+            'url' => '/documentation/installation_guide.html',
             'label' => $this->translator->trans('Installation guide'),
         ];
         $items[] = [
             'class' => 'item-changelog',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/changelog.html']),
+            'url' => '/documentation/changelog.html',
             'label' => $this->translator->trans('Changes in last version'),
         ];
         $items[] = [
             'class' => 'item-credits',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/credits.html']),
+            'url' => '/documentation/credits.html',
             'label' => $this->translator->trans('Contributors list'),
         ];
         $items[] = [
             'class' => 'item-security',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/security.html']),
+            'url' => '/documentation/security.html',
             'label' => $this->translator->trans('Security guide'),
         ];
         $items[] = [
             'class' => 'item-optimization',
-            'url' => $this->generateUrl('legacy_main', ['name' => '../documentation/optimization.html']),
+            'url' => '/documentation/optimization.html',
             'label' => $this->translator->trans('Optimization guide'),
         ];
         $items[] = [
@@ -782,45 +779,45 @@ class IndexBlocksController extends BaseController
         $items = [];
         $items[] = [
             'class' => 'item-session-list',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_list.php']),
+            'url' => '/main/session/session_list.php',
             'label' => $this->translator->trans('Training sessions list'),
         ];
         $items[] = [
             'class' => 'item-session-add',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_add.php']),
+            'url' => '/main/session/session_add.php',
             'label' => $this->translator->trans('Add a training session'),
         ];
         $items[] = [
             'class' => 'item-session-category',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_category_list.php']),
+            'url' => '/main/session/session_category_list.php',
             'label' => $this->translator->trans('Sessions categories list'),
         ];
         $items[] = [
             'class' => 'item-session-import',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import.php']),
+            'url' => '/main/session/session_import.php',
             'label' => $this->translator->trans('Import sessions list'),
         ];
         $items[] = [
             'class' => 'item-session-import-hr',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_import_drh.php']),
+            'url' => '/main/session/session_import_drh.php',
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
         if (\count($this->extAuthSource['ldap']) > 0) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/ldap_import_students_to_session.php']),
+                'url' => '/main/admin/ldap_import_students_to_session.php',
                 'label' => $this->translator->trans('Import LDAP users into a session'),
             ];
         }
         $items[] = [
             'class' => 'item-session-export',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'session/session_export.php']),
+            'url' => '/main/session/session_export.php',
             'label' => $this->translator->trans('Export sessions list'),
         ];
 
         $items[] = [
             'class' => 'item-session-course-copy',
-            'url' => $this->generateUrl('legacy_main', ['name' => 'coursecopy/copy_course_session.php']),
+            'url' => '/main/coursecopy/copy_course_session.php',
             'label' => $this->translator->trans('Copy from course in session to another session'),
         ];
 
@@ -830,37 +827,34 @@ class IndexBlocksController extends BaseController
             // Disabled until it is reemplemented to work with Chamilo 2
             /*                $items[] = [
                                 'class' => 'item-session-user-move-stats',
-                                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/user_move_stats.php']),
+                                'url' => '/main/admin/user_move_stats.php',
                                 'label' => $this->translator->trans('Move users results from/to a session'),
                             ];
              */
             $items[] = [
                 'class' => 'item-session-user-move',
-                'url' => $this->generateUrl(
-                    'legacy_main',
-                    ['name' => 'coursecopy/move_users_from_course_to_session.php']
-                ),
+                'url' => '/main/coursecopy/move_users_from_course_to_session.php',
                 'label' => $this->translator->trans('Move users results from base course to a session'),
             ];
 
             $items[] = [
                 'class' => 'item-career-dashboard',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/career_dashboard.php']),
+                'url' => '/main/admin/career_dashboard.php',
                 'label' => $this->translator->trans('Careers and promotions'),
             ];
             $items[] = [
                 'class' => 'item-session-field',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/extra_fields.php', 'type' => 'session']),
+                'url' => '/main/admin/extra_fields.php?'.http_build_query(['type' => 'session']),
                 'label' => $this->translator->trans('Manage session fields'),
             ];
             $items[] = [
                 'class' => 'item-resource-sequence',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/resource_sequence.php', 'type' => SequenceResource::SESSION_TYPE]),
+                'url' => '/main/admin/resource_sequence.php?'.http_build_query(['type' => SequenceResource::SESSION_TYPE]),
                 'label' => $this->translator->trans('Resources sequencing'),
             ];
             $items[] = [
                 'class' => 'item-export-exercise-results',
-                'url' => $this->generateUrl('legacy_main', ['name' => 'admin/export_exercise_results.php']),
+                'url' => '/main/admin/export_exercise_results.php',
                 'label' => $this->translator->trans('Export all results from an exercise'),
             ];
         }

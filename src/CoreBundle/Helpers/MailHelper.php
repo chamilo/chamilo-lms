@@ -57,7 +57,7 @@ final class MailHelper
         }
 
         // Reply to first
-        if (!empty($replyToAddress) && isset($replyToAddress['mail']) && isset($replyToAddress['name'])) {
+        if (!empty($replyToAddress) && isset($replyToAddress['mail'], $replyToAddress['name'])) {
             $replyToEmailValidation = $this->validator->validate($replyToAddress['mail'], $emailConstraint);
 
             if (0 === $replyToEmailValidation->count()) {

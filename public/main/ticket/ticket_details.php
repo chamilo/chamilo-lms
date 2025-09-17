@@ -168,7 +168,7 @@ $title = 'Ticket #'.$ticket['ticket']['code'];
 
 if ($allowEdition && isset($_REQUEST['close'])) {
     TicketManager::close_ticket($ticket_id, $user_id);
-    $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSE;
+    $ticket['ticket']['status_id'] = TicketManager::STATUS_CLOSED;
     $ticket['ticket']['status'] = get_lang('Closed');
 }
 
@@ -227,7 +227,7 @@ $subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject'
 
 if ($allowEdition
     && TicketManager::STATUS_FORWARDED != $ticket['ticket']['status_id']
-    && TicketManager::STATUS_CLOSE
+    && TicketManager::STATUS_CLOSED
     != $ticket['ticket']['status_id']
 ) {
     $form = getForm($ticket['ticket']);
@@ -389,7 +389,7 @@ Display::display_header();
 echo Display::toolbarAction('ticket', $actions);
 
 $bold = '';
-if (TicketManager::STATUS_CLOSE == $ticket['ticket']['status_id']) {
+if (TicketManager::STATUS_CLOSED == $ticket['ticket']['status_id']) {
     $bold = 'style = "font-weight: bold;"';
 }
 $senderData = get_lang('added by').' '.$ticket['user']['complete_name_with_message_link'];

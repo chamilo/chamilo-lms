@@ -748,7 +748,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         'user_subscriptions:sessions',
         'student_publication_rel_user:read',
         'student_publication:read',
-        'student_publication_comment:read'
+        'student_publication_comment:read',
     ])]
     protected string $fullName;
 

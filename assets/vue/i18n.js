@@ -1,28 +1,100 @@
 import { createI18n } from "vue-i18n"
 
+// Load all locale JSON files inside assets/locales (flat folder)
 function loadLocaleMessages() {
-  const locales = require.context("./../locales", true, /[A-Za-z0-9-_,\s]+\.json$/i)
+  const ctx = require.context("../locales", false, /[A-Za-z0-9-_,\s]+\.json$/i)
   const messages = {}
-
-  locales.keys().forEach((key) => {
-    const matched = key.match(/([A-Za-z0-9-_]+)\./i)
-    if (matched && matched.length > 1) {
-      const locale = matched[1]
-      messages[locale] = locales(key)
+  ctx.keys().forEach((key) => {
+    const m = key.match(/([A-Za-z0-9-_]+)\.json$/i)
+    if (m && m[1]) {
+      const localeKey = m[1]
+      messages[localeKey] = ctx(key)
     }
   })
 
   return messages
 }
 
-let locale = document.querySelector("html").lang
-if (!locale) {
-  locale = "en"
+// Resolve the best available bundle for a requested code
+function resolveBestLocale(requested, messages) {
+  const keys = Object.keys(messages)
+  if (!keys.length) return { requested, resolved: "en", base: null }
+
+  const lowerMap = new Map(keys.map((k) => [k.toLowerCase(), k]))
+  const raw = String(requested || "").trim()
+  const norm = raw.replace(/-/g, "_")
+  const base = norm.toLowerCase().split("_")[0] || norm.toLowerCase()
+
+  const existsCI = (k) => lowerMap.has(String(k).toLowerCase())
+  const pickCI = (k) => lowerMap.get(String(k).toLowerCase())
+
+  // 1) exact (case-insensitive)
+  if (existsCI(norm)) return { requested: raw, resolved: pickCI(norm), base }
+
+  // 2) try opposite normalization
+  const dash = norm.replace(/_/g, "-")
+  if (existsCI(dash)) return { requested: raw, resolved: pickCI(dash), base }
+
+  // 3) try base (e.g. "es")
+  if (existsCI(base)) return { requested: raw, resolved: pickCI(base), base }
+
+  // 4) first file starting with base_ or base-
+  const prefUnd = keys.find((k) => k.toLowerCase().startsWith(base + "_"))
+  if (prefUnd) return { requested: raw, resolved: prefUnd, base }
+  const prefDash = keys.find((k) => k.toLowerCase().startsWith(base + "-"))
+  if (prefDash) return { requested: raw, resolved: prefDash, base }
+
+  // 5) fallback to English
+  return { requested: raw, resolved: "en", base }
 }
 
-export default createI18n({
+// Build fallback chain (prefer base, then English)
+function buildFallbackChain(base, resolved, messages) {
+  const chain = []
+  if (base && base !== resolved && messages[base]) chain.push(base)
+  chain.push("en")
+  return chain
+}
+
+const messages = loadLocaleMessages()
+
+// Prefer previously chosen locale, otherwise <html lang>, otherwise "en"
+const stored = typeof localStorage !== "undefined" ? localStorage.getItem("app_locale") : null
+const initialHtmlLocale = stored || document.documentElement?.lang || "en"
+const initial = resolveBestLocale(initialHtmlLocale, messages)
+
+// Create runtime alias if requested bundle doesn't exist
+if (!messages[initial.requested] && messages[initial.resolved]) {
+  messages[initial.requested] = messages[initial.resolved]
+}
+
+const i18n = createI18n({
   legacy: false,
-  locale: locale,
-  fallbackLocale: "en",
-  messages: loadLocaleMessages(),
+  globalInjection: true, // allow using $t in Options API
+  locale: initial.requested, // keep requested code (e.g. "es_spanish")
+  fallbackLocale: buildFallbackChain(initial.base, initial.resolved, messages),
+  messages,
 })
+
+// Public API: switch locale at runtime (no page reload)
+export function setLocale(code) {
+  const target = resolveBestLocale(code, messages)
+
+  // Create/refresh runtime alias for the requested key
+  if (!i18n.global.availableLocales.includes(target.requested) && messages[target.resolved]) {
+    i18n.global.setLocaleMessage(target.requested, messages[target.resolved])
+  }
+
+  // Update fallback chain and current locale reactively
+  i18n.global.fallbackLocale.value = buildFallbackChain(target.base, target.resolved, messages)
+  i18n.global.locale.value = target.requested
+
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = target.requested
+  }
+  if (typeof localStorage !== "undefined") {
+    localStorage.setItem("app_locale", target.requested)
+  }
+}
+
+export default i18n

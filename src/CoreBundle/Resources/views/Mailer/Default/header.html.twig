@@ -1,13 +1,24 @@
 {% autoescape false %}
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
-    <tr>
-        <td width="245" {{ mail_header_style }}>
-            <img class="navbar-brand-full" width="130"
-                 src="{{ theme_asset_base64('images/header-logo.png', true) }}"
-                 alt="Chamilo"/>
-        </td>
-        <td width="100%">            &nbsp;
-        </td>
-    </tr>
-</table>
+    {# Fallbacks: email-logo (SVG/PNG) → header-logo (SVG/PNG) #}
+    {% set src = theme_asset_base64('images/email-logo.svg') %}
+    {% if not src %}{% set src = theme_asset_base64('images/email-logo.png') %}{% endif %}
+    {% if not src %}{% set src = theme_asset_base64('images/header-logo.svg') %}{% endif %}
+    {% if not src %}{% set src = theme_asset_base64('images/header-logo.png') %}{% endif %}
+    <table border="0" cellpadding="10" cellspacing="0" width="100%">
+        <tr>
+            <td width="245" valign="top" {{ mail_header_style|default('') }}>
+                {% if src %}
+                    <img
+                        alt="Chamilo"
+                        width="130"
+                        height="60"
+                        src="{{ src }}"
+                    />
+                {% else %}
+                    <span style="font-weight:600;font-size:16px;line-height:1;">Chamilo</span>
+                {% endif %}
+            </td>
+            <td width="100%">&nbsp;</td>
+        </tr>
+    </table>
 {% endautoescape %}

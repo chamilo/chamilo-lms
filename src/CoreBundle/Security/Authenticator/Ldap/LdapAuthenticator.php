@@ -56,35 +56,35 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         private readonly TranslatorInterface $translator,
         Ldap $ldap,
     ) {
-        $params = $this->authConfigHelper->getLdapConfig(
+        $ldapConfig = $this->authConfigHelper->getLdapConfig(
             $this->accessUrlHelper->getCurrent()
         );
 
-        if (!($params['enabled'] ?? false)) {
+        if (!$ldapConfig['enabled']) {
             return;
         }
 
         $this->isEnabled = true;
 
-        $dnString = $params['dn_string'] ?? '{user_identifier}';
-        $searchDn = $params['search_dn'] ?? '';
-        $searchPassword = $params['search_password'] ?? '';
-        $queryString = $params['query_string'] ?? null;
+        $dnString = $ldapConfig['dn_string'] ?? '{user_identifier}';
+        $searchDn = $ldapConfig['search_dn'] ?? '';
+        $searchPassword = $ldapConfig['search_password'] ?? '';
+        $queryString = $ldapConfig['query_string'] ?? null;
 
-        $this->dataCorrespondence = array_filter($params['data_correspondence']) ?: [];
+        $this->dataCorrespondence = array_filter($ldapConfig['data_correspondence']) ?: [];
 
         $this->ldapBadge = new LdapBadge(Ldap::class, $dnString, $searchDn, $searchPassword, $queryString);
 
         $this->userProvider = new LdapUserProvider(
             $ldap,
-            $params['base_dn'],
+            $ldapConfig['base_dn'],
             $searchDn ?: '',
             $searchPassword ?: null,
             ['ROLE_STUDENT'],
-            $params['uid_key'] ?? null,
-            $params['filter'] ?? null,
-            $params['password_attribute'] ?? null,
-            array_values($this->dataCorrespondence + [$params['password_attribute']]),
+            $ldapConfig['uid_key'] ?? null,
+            $ldapConfig['filter'] ?? null,
+            $ldapConfig['password_attribute'] ?? null,
+            array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]),
         );
     }
 

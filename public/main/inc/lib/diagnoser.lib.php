@@ -565,18 +565,43 @@ class Diagnoser
 
         // Extensions
         $extensions = [
+            'curl' => [
+                'link' => 'https://php.net/curl',
+                'expected' => 1,
+                'comment' => get_lang('This extension must be loaded.'),
+            ],
+            'exif' => [
+                'link' => 'https://www.php.net/exif',
+                'expected' => 1,
+                'comment' => get_lang('This extension should be loaded.'),
+            ],
+            'fileinfo' => [
+                'link' => 'https://php.net/fileinfo',
+                'expected' => 1,
+                'comment' => get_lang('This extension must be loaded.'),
+            ],
             'gd' => [
                 'link' => 'https://php.net/gd',
                 'expected' => 1,
                 'comment' => get_lang('This extension must be loaded.'),
             ],
-            'pdo_mysql' => [
-                'link' => 'https://php.net/manual/en/ref.pdo-mysql.php',
+            'ldap' => [
+                'link' => 'https://php.net/ldap',
                 'expected' => 1,
-                'comment' => get_lang('This extension must be loaded.'),
+                'comment' => get_lang('This extension should be loaded.'),
+            ],
+            'mbstring' => [
+                'link' => 'https://www.php.net/mbstring',
+                'expected' => 1,
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'pcre' => [
                 'link' => 'https://php.net/pcre',
+                'expected' => 1,
+                'comment' => get_lang('This extension must be loaded.'),
+            ],
+            'pdo_mysql' => [
+                'link' => 'https://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
                 'comment' => get_lang('This extension must be loaded.'),
             ],
@@ -595,39 +620,19 @@ class Diagnoser
                 'expected' => 1,
                 'comment' => get_lang('This extension must be loaded.'),
             ],
-            'curl' => [
-                'link' => 'https://php.net/curl',
-                'expected' => 1,
-                'comment' => get_lang('This extension must be loaded.'),
-            ],
-            'fileinfo' => [
-                'link' => 'https://php.net/fileinfo',
-                'expected' => 1,
-                'comment' => get_lang('This extension must be loaded.'),
-            ],
-            'xsl' => [
-                'link' => 'https://php.net/xsl',
-                'expected' => 2,
-                'comment' => get_lang('This extension should be loaded.'),
-            ],
-            'Zend OPcache' => [
-                'link' => 'https://php.net/opcache',
-                'expected' => 2,
-                'comment' => get_lang('This extension should be loaded.'),
-            ],
             'apcu' => [
                 'link' => 'https://php.net/apcu',
                 'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],
-            'exif' => [
-                'link' => 'https://www.php.net/exif',
-                'expected' => 1,
+            'bcmath' => [
+                'link' => 'https://php.net/bcmath',
+                'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],
-            'mbstring' => [
-                'link' => 'https://www.php.net/mbstring',
-                'expected' => 1,
+            'OPcache' => [
+                'link' => 'https://php.net/opcache',
+                'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],
             'openssl' => [ //required only for DKIM e-mail signatures
@@ -635,8 +640,8 @@ class Diagnoser
                 'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],
-            'bcmath' => [
-                'link' => 'https://php.net/bcmath',
+            'xsl' => [
+                'link' => 'https://php.net/xsl',
                 'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],

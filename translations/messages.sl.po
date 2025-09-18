@@ -2153,7 +2153,7 @@ msgstr "Pripadajači dokumenti bodo dodani izvozu avtomatično."
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "V primeru, da želite izvoziti učno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vključeni v izvoz; izberete jih iz seznama testov."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "Arhivska mapa, ki jo uporablja to orodje, ne omogoča pisalnega dostopa. Prosim da se obrnete na upravitelja platforme."
 
 msgid "Target course"
@@ -17229,12 +17229,6 @@ msgstr "Preimenuj in komentiraj"
 msgid "Photo retouching"
 msgstr "Retuširanje"
 
-msgid "Enable external Pixlr services"
-msgstr "Omogoči zunanjo Pixlr storitev"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr omogoča urejanje, prilagajanje in filtriranje vaših fotografij (podobno kot npr. Photoshop). Je idealen sopotnik pri procesiranju bitnih slik."
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "%s promocij je bilo arhiviranih. Akcija ima za posledico, da postanejo nevidne vse seje, registrirane v tej promociji. Akcijo lahko prekličete z dearhiviranjem te promocije."
 
@@ -18270,16 +18264,16 @@ msgstr "Kategorije foruma"
 msgid "Cleanup of cache and temporary files"
 msgstr "Čiščenje mape arhivov"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "Chamilo vzdržuje kopijo večine začasnih datotek, ki so ustvarjene med izvajanjem (rezervne kopije, izvozi, kopije, ...) v mapi 'archive'. Količina datotek in njihova velikost v določenem času lahko presežeta zmožnosti sistema. Kliknite spodnji gumb za čiščenje arhivske mape sistema. Operacijo je mogoče avtomatizirati preko cron procesa, če pa to ni možno, čistite občasno mapo preko te strani."
 
 msgid "Proceed with cleanup"
 msgstr "Nadaljuj s čiščenjem"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "čiščenje mape arhivov je bilo uspešno."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Iz neznanega razloga mape chamilo/var/cache/ ni bilo mogoče očistiti. "
 "Prosimo, očistite jo ročno: povežite se s strežnikom in izbrišite vse "

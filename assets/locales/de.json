@@ -51,7 +51,7 @@
     "Expiration date": "Verfallsdatum",
     "Modified": "Ver\u00e4ndert",
     "Size": "Gr\u00f6\u00dfe",
-    "New folder": "Neue Datei",
+    "New folder": "Neuer Ordner",
     "Name": "Name",
     "Title is required": "\u00dcberschrift fehlt",
     "Actions": "Actions",
@@ -1120,5 +1120,8 @@
     "Visual theme (assets)": "Visual theme (assets)",
     "Branding (logos)": "Branding (logos)",
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
-    "Updated": "Aktualisiert"
+    "Updated": "Aktualisiert",
+    "Explore more courses": "Erkunden Sie weitere Kurse",
+    "Sessions catalogue": "Sessionskatalog",
+    "Videoconference": "Video-Konferenz"
 }

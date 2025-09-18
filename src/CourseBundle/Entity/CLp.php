@@ -42,9 +42,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapiContext: [
                 'summary' => 'List learning paths filtered by resourceNode.parent (course) and sid',
                 'parameters' => [
-                    ['name'=>'resourceNode.parent','in'=>'query','required'=>true,'schema'=>['type'=>'integer']],
-                    ['name'=>'sid','in'=>'query','required'=>false,'schema'=>['type'=>'integer']],
-                    ['name'=>'title','in'=>'query','required'=>false,'schema'=>['type'=>'string']],
+                    ['name' => 'resourceNode.parent', 'in' => 'query', 'required' => true, 'schema' => ['type' => 'integer']],
+                    ['name' => 'sid', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'integer']],
+                    ['name' => 'title', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string']],
                 ],
             ],
             name: 'get_lp_collection_with_progress',
@@ -62,7 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ],
     normalizationContext: [
-        'groups' => ['lp:read','resource_node:read','resource_link:read'],
+        'groups' => ['lp:read', 'resource_node:read', 'resource_link:read'],
         'enable_max_depth' => true,
     ],
     denormalizationContext: ['groups' => ['lp:write']],
@@ -725,7 +725,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     public function getProgress(): int
     {
-        return ($this->progress ?? 0);
+        return $this->progress ?? 0;
     }
     public function setProgress(?int $progress): void
     {

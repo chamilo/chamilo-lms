@@ -22,8 +22,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Throwable;
 
+use const FILTER_VALIDATE_EMAIL;
 use const PHP_SAPI;
+use const PHP_URL_HOST;
 use const UPLOAD_ERR_OK;
 
 class MessageHelper
@@ -311,7 +314,8 @@ class MessageHelper
                 ->to(new Address($toAddress, $receiver->getFullName() ?: $receiver->getUsername()))
                 ->subject($subject)
                 ->text($content)
-                ->html($content);
+                ->html($content)
+            ;
 
             foreach ($attachmentList as $att) {
                 $file = $att['file'] ?? null;
@@ -321,10 +325,11 @@ class MessageHelper
             }
 
             $this->mailer->send($email);
-        } catch (\Throwable $e) {
-            error_log('Failed to send email: ' . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log('Failed to send email: '.$e->getMessage());
         }
     }
+
     /**
      * Constructs the FROM as an Address, prioritizing configuration;
      * If there is no valid value, infers the current domain and uses noreply@{domain}.
@@ -360,7 +365,7 @@ class MessageHelper
             $host = 'example.org';
         }
 
-        return new Address('noreply@' . $host, $fromName);
+        return new Address('noreply@'.$host, $fromName);
     }
 
     /**

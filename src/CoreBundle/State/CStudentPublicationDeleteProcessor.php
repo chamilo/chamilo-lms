@@ -8,16 +8,19 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 /**
  * @implements ProcessorInterface<CStudentPublication, void>
  */
 final class CStudentPublicationDeleteProcessor implements ProcessorInterface
 {
-    public function __construct(private readonly EntityManagerInterface $em) {}
+    public function __construct(
+        private readonly EntityManagerInterface $em
+    ) {}
 
     public function process($data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
@@ -28,8 +31,12 @@ final class CStudentPublicationDeleteProcessor implements ProcessorInterface
         $node = $data->hasResourceNode() ? $data->getResourceNode() : null;
 
         $this->em->beginTransaction();
+
         try {
-            try { $this->em->refresh($data); } catch (\Throwable) {}
+            try {
+                $this->em->refresh($data);
+            } catch (Throwable) {
+            }
 
             $this->em->remove($data);
             $this->em->flush();
@@ -47,8 +54,9 @@ final class CStudentPublicationDeleteProcessor implements ProcessorInterface
             }
 
             $this->em->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->em->rollback();
+
             throw $e;
         }
     }

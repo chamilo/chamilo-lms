@@ -124,7 +124,7 @@ export function useSidebarMenu() {
       if (courseItems.length > 0) {
         items.push({
           icon: "mdi mdi-book-open-page-variant",
-          label: courseItems.length > 1 ? t("Course") : courseItems[0].label,
+          label: courseItems.length > 1 ? t("Courses") : courseItems[0].label,
           items: courseItems.length > 1 ? courseItems : undefined,
           route: 1 === courseItems.length ? courseItems[0].route : undefined,
           class: courseItems.length > 0 ? courseItems[0].class : "",
@@ -245,7 +245,7 @@ export function useSidebarMenu() {
 
       if (subItems.length > 0) {
         items.push(
-          createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis Management", {
+          createMenuItem("diagnostics", "mdi-text-box-search", "Diagnosis management", {
             subItems,
           }),
         )

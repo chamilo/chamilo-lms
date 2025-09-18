@@ -54,12 +54,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(
             uriTemplate: '/documents/{iid}/toggle_visibility',
             controller: UpdateVisibilityDocument::class,
+            openapiContext: [
+                'summary' => 'Change document visibility (visible/invisible to learners).',
+            ],
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
         new Put(
             uriTemplate: '/documents/{iid}/move',
             controller: UpdateDocumentFileAction::class,
+            openapiContext: [
+                'summary' => 'Move document.',
+            ],
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: true
         ),
@@ -92,6 +98,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/documents/{iid}/lp-usage',
             controller: DocumentLearningPathUsageAction::class,
+            openapiContext: [
+                'summary' => 'Get a list of learning paths where a document is used.',
+            ],
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'api_documents_lp_usage'

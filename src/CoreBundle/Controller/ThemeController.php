@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const DIRECTORY_SEPARATOR;
+
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
@@ -38,13 +40,14 @@ class ThemeController extends AbstractController
     public function uploadLogos(
         string $slug,
         Request $request,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] FilesystemOperator $fs
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
     ): JsonResponse {
         $map = [
             'header_svg' => 'images/header-logo.svg',
             'header_png' => 'images/header-logo.png',
-            'email_svg'  => 'images/email-logo.svg',
-            'email_png'  => 'images/email-logo.png',
+            'email_svg' => 'images/email-logo.svg',
+            'email_png' => 'images/email-logo.png',
         ];
 
         if (!$fs->directoryExists($slug)) {
@@ -58,39 +61,57 @@ class ThemeController extends AbstractController
 
         foreach ($map as $field => $relativePath) {
             $file = $request->files->get($field);
-            if (!$file) { $results[$field] = 'skipped'; continue; }
+            if (!$file) {
+                $results[$field] = 'skipped';
 
-            $ext  = strtolower((string) $file->getClientOriginalExtension());
+                continue;
+            }
+
+            $ext = strtolower((string) $file->getClientOriginalExtension());
             $mime = (string) $file->getMimeType();
 
             // SVG
             if (str_ends_with($field, '_svg')) {
-                if ($mime !== 'image/svg+xml' && $ext !== 'svg') {
-                    $results[$field] = 'invalid_mime'; continue;
+                if ('image/svg+xml' !== $mime && 'svg' !== $ext) {
+                    $results[$field] = 'invalid_mime';
+
+                    continue;
                 }
                 $content = @file_get_contents($file->getPathname()) ?: '';
                 $content = $this->sanitizeSvg($content);
                 $this->ensureDir($fs, $slug.'/images');
                 $fs->write($slug.'/'.$relativePath, $content);
-                $results[$field] = 'uploaded'; continue;
+                $results[$field] = 'uploaded';
+
+                continue;
             }
 
             // PNG
-            if ($mime !== 'image/png' && $ext !== 'png') {
-                $results[$field] = 'invalid_mime'; continue;
+            if ('image/png' !== $mime && 'png' !== $ext) {
+                $results[$field] = 'invalid_mime';
+
+                continue;
             }
             $info = @getimagesize($file->getPathname());
-            if (!$info) { $results[$field] = 'invalid_image'; continue; }
+            if (!$info) {
+                $results[$field] = 'invalid_image';
+
+                continue;
+            }
             [$w, $h] = $info;
 
-            if ($field === 'header_png' && ($w > 190 || $h > 60)) {
-                $results[$field] = 'invalid_dimensions_header_png'; continue;
+            if ('header_png' === $field && ($w > 190 || $h > 60)) {
+                $results[$field] = 'invalid_dimensions_header_png';
+
+                continue;
             }
 
             $this->ensureDir($fs, $slug.'/images');
             $stream = fopen($file->getPathname(), 'rb');
             $fs->writeStream($slug.'/'.$relativePath, $stream);
-            if (is_resource($stream)) { fclose($stream); }
+            if (\is_resource($stream)) {
+                fclose($stream);
+            }
 
             $results[$field] = 'uploaded';
         }
@@ -112,13 +133,14 @@ class ThemeController extends AbstractController
     public function deleteLogo(
         string $slug,
         string $type,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] FilesystemOperator $fs
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
     ): JsonResponse {
         $map = [
             'header_svg' => 'images/header-logo.svg',
             'header_png' => 'images/header-logo.png',
-            'email_svg'  => 'images/email-logo.svg',
-            'email_png'  => 'images/email-logo.png',
+            'email_svg' => 'images/email-logo.svg',
+            'email_png' => 'images/email-logo.png',
         ];
 
         $path = $slug.'/'.$map[$type];
@@ -145,10 +167,11 @@ class ThemeController extends AbstractController
         string $name,
         string $path,
         Request $request,
-        #[Autowire(service: 'oneup_flysystem.themes_filesystem')] FilesystemOperator $filesystem
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $filesystem
     ): Response {
         $themeDir = basename($name);
-        $strict   = $request->query->getBoolean('strict', false);
+        $strict = $request->query->getBoolean('strict', false);
 
         if (!$filesystem->directoryExists($themeDir)) {
             throw $this->createNotFoundException('The folder name does not exist.');
@@ -171,6 +194,7 @@ class ThemeController extends AbstractController
             foreach ($candidates as $c) {
                 if ($filesystem->fileExists($c)) {
                     $filePath = $c;
+
                     break;
                 }
             }
@@ -181,7 +205,7 @@ class ThemeController extends AbstractController
 
         $response = new StreamedResponse(function () use ($filesystem, $filePath): void {
             $out = fopen('php://output', 'wb');
-            $in  = $filesystem->readStream($filePath);
+            $in = $filesystem->readStream($filePath);
             stream_copy_to_stream($in, $out);
             fclose($out);
             fclose($in);
@@ -215,8 +239,8 @@ class ThemeController extends AbstractController
     {
         $svg = preg_replace('#<script[^>]*>.*?</script>#is', '', $svg) ?? $svg;
         $svg = preg_replace('/ on\w+="[^"]*"/i', '', $svg) ?? $svg;
-        $svg = preg_replace("/ on\w+='[^']*'/i", '', $svg) ?? $svg;
-        $svg = preg_replace('/xlink:href=["\']\s*javascript:[^"\']*["\']/i', 'xlink:href="#"', $svg) ?? $svg;
-        return $svg;
+        $svg = preg_replace("/ on\\w+='[^']*'/i", '', $svg) ?? $svg;
+
+        return preg_replace('/xlink:href=["\']\s*javascript:[^"\']*["\']/i', 'xlink:href="#"', $svg) ?? $svg;
     }
 }

@@ -162,6 +162,18 @@ services:
         arguments:
             - '%env(AZURE_STORAGE_CONNECTION_STRING)%'
 
+    Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter: ~
+
+    Symfony\Component\Ldap\Ldap:
+        arguments: [ '@Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter' ]
+        tags:
+            - ldap
+
+    Symfony\Component\Ldap\Security\CheckLdapCredentialsListener:
+        arguments: [ '@security.ldap_locator' ]
+        tags:
+            - { name: kernel.event_subscriber, dispatcher: security.event_dispatcher.main }
+
 cocur_slugify:
     lowercase: true
 

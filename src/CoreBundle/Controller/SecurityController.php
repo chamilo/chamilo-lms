@@ -11,11 +11,13 @@ use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
+use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
@@ -216,6 +218,22 @@ class SecurityController extends AbstractController
     public function loginTokenCheck(): Response
     {
         // this response was managed in LoginTokenAuthenticator class
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @see LdapAuthenticator
+     */
+    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'])]
+    public function ldapLoginCheck(AuthenticationConfigHelper $authConfigHelper): Response
+    {
+        $ldapConfig = $authConfigHelper->getLdapConfig();
+
+        if (!$ldapConfig['enabled']) {
+            throw $this->createAccessDeniedException();
+        }
+
+        // this response was managed in LdapAuthenticator class
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
 

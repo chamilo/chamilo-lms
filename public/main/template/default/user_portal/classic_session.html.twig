@@ -12,7 +12,7 @@
                             {{ session_image }} {{ row.title }}
                         {% else %}
                             {# Default link #}
-                            {% set session_link = url('legacy_main', { 'name' : 'session/index.php', 'session_id' : row.id }) %}
+                            {% set session_link = '/main/session/index.php' ~ { 'session_id' : row.id }|url_encode %}
                             {% if row.course_list_session_style == 2 and row.courses|length == 1 %}
                                 {# Linkt to first course #}
                                 {% set session_link = row.courses.0.link %}
@@ -41,7 +41,7 @@
                     {% if row.show_actions %}
                         <div class="pull-right">
 
-                            <a href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
+                            <a href="/main/session/resume_session.php?{{ { 'id_session' : row.id }|url_encode }}">
                                 {{ 'ActionIcon::EDIT'|mdi_icon_t(22, 'ch-tool-icon', 'Edit') }}
                             </a>
                         </div>
@@ -102,9 +102,9 @@
                                                 {{ 'ObjectIcon::TEACHER'|mdi_icon(16) }}
                                                 {% for coach in item.coaches %}
                                                     {{ loop.index > 1 ? ' | ' }}
-                                                    url('legacy_main', { 'name' : 'session/resume_session.php', 'sid' : row.id })
+                                                    {{ '/main/session/resume_session.php?' ~ { 'sid' : row.id }|url_encode }}
 
-                                                    <a href="{{ url('legacy_main', {'name' : 'inc/ajax/user_manager.ajax.php', 'a': 'get_user_popup', 'user_id': coach.user_id, 'session_id': row.id, 'course_id': item.real_id })|url_encode() }}"
+                                                    <a href="{{ '/main/inc/ajax/user_manager.ajax.php?' ~ {'a': 'get_user_popup', 'user_id': coach.user_id, 'session_id': row.id, 'course_id': item.real_id }|url_encode }}"
                                                        data-title="{{ coach.full_name }}" class="ajax">
                                                         {{ coach.firstname }}, {{ coach.lastname }}
                                                     </a>
@@ -141,7 +141,7 @@
             </div>
         {% else %}
             <div class="panel-heading">
-                <a href="{{ url('legacy_main', { 'name' : 'session/index.php', 'session_id' : row.id }) }}">
+                <a href="/main/session/index.php?{{ { 'session_id' : row.id }|url_encode }}">
                     <img id="session_img_{{ row.id }}" src="{{ "window_list.png"|icon(32) }}" alt="{{ row.title }}"
                          title="{{ row.title }}">
                     {{ row.title }}
@@ -151,7 +151,7 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-2">
-                        <a class="thumbnail" href="{{ url('legacy_main', { 'name' : 'session/index.php', 'session_id' : row.id }) }}">
+                        <a class="thumbnail" href="/main/session/index.php?{{ { 'session_id' : row.id }|url_encode }}">
                             <img class="img-responsive"
                                  src="{{ row.image ? _p.web_upload ~ row.image : 'session_default.png'|icon() }}"
                                  alt="{{ row.title }}" title="{{ row.title }}">

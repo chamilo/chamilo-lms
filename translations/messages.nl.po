@@ -2170,7 +2170,7 @@ msgstr "Documenten worden ook toegevoegd"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Als u een leerpad dat een oefening bevat wenst te exporteren dan dient u ervoor te zorgen dat deze oefeningen ook in de export zitten. U dient deze dus te selecteren in de lijst met oefeningen"
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "De archievenfolder die door deze functionaliteit gebruikt word is niet schrijfbaar. Gelieve contact op te nemen met uw platform beheerder."
 
 msgid "Target course"
@@ -17318,12 +17318,6 @@ msgstr "Hernoem en geef commentaar"
 msgid "Photo retouching"
 msgstr "Foto be/bijwerken"
 
-msgid "Enable external Pixlr services"
-msgstr "Activeer externe Pixlr service"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr maakt het mogelijk om je foto's te bewerken, aanpassen en filteren met opties vergelijkbaar met Photoshop. Het is de ideale aanvulling om plaatjes te bewerken gebaseerd op bitmap."
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "De %s kwalificatie is gearchiveerd. Dit heeft tot gevolg dat allebijbehorende cursus-sessies niet meer zichtbaar zijn. Je kunt dit ongedaan maken door het uit het weer uit het archief te halen."
 
@@ -18359,10 +18353,10 @@ msgstr "Forum categorieën"
 msgid "Cleanup of cache and temporary files"
 msgstr "Archive directory cleanup"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr ""
 "Chamilo bewaart een kopie van de meeste tijdelijke bestanden die het "
-"genereert (voor back-ups, exports, kopieën, enz.) in de app/cache/-map. Na "
+"genereert (voor back-ups, exports, kopieën, enz.) in de var/cache/-map. Na "
 "verloop van tijd kan dit leiden tot een zeer grote hoeveelheid gebruikte "
 "schijfruimte voor niets. Klik op de onderstaande knop om uw archiefmap op te "
 "schonen. Deze bewerking zou geautomatiseerd moeten worden door een cron-"
@@ -18372,10 +18366,10 @@ msgstr ""
 msgid "Proceed with cleanup"
 msgstr "Proceed with cleanup"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "Het archief is succesvol opgeschoond"
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Om een of andere reden kon de map var/cache/ niet worden opgeschoond. "
 "Gelieve deze handmatig op te schonen door verbinding te maken met de server "

@@ -2153,7 +2153,7 @@ msgstr "Documentele vor fi de asemenea adăugate"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Dacă doriti sa exportați o lecție care conține exerciții, trebuie să vă asigurați că aceste exerciții au fost incluse în export; pentru asta va trebui selectat în lista de exerciții."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr " folosit de acest instrument nu permite permisiuni de scriere. Contactați administratorul platformei."
 
 msgid "Target course"
@@ -17229,12 +17229,6 @@ msgstr "Redenumiți și comentează"
 msgid "Photo retouching"
 msgstr "Retușare fotografica"
 
-msgid "Enable external Pixlr services"
-msgstr ""
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr ""
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr ""
 
@@ -18270,16 +18264,16 @@ msgstr "Categorii de foru"
 msgid "Cleanup of cache and temporary files"
 msgstr "Curățarea directorul arhivă"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "Chamilo salvează o copie a fișierelor temporare generate (pentru backup, exporturi, copii, etc.) în cadrul arhivei directorul /. După un timp, toate acestea pot ocupa o mulțime de spațiu pe hard disk. Dacă faceți clic pe acest buton va rula o curatare manuala a acestui director. Această operație trebuie efectuată cu regularitate de utilitatea cron Linux, dar în cazul în care acest lucru nu este posibil în mediul dvs. poate utiliza această pagină pentru a șterge toate fișierele temporare din timp în timp."
 
 msgid "Proceed with cleanup"
 msgstr "Executa curatirea"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "Conținutul directorului archive/ a fost eliminat."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Din anumite motive, directorul chamilo/var/cache/ nu a putut fi curățat. Vă "
 "rugăm să-l curățați manual: conectați-vă la server și ștergeți toate "

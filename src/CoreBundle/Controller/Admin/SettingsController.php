@@ -46,35 +46,35 @@ class SettingsController extends BaseController
     #[Route('/settings/search_settings', name: 'chamilo_platform_settings_search')]
     public function searchSetting(Request $request, AccessUrlHelper $accessUrlHelper): Response
     {
-        $manager   = $this->getSettingsManager();
+        $manager = $this->getSettingsManager();
 
         $url = $accessUrlHelper->getCurrent();
         $manager->setUrl($url);
 
-        $formList  = [];
+        $formList = [];
         $templateMap = [];
         $templateMapByCategory = [];
-        $settings  = [];
+        $settings = [];
 
         $keyword = trim((string) $request->query->get('keyword', ''));
 
         $searchForm = $this->getSearchForm();
         $searchForm->handleRequest($request);
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $values  = $searchForm->getData();
+            $values = $searchForm->getData();
             $keyword = trim((string) ($values['keyword'] ?? ''));
         }
 
         $schemas = $manager->getSchemas();
 
-        if ($keyword === '') {
+        if ('' === $keyword) {
             return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
-                'keyword'                  => $keyword,
-                'schemas'                  => $schemas,
-                'settings'                 => $settings,
-                'form_list'                => $formList,
-                'search_form'              => $searchForm->createView(),
-                'template_map'             => $templateMap,
+                'keyword' => $keyword,
+                'schemas' => $schemas,
+                'settings' => $settings,
+                'form_list' => $formList,
+                'search_form' => $searchForm->createView(),
+                'template_map' => $templateMap,
                 'template_map_by_category' => $templateMapByCategory,
             ]);
         }
@@ -102,12 +102,12 @@ class SettingsController extends BaseController
                         $templateMapByCategory[$category][$var] = $templateMap[$var];
                     }
                 }
-                $settings    = $manager->load($category);
+                $settings = $manager->load($category);
                 $schemaAlias = $manager->convertNameSpaceToService($category);
-                $form        = $this->getSettingsFormFactory()->create($schemaAlias);
+                $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
                 foreach (array_keys($settings->getParameters()) as $name) {
-                    if (!in_array($name, $variablesInCategory, true)) {
+                    if (!\in_array($name, $variablesInCategory, true)) {
                         $form->remove($name);
                         $settings->remove($name);
                     }
@@ -118,12 +118,12 @@ class SettingsController extends BaseController
         }
 
         return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
-            'keyword'                  => $keyword,
-            'schemas'                  => $schemas,
-            'settings'                 => $settings,
-            'form_list'                => $formList,
-            'search_form'              => $searchForm->createView(),
-            'template_map'             => $templateMap,
+            'keyword' => $keyword,
+            'schemas' => $schemas,
+            'settings' => $settings,
+            'form_list' => $formList,
+            'search_form' => $searchForm->createView(),
+            'template_map' => $templateMap,
             'template_map_by_category' => $templateMapByCategory,
         ]);
     }
@@ -152,9 +152,9 @@ class SettingsController extends BaseController
         $form->setData($settings);
 
         $isPartial =
-            $request->isMethod('PATCH') ||
-            strtoupper((string) $request->request->get('_method')) === 'PATCH' ||
-            $request->request->getBoolean('_partial', false);
+            $request->isMethod('PATCH')
+            || 'PATCH' === strtoupper((string) $request->request->get('_method'))
+            || $request->request->getBoolean('_partial', false);
 
         if ($isPartial) {
             $payload = $request->request->all($form->getName());
@@ -176,7 +176,7 @@ class SettingsController extends BaseController
 
             $this->addFlash($messageType, $message);
 
-            if ($keyword !== '') {
+            if ('' !== $keyword) {
                 return $this->redirectToRoute('chamilo_platform_settings_search', [
                     'keyword' => $keyword,
                 ]);
@@ -201,12 +201,12 @@ class SettingsController extends BaseController
         }
 
         return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
-            'schemas'     => $schemas,
-            'settings'    => $settings,
-            'form'        => $form->createView(),
-            'keyword'     => $keyword,
+            'schemas' => $schemas,
+            'settings' => $settings,
+            'form' => $form->createView(),
+            'keyword' => $keyword,
             'search_form' => $this->getSearchForm()->createView(),
-            'template_map'=> $templateMap,
+            'template_map' => $templateMap,
         ]);
     }
 

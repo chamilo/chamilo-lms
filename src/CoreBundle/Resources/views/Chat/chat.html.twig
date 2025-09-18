@@ -2,277 +2,591 @@
 
 {% block content %}
     {% autoescape false %}
-<div class="page-chat">
-    <div class="row">
-        <div class="col-sm-4 col-md-5 col-lg-4">
-            <ul class="row list-unstyled" id="chat-users"></ul>
-        </div>
-        <div class="col-sm-8 col-md-7 col-lg-8">
-            <div id="chat-tabs">
-                <ul class="nav nav-tabs" role="tablist">
-                    {% if not restrict_to_coach %}
-                        <li role="presentation" class="active">
-                            <a href="#all" aria-controls="all" role="tab" data-toggle="tab">{{ 'All'|get_lang }}</a>
-                        </li>
-                    {% endif %}
-                </ul>
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="{{ restrict_to_coach ? '' : 'all' }}">
-                        <div class="course-chat chat-history" id="{{ restrict_to_coach ? '' : 'chat-history' }}"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="profile row">
-                <div class="col-xs-12">
-                    <div class="message-form-chat">
-                        <div class="tabbable">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#tab1" data-toggle="tab">{{ 'Write'|get_lang }}</a>
-                                </li>
-                                <li>
-                                    <a href="#tab2" id="preview" data-toggle="tab">{{ 'Preview'|get_lang }}</a>
-                                </li>
-                                <li>
-                                    <button id="emojis" class="btn btn-link" type="button">
-                                        <span class="sr-only">{{ 'Emoji'|get_lang }}</span>{{ emoji_smile }}
-                                    </button>
-                                </li>
+
+        <div class="min-h-screen bg-support-2">
+            <div class="mx-auto max-w-7xl p-4 md:p-6">
+                <div class="grid grid-cols-12 gap-4 md:gap-6">
+
+                    {# LEFT: user list #}
+                    <aside class="col-span-12 md:col-span-4 lg:col-span-3">
+                        <div class="rounded-2xl border border-gray-25 bg-white shadow-sm">
+                            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-20">
+                                <h2 class="text-sm font-semibold text-gray-90">{{ 'Users'|trans }}</h2>
+                                <span class="inline-flex items-center gap-2 text-xs text-gray-50">
+              <span class="h-2 w-2 rounded-full bg-success"></span>
+              {{ 'Online'|trans }}
+            </span>
+                            </div>
+                            <ul id="chat-users" class="divide-y divide-gray-20 max-h-[70vh] overflow-y-auto">
+                                {# Filled by JS #}
                             </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab1">
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <span class="sr-only">{{ 'Message'|get_lang }}</span>
-                                            <textarea id="chat-writer" name="message"></textarea>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <button id="chat-send-message" type="button" {{ restrict_to_coach ? 'disabled' : '' }}
-                                                    class="btn btn--primary">{{ 'Send'|get_lang }}</button>
-                                        </div>
-                                    </div>
+                        </div>
+                    </aside>
+
+                    {# RIGHT: chat #}
+                    <section class="col-span-12 md:col-span-8 lg:col-span-9">
+                        <div class="rounded-2xl border border-gray-25 bg-white shadow-sm">
+                            {# Tabs #}
+                            <div id="chat-tabs" class="border-b border-gray-100">
+                                <div class="flex items-center gap-2 overflow-x-auto px-4 pt-3">
+                                    {% if not restrict_to_coach %}
+                                        <button
+                                                data-user="0"
+                                                id="chat-tab-0"
+                                                class="tab-btn active whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium"
+                                        >{{ 'All'|trans }}</button>
+                                    {% endif %}
+                                    {# Dynamic user tabs added by JS #}
                                 </div>
-                                <div class="tab-pane" id="tab2">
-                                    <div id="html-preview" class="emoji-wysiwyg-editor-preview"></div>
+                            </div>
+
+                            {# Histories (dedicated root so JS appends panels here) #}
+                            <div class="p-4" id="histories-root">
+                                <div class="tab-panel" id="{{ restrict_to_coach ? '' : 'panel-0' }}">
+                                    <div class="chat-history" id="{{ restrict_to_coach ? '' : 'chat-history' }}"></div>
+                                </div>
+                                {# Dynamic user panels added by JS #}
+                            </div>
+
+                            {# Composer #}
+                            <div class="border-t border-gray-100 p-4">
+                                <div class="flex items-start gap-3">
+                                    {# Emoji popover anchor #}
+                                    <div class="relative" id="emoji-anchor">
+                                        <button id="emojis" type="button" class="btn btn-secondary"
+                                                aria-haspopup="menu" aria-expanded="false" aria-controls="emoji-popover">
+                                            <span class="sr-only">{{ 'Emoji'|trans }}</span> 😊
+                                        </button>
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <label for="chat-writer" class="sr-only">{{ 'Message'|trans }}</label>
+                                        <textarea id="chat-writer" name="message" rows="3"
+                                                  class="chat-writer w-full rounded-xl border border-gray-200 p-3 text-sm outline-none ring-0 focus:border-gray-300"
+                                                  placeholder="{{ 'Write…'|trans }}"
+                                                  autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="true"></textarea>
+
+                                        <div class="mt-2 flex items-center justify-between">
+                                            <div class="flex items-center gap-2 text-xs text-gray-500">
+                                                <button id="preview" type="button" class="btn btn-tertiary px-2 py-1">
+                                                    {{ 'Preview'|trans }}
+                                                </button>
+                                                <span>•</span>
+                                                <span>{{ 'Enter to send · Shift+Enter for newline'|trans }}</span>
+                                            </div>
+
+                                            <div class="flex items-center gap-2">
+                                                <button id="chat-reset" type="button" class="btn btn-danger-outline">
+                                                    {{ 'Reset'|trans }}
+                                                </button>
+                                                <button id="chat-send-message" type="button"
+                                                        class="btn btn-primary min-w-[112px]"
+                                                        {{ restrict_to_coach ? 'disabled' : '' }}>
+                                                    ✉️ {{ 'Send'|trans }}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div id="html-preview" class="mt-3 hidden rounded-xl border border-dashed border-gray-200 p-3 text-sm text-gray-700"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
+
                 </div>
             </div>
         </div>
+
+        <audio id="chat-alert" class="hidden">
+            <source src="{{ asset('sound/notification.wav') }}" type="audio/wav">
+            <source src="{{ asset('chat/sound/notification.ogg') }}" type="audio/ogg">
+            <source src="{{ asset('chat/sound/notification.mp3') }}" type="audio/mpeg">
+        </audio>
+
+        <script>
+          window.addEventListener('DOMContentLoaded', () => {
+            // ---------- i18n strings for JS ----------
+            const T = {
+              startChat: '{{ "Start chat"|trans|e('js') }}',
+              leaveMessage: '{{ "Leave a message"|trans|e('js') }}',
+              chat: '{{ "Chat"|trans|e('js') }}',
+              confirmReset: '{{ "Are you sure you want to clear this chat?"|trans|e('js') }}'
+            };
+
+            // ---------- helpers (comments in English) ----------
+            const ajaxUrl = '{{ url('chat_ajax') ~ '?' ~ course_url_params }}';
+            const myUserId = {{ user.user_id }};
+            const restrictToCoach = {{ restrict_to_coach ? 'true' : 'false' }};
+            const parentNodeId = {{ chat_parent_node_id|default('0') }};
+
+            const $  = (sel, root=document) => root.querySelector(sel);
+            const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+            const qs = (obj) => new URLSearchParams(obj).toString();
+            const historiesRoot = document.getElementById('histories-root');
+
+            // Ensure parent node parameter travels with requests
+            const withNode = (params={}) => {
+              const p = { ...params };
+              if (parentNodeId && String(parentNodeId) !== '0') p.node = parentNodeId;
+              return p;
+            };
+
+            // GET helper
+            const getJSON = (params) =>
+              fetch(`${ajaxUrl}&${qs(withNode(params))}`, { credentials: 'same-origin' })
+                .then(r => r.ok ? r.json() : Promise.reject(r));
+
+            // POST helper (x-www-form-urlencoded)
+            const postForm = (params) =>
+              fetch(ajaxUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+                body: new URLSearchParams(withNode(params)),
+                credentials: 'same-origin'
+              }).then(r => r.ok ? r.json() : Promise.reject(r));
+
+            const escapeHTML = (s) => (s ?? '').toString().replace(/[&<>"']/g, (m) =>
+              ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])
+            );
+
+            function setActiveTab(btn) {
+              $$('#chat-tabs .tab-btn').forEach(b => {
+                b.classList.remove('active','bg-gray-15','text-gray-90','ring-1','ring-inset','ring-gray-25');
+                b.classList.add('text-gray-50','hover:bg-gray-15');
+              });
+              btn.classList.add('active','bg-gray-15','text-gray-90','ring-1','ring-inset','ring-gray-25');
+              btn.classList.remove('text-gray-50');
+            }
+
+            function showPanel(userId) {
+              $$('.tab-panel').forEach(p => p.classList.add('hidden'));
+              const id = (userId === 0) ? 'panel-0' : ('panel-' + userId);
+              const panel = document.getElementById(id);
+              if (panel) panel.classList.remove('hidden');
+            }
+
+            // ---------- Emoji picker (Unicode only) ----------
+            const EMOJIS = ['😀','😃','😄','😁','😆','😅','😂','🙂','😉','😊','😇','😍','😘','😋','😛','😜','🤪','🤗','🤔','🤨','😐','😑','🙄','😏','😴','🤤','😪','😮','😯','😲','😳','🥵','🥶','😰','😥','😭','😤','😠','😡','🤬','😎','🤓','🥳','🤩','👏','👍','👎','🙏','💪','🔥','❤️','💙','💚','💛'];
+            const EMOJI_ROWS = 3;
+            let emojiOpen = false;
+            let emojiPopover = null;
+
+            function buildEmojiPopover() {
+              if (emojiPopover) return emojiPopover;
+              const pop = document.createElement('div');
+              pop.id = 'emoji-popover';
+              pop.setAttribute('role', 'menu');
+              pop.setAttribute('aria-label', 'Emoji picker');
+              pop.className = 'emoji-popover';
+              pop.hidden = true;
+
+              const grid = document.createElement('div');
+              grid.style.display = 'grid';
+              grid.style.gridAutoFlow = 'column';
+              grid.style.gridTemplateRows = `repeat(${EMOJI_ROWS}, auto)`;
+              grid.style.gridAutoColumns = '2.4rem';
+              grid.style.gap = '6px';
+
+              EMOJIS.forEach((ch) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'emoji-btn';
+                btn.textContent = ch;
+                btn.addEventListener('click', () => {
+                  const writer = $('#chat-writer');
+                  if (writer) {
+                    const start = writer.selectionStart ?? writer.value.length;
+                    const end   = writer.selectionEnd   ?? writer.value.length;
+                    writer.value = writer.value.slice(0, start) + ch + ' ' + writer.value.slice(end);
+                    writer.focus();
+                    writer.selectionStart = writer.selectionEnd = start + 2;
+                  }
+                  hideEmoji();
+                });
+                grid.appendChild(btn);
+              });
+
+              pop.appendChild(grid);
+              document.body.appendChild(pop);
+              return (emojiPopover = pop);
+            }
+            function positionEmojiPopover() {
+              const anchorBtn = $('#emojis');
+              const pop = buildEmojiPopover();
+              const r = anchorBtn.getBoundingClientRect();
+              const margin = 8;
+              let top = r.bottom + margin + window.scrollY;
+              let left = r.left + window.scrollX;
+              const fitsBelow = (top + pop.offsetHeight) < (window.scrollY + window.innerHeight);
+              if (!fitsBelow) top = r.top - margin - pop.offsetHeight + window.scrollY;
+              const maxLeft = window.scrollX + window.innerWidth - pop.offsetWidth - margin;
+              if (left > maxLeft) left = Math.max(window.scrollX + margin, maxLeft);
+              pop.style.top = `${top}px`;
+              pop.style.left = `${left}px`;
+            }
+            function showEmoji(){ buildEmojiPopover(); positionEmojiPopover(); emojiPopover.hidden = false; $('#emojis').setAttribute('aria-expanded','true'); emojiOpen = true; (emojiPopover.querySelector('.emoji-btn')||{}).focus?.(); }
+            function hideEmoji(){ if (!emojiPopover) return; emojiPopover.hidden = true; $('#emojis').setAttribute('aria-expanded','false'); emojiOpen = false; $('#emojis').focus(); }
+            function toggleEmoji(){ emojiOpen ? hideEmoji() : showEmoji(); }
+            document.addEventListener('click', (e) => { if (!emojiOpen) return; const anchor = $('#emoji-anchor'); if (!anchor.contains(e.target) && !emojiPopover.contains(e.target)) hideEmoji(); });
+            document.addEventListener('keydown', (e) => { if (emojiOpen && e.key === 'Escape') { e.preventDefault(); hideEmoji(); }});
+            window.addEventListener('resize', () => { if (emojiOpen) positionEmojiPopover(); });
+            window.addEventListener('scroll', () => { if (emojiOpen) positionEmojiPopover(); }, true);
+
+            // ---------- App ----------
+            const ChChat = {
+              _historySize: -1,
+              usersOnline: 0,
+              currentFriend: 0,
+              _pollDelayMs: 2000,
+              _loopHandle: null,
+
+              track() {
+                return getJSON({
+                  action: 'track',
+                  size: this._historySize,
+                  users_online: this.usersOnline,
+                  friend: this.currentFriend
+                }).then(response => {
+                  if (!response || !response.status) return;
+                  if (response.data && response.data.history !== undefined) {
+                    this._historySize = response.data.oldFileSize ?? -1;
+                    this.setHistory(response.data.history);
+                  }
+                  if (response.data && response.data.userList) {
+                    this.usersOnline = response.data.usersOnline || 0;
+                    this.setConnectedUsers(response.data.userList);
+                  }
+                }).catch(() => {});
+              },
+
+              loop() {
+                if (this._loopHandle) clearTimeout(this._loopHandle);
+                this.track().finally(() => {
+                  this._loopHandle = setTimeout(() => this.loop(), this._pollDelayMs);
+                });
+              },
+
+              setHistory(html) {
+                const containerId = this.currentFriend ? ('chat-history-' + this.currentFriend) : 'chat-history';
+                const el = document.getElementById(containerId);
+                if (!el) return;
+                el.innerHTML = html || '';
+                el.scrollTop = el.scrollHeight;
+              },
+
+              setConnectedUsers(list) {
+                const ul = document.getElementById('chat-users');
+                if (!ul) return;
+
+                const items = (list || []).map(user => {
+                  const isMe = (user.id === myUserId);
+                  const dotCls = user.isConnected ? 'bg-emerald-500' : 'bg-gray-300';
+                  const btnTitle = user.isConnected ? T.startChat : T.leaveMessage;
+
+                  return `
+<li class="px-4 py-3 hover:bg-gray-15">
+  <div class="flex items-center gap-3 chat-user cursor-pointer" data-name="${escapeHTML(user.complete_name)}" data-user="${user.id}">
+    <img src="${escapeHTML(user.image_url)}" alt="${escapeHTML(user.complete_name)}" class="h-9 w-9 rounded-full object-cover" />
+    <div class="min-w-0 flex-1">
+      <div class="flex items-center justify-between">
+        <p class="truncate text-sm font-medium text-gray-800">${escapeHTML(user.complete_name)}</p>
+        <span class="ml-2 inline-block h-2 w-2 rounded-full ${dotCls}"></span>
+      </div>
+      <p class="text-xs text-gray-500 truncate">${user.username ? escapeHTML(user.username) : '&nbsp;'}</p>
     </div>
-</div>
-<audio id="chat-alert" class="skip">
-    <source src="{{ asset('sound/notification.wav') }}" type="audio/wav"></source>
-    <source src="{{ asset('chat/sound/notification.ogg') }}" type="audio/ogg"></source>
-    <source src="{{ asset('chat/sound/notification.mp3') }}" type="audio/mpeg"></source>
-</audio>
-<script>
-    $(function () {
-        var ChChat = {
-            _ajaxUrl: '{{ url('chat_ajax') ~ '?' ~ course_url_params }}',
-            _historySize: -1,
-            usersOnline: 0,
-            currentFriend: 0,
-            call: false,
-            track: function () {
-                return $
-                    .get(ChChat._ajaxUrl, {
-                        action: 'track',
-                        size: ChChat._historySize,
-                        users_online: ChChat.usersOnline,
-                        friend: ChChat.currentFriend
-                    })
-                    .done(function (response) {
-                        if (response.data.history) {
-                            ChChat._historySize = response.data.oldFileSize;
-                            ChChat.setHistory(response.data.history);
-                        }
+    ${!isMe ? `
+      <button type="button" class="btn btn-tertiary user-chat-btn"
+        title="${escapeHTML(btnTitle)}" data-name="${escapeHTML(user.complete_name)}" data-user="${user.id}">
+        {{ 'Chat'|trans }}
+      </button>` : ''}
+  </div>
+</li>`;
+                }).join('');
 
-                        if (response.data.userList) {
-                            ChChat.usersOnline = response.data.usersOnline;
-                            ChChat.setConnectedUsers(response.data.userList);
-                        }
+                ul.innerHTML = items;
+              },
+
+              openTabForUser(userId, name) {
+                const tabsContainer = document.querySelector('#chat-tabs .flex');
+
+                if (!document.getElementById('chat-tab-' + userId)) {
+                  const btn = document.createElement('button');
+                  btn.id = 'chat-tab-' + userId;
+                  btn.dataset.user = String(userId);
+                  btn.className = 'tab-btn whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50';
+                  btn.textContent = name;
+                  tabsContainer.appendChild(btn);
+
+                  const panel = document.createElement('div');
+                  panel.id = 'panel-' + userId;
+                  panel.className = 'tab-panel hidden';
+                  panel.innerHTML = `<div class="chat-history" id="chat-history-${userId}"></div>`;
+                  historiesRoot.appendChild(panel);
+                }
+
+                const btnToActivate = document.getElementById('chat-tab-' + userId);
+                setActiveTab(btnToActivate);
+                showPanel(userId);
+                this.currentFriend = userId;
+
+                const sendBtn = document.getElementById('chat-send-message');
+                if (sendBtn) sendBtn.disabled = false;
+              },
+
+              send() {
+                const textarea = document.getElementById('chat-writer');
+                const val = textarea ? textarea.value : '';
+                if (!val || !val.trim().length) return;
+
+                const btn = document.getElementById('chat-send-message');
+                if (btn) btn.disabled = true;
+
+                const params = {
+                  action: 'write',
+                  message: val,
+                  friend: this.currentFriend,
+                  cid: {{ course.id }},
+                  gid: {{ group_id|default(0) }},
+                  sid: {{ session_id|default(0) }}
+                };
+
+                // Primary: POST
+                postForm(params)
+                  .then(response => {
+                    if (!response || !response.status) throw new Error('Write failed (POST)');
+                    textarea.value = '';
+                    const preview = document.getElementById('html-preview');
+                    if (preview) { preview.classList.add('hidden'); preview.innerHTML = ''; }
+                    return this.track();
+                  })
+                  .catch(() => {
+                    // Fallback: GET
+                    return getJSON(params).then(response => {
+                      if (!response || !response.status) throw new Error('Write failed (GET)');
+                      textarea.value = '';
+                      const preview = document.getElementById('html-preview');
+                      if (preview) { preview.classList.add('hidden'); preview.innerHTML = ''; }
+                      return this.track();
                     });
-            },
-            setHistory: function (messageList) {
-                var chatHistoryContainer = ChChat.currentFriend ? ('#chat-history-' + ChChat.currentFriend) : '#chat-history';
+                  })
+                  .finally(() => { if (btn) btn.disabled = false; });
+              },
 
-                $(chatHistoryContainer)
-                    .html(messageList)
-                    .prop('scrollTop', function () {
-                        return this.scrollHeight;
-                    });
-                //$('#chat-alert').get(0).play();
-            },
-            setConnectedUsers: function (userList) {
-                var html = '';
+              preview() {
+                const textarea = document.getElementById('chat-writer');
+                const val = textarea ? textarea.value : '';
+                postForm({ action: 'preview', message: val })
+                  .then(response => {
+                    if (!response || !response.status) return;
+                    const preview = document.getElementById('html-preview');
+                    if (preview) { preview.classList.remove('hidden'); preview.innerHTML = response.data.message || ''; }
+                  }).catch(() => {});
+              },
 
-                userList.forEach(function (user) {
-                    var buttonStatus = user.isConnected ? 'success' : 'muted',
-                        buttonTitle = user.isConnected ? '{{ 'StartAChat'|get_lang }}' : '{{ 'LeaveAMessage'|get_lang }}';
+              reset() {
+                if (!confirm(T.confirmReset)) return;
+                getJSON({ action: 'reset', friend: this.currentFriend }).then(response => {
+                  if (!response || !response.status) return;
+                  this.setHistory(response.data);
+                }).catch(() => {});
+              },
 
-                    html += '<li class="col-xs-12">' +
-                        '   <div class="chat-user" data-name="' + user.complete_name + '" data-user="' + user.user_id + '">' +
-                        '       <img src="' + user.image_url + '" alt="' + user.complete_name + '" class="img-circle user-image-chat"/>' +
-                        '       <ul class="list-unstyled">' +
-                        '           <li>' + user.complete_name;
-
-                    if (user.user_id != {{ user.user_id }}) {
-                        html += '           <button type="button" class="btn btn-link btn-xs" title="' + buttonTitle + '" data-name="' + user.complete_name + '" data-user="' + user.user_id + '">' +
-                            '               <i class="fa fa-comments text-' + buttonStatus + '"></i><span class="sr-only">' + buttonTitle + '</span>' +
-                            '           </button>';
-                    }
-                    html += '           </li>' +
-                            {% if chamilo_settings_get('profile.hide_username_in_course_chat') == 'false' %}
-                        '           <li><small>' + user.username + '</small></li>' +
-                            {% else %}
-                        '           <li>&nbsp;</li>' +
-                            {% endif %}
-                        '       </ul>' +
-                        '   </div>' +
-                        '</li>';
-                });
-
-                $('#chat-users').html(html);
-            },
-            onPreviewListener: function () {
-                $.post(ChChat._ajaxUrl, {
-                    action: 'preview',
-                    'message': $('textarea#chat-writer').val()
-                })
-                .done(function (response) {
-                    if (!response.status) {
-                        return;
-                    }
-
-                    $('#html-preview').html(response.data.message);
-                });
-            },
-            onSendMessageListener: function (e) {
-                e.preventDefault();
-
-                if (!$('textarea#chat-writer').val().trim().length) {
-                    return;
+              bind() {
+                const tabsRoot = document.getElementById('chat-tabs');
+                if (tabsRoot) {
+                  tabsRoot.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.tab-btn');
+                    if (!btn) return;
+                    const userId = parseInt(btn.dataset.user || '0', 10) || 0;
+                    setActiveTab(btn);
+                    showPanel(userId);
+                    this.currentFriend = userId;
+                  });
                 }
 
-                var self = this;
-                self.disabled = true;
-
-                $.get(ChChat._ajaxUrl, {
-                    action: 'write',
-                    message: $('textarea#chat-writer').val(),
-                    friend: ChChat.currentFriend
-                })
-                .done(function (response) {
-                    self.disabled = false;
-
-                    if (!response.status) {
-                        return;
-                    }
-
-                    $('textarea#chat-writer').val('');
-                    $(".emoji-wysiwyg-editor").html('');
-                });
-            },
-            onResetListener: function (e) {
-                if (!confirm("{{ 'ConfirmReset'|get_lang }}")) {
-                    e.preventDefault();
-                    return;
+                const usersRoot = document.getElementById('chat-users');
+                if (usersRoot) {
+                  usersRoot.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.user-chat-btn');
+                    const row = e.target.closest('.chat-user');
+                    const node = btn || row;
+                    if (!node) return;
+                    const userId = parseInt(node.dataset.user || '0', 10) || 0;
+                    const name = node.dataset.name || 'User';
+                    if (!userId) return;
+                    this.openTabForUser(userId, name);
+                  });
                 }
 
-                $.get(ChChat._ajaxUrl, {
-                    action: 'reset',
-                    friend: ChChat.currentFriend
-                })
-                .done(function (response) {
-                    if (!response.status) {
-                        return;
-                    }
+                const sendBtn = document.getElementById('chat-send-message');
+                if (sendBtn) sendBtn.addEventListener('click', (e) => { e.preventDefault(); this.send(); });
 
-                    ChChat.setHistory(response.data);
-                });
-            },
-            init: function () {
-                ChChat.track().done(function () {
-                    ChChat.init();
-                });
-            }
-        };
+                const prevBtn = document.getElementById('preview');
+                if (prevBtn) prevBtn.addEventListener('click', () => this.preview());
 
-        hljs.initHighlightingOnLoad();
+                const resetBtn = document.getElementById('chat-reset');
+                if (resetBtn) resetBtn.addEventListener('click', () => this.reset());
 
-        $('body').on('click', '#chat-reset', ChChat.onResetListener);
-        $('#preview').on('click', ChChat.onPreviewListener);
-        $('#emojis').on('click', function () {
-            $('[data-toggle="tab"][href="#tab1"]').show().tab('show');
-        });
-
-        $('button#chat-send-message').on('click', ChChat.onSendMessageListener);
-        $('#chat-users').on('click', 'div.chat-user', function (e) {
-            e.preventDefault();
-            var jSelf = $(this),
-                userId = parseInt(jSelf.data('user')) || 0;
-
-            if (!userId) {
-                return;
-            }
-
-            var exists = false;
-
-            $('#chat-tabs ul.nav li').each(function (i, el) {
-                if ($(el).data('user') == userId) {
-                    exists = true;
+                const writer = document.getElementById('chat-writer');
+                if (writer) {
+                  writer.addEventListener('keydown', (e) => {
+                    // Enter sends; Shift+Enter keeps newline
+                    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); this.send(); }
+                  });
                 }
-            });
 
-            $('button#chat-send-message').prop('disabled', false);
+                const emojiBtn = document.getElementById('emojis');
+                if (emojiBtn) emojiBtn.addEventListener('click', toggleEmoji);
+              },
 
-            if (exists) {
-                $('#chat-tab-' + userId).tab('show');
+              start() {
+                const defaultTab = document.getElementById('chat-tab-0');
+                if (defaultTab) {
+                  setActiveTab(defaultTab);
+                  showPanel(0);
+                  this.currentFriend = 0;
+                }
 
-                return;
+                if (restrictToCoach) {
+                  const sendBtn = document.getElementById('chat-send-message');
+                  if (sendBtn) sendBtn.disabled = true;
+                }
+
+                this.bind();
+                this.loop();
+              }
+            };
+
+            ChChat.start();
+          });
+        </script>
+
+        <style>
+            /* ---------- Buttons ---------- */
+            .btn{
+                border-radius: 12px;
+                padding: 8px 12px;
+                font-size: 14px;
+                font-weight: 600;
+                border: 1px solid #E5E7EB;
+                background:#fff;
+                color:#374151;
+                cursor: pointer;
+                transition: background .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+            }
+            .btn:hover{ background:#F9FAFB; }
+            .btn:disabled{ opacity:.5; cursor:not-allowed; }
+            .btn-primary{ background:#4F46E5; border-color:#4F46E5; color:#fff; box-shadow: 0 2px 6px rgba(79,70,229,.25); }
+            .btn-primary:hover{ background:#4338CA; }
+            .btn-secondary{ color:#374151; }
+            .btn-tertiary{ background:#fff; color:#4B5563; }
+            .btn-danger-outline{ border-color:#EF4444; color:#B91C1C; background:#fff; }
+            .btn-danger-outline:hover{ background:#FEE2E2; }
+
+            /* ---------- Textarea feel ---------- */
+            .chat-writer{
+                line-height: 1.35;
+                white-space: pre-wrap;
+                word-break: break-word;
+                tab-size: 2;
+                letter-spacing: normal;
+                resize: vertical;
             }
 
-            $('#chat-tabs ul.nav-tabs').append('\
-                <li role="presentation" data-user="' + userId + '">\
-                    <a id="chat-tab-' + userId + '" href="#chat-' + userId + '" aria-controls="chat-' + userId + '" role="tab" data-toggle="tab">' + jSelf.data('name') + '</a>\
-                </li>\
-            ');
-
-            $('#chat-tabs .tab-content').append('\
-                <div role="tabpanel" class="tab-pane" id="chat-' + userId + '">\
-                    <div class="course-chat chat-history" id="chat-history-' + userId + '"></div>\
-                </div>\
-            ');
-
-            $('#chat-tab-' + userId).tab('show');
-        });
-
-        $('#chat-tabs ul.nav-tabs').on('shown.bs.tab', 'li a', function (e) {
-            var jSelf = $(this);
-            var userId = parseInt(jSelf.parent().data('user')) || 0;
-            if (!userId) {
-                ChChat.currentFriend = 0;
-
-                return;
+            /* ---------- Chat history container ---------- */
+            .chat-history{
+                background:#FAFAFA;
+                border:1px solid #F3F4F6;
+                border-radius: 16px;
+                padding: 12px;
+                min-height: 220px;
+                max-height: 50vh;
+                overflow-y: auto;
             }
 
-            ChChat.currentFriend = userId;
-
-            $(this).tab('show');
-        });
-
-        $('.emoji-wysiwyg-editor').on('keyup', function (e) {
-            if (e.ctrlKey && e.keyCode === 13) {
-                $('button#chat-send-message').trigger('click');
+            /* ---------- Bubbles (match backend HTML structure) ---------- */
+            .message-teacher,
+            .message-student{
+                display:flex;
+                align-items:flex-end;
+                gap:10px;
+                margin:10px 0;
             }
-        });
+            .message-teacher{ justify-content:flex-end; }
+            .message-student{ justify-content:flex-start; }
 
-        ChChat.init();
-    });
-</script>
+            .message-teacher .content-message,
+            .message-student .content-message{
+                max-width: 72%;
+                padding: 10px 12px;
+                border-radius: 14px;
+                box-shadow: 0 1px 2px rgba(0,0,0,.04);
+            }
 
-{% endautoescape %}
+            .message-teacher .content-message{
+                background:#4F46E5; color:#fff;
+                border-top-right-radius: 4px; /* small notch feel */
+            }
+            .message-student .content-message{
+                background:#F3F4F6; color:#111827;
+                border-top-left-radius: 4px;
+            }
+
+            .chat-image{
+                width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;
+                border: 1px solid #E5E7EB;
+            }
+            .chat-message-block-name{
+                font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;
+                color: currentColor;
+            }
+            .chat-message-block-content p{ margin: 0; }
+            .chat-message-block-content p + p{ margin-top: .25rem; }
+            .chat-message-block-content h1,
+            .chat-message-block-content h2,
+            .chat-message-block-content h3,
+            .chat-message-block-content h4,
+            .chat-message-block-content h5,
+            .chat-message-block-content h6{ margin: .25rem 0; font-size: 1em; }
+            .chat-message-block-content ul,
+            .chat-message-block-content ol{ margin: .25rem 0; padding-left: 1.25rem; }
+            .chat-message-block-content blockquote{ margin: .25rem 0; padding-left: .75rem; border-left: 3px solid #E5E7EB; color:#6B7280; }
+
+            .message-date{
+                font-size: .7rem; opacity:.8; margin-top: 6px; text-align: right;
+                color: #E0E7FF; /* light for teacher bubble */
+            }
+            .message-student .message-date{ color:#6B7280; text-align:left; }
+
+            /* Emoji popover */
+            #emoji-popover.emoji-popover{
+                position: fixed;
+                z-index: 50;
+                width: max-content;
+                max-width: calc(100vw - 24px);
+                max-height: 18rem;
+                overflow: auto;
+                padding: 8px;
+                border: 1px solid #E5E7EB;
+                border-radius: 16px;
+                background: #fff;
+                box-shadow: 0 10px 20px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.06);
+            }
+            #emoji-popover .emoji-btn{
+                width: 2.4rem; height: 2.4rem; font-size: 1.25rem; line-height: 1;
+                display: flex; align-items: center; justify-content: center;
+                border-radius: 10px; border: none; background: transparent; cursor: pointer;
+            }
+            #emoji-popover .emoji-btn:hover{ background:#F3F4F6; }
+            #emoji-popover .emoji-btn:focus{ outline:2px solid rgba(79,70,229,.6); outline-offset:2px; }
+
+            /* Emoji-friendly font stack */
+            #chat-writer, .chat-history, #emoji-popover{
+                font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+            }
+        </style>
+
+    {% endautoescape %}
 {% endblock %}

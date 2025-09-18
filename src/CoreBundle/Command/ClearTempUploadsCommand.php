@@ -46,7 +46,8 @@ Examples:
   php bin/console cache:clear-uploads --dry-run
   php bin/console cache:clear-uploads --dir=/var/www/chamilo/var/uploads_tmp
 HELP
-            );
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -56,13 +57,14 @@ HELP
             Container::setContainer($kernelContainer);
         }
 
-        $io        = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
         $olderThan = (int) $input->getOption('older-than');
-        $dryRun    = (bool) $input->getOption('dry-run');
-        $dir       = $input->getOption('dir');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $dir = $input->getOption('dir');
 
         if ($olderThan < 0) {
             $io->error('Option --older-than must be >= 0.');
+
             return Command::INVALID;
         }
 
@@ -72,7 +74,8 @@ HELP
             // quick override instance (no service registration needed)
             $targetHelper = new TempUploadHelper($dir);
             if (!is_dir($targetHelper->getTempDir()) || !is_readable($targetHelper->getTempDir())) {
-                $io->error(sprintf('Directory not readable: %s', $targetHelper->getTempDir()));
+                $io->error(\sprintf('Directory not readable: %s', $targetHelper->getTempDir()));
+
                 return Command::FAILURE;
             }
         }
@@ -84,14 +87,14 @@ HELP
 
         $mb = $stats['bytes'] / 1048576;
         if ($dryRun) {
-            $io->note(sprintf(
+            $io->note(\sprintf(
                 'DRY RUN: %d files (%.2f MB) would be removed in %s',
                 $stats['files'],
                 $mb,
                 $tempDir
             ));
         } else {
-            $io->success(sprintf(
+            $io->success(\sprintf(
                 'CLEANED: %d files removed (%.2f MB) in %s',
                 $stats['files'],
                 $mb,

@@ -5,7 +5,7 @@
             <img src="{{ user_group_image }}" class="img-responsive" />
             <div class="caption">
 {#                <h4 class="group-title">#}
-{#                    <a href="{{ url('legacy_main', { 'name' : 'social/group_view.php', 'id': group_id}) }}">#}
+{#                    <a href="{{ '/main/social/group_view.php?' ~ { 'id': group_id}|url_encode }}">#}
 {#                        {{ user_group.title }}#}
 {#                    </a>#}
 {#                </h4>#}
@@ -14,7 +14,7 @@
 {#                </p>#}
                 {% if user_is_group_admin %}
                     <div id="edit_image" class="buttom-subscribed">
-                        <a class="btn btn--plain" href="{{ url('legacy_main', { 'name' : 'social/group_edit.php', 'id': group_id}) }}">
+                        <a class="btn btn--plain" href="{{ '/main/social/group_edit.php?' ~ { 'id': group_id}|url_encode }}">
                             {{ 'Edit this group'|get_lang }}
                         </a>
                     </div>

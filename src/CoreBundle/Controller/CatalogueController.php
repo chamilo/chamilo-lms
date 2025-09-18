@@ -23,6 +23,8 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
+use ExtraFieldValue;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -184,15 +186,15 @@ class CatalogueController extends AbstractController
             return [];
         }
 
-        if (is_string($raw)) {
+        if (\is_string($raw)) {
             $raw = json_decode($raw, true) ?? [];
         }
 
-        if (isset($raw['courses']) && is_array($raw['courses'])) {
+        if (isset($raw['courses']) && \is_array($raw['courses'])) {
             return $raw['courses'];
         }
 
-        return is_array($raw) ? $raw : [];
+        return \is_array($raw) ? $raw : [];
     }
 
     #[Route('/course-extra-fields', name: 'chamilo_core_catalogue_course_extra_fields', methods: ['GET'])]
@@ -205,43 +207,43 @@ class CatalogueController extends AbstractController
 
         $allowed = array_map('strval', $settings['extra_fields_in_search_form'] ?? []);
 
-        $ef = new \ExtraField('course');
+        $ef = new ExtraField('course');
         $raw = $ef->get_all();
 
         $mapped = array_map(function ($f) {
             $type = (int) $f['value_type'];
 
             $base = [
-                'variable'     => (string) $f['variable'],
-                'title'        => (string) ($f['display_text'] ?? $f['variable']),
-                'value_type'   => $type,
+                'variable' => (string) $f['variable'],
+                'title' => (string) ($f['display_text'] ?? $f['variable']),
+                'value_type' => $type,
                 'defaultValue' => $f['field_default_value'] ?? null,
             ];
 
             $options = [];
-            if (!empty($f['options']) && is_array($f['options'])) {
+            if (!empty($f['options']) && \is_array($f['options'])) {
                 foreach ($f['options'] as $opt) {
                     $options[] = [
-                        'id'     => isset($opt['id']) ? (int) $opt['id'] : 0,
-                        'value'  => isset($opt['option_value']) ? (string) $opt['option_value'] : (string) ($opt['id'] ?? ''),
-                        'label'  => (string) ($opt['display_text'] ?? $opt['option_value'] ?? ''),
+                        'id' => isset($opt['id']) ? (int) $opt['id'] : 0,
+                        'value' => isset($opt['option_value']) ? (string) $opt['option_value'] : (string) ($opt['id'] ?? ''),
+                        'label' => (string) ($opt['display_text'] ?? $opt['option_value'] ?? ''),
                         'parent' => isset($opt['parent_id']) ? (int) $opt['parent_id'] : 0,
                     ];
                 }
             }
 
             $typesWithOptions = [
-                \ExtraField::FIELD_TYPE_SELECT,
-                \ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
-                \ExtraField::FIELD_TYPE_DOUBLE_SELECT,
-                \ExtraField::FIELD_TYPE_TRIPLE_SELECT,
-                \ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
-                \ExtraField::FIELD_TYPE_RADIO,
-                \ExtraField::FIELD_TYPE_CHECKBOX,
-                \ExtraField::FIELD_TYPE_TAG,
+                ExtraField::FIELD_TYPE_SELECT,
+                ExtraField::FIELD_TYPE_SELECT_MULTIPLE,
+                ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+                ExtraField::FIELD_TYPE_TRIPLE_SELECT,
+                ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD,
+                ExtraField::FIELD_TYPE_RADIO,
+                ExtraField::FIELD_TYPE_CHECKBOX,
+                ExtraField::FIELD_TYPE_TAG,
             ];
 
-            if (in_array($type, $typesWithOptions, true)) {
+            if (\in_array($type, $typesWithOptions, true)) {
                 $base['options'] = $options;
             }
 
@@ -270,47 +272,47 @@ class CatalogueController extends AbstractController
     {
         $ids = array_filter(array_map('intval', explode(',', (string) $request->query->get('ids', ''))));
         if (!$ids) {
-            return $this->json(new \stdClass());
+            return $this->json(new stdClass());
         }
 
         $settings = $this->readCatalogueSettings($settingsManager);
 
         // Union of allowed variables (search form ∪ course card)
         $allowedSearch = array_map('strval', $settings['extra_fields_in_search_form'] ?? []);
-        $allowedCard   = array_map('strval', $settings['extra_fields_in_course_block'] ?? []);
-        $allowedVars   = array_values(array_unique(array_filter(array_merge($allowedSearch, $allowedCard))));
+        $allowedCard = array_map('strval', $settings['extra_fields_in_course_block'] ?? []);
+        $allowedVars = array_values(array_unique(array_filter(array_merge($allowedSearch, $allowedCard))));
 
         // Force-include variables that we always want to expose
         $allowedVars = array_values(array_unique(array_merge($allowedVars, ['video_url', 'special_course'])));
 
         if (!$allowedVars) {
-            return $this->json(new \stdClass());
+            return $this->json(new stdClass());
         }
 
-        $ef  = new \ExtraField('course');
-        $efv = new \ExtraFieldValue('course');
+        $ef = new ExtraField('course');
+        $efv = new ExtraFieldValue('course');
 
         // Build metadata maps (by variable and by id)
         $allFields = $ef->get_all(); // rows: ['id','variable','value_type','field_default_value', ...]
         $byVar = [];
-        $byId  = [];
+        $byId = [];
 
         foreach ($allFields as $f) {
             $var = (string) ($f['variable'] ?? '');
             if (!$var) {
                 continue;
             }
-            if (!in_array($var, $allowedVars, true)) {
+            if (!\in_array($var, $allowedVars, true)) {
                 continue; // only expose what we explicitly allow
             }
 
-            $type    = (int) ($f['value_type'] ?? 0);
+            $type = (int) ($f['value_type'] ?? 0);
             $default = $f['field_default_value'] ?? null;
 
             $byVar[$var] = [
-                'id'           => (int) ($f['id'] ?? 0),
-                'value_type'   => $type,
-                'default_raw'  => $default,
+                'id' => (int) ($f['id'] ?? 0),
+                'value_type' => $type,
+                'default_raw' => $default,
             ];
             if (!empty($f['id'])) {
                 $byId[(int) $f['id']] = $var;
@@ -321,9 +323,9 @@ class CatalogueController extends AbstractController
         foreach ($allowedVars as $var) {
             if (!isset($byVar[$var])) {
                 $byVar[$var] = [
-                    'id'           => 0,
-                    'value_type'   => 0,     // unknown → treat as text-like
-                    'default_raw'  => null,
+                    'id' => 0,
+                    'value_type' => 0,     // unknown → treat as text-like
+                    'default_raw' => null,
                 ];
             }
         }
@@ -333,36 +335,41 @@ class CatalogueController extends AbstractController
         foreach ($ids as $courseId) {
             $values = [];
             $rows = method_exists($efv, 'getAllValuesByItem') ? $efv->getAllValuesByItem($courseId) : null;
-            if (!is_array($rows) || !$rows) {
+            if (!\is_array($rows) || !$rows) {
                 $rows = method_exists($efv, 'get_values_by_item') ? $efv->get_values_by_item($courseId) : null;
             }
 
-            if (!is_array($rows) || !$rows) {
+            if (!\is_array($rows) || !$rows) {
                 $rows = method_exists($ef, 'getDataAndFormattedValues')
                     ? $ef->getDataAndFormattedValues($courseId, false, array_keys($byVar))
                     : null;
             }
 
             // Normalize bulk rows into { var => value }
-            if (is_array($rows)) {
+            if (\is_array($rows)) {
                 // Handle both shapes: list-of-rows and map-by-variable
-                $hasStringKeys = static function(array $a): bool {
+                $hasStringKeys = static function (array $a): bool {
                     foreach (array_keys($a) as $k) {
-                        if (is_string($k)) return true;
+                        if (\is_string($k)) {
+                            return true;
+                        }
                     }
+
                     return false;
                 };
 
                 if ($hasStringKeys($rows) && !isset($rows[0])) {
                     // Shape A: map variable => value/row
                     foreach ($rows as $var => $valRaw) {
-                        if (!isset($byVar[$var])) continue;
+                        if (!isset($byVar[$var])) {
+                            continue;
+                        }
 
                         $type = (int) ($byVar[$var]['value_type'] ?? 0);
-                        $val  = $valRaw;
-                        $arr  = null;
+                        $val = $valRaw;
+                        $arr = null;
 
-                        if (is_array($valRaw)) {
+                        if (\is_array($valRaw)) {
                             // Common keys across Chamilo providers
                             $val = $valRaw['field_value'] ?? $valRaw['value'] ?? $valRaw['value_raw'] ?? null;
                             $arr = $valRaw['value_as_array'] ?? $valRaw['value_array'] ?? null;
@@ -373,17 +380,17 @@ class CatalogueController extends AbstractController
                             }
                         }
 
-                        $values[$var] = $this->normaliseValueForType($type, $val, is_array($arr) ? $arr : null);
+                        $values[$var] = $this->normaliseValueForType($type, $val, \is_array($arr) ? $arr : null);
                     }
                 } else {
                     // Shape B: list of rows (possibly indexed by field ID)
                     foreach ($rows as $key => $r) {
                         // Resolve variable
                         $var = (string) ($r['variable'] ?? $r['field_variable'] ?? '');
-                        if (!$var && isset($r['id']) && isset($byId[(int) $r['id']])) {
+                        if (!$var && isset($r['id'], $byId[(int) $r['id']])) {
                             $var = $byId[(int) $r['id']];
                         }
-                        if (!$var && isset($r['field_id']) && isset($byId[(int) $r['field_id']])) {
+                        if (!$var && isset($r['field_id'], $byId[(int) $r['field_id']])) {
                             $var = $byId[(int) $r['field_id']];
                         }
                         if (!$var || !isset($byVar[$var])) {
@@ -391,10 +398,10 @@ class CatalogueController extends AbstractController
                         }
 
                         $type = (int) ($r['value_type'] ?? $r['field_type'] ?? $byVar[$var]['value_type'] ?? 0);
-                        $val  = $r['field_value'] ?? $r['value'] ?? null;
-                        $arr  = $r['value_as_array'] ?? $r['value_array'] ?? null;
+                        $val = $r['field_value'] ?? $r['value'] ?? null;
+                        $arr = $r['value_as_array'] ?? $r['value_array'] ?? null;
 
-                        $values[$var] = $this->normaliseValueForType($type, $val, is_array($arr) ? $arr : null);
+                        $values[$var] = $this->normaliseValueForType($type, $val, \is_array($arr) ? $arr : null);
                     }
                 }
             }
@@ -403,8 +410,8 @@ class CatalogueController extends AbstractController
             foreach ($missing as $var) {
                 $meta = $byVar[$var];
                 $type = (int) ($meta['value_type'] ?? 0);
-                $val  = null;
-                $row  = null;
+                $val = null;
+                $row = null;
 
                 // Prefer lookup by field_id when available
                 if (!empty($meta['id'])) {
@@ -415,10 +422,10 @@ class CatalogueController extends AbstractController
                     $row = $efv->get_values_by_handler_and_field_variable($courseId, $var, false);
                 }
 
-                if (is_array($row)) {
+                if (\is_array($row)) {
                     // Unify shape
                     $type = (int) ($row['value_type'] ?? $type);
-                    $val  = $row['field_value'] ?? $row['value'] ?? null;
+                    $val = $row['field_value'] ?? $row['value'] ?? null;
                     $values[$var] = $this->normaliseValueForType($type, $val, null);
                 }
             }
@@ -426,7 +433,7 @@ class CatalogueController extends AbstractController
             // Ensure all allowed vars exist with sensible defaults
             $norm = [];
             foreach ($byVar as $var => $meta) {
-                if (array_key_exists($var, $values)) {
+                if (\array_key_exists($var, $values)) {
                     $norm[$var] = $values[$var];
                 } else {
                     $norm[$var] = $this->normaliseDefaultForType(
@@ -447,26 +454,41 @@ class CatalogueController extends AbstractController
      * - Checkbox => boolean
      * - Multiselect/Tags => array<string>
      * - Double/Triple/Select+Text => array when applicable (or string)
+     *
+     * @param mixed $value
      */
     private function normaliseValueForType(int $type, $value, ?array $arrayValue)
     {
         switch ($type) {
-            case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
-            case \ExtraField::FIELD_TYPE_TAG:
-                if (is_array($arrayValue)) return array_values($arrayValue);
-                if ($value === null || $value === '') return [];
-                return is_array($value) ? array_values($value) : [(string) $value];
+            case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+            case ExtraField::FIELD_TYPE_TAG:
+                if (\is_array($arrayValue)) {
+                    return array_values($arrayValue);
+                }
+                if (null === $value || '' === $value) {
+                    return [];
+                }
 
-            case \ExtraField::FIELD_TYPE_CHECKBOX:
-                if (is_bool($value)) return $value;
+                return \is_array($value) ? array_values($value) : [(string) $value];
+
+            case ExtraField::FIELD_TYPE_CHECKBOX:
+                if (\is_bool($value)) {
+                    return $value;
+                }
                 $v = strtolower((string) $value);
-                return in_array($v, ['1','true','yes','on'], true);
 
-            case \ExtraField::FIELD_TYPE_DOUBLE_SELECT:
-            case \ExtraField::FIELD_TYPE_TRIPLE_SELECT:
-            case \ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
-                if (is_array($arrayValue)) return array_values($arrayValue);
-                if (is_array($value))     return array_values($value);
+                return \in_array($v, ['1', 'true', 'yes', 'on'], true);
+
+            case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+            case ExtraField::FIELD_TYPE_TRIPLE_SELECT:
+            case ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD:
+                if (\is_array($arrayValue)) {
+                    return array_values($arrayValue);
+                }
+                if (\is_array($value)) {
+                    return array_values($value);
+                }
+
                 return $value;
 
             default:
@@ -479,20 +501,22 @@ class CatalogueController extends AbstractController
      * - Checkbox => false (unless default_raw explicitly says otherwise)
      * - Multiselect/Tags => []
      * - Others => null (or normalized default_raw when present)
+     *
+     * @param mixed $defaultRaw
      */
     private function normaliseDefaultForType(int $type, $defaultRaw)
     {
         // If a default is set at field level, try to normalize it first.
-        if ($defaultRaw !== null && $defaultRaw !== '') {
-            return $this->normaliseValueForType($type, $defaultRaw, is_array($defaultRaw) ? $defaultRaw : null);
+        if (null !== $defaultRaw && '' !== $defaultRaw) {
+            return $this->normaliseValueForType($type, $defaultRaw, \is_array($defaultRaw) ? $defaultRaw : null);
         }
 
         switch ($type) {
-            case \ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
-            case \ExtraField::FIELD_TYPE_TAG:
+            case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+            case ExtraField::FIELD_TYPE_TAG:
                 return [];
 
-            case \ExtraField::FIELD_TYPE_CHECKBOX:
+            case ExtraField::FIELD_TYPE_CHECKBOX:
                 return false;
 
             default:

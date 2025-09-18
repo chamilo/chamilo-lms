@@ -63,3 +63,27 @@ parameters:
                     script_users_delta: false
                     script_usergroups_delta: false
                     group_filter_regex: ''
+
+            ldap:
+                enabled: false
+                title: 'LDAP'
+                connection_string: 'ldap://localhost:389'
+                protocol_version: 3
+                referrals: false
+                dn_string: '{username}'
+                query_string: null
+                base_dn: 'DC=cblue,DC=be'
+                search_dn: 'CN=admin,dc=cblue,dc=be'
+                search_password: 'pass'
+                filter: null
+                uid_key: 'uid'
+                password_attribute: 'userPassword'
+                data_correspondence:
+                    firstname: 'givenName'
+                    lastname: 'sn'
+                    email: 'mail'
+                    locale: null
+                    role: null
+                    phone: null
+                    active: null
+                    admin: null

@@ -94,7 +94,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         } elseif (false === $filename) {
             echo Display::return_message(
                 get_lang(
-                    'The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
+                    'The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'
                 ),
                 'error'
             );
@@ -132,7 +132,7 @@ if (Security::check_token('post') && ('course_select_form' === $action || 'full_
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields);
     } elseif (false === $filename) {
-        echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
+        echo Display::return_message(get_lang('The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
         echo '<a class="btn btn--plain" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
     } else {
         echo Display::return_message(get_lang('There are no resources in backup file'), 'warning');

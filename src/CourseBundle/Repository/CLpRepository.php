@@ -87,14 +87,13 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
     {
         $params = [
             'lp_id' => $resource->getResourceIdentifier(),
-            'name' => 'lp/lp_controller.php',
             'action' => 'view',
         ];
         if (!empty($extraParams)) {
             $params = array_merge($params, $extraParams);
         }
 
-        return $router->generate('legacy_main', $params);
+        return '/main/lp/lp_controller.php?'.http_build_query($params);
     }
 
     public function findAutoLaunchableLPByCourseAndSession(Course $course, ?Session $session = null): ?int
@@ -148,11 +147,12 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             ->andWhere('rl.course = :course')
             ->andWhere('lp.lpType = :scormType')
             ->setParameters([
-                'course'    => $course,
-                'scormType' => CLp::SCORM_TYPE
+                'course' => $course,
+                'scormType' => CLp::SCORM_TYPE,
             ])
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function lastProgressForUser(iterable $lps, User $user, ?Session $session): array
@@ -160,7 +160,9 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         $lpIds = [];
         foreach ($lps as $lp) {
             $id = (int) $lp->getIid();
-            if ($id > 0) { $lpIds[] = $id; }
+            if ($id > 0) {
+                $lpIds[] = $id;
+            }
         }
         if (!$lpIds) {
             return [];
@@ -169,9 +171,9 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();
         $sub = $session
-            ? 'SELECT MAX(v2.iid) FROM ' . CLpView::class . ' v2
+            ? 'SELECT MAX(v2.iid) FROM '.CLpView::class.' v2
                  WHERE v2.user = :user AND v2.session = :session AND v2.lp = v.lp'
-            : 'SELECT MAX(v2.iid) FROM ' . CLpView::class . ' v2
+            : 'SELECT MAX(v2.iid) FROM '.CLpView::class.' v2
                  WHERE v2.user = :user AND v2.session IS NULL AND v2.lp = v.lp';
 
         $qb->select('IDENTITY(v.lp) AS lp_id', 'COALESCE(v.progress, 0) AS progress')
@@ -181,7 +183,8 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             ->andWhere($session ? 'v.session = :session' : 'v.session IS NULL')
             ->andWhere('v.iid = ('.$sub.')')
             ->setParameter('lpIds', $lpIds)
-            ->setParameter('user', $user);
+            ->setParameter('user', $user)
+        ;
 
         if ($session) {
             $qb->setParameter('session', $session);
@@ -191,7 +194,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
         $map = array_fill_keys($lpIds, 0);
         foreach ($rows as $r) {
-            $map[(int)$r['lp_id']] = (int)$r['progress'];
+            $map[(int) $r['lp_id']] = (int) $r['progress'];
         }
 
         return $map;
@@ -199,10 +202,12 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
 
     public function reorderByIds(int $courseId, ?int $sessionId, array $orderedLpIds, ?int $categoryId = null): void
     {
-        if (!$orderedLpIds) return;
+        if (!$orderedLpIds) {
+            return;
+        }
 
-        $em      = $this->getEntityManager();
-        $course  = $em->getReference(Course::class, $courseId);
+        $em = $this->getEntityManager();
+        $course = $em->getReference(Course::class, $courseId);
         $session = $sessionId ? $em->getReference(Session::class, $sessionId) : null;
 
         $qb = $this->createQueryBuilder('lp')
@@ -211,7 +216,8 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             ->join('rn.resourceLinks', 'rl')
             ->where('lp.iid IN (:ids)')
             ->andWhere('rl.course = :course')->setParameter('course', $course)
-            ->setParameter('ids', $orderedLpIds);
+            ->setParameter('ids', $orderedLpIds)
+        ;
 
         if ($session) {
             $qb->andWhere('rl.session = :sid')->setParameter('sid', $session);
@@ -219,7 +225,7 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
             $qb->andWhere('rl.session IS NULL');
         }
 
-        if ($categoryId !== null) {
+        if (null !== $categoryId) {
             $qb->andWhere('lp.category = :cat')->setParameter('cat', $categoryId);
         } else {
             $qb->andWhere('lp.category IS NULL');
@@ -228,21 +234,27 @@ final class CLpRepository extends ResourceRepository implements ResourceWithLink
         /** @var CLp[] $lps */
         $lps = $qb->getQuery()->getResult();
         $linksByLpId = [];
-        $positions   = [];
+        $positions = [];
         foreach ($lps as $lp) {
             $link = $lp->getResourceNode()->getResourceLinkByContext($course, $session);
-            if (!$link) continue;
-            $linksByLpId[(int)$lp->getIid()] = $link;
-            $positions[] = (int)$link->getDisplayOrder();
+            if (!$link) {
+                continue;
+            }
+            $linksByLpId[(int) $lp->getIid()] = $link;
+            $positions[] = (int) $link->getDisplayOrder();
         }
-        if (!$linksByLpId) return;
+        if (!$linksByLpId) {
+            return;
+        }
 
         sort($positions);
         $start = $positions[0];
 
         $pos = $start;
         foreach ($orderedLpIds as $lpId) {
-            if (!isset($linksByLpId[$lpId])) continue;
+            if (!isset($linksByLpId[$lpId])) {
+                continue;
+            }
             $linksByLpId[$lpId]->setDisplayOrder($pos);
             $pos++;
         }

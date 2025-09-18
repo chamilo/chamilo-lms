@@ -6,7 +6,7 @@
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function(myObject) {},
             type: "GET",
-            url: "{{ url('legacy_main', {'name' : 'inc/ajax/thematic.ajax.php'}) ~ '?' ~ course_url_params ~ '&a=get_datetime_by_attendance' }}",
+            url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=get_datetime_by_attendance' }}",
             data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
             success: function(data) {
                 $("#div_datetime_attendance").html(data);
@@ -22,7 +22,7 @@
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function(myObject) {},
             type: "GET",
-            url: "{{ url('legacy_main', {'name' : 'inc/ajax/thematic.ajax.php'}) ~ '?' ~ course_url_params ~ '&a=update_done_thematic_advance' }}",
+            url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=update_done_thematic_advance' }}",
             data: "thematic_advance_id="+advanceId,
             success: function(data) {
                 $("#div_result").html(data);

@@ -30,31 +30,31 @@ class PageController extends AbstractController
     public function topbarVisibility(Request $request, PageRepository $pageRepo): JsonResponse
     {
         $accessUrl = $this->accessUrlHelper->getCurrent();
-        $locale    = trim((string) $request->query->get('locale', ''));
+        $locale = trim((string) $request->query->get('locale', ''));
 
         // We first try exact locale, then fallback to the 2-letter prefix.
-        $prefix = $locale !== '' ? substr($locale, 0, 2) : '';
+        $prefix = '' !== $locale ? substr($locale, 0, 2) : '';
 
-        $homeExact   = $locale !== '' ? $pageRepo->countByCategoryAndLocale($accessUrl, 'index', $locale) : 0;
-        $homePrefix  = $prefix !== '' ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'index', $prefix) : 0;
-        $home        = ($homeExact + $homePrefix) > 0;
+        $homeExact = '' !== $locale ? $pageRepo->countByCategoryAndLocale($accessUrl, 'index', $locale) : 0;
+        $homePrefix = '' !== $prefix ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'index', $prefix) : 0;
+        $home = ($homeExact + $homePrefix) > 0;
 
-        $faqExact    = $locale !== '' ? $pageRepo->countByCategoryAndLocale($accessUrl, 'faq', $locale) : 0;
-        $faqPrefix   = $prefix !== '' ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'faq', $prefix) : 0;
-        $faq         = ($faqExact + $faqPrefix) > 0;
+        $faqExact = '' !== $locale ? $pageRepo->countByCategoryAndLocale($accessUrl, 'faq', $locale) : 0;
+        $faqPrefix = '' !== $prefix ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'faq', $prefix) : 0;
+        $faq = ($faqExact + $faqPrefix) > 0;
 
-        $demoExact   = $locale !== '' ? $pageRepo->countByCategoryAndLocale($accessUrl, 'demo', $locale) : 0;
-        $demoPrefix  = $prefix !== '' ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'demo', $prefix) : 0;
-        $demo        = ($demoExact + $demoPrefix) > 0;
+        $demoExact = '' !== $locale ? $pageRepo->countByCategoryAndLocale($accessUrl, 'demo', $locale) : 0;
+        $demoPrefix = '' !== $prefix ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'demo', $prefix) : 0;
+        $demo = ($demoExact + $demoPrefix) > 0;
 
-        $contactExact  = $locale !== '' ? $pageRepo->countByCategoryAndLocale($accessUrl, 'contact', $locale) : 0;
-        $contactPrefix = $prefix !== '' ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'contact', $prefix) : 0;
-        $contact       = ($contactExact + $contactPrefix) > 0;
+        $contactExact = '' !== $locale ? $pageRepo->countByCategoryAndLocale($accessUrl, 'contact', $locale) : 0;
+        $contactPrefix = '' !== $prefix ? $pageRepo->countByCategoryAndLocalePrefix($accessUrl, 'contact', $prefix) : 0;
+        $contact = ($contactExact + $contactPrefix) > 0;
 
         return $this->json([
-            'home'    => $home,
-            'faq'     => $faq,
-            'demo'    => $demo,
+            'home' => $home,
+            'faq' => $faq,
+            'demo' => $demo,
             'contact' => $contact,
         ]);
     }

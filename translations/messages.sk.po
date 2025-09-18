@@ -2152,7 +2152,7 @@ msgstr "Dokumenty budú tiež pridané"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Ak chcete exportovať učebnú osnovu obsahujúcu test, musíte sa presvedčiť, že príslušné testy sú zahrnuté v exporte. To znamená, že ich musíte označiť v zozname testov."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "Archívny katalóg používaný týmto nástrojom nie je možné prepísať. Kontaktujte prosím svojho administrátora platformy."
 
 msgid "Target course"
@@ -17228,12 +17228,6 @@ msgstr "Premenovať komentár"
 msgid "Photo retouching"
 msgstr "Retušovanie fotografií"
 
-msgid "Enable external Pixlr services"
-msgstr "Povoliť externé Pixlr služby"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr vám umožní upraviť a filtrovať vaše fotografie s funkciami podobnými Photoshopu. Je ideálnym doplnkom pre spracovanie bitmapových obrázkov"
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr "Propagácia %s bola archivovaná. Táto akcia má za následok vytváranie neviditeľných všetkých stretnutí zaregistrovaných do tejto akcie. Môžete sa vrátiť späť tým, že odarchivujete túto akciu."
 
@@ -18269,16 +18263,16 @@ msgstr "Kategórie fóra"
 msgid "Cleanup of cache and temporary files"
 msgstr "Vyčistiť archívny adresár"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "Chamilo uchováva kópiu väčšiny dočasných súborov, ktoré generuje (pre zálohovanie, exportovanie, kópie, atď.) do jeho archívu/adresára. Po chvíli, to môže zabrať až veľké množstvo miesta na disku používaného pre nič za nič. Kliknite na tlačidlo nižšie na vyčistenie archívu. Táto operácia by mala byť automatizovaná procesom cron, ale ak to nie je možné, môžete prísť na túto stránku pravidelne odstrániť všetky dočasné súbory z adresára."
 
 msgid "Proceed with cleanup"
 msgstr "Pokračujte v čistení"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "Vyčistenie archívu/ adresára bolo úspešne vykonané."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Z nejakého dôvodu sa nepodarilo vyčistiť adresár chamilo/var/cache/. Prosím, "
 "vyčistite ho ručne: pripojte sa k serveru a odstráňte všetky súbory a "

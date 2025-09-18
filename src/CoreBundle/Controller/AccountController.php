@@ -257,7 +257,7 @@ class AccountController extends BaseController
             'qrCode' => $qrCodeBase64,
             'user' => $user,
             'showQRCode' => $showQRCode,
-            'password_requirements' => \Security::getPasswordRequirements()['min'],
+            'password_requirements' => Security::getPasswordRequirements()['min'],
         ]);
     }
 

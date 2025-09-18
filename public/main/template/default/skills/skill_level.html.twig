@@ -17,14 +17,12 @@
             <td>{{ item.shortTitle }}</td>
             <td> {{ item.profile }}</td>
             <td>
-                <a
-                    href="{{ url('legacy_main', {'title' : 'skills/skill_level.php'}) }}?action=edit&id={{ item.id }}"
-                >
+                <a href="/main/skills/skill_level.php?action=edit&id={{ item.id }}">
                     {{ 'ActionIcon::EDIT'|mdi_icon(22) }}
                 </a>
 
                 <a
-                    href="{{ url('legacy_main', {'title' : 'skills/skill_level.php'}) }}?action=delete&id={{ item.id }}"
+                    href="/main/skills/skill_level.php?action=delete&id={{ item.id }}"
                 >
                     {{ 'ActionIcon::DELETE'|mdi_icon(22) }}
                 </a>

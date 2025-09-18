@@ -2,6 +2,7 @@
   <BaseTable
     :is-loading="loading"
     :values="assignments"
+    :total-items="assignments.length"
     data-key="id"
   >
     <Column :header="t('Type')">

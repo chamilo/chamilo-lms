@@ -2145,7 +2145,7 @@ msgstr "Dokumenty zostaną dodane"
 msgid "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests."
 msgstr "Jeśli chcesz wyeksportować ścieżki nauczania zawierające test, upewnij się, że odpowiednie testy zostały włączone do eksportu. Należy je wybrać z listy testów."
 
-msgid "The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
+msgid "The var/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator."
 msgstr "Archiwa katalogu wykorzystywane przez to narzędzie, nie posiadają prawa zapisu. Skontaktuj się z administratorem platformy."
 
 msgid "Target course"
@@ -17221,12 +17221,6 @@ msgstr "Zmień nazwę i skomentuj"
 msgid "Photo retouching"
 msgstr "Retusz zdjęć"
 
-msgid "Enable external Pixlr services"
-msgstr "Włącz usługi zewnętrzne Pixlr"
-
-msgid "Pixlr allow you to edit, adjust and filter your photos with features similar to Photoshop. It is the ideal complement to process images based on bitmaps"
-msgstr "Pixlr pozwala edytować, zmienić i filtrować zdjęcia o cechach podobnych do Photoshopa. Jest idealnym uzupełnieniem  przetwarzania obrazów na podstawie map bitowych"
-
 msgid "The <i>%s</i> promotion has been archived. This action has the consequence of making invisible all sessions registered into this promotion. You can undo this by unarchiving this promotion."
 msgstr ""
 
@@ -18262,16 +18256,16 @@ msgstr "Kategorie forum"
 msgid "Cleanup of cache and temporary files"
 msgstr "Oczyszczanie katalogu archiwum"
 
-msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its app/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
+msgid "Chamilo keeps a copy of most of the temporary files it generates (for backups, exports, copies, etc) into its var/cache/ directory. After a while, this can add up to a very large amount of disk space being used for nothing. Click the button below to clean your archive directory up. This operation should be automated by a cron process, but if this is not possible, you can come to this page regularly to remove all temporary files from the directory."
 msgstr "Chamilo przechowuje kopię większości plików tymczasowych, które generuje (do tworzenia kopii zapasowych, eksportu, kopii, itp.) w swoim archiwum / katalogu. Po pewnym czasie, zajmują one bardzo dużo miejsca na dysku, niepotrzebnie. Kliknij przycisk poniżej, aby wyczyścić katalog archiwum up. Ta operacja powinna być zautomatyzowana przez proces cron, ale jeśli nie jest to możliwe, można zaglądać na tą stronę regularnie, aby usunąć wszystkie pliki tymczasowe z katalogu."
 
 msgid "Proceed with cleanup"
 msgstr "Rozpocznij oczyszczanie"
 
-msgid "The app/cache/ directory cleanup has been executed successfully."
+msgid "The var/cache/ directory cleanup has been executed successfully."
 msgstr "Oczyszczanie Archiwum /katalogu zostało wykonane pomyślnie."
 
-msgid "For some reason, the app/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/app/cache/ directory, except the .htaccess file. On Linux: # find app/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
+msgid "For some reason, the var/cache/ directory could not be cleaned up. Please clean it up by manually connecting to the server and delete all files and symbolic links under the chamilo/var/cache/ directory, except the .htaccess file. On Linux: # find var/cache/ \\( -type f -or -type l \\) -not -name .htaccess -exec echo rm -v \\{} \\;"
 msgstr ""
 "Z jakiegoś powodu katalog chamilo/var/cache/ nie mógł zostać wyczyszczony. "
 "Proszę wyczyścić go ręcznie: połącz się z serwerem i usuń wszystkie pliki "

@@ -38,8 +38,8 @@ final class Version20250905071600 extends AbstractMigrationChamilo
         }
 
         // Add composite index for quick lookups when rendering
-        $indexes = array_map(static fn($i) => $i->getName(), $table->getIndexes());
-        if (!in_array('idx_ai_requests_lookup', $indexes, true)) {
+        $indexes = array_map(static fn ($i) => $i->getName(), $table->getIndexes());
+        if (!\in_array('idx_ai_requests_lookup', $indexes, true)) {
             $this->addSql('CREATE INDEX idx_ai_requests_lookup ON ai_requests (tool_name, tool_item_id)');
         }
     }
@@ -49,8 +49,8 @@ final class Version20250905071600 extends AbstractMigrationChamilo
         $schemaManager = $this->connection->createSchemaManager();
         $table = $schemaManager->introspectTable('ai_requests');
 
-        $indexes = array_map(static fn($i) => $i->getName(), $table->getIndexes());
-        if (in_array('idx_ai_requests_lookup', $indexes, true)) {
+        $indexes = array_map(static fn ($i) => $i->getName(), $table->getIndexes());
+        if (\in_array('idx_ai_requests_lookup', $indexes, true)) {
             $this->addSql('DROP INDEX idx_ai_requests_lookup ON ai_requests');
         }
 

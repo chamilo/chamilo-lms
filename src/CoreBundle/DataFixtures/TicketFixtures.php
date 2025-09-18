@@ -54,8 +54,7 @@ class TicketFixtures extends Fixture
                 ->setInsertUserId($adminId)
             ;
 
-            $isRequired = 6 === $i;
-            $ticketCategory->setCourseRequired($isRequired);
+            $ticketCategory->setCourseRequired(6 === $i);
 
             $manager->persist($ticketCategory);
             $i++;
@@ -72,7 +71,7 @@ class TicketFixtures extends Fixture
             $ticketPriority = new TicketPriority();
             $ticketPriority
                 ->setTitle($priority)
-                ->setCode($code)
+                ->setCode((string) $code)
                 ->setInsertUserId($adminId)
             ;
 
@@ -86,7 +85,7 @@ class TicketFixtures extends Fixture
             TicketManager::STATUS_NEW => $this->translator->trans('New'),
             TicketManager::STATUS_PENDING => $this->translator->trans('Pending'),
             TicketManager::STATUS_UNCONFIRMED => $this->translator->trans('Unconfirmed'),
-            TicketManager::STATUS_CLOSE => $this->translator->trans('Close'),
+            TicketManager::STATUS_CLOSED => $this->translator->trans('Closed'),
             TicketManager::STATUS_FORWARDED => $this->translator->trans('Forwarded'),
         ];
 
@@ -94,7 +93,7 @@ class TicketFixtures extends Fixture
             $ticketStatus = new TicketStatus();
             $ticketStatus
                 ->setTitle($status)
-                ->setCode($code)
+                ->setCode((string) $code)
             ;
             $manager->persist($ticketStatus);
         }

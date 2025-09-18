@@ -43,7 +43,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Exception;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -74,8 +73,11 @@ final class UserToJsonNormalizer
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->userRepository->find($userId);
+        if (!$user) {
+            throw new \RuntimeException(sprintf('User %d not found', $userId));
+        }
 
         $user->setPassword($substitutionTerms['password'] ?? '');
         $user->setSalt($substitutionTerms['salt'] ?? '');
@@ -89,14 +91,10 @@ final class UserToJsonNormalizer
         $user->setWebsite($noDataLabel);
 
         // GradebookCertificate
-        $result = $em->getRepository(GradebookCertificate::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(GradebookCertificate::class)->findBy(['user' => $userId]);
         $gradebookCertificate = [];
-
-        /** @var GradebookCertificate $item */
         foreach ($result as $item) {
-            $createdAt = $item->getCreatedAt()->format($dateFormat);
+            $createdAt = $item->getCreatedAt()?->format($dateFormat) ?? '';
             $list = [
                 'Score: '.$item->getScoreCertificate(),
                 'Path: '.$item->getPathCertificate(),
@@ -106,14 +104,10 @@ final class UserToJsonNormalizer
         }
 
         // TrackEExercises
-        $result = $em->getRepository(TrackEExercise::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(TrackEExercise::class)->findBy(['user' => $userId]);
         $trackEExercises = [];
-
-        /** @var TrackEExercise $item */
         foreach ($result as $item) {
-            $date = $item->getExeDate()->format($dateFormat);
+            $date = $item->getExeDate()?->format($dateFormat) ?? '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$date,
@@ -123,18 +117,12 @@ final class UserToJsonNormalizer
         }
 
         // TrackEAttempt
-        $result = $em->getRepository(TrackEAttempt::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(TrackEAttempt::class)->findBy(['user' => $userId]);
         $trackEAttempt = [];
-
-        /** @var TrackEAttempt $item */
         foreach ($result as $item) {
-            $date = $item->getTms()->format($dateFormat);
+            $date = $item->getTms()?->format($dateFormat) ?? '';
             $list = [
-                'Attempt #'.$item->getTrackEExercise()->getExeId(),
-                // 'Answer: '.$item->getAnswer(),
-                // 'Marks: '.$item->getMarks(),
+                'Attempt #'.($item->getTrackEExercise()?->getExeId() ?? 'n/a'),
                 'Position: '.$item->getPosition(),
                 'Date: '.$date,
             ];
@@ -142,15 +130,11 @@ final class UserToJsonNormalizer
         }
 
         // TrackECourseAccess
-        $result = $em->getRepository(TrackECourseAccess::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(TrackECourseAccess::class)->findBy(['user' => $userId]);
         $trackECourseAccessList = [];
-
-        /** @var TrackECourseAccess $item */
         foreach ($result as $item) {
-            $startDate = $item->getLoginCourseDate()->format($dateFormat);
-            $endDate = null !== $item->getLogoutCourseDate() ? $item->getLogoutCourseDate()->format($dateFormat) : '';
+            $startDate = $item->getLoginCourseDate()?->format($dateFormat) ?? '';
+            $endDate = $item->getLogoutCourseDate()?->format($dateFormat) ?? '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$startDate,
@@ -177,38 +161,28 @@ final class UserToJsonNormalizer
             $qb->select($qb->expr()->count('l'))
                 ->from($entity, 'l')
                 ->where("l.$field = :login")
-                ->setParameter('login', $userId)
-            ;
-            $query = $qb->getQuery();
-            $count = $query->getSingleScalarResult();
+                ->setParameter('login', $userId);
+            $count = (int) $qb->getQuery()->getSingleScalarResult();
 
             if ($count > $maxResults) {
                 $qb = $em->getRepository($entity)->createQueryBuilder('l');
-                $qb
-                    ->select('l')
+                $qb->select('l')
                     ->where("l.$field = :login")
                     ->setParameter('login', $userId)
-                ;
-                $qb
                     ->setFirstResult(0)
-                    ->setMaxResults($maxResults)
-                ;
+                    ->setMaxResults($maxResults);
                 $result = $qb->getQuery()->getResult();
             } else {
-                $criteria = [
-                    $field => $userId,
-                ];
-                $result = $em->getRepository($entity)->findBy($criteria);
+                $result = $em->getRepository($entity)->findBy([$field => $userId]);
             }
             $trackResults[$entity] = $result;
         }
 
+        // TrackELogin
         $trackELoginList = [];
-
-        /** @var TrackELogin $item */
         foreach ($trackResults[TrackELogin::class] as $item) {
-            $startDate = $item->getLoginDate()->format($dateFormat);
-            $endDate = null !== $item->getLogoutDate() ? $item->getLogoutDate()->format($dateFormat) : '';
+            $startDate = $item->getLoginDate()?->format($dateFormat) ?? '';
+            $endDate = $item->getLogoutDate()?->format($dateFormat) ?? '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Start: '.$startDate,
@@ -219,10 +193,8 @@ final class UserToJsonNormalizer
 
         // TrackEAccess
         $trackEAccessList = [];
-
-        /** @var TrackEAccess $item */
         foreach ($trackResults[TrackEAccess::class] as $item) {
-            $date = $item->getAccessDate()->format($dateFormat);
+            $date = $item->getAccessDate()?->format($dateFormat) ?? '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Tool: '.$item->getAccessTool(),
@@ -233,10 +205,8 @@ final class UserToJsonNormalizer
 
         // TrackEOnline
         $trackEOnlineList = [];
-
-        /** @var TrackEOnline $item */
         foreach ($trackResults[TrackEOnline::class] as $item) {
-            $date = $item->getLoginDate()->format($dateFormat);
+            $date = $item->getLoginDate()?->format($dateFormat) ?? '';
             $list = [
                 'IP: '.$item->getUserIp(),
                 'Login date: '.$date,
@@ -248,10 +218,8 @@ final class UserToJsonNormalizer
 
         // TrackEDefault
         $trackEDefault = [];
-
-        /** @var TrackEDefault $item */
         foreach ($trackResults[TrackEDefault::class] as $item) {
-            $date = $item->getDefaultDate()->format($dateFormat);
+            $date = $item->getDefaultDate()?->format($dateFormat) ?? '';
             $list = [
                 'Type: '.$item->getDefaultEventType(),
                 'Value: '.$item->getDefaultValue(),
@@ -265,10 +233,8 @@ final class UserToJsonNormalizer
 
         // TrackELastaccess
         $trackELastaccess = [];
-
-        /** @var TrackELastaccess $item */
         foreach ($trackResults[TrackELastaccess::class] as $item) {
-            $date = $item->getAccessDate()->format($dateFormat);
+            $date = $item->getAccessDate()?->format($dateFormat) ?? '';
             $list = [
                 'Course #'.$item->getCId(),
                 'Session # '.$item->getSessionId(),
@@ -280,10 +246,8 @@ final class UserToJsonNormalizer
 
         // TrackEUploads
         $trackEUploads = [];
-
-        /** @var TrackEUploads $item */
         foreach ($trackResults[TrackEUploads::class] as $item) {
-            $date = $item->getUploadDate()->format($dateFormat);
+            $date = $item->getUploadDate()?->format($dateFormat) ?? '';
             $list = [
                 'Course #'.$item->getCId(),
                 'Uploaded at: '.$date,
@@ -292,24 +256,21 @@ final class UserToJsonNormalizer
             $trackEUploads[] = implode(', ', $list);
         }
 
+        // GradebookResult
         $gradebookResult = [];
-
-        /** @var GradebookResult $item */
         foreach ($trackResults[GradebookResult::class] as $item) {
-            $date = $item->getCreatedAt()->format($dateFormat);
+            $date = $item->getCreatedAt()?->format($dateFormat) ?? '';
             $list = [
-                'Evaluation id# '.$item->getEvaluation()->getId(),
-                // 'Score: '.$item->getScore(),
+                'Evaluation id# '.($item->getEvaluation()?->getId() ?? 'n/a'),
                 'Creation date: '.$date,
             ];
             $gradebookResult[] = implode(', ', $list);
         }
 
+        // TrackEDownloads
         $trackEDownloads = [];
-
-        /** @var TrackEDownloads $item */
         foreach ($trackResults[TrackEDownloads::class] as $item) {
-            $date = $item->getDownDate()->format($dateFormat);
+            $date = $item->getDownDate()?->format($dateFormat) ?? '';
             $list = [
                 'File: '.$item->getDownDocPath(),
                 'Download at: '.$date,
@@ -318,28 +279,17 @@ final class UserToJsonNormalizer
         }
 
         // UserCourseCategory
-        $result = $em->getRepository(UserCourseCategory::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(UserCourseCategory::class)->findBy(['user' => $userId]);
         $userCourseCategory = [];
-
-        /** @var UserCourseCategory $item */
         foreach ($result as $item) {
-            $list = [
-                'Title: '.$item->getTitle(),
-            ];
-            $userCourseCategory[] = implode(', ', $list);
+            $userCourseCategory[] = 'Title: '.$item->getTitle();
         }
 
-        // Forum
-        $result = $em->getRepository(CForumPost::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Forum Posts
+        $result = $em->getRepository(CForumPost::class)->findBy(['user' => $userId]);
         $cForumPostList = [];
-
-        /** @var CForumPost $item */
         foreach ($result as $item) {
-            $date = $item->getPostDate()->format($dateFormat);
+            $date = $item->getPostDate()?->format($dateFormat) ?? '';
             $list = [
                 'Title: '.$item->getTitle(),
                 'Creation date: '.$date,
@@ -347,15 +297,11 @@ final class UserToJsonNormalizer
             $cForumPostList[] = implode(', ', $list);
         }
 
-        // CForumThread
-        $result = $em->getRepository(CForumThread::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Forum Threads
+        $result = $em->getRepository(CForumThread::class)->findBy(['user' => $userId]);
         $cForumThreadList = [];
-
-        /** @var CForumThread $item */
         foreach ($result as $item) {
-            $date = $item->getThreadDate()->format($dateFormat);
+            $date = $item->getThreadDate()?->format($dateFormat) ?? '';
             $list = [
                 'Title: '.$item->getTitle(),
                 'Creation date: '.$date,
@@ -363,84 +309,66 @@ final class UserToJsonNormalizer
             $cForumThreadList[] = implode(', ', $list);
         }
 
-        // cGroupRelUser
-        $result = $em->getRepository(CGroupRelUser::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Group Relations
+        $result = $em->getRepository(CGroupRelUser::class)->findBy(['user' => $userId]);
         $cGroupRelUser = [];
-
-        /** @var CGroupRelUser $item */
         foreach ($result as $item) {
             $list = [
-                'Course # '.$item->getCId(),
-                'Group #'.$item->getGroup()->getIid(),
+                'Course #'.$item->getCId(),
+                'Group #'.($item->getGroup()?->getIid() ?? 'n/a'),
                 'Role: '.$item->getStatus(),
             ];
             $cGroupRelUser[] = implode(', ', $list);
         }
 
-        // CAttendanceSheet
-        $result = $em->getRepository(CAttendanceSheet::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Attendance Sheets
+        $result = $em->getRepository(CAttendanceSheet::class)->findBy(['user' => $userId]);
         $cAttendanceSheetList = [];
-
-        /** @var CAttendanceSheet $item */
         foreach ($result as $item) {
             $list = [
                 'Presence: '.$item->getPresence(),
-                'Calendar id: '.$item->getAttendanceCalendar()->getIid(),
+                'Calendar id: '.($item->getAttendanceCalendar()?->getIid() ?? 'n/a'),
             ];
             $cAttendanceSheetList[] = implode(', ', $list);
         }
 
-        // CAttendanceResult
-        $result = $em->getRepository(CAttendanceResult::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Attendance Results
+        $result = $em->getRepository(CAttendanceResult::class)->findBy(['user' => $userId]);
         $cAttendanceResult = [];
-
-        /** @var CAttendanceResult $item */
         foreach ($result as $item) {
             $list = [
                 'Score : '.$item->getScore(),
-                'Calendar id: '.$item->getAttendance()->getIid(),
+                'Calendar id: '.($item->getAttendance()?->getIid() ?? 'n/a'),
             ];
             $cAttendanceResult[] = implode(', ', $list);
         }
 
-        // Message
-        $result = $em->getRepository(Message::class)->findBy([
-            'sender' => $userId,
-        ]);
+        // Messages
+        $result = $em->getRepository(Message::class)->findBy(['sender' => $userId]);
         $messageList = [];
-
-        /** @var Message $item */
         foreach ($result as $item) {
-            $date = $item->getSendDate()->format($dateFormat);
-            $userName = '';
+            $date = $item->getSendDate()?->format($dateFormat) ?? '';
+            $userNames = [];
             if ($item->getReceivers()) {
                 foreach ($item->getReceivers() as $receiver) {
-                    $userName = ', '.$receiver->getReceiver()->getUsername();
+                    $username = $receiver->getReceiver()?->getUsername();
+                    if ($username) {
+                        $userNames[] = $username;
+                    }
                 }
             }
-
             $list = [
                 'Title: '.$item->getTitle(),
                 'Sent date: '.$date,
-                'To users: '.$userName,
+                'To users: '.implode(', ', $userNames),
                 'Type: '.$item->getMsgType(),
             ];
             $messageList[] = implode(', ', $list);
         }
 
-        // CSurveyAnswer
-        $result = $em->getRepository(CSurveyAnswer::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Survey Answers
+        $result = $em->getRepository(CSurveyAnswer::class)->findBy(['user' => $userId]);
         $cSurveyAnswer = [];
-
-        /** @var CSurveyAnswer $item */
         foreach ($result as $item) {
             $list = [
                 'Answer # '.$item->getIid(),
@@ -449,15 +377,11 @@ final class UserToJsonNormalizer
             $cSurveyAnswer[] = implode(', ', $list);
         }
 
-        // CDropboxFile
-        $result = $em->getRepository(CDropboxFile::class)->findBy([
-            'uploaderId' => $userId,
-        ]);
+        // Dropbox File
+        $result = $em->getRepository(CDropboxFile::class)->findBy(['uploaderId' => $userId]);
         $cDropboxFile = [];
-
-        /** @var CDropboxFile $item */
         foreach ($result as $item) {
-            $date = $item->getUploadDate()->format($dateFormat);
+            $date = $item->getUploadDate()?->format($dateFormat) ?? '';
             $list = [
                 'Title: '.$item->getTitle(),
                 'Uploaded date: '.$date,
@@ -466,13 +390,9 @@ final class UserToJsonNormalizer
             $cDropboxFile[] = implode(', ', $list);
         }
 
-        // CDropboxPerson
-        $result = $em->getRepository(CDropboxPerson::class)->findBy([
-            'userId' => $userId,
-        ]);
+        // Dropbox Person
+        $result = $em->getRepository(CDropboxPerson::class)->findBy(['userId' => $userId]);
         $cDropboxPerson = [];
-
-        /** @var CDropboxPerson $item */
         foreach ($result as $item) {
             $list = [
                 'File #'.$item->getFileId(),
@@ -481,15 +401,11 @@ final class UserToJsonNormalizer
             $cDropboxPerson[] = implode(', ', $list);
         }
 
-        // CDropboxPerson
-        $result = $em->getRepository(CDropboxFeedback::class)->findBy([
-            'authorUserId' => $userId,
-        ]);
+        // Dropbox Feedback
+        $result = $em->getRepository(CDropboxFeedback::class)->findBy(['authorUserId' => $userId]);
         $cDropboxFeedback = [];
-
-        /** @var CDropboxFeedback $item */
         foreach ($result as $item) {
-            $date = $item->getFeedbackDate()->format($dateFormat);
+            $date = $item->getFeedbackDate()?->format($dateFormat) ?? '';
             $list = [
                 'File #'.$item->getFileId(),
                 'Feedback: '.$item->getFeedback(),
@@ -498,15 +414,11 @@ final class UserToJsonNormalizer
             $cDropboxFeedback[] = implode(', ', $list);
         }
 
-        // CNotebook
-        $result = $em->getRepository(CNotebook::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Notebook
+        $result = $em->getRepository(CNotebook::class)->findBy(['user' => $userId]);
         $cNotebook = [];
-
-        /** @var CNotebook $item */
         foreach ($result as $item) {
-            $date = $item->getUpdateDate()->format($dateFormat);
+            $date = $item->getUpdateDate()?->format($dateFormat) ?? '';
             $list = [
                 'Title: '.$item->getTitle(),
                 'Date: '.$date,
@@ -514,64 +426,40 @@ final class UserToJsonNormalizer
             $cNotebook[] = implode(', ', $list);
         }
 
-        // CLpView
-        $result = $em->getRepository(CLpView::class)->findBy([
-            'user' => $userId,
-        ]);
+        // LP Views
+        $result = $em->getRepository(CLpView::class)->findBy(['user' => $userId]);
         $cLpView = [];
-
-        /** @var CLpView $item */
         foreach ($result as $item) {
             $list = [
-                // 'Id #'.$item->getId(),
-                'LP #'.$item->getLp()->getIid(),
+                'LP #'.($item->getLp()?->getIid() ?? 'n/a'),
                 'Progress: '.$item->getProgress(),
-                // 'Course #'.$item->getCId(),
-                // 'Session #'.$item->getSessionId(),
             ];
             $cLpView[] = implode(', ', $list);
         }
 
-        // CStudentPublication
-        $result = $em->getRepository(CStudentPublication::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Student Publications
+        $result = $em->getRepository(CStudentPublication::class)->findBy(['user' => $userId]);
         $cStudentPublication = [];
-
-        /** @var CStudentPublication $item */
         foreach ($result as $item) {
-            $list = [
-                'Title: '.$item->getTitle(),
-                // 'URL: '.$item->getTitle(),
-            ];
-            $cStudentPublication[] = implode(', ', $list);
+            $cStudentPublication[] = 'Title: '.$item->getTitle();
         }
 
-        // CStudentPublicationComment
-        $result = $em->getRepository(CStudentPublicationComment::class)->findBy([
-            'user' => $userId,
-        ]);
+        // Student Publication Comments
+        $result = $em->getRepository(CStudentPublicationComment::class)->findBy(['user' => $userId]);
         $cStudentPublicationComment = [];
-
-        /** @var CStudentPublicationComment $item */
         foreach ($result as $item) {
-            $date = $item->getSentAt()->format($dateFormat);
+            $date = $item->getSentAt()?->format($dateFormat) ?? '';
             $list = [
                 'Commment: '.$item->getComment(),
                 'File '.$item->getFile(),
-                // 'Course # '.$item->getCId(),
                 'Date: '.$date,
             ];
             $cStudentPublicationComment[] = implode(', ', $list);
         }
 
-        // CWiki
-        $result = $em->getRepository(CWiki::class)->findBy([
-            'userId' => $userId,
-        ]);
+        // Wiki
+        $result = $em->getRepository(CWiki::class)->findBy(['userId' => $userId]);
         $cWiki = [];
-
-        /** @var CWiki $item */
         foreach ($result as $item) {
             $list = [
                 'Title: '.$item->getTitle(),
@@ -581,13 +469,9 @@ final class UserToJsonNormalizer
             $cWiki[] = implode(', ', $list);
         }
 
-        // Ticket
-        $result = $em->getRepository(Ticket::class)->findBy([
-            'insertUserId' => $userId,
-        ]);
+        // Tickets
+        $result = $em->getRepository(Ticket::class)->findBy(['insertUserId' => $userId]);
         $ticket = [];
-
-        /** @var Ticket $item */
         foreach ($result as $item) {
             $list = [
                 'Code: '.$item->getCode(),
@@ -596,15 +480,11 @@ final class UserToJsonNormalizer
             $ticket[] = implode(', ', $list);
         }
 
-        // Message
-        $result = $em->getRepository(TicketMessage::class)->findBy([
-            'insertUserId' => $userId,
-        ]);
+        // Ticket Messages
+        $result = $em->getRepository(TicketMessage::class)->findBy(['insertUserId' => $userId]);
         $ticketMessage = [];
-
-        /** @var TicketMessage $item */
         foreach ($result as $item) {
-            $date = $item->getInsertDateTime()->format($dateFormat);
+            $date = $item->getInsertDateTime()?->format($dateFormat) ?? '';
             $list = [
                 'Subject: '.$item->getSubject(),
                 'IP: '.$item->getIpAddress(),
@@ -615,14 +495,10 @@ final class UserToJsonNormalizer
         }
 
         // SkillRelUserComment
-        $result = $em->getRepository(SkillRelUserComment::class)->findBy([
-            'feedbackGiver' => $userId,
-        ]);
+        $result = $em->getRepository(SkillRelUserComment::class)->findBy(['feedbackGiver' => $userId]);
         $skillRelUserComment = [];
-
-        /** @var SkillRelUserComment $item */
         foreach ($result as $item) {
-            $date = $item->getFeedbackDateTime()->format($dateFormat);
+            $date = $item->getFeedbackDateTime()?->format($dateFormat) ?? '';
             $list = [
                 'Feedback: '.$item->getFeedbackText(),
                 'Value: '.$item->getFeedbackValue(),
@@ -632,21 +508,17 @@ final class UserToJsonNormalizer
         }
 
         // UserRelCourseVote
-        $result = $em->getRepository(UserRelCourseVote::class)->findBy([
-            'user' => $userId,
-        ]);
+        $result = $em->getRepository(UserRelCourseVote::class)->findBy(['user' => $userId]);
         $userRelCourseVote = [];
-
-        /** @var UserRelCourseVote $item */
         foreach ($result as $item) {
             $list = [
-                'Course #'.$item->getCourse()->getId(),
-                // 'Session #'.$item->getSession()->getId(),
+                'Course #'.($item->getCourse()?->getId() ?? 'n/a'),
                 'Vote: '.$item->getVote(),
             ];
             $userRelCourseVote[] = implode(', ', $list);
         }
 
+        // Preserve last login safely (no-op but keeps behavior)
         $lastLogin = $user->getLastLogin();
         $user->setLastLogin($lastLogin);
 
@@ -666,7 +538,6 @@ final class UserToJsonNormalizer
             'twitterData',
             'twitterName',
             'twitterUid',
-            'gplusUid',
             'token',
             'website',
             'plainPassword',
@@ -695,13 +566,15 @@ final class UserToJsonNormalizer
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;
 
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->userRepository->find($userId);
         if (!$user) {
-            throw new Exception('User not found.');
+            throw new \Exception('User not found.');
         }
 
         $personalData = [];
+
+        // User info
         $personalData['user_info'][] = [
             'ID' => $user->getId(),
             'Username' => $user->getUsername(),
@@ -720,41 +593,44 @@ final class UserToJsonNormalizer
             'ApiToken' => $user->getApiToken(),
         ];
 
+        // Courses (null-safe)
         $courses = $user->getCourses();
         foreach ($courses as $course) {
             $personalData['Courses'][] = [
-                'CourseID' => $course->getCourse()->getId(),
-                'CourseCode' => $course->getCourse()->getCode(),
-                'CourseTitle' => $course->getCourse()->getTitle(),
+                'CourseID' => $course->getCourse()?->getId() ?? 'n/a',
+                'CourseCode' => $course->getCourse()?->getCode() ?? 'n/a',
+                'CourseTitle' => $course->getCourse()?->getTitle() ?? 'n/a',
             ];
         }
 
+        // GradebookCertificates
         $gradebookCertificates = $em->getRepository(GradebookCertificate::class)->findBy(['user' => $userId]);
         foreach ($gradebookCertificates as $certificate) {
             $personalData['GradebookCertificates'][] = [
                 'Score' => $certificate->getScoreCertificate(),
                 'Path' => $certificate->getPathCertificate(),
-                'CreatedAt' => $certificate->getCreatedAt()->format($dateFormat),
+                'CreatedAt' => $certificate->getCreatedAt()?->format($dateFormat) ?? '',
             ];
         }
 
+        // TrackEExercises
         $trackEExercises = $em->getRepository(TrackEExercise::class)->findBy(['user' => $userId]);
         foreach ($trackEExercises as $exercise) {
             $personalData['TrackEExercises'][] = [
                 'IP' => $exercise->getUserIp(),
-                'Start' => $exercise->getExeDate()->format($dateFormat),
+                'Start' => $exercise->getExeDate()?->format($dateFormat) ?? '',
                 'Status' => $exercise->getStatus(),
             ];
         }
 
-        // TrackEDownloads
-        $resourceLinkId = $user->getResourceNode()->getResourceLinks()->first();
-        if (null !== $resourceLinkId) {
-            $trackEDownloads = $em->getRepository(TrackEDownloads::class)->findBy(['resourceLink' => $resourceLinkId]);
+        // Downloads (null-safe on resource link)
+        $resourceLink = $user->getResourceNode()?->getResourceLinks()?->first();
+        if ($resourceLink) {
+            $trackEDownloads = $em->getRepository(TrackEDownloads::class)->findBy(['resourceLink' => $resourceLink]);
             foreach ($trackEDownloads as $item) {
-                $userData['Downloads'][] = [
+                $personalData['Downloads'][] = [
                     'File' => $item->getDownDocPath(),
-                    'DownloadedAt' => $item->getDownDate()->format($dateFormat),
+                    'DownloadedAt' => $item->getDownDate()?->format($dateFormat) ?? '',
                 ];
             }
         }
@@ -762,159 +638,153 @@ final class UserToJsonNormalizer
         // UserCourseCategory
         $userCourseCategories = $em->getRepository(UserCourseCategory::class)->findBy(['user' => $userId]);
         foreach ($userCourseCategories as $item) {
-            $userData['CourseCategories'][] = [
+            $personalData['CourseCategories'][] = [
                 'Title' => $item->getTitle(),
             ];
         }
 
-        // CForumPost
+        // Forum Posts
         $cForumPosts = $em->getRepository(CForumPost::class)->findBy(['user' => $userId]);
         foreach ($cForumPosts as $item) {
-            $userData['ForumPosts'][] = [
+            $personalData['ForumPosts'][] = [
                 'Title' => $item->getTitle(),
-                'CreationDate' => $item->getPostDate()->format($dateFormat),
+                'CreationDate' => $item->getPostDate()?->format($dateFormat) ?? '',
             ];
         }
 
-        // CForumThread
+        // Forum Threads (single block; removed duplicate)
         $cForumThreads = $em->getRepository(CForumThread::class)->findBy(['user' => $userId]);
         foreach ($cForumThreads as $item) {
-            $userData['ForumThreads'][] = [
+            $personalData['ForumThreads'][] = [
                 'Title' => $item->getTitle(),
-                'CreationDate' => $item->getThreadDate()->format($dateFormat),
+                'CreationDate' => $item->getThreadDate()?->format($dateFormat) ?? '',
             ];
         }
 
-        // CForumThread
-        $cForumThreads = $em->getRepository(CForumThread::class)->findBy(['user' => $userId]);
-        foreach ($cForumThreads as $item) {
-            $userData['ForumThreads'][] = [
-                'Title' => $item->getTitle(),
-                'CreationDate' => $item->getThreadDate()->format($dateFormat),
-            ];
-        }
-
-        // CGroupRelUser
+        // Group Relations
         $cGroupRelUsers = $em->getRepository(CGroupRelUser::class)->findBy(['user' => $userId]);
         foreach ($cGroupRelUsers as $item) {
-            $userData['GroupRelations'][] = [
+            $personalData['GroupRelations'][] = [
                 'CourseId' => $item->getCId(),
-                'GroupId' => $item->getGroup()->getIid(),
-                'Role' => $item->getStatus(),
+                'GroupId'  => $item->getGroup()?->getIid() ?? 'n/a',
+                'Role'     => $item->getStatus(),
             ];
         }
 
-        // CAttendanceSheet
+        // Attendance Sheets
         $cAttendanceSheets = $em->getRepository(CAttendanceSheet::class)->findBy(['user' => $userId]);
         foreach ($cAttendanceSheets as $item) {
-            $userData['AttendanceSheets'][] = [
-                'Presence' => $item->getPresence(),
-                'CalendarId' => $item->getAttendanceCalendar()->getIid(),
+            $personalData['AttendanceSheets'][] = [
+                'Presence'   => $item->getPresence(),
+                'CalendarId' => $item->getAttendanceCalendar()?->getIid() ?? 'n/a',
             ];
         }
 
-        // CAttendanceResult
+        // Attendance Results
         $cAttendanceResults = $em->getRepository(CAttendanceResult::class)->findBy(['user' => $userId]);
         foreach ($cAttendanceResults as $item) {
-            $userData['AttendanceResults'][] = [
-                'Score' => $item->getScore(),
-                'CalendarId' => $item->getAttendance()->getIid(),
+            $personalData['AttendanceResults'][] = [
+                'Score'      => $item->getScore(),
+                'CalendarId' => $item->getAttendance()?->getIid() ?? 'n/a',
             ];
         }
 
-        // Message
+        // Messages
         $messages = $em->getRepository(Message::class)->findBy(['sender' => $userId]);
         foreach ($messages as $item) {
-            $receivers = array_map(fn ($receiver) => $receiver->getReceiver()->getUsername(), $item->getReceivers()->toArray());
-            $userData['Messages'][] = [
-                'Title' => $item->getTitle(),
-                'SentDate' => $item->getSendDate()->format($dateFormat),
-                'ToUsers' => implode(', ', $receivers),
-                'Type' => $item->getMsgType(),
+            $receivers = array_map(
+                fn ($receiver) => $receiver->getReceiver()?->getUsername() ?? 'n/a',
+                $item->getReceivers()->toArray()
+            );
+            $personalData['Messages'][] = [
+                'Title'    => $item->getTitle(),
+                'SentDate' => $item->getSendDate()?->format($dateFormat) ?? '',
+                'ToUsers'  => implode(', ', $receivers),
+                'Type'     => $item->getMsgType(),
             ];
         }
 
-        // CSurveyAnswer
+        // Survey Answers
         $cSurveyAnswers = $em->getRepository(CSurveyAnswer::class)->findBy(['user' => $userId]);
         foreach ($cSurveyAnswers as $item) {
-            $userData['SurveyAnswers'][] = [
+            $personalData['SurveyAnswers'][] = [
                 'AnswerId' => $item->getIid(),
                 'Value' => $item->getValue(),
             ];
         }
 
-        // CLpView
+        // LP Views
         $cLpViews = $em->getRepository(CLpView::class)->findBy(['user' => $userId]);
         foreach ($cLpViews as $item) {
-            $userData['LpViews'][] = [
-                'LPId' => $item->getLp()->getIid(),
+            $personalData['LpViews'][] = [
+                'LPId'     => $item->getLp()?->getIid() ?? 'n/a',
                 'Progress' => $item->getProgress(),
             ];
         }
 
-        // CStudentPublication
+        // Student Publications
         $cStudentPublications = $em->getRepository(CStudentPublication::class)->findBy(['user' => $userId]);
         foreach ($cStudentPublications as $item) {
-            $userData['StudentPublications'][] = [
+            $personalData['StudentPublications'][] = [
                 'Title' => $item->getTitle(),
             ];
         }
 
-        // CStudentPublicationComment
+        // Student Publication Comments
         $cStudentPublicationComments = $em->getRepository(CStudentPublicationComment::class)->findBy(['user' => $userId]);
         foreach ($cStudentPublicationComments as $item) {
-            $userData['StudentPublicationComments'][] = [
+            $personalData['StudentPublicationComments'][] = [
                 'Comment' => $item->getComment(),
                 'File' => $item->getFile(),
-                'Date' => $item->getSentAt()->format($dateFormat),
+                'Date' => $item->getSentAt()?->format($dateFormat) ?? '',
             ];
         }
 
-        // CWiki
+        // Wiki
         $cWikis = $em->getRepository(CWiki::class)->findBy(['userId' => $userId]);
         foreach ($cWikis as $item) {
-            $userData['Wikis'][] = [
+            $personalData['Wikis'][] = [
                 'Title' => $item->getTitle(),
                 'Progress' => $item->getProgress(),
                 'IP' => $item->getUserIp(),
             ];
         }
 
-        // Ticket
+        // Tickets
         $tickets = $em->getRepository(Ticket::class)->findBy(['insertUserId' => $userId]);
         foreach ($tickets as $item) {
-            $userData['Tickets'][] = [
+            $personalData['Tickets'][] = [
                 'Code' => $item->getCode(),
                 'Subject' => $item->getSubject(),
             ];
         }
 
-        // TicketMessage
+        // Ticket Messages
         $ticketMessages = $em->getRepository(TicketMessage::class)->findBy(['insertUserId' => $userId]);
         foreach ($ticketMessages as $item) {
-            $userData['TicketMessages'][] = [
+            $personalData['TicketMessages'][] = [
                 'Subject' => $item->getSubject(),
                 'IP' => $item->getIpAddress(),
                 'Status' => $item->getStatus(),
-                'CreationDate' => $item->getInsertDateTime()->format($dateFormat),
+                'CreationDate' => $item->getInsertDateTime()?->format($dateFormat) ?? '',
             ];
         }
 
         // SkillRelUserComment
         $skillRelUserComments = $em->getRepository(SkillRelUserComment::class)->findBy(['feedbackGiver' => $userId]);
         foreach ($skillRelUserComments as $item) {
-            $userData['SkillUserComments'][] = [
+            $personalData['SkillUserComments'][] = [
                 'Feedback' => $item->getFeedbackText(),
                 'Value' => $item->getFeedbackValue(),
-                'CreatedAt' => $item->getFeedbackDateTime()->format($dateFormat),
+                'CreatedAt' => $item->getFeedbackDateTime()?->format($dateFormat) ?? '',
             ];
         }
 
-        // UserRelCourseVote
+        // Course Votes
         $userRelCourseVotes = $em->getRepository(UserRelCourseVote::class)->findBy(['user' => $userId]);
         foreach ($userRelCourseVotes as $item) {
-            $userData['CourseVotes'][] = [
-                'CourseId' => $item->getCourse()->getId(),
+            $personalData['CourseVotes'][] = [
+                'CourseId' => $item->getCourse()?->getId() ?? 'n/a',
                 'Vote' => $item->getVote(),
             ];
         }

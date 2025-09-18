@@ -200,10 +200,7 @@ function handlePlugins()
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
 
-            $configureUrl = Container::getRouter()->generate(
-                'legacy_main',
-                ['name' => 'admin/configure_plugin.php', 'plugin' => $pluginName]
-            );
+            $configureUrl = '/main/admin/configure_plugin.php?'.http_build_query(['plugin' => $pluginName]);
 
             echo Display::url(
                 get_lang('Configure'),

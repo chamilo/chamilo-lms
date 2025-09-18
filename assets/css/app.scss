@@ -918,6 +918,58 @@ img.course-tool__icon {
 .media-children    { margin-left:1rem; }
 .media-group h4   { margin-top:0; color:#23527c; }
 
+#tool-wiki { display:flex; flex-direction:column; min-height:100%; }
+#tool-wiki .wiki-wrap { flex: 1 0 auto; }
+#tool-wiki #wikicontent { display: flow-root; }
+#tool-wiki .wiki-footer { clear: both; margin-top: 1rem; }
+.wiki-stats-grid .panel {height:100%}
+.wiki-stats-grid .panel-body a {display:block; padding:6px 0}
+.wiki-stats-grid .panel-body a .mdi {vertical-align:middle; margin-right:6px}
+.wiki-breadcrumb {margin:10px 0 15px}
+.wiki-bc-wrap{margin:12px 0}
+.breadcrumb--wiki{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
+.breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
+.breadcrumb--wiki .mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
+.breadcrumb-actions{margin-left:auto; display:flex; gap:.5rem}
+.breadcrumb-actions .btn{padding:6px 10px; border:1px solid #e7eaef; border-radius:10px; background:#fff;}
+.wiki-bc-wrap{margin:12px 0}
+.breadcrumb--wiki{display:flex; flex-wrap:wrap; align-items:center; gap:.5rem;background:linear-gradient(180deg,#ffffff,#f8f9fb);border:1px solid #e7eaef; border-radius:12px; padding:8px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.breadcrumb--wiki .breadcrumb-item a{ text-decoration:none; font-weight:600; }
+.breadcrumb--wiki .breadcrumb-item.active{ color:#6c757d; font-weight:600; }
+.mdi-inline{vertical-align:-0.15em; margin-right:.35rem;}
+.wiki-pills{display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 16px}
+.wiki-pills .pill{display:inline-flex; align-items:center; gap:6px;padding:6px 10px; background:#fff; border:1px solid #e7eaef;border-radius:999px; text-decoration:none; font-weight:600;}
+.wiki-pills .pill.active{ background:#eef4ff; border-color:#cddcff; }
+.wiki-discuss{
+  .wd-wrap{ margin:0 auto; padding:12px 14px; }
+  .wd-header{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin-bottom:12px; padding:8px 10px; border:1px solid #dfe3e7; border-radius:4px; background:linear-gradient(#f8f8f8, #eeeeee); }
+  .wd-title{ margin:0; font-size:20px; line-height:1.2; font-weight:600; }
+  .wd-meta{ margin-top:2px; font-size:12px; color:#6c757d; }
+  .wd-toolbar a{ display:inline-block; margin-left:8px; }
+  .wd-card{ margin-top:12px; border:1px solid #e5e7eb; border-radius:4px; background:#fff; }
+  .wd-card .panel-body{ padding:14px; }
+  .wd-form .form-group{ display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+  .wd-form .control-label{ width:140px; padding-top:7px; margin:0; font-weight:600; text-align:left; }
+  .wd-form .col-sm-10{ flex:1 1 auto; min-width:0; }
+  .wd-form .form-control{ width:100%; }
+  .wd-form .wd-rating{ max-width:160px; }
+  .btn--primary{ background:#2d6cdf; border:1px solid #2257b6; color:#fff; padding:6px 14px; border-radius:4px; font-weight:600; }
+  .btn--primary:hover{ background:#255bc3; }
+  .wd-stats{ margin:12px 0 6px; padding:8px 10px; display:flex; gap:8px; flex-wrap:wrap; color:#606c76; background:#fafafa; border:1px solid #e5e7eb; border-radius:4px; }
+  .wd-empty{ margin-top:8px; }
+  .wd-comment{ display:flex; gap:12px; padding:12px 0; border-bottom:1px solid #eee; }
+  .wd-comment:last-child{ border-bottom:none; }
+  .wd-avatar{ width:40px; height:50px; border-radius:4px; background:#e9ecef; flex:none; object-fit:cover; }
+  .wd-avatar.wd-avatar--ph{ display:block; }
+  .wd-comment-body{ flex:1 1 auto; min-width:0; }
+  .wd-comment-meta{ font-size:12px; color:#6c757d; display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .wd-dot{ color:#c0c4c8; }
+  .wd-comment-text{ white-space:pre-wrap; margin-top:4px; font-size:14px; }
+  .form-horizontal .control-label{ text-align:left; }
+  textarea.form-control{ min-height:140px; }
+}
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";

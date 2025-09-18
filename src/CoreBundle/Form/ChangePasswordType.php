@@ -149,10 +149,10 @@ class ChangePasswordType extends AbstractType
         $errors = [];
         $req = Security::getPasswordRequirements()['min'];
 
-        $len      = \strlen($password);
-        $lower    = preg_match_all('/[a-z]/', $password);
-        $upper    = preg_match_all('/[A-Z]/', $password);
-        $digits   = preg_match_all('/\d/', $password);
+        $len = \strlen($password);
+        $lower = preg_match_all('/[a-z]/', $password);
+        $upper = preg_match_all('/[A-Z]/', $password);
+        $digits = preg_match_all('/\d/', $password);
         $specials = preg_match_all('/[^a-zA-Z0-9]/', $password);
 
         if ($len < $req['length']) {

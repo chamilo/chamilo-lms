@@ -50,55 +50,55 @@ final class Version20250905185500 extends AbstractMigrationChamilo
         $recreated = 0;
 
         foreach ($rows as $row) {
-            $title      = (string) $row['plugin_title'];
-            $installed  = (int) ($row['plugin_installed'] ?? 0);
-            $accessUrl  = $row['access_url'] !== null ? (int) $row['access_url'] : 1; // default URL=1 if missing
-            $cfgRaw     = $row['cfg'];
+            $title = (string) $row['plugin_title'];
+            $installed = (int) ($row['plugin_installed'] ?? 0);
+            $accessUrl = null !== $row['access_url'] ? (int) $row['access_url'] : 1; // default URL=1 if missing
+            $cfgRaw = $row['cfg'];
 
             // Restore 'status' row (legacy semantics)
             $conn->insert('settings', [
-                'variable'              => 'status',
-                'subkey'                => $title,
-                'type'                  => 'setting',
-                'category'              => 'plugins',
-                'selected_value'        => $installed ? 'installed' : 'uninstalled',
-                'title'                 => $title,
-                'comment'               => '',
+                'variable' => 'status',
+                'subkey' => $title,
+                'type' => 'setting',
+                'category' => 'plugins',
+                'selected_value' => $installed ? 'installed' : 'uninstalled',
+                'title' => $title,
+                'comment' => '',
                 'access_url_changeable' => 1,
-                'access_url_locked'     => 0,
-                'access_url'            => $accessUrl,
+                'access_url_locked' => 0,
+                'access_url' => $accessUrl,
             ]);
             $recreated++;
 
             // Restore configuration rows from JSON
             $cfg = [];
-            if (is_string($cfgRaw) && $cfgRaw !== '') {
+            if (\is_string($cfgRaw) && '' !== $cfgRaw) {
                 $decoded = json_decode($cfgRaw, true);
-                if (is_array($decoded)) {
+                if (\is_array($decoded)) {
                     $cfg = $decoded;
                 }
-            } elseif (is_array($cfgRaw)) {
+            } elseif (\is_array($cfgRaw)) {
                 $cfg = $cfgRaw;
             }
 
             if (!empty($cfg)) {
                 foreach ($cfg as $key => $val) {
-                    $variable      = $title . '_' . (string) $key;
+                    $variable = $title.'_'.(string) $key;
                     $selectedValue =
-                        is_bool($val) ? ($val ? 'true' : 'false') :
-                            (is_scalar($val) ? (string) $val : json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+                        \is_bool($val) ? ($val ? 'true' : 'false') :
+                            (\is_scalar($val) ? (string) $val : json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 
                     $conn->insert('settings', [
-                        'variable'              => $variable,
-                        'subkey'                => $title,
-                        'type'                  => 'setting',
-                        'category'              => 'plugins',
-                        'selected_value'        => $selectedValue,
-                        'title'                 => $title,
-                        'comment'               => '',
+                        'variable' => $variable,
+                        'subkey' => $title,
+                        'type' => 'setting',
+                        'category' => 'plugins',
+                        'selected_value' => $selectedValue,
+                        'title' => $title,
+                        'comment' => '',
                         'access_url_changeable' => 1,
-                        'access_url_locked'     => 0,
-                        'access_url'            => $accessUrl,
+                        'access_url_locked' => 0,
+                        'access_url' => $accessUrl,
                     ]);
                     $recreated++;
                 }

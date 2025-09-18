@@ -40,6 +40,25 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
   const currentFolderTitle = ref("Root")
   const { cid, sid, gid } = useCidReq()
 
+  const SS_KEY_PARENT = "pf_parent"
+  const setParentInSession = (id) => {
+    try {
+      sessionStorage.setItem(SS_KEY_PARENT, String(Number(id || 0)))
+    } catch {}
+  }
+  const getParentFromSession = () => {
+    try {
+      return Number(sessionStorage.getItem(SS_KEY_PARENT) || 0)
+    } catch {
+      return 0
+    }
+  }
+  const clearParentInSession = () => {
+    try {
+      sessionStorage.removeItem(SS_KEY_PARENT)
+    } catch {}
+  }
+
   const flattenFilters = (filters) => {
     return Object.keys(filters).reduce((acc, key) => {
       acc[key] = filters[key]
@@ -101,6 +120,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       })
       filters.value["resourceNode.parent"] = data.resourceNode.id
       currentFolderTitle.value = data.resourceNode.title
+      setParentInSession(filters.value["resourceNode.parent"])
       onUpdateOptions()
     }
   }
@@ -110,14 +130,22 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
       const previousFolder = previousFolders.value.pop()
       filters.value["resourceNode.parent"] = previousFolder.id
       currentFolderTitle.value = previousFolder.title
-      onUpdateOptions()
     } else {
       filters.value["resourceNode.parent"] = isCourseDocument
         ? course.value.resourceNode.id
         : user.value.resourceNode.id
       currentFolderTitle.value = "Root"
-      onUpdateOptions()
     }
+    setParentInSession(filters.value["resourceNode.parent"])
+    onUpdateOptions()
+  }
+
+  const resetToRoot = () => {
+    clearParentInSession()
+    previousFolders.value = []
+    currentFolderTitle.value = "Root"
+    filters.value["resourceNode.parent"] = isCourseDocument ? course.value.resourceNode.id : user.value.resourceNode.id
+    onUpdateOptions()
   }
 
   const returnToEditor = (data) => {
@@ -153,14 +181,10 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     return fileExtensions.includes(extension)
   }
 
-  const getFileUrl = (file) => {
-    return file.contentUrl
-  }
+  const getFileUrl = (file) => file.contentUrl
 
   const getIcon = (file) => {
-    if (!file.resourceNode.firstResourceFile) {
-      return "mdi-folder"
-    }
+    if (!file.resourceNode.firstResourceFile) return "mdi-folder"
     const fileTypeIcons = {
       pdf: "mdi-file-pdf-box",
       doc: "mdi-file-word-box",
@@ -289,6 +313,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     localStorage.setItem("currentFolderTitle", currentFolderTitle.value)
     localStorage.setItem("isUploaded", "true")
     localStorage.setItem("uploadParentNodeId", filters.value["resourceNode.parent"])
+    setParentInSession(filters.value["resourceNode.parent"])
 
     await router.push({
       name: uploadRoute,
@@ -303,6 +328,23 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
 
   const onMountedCallback = () => {
     onMounted(() => {
+      const hasNodeParam =
+        route.params?.node !== undefined &&
+        route.params?.node !== null &&
+        String(route.params.node) !== "" &&
+        Number(route.params.node) > 0
+
+      const hasExplicitParentInQuery =
+        route.query?.parentResourceNodeId !== undefined &&
+        route.query?.parentResourceNodeId !== null &&
+        String(route.query.parentResourceNodeId) !== ""
+
+      if (!hasNodeParam && !hasExplicitParentInQuery) {
+        clearParentInSession()
+        previousFolders.value = []
+        currentFolderTitle.value = "Root"
+      }
+
       const savedPreviousFolders = localStorage.getItem("previousFolders")
       const savedCurrentFolderTitle = localStorage.getItem("currentFolderTitle")
       const isUploaded = localStorage.getItem("isUploaded")
@@ -313,10 +355,17 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
         localStorage.removeItem("isUploaded")
         localStorage.removeItem("uploadParentNodeId")
       } else if (!filters.value["resourceNode.parent"] || filters.value["resourceNode.parent"] === 0) {
-        filters.value["resourceNode.parent"] = isCourseDocument
-          ? course.value.resourceNode.id
-          : user.value.resourceNode.id
+        const ssParent = getParentFromSession()
+        if (ssParent) {
+          filters.value["resourceNode.parent"] = ssParent
+        } else {
+          filters.value["resourceNode.parent"] = isCourseDocument
+            ? course.value.resourceNode.id
+            : user.value.resourceNode.id
+        }
       }
+
+      setParentInSession(filters.value["resourceNode.parent"])
 
       if (savedPreviousFolders) {
         previousFolders.value = JSON.parse(savedPreviousFolders)
@@ -388,6 +437,7 @@ export function useFileManager(entity, apiEndpoint, uploadRoute, isCourseDocumen
     onUpdateOptions,
     handleClickFile,
     goBack,
+    resetToRoot,
     returnToEditor,
     toggleViewMode,
     viewModeIcon,

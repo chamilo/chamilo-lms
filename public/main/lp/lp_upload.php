@@ -2,9 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Script managing the learnpath upload. To best treat the uploaded file, make sure we can identify it.
@@ -26,28 +30,28 @@ if (('true' === api_get_setting('lp.allow_htaccess_import_from_scorm')) && isset
 }
 
 /*
- * Check the request method in place of a variable from POST
- * because if the file size exceed the maximum file upload
- * size set in php.ini, all variables from POST are cleared !
+ * Check the request method instead of relying on POST variables,
+ * because if the uploaded file exceeds php.ini limits, POST is cleared.
  */
 $user_file = $_FILES['user_file'] ?? [];
 $is_error  = $user_file['error'] ?? false;
 $em        = Database::getManager();
 
 if (isset($_POST) && $is_error) {
+    // Redirect to the upload screen with an error
     unset($_FILES['user_file']);
     ChamiloHelper::redirectTo(api_get_path(WEB_PATH).'main/upload/index.php?'.api_get_cidreq().'&origin=course&curdirpath=/&tool=learnpath');
 }
 elseif ('POST' === $_SERVER['REQUEST_METHOD']
     && !empty($_FILES['user_file']['name'])
 ) {
-    // A file upload has been detected, now deal with the file...
+    // A file upload has been detected, now handle it...
     $s = $_FILES['user_file']['name'];
 
-    // Get name of the zip file without the extension.
+    // Derive filename info
     $info           = pathinfo($s);
     $filename       = $info['basename'];
-    $extension      = $info['extension'];
+    $extension      = $info['extension'] ?? '';
     $file_base_name = str_replace('.'.$extension, '', $filename);
 
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
@@ -64,7 +68,7 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
         case 'chamilo':
             $filename = CourseArchiver::importUploadedFile($_FILES['user_file']['tmp_name']);
             if ($filename) {
-                $course        = CourseArchiver::readCourse($filename, false);
+                $course         = CourseArchiver::readCourse($filename, false);
                 $courseRestorer = new CourseRestorer($course);
                 $courseRestorer->set_file_option(FILE_OVERWRITE);
                 $courseRestorer->restore('', api_get_session_id());
@@ -72,8 +76,7 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             }
             break;
         case 'scorm':
-            $tmpFile  = $_FILES['user_file']['tmp_name'];
-            $fileSize = filesize($tmpFile);
+            $tmpFile = $_FILES['user_file']['tmp_name'];
             $blocked = learnpath::verify_document_size($tmpFile);
             if ($blocked) {
                 ChamiloHelper::redirectTo(api_get_path(WEB_PATH).'main/upload/index.php?'.api_get_cidreq().'&origin=course&curdirpath=/&tool=learnpath');
@@ -91,10 +94,27 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                 $scorm->parse_manifest();
                 $lp = $scorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
                 if ($lp) {
-                    $lp->setContentLocal($proximity)
-                        ->setContentMaker($maker);
+                    $lp->setContentLocal($proximity)->setContentMaker($maker);
                     $em->persist($lp);
                     $em->flush();
+
+                    /** @var CDocumentRepository $docRepo */
+                    $docRepo = $em->getRepository(CDocument::class);
+
+                    /** @var Session|null $session */
+                    $session = api_get_session_entity();
+
+                    $uploadedZip = new UploadedFile(
+                        $_FILES['user_file']['tmp_name'],
+                        $_FILES['user_file']['name'],
+                        $_FILES['user_file']['type'] ?? null,
+                        $_FILES['user_file']['error'] ?? 0,
+                        true
+                    );
+
+                    // Save under Documents / Learning paths (course/session aware)
+                    $docRepo->registerScormZip(api_get_course_entity(), $session, $lp, $uploadedZip);
+
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                 }
             }
@@ -127,72 +147,84 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             Display::addFlash(Display::return_message(get_lang('Unknown package format'), 'warning'));
 
             return false;
-            break;
     }
 } elseif ('POST' === $_SERVER['REQUEST_METHOD']) {
-    // end if is_uploaded_file
-    // If file name given to get in /upload/, try importing this way.
-    // A file upload has been detected, now deal with the file...
-    // Directory creation.
-    $stopping_error = false;
+    // Fallback: import from an existing file in /upload/ (no $_FILES)
 
     if (!isset($_POST['file_name'])) {
         return false;
     }
 
-    // Escape path with basename so it can only be directly into the archive/ directory.
+    // Escape path to ensure it only targets /archive/
     $s = api_get_path(SYS_ARCHIVE_PATH).basename($_POST['file_name']);
-    // Get name of the zip file without the extension
-    $info = pathinfo($s);
-    $filename = $info['basename'];
-    $extension = $info['extension'];
+
+    // Derive filename info
+    $info           = pathinfo($s);
+    $filename       = $info['basename'];
+    $extension      = $info['extension'] ?? '';
     $file_base_name = str_replace('.'.$extension, '', $filename);
-    $new_dir = api_replace_dangerous_char(trim($file_base_name));
+    $new_dir        = api_replace_dangerous_char(trim($file_base_name));
 
     $result = learnpath::verify_document_size($s);
     if ($result) {
-        Display::addFlash(
-            Display::return_message(get_lang('The file is too big to upload.'))
-        );
+        Display::addFlash(Display::return_message(get_lang('The file is too big to upload.')));
     }
     $type = learnpath::getPackageType($s, basename($s));
 
     switch ($type) {
         case 'scorm':
             $oScorm = new scorm();
-            $entity = $oScorm->getEntity();
+
+            // Import from local path
             $manifest = $oScorm->import_local_package($s, $current_dir);
-            // The file was treated, it can now be cleaned from the temp dir
-            unlink($s);
+
+            // Make a tmp copy of the ZIP (so we can register it in Documents after unlink)
+            $uploadedZip = null;
+            if (is_file($s)) {
+                $tmpCopy = tempnam(sys_get_temp_dir(), 'scorm_zip_');
+                @copy($s, $tmpCopy);
+                $uploadedZip = new UploadedFile(
+                    $tmpCopy,
+                    basename($s),
+                    'application/zip',
+                    null,
+                    true
+                );
+            }
+
+            // Clean original file from /archive
+            if (is_file($s)) {
+                unlink($s);
+            }
+
             if (!empty($manifest)) {
                 $oScorm->parse_manifest();
-                $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
-            }
 
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) {
-                $proximity = Database::escape_string($_REQUEST['content_proximity']);
-            }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) {
-                $maker = Database::escape_string($_REQUEST['content_maker']);
-            }
+                // Create the LP entity (CLp)
+                $lp = $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score'] ?? 1);
 
-            $entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('scorm_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();
+                if ($lp) {
+                    /** @var CDocumentRepository $docRepo */
+                    $docRepo = $em->getRepository(CDocument::class);
+
+                    /** @var Session|null $session */
+                    $session = api_get_session_entity();
+
+                    // Save under Documents / Learning paths (course/session aware)
+                    $docRepo->registerScormZip(api_get_course_entity(), $session, $lp, $uploadedZip);
+                    Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
+                }
+            }
             break;
         case 'aicc':
-            $oAICC = new aicc();
+            $oAICC  = new aicc();
             $entity = $oAICC->getEntity();
             $config_dir = $oAICC->import_local_package($s, $current_dir);
-            // The file was treated, it can now be cleaned from the temp dir
-            unlink($s);
+
+            if (is_file($s)) {
+                unlink($s);
+            }
+
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
@@ -217,14 +249,13 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
             break;
         case '':
         default:
-            // There was an error, clean the file from the temp dir
+            // Unknown format: cleanup and warn
             if (is_file($s)) {
                 unlink($s);
             }
             Display::addFlash(
                 Display::return_message(get_lang('Unknown package format'), 'warning')
             );
-
             return false;
     }
 }

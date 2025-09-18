@@ -544,6 +544,14 @@ class LanguageFixtures extends Fixture
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
+            [
+                'original_name' => 'မြန်မာဘာသာ',
+                'english_name' => 'burmese',
+                'isocode' => 'my_MM',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
         ];
     }
 }

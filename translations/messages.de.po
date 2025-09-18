@@ -30017,3 +30017,6 @@ msgstr "Kompetenzverlauf"
 
 msgid "Badge"
 msgstr "Auszeichnung"
+
+msgid "Date of birth"
+msgstr "Geburtsdatum"

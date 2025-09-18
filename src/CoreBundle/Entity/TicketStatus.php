@@ -33,32 +33,23 @@ class TicketStatus
     #[ORM\JoinColumn(name: 'access_url_id', referencedColumnName: 'id', nullable: true)]
     protected ?AccessUrl $accessUrl = null;
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getCode()
     {
         return $this->code;
     }
 
-    public function setCode(string $code): self
+    public function setCode(string|int $code): self
     {
-        $this->code = $code;
+        $this->code = (string) $code;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle()
     {
         return $this->title;
@@ -71,15 +62,12 @@ class TicketStatus
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

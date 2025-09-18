@@ -1353,25 +1353,23 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE $table_support_messages
-                SET
-                    status = 'LEI',
-                    sys_lastedit_user_id ='".api_get_user_id()."',
-                    sys_lastedit_datetime ='".$now."'
-                WHERE ticket_id = $ticketId ";
+            SET
+                status = 'LEI',
+                sys_lastedit_user_id = " . (int) api_get_user_id() . ",
+                sys_lastedit_datetime = '$now'
+            WHERE ticket_id = $ticketId";
 
         if (api_is_platform_admin()) {
-            $sql .= " AND sys_insert_user_id = '$userId'";
+            $sql .= " AND sys_insert_user_id = $userId";
         } else {
-            $sql .= " AND sys_insert_user_id != '$userId'";
+            $sql .= " AND sys_insert_user_id != $userId";
         }
         $result = Database::query($sql);
         if (Database::affected_rows($result) > 0) {
-            Database::query(
-                "UPDATE $table_support_tickets SET
-                    status_id = ".self::STATUS_PENDING."
-                 WHERE id = $ticketId AND status_id = ".self::STATUS_NEW
-            );
-
+            $sql2 = "UPDATE $table_support_tickets
+                 SET status_id = " . self::STATUS_PENDING . "
+                 WHERE id = $ticketId AND status_id = " . self::STATUS_NEW;
+            Database::query($sql2);
             return true;
         }
 
@@ -2454,8 +2452,6 @@ class TicketManager
             self::PRIORITY_NORMAL,
             self::PRIORITY_HIGH,
             self::PRIORITY_LOW,
-            self::STATUS_CLOSED,
-            self::STATUS_FORWARDED,
         ];
     }
 

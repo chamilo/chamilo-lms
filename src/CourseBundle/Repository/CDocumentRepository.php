@@ -76,21 +76,14 @@ final class CDocumentRepository extends ResourceRepository
 
     /**
      * Register the original SCORM ZIP under:
-     *   /Learning paths/SCORM - {lp_id} - {lp_title}/{lp_title}.zip
-     * Folder is teacher-only (DRAFT visibility by default).
+     *   <course root> / Learning paths / SCORM - {lp_id} - {lp_title} / {lp_title}.zip
      */
-    public function registerScormZip(Course $course, CLp $lp, UploadedFile $zip): void
+    public function registerScormZip(Course $course, ?Session $session, CLp $lp, UploadedFile $zip): void
     {
-        $em    = $this->em();
-        $root  = $this->ensureCourseDocumentsRootNode($course);
+        $em = $this->em();
 
-        // Top folder for learning paths (use PUBLISHED if you want to see it without teacher role)
-        $lpTop = $this->ensureFolder(
-            $course,
-            $root,
-            'Learning paths',
-            ResourceLink::VISIBILITY_DRAFT
-        );
+        // Ensure "Learning paths" directly under the course resource node
+        $lpTop = $this->ensureLearningPathSystemFolder($course, $session);
 
         // Subfolder per LP
         $lpFolderTitle = \sprintf('SCORM - %d - %s', $lp->getIid(), $this->safeTitle($lp->getTitle()));
@@ -98,16 +91,18 @@ final class CDocumentRepository extends ResourceRepository
             $course,
             $lpTop,
             $lpFolderTitle,
-            ResourceLink::VISIBILITY_DRAFT
+            ResourceLink::VISIBILITY_DRAFT,
+            $session
         );
 
-        // Store the ZIP as a "file" document under the LP folder
+        // ZIP file under the LP folder
         $this->createFileInFolder(
             $course,
             $lpFolder,
             $zip,
             \sprintf('SCORM ZIP for LP #%d', $lp->getIid()),
-            ResourceLink::VISIBILITY_DRAFT
+            ResourceLink::VISIBILITY_DRAFT,
+            $session
         );
 
         $em->flush();
@@ -121,7 +116,6 @@ final class CDocumentRepository extends ResourceRepository
         $em = $this->em();
         $prefix = \sprintf('SCORM - %d - ', $lp->getIid());
 
-        // Newer layout: folders directly under the course root
         $courseRoot = $course->getResourceNode();
         if ($courseRoot) {
             // SCORM folder directly under course root
@@ -130,20 +124,11 @@ final class CDocumentRepository extends ResourceRepository
                 return;
             }
 
-            // SCORM folder under "Learning paths" (which itself is under course root)
+            // Or under "Learning paths"
             $lpTop = $this->findChildNodeByTitle($courseRoot, 'Learning paths');
             if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
                 $em->flush();
                 return;
-            }
-        }
-
-        // Legacy layout: under Documents → Learning paths
-        $docsRoot = $this->getCourseDocumentsRootNode($course);
-        if ($docsRoot) {
-            $lpTop = $this->findChildNodeByTitle($docsRoot, 'Learning paths');
-            if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
-                $em->flush();
             }
         }
     }
@@ -265,16 +250,18 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Create (if missing) a folder under $parent using the API path:
-     * create a CDocument(folder) + setParentResourceNode + setResourceLinkArray and let
-     * the ResourceListener build the ResourceNode.
+     * Create (if missing) a folder under $parent using the CDocument API path.
+     * The folder is attached under the given $parent (not the course root),
+     * and linked to the course (cid) and optionally the session (sid).
      */
     public function ensureFolder(
         Course $course,
         ResourceNode $parent,
         string $folderTitle,
-        int $visibility = ResourceLink::VISIBILITY_DRAFT
+        int $visibility = ResourceLink::VISIBILITY_DRAFT,
+        ?Session $session = null
     ): ResourceNode {
+        // Return if a child with this title already exists under the parent
         if ($child = $this->findChildNodeByTitle($parent, $folderTitle)) {
             return $child;
         }
@@ -285,11 +272,20 @@ final class CDocumentRepository extends ResourceRepository
         $doc = new CDocument();
         $doc->setTitle($folderTitle);
         $doc->setFiletype('folder');
-        $doc->setParentResourceNode($course->getResourceNode()->getId());
-        $doc->setResourceLinkArray([[
+
+        // IMPORTANT: attach to the given parent, not to the course root
+        $doc->setParentResourceNode($parent->getId());
+
+        // Link to course (and optional session)
+        $link = [
             'cid' => $course->getId(),
             'visibility' => $visibility,
-        ]]);
+        ];
+        if ($session && method_exists($session, 'getId')) {
+            $link['sid'] = $session->getId();
+        }
+        $doc->setResourceLinkArray([$link]);
+
         if ($user) {
             $doc->setCreator($user);
         }
@@ -302,15 +298,16 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Create a file under $parent using the API path:
-     * CDocument(file) + setUploadFile + setParentResourceNode + setResourceLinkArray.
+     * Create a file under $parent using the CDocument API path.
+     * The file is linked to the course (cid) and optionally the session (sid).
      */
     public function createFileInFolder(
         Course $course,
         ResourceNode $parent,
         UploadedFile $uploaded,
         string $comment,
-        int $visibility
+        int $visibility,
+        ?Session $session = null
     ): ResourceNode {
         /** @var User|null $user */
         $user = \api_get_user_entity();
@@ -322,10 +319,16 @@ final class CDocumentRepository extends ResourceRepository
         $doc->setFiletype('file');
         $doc->setComment($comment);
         $doc->setParentResourceNode($parent->getId());
-        $doc->setResourceLinkArray([[
+
+        $link = [
             'cid' => $course->getId(),
             'visibility' => $visibility,
-        ]]);
+        ];
+        if ($session && method_exists($session, 'getId')) {
+            $link['sid'] = $session->getId();
+        }
+        $doc->setResourceLinkArray([$link]);
+
         $doc->setUploadFile($uploaded);
 
         if ($user) {
@@ -343,8 +346,47 @@ final class CDocumentRepository extends ResourceRepository
     {
         return $this->em()
             ->getRepository(ResourceNode::class)
-            ->findOneBy(['parent' => $parent, 'title' => $title]);
+            ->findOneBy([
+                'parent' => $parent->getId(),
+                'title'  => $title,
+            ]);
     }
+
+    /**
+     * Ensure "Learning paths" exists directly under the course resource node.
+     * Links are created for course (and optional session) context.
+     */
+    public function ensureLearningPathSystemFolder(Course $course, ?Session $session = null): ResourceNode
+    {
+        $courseRoot = $course->getResourceNode();
+        if (!$courseRoot instanceof ResourceNode) {
+            throw new \RuntimeException('Course has no ResourceNode root.');
+        }
+
+        // Try common i18n variants first
+        $candidates = array_values(array_unique(array_filter([
+            \function_exists('get_lang') ? \get_lang('LearningPaths') : null,
+            \function_exists('get_lang') ? \get_lang('LearningPath')  : null,
+            'Learning paths',
+            'Learning path',
+        ])));
+
+        foreach ($candidates as $title) {
+            if ($child = $this->findChildNodeByTitle($courseRoot, $title)) {
+                return $child;
+            }
+        }
+
+        // Create "Learning paths" directly under the course root
+        return $this->ensureFolder(
+            $course,
+            $courseRoot,
+            'Learning paths',
+            ResourceLink::VISIBILITY_DRAFT,
+            $session
+        );
+    }
+
 
     private function safeTitle(string $name): string
     {

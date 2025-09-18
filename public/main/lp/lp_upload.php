@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
@@ -97,16 +98,22 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                     $em->persist($lp);
                     $em->flush();
 
-                    // register the original ZIP into Documents
+                    /** @var CDocumentRepository $docRepo */
                     $docRepo = $em->getRepository(CDocument::class);
+
+                    /** @var Session|null $session */
+                    $session = api_get_session_entity();
+
                     $uploadedZip = new UploadedFile(
                         $_FILES['user_file']['tmp_name'],
                         $_FILES['user_file']['name'],
                         $_FILES['user_file']['type'] ?? null,
                         $_FILES['user_file']['error'] ?? 0,
-                        true // test mode: file is already on disk
+                        true
                     );
-                    $docRepo->registerScormZip(api_get_course_entity(), $lp, $uploadedZip);
+
+                    // Save under Documents / Learning paths (course/session aware)
+                    $docRepo->registerScormZip(api_get_course_entity(), $session, $lp, $uploadedZip);
 
                     Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
                 }
@@ -167,11 +174,11 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
     switch ($type) {
         case 'scorm':
             $oScorm = new scorm();
-            $entity = $oScorm->getEntity();
 
             // Import from local path
             $manifest = $oScorm->import_local_package($s, $current_dir);
 
+            // Make a tmp copy of the ZIP (so we can register it in Documents after unlink)
             $uploadedZip = null;
             if (is_file($s)) {
                 $tmpCopy = tempnam(sys_get_temp_dir(), 'scorm_zip_');
@@ -181,41 +188,32 @@ elseif ('POST' === $_SERVER['REQUEST_METHOD']
                     basename($s),
                     'application/zip',
                     null,
-                    true // test mode
+                    true
                 );
             }
 
+            // Clean original file from /archive
             if (is_file($s)) {
                 unlink($s);
             }
 
             if (!empty($manifest)) {
                 $oScorm->parse_manifest();
-                $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score']);
-                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
-            }
 
-            $proximity = '';
-            if (!empty($_REQUEST['content_proximity'])) {
-                $proximity = Database::escape_string($_REQUEST['content_proximity']);
-            }
-            $maker = '';
-            if (!empty($_REQUEST['content_maker'])) {
-                $maker = Database::escape_string($_REQUEST['content_maker']);
-            }
+                // Create the LP entity (CLp)
+                $lp = $oScorm->import_manifest(api_get_course_int_id(), $_REQUEST['use_max_score'] ?? 1);
 
-            $entity
-                ->setContentLocal($proximity)
-                ->setContentMaker($maker)
-                ->setJsLib('scorm_api.php')
-            ;
-            $em->persist($entity);
-            $em->flush();
+                if ($lp) {
+                    /** @var CDocumentRepository $docRepo */
+                    $docRepo = $em->getRepository(CDocument::class);
 
-            if ($uploadedZip instanceof UploadedFile) {
-                /** @var CDocumentRepository $docRepo */
-                $docRepo = $em->getRepository(CDocument::class);
-                $docRepo->registerScormZip(api_get_course_entity(), $entity, $uploadedZip);
+                    /** @var Session|null $session */
+                    $session = api_get_session_entity();
+
+                    // Save under Documents / Learning paths (course/session aware)
+                    $docRepo->registerScormZip(api_get_course_entity(), $session, $lp, $uploadedZip);
+                    Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
+                }
             }
             break;
         case 'aicc':

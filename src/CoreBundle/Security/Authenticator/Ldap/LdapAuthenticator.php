@@ -56,9 +56,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         private readonly TranslatorInterface $translator,
         Ldap $ldap,
     ) {
-        $ldapConfig = $this->authConfigHelper->getLdapConfig(
-            $this->accessUrlHelper->getCurrent()
-        );
+        $ldapConfig = $this->authConfigHelper->getLdapConfig();
 
         if (!$ldapConfig['enabled']) {
             return;

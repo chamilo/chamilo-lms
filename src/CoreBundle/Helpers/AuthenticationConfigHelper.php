@@ -163,7 +163,7 @@ readonly class AuthenticationConfigHelper
     /**
      * @return array<string, mixed>
      */
-    public function getLdapConfig(?AccessUrl $url): array
+    public function getLdapConfig(?AccessUrl $url = null): array
     {
         $authentication = $this->getAuthSources($url);
         $ldapConfig = [];

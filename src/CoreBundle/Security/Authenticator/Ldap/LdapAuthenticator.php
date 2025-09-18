@@ -206,6 +206,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         if (!$user) {
             $user = (new User())
                 ->setCreatorId($this->userRepo->getRootUser()->getId())
+                ->addAuthSourceByAuthentication('extldap', $currentAccessUrl)
             ;
         }
 
@@ -262,7 +263,6 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         $user
             ->setUsername($ldapUser->getUserIdentifier())
             ->setPlainPassword($ldapUser->getPassword())
-            ->addAuthSourceByAuthentication('extldap', $currentAccessUrl)
         ;
 
         $this->userRepo->updateUser($user);

@@ -1,12 +1,15 @@
 import baseService from "./baseService"
 
 /**
- * @param {string} login
- * @param {string} password
- * @param {boolean} _remember_me
+ * @param {string} actionUrl
+ * @param {Object} params
+ * @param {string} params.login
+ * @param {string} params.password
+ * @param {boolean} params._remember_me
+ * @param {string|null} [params.totp=null]
  * @returns {Promise<Object>}
  */
-async function login({ login, password, _remember_me, totp = null }) {
+async function doLoginRequest(actionUrl, { login, password, _remember_me, totp = null }) {
   const payload = {
     username: login,
     password,
@@ -17,7 +20,31 @@ async function login({ login, password, _remember_me, totp = null }) {
     payload.totp = totp
   }
 
-  return await baseService.post("/login_json", payload)
+  return await baseService.post(actionUrl, payload)
+}
+
+/**
+ * @param {Object} params
+ * @param {string} params.login
+ * @param {string} params.password
+ * @param {boolean} params._remember_me
+ * @param {string|null} [params.totp=null]
+ * @returns {Promise<Object>}
+ */
+async function login({ login, password, _remember_me, totp = null }) {
+  return await doLoginRequest("/login_json", { login, password, _remember_me, totp })
+}
+
+/**
+ * @param {Object} params
+ * @param {string} params.login
+ * @param {string} params.password
+ * @param {boolean} params._remember_me
+ * @param {string|null} [params.totp=null]
+ * @returns {Promise<Object>}
+ */
+async function loginLdap({ login, password, _remember_me, totp = null }) {
+  return await doLoginRequest("/login/ldap/check", { login, password, _remember_me, totp })
 }
 
 /**
@@ -56,6 +83,7 @@ async function loginTokenCheck(portalUrl, token) {
 
 export default {
   login,
+  loginLdap,
   checkSession,
   loginTokenRequest,
   loginTokenCheck,

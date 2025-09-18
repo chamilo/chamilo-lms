@@ -24,7 +24,7 @@ export function useLogin() {
   const isLoading = ref(false)
   const requires2FA = ref(false)
 
-  async function performLogin({ login, password, _remember_me, totp = null }) {
+  async function performLogin({ login, password, _remember_me, totp = null, isLoginLdap = false }) {
     isLoading.value = true
     requires2FA.value = false
 
@@ -43,7 +43,7 @@ export function useLogin() {
         payload.returnUrl = returnUrl
       }
 
-      const responseData = await securityService.login(payload)
+      const responseData = isLoginLdap ? await securityService.loginLdap(payload) : await securityService.login(payload)
 
       // Handle 2FA flow
       if (responseData.requires2FA && !payload.totp) {
@@ -143,8 +143,7 @@ export function useLogin() {
 
       return { success: true }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "An error occurred during login."
+      const errorMessage = error.response?.data?.error || "An error occurred during login."
       showErrorNotification(errorMessage)
       return { success: false, error: errorMessage }
     } finally {

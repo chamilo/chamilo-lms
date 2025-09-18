@@ -9,6 +9,14 @@
       class="login-section__form"
       @submit.prevent="onSubmitLoginForm"
     >
+      <BaseCheckbox
+        v-if="platformConfigStore.ldapAuth"
+        id="chb-ldap"
+        :label="platformConfigStore.ldapAuth.title"
+        name="ldap_auth"
+        v-model="ldapAuth"
+      />
+
       <div class="field">
         <InputText
           id="login"
@@ -102,6 +110,7 @@ import Button from "primevue/button"
 import InputText from "primevue/inputtext"
 import Password from "primevue/password"
 import ToggleSwitch from "primevue/toggleswitch"
+import BaseCheckbox from "./basecomponents/BaseCheckbox.vue"
 import { useI18n } from "vue-i18n"
 import { useLogin } from "../composables/auth/login"
 import LoginOAuth2Buttons from "./login/LoginOAuth2Buttons.vue"
@@ -115,6 +124,7 @@ const allowRegistration = computed(() => "false" !== platformConfigStore.getSett
 
 const { redirectNotAuthenticated, performLogin, isLoading, requires2FA } = useLogin()
 
+const ldapAuth = ref(false)
 const login = ref("")
 const password = ref("")
 const totp = ref("")
@@ -128,6 +138,7 @@ async function onSubmitLoginForm() {
     password: password.value,
     totp: requires2FA.value ? totp.value : null,
     _remember_me: remember.value,
+    isLoginLdap: ldapAuth.value,
   })
 }
 </script>

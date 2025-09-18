@@ -59,17 +59,11 @@ class TicketPriority
         $this->urgency = '';
     }
 
-    /**
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getTitle()
     {
         return $this->title;
@@ -82,39 +76,30 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCode()
     {
         return $this->code;
     }
 
-    public function setCode(string $code): self
+    public function setCode(string|int $code): self
     {
-        $this->code = $code;
+        $this->code = (string) $code;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getColor()
     {
         return $this->color;
@@ -127,9 +112,6 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUrgency()
     {
         return $this->urgency;
@@ -142,9 +124,6 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getInsertUserId()
     {
         return $this->insertUserId;
@@ -157,9 +136,6 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getInsertDateTime()
     {
         return $this->insertDateTime;
@@ -172,9 +148,6 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLastEditUserId()
     {
         return $this->lastEditUserId;
@@ -187,9 +160,6 @@ class TicketPriority
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getLastEditDateTime()
     {
         return $this->lastEditDateTime;

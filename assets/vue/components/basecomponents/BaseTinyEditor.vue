@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, ref } from "vue"
 import TinyEditor from "../../components/Editor"
 import { useRoute, useRouter } from "vue-router"
 import { useCidReqStore } from "../../store/cidReq"
@@ -35,227 +35,162 @@ import { useSecurityStore } from "../../store/securityStore"
 import FloatLabel from "primevue/floatlabel"
 import { useLocale } from "../../composables/locale"
 
-const hasContent = computed(() => String(modelValue ?? '').trim().length > 0)
-const modelValue = defineModel({
-  type: String,
-  required: true,
-})
+const modelValue = defineModel({ type: String, required: true })
 
-const props = defineProps({
-  editorId: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  title: {
-    type: String,
-    default: "",
-  },
-  editorConfig: {
-    type: Object,
-    default: () => {},
-  },
-  // A helper text shown below editor
-  helpText: {
-    type: String,
-    default: "",
-  },
-  // if true the Chamilo inner file manager will be shown
-  // if false the system file picker will be shown
-  useFileManager: {
-    type: Boolean,
-    default: false,
-  },
-  fullPage: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-})
-
+/* Reactive UI state */
 const isFocused = ref(false)
+
+/* Props */
+const props = defineProps({
+  editorId: { type: String, required: true },
+  required: { type: Boolean, default: false },
+  title: { type: String, default: "" },
+  editorConfig: { type: Object, default: () => ({}) },
+  helpText: { type: String, default: "" },
+  // If true: use Chamilo file manager; if false: use system file picker.
+  useFileManager: { type: Boolean, default: false },
+  // When true, includes TinyMCE "fullpage" plugin/button.
+  fullPage: { type: Boolean, default: true },
+})
+
+/* Derived UI flags */
+const hasContent = computed(() => String(modelValue?.value ?? "").trim().length > 0)
+
+/* Routing / stores */
 const router = useRouter()
 const route = useRoute()
 const parentResourceNodeId = ref(0)
 
 const securityStore = useSecurityStore()
 const cidReqStore = useCidReqStore()
-
 const { course } = storeToRefs(cidReqStore)
 
-// Set the parent node ID based on the user's resource node ID or route parameter
-parentResourceNodeId.value = securityStore.user.resourceNode.id
+/* Determine parent node: prefer user's node; allow route override */
+parentResourceNodeId.value = securityStore.user?.resourceNode?.id ?? 0
 if (route.params.node) {
   parentResourceNodeId.value = Number(route.params.node)
 }
 
+/* Language resolution */
 const supportedLanguages = {
-  ar: "ar.js",
-  de: "de.js",
-  en: "en.js",
-  es: "es.js",
-  fr_FR: "fr_FR.js",
-  it: "it.js",
-  nl: "nl.js",
-  pt_PT: "pt_PT.js",
-  ru: "ru.js",
-  zh_CN: "zh_CN.js",
+  ar: "ar.js", de: "de.js", en: "en.js", es: "es.js", fr_FR: "fr_FR.js",
+  it: "it.js", nl: "nl.js", pt_PT: "pt_PT.js", ru: "ru.js", zh_CN: "zh_CN.js",
 }
-
 const { appLocale } = useLocale()
 
 function getLanguageConfig(locale) {
   const defaultLang = "en"
   const url = "/libs/editor/langs/"
-  const isoCode = locale.split("_")[0]
-  let languageFile = supportedLanguages[isoCode]
-  let finalLanguage = isoCode
+  const iso = String(locale || "").split("_")[0] || defaultLang
+  let file = supportedLanguages[iso]
+  let lang = iso
 
-  if (!languageFile) {
-    const regionalMatch = Object.entries(supportedLanguages).find(([key, value]) => key.startsWith(isoCode))
-    if (regionalMatch) {
-      languageFile = regionalMatch[1]
-      finalLanguage = regionalMatch[0]
+  if (!file) {
+    const regional = Object.entries(supportedLanguages).find(([key]) => key.startsWith(iso))
+    if (regional) {
+      file = regional[1]
+      lang = regional[0]
     } else {
-      languageFile = `${defaultLang}.js`
-      finalLanguage = defaultLang
+      file = `${defaultLang}.js`
+      lang = defaultLang
     }
   }
-
-  return {
-    language: finalLanguage,
-    language_url: `${url}${languageFile}`,
-  }
+  return { language: lang, language_url: `${url}${file}` }
 }
-
 const languageConfig = getLanguageConfig(appLocale.value)
-const toolbarUndo = "undo redo"
-const toolbarFormatText = "bold italic underline strikethrough"
-const toolbarInsertMedia = "image media template link"
-const toolbarFontConfig = "fontselect fontsizeselect formatselect"
-const toolbarAlign = "alignleft aligncenter alignright alignjustify"
-const toolbarIndent = "outdent indent"
-const toolbarList = "numlist bullist"
-const toolbarColor = "forecolor backcolor removeformat"
-const toolbarPageBreak = "pagebreak"
-const toolbarSpecialSymbols = "charmap emoticons"
-const toolbarOther = "fullscreen preview save print"
-const toolbarCode = "code codesample"
-const toolbarTextDirection = "ltr rtl"
 
+/* Pull base from global config file (tiny-settings.js) */
+const base = (typeof window !== "undefined" ? window.CHAMILO_TINYMCE_BASE_CONFIG : {}) || {}
+
+/* Compose default editor config: use base and add Chamilo-specific bits */
 const defaultEditorConfig = {
+  ...base,
   skin: false,
-  content_css: ["/build/css/editor_content.css"],
   branding: false,
   relative_urls: false,
-  height: 500,
-  toolbar_mode: "sliding",
+  height: base.height ?? 500,
+  toolbar_mode: base.toolbar_mode ?? "sliding",
   autosave_ask_before_unload: true,
+  content_css: Array.isArray(base.content_css)
+    ? [...base.content_css, "/build/css/editor_content.css"]
+    : ["/build/css/editor_content.css"],
   language: languageConfig.language,
   language_url: languageConfig.language_url,
-  plugins: [
-    "advlist",
-    "anchor",
-    "autolink",
-    "charmap",
-    "code",
-    "codesample",
-    "directionality",
-    "fullscreen",
-    "emoticons",
-    "image",
-    "insertdatetime",
-    "link",
-    "lists",
-    "media",
-    "paste",
-    "preview",
-    "print",
-    "pagebreak",
-    "save",
-    "searchreplace",
-    "table",
-    "template",
-    "visualblocks",
-    "wordcount",
-  ],
-  toolbar:
-    toolbarUndo +
-    " | " +
-    toolbarFormatText +
-    " | " +
-    toolbarInsertMedia +
-    " | " +
-    toolbarFontConfig +
-    " | " +
-    toolbarAlign +
-    " | " +
-    toolbarIndent +
-    " | " +
-    toolbarList +
-    " | " +
-    toolbarColor +
-    " | " +
-    toolbarPageBreak +
-    " | " +
-    toolbarSpecialSymbols +
-    " | " +
-    toolbarOther +
-    " | " +
-    toolbarCode +
-    " | " +
-    toolbarTextDirection,
-  content_style: ".tiny-content { font-family: Arial, sans-serif; }",
+  // Keep a wrapper class inside content for consistent styling in Chamilo
+  content_style: (base.content_style ?? "") + " .tiny-content { font-family: Arial, Helvetica, sans-serif; }",
   body_class: "tiny-content",
 }
 
+/* Add fullPage when requested (merge with base plugins/toolbar) */
 if (props.fullPage) {
-  defaultEditorConfig.plugins.push("fullpage")
-  defaultEditorConfig.toolbar += " | fullpage"
+  const basePlugins = String(base.plugins || "").split(/\s+/).filter(Boolean)
+  const mergedPlugins = Array.from(new Set([...basePlugins, "fullpage"]))
+  defaultEditorConfig.plugins = mergedPlugins.join(" ")
+  defaultEditorConfig.toolbar = (base.toolbar ? base.toolbar + " | " : "") + "fullpage"
 }
 
-const editorConfig = computed(() => ({
-  ...defaultEditorConfig,
-  ...props.editorConfig,
-  file_picker_callback: filePickerCallback,
-  setup(editor) {
-    editor.on("focus", () => {
-      isFocused.value = true
-    })
-    editor.on("blur", () => {
-      isFocused.value = false
-    })
-    editor.on("GetContent", (e) => {
-      if (!e.content.includes("tiny-content")) {
-        e.content = `<div class="tiny-content">${e.content}</div>`
+/* Final config: merge base+local via builder to preserve both setup() handlers */
+const editorConfig = computed(() => {
+  const builder = typeof window !== "undefined" ? window.buildTinyMceConfig : null
+  const local = {
+    ...defaultEditorConfig,
+    ...props.editorConfig,
+    file_picker_callback: filePickerCallback,
+    setup(editor) {
+      editor.on("focus", () => { isFocused.value = true })
+      editor.on("blur", () => { isFocused.value = false })
+      editor.on("GetContent", (e) => {
+        if (!e.content.includes("tiny-content")) {
+          e.content = `<div class="tiny-content">${e.content}</div>`
+        }
+      })
+      // Preserve caller's setup if provided
+      if (props.editorConfig?.setup && typeof props.editorConfig.setup === "function") {
+        props.editorConfig.setup(editor)
       }
-    })
-  },
-}))
+    },
+  }
+  return builder ? builder(local) : local
+})
 
-async function filePickerCallback(callback, value, meta) {
-  let url = getUrlForTinyEditor()
-  if ("image" === meta.filetype) {
-    url += "&type=images"
-  } else {
-    url += "&type=files"
+/* File picker: Chamilo file manager (when enabled) or system picker fallback */
+async function filePickerCallback(callback, _value, meta) {
+  // If system picker requested, use a lightweight native file input for images/files
+  if (!props.useFileManager) {
+    const input = document.createElement("input")
+    input.type = "file"
+    input.accept = meta.filetype === "image" ? "image/*" : "*/*"
+    input.onchange = () => {
+      const file = input.files?.[0]
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = () => callback(reader.result)
+      reader.readAsDataURL(file)
+    }
+    input.click()
+    return
   }
 
-  window.addEventListener("message", function (event) {
-    let data = event.data
-    if (data.url) {
-      callback(data.url)
-    }
-  })
+  // Chamilo inner file manager
+  let url = getUrlForTinyEditor()
+  url += meta.filetype === "image" ? "&type=images" : "&type=files"
 
-  window.tinymce.activeEditor.windowManager.openUrl({
-    url: url,
+  // Bridge for postMessage from file manager
+  const onMessage = (event) => {
+    const data = event.data
+    if (data?.url) {
+      callback(data.url)
+      window.removeEventListener("message", onMessage)
+    }
+  }
+  window.addEventListener("message", onMessage)
+
+  // Open file manager in TinyMCE window
+  window.tinymce?.activeEditor?.windowManager.openUrl({
+    url,
     title: "File Manager",
     onMessage: (api, message) => {
-      if (message.mceAction === "fileSelected") {
+      if (message?.mceAction === "fileSelected") {
         callback(message.content.url)
         api.close()
       }
@@ -263,21 +198,18 @@ async function filePickerCallback(callback, value, meta) {
   })
 }
 
+/* Build file manager URL (course-aware) */
 function getUrlForTinyEditor() {
   if (!course.value) {
     return router.resolve({
       name: "FileManagerList",
-      params: {
-        node: parentResourceNodeId.value,
-      },
+      params: { node: parentResourceNodeId.value },
     }).href
   }
-
-  let queryParams = { cid: course.value.id, sid: 0, gid: 0, filetype: "file" }
   return router.resolve({
     name: "FileManagerList",
     params: { node: parentResourceNodeId.value },
-    query: queryParams,
+    query: { cid: course.value.id, sid: 0, gid: 0, filetype: "file" },
   }).href
 }
 </script>

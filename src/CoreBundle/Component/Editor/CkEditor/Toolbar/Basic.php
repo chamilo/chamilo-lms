@@ -11,59 +11,8 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
 class Basic extends Toolbar
 {
     /**
-     * Default plugins that will be use in all toolbars
-     * In order to add a new plugin you have to load it in default/layout/head.tpl.
-     */
-    public array $defaultPlugins = [
-        // 'adobeair',
-        // 'ajax',
-        'audio',
-        'image2_chamilo',
-        'bidi',
-        'colorbutton',
-        'colordialog',
-        'dialogui',
-        'dialogadvtab',
-        'div',
-        // if you activate this plugin the html, head tags will not be saved
-        // 'divarea',
-        // 'docprops',
-        'find',
-        'flash',
-        'font',
-        'iframe',
-        // 'iframedialog',
-        'indentblock',
-        'justify',
-        'language',
-        'lineutils',
-        'liststyle',
-        'newpage',
-        'oembed',
-        'pagebreak',
-        'preview',
-        'print',
-        'save',
-        'selectall',
-        // 'sharedspace',
-        'showblocks',
-        'smiley',
-        // 'sourcedialog',
-        // 'stylesheetparser',
-        // 'tableresize',
-        'templates',
-        // 'uicolor',
-        'video',
-        'widget',
-        'wikilink',
-        'wordcount',
-        'inserthtml',
-        // 'xml',
-        'qmarkersrolls',
-    ];
-
-    /**
-     * Plugins this toolbar.
+     * Plugins for this toolbar (legacy-specific additions).
+     * We only add conditional extras here; the base set comes from tiny-settings.js.
      */
     public array $plugins = [];
     private string $toolbarSet;
@@ -76,17 +25,18 @@ class Basic extends Toolbar
     ) {
         $isAllowedToEdit = api_is_allowed_to_edit();
         $isPlatformAdmin = api_is_platform_admin();
-        // Adding plugins depending of platform conditions
+
+        // Conditional TinyMCE plugin additions (names must match TinyMCE plugin dirs or external plugins)
         $plugins = [];
 
         if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
-            $plugins[] = 'glossary';
+            $plugins[] = 'glossary'; // ensure you provide external_plugins mapping if custom
         }
 
         if ('true' === api_get_setting('youtube_for_students')) {
             $plugins[] = 'youtube';
         } else {
-            if (api_is_allowed_to_edit() || api_is_platform_admin()) {
+            if ($isAllowedToEdit || $isPlatformAdmin) {
                 $plugins[] = 'youtube';
             }
         }
@@ -109,17 +59,13 @@ class Basic extends Toolbar
         }
 
         if ('true' === api_get_setting('enabled_wiris')) {
-            // Commercial plugin
+            // Commercial plugin (external)
             $plugins[] = 'ckeditor_wiris';
         }
 
         if ('true' === api_get_setting('enabled_imgmap')) {
             $plugins[] = 'mapping';
         }
-
-        /*if (api_get_setting('block_copy_paste_for_students') == 'true') {
-            // Missing
-        }*/
 
         if ('true' === api_get_setting('more_buttons_maximized_mode')) {
             $plugins[] = 'toolbarswitch';
@@ -136,7 +82,9 @@ class Basic extends Toolbar
         if ('true' === api_get_setting('editor.ck_editor_block_image_copy_paste')) {
             $plugins[] = 'blockimagepaste';
         }
-        $this->defaultPlugins = array_unique(array_merge($this->defaultPlugins, $plugins));
+
+        // Save only conditional plugins; the base comes from tiny-settings.js
+        $this->plugins = array_values(array_unique($plugins));
         $this->toolbarSet = $toolbar;
         parent::__construct($router, $toolbar, $config, $prefix);
     }
@@ -144,33 +92,34 @@ class Basic extends Toolbar
     /**
      * Get the toolbar config.
      *
-     * @return array
+     * We do NOT set the base plugin list or the full toolbar here.
+     * We only:
+     *  - add conditional plugins (will be UNIONed with the shared base by buildTinyMceConfig)
+     *  - add external_plugins paths for custom plugins
+     *  - set editor behavior flags (skin, content_css, etc.)
+     *  - set language (language, language_url)
      */
     public function getConfig()
     {
         $config = [];
-        $customPlugins = '';
-        $customPluginsPath = [];
+
+        // Optional external custom plugins mapping (only URLs, activation via JS policy)
+        $customPluginsMap = [];
         if ('true' === api_get_setting('editor.translate_html')) {
-            $customPlugins .= ' translatehtml';
-            $customPluginsPath['translatehtml'] = api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
+            $this->plugins[] = 'translatehtml';
+            $customPluginsMap['translatehtml'] =
+                api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
         }
 
-        $plugins = [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste wordcount '.$customPlugins,
-        ];
-
-        if ($this->getConfigAttribute('fullPage')) {
-            $plugins[] = 'fullpage';
+        // If you want JS to be the single source of truth for plugins:
+        //   DO NOT set $config['plugins'] here.
+        // If you still want conditional extras from PHP (and PLUGINS_POLICY='union'):
+        if (!empty($this->plugins)) {
+            $config['plugins'] = implode(' ', $this->plugins);
         }
 
-        $config['plugins'] = implode(' ', $plugins);
-        $config['toolbar'] = 'undo redo directionality | bold italic underline strikethrough | insertfile image media template link | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | code codesample | ltr rtl | '.$customPlugins;
-
-        if (!empty($customPluginsPath)) {
-            $config['external_plugins'] = $customPluginsPath;
+        if (!empty($customPluginsMap)) {
+            $config['external_plugins'] = $customPluginsMap;
         }
 
         $config['skin'] = false;
@@ -179,130 +128,61 @@ class Basic extends Toolbar
         $config['relative_urls'] = false;
         $config['toolbar_mode'] = 'sliding';
         $config['autosave_ask_before_unload'] = true;
-        $config['toolbar_mode'] = 'sliding';
 
-        // enable title field in the Image dialog
         $config['image_title'] = true;
-        // enable automatic uploads of images represented by blob or data URIs
         $config['automatic_uploads'] = true;
-        // custom filepicker only to Image dialog
         $config['file_picker_types'] = 'file image media';
-
         $config['file_picker_callback'] = '[browser]';
 
+        // Language
         $iso = api_get_language_isocode();
         $languageConfig = $this->getLanguageConfig($iso);
-
-        // Merge the language configuration
         $config = array_merge($config, $languageConfig);
 
-        /*if (isset($this->config)) {
-            $this->config = array_merge($config, $this->config);
-        } else {
-            $this->config = $config;
-        }*/
+        $config['height'] = '300';
+
+        // DO NOT set $config['toolbar'] (toolbar comes from tiny-settings.js)
+        // If you *must* add a single extra button from PHP, you could:
+        // $config['toolbar'] = 'translatehtml'; // builder will handle concat/dedupe per policy
 
         $this->config = $config;
-
-        // $config['width'] = '100';
-        $this->config['height'] = '300';
-
         return $this->config;
     }
 
     /**
-     * @return array
-     */
-    public function getNewPageBlock()
-    {
-        return ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
-    }
-
-    /**
-     * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
-     *
-     * @return array
+     * When minimized or maximized toolbars are requested by legacy code,
+     * we keep returning null/arrays but avoid defining the full TinyMCE toolbar.
+     * The shared base toolbar from tiny-settings.js will still apply.
      */
     protected function getNormalToolbar()
     {
         return null;
     }
 
-    /**
-     * Get the toolbar configuration when CKEditor is minimized.
-     *
-     * @return array
-     */
     protected function getMinimizedToolbar()
     {
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            [
-                'Link',
-                'Image',
-                'Video',
-                'Oembed',
-                'Flash',
-                'Youtube',
-                'VimeoEmbed',
-                'Audio',
-                'Table',
-                'Asciimath',
-                'Asciisvg',
-            ],
-            ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor'],
-            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch', 'Source'],
+            // NOTE: left intentionally as a legacy stub; TinyMCE toolbar comes from shared base.
         ];
     }
 
-    /**
-     * Get the toolbar configuration when CKEditor is maximized.
-     *
-     * @return array
-     */
     protected function getMaximizedToolbar()
     {
         return [
             $this->getNewPageBlock(),
-            ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'inserthtml'],
-            ['Undo', 'Redo', '-', 'SelectAll', 'Find', '-', 'RemoveFormat'],
-            ['Link', 'Unlink', 'Anchor', 'Glossary'],
-            [
-                'Image',
-                'Mapping',
-                'Video',
-                'Oembed',
-                'Flash',
-                'Youtube',
-                'VimeoEmbed',
-                'Audio',
-                'leaflet',
-                'Smiley',
-                'SpecialChar',
-                'Asciimath',
-                'Asciisvg',
-            ],
-            '/',
-            ['Table', '-', 'CreateDiv'],
-            ['BulletedList', 'NumberedList', 'HorizontalRule', '-', 'Outdent', 'Indent', 'Blockquote'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
-            ['Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript', '-', 'TextColor', 'BGColor'],
-            ['true' === api_get_setting('allow_spellcheck') ? 'Scayt' : ''],
-            ['Styles', 'Format', 'Font', 'FontSize'],
-            ['PageBreak', 'ShowBlocks'],
-            'true' === api_get_setting('enabled_wiris') ? ['ckeditor_wiris_formulaEditor', 'ckeditor_wiris_CAS'] : [''],
-            ['Toolbarswitch', 'Source'],
+            // NOTE: legacy visualization only; shared base controls TinyMCE toolbar.
         ];
+    }
+
+    public function getNewPageBlock()
+    {
+        return ['NewPage', 'Templates', '-', 'PasteFromWord', 'inserthtml'];
     }
 
     /**
      * Determines the appropriate language configuration for the editor.
-     * Tries to load a specific language file based on the ISO code. If not found, it attempts to load a general language file.
-     * Falls back to English if neither specific nor general language files are available.
      */
     private function getLanguageConfig(string $iso): array
     {
@@ -320,21 +200,16 @@ class Basic extends Toolbar
         ];
 
         if ('en_US' !== $iso) {
-            // Check for a specific variant of the language (e.g., de_german2)
             if (str_contains($iso, '_')) {
-                // Extract the general language code (e.g., de)
+                // Extract general language code (e.g., "de" from "de_DE")
                 list($generalLangCode) = explode('_', $iso, 2);
                 $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
             }
 
-            // Attempt to load the specific language file
             if (file_exists($sysUrl.$specificLangFile)) {
                 $config['language'] = $iso;
                 $config['language_url'] = $url.$specificLangFile;
-            }
-
-            // Fallback to the general language file if specific is not available
-            elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
+            } elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
                 $config['language'] = $generalLangCode;
                 $config['language_url'] = $url.$generalLangFile;
             }

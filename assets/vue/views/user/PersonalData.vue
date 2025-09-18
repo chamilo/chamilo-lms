@@ -157,17 +157,19 @@
   <BaseDialog
     v-if="termsAndConditions"
     v-model:is-visible="termsAndConditionsDialogVisible"
-    :style="{ width: '28rem' }"
+    :style="{ width: '52rem', maxWidth: '95vw' }"
     :title="t('Read the Terms and Conditions')"
   >
-    <template
-      v-for="(term, index) in termsAndConditions"
-      :key="`term-${index}`"
-    >
-      <h3>{{ term.title }}</h3>
-      <div v-html="term.content"></div>
-      <p>{{ term.date_text }}</p>
-    </template>
+    <div class="overflow-y-auto max-h-[70vh] pr-2">
+      <template
+        v-for="(term, index) in termsAndConditions"
+        :key="`term-${index}`"
+      >
+        <h3 class="text-lg font-semibold mb-2">{{ term.title }}</h3>
+        <div v-html="term.content" class="mb-2"></div>
+        <p class="text-sm text-gray-500 mb-4">{{ term.date_text }}</p>
+      </template>
+    </div>
   </BaseDialog>
 </template>
 

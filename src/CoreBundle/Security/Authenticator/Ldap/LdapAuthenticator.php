@@ -212,52 +212,31 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
 
         $ldapFields = $ldapUser->getExtraFields();
 
-        if (isset($this->dataCorrespondence['firstname'])) {
-            $user->setFirstname(
-                $ldapFields[$this->dataCorrespondence['firstname']][0]
-            );
-        } else {
-            $user->setFirstname('');
-        }
+        $fieldsMap = [
+            'firstname' => 'setFirstname',
+            'lastname' => 'setLastname',
+            'email' => 'setEmail',
+            'active' => 'setActive',
+            'role' => 'setRoles',
+            'locale' => 'setLocale',
+            'phone' => 'setPhone',
+        ];
 
-        if (isset($this->dataCorrespondence['lastname'])) {
-            $user->setLastname(
-                $ldapFields[$this->dataCorrespondence['lastname']][0]
-            );
-        } else {
-            $user->setLastname('');
-        }
-
-        if (isset($this->dataCorrespondence['email'])) {
-            $user->setEmail(
-                $ldapFields[$this->dataCorrespondence['email']][0]
-            );
-        } else {
-            $user->setEmail('');
-        }
-
-        if (isset($this->dataCorrespondence['active'])) {
-            $user->setActive(
-                (int) $ldapFields[$this->dataCorrespondence['active']][0]
-            );
-        }
-
-        if (isset($this->dataCorrespondence['role'])) {
-            $user->setRoles(
-                [$ldapFields[$this->dataCorrespondence['role']][0]]
-            );
-        } else {
-            $user->setRoles($ldapUser->getRoles());
-        }
-
-        if (isset($this->dataCorrespondence['locale'])) {
-            $user->setLocale(
-                $ldapFields[$this->dataCorrespondence['locale']][0]
-            );
-        }
-
-        if (isset($this->dataCorrespondence['phone'])) {
-            $user->setPhone($this->dataCorrespondence['phone']);
+        foreach ($fieldsMap as $key => $setter) {
+            if (isset($this->dataCorrespondence[$key]) && $fieldKey = $this->dataCorrespondence[$key]) {
+                $value = $ldapFields[$fieldKey][0] ?? '';
+                if ($key === 'active') {
+                    $user->$setter((int) $value);
+                } elseif ($key === 'role') {
+                    $user->$setter([$value]);
+                } else {
+                    $user->$setter($value);
+                }
+            } elseif ($key === 'firstname' || $key === 'lastname' || $key === 'email') {
+                $user->$setter('');
+            } elseif ($key === 'role') {
+                $user->setRoles($ldapUser->getRoles());
+            }
         }
 
         $user

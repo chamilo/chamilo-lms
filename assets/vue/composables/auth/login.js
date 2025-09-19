@@ -4,6 +4,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import securityService from "../../services/securityService"
 import { useNotification } from "../notification"
+import { setLocale } from "../../i18n"
 
 function isValidHttpUrl(string) {
   try {
@@ -11,6 +12,28 @@ function isValidHttpUrl(string) {
     return url.protocol === "http:" || url.protocol === "https:"
   } catch (_) {
     return false
+  }
+}
+
+// Extract a usable language code from backend response
+function pickUserLang(data) {
+  // Try common fields first, then nested user fields
+  return (
+    data?.language ||
+    data?.locale ||
+    data?.lang ||
+    data?.user?.language ||
+    data?.user?.locale ||
+    data?.user?.lang ||
+    null
+  )
+}
+
+// Apply language immediately (no page reload)
+function applyUserLocale(data) {
+  const lang = pickUserLang(data)
+  if (lang) {
+    setLocale(String(lang))
   }
 }
 
@@ -51,26 +74,29 @@ export function useLogin() {
         return { success: false, requires2FA: true }
       }
 
-      // Handle forced password rotation
+      // If backend forces password rotation, still apply locale before redirect
       if (responseData.rotate_password && responseData.redirect) {
+        applyUserLocale(responseData)
         window.location.href = responseData.redirect
         return { success: true, rotate: true }
       }
 
-      // Handle backend explicit error
+      // Backend explicit error
       if (responseData.error) {
         showErrorNotification(responseData.error)
         return { success: false, error: responseData.error }
       }
 
-      // Handle terms and conditions redirect
+      // Terms and conditions redirect (apply locale before navigating)
       if (responseData.load_terms && responseData.redirect) {
+        applyUserLocale(responseData)
         window.location.href = responseData.redirect
         return { success: true, redirect: responseData.redirect }
       }
 
-      // Handle external redirect param
+      // External redirect param (apply locale before navigating)
       if (route.query.redirect) {
+        applyUserLocale(responseData)
         const redirectParam = route.query.redirect.toString()
         if (isValidHttpUrl(redirectParam)) {
           window.location.href = redirectParam
@@ -80,17 +106,22 @@ export function useLogin() {
         return { success: true }
       }
 
-      // Fallback redirect from backend
+      // Fallback backend redirect (apply locale before navigating)
       if (responseData.redirect) {
+        applyUserLocale(responseData)
         window.location.href = responseData.redirect
         return { success: true }
       }
 
       // Save user info
       securityStore.setUser(responseData)
+
+      // Apply locale NOW so the UI switches before we route
+      applyUserLocale(responseData)
+
       await platformConfigurationStore.initialize()
 
-      // Redirect again if redirect param still exists
+      // Redirect again if redirect param still exists (after login)
       if (route.query.redirect) {
         await router.replace({ path: route.query.redirect.toString() })
         return { success: true }

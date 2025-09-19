@@ -1,6 +1,7 @@
 <template>
   <component
     :is="layout"
+    :key="currentLocale"
     v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
@@ -62,16 +63,23 @@ import { useMediaElementLoader } from "./composables/mediaElementLoader"
 import apolloClient from "./config/apolloClient"
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
+import i18nInstance, { setLocale } from "./i18n"
 
 provide(DefaultApolloClient, apolloClient)
 
 const route = useRoute()
 const router = useRouter()
-const i18n = useI18n()
+
+// Use global i18n scope and expose a reactive locale for keying the layout
+const { locale } = useI18n({ useScope: "global" })
+const currentLocale = computed(() => locale.value)
 
 const { loader: mejsLoader } = useMediaElementLoader()
 
 const { loadComponent: accessUrlChooserVisible } = useAccessUrlChooser()
+const securityStore = useSecurityStore()
+const notification = useNotification()
+const platformConfigurationStore = usePlatformConfig()
 const showAccessUrlChosserLayout = computed(
   () => securityStore.isAuthenticated && !securityStore.isAdmin && accessUrlChooserVisible.value,
 )
@@ -136,9 +144,6 @@ watchEffect(() => {
   }
 })
 
-const securityStore = useSecurityStore()
-const notification = useNotification()
-
 if (!isEmpty(window.user)) {
   securityStore.setUser(window.user)
 }
@@ -179,25 +184,38 @@ axios.interceptors.response.use(
     }),
 )
 
-const platformConfigurationStore = usePlatformConfig()
 platformConfigurationStore.initialize()
 
+// Keep i18n locale synced with your own "useLocale" composable,
+// but switch via setLocale(...) to trigger proper remounting & fallbacks.
 watch(
-  () => route.params,
+  () => route.params, // if your appLocale depends on route (keep as-is if needed)
   () => {
     const { appLocale } = useLocale()
-
-    if (i18n.locale.value !== appLocale.value) {
-      i18n.locale.value = appLocale.value
+    if (appLocale?.value && locale.value !== appLocale.value) {
+      setLocale(appLocale.value)
     }
   },
   {
-    inmediate: true,
+    immediate: true,
   },
 )
 
+// Also react to the authenticated user's preferred language (after login)
+watch(
+  () => securityStore.user?.language,
+  (lang) => {
+    if (lang && locale.value !== lang) {
+      setLocale(lang)
+    }
+  },
+  { immediate: true },
+)
+
 onMounted(async () => {
-  mejsLoader()
+  const { loader } = useMediaElementLoader()
+  loader()
+
   await securityStore.checkSession()
 
   if ("serviceWorker" in navigator) {

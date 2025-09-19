@@ -200,7 +200,7 @@ class SendEventRemindersCommand extends Command
 
         $messageSubject = \sprintf(
             $this->translator->trans('Reminder for event : %s'),
-            [$event->getTitle()]
+            $event->getTitle()
         );
         $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
 

@@ -264,7 +264,7 @@ function prepare_user_sql_query(bool $getCount, bool $showDeletedUsers = false):
     }
     $mappedStatuses = array_values(array_unique($mappedStatuses));
 
-    $adminVariants = ['ROLE_PLATFORM_ADMIN','PLATFORM_ADMIN','ROLE_SUPER_ADMIN','SUPER_ADMIN','ROLE_GLOBAL_ADMIN','GLOBAL_ADMIN','ROLE_ADMIN','ADMIN'];
+    $adminVariants = ['ROLE_PLATFORM_ADMIN','PLATFORM_ADMIN','ROLE_GLOBAL_ADMIN','GLOBAL_ADMIN','ROLE_ADMIN','ADMIN'];
     $needsAdminLeftJoin = (bool) array_intersect($roles, $adminVariants);
     if ($needsAdminLeftJoin) {
         $sql .= " LEFT JOIN $admin_table a ON (a.user_id = u.id) ";
@@ -467,9 +467,7 @@ function get_user_data(int $from, int $number_of_items, int $column, string $dir
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
         if (1 == $user[7] && !empty($user['exp'])) {
-            // check expiration date
             $expiration_time = api_strtotime($user['exp']);
-            // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
                 $user[7] = '-1';
             }
@@ -477,15 +475,15 @@ function get_user_data(int $from, int $number_of_items, int $column, string $dir
 
         // forget about the expiration date field
         $users[] = [
-            $user[0], // id
+            $user[0],
             $photo,
             $user[1],
             $user[2],
             $user[3],
-            $user[4], // username
-            $user[5], // email
+            $user[4],
+            $user[5],
             $user[0],
-            $user[7], // active
+            $user[7],
             api_get_local_time($user[8]),
             api_get_local_time($user[9], null, null, true),
             $user[0],
@@ -598,7 +596,6 @@ function modify_filter($user_id, $url_params, $row): string
     $userRoles = $userEntity ? $userEntity->getRoles() : [];
 
     $isAdminByRole = in_array('ROLE_PLATFORM_ADMIN', $userRoles, true)
-        || in_array('ROLE_SUPER_ADMIN', $userRoles, true)
         || in_array('ROLE_GLOBAL_ADMIN', $userRoles, true)
         || in_array('ROLE_ADMIN', $userRoles, true);
 

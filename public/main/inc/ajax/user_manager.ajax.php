@@ -72,8 +72,6 @@ switch ($action) {
             .$user_info['official_code'];
 
         if ($isAnonymous) {
-            // Only allow anonymous users to see user popup if the popup user
-            // is a teacher (which might be necessary to illustrate a course)
             if (COURSEMANAGER === (int) $user_info['status']) {
                 if ($user_info['status'] === COURSEMANAGER) {
                     echo $userData;
@@ -218,22 +216,21 @@ switch ($action) {
                     );
                     $body = get_lang('Dear')." ".stripslashes($recipientName).",\n\n";
                     $body .= sprintf(
-                        get_lang('Your account on %s has just been approved by one of our administrators.'),
-                        api_get_setting('siteName')
-                    )."\n";
+                            get_lang('Your account on %s has just been approved by one of our administrators.'),
+                            api_get_setting('siteName')
+                        )."\n";
                     $body .= sprintf(
-                        get_lang('You can now login at %s using the login and the password you have provided.'),
-                        api_get_path(WEB_PATH)
-                    ).",\n\n";
+                            get_lang('You can now login at %s using the login and the password you have provided.'),
+                            api_get_path(WEB_PATH)
+                        ).",\n\n";
                     $body .= get_lang('Have fun,')."\n\n";
-                    //$body.=get_lang('In case of trouble, contact us.'). "\n\n". get_lang('Sincerely');
                     $body .= api_get_person_name(
-                        api_get_setting('administratorName'),
-                        api_get_setting('administratorSurname')
-                    )."\n".
-                    get_lang('Administrator')." ".
-                    api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                    get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
+                            api_get_setting('administratorName'),
+                            api_get_setting('administratorSurname')
+                        )."\n".
+                        get_lang('Administrator')." ".
+                        api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
+                        get_lang('E-mail')." : ".api_get_setting('emailAdministrator');
 
                     MessageManager::send_message_simple(
                         $user_id,
@@ -281,7 +278,7 @@ switch ($action) {
 
         $urlId = api_get_current_access_url_id();
 
-        $roleList = ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+        $roleList = ['ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN'];
 
         $users = Container::getUserRepository()->findByRoleList(
             $roleList,
@@ -312,7 +309,7 @@ switch ($action) {
 
         $urlId = api_get_current_access_url_id();
 
-        $roleList = ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'];
+        $roleList = ['ROLE_STUDENT', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN'];
 
         $users = Container::getUserRepository()->findByRoleList(
             $roleList,

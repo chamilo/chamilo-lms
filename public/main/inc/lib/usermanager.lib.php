@@ -5465,20 +5465,18 @@ SQL;
         }
 
         if ($userId) {
-            $logInfo = [
+            Event::registerLog([
                 'tool' => 'logout',
                 'tool_id' => 0,
                 'tool_id_detail' => 0,
                 'action' => '',
                 'info' => 'Change user (login as)',
-            ];
-            Event::registerLog($logInfo);
+            ]);
 
-            // Logout the current user
+            // Logout current user
             self::loginDelete(api_get_user_id());
 
-            return true;
-
+            // Reset and set new session data
             Session::erase('_user');
             Session::erase('is_platformAdmin');
             Session::erase('is_allowedCreateCourse');
@@ -5501,13 +5499,13 @@ SQL;
             Session::write('is_allowedCreateCourse', 1 == $userInfo['status']);
             // will be useful later to know if the user is actually an admin or not (example reporting)
             Session::write('login_as', true);
-            $logInfo = [
+
+            Event::registerLog([
                 'tool' => 'login',
                 'tool_id' => 0,
                 'tool_id_detail' => 0,
                 'info' => $userId,
-            ];
-            Event::registerLog($logInfo);
+            ]);
 
             return true;
         }

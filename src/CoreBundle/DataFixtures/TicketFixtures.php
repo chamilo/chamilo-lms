@@ -54,8 +54,7 @@ class TicketFixtures extends Fixture
                 ->setInsertUserId($adminId)
             ;
 
-            $isRequired = 6 === $i;
-            $ticketCategory->setCourseRequired($isRequired);
+            $ticketCategory->setCourseRequired(6 === $i);
 
             $manager->persist($ticketCategory);
             $i++;
@@ -72,7 +71,7 @@ class TicketFixtures extends Fixture
             $ticketPriority = new TicketPriority();
             $ticketPriority
                 ->setTitle($priority)
-                ->setCode($code)
+                ->setCode((string) $code)
                 ->setInsertUserId($adminId)
             ;
 
@@ -94,7 +93,7 @@ class TicketFixtures extends Fixture
             $ticketStatus = new TicketStatus();
             $ticketStatus
                 ->setTitle($status)
-                ->setCode($code)
+                ->setCode((string) $code)
             ;
             $manager->persist($ticketStatus);
         }

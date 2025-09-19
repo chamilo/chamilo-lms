@@ -163,7 +163,7 @@ readonly class AuthenticationConfigHelper
     /**
      * @return array<string, mixed>
      */
-    public function getLdapConfig(?AccessUrl $url): array
+    public function getLdapConfig(?AccessUrl $url = null): array
     {
         $authentication = $this->getAuthSources($url);
         $ldapConfig = [];
@@ -174,7 +174,7 @@ readonly class AuthenticationConfigHelper
 
         return [
             'enabled' => $ldapConfig['enabled'] ?? false,
-            'title' => $ldapConfig[''] ?? 'LDAP',
+            'title' => $ldapConfig['title'] ?? 'LDAP',
             'connection_string' => $ldapConfig['connection_string'] ?? 'null://null',
             'protocol_version' => $ldapConfig['protocol_version'] ?? 3,
             'referrals' => $ldapConfig['referrals'] ?? false,

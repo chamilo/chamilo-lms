@@ -275,7 +275,17 @@ class UserManager
         }
 
         $user->setRoleFromStatus($status);
-        $user->setDateOfBirth(null);
+        $dobStr = $_POST['date_of_birth'] ?? null;
+        if ($dobStr) {
+            $dob = \DateTime::createFromFormat('Y-m-d', $dobStr)
+                ?: \DateTime::createFromFormat('d/m/Y', $dobStr)
+                    ?: \DateTime::createFromFormat('d-m-Y', $dobStr);
+
+            if ($dob instanceof \DateTime) {
+                $user->setDateOfBirth($dob);
+            }
+        }
+
         $repo->updateUser($user, true);
         $userId = $user->getId();
 

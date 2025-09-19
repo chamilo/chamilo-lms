@@ -16,6 +16,11 @@ require_once '../work/work.lib.php';
 api_block_anonymous_users();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_PUBLIC_PATH)
     .'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<style>
+.course-unsubscribed{background-color:#f5f5f5 !important;}
+.course-unsubscribed td,.course-unsubscribed td a{color:#888 !important;}
+.course-unsubscribed .details-icon{filter:grayscale(100%);opacity:0.5;}
+</style>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -35,6 +40,7 @@ $currentUrl = api_get_self().'?student='.$student_id.'&course='.$courseCode.'&id
 $allowMessages = api_get_configuration_value('private_messages_about_user');
 $workingTime = api_get_configuration_value('considered_working_time');
 $workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
+$subscriptionColumnEnabled = api_get_configuration_value('display_session_subscription_column');
 
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
@@ -142,6 +148,51 @@ switch ($action) {
         header('Location: '.$currentUrl);
         exit;
         break;
+    case 'subscribe_course':
+        if (false === $subscriptionColumnEnabled) {
+            break;
+        }
+        $courseCodeParam = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
+        $sessionParam = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+        if ('' !== $courseCodeParam && $sessionParam > 0) {
+            SessionManager::subscribe_users_to_session_course(
+                [$student_id],
+                $sessionParam,
+                $courseCodeParam
+            );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        $redirectUrl = api_get_self().'?' . http_build_query([
+            'student' => $student_id,
+            'origin' => $origin,
+            'details' => $details,
+            'id_session' => $sessionParam,
+        ]);
+        header('Location: '.$redirectUrl);
+        exit;
+    case 'unsubscribe_course':
+        if (false === $subscriptionColumnEnabled) {
+            break;
+        }
+        $courseCodeParam = isset($_GET['course_code']) ? Security::remove_XSS($_GET['course_code']) : '';
+        $sessionParam = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+        if ('' !== $courseCodeParam && $sessionParam > 0) {
+            $courseInfoParam = api_get_course_info($courseCodeParam);
+            SessionManager::removeUsersFromCourseSession(
+                [$student_id],
+                $sessionParam,
+                $courseInfoParam
+            );
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        $redirectUrl = api_get_self().'?' . http_build_query([
+            'student' => $student_id,
+            'origin' => $origin,
+            'details' => $details,
+            'id_session' => $sessionParam,
+        ]);
+        header('Location: '.$redirectUrl);
+        exit;
     case 'export_one_session_row':
         $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $exportList = Session::read('export_course_list');
@@ -1406,27 +1457,35 @@ $exportCourseList = [];
 $lpIdList = [];
 if (empty($details)) {
     $csv_content[] = [];
-    if($theoreticalTimeEnabled) {
-        $csv_content[] = [
+    if ($theoreticalTimeEnabled) {
+        $header = [
             get_lang('Session'),
             get_lang('Course'),
             get_lang('Time'),
             get_lang('Progress'),
             get_lang('Score'),
             get_lang('TheoreticalTime'),
-            get_lang('AttendancesFaults'),
-            get_lang('Evaluations'),
         ];
+        if ($subscriptionColumnEnabled) {
+            $header[] = get_lang('Subscription');
+        }
+        $header[] = get_lang('AttendancesFaults');
+        $header[] = get_lang('Evaluations');
+        $csv_content[] = $header;
     } else {
-        $csv_content[] = [
+        $header = [
             get_lang('Session'),
             get_lang('Course'),
             get_lang('Time'),
             get_lang('Progress'),
             get_lang('Score'),
-            get_lang('AttendancesFaults'),
-            get_lang('Evaluations'),
         ];
+        if ($subscriptionColumnEnabled) {
+            $header[] = get_lang('Subscription');
+        }
+        $header[] = get_lang('AttendancesFaults');
+        $header[] = get_lang('Evaluations');
+        $csv_content[] = $header;
     }
 
     $attendance = new Attendance();
@@ -1471,6 +1530,9 @@ if (empty($details)) {
         if($theoreticalTimeEnabled) {
             echo '<th>'.get_lang('TheoreticalTime').'</th>';
         }
+        if ($subscriptionColumnEnabled && !empty($sId)) {
+            echo '<th>'.get_lang('Subscription').'</th>';
+        }
         echo '<th>'.get_lang('AttendancesFaults').'</th>
             <th>'.get_lang('Evaluations').'</th>
             <th>'.get_lang('Details').'</th>
@@ -1486,10 +1548,13 @@ if (empty($details)) {
                 get_lang('Progress'),
                 get_lang('Score'),
                 get_lang('TheoreticalTime'),
-                get_lang('AttendancesFaults'),
-                get_lang('Evaluations'),
-                get_lang('Details'),
             ];
+            if ($subscriptionColumnEnabled && !empty($sId)) {
+                $csvRow[] = get_lang('Subscription');
+            }
+            $csvRow[] = get_lang('AttendancesFaults');
+            $csvRow[] = get_lang('Evaluations');
+            $csvRow[] = get_lang('Details');
         } else {
             $csvRow = [
                 '',
@@ -1497,10 +1562,13 @@ if (empty($details)) {
                 get_lang('Time'),
                 get_lang('Progress'),
                 get_lang('Score'),
-                get_lang('AttendancesFaults'),
-                get_lang('Evaluations'),
-                get_lang('Details'),
             ];
+            if ($subscriptionColumnEnabled && !empty($sId)) {
+                $csvRow[] = get_lang('Subscription');
+            }
+            $csvRow[] = get_lang('AttendancesFaults');
+            $csvRow[] = get_lang('Evaluations');
+            $csvRow[] = get_lang('Details');
         }
 
         $exportCourseList[$sId][] = $csvRow;
@@ -1534,8 +1602,58 @@ if (empty($details)) {
                         $sId
                     );
                 }
+                $time_spent_on_course = api_time_to_hms(0);
+                $attendances_faults_avg = '0/0 (0%)';
+                $scoretotal_display = '0/0 (0%)';
+                $progress = '0%';
+                $score = '0%';
+                $subscriptionIcon = '';
+                $subscriptionCsv = '';
+                if ($subscriptionColumnEnabled && !empty($sId)) {
+                    $subscribeUrl = api_get_self().'?' . http_build_query([
+                        'action' => 'subscribe_course',
+                        'id_session' => $sId,
+                        'student' => $student_id,
+                        'course_code' => $courseCodeItem,
+                        'origin' => $origin,
+                        'details' => $details,
+                    ]);
+                    $unsubscribeUrl = api_get_self().'?' . http_build_query([
+                        'action' => 'unsubscribe_course',
+                        'id_session' => $sId,
+                        'student' => $student_id,
+                        'course_code' => $courseCodeItem,
+                        'origin' => $origin,
+                        'details' => $details,
+                    ]);
+                    $subscriptionIcon = Display::url(
+                        Display::return_icon('add.png', get_lang('NotRegistered')),
+                        $subscribeUrl
+                    );
+                    $subscriptionCsv = '+';
+                }
+                if($theoreticalTimeEnabled) {
+                    $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time', $courseCodeItem);
+                    if (is_numeric($theoreticalTime) && (float)$theoreticalTime != 0) {
+                        if ($isSubscribed) {
+                            $totalTheoreticalTime += (float)$theoreticalTime;
+                        }
+                        $hours = floor($theoreticalTime / 60);
+                        $minutes = $theoreticalTime % 60;
+                        $theoreticalTimeDisplay = sprintf('%02d:%02d', $hours, $minutes);
+                    } else {
+                        $theoreticalTimeDisplay = '00:00';
+                    }
+                }
 
                 if ($isSubscribed) {
+                    if ($subscriptionColumnEnabled && !empty($sId)) {
+                        $subscriptionIcon = Display::url(
+                            Display::return_icon('delete.png', get_lang('Registered')),
+                            $unsubscribeUrl
+                        );
+                        $subscriptionCsv = 'x';
+                    }
                     $totalCourses++;
                     $timeInSeconds = Tracking::get_time_spent_on_the_course(
                         $student_id,
@@ -1552,7 +1670,6 @@ if (empty($details)) {
                         $sId
                     );
 
-                    $attendances_faults_avg = '0/0 (0%)';
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
                             $attendances_faults_avg = Display::url(
@@ -1591,105 +1708,103 @@ if (empty($details)) {
                         }
                     }
 
-                    $scoretotal_display = '0/0 (0%)';
                     if (!empty($scoretotal) && !empty($scoretotal[1])) {
                         $scoretotal_display =
-                            round($scoretotal[0], 1).'/'.
-                            round($scoretotal[1], 1).
+                            round($scoretotal[0], 1).'/' .
+                            round($scoretotal[1], 1) .
                             ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
 
                         $gradeBookTotal[0] += $scoretotal[0];
                         $gradeBookTotal[1] += $scoretotal[1];
                     }
 
-                    $progress = Tracking::get_avg_student_progress(
+                    $progressVal = Tracking::get_avg_student_progress(
                         $student_id,
                         $courseCodeItem,
                         [],
                         $sId
                     );
 
-                    $totalProgress += $progress;
+                    $totalProgress += $progressVal;
 
-                    $score = Tracking::get_avg_student_score(
+                    $scoreVal = Tracking::get_avg_student_score(
                         $student_id,
                         $courseCodeItem,
                         [],
                         $sId
                     );
 
-                    if (is_numeric($score)) {
-                        $totalScore += $score;
+                    if (is_numeric($scoreVal)) {
+                        $totalScore += $scoreVal;
                     }
 
-                    if($theoreticalTimeEnabled) {
-                        $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time', $courseCodeItem);
-                        if (is_numeric($theoreticalTime) && (float)$theoreticalTime != 0) {
-                            $totalTheoreticalTime += (float)$theoreticalTime;
-                            $hours = floor($theoreticalTime / 60);
-                            $minutes = $theoreticalTime % 60;
-                            $theoreticalTimeDisplay = sprintf('%02d:%02d', $hours, $minutes);
-                        } else {
-                            $theoreticalTimeDisplay = '00:00';
-                        }
-                    }
-
-                    $progress = empty($progress) ? '0%' : $progress.'%';
-                    $score = empty($score) ? '0%' : $score.'%';
-
-                    if($theoreticalTimeEnabled) {
-                        $csvRow = [
-                            $session_name,
-                            $courseInfoItem['title'],
-                            $time_spent_on_course,
-                            $progress,
-                            $score,
-                            $theoreticalTimeDisplay,
-                            $attendances_faults_avg,
-                            $scoretotal_display,
-                        ];
-                    } else {
-                        $csvRow = [
-                            $session_name,
-                            $courseInfoItem['title'],
-                            $time_spent_on_course,
-                            $progress,
-                            $score,
-                            $attendances_faults_avg,
-                            $scoretotal_display,
-                        ];
-                    }
-
-                    $csv_content[] = $csvRow;
-                    $exportCourseList[$sId][] = $csvRow;
-
-                    echo '<tr>
-                    <td>
-                        <a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                            $courseInfoItem['title'].'
-                        </a>
-                    </td>
-                    <td>'.$time_spent_on_course.'</td>
-                    <td>'.$progress.'</td>
-                    <td>'.$score.'</td>';
-                    if($theoreticalTimeEnabled) {
-                        echo '<td>'.$theoreticalTimeDisplay.'</td>';
-                    }
-                    echo '<td>'.$attendances_faults_avg.'</td>
-                    <td>'.$scoretotal_display.'</td>';
-                    if (!empty($coachId)) {
-                        echo '<td width="10"><a href="'.api_get_self().'?student='.$student_id
-                            .'&details=true&course='.$courseInfoItem['code'].'&id_coach='.$coachId.'&origin='.$origin
-                            .'&id_session='.$sId.'#infosStudent">'
-                            .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
-                    } else {
-                        echo '<td width="10"><a href="'.api_get_self().'?student='.$student_id
-                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId
-                            .'#infosStudent">'
-                            .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
-                    }
-                    echo '</tr>';
+                    $progress = empty($progressVal) ? '0%' : $progressVal.'%';
+                    $score = empty($scoreVal) ? '0%' : $scoreVal.'%';
                 }
+
+                    if($theoreticalTimeEnabled) {
+                    $csvRow = [
+                        $session_name,
+                        $courseInfoItem['title'],
+                        $time_spent_on_course,
+                        $progress,
+                        $score,
+                        $theoreticalTimeDisplay,
+                    ];
+                    if ($subscriptionColumnEnabled && !empty($sId)) {
+                        $csvRow[] = $subscriptionCsv;
+                    }
+                    $csvRow[] = $attendances_faults_avg;
+                    $csvRow[] = $scoretotal_display;
+                } else {
+                    $csvRow = [
+                        $session_name,
+                        $courseInfoItem['title'],
+                        $time_spent_on_course,
+                        $progress,
+                        $score,
+                    ];
+                    if ($subscriptionColumnEnabled && !empty($sId)) {
+                        $csvRow[] = $subscriptionCsv;
+                    }
+                    $csvRow[] = $attendances_faults_avg;
+                    $csvRow[] = $scoretotal_display;
+                }
+
+                $csv_content[] = $csvRow;
+                $exportCourseList[$sId][] = $csvRow;
+                $rowClass = $isSubscribed ? '' : ' class="course-unsubscribed"';
+                echo '<tr'.$rowClass.'>',
+                    '<td>',
+                        '<a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                            $courseInfoItem['title'].
+                        '</a>',
+                    '</td>',
+                    '<td>'.$time_spent_on_course.'</td>',
+                    '<td>'.$progress.'</td>',
+                    '<td>'.$score.'</td>';
+                if($theoreticalTimeEnabled) {
+                    echo '<td>'.$theoreticalTimeDisplay.'</td>';
+                }
+                if ($subscriptionColumnEnabled && !empty($sId)) {
+                    echo '<td>'.$subscriptionIcon.'</td>';
+                }
+                echo '<td>'.$attendances_faults_avg.'</td>',
+                    '<td>'.$scoretotal_display.'</td>';
+                if (!empty($coachId)) {
+                    echo '<td width="10"><a href="'.api_get_self().'?student='.$student_id
+                        .'&details=true&course='.$courseInfoItem['code'].'&id_coach='.$coachId.'&origin='.$origin
+                        .'&id_session='.$sId.'#infosStudent">'
+                        .Display::return_icon('2rightarrow.png', get_lang('Details'), ['class' => 'details-icon'])
+                        .'</a></td>';
+                } else {
+                    echo '<td width="10"><a href="'.api_get_self().'?student='.$student_id
+                        .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId
+                        .'#infosStudent">'
+                        .Display::return_icon('2rightarrow.png', get_lang('Details'), ['class' => 'details-icon'])
+                        .'</a></td>';
+                }
+                echo '</tr>';
             }
 
             $totalAttendanceFormatted = $scoreDisplay->display_score($totalAttendance);
@@ -1711,10 +1826,13 @@ if (empty($details)) {
                     $totalTheoreticalTimeDisplay = sprintf('%02d:%02d', $totalHours, $totalMinutes);
                     echo '<td>'.$totalTheoreticalTimeDisplay.'</td>';
                 }
-                echo '<th>'.$totalAttendanceFormatted.'</th>
-                <th>'.$totalEvaluations.'</th>
-                <th></th>
-            </tr>';
+                if (!empty($sId)) {
+                    echo '<th></th>';
+                }
+                echo '<th>'.$totalAttendanceFormatted.'</th>',
+                '<th>'.$totalEvaluations.'</th>',
+                '<th></th>',
+            '</tr>';
 
             if($theoreticalTimeEnabled) {
                 $csvRow = [
@@ -1724,10 +1842,13 @@ if (empty($details)) {
                     $totalProgressFormatted,
                     $totalScoreFormatted,
                     $totalTheoreticalTimeDisplay,
-                    $totalAttendanceFormatted,
-                    $totalEvaluations,
-                    '',
                 ];
+                if (!empty($sId)) {
+                    $csvRow[] = '';
+                }
+                $csvRow[] = $totalAttendanceFormatted;
+                $csvRow[] = $totalEvaluations;
+                $csvRow[] = '';
             } else {
                 $csvRow = [
                     get_lang('Total'),
@@ -1735,10 +1856,13 @@ if (empty($details)) {
                     $totalTimeFormatted,
                     $totalProgressFormatted,
                     $totalScoreFormatted,
-                    $totalAttendanceFormatted,
-                    $totalEvaluations,
-                    '',
                 ];
+                if (!empty($sId)) {
+                    $csvRow[] = '';
+                }
+                $csvRow[] = $totalAttendanceFormatted;
+                $csvRow[] = $totalEvaluations;
+                $csvRow[] = '';
             }
 
             $csv_content[] = $csvRow;

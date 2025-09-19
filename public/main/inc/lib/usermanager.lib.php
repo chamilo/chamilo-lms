@@ -231,35 +231,19 @@ class UserManager
 
                 return false;
             }
-
-            // We use the authSource as password.
-            // The real validation will be by processed by the auth
-            // source not Chamilo
+            // Use authSource as pseudo-password (validated by external auth).
             $password = $authSources;
         }
 
         // Checking the user language
         $languages = api_get_languages();
-
-        // Default to english
         if (!in_array($language, array_keys($languages), true)) {
-            $language = 'en_US';
+            $language = 'en_US'; // default
         }
 
         $now = new DateTime();
         if (empty($expirationDate) || '0000-00-00 00:00:00' === $expirationDate) {
             $expirationDate = null;
-        // Default expiration date
-            // if there is a default duration of a valid account then
-            // we have to change the expiration_date accordingly
-            // Accept 0000-00-00 00:00:00 as a null value to avoid issues with
-            // third party code using this method with the previous (pre-1.10)
-            // value of 0000...
-            /*if ('' != api_get_setting('account_valid_duration')) {
-                $expirationDate = new DateTime($currentDate);
-                $days = (int) api_get_setting('account_valid_duration');
-                $expirationDate->modify('+'.$days.' day');
-            }*/
         } else {
             $expirationDate = api_get_utc_datetime($expirationDate, true, true);
         }
@@ -291,167 +275,219 @@ class UserManager
         }
 
         $user->setRoleFromStatus($status);
+        $dobStr = $_POST['date_of_birth'] ?? null;
+        if ($dobStr) {
+            $dob = \DateTime::createFromFormat('Y-m-d', $dobStr)
+                ?: \DateTime::createFromFormat('d/m/Y', $dobStr)
+                    ?: \DateTime::createFromFormat('d-m-Y', $dobStr);
 
-        // Add user to a group
-        /*$statusToGroup = [
-            COURSEMANAGER => 'TEACHER',
-            STUDENT => 'STUDENT',
-            DRH => 'RRHH',
-            SESSIONADMIN => 'SESSION_ADMIN',
-            STUDENT_BOSS => 'STUDENT_BOSS',
-            INVITEE => 'INVITEE',
-        ];
-
-        if (isset($statusToGroup[$status])) {
-            $group = Container::$container->get(GroupRepository::class)->findOneBy(['code' => $statusToGroup[$status]]);
-            if ($group) {
-                $user->addGroup($group);
+            if ($dob instanceof \DateTime) {
+                $user->setDateOfBirth($dob);
             }
-        }*/
+        }
 
         $repo->updateUser($user, true);
-
         $userId = $user->getId();
 
-        if (!empty($userId)) {
-            $userLocale = $user->getLocale();
-            if ($isAdmin) {
-                self::addUserAsAdmin($user);
-            }
+        if (empty($userId)) {
+            Display::addFlash(
+                Display::return_message(get_lang('There happened an unknown error. Please contact the platform administrator.'))
+            );
+            return false;
+        }
 
-            if (api_get_multiple_access_url()) {
-                UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
-            } else {
-                //we are adding by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($userId, 1);
-            }
+        $userLocale = $user->getLocale();
+        if ($isAdmin) {
+            self::addUserAsAdmin($user);
+        }
 
-            if (is_array($extra) && count($extra) > 0) {
-                $extra['item_id'] = $userId;
-                $userFieldValue = new ExtraFieldValue('user');
-                /* Force saving of extra fields (otherwise, if the current
+        if (api_get_multiple_access_url()) {
+            UrlManager::add_user_to_url($userId, api_get_current_access_url_id());
+        } else {
+            UrlManager::add_user_to_url($userId, 1);
+        }
+
+        if (is_array($extra) && count($extra) > 0) {
+            $extra['item_id'] = $userId;
+            $userFieldValue = new ExtraFieldValue('user');
+            /* Force saving of extra fields (otherwise, if the current
 ￼                user is not admin, fields not visible to the user - most
 ￼                of them - are just ignored) */
-                $userFieldValue->saveFieldValues(
-                    $extra,
-                    true,
-                    false,
-                    [],
-                    [],
-                    true
-                );
-            } else {
-                // Create notify settings by default
-                self::update_extra_field_value(
-                    $userId,
-                    'mail_notify_invitation',
-                    '1'
-                );
-                self::update_extra_field_value(
-                    $userId,
-                    'mail_notify_message',
-                    '1'
-                );
-                self::update_extra_field_value(
-                    $userId,
-                    'mail_notify_group_message',
-                    '1'
-                );
-            }
-
+            $userFieldValue->saveFieldValues(
+                $extra,
+                true,
+                false,
+                [],
+                [],
+                true
+            );
+        } else {
+            // Create notify settings by default
             self::update_extra_field_value(
                 $userId,
-                'already_logged_in',
-                'false'
+                'mail_notify_invitation',
+                '1'
             );
+            self::update_extra_field_value(
+                $userId,
+                'mail_notify_message',
+                '1'
+            );
+            self::update_extra_field_value(
+                $userId,
+                'mail_notify_group_message',
+                '1'
+            );
+        }
 
-            if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('admin.plugin_redirection_enabled'))) {
-                RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
+        self::update_extra_field_value(
+            $userId,
+            'already_logged_in',
+            'false'
+        );
+
+        if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('admin.plugin_redirection_enabled'))) {
+            RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
+        }
+
+        if (!empty($email) && $sendMail) {
+            $recipient_name = api_get_person_name(
+                $firstName,
+                $lastName,
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
+            $tpl = Container::getTwig();
+            $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig', ['locale' => $userLocale]);
+            $sender_name = api_get_person_name(
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                PERSON_NAME_EMAIL_ADDRESS
+            );
+            $email_admin = api_get_setting('emailAdministrator');
+
+            $url = api_get_path(WEB_PATH);
+            if (api_is_multiple_url_enabled()) {
+                $access_url_id = api_get_current_access_url_id();
+                if (-1 != $access_url_id) {
+                    $urlInfo = api_get_access_url($access_url_id);
+                    if ($urlInfo) {
+                        $url = $urlInfo['url'];
+                    }
+                }
             }
 
-            if (!empty($email) && $sendMail) {
-                $recipient_name = api_get_person_name(
-                    $firstName,
-                    $lastName,
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-                $tpl = Container::getTwig();
-                $emailSubject = $tpl->render('@ChamiloCore/Mailer/Legacy/subject_registration_platform.html.twig', ['locale' => $userLocale]);
-                $sender_name = api_get_person_name(
-                    api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'),
-                    null,
-                    PERSON_NAME_EMAIL_ADDRESS
-                );
-                $email_admin = api_get_setting('emailAdministrator');
+            // variables for the default template
+            $params = [
+                'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
+                'login_name' => $loginName,
+                'original_password' => stripslashes($original_password),
+                'mailWebPath' => $url,
+                'new_user' => $user,
+                'search_link' => $url,
+                'locale' => $userLocale,
+            ];
 
-                $url = api_get_path(WEB_PATH);
-                if (api_is_multiple_url_enabled()) {
-                    $access_url_id = api_get_current_access_url_id();
-                    if (-1 != $access_url_id) {
-                        $urlInfo = api_get_access_url($access_url_id);
-                        if ($urlInfo) {
-                            $url = $urlInfo['url'];
-                        }
-                    }
-                }
+            // ofaj
+            if ('true' === api_get_setting('session.allow_search_diagnostic')) {
+                $urlSearch = api_get_path(WEB_CODE_PATH).'search/search.php';
+                $linkSearch = Display::url($urlSearch, $urlSearch);
+                $params['search_link'] = $linkSearch;
+            }
 
-                // variables for the default template
-                $params = [
-                    'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
-                    'login_name' => $loginName,
-                    'original_password' => stripslashes($original_password),
-                    'mailWebPath' => $url,
-                    'new_user' => $user,
-                    'search_link' => $url,
-                    'locale' => $userLocale,
-                ];
+            $emailBody = $tpl->render(
+                '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
+                $params
+            );
 
-                // ofaj
-                if ('true' === api_get_setting('session.allow_search_diagnostic')) {
-                    $urlSearch = api_get_path(WEB_CODE_PATH).'search/search.php';
-                    $linkSearch = Display::url($urlSearch, $urlSearch);
-                    $params['search_link'] = $linkSearch;
-                }
+            $userInfo = api_get_user_info($userId);
+            $mailTemplateManager = new MailTemplateManager();
+            $phoneNumber = $extra['mobile_phone_number'] ?? null;
 
-                $emailBody = $tpl->render(
-                    '@ChamiloCore/Mailer/Legacy/content_registration_platform.html.twig',
-                    $params
-                );
-
-                $userInfo = api_get_user_info($userId);
-                $mailTemplateManager = new MailTemplateManager();
-                $phoneNumber = $extra['mobile_phone_number'] ?? null;
-
-                $emailBodyTemplate = '';
-                if (!empty($emailTemplate)) {
-                    if (isset($emailTemplate['content_registration_platform.tpl']) &&
-                        !empty($emailTemplate['content_registration_platform.tpl'])
-                    ) {
-                        $emailBodyTemplate = $mailTemplateManager->parseTemplate(
-                            $emailTemplate['content_registration_platform.tpl'],
-                            $userInfo
-                        );
-                    }
-                }
-
-                $twoEmail = ('true' === api_get_setting('mail.send_two_inscription_confirmation_mail'));
-                if (true === $twoEmail) {
-                    $emailBody = $tpl->render(
-                        '@ChamiloCore/Mailer/Legacy/new_user_first_email_confirmation.html.twig'
+            $emailBodyTemplate = '';
+            if (!empty($emailTemplate)) {
+                if (isset($emailTemplate['content_registration_platform.tpl']) &&
+                    !empty($emailTemplate['content_registration_platform.tpl'])
+                ) {
+                    $emailBodyTemplate = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['content_registration_platform.tpl'],
+                        $userInfo
                     );
+                }
+            }
 
-                    if (!empty($emailBodyTemplate) &&
-                        isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
-                        !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
-                    ) {
-                        $emailBody = $mailTemplateManager->parseTemplate(
-                            $emailTemplate['new_user_first_email_confirmation.tpl'],
-                            $userInfo
-                        );
+            $twoEmail = ('true' === api_get_setting('mail.send_two_inscription_confirmation_mail'));
+            if (true === $twoEmail) {
+                $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_first_email_confirmation.html.twig');
+                if (!empty($emailBodyTemplate) &&
+                    isset($emailTemplate['new_user_first_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_first_email_confirmation.tpl'])
+                ) {
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_first_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    [],
+                    [],
+                    false,
+                    [],
+                    $creatorEmail
+                );
+
+                $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_second_email_confirmation.html.twig');
+                if (!empty($emailBodyTemplate) &&
+                    isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
+                    !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
+                ) {
+                    $emailBody = $mailTemplateManager->parseTemplate(
+                        $emailTemplate['new_user_second_email_confirmation.tpl'],
+                        $userInfo
+                    );
+                }
+
+                api_mail_html(
+                    $recipient_name,
+                    $email,
+                    $emailSubject,
+                    $emailBody,
+                    $sender_name,
+                    $email_admin,
+                    null,
+                    null,
+                    null,
+                    [],
+                    $creatorEmail
+                );
+            } else {
+                if (!empty($emailBodyTemplate)) {
+                    $emailBody = $emailBodyTemplate;
+                }
+                $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
+                if ($sendToInbox) {
+                    $adminList = self::get_all_administrators();
+                    $senderId = 1;
+                    if (!empty($adminList)) {
+                        $adminInfo = current($adminList);
+                        $senderId = $adminInfo['user_id'];
                     }
 
+                    MessageManager::send_message_simple(
+                        $userId,
+                        $emailSubject,
+                        $emailBody,
+                        $senderId
+                    );
+                } else {
                     api_mail_html(
                         $recipient_name,
                         $email,
@@ -465,139 +501,103 @@ class UserManager
                         [],
                         $creatorEmail
                     );
+                }
+            }
 
-                    $emailBody = $tpl->render('@ChamiloCore/Mailer/Legacy/new_user_second_email_confirmation.html.twig');
+            $notification = api_get_setting('profile.send_notification_when_user_added', true);
+            if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
+                foreach ($notification['admins'] as $adminId) {
+                    $emailSubjectToAdmin = get_lang('The user has been added').': '.
+                        api_get_person_name($firstName, $lastName);
+                    MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
+                }
+            }
 
-                    if (!empty($emailBodyTemplate) &&
-                        isset($emailTemplate['new_user_second_email_confirmation.tpl']) &&
-                        !empty($emailTemplate['new_user_second_email_confirmation.tpl'])
-                    ) {
-                        $emailBody = $mailTemplateManager->parseTemplate(
-                            $emailTemplate['new_user_second_email_confirmation.tpl'],
-                            $userInfo
-                        );
-                    }
+            /** @var TranslatorInterface $translator */
+            $translator   = Container::$container->get('translator');
+            $currentLocale = $translator->getLocale();
 
-                    api_mail_html(
-                        $recipient_name,
-                        $email,
-                        $emailSubject,
-                        $emailBody,
-                        $sender_name,
-                        $email_admin,
-                        null,
-                        null,
-                        null,
-                        [],
-                        $creatorEmail
-                    );
-                } else {
-                    if (!empty($emailBodyTemplate)) {
-                        $emailBody = $emailBodyTemplate;
-                    }
-                    $sendToInbox = ('true' === api_get_setting('registration.send_inscription_msg_to_inbox'));
-                    if ($sendToInbox) {
-                        $adminList = self::get_all_administrators();
-                        $senderId = 1;
-                        if (!empty($adminList)) {
-                            $adminInfo = current($adminList);
-                            $senderId = $adminInfo['user_id'];
+            $visibleCoreFields = [];
+            $visibleExtraVars  = [];
+
+            if ($form) {
+                $formNames = [];
+                if (property_exists($form, '_elements') && is_array($form->_elements)) {
+                    foreach ($form->_elements as $el) {
+                        if (is_object($el) && method_exists($el, 'getName')) {
+                            $formNames[] = (string) $el->getName();
                         }
-
-                        MessageManager::send_message_simple(
-                            $userId,
-                            $emailSubject,
-                            $emailBody,
-                            $senderId
-                        );
-                    } else {
-                        api_mail_html(
-                            $recipient_name,
-                            $email,
-                            $emailSubject,
-                            $emailBody,
-                            $sender_name,
-                            $email_admin,
-                            [],
-                            [],
-                            false,
-                            [],
-                            $creatorEmail
-                        );
                     }
                 }
 
-                $notification = api_get_setting('profile.send_notification_when_user_added', true);
-                if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
-                    foreach ($notification['admins'] as $adminId) {
-                        $emailSubjectToAdmin = get_lang('The user has been added').': '.
-                            api_get_person_name($firstName, $lastName);
-                        MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
-                    }
-                }
+                $cfg = api_get_setting('registration.allow_fields_inscription', true);
+                $cfgCore = (is_array($cfg) && isset($cfg['fields']) && is_array($cfg['fields']))
+                    ? $cfg['fields']
+                    : [];
 
-                /** @var TranslatorInterface $translator */
-                $translator   = Container::$container->get('translator');
-                $currentLocale = $translator->getLocale();
+                $visibleCoreFields = array_values(array_intersect($cfgCore, $formNames));
 
-                if ($sendEmailToAllAdmins) {
-                    $adminList = self::get_all_administrators();
-                    $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
-
-                    foreach ($adminList as $adminId => $adminData) {
-                        $adminLocale = $adminData['locale'] ?? 'en_US';
-                        $translator->setLocale($adminLocale);
-
-                        $profileHtml      = self::renderRegistrationProfileHtml($user, $extra ?? [], $adminLocale);
-                        $userLanguageName = self::resolveLanguageName($user->getLocale());
-
-                        $params = [
-                            'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
-                            'user_added'    => $user,
-                            'link'          => Display::url($url, $url),
-                            'form'          => $profileHtml,
-                            'user_language' => $userLanguageName,
-                        ];
-
-                        $emailBody = $tpl->render(
-                            '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
-                            $params
-                        );
-
-                        $subject = get_lang('The user has been added', $adminLocale);
-
-                        MessageManager::send_message_simple(
-                            $adminId,
-                            $subject,
-                            $emailBody,
-                            $userId
-                        );
-
-                        $translator->setLocale($currentLocale);
+                foreach ($formNames as $n) {
+                    if (strpos($n, 'extra_') === 0) {
+                        $visibleExtraVars[] = substr($n, 6);
                     }
                 }
             }
 
-            Container::getEventDispatcher()
-                ->dispatch(
-                    new UserCreatedEvent(
-                        ['return' => $user, 'originalPassword' => $original_password],
-                        AbstractEvent::TYPE_POST
-                    ),
-                    Events::USER_CREATED
-                )
-            ;
+            if ($sendEmailToAllAdmins) {
+                $adminList = self::get_all_administrators();
+                $url = api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId();
 
-            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
-        } else {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('There happened an unknown error. Please contact the platform administrator.')
-                )
-            );
+                foreach ($adminList as $adminId => $adminData) {
+                    $adminLocale = $adminData['locale'] ?? 'en_US';
+                    $translator->setLocale($adminLocale);
 
-            return false;
+                    $profileHtml      = self::renderRegistrationProfileHtml(
+                        $user,
+                        $extra ?? [],
+                        $adminLocale,
+                        $visibleCoreFields,
+                        $visibleExtraVars
+                    );
+                    $userLanguageName = self::resolveLanguageName($user->getLocale());
+
+                    $paramsAdmin = [
+                        'complete_name' => stripslashes(api_get_person_name($firstName, $lastName)),
+                        'user_added'    => $user,
+                        'link'          => Display::url($url, $url),
+                        'form'          => $profileHtml,
+                        'user_language' => $userLanguageName,
+                    ];
+
+                    $emailBodyAdmin = $tpl->render(
+                        '@ChamiloCore/Mailer/Legacy/content_registration_platform_to_admin.html.twig',
+                        $paramsAdmin
+                    );
+
+                    $subject = get_lang('The user has been added', $adminLocale);
+                    MessageManager::send_message_simple(
+                        $adminId,
+                        $subject,
+                        $emailBodyAdmin,
+                        $userId
+                    );
+
+                    $translator->setLocale($currentLocale);
+                }
+            }
         }
+
+        Container::getEventDispatcher()
+            ->dispatch(
+                new UserCreatedEvent(
+                    ['return' => $user, 'originalPassword' => $original_password],
+                    AbstractEvent::TYPE_POST
+                ),
+                Events::USER_CREATED
+            )
+        ;
+
+        Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
 
         return $userId;
     }
@@ -625,37 +625,66 @@ class UserManager
     }
 
     /**
-     * Build the “profile” HTML (core + dynamic extra fields) for the admin email, localized in $adminLocale.
+     * Build the “profile” HTML (core + dynamic extra fields) for the admin email, located in $adminLocale.
      *
      * @param User $user
-     * @param array  $extraParams  Raw POST values from registration (keys: "extra_*").
-     * @param string $adminLocale  e.g. "es_ES", "fr_FR".
+     * @param array $extraParams Raw POST values from registration (keys: "extra_*").
+     * @param string $adminLocale e.g. "es_ES", "fr_FR".
+     * @param array $visibleCoreFields Visible core names (email, firstname, status, date_of_birth, etc.)
+     * @param array $visibleExtraVars Visible extra variables (without the "extra_" prefix)
      */
-    private static function renderRegistrationProfileHtml(User $user, array $extraParams, string $adminLocale): string
-    {
-        $statusLabel = ((int) $user->getStatus() === COURSEMANAGER)
-            ? get_lang('Teach courses', $adminLocale)
-            : get_lang('Follow courses', $adminLocale);
+    private static function renderRegistrationProfileHtml(
+        User $user,
+        array $extraParams,
+        string $adminLocale,
+        array $visibleCoreFields = [],
+        array $visibleExtraVars = []
+    ): string {
+        $showAllCore  = empty($visibleCoreFields);
+        $showAllExtra = empty($visibleExtraVars);
 
-        $languageName = $user->getLocale();
-        $langRepo = Container::$container->get(LanguageRepository::class);
-        if ($langRepo && ($lang = $langRepo->findOneBy(['isocode' => $user->getLocale()]))) {
-            $languageName = $lang->getOriginalName();
+        $coreVisible = array_fill_keys($visibleCoreFields, true);
+        $extraVisible = array_fill_keys($visibleExtraVars, true);
+
+        $languageName = self::resolveLanguageName($user->getLocale());
+
+        $corePairs = [];
+
+        if ($showAllCore || !empty($coreVisible['email'])) {
+            $corePairs[get_lang('E-mail', $adminLocale)] = $user->getEmail();
+        }
+        if ($showAllCore || !empty($coreVisible['firstname'])) {
+            $corePairs[get_lang('First name', $adminLocale)] = (string) $user->getFirstname();
+        }
+        if ($showAllCore || !empty($coreVisible['lastname'])) {
+            $corePairs[get_lang('Last name', $adminLocale)] = (string) $user->getLastname();
+        }
+        if ($showAllCore || !empty($coreVisible['username'])) {
+            $corePairs[get_lang('Username', $adminLocale)] = $user->getUsername();
+        }
+        if ($showAllCore || !empty($coreVisible['official_code'])) {
+            $corePairs[get_lang('Official code', $adminLocale)] = $user->getOfficialCode() ?? '';
+        }
+        if ($showAllCore || !empty($coreVisible['phone'])) {
+            $corePairs[get_lang('Phone', $adminLocale)] = $user->getPhone() ?? '';
+        }
+        if ($showAllCore || !empty($coreVisible['address'])) {
+            $corePairs[get_lang('User address', $adminLocale)] = $user->getAddress() ?? '';
+        }
+        if ($showAllCore || !empty($coreVisible['language'])) {
+            $corePairs[get_lang('Language', $adminLocale)] = $languageName;
         }
 
-        $corePairs = [
-            get_lang('E-mail',        $adminLocale) => (string) $user->getEmail(),
-            get_lang('First name',    $adminLocale) => (string) $user->getFirstname(),
-            get_lang('Last name',     $adminLocale) => (string) $user->getLastname(),
-            get_lang('Username',      $adminLocale) => (string) $user->getUsername(),
-            get_lang('Official code', $adminLocale) => (string) ($user->getOfficialCode() ?? ''),
-            get_lang('Phone',         $adminLocale) => (string) ($user->getPhone() ?? ''),
-            get_lang('Address',       $adminLocale) => (string) ($user->getAddress() ?? ''),
-            get_lang('Language',      $adminLocale) => (string) $languageName,
-            get_lang('What do you want to do?', $adminLocale) => $statusLabel,
-        ];
+        if ($showAllCore || !empty($coreVisible['status'])) {
+            $statusLabel = ((int) $user->getStatus() === COURSEMANAGER)
+                ? get_lang('Teach courses', $adminLocale)
+                : get_lang('Follow courses', $adminLocale);
+            $corePairs[get_lang('What do you want to do?', $adminLocale)] = $statusLabel;
+        }
 
-        if ($user->getDateOfBirth() instanceof \DateTimeInterface) {
+        if (($showAllCore || !empty($coreVisible['date_of_birth'])) &&
+            $user->getDateOfBirth() instanceof \DateTimeInterface
+        ) {
             $corePairs[get_lang('Date of birth', $adminLocale)] = $user->getDateOfBirth()->format('Y-m-d');
         }
 
@@ -671,6 +700,10 @@ class UserManager
                 $fieldId   = (int)$row['id'];
                 $variable  = (string)$row['variable'];
                 $presentVars[$variable] = true;
+
+                if (!$showAllExtra && empty($extraVisible[$variable])) {
+                    continue;
+                }
 
                 $tr = $efv->get_values_by_handler_and_field_id((int) $user->getId(), $fieldId, true);
                 $val = null;
@@ -706,6 +739,7 @@ class UserManager
             if (strpos($k, 'extra_') !== 0) continue;
             $variable = substr($k, 6);
             if (isset($presentVars[$variable])) continue;
+            if (!$showAllExtra && empty($extraVisible[$variable])) continue;
 
             $def = $ef->get_handler_field_info_by_field_variable($variable);
             $label = $def && !empty($def['display_text'])

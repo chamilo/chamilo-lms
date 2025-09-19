@@ -17,7 +17,10 @@ export default {
       return state.isAuthenticated
     },
     isAdmin(state, getters) {
-      return getters.isAuthenticated && (getters.hasRole("ROLE_SUPER_ADMIN") || getters.hasRole("ROLE_ADMIN"))
+      return (
+        getters.isAuthenticated &&
+        (getters.hasRole("ROLE_ADMIN") || getters.hasRole("ROLE_GLOBAL_ADMIN"))
+      )
     },
     isCourseAdmin(state, getters) {
       if (getters.isAdmin) {
@@ -34,8 +37,7 @@ export default {
       if (!getters.isAuthenticated) {
         return false
       }
-
-      if (getters.hasRole("ROLE_SUPER_ADMIN") || getters.hasRole("ROLE_ADMIN")) {
+      if (getters.hasRole("ROLE_ADMIN") || getters.hasRole("ROLE_GLOBAL_ADMIN")) {
         return true
       }
 
@@ -52,7 +54,7 @@ export default {
     },
     hasRole(state) {
       return (role) => {
-        if (state.user.roles) {
+        if (state.user && state.user.roles) {
           return state.user.roles.indexOf(role) !== -1
         }
 

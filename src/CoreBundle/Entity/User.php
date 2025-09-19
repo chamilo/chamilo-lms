@@ -155,13 +155,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public const ROLE_FALLBACK = 99;
 
-    /*public const COURSE_MANAGER = 1;
-      public const TEACHER = 1;
-      public const SESSION_ADMIN = 3;
-      public const DRH = 4;
-      public const STUDENT = 5;
-      public const ANONYMOUS = 6;*/
-
     // User active field constants
     public const ACTIVE = 1;
     public const INACTIVE = 0;
@@ -1251,7 +1244,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isPasswordRequestNonExpired(int $ttl): bool
     {
         return $this->getPasswordRequestedAt() instanceof DateTime && $this->getPasswordRequestedAt()->getTimestamp(
-        ) + $ttl > time();
+            ) + $ttl > time();
     }
 
     public function getPasswordRequestedAt(): ?DateTime
@@ -1669,7 +1662,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function isSuperAdmin(): bool
     {
-        return $this->hasRole('ROLE_SUPER_ADMIN');
+        // Treat "global admin" as super-admin
+        return $this->hasRole('ROLE_GLOBAL_ADMIN');
     }
 
     public function hasRole(string $role): bool
@@ -2357,7 +2351,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this
             ->getFriendsWithMeByRelationType($relationType)
             ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
-        ;
+            ;
     }
 
     /**

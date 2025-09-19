@@ -27,6 +27,7 @@ export const useSecurityStore = defineStore("security", () => {
    * @param {string} role
    */
   const removeRole = (role) => {
+    if (!user.value || !user.value.roles) return
     const index = user.value.roles.indexOf(role)
 
     if (index > -1) {
@@ -40,19 +41,20 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isHRM = computed(() => hasRole.value("ROLE_HR"))
 
-  const isTeacher = computed(() => (isAdmin.value ? true : hasRole.value("ROLE_TEACHER")))
+  const isAdmin = computed(() => hasRole.value("ROLE_ADMIN") || hasRole.value("ROLE_GLOBAL_ADMIN"))
 
-  const isCurrentTeacher = computed(() => (isAdmin.value ? true : hasRole.value("ROLE_CURRENT_COURSE_TEACHER")))
+  const isTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_TEACHER"))
 
-  const isCourseAdmin = computed(() =>
-    isAdmin.value
-      ? true
-      : hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER") || hasRole.value("ROLE_CURRENT_COURSE_TEACHER"),
+  const isCurrentTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_CURRENT_COURSE_TEACHER"))
+
+  const isCourseAdmin = computed(
+    () =>
+      isAdmin.value ||
+      hasRole.value("ROLE_CURRENT_COURSE_SESSION_TEACHER") ||
+      hasRole.value("ROLE_CURRENT_COURSE_TEACHER"),
   )
 
   const isSessionAdmin = computed(() => hasRole.value("ROLE_SESSION_MANAGER"))
-
-  const isAdmin = computed(() => hasRole.value("ROLE_SUPER_ADMIN") || hasRole.value("ROLE_ADMIN"))
 
   async function checkSession() {
     isLoading.value = true

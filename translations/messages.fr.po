@@ -30442,3 +30442,6 @@ msgstr "Terminé le"
 
 msgid "Incomplete courses"
 msgstr "Cours non terminés"
+
+msgid "Date of birth"
+msgstr "Date de naissance"

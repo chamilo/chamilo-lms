@@ -1,13 +1,38 @@
 {% autoescape false %}
-<table border="0" cellpadding="10" cellspacing="0" width="100%">
-    <tr>
-        <td width="245" {{ mail_header_style }}>
-            <img class="navbar-brand-full" width="130"
-                 src="{{ theme_asset_base64('images/header-logo.png', true) }}"
-                 alt="Chamilo"/>
-        </td>
-        <td width="100%">            &nbsp;
-        </td>
-    </tr>
-</table>
+    {% set src = theme_logo('email', true) %}
+    {% if not src %}
+        {% set candidates = [
+            'images/email-logo.svg',
+            'images/email-logo.png',
+            'images/header-logo.svg',
+            'images/header-logo.png'
+        ] %}
+        {% for c in candidates %}
+            {% if not src %}
+                {% set url = theme_asset(c, true) %}
+                {% if url %}
+                    {% set src = url %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <table border="0" cellpadding="10" cellspacing="0" width="100%">
+        <tr>
+            <td width="245" valign="top" {{ mail_header_style|default('') }}>
+                {% if src %}
+                    <img
+                            alt="{{ platform_name|default('Chamilo') }}"
+                            width="130"
+                            style="display:block;height:40px;"
+                            src="{{ src }}"
+                    />
+                {% else %}
+                    <span style="font-weight:600;font-size:16px;line-height:1;">
+          {{ platform_name|default('Chamilo') }}
+        </span>
+                {% endif %}
+            </td>
+            <td width="100%">&nbsp;</td>
+        </tr>
+    </table>
 {% endautoescape %}

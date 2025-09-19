@@ -45,7 +45,17 @@ class PlatformConfigurationController extends AbstractController
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
             'oauth2_providers' => $this->authenticationConfigHelper->getEnabledOAuthProviders(),
+            'ldap_auth' => null,
         ];
+
+        $ldapConfig = $this->authenticationConfigHelper->getLdapConfig();
+
+        if ($ldapConfig['enabled']) {
+            $configuration['ldap_auth'] = [
+                'enabled' => true,
+                'title' => $ldapConfig['title'],
+            ];
+        }
 
         $configuration['settings']['registration.allow_registration'] = $settingsManager->getSetting('registration.allow_registration', true);
         $configuration['settings']['catalog.course_catalog_published'] = $settingsManager->getSetting('catalog.course_catalog_published', true);

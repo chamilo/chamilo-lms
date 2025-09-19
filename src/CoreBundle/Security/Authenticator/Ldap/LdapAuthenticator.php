@@ -56,35 +56,33 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         private readonly TranslatorInterface $translator,
         Ldap $ldap,
     ) {
-        $params = $this->authConfigHelper->getLdapConfig(
-            $this->accessUrlHelper->getCurrent()
-        );
+        $ldapConfig = $this->authConfigHelper->getLdapConfig();
 
-        if (!($params['enabled'] ?? false)) {
+        if (!$ldapConfig['enabled']) {
             return;
         }
 
         $this->isEnabled = true;
 
-        $dnString = $params['dn_string'] ?? '{user_identifier}';
-        $searchDn = $params['search_dn'] ?? '';
-        $searchPassword = $params['search_password'] ?? '';
-        $queryString = $params['query_string'] ?? null;
+        $dnString = $ldapConfig['dn_string'] ?? '{user_identifier}';
+        $searchDn = $ldapConfig['search_dn'] ?? '';
+        $searchPassword = $ldapConfig['search_password'] ?? '';
+        $queryString = $ldapConfig['query_string'] ?? null;
 
-        $this->dataCorrespondence = array_filter($params['data_correspondence']) ?: [];
+        $this->dataCorrespondence = array_filter($ldapConfig['data_correspondence']) ?: [];
 
         $this->ldapBadge = new LdapBadge(Ldap::class, $dnString, $searchDn, $searchPassword, $queryString);
 
         $this->userProvider = new LdapUserProvider(
             $ldap,
-            $params['base_dn'],
+            $ldapConfig['base_dn'],
             $searchDn ?: '',
             $searchPassword ?: null,
             ['ROLE_STUDENT'],
-            $params['uid_key'] ?? null,
-            $params['filter'] ?? null,
-            $params['password_attribute'] ?? null,
-            array_values($this->dataCorrespondence + [$params['password_attribute']]),
+            $ldapConfig['uid_key'] ?? null,
+            $ldapConfig['filter'] ?? null,
+            $ldapConfig['password_attribute'] ?? null,
+            array_values($this->dataCorrespondence + [$ldapConfig['password_attribute']]),
         );
     }
 
@@ -206,63 +204,42 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         if (!$user) {
             $user = (new User())
                 ->setCreatorId($this->userRepo->getRootUser()->getId())
+                ->addAuthSourceByAuthentication('extldap', $currentAccessUrl)
             ;
         }
 
         $ldapFields = $ldapUser->getExtraFields();
 
-        if (isset($this->dataCorrespondence['firstname'])) {
-            $user->setFirstname(
-                $ldapFields[$this->dataCorrespondence['firstname']][0]
-            );
-        } else {
-            $user->setFirstname('');
-        }
+        $fieldsMap = [
+            'firstname' => 'setFirstname',
+            'lastname' => 'setLastname',
+            'email' => 'setEmail',
+            'active' => 'setActive',
+            'role' => 'setRoles',
+            'locale' => 'setLocale',
+            'phone' => 'setPhone',
+        ];
 
-        if (isset($this->dataCorrespondence['lastname'])) {
-            $user->setLastname(
-                $ldapFields[$this->dataCorrespondence['lastname']][0]
-            );
-        } else {
-            $user->setLastname('');
-        }
-
-        if (isset($this->dataCorrespondence['email'])) {
-            $user->setEmail(
-                $ldapFields[$this->dataCorrespondence['email']][0]
-            );
-        } else {
-            $user->setEmail('');
-        }
-
-        if (isset($this->dataCorrespondence['active'])) {
-            $user->setActive(
-                (int) $ldapFields[$this->dataCorrespondence['active']][0]
-            );
-        }
-
-        if (isset($this->dataCorrespondence['role'])) {
-            $user->setRoles(
-                [$ldapFields[$this->dataCorrespondence['role']][0]]
-            );
-        } else {
-            $user->setRoles($ldapUser->getRoles());
-        }
-
-        if (isset($this->dataCorrespondence['locale'])) {
-            $user->setLocale(
-                $ldapFields[$this->dataCorrespondence['locale']][0]
-            );
-        }
-
-        if (isset($this->dataCorrespondence['phone'])) {
-            $user->setPhone($this->dataCorrespondence['phone']);
+        foreach ($fieldsMap as $key => $setter) {
+            if (isset($this->dataCorrespondence[$key]) && $fieldKey = $this->dataCorrespondence[$key]) {
+                $value = $ldapFields[$fieldKey][0] ?? '';
+                if ($key === 'active') {
+                    $user->$setter((int) $value);
+                } elseif ($key === 'role') {
+                    $user->$setter([$value]);
+                } else {
+                    $user->$setter($value);
+                }
+            } elseif ($key === 'firstname' || $key === 'lastname' || $key === 'email') {
+                $user->$setter('');
+            } elseif ($key === 'role') {
+                $user->setRoles($ldapUser->getRoles());
+            }
         }
 
         $user
             ->setUsername($ldapUser->getUserIdentifier())
             ->setPlainPassword($ldapUser->getPassword())
-            ->addAuthSourceByAuthentication('extldap', $currentAccessUrl)
         ;
 
         $this->userRepo->updateUser($user);

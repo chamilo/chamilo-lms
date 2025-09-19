@@ -1154,13 +1154,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'mailer_from_email',
-                    'title' => "Mail: 'From' address",
-                    'comment' => "The e-mail address from which e-mails will be sent when the platform sends an e-mail, also used as 'reply-to' header. We recommend using a 'no-reply' e-mail address here, to avoid excessive filling of an e-mail box. The support e-mail address defined in the Platform section should be used to contact you, but replying to automatic notifications should not be encouraged.",
+                    'title' => 'Send all e-mails from this e-mail address',
+                    'comment' => 'Sets the default email address used in the "from" field of emails.',
                 ],
                 [
                     'name' => 'mailer_from_name',
-                    'title' => "Mail: 'From' name",
-                    'comment' => 'The name that appears as the sender (next to the From e-mail address) when the platform sends an e-mail.',
+                    'title' => 'Send all e-mails as originating from this (organizational) name',
+                    'comment' => 'Sets the default display name used for sending platform emails. e.g. "Support team".',
                 ],
                 [
                     'name' => 'mailer_mails_charset',
@@ -3084,16 +3084,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'mail' => [
-                [
-                    'name' => 'mailer_from_name',
-                    'title' => 'Send all e-mails from this e-mail address',
-                    'comment' => 'Sets the default email address used in the "from" field of emails.',
-                ],
-                [
-                    'name' => 'mailer_from_email',
-                    'title' => 'Send all e-mails as originating from this (organizational) name',
-                    'comment' => 'Sets the default display name used for sending platform emails. e.g. "Support team".',
-                ],
                 [
                     'name' => 'allow_email_editor_for_anonymous',
                     'title' => 'E-mail editor for anonymous',

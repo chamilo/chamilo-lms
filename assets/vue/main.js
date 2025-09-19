@@ -38,6 +38,7 @@ import Select from "primevue/select"
 import Toolbar from "primevue/toolbar"
 
 import Dialog from "primevue/dialog"
+import ConfirmDialog from "primevue/confirmdialog"
 import InputText from "primevue/inputtext"
 import Button from "primevue/button"
 import Column from "primevue/column"
@@ -176,6 +177,7 @@ const app = createApp(App)
 app.use(ToastService)
 app.use(ConfirmationService)
 app.component("Dialog", Dialog)
+app.component("ConfirmDialog", ConfirmDialog)
 app.component("DataView", DataView)
 app.component("Dropdown", Select)
 app.component("InputText", InputText)
@@ -217,6 +219,8 @@ function applyPrimeLocale() {
   if (!cfg) return
   cfg.locale = {
     ...(cfg.locale ?? {}),
+    accept: t("Yes"),
+    reject: t("No"),
     emptyMessage: t("No available options"),
     emptyFilterMessage: t("No available options"),
   }

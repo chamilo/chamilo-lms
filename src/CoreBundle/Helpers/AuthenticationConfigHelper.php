@@ -163,14 +163,51 @@ readonly class AuthenticationConfigHelper
     /**
      * @return array<string, mixed>
      */
-    public function getLdapConfig(?AccessUrl $url): array
+    public function getLdapConfig(?AccessUrl $url = null): array
     {
         $authentication = $this->getAuthSources($url);
+        $ldapConfig = [];
 
         if (isset($authentication['ldap'])) {
-            return $authentication['ldap'];
+            $ldapConfig = $authentication['ldap'];
         }
 
-        return [];
+        return [
+            'enabled' => $ldapConfig['enabled'] ?? false,
+            'title' => $ldapConfig['title'] ?? 'LDAP',
+            'connection_string' => $ldapConfig['connection_string'] ?? 'null://null',
+            'protocol_version' => $ldapConfig['protocol_version'] ?? 3,
+            'referrals' => $ldapConfig['referrals'] ?? false,
+            'dn_string' => $ldapConfig['dn_string'] ?? '{user_identifier}',
+            'query_string' => $ldapConfig['query_string'] ?? null,
+            'base_dn' => $ldapConfig['base_dn'] ?? null,
+            'search_dn' => $ldapConfig['search_dn'] ?? null,
+            'search_password' => $ldapConfig['search_password'] ?? null,
+            'filter' => $ldapConfig['filter'] ?? null,
+            'uid_key' => $ldapConfig['uid_key'] ?? 'uid',
+            'password_attribute' => $ldapConfig['password_attribute'] ?? null,
+            'data_correspondence' => $this->getLdapDataCorrespondenceConfig(
+                $ldapConfig['data_correspondence'] ?? []
+            ),
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed> $dataCorrespondence
+     *
+     * @return array<string, mixed>
+     */
+    private function getLdapDataCorrespondenceConfig(array $dataCorrespondence): array
+    {
+        return [
+            'firstname' => $dataCorrespondence['firstname'] ?? null,
+            'lastname' => $dataCorrespondence['lastname'] ?? 'sn',
+            'email' => $dataCorrespondence['email'] ?? 'mail',
+            'locale' => $dataCorrespondence['locale'] ?? null,
+            'role' => $dataCorrespondence['role'] ?? null,
+            'phone' => $dataCorrespondence['phone'] ?? null,
+            'active' => $dataCorrespondence['active'] ?? null,
+            'admin' => $dataCorrespondence['admin'] ?? null,
+        ];
     }
 }

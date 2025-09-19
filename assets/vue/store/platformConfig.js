@@ -9,6 +9,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const plugins = ref([])
   const visualTheme = ref("chamilo")
   const oauth2Providers = ref([])
+  const ldapAuth = ref(null)
 
   async function findSettingsRequest() {
     isLoading.value = true
@@ -25,6 +26,8 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
       plugins.value = data.plugins
 
       oauth2Providers.value = data.oauth2_providers
+
+      ldapAuth.value = data.ldap_auth
     } catch (e) {
       console.log(e)
     } finally {
@@ -52,5 +55,6 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     isStudentViewActive,
     visualTheme,
     oauth2Providers,
+    ldapAuth,
   }
 })

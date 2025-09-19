@@ -14,13 +14,13 @@ class ExtAdapter extends Adapter
     public function __construct(
         private readonly AuthenticationConfigHelper $authConfigHelper,
     ) {
-        $params = $this->authConfigHelper->getLdapConfig(null);
+        $params = $this->authConfigHelper->getLdapConfig();
 
         $config = [
-            'connection_string' => $params['connection_string'] ?? 'ldap://localhost:389',
+            'connection_string' => $params['connection_string'],
             'options' => [
-                'protocol_version' => $params['protocol_version'] ?? 3,
-                'referrals' => $params['referrals'] ?? false,
+                'protocol_version' => $params['protocol_version'],
+                'referrals' => $params['referrals'],
             ],
         ];
 

@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -31,6 +32,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use function pathinfo;
+
 use const PATHINFO_FILENAME;
 
 #[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
@@ -42,7 +45,8 @@ class SessionAdminController extends BaseController
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly SettingsManager $settingsManager,
         private readonly UserHelper $userHelper,
-        private readonly CCourseDescriptionRepository $courseDescriptionRepository
+        private readonly CCourseDescriptionRepository $courseDescriptionRepository,
+        private readonly IllustrationRepository $illustrationRepository
     ) {}
 
     #[Route('/courses', name: 'chamilo_core_admin_sessionadmin_courses', methods: ['GET'])]
@@ -51,20 +55,38 @@ class SessionAdminController extends BaseController
         $url = $this->accessUrlHelper->getCurrent();
         $courses = $this->courseRepository->getCoursesByAccessUrl($url);
 
-        $data = array_map(static function (Course $course) {
+        $filterForCards = '';
+
+        $data = array_map(function (Course $course) use ($filterForCards) {
+            $illustrationUrl = $this->illustrationRepository->getIllustrationUrl(
+                $course,
+                $filterForCards,
+                512
+            );
+
             return [
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'description' => $course->getDescription(),
                 'visibility' => $course->getVisibility(),
-                'illustrationUrl' => method_exists($course, 'getIllustrationUrl')
-                    ? $course->getIllustrationUrl()
-                    : null,
+                'illustrationUrl' => $this->normalizePath($illustrationUrl),
             ];
         }, $courses);
 
         return $this->json($data);
+    }
+
+    private function normalizePath(?string $path): string
+    {
+        if (!\is_string($path) || $path === '') {
+            return '/img/session_default.svg';
+        }
+        $p = trim($path);
+        if (\str_starts_with($p, 'http://') || \str_starts_with($p, 'https://') || \str_starts_with($p, '/')) {
+            return $p;
+        }
+        return '/'.ltrim($p, '/');
     }
 
     #[Route('/courses/completed', name: 'chamilo_core_admin_sessionadmin_courses_completed', methods: ['GET'])]
@@ -233,8 +255,11 @@ class SessionAdminController extends BaseController
     }
 
     #[Route('/courses/extend_week', name: 'chamilo_core_admin_sessionadmin_session_extend_one_week', methods: ['POST'])]
-    public function extendSessionByWeek(Request $request, SessionRelCourseRelUserRepository $sessionRelCourseRelUserRepository, EntityManagerInterface $entityManager): JsonResponse
-    {
+    public function extendSessionByWeek(
+        Request $request,
+        SessionRelCourseRelUserRepository $sessionRelCourseRelUserRepository,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $sessionId = (int) ($data['sessionId'] ?? 0);
         $userId = (int) ($data['userId'] ?? 0);
@@ -267,7 +292,11 @@ class SessionAdminController extends BaseController
         $session->setAccessEndDate($newEndDate);
         $entityManager->flush();
 
-        return $this->json(['success' => true, 'message' => 'Session extended by one week.', 'newEndDate' => $newEndDate->format('Y-m-d')]);
+        return $this->json([
+            'success' => true,
+            'message' => 'Session extended by one week.',
+            'newEndDate' => $newEndDate->format('Y-m-d'),
+        ]);
     }
 
     #[Route('/courses/{id}', name: 'chamilo_core_admin_sessionadmin_course_view', methods: ['GET'])]
@@ -290,15 +319,20 @@ class SessionAdminController extends BaseController
             ];
         }, $items);
 
+        $filterForCards = '';
+        $illustrationUrl = $this->illustrationRepository->getIllustrationUrl(
+            $course,
+            $filterForCards,
+            512
+        );
+
         return $this->json([
             'id' => $course->getId(),
             'title' => $course->getTitle(),
             'code' => $course->getCode(),
             'description' => '',
             'descriptions' => $descriptions,
-            'illustrationUrl' => method_exists($course, 'getIllustrationUrl')
-                ? $course->getIllustrationUrl()
-                : null,
+            'illustrationUrl' => $this->normalizePath($illustrationUrl),
         ]);
     }
 

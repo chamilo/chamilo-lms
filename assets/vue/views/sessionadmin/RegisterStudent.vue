@@ -2,11 +2,31 @@
   <div class="p-6 space-y-6">
     <Card>
       <template #header>
-        <img
-          :src="course.illustrationUrl || PLACEHOLDER"
-          :alt="course.title"
-          class="w-full h-40 object-cover rounded-t-xl"
-        />
+        <div class="relative w-full rounded-t-xl bg-gray-100 overflow-hidden">
+          <div
+            v-if="isFetching"
+            class="w-full h-36 sm:h-44 md:h-52 lg:h-60 animate-pulse bg-gray-200"
+            aria-hidden="true"
+          />
+          <div
+            v-else-if="hasRealBanner && !imgLoaded"
+            class="w-full h-36 sm:h-44 md:h-52 lg:h-60 animate-pulse bg-gray-200"
+            aria-hidden="true"
+          />
+          <img
+            v-else-if="hasRealBanner && imgLoaded"
+            :src="displaySrc"
+            :alt="course.title || 'Course illustration'"
+            class="block w-full h-36 sm:h-44 md:h-52 lg:h-60 object-cover object-center"
+            referrerpolicy="no-referrer"
+          />
+          <img
+            v-else
+            :src="PLACEHOLDER"
+            :alt="course.title || 'Course illustration'"
+            class="block w-full h-36 sm:h-44 md:h-52 lg:h-60 object-cover object-center"
+          />
+        </div>
       </template>
 
       <template #title>
@@ -222,6 +242,7 @@ const extraFieldKey = platformConfigStore.getSetting(
   "platform.session_admin_user_subscription_search_extra_field_to_search",
 )
 
+const isFetching = ref(true)
 const course = ref({
   title: "Loading...",
   code: "",
@@ -229,6 +250,61 @@ const course = ref({
   descriptions: [],
   illustrationUrl: null,
 })
+
+function normalizeUrl(u) {
+  if (!u || typeof u !== "string") return null
+  const s = u.trim()
+  if (s.startsWith("http://") || s.startsWith("https://") || s.startsWith("/")) return s
+  return `/${s.replace(/^\/+/, "")}`
+}
+
+const rawBanner = ref(null)
+const hasRealBanner = computed(() => !!rawBanner.value)
+const imgLoaded = ref(false)
+const displaySrc = ref(null)
+
+function preloadImage(src) {
+  imgLoaded.value = false
+  displaySrc.value = null
+  if (!src) return
+  const im = new Image()
+  im.referrerPolicy = "no-referrer"
+  im.onload = () => {
+    displaySrc.value = src
+    imgLoaded.value = true
+  }
+  im.onerror = () => {
+    rawBanner.value = null
+    imgLoaded.value = false
+  }
+  im.src = src
+}
+
+async function loadCourse() {
+  isFetching.value = true
+  try {
+    const data = await courseService.findCourseForSessionAdmin(courseId)
+    course.value = {
+      id: data.id,
+      title: data.title,
+      code: data.code,
+      description: data.description,
+      descriptions: data.descriptions || [],
+      illustrationUrl: normalizeUrl(data.illustrationUrl),
+    }
+    rawBanner.value = normalizeUrl(data.illustrationUrl)
+    if (rawBanner.value) {
+      preloadImage(rawBanner.value)
+    }
+  } catch (e) {
+    console.error("[RegisterStudent] course load failed:", e)
+    rawBanner.value = null
+  } finally {
+    isFetching.value = false
+  }
+}
+
+loadCourse()
 
 const createForm = ref({
   firstname: "",
@@ -239,30 +315,10 @@ const createForm = ref({
   sendEmail: true,
   [extraFieldKey]: "",
 })
-
 const createLoading = ref(false)
-
 const platformSessionAdminAccessAllUrls = computed(
   () => platformConfigStore.getSetting("platform.session_admin_access_to_all_users_on_all_urls") === "true",
 )
-
-async function loadCourse() {
-  try {
-    const data = await courseService.findCourseForSessionAdmin(courseId)
-    course.value = {
-      id: data.id,
-      title: data.title,
-      code: data.code,
-      description: data.description,
-      descriptions: data.descriptions || [],
-      illustrationUrl: data.illustrationUrl,
-    }
-  } catch (e) {
-    console.error("[RegisterStudent] course load failed:", e)
-  }
-}
-
-loadCourse()
 
 const form = ref({ lastname: "", firstname: "", tempId: "" })
 const student = ref(null)

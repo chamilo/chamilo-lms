@@ -1088,15 +1088,29 @@ function modify_filter($user_id, $row, $data)
         // Unsubscribe
         if ($canEditUsers && ($user_id != $current_user_id || api_is_platform_admin())) {
             $result .= Display::url(
-                Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon text-xl delete-swal', null, ICON_SIZE_MEDIUM, get_lang('Unsubscribe')),
-                api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id
+                Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon text-xl', null, ICON_SIZE_MEDIUM, get_lang('Unsubscribe')),
+                api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id,
+                [
+                    'class' => 'delete-swal',
+                    'title' => get_lang('Unsubscribe'),
+                    'data-title' => get_lang('Are you sure you want to unsubscribe this user?'),
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text'  => get_lang('No'),
+                ]
             );
         }
     } else {
         if (1 == $course_info['unsubscribe'] && $user_id == $current_user_id) {
             $result .= Display::url(
-                Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon text-xl delete-swal', null, ICON_SIZE_MEDIUM, get_lang('Unsubscribe')),
-                api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id
+                Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon text-xl', null, ICON_SIZE_MEDIUM, get_lang('Unsubscribe')),
+                api_get_self().'?'.api_get_cidreq().'&type='.$type.'&unregister=yes&user_id='.$user_id,
+                [
+                    'class' => 'delete-swal',
+                    'title' => get_lang('Unsubscribe'),
+                    'data-title' => get_lang('Are you sure you want to unsubscribe?'),
+                    'data-confirm-text' => get_lang('Yes'),
+                    'data-cancel-text'  => get_lang('No'),
+                ]
             );
         }
     }

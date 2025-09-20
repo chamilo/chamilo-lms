@@ -217,7 +217,7 @@ if (isset($exerciseId) && $exerciseId > 0) {
                         ['class' => 'btn btn--warning btn-sm']
                     );
                 $delete_link = null;
-                if (true == $objExercise->edit_exercise_in_lp) {
+                if ($objExercise->edit_exercise_in_lp) {
                     $delete_link = Display::url(
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-button', 'margin-bottom: 5px;', ICON_SIZE_TINY, get_lang('Remove from test')),
                         api_get_self().'?'.api_get_cidreq().'&'
@@ -230,6 +230,8 @@ if (isset($exerciseId) && $exerciseId > 0) {
                             'id' => "delete_$id",
                             'class' => 'delete-swal btn btn--danger btn-sm',
                             'data-title' => get_lang('Are you sure you want to delete'),
+                            'data-confirm-text' => get_lang('Yes'),
+                            'data-cancel-text'  => get_lang('Cancel'),
                             'title' => get_lang('Delete'),
                         ]
                     );

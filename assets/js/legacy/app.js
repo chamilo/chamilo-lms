@@ -132,24 +132,27 @@ $(function () {
   }
 
   // MODAL DELETE CONFIRM
-  $(".delete-swal").click(function (e) {
+  $(document).on("click", ".delete-swal", function (e) {
     e.preventDefault()
-    var url = $(this).attr("href")
-    var title = $(this).data("title") || $(this).attr("title")
-    var confirmText = $(this).data("confirm-text") || 'Yes'
-    var cancelText = $(this).data("cancel-text") || 'Cancel'
+
+    const $a = $(this)
+    const url = $a.attr("href")
+    const title = $a.data("title") || $a.attr("title") || ""
+
+    const confirmText = $a.data("confirm-text") || "Yes"
+    const cancelText = $a.data("cancel-text") || "No"
 
     Swal.fire({
-      title: title,
-      text: "",
+      title,
       icon: "warning",
       showCancelButton: true,
+      confirmButtonText: confirmText,
       cancelButtonText: cancelText,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: confirmText,
+      reverseButtons: true,
     }).then((result) => {
-      if (result.value) {
+      if (result.isConfirmed) {
         window.location.href = url
       }
     })
@@ -456,10 +459,10 @@ function setCheckbox(value, table_id) {
 }
 
 function action_click(element, table_id) {
-  var d = $("#" + table_id);
-  var confirmMessage = $(element).attr("data-confirm") || "ConfirmYourChoice";
+  var d = $("#" + table_id)
+  var confirmMessage = $(element).attr("data-confirm") || "ConfirmYourChoice"
   if (!confirm(confirmMessage)) {
-    return false;
+    return false
   } else {
     var action = $(element).attr("data-action")
     $("#" + table_id + ' input[name="action"]').attr("value", action)

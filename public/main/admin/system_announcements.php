@@ -441,13 +441,22 @@ if ($show_announcement_list) {
         $row[] = implode(', ', $announcement->getRoles());
 
         $row[] = $announcement->getLang();
-        $row[] = "<a href=\"?action=edit&id=".$announcement->getId()."\">".
-            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
-            <a
-                href=\"?action=delete&id=".$announcement->getId()."\"
-                title=".addslashes(api_htmlentities(get_lang('Please confirm your choice')))." class='delete-swal' >".
+        $confirmMsg = addslashes(api_htmlentities(get_lang('Please confirm your choice')));
+        $yesText    = addslashes(api_htmlentities(get_lang('Yes')));
+        $noText     = addslashes(api_htmlentities(get_lang('No')));
+        $row[] =
+            '<a href="?action=edit&id='.$announcement->getId().'">'.
+            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).
+            '</a>
+    <a
+        href="?action=delete&id='.$announcement->getId().'"
+        class="delete-swal"
+        data-title="'.$confirmMsg.'"
+        data-confirm-text="'.$yesText.'"
+        data-cancel-text="'.$noText.'"
+        title="'.api_htmlentities(get_lang('Delete')).'">'.
             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).
-            "</a>";
+            '</a>';
         $announcement_data[] = $row;
     }
     $table = new SortableTableFromArray($announcement_data);

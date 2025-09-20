@@ -134,6 +134,8 @@
               :ringValue="ringValue"
               :canExportScorm="canExportScorm"
               :canExportPdf="canExportPdf"
+              :canAutoLaunch="canAutoLaunch"
+              @toggle-auto-launch="onToggleAutoLaunch"
               @open="openLegacy"
               @edit="goEdit"
               @report="onReport"
@@ -160,6 +162,8 @@
         :ringValue="ringValue"
         :canExportScorm="canExportScorm"
         :canExportPdf="canExportPdf"
+        :canAutoLaunch="canAutoLaunch"
+        @toggle-auto-launch="onToggleAutoLaunch"
         @open="openLegacy"
         @edit="goEdit"
         @report="onReport"
@@ -243,6 +247,23 @@ const canExportPdf = computed(() => {
   const hidden = platformConfig.getSetting("course.hide_scorm_pdf_link") === "true"
   return !hidden
 })
+
+// --- Auto-launch enable (course setting) ---
+const enableLpAutoLaunch = computed(() => {
+  const val = courseSettingsStore?.getSetting?.("enable_lp_auto_launch")
+  return String(val) === "true" || Number(val) === 1
+})
+const canAutoLaunch = computed(() => canEdit.value && enableLpAutoLaunch.value)
+// Toggle Auto-launch (rocket)
+const onToggleAutoLaunch = (lp) => {
+  if (!canAutoLaunch.value || !lp?.iid) return
+  const next = Number(lp.autolaunch) === 1 ? 0 : 1
+  window.location.href = lpService.buildLegacyActionUrl(lp.iid, "auto_launch", {
+    cid: cid.value,
+    sid: sid.value,
+    params: { status: next },
+  })
+}
 
 const items = ref([])
 const categories = ref([])

@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Component\Editor\Toolbar;
 class Basic extends Toolbar
 {
     /**
-     * Plugins for this toolbar (legacy-specific additions).
-     * We only add conditional extras here; the base set comes from tiny-settings.js.
+     * Toolbar-specific plugins (legacy additions).
+     * Only add conditional extras here; the base set comes from tiny-settings.js.
      */
     public array $plugins = [];
     private string $toolbarSet;
@@ -26,76 +26,100 @@ class Basic extends Toolbar
         $isAllowedToEdit = api_is_allowed_to_edit();
         $isPlatformAdmin = api_is_platform_admin();
 
-        // Conditional TinyMCE plugin additions (names must match TinyMCE plugin dirs or external plugins)
-        $plugins = [];
+        // Build the candidate list based on platform settings (we will filter by availability later)
+        $candidates = [];
 
         if ('ismanual' === api_get_setting('show_glossary_in_documents')) {
-            $plugins[] = 'glossary'; // ensure you provide external_plugins mapping if custom
+            $candidates[] = 'glossary'; // custom; requires external plugin mapping or core file
         }
 
-        if ('true' === api_get_setting('youtube_for_students')) {
-            $plugins[] = 'youtube';
-        } else {
-            if ($isAllowedToEdit || $isPlatformAdmin) {
-                $plugins[] = 'youtube';
-            }
-        }
+        // IMPORTANT: 'youtube' removed to avoid 404; use TinyMCE 'media' for YouTube/Vimeo
+        // $candidates[] = 'youtube';
 
         if ('true' === api_get_setting('enabled_googlemaps')) {
-            $plugins[] = 'leaflet';
+            $candidates[] = 'leaflet';
         }
 
         if ('true' === api_get_setting('math_asciimathML')) {
-            $plugins[] = 'asciimath';
+            $candidates[] = 'asciimath';
         }
 
         if ('true' === api_get_setting('enabled_mathjax')) {
-            $plugins[] = 'mathjax';
-            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+            $candidates[] = 'mathjax';
+            // MathJax library URL (used by your integration if needed)
+            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH) . 'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ('true' === api_get_setting('enabled_asciisvg')) {
-            $plugins[] = 'asciisvg';
+            $candidates[] = 'asciisvg';
         }
 
         if ('true' === api_get_setting('enabled_wiris')) {
-            // Commercial plugin (external)
-            $plugins[] = 'ckeditor_wiris';
+            // Commercial/external plugin name used by your integration
+            $candidates[] = 'ckeditor_wiris';
         }
 
         if ('true' === api_get_setting('enabled_imgmap')) {
-            $plugins[] = 'mapping';
+            $candidates[] = 'mapping';
         }
 
         if ('true' === api_get_setting('more_buttons_maximized_mode')) {
-            $plugins[] = 'toolbarswitch';
+            $candidates[] = 'toolbarswitch';
         }
 
         if ('true' === api_get_setting('allow_spellcheck')) {
-            $plugins[] = 'scayt';
+            $candidates[] = 'scayt';
         }
 
         if (api_get_configuration_sub_value('ckeditor_vimeo_embed/config') && ($isAllowedToEdit || $isPlatformAdmin)) {
-            $plugins[] = 'ckeditor_vimeo_embed';
+            $candidates[] = 'ckeditor_vimeo_embed';
         }
 
         if ('true' === api_get_setting('editor.ck_editor_block_image_copy_paste')) {
-            $plugins[] = 'blockimagepaste';
+            $candidates[] = 'blockimagepaste';
         }
 
-        // Save only conditional plugins; the base comes from tiny-settings.js
-        $this->plugins = array_values(array_unique($plugins));
+        // Optionally add translatehtml if enabled (will be mapped as external if present)
+        if ('true' === api_get_setting('editor.translate_html')) {
+            $candidates[] = 'translatehtml';
+        }
+
+        // Prepare external plugin candidates (name => web URL). Only mapped if file exists.
+        $externalCandidates = [
+            // Place your custom TinyMCE plugins here if you ship them under /public/libs/editor/tinymce_plugins/<name>/plugin.js
+            // 'glossary' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/glossary/plugin.js',
+            // 'mapping' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/mapping/plugin.js',
+            // 'toolbarswitch' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/toolbarswitch/plugin.js',
+            // 'ckeditor_wiris' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_wiris/plugin.js',
+            // 'ckeditor_vimeo_embed' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_vimeo_embed/plugin.js',
+            // 'scayt' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/scayt/plugin.js',
+            'translatehtml' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/translatehtml/plugin.js',
+        ];
+
+        // Filter candidates by availability (core or external). Build external_plugins map as needed.
+        [$availablePlugins, $externalMap] = $this->filterAvailablePlugins($candidates, $externalCandidates);
+
+        $this->plugins = $availablePlugins;
         $this->toolbarSet = $toolbar;
+
+        // Pass through to parent (keeps behavior consistent with existing constructor flow)
         parent::__construct($router, $toolbar, $config, $prefix);
+
+        // Merge any external plugins detected into $this->config later in getConfig()
+        // We store them temporarily in a property for use in getConfig()
+        $this->detectedExternalPlugins = $externalMap;
     }
+
+    /** @var array<string,string> */
+    private array $detectedExternalPlugins = [];
 
     /**
      * Get the toolbar config.
      *
-     * We do NOT set the base plugin list or the full toolbar here.
-     * We only:
-     *  - add conditional plugins (will be UNIONed with the shared base by buildTinyMceConfig)
-     *  - add external_plugins paths for custom plugins
+     * Do NOT define the base plugin list or the full toolbar here.
+     * Only:
+     *  - add conditional plugins (UNIONed with base via buildTinyMceConfig)
+     *  - add external_plugins mappings for custom plugins
      *  - set editor behavior flags (skin, content_css, etc.)
      *  - set language (language, language_url)
      */
@@ -103,23 +127,14 @@ class Basic extends Toolbar
     {
         $config = [];
 
-        // Optional external custom plugins mapping (only URLs, activation via JS policy)
-        $customPluginsMap = [];
-        if ('true' === api_get_setting('editor.translate_html')) {
-            $this->plugins[] = 'translatehtml';
-            $customPluginsMap['translatehtml'] =
-                api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js';
-        }
-
-        // If you want JS to be the single source of truth for plugins:
-        //   DO NOT set $config['plugins'] here.
-        // If you still want conditional extras from PHP (and PLUGINS_POLICY='union'):
+        // Provide conditional plugins from PHP; base plugins come from tiny-settings.js
         if (!empty($this->plugins)) {
             $config['plugins'] = implode(' ', $this->plugins);
         }
 
-        if (!empty($customPluginsMap)) {
-            $config['external_plugins'] = $customPluginsMap;
+        // External plugins that were detected as present
+        if (!empty($this->detectedExternalPlugins)) {
+            $config['external_plugins'] = $this->detectedExternalPlugins;
         }
 
         $config['skin'] = false;
@@ -129,9 +144,11 @@ class Basic extends Toolbar
         $config['toolbar_mode'] = 'sliding';
         $config['autosave_ask_before_unload'] = true;
 
+        // Uploads / file picking
         $config['image_title'] = true;
         $config['automatic_uploads'] = true;
         $config['file_picker_types'] = 'file image media';
+        // Placeholder replaced by the file manager bridge in CkEditor.php
         $config['file_picker_callback'] = '[browser]';
 
         // Language
@@ -141,18 +158,13 @@ class Basic extends Toolbar
 
         $config['height'] = '300';
 
-        // DO NOT set $config['toolbar'] (toolbar comes from tiny-settings.js)
-        // If you *must* add a single extra button from PHP, you could:
-        // $config['toolbar'] = 'translatehtml'; // builder will handle concat/dedupe per policy
-
+        // Do NOT set $config['toolbar']; the base toolbar comes from tiny-settings.js
         $this->config = $config;
         return $this->config;
     }
 
     /**
-     * When minimized or maximized toolbars are requested by legacy code,
-     * we keep returning null/arrays but avoid defining the full TinyMCE toolbar.
-     * The shared base toolbar from tiny-settings.js will still apply.
+     * Legacy stubs: we do not define complete toolbars here; tiny-settings.js controls them.
      */
     protected function getNormalToolbar()
     {
@@ -164,7 +176,7 @@ class Basic extends Toolbar
         return [
             $this->getNewPageBlock(),
             ['Undo', 'Redo'],
-            // NOTE: left intentionally as a legacy stub; TinyMCE toolbar comes from shared base.
+            // Legacy stub: the real toolbar is defined in tiny-settings.js
         ];
     }
 
@@ -172,7 +184,7 @@ class Basic extends Toolbar
     {
         return [
             $this->getNewPageBlock(),
-            // NOTE: legacy visualization only; shared base controls TinyMCE toolbar.
+            // Legacy stub: the real toolbar is defined in tiny-settings.js
         ];
     }
 
@@ -182,7 +194,7 @@ class Basic extends Toolbar
     }
 
     /**
-     * Determines the appropriate language configuration for the editor.
+     * Determine TinyMCE language configuration (file + code).
      */
     private function getLanguageConfig(string $iso): array
     {
@@ -193,7 +205,7 @@ class Basic extends Toolbar
         $specificLangFile = "libs/editor/langs/{$iso}.js";
         $generalLangFile = null;
 
-        // Default configuration set to English
+        // Default to English
         $config = [
             'language' => $defaultLang,
             'language_url' => $defaultLangFile,
@@ -202,19 +214,74 @@ class Basic extends Toolbar
         if ('en_US' !== $iso) {
             if (str_contains($iso, '_')) {
                 // Extract general language code (e.g., "de" from "de_DE")
-                list($generalLangCode) = explode('_', $iso, 2);
+                [$generalLangCode] = explode('_', $iso, 2);
                 $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
             }
 
-            if (file_exists($sysUrl.$specificLangFile)) {
+            if (file_exists($sysUrl . $specificLangFile)) {
                 $config['language'] = $iso;
-                $config['language_url'] = $url.$specificLangFile;
-            } elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
+                $config['language_url'] = $url . $specificLangFile;
+            } elseif (null !== $generalLangFile && file_exists($sysUrl . $generalLangFile)) {
                 $config['language'] = $generalLangCode;
-                $config['language_url'] = $url.$generalLangFile;
+                $config['language_url'] = $url . $generalLangFile;
             }
         }
 
         return $config;
+    }
+
+    /**
+     * Filter a list of plugin names by availability and build an external_plugins map.
+     *
+     * A plugin is considered available if:
+     *  - Core file exists:  {SYS_PUBLIC}/libs/editor/plugins/<name>/plugin.min.js
+     *  - OR an external candidate exists: {SYS_PUBLIC}/libs/editor/tinymce_plugins/<name>/plugin.js
+     *
+     * Returns: [availablePluginNames[], externalPluginsMap[name => webUrl]]
+     *
+     * @param string[] $names
+     * @param array<string,string> $externalCandidates name => web URL (will be validated on disk)
+     * @return array{0: array<int,string>, 1: array<string,string>}
+     */
+    private function filterAvailablePlugins(array $names, array $externalCandidates): array
+    {
+        $available = [];
+        $externalMap = [];
+
+        $sysPublic = rtrim(api_get_path(SYS_PUBLIC_PATH), '/').'/';
+        $webPublic = rtrim(api_get_path(WEB_PUBLIC_PATH), '/').'/';
+
+        foreach (array_unique($names) as $name) {
+            $corePath = $sysPublic . 'libs/editor/plugins/' . $name . '/plugin.min.js';
+            $extPath  = $sysPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js';
+            $extUrl   = $externalCandidates[$name] ?? ($webPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js');
+
+            if (file_exists($corePath)) {
+                // Core plugin exists
+                $available[] = $name;
+                continue;
+            }
+
+            if (file_exists($extPath)) {
+                // External plugin exists on disk; map its URL
+                $available[] = $name;
+                $externalMap[$name] = $extUrl;
+                continue;
+            }
+
+            // If an explicit external candidate was provided, validate it
+            if (isset($externalCandidates[$name])) {
+                $explicitPath = $sysPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js';
+                if (file_exists($explicitPath)) {
+                    $available[] = $name;
+                    $externalMap[$name] = $externalCandidates[$name];
+                    continue;
+                }
+            }
+
+            // Not available: silently skip (prevents TinyMCE load errors)
+        }
+
+        return [$available, $externalMap];
     }
 }

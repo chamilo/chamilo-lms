@@ -16,13 +16,15 @@ const props = defineProps({
   canEdit: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
   canExportPdf: { type: Boolean, default: false },
+  canAutoLaunch: { type: Boolean, default: false }, // <- importante
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf",
-  "reorder"
+  "toggle-visible","toggle-publish","delete",
+  "export-scorm","export-pdf",
+  "reorder","toggle-auto-launch",
 ])
 
 const displayTitle = computed(() => props.title || t("Learning path categories"))
@@ -184,15 +186,18 @@ function onChangeCat() {
             :ringValue="ringValue"
             :canExportScorm="canExportScorm"
             :canExportPdf="canExportPdf"
-            @open="$emit('open', element)"
-            @edit="$emit('edit', element)"
-            @report="$emit('report', element)"
-            @settings="$emit('settings', element)"
-            @build="$emit('build', element)"
-            @toggle-visible="$emit('toggle-visible', element)"
-            @toggle-publish="$emit('toggle-publish', element)"
-            @delete="$emit('delete', element)"
-            @export-pdf="$emit('export-pdf', element)"
+            :canAutoLaunch="canAutoLaunch"
+          @toggle-auto-launch="$emit('toggle-auto-launch', element)"
+          @open="$emit('open', element)"
+          @edit="$emit('edit', element)"
+          @report="$emit('report', element)"
+          @settings="$emit('settings', element)"
+          @build="$emit('build', element)"
+          @toggle-visible="$emit('toggle-visible', element)"
+          @toggle-publish="$emit('toggle-publish', element)"
+          @delete="$emit('delete', element)"
+          @export-scorm="$emit('export-scorm', element)"
+          @export-pdf="$emit('export-pdf', element)"
           />
         </template>
       </Draggable>

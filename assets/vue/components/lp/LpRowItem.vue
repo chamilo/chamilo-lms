@@ -10,6 +10,7 @@ const props = defineProps({
   canEdit: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
   canExportPdf: { type: Boolean, default: false },
+  canAutoLaunch: { type: Boolean, default: false },
   buildDates: { type: Function, required: true },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
@@ -17,7 +18,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   "open","edit","report","settings","build",
-  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf"
+  "toggle-visible","toggle-publish","delete","export-scorm","export-pdf","toggle-auto-launch",
 ])
 
 const dateText = computed(() => {
@@ -118,6 +119,18 @@ const progressTextClass = computed(() => {
             @click="emit('export-pdf', lp)"
           >
             <i class="mdi mdi-file-pdf-box text-xl" />
+          </button>
+          <button
+            v-if="canAutoLaunch"
+            class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
+            :title="Number(lp.autolaunch) === 1 ? $t('Disable learning path auto-launch') : $t('Enable learning path auto-launch')"
+            @click.stop="emit('toggle-auto-launch', lp)"
+          >
+            <i
+              class="mdi"
+              :class="Number(lp.autolaunch) === 1 ? 'mdi-rocket-launch' : 'mdi-rocket-launch-outline'"
+              aria-hidden
+            ></i>
           </button>
           <BaseDropdownMenu
             :dropdown-id="`row-${lp.iid}`"

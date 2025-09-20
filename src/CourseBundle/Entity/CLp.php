@@ -89,6 +89,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
 
     #[Assert\NotBlank]
     #[ORM\Column(name: 'lp_type', type: 'integer', nullable: false)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected int $lpType;
 
     #[Assert\NotBlank]
@@ -97,6 +98,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected string $title;
 
     #[ORM\Column(name: 'ref', type: 'text', nullable: true)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected ?string $ref = null;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
@@ -104,6 +106,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected ?string $description;
 
     #[ORM\Column(name: 'path', type: 'text', nullable: false)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected string $path;
 
     #[ORM\Column(name: 'force_commit', type: 'boolean', nullable: false)]
@@ -125,6 +128,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected string $contentLicense;
 
     #[ORM\Column(name: 'prevent_reinit', type: 'boolean', nullable: false, options: ['default' => 1])]
+    #[Groups(['lp:read', 'lp:write'])]
     protected bool $preventReinit;
 
     #[ORM\Column(name: 'js_lib', type: 'text', nullable: false)]
@@ -142,6 +146,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected string $author;
 
     #[ORM\Column(name: 'prerequisite', type: 'integer', nullable: false)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected int $prerequisite;
 
     #[ORM\Column(name: 'hide_toc_frame', type: 'boolean', nullable: false)]
@@ -154,6 +159,7 @@ class CLp extends AbstractResource implements ResourceInterface, ResourceShowCou
     protected int $useMaxScore;
 
     #[ORM\Column(name: 'autolaunch', type: 'integer', nullable: false)]
+    #[Groups(['lp:read', 'lp:write'])]
     protected int $autolaunch;
 
     #[ORM\ManyToOne(targetEntity: CLpCategory::class, inversedBy: 'lps')]

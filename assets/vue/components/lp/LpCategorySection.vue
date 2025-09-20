@@ -16,7 +16,7 @@ const props = defineProps({
   canEdit: { type: Boolean, default: false },
   canExportScorm: { type: Boolean, default: false },
   canExportPdf: { type: Boolean, default: false },
-  canAutoLaunch: { type: Boolean, default: false }, // <- importante
+  canAutoLaunch: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
 })

@@ -299,24 +299,30 @@ class MessageHelper
         }
     }
 
+    /**
+     * Sends an email notification to $receiver with given subject/content and optional attachments.
+     * - Validates recipient email.
+     * - Uses buildFromAddress() to construct a proper FROM (name + address).
+     * - Attaches only OK-uploaded files.
+     */
     private function sendEmailNotification(User $receiver, User $sender, string $subject, string $content, array $attachmentList): void
     {
+        // Validate recipient email early
         $toAddress = $receiver->getEmail();
         if (!filter_var($toAddress, FILTER_VALIDATE_EMAIL)) {
+            // No valid recipient → nothing to send (could log if needed)
             return;
         }
 
-        $from = $this->buildFromAddress();
-
         try {
             $email = (new Email())
-                ->from($from)
-                ->to(new Address($toAddress, $receiver->getFullName() ?: $receiver->getUsername()))
+                ->from($this->buildFromAddress())
+                ->to(new Address($toAddress, $receiver->getFullname() ?: $receiver->getUsername()))
                 ->subject($subject)
                 ->text($content)
-                ->html($content)
-            ;
+                ->html($content);
 
+            // Attach files if provided in the expected structure
             foreach ($attachmentList as $att) {
                 $file = $att['file'] ?? null;
                 if ($file instanceof UploadedFile && UPLOAD_ERR_OK === $file->getError()) {
@@ -325,24 +331,28 @@ class MessageHelper
             }
 
             $this->mailer->send($email);
-        } catch (Throwable $e) {
-            error_log('Failed to send email: '.$e->getMessage());
+        } catch (\Throwable $e) {
+            // Soft-fail: log and continue
+            error_log('Failed to send email: ' . $e->getMessage());
         }
     }
 
     /**
-     * Constructs the FROM as an Address, prioritizing configuration;
-     * If there is no valid value, infers the current domain and uses noreply@{domain}.
+     * Builds the FROM address used in outgoing emails.
+     * Priority (name): mail.mailer_from_name → platform.site_name → "Chamilo"
+     * Priority (email): mail.mailer_from_email → platform.administrator_email → noreply@{host}
+     * Host resolution: AccessUrl → RequestStack → 'example.org'
      */
     private function buildFromAddress(): Address
     {
+        // Resolve display name
         $fromName = $this->settingsManager->getSetting('mail.mailer_from_name')
             ?: $this->settingsManager->getSetting('platform.site_name', true)
                 ?: 'Chamilo';
 
+        // Resolve email candidates (only existing/valid settings)
         $candidates = [
             $this->settingsManager->getSetting('mail.mailer_from_email'),
-            $this->settingsManager->getSetting('mail.mailer_from_address'),
             $this->settingsManager->getSetting('platform.administrator_email'),
         ];
         foreach ($candidates as $cand) {
@@ -351,6 +361,7 @@ class MessageHelper
             }
         }
 
+        // Fallback host inference
         $host = null;
         $accessUrl = $this->accessUrlHelper->getCurrent();
         if ($accessUrl && method_exists($accessUrl, 'getUrl')) {
@@ -365,7 +376,8 @@ class MessageHelper
             $host = 'example.org';
         }
 
-        return new Address('noreply@'.$host, $fromName);
+        // Last-resort fallback
+        return new Address('noreply@' . $host, $fromName);
     }
 
     /**

@@ -1,21 +1,30 @@
 <template>
   <Card class="course-card">
     <template #header>
-      <img
-        v-if="isLocked"
-        :alt="course.title"
-        :src="course.illustrationUrl || '/img/session_default.svg'"
-      />
-      <BaseAppLink
-        v-else
-        :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
-        class="course-card__home-link"
-      >
+      <div class="relative aspect-[16/9] w-full overflow-hidden rounded-t-2xl bg-gray-100">
         <img
-          :alt="course.title"
-          :src="course.illustrationUrl || '/img/session_default.svg'"
+          v-if="isLocked"
+          :alt="course.title || 'Course illustration'"
+          :src="imageUrl"
+          class="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+          referrerpolicy="no-referrer"
         />
-      </BaseAppLink>
+        <BaseAppLink
+          v-else
+          :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
+          class="absolute inset-0 block"
+          aria-label="Open course"
+        >
+          <img
+            :alt="course.title || 'Course illustration'"
+            :src="imageUrl"
+            class="h-full w-full object-cover"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+          />
+        </BaseAppLink>
+      </div>
     </template>
     <template #title>
       <div class="course-card__title flex items-center gap-2">
@@ -130,7 +139,9 @@ const daysRemainingText = computed(() => {
   return t("Expired")
 })
 
-const showCourseDuration = computed(() => platformConfigStore.getSetting("course.show_course_duration") === "true")
+const showCourseDuration = computed(
+  () => platformConfigStore.getSetting("course.show_course_duration") === "true",
+)
 
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {
@@ -171,6 +182,14 @@ const { hasRequirements, requirementList, graphImage, fetchStatus } = useCourseR
 )
 
 const isLocked = computed(() => props.disabled || internalLocked.value)
+
+const imageUrl = computed(() =>
+  props.course?.illustrationUrl ||
+  props.course?.image?.url ||
+  props.course?.pictureUrl ||
+  props.course?.thumbnail ||
+  "/img/session_default.svg",
+)
 
 onMounted(() => {
   if (props.course?.id) {

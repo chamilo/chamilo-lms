@@ -22,16 +22,16 @@ class CkEditor extends Editor
      */
     public function createHtml($value): string
     {
-        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
-                 '.$value.'
-                 </textarea>';
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >'
+            . $value
+            . '</textarea>';
         $html .= $this->editorReplace();
 
         return $html;
     }
 
     /**
-     * Return the HTML code required to run editor.
+     * Return the HTML code required to run editor with inline style (full page).
      *
      * @param string $value
      */
@@ -41,13 +41,14 @@ class CkEditor extends Editor
         $value = trim($value);
 
         if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {
-            $style = api_get_bootstrap_and_font_awesome();
+            // Load default CSS only when the editor is empty to provide a visual baseline
+            $style  = api_get_bootstrap_and_font_awesome();
             $style .= Container::getThemeHelper()->getThemeAssetLinkTag('document.css');
         }
 
-        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >
-                 '.$style.$value.'
-                 </textarea>';
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >'
+            . $style.$value
+            . '</textarea>';
         $html .= $this->editorReplace();
 
         return $html;
@@ -64,27 +65,31 @@ class CkEditor extends Editor
 
         $config = $toolbar->getConfig();
         $config['selector'] = '#'.$this->getTextareaId();
+
+        // Convert PHP config to a TinyMCE init JavaScript snippet
         $javascript = $this->toJavascript($config);
 
-        // it replaces [browser] by image picker callback
+        // Replace file browser placeholder by our File Manager picker
         $javascript = str_replace('"[browser]"', $this->getFileManagerPicker(), $javascript);
 
+        // Inject script that:
+        //  1) Bridges postMessage -> callback for the File Manager
+        //  2) Monkey-patches tinymce.init to always merge with window.buildTinyMceConfig (from tiny-settings.js)
+        //  3) Queues the generated TinyMCE init script into window.chEditors for deferred execution
         return "<script>
+            // 1) Cross-frame bridge: accept file URL messages from the File Manager
             window.addEventListener('message', function(event) {
-                // Check if the received message contains the URL data
-                if (event.data.url) {
-                    // Check if we are in an iframe
+                if (event && event.data && event.data.url) {
                     if (window.parent !== window) {
-                        // Send the message to the parent window
+                        // Forward to parent if inside an iframe
                         window.parent.postMessage(event.data, '*');
-                        // Access the callback function in the parent window
-                        const parentWindow = window.parent.window[0].window;
+                        const parentWindow = (window.parent && window.parent.window && window.parent.window[0]) ? window.parent.window[0].window : null;
                         if (parentWindow && parentWindow.tinyMCECallback) {
                             parentWindow.tinyMCECallback(event.data.url);
                             delete parentWindow.tinyMCECallback;
                         }
                     } else if (window.tinyMCECallback) {
-                        // Handle the message in the main context
+                        // Handle directly if on the main window
                         window.tinyMCECallback(event.data.url);
                         delete window.tinyMCECallback;
                     }
@@ -92,10 +97,30 @@ class CkEditor extends Editor
             });
 
             document.addEventListener('DOMContentLoaded', function() {
+                // 2) Patch tinymce.init once to merge local config with the shared base config
+                //    The shared base config is defined in /theme/<theme>/tiny-settings.js
+                if (window.tinymce && !window.tinymce.__chamiloPatched) {
+                    const originalInit = window.tinymce.init.bind(window.tinymce);
+                    window.tinymce.__chamiloPatched = true;
+                    window.tinymce.init = function(cfg) {
+                        // If the shared builder exists, merge base + local configs
+                        if (window.buildTinyMceConfig && typeof window.buildTinyMceConfig === 'function') {
+                            try {
+                                cfg = window.buildTinyMceConfig(cfg);
+                            } catch (e) {
+                                // Fail-safe: if merge fails, fall back to the given cfg
+                                // console.warn('TinyMCE config merge failed:', e);
+                            }
+                        }
+                        return originalInit(cfg);
+                    };
+                }
+
+                // 3) Defer editor initialization until all legacy scripts are ready
                 window.chEditors = window.chEditors || [];
-                window.chEditors.push($javascript)
-           });
-           </script>";
+                window.chEditors.push({$javascript});
+            });
+        </script>";
     }
 
     /**
@@ -122,11 +147,14 @@ class CkEditor extends Editor
             $image = $template->getImage();
             $image = !empty($image) ? $image : 'empty.gif';
 
-            /*$image = $this->urlGenerator->generate(
+            // If generating absolute URLs is needed, use the router (commented out example)
+            /*
+            $image = $this->urlGenerator->generate(
                 'get_document_template_action',
-                array('file' => $image),
+                ['file' => $image],
                 UrlGenerator::ABSOLUTE_URL
-            );*/
+            );
+            */
 
             $content = str_replace($search, $replace, $template->getContent());
 
@@ -162,21 +190,22 @@ class CkEditor extends Editor
     }
 
     /**
-     * Get a custom image picker.
+     * Default image picker (uses a native file input and embeds as data URL).
      */
     private function getImagePicker(): string
     {
         return 'function (cb, value, meta) {
             var input = document.createElement("input");
-            input.setAttribute("type", "file");
-            input.setAttribute("accept", "image/*");
+            input.type = "file";
+            input.accept = (meta && meta.filetype === "image") ? "image/*" : "*/*";
             input.onchange = function () {
-                var file = this.files[0];
+                var file = this.files && this.files[0];
+                if (!file) return;
                 var reader = new FileReader();
                 reader.onload = function () {
                     var id = "blobid" + (new Date()).getTime();
-                    var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-                    var base64 = reader.result.split(",")[1];
+                    var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                    var base64 = String(reader.result || "").split(",")[1];
                     var blobInfo = blobCache.create(id, file, base64);
                     blobCache.add(blobInfo);
                     cb(blobInfo.blobUri(), { title: file.name });
@@ -192,7 +221,7 @@ class CkEditor extends Editor
      *
      * @param bool $onlyPersonalfiles if true, only shows personal files
      *
-     * @return string javaScript function as string
+     * @return string JavaScript function as a string
      */
     private function getFileManagerPicker(bool $onlyPersonalfiles = true): string
     {
@@ -220,18 +249,20 @@ class CkEditor extends Editor
         }
 
         if (!isset($url)) {
+            // Fallback to simple native image picker if a URL cannot be determined
             return $this->getImagePicker();
         }
 
         return '
             function(cb, value, meta) {
+                // Store callback to be used by the postMessage bridge
                 window.tinyMCECallback = cb;
-                let fileType = meta.filetype;
-                let fileManagerUrl = "'.$url.'";
+                var fileType = (meta && meta.filetype) ? meta.filetype : "file";
+                var fileManagerUrl = "'.$url.'";
 
                 if (fileType === "image") {
                     fileManagerUrl += "&type=images";
-                } else if (fileType === "file") {
+                } else {
                     fileManagerUrl += "&type=files";
                 }
 
@@ -256,17 +287,14 @@ class CkEditor extends Editor
                 'description' => null,
                 'image' => api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/empty.gif',
                 'html' => '
-                <!DOCYTPE html>
+                <!DOCTYPE html>
                 <html>
                     <head>
                         <meta charset="'.api_get_system_encoding().'" />
                     </head>
-                    <body  dir="'.api_get_text_direction().'">
-                        <p>
-                            <br/>
-                        </p>
+                    <body dir="'.api_get_text_direction().'">
+                        <p><br/></p>
                     </body>
-                    </html>
                 </html>
             ',
             ],
@@ -340,13 +368,14 @@ class CkEditor extends Editor
             $templateItem['title'] = $template->getTitle();
             $templateItem['description'] = $template->getDescription();
             $templateItem['image'] = api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/noimage.gif';
-            /*$templateItem['html'] = file_get_contents(api_get_path(SYS_COURSE_PATH)
-                .$courseDirectory.'/document'.$templateData['path']);*/
+
+            // If you want to include HTML content from course documents, implement a safe resolver here.
+            // (Left out intentionally to avoid file system coupling in this context.)
 
             $image = $template->getImage();
             if (!empty($image)) {
-                $templateItem['image'] = api_get_path(WEB_COURSE_PATH)
-                    .$courseDirectory.'/upload/template_thumbnails/'.$template->getImage();
+                // If you have a course dir resolver, replace the following with your real path builder.
+                // $templateItem['image'] = api_get_path(WEB_COURSE_PATH) . $courseDirectory . '/upload/template_thumbnails/' . $template->getImage();
             }
 
             $templateList[] = $templateItem;

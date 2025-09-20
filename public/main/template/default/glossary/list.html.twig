@@ -10,8 +10,13 @@
                                 {{ 'ActionIcon::EDIT' | mdi_icon }}
                             </a>
                             <a
-                                title="{{ 'Confirm if you want to delete'|trans }}" href="{{ item.delete }}"
-                                class="btn btn-light btn-sm delete-swal">
+                                    href="{{ item.delete }}"
+                                    class="btn btn-light btn-sm delete-swal"
+                                    title="{{ 'Delete'|trans }}"
+                                    data-title="{{ 'Confirm if you want to delete'|trans }}"
+                                    data-confirm-text="{{ 'Yes'|trans }}"
+                                    data-cancel-text="{{ 'No'|trans }}"
+                            >
                                 {{ 'ActionIcon::DELETE' | mdi_icon }}
                             </a>
                         </div>

@@ -13,6 +13,9 @@ export function useSidebarMenu() {
   const platformConfigStore = usePlatformConfig()
   const enrolledStore = useEnrolledStore()
   const { items: socialItems } = useSocialMenuItems()
+
+  const allowSocialTool = computed(() => platformConfigStore.getSetting("social.allow_social_tool") !== "false")
+
   const showTabs = computed(() => {
     const defaultTabs = platformConfigStore.getSetting("platform.show_tabs") || []
     const tabsPerRoleJson = platformConfigStore.getSetting("platform.show_tabs_per_role") || ""
@@ -183,30 +186,32 @@ export function useSidebarMenu() {
     }
 
     if (showTabs.value.indexOf("social") > -1) {
-      const styledSocialItems = socialItems.value.map((item) => {
-        const newItem = {
-          ...item,
-          class: `${isActive(item) ? "p-focus" : ""} pl-4`,
-          icon: item.icon ? item.icon : undefined,
-        }
+      if (allowSocialTool.value) {
+        const styledSocialItems = socialItems.value.map((item) => {
+          const newItem = {
+            ...item,
+            class: `${isActive(item) ? "p-focus" : ""} pl-4`,
+            icon: item.icon ? item.icon : undefined,
+          }
 
-        if (newItem.isLink && newItem.route) {
-          newItem.url = newItem.route
-        } else if (newItem.route) {
-          // nothing to do
-        } else if (newItem.link) {
-          newItem.url = newItem.link
-        }
+          if (newItem.isLink && newItem.route) {
+            newItem.url = newItem.route
+          } else if (newItem.route) {
+            // nothing to do
+          } else if (newItem.link) {
+            newItem.url = newItem.link
+          }
 
-        return newItem
-      })
+          return newItem
+        })
 
-      items.push({
-        icon: "mdi mdi-sitemap-outline",
-        label: t("Social network"),
-        items: styledSocialItems,
-        expanded: isActive({ items: styledSocialItems }),
-      })
+        items.push({
+          icon: "mdi mdi-sitemap-outline",
+          label: t("Social network"),
+          items: styledSocialItems,
+          expanded: isActive({ items: styledSocialItems }),
+        })
+      }
     }
 
     if (

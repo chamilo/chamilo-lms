@@ -137,6 +137,7 @@ class PlatformConfigurationController extends AbstractController
                 'course.hide_scorm_pdf_link',
                 'platform.table_default_row',
                 'platform.table_row_list',
+                'social.allow_social_tool',
             ];
 
             $user = $this->userHelper->getCurrent();

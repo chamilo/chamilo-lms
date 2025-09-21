@@ -283,6 +283,16 @@ class CourseDriver extends Driver implements DriverInterface
                 return false;
             }
 
+            if (str_starts_with($this->mimetype($tmpname, $name), 'image')) {
+                try {
+                    \DocumentManager::autoResizeImageIfNeeded($size, $tmpname);
+                } catch (\Exception $e) {
+                    $this->addError($e->getMessage());
+
+                    return false;
+                }
+            }
+
             $result = parent::upload($fp, $dst, $name, $tmpname);
             $name = $result['name'];
             $filtered = \URLify::filter($result['name'], 80, '', true);

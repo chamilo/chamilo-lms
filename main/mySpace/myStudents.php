@@ -1258,18 +1258,35 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
         }
     }
     $timeSpentLastWeek = api_time_to_hms($timeSeconds);
+    $detailsUrl = api_get_path(WEB_CODE_PATH)
+        .'mySpace/time_report_last_week.php?student='.$student_id
+        .'&start='.$startWeek.'&end='.$endWeek;
     $timeContent  = '<div class="text-center">';
     $timeContent .= Display::return_icon('clock.png', get_lang('TimeSpentLastWeek'), [], ICON_SIZE_MEDIUM);
-    $timeContent .= ' '.$timeSpentLastWeek;
+    $timeContent .= '<div>'.$timeSpentLastWeek.'</div>';
+    $timeContent .= '<div>&nbsp;</div>';
+    $timeContent .= '<div><a href="'.$detailsUrl.'"'
+        .' onclick="window.open(this.href, \'timeReportDetails\','
+        .' \'width=800,height=600,scrollbars=yes\'); return false;">'
+        .get_lang('Details').'</a></div>';
+    $timeContent .= '<div>&nbsp;</div>';
+    $timeContent .= '<div>'
+        .'<a href="'.$detailsUrl.'&export=pdf">'
+        .Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM)
+        .'</a> '
+        .'<a href="'.$detailsUrl.'&export=xls">'
+        .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM)
+        .'</a></div>';
     $timeContent .= '</div>';
     $timePanel = Display::panel($timeContent, get_lang('TimeSpentInCoursesLastWeek'));
 
-    $donutContent  = '<div class="easy-donut text-center">';
-    $donutContent .= '<div id="easypiechart-session-avg" class="easypiechart" data-percent="'.$avgSessionsProgress.'">';
-    $donutContent .= '<span class="percent">'.$avgSessionsProgress.'%</span>';
-    $donutContent .= '</div>';
-    $donutContent .= '</div>';
-    $donutPanel = Display::panel($donutContent, get_lang('AverageProgressInSessions'));
+    $avgProgressContent  = '<div class="text-center">';
+    $avgProgressContent .= '<div id="avg-sessions-progress" class="easypiechart" data-percent="'.$avgSessionsProgress.'">';
+    $avgProgressContent .= '<span class="percent">'.$avgSessionsProgress.'%</span>';
+    $avgProgressContent .= '</div>';
+    $avgProgressContent .= '</div>';
+    $avgProgressContent .= "<script>\n        $(function() {\n            $('#avg-sessions-progress').easyPieChart({\n                scaleColor: false,\n                lineWidth: 8,\n                barColor: '#3ba557',\n                trackColor: '#f2f2f2'\n            });\n        });\n    </script>";
+    $avgProgressPanel = Display::panel($avgProgressContent, get_lang('AverageProgressInSessions'));
 
     $sessionBars = '';
     foreach ($sessionProgressList as $item) {
@@ -1278,26 +1295,76 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
         $sessionBars .= '<div class="progress-bar progress-bar-success" role="progressbar" style="width: '.$item['progress'].'%;">'.$item['progress'].'%</div>';
         $sessionBars .= '</div>';
     }
-    $sessionBarsPanel = Display::panel($sessionBars);
+    $sessionBarsAccordion = Display::panelCollapse(
+        get_lang('ProgressionInSessions'),
+        $sessionBars,
+        'panel-session-progress',
+        [],
+        'accordion-session-progress',
+        'collapse-session-progress',
+        false,
+        true
+    );
 
-    $sessionProgressHtml  = '<div class="row session-progress-section">';
-    $sessionProgressHtml .= '<div class="col-md-6">'.$sessionBarsPanel.'</div>';
-    $sessionProgressHtml .= '<div class="col-md-6 text-center">';
-    $sessionProgressHtml .= $donutPanel;
-    $sessionProgressHtml .= $timePanel;
+    $sessionProgressHtml  = '<div class="row session-progress-section" style="display:flex;flex-wrap:wrap;align-items:stretch;">';
+    $sessionProgressHtml .= '<div class="col-md-6 text-center" style="display:flex;"><div style="flex:1;">'.$avgProgressPanel.'</div></div>';
+    $sessionProgressHtml .= '<div class="col-md-6" style="display:flex;"><div style="flex:1;">'.$timePanel.'</div></div>';
     $sessionProgressHtml .= '</div>';
-    $sessionProgressHtml .= '</div>';
+    $sessionProgressHtml .= $sessionBarsAccordion;
+
+    // Weekly time spent summary table - vertical layout displayed in 4 columns
+    $weeksToShow = 52;
+    $currentMonday = strtotime('monday this week');
+    $weekData = [];
+    for ($i = 1; $i <= $weeksToShow; $i++) {
+        $weekStart = strtotime('-'.$i.' week', $currentMonday);
+        $weekEnd = $weekStart + (6 * 86400);
+        $startDate = date('Y-m-d', $weekStart);
+        $endDate = date('Y-m-d', $weekEnd);
+        $reportWeek = Tracking::generateReport('time_report', [$student_id], $startDate, $endDate);
+        $weekSeconds = 0;
+        foreach ($reportWeek['rows'] as $reportRow) {
+            $parts = explode(':', $reportRow[6]);
+            if (count($parts) === 3) {
+                [$h, $m, $s] = array_map('intval', $parts);
+                $weekSeconds += ($h * 3600) + ($m * 60) + $s;
+            }
+        }
+        $label = date('Y', $weekStart).' - '.date('W', $weekStart);
+        $weekData[] = [
+            'label' => $label,
+            'time'  => api_time_to_hms($weekSeconds),
+        ];
+    }
+
+    $tablesHtml = '<div class="row">';
+    $tablesCount = 4;
+    $weeksPerTable = (int) ceil($weeksToShow / $tablesCount);
+    $index = 0;
+    for ($table = 0; $table < $tablesCount; $table++) {
+        $tableHtml  = '<table class="table table-bordered table-condensed">';
+        $tableHtml .= '<thead><tr><th>'.get_lang('Week').'</th><th>'.get_lang('LatencyTimeSpent').'</th></tr></thead><tbody>';
+        for ($j = 0; $j < $weeksPerTable && $index < count($weekData); $j++, $index++) {
+            $label = Security::remove_XSS($weekData[$index]['label']);
+            $time  = $weekData[$index]['time'];
+            $tableHtml .= '<tr><th class="text-center">'.$label.'</th><td class="text-right">'.$time.'</td></tr>';
+        }
+        $tableHtml .= '</tbody></table>';
+        $tablesHtml .= '<div class="col-md-3">'.$tableHtml.'</div>';
+    }
+    $tablesHtml .= '</div>';
+    $weeklySummaryPanel = Display::panelCollapse(
+        get_lang('WeeklyTimeSummary'),
+        $tablesHtml,
+        'panel-weekly-summary',
+        [],
+        'accordion-weekly-summary',
+        'collapse-weekly-summary',
+        false
+    );
+
+    $sessionProgressHtml .= $weeklySummaryPanel;
     echo Display::panel($sessionProgressHtml, '', '', 'default', $sessionProgressHeading);
-    echo "<script>
-        $(function () {
-            $('#easypiechart-session-avg').easyPieChart({
-                scaleColor: false,
-                barColor: '#30a5ff',
-                lineWidth: 8,
-                trackColor: '#f2f2f2'
-            });
-        });
-    </script>";
 }
 
 echo MyStudents::getBlockForSkills(

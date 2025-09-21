@@ -47,6 +47,19 @@ class HomeDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allow()) {
+            if (str_starts_with($this->mimetype($tmpname, $name), 'image')) {
+                try {
+                    \DocumentManager::autoResizeImageIfNeeded(
+                        filesize($tmpname),
+                        $tmpname
+                    );
+                } catch (\Exception $e) {
+                    $this->addError($e->getMessage());
+
+                    return false;
+                }
+            }
+
             return parent::upload($fp, $dst, $name, $tmpname);
         }
     }

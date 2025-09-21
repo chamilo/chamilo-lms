@@ -2296,6 +2296,13 @@ VALUES (21, 13, 'send_notification_at_a_specific_date', 'Send notification at a 
 // Enable image upload as file when doing a copy in the content or a drag and drop.
 //$_configuration['enable_uploadimage_editor'] = false;
 
+// Automatic image resize before upload image with CKEditor
+/*$_configuration['wysiwyg_image_auto_resize_max'] = [
+    'w'=> 800, //max width
+    'h' => 600, //max height
+    'mb' => 2 //max size (in MB)
+];*/
+
 // Ckeditor settings.
 //$_configuration['editor_settings'] = ['config' => ['youtube_responsive' => true, 'image_responsive' => true]];
 

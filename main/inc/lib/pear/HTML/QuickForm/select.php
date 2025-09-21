@@ -419,8 +419,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }
-                $strHtml .= $tabs . "<option" . $this->_getAttrString($option['attr']) . '>' .
-                    $option['text'] . "</option>";
+                $strHtml .= $tabs.Display::tag(
+                    'option',
+                    Security::remove_XSS($option['text']),
+                    $option['attr']
+                );
             }
             foreach ($this->_optgroups as $optgroup) {
                 $strHtml .= $tabs . '<optgroup label="' . $optgroup['label'] . '">';
@@ -432,7 +435,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         $option['selected'] = 'selected';
                     }
 
-                    $strHtml .= $tabs . " <option" . $this->_getAttrString($option) . '>' .$text . "</option>";
+                    $strHtml .= $tabs.Display::tag(
+                        'option',
+                        Security::remove_XSS($text),
+                        $option
+                    );
                 }
                 $strHtml .= "</optgroup>";
             }

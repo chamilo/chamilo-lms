@@ -1085,6 +1085,44 @@ try {
             Event::addEvent(LOG_WS.$action, 'success', 'true');
             $restResponse->setData($data);
             break;
+        /**
+         * Subscribe a course to a session using extra field values for identification.
+         *
+         * Validates parameters from $_POST and calls the Rest method.
+         *
+         * Required POST parameters:
+         * - api_key: API key for authentication.
+         * - username: Username for authentication.
+         * - session_field_name: Name of the extra field for sessions.
+         * - session_field_value: Value of the session extra field.
+         * - course_field_name: Name of the extra field for courses.
+         * - course_field_value: Value of the course extra field.
+         *
+         * @return void Outputs JSON response via existing echo.
+         */
+        case Rest::SUBSCRIBE_COURSE_TO_SESSION_XF:
+            $required_params = ['api_key', 'username', 'session_field_name', 'session_field_value', 'course_field_name', 'course_field_value'];
+            $missing = [];
+            foreach ($required_params as $param) {
+                if (empty($_POST[$param])) {
+                    $missing[] = $param;
+                }
+            }
+            if (!empty($missing)) {
+                $result = [
+                    'error' => true,
+                    'message' => 'Missing required parameters: ' . implode(', ', $missing)
+                ];
+                break;
+            }
+            $params = $_POST;
+            $result = $restApi->subscribeCourseToSessionFromExtraField($params);
+            if ($result['error']) {
+                $restResponse->setErrorMessage($result['message']);
+            } else {
+                $restResponse->setData($result['data']);
+            }
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

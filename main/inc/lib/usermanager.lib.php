@@ -6988,7 +6988,7 @@ SQL;
 
     public static function blockIfMaxLoginAttempts(array $userInfo)
     {
-        if (false === (bool) $userInfo['active'] || null === $userInfo['last_login']) {
+        if (!isset($userInfo['active']) || false === (bool) $userInfo['active'] || null === $userInfo['last_login']) {
             return;
         }
 

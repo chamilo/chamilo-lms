@@ -10049,7 +10049,7 @@ class SessionManager
         // 2. SESSION DATA
         $row2 = $config['course_field_value'] ? [$config['course_field_value']] : [$courseInfo['title']];
         $row2[] = (new DateTime($sessionInfo['access_start_date']))->format('d/m/Y');
-        $row2[] = (new DateTime($sessionInfo['access_end_date']))->format('d/m/T');
+        $row2[] = (new DateTime($sessionInfo['access_end_date']))->format('d/m/Y');
 
         $extraValuesObj = new ExtraFieldValue('session');
         $sessionExtra = $extraValuesObj->getAllValuesByItem($sessionId);

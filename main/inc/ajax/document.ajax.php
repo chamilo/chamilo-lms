@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Component\Editor\Driver\Driver;
+use Chamilo\CoreBundle\Component\Editor\Driver\PersonalDriver;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -222,6 +223,22 @@ switch ($action) {
         $isMimeAccepted = (new Driver())->mimeAccepted($mimeType, ['image']);
 
         if (!$isMimeAccepted) {
+            exit;
+        }
+
+        try {
+            $fileUpload['size'] = DocumentManager::autoResizeImageIfNeeded(
+                $fileUpload['size'],
+                $fileUpload['tmp_name']
+            );
+        } catch (Exception $e) {
+            echo json_encode([
+                'uploaded' => 0,
+                'error' => [
+                    'message' => $e->getMessage(),
+                ]
+            ]);
+
             exit;
         }
 

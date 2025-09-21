@@ -4617,7 +4617,7 @@ class Rest extends WebService
 
         // Get coach ID if we got it as username
         if (!empty($params['coach_username'])) {
-            $param['id_coach'] = UserManager::get_user_id_from_username($params['coach_username']);
+            $params['id_coach'] = UserManager::get_user_id_from_username($params['coach_username']);
         }
         // Delegate to existing updateSession() method (mirrors its logic)
         $result = $this->updateSession($params);

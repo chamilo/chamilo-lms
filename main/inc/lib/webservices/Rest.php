@@ -4433,7 +4433,7 @@ class Rest extends WebService
                 'message' => 'No session found with extra field value "' . $sessionFieldValue . '".'
             ];
         }
-        $sessionId = (int) $sessionIdList[0]; // Assume single match
+        $sessionId = (int) $sessionIdList[0]['item_id']; // Assume single match
 
         // Get course c_id from extra field value using ExtraFieldValue model
         $courseValueModel = new ExtraFieldValue('course');
@@ -4450,10 +4450,10 @@ class Rest extends WebService
                 'message' => 'No course found with extra field value "' . $courseFieldValue . '".'
             ];
         }
-        $cId = (int) $courseIdList[0]; // Assume single match
+        $cId = (int) $courseIdList[0]['item_id']; // Assume single match
 
         // Add course to session using existing core method (mirrors addCoursesSession logic)
-        $success = SessionManager::add_courses_to_session($sessionId, [$cId]);
+        $success = SessionManager::add_courses_to_session($sessionId, [$cId], false);
 
         if ($success) {
             return [

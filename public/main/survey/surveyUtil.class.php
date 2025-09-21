@@ -241,30 +241,41 @@ class SurveyUtil
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                $surveysAnswered = SurveyManager::getInvitationsAnswered(
+                // Render once per unique (survey_id, lp_item_id) pair to avoid duplicates.
+                $answered = SurveyManager::getInvitationsAnswered(
                     $survey->getCode(),
                     api_get_course_int_id(),
                     api_get_session_id()
                 );
 
-                if (!empty($surveysAnswered)) {
-                    foreach ($surveysAnswered as $invitation) {
-                        $surveyEntity = $invitation->getSurvey();
-                        if (!$surveyEntity) {
-                            continue;
-                        }
+                $rendered = [];
+                $showNames = ($survey->getAnonymous() === '0');
 
-                        $showNames = ($surveyEntity->getAnonymous() === '0');
+                // If no invitations answered, still show a single consolidated report.
+                if (empty($answered)) {
+                    echo self::displayCompleteReport($survey, 0, true, true, $showNames, 0);
+                    break;
+                }
 
-                        echo SurveyUtil::displayCompleteReport(
-                            $surveyEntity,
-                            0,
-                            true,
-                            true,
-                            $showNames,
-                            (int) $invitation->getLpItemId()
-                        );
+                foreach ($answered as $inv) {
+                    $s = $inv->getSurvey();
+                    if (!$s) {
+                        continue;
                     }
+                    $key = $s->getIid().':'.(int) $inv->getLpItemId();
+                    if (isset($rendered[$key])) {
+                        continue; // already rendered this bucket
+                    }
+                    $rendered[$key] = true;
+
+                    echo self::displayCompleteReport(
+                        $s,
+                        0,               // all users
+                        true,            // action bar
+                        true,            // filters
+                        $showNames,      // extra user fields only if not anonymous
+                        (int) $inv->getLpItemId()
+                    );
                 }
                 break;
             case 'deleteuserreport':
@@ -561,7 +572,6 @@ class SurveyUtil
     public static function display_question_report(CSurvey $survey)
     {
         $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
-        // Determining the offset of the sql statement (the n-th question of the survey)
         $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
         $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
         $surveyId = $survey->getIid();
@@ -574,13 +584,13 @@ class SurveyUtil
             $sessionCondition = api_get_session_condition($sessionId);
         }
 
-        // Database table definitions
+        // DB tables
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
-        $actions = '<a
-            href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
+        // Toolbar
+        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview')).
             '</a>';
         $actions .= Display::url(
@@ -590,7 +600,9 @@ class SurveyUtil
         );
 
         echo Display::toolbarAction('survey', [$actions]);
+        echo '<div class="ch-survey-report">';
 
+        // Survey header table (used for PDF too)
         $fromUntil = sprintf(
             get_lang('From %s until %s'),
             api_get_local_time($survey->getAvailFrom()),
@@ -604,7 +616,8 @@ class SurveyUtil
             get_lang('Survey introduction') => cut(strip_tags($survey->getIntro()), $max),
         ];
 
-        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table']);
+        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table table-bordered table-sm sr-table']);
+
         $row = 0;
         foreach ($data as $label => $item) {
             $table->setCellContents($row, 0, $label);
@@ -612,18 +625,19 @@ class SurveyUtil
             $row++;
         }
 
+        // Question list
         $questions = $survey->getQuestions();
         $numberOfQuestions = 0;
-        foreach ($questions as $question) {
-            if ('pagebreak' !== $question->getType()) {
+        foreach ($questions as $q) {
+            if ('pagebreak' !== $q->getType()) {
                 $numberOfQuestions++;
             }
         }
 
         $newQuestionList = [];
         if ($numberOfQuestions > 0) {
-            $limitStatement = null;
             if (!$singlePage) {
+                // Pagination (question numbers)
                 echo '<div id="question_report_questionnumbers" class="pagination">';
                 if (0 != $currentQuestion) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
@@ -636,82 +650,101 @@ class SurveyUtil
                         echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                             .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($i - 1).'">'.$i.'</a></li>';
                     } else {
-                        echo '<li class="disabled"s><a href="#">'.$i.'</a></li>';
+                        echo '<li class="disabled"><a href="#">'.$i.'</a></li>';
                     }
                 }
                 if ($currentQuestion < ($numberOfQuestions - 1)) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                         .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset + 1).'">'
-                        .get_lang('Next question').'</li></a>';
+                        .get_lang('Next question').'</a></li>';
                 }
-                echo '</ul>';
                 echo '</div>';
-                $limitStatement = " LIMIT $offset, 1";
             }
 
-            // Getting the question information
-            /*$sql = "SELECT * FROM $table_survey_question
-                    WHERE
-                        survey_id = $surveyId AND
-                        survey_question NOT LIKE '%{{%' AND
-                        type <>'pagebreak'
-                    ORDER BY sort ASC
-                    $limitStatement";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result)) {*/
-            foreach ($questions as $question) {
-                if (strpos($question->getSurveyQuestion(), '%{{%') && 'pagebreak' !== $question->getType()) {
+            // Build list (skip tagged/pagebreak)
+            foreach ($questions as $q) {
+                if (strpos($q->getSurveyQuestion(), '%{{%') && 'pagebreak' !== $q->getType()) {
                     continue;
                 }
-                $newQuestionList[$question->getIid()] = $question;
+                $newQuestionList[$q->getIid()] = $q;
             }
         }
+
+        // Pretty container
+        echo '<div class="sr-container">';
+
+        // Survey info card
+        // Survey info card (pretty, keeps #pdf_table for PDF export)
+        echo '<div class="sr-card">';
+        echo '  <div class="sr-card__header">'.get_lang('Survey').'</div>';
+        echo '  <div class="sr-card__body">';
+
+        echo '    <table id="pdf_table" class="table table-bordered table-striped table-sm sr-table sr-summary-table">';
+        echo '      <tbody>';
+        echo '        <tr>';
+        echo '          <th scope="row">'.get_lang('Survey title').'</th>';
+        echo '          <td>'.cut(strip_tags($survey->getTitle()), $max).'</td>';
+        echo '        </tr>';
+        echo '        <tr>';
+        echo '          <th scope="row">'.get_lang('Survey subtitle').'</th>';
+        echo '          <td>'.cut(strip_tags($survey->getSubtitle()), $max).'</td>';
+        echo '        </tr>';
+        echo '        <tr>';
+        echo '          <th scope="row">'.get_lang('Dates').'</th>';
+        echo '          <td>'.$fromUntil.'</td>';
+        echo '        </tr>';
+        echo '        <tr>';
+        echo '          <th scope="row">'.get_lang('Survey introduction').'</th>';
+        echo '          <td>'.cut(strip_tags($survey->getIntro()), $max).'</td>';
+        echo '        </tr>';
+        echo '      </tbody>';
+        echo '    </table>';
+
+        echo '  </div>';
+        echo '</div>';
+
         echo '<div id="question_results">';
         /** @var CSurveyQuestion $question */
         foreach ($newQuestionList as $question) {
             $chartData = [];
             $options = [];
             $questionId = $question->getIid();
-
-            echo '<div class="question-item">';
-            echo '<div class="title-question">';
-            echo strip_tags($question->getSurveyQuestion());
-            echo '</div>';
             $type = $question->getType();
 
+            // Card wrapper per question
+            echo '<div class="sr-card">';
+            echo '<div class="sr-card__header">'.get_lang('Question').'</div>';
+            echo '<div class="sr-card__body">';
+
+            echo '<div class="title-question">'.strip_tags($question->getSurveyQuestion()).'</div>';
+
             if ('score' === $type) {
-                /** @todo This function should return the options as this is needed further in the code */
-                $options = self::display_question_report_score($survey, $question, $offset);
+                // Score-type
+                self::display_question_report_score($survey, $question, $offset);
             } elseif ('open' === $type || 'comment' === $type) {
-                echo '<div class="open-question">';
-                /** @todo Also get the user who has answered this */
+                // Open/comment as list
+                echo '<div class="open-question sr-block"><ul>';
                 $sql = "SELECT * FROM $table_survey_answer
-                        WHERE
-                            survey_id= $surveyId AND
-                            question_id = $questionId ";
+                    WHERE survey_id= $surveyId AND question_id = $questionId ";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_assoc($result)) {
-                    echo $row['option_id'].'<hr noshade="noshade" size="1" />';
+                    echo '<li>'.api_htmlentities($row['option_id'], ENT_QUOTES).'</li>';
                 }
-                echo '</div>';
+                echo '</ul></div>';
             } else {
-                // Getting the options ORDER BY sort ASC
+                // Choice-based questions
                 $sql = "SELECT * FROM $table_survey_question_option
-                        WHERE
-                            survey_id = $surveyId AND
-                            question_id = $questionId
-                        ORDER BY sort ASC";
+                    WHERE survey_id = $surveyId AND question_id = $questionId
+                    ORDER BY sort ASC";
                 $result = Database::query($sql);
                 while ($row = Database::fetch_assoc($result)) {
                     $options[$row['iid']] = $row;
                 }
-                // Getting the answers
+
                 $sql = "SELECT *, count(iid) as total
-                        FROM $table_survey_answer
-                        WHERE
-                            survey_id = $surveyId AND
-                            question_id = $questionId
-                        GROUP BY option_id, value";
+                    FROM $table_survey_answer
+                    WHERE survey_id = $surveyId AND question_id = $questionId
+                    GROUP BY option_id, value";
                 $result = Database::query($sql);
                 $number_of_answers = [];
                 $data = [];
@@ -727,133 +760,111 @@ class SurveyUtil
                     $data[$row['option_id']] = $row;
                 }
 
-                foreach ($options as $option) {
-                    $optionText = strip_tags($option['option_text']);
+                foreach ($options as $opt) {
+                    $optionText = strip_tags($opt['option_text']);
                     $optionText = html_entity_decode($optionText);
-                    $votes = 0;
-                    if (isset($data[$option['iid']]['total'])) {
-                        $votes = $data[$option['iid']]['total'];
-                    }
-                    array_push($chartData, ['option' => $optionText, 'votes' => $votes]);
+                    $votes = isset($data[$opt['iid']]['total']) ? $data[$opt['iid']]['total'] : 0;
+                    $chartData[] = ['option' => $optionText, 'votes' => $votes];
                 }
+
                 $chartContainerId = 'chartContainer'.$questionId;
-                echo '<div id="'.$chartContainerId.'" style="text-align:center;">';
+                echo '<div id="'.$chartContainerId.'" class="sr-block" style="text-align:center;">';
                 echo self::drawChart($chartData, false, $chartContainerId, false);
                 echo '</div>';
 
-                // displaying the table: headers
-                echo '<table class="display-survey table" id="table_'.$chartContainerId.'">';
-                echo '';
-                echo '	<tr>';
-                echo '		<th style="width: 50%">&nbsp;</th>';
-                echo '		<th style="width: 10%">'.get_lang('Absolute total').'</th>';
-                echo '		<th style="width: 10%">'.get_lang('Percentage').'</th>';
-                echo '		<th style="width: 30%">'.get_lang('Graphic').'</th>';
-                echo '	</tr>';
+                // Table (bordered/striped/compact)
+                echo '<table class="display-survey table table-bordered table-striped table-sm sr-table sr-block" id="table_'.$chartContainerId.'">';
+                echo '  <thead><tr>
+                        <th style="width:50%">&nbsp;</th>
+                        <th style="width:10%">'.get_lang('Absolute total').'</th>
+                        <th style="width:10%">'.get_lang('Percentage').'</th>
+                        <th style="width:30%">'.get_lang('Graphic').'</th>
+                    </tr></thead><tbody>';
 
-                // Displaying the table: the content
                 if (is_array($options)) {
-                    foreach ($options as $key => &$value) {
+                    foreach ($options as $key => $value) {
                         if ('multiplechoiceother' === $type && 'other' === $value['option_text']) {
                             $value['option_text'] = get_lang('Please specify:');
                         }
-
-                        $absolute_number = null;
-                        if (isset($data[$value['iid']])) {
-                            $absolute_number = $data[$value['iid']]['total'];
-                        }
+                        $absolute_number = isset($data[$value['iid']]) ? $data[$value['iid']]['total'] : 0;
                         if ('percentage' === $type && empty($absolute_number)) {
                             continue;
                         }
-                        $number_of_answers[$option['question_id']] = isset($number_of_answers[$option['question_id']])
-                            ? $number_of_answers[$option['question_id']]
-                            : 0;
-                        if (0 == $number_of_answers[$option['question_id']]) {
-                            $answers_number = 0;
-                        } else {
-                            $answers_number = $absolute_number / $number_of_answers[$option['question_id']] * 100;
-                        }
-                        echo '	<tr>';
+                        $qid = $value['question_id'] ?? null;
+                        $totalAnswers = $qid && isset($number_of_answers[$qid]) ? $number_of_answers[$qid] : 0;
+                        $percentage = $totalAnswers ? ($absolute_number / $totalAnswers * 100) : 0;
+
+                        echo '<tr>';
                         echo '<td>'.$value['option_text'].'</td>';
                         echo '<td>';
                         if (0 != $absolute_number) {
                             echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
-                                .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='
-                                .$value['iid'].'">'.$absolute_number.'</a>';
+                                .'&survey_id='.$surveyId.'&question='.$offset.'&viewoption='.$value['iid'].'">'.$absolute_number.'</a>';
                         } else {
                             echo '0';
                         }
-
-                        echo '      </td>';
-                        echo '<td>'.round($answers_number, 2).' %</td>';
+                        echo '</td>';
+                        echo '<td>'.round($percentage, 2).' %</td>';
                         echo '<td>';
-                        $size = $answers_number * 2;
-                        if ($size > 0) {
-                            echo '<div
-                                    style="border:1px solid #264269; background-color:#aecaf4; height:10px;
-                                    width:'.$size.'px">
-                                    &nbsp;
-                                    </div>';
-                        } else {
-                            echo '<div style="text-align: left;">'.get_lang("No data available").'</div>';
-                        }
-                        echo ' </td>';
-                        echo ' </tr>';
+                        // Simple progress bar (no external JS/CSS needed)
+                        $w = max(0, min(100, round($percentage, 2)));
+                        echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
+                            .'<div style="height:10px;width:'.$w.'%;background:#93c5fd;"></div>'
+                            .'</div>';
+                        echo '</td>';
+                        echo '</tr>';
                     }
                 }
 
-                $optionResult = '';
+                $optionResult = '0';
                 if (isset($option['question_id']) && isset($number_of_answers[$option['question_id']])) {
-                    if (0 == $number_of_answers[$option['question_id']]) {
-                        $optionResult = '0';
-                    } else {
-                        $optionResult = $number_of_answers[$option['question_id']];
-                    }
+                    $optionResult = $number_of_answers[$option['question_id']] ?: '0';
                 }
 
-                // displaying the table: footer (totals)
-                echo '	<tr>
-                            <td><b>'.get_lang('Total').'</b></td>
-                            <td><b>'.$optionResult.'</b></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                        </tr>
-                        </table>';
+                echo '</tbody><tfoot><tr>
+                    <td><b>'.get_lang('Total').'</b></td>
+                    <td><b>'.$optionResult.'</b></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr></tfoot>';
+                echo '</table>';
             }
-            echo '</div>';
+
+            echo '</div>';  // body
+            echo '</div>';  // card
         }
-        echo '</div>';
+        echo '</div>';      // #question_results
+        echo '</div>';      // .sr-container
 
-        // Survey information, needed for the PDF export.
-        echo Display::page_subheader(get_lang('Survey')).'<br />';
-        $table->display();
-
+        // People who chose specific option
         if (isset($_GET['viewoption'])) {
+            echo '<div class="sr-container">';
+            echo '<div class="sr-card"><div class="sr-card__header">'.get_lang('Details').'</div><div class="sr-card__body">';
             echo '<div class="answered-people">';
             echo '<h4>'.get_lang('People who have chosen this answer').': '
                 .strip_tags($options[Security::remove_XSS($_GET['viewoption'])]['option_text']).'</h4>';
 
             if (is_numeric($_GET['value'])) {
                 $sql_restriction = "AND value='".Database::escape_string($_GET['value'])."'";
+            } else {
+                $sql_restriction = '';
             }
 
             $sql = "SELECT user FROM $table_survey_answer
-                    WHERE
-                        c_id = $course_id AND
-                        option_id = '".Database::escape_string($_GET['viewoption'])."'
-                        $sql_restriction $sessionCondition";
+                WHERE c_id = $course_id
+                  AND option_id = '".Database::escape_string($_GET['viewoption'])."'
+                  $sql_restriction $sessionCondition";
             $result = Database::query($sql);
             echo '<ul>';
             while ($row = Database::fetch_assoc($result)) {
                 $user_info = api_get_user_info($row['user']);
                 echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action=userreport&survey_id='
-                    .$surveyId.'&user='.$row['user'].'">'
-                    .$user_info['complete_name_with_username']
-                    .'</a></li>';
+                    .$surveyId.'&user='.$row['user'].'">'.$user_info['complete_name_with_username'].'</a></li>';
             }
             echo '</ul>';
-            echo '</div>';
+            echo '</div></div></div></div>';
         }
+        echo '</div>';
     }
 
     /**
@@ -863,7 +874,6 @@ class SurveyUtil
      */
     public static function display_question_report_score(CSurvey $survey, CSurveyQuestion $question, $offset)
     {
-        // Database table definitions
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $surveyId = $survey->getIid();
@@ -876,109 +886,84 @@ class SurveyUtil
             $sessionCondition = api_get_session_condition($sessionId);
         }
 
-        foreach ($options as $option) {
-            $options[$option->getIid()] = $option;
+        foreach ($options as $opt) {
+            $options[$opt->getIid()] = $opt;
         }
 
-        // Getting the answers
+        // Answers summary
         $sql = "SELECT *, count(iid) as total
-                FROM $table_survey_answer
-                WHERE
-                   survey_id= $surveyId AND
-                   question_id = '".$questionId."'
-                   $sessionCondition
-                GROUP BY option_id, value";
+            FROM $table_survey_answer
+            WHERE survey_id= $surveyId AND question_id = '".$questionId."'
+            $sessionCondition
+            GROUP BY option_id, value";
         $result = Database::query($sql);
         $number_of_answers = 0;
+        $data = [];
         while ($row = Database::fetch_array($result)) {
             $number_of_answers += $row['total'];
             $data[$row['option_id']][$row['value']] = $row;
         }
 
+        // Chart data
         $chartData = [];
         /** @var CSurveyQuestionOption $option */
         foreach ($options as $option) {
             $optionId = $option->getIid();
-            $optionText = strip_tags($option->getOptionText());
-            $optionText = html_entity_decode($optionText);
+            $optionText = html_entity_decode(strip_tags($option->getOptionText()));
             for ($i = 1; $i <= $question->getMaxValue(); $i++) {
-                $votes = null;
-                if (isset($data[$optionId][$i])) {
-                    $votes = $data[$optionId][$i]['total'];
-                }
-
-                if (empty($votes)) {
-                    $votes = '0';
-                }
-                array_push(
-                    $chartData,
-                    [
-                        'serie' => $optionText,
-                        'option' => $i,
-                        'votes' => $votes,
-                    ]
-                );
+                $votes = isset($data[$optionId][$i]) ? $data[$optionId][$i]['total'] : 0;
+                $chartData[] = ['serie' => $optionText, 'option' => $i, 'votes' => $votes];
             }
         }
-        echo '<div id="chartContainer" class="col-md-12">';
+
+        echo '<div class="sr-container">';
+        echo '<div id="chartContainer" class="col-md-12 sr-block">';
         echo self::drawChart($chartData, true);
         echo '</div>';
 
-        // Displaying the table: headers
-        echo '<table class="table">';
-        echo '	<tr>';
-        echo '		<th>&nbsp;</th>';
-        echo '		<th>'.get_lang('Score').'</th>';
-        echo '		<th>'.get_lang('Absolute total').'</th>';
-        echo '		<th>'.get_lang('Percentage').'</th>';
-        echo '		<th>'.get_lang('Graphic').'</th>';
-        echo '	</tr>';
-        // Displaying the table: the content
+        // Table (styled)
+        echo '<table class="table table-bordered table-striped table-sm sr-table">';
+        echo '  <thead><tr>
+                <th>&nbsp;</th>
+                <th>'.get_lang('Score').'</th>
+                <th>'.get_lang('Absolute total').'</th>
+                <th>'.get_lang('Percentage').'</th>
+                <th>'.get_lang('Graphic').'</th>
+            </tr></thead><tbody>';
+
         foreach ($options as $key => $value) {
             $optionId = $value->getIid();
             for ($i = 1; $i <= $question->getMaxValue(); $i++) {
-                $absolute_number = null;
-                if (isset($data[$optionId][$i])) {
-                    $absolute_number = $data[$optionId][$i]['total'];
-                }
-
-                echo '<tr>';
-                echo '<td>'.$value->getOptionText().'</td>';
-                echo '<td>'.$i.'</td>';
-
-                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
-                    .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
-                    .'&viewoption='.$optionId.'&value='.$i.'">'.$absolute_number.'</a></td>';
+                $absolute_number = isset($data[$optionId][$i]) ? $data[$optionId][$i]['total'] : 0;
 
                 $percentage = 0;
                 $size = 0;
                 if (!empty($number_of_answers)) {
                     $percentage = round($absolute_number / $number_of_answers * 100, 2);
-                    $size = ($absolute_number / $number_of_answers * 100 * 2);
+                    $size = $percentage; // 0..100
                 }
+
+                echo '<tr>';
+                echo '<td>'.$value->getOptionText().'</td>';
+                echo '<td>'.$i.'</td>';
+                echo '<td><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?'.api_get_cidreq().'&action='.$action
+                    .'&survey_id='.$surveyId.'&question='.Security::remove_XSS($offset)
+                    .'&viewoption='.$optionId.'&value='.$i.'">'.$absolute_number.'</a></td>';
                 echo '<td>'.$percentage.' %</td>';
                 echo '<td>';
-                if ($size > 0) {
-                    echo '<div
-                            style="border:1px solid #264269;
-                            background-color:#aecaf4;
-                            height:10px; width:'.$size.'px">
-                            &nbsp;
-                        </div>';
-                }
-                echo '		</td>';
-                echo '	</tr>';
+                echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
+                    .'<div style="height:10px;width:'.$size.'%;background:#93c5fd;"></div>'
+                    .'</div>';
+                echo '</td>';
+                echo '</tr>';
             }
         }
-        // Displaying the table: footer (totals)
-        echo '	<tr>';
-        echo '		<td style="border-top:1px solid black"><b>'.get_lang('Total').'</b></td>';
-        echo '		<td style="border-top:1px solid black">&nbsp;</td>';
-        echo '		<td style="border-top:1px solid black"><b>'.$number_of_answers.'</b></td>';
-        echo '		<td style="border-top:1px solid black">&nbsp;</td>';
-        echo '		<td style="border-top:1px solid black">&nbsp;</td>';
-        echo '	</tr>';
+
+        echo '  </tbody><tfoot><tr>
+                <td colspan="5"><b>'.get_lang('Total').': '.$number_of_answers.'</b></td>
+            </tr></tfoot>';
         echo '</table>';
+        echo '</div>';
     }
 
     /**
@@ -993,20 +978,19 @@ class SurveyUtil
      */
     public static function displayCompleteReport(
         CSurvey $survey,
-        $userId = 0,
-        $addActionBar = true,
-        $addFilters = true,
-        $addExtraFields = true,
-        $lpItemId = 0
+                $userId = 0,
+                $addActionBar = true,
+                $addFilters = true,
+                $addExtraFields = true,
+                $lpItemId = 0
     ) {
-        // Database table definitions
+        // DB tables
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $surveyId = $survey->getIid();
         $course_id = api_get_course_int_id();
-
         if (empty($surveyId) || empty($course_id)) {
             return '';
         }
@@ -1023,33 +1007,28 @@ class SurveyUtil
 
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
         $content = '';
+
+        // Optional LP header
         if (!empty($lpItemId)) {
             $tableLp = Database::get_course_table(TABLE_LP_MAIN);
             $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT l.name,
-                    li.title
-                    FROM $tableLpItem li
-                    INNER JOIN $tableLp l
-                    ON l.iid = li.lp_id AND
-                       l.c_id = li.c_id
-                    WHERE li.c_id = $course_id AND
-                          li.iid = $lpItemId";
+            $sql = "SELECT l.name, li.title
+                FROM $tableLpItem li
+                INNER JOIN $tableLp l ON l.iid = li.lp_id AND l.c_id = li.c_id
+                WHERE li.c_id = $course_id AND li.iid = $lpItemId";
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
-                $lpName = $row['name'];
-                $lpItemTitle = $row['title'];
-                $content .= '<h3>'.$lpName.' : '.$lpItemTitle.'</h3>';
+                $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
+                    .get_lang('Learning path')
+                    .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['name'].' : '.$row['title'].'</h3></div></div></div>';
             }
         }
 
+        // Toolbar
         if ($addActionBar) {
-            $actions = '<a
-                href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
-                .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'),
-                    [],
-                    ICON_SIZE_MEDIUM
-                )
+            $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
+                .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'), [], ICON_SIZE_MEDIUM)
                 .'</a>';
             $actions .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
                 .Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
@@ -1060,50 +1039,36 @@ class SurveyUtil
 
             $content .= Display::toolbarAction('survey', [$actions]);
 
-            // The form
-            $content .= '<form
-                id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
-            $content .= '<input type="hidden" name="export_report" value="export_report">';
-            $content .= '<input type="hidden" name="export_format" value="csv">';
-            $content .= '</form>';
-            $content .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self(
-                ).'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
-            $content .= '<input type="hidden" name="export_report" value="export_report">';
-            $content .= '<input type="hidden" name="export_format" value="xls">';
-            $content .= '</form>';
-            $content .= '<form id="form1c" name="form1c" method="post" action="'.api_get_self(
-                ).'?action='.$action.'&survey_id='
-                .$surveyId.'&'.api_get_cidreq().'">';
-            $content .= '<input type="hidden" name="export_report" value="export_report">';
-            $content .= '<input type="hidden" name="export_format" value="csv-compact">';
-            $content .= '</form>';
+            // Export forms
+            $content .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">
+            <input type="hidden" name="export_report" value="export_report">
+            <input type="hidden" name="export_format" value="csv"></form>';
+            $content .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">
+            <input type="hidden" name="export_report" value="export_report">
+            <input type="hidden" name="export_format" value="xls"></form>';
+            $content .= '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">
+            <input type="hidden" name="export_report" value="export_report">
+            <input type="hidden" name="export_format" value="csv-compact"></form>';
         }
 
-        $content .= '<form
-            id="form2"
-            name="form2"
-            method="post"
-            action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
-        $content .= '<br /><table class="table table-hover table-striped data_table" border="1">';
-        // Getting the number of options per question
-        $content .= '<tr>';
-        $content .= '<th>';
+        // Open card + form + table
+        $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
+            .get_lang('Complete report').'</div><div class="sr-card__body">';
 
+        $content .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+        $content .= '<table class="table table-bordered table-striped table-hover table-sm data_table sr-table">';
+
+        // Header row (filters + profile attrs)
+        $content .= '<tr><th>';
         if ($addFilters) {
             if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (isset($_POST['export_report']) && $_POST['export_report'])
             ) {
-                $content .= '<button class="cancel"
-                                type="submit"
-                                name="reset_question_filter" value="'.get_lang('Reset filter').'">'.
-                                get_lang('Reset filter').'</button>';
+                $content .= '<button class="cancel" type="submit" name="reset_question_filter" value="'.get_lang('Reset filter').'">'
+                    .get_lang('Reset filter').'</button>';
             }
-            $content .= '<button
-                            class = "save"
-                            type="submit" name="submit_question_filter" value="'.get_lang('Filter').'">'.
-                            get_lang('Filter').'</button>';
+            $content .= '<button class="save" type="submit" name="submit_question_filter" value="'.get_lang('Filter').'">'
+                .get_lang('Filter').'</button>';
             $content .= '</th>';
         }
 
@@ -1113,15 +1078,7 @@ class SurveyUtil
                     isset($_POST['export_report']) && $_POST['export_report']) ||
                 !empty($_POST['fields_filter'])
             ) {
-                // Show user fields section with a big th colspan that spans over all fields
-                $extra_user_fields = UserManager::get_extra_fields(
-                    0,
-                    0,
-                    5,
-                    'ASC',
-                    false,
-                    true
-                );
+                $extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true);
                 $num = count($extra_user_fields);
                 if ($num > 0) {
                     $content .= '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
@@ -1130,105 +1087,66 @@ class SurveyUtil
                         $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
                     }
                     $content .= get_lang('Profile attributes');
-                    $content .= '</label>';
-                    $content .= '</th>';
+                    $content .= '</label></th>';
                     $display_extra_user_fields = true;
                 }
             }
         }
 
+        // Questions headers
         $sql = "SELECT
-                  q.iid question_id,
-                  q.type,
-                  q.survey_question,
-                  count(o.iid) as number_of_options
-				FROM $table_survey_question q
-				LEFT JOIN $table_survey_question_option o
-				ON q.iid = o.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    q.survey_id = '".$surveyId."'
-				GROUP BY q.iid
-				ORDER BY q.sort ASC";
+              q.iid question_id, q.type, q.survey_question, count(o.iid) as number_of_options
+            FROM $table_survey_question q
+            LEFT JOIN $table_survey_question_option o ON q.iid = o.question_id
+            WHERE survey_question NOT LIKE '%{{%' AND q.survey_id = '".$surveyId."'
+            GROUP BY q.iid ORDER BY q.sort ASC";
         $result = Database::query($sql);
         $questions = [];
         while ($row = Database::fetch_array($result)) {
-            // We show the questions if
-            // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a quesiton filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-                (is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter']))
+                (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                // We do not show comment and pagebreak question types
                 if ('pagebreak' !== $row['type']) {
-                    $content .= ' <th';
-                    if ($row['number_of_options'] > 0 && 'percentage' !== $row['type']) {
-                        $content .= ' colspan="'.$row['number_of_options'].'"';
-                    }
-                    $content .= '>';
+                    $content .= ' <th'.(($row['number_of_options'] > 0 && 'percentage' !== $row['type']) ? ' colspan="'.$row['number_of_options'].'"' : '').'>';
                     $content .= '<label>';
                     if ($addFilters) {
-                        $content .= '<input
-                                type="checkbox"
-                                name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
+                        $content .= '<input type="checkbox" name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
                     }
                     $content .= $row['survey_question'];
-                    $content .= '</label>';
-                    $content .= '</th>';
+                    $content .= '</label></th>';
                 }
-                // No column at all if it's not a question
             }
             $questions[$row['question_id']] = $row;
         }
-        $content .= '	</tr>';
+        $content .= '</tr>';
 
-        // Getting all the questions and options
-        $content .= '	<tr>';
-        $content .= '		<th>&nbsp;</th>'; // the user column
-
+        // Second header row (user + extra fields + options)
+        $content .= '<tr><th>&nbsp;</th>';
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-            isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
+                isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
         ) {
             if ($addExtraFields) {
-                // show the fields names for user fields
-                foreach ($extra_user_fields as &$field) {
+                foreach ($extra_user_fields as $field) {
                     $content .= '<th>'.$field[3].'</th>';
                 }
             }
         }
 
-        // cells with option (none for open question)
         $sql = "SELECT
-                    sq.iid question_id,
-                    sq.survey_id,
-                    sq.survey_question,
-                    sq.display,
-                    sq.sort,
-                    sq.type,
-                    sqo.iid question_option_id,
-                    sqo.option_text,
-                    sqo.sort as option_sort
-				FROM $table_survey_question sq
-				LEFT JOIN $table_survey_question_option sqo
-				ON sq.iid = sqo.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    sq.survey_id = $surveyId
-				ORDER BY sq.sort ASC, sqo.sort ASC";
+                sq.iid question_id, sq.survey_id, sq.survey_question, sq.display, sq.sort, sq.type,
+                sqo.iid question_option_id, sqo.option_text, sqo.sort as option_sort
+            FROM $table_survey_question sq
+            LEFT JOIN $table_survey_question_option sqo ON sq.iid = sqo.question_id
+            WHERE survey_question NOT LIKE '%{{%' AND sq.survey_id = $surveyId
+            ORDER BY sq.sort ASC, sqo.sort ASC";
         $result = Database::query($sql);
 
         $display_percentage_header = 1;
         $possible_answers = [];
-        // in order to display only once the cell option (and not 100 times)
         while ($row = Database::fetch_array($result)) {
-            // We show the options if
-            // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a question filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
-                // we do not show comment and pagebreak question types
                 if ('open' == $row['type'] || 'comment' == $row['type']) {
                     $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
@@ -1240,49 +1158,38 @@ class SurveyUtil
                 } elseif ('percentage' == $row['type']) {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 } elseif ('pagebreak' != $row['type'] && 'percentage' != $row['type']) {
-                    $content .= '<th>';
-                    $content .= $row['option_text'];
-                    $content .= '</th>';
+                    $content .= '<th>'.$row['option_text'].'</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
                 }
             }
         }
+        $content .= '</tr>';
 
-        $content .= '	</tr>';
-
+        // User filter
         $userCondition = '';
         if (!empty($userId)) {
             $userId = (int) $userId;
             $userCondition = " AND user = $userId ";
         }
 
-        // Getting all the answers of the users
+        // Collect answers grouped by user
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-                WHERE
-                    survey_id = $surveyId
-                    $userCondition
-                    $sessionCondition
-                    $lpItemCondition
-                ORDER BY iid, user ASC";
+            WHERE survey_id = $surveyId
+              $userCondition
+              $sessionCondition
+              $lpItemCondition
+            ORDER BY iid, user ASC";
         $result = Database::query($sql);
         $i = 1;
         while ($row = Database::fetch_array($result)) {
             if ($old_user != $row['user'] && '' != $old_user) {
-                $userParam = $old_user;
-                if (0 != $survey->getAnonymous()) {
-                    $userParam = $i;
-                    $i++;
-                }
+                $userParam = (0 != $survey->getAnonymous()) ? $i : $old_user;
+                if (0 != $survey->getAnonymous()) { $i++; }
                 $content .= self::display_complete_report_row(
-                    $survey,
-                    $possible_answers,
-                    $answers_of_user,
-                    $userParam,
-                    $questions,
-                    $display_extra_user_fields
+                    $survey, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields
                 );
                 $answers_of_user = [];
             }
@@ -1297,24 +1204,13 @@ class SurveyUtil
             $old_user = $row['user'];
         }
 
-        $userParam = $old_user;
-        if (0 != $survey->getAnonymous()) {
-            $userParam = $i;
-            $i++;
-        }
-
+        $userParam = (0 != $survey->getAnonymous()) ? $i : $old_user;
         $content .= self::display_complete_report_row(
-            $survey,
-            $possible_answers,
-            $answers_of_user,
-            $userParam,
-            $questions,
-            $display_extra_user_fields
+            $survey, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields
         );
 
-        // This is to display the last user
-        $content .= '</table>';
-        $content .= '</form>';
+        $content .= '</table></form>';
+        $content .= '</div></div></div>'; // close card+container
 
         return $content;
     }
@@ -2068,31 +1964,17 @@ class SurveyUtil
      */
     public static function display_comparative_report()
     {
-        // Allowed question types for comparative report
-        $allowed_question_types = [
-            'yesno',
-            'multiplechoice',
-            'multipleresponse',
-            'dropdown',
-            'percentage',
-            'score',
-        ];
-
+        $allowed_question_types = ['yesno','multiplechoice','multipleresponse','dropdown','percentage','score'];
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
-        // Getting all the questions
         $questions = SurveyManager::get_questions($surveyId);
 
-        // Actions bar
-        $actions = '<a href="'.api_get_path(
-                WEB_CODE_PATH
-            ).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq()
-            .'">'
+        // Toolbar
+        $actions = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
             .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'))
             .'</a>';
         echo Display::toolbarAction('survey', [$actions]);
 
-        // Displaying an information message that only the questions with predefined answers can be used in a comparative report
         echo Display::return_message(get_lang('Only questions with predefined answers can be used'), 'normal', false);
 
         $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
@@ -2110,56 +1992,39 @@ class SurveyUtil
         $optionsY = ['----'];
         $defaults = [];
         foreach ($questions as $key => &$question) {
-            // Ignored tagged questions
-            if ($question) {
-                if (false !== strpos($question['question'], '{{')) {
-                    $question = null;
-                    continue;
-                }
+            if ($question && false !== strpos($question['question'], '{{')) {
+                $question = null;
+                continue;
             }
-            if (is_array($allowed_question_types)) {
-                if (in_array($question['type'], $allowed_question_types)) {
-                    if (isset($_GET['xaxis']) && $_GET['xaxis'] == $question['question_id']) {
-                        $defaults['xaxis'] = $question['question_id'];
-                    }
-
-                    if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
-                        $defaults['yaxis'] = $question['question_id'];
-                    }
-
-                    $optionsX[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
-                    $optionsY[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
+            if (in_array($question['type'], $allowed_question_types)) {
+                if (isset($_GET['xaxis']) && $_GET['xaxis'] == $question['question_id']) {
+                    $defaults['xaxis'] = $question['question_id'];
                 }
+                if (isset($_GET['yaxis']) && $_GET['yaxis'] == $question['question_id']) {
+                    $defaults['yaxis'] = $question['question_id'];
+                }
+                $optionsX[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
+                $optionsY[$question['question_id']] = api_substr(strip_tags($question['question']), 0, 90);
             }
         }
-
         $form->addSelect('xaxis', get_lang('Select the question on the X axis'), $optionsX);
         $form->addSelect('yaxis', get_lang('Select the question on the Y axis'), $optionsY);
-
         $form->addButtonSearch(get_lang('Compare questions'));
         $form->setDefaults($defaults);
         $form->display();
 
-        // Getting all the information of the x axis
-        if (is_numeric($xAxis)) {
-            $question_x = SurveyManager::get_question($xAxis);
-        }
+        if (is_numeric($xAxis)) { $question_x = SurveyManager::get_question($xAxis); }
+        if (is_numeric($yAxis)) { $question_y = SurveyManager::get_question($yAxis); }
 
-        // Getting all the information of the y axis
-        if (is_numeric($yAxis)) {
-            $question_y = SurveyManager::get_question($yAxis);
-        }
-
-        if (is_numeric($xAxis) && is_numeric($yAxis) && $question_x && $question_y) {
-            // Getting the answers of the two questions
+        if (is_numeric($xAxis) && is_numeric($yAxis) && !empty($question_x) && !empty($question_y)) {
             $answers_x = self::get_answers_of_question_by_user($surveyId, $xAxis);
             $answers_y = self::get_answers_of_question_by_user($surveyId, $yAxis);
 
-            // Displaying the table
-            $tableHtml = '<table border="1" class="table table-hover table-striped data_table">';
+            $tableHtml = '<table class="table table-bordered table-striped table-sm sr-table">';
             $xOptions = [];
-            // The header
-            $tableHtml .= '<tr>';
+
+            // Header
+            $tableHtml .= '<thead><tr>';
             for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                 if (0 == $ii) {
                     $tableHtml .= '<th>&nbsp;</th>';
@@ -2168,22 +2033,19 @@ class SurveyUtil
                         for ($x = 1; $x <= $question_x['maximum_score']; $x++) {
                             $tableHtml .= '<th>'.$question_x['answers'][($ii - 1)].'<br />'.$x.'</th>';
                         }
-                        $x = '';
                     } else {
                         $tableHtml .= '<th>'.$question_x['answers'][($ii - 1)].'</th>';
                     }
-                    $optionText = strip_tags($question_x['answers'][$ii - 1]);
-                    $optionText = html_entity_decode($optionText);
-                    array_push($xOptions, trim($optionText));
+                    $optionText = html_entity_decode(strip_tags($question_x['answers'][$ii - 1]));
+                    $xOptions[] = trim($optionText);
                 }
             }
-            $tableHtml .= '</tr>';
+            $tableHtml .= '</tr></thead><tbody>';
+
             $chartData = [];
-            // The main part
+            // Body
             for ($ij = 0; $ij < count($question_y['answers']); $ij++) {
-                $currentYQuestion = strip_tags($question_y['answers'][$ij]);
-                $currentYQuestion = html_entity_decode($currentYQuestion);
-                // The Y axis is a scoring question type so we have more rows than the options (actually options * maximum score)
+                $currentYQuestion = html_entity_decode(strip_tags($question_y['answers'][$ij]));
                 if ('score' == $question_y['type']) {
                     for ($y = 1; $y <= $question_y['maximum_score']; $y++) {
                         $tableHtml .= '<tr>';
@@ -2194,57 +2056,34 @@ class SurveyUtil
                                         $tableHtml .= '<th>'.$question_y['answers'][($ij)].' '.$y.'</th>';
                                         break;
                                     } else {
-                                        $tableHtml .= '<td align="center">';
                                         $votes = self::comparative_check(
-                                            $answers_x,
-                                            $answers_y,
+                                            $answers_x, $answers_y,
                                             $question_x['answersid'][($ii - 1)],
                                             $question_y['answersid'][($ij)],
-                                            $x,
-                                            $y
+                                            $x, $y
                                         );
-                                        $tableHtml .= $votes;
-                                        array_push(
-                                            $chartData,
-                                            [
-                                                'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
-                                                'option' => $x,
-                                                'votes' => $votes,
-                                            ]
-                                        );
-                                        $tableHtml .= '</td>';
+                                        $tableHtml .= '<td align="center">'.$votes.'</td>';
+                                        $chartData[] = ['serie' => [$currentYQuestion, $xOptions[$ii - 1]], 'option' => $x, 'votes' => $votes];
                                     }
                                 }
                             } else {
                                 if (0 == $ii) {
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].' '.$y.'</th>';
                                 } else {
-                                    $tableHtml .= '<td align="center">';
                                     $votes = self::comparative_check(
-                                        $answers_x,
-                                        $answers_y,
+                                        $answers_x, $answers_y,
                                         $question_x['answersid'][($ii - 1)],
                                         $question_y['answersid'][($ij)],
-                                        0,
-                                        $y
+                                        0, $y
                                     );
-                                    $tableHtml .= $votes;
-                                    array_push(
-                                        $chartData,
-                                        [
-                                            'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
-                                            'option' => $y,
-                                            'votes' => $votes,
-                                        ]
-                                    );
-                                    $tableHtml .= '</td>';
+                                    $tableHtml .= '<td align="center">'.$votes.'</td>';
+                                    $chartData[] = ['serie' => [$currentYQuestion, $xOptions[$ii - 1]], 'option' => $y, 'votes' => $votes];
                                 }
                             }
                         }
                         $tableHtml .= '</tr>';
                     }
                 } else {
-                    // The Y axis is NOT a score question type so the number of rows = the number of options
                     $tableHtml .= '<tr>';
                     for ($ii = 0; $ii <= count($question_x['answers']); $ii++) {
                         if ('score' == $question_x['type']) {
@@ -2253,59 +2092,40 @@ class SurveyUtil
                                     $tableHtml .= '<th>'.$question_y['answers'][$ij].'</th>';
                                     break;
                                 } else {
-                                    $tableHtml .= '<td align="center">';
                                     $votes = self::comparative_check(
-                                        $answers_x,
-                                        $answers_y,
+                                        $answers_x, $answers_y,
                                         $question_x['answersid'][($ii - 1)],
                                         $question_y['answersid'][($ij)],
-                                        $x,
-                                        0
+                                        $x, 0
                                     );
-                                    $tableHtml .= $votes;
-                                    array_push(
-                                        $chartData,
-                                        [
-                                            'serie' => [$currentYQuestion, $xOptions[$ii - 1]],
-                                            'option' => $x,
-                                            'votes' => $votes,
-                                        ]
-                                    );
-                                    $tableHtml .= '</td>';
+                                    $tableHtml .= '<td align="center">'.$votes.'</td>';
+                                    $chartData[] = ['serie' => [$currentYQuestion, $xOptions[$ii - 1]], 'option' => $x, 'votes' => $votes];
                                 }
                             }
                         } else {
                             if (0 == $ii) {
                                 $tableHtml .= '<th>'.$question_y['answers'][($ij)].'</th>';
                             } else {
-                                $tableHtml .= '<td align="center">';
                                 $votes = self::comparative_check(
-                                    $answers_x,
-                                    $answers_y,
+                                    $answers_x, $answers_y,
                                     $question_x['answersid'][($ii - 1)],
                                     $question_y['answersid'][($ij)]
                                 );
-                                $tableHtml .= $votes;
-                                array_push(
-                                    $chartData,
-                                    [
-                                        'serie' => $xOptions[$ii - 1],
-                                        'option' => $currentYQuestion,
-                                        'votes' => $votes,
-                                    ]
-                                );
-                                $tableHtml .= '</td>';
+                                $tableHtml .= '<td align="center">'.$votes.'</td>';
+                                $chartData[] = ['serie' => $xOptions[$ii - 1], 'option' => $currentYQuestion, 'votes' => $votes];
                             }
                         }
                     }
                     $tableHtml .= '</tr>';
                 }
             }
-            $tableHtml .= '</table>';
-            echo '<div id="chartContainer" class="col-md-12">';
-            echo self::drawChart($chartData, true);
-            echo '</div>';
+            $tableHtml .= '</tbody></table>';
+
+            echo '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
+                .get_lang('Comparative report').'</div><div class="sr-card__body">';
+            echo '<div id="chartContainer" class="sr-block">'.self::drawChart($chartData, true).'</div>';
             echo $tableHtml;
+            echo '</div></div></div>';
         }
     }
 

@@ -13,8 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
  * @author  Toon Keppens
  */
 $modifyAnswers = (int) $_GET['hotspotadmin'];
-if (!is_object($objQuestion)) {
+if (!is_object($objQuestion) || empty($objQuestion->iid) || (int)$objQuestion->iid !== $modifyAnswers) {
     $objQuestion = Question::read($modifyAnswers);
+    if (!$objQuestion) {
+        api_not_allowed();
+    }
+    Session::write('objQuestion', $objQuestion);
 }
 
 $questionName = $objQuestion->selectTitle();
@@ -330,14 +334,16 @@ if ($submitAnswers || $buttonBack) {
             );
             $objAnswer->save();
 
-            // sets the total weighting of the question
-            $objQuestion->updateWeighting($questionWeighting);
+            $objQuestion->iid = (int)$modifyAnswers;
+            $objQuestion->course = api_get_course_info();
+            $objQuestion->updateWeighting((float)$questionWeighting);
+
             $objQuestion->save($objExercise);
 
-            $editQuestion = $questionId;
+            $editQuestion = $objQuestion->iid;
             unset($modifyAnswers);
-            echo '<script type="text/javascript">window.location.href="'.$hotspot_admin_url
-                .'&message=ItemUpdated"</script>';
+            echo '<script type="text/javascript">window.location.href="'.
+                $hotspot_admin_url.'&message=ItemUpdated"</script>';
         }
     }
 }

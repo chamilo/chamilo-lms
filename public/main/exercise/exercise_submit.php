@@ -628,6 +628,23 @@ $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
 if ($time_control) {
     //Sends the exercise form when the expired time is finished.
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
+    if (isset($exe_id) && $time_left <= 0) {
+        Database::query("
+        UPDATE " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . "
+        SET status = 'completed',
+            exe_date = FROM_UNIXTIME(LEAST(UNIX_TIMESTAMP('" . Database::escape_string($clock_expired_time) . "'), UNIX_TIMESTAMP()))
+        WHERE exe_id = " . (int) $exe_id . "
+          AND status = 'incomplete'
+    ");
+
+        $resultUrl = 'exercise_result.php?' . api_get_cidreq()
+            . "&exe_id=$exe_id"
+            . "&learnpath_id=$learnpath_id"
+            . "&learnpath_item_id=$learnpath_item_id"
+            . "&learnpath_item_view_id=$learnpath_item_view_id";
+        header('Location: ' . $resultUrl);
+        exit;
+    }
 }
 
 //in LP's is enabled the "remember question" feature?

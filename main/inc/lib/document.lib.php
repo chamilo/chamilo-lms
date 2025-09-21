@@ -7661,4 +7661,39 @@ class DocumentManager
 
         return $content;
     }
+
+    public static function autoResizeImageIfNeeded(int $size, string $tmpName): int
+    {
+        $resizeMax = api_get_configuration_value('wysiwyg_image_auto_resize_max');
+
+        if (is_array($resizeMax)) {
+            if ($size > ($resizeMax['mb'] * 1024 * 1024)) {
+                throw new Exception(get_lang('UplFileTooBig'));
+            }
+
+            $temp = new Image($tmpName);
+            $pictureInfo = $temp->get_image_info();
+
+            $thumbSize = 0;
+
+            if ($pictureInfo['width'] > $pictureInfo['height']) {
+                if ($pictureInfo['width'] > $resizeMax['w']) {
+                    $thumbSize = $resizeMax['w'];
+                }
+            } else {
+                if ($pictureInfo['height'] > $resizeMax['h']) {
+                    $thumbSize = $resizeMax['h'];
+                }
+            }
+
+            if ($thumbSize) {
+                $temp->resize($thumbSize);
+                $temp->send_image($tmpName);
+
+                return filesize($tmpName);
+            }
+        }
+
+        return $size;
+    }
 }

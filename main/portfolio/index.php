@@ -190,9 +190,8 @@ switch ($action) {
             break;
         }
 
-        if ($httpRequest->query->has('user')) {
-            $urlUser = $httpRequest->query->getInt('user');
-        }
+        $urlUser = $httpRequest->query->getInt('user');
+
         $controller->view($item, $urlUser);
 
         return;

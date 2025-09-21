@@ -600,19 +600,19 @@ switch ($action) {
                     require 'lp_add_item.php';
                 } else {
                     Session::write('post_time', $_POST['post_time']);
-                    $directoryParentId = isset($_POST['directory_parent_id']) ? $_POST['directory_parent_id'] : 0;
+                    $directoryParentId = $_POST['directory_parent_id'] ?? 0;
                     $courseInfo = api_get_course_info();
                     if (empty($directoryParentId)) {
                         $_SESSION['oLP']->generate_lp_folder($courseInfo);
                     }
 
-                    $parent = isset($_POST['parent']) ? $_POST['parent'] : '';
-                    $previous = isset($_POST['previous']) ? $_POST['previous'] : '';
-                    $type = isset($_POST['type']) ? $_POST['type'] : '';
-                    $path = isset($_POST['path']) ? $_POST['path'] : '';
-                    $description = isset($_POST['description']) ? $_POST['description'] : '';
-                    $prerequisites = isset($_POST['prerequisites']) ? $_POST['prerequisites'] : '';
-                    $maxTimeAllowed = isset($_POST['maxTimeAllowed']) ? $_POST['maxTimeAllowed'] : '';
+                    $parent = $_POST['parent'] ?? '';
+                    $previous = $_POST['previous'] ?? '';
+                    $type = $_POST['type'] ?? '';
+                    $path = $_POST['path'] ?? '';
+                    $description = $_POST['description'] ?? '';
+                    $prerequisites = $_POST['prerequisites'] ?? '';
+                    $maxTimeAllowed = $_POST['maxTimeAllowed'] ?? '';
 
                     if ($_POST['type'] == TOOL_DOCUMENT) {
 

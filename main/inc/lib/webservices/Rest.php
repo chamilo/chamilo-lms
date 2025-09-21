@@ -154,7 +154,8 @@ class Rest extends WebService
     public const DELETE_GROUP_SUB_COURSE = 'delete_group_sub_course';
     public const DELETE_GROUP_SUB_SESSION = 'delete_group_sub_session';
     public const GET_AUDIT_ITEMS = 'get_audit_items';
-    public const SUBSCRIBE_COURSE_TO_SESSION_XF = 'subscribe_course_to_session_from_extra_field';
+    public const SUBSCRIBE_COURSE_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_course_to_session_from_extra_field';
+    public const SUBSCRIBE_USER_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_user_to_session_from_extra_field';
 
     /**
      * @var Session
@@ -4469,6 +4470,96 @@ class Rest extends WebService
             return [
                 'error' => true,
                 'message' => 'Failed to subscribe course to session.'
+            ];
+        }
+    }
+
+    /**
+     * Subscribe a specific user to a specific session, identified via extra field values.
+     *
+     * This method:
+     * - Locates the session ID using the provided session extra field name/value via ExtraFieldValue('session').
+     * - Locates the user ID using the provided user extra field name/value via ExtraFieldValue('user').
+     * - Adds the user to the session using SessionManager::subscribe_users_to_session() (similar to subscribeUsersToSession()).
+     *
+     * Required parameters:
+     * - session_field_name: Name of the extra field for sessions (e.g., 'peoplesoft_sid').
+     * - session_field_value: Value of the session extra field (e.g., '123450').
+     * - user_field_name: Name of the extra field for users (e.g., 'peoplesoft_uid').
+     * - user_field_value: Value of the user extra field (e.g., '1').
+     *
+     * @param array $params Associative array of POST parameters.
+     * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
+     */
+    public function subscribeUserToSessionFromExtraField($params)
+    {
+        // Validate required parameters (redundant with v2.php but for safety)
+        $required = ['session_field_name', 'session_field_value', 'user_field_name', 'user_field_value'];
+        foreach ($required as $key) {
+            if (empty($params[$key])) {
+                return [
+                    'error' => true,
+                    'message' => 'Missing required parameter: ' . $key
+                ];
+            }
+        }
+
+        $sessionFieldName = $params['session_field_name'];
+        $sessionFieldValue = $params['session_field_value'];
+        $userFieldName = $params['user_field_name'];
+        $userFieldValue = $params['user_field_value'];
+
+        // Get session ID from extra field value using ExtraFieldValue model
+        $sessionValueModel = new ExtraFieldValue('session');
+        $sessionIdList = $sessionValueModel->get_item_id_from_field_variable_and_field_value(
+            $sessionFieldName,
+            $sessionFieldValue,
+            false,
+            false,
+            true
+        );
+        if (empty($sessionIdList)) {
+            return [
+                'error' => true,
+                'message' => 'No session found with extra field value "' . $sessionFieldValue . '".'
+            ];
+        }
+        $sessionId = (int) $sessionIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
+
+        // Get user ID from extra field value using ExtraFieldValue model
+        $userValueModel = new ExtraFieldValue('user');
+        $userIdList = $userValueModel->get_item_id_from_field_variable_and_field_value(
+            $userFieldName,
+            $userFieldValue,
+            false,
+            false,
+            true
+        );
+        if (empty($userIdList)) {
+            return [
+                'error' => true,
+                'message' => 'No user found with extra field value "' . $userFieldValue . '".'
+            ];
+        }
+        $userId = (int) $userIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
+
+        // Add user to session using existing core method (mirrors subscribeUsersToSession logic)
+        $success = SessionManager::subscribeUsersToSession($sessionId, [$userId]);
+
+        if ($success) {
+            return [
+                'error' => false,
+                'data' => [
+                    'status' => true,
+                    'message' => 'User subscribed to session',
+                    'id_session' => $sessionId,
+                    'user_id' => $userId
+                ]
+            ];
+        } else {
+            return [
+                'error' => true,
+                'message' => 'Failed to subscribe user to session.'
             ];
         }
     }

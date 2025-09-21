@@ -1100,7 +1100,7 @@ try {
          *
          * @return void Outputs JSON response via existing echo.
          */
-        case Rest::SUBSCRIBE_COURSE_TO_SESSION_XF:
+        case Rest::SUBSCRIBE_COURSE_TO_SESSION_FROM_EXTRA_FIELD:
             $required_params = ['api_key', 'username', 'session_field_name', 'session_field_value', 'course_field_name', 'course_field_value'];
             $missing = [];
             foreach ($required_params as $param) {
@@ -1117,6 +1117,41 @@ try {
             }
             $params = $_POST;
             $result = $restApi->subscribeCourseToSessionFromExtraField($params);
+            if ($result['error']) {
+                $restResponse->setErrorMessage($result['message']);
+            } else {
+                $restResponse->setData($result['data']);
+            }
+            break;
+        /**
+         * Subscribe a user to a session using extra field values for identification.
+         *
+         * Validates parameters from $_POST and calls the Rest method, handling response via $restResponse.
+         *
+         * Required POST parameters:
+         * - api_key: API key for authentication.
+         * - username: Username for authentication.
+         * - session_field_name: Name of the extra field for sessions.
+         * - session_field_value: Value of the session extra field.
+         * - user_field_name: Name of the extra field for users.
+         * - user_field_value: Value of the user extra field.
+         *
+         * @return void Sets response via existing $restResponse object.
+         */
+        case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_EXTRA_FIELD:
+            $required_params = ['api_key', 'username', 'session_field_name', 'session_field_value', 'user_field_name', 'user_field_value'];
+            $missing = [];
+            foreach ($required_params as $param) {
+                if (empty($_POST[$param])) {
+                    $missing[] = $param;
+                }
+            }
+            if (!empty($missing)) {
+                $restResponse->setErrorMessage('Missing required parameters: ' . implode(', ', $missing));
+                break;
+            }
+            $params = $_POST;
+            $result = $restApi->subscribeUserToSessionFromExtraField($params);
             if ($result['error']) {
                 $restResponse->setErrorMessage($result['message']);
             } else {

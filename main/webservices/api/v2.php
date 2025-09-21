@@ -1158,6 +1158,40 @@ try {
                 $restResponse->setData($result['data']);
             }
             break;
+        /**
+         * Update a session using extra field value for identification.
+         *
+         * Validates parameters from $_POST and calls the Rest method, handling response via $restResponse.
+         *
+         * Required POST parameters:
+         * - api_key: API key for authentication.
+         * - username: Username for authentication.
+         * - field_name: Name of the extra field for sessions.
+         * - field_value: Value of the session extra field.
+         * - Optional: name, coach_username, access_start_date, access_end_date, etc.
+         *
+         * @return void Sets response via existing $restResponse object.
+         */
+        case Rest::UPDATE_SESSION_FROM_EXTRA_FIELD:
+            $required_params = ['api_key', 'username', 'field_name', 'field_value'];
+            $missing = [];
+            foreach ($required_params as $param) {
+                if (empty($_POST[$param])) {
+                    $missing[] = $param;
+                }
+            }
+            if (!empty($missing)) {
+                $restResponse->setErrorMessage('Missing required parameters: ' . implode(', ', $missing));
+                break;
+            }
+            $params = $_POST;
+            $result = $restApi->updateSessionFromExtraField($params);
+            if ($result['error']) {
+                $restResponse->setErrorMessage($result['message']);
+            } else {
+                $restResponse->setData($result['data']);
+            }
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

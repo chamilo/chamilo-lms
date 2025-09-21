@@ -156,6 +156,7 @@ class Rest extends WebService
     public const GET_AUDIT_ITEMS = 'get_audit_items';
     public const SUBSCRIBE_COURSE_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_course_to_session_from_extra_field';
     public const SUBSCRIBE_USER_TO_SESSION_FROM_EXTRA_FIELD = 'subscribe_user_to_session_from_extra_field';
+    public const UPDATE_SESSION_FROM_EXTRA_FIELD = 'update_session_from_extra_field';
 
     /**
      * @var Session
@@ -4563,7 +4564,72 @@ class Rest extends WebService
             ];
         }
     }
+    /**
+     * Update a specific session, identified via extra field value.
+     *
+     * This method:
+     * - Locates the session ID using the provided extra field name/value via ExtraFieldValue('session').
+     * - Calls updateSession() with the located ID and provided update parameters (e.g., name, coach_username, dates).
+     *
+     * Required parameters:
+     * - field_name: Name of the extra field for sessions (e.g., 'peoplesoft_sid').
+     * - field_value: Value of the session extra field (e.g., PeopleSoft ID).
+     * - Optional update fields: name, coach_username, access_start_date, access_end_date, etc.
+     *
+     * @param array $params Associative array of POST parameters.
+     * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
+     */
+    public function updateSessionFromExtraField($params)
+    {
+        // Validate required parameters (redundant with v2.php but for safety)
+        $required = ['field_name', 'field_value'];
+        foreach ($required as $key) {
+            if (empty($params[$key])) {
+                return [
+                    'error' => true,
+                    'message' => 'Missing required parameter: ' . $key
+                ];
+            }
+        }
 
+        $fieldName = $params['field_name'];
+        $fieldValue = $params['field_value'];
+
+        // Get session ID from extra field value using ExtraFieldValue model
+        $sessionValueModel = new ExtraFieldValue('session');
+        $sessionIdList = $sessionValueModel->get_item_id_from_field_variable_and_field_value(
+            $fieldName,
+            $fieldValue,
+            false,
+            false,
+            true
+        );
+        if (empty($sessionIdList)) {
+            return [
+                'error' => true,
+                'message' => 'No session found with extra field value "' . $fieldValue . '".'
+            ];
+        }
+        $sessionId = (int) $sessionIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
+
+        // Prepare params for updateSession() by adding the located ID
+        $params['id_session'] = $sessionId;
+
+        // Get coach ID if we got it as username
+        if (!empty($params['coach_username'])) {
+            $param['id_coach'] = UserManager::get_user_id_from_username($params['coach_username']);
+        }
+        // Delegate to existing updateSession() method (mirrors its logic)
+        $result = $this->updateSession($params);
+
+        // Override message and include ID in data if successful
+        if (!$result['error']) {
+            $result['data']['id_session'] = $sessionId;
+            $result['data']['message'] = 'Session updated';
+        }
+
+        return $result;
+    }
     /**
      * Generate an API key for webservices access for the given user ID.
      */

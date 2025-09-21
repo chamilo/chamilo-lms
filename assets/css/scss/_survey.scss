@@ -1,0 +1,106 @@
+.ch-survey-report {
+  // ---- design tokens (tweak freely) ----
+  $border: #e5e7eb;
+  $bg-soft: #f9fafb;
+  $bg-muted: #f3f4f6;
+  $text: #111827;
+  $shadow: 0 1px 2px rgba(0, 0, 0, .04);
+
+  // ---- card ----
+  .sr-card {
+    border: 1px solid $border;
+    border-radius: 12px;
+    box-shadow: $shadow;
+    margin-bottom: 18px;
+
+    &__header {
+      padding: 12px 16px;
+      font-weight: 700;
+      background: $bg-soft;
+      border-bottom: 1px solid $border;
+    }
+    &__body {
+      padding: 12px 16px;
+    }
+  }
+
+  // ---- compact table look used in the survey summary (#pdf_table) ----
+  .sr-summary-table {
+    margin: 0;
+    border-radius: 10px;
+    overflow: hidden;
+
+    th,
+    td {
+      border-color: $border;
+      color: $text;
+      background: #fff;
+    }
+
+    th[scope="row"] {
+      width: 260px;
+      white-space: nowrap;
+      background: $bg-muted; // subtle contrast for labels
+      font-weight: 600;
+      vertical-align: middle;
+    }
+
+    tr + tr {
+      th,
+      td {
+        border-top: 1px solid $border;
+      }
+    }
+  }
+
+  // ---- generic “block” spacing helpers used in question sections ----
+  .sr-block {
+    margin-top: 10px;
+  }
+
+  // ---- optional: progress bar style used inside the “Graphic” column ----
+  .sr-progress {
+    // outer track
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    height: 10px;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+
+    // inner fill
+    &__fill {
+      height: 100%;
+      width: 0; // set inline (e.g., style="width:66%")
+      background: #93c5fd;
+    }
+  }
+
+  // ---- spacing for the number pagination row (if present) ----
+  #question_report_questionnumbers {
+    margin: 10px 0 16px;
+    display: flex;
+    gap: 6px;
+
+    li {
+      list-style: none;
+
+      a {
+        display: block;
+        padding: 6px 10px;
+        border: 1px solid $border;
+        border-radius: 8px;
+        background: #fff;
+        color: $text;
+        text-decoration: none;
+
+        &:hover { background: $bg-soft; }
+      }
+
+      &.disabled a {
+        opacity: .6;
+        pointer-events: none;
+      }
+    }
+  }
+}

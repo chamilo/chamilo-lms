@@ -5510,37 +5510,6 @@ SQL;
             // Logout current user
             self::loginDelete(api_get_user_id());
 
-            // Reset and set new session data
-            Session::erase('_user');
-            Session::erase('is_platformAdmin');
-            Session::erase('is_allowedCreateCourse');
-            Session::erase('_uid');
-
-            // Cleaning session variables
-            $_user['firstName'] = $userInfo['firstname'];
-            $_user['lastName'] = $userInfo['lastname'];
-            $_user['mail'] = $userInfo['email'];
-            $_user['official_code'] = $userInfo['official_code'];
-            $_user['picture_uri'] = $userInfo['picture_uri'];
-            $_user['user_id'] = $userId;
-            $_user['id'] = $userId;
-            $_user['status'] = $userInfo['status'];
-
-            // Filling session variables with new data
-            Session::write('_uid', $userId);
-            Session::write('_user', $userInfo);
-            Session::write('is_platformAdmin', (bool) self::is_admin($userId));
-            Session::write('is_allowedCreateCourse', 1 == $userInfo['status']);
-            // will be useful later to know if the user is actually an admin or not (example reporting)
-            Session::write('login_as', true);
-
-            Event::registerLog([
-                'tool' => 'login',
-                'tool_id' => 0,
-                'tool_id_detail' => 0,
-                'info' => $userId,
-            ]);
-
             return true;
         }
 

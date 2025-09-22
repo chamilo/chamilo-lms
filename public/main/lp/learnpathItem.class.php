@@ -84,6 +84,12 @@ class learnpathItem
     private $prerequisiteMaxScore;
     private $prerequisiteMinScore;
 
+    public $display_order;
+    public $js_lib;
+    public $author;
+    public $hide_toc_frame;
+    public $max_ordered_items;
+
     /**
      * Prepares the learning path item for later launch.
      * Don't forget to use set_lp_view() if applicable after creating the item.

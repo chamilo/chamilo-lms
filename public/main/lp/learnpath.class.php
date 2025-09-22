@@ -123,6 +123,11 @@ class learnpath
     public $entity;
     public $auto_forward_video = 1;
 
+    public $js_lib;
+    public $author;
+    public $hide_toc_frame;
+    public $max_ordered_items;
+
     public function __construct(CLp $entity = null, $course_info, $user_id)
     {
         $debug = $this->debug;

@@ -63,15 +63,11 @@ const stored = typeof localStorage !== "undefined" ? localStorage.getItem("app_l
 const initialHtmlLocale = stored || document.documentElement?.lang || "en"
 const initial = resolveBestLocale(initialHtmlLocale, messages)
 
-// Create runtime alias if requested bundle doesn't exist
-if (!messages[initial.requested] && messages[initial.resolved]) {
-  messages[initial.requested] = messages[initial.resolved]
-}
-
+// NOTE: do NOT create runtime aliases; use the resolved bundle directly
 const i18n = createI18n({
   legacy: false,
   globalInjection: true, // allow using $t in Options API
-  locale: initial.requested, // keep requested code (e.g. "es_spanish")
+  locale: initial.resolved, // use an existing bundle to avoid remounts
   fallbackLocale: buildFallbackChain(initial.base, initial.resolved, messages),
   messages,
 })
@@ -80,20 +76,15 @@ const i18n = createI18n({
 export function setLocale(code) {
   const target = resolveBestLocale(code, messages)
 
-  // Create/refresh runtime alias for the requested key
-  if (!i18n.global.availableLocales.includes(target.requested) && messages[target.resolved]) {
-    i18n.global.setLocaleMessage(target.requested, messages[target.resolved])
-  }
-
   // Update fallback chain and current locale reactively
   i18n.global.fallbackLocale.value = buildFallbackChain(target.base, target.resolved, messages)
-  i18n.global.locale.value = target.requested
+  i18n.global.locale.value = target.resolved // switch to an existing bundle
 
   if (typeof document !== "undefined") {
-    document.documentElement.lang = target.requested
+    document.documentElement.lang = target.resolved
   }
   if (typeof localStorage !== "undefined") {
-    localStorage.setItem("app_locale", target.requested)
+    localStorage.setItem("app_locale", target.resolved)
   }
 }
 

@@ -1,7 +1,6 @@
 <template>
   <component
     :is="layout"
-    :key="currentLocale"
     v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >

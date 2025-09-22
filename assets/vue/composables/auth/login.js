@@ -4,7 +4,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import securityService from "../../services/securityService"
 import { useNotification } from "../notification"
-import { setLocale } from "../../i18n"
+import i18n, { setLocale } from "../../i18n"
 
 function isValidHttpUrl(string) {
   try {
@@ -33,7 +33,10 @@ function pickUserLang(data) {
 function applyUserLocale(data) {
   const lang = pickUserLang(data)
   if (lang) {
-    setLocale(String(lang))
+    const next = String(lang)
+    if (i18n.global.locale.value !== next) {
+      setLocale(next)
+    }
   }
 }
 

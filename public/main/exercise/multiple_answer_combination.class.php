@@ -121,7 +121,7 @@ class MultipleAnswerCombination extends Question
             $form->addHtmlEditor(
                 'comment['.$i.']',
                 null,
-                true,
+                false,
                 false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );

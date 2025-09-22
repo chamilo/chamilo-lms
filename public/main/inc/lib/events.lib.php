@@ -825,17 +825,19 @@ class Event
      */
     public static function getLastAttemptDateOfExercise(int $exeId): string
     {
-        $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sql = "SELECT max(tms) as last_attempt_date
-                FROM $track_attempts
-                WHERE exe_id = $exeId";
-        $rs_last_attempt = Database::query($sql);
-        if (0 == Database::num_rows($rs_last_attempt)) {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $sql = "SELECT MAX(tms) AS last_attempt_date FROM $table WHERE exe_id = $exeId";
+        $res = Database::query($sql);
+
+        if (!$res) {
             return '';
         }
-        $row_last_attempt = Database::fetch_array($rs_last_attempt);
 
-        return $row_last_attempt['last_attempt_date']; //Get the date of last attempt
+        $row = Database::fetch_array($res) ?: [];
+        $val = $row['last_attempt_date'] ?? null;
+
+        return $val !== null ? (string) $val : '';
     }
 
     /**

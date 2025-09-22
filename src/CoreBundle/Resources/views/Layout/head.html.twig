@@ -40,6 +40,12 @@
         {# <link rel="stylesheet" href="theme_asset('print.css')" media="print" /> #}
     {% endblock %}
 
+    {# --- TinyMCE shared base config (load before any TinyMCE usage) --- #}
+    <script
+            src="{{ theme_asset('tiny-settings.js') }}?v={{ random() }}"
+            onerror="this.onerror=null;this.src='/theme/chamilo/tiny-settings.js?v={{ random() }}';"
+    ></script>
+
     {{ encore_entry_script_tags('legacy_free-jqgrid') }}
     {{ encore_entry_script_tags('legacy_app') }}
     {{ encore_entry_script_tags('legacy_lp') }}

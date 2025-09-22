@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -25,6 +26,7 @@ use League\OAuth2\Client\Tool\ArrayAccessorTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use UnexpectedValueException;
 
 class GenericAuthenticator extends AbstractAuthenticator
@@ -171,7 +173,7 @@ class GenericAuthenticator extends AbstractAuthenticator
                 )
             )
             ->addAuthSourceByAuthentication(
-                'oauth2',
+                UserAuthSource::OAUTH2,
                 $this->accessUrlHelper->getCurrent()
             )
             ->setStatus($status)
@@ -276,5 +278,10 @@ class GenericAuthenticator extends AbstractAuthenticator
         }
 
         $this->entityManager->flush();
+    }
+
+    protected function getCustomBadge(): ?BadgeInterface
+    {
+        return new OAuth2Badge(UserAuthSource::OAUTH2);
     }
 }

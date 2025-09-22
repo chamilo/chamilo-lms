@@ -20,6 +20,10 @@ use const DIRECTORY_SEPARATOR;
 
 final class ThemeHelper
 {
+    /**
+     * Absolute last resort if nothing else is configured.
+     * Kept for backward compatibility.
+     */
     public const DEFAULT_THEME = 'chamilo';
 
     public function __construct(
@@ -31,11 +35,19 @@ final class ThemeHelper
         private readonly RouterInterface $router,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private readonly FilesystemOperator $filesystem,
+        // Injected from services.yaml (.env -> THEME_FALLBACK)
+        #[Autowire(param: 'theme_fallback')]
+        private readonly string $themeFallback = '',
     ) {}
 
     /**
-     * Returns the name of the color theme configured to be applied on the current page.
-     * The returned name depends on the platform, course or user settings.
+     * Returns the slug of the theme that should be applied on the current page.
+     * Precedence:
+     * 1) Active theme bound to current AccessUrl (DB relation)
+     * 2) User-selected theme (if enabled)
+     * 3) Course/LP theme (if enabled)
+     * 4) THEME_FALLBACK from .env
+     * 5) DEFAULT_THEME ('chamilo')
      */
     public function getVisualTheme(): string
     {
@@ -50,97 +62,125 @@ final class ThemeHelper
         $visualTheme = null;
         $accessUrl = $this->accessUrlHelper->getCurrent();
 
+        // 1) Active theme bound to current AccessUrl (DB relation)
         if ($accessUrl instanceof AccessUrl) {
             $visualTheme = $accessUrl->getActiveColorTheme()?->getColorTheme()->getSlug();
         }
 
-        if ('true' == $this->settingsManager->getSetting('profile.user_selected_theme')) {
-            $visualTheme = $this->userHelper->getCurrent()?->getTheme();
+        // 2) User-selected theme (if setting is enabled)
+        if ('true' === $this->settingsManager->getSetting('profile.user_selected_theme')) {
+            $visualTheme = $this->userHelper->getCurrent()?->getTheme() ?: $visualTheme;
         }
 
-        if ('true' == $this->settingsManager->getSetting('course.allow_course_theme')) {
+        // 3) Course theme / Learning path theme (if setting is enabled)
+        if ('true' === $this->settingsManager->getSetting('course.allow_course_theme')) {
             $course = $this->cidReqHelper->getCourseEntity();
 
             if ($course) {
                 $this->settingsCourseManager->setCourse($course);
 
-                $visualTheme = $this->settingsCourseManager->getCourseSettingValue('course_theme');
+                $courseTheme = (string) $this->settingsCourseManager->getCourseSettingValue('course_theme');
+                if ($courseTheme !== '') {
+                    $visualTheme = $courseTheme;
+                }
 
                 if (1 === (int) $this->settingsCourseManager->getCourseSettingValue('allow_learning_path_theme')) {
-                    $visualTheme = $lp_theme_css;
+                    if (!empty($lp_theme_css)) {
+                        $visualTheme = $lp_theme_css;
+                    }
                 }
             }
         }
 
-        if (empty($visualTheme)) {
-            $visualTheme = self::DEFAULT_THEME;
+        // 4) .env fallback if still empty
+        if ($visualTheme === null || $visualTheme === '') {
+            $fallback = \trim((string) $this->themeFallback);
+            $visualTheme = $fallback !== '' ? $fallback : self::DEFAULT_THEME;
         }
 
         return $visualTheme;
     }
 
     /**
-     * @throws FilesystemException
+     * Decide the theme in which the requested asset actually exists.
+     * This prevents 404 when the file is only present in DEFAULT_THEME.
      */
-    public function getFileLocation(string $path): ?string
+    private function resolveAssetTheme(string $path): ?string
     {
-        $themeName = $this->getVisualTheme();
+        $visual = $this->getVisualTheme();
 
-        $locations = [
-            $themeName.DIRECTORY_SEPARATOR.$path,
-            self::DEFAULT_THEME.DIRECTORY_SEPARATOR.$path,
-        ];
-
-        foreach ($locations as $location) {
-            if ($this->filesystem->fileExists($location)) {
-                return $location;
+        try {
+            if ($this->filesystem->fileExists($visual.DIRECTORY_SEPARATOR.$path)) {
+                return $visual;
             }
+            if ($this->filesystem->fileExists(self::DEFAULT_THEME.DIRECTORY_SEPARATOR.$path)) {
+                return self::DEFAULT_THEME;
+            }
+        } catch (FilesystemException) {
+            return null;
         }
 
         return null;
     }
 
+    /**
+     * Resolves a themed file location checking the selected theme first,
+     * then falling back to DEFAULT_THEME as a last resort.
+     */
+    public function getFileLocation(string $path): ?string
+    {
+        $assetTheme = $this->resolveAssetTheme($path);
+        if ($assetTheme === null) {
+            return null;
+        }
+
+        return $assetTheme.DIRECTORY_SEPARATOR.$path;
+    }
+
+    /**
+     * Build a URL for the theme asset, using the theme where the file actually exists.
+     */
     public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
     {
-        try {
-            if (!$this->getFileLocation($path)) {
-                return '';
-            }
-        } catch (FilesystemException) {
+        $assetTheme = $this->resolveAssetTheme($path);
+        if ($assetTheme === null) {
             return '';
         }
 
-        $themeName = $this->getVisualTheme();
-
         return $this->router->generate(
             'theme_asset',
-            ['name' => $themeName, 'path' => $path],
+            ['name' => $assetTheme, 'path' => $path],
             $absoluteUrl ? UrlGeneratorInterface::ABSOLUTE_URL : UrlGeneratorInterface::ABSOLUTE_PATH
         );
     }
 
+    /**
+     * Convenience helper to emit a <link> tag for a theme asset.
+     */
     public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string
     {
         $url = $this->getThemeAssetUrl($path, $absoluteUrl);
-
-        if (empty($url)) {
+        if ($url === '') {
             return '';
         }
 
         return \sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 
+    /**
+     * Read raw contents from the themed filesystem.
+     */
     public function getAssetContents(string $path): string
     {
         try {
-            if ($fullPath = $this->getFileLocation($path)) {
+            $fullPath = $this->getFileLocation($path);
+            if ($fullPath) {
                 $stream = $this->filesystem->readStream($fullPath);
-
-                $contents = stream_get_contents($stream);
-
-                fclose($stream);
-
-                return $contents;
+                $contents = \is_resource($stream) ? stream_get_contents($stream) : false;
+                if (\is_resource($stream)) {
+                    fclose($stream);
+                }
+                return $contents !== false ? $contents : '';
             }
         } catch (FilesystemException) {
             return '';
@@ -149,14 +189,21 @@ final class ThemeHelper
         return '';
     }
 
+    /**
+     * Return a Base64-encoded data URI for the given themed asset.
+     */
     public function getAssetBase64Encoded(string $path): string
     {
         try {
-            if ($fullPath = $this->getFileLocation($path)) {
+            $fullPath = $this->getFileLocation($path);
+            if ($fullPath) {
                 $detector = new ExtensionMimeTypeDetector();
                 $mimeType = (string) $detector->detectMimeTypeFromFile($fullPath);
+                $data = $this->getAssetContents($path);
 
-                return 'data:'.$mimeType.';base64,'.base64_encode($this->getAssetContents($path));
+                return $data !== ''
+                    ? 'data:'.$mimeType.';base64,'.base64_encode($data)
+                    : '';
             }
         } catch (FilesystemException) {
             return '';
@@ -165,15 +212,19 @@ final class ThemeHelper
         return '';
     }
 
+    /**
+     * Return the preferred logo URL for current theme (header/email),
+     * falling back to DEFAULT_THEME if needed.
+     */
     public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
     {
-        $candidates = 'email' === $type
+        $candidates = $type === 'email'
             ? ['images/email-logo.svg', 'images/email-logo.png']
             : ['images/header-logo.svg', 'images/header-logo.png'];
 
         foreach ($candidates as $relPath) {
             $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);
-            if ('' !== $url) {
+            if ($url !== '') {
                 return $url;
             }
         }

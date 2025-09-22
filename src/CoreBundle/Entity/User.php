@@ -281,7 +281,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?DateTime $credentialsExpireAt;
 
     #[ORM\Column(name: 'date_of_birth', type: 'datetime', nullable: true)]
-    protected ?DateTime $dateOfBirth;
+    protected ?DateTime $dateOfBirth = null;
 
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'expires_at', type: 'datetime', nullable: true)]
@@ -835,7 +835,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->roles = [];
         $this->credentialsExpired = false;
         $this->credentialsExpireAt = new DateTime();
-        $this->dateOfBirth = new DateTime();
+        $this->dateOfBirth = null;
         $this->expiresAt = new DateTime();
         $this->passwordRequestedAt = new DateTime();
         $this->sentSocialPosts = new ArrayCollection();
@@ -2495,6 +2495,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->authSources;
     }
 
+    /**
+     * @return Collection<int, UserAuthSource>
+     */
     public function getAuthSourcesByUrl(AccessUrl $url): Collection
     {
         $criteria = Criteria::create();

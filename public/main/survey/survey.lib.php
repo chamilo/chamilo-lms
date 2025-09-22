@@ -32,19 +32,15 @@ class SurveyManager
         if (empty($code)) {
             return false;
         }
-        $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_SURVEY);
         $code = Database::escape_string($code);
         $num = 0;
         $new_code = $code;
         while (true) {
-
             if (isset($surveyId)) {
-                $sql = "SELECT * FROM $table
-                    WHERE code = '$new_code' AND iid = $surveyId";
+                $sql = "SELECT 1 FROM $table WHERE code = '$new_code' AND iid = $surveyId";
             } else {
-                $sql = "SELECT * FROM $table
-                    WHERE code = '$new_code'";
+                $sql = "SELECT 1 FROM $table WHERE code = '$new_code'";
             }
 
             $result = Database::query($sql);
@@ -140,12 +136,11 @@ class SurveyManager
         $survey_id = (int) $survey_id;
         $table_survey = Database::get_course_table(TABLE_SURVEY);
 
-        if (empty($courseInfo)) {
+        if (empty($courseInfo) || empty($survey_id)) {
             return [];
         }
-        $sql = "SELECT * FROM $table_survey
-                WHERE iid = $survey_id";
 
+        $sql = "SELECT * FROM $table_survey WHERE iid = $survey_id";
         $result = Database::query($sql);
         $return = [];
 
@@ -154,27 +149,18 @@ class SurveyManager
             if ($simple_return) {
                 return $return;
             }
-            // We do this (temporarily) to have the array match the quickform elements immediately
-            // idealiter the fields in the db match the quickform fields
-            $return['survey_code'] = $return['code'];
-            $return['survey_title'] = $return['title'];
-            $return['survey_subtitle'] = $return['subtitle'];
-            $return['survey_language'] = $return['lang'];
-            $return['start_date'] = $return['avail_from'];
-            $return['end_date'] = $return['avail_till'];
-            $return['survey_share'] = $return['is_shared'];
-            $return['survey_introduction'] = $return['intro'];
-            $return['survey_thanks'] = $return['surveythanks'];
-            $return['survey_type'] = $return['survey_type'];
-            $return['one_question_per_page'] = $return['one_question_per_page'];
-            $return['show_form_profile'] = $return['show_form_profile'];
-            $return['input_name_list'] = isset($return['input_name_list']) ? $return['input_name_list'] : null;
-            $return['shuffle'] = $return['shuffle'];
-            $return['parent_id'] = $return['parent_id'];
-            $return['survey_version'] = $return['survey_version'];
-            $return['anonymous'] = $return['anonymous'];
-            $return['c_id'] = isset($return['c_id']) ? $return['c_id'] : 0;
-            $return['session_id'] = isset($return['session_id']) ? $return['session_id'] : 0;
+            $return['survey_code']           = $return['code'];
+            $return['survey_title']          = $return['title'];
+            $return['survey_subtitle']       = $return['subtitle'];
+            $return['survey_language']       = $return['lang'];
+            $return['start_date']            = $return['avail_from'];
+            $return['end_date']              = $return['avail_till'];
+            $return['survey_share']          = $return['is_shared'];
+            $return['survey_introduction']   = $return['intro'];
+            $return['survey_thanks']         = $return['surveythanks'];
+            $return['input_name_list']       = $return['input_name_list'] ?? null;
+            $return['c_id']                  = $return['c_id'] ?? 0;
+            $return['session_id']            = $return['session_id'] ?? 0;
         }
 
         return $return;
@@ -203,148 +189,95 @@ class SurveyManager
      */
     public static function store_survey($values)
     {
+        $return = ['id' => 0];
         $session_id = api_get_session_id();
-        $courseCode = api_get_course_id();
         $table_survey = Database::get_course_table(TABLE_SURVEY);
         $shared_survey_id = 0;
         $displayQuestionNumber = isset($values['display_question_number']);
         $repo = Container::getSurveyRepository();
 
-        if (!isset($values['survey_id'])) {
-            // Check if the code doesn't soon exists in this language
+        if (empty($values['survey_id'])) {
+            $normalizedCode = self::generateSurveyCode($values['survey_code'] ?? '');
+            $lang = $values['survey_language'] ?? api_get_language_isocode();
+
             $sql = 'SELECT 1 FROM '.$table_survey.'
-			        WHERE
-			            code = "'.Database::escape_string($values['survey_code']).'" AND
-			            lang = "'.Database::escape_string($values['survey_language']).'"';
+                WHERE code = "'.Database::escape_string($normalizedCode).'"
+                  AND lang = "'.Database::escape_string($lang).'"';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 Display::addFlash(
-                    Display::return_message(
-                        get_lang('This survey code soon exists in this language'),
-                        'error'
-                    )
+                    Display::return_message(get_lang('This survey code soon exists in this language'), 'error')
                 );
-                $return['type'] = 'error';
-                $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
-
-                return $return;
+                return ['type' => 'error', 'id' => 0];
             }
 
-            if (!isset($values['anonymous'])) {
-                $values['anonymous'] = 0;
-            }
-
-            $values['anonymous'] = (int) $values['anonymous'];
+            $values['anonymous'] = !empty($values['anonymous']) ? 1 : 0;
+            $onePerPage = !empty($values['one_question_per_page']) ? 1 : 0;
+            $shuffle    = !empty($values['shuffle']) ? 1 : 0;
 
             $survey = new CSurvey();
-            $extraParams = [];
             if (0 == $values['anonymous']) {
-                // Input_name_list
-                $values['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
+                $values['show_form_profile'] = !empty($values['show_form_profile']) ? 1 : 0;
                 $survey->setShowFormProfile($values['show_form_profile']);
 
                 if (1 == $values['show_form_profile']) {
-                    // Input_name_list
-                    $fields = explode(',', $values['input_name_list']);
+                    $fields = explode(',', $values['input_name_list'] ?? '');
                     $field_values = '';
-                    foreach ($fields as &$field) {
-                        if ('' != $field) {
-                            if ('' == $values[$field]) {
-                                $values[$field] = 0;
-                            }
-                            $field_values .= $field.':'.$values[$field].'@';
-                        }
+                    foreach ($fields as $field) {
+                        if ($field === '') { continue; }
+                        $v = isset($values[$field]) && $values[$field] !== '' ? $values[$field] : 0;
+                        $field_values .= $field.':'.$v.'@';
                     }
-                    $extraParams['form_fields'] = $field_values;
+                    $survey->setFormFields($field_values);
                 } else {
-                    $extraParams['form_fields'] = '';
+                    $survey->setFormFields('');
                 }
-                $survey->setFormFields($extraParams['form_fields']);
+            } else {
+                $survey->setFormFields('');
+                $survey->setShowFormProfile(0);
             }
 
-            $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;
-            $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : 0;
-
-            if (1 == $values['survey_type']) {
-                $survey
-                    ->setSurveyType(1)
-                    ->setShuffle($values['shuffle'])
-                    ->setOneQuestionPerPage($values['one_question_per_page'])
-                ;
-                // Logic for versioning surveys
-                if (!empty($values['parent_id'])) {
-                    $parentId = (int) $values['parent_id'];
-                    $sql = 'SELECT survey_version
-                            FROM '.$table_survey.'
-					        WHERE
-					            parent_id = '.$parentId.'
-                            ORDER BY survey_version DESC
-                            LIMIT 1';
-                    $rs = Database::query($sql);
-                    if (0 === Database::num_rows($rs)) {
-                        $sql = 'SELECT survey_version FROM '.$table_survey.'
-						        WHERE
-						            iid = '.$parentId;
-                        $rs = Database::query($sql);
-                        $getversion = Database::fetch_assoc($rs);
-                        if (empty($getversion['survey_version'])) {
-                            $versionValue = ++$getversion['survey_version'];
-                        } else {
-                            $versionValue = $getversion['survey_version'];
-                        }
-                    } else {
-                        $row = Database::fetch_assoc($rs);
-                        $pos = api_strpos($row['survey_version'], '.');
-                        if (false === $pos) {
-                            $row['survey_version'] = $row['survey_version'] + 1;
-                            $versionValue = $row['survey_version'];
-                        } else {
-                            $getlast = explode('\.', $row['survey_version']);
-                            $lastversion = array_pop($getlast);
-                            $lastversion = $lastversion + 1;
-                            $add = implode('.', $getlast);
-                            if ('' != $add) {
-                                $insertnewversion = $add.'.'.$lastversion;
-                            } else {
-                                $insertnewversion = $lastversion;
-                            }
-                            $versionValue = $insertnewversion;
-                        }
-                    }
-                    $survey->setSurveyVersion($versionValue);
-                }
+            try {
+                $start = new \DateTime($values['start_date']);
+                $end   = new \DateTime($values['end_date']);
+            } catch (\Exception $e) {
+                Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
+                return ['type' => 'error', 'id' => 0];
             }
 
-            $course = api_get_course_entity();
+            $course  = api_get_course_entity();
             $session = api_get_session_entity();
 
             $survey
-                ->setCode(self::generateSurveyCode($values['survey_code']))
+                ->setCode($normalizedCode)
                 ->setTitle($values['survey_title'])
-                ->setSubtitle($values['survey_title'])
-                ->setLang($values['survey_language'])
-                ->setAvailFrom(new \DateTime($values['start_date']))
-                ->setAvailTill(new \DateTime($values['end_date']))
+                ->setSubtitle($values['survey_subtitle'] ?? '')
+                ->setLang($lang)
+                ->setAvailFrom($start)
+                ->setAvailTill($end)
                 ->setIsShared($shared_survey_id)
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
                 ->setDisplayQuestionNumber($displayQuestionNumber)
-                ->setAnonymous((string) $values['anonymous'])
-                ->setVisibleResults((int) $values['visible_results'])
-                ->setSurveyType((int) ($values['survey_type'] ?? 1))
+                ->setAnonymous((string) ((int) $values['anonymous']))
+                ->setVisibleResults((int) ($values['visible_results'] ?? SURVEY_VISIBLE_TUTOR))
+                ->setSurveyType((int) ($values['survey_type'] ?? 0))
+                ->setOneQuestionPerPage($onePerPage)
+                ->setShuffle($shuffle)
                 ->setParent($course)
-                ->addCourseLink($course, $session)
-            ;
+                ->addCourseLink($course, $session);
 
-            if (isset($values['parent_id']) && !empty($values['parent_id'])) {
-                $parent = $repo->find($values['parent_id']);
-                $survey->setSurveyParent($parent);
+            if (!empty($values['parent_id'])) {
+                $parent = $repo->find((int) $values['parent_id']);
+                if ($parent) {
+                    $survey->setSurveyParent($parent);
+                }
             }
 
             $repo->create($survey);
+            $survey_id = (int) $survey->getIid();
 
-            $survey_id = $survey->getIid();
             if ($survey_id > 0) {
                 Event::addEvent(
                     LOG_SURVEY_CREATED,
@@ -357,65 +290,67 @@ class SurveyManager
                 );
             }
 
-            if (1 == $values['survey_type'] && !empty($values['parent_id'])) {
-                self::copySurvey($values['parent_id'], $survey_id);
+            if ((int) ($values['survey_type'] ?? 0) === 1 && !empty($values['parent_id'])) {
+                self::copySurvey((int) $values['parent_id'], $survey_id);
             }
 
             Display::addFlash(
-                Display::return_message(
-                    get_lang('The survey has been created successfully'),
-                    'success'
-                )
+                Display::return_message(get_lang('The survey has been created successfully'), 'success')
             );
             $return['id'] = $survey_id;
         } else {
-            // Check whether the code doesn't soon exists in this language
-            $sql = 'SELECT 1 FROM '.$table_survey.'
-			        WHERE
-			            code = "'.Database::escape_string($values['survey_code']).'" AND
-			            lang = "'.Database::escape_string($values['survey_language']).'" AND
-			            iid !='.intval($values['survey_id']);
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                Display::addFlash(
-                    Display::return_message(
-                        get_lang('This survey code soon exists in this language'),
-                        'error'
-                    )
-                );
-                $return['type'] = 'error';
-                $return['id'] = isset($values['survey_id']) ? $values['survey_id'] : 0;
-
-                return $return;
-            }
-
-            if (!isset($values['anonymous'])
-                || (isset($values['anonymous']) && '' == $values['anonymous'])
-            ) {
-                $values['anonymous'] = 0;
-            }
+            $surveyId = (int) $values['survey_id'];
 
             /** @var CSurvey $survey */
-            $survey = $repo->find($values['survey_id']);
+            $survey = $repo->find($surveyId);
+            if (!$survey) {
+                Display::addFlash(Display::return_message(get_lang('Survey not found'), 'error'));
+                return ['type' => 'error', 'id' => $surveyId];
+            }
 
-            $survey->setOneQuestionPerPage(isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0);
-            $survey->setShuffle(isset($values['shuffle']) ? $values['shuffle'] : 0);
+            $inputCode = isset($values['survey_code']) ? self::generateSurveyCode($values['survey_code']) : $survey->getCode();
+            $inputLang = $values['survey_language'] ?? $survey->getLang();
+            $codeChanged = ($inputCode !== $survey->getCode()) || ($inputLang !== $survey->getLang());
+
+            if ($codeChanged) {
+                $sql = 'SELECT 1 FROM '.$table_survey.'
+                    WHERE code = "'.Database::escape_string($inputCode).'"
+                      AND lang = "'.Database::escape_string($inputLang).'"
+                      AND iid <> '.(int) $surveyId;
+                $rs = Database::query($sql);
+                if (Database::num_rows($rs) > 0) {
+                    Display::addFlash(
+                        Display::return_message(get_lang('This survey code soon exists in this language'), 'error')
+                    );
+                    return ['type' => 'error', 'id' => $surveyId];
+                }
+                // Aplica nuevo code/lang si cambiaron
+                $survey->setCode($inputCode);
+                $survey->setLang($inputLang);
+            }
+
+            $values['anonymous']     = !empty($values['anonymous']) ? 1 : 0;
+            $onePerPage              = !empty($values['one_question_per_page']) ? 1 : 0;
+            $shuffle                 = !empty($values['shuffle']) ? 1 : 0;
+            $showFormProfile         = !empty($values['show_form_profile']) ? 1 : 0;
+
+            try {
+                $start = !empty($values['start_date']) ? new \DateTime($values['start_date']) : $survey->getAvailFrom();
+                $end   = !empty($values['end_date'])   ? new \DateTime($values['end_date'])   : $survey->getAvailTill();
+            } catch (\Exception $e) {
+                Display::addFlash(Display::return_message(get_lang('Invalid date'), 'error'));
+                return ['type' => 'error', 'id' => $surveyId];
+            }
 
             if (0 == $values['anonymous']) {
-                $survey->setShowFormProfile(isset($values['show_form_profile']) ? $values['show_form_profile'] : 0);
-                $isFormProfile = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
-                if (1 == $isFormProfile) {
-                    $fields = explode(',', $values['input_name_list']);
+                $survey->setShowFormProfile($showFormProfile);
+                if (1 == $showFormProfile) {
+                    $fields = explode(',', $values['input_name_list'] ?? '');
                     $field_values = '';
-                    foreach ($fields as &$field) {
-                        if ('' != $field) {
-                            if (!isset($values[$field]) ||
-                                (isset($values[$field]) && '' == $values[$field])
-                            ) {
-                                $values[$field] = 0;
-                            }
-                            $field_values .= $field.':'.$values[$field].'@';
-                        }
+                    foreach ($fields as $field) {
+                        if ($field === '') { continue; }
+                        $v = isset($values[$field]) && $values[$field] !== '' ? $values[$field] : 0;
+                        $field_values .= $field.':'.$v.'@';
                     }
                     $survey->setFormFields($field_values);
                 } else {
@@ -428,48 +363,31 @@ class SurveyManager
 
             $survey
                 ->setTitle($values['survey_title'])
-                ->setSubtitle($values['survey_title'])
-                ->setLang($values['survey_language'])
-                ->setAvailFrom(new \DateTime($values['start_date']))
-                ->setAvailTill(new \DateTime($values['end_date']))
+                ->setSubtitle($values['survey_subtitle'] ?? '')
+                ->setAvailFrom($start)
+                ->setAvailTill($end)
                 ->setIsShared($shared_survey_id)
                 ->setTemplate('template')
                 ->setIntro($values['survey_introduction'])
                 ->setSurveyThanks($values['survey_thanks'])
-                ->setAnonymous((string) $values['anonymous'])
-                ->setVisibleResults((int) $values['visible_results'])
+                ->setAnonymous((string) ((int) $values['anonymous']))
+                ->setVisibleResults((int) ($values['visible_results'] ?? SURVEY_VISIBLE_TUTOR))
                 ->setDisplayQuestionNumber($displayQuestionNumber)
-            ;
+                ->setOneQuestionPerPage($onePerPage)
+                ->setShuffle($shuffle);
 
-            $repo->update($survey);
-            /*
-            // Update into item_property (update)
-            api_item_property_update(
-                api_get_course_info(),
-                TOOL_SURVEY,
-                $values['survey_id'],
-                'SurveyUpdated',
-                api_get_user_id()
-            );*/
+            $em = Database::getManager();
+            $em->persist($survey);
+            $em->flush();
 
             Display::addFlash(
-                Display::return_message(
-                    get_lang('The survey has been updated successfully'),
-                    'confirmation'
-                )
+                Display::return_message(get_lang('The survey has been updated successfully'), 'confirmation')
             );
-
-            $return['id'] = $values['survey_id'];
+            $return['id'] = $surveyId;
         }
 
         $survey_id = (int) $return['id'];
-
-        // Gradebook
-        $gradebook_option = false;
-        if (isset($values['survey_qualify_gradebook'])) {
-            $gradebook_option = $values['survey_qualify_gradebook'] > 0;
-        }
-
+        $gradebook_option = !empty($values['survey_qualify_gradebook']);
         $gradebook_link_type = 8;
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_int_id(),
@@ -477,36 +395,33 @@ class SurveyManager
             $survey_id,
             $session_id
         );
-
-        $gradebook_link_id = isset($link_info['id']) ? $link_info['id'] : false;
+        $gradebook_link_id = $link_info['id'] ?? false;
 
         if ($gradebook_option) {
-            if ($survey_id > 0) {
-                $title_gradebook = ''; // Not needed here.
-                $description_gradebook = ''; // Not needed here.
-                $survey_weight = floatval($_POST['survey_weight']);
-                $max_score = 1;
+            $survey_weight = isset($values['survey_weight'])
+                ? (float) $values['survey_weight']
+                : (isset($_POST['survey_weight']) ? (float) $_POST['survey_weight'] : 0.0);
+            $max_score = 1;
 
-                if (!$gradebook_link_id && isset($values['category_id'])) {
-                    GradebookUtils::add_resource_to_course_gradebook(
-                        $values['category_id'],
-                        api_get_course_int_id(),
-                        $gradebook_link_type,
-                        $survey_id,
-                        $title_gradebook,
-                        $survey_weight,
-                        $max_score,
-                        $description_gradebook,
-                        1,
-                        $session_id
-                    );
-                } else {
-                    GradebookUtils::updateResourceFromCourseGradebook(
-                        $gradebook_link_id,
-                        api_get_course_int_id(),
-                        $survey_weight
-                    );
-                }
+            if (!$gradebook_link_id && isset($values['category_id'])) {
+                GradebookUtils::add_resource_to_course_gradebook(
+                    $values['category_id'],
+                    api_get_course_int_id(),
+                    $gradebook_link_type,
+                    $survey_id,
+                    '',
+                    $survey_weight,
+                    $max_score,
+                    '',
+                    1,
+                    $session_id
+                );
+            } else {
+                GradebookUtils::updateResourceFromCourseGradebook(
+                    $gradebook_link_id,
+                    api_get_course_int_id(),
+                    $survey_weight
+                );
             }
         } else {
             // Delete everything of the gradebook for this $linkId
@@ -1975,6 +1890,10 @@ class SurveyManager
     {
         if (null === $survey) {
             api_not_allowed(true);
+        }
+
+        if (api_is_allowed_to_edit()) {
+            return;
         }
 
         $utcZone = new DateTimeZone('UTC');

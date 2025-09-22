@@ -3374,54 +3374,75 @@ class Exercise
         $timeLeft = (int) $timeLeft;
 
         return "<script>
-            function openClockWarning() {
-                $('#clock_warning').dialog({
-                    modal:true,
-                    height:320,
-                    width:550,
-                    closeOnEscape: false,
-                    resizable: false,
-                    buttons: {
-                        '".addslashes(get_lang('Close'))."': function() {
-                            $('#clock_warning').dialog('close');
-                        }
-                    },
-                    close: function() {
-                        window.location.href = '$url';
-                    }
-                });
-                $('#clock_warning').dialog('open');
-                $('#counter_to_redirect').epiclock({
-                    mode: $.epiclock.modes.countdown,
-                    offset: {seconds: 5},
-                    format: 's'
-                }).bind('timer', function () {
-                    window.location.href = '$url';
-                });
-            }
+        (function ensureModalStyles() {
+            if (document.getElementById('ch-modal-styles')) return;
+            var css = `
+#clock_warning { display: none; }
+.ch-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; }
+.ch-modal::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.3); }
+.ch-panel { position: relative; width: 100%; max-width: 520px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,.08); padding: 16px; color:#111827; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; }
+.ch-close { position:absolute; right: 10px; top:10px; cursor:pointer; color:#6b7280; }
+            `;
+            var s = document.createElement('style');
+            s.id = 'ch-modal-styles';
+            s.textContent = css;
+            document.head.appendChild(s);
+        })();
 
-            function onExpiredTimeExercise() {
-                $('#wrapper-clock').hide();
-                $('#expired-message-id').show();
-                // Fixes bug #5263
-                $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
-                openClockWarning();
+        function wrapClockWarning() {
+            var \$cw = \$('#clock_warning');
+            if (!\$cw.length) return \$cw;
+            // turn container into modal
+            \$cw.addClass('ch-modal');
+            // ensure inner panel
+            if (!\$cw.find('.ch-panel').length) {
+                \$cw.html('<div class=\"ch-panel\"><span class=\"mdi mdi-close ch-close\" title=\"Close\" aria-label=\"Close\"></span>' + \$cw.html() + '</div>');
             }
+            // close button
+            \$cw.on('click', '.ch-close', function(){ closeClockWarning(); });
+            return \$cw;
+        }
 
-			$(function() {
-				// time in seconds when using minutes there are some seconds lost
-                var time_left = parseInt(".$timeLeft.");
-                $('#exercise_clock_warning').epiclock({
-                    mode: $.epiclock.modes.countdown,
-                    offset: {seconds: time_left},
-                    format: 'x:i:s',
-                    renderer: 'minute'
-                }).bind('timer', function () {
-                    onExpiredTimeExercise();
-                });
-	       		$('#submit_save').click(function () {});
-	        });
-	    </script>";
+        function openClockWarning() {
+            var \$cw = wrapClockWarning();
+            if (!\$cw || !\$cw.length) return;
+            \$cw.show();
+
+            // countdown 5s -> redirect
+            \$('#counter_to_redirect').epiclock({
+                mode: \$.epiclock.modes.countdown,
+                offset: {seconds: 5},
+                format: 's'
+            }).bind('timer', function () {
+                window.location.href = '$url';
+            });
+        }
+
+        function closeClockWarning() {
+            \$('#clock_warning').hide();
+            window.location.href = '$url';
+        }
+
+        function onExpiredTimeExercise() {
+            \$('#wrapper-clock').hide();
+            \$('#expired-message-id').show();
+            \$('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
+            openClockWarning();
+        }
+
+        \$(function() {
+            var time_left = parseInt(".$timeLeft.");
+            \$('#exercise_clock_warning').epiclock({
+                mode: \$.epiclock.modes.countdown,
+                offset: {seconds: time_left},
+                format: 'x:i:s',
+                renderer: 'minute'
+            }).bind('timer', function () {
+                onExpiredTimeExercise();
+            });
+            \$('#submit_save').click(function () {});
+        });
+    </script>";
     }
 
     /**
@@ -3439,8 +3460,7 @@ class Exercise
         if (ALL_ON_ONE_PAGE == $this->type) {
             $script = "save_now_all('validate');";
         } elseif (ONE_PER_PAGE == $this->type) {
-            $script = 'window.quizTimeEnding = true;
-                $(\'[name="save_now"]\').trigger(\'click\');';
+            $script = 'window.quizTimeEnding = true; $(\'[name=\"save_now\"]\').trigger(\'click\');';
         }
 
         $exerciseSubmitRedirect = '';
@@ -3449,65 +3469,81 @@ class Exercise
         }
 
         return "<script>
-            function openClockWarning() {
-                $('#clock_warning').dialog({
-                    modal:true,
-                    height:320,
-                    width:550,
-                    closeOnEscape: false,
-                    resizable: false,
-                    buttons: {
-                        '".addslashes(get_lang('End test'))."': function() {
-                            $('#clock_warning').dialog('close');
-                        }
-                    },
-                    close: function() {
-                        send_form();
-                    }
-                });
+        (function ensureModalStyles() {
+            if (document.getElementById('ch-modal-styles')) return;
+            var css = `
+#clock_warning { display: none; }
+.ch-modal { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; padding: 16px; }
+.ch-modal::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.3); }
+.ch-panel { position: relative; width: 100%; max-width: 520px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,.08); padding: 16px; color:#111827; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif; }
+.ch-close { position:absolute; right: 10px; top:10px; cursor:pointer; color:#6b7280; }
+            `;
+            var s = document.createElement('style');
+            s.id = 'ch-modal-styles';
+            s.textContent = css;
+            document.head.appendChild(s);
+        })();
 
-                $('#clock_warning').dialog('open');
-                $('#counter_to_redirect').epiclock({
-                    mode: $.epiclock.modes.countdown,
-                    offset: {seconds: 5},
-                    format: 's'
-                }).bind('timer', function () {
-                    send_form();
-                });
+        function wrapClockWarning() {
+            var \$cw = \$('#clock_warning');
+            if (!\$cw.length) return \$cw;
+            \$cw.addClass('ch-modal');
+            if (!\$cw.find('.ch-panel').length) {
+                \$cw.html('<div class=\"ch-panel\"><span class=\"mdi mdi-close ch-close\" title=\"Close\" aria-label=\"Close\"></span>' + \$cw.html() + '</div>');
             }
+            \$cw.on('click', '.ch-close', function(){ closeClockWarning(); });
+            return \$cw;
+        }
 
-            function send_form() {
-                if ($('#exercise_form').length) {
-                    $script
-                } else {
-                    $exerciseSubmitRedirect
-                    // In exercise_reminder.php
-                    final_submit();
-                }
+        function openClockWarning() {
+            var \$cw = wrapClockWarning();
+            if (!\$cw || !\$cw.length) return;
+            \$cw.show();
+
+            \$('#counter_to_redirect').epiclock({
+                mode: \$.epiclock.modes.countdown,
+                offset: {seconds: 5},
+                format: 's'
+            }).bind('timer', function () {
+                send_form();
+            });
+        }
+
+        function closeClockWarning() {
+            \$('#clock_warning').hide();
+            send_form();
+        }
+
+        function send_form() {
+            if (\$('#exercise_form').length) {
+                $script
+            } else {
+                $exerciseSubmitRedirect
+                // In exercise_reminder.php
+                final_submit();
             }
+        }
 
-            function onExpiredTimeExercise() {
-                $('#wrapper-clock').hide();
-                $('#expired-message-id').show();
-                // Fixes bug #5263
-                $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
-                openClockWarning();
-            }
+        function onExpiredTimeExercise() {
+            \$('#wrapper-clock').hide();
+            \$('#expired-message-id').show();
+            \$('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
+            openClockWarning();
+        }
 
-			$(function() {
-				// time in seconds when using minutes there are some seconds lost
-                var time_left = parseInt(".$timeLeft.");
-                $('#exercise_clock_warning').epiclock({
-                    mode: $.epiclock.modes.countdown,
-                    offset: {seconds: time_left},
-                    format: 'x:C:s',
-                    renderer: 'minute'
-                }).bind('timer', function () {
-                    onExpiredTimeExercise();
-                });
-	       		$('#submit_save').click(function () {});
-	        });
-	    </script>";
+        \$(function() {
+            var time_left = parseInt(".$timeLeft.");
+            \$('#exercise_clock_warning').epiclock({
+                mode: \$.epiclock.modes.countdown,
+                offset: {seconds: time_left},
+                format: 'x:C:s',
+                renderer: 'minute'
+            }).bind('timer', function () {
+                onExpiredTimeExercise();
+            });
+            \$('#submit_save').click(function () {});
+        });
+    </script>";
     }
 
     /**

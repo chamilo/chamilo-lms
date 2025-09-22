@@ -7,9 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use League\OAuth2\Client\Token\AccessToken;
 use Stevenmaguire\OAuth2\Client\Provider\KeycloakResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 
 class KeycloakAuthenticator extends AbstractAuthenticator
 {
@@ -45,7 +48,7 @@ class KeycloakAuthenticator extends AbstractAuthenticator
             ->setPlainPassword('keycloak')
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
-                'keycloak',
+                UserAuthSource::KEYCLOAK,
                 $this->accessUrlHelper->getCurrent()
             )
             ->setRoleFromStatus(STUDENT)
@@ -59,5 +62,10 @@ class KeycloakAuthenticator extends AbstractAuthenticator
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    protected function getCustomBadge(): ?BadgeInterface
+    {
+        return new Oauth2Badge(UserAuthSource::KEYCLOAK);
     }
 }

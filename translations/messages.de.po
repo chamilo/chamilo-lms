@@ -30020,3 +30020,6 @@ msgstr "Auszeichnung"
 
 msgid "Date of birth"
 msgstr "Geburtsdatum"
+
+msgid "Are you sure to delete the friendship?"
+msgstr "Möchten Sie die Freundschaft wirklich löschen?"

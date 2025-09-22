@@ -371,25 +371,21 @@ if (false === $userAlreadyRegisteredShowTerms &&
             get_lang('Phone'),
             ['size' => 20]
         );
-        //if ('true' === api_get_setting('registration', 'phone')) {
         $form->addRule(
             'phone',
             get_lang('Required field'),
             'required'
         );
-        //}
     }
 
     // Language
     if (in_array('language', $allowedFields)) {
-        //if ('true' === api_get_setting('registration', 'language')) {
         $form->addSelectLanguage(
             'language',
             get_lang('Language'),
             [],
             ['id' => 'language']
         );
-        //}
     }
 
     if (in_array('official_code', $allowedFields)) {
@@ -399,29 +395,19 @@ if (false === $userAlreadyRegisteredShowTerms &&
             get_lang('Official code'),
             ['size' => 40]
         );
-        //if ('true' === api_get_setting('registration', 'officialcode')) {
         $form->addRule(
             'official_code',
             get_lang('Required field'),
             'required'
         );
-        //}
     }
 
-    // STUDENT/TEACHER
-    if ('false' !== api_get_setting('allow_registration_as_teacher')) {
-        if (in_array('status', $allowedFields)) {
-            $form->addRadio(
-                'status',
-                get_lang('What do you want to do?'),
-                [
-                    STUDENT => '<p class="caption">'.get_lang('Follow courses').'</p>',
-                    COURSEMANAGER => '<p class="caption">'.get_lang('Teach courses').'</p>',
-                ],
-                ['class' => 'register-profile']
-            );
-            $form->addRule('status', get_lang('Required field'), 'required');
-        }
+    if (in_array('date_of_birth', $allowedFields, true)) {
+        $form->addDatePicker(
+            'date_of_birth',
+            get_lang('Date of birth'),
+            ['required' => false]
+        );
     }
 
     $captcha = api_get_setting('allow_captcha');
@@ -595,6 +581,7 @@ if (false === $userAlreadyRegisteredShowTerms &&
     }
 }
 
+// Defaults
 if (isset($_SESSION['user_language_choice']) && '' != $_SESSION['user_language_choice']) {
     $defaults['language'] = $_SESSION['user_language_choice'];
 } else {

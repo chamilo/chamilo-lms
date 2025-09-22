@@ -68,6 +68,23 @@ if (!$is_allowedToEdit) {
     }
 }
 
+if (!empty($objExercise->expired_time)) {
+    $status          = $track_exercise_info['status'] ?? '';
+    $expiredAt       = $track_exercise_info['expired_time_control'] ?? null;
+    if ($status === 'incomplete' && !empty($expiredAt)) {
+        $timeLeft = api_strtotime($expiredAt, 'UTC') - time();
+        if ($timeLeft <= 0) {
+            Database::query("
+                UPDATE " . Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES) . "
+                SET status = 'completed',
+                    exe_date = FROM_UNIXTIME(LEAST(UNIX_TIMESTAMP('" . Database::escape_string($expiredAt) . "'), UNIX_TIMESTAMP()))
+                WHERE exe_id = " . $id . " AND status = 'incomplete'
+            ");
+            $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
+        }
+    }
+}
+
 $allowSignature = false;
 if ($student_id === $current_user_id && ExerciseSignaturePlugin::exerciseHasSignatureActivated($objExercise)) {
     // Check if signature exists.

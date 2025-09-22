@@ -47,15 +47,13 @@ class ExtraFieldType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** Prefer the bound item (user) passed by ProfileType; fallback to Security user. */
         /** @var User|null $item */
-        $item = $this->security->getUser();
-        if (null === $item) {
-            return;
-        }
+        $item = $options['item'] instanceof User ? $options['item'] : ($this->security->getUser() instanceof User ? $this->security->getUser() : null);
 
         $extraFieldType = ExtraField::USER_FIELD_TYPE;
 
-        // Load all extra fields for user
+        // Load all extra fields for user type
         $extraFields = $this->extraFieldRepository->getExtraFields($extraFieldType);
 
         // Optional allowlist/editable map provided by parent form
@@ -63,8 +61,13 @@ class ExtraFieldType extends AbstractType
         $allowlist = $options['visibility_allowlist'] ?? [];
         /** @var array<string,bool> $editableMap */
         $editableMap = $options['visibility_editable_map'] ?? [];
+        $strict = (bool)($options['visibility_strict'] ?? false);
 
-        // Determine Google Maps plugin state (enabled + API on)
+        if ($strict && empty($allowlist)) {
+            return;
+        }
+
+        // Google Maps plugin state
         $pluginEnabled = $this->pluginHelper->isPluginEnabled('google_maps');
         $gMapsPlugin = GoogleMapsPlugin::create();
         $apiEnabled = ('true' === $gMapsPlugin->get('enable_api'));
@@ -90,11 +93,13 @@ class ExtraFieldType extends AbstractType
             }
         }
 
-        // Fetch current values for the logged user
-        $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
+        // Current values for the (possibly null) user
         $data = [];
-        foreach ($values as $value) {
-            $data[$value->getField()->getVariable()] = $value->getFieldValue();
+        if ($item instanceof User) {
+            $values = $this->extraFieldValuesRepository->getExtraFieldValuesFromItem($item, $extraFieldType);
+            foreach ($values as $value) {
+                $data[$value->getField()->getVariable()] = $value->getFieldValue();
+            }
         }
 
         // Build form fields
@@ -153,16 +158,18 @@ class ExtraFieldType extends AbstractType
 
                     // Preload existing user tags as choices (if any)
                     $class = 'select2_extra_rel_tag';
-                    $tags = $this->tagRepository->getTagsByUser($extraField, $item);
                     $choices = [];
                     $choicesAttributes = [];
-                    foreach ($tags as $tag) {
-                        $stringTag = $tag->getTag();
-                        if ($stringTag === '') {
-                            continue;
+                    if ($item instanceof User) {
+                        $tags = $this->tagRepository->getTagsByUser($extraField, $item);
+                        foreach ($tags as $tag) {
+                            $stringTag = $tag->getTag();
+                            if ($stringTag === '') {
+                                continue;
+                            }
+                            $choices[$stringTag] = $stringTag;
+                            $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                         }
-                        $choices[$stringTag] = $stringTag;
-                        $choicesAttributes[$stringTag] = ['data-id' => $tag->getId()];
                     }
                     $defaultOptions['choices'] = $choices;
                     $defaultOptions['choice_attr'] = $choicesAttributes;
@@ -189,20 +196,13 @@ class ExtraFieldType extends AbstractType
                     break;
 
                 case \ExtraField::FIELD_TYPE_DATE:
-                    $defaultOptions['data'] = null;
-                    if (!empty($value)) {
-                        $defaultOptions['data'] = new DateTime((string) $value);
-                    }
+                    $defaultOptions['data'] = !empty($value) ? new DateTime((string) $value) : null;
                     $defaultOptions['widget'] = 'single_text';
                     $builder->add($variable, DateType::class, $defaultOptions);
-
                     break;
 
                 case \ExtraField::FIELD_TYPE_DATETIME:
-                    $defaultOptions['data'] = null;
-                    if (!empty($value)) {
-                        $defaultOptions['data'] = new DateTime((string) $value);
-                    }
+                    $defaultOptions['data'] = !empty($value) ? new DateTime((string) $value) : null;
                     $defaultOptions['widget'] = 'single_text';
                     $builder->add($variable, DateTimeType::class, $defaultOptions);
 
@@ -274,11 +274,14 @@ class ExtraFieldType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($item, $extraFields): void {
+                // If item is missing, we cannot persist, but we still built fields for UX
+                if (!$item instanceof User) {
+                    return;
+                }
+
                 $data = $event->getData() ?? [];
                 foreach ($extraFields as $extraField) {
                     $variable = $extraField->getVariable();
-
-                    // If field wasn't built (e.g., filtered by allowlist), skip
                     if (!\array_key_exists($variable, $data)) {
                         continue;
                     }
@@ -322,13 +325,15 @@ class ExtraFieldType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Optional: list of extra variables to render. Empty = render all.
             'visibility_allowlist'    => [],
-            // Optional: control editable per variable. Empty = fallback to ExtraField::isChangeable()
             'visibility_editable_map' => [],
+            'visibility_strict'       => false,
+            'item'                    => null,
         ]);
 
         $resolver->setAllowedTypes('visibility_allowlist', ['array']);
         $resolver->setAllowedTypes('visibility_editable_map', ['array']);
+        $resolver->setAllowedTypes('visibility_strict', ['bool']);
+        $resolver->setAllowedTypes('item', ['null', User::class]);
     }
 }

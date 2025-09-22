@@ -281,7 +281,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         $name = $element->getName();
         $label = $element->getLabel();
         $labelForId = $element->getAttribute('id');
-        $extraLabelClass = $element->getAttribute('extra_label_class');
+        $extraLabelClass = $element->getAttribute('extra_label_class') ?: '';
 
         $icon = $element->getIconToHtml();
 

@@ -136,7 +136,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     public function getIconToHtml()
     {
-        return $this->icon;
+        return (string) $this->icon;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Helpers;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -91,6 +92,7 @@ readonly class AzureAuthenticatorHelper
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
             ;
         } else {
+            /** @var User $user */
             $user = $this->userRepository->find($userId);
 
             if (!$this->providerParams['update_users']) {
@@ -234,7 +236,7 @@ readonly class AzureAuthenticatorHelper
         $lastName = $azureUserData['surname'];
         $email = $azureUserData['mail'];
         $username = $azureUserData['userPrincipalName'];
-        $authSource = 'azure';
+        $authSource = UserAuthSource::AZURE;
         $active = ($azureUserData['accountEnabled'] ? 1 : 0);
         $extra = [
             'extra_'.self::EXTRA_FIELD_ORGANISATION_EMAIL => $azureUserData['mail'],

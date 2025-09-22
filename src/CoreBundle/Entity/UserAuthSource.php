@@ -17,6 +17,9 @@ class UserAuthSource
     public const CAS = 'cas';
     public const LDAP = 'extldap';
     public const AZURE = 'azure';
+    public const FACEBOOK = 'facebook';
+    public const KEYCLOAK = 'keycloak';
+    public const OAUTH2 = 'oauth2';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

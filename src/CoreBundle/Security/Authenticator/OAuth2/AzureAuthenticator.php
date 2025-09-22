@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\AzureAuthenticatorHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -18,6 +20,7 @@ use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use TheNetworg\OAuth2\Client\Provider\Azure;
 
 class AzureAuthenticator extends AbstractAuthenticator
@@ -101,5 +104,10 @@ class AzureAuthenticator extends AbstractAuthenticator
         }
 
         return $user;
+    }
+
+    protected function getCustomBadge(): ?BadgeInterface
+    {
+        return new Oauth2Badge(UserAuthSource::AZURE);
     }
 }

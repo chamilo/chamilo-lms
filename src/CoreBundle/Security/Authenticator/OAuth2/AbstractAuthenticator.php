@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
@@ -54,16 +55,21 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     public function authenticate(Request $request): Passport
     {
-        /** @var AccessToken $accessToken */
         $accessToken = $this->fetchAccessToken($this->client);
 
         $user = $this->userLoader($accessToken);
 
-        return new SelfValidatingPassport(
+        $passport = new SelfValidatingPassport(
             new UserBadge(
                 $user->getUserIdentifier()
             ),
         );
+
+        if ($customBadge = $this->getCustomBadge()) {
+            $passport->addBadge($customBadge);
+        }
+
+        return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -84,4 +90,6 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
      * Find or create and save the new user.
      */
     abstract protected function userLoader(AccessToken $accessToken): User;
+
+    abstract protected function getCustomBadge(): ?BadgeInterface;
 }

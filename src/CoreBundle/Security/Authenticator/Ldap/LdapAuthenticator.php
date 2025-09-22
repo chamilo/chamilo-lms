@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Security\Authenticator\Ldap;
 
 use Chamilo\CoreBundle\Controller\SecurityController;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -204,7 +205,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         if (!$user) {
             $user = (new User())
                 ->setCreatorId($this->userRepo->getRootUser()->getId())
-                ->addAuthSourceByAuthentication('extldap', $currentAccessUrl)
+                ->addAuthSourceByAuthentication(UserAuthSource::LDAP, $currentAccessUrl)
             ;
         }
 

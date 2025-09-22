@@ -7,9 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -17,6 +19,7 @@ use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 
 class FacebookAuthenticator extends AbstractAuthenticator
 {
@@ -68,7 +71,7 @@ class FacebookAuthenticator extends AbstractAuthenticator
             ->setPlainPassword('facebook')
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
-                'facebook',
+                UserAuthSource::FACEBOOK,
                 $this->accessUrlHelper->getCurrent()
             )
             ->setRoleFromStatus(STUDENT)
@@ -87,5 +90,10 @@ class FacebookAuthenticator extends AbstractAuthenticator
     private function changeToValidChamiloLogin(string $email): string
     {
         return $this->slugify->slugify($email);
+    }
+
+    protected function getCustomBadge(): ?BadgeInterface
+    {
+        return new Oauth2Badge(UserAuthSource::FACEBOOK);
     }
 }

@@ -2501,6 +2501,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->authSources;
     }
 
+    /**
+     * @return Collection<int, UserAuthSource>
+     */
     public function getAuthSourcesByUrl(AccessUrl $url): Collection
     {
         $criteria = Criteria::create();

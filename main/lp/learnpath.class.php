@@ -6940,7 +6940,8 @@ class learnpath
         $isConfigPage = false,
         $allowExpand = true,
         $action = '',
-        $extraField = []
+        $extraField = [],
+        $noEdition = false
     ) {
         $actionsRight = '';
         $lpId = $this->lp_id;
@@ -6997,7 +6998,7 @@ class learnpath
 
         $subscriptionSettings = self::getSubscriptionSettings();
         $request = api_request_uri();
-        if (strpos($request, 'edit') === false) {
+        if ((strpos($request, 'edit') === false) && !$noEdition) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'settings.png',
@@ -7012,7 +7013,7 @@ class learnpath
             );
         }
 
-        if ((strpos($request, 'build') === false &&
+        if ((strpos($request, 'build') === false && !$noEdition &&
             strpos($request, 'add_item') === false) ||
             in_array($action, ['add_audio'])
         ) {

@@ -100,7 +100,7 @@ class ProfileType extends AbstractType
             'date_of_birth' => [
                 'field' => 'date_of_birth',
                 'type'  => DateType::class,
-                'label' => 'Date of birth (core)',
+                'label' => 'Date of birth',
                 'required' => false,
                 'form_options' => [
                     // Plain input + flatpickr in Twig (better UX) - html5 off to avoid native picker

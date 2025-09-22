@@ -6425,39 +6425,58 @@ function api_get_roles(): array
 /**
  * Normalizes a role code to canonical "ROLE_*" uppercase form.
  */
-function api_normalize_role_code(string $code): string
-{
-    $code = strtoupper(trim($code));
-    return str_starts_with($code, 'ROLE_') ? $code : 'ROLE_'.$code;
+function api_normalize_role_code(string $code): string {
+    $c = strtoupper(trim($code));
+    $map = [
+        'STUDENT' => 'ROLE_STUDENT',
+        'TEACHER' => 'ROLE_TEACHER',
+        'HR' => 'ROLE_HR',
+        'SESSION_MANAGER' => 'ROLE_SESSION_MANAGER',
+        'STUDENT_BOSS' => 'ROLE_STUDENT_BOSS',
+        'INVITEE' => 'ROLE_INVITEE',
+        'QUESTION_MANAGER' => 'ROLE_QUESTION_MANAGER',
+        'ADMIN' => 'ROLE_ADMIN',
+        'GLOBAL_ADMIN' => 'ROLE_GLOBAL_ADMIN',
+        'SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
+        'ROLE_SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
+    ];
+    if (!str_starts_with($c, 'ROLE_')) {
+        return $map[$c] ?? ('ROLE_'.$c);
+    }
+    return $map[$c] ?? $c;
 }
 
 /**
  * Priority when deriving legacy status from roles (first match wins).
  */
-function api_roles_priority(): array
-{
+function api_roles_priority(): array {
     return [
+        'ROLE_GLOBAL_ADMIN',
+        'ROLE_ADMIN',
         'ROLE_SESSION_MANAGER',
-        'ROLE_HR',
         'ROLE_TEACHER',
+        'ROLE_HR',
         'ROLE_STUDENT_BOSS',
         'ROLE_INVITEE',
         'ROLE_STUDENT',
     ];
 }
 
-/**
- * Canonical role -> legacy status map.
- */
-function api_role_status_map(): array
-{
+function api_has_admin_role(array $roles): bool {
+    $n = array_map('api_normalize_role_code', $roles);
+    return in_array('ROLE_ADMIN', $n, true) || in_array('ROLE_GLOBAL_ADMIN', $n, true);
+}
+
+function api_role_status_map(): array {
     return [
-        'ROLE_SESSION_MANAGER' => SESSIONADMIN,
-        'ROLE_HR'              => DRH,
-        'ROLE_TEACHER'         => COURSEMANAGER,
-        'ROLE_STUDENT_BOSS'    => STUDENT_BOSS,
-        'ROLE_INVITEE'         => INVITEE,
-        'ROLE_STUDENT'         => STUDENT,
+        'ROLE_GLOBAL_ADMIN'   => COURSEMANAGER, // 1
+        'ROLE_ADMIN'          => COURSEMANAGER, // 1
+        'ROLE_SESSION_MANAGER'=> COURSEMANAGER, // 1
+        'ROLE_TEACHER'        => COURSEMANAGER, // 1
+        'ROLE_HR'             => DRH,           // 4
+        'ROLE_STUDENT_BOSS'   => STUDENT_BOSS,
+        'ROLE_INVITEE'        => INVITEE,
+        'ROLE_STUDENT'        => STUDENT,       // 5 (fallback)
     ];
 }
 

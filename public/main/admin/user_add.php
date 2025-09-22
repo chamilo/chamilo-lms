@@ -403,6 +403,7 @@ if ($form->validate()) {
         $template = isset($user['email_template_option']) ? $user['email_template_option'] : [];
 
         $roles = $user['roles'] ?? [];
+        $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
         $status = api_status_from_roles($roles);
         if ((int) ($user['admin']['platform_admin'] ?? 0) === 1) {
             $status = COURSEMANAGER;
@@ -467,11 +468,18 @@ if ($form->validate()) {
             }
 
             $repo = Container::getUserRepository();
+            /* @var User $userEntity */
             $userEntity = $repo->find($user_id);
 
             if ($userEntity) {
                 $userEntity->setRoles($roles);
                 $repo->updateUser($userEntity);
+            }
+
+            if (api_has_admin_role($roles)) {
+                UserManager::addUserAsAdmin($userEntity);
+            } else {
+                UserManager::removeUserAdmin($userEntity);
             }
 
             $extraFieldValues = new ExtraFieldValue('user');

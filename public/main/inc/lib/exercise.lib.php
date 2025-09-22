@@ -1916,26 +1916,45 @@ HOTSPOT;
         $exercise_id = $exercise->getId();
         $expiredTime = $exercise->expired_time;
 
-        if (!empty($expiredTime)) {
-            $current_expired_time_key = self::get_time_control_key(
-                $exercise_id,
-                $lp_id,
-                $lp_item_id
-            );
-            if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
-                $current_time = time();
-                $expired_time = api_strtotime(
-                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s'),
-                    'UTC'
-                );
-                $total_time_allowed = $expired_time + 30;
-                if ($total_time_allowed < $current_time) {
-                    return false;
-                }
+        // If the exercise has no time control configured, it's valid.
+        if (empty($expiredTime)) {
+            return true;
+        }
 
-                return true;
-            }
+        // Build a stable session key for the LP/exercise context
+        $current_expired_time_key = self::get_time_control_key(
+            $exercise_id,
+            $lp_id,
+            $lp_item_id
+        );
 
+        // If the key isn't present, time control cannot be validated -> not valid
+        if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
+            return false;
+        }
+
+        // Normalize the stored value (can be DateTime, unix timestamp, or string)
+        $raw = $_SESSION['expired_time'][$current_expired_time_key];
+        if ($raw instanceof \DateTimeInterface) {
+            $expiredAtStr = $raw->format('Y-m-d H:i:s');
+        } elseif (is_int($raw) || ctype_digit((string) $raw)) {
+            // Treat numeric as unix timestamp (UTC)
+            $expiredAtStr = gmdate('Y-m-d H:i:s', (int) $raw);
+        } else {
+            // Assume parsable datetime string
+            $expiredAtStr = (string) $raw;
+        }
+
+        // Compute remaining time (defensive: handle parse failure as already expired)
+        $expired_time = api_strtotime($expiredAtStr, 'UTC');
+        if ($expired_time === false || $expired_time === null) {
+            return false;
+        }
+
+        $current_time = time();
+        $total_time_allowed = $expired_time + 30; // small grace period
+
+        if ($total_time_allowed < $current_time) {
             return false;
         }
 

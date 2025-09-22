@@ -1546,19 +1546,45 @@ function finishInstallationWithContainer(
         ->setTimezone($timezone)
     ;
 
+    $existingRoles = method_exists($admin, 'getRoles') ? $admin->getRoles() : [];
+    $normalized = array_map('api_normalize_role_code', $existingRoles);
+    $mustHave = ['ROLE_ADMIN', 'ROLE_GLOBAL_ADMIN'];
+    $roles = array_values(array_unique(array_merge($normalized, $mustHave)));
+
+    $admin->setRoles($roles);
     $repo->updateUser($admin);
+
+    if (in_array('ROLE_ADMIN', $roles, true) || in_array('ROLE_GLOBAL_ADMIN', $roles, true)) {
+        UserManager::addUserAsAdmin($admin);
+    } else {
+        UserManager::removeUserAdmin($admin);
+    }
 
     /** @var User $anonUser */
     $anonUser = $repo->findOneBy(['username' => 'anon']);
-    $anonUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
-
-    $repo->updateUser($anonUser);
+    if ($anonUser) {
+        $anonUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+        $anonRoles = method_exists($anonUser, 'getRoles') ? (array) $anonUser->getRoles() : [];
+        if (empty($anonRoles)) {
+            $anonUser->setRoles(['ROLE_USER']);
+        } else {
+            $anonUser->setRoles(array_values(array_unique(array_map('api_normalize_role_code', $anonRoles))));
+        }
+        $repo->updateUser($anonUser);
+    }
 
     /** @var User $fallbackUser */
     $fallbackUser = $repo->findOneBy(['username' => 'fallback_user']);
-    $fallbackUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
-
-    $repo->updateUser($fallbackUser);
+    if ($fallbackUser) {
+        $fallbackUser->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $accessUrl);
+        $fallbackRoles = method_exists($fallbackUser, 'getRoles') ? $fallbackUser->getRoles() : [];
+        if (empty($fallbackRoles)) {
+            $fallbackUser->setRoles(['ROLE_USER']);
+        } else {
+            $fallbackUser->setRoles(array_values(array_unique(array_map('api_normalize_role_code', $fallbackRoles))));
+        }
+        $repo->updateUser($fallbackUser);
+    }
 
     // Set default language
     Database::update(

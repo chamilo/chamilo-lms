@@ -415,6 +415,7 @@ if ($form->validate()) {
     }
 
     $roles = $user['roles'] ?? [];
+    $roles = array_values(array_unique(array_map('api_normalize_role_code', $roles)));
     $newStatus = api_status_from_roles($roles);
     if ($newStatus === DRH && CourseManager::is_user_subscribed_in_course((int) $user_id)) {
         $error_drh = true;
@@ -556,10 +557,17 @@ if ($form->validate()) {
         }
 
         $repo = Container::getUserRepository();
+        /* @var User $userEntity */
         $userEntity = $repo->find($user_id);
         if ($userEntity) {
             $userEntity->setRoles($roles);
             $repo->updateUser($userEntity);
+        }
+
+        if (api_has_admin_role($roles)) {
+            UserManager::addUserAsAdmin($userEntity);
+        } else {
+            UserManager::removeUserAdmin($userEntity);
         }
 
         $extraFieldValue = new ExtraFieldValue('user');

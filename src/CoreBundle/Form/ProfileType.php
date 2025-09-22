@@ -36,27 +36,26 @@ class ProfileType extends AbstractType
         $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
         $visibleOptions    = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
 
-        // Fine-grained (category + key): profile.profile_fields_visibility (JSON)
-        $visibilitySetting = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
-        if (\is_string($visibilitySetting)) {
+        // Fine-grained JSON (authoritative if present)
+        $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
+        if (\is_string($rawFine)) {
             try {
-                $decoded = \json_decode($visibilitySetting, true, 512, \JSON_THROW_ON_ERROR);
-                if (\is_array($decoded)) {
-                    $visibilitySetting = $decoded;
-                }
+                $decoded = \json_decode($rawFine, true, 512, \JSON_THROW_ON_ERROR);
+                $rawFine = \is_array($decoded) ? $decoded : [];
             } catch (\Throwable) {
-                $visibilitySetting = [];
+                $rawFine = [];
             }
         }
         $fieldsVisibility = [];
-        if (\is_array($visibilitySetting)) {
-            $fieldsVisibility = $visibilitySetting['options'] ?? $visibilitySetting;
+        if (\is_array($rawFine)) {
+            $fieldsVisibility = $rawFine['options'] ?? $rawFine;
             if (!\is_array($fieldsVisibility)) {
                 $fieldsVisibility = [];
             }
         }
+        $hasFine = !empty($fieldsVisibility); // strict mode if true
 
-        // Expand aliases used by high-level settings
+        // Expand aliases used by high-level settings (fallbacks only)
         $expandMap = [
             'name'    => ['firstname', 'lastname'],
             'surname' => ['lastname'],
@@ -103,7 +102,6 @@ class ProfileType extends AbstractType
                 'label' => 'Date of birth',
                 'required' => false,
                 'form_options' => [
-                    // Plain input + flatpickr in Twig (better UX) - html5 off to avoid native picker
                     'widget'        => 'single_text',
                     'html5'         => false,
                     'format'        => 'yyyy-MM-dd',
@@ -116,26 +114,49 @@ class ProfileType extends AbstractType
                     ],
                 ],
             ],
+            // Timezone will be added below if visible (fine JSON or fallback)
+            'timezone'     => [
+                'field' => 'timezone',
+                'type'  => ChoiceType::class,
+                'label' => 'Timezone',
+                'required' => false,
+                'form_options' => static function (): array {
+                    $timezones = DateTimeZone::listIdentifiers();
+                    sort($timezones);
+                    $choices = array_combine($timezones, $timezones);
+                    return [
+                        'choices' => $choices,
+                        'placeholder' => '',
+                        'choice_translation_domain' => false,
+                    ];
+                },
+            ],
         ];
 
-        // Priority rules (core):
-        // - If key exists in fine-grained map: boolean means editable=true/false; presence means visible
-        // - If not present: visible/editable fall back to high-level lists
-        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh): bool {
-            if (\array_key_exists($key, $fieldsVisibility)) {
-                return true; // listed → visible
+        // Visibility (core):
+        // Strict when $hasFine: only keys present in $fieldsVisibility are visible.
+        // Otherwise, fallback to visible_options.
+        $isCoreVisible = function (string $key) use ($fieldsVisibility, $visibleHigh, $hasFine): bool {
+            if ($hasFine) {
+                return \array_key_exists($key, $fieldsVisibility);
             }
             return \in_array($key, $visibleHigh, true);
         };
+
+        // Editability (core):
+        // If key is in fine JSON, its boolean decides; otherwise fallback to changeable_options.
         $isCoreEditable = function (string $key) use ($fieldsVisibility, $editableHigh): bool {
             if (\array_key_exists($key, $fieldsVisibility)) {
-                return (bool) $fieldsVisibility[$key]; // json boolean drives editability
+                return (bool) $fieldsVisibility[$key];
             }
             return \in_array($key, $editableHigh, true);
         };
 
-        // Build core fields
+        // Build core fields (except timezone; decide after)
         foreach ($fieldsMap as $key => $fieldConfig) {
+            if ($key === 'timezone') {
+                continue;
+            }
             if (!$isCoreVisible($key)) {
                 continue;
             }
@@ -156,8 +177,11 @@ class ProfileType extends AbstractType
                 }
             }
 
-            if (isset($fieldConfig['form_options']) && \is_array($fieldConfig['form_options'])) {
-                $opts = array_merge($opts, $fieldConfig['form_options']);
+            if (isset($fieldConfig['form_options'])) {
+                $extra = \is_callable($fieldConfig['form_options'])
+                    ? ($fieldConfig['form_options'])()
+                    : (array) $fieldConfig['form_options'];
+                $opts = array_merge($opts, $extra);
             }
 
             if (!$isCoreEditable($key)) {
@@ -167,43 +191,48 @@ class ProfileType extends AbstractType
             $builder->add($fieldConfig['field'], $fieldConfig['type'], $opts);
         }
 
-        // Timezone (optional, independent from the visibility settings above)
-        if ('true' === $this->settingsManager->getSetting('profile.use_users_timezone', true)) {
-            $timezones = DateTimeZone::listIdentifiers();
-            sort($timezones);
-            $timezoneChoices = array_combine($timezones, $timezones);
-
-            $builder->add(
-                'timezone',
-                ChoiceType::class,
-                [
-                    'label' => 'Timezone',
-                    'choices' => $timezoneChoices,
-                    'required' => false,
-                    'placeholder' => '',
-                    'choice_translation_domain' => false,
-                ]
-            );
+        // Timezone: only show if visible (fine JSON present with key, or fallback says visible)
+        if ($isCoreVisible('timezone')) {
+            $tzCfg = $fieldsMap['timezone'];
+            $opts = [
+                'label'    => $tzCfg['label'],
+                'required' => $tzCfg['required'],
+                'mapped'   => true,
+            ];
+            $extra = ($tzCfg['form_options'])();
+            $opts = array_merge($opts, $extra);
+            if (!$isCoreEditable('timezone')) {
+                $opts['disabled'] = true;
+            }
+            $builder->add($tzCfg['field'], $tzCfg['type'], $opts);
         }
 
-        // Build ExtraFieldType with allowlist + editable map derived from JSON
-        // Consider as "core" the keys present in $fieldsMap; the rest of JSON keys affect "extra" fields.
+        // Build ExtraFieldType with allowlist + editable map derived from fine JSON (strict when present)
         $coreKeys = array_keys($fieldsMap);
-
         $extraAllowlist = [];
         $extraEditableMap = [];
-        foreach ($fieldsVisibility as $key => $bool) {
-            if (!\in_array($key, $coreKeys, true)) {
-                $extraAllowlist[] = $key;          // presence in JSON ⇒ visible
-                $extraEditableMap[$key] = (bool) $bool; // boolean ⇒ editable
+
+        if ($hasFine) {
+            // Strict: only extras listed in fine JSON
+            foreach ($fieldsVisibility as $key => $bool) {
+                if (!\in_array($key, $coreKeys, true)) {
+                    $extraAllowlist[] = $key;               // visible
+                    $extraEditableMap[$key] = (bool) $bool; // editable
+                }
             }
+        } else {
+            // Fallback: show all extras (no allowlist) and let ExtraField configuration drive editability
+            $extraAllowlist = []; // empty = render all extras
+            $extraEditableMap = []; // let EF config decide
         }
 
         $builder->add('extra_fields', ExtraFieldType::class, [
             'mapped'                  => false,
             'label'                   => false,
-            'visibility_allowlist'    => $extraAllowlist,    // empty → show all; non-empty → filter
-            'visibility_editable_map' => $extraEditableMap,  // editable control per extra
+            'visibility_allowlist'    => $extraAllowlist,
+            'visibility_editable_map' => $extraEditableMap,
+            'visibility_strict'       => $hasFine,
+            'item'                    => $builder->getData(),
         ]);
     }
 

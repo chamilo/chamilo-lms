@@ -30445,3 +30445,6 @@ msgstr "Cours non terminés"
 
 msgid "Date of birth"
 msgstr "Date de naissance"
+
+msgid "Are you sure to delete the friendship?"
+msgstr "Êtes vous sûr de supprimer la relation ?"

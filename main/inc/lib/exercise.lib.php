@@ -6258,6 +6258,8 @@ EOT;
      */
     public static function getFeedbackText($message)
     {
+        $message = Security::remove_XSS($message);
+
         return Display::return_message($message, 'warning', false);
     }
 

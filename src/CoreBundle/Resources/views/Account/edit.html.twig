@@ -1,70 +1,80 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
 {% block content %}
-{% autoescape false %}
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        $('.select2_user_rel_tag').each(function(i, obj) {
-            let fieldId = '&field_id=' + $(this).attr('data.field_id');
-            $(this).select2({
+    {% autoescape false %}
+        <link rel="stylesheet" href="/build/flatpickr/flatpickr.min.css"/>
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            $('.select2_user_rel_tag').each(function(i, obj) {
+              let fieldId = '&field_id=' + $(this).attr('data.field_id');
+              $(this).select2({
                 ajax: {
-                    url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'name' : '', 'a': 'search_tags', 'type': 'user'}|url_encode }}' + fieldId,
-                    processResults: function (data) {
-                        return {
-                            results: data.items
-                        }
-                    }
+                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'name' : '', 'a': 'search_tags', 'type': 'user'}|url_encode }}' + fieldId,
+                  processResults: function (data) { return { results: data.items } }
                 },
                 cache: false,
                 tags: true,
                 tokenSeparators: [','],
-            });
+              });
 
-            $(this).on('select2:select', function (e) {
+              $(this).on('select2:select', function (e) {
                 const data = e.params.data;
                 $(this).children('[value="' + data['id'] + '"]').attr({
-                    'data-id': data['id'],
-                    'value': data['text']
+                  'data-id': data['id'],
+                  'value': data['text']
                 });
-            });
+              });
 
-            $(this).on('select2:unselect', function (e) {
-                //let fieldId = '&tag_id=' + e.params.data.id;
+              $(this).on('select2:unselect', function (e) {
                 let fieldId = '&tag_id=' + e.params.data.element.dataset.id;
                 $.ajax({
-                    url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId,
-                    success: function(data) {
-                    }
+                  url: '/main/inc/ajax/extra_field.ajax.php?{{ { 'a': 'delete_tag', 'type': 'user'}|url_encode }}' + fieldId,
+                  success: function(data) {}
                 });
+              });
             });
-        });
-    });
-    </script>
+          });
+        </script>
 
-    <div class="section-header section-header--h2">
-        <h2 class="section-header__title">{{ user.fullName }}</h2>
-    </div>
-{#        <a href="{{ url('app_forgot_password_request') }}" class="btn btn--primary">#}
-{#            Reset password#}
-{#        </a>#}
-
-    <div class="flex md:flex-row gap-4 mt-6">
-        <div class="w-16">
-            <img class="h-16 w-16 rounded-full mb-4"
-                 src="{{ user | illustration }}?w=120&h=120&fit=crop"
-                 alt=""
-            />
+        <div class="section-header section-header--h2">
+            <h2 class="section-header__title">{{ user.fullName }}</h2>
         </div>
-        <div class="flex-grow">
-            {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
-            {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
-            <div>
-                <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+        <div class="flex md:flex-row gap-4 mt-6">
+            <div class="w-16">
+                <img class="h-16 w-16 rounded-full mb-4"
+                     src="{{ user | illustration }}?w=120&h=120&fit=crop"
+                     alt=""
+                />
             </div>
-            {{ form_end(form) }}
-        </div>
-    </div>
+            <div class="flex-grow">
+                {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+                {{ form_widget(form, {'attr': {'class': 'flex flex-col gap-4'}}) }}
 
-{% endautoescape %}
+                <div>
+                    <button class="btn btn--primary" name="update_profile" type="submit">{{ 'Update profile'|trans }}</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        {# Flatpickr JS desde /build #}
+        <script src="/build/flatpickr/flatpickr.min.js"></script>
+        {# (Opcional) Localización, si quieres: <script src="/build/flatpickr/l10n/fr.js"></script> #}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            if (window.flatpickr) {
+              flatpickr('.js-date-of-birth', {
+                dateFormat: 'Y-m-d',
+                allowInput: true,
+                altInput: true,
+                altFormat: 'd/m/Y',
+                maxDate: new Date().toISOString().slice(0,10),
+                // locale: 'fr',
+              });
+            }
+          });
+        </script>
+
+    {% endautoescape %}
 {% endblock %}

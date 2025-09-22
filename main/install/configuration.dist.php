@@ -1953,6 +1953,9 @@ $_configuration['auth_password_links'] = [
 //Create an extra field for courses with identifier "theoretical_time"
 //$_configuration['display_theoretical_time'] = false;
 
+// Show subscription column in session course list on main/mySpace/myStudents.php
+//$_configuration['display_session_subscription_column'] = false;
+
 // Enable improved tracking section in main/mySpace/myStudents.php
 //$_configuration['improve_tracking_in_mystudent_php'] = false;
 

@@ -34,10 +34,6 @@ class CreateUserOnAccessUrlInput
     #[Groups(['write'])]
     private ?string $password = null;
 
-    #[Assert\NotBlank]
-    #[Groups(['write'])]
-    private int $accessUrlId;
-
     #[Groups(['write'])]
     private ?string $locale = null;
 
@@ -96,15 +92,6 @@ class CreateUserOnAccessUrlInput
     public function setPassword(?string $password): void
     {
         $this->password = $password;
-    }
-
-    public function getAccessUrlId(): int
-    {
-        return $this->accessUrlId;
-    }
-    public function setAccessUrlId(int $accessUrlId): void
-    {
-        $this->accessUrlId = $accessUrlId;
     }
 
     public function getLocale(): ?string

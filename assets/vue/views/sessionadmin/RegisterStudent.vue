@@ -311,7 +311,6 @@ const createForm = ref({
   lastname: "",
   email: "",
   password: "",
-  accessUrlId: 1,
   sendEmail: true,
   [extraFieldKey]: "",
 })
@@ -405,7 +404,6 @@ async function handleCreateUser() {
     firstname: createForm.value.firstname,
     lastname: createForm.value.lastname,
     password: pwd,
-    accessUrlId: createForm.value.accessUrlId,
     sendEmail: createForm.value.sendEmail,
   }
 
@@ -416,7 +414,7 @@ async function handleCreateUser() {
   }
 
   try {
-    const newUser = await userService.createOnAccessUrl(payload)
+    const newUser = await userService.createOnAccessUrl(window.access_url_id || 1, payload)
     if (extraFieldKey && createForm.value[extraFieldKey]) {
       newUser.extra = {
         [extraFieldKey]: createForm.value[extraFieldKey],
@@ -445,7 +443,6 @@ watch(showCreateModal, (val) => {
       lastname: "",
       email: "",
       password: "",
-      accessUrlId: window.access_url_id,
       sendEmail: true,
       [extraFieldKey]: "",
     }

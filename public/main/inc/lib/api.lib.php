@@ -6499,8 +6499,6 @@ function api_normalize_role_code(string $code): string {
         'QUESTION_MANAGER' => 'ROLE_QUESTION_MANAGER',
         'ADMIN' => 'ROLE_ADMIN',
         'GLOBAL_ADMIN' => 'ROLE_GLOBAL_ADMIN',
-        'SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
-        'ROLE_SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
     ];
     if (!str_starts_with($c, 'ROLE_')) {
         return $map[$c] ?? ('ROLE_'.$c);

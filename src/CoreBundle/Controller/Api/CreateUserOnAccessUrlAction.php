@@ -10,18 +10,19 @@ use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
@@ -31,14 +32,14 @@ class CreateUserOnAccessUrlAction
         private EntityManagerInterface $em,
         private AccessUrlRepository $accessUrlRepo,
         private ValidatorInterface $validator,
-        private UserPasswordHasherInterface $passwordHasher,
         private ExtraFieldValuesRepository $extraFieldValuesRepo,
         private ExtraFieldRepository $extraFieldRepo,
         private MessageHelper $messageHelper,
         private TranslatorInterface $translator,
         private UserHelper $userHelper,
         private readonly RequestStack $requestStack,
-        private readonly SettingsManager $settingsManager
+        private readonly SettingsManager $settingsManager,
+        private readonly UserRepository $userRepository,
     ) {}
 
     public function __invoke(CreateUserOnAccessUrlInput $data): User
@@ -60,13 +61,12 @@ class CreateUserOnAccessUrlAction
             ->setTimezone($data->getTimezone() ?? 'Europe/Paris')
             ->setStatus($data->getStatus() ?? 5)
             ->setActive(User::ACTIVE)
-            ->setPassword(
-                $this->passwordHasher->hashPassword($user, $data->getPassword())
-            )
+            ->setPlainPassword($data->getPassword())
+            ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $url)
+            ->setRoleFromStatus($data->getStatus() ?? 5)
         ;
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->userRepository->updateUser($user);
 
         if (!empty($data->extraFields)) {
             foreach ($data->extraFields as $variable => $value) {

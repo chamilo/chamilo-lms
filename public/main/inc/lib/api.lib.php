@@ -3682,6 +3682,71 @@ function api_get_languages()
 }
 
 /**
+ * Returns the platform default language isocode.
+ * Tries 'language.platform_language' (isocode). If empty, falls back to 'platformLanguage' (english_name) and resolves to isocode.
+ */
+function api_get_platform_default_isocode(): ?string
+{
+    // Preferred: isocode stored under 'language.platform_language'
+    $iso = trim((string) api_get_setting('language.platform_language'));
+    if ($iso !== '') {
+        return $iso;
+    }
+
+    // Fallback: older config storing english_name
+    $englishName = trim((string) api_get_setting('platformLanguage'));
+    if ($englishName === '') {
+        return null;
+    }
+
+    $langTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $safe = Database::escape_string($englishName);
+    $sql  = "SELECT isocode FROM $langTable WHERE english_name = '$safe' LIMIT 1";
+    $res  = Database::query($sql);
+    if ($row = Database::fetch_assoc($res)) {
+        return $row['isocode'];
+    }
+
+    return null;
+}
+
+/**
+ * Returns available languages (available=1) plus the platform default language even if not available.
+ * Ensures the platform default never disappears from dropdowns.
+ *
+ * @return array<string,string> isocode => original_name
+ */
+function api_get_languages_with_platform_default(): array
+{
+    $langTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+
+    // Standard available languages
+    $sql = "SELECT isocode, original_name FROM $langTable WHERE available = '1' ORDER BY original_name ASC";
+    $res = Database::query($sql);
+
+    $languages = [];
+    while ($row = Database::fetch_assoc($res)) {
+        $languages[$row['isocode']] = $row['original_name'];
+    }
+
+    // Ensure platform default is present even if not available
+    $defaultIso = api_get_platform_default_isocode();
+    if ($defaultIso && !isset($languages[$defaultIso])) {
+        $safe   = Database::escape_string($defaultIso);
+        $sqlDef = "SELECT isocode, original_name FROM $langTable WHERE isocode = '$safe' LIMIT 1";
+        $resDef = Database::query($sqlDef);
+        if ($row = Database::fetch_assoc($resDef)) {
+            $languages[$row['isocode']] = $row['original_name'];
+        }
+    }
+
+    // Optional: stable, human-friendly order
+    asort($languages, SORT_NATURAL | SORT_FLAG_CASE);
+
+    return $languages;
+}
+
+/**
  * Returns the id (the database id) of a language.
  *
  * @param   string  language name (the corresponding name of the language-folder in the filesystem)
@@ -6434,8 +6499,6 @@ function api_normalize_role_code(string $code): string {
         'QUESTION_MANAGER' => 'ROLE_QUESTION_MANAGER',
         'ADMIN' => 'ROLE_ADMIN',
         'GLOBAL_ADMIN' => 'ROLE_GLOBAL_ADMIN',
-        'SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
-        'ROLE_SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
     ];
     if (!str_starts_with($c, 'ROLE_')) {
         return $map[$c] ?? ('ROLE_'.$c);

@@ -16,20 +16,19 @@ class SelectLanguage extends HTML_QuickForm_select
     ) {
         parent::__construct($elementName, $elementLabel, $options, $attributes);
 
-        $default = $attributes['set_custom_default'] ?? false;
-        if (!empty($default)) {
-            $defaultValue = $default;
-        } else {
-            $defaultValue = api_get_setting('platformLanguage');
-        }
-        // Get all languages
-        $languages = api_get_languages();
+        // Prefer a custom default if provided; otherwise use platform default isocode
+        $customDefault = $attributes['set_custom_default'] ?? false;
+        $defaultValue = !empty($customDefault) ? $customDefault : api_get_platform_default_isocode();
+
+        // Fetch languages available + platform default (even if not available)
+        $languages = api_get_languages_with_platform_default();
+
         foreach ($languages as $iso => $name) {
-            $attributes = [];
-            if ($iso === $defaultValue) {
-                $attributes = ['selected' => 'selected'];
+            $optAttrs = [];
+            if ($defaultValue && $iso === $defaultValue) {
+                $optAttrs = ['selected' => 'selected'];
             }
-            $this->addOption($name, $iso, $attributes);
+            $this->addOption($name, $iso, $optAttrs);
         }
     }
 }

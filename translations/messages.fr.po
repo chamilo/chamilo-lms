@@ -4495,7 +4495,7 @@ msgstr ""
 "paramètre pour des cours spécifiques via : Administration > Cours > modifier"
 
 msgid "Profile"
-msgstr "Rôle"
+msgstr "Profil"
 
 msgid "Which parts of the profile can be changed?"
 msgstr "Quelle partie du profil souhaitez-vous modifier ?"

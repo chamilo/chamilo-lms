@@ -9428,7 +9428,7 @@ msgid "From"
 msgstr "Von"
 
 msgid "To"
-msgstr "An"
+msgstr "Bis"
 
 msgid "Content"
 msgstr "Inhalt"

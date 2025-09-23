@@ -354,7 +354,7 @@ const load = async () => {
 
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
     const roles = securityStore.user?.roles ?? []
-    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_SUPER_ADMIN"))) {
+    if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
       allowed = true
     }
     rawCanEdit.value = !!allowed

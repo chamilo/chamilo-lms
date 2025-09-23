@@ -6376,9 +6376,8 @@ function api_get_roles(): array
 
     $codes = Container::$container
         ->get(\Chamilo\CoreBundle\Helpers\PermissionHelper::class)
-        ->getUserRoles(); // list of role codes from DB
+        ->getUserRoles();
 
-    // Built-in labels fallbacks. DB codes are used as keys.
     $labels = [
         'ROLE_STUDENT'          => get_lang('Learner'),
         'STUDENT'               => get_lang('Learner'),
@@ -6398,8 +6397,6 @@ function api_get_roles(): array
         'ADMIN'                 => get_lang('Admin'),
         'ROLE_PLATFORM_ADMIN'   => get_lang('Administrator'),
         'PLATFORM_ADMIN'        => get_lang('Administrator'),
-        'ROLE_SUPER_ADMIN'      => get_lang('Super admin'),
-        'SUPER_ADMIN'           => get_lang('Super admin'),
         'ROLE_GLOBAL_ADMIN'     => get_lang('Global admin'),
         'GLOBAL_ADMIN'          => get_lang('Global admin'),
         'ROLE_ANONYMOUS'        => 'Anonymous',
@@ -6795,7 +6792,6 @@ function api_drh_can_access_all_session_content()
 function api_can_login_as($loginAsUserId, $userId = null)
 {
     $loginAsUserId = (int) $loginAsUserId;
-
     if (empty($loginAsUserId)) {
         return false;
     }
@@ -6808,9 +6804,8 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     }
 
-    // Check if the user to login is an admin
+    // If target is an admin, only global admins can login to admin accounts
     if (api_is_platform_admin_by_id($loginAsUserId)) {
-        // Only super admins can login to admin accounts
         if (!api_global_admin_can_edit_admin($loginAsUserId)) {
             return false;
         }
@@ -6821,25 +6816,18 @@ function api_can_login_as($loginAsUserId, $userId = null)
     $isDrh = function () use ($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
-                $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                    'drh_all',
-                    api_get_user_id()
-                );
-                $userList = [];
+                $users   = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
+                $userIds = [];
                 if (is_array($users)) {
                     foreach ($users as $user) {
-                        $userList[] = $user['id'];
+                        $userIds[] = $user['id'];
                     }
                 }
-                if (in_array($loginAsUserId, $userList)) {
-                    return true;
-                }
-            } else {
-                if (api_is_drh() &&
-                    UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())
-                ) {
-                    return true;
-                }
+                return in_array($loginAsUserId, $userIds);
+            }
+
+            if (UserManager::is_user_followed_by_drh($loginAsUserId, api_get_user_id())) {
+                return true;
             }
         }
 
@@ -6852,9 +6840,9 @@ function api_can_login_as($loginAsUserId, $userId = null)
         $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
     }
 
-    return api_is_platform_admin() ||
-        (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins)) ||
-        $isDrh();
+    return api_is_platform_admin() // local admins can login as (except into other admins unless allowed above)
+        || (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins))
+        || $isDrh();
 }
 
 /**

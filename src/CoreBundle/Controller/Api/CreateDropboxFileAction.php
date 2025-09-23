@@ -34,7 +34,7 @@ final class CreateDropboxFileAction
         EntityManagerInterface $em,
         UserHelper $userHelper
     ): JsonResponse {
-        // --- Contexto
+
         $cid = (int) $request->query->get('cid', 0);
         $sid = (int) $request->query->get('sid', 0);
         $gid = (int) $request->query->get('gid', 0);
@@ -46,7 +46,6 @@ final class CreateDropboxFileAction
             throw new UnauthorizedHttpException('', 'Unauthorized.');
         }
 
-        // --- Normaliza: queremos SIEMPRE uploadFile
         /** @var UploadedFile|null $file */
         $file = $request->files->get('uploadFile');
         if (!$file) {
@@ -62,7 +61,6 @@ final class CreateDropboxFileAction
             throw new BadRequestHttpException('"uploadFile" is required');
         }
 
-        // --- Nodo padre: si no viene, usamos el del curso
         $parentId = (int) $request->request->get('parentResourceNodeId', 0);
         if ($parentId === 0) {
             $course = $courseRepo->find($cid);
@@ -77,7 +75,6 @@ final class CreateDropboxFileAction
         /** @var string[] $tokens */
         $tokens      = (array) ($request->request->all('recipients') ?? []);
 
-        // --- Asegura filename único (UNIQUE en filename)
         $original  = $file->getClientOriginalName() ?: 'upload.bin';
         $candidate = $original;
         $i = 1;
@@ -89,12 +86,11 @@ final class CreateDropboxFileAction
             $i++;
         }
 
-        // --- Construye el recurso tipo archivo (activa ResourceListener)
         $now = new DateTime();
         $e = new CDropboxFile();
-        $e->setFiletype('file');               // importante
-        $e->setParentResourceNode($parentId);  // importante
-        $e->setUploadFile($file);              // importante
+        $e->setFiletype('file');
+        $e->setParentResourceNode($parentId);
+        $e->setUploadFile($file);
 
         $e->setCId($cid);
         $e->setSessionId($sid);
@@ -108,15 +104,11 @@ final class CreateDropboxFileAction
         $e->setLastUploadDate($now);
         $e->setCatId($categoryId);
 
-        // Links de visibilidad (ResourceLinkArray)
         $e->setResourceLinkArray($this->buildLinks($tokens, $cid, $sid, $gid));
 
-        // --- Guarda recurso para tener iid
         $em->persist($e);
         $em->flush();
 
-        // -------- Legacy: Persons + Posts ----------
-        // Persona para uploader
         $up = new CDropboxPerson();
         $up->setCId($cid);
         $up->setUserId($user->getId());

@@ -224,7 +224,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $apiToken = null;
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
-    #[Assert\NotBlank]
     #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
@@ -1328,7 +1327,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -1340,7 +1339,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): self
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 

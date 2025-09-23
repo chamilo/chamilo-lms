@@ -6982,19 +6982,21 @@ class learnpath
             ])
         );
 
-        $actionsLeft .= Display::url(
-            Display::return_icon(
-                'upload_audio.png',
-                get_lang('UpdateAllAudioFragments'),
-                '',
-                ICON_SIZE_MEDIUM
-            ),
-            'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
-                'action' => 'admin_view',
-                'lp_id' => $lpId,
-                'updateaudio' => 'true',
-            ])
-        );
+        if (!$noEdition) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'upload_audio.png',
+                    get_lang('UpdateAllAudioFragments'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
+                    'action' => 'admin_view',
+                    'lp_id' => $lpId,
+                    'updateaudio' => 'true',
+                ])
+            );
+        }
 
         $subscriptionSettings = self::getSubscriptionSettings();
         $request = api_request_uri();

@@ -264,7 +264,8 @@ $form->addRule('roles', get_lang('Required field'), 'required');
 
 $display = 'none';
 if (isset($_POST['roles']) && is_array($_POST['roles'])) {
-    $display = in_array('ROLE_TEACHER', $_POST['roles']) || in_array('ROLE_SESSION_MANAGER', $_POST['roles']) ? 'block' : 'none';
+    $norm = array_map('api_normalize_role_code', $_POST['roles']);
+    $display = (in_array('ROLE_TEACHER', $norm, true) || in_array('ROLE_SESSION_MANAGER', $norm, true)) ? 'block' : 'none';
 }
 
 // Platform admin
@@ -398,9 +399,22 @@ if (!$hideFields) {
         $user_data['expiration_date'] = api_get_local_time($expiration_date);
     }
 }
-$availableRoles = array_keys(api_get_roles());
-$userRoles = array_intersect($userObj->getRoles(), $availableRoles);
-$user_data['roles'] = $userRoles;
+
+$roleOptions = api_get_roles();
+$optionKeyByCanon = [];
+foreach ($roleOptions as $optKey => $label) {
+    $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = $optKey;
+}
+
+$userCanonRoles = array_map('api_normalize_role_code', (array) $userObj->getRoles());
+$selectedOptionKeys = [];
+foreach ($userCanonRoles as $canon) {
+    if (isset($optionKeyByCanon[$canon])) {
+        $selectedOptionKeys[] = $optionKeyByCanon[$canon];
+    }
+}
+
+$user_data['roles'] = array_values(array_unique($selectedOptionKeys));
 $form->setDefaults($user_data);
 
 $error_drh = false;

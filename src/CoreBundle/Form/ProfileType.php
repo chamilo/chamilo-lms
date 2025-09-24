@@ -72,7 +72,7 @@ class ProfileType extends AbstractType
         $visibleHigh  = $expand(\is_array($visibleOptions) ? $visibleOptions : []);
         $editableHigh = $expand(\is_array($changeableOptions) ? $changeableOptions : []);
 
-        $languages = array_flip($this->languageRepository->getAllAvailableToArray(true));
+        $languages = array_flip($this->languageRepository->getAllAvailableToArray(true, true));
 
         // Core fields map (keys must align with settings keys)
         $fieldsMap = [

@@ -31,6 +31,8 @@ class SubLanguageManager
         if ($onlyActive) {
             $sql .= ' WHERE available = 1';
         }
+        $sql .= ' ORDER BY english_name ASC';
+
         $rs = Database::query($sql);
         $all_languages = [];
         while ($row = Database::fetch_assoc($rs)) {

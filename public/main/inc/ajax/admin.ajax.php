@@ -68,24 +68,23 @@ switch ($action) {
         break;
     case 'get_latest_news':
         try {
-            $latestNews = getLatestNews();
-            $latestNews = json_decode($latestNews, true);
-
-            echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
-            break;
-        } catch (Exception $e) {
-            break;
+            $json = getLatestNews();
+            $data = json_decode($json, true);
+            echo Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
+        } catch (\Throwable $e) {
+            echo Security::remove_XSS(get_lang('Could not load latest news at this time.'), COURSEMANAGER);
         }
+        break;
     case 'get_support':
         try {
-            $latestNews = getProSupport();
-            $latestNews = json_decode($latestNews, true);
+            $json = getProSupport();
+            $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
 
-            echo Security::remove_XSS($latestNews['text'], COURSEMANAGER);
-            break;
-        } catch (Exception $e) {
-            break;
+            echo Security::remove_XSS($data['text'] ?? '', COURSEMANAGER);
+        } catch (\Throwable $e) {
+            echo Security::remove_XSS(get_lang('Could not load support info at this time.'), COURSEMANAGER);
         }
+        break;
 }
 
 /**
@@ -266,26 +265,29 @@ function check_system_version()
  *
  * @return string|void
  */
-function getLatestNews()
+function getLatestNews(): string
 {
     $url = 'https://version.chamilo.org/c/news/latest.php';
 
-    $client = new Client();
-    $response = $client->request(
-        'GET',
-        $url,
-        [
-            'query' => [
-                'language' => api_get_language_isocode(),
-            ],
-        ]
-    );
+    $client = new Client([
+        'verify'      => false,
+        'timeout'     => 6,
+        'http_errors' => false,
+        'headers'     => ['Accept' => 'application/json'],
+    ]);
+
+    $lang = str_replace('-', '_', (string) api_get_language_isocode());
+    if ($lang === '' ) { $lang = 'en_US'; }
+
+    $response = $client->request('GET', $url, [
+        'query' => ['language' => $lang],
+    ]);
 
     if (200 !== $response->getStatusCode()) {
         throw new Exception(get_lang('Access denied'));
     }
 
-    return $response->getBody()->getContents();
+    return (string) $response->getBody();
 }
 
 /**
@@ -296,24 +298,26 @@ function getLatestNews()
  *
  * @return string|void
  */
-function getProSupport()
+function getProSupport(): string
 {
     $url = 'https://version.chamilo.org/c/support/latest.php';
 
-    $client = new Client();
-    $response = $client->request(
-        'GET',
-        $url,
-        [
-            'query' => [
-                'language' => api_get_language_isocode(),
-            ],
-        ]
-    );
+    $client = new Client([
+        'verify'      => false,
+        'timeout'     => 6,
+        'http_errors' => false,
+        'headers'     => ['Accept' => 'application/json'],
+    ]);
+
+    $lang = str_replace('-', '_', (string) api_get_language_isocode() ?: 'en_US');
+
+    $response = $client->request('GET', $url, [
+        'query' => ['language' => $lang],
+    ]);
 
     if (200 !== $response->getStatusCode()) {
         throw new Exception(get_lang('Access denied'));
     }
 
-    return $response->getBody()->getContents();
+    return (string) $response->getBody();
 }

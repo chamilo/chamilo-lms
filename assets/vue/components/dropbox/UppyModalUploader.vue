@@ -3,10 +3,13 @@
     v-if="ready"
     :uppy="uppy"
     :open="visible"
-    :close-after-finish="false"
-    :hide-upload-button="true"
-    :show-progress-details="false"
-    :proudly-display-powered-by-uppy="false"
+    :props="{
+      closeAfterFinish: false,
+      hideUploadButton: true,
+      showProgressDetails: false,
+      proudlyDisplayPoweredByUppy: false,
+      maxNumberOfFiles: 1
+    }"
     @close="handleClose"
     :done-button-handler="handleDone"
   />

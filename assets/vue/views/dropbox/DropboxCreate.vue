@@ -25,13 +25,15 @@
               <Dashboard
                 v-if="uppy"
                 :uppy="uppy"
-                :inline="true"
-                :hideUploadButton="true"
-                :show-progress-details="true"
-                :proudly-display-powered-by-uppy="false"
-                :width="'100%'"
-                :height="360"
-                :note="t('Drag & drop or browse to add files')"
+                class="w-full"
+                :props="{
+                  proudlyDisplayPoweredByUppy: false,
+                  showProgressDetails: true,
+                  hideUploadButton: true,
+                  height: 360,
+                  width: '100%',
+                  note: t('Drag & drop or browse to add files'),
+                }"
               />
             </div>
 

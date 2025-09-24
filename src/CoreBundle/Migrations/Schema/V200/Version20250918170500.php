@@ -36,7 +36,6 @@ final class Version20250918170500 extends AbstractMigrationChamilo
         ");
 
         // Make the 1:1 explicit (unique on resource_node_id).
-        // Note: MySQL allows multiple NULLs in a UNIQUE index, so this will not block rows without link.
         $this->addSql("
             CREATE UNIQUE INDEX UNIQ_4D71B46C1BAD783F ON c_dropbox_file (resource_node_id)
         ");

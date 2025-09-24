@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,47 +92,64 @@ class AdminController extends BaseController
 
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/resources_info', name: 'admin_resources_info', methods: ['GET'])]
-    public function listResourcesInfo(Request $request, ResourceNodeRepository $resourceNodeRepo, EntityManagerInterface $em): Response
+    public function listResourcesInfo(
+        Request                $request,
+        ResourceNodeRepository $resourceNodeRepo,
+        EntityManagerInterface $em
+    ): Response
     {
         $resourceTypeId = $request->query->getInt('type');
         $resourceTypes = $em->getRepository(ResourceType::class)->findAll();
 
         $courses = [];
+        $showUsers = false;
+        $typeTitle = null;
+
         if ($resourceTypeId > 0) {
+            /** @var ResourceType|null $rt */
+            $rt = $em->getRepository(ResourceType::class)->find($resourceTypeId);
+            $typeTitle = $rt?->getTitle();
+
+            /** Load ResourceLinks for the selected type */
+            /** @var ResourceLink[] $resourceLinks */
             $resourceLinks = $em->getRepository(ResourceLink::class)->createQueryBuilder('rl')
                 ->join('rl.resourceNode', 'rn')
                 ->where('rn.resourceType = :type')
                 ->setParameter('type', $resourceTypeId)
                 ->getQuery()
-                ->getResult()
-            ;
+                ->getResult();
 
+            /** Aggregate by course/session key */
             $seen = [];
+            $keysMeta = [];
             foreach ($resourceLinks as $link) {
                 $course = $link->getCourse();
-                $session = $link->getSession();
-                $node = $link->getResourceNode();
-
                 if (!$course) {
                     continue;
                 }
+                $session = $link->getSession();
+                $node = $link->getResourceNode();
 
-                $key = $session
-                    ? 's'.$session->getId().'-'.$course->getId()
-                    : 'c'.$course->getId();
+                $cid = $course->getId();
+                $sid = $session?->getId() ?? 0;
+                $key = self::makeKey($cid, $sid);
 
                 if (!isset($seen[$key])) {
                     $seen[$key] = [
-                        'type' => $session ? 'session' : 'course',
-                        'id' => $session ? $session->getId() : $course->getId(),
-                        'title' => $session ? $session->getTitle().' - '.$course->getTitle() : $course->getTitle(),
-                        'url' => $session
-                            ? '/course/'.$course->getId().'/home?sid='.$session->getId()
-                            : '/course/'.$course->getId().'/home',
+                        'type' => $sid ? 'session' : 'course',
+                        'id' => $sid ?: $cid,
+                        'courseId' => $cid,
+                        'sessionId' => $sid,
+                        'title' => $sid ? ($session->getTitle() . ' - ' . $course->getTitle()) : $course->getTitle(),
+                        'url' => $sid
+                            ? '/course/' . $cid . '/home?sid=' . $sid
+                            : '/course/' . $cid . '/home',
                         'count' => 0,
                         'items' => [],
+                        'users' => [],
                         'firstCreatedAt' => $node->getCreatedAt(),
                     ];
+                    $keysMeta[$key] = ['cid' => $cid, 'sid' => $sid];
                 }
 
                 $seen[$key]['count']++;
@@ -142,14 +160,33 @@ class AdminController extends BaseController
                 }
             }
 
-            $courses = array_values($seen);
-            usort($courses, fn ($a, $b) => strnatcasecmp($a['title'], $b['title']));
+            /** Populate users depending on the resource type */
+            if (!empty($seen)) {
+                $usersMap = $this->fetchUsersForType($typeTitle, $em, $keysMeta);
+                foreach ($usersMap as $key => $names) {
+                    if (isset($seen[$key]) && $names) {
+                        $seen[$key]['users'] = array_values(array_unique($names));
+                    }
+                }
+                // Show the "Users" column only if there's any user to display
+                $showUsers = array_reduce($seen, fn($acc, $row) => $acc || !empty($row['users']), false);
+            }
+
+            /** Normalize output */
+            $courses = array_values(array_map(function ($row) {
+                $row['items'] = array_values(array_unique($row['items']));
+                return $row;
+            }, $seen));
+
+            usort($courses, fn($a, $b) => strnatcasecmp($a['title'], $b['title']));
         }
 
         return $this->render('@ChamiloCore/Admin/resources_info.html.twig', [
             'resourceTypes' => $resourceTypes,
             'selectedType' => $resourceTypeId,
             'courses' => $courses,
+            'showUsers' => $showUsers,
+            'typeTitle' => $typeTitle,
         ]);
     }
 
@@ -228,7 +265,7 @@ class AdminController extends BaseController
         $olderThan = (int) $request->request->get('older_than', 0);
         $dryRun = (bool) $request->request->get('dry_run', false);
 
-        // 1) Purge temp uploads/cache (configurable dir via helper parameter)
+        // Purge temp uploads/cache (configurable dir via helper parameter)
         $purge = $tempUploadHelper->purge(olderThanMinutes: $olderThan, dryRun: $dryRun);
 
         if ($dryRun) {
@@ -247,7 +284,7 @@ class AdminController extends BaseController
             ));
         }
 
-        // 2) Remove legacy build main.js and hashed variants (best effort)
+        // Remove legacy build main.js and hashed variants (best effort)
         $publicBuild = $this->getParameter('kernel.project_dir').'/public/build';
         if (is_dir($publicBuild) && is_readable($publicBuild)) {
             @unlink($publicBuild.'/main.js');
@@ -259,7 +296,7 @@ class AdminController extends BaseController
             }
         }
 
-        // 3) Rebuild styles/assets like original archive_cleanup.php
+        // Rebuild styles/assets like original archive_cleanup.php
         try {
             ScriptHandler::dumpCssFiles();
             $this->addFlash('success', 'The styles and assets in the web/ folder have been refreshed.');
@@ -269,5 +306,129 @@ class AdminController extends BaseController
         }
 
         return $this->redirectToRoute('admin_cleanup_temp_uploads', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Returns a map key => [user names...] depending on the selected resource type.
+     *
+     * @param array<string,array{cid:int,sid:int}> $keysMeta
+     * @return array<string,string[]>
+     */
+    private function fetchUsersForType(?string $typeTitle, EntityManagerInterface $em, array $keysMeta): array
+    {
+        $type = is_string($typeTitle) ? strtolower($typeTitle) : '';
+
+        return match ($type) {
+            'dropbox' => $this->fetchDropboxRecipients($em, $keysMeta),
+            // 'student_publications' => $this->fetchStudentPublicationsUsers($em, $keysMeta), // TODO
+            default => $this->fetchUsersFromResourceLinks($em, $keysMeta),
+        };
+    }
+
+    /**
+     * Default behavior: list users tied to ResourceLink.user (user-scoped visibility).
+     *
+     * @param array<string,array{cid:int,sid:int}> $keysMeta
+     * @return array<string,string[]>
+     */
+    private function fetchUsersFromResourceLinks(EntityManagerInterface $em, array $keysMeta): array
+    {
+        if (!$keysMeta) {
+            return [];
+        }
+
+        // Load resource links having a user and group them by (cid,sid)
+        $q = $em->createQuery(
+            'SELECT rl, c, s, u
+           FROM Chamilo\CoreBundle\Entity\ResourceLink rl
+           LEFT JOIN rl.course c
+           LEFT JOIN rl.session s
+           LEFT JOIN rl.user u
+          WHERE rl.user IS NOT NULL'
+        );
+        /** @var ResourceLink[] $links */
+        $links = $q->getResult();
+
+        $out = [];
+        foreach ($links as $rl) {
+            $cid = $rl->getCourse()?->getId();
+            if (!$cid) {
+                continue;
+            }
+            $sid = $rl->getSession()?->getId() ?? 0;
+            $key = self::makeKey($cid, $sid);
+            if (!isset($keysMeta[$key])) {
+                continue; // ignore links not present in the current table
+            }
+
+            $name = $rl->getUser()?->getFullName();
+            if ($name) {
+                $out[$key][] = $name;
+            }
+        }
+        // Dedupe
+        foreach ($out as $k => $arr) {
+            $out[$k] = array_values(array_unique(array_filter($arr)));
+        }
+        return $out;
+    }
+
+    /**
+     * Dropbox-specific: list real recipients from c_dropbox_person (joined with c_dropbox_file and user).
+     *
+     * @param array<string,array{cid:int,sid:int}> $keysMeta
+     * @return array<string,string[]>
+     */
+    private function fetchDropboxRecipients(EntityManagerInterface $em, array $keysMeta): array
+    {
+        if (!$keysMeta) {
+            return [];
+        }
+
+        $cids = array_values(array_unique(array_map(fn($m) => (int) $m['cid'], $keysMeta)));
+        if (!$cids) {
+            return [];
+        }
+
+        $conn = $em->getConnection();
+        $sql = "SELECT
+                    p.c_id                       AS cid,
+                    f.session_id                 AS sid,
+                    CONCAT(u.firstname, ' ', u.lastname) AS uname
+                FROM c_dropbox_person p
+                INNER JOIN c_dropbox_file f
+                        ON f.iid = p.file_id
+                       AND f.c_id = p.c_id
+                INNER JOIN `user` u
+                        ON u.id = p.user_id
+                WHERE p.c_id IN (:cids)
+        ";
+
+        $rows = $conn->executeQuery($sql, ['cids' => $cids], ['cids' => Connection::PARAM_INT_ARRAY])->fetchAllAssociative();
+
+        $out = [];
+        foreach ($rows as $r) {
+            $cid = (int) ($r['cid'] ?? 0);
+            $sid = (int) ($r['sid'] ?? 0);
+            $key = self::makeKey($cid, $sid);
+            if (!isset($keysMeta[$key])) {
+                continue; // ignore entries not displayed in the table
+            }
+            $uname = trim((string) ($r['uname'] ?? ''));
+            if ($uname !== '') {
+                $out[$key][] = $uname;
+            }
+        }
+        // Dedupe
+        foreach ($out as $k => $arr) {
+            $out[$k] = array_values(array_unique(array_filter($arr)));
+        }
+        return $out;
+    }
+
+    /** Helper to build the aggregation key for course/session rows. */
+    private static function makeKey(int $cid, int $sid): string
+    {
+        return $sid > 0 ? ('s' . $sid . '-' . $cid) : ('c' . $cid);
     }
 }

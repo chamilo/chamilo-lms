@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
@@ -18,6 +19,7 @@ class LanguageRepository extends ServiceEntityRepository
     public function __construct(
         ManagerRegistry $registry,
         private readonly ParameterBagInterface $parameterBag,
+        private readonly SettingsManager $settingsManager
     ) {
         parent::__construct($registry, Language::class);
     }
@@ -25,34 +27,35 @@ class LanguageRepository extends ServiceEntityRepository
     public function getAllAvailable($excludeDefaultLocale = false): QueryBuilder
     {
         $qb = $this->createQueryBuilder('l');
-        $qb
-            ->where(
-                $qb->expr()->eq('l.available', true)
-            )
-            /*->andWhere(
-                $qb->expr()->isNull('l.parent')
-            )*/
-        ;
+
+        $qb->where($qb->expr()->eq('l.available', ':avail'))
+            ->setParameter('avail', true)
+            ->orderBy('l.englishName', 'ASC');
 
         if ($excludeDefaultLocale) {
-            $qb
-                ->andWhere($qb->expr()->neq('l.isocode', ':iso_en'))
-                ->setParameter('iso_en', $this->parameterBag->get('locale'))
-            ;
+            $qb->andWhere($qb->expr()->neq('l.isocode', ':iso_base'))
+                ->setParameter('iso_base', $this->parameterBag->get('locale'));
         }
 
         return $qb;
     }
 
-    public function getAllAvailableToArray(bool $onlyActive = false): array
-    {
-        $queryBuilder = $this->getAllAvailable();
+    /**
+     * @return array<string,string> [isocode => original_name]
+     */
+    public function getAllAvailableToArray(
+        bool $onlyActive = true,
+        bool $includePlatformDefault = false
+    ): array {
+        $qb = $this->getAllAvailable();
 
         if (!$onlyActive) {
-            $queryBuilder->resetDQLPart('where');
+            $qb->resetDQLPart('where');
+            $qb->orderBy('l.englishName', 'ASC');
         }
 
-        $languages = $queryBuilder->getQuery()->getResult();
+        /** @var Language[] $languages */
+        $languages = $qb->getQuery()->getResult();
 
         $list = [];
 
@@ -61,7 +64,44 @@ class LanguageRepository extends ServiceEntityRepository
             $list[$language->getIsocode()] = $language->getOriginalName();
         }
 
+        if ($includePlatformDefault) {
+            $defaultIso = $this->getPlatformDefaultIso();
+            if ($defaultIso && !isset($list[$defaultIso])) {
+                $default = $this->findOneBy(['isocode' => $defaultIso]);
+                if ($default instanceof Language) {
+                    $list[$default->getIsocode()] = $default->getOriginalName();
+                }
+            }
+        }
+
         return $list;
+    }
+
+    private function getPlatformDefaultIso(): ?string
+    {
+        $iso = trim($this->settingsManager->getSetting('language.platform_language', true));
+        if ($iso !== '') {
+            return $iso;
+        }
+
+        $englishName = trim($this->settingsManager->getSetting('language.platformLanguage'));
+        if ($englishName === '') {
+            return null;
+        }
+
+        $lang = $this->findOneBy(['englishName' => $englishName]);
+        return $lang?->getIsocode();
+    }
+
+    /**
+     * Convenience for forms: ordered by englishName, labels = original_name,
+     * and includes platform default ISO if it is not active.
+     *
+     * @return array<string,string> [isocode => original_name]
+     */
+    public function getAllForSelectIncludePlatformDefault(): array
+    {
+        return $this->getAllAvailableToArray(true, true);
     }
 
     /**

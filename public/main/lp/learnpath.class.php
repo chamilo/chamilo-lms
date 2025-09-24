@@ -29,6 +29,7 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
@@ -789,21 +790,20 @@ class learnpath
             $course_id = isset($courseInfo['real_id']) ? $courseInfo['real_id'] : $course_id;
         }
 
-        // TODO: Implement a way of getting this to work when the current object is not set.
-        // In clear: implement this in the item class as well (abstract class) and use the given ID in queries.
-        // If an ID is specifically given and the current LP is not the same, prevent delete.
+        // Prevent deleting a different LP than the current one if an explicit ID was passed
         if (!empty($id) && ($id != $this->lp_id)) {
             return false;
         }
 
-        $course = api_get_course_entity();
+        $course  = api_get_course_entity();
         $session = api_get_session_entity();
-        /* @var CLp $lp */
+
+        /** @var CLp|null $lp */
         $lp = Container::getLpRepository()->find($this->lp_id);
 
-        // 1) Detach the asset to avoid FK constraint
-        $asset = $lp->getAsset();
-        if ($asset) {
+        // Detach the asset to avoid FK constraint
+        $asset = $lp ? $lp->getAsset() : null;
+        if ($asset && $lp) {
             $lp->setAsset(null);
             $em = Database::getManager();
             $em->persist($lp);
@@ -815,10 +815,12 @@ class learnpath
             Container::getAssetRepository()->delete($asset);
         }
 
+        // Remove resource links (course/session context)
         Database::getManager()
             ->getRepository(ResourceLink::class)
             ->removeByResourceInContext($lp, $course, $session);
 
+        // Remove from gradebook if present
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_int_id(),
             4,
@@ -830,8 +832,9 @@ class learnpath
             GradebookUtils::remove_resource_from_course_gradebook($link_info['id']);
         }
 
-        $trackRepo     = Container::$container->get(TrackEDefaultRepository::class);
-        $resourceNode  = $lp->getResourceNode();
+        // Tracking event
+        $trackRepo    = Container::$container->get(TrackEDefaultRepository::class);
+        $resourceNode = $lp ? $lp->getResourceNode() : null;
         if ($resourceNode) {
             $trackRepo->registerResourceEvent(
                 $resourceNode,
@@ -840,6 +843,20 @@ class learnpath
                 api_get_course_int_id(),
                 api_get_session_id()
             );
+        }
+
+        // Purge the SCORM ZIP registered under Documents/Learning paths (teacher-only folder)
+        //    This keeps the course storage meter consistent after LP deletion.
+        try {
+            if ($lp && $course) {
+                $em = Database::getManager();
+                /** @var CDocumentRepository $docRepo */
+                $docRepo = $em->getRepository(CDocument::class);
+                $docRepo->purgeScormZip($course, $lp);
+            }
+        } catch (\Throwable $e) {
+            // Do not block LP deletion if purge fails; just log the error.
+            error_log('[learnpath::delete] Failed to purge SCORM ZIP from Documents: '.$e->getMessage());
         }
     }
 

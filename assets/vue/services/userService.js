@@ -44,8 +44,13 @@ async function findBySearchTerm(term) {
   return await baseService.getCollection("/api/users", { search: term })
 }
 
-async function createOnAccessUrl(payload) {
-  return baseService.post("/api/advanced/create-user-on-access-url", payload)
+/**
+ * @param {number} accessUrlId
+ * @param {Object} payload
+ * @returns {Promise<Object>}
+ */
+async function createOnAccessUrl(accessUrlId, payload) {
+  return baseService.post(`/api/access_urls/${accessUrlId}/user`, payload)
 }
 
 export default {

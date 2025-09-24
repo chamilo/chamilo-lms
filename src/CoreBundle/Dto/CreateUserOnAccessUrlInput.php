@@ -25,21 +25,14 @@ class CreateUserOnAccessUrlInput
     #[Groups(['write'])]
     private string $email;
 
-    #[Assert\NotBlank]
     #[Groups(['write'])]
-    private string $firstname;
+    private ?string $firstname = null;
 
-    #[Assert\NotBlank]
     #[Groups(['write'])]
-    private string $lastname;
+    private ?string $lastname = null;
 
-    #[Assert\NotBlank]
     #[Groups(['write'])]
-    private string $password;
-
-    #[Assert\NotBlank]
-    #[Groups(['write'])]
-    private int $accessUrlId;
+    private ?string $password = null;
 
     #[Groups(['write'])]
     private ?string $locale = null;
@@ -54,7 +47,7 @@ class CreateUserOnAccessUrlInput
     public ?array $extraFields = null;
 
     #[Groups(['write'])]
-    private ?bool $sendEmail = true;
+    private bool $sendEmail = true;
 
     public function getUsername(): string
     {
@@ -74,40 +67,31 @@ class CreateUserOnAccessUrlInput
         $this->email = $email;
     }
 
-    public function getFirstname(): string
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
-    public function setFirstname(string $firstname): void
+    public function setFirstname(?string $firstname): void
     {
         $this->firstname = $firstname;
     }
 
-    public function getLastname(): string
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
-    public function setLastname(string $lastname): void
+    public function setLastname(?string $lastname): void
     {
         $this->lastname = $lastname;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
-    public function setPassword(string $password): void
+    public function setPassword(?string $password): void
     {
         $this->password = $password;
-    }
-
-    public function getAccessUrlId(): int
-    {
-        return $this->accessUrlId;
-    }
-    public function setAccessUrlId(int $accessUrlId): void
-    {
-        $this->accessUrlId = $accessUrlId;
     }
 
     public function getLocale(): ?string
@@ -142,7 +126,7 @@ class CreateUserOnAccessUrlInput
         return $this->sendEmail;
     }
 
-    public function setSendEmail(?bool $sendEmail): void
+    public function setSendEmail(bool $sendEmail): void
     {
         $this->sendEmail = $sendEmail;
     }

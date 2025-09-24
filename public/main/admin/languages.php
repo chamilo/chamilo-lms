@@ -29,7 +29,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
     if (isset($_POST['visibility']) &&
-        $_POST['visibility'] == strval(intval($_POST['visibility'])) && 0 == $_POST['visibility']) {
+        $_POST['visibility'] == strval(intval($_POST['visibility'])) && 0 == $_POST['visibility']
+    ) {
         if (isset($_POST['id']) && $_POST['id'] == strval(intval($_POST['id']))) {
             if (false == SubLanguageManager::check_if_language_is_used($_POST['id'])) {
                 SubLanguageManager::make_unavailable_language($_POST['id']);
@@ -51,75 +52,15 @@ if (isset($_POST['sent_http_request'])) {
 }
 
 $msgLang = isset($_SESSION['disabled_languages']) ? 1 : 0;
-$disabledLang = isset($_SESSION['disabled_languages']) ? $_SESSION['disabled_languages'] : null;
-
-$htmlHeadXtra[] = '<script>
- $(function () {
-    var msgLang = '.$msgLang.';
-    var disabledLang = "'.$disabledLang.'"
-
-    if (msgLang == 1) {
-        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.addslashes(get_lang('There are users currently using the following language. Please disable manually.')).' <br /> " + disabledLang + "</div");
-    }
-
-    $("#disable_all_except_default").click(function () {
-        if(confirm("'.addslashes(get_lang('Please confirm your choice')).'")) {
-            $.ajax({
-                contentType: "application/x-www-form-urlencoded",
-                beforeSend: function(myObject) {
-                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em>  '.addslashes(get_lang('Loading')).'</div>");
-                },
-                type: "GET",
-                url: "../admin/languages.php",
-                data: "action=disable_all_except_default",
-                success: function(datos) {
-                    window.location.href = "'.api_get_self().'";
-                }
-            });
-        }
-
-        return false;
-    });
-
-    $(".make_visible_and_invisible").click(function(e) {
-        e.preventDefault();
-
-        var id_link_tool = $(this).attr("id");
-        var link_id = id_link_tool.split("linktool_")[1];
-        var currentIcon = $("#imglinktool_" + link_id);
-
-        $.ajax({
-            type: "POST",
-            url: "../admin/languages.php",
-            data: { id: link_id, visibility: currentIcon.hasClass("mdi-toggle-switch") ? 0 : 1, sent_http_request: 1 },
-            beforeSend: function() {
-                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em>'.addslashes(get_lang('Loading')). '...</div>");
-            },
-            success: function(response) {
-                if (response === "set_visible" || response === "set_hidden") {
-                    var newIconClass = (response === "set_visible") ? "mdi-toggle-switch" : "mdi-toggle-switch-off";
-                    var oldIconClass = (response === "set_visible") ? "mdi-toggle-switch-off" : "mdi-toggle-switch";
-
-                    currentIcon.removeClass(oldIconClass).addClass(newIconClass);
-                }
-            }
-        });
-    });
-
- });
-</script>';
-
-// unset the msg session variable
+$disabledLang = $msgLang ? (string) $_SESSION['disabled_languages'] : '';
 unset($_SESSION['disabled_languages']);
 
-// setting the table that is needed for the styles management (there is a check if it exists later in this code)
 $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $url = api_get_self();
 
-// we change the availability
 switch ($action) {
     case 'makeunavailable':
         if (!empty($id)) {
@@ -128,7 +69,6 @@ switch ($action) {
         }
         header("Location: $url");
         exit;
-        break;
     case 'makeavailable':
         if (!empty($id)) {
             SubLanguageManager::make_available_language($id);
@@ -148,10 +88,10 @@ switch ($action) {
         $failedDisabledLanguages = '';
         $checkFailed = false;
         foreach ($allLanguages as $language) {
-            if (false == SubLanguageManager::check_if_language_is_used($language['id'])) {
-                SubLanguageManager::make_unavailable_language($language['id']);
+            if (false == SubLanguageManager::check_if_language_is_used((int) $language['id'])) {
+                SubLanguageManager::make_unavailable_language((int) $language['id']);
             } else {
-                if (intval(SubLanguageManager::get_platform_language_id()) !== intval($language['id'])) {
+                if ((int) SubLanguageManager::get_platform_language_id() !== (int) $language['id']) {
                     $failedDisabledLanguages .= ' - '.$language['english_name'].'<br />';
                     $checkFailed = true;
                 }
@@ -164,14 +104,18 @@ switch ($action) {
         Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         header("Location: $url");
         exit;
-        break;
     case 'make_unavailable_confirmed':
         $language_info = SubLanguageManager::get_all_information_of_language($id);
-        if (1 == $language_info['available']) {
+        if ($language_info && 1 == (int) $language_info['available']) {
             SubLanguageManager::make_unavailable_language($id);
             $platform_language = api_get_setting('platformLanguage');
             UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
-            Display::addFlash(Display::return_message(get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.'), 'confirm'));
+            Display::addFlash(
+                Display::return_message(
+                    get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.'),
+                    'confirm'
+                )
+            );
             header("Location: $url");
             exit;
         }
@@ -179,7 +123,6 @@ switch ($action) {
 }
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
-    // changing the name
     $name = html_filter($_POST['txt_name']);
     $postId = (int) $_POST['edit_id'];
     Database::update(
@@ -187,7 +130,6 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
         ['original_name' => $name],
         ['id = ?' => $postId]
     );
-    // changing the Platform language
     if (isset($_POST['platformlanguage']) && '' != $_POST['platformlanguage']) {
         api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
         header("Location: $url");
@@ -196,25 +138,23 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
 } elseif (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'makeavailable':
-            if (count($_POST['id']) > 0) {
-                $ids = [];
-                foreach ($_POST['id'] as $index => $id) {
-                    $ids[] = intval($id);
+            if (!empty($_POST['id'])) {
+                $ids = array_map('intval', (array) $_POST['id']);
+                if ($ids) {
+                    $sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
+                    Database::query($sql);
                 }
-                $sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
-                Database::query($sql);
                 header("Location: $url");
                 exit;
             }
             break;
         case 'makeunavailable':
-            if (count($_POST['id']) > 0) {
-                $ids = [];
-                foreach ($_POST['id'] as $index => $id) {
-                    $ids[] = intval($id);
+            if (!empty($_POST['id'])) {
+                $ids = array_map('intval', (array) $_POST['id']);
+                if ($ids) {
+                    $sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
+                    Database::query($sql);
                 }
-                $sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
-                Database::query($sql);
                 header("Location: $url");
                 exit;
             }
@@ -222,33 +162,94 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
     }
 }
 
-// setting the name of the tool
 $tool_name = get_lang('Chamilo Portal Languages');
 
-// setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
-// displaying the explanation for this tool
-Display::addFlash(Display::return_message(get_lang('This tool manages the language selection menu on the login page. As a platform administrator you can decide which languages should be available for your users.'), 'normal'));
+Display::addFlash(
+    Display::return_message(
+        get_lang('This tool manages the language selection menu on the login page. As a platform administrator you can decide which languages should be available for your users.')
+    )
+);
 
-// including the header file (which includes the banner itself)
+$htmlHeadXtra[] = '<script>
+$(function () {
+    var msgLang = '. $msgLang .';
+    var disabledLang = "'.addslashes($disabledLang).'";
+
+    if (msgLang === 1) {
+        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.addslashes(get_lang('There are users currently using the following language. Please disable manually.')).'<br />" + disabledLang + "</div>");
+    }
+
+    $("#disable_all_except_default").on("click", function () {
+        if (confirm("'.addslashes(get_lang('Please confirm your choice')).'")) {
+            $.ajax({
+                contentType: "application/x-www-form-urlencoded",
+                beforeSend: function() {
+                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em> '.addslashes(get_lang('Loading')).'</div>");
+                },
+                type: "GET",
+                url: "'.api_get_self().'",
+                data: { action: "disable_all_except_default" },
+                success: function() {
+                    window.location.href = "'.api_get_self().'";
+                }
+            });
+        }
+        return false;
+    });
+
+    $(".make_visible_and_invisible").on("click", function (e) {
+        e.preventDefault();
+        var $link = $(this);
+        var id = parseInt($link.data("id"), 10);
+        var available = parseInt($link.data("available"), 10);
+        var nextVisibility = available ? 0 : 1;
+        var $icon = $("#imglinktool_" + id);
+
+        $.ajax({
+            type: "POST",
+            url: "../admin/languages.php",
+            data: { id: id, visibility: nextVisibility, sent_http_request: 1 },
+            beforeSend: function () {
+                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em> '.addslashes(get_lang('Loading')).'...</div>");
+            },
+            success: function (response) {
+                if (response === "set_visible" || response === "set_hidden") {
+                    var nowAvailable = response === "set_visible" ? 1 : 0;
+                    $link.data("available", nowAvailable);
+
+                    if (nowAvailable === 1) {
+                        $icon.removeClass("ch-tool-icon-disabled");
+                    } else {
+                        $icon.addClass("ch-tool-icon-disabled");
+                    }
+
+                    $("#id_content_message").html("<div class=\'alert alert-success\'>'.addslashes(get_lang('Update successful')).'</div>");
+                } else if (typeof response === "string" && response.indexOf("confirm:") === 0) {
+                    window.location.href = "'.api_get_self().'?action=make_unavailable_confirmed&id=" + id;
+                }
+            }
+        });
+    });
+});
+</script>';
+
 Display::display_header($tool_name);
 
 echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn--primary">
 <em class="fa fa-eye"></em> '.get_lang('Disable all languages except the platform default').'</a><br /><br />';
 
-// selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 $currentLanguage = api_get_setting('language.platform_language');
 
-// the table data
 $language_data = [];
 while ($row = Database::fetch_array($result_select)) {
     $row_td = [];
     $row_td[] = $row['id'];
     $checked = '';
-    // the first column is the original name of the language OR a form containing the original name
+
     if ('edit' == $action && $row['id'] == $id) {
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
@@ -257,7 +258,7 @@ while ($row = Database::fetch_array($result_select)) {
         $row_td[] = '
             <input type="hidden" name="edit_id" value="'.$id.'" />
             <input type="text" name="txt_name" value="'.$row['original_name'].'" />
-            <input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" />
+            <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" />
             <label for="platformlanguage">'.$row['original_name'].' '.get_lang('as platformlanguage').'</label>
             <input type="submit" name="Submit" value="'.get_lang('Validate').'" />
             <a name="value" />';
@@ -265,14 +266,20 @@ while ($row = Database::fetch_array($result_select)) {
         $row_td[] = $row['original_name'];
     }
 
-    // the second column
     $row_td[] = $row['english_name'].' ('.$row['isocode'].')';
 
     if ($row['isocode'] == $currentLanguage) {
-        $setplatformlanguage = Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Current portal\'s language'));
+        $setplatformlanguage = Display::getMdiIcon(
+            ToolIcon::TRANSLATION,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Current portal\'s language')
+        );
     } else {
+        $confirmSet = addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'));
         $setplatformlanguage =
-            "<a href=\"javascript:if (confirm('".addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
+            "<a href=\"javascript:if (confirm('".$confirmSet."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
             Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Set language as default'))."</a>";
     }
 
@@ -303,13 +310,16 @@ while ($row = Database::fetch_array($result_select)) {
         $row_td[] = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
             "<a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".
             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
-                     &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+            &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     } else {
-        $action = ($row['available'] == 1) ? 'makeunavailable' : 'makeavailable';
         $icon = ($row['available'] == 1) ? StateIcon::ACTIVE : StateIcon::INACTIVE;
         $tooltip = ($row['available'] == 1) ? get_lang('Make unavailable') : get_lang('Make available');
 
-        $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=$action&id=".$row['id']."'>".
+        $row_td[] = "<a class=\"make_visible_and_invisible\"
+                        id=\"linktool_".$row['id']."\"
+                        href=\"".api_get_self()."?action=".(($row['available']==1)?'makeunavailable':'makeavailable')."&id=".$row['id']."\"
+                        data-id=\"".$row['id']."\"
+                        data-available=\"".$row['available']."\">".
             Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $tooltip, ['id' => 'imglinktool_'.$row['id']])."</a>
             <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
             &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;

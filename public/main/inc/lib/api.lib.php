@@ -3720,8 +3720,10 @@ function api_get_languages_with_platform_default(): array
 {
     $langTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
-    // Standard available languages
-    $sql = "SELECT isocode, original_name FROM $langTable WHERE available = '1' ORDER BY original_name ASC";
+    $sql = "SELECT isocode, original_name
+            FROM $langTable
+            WHERE available = '1'
+            ORDER BY english_name ASC";
     $res = Database::query($sql);
 
     $languages = [];
@@ -3739,9 +3741,6 @@ function api_get_languages_with_platform_default(): array
             $languages[$row['isocode']] = $row['original_name'];
         }
     }
-
-    // Optional: stable, human-friendly order
-    asort($languages, SORT_NATURAL | SORT_FLAG_CASE);
 
     return $languages;
 }

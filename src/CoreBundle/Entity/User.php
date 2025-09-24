@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
@@ -108,20 +109,27 @@ use UserManager;
             normalizationContext: ['groups' => ['user_skills:read']],
             name: 'get_user_skills'
         ),
-        new Post(
-            uriTemplate: '/advanced/create-user-on-access-url',
-            controller: CreateUserOnAccessUrlAction::class,
-            denormalizationContext: ['groups' => ['write']],
-            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
-            input: CreateUserOnAccessUrlInput::class,
-            output: User::class,
-            deserialize: true,
-            name: 'create_user_on_access_url'
-        ),
     ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']],
     security: 'is_granted("ROLE_USER")'
+)]
+#[ApiResource(
+    uriTemplate: '/access_urls/{id}/user',
+    operations: [
+        new Post(
+            controller: CreateUserOnAccessUrlAction::class,
+        ),
+    ],
+    uriVariables: [
+        'id' => new Link(
+            description: 'AccessUrl identifier',
+        ),
+    ],
+    denormalizationContext: ['groups' => ['write']],
+    input: CreateUserOnAccessUrlInput::class,
+    output: User::class,
+    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
 )]
 #[ORM\Table(name: 'user')]
 #[ORM\Index(columns: ['status'], name: 'status')]
@@ -224,7 +232,6 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $apiToken = null;
 
     #[ApiProperty(iris: ['http://schema.org/name'])]
-    #[Assert\NotBlank]
     #[Groups(['user:read', 'user:write', 'resource_node:read', 'user_json:read', 'track_e_exercise:read', 'user_rel_user:read', 'user_subscriptions:sessions', 'student_publication_rel_user:read'])]
     #[ORM\Column(name: 'firstname', type: 'string', length: 64, nullable: true)]
     protected ?string $firstname = null;
@@ -1328,7 +1335,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -1340,7 +1347,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): self
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 

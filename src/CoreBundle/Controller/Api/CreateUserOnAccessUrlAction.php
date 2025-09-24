@@ -8,47 +8,40 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateUserOnAccessUrlInput;
-use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
-use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
-class CreateUserOnAccessUrlAction
+readonly class CreateUserOnAccessUrlAction
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private AccessUrlRepository $accessUrlRepo,
         private ValidatorInterface $validator,
-        private UserPasswordHasherInterface $passwordHasher,
         private ExtraFieldValuesRepository $extraFieldValuesRepo,
         private ExtraFieldRepository $extraFieldRepo,
         private MessageHelper $messageHelper,
         private TranslatorInterface $translator,
         private UserHelper $userHelper,
-        private readonly RequestStack $requestStack,
-        private readonly SettingsManager $settingsManager
+        private RequestStack $requestStack,
+        private SettingsManager $settingsManager,
+        private UserRepository $userRepository,
     ) {}
 
-    public function __invoke(CreateUserOnAccessUrlInput $data): User
+    public function __invoke(AccessUrl $url, CreateUserOnAccessUrlInput $data): User
     {
         $this->validator->validate($data);
-
-        $url = $this->accessUrlRepo->find($data->getAccessUrlId());
-        if (!$url) {
-            throw new NotFoundHttpException('Access URL not found.');
-        }
 
         $user = new User();
         $user
@@ -60,13 +53,12 @@ class CreateUserOnAccessUrlAction
             ->setTimezone($data->getTimezone() ?? 'Europe/Paris')
             ->setStatus($data->getStatus() ?? 5)
             ->setActive(User::ACTIVE)
-            ->setPassword(
-                $this->passwordHasher->hashPassword($user, $data->getPassword())
-            )
+            ->setPlainPassword($data->getPassword())
+            ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $url)
+            ->setRoleFromStatus($data->getStatus() ?? 5)
         ;
 
-        $this->em->persist($user);
-        $this->em->flush();
+        $this->userRepository->updateUser($user);
 
         if (!empty($data->extraFields)) {
             foreach ($data->extraFields as $variable => $value) {
@@ -87,17 +79,9 @@ class CreateUserOnAccessUrlAction
             }
         }
 
-        $hasAccess = $user->getPortals()->exists(
-            fn ($k, $rel) => $rel->getUrl()?->getId() === $url->getId()
-        );
+        $url->addUser($user);
 
-        if (!$hasAccess) {
-            $rel = new AccessUrlRelUser();
-            $rel->setUser($user)->setUrl($url);
-
-            $this->em->persist($rel);
-            $this->em->flush();
-        }
+        $this->em->flush();
 
         if ($data->getSendEmail()) {
             $request = $this->requestStack->getCurrentRequest();

@@ -1327,6 +1327,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => '2fa_enable',
+                    'title' => 'Enable 2FA',
+                    'comment' => "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously.",
+                ],
+                [
                     'name' => 'filter_terms',
                     'title' => 'Filter terms',
                     'comment' => 'Give a list of terms, one by line, to be filtered out of web pages and e-mails. These terms will be replaced by ***.',

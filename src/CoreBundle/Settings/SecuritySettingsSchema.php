@@ -43,6 +43,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'anonymous_autoprovisioning' => 'false',
             'access_to_personal_file_for_all' => 'false',
             'password_rotation_days' => '0',
+            '2fa_enable' => 'false',
         ]);
 
         $allowedTypes = [
@@ -80,6 +81,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('anonymous_autoprovisioning', YesNoType::class)
             ->add('access_to_personal_file_for_all', YesNoType::class)
             ->add('password_rotation_days', TextType::class)
+            ->add('2fa_enable', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

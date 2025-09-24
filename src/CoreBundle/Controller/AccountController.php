@@ -114,32 +114,33 @@ class AccountController extends BaseController
 
         if (!$user || !$user instanceof UserInterface) {
             $userId = $request->query->get('userId');
-            // error_log("User not logged in. Received userId from query: " . $userId);
 
             if (!$userId || !ctype_digit($userId)) {
-                // error_log("Access denied: Missing or invalid userId.");
                 throw $this->createAccessDeniedException('This user does not have access to this section.');
             }
 
             $user = $userRepository->find((int) $userId);
 
             if (!$user || !$user instanceof UserInterface) {
-                // error_log("Access denied: User not found with ID $userId");
                 throw $this->createAccessDeniedException('User not found or invalid.');
             }
-
-            // error_log("Loaded user by ID: " . $user->getId());
         }
 
+        // Global 2FA toggle: read either "security.2fa_enable" or fallback "2fa_enable"
+        $twoFaEnabledGlobally = 'true' === $settingsManager->getSetting('security.2fa_enable', true);
+
+        // When rotating password (forced update), we also hide the 2FA widget
         $isRotation = $request->query->getBoolean('rotate', false);
 
+        // Build the form; expose 2FA fields only if globally enabled and not rotating the password
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
         ], [
             'user' => $user,
             'portal_name' => $settingsManager->getSetting('platform.institution'),
             'password_hasher' => $passwordHasher,
-            'enable_2fa_field' => !$isRotation,
+            'enable_2fa_field' => $twoFaEnabledGlobally && !$isRotation,
+            'global_2fa_enabled' => $twoFaEnabledGlobally,
         ]);
         $form->handleRequest($request);
 
@@ -147,9 +148,10 @@ class AccountController extends BaseController
         $qrCodeBase64 = null;
         $showQRCode = false;
 
-        // Build QR code preview if user opts to enable 2FA but hasn't saved yet
+        // Pre-generate QR preview only when 2FA is globally enabled and user opted-in but hasn't saved yet
         if (
-            $form->isSubmitted()
+            $twoFaEnabledGlobally
+            && $form->isSubmitted()
             && $form->has('enable2FA')
             && $form->get('enable2FA')->getData()
             && !$user->getMfaSecret()
@@ -186,35 +188,40 @@ class AccountController extends BaseController
                 if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
                     $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
                 } else {
-                    $currentPassword = $form->get('currentPassword')->getData();
-                    $newPassword = $form->get('newPassword')->getData();
-                    $confirmPassword = $form->get('confirmPassword')->getData();
-                    $enable2FA = !$isRotation && $form->has('enable2FA')
-                        ? $form->get('enable2FA')->getData()
+                    $currentPassword  = $form->get('currentPassword')->getData();
+                    $newPassword      = $form->get('newPassword')->getData();
+                    $confirmPassword  = $form->get('confirmPassword')->getData();
+
+                    // Only consider the user's 2FA intent if the global toggle is ON and not rotating
+                    $enable2FA = $twoFaEnabledGlobally && !$isRotation && $form->has('enable2FA')
+                        ? (bool) $form->get('enable2FA')->getData()
                         : false;
 
-                    if ($enable2FA && !$user->getMfaSecret()) {
+                    // Handle 2FA activation (only when globally enabled)
+                    if ($twoFaEnabledGlobally && $enable2FA && !$user->getMfaSecret()) {
                         $secret = $session->get('temporary_mfa_secret');
-                        $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
-                        $user->setMfaSecret($encryptedSecret);
-                        $user->setMfaEnabled(true);
-                        $user->setMfaService('TOTP');
-                        $userRepository->updateUser($user);
+                        if ($secret) {
+                            $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
+                            $user->setMfaSecret($encryptedSecret);
+                            $user->setMfaEnabled(true);
+                            $user->setMfaService('TOTP');
+                            $userRepository->updateUser($user);
+                            $session->remove('temporary_mfa_secret');
 
-                        $session->remove('temporary_mfa_secret');
-
-                        $this->addFlash('success', '2FA activated successfully.');
-
-                        return $this->redirectToRoute('chamilo_core_account_home');
+                            $this->addFlash('success', $this->translator->trans('2FA activated successfully.'));
+                            return $this->redirectToRoute('chamilo_core_account_home');
+                        }
                     }
 
-                    if (!$isRotation && !$enable2FA && $user->getMfaEnabled()) {
+                    // Handle 2FA deactivation from the form (only visible if global is ON; safe to guard too)
+                    if ($twoFaEnabledGlobally && !$isRotation && !$enable2FA && $user->getMfaEnabled()) {
                         $user->setMfaEnabled(false);
                         $user->setMfaSecret(null);
                         $userRepository->updateUser($user);
-                        $this->addFlash('success', '2FA disabled successfully.');
+                        $this->addFlash('success', $this->translator->trans('2FA disabled successfully.'));
                     }
 
+                    // Password change flow (unchanged)
                     if ($newPassword || $confirmPassword || $currentPassword) {
                         if (!$userRepository->isPasswordValid($user, $currentPassword)) {
                             $form->get('currentPassword')->addError(new FormError(
@@ -228,15 +235,11 @@ class AccountController extends BaseController
                             $user->setPlainPassword($newPassword);
                             $user->setPasswordUpdatedAt(new DateTimeImmutable());
                             $userRepository->updateUser($user);
-                            $this->addFlash('success', 'Password updated successfully.');
+                            $this->addFlash('success', $this->translator->trans('Password updated successfully.'));
 
-                            // Re-login if the user was not logged
+                            // Re-login if the user was not logged in (edge case when rotating from link)
                             if (!$this->getUser()) {
-                                $token = new UsernamePasswordToken(
-                                    $user,
-                                    'main',
-                                    $user->getRoles()
-                                );
+                                $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
                                 $tokenStorage->setToken($token);
                                 $request->getSession()->set('_security_main', serialize($token));
                             }

@@ -47,6 +47,7 @@ class ChangePasswordType extends AbstractType
             ])
         ;
 
+        // Show 2FA fields only when allowed by controller/options
         if ($options['enable_2fa_field']) {
             $builder->add('enable2FA', CheckboxType::class, [
                 'label' => 'Enable two-factor authentication (2FA)',
@@ -72,7 +73,7 @@ class ChangePasswordType extends AbstractType
             $newPassword = $form->get('newPassword')->getData();
             $confirmPassword = $form->get('confirmPassword')->getData();
             $enable2FA = $form->has('enable2FA')
-                ? $form->get('enable2FA')->getData()
+                ? (bool) $form->get('enable2FA')->getData()
                 : false;
             $code = $form->has('confirm2FACode')
                 ? $form->get('confirm2FACode')->getData()
@@ -96,7 +97,8 @@ class ChangePasswordType extends AbstractType
                 }
             }
 
-            if ($form->has('confirm2FACode')) {
+            // Guard 2FA validation behind the global toggle AND presence of the field
+            if ($options['global_2fa_enabled'] === true && $form->has('confirm2FACode')) {
                 if ($user->getMfaEnabled() || $enable2FA) {
                     if (empty($code)) {
                         $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
@@ -131,13 +133,14 @@ class ChangePasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'change_password',
-            'enable_2fa_field' => true,
-            'user' => null,
-            'portal_name' => 'Chamilo',
-            'password_hasher' => null,
+            'csrf_protection'   => true,
+            'csrf_field_name'   => '_token',
+            'csrf_token_id'     => 'change_password',
+            'enable_2fa_field'  => true,
+            'global_2fa_enabled'=> true,
+            'user'              => null,
+            'portal_name'       => 'Chamilo',
+            'password_hasher'   => null,
         ]);
     }
 

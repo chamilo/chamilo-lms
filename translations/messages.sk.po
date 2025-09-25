@@ -4367,8 +4367,8 @@ msgstr "Testovací Server"
 msgid "Who's Online"
 msgstr "Kto je online"
 
-msgid "as platformlanguage"
-msgstr "ako jazyk platformy"
+msgid "%s as platform language"
+msgstr "%s ako jazyk platformy"
 
 msgid "Display the number of persons that are online?"
 msgstr "Zobraziť počet pripojených používateľov?"

@@ -4359,8 +4359,8 @@ msgstr "테스트 서버"
 msgid "Who's Online"
 msgstr "누가 로그인했을까?"
 
-msgid "as platformlanguage"
-msgstr "플랫폼 언어처럼"
+msgid "%s as platform language"
+msgstr "%s 플랫폼 언어처럼"
 
 msgid "Display the number of persons that are online?"
 msgstr "온라인 상에 있는 사람의 수를 표시하도록 하겠습니까?"

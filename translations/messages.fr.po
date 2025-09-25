@@ -4473,8 +4473,8 @@ msgstr "Serveur de test"
 msgid "Who's Online"
 msgstr "Qui est connecté"
 
-msgid "as platformlanguage"
-msgstr "comme langue de la plateforme"
+msgid "%s as platform language"
+msgstr "%s comme langue de la plateforme"
 
 msgid "Display the number of persons that are online?"
 msgstr "Afficher le nombre de personnes connectées ?"

@@ -259,7 +259,7 @@ while ($row = Database::fetch_array($result_select)) {
             <input type="hidden" name="edit_id" value="'.$id.'" />
             <input type="text" name="txt_name" value="'.$row['original_name'].'" />
             <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" />
-            <label for="platformlanguage">'.$row['original_name'].' '.get_lang('as platformlanguage').'</label>
+            <label for="platformlanguage">'.sprintf(get_lang('%s as platform language'), $row['original_name']).'</label>
             <input type="submit" name="Submit" value="'.get_lang('Validate').'" />
             <a name="value" />';
     } else {

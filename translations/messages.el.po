@@ -4367,8 +4367,8 @@ msgstr "Δοκιμαστικός Server"
 msgid "Who's Online"
 msgstr "Ποιοι είναι συνδεδεμένοι"
 
-msgid "as platformlanguage"
-msgstr "ως γλώσσα πλατφόρμας"
+msgid "%s as platform language"
+msgstr "%s ως γλώσσα πλατφόρμας"
 
 msgid "Display the number of persons that are online?"
 msgstr "Εμφάνιση πλήθους προσώπων που είναι συνδεμένοι;"

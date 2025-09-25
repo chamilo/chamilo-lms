@@ -4359,8 +4359,8 @@ msgstr "Test (Geliştirme) Sunucusu"
 msgid "Who's Online"
 msgstr "Bağlı Kullanıcılar"
 
-msgid "as platformlanguage"
-msgstr "platform lisanı olarak"
+msgid "%s as platform language"
+msgstr "%s platform lisanı olarak"
 
 msgid "Display the number of persons that are online?"
 msgstr "Online kullanıcılar gösterilsin mi?"

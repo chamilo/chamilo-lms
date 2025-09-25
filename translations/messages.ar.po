@@ -4368,8 +4368,8 @@ msgstr " خادم الاختبار"
 msgid "Who's Online"
 msgstr "من المتصل"
 
-msgid "as platformlanguage"
-msgstr " كلغة النظام"
+msgid "%s as platform language"
+msgstr "%s كلغة النظام"
 
 msgid "Display the number of persons that are online?"
 msgstr "عرض عدد الاشخاص المتصلين؟"

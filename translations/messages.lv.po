@@ -4360,8 +4360,8 @@ msgstr "Testa Serveris"
 msgid "Who's Online"
 msgstr "Kuri Lietotāji ir tiešsaistē?"
 
-msgid "as platformlanguage"
-msgstr "kā platformas valoda"
+msgid "%s as platform language"
+msgstr "%s kā platformas valoda"
 
 msgid "Display the number of persons that are online?"
 msgstr "Rādīt personu skaitu, cik ir tiešsaistē?"

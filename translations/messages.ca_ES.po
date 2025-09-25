@@ -4367,8 +4367,8 @@ msgstr "Servidor de proves"
 msgid "Who's Online"
 msgstr "Usuaris connectats"
 
-msgid "as platformlanguage"
-msgstr "Com a idioma de la plataforma"
+msgid "%s as platform language"
+msgstr "%s com a idioma de la plataforma"
 
 msgid "Display the number of persons that are online?"
 msgstr "Mostrar el nombre de persones en línia?"

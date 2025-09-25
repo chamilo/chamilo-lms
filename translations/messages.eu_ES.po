@@ -4359,8 +4359,8 @@ msgstr "Proba zerbitzaria"
 msgid "Who's Online"
 msgstr "Nor dago online?"
 
-msgid "as platformlanguage"
-msgstr "plataformako hizkuntza gisa"
+msgid "%s as platform language"
+msgstr "%s plataformako hizkuntza gisa"
 
 msgid "Display the number of persons that are online?"
 msgstr "Online dauden pertsona kopurua erakutsi behar al da?"

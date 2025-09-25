@@ -4359,8 +4359,8 @@ msgstr "Тест сервер"
 msgid "Who's Online"
 msgstr "Кој е онлајн"
 
-msgid "as platformlanguage"
-msgstr "како јазик_на_платформата"
+msgid "%s as platform language"
+msgstr "%s како јазик_на_платформата"
 
 msgid "Display the number of persons that are online?"
 msgstr "Покажи го бројот на корисници кои се онлајн?"

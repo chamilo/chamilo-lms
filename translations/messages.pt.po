@@ -4367,8 +4367,8 @@ msgstr "Servidor de Teste"
 msgid "Who's Online"
 msgstr "Quem está online?"
 
-msgid "as platformlanguage"
-msgstr "como idioma da plataforma"
+msgid "%s as platform language"
+msgstr "%s como idioma da plataforma"
 
 msgid "Display the number of persons that are online?"
 msgstr "Mostrar número de pessoas que estão online?"

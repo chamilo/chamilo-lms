@@ -4354,8 +4354,8 @@ msgstr "စမ်းသပ်ဆာဗာ"
 msgid "Who's Online"
 msgstr "အွန်လိုင်းရှိသူ"
 
-msgid "as platformlanguage"
-msgstr "ပလပ်ဖောင်းဘာသာစကားအဖြစ်"
+msgid "%s as platform language"
+msgstr "%s ပလပ်ဖောင်းဘာသာစကားအဖြစ်"
 
 msgid "Display the number of persons that are online?"
 msgstr "အွန်လိုင်းရှိသူများ၏ အရေအတွက်ကို ပြသမည်လား။"

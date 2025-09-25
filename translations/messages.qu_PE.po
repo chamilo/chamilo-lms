@@ -4359,8 +4359,8 @@ msgstr "Servidor de desarrollo"
 msgid "Who's Online"
 msgstr "¿ Pin kashan kunan ?"
 
-msgid "as platformlanguage"
-msgstr "hanp'araq simin hina"
+msgid "%s as platform language"
+msgstr "%s hanp'araq simin hina"
 
 msgid "Display the number of persons that are online?"
 msgstr "Qhawarichinkichu hayka runakuna kaypi kasqankuta ?"

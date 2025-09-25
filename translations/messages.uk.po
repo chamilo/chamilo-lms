@@ -4352,8 +4352,8 @@ msgstr "Тестовий сервер"
 msgid "Who's Online"
 msgstr "Хто в онлайні"
 
-msgid "as platformlanguage"
-msgstr "як мова платформи"
+msgid "%s as platform language"
+msgstr "%s як мова платформи"
 
 msgid "Display the number of persons that are online?"
 msgstr "Показувати кількість осіб, що в онлайні?"

@@ -4368,8 +4368,8 @@ msgstr "שרת בדיקה"
 msgid "Who's Online"
 msgstr "מי מחובר"
 
-msgid "as platformlanguage"
-msgstr "כשפה פלטפורמה"
+msgid "%s as platform language"
+msgstr "%s כשפה פלטפורמה"
 
 msgid "Display the number of persons that are online?"
 msgstr "הצג את מספר האנשים המקוונים?"

@@ -4349,7 +4349,7 @@ msgstr ""
 msgid "Who's Online"
 msgstr ""
 
-msgid "as platformlanguage"
+msgid "%s as platform language"
 msgstr ""
 
 msgid "Display the number of persons that are online?"

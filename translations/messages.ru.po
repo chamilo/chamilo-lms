@@ -4360,8 +4360,8 @@ msgstr "Тестовый сервер"
 msgid "Who's Online"
 msgstr "Кто на связи (онлайн)"
 
-msgid "as platformlanguage"
-msgstr "как язык платформы"
+msgid "%s as platform language"
+msgstr "%s как язык платформы"
 
 msgid "Display the number of persons that are online?"
 msgstr "Показать число человек, кто в настоящий момент на связи (онлайн)?"

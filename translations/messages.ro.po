@@ -4368,8 +4368,8 @@ msgstr "Server de testare"
 msgid "Who's Online"
 msgstr "Cine este conectat"
 
-msgid "as platformlanguage"
-msgstr "ca limba pentru platforma"
+msgid "%s as platform language"
+msgstr "%s ca limba pentru platforma"
 
 msgid "Display the number of persons that are online?"
 msgstr "Doriti afisarea numarului de persoane conectate in acest moment?"

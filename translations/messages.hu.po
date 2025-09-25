@@ -4359,8 +4359,8 @@ msgstr "Teszt szerver"
 msgid "Who's Online"
 msgstr "Ki van bejelentkezve"
 
-msgid "as platformlanguage"
-msgstr "a felület nyelveként"
+msgid "%s as platform language"
+msgstr "%s a felület nyelveként"
 
 msgid "Display the number of persons that are online?"
 msgstr "Mutassa az online felhasználók számát?"

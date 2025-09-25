@@ -4420,8 +4420,8 @@ msgstr "Test-Server"
 msgid "Who's Online"
 msgstr "Wer ist online"
 
-msgid "as platformlanguage"
-msgstr "als Plattform Sprache"
+msgid "%s as platform language"
+msgstr "%s als Plattform Sprache"
 
 msgid "Display the number of persons that are online?"
 msgstr "Die Zahl der Benutzer anzeigen, die zur Zeit online sind?"

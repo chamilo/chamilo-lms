@@ -4359,8 +4359,8 @@ msgstr "Servidor de desendolcu"
 msgid "Who's Online"
 msgstr "¿ Quién ta coneutáu ?"
 
-msgid "as platformlanguage"
-msgstr "como idioma de la plataforma"
+msgid "%s as platform language"
+msgstr "%s como idioma de la plataforma"
 
 msgid "Display the number of persons that are online?"
 msgstr "¿ Amosar númberu de persones que tán coneutaes ?"

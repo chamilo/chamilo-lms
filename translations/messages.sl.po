@@ -4368,8 +4368,8 @@ msgstr "Testni strežnik"
 msgid "Who's Online"
 msgstr "Kdo je aktiven"
 
-msgid "as platformlanguage"
-msgstr " kot jezik platforme"
+msgid "%s as platform language"
+msgstr "%s kot jezik platforme"
 
 msgid "Display the number of persons that are online?"
 msgstr "Prikaz števila trenutno prijavljenih (aktivnih) uporabnikov ?"

@@ -4372,8 +4372,8 @@ msgstr "Servidor de desarrollo"
 msgid "Who's Online"
 msgstr "¿ Quién está en línea ?"
 
-msgid "as platformlanguage"
-msgstr "como idioma de la plataforma"
+msgid "%s as platform language"
+msgstr "%s como idioma de la plataforma"
 
 msgid "Display the number of persons that are online?"
 msgstr "¿ Mostrar el número de personas que están en línea ?"

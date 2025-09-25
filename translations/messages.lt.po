@@ -4361,8 +4361,8 @@ msgstr "Testavimo severis"
 msgid "Who's Online"
 msgstr "Kas yra prisijungęs"
 
-msgid "as platformlanguage"
-msgstr "kaip sistemos kalba"
+msgid "%s as platform language"
+msgstr "%s kaip sistemos kalba"
 
 msgid "Display the number of persons that are online?"
 msgstr "Rodyti prisijungusių prie sistemos asmenų skaičių?"

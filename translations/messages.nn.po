@@ -4359,8 +4359,8 @@ msgstr "Testtjener"
 msgid "Who's Online"
 msgstr "Hvem er pålogget"
 
-msgid "as platformlanguage"
-msgstr "som plattformspråk"
+msgid "%s as platform language"
+msgstr "%s som plattformspråk"
 
 msgid "Display the number of persons that are online?"
 msgstr "Vise antall personer pålogget?"

@@ -4391,8 +4391,8 @@ msgstr "Testserver"
 msgid "Who's Online"
 msgstr "Online gebruikers"
 
-msgid "as platformlanguage"
-msgstr "als platformtaal"
+msgid "%s as platform language"
+msgstr "%s als platformtaal"
 
 msgid "Display the number of persons that are online?"
 msgstr "Toon het aantal gebruikers dat online is?"

@@ -4359,8 +4359,8 @@ msgstr "سرور آزمایشی"
 msgid "Who's Online"
 msgstr "چه کسانی متصل هستند؟"
 
-msgid "as platformlanguage"
-msgstr "زبان محیط آموزشی"
+msgid "%s as platform language"
+msgstr "%s زبان محیط آموزشی"
 
 msgid "Display the number of persons that are online?"
 msgstr "نمایش تعداد افراد متصل؟"

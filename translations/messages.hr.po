@@ -4360,8 +4360,8 @@ msgstr "Probni poslužitelj"
 msgid "Who's Online"
 msgstr "Tko je priključen"
 
-msgid "as platformlanguage"
-msgstr "kao jezik platforme"
+msgid "%s as platform language"
+msgstr "%s kao jezik platforme"
 
 msgid "Display the number of persons that are online?"
 msgstr "Prikaži broj priključenih korisnika?"

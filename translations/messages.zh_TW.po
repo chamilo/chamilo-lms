@@ -4359,8 +4359,8 @@ msgstr "測試伺服器"
 msgid "Who's Online"
 msgstr "誰在線上？"
 
-msgid "as platformlanguage"
-msgstr "作為平台語言"
+msgid "%s as platform language"
+msgstr "%s 作為平台語言"
 
 msgid "Display the number of persons that are online?"
 msgstr "是否顯示在線人數？"

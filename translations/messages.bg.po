@@ -4359,8 +4359,8 @@ msgstr "Тестов сървър"
 msgid "Who's Online"
 msgstr "Посетители"
 
-msgid "as platformlanguage"
-msgstr "като език на системата"
+msgid "%s as platform language"
+msgstr "%s като език на системата"
 
 msgid "Display the number of persons that are online?"
 msgstr "Дали да се показва броят на посетителите на портала?"

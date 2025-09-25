@@ -4359,8 +4359,8 @@ msgstr "Server Ujicoba"
 msgid "Who's Online"
 msgstr "siapa yang online"
 
-msgid "as platformlanguage"
-msgstr "sebagai bahasa platform"
+msgid "%s as platform language"
+msgstr "%s sebagai bahasa platform"
 
 msgid "Display the number of persons that are online?"
 msgstr "Tampilkan jumlah user online?"

@@ -138,6 +138,7 @@ class PlatformConfigurationController extends AbstractController
                 'platform.table_default_row',
                 'platform.table_row_list',
                 'social.allow_social_tool',
+                'chat.allow_global_chat',
             ];
 
             $user = $this->userHelper->getCurrent();

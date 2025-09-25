@@ -12,6 +12,7 @@
     <ConfirmDialog />
 
     <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+    <DockedChat v-if="showGlobalChat" />
   </component>
   <Toast position="top-center">
     <template #message="slotProps">
@@ -40,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
+import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect, defineAsyncComponent } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import axios from "axios"
@@ -62,7 +63,7 @@ import { useMediaElementLoader } from "./composables/mediaElementLoader"
 import apolloClient from "./config/apolloClient"
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
-import i18nInstance, { setLocale } from "./i18n"
+import { setLocale } from "./i18n"
 
 provide(DefaultApolloClient, apolloClient)
 
@@ -116,21 +117,9 @@ const layout = computed(() => {
 })
 
 const legacyContainer = ref(null)
-
-watch(
-  () => route.name,
-  () => {
-    if (legacyContainer.value) {
-      legacyContainer.value.innerHTML = ""
-    }
-  },
-)
-
+watch(() => route.name, () => { if (legacyContainer.value) legacyContainer.value.innerHTML = "" })
 watchEffect(() => {
-  if (!legacyContainer.value) {
-    return
-  }
-
+  if (!legacyContainer.value) return
   const content = document.querySelector("#sectionMainContent")
 
   if (content) {
@@ -173,10 +162,10 @@ axios.interceptors.response.use(
   undefined,
   (error) =>
     new Promise(() => {
-      if (401 === error.response.status) {
-        notification.showWarningNotification(error.response.data.error)
-      } else if (500 === error.response.status) {
-        notification.showWarningNotification(error.response.data.detail)
+      if (401 === error.response?.status) {
+        notification.showWarningNotification(error.response.data?.error)
+      } else if (500 === error.response?.status) {
+        notification.showWarningNotification(error.response.data?.detail)
       }
 
       throw error
@@ -185,31 +174,16 @@ axios.interceptors.response.use(
 
 platformConfigurationStore.initialize()
 
-// Keep i18n locale synced with your own "useLocale" composable,
-// but switch via setLocale(...) to trigger proper remounting & fallbacks.
-watch(
-  () => route.params, // if your appLocale depends on route (keep as-is if needed)
-  () => {
-    const { appLocale } = useLocale()
-    if (appLocale?.value && locale.value !== appLocale.value) {
-      setLocale(appLocale.value)
-    }
-  },
-  {
-    immediate: true,
-  },
-)
+// i18n sync
+watch(() => route.params, () => {
+  const { appLocale } = useLocale()
+  if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
+}, { immediate: true })
 
-// Also react to the authenticated user's preferred language (after login)
-watch(
-  () => securityStore.user?.language,
-  (lang) => {
-    if (lang && locale.value !== lang) {
-      setLocale(lang)
-    }
-  },
-  { immediate: true },
-)
+watch(() => securityStore.user?.language, (lang) => {
+  if (lang && locale.value !== lang) setLocale(lang)
+}, { immediate: true })
+
 
 onMounted(async () => {
   const { loader } = useMediaElementLoader()
@@ -227,5 +201,22 @@ onMounted(async () => {
         console.error("[PWA] Service Worker registration failed:", error)
       })
   }
+})
+
+const DockedChat = defineAsyncComponent(() => import("./components/chat/DockedChat.vue"))
+const allowGlobalChat = computed(() => {
+  if (platformConfigurationStore.isLoading) {
+    console.log("[CHAT] waiting settings... isLoading=true")
+    return false
+  }
+  const val = platformConfigurationStore.getSetting?.("chat.allow_global_chat")
+  console.log("[CHAT] getSetting('chat.allow_global_chat') ->", val)
+  return String(val) === "true"
+})
+
+const showGlobalChat = computed(() => {
+  const visible = securityStore.isAuthenticated && allowGlobalChat.value
+  console.log("[CHAT] showGlobalChat=", visible, "| isAuthenticated=", securityStore.isAuthenticated, "| allowGlobalChat=", allowGlobalChat.value)
+  return visible
 })
 </script>

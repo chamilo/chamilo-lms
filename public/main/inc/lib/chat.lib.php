@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use ChamiloSession as Session;
 
 /**
@@ -84,15 +85,9 @@ class Chat extends Model
     /**
      * @return string
      */
-    public function getContacts()
+    public function getContacts(): string
     {
-        $html = SocialManager::listMyFriendsBlock(
-            api_get_user_id(),
-            '',
-            true
-        );
-
-        echo $html;
+        return (string) SocialManager::listMyFriendsBlock(api_get_user_id(), '', true);
     }
 
     /**
@@ -367,7 +362,8 @@ class Chat extends Model
     ) {
         $relation = SocialManager::get_relation_between_contacts($fromUserId, $to_user_id);
 
-        if (USER_RELATION_TYPE_FRIEND == $relation) {
+        if ($relation === UserRelUser::USER_RELATION_TYPE_FRIEND
+            || $relation === UserRelUser::USER_RELATION_TYPE_GOODFRIEND) {
             $now = api_get_utc_datetime();
             $user_info = api_get_user_info($to_user_id, true);
             $this->saveWindow($to_user_id);
@@ -402,6 +398,7 @@ class Chat extends Model
             $params['to_user'] = (int) $to_user_id;
             $params['message'] = $messagesan;
             $params['sent'] = api_get_utc_datetime();
+            $params['recd']      = 0;
 
             if (!empty($fromUserId) && !empty($to_user_id)) {
                 $messageId = $this->save($params);
@@ -516,5 +513,22 @@ class Chat extends Model
         }
 
         return false;
+    }
+
+    public function ackReadUpTo(int $fromUserId, int $toUserId, int $lastSeenMessageId): int
+    {
+        if ($fromUserId <= 0 || $toUserId <= 0 || $lastSeenMessageId <= 0) {
+            return 0;
+        }
+
+        $sql = "UPDATE {$this->table}
+            SET recd = 2
+            WHERE from_user = {$fromUserId}
+              AND to_user = {$toUserId}
+              AND id <= {$lastSeenMessageId}
+              AND recd < 2";
+        $res = Database::query($sql);
+
+        return Database::affected_rows($res);
     }
 }

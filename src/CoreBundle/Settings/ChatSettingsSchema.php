@@ -18,8 +18,8 @@ class ChatSettingsSchema extends AbstractSettingsSchema
             ->setDefaults(
                 [
                     'show_chat_folder' => 'true',
-                    'allow_global_chat' => 'true',
-                    'hide_chat_video' => 'false',
+                    'allow_global_chat' => 'false',
+                    'hide_chat_video' => 'true',
                     'course_chat_restrict_to_coach' => 'false',
                 ]
             )

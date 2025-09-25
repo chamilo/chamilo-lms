@@ -43,6 +43,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Exception;
+use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -76,7 +78,7 @@ final class UserToJsonNormalizer
         /** @var User|null $user */
         $user = $this->userRepository->find($userId);
         if (!$user) {
-            throw new \RuntimeException(sprintf('User %d not found', $userId));
+            throw new RuntimeException(\sprintf('User %d not found', $userId));
         }
 
         $user->setPassword($substitutionTerms['password'] ?? '');
@@ -161,7 +163,8 @@ final class UserToJsonNormalizer
             $qb->select($qb->expr()->count('l'))
                 ->from($entity, 'l')
                 ->where("l.$field = :login")
-                ->setParameter('login', $userId);
+                ->setParameter('login', $userId)
+            ;
             $count = (int) $qb->getQuery()->getSingleScalarResult();
 
             if ($count > $maxResults) {
@@ -170,7 +173,8 @@ final class UserToJsonNormalizer
                     ->where("l.$field = :login")
                     ->setParameter('login', $userId)
                     ->setFirstResult(0)
-                    ->setMaxResults($maxResults);
+                    ->setMaxResults($maxResults)
+                ;
                 $result = $qb->getQuery()->getResult();
             } else {
                 $result = $em->getRepository($entity)->findBy([$field => $userId]);
@@ -569,7 +573,7 @@ final class UserToJsonNormalizer
         /** @var User|null $user */
         $user = $this->userRepository->find($userId);
         if (!$user) {
-            throw new \Exception('User not found.');
+            throw new Exception('User not found.');
         }
 
         $personalData = [];
@@ -666,8 +670,8 @@ final class UserToJsonNormalizer
         foreach ($cGroupRelUsers as $item) {
             $personalData['GroupRelations'][] = [
                 'CourseId' => $item->getCId(),
-                'GroupId'  => $item->getGroup()?->getIid() ?? 'n/a',
-                'Role'     => $item->getStatus(),
+                'GroupId' => $item->getGroup()?->getIid() ?? 'n/a',
+                'Role' => $item->getStatus(),
             ];
         }
 
@@ -675,7 +679,7 @@ final class UserToJsonNormalizer
         $cAttendanceSheets = $em->getRepository(CAttendanceSheet::class)->findBy(['user' => $userId]);
         foreach ($cAttendanceSheets as $item) {
             $personalData['AttendanceSheets'][] = [
-                'Presence'   => $item->getPresence(),
+                'Presence' => $item->getPresence(),
                 'CalendarId' => $item->getAttendanceCalendar()?->getIid() ?? 'n/a',
             ];
         }
@@ -684,7 +688,7 @@ final class UserToJsonNormalizer
         $cAttendanceResults = $em->getRepository(CAttendanceResult::class)->findBy(['user' => $userId]);
         foreach ($cAttendanceResults as $item) {
             $personalData['AttendanceResults'][] = [
-                'Score'      => $item->getScore(),
+                'Score' => $item->getScore(),
                 'CalendarId' => $item->getAttendance()?->getIid() ?? 'n/a',
             ];
         }
@@ -697,10 +701,10 @@ final class UserToJsonNormalizer
                 $item->getReceivers()->toArray()
             );
             $personalData['Messages'][] = [
-                'Title'    => $item->getTitle(),
+                'Title' => $item->getTitle(),
                 'SentDate' => $item->getSendDate()?->format($dateFormat) ?? '',
-                'ToUsers'  => implode(', ', $receivers),
-                'Type'     => $item->getMsgType(),
+                'ToUsers' => implode(', ', $receivers),
+                'Type' => $item->getMsgType(),
             ];
         }
 
@@ -717,7 +721,7 @@ final class UserToJsonNormalizer
         $cLpViews = $em->getRepository(CLpView::class)->findBy(['user' => $userId]);
         foreach ($cLpViews as $item) {
             $personalData['LpViews'][] = [
-                'LPId'     => $item->getLp()?->getIid() ?? 'n/a',
+                'LPId' => $item->getLp()?->getIid() ?? 'n/a',
                 'Progress' => $item->getProgress(),
             ];
         }

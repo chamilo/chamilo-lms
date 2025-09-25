@@ -13,7 +13,7 @@ final class Version20250918152900 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Languages: insert Burmese (my_MM) if missing.";
+        return 'Languages: insert Burmese (my_MM) if missing.';
     }
 
     public function up(Schema $schema): void

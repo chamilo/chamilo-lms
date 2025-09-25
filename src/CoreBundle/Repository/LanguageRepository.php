@@ -30,11 +30,13 @@ class LanguageRepository extends ServiceEntityRepository
 
         $qb->where($qb->expr()->eq('l.available', ':avail'))
             ->setParameter('avail', true)
-            ->orderBy('l.englishName', 'ASC');
+            ->orderBy('l.englishName', 'ASC')
+        ;
 
         if ($excludeDefaultLocale) {
             $qb->andWhere($qb->expr()->neq('l.isocode', ':iso_base'))
-                ->setParameter('iso_base', $this->parameterBag->get('locale'));
+                ->setParameter('iso_base', $this->parameterBag->get('locale'))
+            ;
         }
 
         return $qb;
@@ -80,16 +82,17 @@ class LanguageRepository extends ServiceEntityRepository
     private function getPlatformDefaultIso(): ?string
     {
         $iso = trim($this->settingsManager->getSetting('language.platform_language', true));
-        if ($iso !== '') {
+        if ('' !== $iso) {
             return $iso;
         }
 
         $englishName = trim($this->settingsManager->getSetting('language.platformLanguage'));
-        if ($englishName === '') {
+        if ('' === $englishName) {
             return null;
         }
 
         $lang = $this->findOneBy(['englishName' => $englishName]);
+
         return $lang?->getIsocode();
     }
 

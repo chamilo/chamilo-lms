@@ -349,6 +349,7 @@ class TrackingStatsHelper
             ->setParameter('ids', array_map('intval', $userIds))
             ->setParameter('active', User::ACTIVE)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 }

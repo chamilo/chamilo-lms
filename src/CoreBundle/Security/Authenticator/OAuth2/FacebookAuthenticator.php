@@ -94,6 +94,6 @@ class FacebookAuthenticator extends AbstractAuthenticator
 
     protected function getCustomBadge(): ?BadgeInterface
     {
-        return new Oauth2Badge(UserAuthSource::FACEBOOK);
+        return new OAuth2Badge(UserAuthSource::FACEBOOK);
     }
 }

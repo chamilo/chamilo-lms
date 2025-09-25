@@ -32,8 +32,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use function pathinfo;
-
 use const PATHINFO_FILENAME;
 
 #[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
@@ -79,13 +77,14 @@ class SessionAdminController extends BaseController
 
     private function normalizePath(?string $path): string
     {
-        if (!\is_string($path) || $path === '') {
+        if (!\is_string($path) || '' === $path) {
             return '/img/session_default.svg';
         }
         $p = trim($path);
-        if (\str_starts_with($p, 'http://') || \str_starts_with($p, 'https://') || \str_starts_with($p, '/')) {
+        if (str_starts_with($p, 'http://') || str_starts_with($p, 'https://') || str_starts_with($p, '/')) {
             return $p;
         }
+
         return '/'.ltrim($p, '/');
     }
 
@@ -127,7 +126,7 @@ class SessionAdminController extends BaseController
             $isDownloadAllowed = false;
 
             if (!empty($path)) {
-                $hash = pathinfo($path, PATHINFO_FILENAME);
+                $hash = \pathinfo($path, PATHINFO_FILENAME);
                 $downloadUrl = '/certificates/'.$hash.'.pdf';
 
                 $isPlatformAdmin = $user && $user->isAdmin();

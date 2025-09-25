@@ -188,9 +188,9 @@ class AccountController extends BaseController
                 if (!$csrfTokenManager->isTokenValid(new CsrfToken('change_password', $submittedToken))) {
                     $form->addError(new FormError($this->translator->trans('CSRF token is invalid. Please try again.')));
                 } else {
-                    $currentPassword  = $form->get('currentPassword')->getData();
-                    $newPassword      = $form->get('newPassword')->getData();
-                    $confirmPassword  = $form->get('confirmPassword')->getData();
+                    $currentPassword = $form->get('currentPassword')->getData();
+                    $newPassword = $form->get('newPassword')->getData();
+                    $confirmPassword = $form->get('confirmPassword')->getData();
 
                     // Only consider the user's 2FA intent if the global toggle is ON and not rotating
                     $enable2FA = $twoFaEnabledGlobally && !$isRotation && $form->has('enable2FA')
@@ -209,6 +209,7 @@ class AccountController extends BaseController
                             $session->remove('temporary_mfa_secret');
 
                             $this->addFlash('success', $this->translator->trans('2FA activated successfully.'));
+
                             return $this->redirectToRoute('chamilo_core_account_home');
                         }
                     }

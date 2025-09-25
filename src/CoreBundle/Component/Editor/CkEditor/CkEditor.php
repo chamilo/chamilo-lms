@@ -23,8 +23,8 @@ class CkEditor extends Editor
     public function createHtml($value): string
     {
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >'
-            . $value
-            . '</textarea>';
+            .$value
+            .'</textarea>';
         $html .= $this->editorReplace();
 
         return $html;
@@ -42,13 +42,13 @@ class CkEditor extends Editor
 
         if ('' === $value || '<html><head><title></title></head><body></body></html>' === $value) {
             // Load default CSS only when the editor is empty to provide a visual baseline
-            $style  = api_get_bootstrap_and_font_awesome();
+            $style = api_get_bootstrap_and_font_awesome();
             $style .= Container::getThemeHelper()->getThemeAssetLinkTag('document.css');
         }
 
         $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" >'
-            . $style.$value
-            . '</textarea>';
+            .$style.$value
+            .'</textarea>';
         $html .= $this->editorReplace();
 
         return $html;

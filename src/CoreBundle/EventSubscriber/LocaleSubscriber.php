@@ -74,7 +74,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         // Fallback: resolve course from request if not in session yet
         if (!$course instanceof Course) {
             // Accept both numeric id (?cid=123) and code (?cid=ABC) as well as legacy ?cidReq=CODE
-            $cid   = $request->query->get('cid');
+            $cid = $request->query->get('cid');
             $cidReq = $request->query->get('cidReq');
 
             if ($cid) {
@@ -91,12 +91,12 @@ class LocaleSubscriber implements EventSubscriberInterface
         }
 
         if ($course instanceof Course) {
-            $userLocale   = $localeList['user_profil_lang'] ?? null;
+            $userLocale = $localeList['user_profil_lang'] ?? null;
             $courseLocale = $course->getCourseLanguage();
 
             // The per-course setting decides whether to use user language
             $this->courseSettingsManager->setCourse($course);
-            $allowUser = $this->courseSettingsManager->getCourseSettingValue('show_course_in_user_language') === '1';
+            $allowUser = '1' === $this->courseSettingsManager->getCourseSettingValue('show_course_in_user_language');
 
             if ($allowUser && $userLocale) {
                 $localeList['course_lang'] = $userLocale;
@@ -112,11 +112,11 @@ class LocaleSubscriber implements EventSubscriberInterface
 
         // 5) Honor configured priorities language_priority_1..4
         foreach ([
-                     'language_priority_1',
-                     'language_priority_2',
-                     'language_priority_3',
-                     'language_priority_4',
-                 ] as $settingKey) {
+            'language_priority_1',
+            'language_priority_2',
+            'language_priority_3',
+            'language_priority_4',
+        ] as $settingKey) {
             $priority = $this->settingsManager->getSetting("language.$settingKey");
             if (!empty($priority) && !empty($localeList[$priority])) {
                 return $localeList[$priority];

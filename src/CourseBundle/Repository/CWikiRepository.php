@@ -8,7 +8,6 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CWiki;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CWikiRepository extends ResourceRepository
@@ -29,15 +28,16 @@ final class CWikiRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('w')
             ->select('w.userId AS userId, w.userIp AS userIp, COUNT(w.iid) AS numEdits')
             ->where('w.cId = :cId')
-            ->setParameter('cId', $courseId);
+            ->setParameter('cId', $courseId)
+        ;
 
         // Group filter
-        if ($groupId !== null) {
+        if (null !== $groupId) {
             $qb->andWhere('w.groupId = :gid')->setParameter('gid', $groupId);
         }
 
         // Session filter
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $qb->andWhere('w.sessionId = :sid')->setParameter('sid', $sessionId);
         }
 
@@ -45,6 +45,7 @@ final class CWikiRepository extends ResourceRepository
             ->groupBy('w.userId, w.userIp')
             ->orderBy('numEdits', 'DESC')
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
     }
 }

@@ -98,7 +98,7 @@ class ChangePasswordType extends AbstractType
             }
 
             // Guard 2FA validation behind the global toggle AND presence of the field
-            if ($options['global_2fa_enabled'] === true && $form->has('confirm2FACode')) {
+            if (true === $options['global_2fa_enabled'] && $form->has('confirm2FACode')) {
                 if ($user->getMfaEnabled() || $enable2FA) {
                     if (empty($code)) {
                         $form->get('confirm2FACode')->addError(new FormError('The 2FA code is required.'));
@@ -133,14 +133,14 @@ class ChangePasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'csrf_protection'   => true,
-            'csrf_field_name'   => '_token',
-            'csrf_token_id'     => 'change_password',
-            'enable_2fa_field'  => true,
-            'global_2fa_enabled'=> true,
-            'user'              => null,
-            'portal_name'       => 'Chamilo',
-            'password_hasher'   => null,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id' => 'change_password',
+            'enable_2fa_field' => true,
+            'global_2fa_enabled' => true,
+            'user' => null,
+            'portal_name' => 'Chamilo',
+            'password_hasher' => null,
         ]);
     }
 

@@ -47,7 +47,7 @@ class Basic extends Toolbar
         if ('true' === api_get_setting('enabled_mathjax')) {
             $candidates[] = 'mathjax';
             // MathJax library URL (used by your integration if needed)
-            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH) . 'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+            $config['mathJaxLib'] = api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
         if ('true' === api_get_setting('enabled_asciisvg')) {
@@ -93,7 +93,7 @@ class Basic extends Toolbar
             // 'ckeditor_wiris' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_wiris/plugin.js',
             // 'ckeditor_vimeo_embed' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_vimeo_embed/plugin.js',
             // 'scayt' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/scayt/plugin.js',
-            'translatehtml' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/translatehtml/plugin.js',
+            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js',
         ];
 
         // Filter candidates by availability (core or external). Build external_plugins map as needed.
@@ -110,7 +110,9 @@ class Basic extends Toolbar
         $this->detectedExternalPlugins = $externalMap;
     }
 
-    /** @var array<string,string> */
+    /**
+     * @var array<string,string>
+     */
     private array $detectedExternalPlugins = [];
 
     /**
@@ -160,6 +162,7 @@ class Basic extends Toolbar
 
         // Do NOT set $config['toolbar']; the base toolbar comes from tiny-settings.js
         $this->config = $config;
+
         return $this->config;
     }
 
@@ -218,12 +221,12 @@ class Basic extends Toolbar
                 $generalLangFile = "libs/editor/langs/{$generalLangCode}.js";
             }
 
-            if (file_exists($sysUrl . $specificLangFile)) {
+            if (file_exists($sysUrl.$specificLangFile)) {
                 $config['language'] = $iso;
-                $config['language_url'] = $url . $specificLangFile;
-            } elseif (null !== $generalLangFile && file_exists($sysUrl . $generalLangFile)) {
+                $config['language_url'] = $url.$specificLangFile;
+            } elseif (null !== $generalLangFile && file_exists($sysUrl.$generalLangFile)) {
                 $config['language'] = $generalLangCode;
-                $config['language_url'] = $url . $generalLangFile;
+                $config['language_url'] = $url.$generalLangFile;
             }
         }
 
@@ -239,8 +242,9 @@ class Basic extends Toolbar
      *
      * Returns: [availablePluginNames[], externalPluginsMap[name => webUrl]]
      *
-     * @param string[] $names
+     * @param string[]             $names
      * @param array<string,string> $externalCandidates name => web URL (will be validated on disk)
+     *
      * @return array{0: array<int,string>, 1: array<string,string>}
      */
     private function filterAvailablePlugins(array $names, array $externalCandidates): array
@@ -252,13 +256,14 @@ class Basic extends Toolbar
         $webPublic = rtrim(api_get_path(WEB_PUBLIC_PATH), '/').'/';
 
         foreach (array_unique($names) as $name) {
-            $corePath = $sysPublic . 'libs/editor/plugins/' . $name . '/plugin.min.js';
-            $extPath  = $sysPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js';
-            $extUrl   = $externalCandidates[$name] ?? ($webPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js');
+            $corePath = $sysPublic.'libs/editor/plugins/'.$name.'/plugin.min.js';
+            $extPath = $sysPublic.'libs/editor/tinymce_plugins/'.$name.'/plugin.js';
+            $extUrl = $externalCandidates[$name] ?? ($webPublic.'libs/editor/tinymce_plugins/'.$name.'/plugin.js');
 
             if (file_exists($corePath)) {
                 // Core plugin exists
                 $available[] = $name;
+
                 continue;
             }
 
@@ -266,15 +271,17 @@ class Basic extends Toolbar
                 // External plugin exists on disk; map its URL
                 $available[] = $name;
                 $externalMap[$name] = $extUrl;
+
                 continue;
             }
 
             // If an explicit external candidate was provided, validate it
             if (isset($externalCandidates[$name])) {
-                $explicitPath = $sysPublic . 'libs/editor/tinymce_plugins/' . $name . '/plugin.js';
+                $explicitPath = $sysPublic.'libs/editor/tinymce_plugins/'.$name.'/plugin.js';
                 if (file_exists($explicitPath)) {
                     $available[] = $name;
                     $externalMap[$name] = $externalCandidates[$name];
+
                     continue;
                 }
             }

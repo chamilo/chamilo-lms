@@ -7,7 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use DateTime;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
+
+use const CASE_UPPER;
+use const JSON_ERROR_NONE;
+use const JSON_UNESCAPED_UNICODE;
+use const PREG_SPLIT_NO_EMPTY;
 
 final class Version20250918163700 extends AbstractMigrationChamilo
 {
@@ -22,11 +29,11 @@ final class Version20250918163700 extends AbstractMigrationChamilo
         $conn->beginTransaction();
 
         try {
-            $users = $conn->fetchAllAssociative("SELECT id, roles FROM `user`");
-            $updateStmt = $conn->prepare("UPDATE `user` SET roles = :roles WHERE id = :id");
+            $users = $conn->fetchAllAssociative('SELECT id, roles FROM `user`');
+            $updateStmt = $conn->prepare('UPDATE `user` SET roles = :roles WHERE id = :id');
 
             foreach ($users as $u) {
-                $id  = (int) $u['id'];
+                $id = (int) $u['id'];
                 $raw = $u['roles'];
 
                 [$roles, $format] = $this->decodeRoles($raw);
@@ -41,11 +48,11 @@ final class Version20250918163700 extends AbstractMigrationChamilo
 
                 $changed = false;
 
-                if (in_array('ROLE_SUPER_ADMIN', $upper, true)) {
-                    if (!in_array('ROLE_ADMIN', $upper, true)) {
+                if (\in_array('ROLE_SUPER_ADMIN', $upper, true)) {
+                    if (!\in_array('ROLE_ADMIN', $upper, true)) {
                         $upper[] = 'ROLE_ADMIN';
                     }
-                    $upper   = array_values(array_diff($upper, ['ROLE_SUPER_ADMIN']));
+                    $upper = array_values(array_diff($upper, ['ROLE_SUPER_ADMIN']));
                     $changed = true;
                 }
 
@@ -56,21 +63,22 @@ final class Version20250918163700 extends AbstractMigrationChamilo
             }
 
             $adminRoleId = $this->ensureAdminRoleId();
-            $permId      = $this->ensurePermissionExists('user:loginas', 'Login as user', 'Login as another user');
+            $permId = $this->ensurePermissionExists('user:loginas', 'Login as user', 'Login as another user');
             $this->ensurePermissionRelRole($permId, $adminRoleId);
 
             $superAdminId = $this->getRoleIdByCodes(['SUPER_ADMIN', 'SUA']);
-            if ($superAdminId !== null) {
+            if (null !== $superAdminId) {
                 $conn->executeStatement(
-                    "DELETE FROM permission_rel_role WHERE role_id = :rid",
+                    'DELETE FROM permission_rel_role WHERE role_id = :rid',
                     ['rid' => $superAdminId]
                 );
-                $conn->executeStatement("DELETE FROM role WHERE id = :rid", ['rid' => $superAdminId]);
+                $conn->executeStatement('DELETE FROM role WHERE id = :rid', ['rid' => $superAdminId]);
             }
 
             $conn->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $conn->rollBack();
+
             throw $e;
         }
     }
@@ -87,18 +95,18 @@ final class Version20250918163700 extends AbstractMigrationChamilo
             $this->ensurePermissionRelRole($permId, $superAdminId);
 
             $adminRoleId = $this->getRoleIdByCodes(['ADMIN', 'ADM']);
-            if ($adminRoleId !== null) {
+            if (null !== $adminRoleId) {
                 $conn->executeStatement(
-                    "DELETE FROM permission_rel_role WHERE permission_id = :pid AND role_id = :rid",
+                    'DELETE FROM permission_rel_role WHERE permission_id = :pid AND role_id = :rid',
                     ['pid' => $permId, 'rid' => $adminRoleId]
                 );
             }
 
-            $users = $conn->fetchAllAssociative("SELECT id, roles FROM `user`");
-            $updateStmt = $conn->prepare("UPDATE `user` SET roles = :roles WHERE id = :id");
+            $users = $conn->fetchAllAssociative('SELECT id, roles FROM `user`');
+            $updateStmt = $conn->prepare('UPDATE `user` SET roles = :roles WHERE id = :id');
 
             foreach ($users as $u) {
-                $id  = (int) $u['id'];
+                $id = (int) $u['id'];
                 $raw = $u['roles'];
 
                 [$roles, $format] = $this->decodeRoles($raw);
@@ -107,43 +115,45 @@ final class Version20250918163700 extends AbstractMigrationChamilo
                     $roles
                 )));
 
-                if (in_array('ROLE_ADMIN', $upper, true) && !in_array('ROLE_SUPER_ADMIN', $upper, true)) {
-                    $upper[]  = 'ROLE_SUPER_ADMIN';
-                    $encoded  = $this->encodeRoles($upper, $format);
+                if (\in_array('ROLE_ADMIN', $upper, true) && !\in_array('ROLE_SUPER_ADMIN', $upper, true)) {
+                    $upper[] = 'ROLE_SUPER_ADMIN';
+                    $encoded = $this->encodeRoles($upper, $format);
                     $updateStmt->executeStatement(['roles' => $encoded, 'id' => $id]);
                 }
             }
 
             $conn->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $conn->rollBack();
+
             throw $e;
         }
     }
 
     private function decodeRoles($raw): array
     {
-        if ($raw === null || $raw === '') {
+        if (null === $raw || '' === $raw) {
             return [[], 'empty'];
         }
 
-        if (is_array($raw)) {
+        if (\is_array($raw)) {
             return [$raw, 'array'];
         }
 
         $s = (string) $raw;
 
         $json = json_decode($s, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
+        if (JSON_ERROR_NONE === json_last_error() && \is_array($json)) {
             return [$json, 'json'];
         }
 
         $unser = @unserialize($s);
-        if ($unser !== false && is_array($unser)) {
+        if (false !== $unser && \is_array($unser)) {
             return [$unser, 'php'];
         }
 
         $parts = preg_split('/[,\s]+/', $s, -1, PREG_SPLIT_NO_EMPTY);
+
         return [$parts ?: [], 'text'];
     }
 
@@ -151,15 +161,15 @@ final class Version20250918163700 extends AbstractMigrationChamilo
     {
         return match ($format) {
             'json', 'array', 'empty' => json_encode(array_values($roles), JSON_UNESCAPED_UNICODE),
-            'php'                      => serialize(array_values($roles)),
-            'text'                     => implode(',', array_values($roles)),
-            default                    => json_encode(array_values($roles), JSON_UNESCAPED_UNICODE),
+            'php' => serialize(array_values($roles)),
+            'text' => implode(',', array_values($roles)),
+            default => json_encode(array_values($roles), JSON_UNESCAPED_UNICODE),
         };
     }
 
     private function getRoleIdByCodes(array $codes): ?int
     {
-        $placeholders = implode(',', array_fill(0, count($codes), '?'));
+        $placeholders = implode(',', array_fill(0, \count($codes), '?'));
         $row = $this->connection->fetchAssociative(
             "SELECT id FROM role WHERE code IN ($placeholders) LIMIT 1",
             $codes
@@ -171,46 +181,48 @@ final class Version20250918163700 extends AbstractMigrationChamilo
     private function ensureAdminRoleId(): int
     {
         $id = $this->getRoleIdByCodes(['ADMIN', 'ADM']);
-        if ($id !== null) {
+        if (null !== $id) {
             return $id;
         }
+
         return $this->createRoleRow('ADMIN', 'Administrator', 'Platform administrator');
     }
 
     private function ensureSuperAdminRoleId(): int
     {
         $id = $this->getRoleIdByCodes(['SUPER_ADMIN', 'SUA']);
-        if ($id !== null) {
+        if (null !== $id) {
             return $id;
         }
+
         return $this->createRoleRow('SUPER_ADMIN', 'Super Administrator', 'Full platform administrator');
     }
 
     private function createRoleRow(string $code, string $title, ?string $description = null): int
     {
         $conn = $this->connection;
-        $sm   = $conn->createSchemaManager();
+        $sm = $conn->createSchemaManager();
 
         $cols = [];
         foreach ($sm->listTableColumns('role') as $c) {
             $cols[strtoupper($c->getName())] = $c;
         }
 
-        $now  = (new \DateTime())->format('Y-m-d H:i:s');
+        $now = (new DateTime())->format('Y-m-d H:i:s');
 
         $data = [
-            'code'  => $code,
+            'code' => $code,
             'title' => $title,
         ];
 
-        if ($description !== null && isset($cols['DESCRIPTION'])) {
+        if (null !== $description && isset($cols['DESCRIPTION'])) {
             $data['description'] = $description;
         }
 
         if (isset($cols['CONSTANT_VALUE'])) {
-            $type      = strtolower($cols['CONSTANT_VALUE']->getType()->getName());
-            $isNumeric = in_array($type, ['integer', 'smallint', 'bigint', 'decimal', 'float', 'boolean'], true);
-            $data['constant_value'] = $isNumeric ? 0 : ('ROLE_' . strtoupper($code));
+            $type = strtolower($cols['CONSTANT_VALUE']->getType()->getName());
+            $isNumeric = \in_array($type, ['integer', 'smallint', 'bigint', 'decimal', 'float', 'boolean'], true);
+            $data['constant_value'] = $isNumeric ? 0 : ('ROLE_'.strtoupper($code));
         }
 
         if (isset($cols['SYSTEM_ROLE'])) {
@@ -225,8 +237,8 @@ final class Version20250918163700 extends AbstractMigrationChamilo
         }
 
         $fields = array_keys($data);
-        $placeholders = array_map(fn ($f) => ':' . $f, $fields);
-        $sql = 'INSERT INTO role (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')';
+        $placeholders = array_map(fn ($f) => ':'.$f, $fields);
+        $sql = 'INSERT INTO role ('.implode(',', $fields).') VALUES ('.implode(',', $placeholders).')';
         $conn->executeStatement($sql, $data);
 
         return (int) $conn->lastInsertId();
@@ -236,18 +248,18 @@ final class Version20250918163700 extends AbstractMigrationChamilo
     {
         $conn = $this->connection;
 
-        $row = $conn->fetchAssociative("SELECT id FROM permission WHERE slug = :s", ['s' => $slug]);
+        $row = $conn->fetchAssociative('SELECT id FROM permission WHERE slug = :s', ['s' => $slug]);
         if ($row) {
             return (int) $row['id'];
         }
 
-        $sm   = $conn->createSchemaManager();
+        $sm = $conn->createSchemaManager();
         $cols = array_change_key_case(
             array_map(fn ($c) => $c->getName(), $sm->listTableColumns('permission')),
             CASE_UPPER
         );
 
-        $now  = (new \DateTime())->format('Y-m-d H:i:s');
+        $now = (new DateTime())->format('Y-m-d H:i:s');
 
         $data = ['slug' => $slug, 'title' => $title, 'description' => $desc];
         if (isset($cols['CREATED_AT'])) {
@@ -258,8 +270,8 @@ final class Version20250918163700 extends AbstractMigrationChamilo
         }
 
         $fields = array_keys($data);
-        $place  = array_map(fn ($f) => ':' . $f, $fields);
-        $sql    = 'INSERT INTO permission (' . implode(',', $fields) . ') VALUES (' . implode(',', $place) . ')';
+        $place = array_map(fn ($f) => ':'.$f, $fields);
+        $sql = 'INSERT INTO permission ('.implode(',', $fields).') VALUES ('.implode(',', $place).')';
         $conn->executeStatement($sql, $data);
 
         return (int) $conn->lastInsertId();
@@ -268,13 +280,13 @@ final class Version20250918163700 extends AbstractMigrationChamilo
     private function ensurePermissionRelRole(int $permissionId, int $roleId): void
     {
         $row = $this->connection->fetchAssociative(
-            "SELECT 1 FROM permission_rel_role WHERE permission_id = :p AND role_id = :r",
+            'SELECT 1 FROM permission_rel_role WHERE permission_id = :p AND role_id = :r',
             ['p' => $permissionId, 'r' => $roleId]
         );
         if (!$row) {
-            $now = (new \DateTime())->format('Y-m-d H:i:s');
+            $now = (new DateTime())->format('Y-m-d H:i:s');
             $this->connection->executeStatement(
-                "INSERT INTO permission_rel_role (permission_id, role_id, changeable, updated_at) VALUES (:p, :r, 1, :u)",
+                'INSERT INTO permission_rel_role (permission_id, role_id, changeable, updated_at) VALUES (:p, :r, 1, :u)',
                 ['p' => $permissionId, 'r' => $roleId, 'u' => $now]
             );
         }

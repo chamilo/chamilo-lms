@@ -224,16 +224,16 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         foreach ($fieldsMap as $key => $setter) {
             if (isset($this->dataCorrespondence[$key]) && $fieldKey = $this->dataCorrespondence[$key]) {
                 $value = $ldapFields[$fieldKey][0] ?? '';
-                if ($key === 'active') {
-                    $user->$setter((int) $value);
-                } elseif ($key === 'role') {
-                    $user->$setter([$value]);
+                if ('active' === $key) {
+                    $user->{$setter}((int) $value);
+                } elseif ('role' === $key) {
+                    $user->{$setter}([$value]);
                 } else {
-                    $user->$setter($value);
+                    $user->{$setter}($value);
                 }
-            } elseif ($key === 'firstname' || $key === 'lastname' || $key === 'email') {
-                $user->$setter('');
-            } elseif ($key === 'role') {
+            } elseif ('firstname' === $key || 'lastname' === $key || 'email' === $key) {
+                $user->{$setter}('');
+            } elseif ('role' === $key) {
                 $user->setRoles($ldapUser->getRoles());
             }
         }

@@ -1251,7 +1251,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function isPasswordRequestNonExpired(int $ttl): bool
     {
         return $this->getPasswordRequestedAt() instanceof DateTime && $this->getPasswordRequestedAt()->getTimestamp(
-            ) + $ttl > time();
+        ) + $ttl > time();
     }
 
     public function getPasswordRequestedAt(): ?DateTime
@@ -2358,7 +2358,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this
             ->getFriendsWithMeByRelationType($relationType)
             ->exists(fn (int $index, UserRelUser $userRelUser) => $userRelUser->getUser() === $friend)
-            ;
+        ;
     }
 
     /**

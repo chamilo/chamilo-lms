@@ -47,7 +47,7 @@ final class ThemeHelper
      * 2) User-selected theme (if enabled)
      * 3) Course/LP theme (if enabled)
      * 4) THEME_FALLBACK from .env
-     * 5) DEFAULT_THEME ('chamilo')
+     * 5) DEFAULT_THEME ('chamilo').
      */
     public function getVisualTheme(): string
     {
@@ -80,7 +80,7 @@ final class ThemeHelper
                 $this->settingsCourseManager->setCourse($course);
 
                 $courseTheme = (string) $this->settingsCourseManager->getCourseSettingValue('course_theme');
-                if ($courseTheme !== '') {
+                if ('' !== $courseTheme) {
                     $visualTheme = $courseTheme;
                 }
 
@@ -93,9 +93,9 @@ final class ThemeHelper
         }
 
         // 4) .env fallback if still empty
-        if ($visualTheme === null || $visualTheme === '') {
-            $fallback = \trim((string) $this->themeFallback);
-            $visualTheme = $fallback !== '' ? $fallback : self::DEFAULT_THEME;
+        if (null === $visualTheme || '' === $visualTheme) {
+            $fallback = trim((string) $this->themeFallback);
+            $visualTheme = '' !== $fallback ? $fallback : self::DEFAULT_THEME;
         }
 
         return $visualTheme;
@@ -130,7 +130,7 @@ final class ThemeHelper
     public function getFileLocation(string $path): ?string
     {
         $assetTheme = $this->resolveAssetTheme($path);
-        if ($assetTheme === null) {
+        if (null === $assetTheme) {
             return null;
         }
 
@@ -143,7 +143,7 @@ final class ThemeHelper
     public function getThemeAssetUrl(string $path, bool $absoluteUrl = false): string
     {
         $assetTheme = $this->resolveAssetTheme($path);
-        if ($assetTheme === null) {
+        if (null === $assetTheme) {
             return '';
         }
 
@@ -160,7 +160,7 @@ final class ThemeHelper
     public function getThemeAssetLinkTag(string $path, bool $absoluteUrl = false): string
     {
         $url = $this->getThemeAssetUrl($path, $absoluteUrl);
-        if ($url === '') {
+        if ('' === $url) {
             return '';
         }
 
@@ -180,7 +180,8 @@ final class ThemeHelper
                 if (\is_resource($stream)) {
                     fclose($stream);
                 }
-                return $contents !== false ? $contents : '';
+
+                return false !== $contents ? $contents : '';
             }
         } catch (FilesystemException) {
             return '';
@@ -201,7 +202,7 @@ final class ThemeHelper
                 $mimeType = (string) $detector->detectMimeTypeFromFile($fullPath);
                 $data = $this->getAssetContents($path);
 
-                return $data !== ''
+                return '' !== $data
                     ? 'data:'.$mimeType.';base64,'.base64_encode($data)
                     : '';
             }
@@ -218,13 +219,13 @@ final class ThemeHelper
      */
     public function getPreferredLogoUrl(string $type = 'header', bool $absoluteUrl = false): string
     {
-        $candidates = $type === 'email'
+        $candidates = 'email' === $type
             ? ['images/email-logo.svg', 'images/email-logo.png']
             : ['images/header-logo.svg', 'images/header-logo.png'];
 
         foreach ($candidates as $relPath) {
             $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);
-            if ($url !== '') {
+            if ('' !== $url) {
                 return $url;
             }
         }

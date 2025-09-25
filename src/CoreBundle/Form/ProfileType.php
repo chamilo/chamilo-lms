@@ -19,6 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Throwable;
+
+use const JSON_THROW_ON_ERROR;
 
 /**
  * @template-extends AbstractType<User>
@@ -34,15 +37,15 @@ class ProfileType extends AbstractType
     {
         // High-level lists (fallback behavior)
         $changeableOptions = $this->settingsManager->getSetting('profile.changeable_options', true) ?? [];
-        $visibleOptions    = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
+        $visibleOptions = $this->settingsManager->getSetting('profile.visible_options', true) ?? [];
 
         // Fine-grained JSON (authoritative if present)
         $rawFine = $this->settingsManager->getSetting('profile.profile_fields_visibility', true) ?? [];
         if (\is_string($rawFine)) {
             try {
-                $decoded = \json_decode($rawFine, true, 512, \JSON_THROW_ON_ERROR);
+                $decoded = json_decode($rawFine, true, 512, JSON_THROW_ON_ERROR);
                 $rawFine = \is_array($decoded) ? $decoded : [];
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 $rawFine = [];
             }
         }
@@ -57,7 +60,7 @@ class ProfileType extends AbstractType
 
         // Expand aliases used by high-level settings (fallbacks only)
         $expandMap = [
-            'name'    => ['firstname', 'lastname'],
+            'name' => ['firstname', 'lastname'],
             'surname' => ['lastname'],
         ];
         $expand = static function (array $keys) use ($expandMap): array {
@@ -69,61 +72,62 @@ class ProfileType extends AbstractType
             return array_values(array_unique($out));
         };
 
-        $visibleHigh  = $expand(\is_array($visibleOptions) ? $visibleOptions : []);
+        $visibleHigh = $expand(\is_array($visibleOptions) ? $visibleOptions : []);
         $editableHigh = $expand(\is_array($changeableOptions) ? $changeableOptions : []);
 
         $languages = array_flip($this->languageRepository->getAllAvailableToArray(true, true));
 
         // Core fields map (keys must align with settings keys)
         $fieldsMap = [
-            'firstname'    => ['field' => 'firstname',     'type' => TextType::class,         'label' => 'Firstname'],
-            'lastname'     => ['field' => 'lastname',      'type' => TextType::class,         'label' => 'Lastname'],
-            'officialcode' => ['field' => 'official_code', 'type' => TextType::class,         'label' => 'Official Code'],
-            'email'        => ['field' => 'email',         'type' => EmailType::class,        'label' => 'Email'],
-            'picture'      => ['field' => 'illustration',  'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],
-            'login'        => ['field' => 'login',         'type' => TextType::class,         'label' => 'Login'],
-            'password'     => ['field' => 'password',      'type' => PasswordType::class,     'label' => 'Password', 'mapped' => false, 'required' => false],
-            'language'     => [
+            'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
+            'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Lastname'],
+            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official Code'],
+            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'Email'],
+            'picture' => ['field' => 'illustration', 'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],
+            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
+            'password' => ['field' => 'password', 'type' => PasswordType::class, 'label' => 'Password', 'mapped' => false, 'required' => false],
+            'language' => [
                 'field' => 'locale',
-                'type'  => ChoiceType::class,
+                'type' => ChoiceType::class,
                 'label' => 'Language',
                 'choices' => $languages,
                 'required' => true,
                 'placeholder' => null,
                 'choice_translation_domain' => false,
             ],
-            'phone'        => ['field' => 'phone',         'type' => TextType::class,         'label' => 'Phone Number'],
-            'theme'        => ['field' => 'theme',         'type' => TextType::class,         'label' => 'Theme'],
+            'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone Number'],
+            'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme'],
 
             // Core date_of_birth → entity property dateOfBirth
             'date_of_birth' => [
                 'field' => 'date_of_birth',
-                'type'  => DateType::class,
+                'type' => DateType::class,
                 'label' => 'Date of birth',
                 'required' => false,
                 'form_options' => [
-                    'widget'        => 'single_text',
-                    'html5'         => false,
-                    'format'        => 'yyyy-MM-dd',
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'format' => 'yyyy-MM-dd',
                     'property_path' => 'dateOfBirth',
-                    'attr'          => [
-                        'class'        => 'js-date-of-birth',
-                        'placeholder'  => 'YYYY-MM-DD',
+                    'attr' => [
+                        'class' => 'js-date-of-birth',
+                        'placeholder' => 'YYYY-MM-DD',
                         'autocomplete' => 'bday',
-                        'inputmode'    => 'numeric',
+                        'inputmode' => 'numeric',
                     ],
                 ],
             ],
             // Timezone will be added below if visible (fine JSON or fallback)
-            'timezone'     => [
+            'timezone' => [
                 'field' => 'timezone',
-                'type'  => ChoiceType::class,
+                'type' => ChoiceType::class,
                 'label' => 'Timezone',
                 'required' => false,
                 'form_options' => static function (): array {
                     $timezones = DateTimeZone::listIdentifiers();
                     sort($timezones);
                     $choices = array_combine($timezones, $timezones);
+
                     return [
                         'choices' => $choices,
                         'placeholder' => '',
@@ -140,6 +144,7 @@ class ProfileType extends AbstractType
             if ($hasFine) {
                 return \array_key_exists($key, $fieldsVisibility);
             }
+
             return \in_array($key, $visibleHigh, true);
         };
 
@@ -149,12 +154,13 @@ class ProfileType extends AbstractType
             if (\array_key_exists($key, $fieldsVisibility)) {
                 return (bool) $fieldsVisibility[$key];
             }
+
             return \in_array($key, $editableHigh, true);
         };
 
         // Build core fields (except timezone; decide after)
         foreach ($fieldsMap as $key => $fieldConfig) {
-            if ($key === 'timezone') {
+            if ('timezone' === $key) {
                 continue;
             }
             if (!$isCoreVisible($key)) {
@@ -162,9 +168,9 @@ class ProfileType extends AbstractType
             }
 
             $opts = [
-                'label'    => $fieldConfig['label'],
+                'label' => $fieldConfig['label'],
                 'required' => $fieldConfig['required'] ?? false,
-                'mapped'   => $fieldConfig['mapped']   ?? true,
+                'mapped' => $fieldConfig['mapped'] ?? true,
             ];
 
             if (isset($fieldConfig['choices'])) {
@@ -195,9 +201,9 @@ class ProfileType extends AbstractType
         if ($isCoreVisible('timezone')) {
             $tzCfg = $fieldsMap['timezone'];
             $opts = [
-                'label'    => $tzCfg['label'],
+                'label' => $tzCfg['label'],
                 'required' => $tzCfg['required'],
-                'mapped'   => true,
+                'mapped' => true,
             ];
             $extra = ($tzCfg['form_options'])();
             $opts = array_merge($opts, $extra);
@@ -227,12 +233,12 @@ class ProfileType extends AbstractType
         }
 
         $builder->add('extra_fields', ExtraFieldType::class, [
-            'mapped'                  => false,
-            'label'                   => false,
-            'visibility_allowlist'    => $extraAllowlist,
+            'mapped' => false,
+            'label' => false,
+            'visibility_allowlist' => $extraAllowlist,
             'visibility_editable_map' => $extraEditableMap,
-            'visibility_strict'       => $hasFine,
-            'item'                    => $builder->getData(),
+            'visibility_strict' => $hasFine,
+            'item' => $builder->getData(),
         ]);
     }
 

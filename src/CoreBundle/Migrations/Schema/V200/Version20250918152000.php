@@ -13,7 +13,7 @@ final class Version20250918152000 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Mail settings: fix titles/comments and upsert defaults for mailer_from_email & mailer_from_name in settings.";
+        return 'Mail settings: fix titles/comments and upsert defaults for mailer_from_email & mailer_from_name in settings.';
     }
 
     public function up(Schema $schema): void
@@ -37,29 +37,29 @@ final class Version20250918152000 extends AbstractMigrationChamilo
 
         foreach ($pairs as $p) {
             $exists = (int) $this->connection->fetchOne(
-                "SELECT COUNT(*) FROM settings
-                 WHERE variable = ? AND subkey IS NULL AND access_url = 1",
+                'SELECT COUNT(*) FROM settings
+                 WHERE variable = ? AND subkey IS NULL AND access_url = 1',
                 [$p['variable']]
             );
 
-            if ($exists === 0) {
+            if (0 === $exists) {
                 $this->connection->executeStatement(
-                    "INSERT INTO settings
+                    'INSERT INTO settings
                         (variable, subkey, type, category, selected_value, title, comment,
                          access_url_changeable, access_url_locked, access_url)
                      VALUES
-                        (?, NULL, NULL, ?, ?, ?, ?, 1, 0, 1)",
+                        (?, NULL, NULL, ?, ?, ?, ?, 1, 0, 1)',
                     [$p['variable'], $p['category'], $p['default'], $p['title'], $p['comment']]
                 );
-                $this->write(sprintf("Inserted missing setting: %s", $p['variable']));
+                $this->write(\sprintf('Inserted missing setting: %s', $p['variable']));
             } else {
                 $this->connection->executeStatement(
-                    "UPDATE settings
+                    'UPDATE settings
                      SET title = ?, comment = ?, category = ?
-                     WHERE variable = ? AND subkey IS NULL AND access_url = 1",
+                     WHERE variable = ? AND subkey IS NULL AND access_url = 1',
                     [$p['title'], $p['comment'], $p['category'], $p['variable']]
                 );
-                $this->write(sprintf("Updated setting metadata: %s", $p['variable']));
+                $this->write(\sprintf('Updated setting metadata: %s', $p['variable']));
             }
         }
     }

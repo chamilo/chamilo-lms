@@ -33,18 +33,18 @@ final readonly class UserAuthSourceListener
         $authenticationTypes = $user->getAuthSourcesAuthentications($currentAccessUrl);
 
         if ($oAuth2Badge = $passport->getBadge(OAuth2Badge::class)) {
-            if (!in_array($oAuth2Badge->getAuthentication(), $authenticationTypes)) {
+            if (!\in_array($oAuth2Badge->getAuthentication(), $authenticationTypes)) {
                 throw new CustomUserMessageAuthenticationException('User authentication method not allowed');
             }
         }
 
         if ($passport->hasBadge(LdapBadge::class)) {
-            if (!in_array(UserAuthSource::LDAP, $authenticationTypes)) {
+            if (!\in_array(UserAuthSource::LDAP, $authenticationTypes)) {
                 throw new CustomUserMessageAuthenticationException('User authentication method not allowed');
             }
         }
 
-        if (!in_array(UserAuthSource::PLATFORM, $authenticationTypes)) {
+        if (!\in_array(UserAuthSource::PLATFORM, $authenticationTypes)) {
             throw new CustomUserMessageAuthenticationException('User authentication method not allowed');
         }
     }

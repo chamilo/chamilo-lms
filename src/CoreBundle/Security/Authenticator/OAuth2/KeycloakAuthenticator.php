@@ -66,6 +66,6 @@ class KeycloakAuthenticator extends AbstractAuthenticator
 
     protected function getCustomBadge(): ?BadgeInterface
     {
-        return new Oauth2Badge(UserAuthSource::KEYCLOAK);
+        return new OAuth2Badge(UserAuthSource::KEYCLOAK);
     }
 }

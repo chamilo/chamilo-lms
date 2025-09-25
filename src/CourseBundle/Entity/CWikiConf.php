@@ -290,8 +290,6 @@ class CWikiConf
 
     /**
      * Get startdateAssig.
-     *
-     * @return DateTime
      */
     public function getStartdateAssig(): ?DateTime
     {

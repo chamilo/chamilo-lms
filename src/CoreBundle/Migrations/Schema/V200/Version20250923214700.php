@@ -8,12 +8,17 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
+
+use const JSON_ERROR_NONE;
+use const PHP_INT_MAX;
+use const PREG_SPLIT_NO_EMPTY;
 
 final class Version20250923214700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Normalize user.roles to canonical ROLE_* and serialize consistently";
+        return 'Normalize user.roles to canonical ROLE_* and serialize consistently';
     }
 
     public function up(Schema $schema): void
@@ -22,11 +27,11 @@ final class Version20250923214700 extends AbstractMigrationChamilo
         $conn->beginTransaction();
 
         try {
-            $users = $conn->fetchAllAssociative("SELECT id, roles FROM `user`");
-            $updateStmt = $conn->prepare("UPDATE `user` SET roles = :roles WHERE id = :id");
+            $users = $conn->fetchAllAssociative('SELECT id, roles FROM `user`');
+            $updateStmt = $conn->prepare('UPDATE `user` SET roles = :roles WHERE id = :id');
 
             foreach ($users as $u) {
-                $id  = (int) $u['id'];
+                $id = (int) $u['id'];
                 $raw = $u['roles'];
 
                 // Decode from any legacy format to array
@@ -45,8 +50,9 @@ final class Version20250923214700 extends AbstractMigrationChamilo
             }
 
             $conn->commit();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $conn->rollBack();
+
             throw $e;
         }
     }
@@ -56,14 +62,17 @@ final class Version20250923214700 extends AbstractMigrationChamilo
     /**
      * Decode roles from various legacy formats into an array.
      * Supported: json, php-serialized, comma/space-separated text, array, empty.
+     *
+     * @param mixed $raw
+     *
      * @return array{0: array}
      */
     private function decodeRoles($raw): array
     {
-        if ($raw === null || $raw === '') {
+        if (null === $raw || '' === $raw) {
             return [[]];
         }
-        if (is_array($raw)) {
+        if (\is_array($raw)) {
             return [$raw];
         }
 
@@ -71,18 +80,19 @@ final class Version20250923214700 extends AbstractMigrationChamilo
 
         // Try JSON
         $json = json_decode($s, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
+        if (JSON_ERROR_NONE === json_last_error() && \is_array($json)) {
             return [$json];
         }
 
         // Try PHP serialized
         $unser = @unserialize($s);
-        if ($unser !== false && is_array($unser)) {
+        if (false !== $unser && \is_array($unser)) {
             return [$unser];
         }
 
         // Fallback: split plain text by commas/spaces
         $parts = preg_split('/[,\s]+/', $s, -1, PREG_SPLIT_NO_EMPTY);
+
         return [$parts ?: []];
     }
 
@@ -92,14 +102,14 @@ final class Version20250923214700 extends AbstractMigrationChamilo
      * - Add ROLE_ prefix when missing
      * - Unify legacy aliases (e.g., SUPER_ADMIN → ROLE_GLOBAL_ADMIN)
      * - Deduplicate
-     * - Sort by meaningful priority
+     * - Sort by meaningful priority.
      */
     private function normalizeRoles(array $roles): array
     {
         $out = [];
         foreach ($roles as $r) {
             $c = $this->normalizeRoleCode((string) $r);
-            if ($c !== '' && !in_array($c, $out, true)) {
+            if ('' !== $c && !\in_array($c, $out, true)) {
                 $out[] = $c;
             }
         }
@@ -122,6 +132,7 @@ final class Version20250923214700 extends AbstractMigrationChamilo
             if ($pa === $pb) {
                 return strcmp($a, $b);
             }
+
             return $pa <=> $pb;
         });
 
@@ -132,22 +143,23 @@ final class Version20250923214700 extends AbstractMigrationChamilo
     {
         $c = strtoupper(trim($code));
         static $map = [
-            'STUDENT'          => 'ROLE_STUDENT',
-            'TEACHER'          => 'ROLE_TEACHER',
-            'HR'               => 'ROLE_HR',
-            'SESSION_MANAGER'  => 'ROLE_SESSION_MANAGER',
-            'STUDENT_BOSS'     => 'ROLE_STUDENT_BOSS',
-            'INVITEE'          => 'ROLE_INVITEE',
+            'STUDENT' => 'ROLE_STUDENT',
+            'TEACHER' => 'ROLE_TEACHER',
+            'HR' => 'ROLE_HR',
+            'SESSION_MANAGER' => 'ROLE_SESSION_MANAGER',
+            'STUDENT_BOSS' => 'ROLE_STUDENT_BOSS',
+            'INVITEE' => 'ROLE_INVITEE',
             'QUESTION_MANAGER' => 'ROLE_QUESTION_MANAGER',
-            'ADMIN'            => 'ROLE_ADMIN',
-            'GLOBAL_ADMIN'     => 'ROLE_GLOBAL_ADMIN',
-            'SUPER_ADMIN'      => 'ROLE_GLOBAL_ADMIN',
+            'ADMIN' => 'ROLE_ADMIN',
+            'GLOBAL_ADMIN' => 'ROLE_GLOBAL_ADMIN',
+            'SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
             'ROLE_SUPER_ADMIN' => 'ROLE_GLOBAL_ADMIN',
         ];
 
         if (!str_starts_with($c, 'ROLE_')) {
-            return $map[$c] ?? ('ROLE_' . $c);
+            return $map[$c] ?? ('ROLE_'.$c);
         }
+
         return $map[$c] ?? $c;
     }
 }

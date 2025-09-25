@@ -108,6 +108,6 @@ class AzureAuthenticator extends AbstractAuthenticator
 
     protected function getCustomBadge(): ?BadgeInterface
     {
-        return new Oauth2Badge(UserAuthSource::AZURE);
+        return new OAuth2Badge(UserAuthSource::AZURE);
     }
 }

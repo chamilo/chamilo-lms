@@ -59,9 +59,10 @@ class ExtraFieldType extends AbstractType
         // Optional allowlist/editable map provided by parent form
         /** @var string[] $allowlist */
         $allowlist = $options['visibility_allowlist'] ?? [];
+
         /** @var array<string,bool> $editableMap */
         $editableMap = $options['visibility_editable_map'] ?? [];
-        $strict = (bool)($options['visibility_strict'] ?? false);
+        $strict = (bool) ($options['visibility_strict'] ?? false);
 
         if ($strict && empty($allowlist)) {
             return;
@@ -111,8 +112,8 @@ class ExtraFieldType extends AbstractType
                 continue;
             }
 
-            $text     = $extraField->getDisplayText();
-            $value    = $data[$variable] ?? null;
+            $text = $extraField->getDisplayText();
+            $value = $data[$variable] ?? null;
 
             // If editable map provided, use it; otherwise fallback to field config
             $editable = \array_key_exists($variable, $editableMap)
@@ -120,12 +121,12 @@ class ExtraFieldType extends AbstractType
                 : (bool) $extraField->isChangeable();
 
             $defaultOptions = [
-                'label'        => $text,
-                'required'     => false,
+                'label' => $text,
+                'required' => false,
                 'by_reference' => false,
-                'mapped'       => false,
-                'data'         => $value,
-                'disabled'     => !$editable,
+                'mapped' => false,
+                'data' => $value,
+                'disabled' => !$editable,
             ];
 
             switch ($extraField->getValueType()) {
@@ -137,8 +138,8 @@ class ExtraFieldType extends AbstractType
                             $parts = explode('::', (string) $value);
                             $coordinates = isset($parts[1]) ? explode(',', $parts[1]) : [];
                             $defaultOptions['data'] = [
-                                'address'   => $parts[0] ?? '',
-                                'latitude'  => $coordinates[0] ?? '',
+                                'address' => $parts[0] ?? '',
+                                'latitude' => $coordinates[0] ?? '',
                                 'longitude' => $coordinates[1] ?? '',
                             ];
                         }
@@ -150,6 +151,7 @@ class ExtraFieldType extends AbstractType
                         $defaultOptions['attr']['placeholder'] = 'address::lat,lng or lat,lng';
                         $builder->add($variable, TextType::class, $defaultOptions);
                     }
+
                     break;
 
                 case \ExtraField::FIELD_TYPE_TAG:
@@ -164,7 +166,7 @@ class ExtraFieldType extends AbstractType
                         $tags = $this->tagRepository->getTagsByUser($extraField, $item);
                         foreach ($tags as $tag) {
                             $stringTag = $tag->getTag();
-                            if ($stringTag === '') {
+                            if ('' === $stringTag) {
                                 continue;
                             }
                             $choices[$stringTag] = $stringTag;
@@ -199,6 +201,7 @@ class ExtraFieldType extends AbstractType
                     $defaultOptions['data'] = !empty($value) ? new DateTime((string) $value) : null;
                     $defaultOptions['widget'] = 'single_text';
                     $builder->add($variable, DateType::class, $defaultOptions);
+
                     break;
 
                 case \ExtraField::FIELD_TYPE_DATETIME:
@@ -325,10 +328,10 @@ class ExtraFieldType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'visibility_allowlist'    => [],
+            'visibility_allowlist' => [],
             'visibility_editable_map' => [],
-            'visibility_strict'       => false,
-            'item'                    => null,
+            'visibility_strict' => false,
+            'item' => null,
         ]);
 
         $resolver->setAllowedTypes('visibility_allowlist', ['array']);

@@ -46,7 +46,7 @@ class PlatformConfigurationController extends AbstractController
         $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
 
         if ($forcedLoginMethod) {
-            if (in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
+            if (\in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
                 $enabledOAuthProviders = [$forcedLoginMethod => $enabledOAuthProviders[$forcedLoginMethod]];
             } else {
                 $enabledOAuthProviders = [];
@@ -68,12 +68,12 @@ class PlatformConfigurationController extends AbstractController
                 $enabledOAuthProviders
             ),
             'ldap_auth' => null,
-            'forced_login_method' => $forcedLoginMethod
+            'forced_login_method' => $forcedLoginMethod,
         ];
 
         $ldapConfig = $authenticationConfigHelper->getLdapConfig();
 
-        if ($ldapConfig['enabled'] && in_array($forcedLoginMethod, ['ldap', null], true)) {
+        if ($ldapConfig['enabled'] && \in_array($forcedLoginMethod, ['ldap', null], true)) {
             $configuration['ldap_auth'] = [
                 'enabled' => true,
                 'title' => $ldapConfig['title'],

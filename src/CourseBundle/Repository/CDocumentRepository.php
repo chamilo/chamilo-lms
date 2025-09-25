@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class CDocumentRepository extends ResourceRepository
@@ -49,13 +50,15 @@ final class CDocumentRepository extends ResourceRepository
     public function findDocumentsByAuthor(int $userId)
     {
         $qb = $this->createQueryBuilder('d');
+
         return $qb
             ->innerJoin('d.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'l')
             ->where('l.user = :user')
             ->setParameter('user', $userId)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     public function countUserDocuments(User $user, Course $course, ?Session $session = null, ?CGroup $group = null): int
@@ -63,15 +66,18 @@ final class CDocumentRepository extends ResourceRepository
         $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
         $qb->select('count(resource)');
         $this->addFileTypeQueryBuilder('file', $qb);
+
         return $this->getCount($qb);
     }
 
     protected function addFileTypeQueryBuilder(string $fileType, ?QueryBuilder $qb = null): QueryBuilder
     {
         $qb = $this->getOrCreateQueryBuilder($qb);
+
         return $qb
             ->andWhere('resource.filetype = :filetype')
-            ->setParameter('filetype', $fileType);
+            ->setParameter('filetype', $fileType)
+        ;
     }
 
     /**
@@ -121,6 +127,7 @@ final class CDocumentRepository extends ResourceRepository
             // SCORM folder directly under course root
             if ($this->tryDeleteFirstFolderByTitlePrefix($courseRoot, $prefix)) {
                 $em->flush();
+
                 return;
             }
 
@@ -128,6 +135,7 @@ final class CDocumentRepository extends ResourceRepository
             $lpTop = $this->findChildNodeByTitle($courseRoot, 'Learning paths');
             if ($lpTop && $this->tryDeleteFirstFolderByTitlePrefix($lpTop, $prefix)) {
                 $em->flush();
+
                 return;
             }
         }
@@ -146,12 +154,14 @@ final class CDocumentRepository extends ResourceRepository
             ->where('rn.parent = :parent')
             ->andWhere('rn.title LIKE :prefix')
             ->setParameters(['parent' => $parent, 'prefix' => $prefix.'%'])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         /** @var ResourceNode|null $node */
         $node = $qb->getQuery()->getOneOrNullResult();
         if ($node) {
             $em->remove($node);
+
             return true;
         }
 
@@ -166,8 +176,8 @@ final class CDocumentRepository extends ResourceRepository
      */
     public function getCourseDocumentsRootNode(Course $course): ?ResourceNode
     {
-        $em  = $this->em();
-        $rt  = $this->getResourceType();
+        $em = $this->em();
+        $rt = $this->getResourceType();
         $courseNode = $course->getResourceNode();
 
         if ($courseNode) {
@@ -183,11 +193,12 @@ final class CDocumentRepository extends ResourceRepository
             )
                 ->setParameters([
                     'parent' => $courseNode,
-                    'rtype'  => $rt,
+                    'rtype' => $rt,
                     'course' => $course,
                 ])
                 ->setMaxResults(1)
-                ->getOneOrNullResult();
+                ->getOneOrNullResult()
+            ;
 
             if ($node) {
                 return $node;
@@ -207,7 +218,8 @@ final class CDocumentRepository extends ResourceRepository
         )
             ->setParameters(['rtype' => $rt, 'course' => $course])
             ->setMaxResults(1)
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 
     /**
@@ -220,10 +232,11 @@ final class CDocumentRepository extends ResourceRepository
             return $root;
         }
 
-        $em   = $this->em();
+        $em = $this->em();
         $type = $this->getResourceType();
+
         /** @var User|null $user */
-        $user = \api_get_user_entity();
+        $user = api_get_user_entity();
 
         $node = new ResourceNode();
         $node->setTitle('Documents');
@@ -267,7 +280,7 @@ final class CDocumentRepository extends ResourceRepository
         }
 
         /** @var User|null $user */
-        $user = \api_get_user_entity();
+        $user = api_get_user_entity();
 
         $doc = new CDocument();
         $doc->setTitle($folderTitle);
@@ -310,7 +323,7 @@ final class CDocumentRepository extends ResourceRepository
         ?Session $session = null
     ): ResourceNode {
         /** @var User|null $user */
-        $user = \api_get_user_entity();
+        $user = api_get_user_entity();
 
         $title = $uploaded->getClientOriginalName();
 
@@ -348,8 +361,9 @@ final class CDocumentRepository extends ResourceRepository
             ->getRepository(ResourceNode::class)
             ->findOneBy([
                 'parent' => $parent->getId(),
-                'title'  => $title,
-            ]);
+                'title' => $title,
+            ])
+        ;
     }
 
     /**
@@ -360,13 +374,13 @@ final class CDocumentRepository extends ResourceRepository
     {
         $courseRoot = $course->getResourceNode();
         if (!$courseRoot instanceof ResourceNode) {
-            throw new \RuntimeException('Course has no ResourceNode root.');
+            throw new RuntimeException('Course has no ResourceNode root.');
         }
 
         // Try common i18n variants first
         $candidates = array_values(array_unique(array_filter([
-            \function_exists('get_lang') ? \get_lang('LearningPaths') : null,
-            \function_exists('get_lang') ? \get_lang('LearningPath')  : null,
+            \function_exists('get_lang') ? get_lang('LearningPaths') : null,
+            \function_exists('get_lang') ? get_lang('LearningPath') : null,
             'Learning paths',
             'Learning path',
         ])));
@@ -387,19 +401,17 @@ final class CDocumentRepository extends ResourceRepository
         );
     }
 
-
     private function safeTitle(string $name): string
     {
-        $name = \trim($name);
-        $name = \str_replace(['/', '\\'], '-', $name);
-        return \preg_replace('/\s+/', ' ', $name) ?: 'Untitled';
+        $name = trim($name);
+        $name = str_replace(['/', '\\'], '-', $name);
+
+        return preg_replace('/\s+/', ' ', $name) ?: 'Untitled';
     }
 
     private function em(): EntityManagerInterface
     {
         /** @var EntityManagerInterface $em */
-        $em = $this->getEntityManager();
-        return $em;
+        return $this->getEntityManager();
     }
-
 }

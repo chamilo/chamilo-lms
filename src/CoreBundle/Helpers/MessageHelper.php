@@ -320,7 +320,8 @@ class MessageHelper
                 ->to(new Address($toAddress, $receiver->getFullName() ?: $receiver->getUsername()))
                 ->subject($subject)
                 ->text($content)
-                ->html($content);
+                ->html($content)
+            ;
 
             // Attach files if provided in the expected structure
             foreach ($attachmentList as $att) {
@@ -331,9 +332,9 @@ class MessageHelper
             }
 
             $this->mailer->send($email);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Soft-fail: log and continue
-            error_log('Failed to send email: ' . $e->getMessage());
+            error_log('Failed to send email: '.$e->getMessage());
         }
     }
 
@@ -341,7 +342,7 @@ class MessageHelper
      * Builds the FROM address used in outgoing emails.
      * Priority (name): mail.mailer_from_name → platform.site_name → "Chamilo"
      * Priority (email): mail.mailer_from_email → platform.administrator_email → noreply@{host}
-     * Host resolution: AccessUrl → RequestStack → 'example.org'
+     * Host resolution: AccessUrl → RequestStack → 'example.org'.
      */
     private function buildFromAddress(): Address
     {
@@ -377,7 +378,7 @@ class MessageHelper
         }
 
         // Last-resort fallback
-        return new Address('noreply@' . $host, $fromName);
+        return new Address('noreply@'.$host, $fromName);
     }
 
     /**

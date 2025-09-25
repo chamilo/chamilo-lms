@@ -131,7 +131,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
         ['id = ?' => $postId]
     );
     if (isset($_POST['platformlanguage']) && '' != $_POST['platformlanguage']) {
-        api_set_setting('platformLanguage', $_POST['platformlanguage'], null, null, api_get_current_access_url_id());
+        api_set_setting('platform_language', $_POST['platformlanguage'], null, 'language', api_get_current_access_url_id());
         header("Location: $url");
         exit;
     }
@@ -258,7 +258,7 @@ while ($row = Database::fetch_array($result_select)) {
         $row_td[] = '
             <input type="hidden" name="edit_id" value="'.$id.'" />
             <input type="text" name="txt_name" value="'.$row['original_name'].'" />
-            <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" />
+            <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['isocode'].'" />
             <label for="platformlanguage">'.sprintf(get_lang('%s as platform language'), $row['original_name']).'</label>
             <input class="btn btn--primary" type="submit" name="Submit" value="'.get_lang('Validate').'" />
             <a name="value" />';

@@ -123,7 +123,7 @@ switch ($action) {
 }
 
 if (isset($_POST['Submit']) && $_POST['Submit']) {
-    $name = html_filter($_POST['txt_name']);
+    $name = Security::remove_XSS($_POST['txt_name']);
     $postId = (int) $_POST['edit_id'];
     Database::update(
         $tbl_admin_languages,

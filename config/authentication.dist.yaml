@@ -7,6 +7,7 @@ parameters:
                 generic:
                     enabled: false
                     title: 'External'
+                    force_as_login_method: false
                     client_id: ''
                     client_secret: ''
                     provider_options:
@@ -31,6 +32,7 @@ parameters:
                 facebook:
                     enabled: false
                     title: 'Facebook'
+                    force_as_login_method: false
                     client_id: ''
                     client_secret: ''
                     #graph_api_version: 'v20.0'
@@ -38,6 +40,7 @@ parameters:
                 keycloak:
                     enabled: false
                     title: 'Keycloak'
+                    force_as_login_method: false
                     client_id: ''
                     client_secret: ''
                     auth_server_url: ''
@@ -47,6 +50,7 @@ parameters:
                 azure:
                     enabled: false
                     title: 'Azure'
+                    force_as_login_method: false
                     client_id: ''
                     client_secret: ''
                     url_api: 'https://graph.microsoft.com'
@@ -67,6 +71,7 @@ parameters:
             ldap:
                 enabled: false
                 title: 'LDAP'
+                force_as_login_method: false
                 connection_string: 'ldap://localhost:389'
                 protocol_version: 3
                 referrals: false

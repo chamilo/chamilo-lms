@@ -10,6 +10,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const visualTheme = ref("chamilo")
   const oauth2Providers = ref([])
   const ldapAuth = ref(null)
+  const forcedLoginMethod = ref(null)
 
   async function findSettingsRequest() {
     isLoading.value = true
@@ -28,6 +29,8 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
       oauth2Providers.value = data.oauth2_providers
 
       ldapAuth.value = data.ldap_auth
+
+      forcedLoginMethod.value = data.forced_login_method
     } catch (e) {
       console.log(e)
     } finally {
@@ -56,5 +59,6 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     visualTheme,
     oauth2Providers,
     ldapAuth,
+    forcedLoginMethod,
   }
 })

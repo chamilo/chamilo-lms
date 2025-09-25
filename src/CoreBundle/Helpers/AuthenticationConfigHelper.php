@@ -98,6 +98,7 @@ readonly class AuthenticationConfigHelper
         return [
             'enabled' => $ldapConfig['enabled'] ?? false,
             'title' => $ldapConfig['title'] ?? 'LDAP',
+            'force_as_login_method' => $ldapConfig['force_as_login_method'] ?? false,
             'connection_string' => $ldapConfig['connection_string'] ?? 'null://null',
             'protocol_version' => $ldapConfig['protocol_version'] ?? 3,
             'referrals' => $ldapConfig['referrals'] ?? false,
@@ -134,6 +135,9 @@ readonly class AuthenticationConfigHelper
         ];
     }
 
+    /**
+     * @return array<string, array<string, mixed>>
+     */
     public function getEnabledOAuthProviders(?AccessUrl $url = null): array
     {
         $urlProviders = $this->getOAuthProvidersForUrl($url);
@@ -196,5 +200,28 @@ readonly class AuthenticationConfigHelper
         };
 
         return array_filter($defaults, fn ($value) => null !== $value);
+    }
+
+    /**
+     * Returns the first authentication method marked as "force_as_login_method" in the authentication configuration.
+     * Checks LDAP first, then enabled OAuth providers. Returns the provider name or null if none is forced.
+     */
+    public function getForcedLoginMethod(?AccessUrl $url = null): ?string
+    {
+        $ldapConfig = $this->getLdapConfig($url);
+
+        if ($ldapConfig['enabled'] && ($ldapConfig['force_as_login_method'] ?? false)) {
+            return 'ldap';
+        }
+
+        $oauthProviders = $this->getEnabledOAuthProviders($url);
+
+        foreach ($oauthProviders as $providerName => $providerConfig) {
+            if ($providerConfig['force_as_login_method'] ?? false) {
+                return $providerName;
+            }
+        }
+
+        return null;
     }
 }

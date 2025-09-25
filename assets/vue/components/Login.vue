@@ -6,11 +6,12 @@
     <h2 class="login-section__title">{{ t("Sign in") }}</h2>
 
     <form
+      v-if="[null, 'ldap'].includes(platformConfigStore.forcedLoginMethod)"
       class="login-section__form"
       @submit.prevent="onSubmitLoginForm"
     >
       <BaseCheckbox
-        v-if="platformConfigStore.ldapAuth"
+        v-if="platformConfigStore.ldapAuth?.enabled && 'ldap' !== platformConfigStore.forcedLoginMethod"
         id="chb-ldap"
         :label="platformConfigStore.ldapAuth.title"
         name="ldap_auth"

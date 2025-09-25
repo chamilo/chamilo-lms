@@ -43,6 +43,15 @@ class PlatformConfigurationController extends AbstractController
         $requestSession = $this->getRequest()->getSession();
 
         $enabledOAuthProviders = $authenticationConfigHelper->getEnabledOAuthProviders();
+        $forcedLoginMethod = $authenticationConfigHelper->getForcedLoginMethod();
+
+        if ($forcedLoginMethod) {
+            if (in_array($forcedLoginMethod, array_keys($enabledOAuthProviders))) {
+                $enabledOAuthProviders = [$forcedLoginMethod => $enabledOAuthProviders[$forcedLoginMethod]];
+            } else {
+                $enabledOAuthProviders = [];
+            }
+        }
 
         $configuration = [
             'settings' => [],
@@ -59,11 +68,12 @@ class PlatformConfigurationController extends AbstractController
                 $enabledOAuthProviders
             ),
             'ldap_auth' => null,
+            'forced_login_method' => $forcedLoginMethod
         ];
 
         $ldapConfig = $authenticationConfigHelper->getLdapConfig();
 
-        if ($ldapConfig['enabled']) {
+        if ($ldapConfig['enabled'] && in_array($forcedLoginMethod, ['ldap', null], true)) {
             $configuration['ldap_auth'] = [
                 'enabled' => true,
                 'title' => $ldapConfig['title'],

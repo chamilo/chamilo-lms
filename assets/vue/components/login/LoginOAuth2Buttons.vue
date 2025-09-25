@@ -14,6 +14,7 @@ const platformConfig = usePlatformConfig()
     class="external-logins"
   >
     <BaseDivider
+      v-if="!platformConfig.forcedLoginMethod"
       :title="t('Or')"
       align="center"
       class="external-logins__divider"

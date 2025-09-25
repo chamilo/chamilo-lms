@@ -69,7 +69,10 @@ export function useLogin() {
         payload.returnUrl = returnUrl
       }
 
-      const responseData = isLoginLdap ? await securityService.loginLdap(payload) : await securityService.login(payload)
+      const responseData =
+        isLoginLdap || "ldap" === platformConfigurationStore.forcedLoginMethod
+          ? await securityService.loginLdap(payload)
+          : await securityService.login(payload)
 
       // Handle 2FA flow
       if (responseData.requires2FA && !payload.totp) {

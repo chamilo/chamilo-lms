@@ -47,7 +47,7 @@ abstract class AzureSyncAbstractCommand extends Command
     ) {
         parent::__construct();
 
-        $this->providerParams = $configHelper->getProviderConfig('azure');
+        $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
 
         $this->provider = $this->clientRegistry->getClient('azure')->getOAuth2Provider();
     }

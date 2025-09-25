@@ -76,7 +76,7 @@ class AzureAuthenticator extends AbstractAuthenticator
             throw new UnauthorizedHttpException('The id field is empty in Azure AD and is needed to set the unique Azure ID for this user.');
         }
 
-        $providerParams = $this->authenticationConfigHelper->getProviderConfig($this->providerName);
+        $providerParams = $this->authenticationConfigHelper->getOAuthProviderConfig($this->providerName);
 
         $user = $this->azureHelper->registerUser($me);
 

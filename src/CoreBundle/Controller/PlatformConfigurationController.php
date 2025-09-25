@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 #[Route('/platform-config')]
@@ -31,24 +32,36 @@ class PlatformConfigurationController extends AbstractController
         private readonly TicketProjectHelper $ticketProjectHelper,
         private readonly UserHelper $userHelper,
         private readonly ThemeHelper $themeHelper,
-        private readonly AuthenticationConfigHelper $authenticationConfigHelper,
     ) {}
 
     #[Route('/list', name: 'platform_config_list', methods: ['GET'])]
-    public function list(SettingsManager $settingsManager): Response
-    {
+    public function list(
+        SettingsManager $settingsManager,
+        AuthenticationConfigHelper $authenticationConfigHelper,
+        UrlGeneratorInterface $urlGenerator,
+    ): Response {
         $requestSession = $this->getRequest()->getSession();
+
+        $enabledOAuthProviders = $authenticationConfigHelper->getEnabledOAuthProviders();
 
         $configuration = [
             'settings' => [],
             'studentview' => $requestSession->get('studentview'),
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
-            'oauth2_providers' => $this->authenticationConfigHelper->getEnabledOAuthProviders(),
+            'oauth2_providers' => array_map(
+                fn ($providerName, $providerParams) => [
+                    'name' => $providerName,
+                    'title' => $providerParams['title'] ?? ucwords($providerName),
+                    'url' => $urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
+                ],
+                array_keys($enabledOAuthProviders),
+                $enabledOAuthProviders
+            ),
             'ldap_auth' => null,
         ];
 
-        $ldapConfig = $this->authenticationConfigHelper->getLdapConfig();
+        $ldapConfig = $authenticationConfigHelper->getLdapConfig();
 
         if ($ldapConfig['enabled']) {
             $configuration['ldap_auth'] = [

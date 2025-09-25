@@ -18,7 +18,11 @@ abstract class AbstractOAuth2ProviderController extends AbstractController
         ClientRegistry $clientRegistry,
         AuthenticationConfigHelper $authenticationConfigHelper,
     ): Response {
-        if (!$authenticationConfigHelper->isOAuth2ProviderEnabled($providerName)) {
+        $configParams = $authenticationConfigHelper->getOAuthProviderConfig($providerName);
+
+        $isEnabled = $configParams['enabled'] ?? false;
+
+        if (!$isEnabled) {
             throw $this->createAccessDeniedException();
         }
 

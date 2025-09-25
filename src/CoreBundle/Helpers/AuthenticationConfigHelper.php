@@ -10,19 +10,15 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use function Symfony\Component\String\u;
 
 readonly class AuthenticationConfigHelper
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,
         private AccessUrlHelper $accessUrlHelper,
-        private UrlGeneratorInterface $urlGenerator,
     ) {}
 
-    public function getProviderConfig(string $providerName, ?AccessUrl $url = null): array
+    public function getOAuthProviderConfig(string $providerName, ?AccessUrl $url = null): array
     {
         $providers = $this->getOAuthProvidersForUrl($url);
 
@@ -37,33 +33,21 @@ readonly class AuthenticationConfigHelper
         return $providers[$providerName];
     }
 
-    public function isOAuth2ProviderEnabled(string $methodName, ?AccessUrl $url = null): bool
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function getOAuthProvidersForUrl(?AccessUrl $url): array
     {
-        $configParams = $this->getProviderConfig($methodName, $url);
+        $authentication = $this->getAuthSources($url);
 
-        return $configParams['enabled'] ?? false;
-    }
-
-    public function getEnabledOAuthProviders(?AccessUrl $url = null): array
-    {
-        $urlProviders = $this->getOAuthProvidersForUrl($url);
-
-        $enabledProviders = [];
-
-        foreach ($urlProviders as $providerName => $providerParams) {
-            if ($providerParams['enabled'] ?? false) {
-                $enabledProviders[] = [
-                    'name' => $providerName,
-                    'title' => $providerParams['title'] ?? u($providerName)->title(),
-                    'url' => $this->urlGenerator->generate(\sprintf('chamilo.oauth2_%s_start', $providerName)),
-                ];
-            }
+        if (isset($authentication['oauth2'])) {
+            return $authentication['oauth2'];
         }
 
-        return $enabledProviders;
+        return [];
     }
 
-    public function getAuthSources(?AccessUrl $url)
+    private function getAuthSources(?AccessUrl $url): array
     {
         $urlId = $url ?: $this->accessUrlHelper->getCurrent();
 
@@ -83,27 +67,81 @@ readonly class AuthenticationConfigHelper
     }
 
     /**
-     * @return array<string, array<string, mixed>>
-     */
-    private function getOAuthProvidersForUrl(?AccessUrl $url): array
-    {
-        $authentication = $this->getAuthSources($url);
-
-        if (isset($authentication['oauth2'])) {
-            return $authentication['oauth2'];
-        }
-
-        return [];
-    }
-
-    /**
      * @return array<int, string>
      */
     public function getAuthSourceAuthentications(?AccessUrl $url): array
     {
-        $authSources = $this->getAuthSources($url);
+        $authentications = [UserAuthSource::PLATFORM];
 
-        return [UserAuthSource::PLATFORM, ...array_keys($authSources)];
+        if ($this->getLdapConfig($url)['enabled']) {
+            $authentications[] = UserAuthSource::LDAP;
+        }
+
+        return array_merge(
+            $authentications,
+            array_keys($this->getEnabledOAuthProviders($url))
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getLdapConfig(?AccessUrl $url = null): array
+    {
+        $authentication = $this->getAuthSources($url);
+        $ldapConfig = [];
+
+        if (isset($authentication['ldap'])) {
+            $ldapConfig = $authentication['ldap'];
+        }
+
+        return [
+            'enabled' => $ldapConfig['enabled'] ?? false,
+            'title' => $ldapConfig['title'] ?? 'LDAP',
+            'connection_string' => $ldapConfig['connection_string'] ?? 'null://null',
+            'protocol_version' => $ldapConfig['protocol_version'] ?? 3,
+            'referrals' => $ldapConfig['referrals'] ?? false,
+            'dn_string' => $ldapConfig['dn_string'] ?? '{user_identifier}',
+            'query_string' => $ldapConfig['query_string'] ?? null,
+            'base_dn' => $ldapConfig['base_dn'] ?? null,
+            'search_dn' => $ldapConfig['search_dn'] ?? null,
+            'search_password' => $ldapConfig['search_password'] ?? null,
+            'filter' => $ldapConfig['filter'] ?? null,
+            'uid_key' => $ldapConfig['uid_key'] ?? 'uid',
+            'password_attribute' => $ldapConfig['password_attribute'] ?? null,
+            'data_correspondence' => $this->getLdapDataCorrespondenceConfig(
+                $ldapConfig['data_correspondence'] ?? []
+            ),
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $dataCorrespondence
+     *
+     * @return array<string, mixed>
+     */
+    private function getLdapDataCorrespondenceConfig(array $dataCorrespondence): array
+    {
+        return [
+            'firstname' => $dataCorrespondence['firstname'] ?? null,
+            'lastname' => $dataCorrespondence['lastname'] ?? 'sn',
+            'email' => $dataCorrespondence['email'] ?? 'mail',
+            'locale' => $dataCorrespondence['locale'] ?? null,
+            'role' => $dataCorrespondence['role'] ?? null,
+            'phone' => $dataCorrespondence['phone'] ?? null,
+            'active' => $dataCorrespondence['active'] ?? null,
+            'admin' => $dataCorrespondence['admin'] ?? null,
+        ];
+    }
+
+    public function getEnabledOAuthProviders(?AccessUrl $url = null): array
+    {
+        $urlProviders = $this->getOAuthProvidersForUrl($url);
+
+        return array_filter(
+            $urlProviders,
+            fn (array $providerParams) => $providerParams['enabled'] ?? false
+        );
     }
 
     public function getOAuthProviderOptions(string $providerType, array $config): array
@@ -158,56 +196,5 @@ readonly class AuthenticationConfigHelper
         };
 
         return array_filter($defaults, fn ($value) => null !== $value);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getLdapConfig(?AccessUrl $url = null): array
-    {
-        $authentication = $this->getAuthSources($url);
-        $ldapConfig = [];
-
-        if (isset($authentication['ldap'])) {
-            $ldapConfig = $authentication['ldap'];
-        }
-
-        return [
-            'enabled' => $ldapConfig['enabled'] ?? false,
-            'title' => $ldapConfig['title'] ?? 'LDAP',
-            'connection_string' => $ldapConfig['connection_string'] ?? 'null://null',
-            'protocol_version' => $ldapConfig['protocol_version'] ?? 3,
-            'referrals' => $ldapConfig['referrals'] ?? false,
-            'dn_string' => $ldapConfig['dn_string'] ?? '{user_identifier}',
-            'query_string' => $ldapConfig['query_string'] ?? null,
-            'base_dn' => $ldapConfig['base_dn'] ?? null,
-            'search_dn' => $ldapConfig['search_dn'] ?? null,
-            'search_password' => $ldapConfig['search_password'] ?? null,
-            'filter' => $ldapConfig['filter'] ?? null,
-            'uid_key' => $ldapConfig['uid_key'] ?? 'uid',
-            'password_attribute' => $ldapConfig['password_attribute'] ?? null,
-            'data_correspondence' => $this->getLdapDataCorrespondenceConfig(
-                $ldapConfig['data_correspondence'] ?? []
-            ),
-        ];
-    }
-
-    /**
-     * @param  array<string, mixed> $dataCorrespondence
-     *
-     * @return array<string, mixed>
-     */
-    private function getLdapDataCorrespondenceConfig(array $dataCorrespondence): array
-    {
-        return [
-            'firstname' => $dataCorrespondence['firstname'] ?? null,
-            'lastname' => $dataCorrespondence['lastname'] ?? 'sn',
-            'email' => $dataCorrespondence['email'] ?? 'mail',
-            'locale' => $dataCorrespondence['locale'] ?? null,
-            'role' => $dataCorrespondence['role'] ?? null,
-            'phone' => $dataCorrespondence['phone'] ?? null,
-            'active' => $dataCorrespondence['active'] ?? null,
-            'admin' => $dataCorrespondence['admin'] ?? null,
-        ];
     }
 }

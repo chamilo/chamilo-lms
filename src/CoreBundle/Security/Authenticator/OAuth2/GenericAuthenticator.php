@@ -65,7 +65,7 @@ class GenericAuthenticator extends AbstractAuthenticator
 
     protected function userLoader(AccessToken $accessToken): User
     {
-        $providerParams = $this->authenticationConfigHelper->getProviderConfig('generic');
+        $providerParams = $this->authenticationConfigHelper->getOAuthProviderConfig('generic');
 
         /** @var GenericResourceOwner $resourceOwner */
         $resourceOwner = $this->client->fetchUserFromToken($accessToken);

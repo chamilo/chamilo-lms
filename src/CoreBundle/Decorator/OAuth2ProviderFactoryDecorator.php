@@ -34,10 +34,10 @@ readonly class OAuth2ProviderFactoryDecorator
         array $collaborators = []
     ): AbstractProvider {
         $customConfig = match ($class) {
-            GenericProvider::class => $this->authenticationConfigHelper->getProviderConfig('generic'),
-            Facebook::class => $this->authenticationConfigHelper->getProviderConfig('facebook'),
-            Keycloak::class => $this->authenticationConfigHelper->getProviderConfig('keycloak'),
-            Azure::class => $this->authenticationConfigHelper->getProviderConfig('azure'),
+            GenericProvider::class => $this->authenticationConfigHelper->getOAuthProviderConfig('generic'),
+            Facebook::class => $this->authenticationConfigHelper->getOAuthProviderConfig('facebook'),
+            Keycloak::class => $this->authenticationConfigHelper->getOAuthProviderConfig('keycloak'),
+            Azure::class => $this->authenticationConfigHelper->getOAuthProviderConfig('azure'),
             default => throw new InvalidArgumentException("Unsupported provider class: $class"),
         };
         $customConfig['client_id'] ??= '';

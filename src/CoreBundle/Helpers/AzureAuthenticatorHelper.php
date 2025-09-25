@@ -57,7 +57,7 @@ readonly class AzureAuthenticatorHelper
         private AccessUrlHelper $accessUrlHelper,
         AuthenticationConfigHelper $configHelper,
     ) {
-        $this->providerParams = $configHelper->getProviderConfig('azure');
+        $this->providerParams = $configHelper->getOAuthProviderConfig('azure');
     }
 
     /**

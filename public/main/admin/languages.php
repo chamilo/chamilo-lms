@@ -172,27 +172,40 @@ Display::addFlash(
     )
 );
 
-$htmlHeadXtra[] = '<script>
+$jsMsg      = addslashes(get_lang('There are users currently using the following language. Please disable manually.'));
+$jsConfirm  = addslashes(get_lang('Please confirm your choice'));
+$jsLoading  = addslashes(get_lang('Loading'));
+$jsUpdated  = addslashes(get_lang('Update successful'));
+$selfUrl    = api_get_self();
+$htmlHeadXtra[] = '
+<style>
+.lang-toggle-icon { font-size:28px; line-height:1; vertical-align:middle; }
+</style>
+<script>
 $(function () {
-    var msgLang = '. $msgLang .';
-    var disabledLang = "'.addslashes($disabledLang).'";
+    var msgLang = ' . (int) $msgLang . ';
+    var disabledLang = ' . json_encode($disabledLang) . ';
 
     if (msgLang === 1) {
-        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.addslashes(get_lang('There are users currently using the following language. Please disable manually.')).'<br />" + disabledLang + "</div>");
+        $("#id_content_message").html(
+            "<div class=\\"warning-message alert alert-warning\\">' . $jsMsg . '<br />" + disabledLang + "</div>"
+        );
     }
 
     $("#disable_all_except_default").on("click", function () {
-        if (confirm("'.addslashes(get_lang('Please confirm your choice')).'")) {
+        if (confirm("' . $jsConfirm . '")) {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function() {
-                    $("#id_content_message").html("<div class=\"warning-message alert alert-warning\"><em class=\"fa fa-refresh fa-spin\"></em> '.addslashes(get_lang('Loading')).'</div>");
+                    $("#id_content_message").html(
+                        "<div class=\\"warning-message alert alert-warning\\"><em class=\\"fa fa-refresh fa-spin\\"></em> ' . $jsLoading . '</div>"
+                    );
                 },
                 type: "GET",
-                url: "'.api_get_self().'",
+                url: ' . json_encode($selfUrl) . ',
                 data: { action: "disable_all_except_default" },
                 success: function() {
-                    window.location.href = "'.api_get_self().'";
+                    window.location.href = ' . json_encode($selfUrl) . ';
                 }
             });
         }
@@ -207,28 +220,41 @@ $(function () {
         var nextVisibility = available ? 0 : 1;
         var $icon = $("#imglinktool_" + id);
 
+        // Optional: prevent double click while request is pending
+        $link.prop("disabled", true).addClass("is-busy");
+
         $.ajax({
             type: "POST",
             url: "../admin/languages.php",
             data: { id: id, visibility: nextVisibility, sent_http_request: 1 },
             beforeSend: function () {
-                $("#id_content_message").html("<div class=\'warning-message alert alert-warning\'><em class=\'fa fa-refresh fa-spin\'></em> '.addslashes(get_lang('Loading')).'...</div>");
+                $("#id_content_message").html(
+                    "<div class=\\"warning-message alert alert-warning\\"><em class=\\"fa fa-refresh fa-spin\\"></em> ' . $jsLoading . '...</div>"
+                );
             },
             success: function (response) {
                 if (response === "set_visible" || response === "set_hidden") {
-                    var nowAvailable = response === "set_visible" ? 1 : 0;
-                    $link.data("available", nowAvailable);
+                    // Determine new availability
+                    var nowAvailable = (response === "set_visible") ? 1 : 0;
 
-                    if (nowAvailable === 1) {
-                        $icon.removeClass("ch-tool-icon-disabled");
-                    } else {
-                        $icon.addClass("ch-tool-icon-disabled");
-                    }
+                    // Persist new state and accessibility
+                    $link
+                        .data("available", nowAvailable)
+                        .attr("aria-pressed", nowAvailable ? "true" : "false");
 
-                    $("#id_content_message").html("<div class=\'alert alert-success\'>'.addslashes(get_lang('Update successful')).'</div>");
+                    // Switch ONLY between the two MDI toggle classes
+                    $icon
+                        .removeClass("mdi-toggle-switch mdi-toggle-switch-off-outline")
+                        .addClass(nowAvailable ? "mdi-toggle-switch" : "mdi-toggle-switch-off-outline");
+
+                    // Feedback
+                    $("#id_content_message").html("<div class=\\"alert alert-success\\">' . $jsUpdated . '</div>");
                 } else if (typeof response === "string" && response.indexOf("confirm:") === 0) {
-                    window.location.href = "'.api_get_self().'?action=make_unavailable_confirmed&id=" + id;
+                    window.location.href = ' . json_encode($selfUrl) . ' + "?action=make_unavailable_confirmed&id=" + id;
                 }
+            },
+            complete: function () {
+                $link.prop("disabled", false).removeClass("is-busy");
             }
         });
     });
@@ -314,15 +340,18 @@ while ($row = Database::fetch_array($result_select)) {
     } else {
         $icon = ($row['available'] == 1) ? StateIcon::ACTIVE : StateIcon::INACTIVE;
         $tooltip = ($row['available'] == 1) ? get_lang('Make unavailable') : get_lang('Make available');
+        $toggleClass = ($row['available'] == 1) ? 'mdi-toggle-switch' : 'mdi-toggle-switch-off-outline';
 
         $row_td[] = "<a class=\"make_visible_and_invisible\"
-                        id=\"linktool_".$row['id']."\"
-                        href=\"".api_get_self()."?action=".(($row['available']==1)?'makeunavailable':'makeavailable')."&id=".$row['id']."\"
-                        data-id=\"".$row['id']."\"
-                        data-available=\"".$row['available']."\">".
-            Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $tooltip, ['id' => 'imglinktool_'.$row['id']])."</a>
-            <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
-            &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+                id=\"linktool_".$row['id']."\"
+                href=\"".api_get_self()."?action=".(($row['available']==1)?'makeunavailable':'makeavailable')."&id=".$row['id']."\"
+                data-id=\"".$row['id']."\"
+                data-available=\"".$row['available']."\"
+                aria-pressed=\"".($row['available'] ? 'true' : 'false')."\">
+                    <i id=\"imglinktool_".$row['id']."\" class=\"mdi ".$toggleClass." ch-tool-icon lang-toggle-icon\" title=\"".$tooltip."\" aria-hidden=\"true\"></i>
+                </a>
+                <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
+                &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
     }
     $language_data[] = $row_td;
 }

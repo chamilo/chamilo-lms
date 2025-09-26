@@ -36,7 +36,7 @@ class Chat
     protected DateTime $sent;
 
     #[ORM\Column(name: 'recd', type: 'integer', nullable: false)]
-    protected int $recd;
+    protected int $recd = 0;
 
     /**
      * Get id.

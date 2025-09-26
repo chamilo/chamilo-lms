@@ -26,22 +26,33 @@ final class CDropboxFileRepository extends ResourceRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $sid  = (int) ($sid ?? 0);
+
         $sql = <<<SQL
-            SELECT
-                f.iid               AS id,
-                f.title             AS title,
-                f.description       AS description,
-                f.filesize          AS filesize,
-                f.last_upload_date  AS lastUploadDate,
-                f.cat_id            AS catId,
-                ''                  AS recipients
-            FROM c_dropbox_file f
-            WHERE f.c_id = :cid
-              AND f.session_id = :sid
-              AND f.uploader_id = :uid
-              AND f.cat_id = :categoryId
-            ORDER BY f.last_upload_date DESC, f.iid DESC
-        SQL;
+        SELECT
+            f.iid               AS id,
+            f.title             AS title,
+            f.description       AS description,
+            f.filesize          AS filesize,
+            f.last_upload_date  AS lastUploadDate,
+            f.cat_id            AS catId,
+            COALESCE(
+                GROUP_CONCAT(DISTINCT TRIM(CONCAT(u.firstname, ' ', u.lastname)) SEPARATOR ', '),
+                ''
+            )                   AS recipients
+        FROM c_dropbox_file f
+        LEFT JOIN c_dropbox_person p
+               ON p.c_id = f.c_id
+              AND p.file_id = f.iid
+              AND p.user_id <> f.uploader_id
+        LEFT JOIN `user` u
+               ON u.id = p.user_id
+        WHERE f.c_id = :cid
+          AND f.session_id = :sid
+          AND f.uploader_id = :uid
+          AND f.cat_id = :categoryId
+        GROUP BY f.iid
+        ORDER BY f.last_upload_date DESC, f.iid DESC
+    SQL;
 
         return $conn->fetchAllAssociative($sql, [
             'cid'        => $cid,
@@ -59,27 +70,29 @@ final class CDropboxFileRepository extends ResourceRepository
     public function findReceivedByContextAndCategory(int $cid, ?int $sid, int $uid, int $categoryId): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sid  = $sid ?? 0;
+        $sid  = (int) ($sid ?? 0);
 
         $sql = <<<SQL
-            SELECT
-                f.iid               AS id,
-                f.title             AS title,
-                f.description       AS description,
-                f.filesize          AS filesize,
-                f.last_upload_date  AS lastUploadDate,
-                f.cat_id            AS catId,
-                CONCAT('User #', f.uploader_id) AS uploader
-            FROM c_dropbox_person p
-            INNER JOIN c_dropbox_file f
+        SELECT
+            f.iid               AS id,
+            f.title             AS title,
+            f.description       AS description,
+            f.filesize          AS filesize,
+            f.last_upload_date  AS lastUploadDate,
+            f.cat_id            AS catId,
+            TRIM(CONCAT(u.firstname, ' ', u.lastname)) AS uploader
+        FROM c_dropbox_person p
+        INNER JOIN c_dropbox_file f
                 ON f.iid = p.file_id
                AND f.c_id = p.c_id
-            WHERE p.c_id = :cid
-              AND p.user_id = :uid
-              AND f.session_id = :sid
-              AND f.cat_id = :categoryId
-            ORDER BY f.last_upload_date DESC, f.iid DESC
-        SQL;
+        LEFT JOIN `user` u
+               ON u.id = f.uploader_id
+        WHERE p.c_id = :cid
+          AND p.user_id = :uid
+          AND f.session_id = :sid
+          AND f.cat_id = :categoryId
+        ORDER BY f.last_upload_date DESC, f.iid DESC
+    SQL;
 
         return $conn->fetchAllAssociative($sql, [
             'cid'        => $cid,
@@ -111,11 +124,11 @@ final class CDropboxFileRepository extends ResourceRepository
         if ($area === 'sent') {
             // Move inside sender's space: update file's category if current user is the uploader.
             $sql = <<<SQL
-            UPDATE c_dropbox_file
-               SET cat_id = :targetCatId
-             WHERE iid = :fileId
-               AND c_id = :cid
-               AND uploader_id = :uid
+        UPDATE c_dropbox_file
+           SET cat_id = :targetCatId
+         WHERE iid = :fileId
+           AND c_id = :cid
+           AND uploader_id = :uid
         SQL;
 
             return $conn->executeStatement($sql, [
@@ -126,48 +139,21 @@ final class CDropboxFileRepository extends ResourceRepository
             ]);
         }
 
-        $conn->beginTransaction();
-        try {
-            // Check recipient visibility exists
-            $check = <<<SQL
-            SELECT 1
-              FROM c_dropbox_person
-             WHERE c_id = :cid
-               AND file_id = :fileId
-               AND user_id = :uid
-             LIMIT 1
-        SQL;
-            $exists = (bool) $conn->fetchOne($check, [
-                'cid'    => $cid,
-                'fileId' => $fileId,
-                'uid'    => $uid,
-            ]);
+        // Move inside receiver's space: update the receiver's own category in c_dropbox_person.
+        $sql = <<<SQL
+        UPDATE c_dropbox_person
+           SET cat_id = :targetCatId
+         WHERE c_id = :cid
+           AND file_id = :fileId
+           AND user_id = :uid
+    SQL;
 
-            if (!$exists) {
-                // Not a recipient; nothing to move.
-                $conn->commit();
-                return 0;
-            }
-
-            // Update the file's category.
-            $upd = <<<SQL
-            UPDATE c_dropbox_file
-               SET cat_id = :targetCatId
-             WHERE iid = :fileId
-               AND c_id = :cid
-        SQL;
-            $affected = $conn->executeStatement($upd, [
-                'targetCatId' => $targetCatId,
-                'fileId'      => $fileId,
-                'cid'         => $cid,
-            ]);
-
-            $conn->commit();
-            return $affected;
-        } catch (\Throwable $e) {
-            $conn->rollBack();
-            throw $e;
-        }
+        return $conn->executeStatement($sql, [
+            'targetCatId' => $targetCatId,
+            'cid'         => $cid,
+            'fileId'      => $fileId,
+            'uid'         => $uid,
+        ]);
     }
 
     public function deleteVisibility(array $fileIds, int $cid, ?int $sid, int $uid, string $area): int

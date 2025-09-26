@@ -6,7 +6,11 @@ export default {
   },
   name: "dropbox",
   component: () => import("../components/dropbox/DropboxLayout.vue"),
-  redirect: { name: "DropboxListSent" },
+  redirect: (to) => ({
+    name: "DropboxListSent",
+    params: to.params,
+    query: to.query,
+  }),
   children: [
     {
       name: "DropboxListSent",
@@ -40,4 +44,4 @@ export default {
       meta: { breadcrumb: "Edit folder" },
     },
   ],
-};
+}

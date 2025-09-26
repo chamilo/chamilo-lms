@@ -49,6 +49,7 @@ final class CreateDropboxFileAction
         /** @var UploadedFile|null $file */
         $file = $request->files->get('uploadFile');
         if (!$file) {
+            // Fallback: accept any uploaded file under a different key and remap it
             foreach ($request->files as $val) {
                 if ($val instanceof UploadedFile) {
                     $file = $val;
@@ -75,6 +76,7 @@ final class CreateDropboxFileAction
         /** @var string[] $tokens */
         $tokens      = (array) ($request->request->all('recipients') ?? []);
 
+        // Ensure filename uniqueness
         $original  = $file->getClientOriginalName() ?: 'upload.bin';
         $candidate = $original;
         $i = 1;
@@ -104,23 +106,17 @@ final class CreateDropboxFileAction
         $e->setLastUploadDate($now);
         $e->setCatId($categoryId);
 
+        // Link visibility (course/session/user/group)
         $e->setResourceLinkArray($this->buildLinks($tokens, $cid, $sid, $gid));
 
         $em->persist($e);
         $em->flush();
 
-        $up = new CDropboxPerson();
-        $up->setCId($cid);
-        $up->setUserId($user->getId());
-        $up->setFileId($e->getIid());
-        $em->persist($up);
-
-        $destUserIds = $this->extractUserIdsFromTokens($tokens, $user->getId());
-        if (!$destUserIds) {
-            $destUserIds = [$user->getId()];
-        }
+        // Extract real recipients; if none, leave it as a "Sent only" file (no recipients).
+        $destUserIds = $this->extractUserIdsFromTokens($tokens);
 
         foreach ($destUserIds as $destUid) {
+            // Create post (feedback/thread seed)
             $post = new CDropboxPost();
             $post->setCId($cid);
             $post->setSessionId($sid ?? 0);
@@ -130,13 +126,12 @@ final class CreateDropboxFileAction
             $post->setFeedbackDate(new DateTime());
             $em->persist($post);
 
-            if ($destUid !== $user->getId()) {
-                $p = new CDropboxPerson();
-                $p->setCId($cid);
-                $p->setUserId($destUid);
-                $p->setFileId($e->getIid());
-                $em->persist($p);
-            }
+            // Create visibility for the recipient
+            $p = new CDropboxPerson();
+            $p->setCId($cid);
+            $p->setUserId($destUid);
+            $p->setFileId($e->getIid());
+            $em->persist($p);
         }
 
         $em->flush();
@@ -156,6 +151,7 @@ final class CreateDropboxFileAction
     {
         $tokens = array_values(array_filter(array_map('strval', $tokens)));
 
+        // If there are no tokens (or only "self"), keep it visible to the course/session/group context only.
         if (empty($tokens) || (count($tokens) === 1 && strtolower($tokens[0]) === 'self')) {
             return [[
                 'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
@@ -191,14 +187,19 @@ final class CreateDropboxFileAction
         ]];
     }
 
-    private function extractUserIdsFromTokens(array $tokens, int $uploaderId): array
+    /**
+     * Extract only real recipient user IDs from tokens.
+     * The uploader must NOT be included here, even if "self" is present.
+     *
+     * @param array $tokens
+     * @return int[]
+     */
+    private function extractUserIdsFromTokens(array $tokens): array
     {
         $ids = [];
         foreach ($tokens as $t) {
             $s = (string) $t;
-            if (strtolower($s) === 'self') {
-                $ids[] = $uploaderId;
-            } elseif (preg_match('/^USER:(\d+)$/i', $s, $m)) {
+            if (preg_match('/^USER:(\d+)$/i', $s, $m)) {
                 $ids[] = (int) $m[1];
             } elseif (preg_match('/^user_(\d+)$/i', $s, $m)) {
                 $ids[] = (int) $m[1];

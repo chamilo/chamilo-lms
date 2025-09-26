@@ -8283,7 +8283,7 @@ msgid "Add this question to the test"
 msgstr "Adicionar esta questão ao exame"
 
 msgid "Display"
-msgstr "Apresentação das questões"
+msgstr "Apresentação"
 
 msgid "Multiple choice"
 msgstr "Múltipla escolha"

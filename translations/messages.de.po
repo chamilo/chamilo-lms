@@ -8336,7 +8336,7 @@ msgid "Add this question to the test"
 msgstr "Frage hinzufügen"
 
 msgid "Display"
-msgstr "Fragen anzeigen"
+msgstr "Anzeigen"
 
 msgid "Multiple choice"
 msgstr "Multiple-Choice"

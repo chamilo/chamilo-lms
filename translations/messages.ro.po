@@ -8284,7 +8284,7 @@ msgid "Add this question to the test"
 msgstr "Adauga o intrebare la test"
 
 msgid "Display"
-msgstr "Prezentarea intrebarilor"
+msgstr "Prezentarea"
 
 msgid "Multiple choice"
 msgstr "Multiple choice"

@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 
-class Version20250701130500 extends AbstractMigrationChamilo
+class Version20201210100011 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {

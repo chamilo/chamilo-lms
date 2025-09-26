@@ -91,7 +91,7 @@ function onChangeCat() {
 </script>
 
 <template>
-  <section class="relative ml-2 rounded-2xl shadow-[0_1px_8px_rgba(0,0,0,.04)]">
+  <section class="relative ml-2 rounded-2xl shadow-lg">
     <header class="relative bg-support-6 rounded-t-2xl flex items-center justify-between pl-0 pr-4 py-3">
       <span class="pointer-events-none absolute inset-y-0 -left-1.5 w-1.5 bg-support-5 rounded-l-2xl" aria-hidden />
       <div class="flex items-center gap-3">
@@ -159,7 +159,7 @@ function onChangeCat() {
       </div>
     </header>
 
-    <div v-if="isOpen && localList.length" :id="panelId" class="px-4 pb-4 bg-white rounded-b-2xl">
+    <div v-if="isOpen && localList.length" :id="panelId" class="sm:px-4 sm:pb-4 px-2 pb-2 bg-white rounded-b-2xl">
       <Draggable
         v-model="localList"
         item-key="iid"
@@ -167,7 +167,7 @@ function onChangeCat() {
         handle=".drag-handle2"
         :animation="180"
         tag="div"
-        class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 mt-5"
+        class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 mt-5"
         ghost-class="ghosting"
         chosen-class="chosen"
         drag-class="dragging"

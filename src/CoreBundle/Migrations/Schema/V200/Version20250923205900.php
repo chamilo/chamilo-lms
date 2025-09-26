@@ -34,8 +34,7 @@ final class Version20250923205900 extends AbstractMigrationChamilo
 
         $targetTitle = 'dropbox';
 
-        $toolRepo   = $this->entityManager->getRepository(Tool::class);
-        $courseRepo = $this->entityManager->getRepository(Course::class);
+        $toolRepo = $this->entityManager->getRepository(Tool::class);
 
         /** @var Tool|null $tool */
         $tool = $toolRepo->findOneBy(['title' => $targetTitle]);
@@ -43,6 +42,8 @@ final class Version20250923205900 extends AbstractMigrationChamilo
             $this->write('Tool "'.$targetTitle.'" does not exist; aborting migration.');
             return;
         }
+
+        $toolId = $tool->getId();
 
         $activeOnCreate = $settings->getSetting('course.active_tools_on_create') ?? [];
         $batchSize = self::BATCH_SIZE;
@@ -62,8 +63,11 @@ final class Version20250923205900 extends AbstractMigrationChamilo
                 }
             }
             if ($already) {
+                $this->entityManager->detach($course);
                 continue;
             }
+
+            $toolRef = $this->entityManager->getReference(Tool::class, $toolId);
 
             // Initial visibility and link visibility (same rule as addToolsInCourse)
             $visible = \in_array($targetTitle, $activeOnCreate, true);
@@ -71,7 +75,7 @@ final class Version20250923205900 extends AbstractMigrationChamilo
 
             // Create CTool and its ResourceLink
             $ctool = (new CTool())
-                ->setTool($tool)
+                ->setTool($toolRef)
                 ->setTitle($targetTitle)
                 ->setVisibility($visible)
                 ->setParent($course)

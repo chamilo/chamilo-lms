@@ -328,27 +328,35 @@ onMounted(() => {
   const initial = normalizeLocale(
     installerData.value.langIso || installerData.value.languageForm
   )
+
+  installerData.value.langIso = initial
+
   if (initial && locale.value !== initial) {
     locale.value = initial
     refreshStepTitles()
   }
-  if (!installerData.value.langIso) {
-    installerData.value.langIso = initial
-  }
 
   const txtIsExecutable = document.getElementById("is_executable")
   if (!txtIsExecutable) return
-  document
-    .querySelectorAll("button")
-    .forEach((button) =>
-      button.addEventListener("click", () => (txtIsExecutable.value = button.name))
-    )
+
+  const form = document.getElementById("install_form")
+  if (form) {
+    form
+      .querySelectorAll("button")
+      .forEach((button) =>
+        button.addEventListener("click", () => (txtIsExecutable.value = button.name))
+      )
+  }
 })
 
 watch(
   () => installerData.value?.langIso,
   (iso) => {
     const next = normalizeLocale(iso)
+    if (next && next !== iso) {
+      installerData.value.langIso = next
+      return
+    }
     if (next && locale.value !== next) {
       locale.value = next
       refreshStepTitles()

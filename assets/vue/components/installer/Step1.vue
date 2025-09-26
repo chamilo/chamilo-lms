@@ -87,22 +87,22 @@ import languages from "../../utils/languages"
 const { t } = useI18n()
 const installerData = inject("installerData")
 
-const ALLOWED = ["en_US", "fr_FR", "es_ES", "de", "nl", "ar"]
+const ALLOWED = ["ar", "de", "en_US", "es", "fr_FR", "he_IL", "it", "nl", "pt_BR", "sl_SI"]
 
 const availableLanguages = computed(() => {
+  const allow = new Set(ALLOWED.map((x) => x.toLowerCase()))
   const list = languages
-    .filter((l) => ALLOWED.includes(l.isocode))
+    .filter((l) => allow.has(l.isocode.toLowerCase()))
     .map((l) => ({
       isocode: l.isocode,
-      original_name: l.english_name || l.original_name || l.isocode,
+      original_name: l.original_name || l.english_name || l.isocode,
     }))
-
-  const iso = installerData.value?.langIso
-  if (iso && !list.some((l) => l.isocode === iso)) {
-    const found = languages.find((l) => l.isocode === iso)
+  const iso = installerData?.value?.langIso
+  if (iso && !list.some((l) => l.isocode.toLowerCase() === String(iso).toLowerCase())) {
+    const found = languages.find((l) => l.isocode.toLowerCase() === String(iso).toLowerCase())
     list.unshift({
       isocode: iso,
-      original_name: found?.english_name || found?.original_name || iso,
+      original_name: found?.original_name || found?.english_name || iso,
     })
   }
 

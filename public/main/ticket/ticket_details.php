@@ -226,9 +226,8 @@ foreach ($messages as $message) {
 $subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);
 
 if ($allowEdition
-    && TicketManager::STATUS_FORWARDED != $ticket['ticket']['status_id']
     && TicketManager::STATUS_CLOSED
-    != $ticket['ticket']['status_id']
+    != $ticket['ticket']['status_id'] || $isAdmin
 ) {
     $form = getForm($ticket['ticket']);
     $formToShow = $form->returnForm();

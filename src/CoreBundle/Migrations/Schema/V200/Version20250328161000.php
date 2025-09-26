@@ -39,12 +39,6 @@ class Version20250328161000 extends AbstractMigrationChamilo
                 'UPDATE ext_translations SET locale = ? WHERE locale = ?',
                 [$newIsoCode, $sublanguage['isocode']]
             );
-
-            // Rename old PO file
-            $filesystem->rename(
-                $projectDir.'/var/translations/messages.'.$sublanguage['isocode'].'.po',
-                $projectDir.'/var/translations/messages.'.$newIsoCode.'.po'
-            );
         }
     }
 

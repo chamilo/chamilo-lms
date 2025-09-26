@@ -26,6 +26,9 @@
                     <th>{{ 'Type'|trans }}</th>
                     <th>{{ 'Title'|trans }}</th>
                     <th>{{ 'Count'|trans }}</th>
+                    {% if showUsers %}
+                        <th>{{ 'Users'|trans }}</th>
+                    {% endif %}
                     <th>{{ 'Resources'|trans }}</th>
                     <th>{{ 'Created at'|trans }}</th>
                     <th>{{ 'Link'|trans }}</th>
@@ -37,6 +40,23 @@
                         <td>{{ course.type|capitalize }}</td>
                         <td>{{ course.title }}</td>
                         <td>{{ course.count }}</td>
+                        {% if showUsers %}
+                            <td>
+                                {% set users = course.users|default([]) %}
+                                {% if users|length > 0 %}
+                                    <ul>
+                                        {% for u in users|slice(0, 5) %}
+                                            <li>{{ u }}</li>
+                                        {% endfor %}
+                                        {% if users|length > 5 %}
+                                            <li class="text-muted">… {{ 'and'|trans }} {{ users|length - 5 }} {{ 'more'|trans }}</li>
+                                        {% endif %}
+                                    </ul>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                         <td>
                             <ul>
                                 {% set total = course.items|length %}

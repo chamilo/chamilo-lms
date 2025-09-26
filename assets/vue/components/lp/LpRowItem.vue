@@ -112,7 +112,7 @@ const progressTextClass = computed(() => {
     </div>
 
     <template v-if="canEdit">
-      <div class="ml-5 md:ml-auto md:flex-col flex items-center justify-between md:justify-start">
+      <div class="ml-5 md:ml-auto md:flex-col flex items-end justify-between md:justify-start">
         <div class="flex gap-x-3 order-2 md:order1 mt-5 md:mt-0">
           <button class="row-start-1 col-start-1 opacity-70 hover:opacity-100" :title="t('Reports')" :aria-label="t('Reports')" @click="emit('report', lp)">
             <i class="mdi mdi-chart-box-outline text-xl" />

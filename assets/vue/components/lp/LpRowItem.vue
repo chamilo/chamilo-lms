@@ -101,6 +101,8 @@ const progressTextClass = computed(() => {
             <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Hide') }}</button>
             <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit learnpath') }}</button>
             <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+            <button v-if="canExportScorm" class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden" @click="emit('export-scorm', lp)">{{ t('Export as SCORM') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden" @click="emit('settings', lp)">{{ t('Settings') }}</button>
           </div>
         </template>
       </BaseDropdownMenu>

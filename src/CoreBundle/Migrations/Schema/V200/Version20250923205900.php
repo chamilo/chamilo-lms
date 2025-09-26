@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\ORM\Query;
 
 final class Version20250923205900 extends AbstractMigrationChamilo
 {
@@ -34,58 +35,61 @@ final class Version20250923205900 extends AbstractMigrationChamilo
 
         $targetTitle = 'dropbox';
 
-        $toolRepo = $this->entityManager->getRepository(Tool::class);
+        // Get Tool ID by title (fail fast if not found)
+        $toolId = $this->entityManager
+            ->createQuery('SELECT t.id FROM Chamilo\CoreBundle\Entity\Tool t WHERE t.title = :title')
+            ->setParameter('title', $targetTitle)
+            ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
 
-        /** @var Tool|null $tool */
-        $tool = $toolRepo->findOneBy(['title' => $targetTitle]);
-        if (!$tool) {
+        if ($toolId === null) {
             $this->write('Tool "'.$targetTitle.'" does not exist; aborting migration.');
             return;
         }
-
-        $toolId = $tool->getId();
+        $toolId = (int) $toolId;
 
         $activeOnCreate = $settings->getSetting('course.active_tools_on_create') ?? [];
+        $visible        = \in_array($targetTitle, $activeOnCreate, true);
+        $linkVisibility = $visible ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
+
         $batchSize = self::BATCH_SIZE;
         $i = 0;
 
-        // Iterate over all courses using a memory-efficient cursor
-        $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
+        // Iterate over course IDs only (no heavy hydration)
+        $q = $this->entityManager->createQuery('SELECT c.id FROM Chamilo\CoreBundle\Entity\Course c');
 
-        /** @var Course $course */
-        foreach ($q->toIterable() as $course) {
-            // Skip if the course already has a CTool with the same title
-            $already = false;
-            foreach ($course->getTools() as $ct) {
-                if (0 === strcasecmp($ct->getTitle(), $targetTitle)) {
-                    $already = true;
-                    break;
-                }
-            }
-            if ($already) {
-                $this->entityManager->detach($course);
+        foreach ($q->toIterable([], Query::HYDRATE_SCALAR) as $row) {
+            $courseId = (int) $row['id'];
+
+            // Does the course already have this tool?
+            $exists = (int) $this->entityManager
+                ->createQuery(
+                    'SELECT COUNT(ct.iid)
+                       FROM Chamilo\CourseBundle\Entity\CTool ct
+                      WHERE ct.title = :title
+                        AND ct.course = :course'
+                )
+                ->setParameter('title', $targetTitle)
+                ->setParameter('course', $this->entityManager->getReference(Course::class, $courseId))
+                ->getSingleScalarResult();
+
+            if ($exists > 0) {
                 continue;
             }
 
-            $toolRef = $this->entityManager->getReference(Tool::class, $toolId);
+            $toolRef   = $this->entityManager->getReference(Tool::class, $toolId);
+            $courseRef = $this->entityManager->getReference(Course::class, $courseId);
 
-            // Initial visibility and link visibility (same rule as addToolsInCourse)
-            $visible = \in_array($targetTitle, $activeOnCreate, true);
-            $linkVisibility = $visible ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
-
-            // Create CTool and its ResourceLink
-            $ctool = (new CTool())
+            $ctool = new CTool()
                 ->setTool($toolRef)
                 ->setTitle($targetTitle)
                 ->setVisibility($visible)
-                ->setParent($course)
-                ->setCreator($course->getCreator())
-                ->addCourseLink($course, null, null, $linkVisibility);
+                ->setCourse($courseRef)
+                ->setParent($courseRef)
+                ->setCreator($courseRef->getCreator())
+                ->addCourseLink($courseRef, null, null, $linkVisibility);
 
-            $course->addTool($ctool);
             $this->entityManager->persist($ctool);
 
-            // Batch flush
             if ((++$i % $batchSize) === 0) {
                 $this->entityManager->flush();
                 $this->entityManager->clear();

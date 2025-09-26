@@ -8284,7 +8284,7 @@ msgid "Add this question to the test"
 msgstr "Aggiungi un quesito a un test"
 
 msgid "Display"
-msgstr "Introduzione ai quesiti"
+msgstr "Prezentazione"
 
 msgid "Multiple choice"
 msgstr "Scelta multipla"

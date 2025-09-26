@@ -26034,7 +26034,7 @@ msgid "Hide gradebook charts"
 msgstr "Hide gradebook charts"
 
 msgid "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
-msgstr "If your portal is resources-limited, reducing the generation of the dynamic gradebok charts with potentially thousands of results is a good option."
+msgstr "If your portal is resources-limited, reducing the generation of the dynamic gradebook charts with potentially thousands of results is a good option."
 
 msgid "Hide gradebook button 'download PDF report'"
 msgstr "Hide gradebook button 'download PDF report'"
@@ -26046,7 +26046,7 @@ msgid "Use test settings for grades display"
 msgstr "Use test settings for grades display"
 
 msgid "Use APCu caching to speed up gradebok"
-msgstr "Use APCu caching to speed up gradebok"
+msgstr "Use APCu caching to speed up gradebook"
 
 msgid "Improve speed when rendering gradebook student reports using Doctrine APCU cache. APCu is an optional but recommended PHP extension."
 msgstr "Improve speed when rendering gradebook student reports using Doctrine APCU cache. APCu is an optional but recommended PHP extension."

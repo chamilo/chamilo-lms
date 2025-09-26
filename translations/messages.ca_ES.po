@@ -8283,7 +8283,7 @@ msgid "Add this question to the test"
 msgstr "Afegir qüestió"
 
 msgid "Display"
-msgstr "Presentació de les qüestions"
+msgstr "Presentació"
 
 msgid "Multiple choice"
 msgstr "Resposta única"

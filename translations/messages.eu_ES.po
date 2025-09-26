@@ -8275,7 +8275,7 @@ msgid "Add this question to the test"
 msgstr "Gehitu galdera azterketari"
 
 msgid "Display"
-msgstr "Galderak aurkeztea"
+msgstr "Aurkeztea"
 
 msgid "Multiple choice"
 msgstr "Hainbat aukera"

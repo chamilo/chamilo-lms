@@ -8499,7 +8499,7 @@ msgid "Add this question to the test"
 msgstr "Ajouter la question au test"
 
 msgid "Display"
-msgstr "Présentation des questions"
+msgstr "Affichage"
 
 msgid "Multiple choice"
 msgstr "Question à réponse unique (QRU)"

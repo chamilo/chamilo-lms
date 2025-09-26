@@ -115,7 +115,7 @@
         </template>
       </Column>
 
-      <Column :header="t('Authors')" headerStyle="width:14rem">
+      <Column :header="t('Sender')" headerStyle="width:14rem">
         <template #body="{ data }">
           <span v-if="data.kind==='file'">{{ data.uploaderName }}</span>
         </template>
@@ -127,15 +127,17 @@
         </template>
       </Column>
 
-      <Column :header="t('Edit')" headerStyle="width:12rem" bodyClass="text-right">
+      <Column :header="t('Edit')" headerStyle="width:16rem" bodyClass="text-right">
         <template #body="{ data }">
           <template v-if="data.kind==='file'">
-            <BaseButton icon="comment" type="black" onlyIcon :label="t('Feedback')" @click="openFeedback(data)" />
-            <BaseButton icon="file-swap" type="black" onlyIcon :label="t('Move')" @click="openMove(data)" />
-            <a :href="downloadUrl(data.id)" target="_blank" rel="noopener">
-              <BaseButton icon="download" type="black" onlyIcon :label="t('Download')" />
-            </a>
-            <BaseButton icon="delete" type="danger" onlyIcon :label="t('Delete')" @click="remove([data.id])" />
+            <div class="inline-flex items-center gap-1 whitespace-nowrap">
+              <BaseButton icon="comment" type="black" onlyIcon :label="t('Feedback')" @click="openFeedback(data)" />
+              <BaseButton icon="file-swap" type="black" onlyIcon :label="t('Move')" @click="openMove(data)" />
+              <a :href="downloadUrl(data.id)" target="_blank" rel="noopener">
+                <BaseButton icon="download" type="black" onlyIcon :label="t('Download')" />
+              </a>
+              <BaseButton icon="delete" type="danger" onlyIcon :label="t('Delete')" @click="remove([data.id])" />
+            </div>
           </template>
         </template>
       </Column>

@@ -102,7 +102,16 @@
 
       <Column :header="t('Visible to')" headerStyle="width:18rem">
         <template #body="{ data }">
-          <span v-if="data.kind==='file'">{{ (data.recipients || []).map(r=>r.name).join(', ') }}</span>
+          <span v-if="data.kind==='file'">
+            {{
+              Array.isArray(data.recipients)
+                ? data.recipients
+                  .map(r => (typeof r === 'string' ? r : r?.name))
+                  .filter(Boolean)
+                  .join(', ')
+                : (typeof data.recipients === 'string' ? data.recipients : '')
+            }}
+          </span>
         </template>
       </Column>
 
@@ -281,7 +290,7 @@ const rowsForTable = computed(() => {
 function enterCat(id) { categoryId.value = id; selected.value = []; load() }
 function goRoot() { enterCat(0) }
 
-function selectAll() { selected.value = rowsForTable.value.slice() }
+function selectAll() { selected.value = rowsForTable.value.filter(r => r.kind === 'file') }
 function clearAll() { selected.value = [] }
 
 async function remove(ids) {

@@ -66,8 +66,8 @@ const progressTextClass = computed(() => {
           </svg>
         </div>
       </div>
-      <div class="flex-1 min-w-0">
-        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-xl leading-none md:leading-4">
+      <div class="flex-1 min-w-0 md:flex md:flex-col md:justify-center">
+        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-2xl leading-none md:leading-4">
           <button
             class="text-left hover:underline focus:underline underline-offset-2"
             @click="emit('open', lp)"

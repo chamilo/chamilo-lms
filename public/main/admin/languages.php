@@ -179,7 +179,8 @@ $jsUpdated  = addslashes(get_lang('Update successful'));
 $selfUrl    = api_get_self();
 $htmlHeadXtra[] = '
 <style>
-.lang-toggle-icon { font-size:28px; line-height:1; vertical-align:middle; }
+.lang-toggle-icon { font-size: 28px !important;width: 1em;height: 1em;line-height: 1em;display: inline-flex;align-items: center;justify-content: center;vertical-align: middle; }
+.lang-toggle-icon::before { line-height: 1em; }
 </style>
 <script>
 $(function () {
@@ -333,7 +334,7 @@ while ($row = Database::fetch_array($result_select)) {
     }
 
     if ($row['isocode'] == $currentLanguage) {
-        $row_td[] = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
+        $row_td[] = '&nbsp;'.Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon lang-toggle-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).'&nbsp;'.
             "<a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".
             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))."</a>
             &nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;

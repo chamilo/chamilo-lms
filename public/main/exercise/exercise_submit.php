@@ -453,20 +453,16 @@ if (empty($exercise_stat_info)) {
 
     if ($isFirstTime && ONE_PER_PAGE == $objExercise->type) {
         $resolvedQuestions = Event::getAllExerciseEventByExeId($exe_id);
-        if (!empty($resolvedQuestions) &&
-            !empty($exercise_stat_info['data_tracking'])
-        ) {
-            // Get current question based in data_tracking question list, instead of track_e_attempt order BT#17789.
+        if (!empty($resolvedQuestions) && !empty($exercise_stat_info['data_tracking'])) {
             $resolvedQuestionsQuestionIds = array_keys($resolvedQuestions);
-            $count = 0;
+            $lastAnsweredIndex = -1;
             $attemptQuestionList = explode(',', $exercise_stat_info['data_tracking']);
             foreach ($attemptQuestionList as $index => $question) {
                 if (in_array($question, $resolvedQuestionsQuestionIds)) {
-                    $count = $index;
-                    continue;
+                    $lastAnsweredIndex = max($lastAnsweredIndex, $index);
                 }
             }
-            $current_question = $count;
+            $current_question = max(1, $lastAnsweredIndex + 2);
         }
     }
 }
@@ -995,16 +991,37 @@ if ($formSent && isset($_POST)) {
     }
 }
 
-// If questionNum comes from POST and not from GET
-$latestQuestionId = Event::getLatestQuestionIdFromAttempt($exe_id);
+$reqGetNum  = isset($_GET['num'])  ? (int) $_GET['num']  : null;
+$reqPostNum = isset($_POST['num']) ? (int) $_POST['num'] : null;
 
-if (null === $current_question) {
-    $current_question = 1;
-    if ($latestQuestionId) {
-        $current_question = $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $reqPostNum !== null) {
+    $current_question = max(1, $reqPostNum + 1);
+} elseif ($reqGetNum !== null) {
+    $current_question = max(1, $reqGetNum);
 } else {
-    $current_question++;
+    $current_question = 1;
+    $latestQuestionId = Event::getLatestQuestionIdFromAttempt($exe_id);
+    if ($latestQuestionId) {
+        $pos = (int) $objExercise->getPositionInCompressedQuestionList($latestQuestionId);
+        $current_question = max(1, $pos + 1);
+    }
+}
+
+$question_count = !empty($questionList) ? count($questionList) : 0;
+if ($_SERVER['REQUEST_METHOD'] === 'GET'
+    && $reqGetNum !== null
+    && $question_count > 0
+    && $reqGetNum > $question_count) {
+    header('Location: exercise_result.php?'.api_get_cidreq()
+        ."&exe_id=$exe_id"
+        ."&learnpath_id=$learnpath_id"
+        ."&learnpath_item_id=$learnpath_item_id"
+        ."&learnpath_item_view_id=$learnpath_item_view_id");
+    exit;
+}
+
+if ($question_count > 0 && $current_question > $question_count) {
+    $current_question = $question_count;
 }
 
 if (0 != $question_count) {
@@ -1409,7 +1426,7 @@ if ($allowBlockCategory &&
     );
     $loading = Display::getMdiIcon('loading', 'animate-spin');
 
-    echo '<script>
+echo '<script>
         function addExerciseEvent(elm, evType, fn, useCapture) {
             if (elm.addEventListener) {
                 elm.addEventListener(evType, fn, useCapture);
@@ -1489,11 +1506,16 @@ if ($allowBlockCategory &&
             });
         }
 
+        function getCurrentQuestionNumber() {
+          var n = parseInt($(\'#num_current_id\').val(), 10);
+          return isNaN(n) || n < 1 ? 1 : n;
+        }
+
         $(function() {
         '.$questionTimeCondition.'
             //This pre-load the save.png icon
             var saveImage = new Image();
-            saveImage.src = "'.htmlspecialchars($saveIcon).'";
+         //   saveImage.src = "'.htmlspecialchars($saveIcon).'";
 
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
@@ -1520,12 +1542,13 @@ if ($allowBlockCategory &&
             $(\'button[name="previous_question_and_save"]\').on("touchstart click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                var
-                    $this = $(this),
-                    previousId = parseInt($this.data(\'prev\')) || 0,
-                    questionId = parseInt($this.data(\'question\')) || 0;
+                if (window._quizNavLock) return;
+                window._quizNavLock = true;
 
-                previous_question_and_save(previousId, questionId);
+                var $this = $(this),
+                questionId = parseInt($this.data(\'question\')) || 0,
+                prevId = Math.max(1, getCurrentQuestionNumber() - 1);
+                previous_question_and_save(prevId, questionId);
             });
 
             $(\'button[name="save_question_list"]\').on(\'touchstart click\', function (e) {
@@ -1578,17 +1601,17 @@ if ($allowBlockCategory &&
         });
 
         function previous_question(question_num) {
-        var url = "exercise_submit.php?'.$params.'&num="+question_num;
-            window.location = url;
+          var url = "exercise_submit.php?'.$params.'&num=" + question_num;
+          window.location = url;
         }
 
         function previous_question_and_save(previous_question_id, question_id_to_save) {
-            save_now(question_id_to_save, null);
-            var url = \'exercise_submit.php?'. api_get_cidreq() .'&exerciseId='. $exerciseId .'&page=\'
-                      + previous_question_id
-                      + \'&reminder='. $reminder .'\';
-            window.location = url;
-          }
+          var url = \'exercise_submit.php?'.api_get_cidreq().'\'
+                  + \'&exerciseId='.$exerciseId.'\'
+                  + \'&num=\' + previous_question_id
+                  + \'&reminder='.$reminder.'\';
+          save_now(question_id_to_save, url);
+        }
 
         function redirectExerciseToResult()
         {
@@ -1631,7 +1654,7 @@ if ($allowBlockCategory &&
             dataparam += remind_list ? ("&" + remind_list) : "";
             dataparam += my_choiceDc ? ("&" + my_choiceDc) : "";
 
-        $("#save_for_now_"+question_id).html(\''.$loading.'\');
+            $("#save_for_now_"+question_id).html(\''.$loading.'\');
             $.ajax({
                 type:"post",
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
@@ -1640,24 +1663,23 @@ if ($allowBlockCategory &&
                     if (return_value.ok) {
                         $("#save_for_now_"+question_id).html(\''.
                         Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved.')).'\');
-                } else if (return_value.error) {
+                    } else if (return_value.error) {
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
-                } else if (return_value.type == "one_per_page") {
+                        Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
+                    } else if (return_value.type == "one_per_page") {
+                        var nextNum = getCurrentQuestionNumber() + 1;
                         var url = "";
-                        if ('.$reminder.' == 1 ) {
-                            url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
-                        } else if ('.$reminder.' == 2 ) {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
-                                '&remind_question_id='.$remind_question_id.'&reminder=2";
+                        if ('.$reminder.' == 1) {
+                            url = "exercise_reminder.php?'.$params.'&num=" + nextNum;
+                        } else if ('.$reminder.' == 2) {
+                            url = "exercise_submit.php?'.$params.'&num=" + nextNum + "&remind_question_id='.$remind_question_id.'&reminder=2";
                         } else {
-                            url = "exercise_submit.php?'.$params.'&num='.$current_question.
-                                '&remind_question_id='.$remind_question_id.'";
-                    }
+                            url = "exercise_submit.php?'.$params.'&num=" + nextNum + "&remind_question_id='.$remind_question_id.'";
+                        }
 
-                    // If last question in category send to exercise_question_reminder.php
-                    if ('.$isLastQuestionInCategory.' > 0 ) {
-                        url = "exercise_question_reminder.php?'.$params.'&num='.($current_question - 1).'&category_id='.$isLastQuestionInCategory.'";
+                        // If last question in category send to exercise_question_reminder.php
+                        if ('.$isLastQuestionInCategory.' > 0 ) {
+                            url = "exercise_question_reminder.php?'.$params.'&num='.($current_question - 1).'&category_id='.$isLastQuestionInCategory.'";
                         }
 
                         if (url_extra) {
@@ -1667,45 +1689,46 @@ if ($allowBlockCategory &&
                         $("#save_for_now_"+question_id).html(\''.
                         Display::getMdiIcon(ActionIcon::SAVE_FORM, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Saved.')).'\' + return_value.savedAnswerMessage);
 
-                    // Show popup
-                    if ("check_answers" === url_extra) {
-                        var button = $(\'button[name="check_answers"]\');
-                        var questionId = parseInt(button.data(\'question\')) || 0;
-                        var urlExtra = button.data(\'url\') || null;
-                        var checkUrl = "'.$checkAnswersUrl.'";
+                        // Show popup
+                        if ("check_answers" === url_extra) {
+                            var button = $(\'button[name="check_answers"]\');
+                            var questionId = parseInt(button.data(\'question\')) || 0;
+                            var urlExtra = button.data(\'url\') || null;
+                            var checkUrl = "'.$checkAnswersUrl.'";
 
-                        $("#global-modal").attr("data-keyboard", "false");
-                        $("#global-modal").attr("data-backdrop", "static");
-                        $("#global-modal").find(".close").hide();
+                            $("#global-modal").attr("data-keyboard", "false");
+                            $("#global-modal").attr("data-backdrop", "static");
+                            $("#global-modal").find(".close").hide();
 
-                        $("#global-modal .modal-body").load(checkUrl, function() {
-                            $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
-                            var continueTest = $("<a>",{
-                                text: "'.addslashes(get_lang('Proceed with the test')).'",
-                                title: "'.addslashes(get_lang('Proceed with the test')).'",
-                                href: "javascript:void(0);",
-                                click: function(){
-                                    $(this).attr("disabled", "disabled");
-                                    $("#global-modal").modal("hide");
-                                    $("#global-modal .modal-body").html("");
-                                }
-                            }).addClass("btn btn--plain").appendTo("#global-modal .modal-body .btn-group");
+                            $("#global-modal .modal-body").load(checkUrl, function() {
+                                $("#global-modal .modal-body").append("<div class=\"btn-group\"></div>");
+                                var continueTest = $("<a>",{
+                                    text: "'.addslashes(get_lang('Proceed with the test')).'",
+                                    title: "'.addslashes(get_lang('Proceed with the test')).'",
+                                    href: "javascript:void(0);",
+                                    click: function(){
+                                        $(this).attr("disabled", "disabled");
+                                        $("#global-modal").modal("hide");
+                                        $("#global-modal .modal-body").html("");
+                                    }
+                                }).addClass("btn btn--plain").appendTo("#global-modal .modal-body .btn-group");
 
-                             $("<a>",{
-                                text: "'.addslashes(get_lang('End test')).'",
-                                title: "'.addslashes(get_lang('End test')).'",
-                                href: "javascript:void(0);",
-                                click: function() {
-                                    $(this).attr("disabled", "disabled");
-                                    continueTest.attr("disabled", "disabled");
-                                    save_now(questionId, urlExtra);
-                                    $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
-                                }
-                            }).addClass("btn btn--primary").appendTo("#global-modal .modal-body .btn-group");
-                        });
-                        $("#global-modal").modal("show");
-                        return true;
-                    }
+                                $("<a>",{
+                                    text: "'.addslashes(get_lang('End test')).'",
+                                    title: "'.addslashes(get_lang('End test')).'",
+                                    href: "javascript:void(0);",
+                                    click: function() {
+                                        $(this).attr("disabled", "disabled");
+                                        continueTest.attr("disabled", "disabled");
+                                        save_now(questionId, urlExtra);
+                                        $("#global-modal .modal-body").html("<span style=\"text-align:center\">'.addslashes($loading).addslashes(get_lang('Loading')).'</span>");
+                                    }
+                                }).addClass("btn btn--primary").appendTo("#global-modal .modal-body .btn-group");
+                            });
+                            $("#global-modal").modal("show");
+                            return true;
+                        }
+
                         // window.quizTimeEnding will be reset in exercise.class.php
                         if (window.quizTimeEnding) {
                             redirectExerciseToResult();
@@ -1716,7 +1739,7 @@ if ($allowBlockCategory &&
                 },
                 error: function() {
                     $("#save_for_now_"+question_id).html(\''.
-                        Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
+                    Display::getMdiIcon('alert-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error')).'\');
                 }
             });
         }
@@ -1758,7 +1781,7 @@ if ($allowBlockCategory &&
                 url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
                 data: requestData,
                 success: function(return_value) {
-                if (return_value.ok) {
+                    if (return_value.ok) {
                         if (validate == "validate") {
                             $("#save_all_response").html(return_value.savedAnswerMessage);
                             window.location = "'.$script_php.'?'.$params.'";

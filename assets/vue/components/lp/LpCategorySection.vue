@@ -167,7 +167,7 @@ function onChangeCat() {
         handle=".drag-handle2"
         :animation="180"
         tag="div"
-        class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 mt-5"
+        class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 mt-5"
         ghost-class="ghosting"
         chosen-class="chosen"
         drag-class="dragging"

@@ -248,7 +248,7 @@
 
 <script setup>
 import { useI18n } from "vue-i18n"
-import { onMounted, provide, ref } from "vue"
+import { onMounted, provide, ref, watch } from "vue"
 
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
 import BaseButton from "./components/basecomponents/BaseButton.vue"
@@ -260,8 +260,8 @@ import Step5 from "./components/installer/Step5"
 import Step6 from "./components/installer/Step6"
 import Step7 from "./components/installer/Step7"
 
-const { t } = useI18n()
-const installerData = ref(window.installerData)
+const { t, locale } = useI18n()
+const installerData = ref(window.installerData || {})
 
 if (!installerData.value.stepData) {
   installerData.value.stepData = {
@@ -304,15 +304,55 @@ const steps = ref([
   },
 ])
 
-onMounted(() => {
-  const txtIsExecutable = document.getElementById("is_executable")
+function refreshStepTitles() {
+  steps.value = [
+    { step: 1, stepTitle: t("Installation language") },
+    { step: 2, stepTitle: t("Requirements") },
+    { step: 3, stepTitle: t("License") },
+    { step: 4, stepTitle: t("Database settings") },
+    { step: 5, stepTitle: t("Config settings") },
+    { step: 6, stepTitle: t("Show Overview") },
+    { step: 7, stepTitle: t("Install") },
+  ]
+}
 
-  if (!txtIsExecutable) {
-    return
+function normalizeLocale(iso) {
+  if (!iso) return "en_US"
+  const low = String(iso).toLowerCase()
+  if (low === "es" || low.startsWith("es_")) return "es"
+  if (low === "en" || low.startsWith("en_")) return "en_US"
+  return iso
+}
+
+onMounted(() => {
+  const initial = normalizeLocale(
+    installerData.value.langIso || installerData.value.languageForm
+  )
+  if (initial && locale.value !== initial) {
+    locale.value = initial
+    refreshStepTitles()
+  }
+  if (!installerData.value.langIso) {
+    installerData.value.langIso = initial
   }
 
+  const txtIsExecutable = document.getElementById("is_executable")
+  if (!txtIsExecutable) return
   document
     .querySelectorAll("button")
-    .forEach((button) => button.addEventListener("click", () => (txtIsExecutable.value = button.name)))
+    .forEach((button) =>
+      button.addEventListener("click", () => (txtIsExecutable.value = button.name))
+    )
 })
+
+watch(
+  () => installerData.value?.langIso,
+  (iso) => {
+    const next = normalizeLocale(iso)
+    if (next && locale.value !== next) {
+      locale.value = next
+      refreshStepTitles()
+    }
+  }
+)
 </script>

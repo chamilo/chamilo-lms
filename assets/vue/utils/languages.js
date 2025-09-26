@@ -399,7 +399,7 @@ export default [
   {
     original_name: "Español",
     english_name: "spanish",
-    isocode: "es",
+    isocode: "es_ES",
     available: 1,
 
     format: "title last_name first_name",

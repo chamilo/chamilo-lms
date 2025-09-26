@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CDropboxCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,9 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CDropboxCategory.
  */
 #[ORM\Table(name: 'c_dropbox_category')]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Index(name: 'session_id', columns: ['session_id'])]
-#[ORM\Entity]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id')]
+#[ORM\Entity(repositoryClass: CDropboxCategoryRepository::class)]
 class CDropboxCategory
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -44,6 +45,11 @@ class CDropboxCategory
 
     #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
     protected int $sessionId;
+
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
 
     /**
      * Set title.

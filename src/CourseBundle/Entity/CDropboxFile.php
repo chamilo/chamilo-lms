@@ -2,30 +2,42 @@
 
 declare(strict_types=1);
 
-/* For licensing terms, see /license.txt */
-
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use Chamilo\CoreBundle\Controller\Api\CreateDropboxFileAction;
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CourseBundle\Repository\CDropboxFileRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 
-/**
- * CDropboxFile.
- */
 #[ORM\Table(name: 'c_dropbox_file', options: ['row_format' => 'DYNAMIC'])]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Index(name: 'session_id', columns: ['session_id'])]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
+#[ORM\Index(columns: ['session_id'], name: 'session_id')]
 #[ORM\UniqueConstraint(name: 'UN_filename', columns: ['filename'])]
-#[ORM\Entity]
-class CDropboxFile
+#[ORM\Entity(repositoryClass: CDropboxFileRepository::class)]
+#[ApiResource(operations: [
+    new Post(
+        uriTemplate: '/c_dropbox_files/upload',
+        controller: CreateDropboxFileAction::class,
+        security: "is_granted('IS_AUTHENTICATED_REMEMBERED')",
+        validationContext: ['groups' => ['Default']],
+        output: false,
+        deserialize: false
+    ),
+])]
+class CDropboxFile extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[ORM\Column(name: 'c_id', type: 'integer')]
-    protected int $cId;
+    #[ORM\Column(name: 'c_id', type: 'integer', options: ['default' => 0])]
+    protected int $cId = 0;
 
     #[ORM\Column(name: 'uploader_id', type: 'integer', nullable: false)]
     protected int $uploaderId;
@@ -33,8 +45,8 @@ class CDropboxFile
     #[ORM\Column(name: 'filename', type: 'string', length: 190, nullable: false)]
     protected string $filename;
 
-    #[ORM\Column(name: 'filesize', type: 'integer', nullable: false)]
-    protected int $filesize;
+    #[ORM\Column(name: 'filesize', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $filesize = 0;
 
     #[ORM\Column(name: 'title', type: 'string', length: 255, nullable: false)]
     protected string $title;
@@ -51,256 +63,198 @@ class CDropboxFile
     #[ORM\Column(name: 'last_upload_date', type: 'datetime', nullable: false)]
     protected DateTime $lastUploadDate;
 
-    #[ORM\Column(name: 'cat_id', type: 'integer', nullable: false)]
-    protected int $catId;
+    #[ORM\Column(name: 'cat_id', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $catId = 0;
 
-    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false)]
-    protected int $sessionId;
+    #[ORM\Column(name: 'session_id', type: 'integer', nullable: false, options: ['default' => 0])]
+    protected int $sessionId = 0;
 
-    /**
-     * Set uploaderId.
-     *
-     * @return CDropboxFile
-     */
-    public function setUploaderId(int $uploaderId)
+    protected string $filetype = 'file';
+
+    public function __construct()
+    {
+        // Keep dates always set
+        $now = new DateTime();
+        $this->uploadDate = $now;
+        $this->lastUploadDate = $now;
+    }
+
+    /** Required by ResourceInterface */
+    public function getResourceIdentifier(): int
+    {
+        return (int) $this->getIid();
+    }
+
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
+    // --- Accessors ---
+
+    public function setUploaderId(int $uploaderId): self
     {
         $this->uploaderId = $uploaderId;
 
         return $this;
     }
 
-    /**
-     * Get uploaderId.
-     *
-     * @return int
-     */
-    public function getUploaderId()
+    public function getUploaderId(): int
     {
         return $this->uploaderId;
     }
 
-    /**
-     * Set filename.
-     *
-     * @return CDropboxFile
-     */
-    public function setFilename(string $filename)
+    public function setFilename(string $filename): self
     {
+        // Important: filename should be unique as per DB constraint.
         $this->filename = $filename;
 
         return $this;
     }
 
-    /**
-     * Get filename.
-     *
-     * @return string
-     */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
-    /**
-     * Set filesize.
-     *
-     * @return CDropboxFile
-     */
-    public function setFilesize(int $filesize)
+    public function setFilesize(int $filesize): self
     {
         $this->filesize = $filesize;
 
         return $this;
     }
 
-    /**
-     * Get filesize.
-     *
-     * @return int
-     */
-    public function getFilesize()
+    public function getFileTypes(): array
     {
-        return $this->filesize;
+        return ['file', 'folder'];
     }
 
-    /**
-     * Set title.
-     *
-     * @return CDropboxFile
-     */
-    public function setTitle(string $title)
+    public function getFiletype(): string
     {
-        $this->title = $title;
+        return $this->filetype;
+    }
+
+    public function setFiletype(string $filetype): self
+    {
+        $this->filetype = $filetype;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getFilesize(): int
+    {
+        return $this->filesize;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        // Keep ResourceNode title in sync at processors/services level.
+        return $this;
+    }
+
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @return CDropboxFile
-     */
-    public function setDescription(string $description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set author.
-     *
-     * @return CDropboxFile
-     */
-    public function setAuthor(string $author)
+    public function setAuthor(?string $author): self
     {
         $this->author = $author;
 
         return $this;
     }
 
-    /**
-     * Get author.
-     *
-     * @return string
-     */
-    public function getAuthor()
+    public function getAuthor(): ?string
     {
         return $this->author;
     }
 
-    /**
-     * Set uploadDate.
-     *
-     * @return CDropboxFile
-     */
-    public function setUploadDate(DateTime $uploadDate)
+    public function setUploadDate(DateTime $uploadDate): self
     {
         $this->uploadDate = $uploadDate;
 
         return $this;
     }
 
-    /**
-     * Get uploadDate.
-     *
-     * @return DateTime
-     */
-    public function getUploadDate()
+    public function getUploadDate(): DateTime
     {
         return $this->uploadDate;
     }
 
-    /**
-     * Set lastUploadDate.
-     *
-     * @return CDropboxFile
-     */
-    public function setLastUploadDate(DateTime $lastUploadDate)
+    public function setLastUploadDate(DateTime $lastUploadDate): self
     {
         $this->lastUploadDate = $lastUploadDate;
 
         return $this;
     }
 
-    /**
-     * Get lastUploadDate.
-     *
-     * @return DateTime
-     */
-    public function getLastUploadDate()
+    public function getLastUploadDate(): DateTime
     {
         return $this->lastUploadDate;
     }
 
-    /**
-     * Set catId.
-     *
-     * @return CDropboxFile
-     */
-    public function setCatId(int $catId)
+    public function setCatId(int $catId): self
     {
         $this->catId = $catId;
 
         return $this;
     }
 
-    /**
-     * Get catId.
-     *
-     * @return int
-     */
-    public function getCatId()
+    public function getCatId(): int
     {
         return $this->catId;
     }
 
-    /**
-     * Set sessionId.
-     *
-     * @return CDropboxFile
-     */
-    public function setSessionId(int $sessionId)
+    public function setSessionId(int $sessionId): self
     {
         $this->sessionId = $sessionId;
 
         return $this;
     }
 
-    /**
-     * Get sessionId.
-     *
-     * @return int
-     */
-    public function getSessionId()
+    public function getSessionId(): int
     {
         return $this->sessionId;
     }
 
-    /**
-     * Set cId.
-     *
-     * @return CDropboxFile
-     */
-    public function setCId(int $cId)
+    public function setCId(int $cId): self
     {
         $this->cId = $cId;
 
         return $this;
     }
 
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
+    public function getCId(): int
     {
         return $this->cId;
-    }
-
-    public function getIid(): ?int
-    {
-        return $this->iid;
     }
 }

@@ -145,4 +145,13 @@ export const chamiloIconToClass = {
   "qrcode": "mdi mdi-qrcode",
   "minus": "mdi mdi-minus",
   "shield-check": "mdi mdi-shield-check",
+  "arrow-up": "mdi mdi-arrow-up",
+  "arrow-down": "mdi mdi-arrow-down",
+  "arrow-left": "mdi mdi-arrow-left",
+  "arrow-right": "mdi mdi-arrow-right",
+  "arrows-left-right": "mdi mdi-swap-horizontal",
+  "upload": "mdi mdi-upload",
+  "pencil": "mdi mdi-pencil",
+  "trash": "mdi mdi-delete",
+  "xmark": "mdi mdi-close",
 }

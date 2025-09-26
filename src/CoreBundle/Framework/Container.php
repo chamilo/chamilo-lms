@@ -50,6 +50,7 @@ use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
+use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -477,6 +478,11 @@ class Container
     public static function getNotebookRepository(): CNotebookRepository
     {
         return self::$container->get(CNotebookRepository::class);
+    }
+
+    public static function getDropboxFileRepository(): CDropboxFile
+    {
+        return self::$container->get(CDropboxFile::class);
     }
 
     public static function getPersonalFileRepository(): PersonalFileRepository

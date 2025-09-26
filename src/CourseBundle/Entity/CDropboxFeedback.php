@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CourseBundle\Repository\CDropboxFeedbackRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
  * CDropboxFeedback.
  */
 #[ORM\Table(name: 'c_dropbox_feedback')]
-#[ORM\Index(name: 'course', columns: ['c_id'])]
-#[ORM\Index(name: 'file_id', columns: ['file_id'])]
-#[ORM\Index(name: 'author_user_id', columns: ['author_user_id'])]
-#[ORM\Entity]
+#[ORM\Index(columns: ['c_id'], name: 'course')]
+#[ORM\Index(columns: ['file_id'], name: 'file_id')]
+#[ORM\Index(columns: ['author_user_id'], name: 'author_user_id')]
+#[ORM\Entity(repositoryClass: CDropboxFeedbackRepository::class)]
 class CDropboxFeedback
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -41,6 +42,12 @@ class CDropboxFeedback
 
     #[ORM\Column(name: 'feedback_date', type: 'datetime', nullable: false)]
     protected DateTime $feedbackDate;
+
+
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
 
     /**
      * Set fileId.

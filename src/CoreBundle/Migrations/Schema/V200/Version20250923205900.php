@@ -79,7 +79,7 @@ final class Version20250923205900 extends AbstractMigrationChamilo
             $toolRef   = $this->entityManager->getReference(Tool::class, $toolId);
             $courseRef = $this->entityManager->getReference(Course::class, $courseId);
 
-            $ctool = new CTool()
+            $ctool = (new CTool())
                 ->setTool($toolRef)
                 ->setTitle($targetTitle)
                 ->setVisibility($visible)

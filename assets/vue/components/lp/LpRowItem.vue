@@ -37,7 +37,7 @@ const progressTextClass = computed(() => {
 </script>
 
 <template>
-  <article class="relative md:flex items-center gap-4 pl-5 pr-4 py-3 rounded-2xl border border-gray-25 bg-support-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <article class="relative md:flex items-center gap-4 pl-5 pr-4 py-3 rounded-2xl border border-gray-25 bg-support-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)] w-full">
     <span class="absolute left-0 top-0 bottom-0 w-1.5 bg-support-5" aria-hidden />
     <button
       v-if="canEdit"
@@ -55,7 +55,7 @@ const progressTextClass = computed(() => {
       </svg>
     </button>
 
-    <div class="flex gap-4">
+    <div class="flex gap-4 w-full">
       <div class="ml-5 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">
         <img v-if="lp.coverUrl" :src="lp.coverUrl" alt="" class="w-full h-full object-cover" />
         <div v-else class="w-full h-full grid place-content-center text-gray-40">
@@ -67,7 +67,7 @@ const progressTextClass = computed(() => {
         </div>
       </div>
       <div class="flex-1 min-w-0">
-        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-xl leading-none md:leading-[inherit]">
+        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-xl leading-none md:leading-4">
           <button
             class="text-left hover:underline focus:underline underline-offset-2"
             @click="emit('open', lp)"

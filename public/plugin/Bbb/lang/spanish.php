@@ -65,3 +65,4 @@ $strings['meeting_duration'] = 'Duración de la reunión (en minutos)';
 $strings['big_blue_button_students_start_conference_in_groups'] = 'Permitir a los estudiantes iniciar una videoconferencia en sus grupos.';
 $strings['delete_recordings_on_course_delete'] = 'Eliminar las grabaciones al eliminar el curso';
 $strings['defaultVisibilityInCourseHomepage'] = 'Visibilidad predeterminada en la página de inicio del curso';
+$strings['ViewActivityDashboard'] = 'Ver el panel de actividades';

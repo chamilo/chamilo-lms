@@ -173,9 +173,26 @@ if ($bbb->pluginEnabled) {
 
                 $meetingInfo = $bbb->findMeetingByName($meetingParams['meeting_name']);
                 if (!empty($meetingInfo) && $url) {
+                    $remoteId = $meetingInfo['remote_id'] ?? null;
+                    if (!$remoteId && !empty($meetingInfo['id'])) {
+                        $full = $bbb->getMeeting((int)$meetingInfo['id']);
+                        if (is_array($full)) {
+                            $remoteId = $full['remote_id'] ?? ($full['remoteId'] ?? null);
+                        }
+                    }
+
+                    if ($bbb->plugin->webhooksEnabled()) {
+                        $scope = $bbb->plugin->webhooksScope();
+                        if ($scope === 'per_meeting') {
+                            if ($remoteId) { $bbb->ensureHookForMeeting($remoteId); }
+                        } else {
+                            $bbb->ensureGlobalHook();
+                        }
+                    }
+
                     $bbb->saveParticipant($meetingInfo['id'], api_get_user_id());
                     $bbb->redirectToBBB($url);
-                } else {
+                }  else {
                     Display::addFlash(
                         Display::return_message($bbb->plugin->get_lang('ThereIsNoVideoConferenceActive'))
                     );

@@ -622,6 +622,7 @@ $content = $tpl->fetch('Bbb/view/listing.tpl');
 // Admin toolbar.
 $actionLinks = '';
 if (api_is_platform_admin()) {
+    $dashboardUrl = api_get_path(WEB_PLUGIN_PATH).'Bbb/webhook_dashboard.php';
     $actionLinks .= Display::toolbarButton(
         $plugin->get_lang('AdminView'),
         api_get_path(WEB_PLUGIN_PATH).'Bbb/admin.php',
@@ -629,10 +630,16 @@ if (api_is_platform_admin()) {
         'primary'
     );
 
-    $tpl->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$actionLinks])
-    );
+    if ($plugin->webhooksEnabled()) {
+        $actionLinks .= Display::toolbarButton(
+            $plugin->get_lang('ViewActivityDashboard'),
+            $dashboardUrl,
+            'chart-line',
+            'primary'
+        );
+    }
+
+    $tpl->assign('actions', Display::toolbarAction('toolbar', [$actionLinks]));
 }
 
 $tpl->assign('content', $content);

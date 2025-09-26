@@ -11,7 +11,7 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use Chamilo\CoreBundle\Repository\ConferenceMeetingRepository;
 use Chamilo\CoreBundle\Repository\ConferenceRecordingRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class Bbb
@@ -408,6 +408,7 @@ class Bbb
      */
     public function createMeeting($params)
     {
+        error_log('BBB API createMeeting');
         // Ensure API is available
         if (!$this->ensureApi()) {
             if ($this->debug) {
@@ -541,6 +542,25 @@ class Bbb
                     $meeting->setInternalMeetingId($result['internalMeetingID']);
                     $em->flush();
                 }
+
+                // Register webhook if enabled (no DB tables, pure BBB hooks API)
+                try {
+                    if ($this->plugin->webhooksEnabled()) {
+                        $scope = $this->plugin->webhooksScope(); // 'per_meeting' | 'global'
+                        if ($scope === 'per_meeting') {
+                            error_log('[BBB hooks] register per-meeting');
+                            $this->registerWebhookForMeeting($meeting->getRemoteId());
+                        } else {
+                            error_log('[BBB hooks] ensure global');
+                            $this->ensureGlobalWebhook();
+                        }
+                    } else {
+                        error_log('[BBB hooks] disabled by config');
+                    }
+                } catch (\Throwable $e) {
+                    error_log('[BBB hooks] registration error: '.$e->getMessage());
+                }
+
                 return $this->joinMeeting($meetingName, true);
             }
 
@@ -705,12 +725,19 @@ class Bbb
             }
         }
 
-        if (
-            strval($meetingIsRunningInfo['returncode']) === 'SUCCESS' &&
-            isset($meetingIsRunningInfo['meetingName']) &&
-            !empty($meetingIsRunningInfo['meetingName'])
-        ) {
-            $meetingInfoExists = true;
+        $meetingInfoExists = false;
+
+        if (is_array($meetingIsRunningInfo)) {
+            $returncode = (string)($meetingIsRunningInfo['returncode'] ?? '');
+            $meetingName = $meetingIsRunningInfo['meetingName'] ?? null;
+
+            if ($returncode === 'SUCCESS' && !empty($meetingName)) {
+                $meetingInfoExists = true;
+            }
+        } else {
+            if (!empty($this->debug)) {
+                error_log('[BBB] meetingIsRunning returned non-array: '.gettype($meetingIsRunningInfo));
+            }
         }
 
         if ($this->debug) {
@@ -825,10 +852,11 @@ class Bbb
 
 
     /**
-     * @param int $meetingId
-     * @param int $userId
-     *
-     * @return array
+     * Returns per-participant aggregates for a given meeting (durations + metrics).
+     * - Sums all closed intervals (inAt..outAt) plus any open interval up to "now".
+     * - Merges JSON metrics across rows:
+     *   * Sums integer counters and "totals.*_seconds"
+     *   * Keeps last non-empty scalar for other leaves
      */
     public function getMeetingParticipantInfo($meetingId, $userId): array
     {
@@ -836,34 +864,114 @@ class Bbb
         /** @var ConferenceActivityRepository $repo */
         $repo = $em->getRepository(ConferenceActivity::class);
 
-        $activity = $repo->createQueryBuilder('a')
-            ->join('a.meeting', 'm')
-            ->join('a.participant', 'u')
-            ->where('m.id = :meetingId')
-            ->andWhere('u.id = :userId')
-            ->setParameter('meetingId', $meetingId)
-            ->setParameter('userId', $userId)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        $meeting = $em->getRepository(ConferenceMeeting::class)->find((int)$meetingId);
+        $user    = $em->getRepository(User::class)->find((int)$userId);
 
-        if (!$activity) {
+        if (!$meeting || !$user) {
             return [];
         }
 
+        $rows = $repo->createQueryBuilder('a')
+            ->where('a.meeting = :meeting')
+            ->andWhere('a.participant = :user')
+            ->setParameter('meeting', $meeting)
+            ->setParameter('user', $user)
+            ->orderBy('a.id', 'ASC')
+            ->getQuery()->getResult();
+
+        if (!$rows) {
+            return [];
+        }
+
+        $now = new \DateTimeImmutable();
+        $onlineSeconds = 0;
+        $lastInAt = null;
+        $lastOutAt = null;
+
+        // Merge metrics across rows
+        $mergedMetrics = [];
+
+        foreach ($rows as $a) {
+            $in  = $a->getInAt();
+            $out = $a->getOutAt();
+
+            if ($in instanceof \DateTimeInterface) {
+                $lastInAt = $in;
+            }
+            if ($out instanceof \DateTimeInterface) {
+                $lastOutAt = $out;
+            }
+
+            // Duration: if outAt missing or equals inAt (open), count until now
+            $start = $in instanceof \DateTimeInterface ? \DateTimeImmutable::createFromMutable($in) : null;
+            $end   = $out instanceof \DateTimeInterface ? \DateTimeImmutable::createFromMutable($out) : null;
+
+            if ($start) {
+                $effectiveEnd = ($end && $end > $start) ? $end : $now;
+                $delta = max(0, $effectiveEnd->getTimestamp() - $start->getTimestamp());
+                $onlineSeconds += $delta;
+            }
+
+            // Merge metrics JSON
+            if (method_exists($a, 'getMetrics')) {
+                $metrics = $a->getMetrics() ?? [];
+                $mergedMetrics = $this->mergeMetrics($mergedMetrics, $metrics);
+            }
+        }
+
         return [
-            'id' => $activity->getId(),
-            'meeting_id' => $activity->getMeeting()?->getId(),
-            'participant_id' => $activity->getParticipant()?->getId(),
-            'in_at' => $activity->getInAt()?->format('Y-m-d H:i:s'),
-            'out_at' => $activity->getOutAt()?->format('Y-m-d H:i:s'),
-            'close' => $activity->isClose(),
-            'type' => $activity->getType(),
-            'event' => $activity->getEvent(),
-            'activity_data' => $activity->getActivityData(),
-            'signature_file' => $activity->getSignatureFile(),
-            'signed_at' => $activity->getSignedAt()?->format('Y-m-d H:i:s'),
+            'meeting_id'      => (int)$meeting->getId(),
+            'participant_id'  => (int)$user->getId(),
+            'online_seconds'  => (int)$onlineSeconds,
+            'in_at_last'      => $lastInAt ? $lastInAt->format('Y-m-d H:i:s') : null,
+            'out_at_last'     => $lastOutAt ? $lastOutAt->format('Y-m-d H:i:s') : null,
+            'metrics'         => $mergedMetrics,
         ];
+    }
+
+    /**
+     * Merge two metrics arrays:
+     * - If both leaves are numeric -> sum them
+     * - If keys start with "totals." and end with "_seconds" and values are numeric -> sum
+     * - If arrays -> deep merge with same rules
+     * - Otherwise -> prefer right-side (latest non-empty)
+     */
+    private function mergeMetrics(array $left, array $right, string $prefix = ''): array
+    {
+        foreach ($right as $k => $rv) {
+            $path = $prefix === '' ? $k : $prefix.'.'.$k;
+
+            if (!array_key_exists($k, $left)) {
+                $left[$k] = $rv;
+                continue;
+            }
+
+            $lv = $left[$k];
+
+            // Both arrays: deep merge
+            if (is_array($lv) && is_array($rv)) {
+                $left[$k] = $this->mergeMetrics($lv, $rv, $path);
+                continue;
+            }
+
+            // Both numeric: sum
+            if (is_numeric($lv) && is_numeric($rv)) {
+                $left[$k] = 0 + $lv + $rv;
+                continue;
+            }
+
+            // totals.* seconds heuristic
+            $isTotalsSeconds = (str_starts_with($path, 'totals.') && str_ends_with($k, '_seconds'));
+            if ($isTotalsSeconds && is_numeric($lv) && is_numeric($rv)) {
+                $left[$k] = 0 + $lv + $rv;
+                continue;
+            }
+
+            // Fallback: keep the most recent non-empty
+            $left[$k] = $rv !== null && $rv !== '' ? $rv : $lv;
+        }
+
+        return $left;
     }
 
     /**
@@ -2011,14 +2119,26 @@ class Bbb
         /** @var ConferenceMeetingRepository $repo */
         $repo = $em->getRepository(ConferenceMeeting::class);
 
+        // Selecciona campos que necesitamos, incluyendo remoteId
         $qb = $repo->createQueryBuilder('m')
+            ->select('m.id AS id, m.title AS title, m.remoteId AS remote_id, m.createdAt AS created_at')
             ->where('m.title = :name')
+            ->andWhere('m.accessUrl = :accessUrl')
             ->setParameter('name', $name)
+            ->setParameter('accessUrl', api_get_url_entity($this->accessUrl))
             ->setMaxResults(1);
 
-        $result = $qb->getQuery()->getArrayResult();
+        $row = $qb->getQuery()->getArrayResult();
+        if (!$row) {
+            return null;
+        }
 
-        return $result[0] ?? null;
+        // Normalización mínima de fechas a string (opcional)
+        if (!empty($row[0]['created_at']) && $row[0]['created_at'] instanceof \DateTimeInterface) {
+            $row[0]['created_at'] = $row[0]['created_at']->format('Y-m-d H:i:s');
+        }
+
+        return $row[0];
     }
 
     /**
@@ -2078,18 +2198,22 @@ class Bbb
             $participant = $activity->getParticipant();
             $participantId = $participant?->getId();
 
-            if (!$participantId || in_array($participantId, $participantIds)) {
+            if (!$participantId || in_array($participantId, $participantIds, true)) {
                 continue;
             }
-
             $participantIds[] = $participantId;
 
+            // Reuse aggregator for each user
+            $agg = $this->getMeetingParticipantInfo($meetingId, $participantId);
+
             $return[] = [
-                'id' => $activity->getId(),
-                'meeting_id' => $meetingId,
-                'participant' => api_get_user_entity($participantId),
-                'in_at' => $activity->getInAt()?->format('Y-m-d H:i:s'),
-                'out_at' => $activity->getOutAt()?->format('Y-m-d H:i:s'),
+                'id'             => $activity->getId(),
+                'meeting_id'     => $meetingId,
+                'participant'    => api_get_user_entity($participantId),
+                'in_at'          => $activity->getInAt()?->format('Y-m-d H:i:s'),
+                'out_at'         => $activity->getOutAt()?->format('Y-m-d H:i:s'),
+                'online_seconds' => $agg['online_seconds'] ?? 0,
+                'metrics'        => $agg['metrics'] ?? [],
             ];
         }
 
@@ -2164,4 +2288,254 @@ class Bbb
 
         return false;
     }
+
+    /**
+     * Build the callback URL for BBB webhooks, signed with HMAC using the plugin salt.
+     */
+    private function buildWebhookCallbackUrl(?string $meetingId = null): string
+    {
+        $base = rtrim(api_get_path(WEB_PLUGIN_PATH), '/').'/Bbb/webhook.php';
+
+        $au  = (int) $this->accessUrl;              // current access_url_id
+        $mid = (string) ($meetingId ?? '');         // meetingID (empty if global)
+
+        $algo   = $this->plugin->webhooksHashAlgo(); // 'sha256' | 'sha1'
+        $secret = (string) $this->salt;
+
+        // Stable signature without timestamp (MUST match webhook.php)
+        $payload = $au.'|'.$mid;
+        $sig     = hash_hmac($algo, $payload, $secret);
+
+        $qs = [
+            'au'  => $au,
+            'mid' => $mid,
+            'sig' => $sig,
+        ];
+
+        $url = $base.'?'.http_build_query($qs);
+
+        error_log('[BBB hooks] callbackURL='.$url);
+
+        return $url;
+    }
+
+    /**
+     * Call to the BBB hooks API (GET with sha1(call+query+salt) checksum).
+     * Returns a normalized array. Uses cURL with timeouts and TLS verification.
+     */
+    private function bbbHooksRequest(string $call, array $params): array
+    {
+        try {
+            $baseRaw = $this->urlWithProtocol ?: '';
+            if ($baseRaw === '') {
+                return ['returncode' => 'FAILED', 'messageKey' => 'missingServerUrl'];
+            }
+
+            $base = rtrim($baseRaw, '/').'/';
+            $apiBase = $base . 'api/';
+
+            $query    = http_build_query($params);
+            $checksum = sha1($call . $query . $this->salt);
+            $url      = $apiBase . $call . '?' . $query . '&checksum=' . $checksum;
+
+            error_log('[BBB hooks] CALL='.$call.' URL='.$url);
+
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT        => 8,
+                CURLOPT_CONNECTTIMEOUT => 3,
+                CURLOPT_FOLLOWLOCATION => false,
+                CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_SSL_VERIFYHOST => 2,
+                CURLOPT_USERAGENT      => 'Chamilo-BBB-Webhooks/1.0',
+            ]);
+            $body = curl_exec($ch);
+            $err  = curl_error($ch);
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+
+            error_log('[BBB hooks] RAW='.substr($body, 0, 2000));
+
+            if ($body === false || !$body) {
+                $this->dlog('bbbHooksRequest: empty body', ['curl_err' => $err]);
+                return ['returncode' => 'FAILED', 'messageKey' => 'noResponse', 'error' => $err ?: ''];
+            }
+
+            $xml = @simplexml_load_string($body);
+            if (!$xml) {
+                $this->dlog('bbbHooksRequest: invalid XML body', ['body_sample' => substr($body, 0, 200)]);
+                return ['returncode' => 'FAILED', 'messageKey' => 'invalidXML'];
+            }
+
+            $out = ['returncode' => (string)($xml->returncode ?? '')];
+            if (isset($xml->messageKey)) { $out['messageKey'] = (string)$xml->messageKey; }
+            if (isset($xml->message))    { $out['message']    = (string)$xml->message; }
+
+            if ($call === 'hooks/list' && isset($xml->hooks)) {
+                $out['hooks'] = [];
+                foreach (($xml->hooks->hook ?? []) as $h) {
+                    $out['hooks'][] = [
+                        'id'          => isset($h->id) ? (string)$h->id : '',
+                        'callbackURL' => isset($h->callbackURL) ? (string)$h->callbackURL : '',
+                        'meetingID'   => isset($h->meetingID) ? (string)$h->meetingID : '',
+                    ];
+                }
+            }
+            if ($call === 'hooks/create' && isset($xml->hookID)) {
+                $out['hookID'] = (string)$xml->hookID;
+            }
+
+            $this->dlog('bbbHooksRequest: parsed response', $out);
+            return $out;
+
+        } catch (\Throwable $e) {
+            $this->dlog('bbbHooksRequest: exception', ['error' => $e->getMessage()]);
+            return ['returncode' => 'FAILED', 'messageKey' => 'exception'];
+        }
+    }
+
+    /**
+     * Registers one webhook per meeting (idempotent).
+     * If a hook with that meeting ID already exists, don't create another one.
+     */
+    private function registerWebhookForMeeting(string $meetingId): void
+    {
+        if ($meetingId === '') {
+            $this->dlog('registerWebhookForMeeting: empty meetingId');
+            return;
+        }
+
+        $this->dlog('registerWebhookForMeeting: start', ['meetingId' => $meetingId]);
+
+        $list = $this->bbbHooksRequest('hooks/list', []);
+        if (($list['returncode'] ?? '') === 'SUCCESS') {
+            foreach (($list['hooks'] ?? []) as $h) {
+                if (($h['meetingID'] ?? '') === $meetingId) {
+                    $this->dlog('registerWebhookForMeeting: already registered', $h);
+                    return;
+                }
+            }
+        } else {
+            $this->dlog('registerWebhookForMeeting: hooks/list failed', $list);
+        }
+
+        $callback = $this->buildWebhookCallbackUrl($meetingId);
+        $params = ['callbackURL' => $callback, 'meetingID' => $meetingId];
+
+        $events = trim((string)$this->plugin->webhooksEventFilter());
+        if ($events !== '') {
+            $events = implode(',', array_map('trim', explode(',', strtolower($events))));
+            $params['events'] = $events;
+        }
+
+        $this->dlog('registerWebhookForMeeting: creating hook', $params);
+        $res = $this->bbbHooksRequest('hooks/create', $params);
+
+        if (($res['returncode'] ?? '') !== 'SUCCESS') {
+            $this->dlog('registerWebhookForMeeting: create failed', $res);
+        } else {
+            $this->dlog('registerWebhookForMeeting: create success', $res);
+        }
+    }
+
+    /** Ensure webhooks when joining an already-existing meeting */
+    public function ensureWebhooksOnJoin(string $remoteId): void
+    {
+        try {
+            if (!$this->plugin->webhooksEnabled()) {
+                if ($this->debug) { error_log('[BBB] ensureWebhooksOnJoin: webhooks disabled'); }
+                return;
+            }
+            $scope = $this->plugin->webhooksScope(); // 'per_meeting' | 'global'
+            if ($this->debug) { error_log('[BBB] ensureWebhooksOnJoin: scope='.$scope.' remoteId='.$remoteId); }
+
+            if ($scope === 'per_meeting') {
+                if ($remoteId === '') {
+                    if ($this->debug) { error_log('[BBB] ensureWebhooksOnJoin: empty remoteId'); }
+                    return;
+                }
+                // private helper already logs internals
+                $this->registerWebhookForMeeting($remoteId);
+            } else {
+                $this->ensureGlobalWebhook();
+            }
+        } catch (\Throwable $e) {
+            if ($this->debug) { error_log('[BBB] ensureWebhooksOnJoin: exception '.$e->getMessage()); }
+        }
+    }
+
+    /**
+     * Ensures a single global webhook (without a meeting ID).
+     * Query hooks/list and create it only if it doesn't exist with the same callbackURL.
+     */
+    private function ensureGlobalWebhook(): void
+    {
+        $callback = $this->buildWebhookCallbackUrl(null);
+        $this->dlog('ensureGlobalWebhook: start', ['callback' => $callback]);
+
+        $list = $this->bbbHooksRequest('hooks/list', []);
+        if (($list['returncode'] ?? '') !== 'SUCCESS') {
+            $this->dlog('ensureGlobalWebhook: hooks/list failed', $list);
+            return;
+        }
+
+        foreach (($list['hooks'] ?? []) as $h) {
+            if (($h['callbackURL'] ?? '') === $callback && ($h['meetingID'] ?? '') === '') {
+                $this->dlog('ensureGlobalWebhook: global hook already exists', $h);
+                return;
+            }
+        }
+
+        $params = ['callbackURL' => $callback];
+        $events = trim((string)$this->plugin->webhooksEventFilter());
+        if ($events !== '') {
+            $events = implode(',', array_map('trim', explode(',', strtolower($events))));
+            $params['events'] = $events;
+        }
+
+        $this->dlog('ensureGlobalWebhook: creating', $params);
+        $res = $this->bbbHooksRequest('hooks/create', $params);
+        if (($res['returncode'] ?? '') !== 'SUCCESS') {
+            $this->dlog('ensureGlobalWebhook: create failed', $res);
+        } else {
+            $this->dlog('ensureGlobalWebhook: create success', $res);
+        }
+    }
+
+    public function ensureGlobalHook(): void
+    {
+        try {
+            error_log('[BBB hooks] ensureGlobalHook() called');
+            $this->ensureGlobalWebhook();
+            error_log('[BBB hooks] ensureGlobalHook() done');
+        } catch (\Throwable $e) {
+            error_log('[BBB hooks] ensureGlobalHook() error: '.$e->getMessage());
+        }
+    }
+
+    public function ensureHookForMeeting(string $remoteId): void
+    {
+        try {
+            if ($remoteId === '') {
+                error_log('[BBB hooks] ensureHookForMeeting(): empty remoteId');
+                return;
+            }
+            error_log('[BBB hooks] ensureHookForMeeting('.$remoteId.') called');
+            $this->registerWebhookForMeeting($remoteId);
+            error_log('[BBB hooks] ensureHookForMeeting('.$remoteId.') done');
+        } catch (\Throwable $e) {
+            error_log('[BBB hooks] ensureHookForMeeting('.$remoteId.') error: '.$e->getMessage());
+        }
+    }
+
+    private function dlog(string $msg, array $ctx = []): void
+    {
+        if (!$this->debug) { return; }
+        if (!empty($ctx)) {
+            $msg .= ' | ' . json_encode($ctx, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
+        }
+        error_log('[BBB] ' . $msg);
+    }
+
 }

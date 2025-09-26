@@ -166,6 +166,21 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                     $this->reassignUserResourcesToFallbackSQL($user, $fallbackUser, $connection);
                 }
 
+                // Remove extra fields
+                $connection->executeStatement(
+                    'DELETE v FROM extra_field_values v
+                INNER JOIN extra_field f ON f.id = v.field_id
+                WHERE f.item_type = :userType AND v.item_id = :uid',
+                    ['userType' => ExtraField::USER_FIELD_TYPE, 'uid' => $user->getId()]
+                );
+
+                $connection->executeStatement(
+                    'DELETE r FROM extra_field_rel_tag r
+                INNER JOIN extra_field f ON f.id = r.field_id
+                WHERE f.item_type = :userType AND r.item_id = :uid',
+                    ['userType' => ExtraField::USER_FIELD_TYPE, 'uid' => $user->getId()]
+                );
+
                 // Remove group relationships
                 $connection->executeStatement(
                     'DELETE FROM usergroup_rel_user WHERE user_id = :userId',

@@ -808,7 +808,7 @@ $no_qualification = false;
 // Show certificate link.
 $certificate = [];
 $actionsLeft = '';
-$hideCertificateExport = api_get_setting('hide_certificate_export_link');
+$hideCertificateExport = api_get_setting('certificate.hide_certificate_export_link');
 $category = null;
 if (!empty($selectCat)) {
     $repo = Container::getGradeBookCategoryRepository();

@@ -28,6 +28,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
             'skill_levels_names' => '',
             'allow_skill_rel_items' => 'false',
             'manual_assignment_subskill_autoload' => 'false',
+            'openbadges_backpack' => 'https://www.badgecraft.eu/',
         ]);
 
         $allowedTypes = [
@@ -51,6 +52,7 @@ class SkillSettingsSchema extends AbstractSettingsSchema
             ->add('skill_levels_names', TextareaType::class)
             ->add('allow_skill_rel_items', YesNoType::class)
             ->add('manual_assignment_subskill_autoload', YesNoType::class)
+            ->add('openbadges_backpack')
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

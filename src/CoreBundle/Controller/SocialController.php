@@ -64,9 +64,9 @@ class SocialController extends AbstractController
         $properties = $propertiesToJson ? json_decode($propertiesToJson, true) : [];
 
         $officerData = [
-            ['name' => $settingsManager->getSetting('profile.data_protection_officer_name')],
-            ['role' => $settingsManager->getSetting('profile.data_protection_officer_role')],
-            ['email' => $settingsManager->getSetting('profile.data_protection_officer_email')],
+            ['name' => $settingsManager->getSetting('privacy.data_protection_officer_name')],
+            ['role' => $settingsManager->getSetting('privacy.data_protection_officer_role')],
+            ['email' => $settingsManager->getSetting('privacy.data_protection_officer_email')],
         ];
         $properties['officer_data'] = $officerData;
 
@@ -1022,7 +1022,7 @@ class SocialController extends AbstractController
         $infoMessage = '';
 
         if (!$isAdmin) {
-            if ('true' === $settingsManager->getSetting('ticket.show_terms_if_profile_completed')) {
+            if ('true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed')) {
                 $extraFieldValue = new ExtraFieldValue('user');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable($userId, 'termactivated');
                 if (isset($value['value'])) {

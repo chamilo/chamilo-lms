@@ -111,7 +111,7 @@ class IndexBlocksController extends BaseController
             }
 
             // Data protection
-            if ('true' !== $this->settingsManager->getSetting('profile.disable_gdpr')) {
+            if ('true' !== $this->settingsManager->getSetting('privacy.disable_gdpr')) {
                 $json['data_privacy'] = [
                     'id' => 'block-admin-privacy',
                     'editable' => false,

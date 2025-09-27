@@ -603,7 +603,6 @@ class SettingsManager implements SettingsManagerInterface
             'show_back_link_on_top_of_tree' => 'Platform',
             'show_different_course_language' => 'Platform',
             'split_users_upload_directory' => 'Tuning',
-            'hide_dltt_markup' => 'Languages',
             'display_categories_on_homepage' => 'Platform',
             'permissions_for_new_directories' => 'Security',
             'permissions_for_new_files' => 'Security',
@@ -679,7 +678,7 @@ class SettingsManager implements SettingsManagerInterface
             'show_default_folders' => 'Tools',
             'show_chat_folder' => 'Tools',
             'course_hide_tools' => 'Course',
-            'show_groups_to_users' => 'Session',
+            'show_groups_to_users' => 'Group',
             'accessibility_font_resize' => 'Platform',
             'hide_courses_in_sessions' => 'Session',
             'enable_quiz_scenario' => 'Course',
@@ -754,7 +753,7 @@ class SettingsManager implements SettingsManagerInterface
             'ticket_warn_admin_no_user_in_category' => 'Ticket',
             'ticket_allow_category_edition' => 'Ticket',
             'load_term_conditions_section' => 'Platform',
-            'show_terms_if_profile_completed' => 'Ticket',
+            'show_terms_if_profile_completed' => 'Profile',
             'hide_home_top_when_connected' => 'Platform',
             'hide_global_announcements_when_not_connected' => 'Platform',
             'course_creation_use_template' => 'Course',
@@ -820,11 +819,10 @@ class SettingsManager implements SettingsManagerInterface
             'exercise_invisible_in_session' => 'exercise',
             'configure_exercise_visibility_in_course' => 'exercise',
             'allow_download_documents_by_api_key' => 'Webservices',
-            'profiling_filter_adding_users' => 'profile',
+            'profiling_filter_adding_users' => 'course',
             'donotlistcampus' => 'platform',
             'course_creation_splash_screen' => 'Course',
             'translate_html' => 'Editor',
-            'enable_bootstrap_in_documents_html' => 'Course',
         ];
     }
 
@@ -994,8 +992,7 @@ class SettingsManager implements SettingsManagerInterface
             'messaging_gdc_project_number' => 'webservice',
             'messaging_gdc_api_key' => 'webservice',
             'allow_download_documents_by_api_key' => 'webservice',
-            'profiling_filter_adding_users' => 'profile',
-            'hide_dltt_markup' => 'language',
+            'profiling_filter_adding_users' => 'course',
             'active_tools_on_create' => 'course',
         ];
 

@@ -32,11 +32,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             'my_display_coloring' => 'false',
             'student_publication_to_take_in_gradebook' => 'first',
             'gradebook_detailed_admin_view' => 'false',
-            'openbadges_backpack' => 'https://backpack.openbadges.org/',
-            'hide_certificate_export_link' => 'false',
-            'add_gradebook_certificates_cron_task_enabled' => 'false',
-            'certificate_filter_by_official_code' => 'false',
-            'hide_certificate_export_link_students' => 'false',
             'gradebook_hide_graph' => 'false',
             'gradebook_hide_pdf_report_button' => 'false',
             'hide_gradebook_percentage_user_result' => 'true',
@@ -65,7 +60,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
             'gradebook_default_weight' => ['string'],
             'student_publication_to_take_in_gradebook' => ['string'],
             'gradebook_detailed_admin_view' => ['string'],
-            'certificate_filter_by_official_code' => ['string'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -93,11 +87,6 @@ class GradebookSettingsSchema extends AbstractSettingsSchema
                 ],
             ])
             ->add('gradebook_detailed_admin_view', YesNoType::class)
-            ->add('openbadges_backpack')
-            ->add('hide_certificate_export_link', YesNoType::class)
-            ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)
-            ->add('certificate_filter_by_official_code', YesNoType::class)
-            ->add('hide_certificate_export_link_students', YesNoType::class)
             ->add('gradebook_hide_pdf_report_button', YesNoType::class)
             ->add('hide_gradebook_percentage_user_result', YesNoType::class)
             ->add('gradebook_use_exercise_score_settings_in_categories', YesNoType::class)

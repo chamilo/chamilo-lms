@@ -24,8 +24,13 @@
                         <div class="col-md-12">
 
                             <div class="{% if not loop.first %}mt-12 {% endif %}mb-4 pb-2 border-b border-gray-25">
-                                <h3 class="text-gray-90 text-h6 font-semibold tracking-wide uppercase">
-                                    {{ category|trans }}
+                                {% set label = namespace_labels[category]
+                                    ?? (category == 'cas' ? 'CAS'
+                                    : (category == 'lp' ? 'Learning path'|trans
+                                    : (category|capitalize)|trans)) %}
+
+                                <h3 class="text-gray-90 text-h6 font-semibold tracking-wide">
+                                    {{ category == 'cas' ? label : label|title }}
                                 </h3>
                             </div>
 

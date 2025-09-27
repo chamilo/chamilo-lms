@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -27,6 +28,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
                     'forum_fold_categories' => 'false',
                     'allow_forum_category_language_filter' => 'false',
                     'subscribe_users_to_forum_notifications_also_in_base_course' => 'false',
+                    'community_managers_user_list' => '',
                 ]
             )
         ;
@@ -58,6 +60,7 @@ class ForumSettingsSchema extends AbstractSettingsSchema
             ->add('forum_fold_categories', YesNoType::class)
             ->add('allow_forum_category_language_filter', YesNoType::class)
             ->add('subscribe_users_to_forum_notifications_also_in_base_course', YesNoType::class)
+            ->add('community_managers_user_list', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

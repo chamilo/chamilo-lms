@@ -25,7 +25,7 @@ $extendedAll = $_GET['extend_all'] ?? null;
 $export = isset($_GET['export']) && 'csv' === $_GET['export'];
 $allowExtend = $_GET['allow_extend'] ?? 1;
 
-$lpReportType = api_get_setting('lp_show_reduced_report');
+$lpReportType = api_get_setting('lp.lp_show_reduced_report');
 $type = 'classic';
 if ('true' === $lpReportType) {
     $type = 'simple';

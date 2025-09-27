@@ -117,7 +117,7 @@ class Template
             'institution_url' => api_get_setting('InstitutionUrl'),
             'date' => api_format_date('now', DATE_FORMAT_LONG),
             'timezone' => api_get_timezone(),
-            'gamification_mode' => api_get_setting('gamification_mode'),
+            'gamification_mode' => api_get_setting('workflows.gamification_mode'),
         ];
         $this->assign('_s', $_s);
 
@@ -450,7 +450,7 @@ class Template
                 'system_version' => api_get_configuration_value('system_version'),
                 'site_name' => api_get_setting('siteName'),
                 'institution' => api_get_setting('Institution'),
-                'gamification_mode' => api_get_setting('gamification_mode'),
+                'gamification_mode' => api_get_setting('workflows.gamification_mode'),
             ],
             'template' => 'default', // @todo setup template folder in config.yml;
         ];
@@ -482,7 +482,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.css',
         ];
 
-        $features = api_get_setting('platform.video_features', true);
+        $features = api_get_setting('document.video_features', true);
         $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
 
         if (!empty($features) && isset($features['features'])) {
@@ -634,7 +634,7 @@ class Template
             'mediaelement/plugins/vrview/vrview.js',
         ];
 
-        $features = api_get_setting('platform.video_features', true);
+        $features = api_get_setting('document.video_features', true);
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ('vrview' === $feature) {
@@ -1008,7 +1008,7 @@ class Template
         //@todo move this in the template
         $rightFloatMenu = '';
         $iconBug = Display::getMdiIcon(ToolIcon::BUG_REPORT, 'ch-tool-icon', null, ICON_SIZE_LARGE, get_lang('Report a bug'));
-        if ('true' === api_get_setting('show_link_bug_notification') && $this->user_is_logged_in) {
+        if ('true' === api_get_setting('ticket.show_link_bug_notification') && $this->user_is_logged_in) {
             $rightFloatMenu = '<div class="report">
 		        <a href="https://github.com/chamilo/chamilo-lms/wiki/How-to-report-issues" target="_blank">
                     '.$iconBug.'
@@ -1016,7 +1016,7 @@ class Template
 		        </div>';
         }
 
-        if ('true' === api_get_setting('show_link_ticket_notification') &&
+        if ('true' === api_get_setting('ticket.show_link_ticket_notification') &&
             $this->user_is_logged_in
         ) {
             // by default is project_id = 1

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -28,6 +29,8 @@ class WorkSettingsSchema extends AbstractSettingsSchema
                     'force_download_doc_before_upload_work' => 'true',
                     'allow_redirect_to_main_page_after_work_upload' => 'false',
                     'my_courses_show_pending_work' => 'false',
+                    'allow_compilatio_tool' => 'false',
+                    'compilatio_tool' => '',
                 ]
             )
         ;
@@ -47,6 +50,8 @@ class WorkSettingsSchema extends AbstractSettingsSchema
             ->add('force_download_doc_before_upload_work', YesNoType::class)
             ->add('allow_redirect_to_main_page_after_work_upload', YesNoType::class)
             ->add('my_courses_show_pending_work', YesNoType::class)
+            ->add('allow_compilatio_tool', YesNoType::class)
+            ->add('compilatio_tool', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

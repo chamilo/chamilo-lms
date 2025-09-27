@@ -120,7 +120,7 @@ readonly class IsAllowedToEditHelper
         }
 
         if ($user->isTeacher()) {
-            return 'true' === $this->settingsManager->getSetting('course.allow_users_to_create_courses');
+            return 'true' === $this->settingsManager->getSetting('workflows.allow_users_to_create_courses');
         }
 
         return $this->requestStack->getSession()->get('is_allowedCreateCourse');

@@ -746,7 +746,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
+        $hideScormCopyLink = api_get_setting('lp.hide_scorm_copy_link');
         if ('true' === $hideScormCopyLink) {
             api_not_allowed(true);
         }
@@ -762,7 +762,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
-        $hideScormExportLink = api_get_setting('hide_scorm_export_link');
+        $hideScormExportLink = api_get_setting('lp.hide_scorm_export_link');
         if ('true' === $hideScormExportLink) {
             api_not_allowed(true);
         }
@@ -774,7 +774,7 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
-        $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
+        $hideScormPdfLink = api_get_setting('lp.hide_scorm_pdf_link');
         if ('true' === $hideScormPdfLink) {
            api_not_allowed(true);
         }

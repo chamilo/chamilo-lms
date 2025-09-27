@@ -524,7 +524,7 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
-        $hide = ('true' === api_get_setting('platform.hide_complete_name_in_whoisonline'));
+        $hide = ('true' === api_get_setting('display.hide_complete_name_in_whoisonline'));
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid, true);
             $lastname = $user_info['lastname'];
@@ -1040,7 +1040,7 @@ class SocialManager extends UserManager
             $template->assign('vcard_user_link', $vCardUserLink);
         }
 
-        if ('1' === api_get_setting('gamification_mode')) {
+        if ('1' === api_get_setting('workflows.gamification_mode')) {
             $gamificationPoints = GamificationUtils::getTotalUserPoints(
                 $userId,
                 $userInfo['status']

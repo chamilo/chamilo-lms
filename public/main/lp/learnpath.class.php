@@ -7775,7 +7775,7 @@ class learnpath
                     CURLOPT_MAXREDIRS => 10,
                 ];
 
-                $proxySettings = api_get_setting('platform.proxy_settings', true);
+                $proxySettings = api_get_setting('security.proxy_settings', true);
                 if (!empty($proxySettings) &&
                     isset($proxySettings['curl_setopt_array'])
                 ) {

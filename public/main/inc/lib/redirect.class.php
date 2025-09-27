@@ -77,7 +77,7 @@ class Redirect
         ) {
             if (isset($userInfo) && !empty($userInfo)) {
                 $userId = $userInfo['user_id'];
-                $allow = ('true' === api_get_setting('admin.plugin_redirection_enabled'));
+                $allow = ('true' === api_get_setting('workflows.plugin_redirection_enabled'));
                 if ($allow) {
                     RedirectionPlugin::redirectUser($userId);
                 }

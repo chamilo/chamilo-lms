@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Settings;
 
+use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,6 +25,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'meta_image_path' => '',
                     'meta_twitter_site' => '',
                     'meta_twitter_creator' => '',
+                    'tracking_skip_generic_data' => 'false',
+                    'block_my_progress_page' => 'false',
+                    'my_progress_course_tools_order' => '',
                 ]
             )
         ;
@@ -39,6 +43,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('meta_image_path')
             ->add('meta_twitter_site')
             ->add('meta_twitter_creator')
+            ->add('tracking_skip_generic_data', YesNoType::class)
+            ->add('block_my_progress_page', YesNoType::class)
+            ->add('my_progress_course_tools_order', TextareaType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

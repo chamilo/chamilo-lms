@@ -12,7 +12,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-if (('true' === api_get_setting('platform.block_my_progress_page'))) {
+if (('true' === api_get_setting('tracking.block_my_progress_page'))) {
     api_not_allowed(true);
 }
 
@@ -110,7 +110,7 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('No data available'), 'warning');
 }
 
-$show = ('true' === api_get_setting('profile.allow_career_users'));
+$show = ('true' === api_get_setting('session.allow_career_users'));
 
 if ($show) {
     $careers = UserManager::getUserCareers($user_id);

@@ -239,7 +239,7 @@ const PLACEHOLDER = "/img/session_default.svg"
 const dynamicExtraField = ref("")
 const platformConfigStore = usePlatformConfig()
 const extraFieldKey = platformConfigStore.getSetting(
-  "platform.session_admin_user_subscription_search_extra_field_to_search",
+  "workflows.session_admin_user_subscription_search_extra_field_to_search",
 )
 
 const isFetching = ref(true)

@@ -270,7 +270,7 @@ if ($course_validation_feature) {
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
-if ('true' === api_get_setting('teacher_can_select_course_template')) {
+if ('true' === api_get_setting('workflows.teacher_can_select_course_template')) {
     $form->addElement(
         'select_ajax',
         'course_template',

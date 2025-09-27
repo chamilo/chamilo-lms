@@ -412,9 +412,7 @@ class LegalManager
             }
         }
 
-        $enforceProfileCompleted =
-            api_get_setting('ticket.show_terms_if_profile_completed') === 'true'
-            || api_get_setting('registration.show_terms_if_profile_completed') === 'true';
+        $enforceProfileCompleted = api_get_setting('profile.show_terms_if_profile_completed') === 'true';
 
         if ($enforceProfileCompleted) {
             $allValues = $extraFieldValue->getAllValuesByItem($userId);

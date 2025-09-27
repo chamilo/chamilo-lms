@@ -2127,7 +2127,7 @@ class Category implements GradebookItem
                     );
                 }
 
-                $hideExportLink = api_get_setting('gradebook.hide_certificate_export_link');
+                $hideExportLink = api_get_setting('certificate.hide_certificate_export_link');
                 $hideExportLinkStudent = api_get_setting('gradebook.hide_certificate_export_link_students');
                 if ('true' === $hideExportLink || (api_is_student() && 'true' === $hideExportLinkStudent)) {
                     $exportToPDF = null;
@@ -2195,7 +2195,7 @@ class Category implements GradebookItem
      */
     public static function exportAllCertificates($catId, $userList = [])
     {
-        $orientation = api_get_setting('document.certificate_pdf_orientation');
+        $orientation = api_get_setting('certificate.certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
         if (!empty($orientation)) {

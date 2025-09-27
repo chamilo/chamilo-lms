@@ -198,3 +198,13 @@ services:
       class: Chamilo\CoreBundle\Settings\CatalogSettingsSchema
       tags:
         - { name: sylius.settings_schema, alias: chamilo_core.settings.catalog, namespace: catalog }
+
+    chamilo_core.settings.workflows:
+      class: Chamilo\CoreBundle\Settings\WorkflowsSettingsSchema
+      tags:
+        - { name: sylius.settings_schema, alias: chamilo_core.settings.workflows, namespace: workflows }
+
+    chamilo_core.settings.privacy:
+      class: Chamilo\CoreBundle\Settings\PrivacySettingsSchema
+      tags:
+        - { name: sylius.settings_schema, alias: chamilo_core.settings.privacy, namespace: privacy }

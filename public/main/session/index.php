@@ -190,7 +190,7 @@ if (false == api_is_coach_of_course_in_session($session_id)) {
 }
 
 $entityManager = Database::getManager();
-$sessionTitleLink = api_get_setting('course.courses_list_session_title_link');
+$sessionTitleLink = api_get_setting('session.courses_list_session_title_link');
 
 if (2 == $sessionTitleLink && 1 === $session->getNbrCourses()) {
     $sessionCourses = $session->getCourses();

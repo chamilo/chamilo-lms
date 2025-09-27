@@ -17,7 +17,7 @@ $nameTools = get_lang('Progress');
 
 api_block_anonymous_users();
 
-if ('0' == api_get_setting('gamification_mode')) {
+if ('0' == api_get_setting('workflows.gamification_mode')) {
     api_not_allowed(true);
 }
 

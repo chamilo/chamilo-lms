@@ -45,7 +45,7 @@ $currentUrl = api_get_self().'?student='.$studentId.'&course='.$courseCode.'&sid
     .'&origin='.$origin.'&details='.$details.'&cid='.$courseId;
 $allowMessages = ('true' === api_get_setting('message.private_messages_about_user'));
 $workingTime = api_get_setting('work.considered_working_time');
-$workingTimeEdit = api_get_configuration_value('allow_working_time_edition');
+$workingTimeEdit = api_get_setting('workflows.allow_working_time_edition');
 
 $allowToQualify = api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||

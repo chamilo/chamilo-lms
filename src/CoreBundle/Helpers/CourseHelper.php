@@ -360,7 +360,7 @@ class CourseHelper
             'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
             'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
-                'default' => 'true' === $this->settingsManager->getSetting('course.allow_public_certificates') ? 1 : '',
+                'default' => 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates') ? 1 : '',
                 'category' => 'certificates',
             ],
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],
@@ -840,7 +840,7 @@ class CourseHelper
     public function useTemplateAsBasisIfRequired($courseCode, $courseTemplate): void
     {
         $templateSetting = $this->settingsManager->getSetting('course.course_creation_use_template');
-        $teacherCanSelectCourseTemplate = 'true' === $this->settingsManager->getSetting('course.teacher_can_select_course_template');
+        $teacherCanSelectCourseTemplate = 'true' === $this->settingsManager->getSetting('workflows.teacher_can_select_course_template');
         $courseTemplate = isset($courseTemplate) ? (int) $courseTemplate : 0;
 
         $useTemplate = false;

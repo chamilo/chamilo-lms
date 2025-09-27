@@ -23,7 +23,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
                 'allow_scheduled_announcements' => 'false',
                 'disable_delete_all_announcements' => 'false',
                 'hide_announcement_sent_to_users_info' => 'false',
-                'send_all_emails_to' => '',
                 'allow_careers_in_global_announcements' => 'false',
                 'allow_coach_to_edit_announcements' => 'false',
                 'course_announcement_scheduled_by_date' => 'false',
@@ -45,9 +44,6 @@ class AnnouncementSettingsSchema extends AbstractSettingsSchema
             ->add('allow_scheduled_announcements', YesNoType::class)
             ->add('disable_delete_all_announcements', YesNoType::class)
             ->add('hide_announcement_sent_to_users_info', YesNoType::class)
-            ->add('send_all_emails_to', TextareaType::class, [
-                'attr' => ['rows' => 5, 'style' => 'font-family: monospace;'],
-            ])
             ->add('allow_careers_in_global_announcements', YesNoType::class)
             ->add('allow_coach_to_edit_announcements', YesNoType::class)
             ->add('course_announcement_scheduled_by_date', YesNoType::class)

@@ -41,7 +41,7 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
-$canEditUsers = 'true' === api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
+$canEditUsers = 'true' === api_get_setting('workflows.allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
 $canEdit = api_is_allowed_to_edit(null, true);
 $canRead = api_is_allowed_to_edit(null, true) || api_is_coach();
 
@@ -51,7 +51,7 @@ if (!empty($sessionId)) {
 }
 
 $disableUsers = 3 === (int) $course_info['visibility'] &&
-    ('true' === api_get_setting('profile.disable_change_user_visibility_for_public_courses'));
+    ('true' === api_get_setting('privacy.disable_change_user_visibility_for_public_courses'));
 
 if (false === $canEdit && $disableUsers) {
     api_not_allowed(true);
@@ -1031,7 +1031,7 @@ function active_filter($active, $urlParams, $row)
  */
 function modify_filter($user_id, $row, $data)
 {
-    $canEditUsers = 'true' === api_get_setting('allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
+    $canEditUsers = 'true' === api_get_setting('workflows.allow_user_course_subscription_by_course_admin') || api_is_platform_admin();
     $is_allowed_to_track = api_is_allowed_to_edit(true, true);
     $user_id = $data[0];
     $userInfo = api_get_user_info($user_id);

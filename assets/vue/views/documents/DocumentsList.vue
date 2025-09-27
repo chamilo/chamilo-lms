@@ -512,7 +512,7 @@ const securityStore = useSecurityStore()
 
 const platformConfigStore = usePlatformConfig()
 const allowAccessUrlFiles = computed(
-  () => "false" !== platformConfigStore.getSetting("course.access_url_specific_files"),
+  () => "false" !== platformConfigStore.getSetting("document.access_url_specific_files"),
 )
 
 const { t } = useI18n()
@@ -579,7 +579,7 @@ const defaultCertificateId = ref(null)
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 
 function resolveDefaultRows(total = 0) {
-  const raw = platformConfigStore.getSetting("platform.table_default_row", 10)
+  const raw = platformConfigStore.getSetting("display.table_default_row", 10)
   const def = Number(raw)
   if (def === 0) return total || Number.MAX_SAFE_INTEGER // “All”
   return Number.isFinite(def) && def > 0 ? def : 10
@@ -624,7 +624,7 @@ onMounted(async () => {
 })
 
 watch(totalItems, (n) => {
-  const def = Number(platformConfigStore.getSetting("platform.table_default_row", 10))
+  const def = Number(platformConfigStore.getSetting("display.table_default_row", 10))
   if (def === 0 && n) {
     options.value.itemsPerPage = n
     onUpdateOptions(options.value)

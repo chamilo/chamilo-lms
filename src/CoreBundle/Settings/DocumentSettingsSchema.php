@@ -39,7 +39,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'show_users_folders' => 'true',
                 'show_default_folders' => 'true',
                 'show_documents_preview' => 'false',
-                'enable_webcam_clip' => 'false',
                 'tool_visible_by_default_at_creation' => [
                     'documents',
                     'learning_path',
@@ -52,15 +51,14 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'documents_default_visibility_defined_in_course' => 'false',
                 'send_notification_when_document_added' => 'false',
                 'thematic_pdf_orientation' => 'landscape',
-                'certificate_pdf_orientation' => 'landscape',
-                'allow_general_certificate' => 'false',
                 'group_document_access' => 'false',
                 'group_category_document_access' => 'false',
-                'allow_compilatio_tool' => 'false',
-                'compilatio_tool' => '',
                 'documents_hide_download_icon' => 'false',
                 'enable_x_sendfile_headers' => 'false',
                 'documents_custom_cloud_link_list' => '',
+
+                'access_url_specific_files' => 'false',
+                'video_features' => '',
             ])
             ->setTransformer(
                 'tool_visible_by_default_at_creation',
@@ -121,7 +119,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
-            ->add('enable_webcam_clip', YesNoType::class)
             ->add('tool_visible_by_default_at_creation', ChoiceType::class, [
                 'multiple' => true,
                 'choices' => [
@@ -141,23 +138,17 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                     'Landscape' => 'landscape',
                 ],
             ])
-            ->add('certificate_pdf_orientation', ChoiceType::class, [
-                'choices' => [
-                    'Portrait' => 'portrait',
-                    'Landscape' => 'landscape',
-                ],
-            ])
-            ->add('allow_general_certificate', YesNoType::class)
             ->add('group_document_access', YesNoType::class)
             ->add('group_category_document_access', YesNoType::class)
-            ->add('allow_compilatio_tool', YesNoType::class)
-            ->add('compilatio_tool', TextareaType::class, [
-                'attr' => ['rows' => 8, 'style' => 'font-family: monospace;'],
-            ])
             ->add('documents_hide_download_icon', YesNoType::class)
             ->add('enable_x_sendfile_headers', YesNoType::class)
             ->add('documents_custom_cloud_link_list', TextareaType::class, [
                 'attr' => ['rows' => 3, 'style' => 'font-family: monospace;'],
+            ])
+            ->add('access_url_specific_files', YesNoType::class)
+            ->add('video_features', TextareaType::class, [
+                'attr' => ['rows' => 4, 'style' => 'font-family: monospace;'],
+                'help' => "JSON opcional. Ej: {\"speed\": true}",
             ])
         ;
 

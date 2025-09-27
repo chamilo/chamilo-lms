@@ -456,7 +456,7 @@ $template->assign('fix_link', $fixLink);
 $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_lp']);
 
 // If the global gamification mode is enabled...
-$gamificationMode = api_get_setting('gamification_mode');
+$gamificationMode = api_get_setting('workflows.gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->getSeriousgameMode();
 

@@ -7,7 +7,7 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if ('false' == api_get_setting('allow_user_course_subscription_by_course_admin')) {
+if ('false' == api_get_setting('workflows.allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }

@@ -489,7 +489,7 @@ class ChamiloHelper
         }
 
         // Check if T&C should be shown during registration
-        $loadMode = api_get_setting('platform.load_term_conditions_section');
+        $loadMode = api_get_setting('workflows.load_term_conditions_section');
 
         if ('course' === $loadMode) {
             // skip adding terms on registration page

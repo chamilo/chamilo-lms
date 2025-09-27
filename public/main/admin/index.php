@@ -100,7 +100,7 @@ if (api_is_platform_admin()) {
     }
     $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('Profiling')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
-    if ('true' !== api_get_setting('profile.disable_gdpr')) {
+    if ('true' !== api_get_setting('privacy.disable_gdpr')) {
         $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consent list')];
     }
     if ('true' === api_get_setting('admin.show_link_request_hrm_user')) {

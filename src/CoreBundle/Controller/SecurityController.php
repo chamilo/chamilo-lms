@@ -112,7 +112,7 @@ class SecurityController extends AbstractController
         if (
             $user->isStudent()
             && 'true' === $this->settingsManager->getSetting('allow_terms_conditions', true)
-            && 'login' === $this->settingsManager->getSetting('load_term_conditions_section', true)
+            && 'login' === $this->settingsManager->getSetting('workflows.load_term_conditions_section', true)
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -286,7 +286,7 @@ class SecurityController extends AbstractController
             };
         }
 
-        if ('true' !== $this->settingsManager->getSetting('course.go_to_course_after_login')) {
+        if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
             return $url;
         }
 

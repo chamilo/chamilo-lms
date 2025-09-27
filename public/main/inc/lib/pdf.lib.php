@@ -699,7 +699,7 @@ class PDF
 
             $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/header-logo.png');
             // Use custom logo image.
-            $pdfLogo = api_get_setting('platform.pdf_logo_header');
+            $pdfLogo = api_get_setting('display.pdf_logo_header');
             if ('true' === $pdfLogo) {
                 $logoSrc = Container::getThemeHelper()->getAssetBase64Encoded('images/pdf_logo_header.png') ?: $logoSrc;
             }

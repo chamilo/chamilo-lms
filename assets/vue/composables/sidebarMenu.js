@@ -17,14 +17,14 @@ export function useSidebarMenu() {
   const allowSocialTool = computed(() => platformConfigStore.getSetting("social.allow_social_tool") !== "false")
 
   const showTabs = computed(() => {
-    const defaultTabs = platformConfigStore.getSetting("platform.show_tabs") || []
-    const tabsPerRoleJson = platformConfigStore.getSetting("platform.show_tabs_per_role") || ""
+    const defaultTabs = platformConfigStore.getSetting("display.show_tabs") || []
+    const tabsPerRoleJson = platformConfigStore.getSetting("display.show_tabs_per_role") || ""
 
     let tabsPerRole = {}
     try {
       tabsPerRole = JSON.parse(tabsPerRoleJson)
     } catch (e) {
-      console.warn("[Sidebar] Invalid JSON in platform.show_tabs_per_role", e)
+      console.warn("[Sidebar] Invalid JSON in display.show_tabs_per_role", e)
     }
 
     const roleMap = {

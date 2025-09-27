@@ -755,7 +755,7 @@ class Plugin
             $pluginInUrl->setConfiguration($pluginConf);
         }
 
-        $showTabsSetting = $settingsManager->getSetting('platform.show_tabs', true);
+        $showTabsSetting = $settingsManager->getSetting('display.show_tabs', true);
 
 //        $subkey = 'custom_tab_'.$tabNum;
 //
@@ -773,7 +773,7 @@ class Plugin
         }
 
         try {
-            $settingsManager->updateSetting('platform.show_tabs', $showTabsSetting);
+            $settingsManager->updateSetting('display.show_tabs', $showTabsSetting);
 
             Container::getEntityManager()->flush();
         } catch (OptimisticLockException|ORMException) {
@@ -794,7 +794,7 @@ class Plugin
     {
         $settingsManager = Container::getSettingsManager();
 
-        $showTabsSetting = $settingsManager->getSetting('platform.show_tabs', true);
+        $showTabsSetting = $settingsManager->getSetting('display.show_tabs', true);
 
         try {
             if (in_array($tabName, $showTabsSetting)) {
@@ -807,7 +807,7 @@ class Plugin
                 }
             }
 
-            $settingsManager->updateSetting('platform.show_tabs', $showTabsSetting);
+            $settingsManager->updateSetting('display.show_tabs', $showTabsSetting);
         } catch (OptimisticLockException|ORMException) {
             return false;
         }

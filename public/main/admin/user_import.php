@@ -748,7 +748,7 @@ if ($count_fields > 0) {
     }
 }
 
-if ('true' === api_get_setting('admin.plugin_redirection_enabled')) {
+if ('true' === api_get_setting('workflows.plugin_redirection_enabled')) {
     $list[] = 'Redirection';
     $list_reponse[] = api_get_path(WEB_PATH);
 }

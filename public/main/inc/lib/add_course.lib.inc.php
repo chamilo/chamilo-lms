@@ -307,7 +307,7 @@ class AddCourse
             'enable_document_auto_launch' => ['default' => 0, 'category' => 'document'],
             'pdf_export_watermark_text' => ['default' => '', 'category' => 'learning_path'],
             'allow_public_certificates' => [
-                'default' => 'true' === api_get_setting('allow_public_certificates') ? 1 : '',
+                'default' => 'true' === api_get_setting('certificate.allow_public_certificates') ? 1 : '',
                 'category' => 'certificates',
             ],
             'documents_default_visibility' => ['default' => 'visible', 'category' => 'document'],

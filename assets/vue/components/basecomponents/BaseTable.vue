@@ -98,10 +98,10 @@ function parseRowList(val) {
   return [5, 10, 20, 50]
 }
 
-const rowListRaw = computed(() => getSetting("platform.table_row_list", [5, 10, 20, 50]))
+const rowListRaw = computed(() => getSetting("display.table_row_list", [5, 10, 20, 50]))
 
 const defaultRowSetting = computed(() => {
-  const raw = getSetting("platform.table_default_row", DEFAULT_FALLBACK_ROWS)
+  const raw = getSetting("display.table_default_row", DEFAULT_FALLBACK_ROWS)
   const n = Number(raw)
   if (!Number.isFinite(n) || n <= 0) return DEFAULT_FALLBACK_ROWS
   return n

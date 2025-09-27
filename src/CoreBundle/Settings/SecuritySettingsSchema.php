@@ -44,6 +44,10 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'access_to_personal_file_for_all' => 'false',
             'password_rotation_days' => '0',
             '2fa_enable' => 'false',
+            'proxy_settings' => '',
+            'login_max_attempt_before_blocking_account' => '0',
+            'force_renew_password_at_first_login' => 'false',
+            'hide_breadcrumb_if_not_allowed' => 'false',
         ]);
 
         $allowedTypes = [
@@ -82,6 +86,10 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('access_to_personal_file_for_all', YesNoType::class)
             ->add('password_rotation_days', TextType::class)
             ->add('2fa_enable', YesNoType::class)
+            ->add('proxy_settings', TextareaType::class)
+            ->add('login_max_attempt_before_blocking_account', TextType::class)
+            ->add('force_renew_password_at_first_login', YesNoType::class)
+            ->add('hide_breadcrumb_if_not_allowed', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

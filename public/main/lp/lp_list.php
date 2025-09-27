@@ -170,9 +170,9 @@ $user = api_get_user_entity($userId);
 $ending = true;
 $allLpTimeValid = true;
 $isInvitee = api_is_invitee();
-$hideScormExportLink = api_get_setting('course.hide_scorm_export_link');
-$hideScormCopyLink = api_get_setting('course.hide_scorm_copy_link');
-$hideScormPdfLink = api_get_setting('course.hide_scorm_pdf_link');
+$hideScormExportLink = api_get_setting('lp.hide_scorm_export_link');
+$hideScormCopyLink = api_get_setting('lp.hide_scorm_copy_link');
+$hideScormPdfLink = api_get_setting('lp.hide_scorm_pdf_link');
 $options = learnpath::getIconSelect();
 $cidReq = api_get_cidreq();
 
@@ -185,7 +185,7 @@ $courseSettingsIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon', '', 2
 $courseSettingsDisableIcon = Display::getMdiIcon('hammer-wrench', 'ch-tool-icon-disabled', '', 22, get_lang('Course settings'));
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
-$gameMode = api_get_setting('gamification_mode');
+$gameMode = api_get_setting('workflows.gamification_mode');
 
 $data = [];
 $shortcutRepository = Container::getShortcutRepository();

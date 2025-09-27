@@ -239,12 +239,12 @@ const showExportDialog = ref(false)
 const exportTarget = ref(null)
 
 const canExportScorm = computed(() => {
-  const isScormEnabled = platformConfig.getSetting("hide_scorm_export_link") !== "true"
+  const isScormEnabled = platformConfig.getSetting("lp.hide_scorm_export_link") !== "true"
   return canEdit.value && isScormEnabled
 })
 
 const canExportPdf = computed(() => {
-  const hidden = platformConfig.getSetting("course.hide_scorm_pdf_link") === "true"
+  const hidden = platformConfig.getSetting("lp.hide_scorm_pdf_link") === "true"
   return !hidden
 })
 

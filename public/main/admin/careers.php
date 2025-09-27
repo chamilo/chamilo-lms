@@ -76,7 +76,7 @@ $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 
 $diagramLink = '';
-$allow = ('true' === api_get_setting('profile.allow_career_diagram'));
+$allow = ('true' === api_get_setting('session.allow_career_diagram'));
 if ($allow) {
     $diagramLink = '<a
         href="'.api_get_path(WEB_CODE_PATH).'admin/career_diagram.php?id=\'+options.rowId+\'">'.

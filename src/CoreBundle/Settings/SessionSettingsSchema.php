@@ -25,7 +25,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'show_session_coach' => 'false',
                     'show_session_data' => 'false',
                     'allow_coach_to_edit_course_session' => 'true',
-                    'show_groups_to_users' => 'false',
                     'hide_courses_in_sessions' => 'false',
                     'allow_session_admins_to_manage_all_sessions' => 'false',
                     'allow_teachers_to_create_sessions' => 'false',
@@ -81,6 +80,14 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'enable_session_replication' => 'false',
                     'session_list_view_remaining_days' => 'false',
                     'user_session_display_mode' => 'card',
+                    'show_simple_session_info' => 'true',
+                    'show_all_sessions_on_my_course_page' => 'true',
+                    'courses_list_session_title_link' => '1',
+                    'allow_edit_tool_visibility_in_session' => 'true',
+                    'allow_career_diagram' => 'false',
+                    'allow_career_users' => 'false',
+                    'career_diagram_legend' => 'false',
+                    'career_diagram_disclaimer' => 'false',
                 ]
             )
         ;
@@ -99,7 +106,6 @@ class SessionSettingsSchema extends AbstractSettingsSchema
             ->add('show_session_coach', YesNoType::class)
             ->add('show_session_data', YesNoType::class)
             ->add('allow_coach_to_edit_course_session', YesNoType::class)
-            ->add('show_groups_to_users', YesNoType::class)
             ->add('hide_courses_in_sessions', YesNoType::class)
             ->add('allow_session_admins_to_manage_all_sessions', YesNoType::class)
             ->add('allow_teachers_to_create_sessions', YesNoType::class)
@@ -164,6 +170,22 @@ class SessionSettingsSchema extends AbstractSettingsSchema
                     'List (classic)' => 'list',
                 ],
             ])
+
+            ->add('show_simple_session_info', YesNoType::class)
+            ->add('show_all_sessions_on_my_course_page', YesNoType::class)
+            ->add('courses_list_session_title_link', ChoiceType::class, [
+                'choices' => [
+                    'No link' => '0',
+                    'Default' => '1',
+                    'Link' => '2',
+                    'Session link' => '3',
+                ],
+            ])
+            ->add('allow_edit_tool_visibility_in_session', YesNoType::class)
+            ->add('allow_career_diagram', YesNoType::class)
+            ->add('allow_career_users', YesNoType::class)
+            ->add('career_diagram_legend', YesNoType::class)
+            ->add('career_diagram_disclaimer', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

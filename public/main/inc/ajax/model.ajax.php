@@ -1440,7 +1440,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_all':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' === $_GET['type']) {
@@ -1485,7 +1485,7 @@ switch ($action) {
             exit;
         }
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         $columns = [
@@ -1514,7 +1514,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_others':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
 
@@ -1554,7 +1554,7 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' == $_GET['type']) {

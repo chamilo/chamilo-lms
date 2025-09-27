@@ -24,11 +24,6 @@
             "selected_value": "true"
         },
         {
-            "variable": "hide_dltt_markup",
-            "subkey": "",
-            "selected_value": "false"
-        },
-        {
             "variable": "profile",
             "subkey": "email",
             "selected_value": "true"

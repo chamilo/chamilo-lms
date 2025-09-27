@@ -111,7 +111,7 @@ final class MailHelper
         try {
             $templatedEmail->subject($subject);
 
-            $list = api_get_setting('announcement.send_all_emails_to', true);
+            $list = api_get_setting('workflows.send_all_emails_to', true);
 
             if (!empty($list) && isset($list['emails'])) {
                 foreach ($list['emails'] as $email) {

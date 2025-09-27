@@ -48,7 +48,7 @@ class CheckCLinkAction extends AbstractController
         ];
 
         // Check for proxy settings in your application configuration
-        $proxySettings = $settingsManager->getSetting('platform.proxy_settings', true);
+        $proxySettings = $settingsManager->getSetting('security.proxy_settings', true);
         if ($proxySettings && isset($proxySettings['curl_setopt_array'])) {
             $defaults[CURLOPT_PROXY] = $proxySettings['curl_setopt_array']['CURLOPT_PROXY'];
             $defaults[CURLOPT_PROXYPORT] = $proxySettings['curl_setopt_array']['CURLOPT_PROXYPORT'];

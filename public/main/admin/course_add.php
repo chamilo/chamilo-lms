@@ -112,7 +112,7 @@ if (1 === count($languages)) {
     $form->addSelectLanguage('course_language', get_lang('Language'));
 }
 
-if ('true' === api_get_setting('teacher_can_select_course_template')) {
+if ('true' === api_get_setting('workflows.teacher_can_select_course_template')) {
     $form->addSelectAjax(
         'course_template',
         [

@@ -45,7 +45,7 @@ $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['fi
 $url = api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId.'&filter='.$filterOfficialCode;
 $courseInfo = api_get_course_info();
 
-$filter = api_get_setting('certificate_filter_by_official_code');
+$filter = api_get_setting('certificate.certificate_filter_by_official_code');
 $userList = [];
 $filterForm = null;
 $certificate_list = [];
@@ -289,7 +289,7 @@ $actions .= Display::url(
     $url.'&action=delete_all_certificates'
 );
 
-$hideCertificateExport = api_get_setting('hide_certificate_export_link');
+$hideCertificateExport = api_get_setting('certificate.hide_certificate_export_link');
 
 if (count($certificate_list) > 0 && 'true' !== $hideCertificateExport) {
     $actions .= Display::url(

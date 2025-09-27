@@ -162,7 +162,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         if (!$resourceFile) {
-            $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
+            $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
             $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
 
             $resourceFiles = $resourceNode->getResourceFiles();
@@ -272,7 +272,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $accessUrlSpecificFiles = $settingsManager->getSetting('course.access_url_specific_files') && $accessUrlHelper->isMultiple();
+        $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
         $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
 
         $resourceFiles = $resourceNode->getResourceFiles();
@@ -667,13 +667,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             // Insert inside the head tag.
                             $content = str_replace('</head>', $js.'</head>', $content);
                         }
-                    }
-                    if ('true' === $this->getSettingsManager()->getSetting('course.enable_bootstrap_in_documents_html')) {
-                        // It adds the bootstrap and awesome css
-                        $links = '<link href="'.api_get_path(WEB_PATH).'libs/bootstrap/bootstrap.min.css" rel="stylesheet">';
-                        $links .= '<link href="'.api_get_path(WEB_PATH).'libs/bootstrap/font-awesome.min.css" rel="stylesheet">';
-                        // Insert inside the head tag.
-                        $content = str_replace('</head>', $links.'</head>', $content);
                     }
                     $response->setContent($content);
 

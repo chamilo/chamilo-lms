@@ -203,7 +203,7 @@ $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
-$userEditionExtraFieldToCheck = 'true' === api_get_setting('platform.user_edition_extra_field_to_check');
+$userEditionExtraFieldToCheck = 'true' === api_get_setting('workflows.user_edition_extra_field_to_check');
 // Breadcrumbs.
 if ('resume_session' === $origin) {
     $interbreadcrumb[] = [

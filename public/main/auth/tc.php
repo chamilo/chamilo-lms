@@ -21,7 +21,7 @@ if (!empty($termData['user_id'])) {
 
 $isPlatformAdmin = api_is_platform_admin();
 if ('true' === api_get_setting('registration.allow_terms_conditions') && !$isPlatformAdmin) {
-    if ('true' === api_get_setting('ticket.show_terms_if_profile_completed')) {
+    if ('true' === api_get_setting('profile.show_terms_if_profile_completed')) {
         if (!empty($userId)) {
             $userInfo = api_get_user_info($userId);
             if ($userInfo && ANONYMOUS != $userInfo['status']) {

@@ -27,7 +27,7 @@ class Compilatio
      */
     public function __construct()
     {
-        if (('true' !== api_get_setting('document.allow_compilatio_tool')) ||
+        if (('true' !== api_get_setting('work.allow_compilatio_tool')) ||
             empty(api_get_setting('document.compilatio_tool', true))
         ) {
             throw new Exception('Compilatio not available');
@@ -474,7 +474,7 @@ class Compilatio
      */
     public static function plagiarismDeleteDoc($courseId, $itemId)
     {
-        if ('true' !== api_get_setting('document.allow_compilatio_tool')) {
+        if ('true' !== api_get_setting('work.allow_compilatio_tool')) {
             return false;
         }
 

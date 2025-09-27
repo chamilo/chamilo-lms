@@ -99,7 +99,7 @@ class Certificate extends Model
             //$this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         } else {
             //$this->checkCertificatePath();
-            if ('true' === api_get_setting('document.allow_general_certificate')) {
+            if ('true' === api_get_setting('certificate.allow_general_certificate')) {
                 // General certificate
                 $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
                 $name = hash('sha256', $this->user_id . $categoryId);
@@ -481,7 +481,7 @@ class Certificate extends Model
             return true;
         }
 
-        if ('true' != api_get_setting('allow_public_certificates')) {
+        if ('true' != api_get_setting('certificate.allow_public_certificates')) {
             // The "non-public" setting is set, so do not print
             return false;
         }
@@ -737,7 +737,7 @@ class Certificate extends Model
      */
     public function generatePdfFromCustomCertificate(): void
     {
-        $orientation = api_get_setting('document.certificate_pdf_orientation');
+        $orientation = api_get_setting('certificate.certificate_pdf_orientation');
 
         $params['orientation'] = 'landscape';
         if (!empty($orientation)) {

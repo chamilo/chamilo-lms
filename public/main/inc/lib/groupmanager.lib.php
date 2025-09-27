@@ -1613,7 +1613,7 @@ class GroupManager
         if (api_sort_by_first_name()) {
             $order = ['firstname' => Criteria::ASC, 'lastname' => Criteria::ASC];
         }
-        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        $orderListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
         if ('true' === $orderListByOfficialCode) {
             //$order = ' ORDER BY u.official_code, u.firstname, u.lastname';
             $order = ['officialCode' => Criteria::ASC, 'firstname' => Criteria::ASC, 'lastname' => Criteria::ASC];

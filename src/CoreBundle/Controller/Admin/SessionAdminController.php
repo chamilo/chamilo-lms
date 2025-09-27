@@ -106,7 +106,7 @@ class SessionAdminController extends BaseController
 
         $user = $this->userHelper->getCurrent();
 
-        $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
+        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $isSessionAdmin = $user && $user->isSessionAdmin();
 
@@ -349,7 +349,7 @@ class SessionAdminController extends BaseController
         $extraFilters = $request->query->all('extraFilters');
 
         $configuredExtraFieldVariable = $settingsManager->getSetting(
-            'platform.session_admin_user_subscription_search_extra_field_to_search',
+            'workflows.session_admin_user_subscription_search_extra_field_to_search',
             true
         );
 

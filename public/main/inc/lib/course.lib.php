@@ -5331,7 +5331,7 @@ class CourseManager
             $courseSettings[] = 'score_model_id';
         }
 
-        $allowLPReturnLink = api_get_setting('allow_lp_return_link');
+        $allowLPReturnLink = api_get_setting('lp.allow_lp_return_link');
         if ('true' === $allowLPReturnLink) {
             $courseSettings[] = 'lp_return_link';
         }
@@ -6293,7 +6293,7 @@ class CourseManager
     {
         $template = api_get_setting('course_creation_use_template');
         $template = is_numeric($template) ? intval($template) : null;
-        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('teacher_can_select_course_template');
+        $teacherCanSelectCourseTemplate = 'true' === api_get_setting('workflows.teacher_can_select_course_template');
         $courseTemplate = isset($courseTemplate) ? intval($courseTemplate) : 0;
 
         $useTemplate = false;

@@ -71,7 +71,16 @@
                                                     <h3 class="text-gray-90 text-body-1 font-semibold">
                                                         {{ field.vars.label|trans }}
                                                     </h3>
-                                                    {# ... botón de template si aplica ... #}
+
+                                                    {% if template_map[fieldName] is defined %}
+                                                        <a href="#"
+                                                           class="text-info hover:text-info-dark show-template flex items-center gap-2"
+                                                           data-template-id="{{ template_map[fieldName] }}"
+                                                           title="{{ 'Show JSON Template'|trans }}">
+                                                            <i class="mdi mdi-information-outline text-info text-lg"></i>
+                                                            <span class="text-body-2">{{ 'Show JSON Template'|trans }}</span>
+                                                        </a>
+                                                    {% endif %}
                                                 </div>
 
                                                 <div class="mb-2">

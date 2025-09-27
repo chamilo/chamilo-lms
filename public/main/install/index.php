@@ -70,13 +70,13 @@ session_start();
 Container::$session = new HttpSession();
 
 require_once 'install.lib.php';
+$httpRequest = Request::createFromGlobals();
 $installationLanguage = 'en_US';
 
-$httpRequest = Request::createFromGlobals();
-
-if ($httpRequest->request->get('language_list')) {
+$langParam = $httpRequest->get('language_list');
+if ($langParam !== null && $langParam !== '') {
     $search = ['../', '\\0'];
-    $installationLanguage = str_replace($search, '', urldecode($httpRequest->request->get('language_list')));
+    $installationLanguage = str_replace($search, '', urldecode($langParam));
     ChamiloSession::write('install_language', $installationLanguage);
 } elseif (ChamiloSession::has('install_language')) {
     $installationLanguage = ChamiloSession::read('install_language');
@@ -654,7 +654,7 @@ $installerData = [
 
     'upgradeFromVersion' => $upgradeFromVersion,
 
-    'langIso' => api_get_language_isocode(),
+    'langIso' => $installationLanguage,
 
     'formAction' => api_get_self().'?'.http_build_query([
             'running' => 1,

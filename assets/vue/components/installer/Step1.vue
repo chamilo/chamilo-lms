@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { inject } from "vue"
+import { inject, computed } from "vue"
 import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
@@ -84,9 +84,28 @@ import SectionHeader from "../layout/SectionHeader.vue"
 
 import languages from "../../utils/languages"
 
-const availableLanguages = languages.filter((language) => ["en_US", "fr_FR", "es", "de", "nl", "ar"].includes(language.isocode))
-
 const { t } = useI18n()
-
 const installerData = inject("installerData")
+
+const ALLOWED = ["ar", "de", "en_US", "es", "fr_FR", "he_IL", "it", "nl", "pt_BR", "sl_SI"]
+
+const availableLanguages = computed(() => {
+  const allow = new Set(ALLOWED.map((x) => x.toLowerCase()))
+  const list = languages
+    .filter((l) => allow.has(l.isocode.toLowerCase()))
+    .map((l) => ({
+      isocode: l.isocode,
+      original_name: l.original_name || l.english_name || l.isocode,
+    }))
+  const iso = installerData?.value?.langIso
+  if (iso && !list.some((l) => l.isocode.toLowerCase() === String(iso).toLowerCase())) {
+    const found = languages.find((l) => l.isocode.toLowerCase() === String(iso).toLowerCase())
+    list.unshift({
+      isocode: iso,
+      original_name: found?.original_name || found?.english_name || iso,
+    })
+  }
+
+  return list
+})
 </script>

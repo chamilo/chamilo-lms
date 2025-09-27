@@ -268,13 +268,11 @@ class SettingsController extends BaseController
 
     private function computeOrderedNamespacesByTranslatedLabel(array $schemas, Request $request): array
     {
-        // Normaliza claves: "chamilo_core.settings.X" => "X"
         $namespaces = array_map(
             static fn($k) => str_replace('chamilo_core.settings.', '', $k),
             array_keys($schemas)
         );
 
-        // Construye etiqueta traducida por namespace (respetando excepciones)
         $labelMap = [];
         foreach ($namespaces as $ns) {
             if ($ns === 'cas') {
@@ -290,12 +288,10 @@ class SettingsController extends BaseController
                 continue;
             }
 
-            // Mismo patrón del Twig: Capitalize + trans
             $key = ucfirst(str_replace('_', ' ', $ns));
             $labelMap[$ns] = $this->translator->trans($key);
         }
 
-        // Orden locale-aware (Collator si está disponible; fallback a strcasecmp)
         $collator = class_exists(\Collator::class) ? new \Collator($request->getLocale()) : null;
         usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
             return $collator
@@ -303,14 +299,12 @@ class SettingsController extends BaseController
                 : strcasecmp($labelMap[$a], $labelMap[$b]);
         });
 
-        // Regla: "AI helpers" debe ir segundo
         $idx = array_search('ai_helpers', $namespaces, true);
         if ($idx !== false) {
             array_splice($namespaces, $idx, 1);
             array_splice($namespaces, 1, 0, ['ai_helpers']);
         }
 
-        // Deja Catalog donde caiga según la traducción (ya no lo forzamos)
         return [$namespaces, $labelMap];
     }
 }

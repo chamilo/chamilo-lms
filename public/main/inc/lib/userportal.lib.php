@@ -186,7 +186,7 @@ class IndexManager
                 'title' => get_lang('My certificates'),
             ];
         }
-        if ('true' == api_get_setting('allow_public_certificates')) {
+        if ('true' == api_get_setting('certificate.allow_public_certificates')) {
             $items[] = [
                 'icon' => Display::getMdiIcon(ActionIcon::SEARCH, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Search')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/search.php',
@@ -664,7 +664,7 @@ class IndexManager
      */
     public function returnClassesBlock()
     {
-        if ('true' !== api_get_setting('show_groups_to_users')) {
+        if ('true' !== api_get_setting('group.show_groups_to_users')) {
             return '';
         }
 
@@ -745,7 +745,7 @@ class IndexManager
             unset($this->tpl->menu_navigation['myprofile']);
         }
 
-        $hideMenu = ('true' === api_get_setting('platform.hide_main_navigation_menu'));
+        $hideMenu = ('true' === api_get_setting('display.hide_main_navigation_menu'));
         if (true === $hideMenu) {
             return '';
         }
@@ -884,12 +884,12 @@ class IndexManager
         $useUserLanguageFilterIfAvailable = true,
         $loadHistory = false
     ) {
-        $gameModeIsActive = api_get_setting('gamification_mode');
+        $gameModeIsActive = api_get_setting('workflows.gamification_mode');
         $viewGridCourses = ('true' === api_get_setting('course.view_grid_courses'));
-        $showSimpleSessionInfo = ('true' === api_get_setting('course.show_simple_session_info'));
+        $showSimpleSessionInfo = ('true' === api_get_setting('session.show_simple_session_info'));
         $coursesWithoutCategoryTemplate = '/user_portal/classic_courses_without_category.tpl';
         $coursesWithCategoryTemplate = '/user_portal/classic_courses_with_category.tpl';
-        $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
+        $showAllSessions = ('true' === api_get_setting('session.show_all_sessions_on_my_course_page'));
 
         if ($loadHistory) {
             // Load sessions in category in *history*
@@ -1160,7 +1160,7 @@ class IndexManager
 
         $extraFieldValue = new ExtraFieldValue('session');
         if ($showSessions) {
-            $coursesListSessionStyle = api_get_setting('course.courses_list_session_title_link');
+            $coursesListSessionStyle = api_get_setting('session.courses_list_session_title_link');
             $coursesListSessionStyle = false === $coursesListSessionStyle ? 1 : $coursesListSessionStyle;
             if (api_is_drh()) {
                 $coursesListSessionStyle = 1;

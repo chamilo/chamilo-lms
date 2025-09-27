@@ -66,6 +66,7 @@ class SettingsController extends BaseController
         }
 
         $schemas = $manager->getSchemas();
+        [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
         if ('' === $keyword) {
             return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
@@ -76,6 +77,8 @@ class SettingsController extends BaseController
                 'search_form' => $searchForm->createView(),
                 'template_map' => $templateMap,
                 'template_map_by_category' => $templateMapByCategory,
+                'ordered_namespaces' => $ordered,
+                'namespace_labels' => $labelMap,
             ]);
         }
 
@@ -125,6 +128,8 @@ class SettingsController extends BaseController
             'search_form' => $searchForm->createView(),
             'template_map' => $templateMap,
             'template_map_by_category' => $templateMapByCategory,
+            'ordered_namespaces' => $ordered,
+            'namespace_labels' => $labelMap,
         ]);
     }
 
@@ -188,6 +193,8 @@ class SettingsController extends BaseController
         }
 
         $schemas = $manager->getSchemas();
+        [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
+
 
         $templateMap = [];
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
@@ -207,6 +214,8 @@ class SettingsController extends BaseController
             'keyword' => $keyword,
             'search_form' => $this->getSearchForm()->createView(),
             'template_map' => $templateMap,
+            'ordered_namespaces' => $ordered,
+            'namespace_labels' => $labelMap,
         ]);
     }
 
@@ -255,5 +264,53 @@ class SettingsController extends BaseController
         $builder->add('search', SubmitType::class, ['attr' => ['class' => 'btn btn--primary']]);
 
         return $builder->getForm();
+    }
+
+    private function computeOrderedNamespacesByTranslatedLabel(array $schemas, Request $request): array
+    {
+        // Normaliza claves: "chamilo_core.settings.X" => "X"
+        $namespaces = array_map(
+            static fn($k) => str_replace('chamilo_core.settings.', '', $k),
+            array_keys($schemas)
+        );
+
+        // Construye etiqueta traducida por namespace (respetando excepciones)
+        $labelMap = [];
+        foreach ($namespaces as $ns) {
+            if ($ns === 'cas') {
+                $labelMap[$ns] = 'CAS';
+                continue;
+            }
+            if ($ns === 'lp') {
+                $labelMap[$ns] = $this->translator->trans('Learning path');
+                continue;
+            }
+            if ($ns === 'ai_helpers') {
+                $labelMap[$ns] = $this->translator->trans('AI helpers');
+                continue;
+            }
+
+            // Mismo patrón del Twig: Capitalize + trans
+            $key = ucfirst(str_replace('_', ' ', $ns));
+            $labelMap[$ns] = $this->translator->trans($key);
+        }
+
+        // Orden locale-aware (Collator si está disponible; fallback a strcasecmp)
+        $collator = class_exists(\Collator::class) ? new \Collator($request->getLocale()) : null;
+        usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
+            return $collator
+                ? $collator->compare($labelMap[$a], $labelMap[$b])
+                : strcasecmp($labelMap[$a], $labelMap[$b]);
+        });
+
+        // Regla: "AI helpers" debe ir segundo
+        $idx = array_search('ai_helpers', $namespaces, true);
+        if ($idx !== false) {
+            array_splice($namespaces, $idx, 1);
+            array_splice($namespaces, 1, 0, ['ai_helpers']);
+        }
+
+        // Deja Catalog donde caiga según la traducción (ya no lo forzamos)
+        return [$namespaces, $labelMap];
     }
 }

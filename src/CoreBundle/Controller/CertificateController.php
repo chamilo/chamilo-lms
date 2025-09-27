@@ -52,7 +52,7 @@ class CertificateController extends AbstractController
         }
 
         // Check if public access is globally allowed and certificate is marked as published
-        $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
+        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
         $securityUser = $this->getUser();
@@ -114,7 +114,7 @@ class CertificateController extends AbstractController
             throw $this->createNotFoundException('The requested certificate does not exist.');
         }
 
-        $allowPublic = 'true' === $this->settingsManager->getSetting('course.allow_public_certificates', true);
+        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
         $user = $this->userHelper->getCurrent();
         $securityUser = $this->getUser();

@@ -82,7 +82,7 @@ class AccountController extends BaseController
                 }
             }
 
-            $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('show_terms_if_profile_completed'));
+            $showTermsIfProfileCompleted = ('true' === $settingsManager->getSetting('profile.show_terms_if_profile_completed'));
             $user->setProfileCompleted($showTermsIfProfileCompleted);
 
             $userRepository->updateUser($user);

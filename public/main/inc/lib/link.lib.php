@@ -1723,7 +1723,7 @@ Do you really want to delete this category and its links ?')."')) return false;\
             CURLOPT_TIMEOUT => 4,
         ];
 
-        $proxySettings = api_get_setting('platform.proxy_settings', true);
+        $proxySettings = api_get_setting('security.proxy_settings', true);
 
         if (!empty($proxySettings) &&
             isset($proxySettings['curl_setopt_array'])

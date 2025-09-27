@@ -19,6 +19,7 @@ class GroupSettingsSchema extends AbstractSettingsSchema
                 [
                     'allow_group_categories' => 'false',
                     'hide_course_group_if_no_tools_available' => 'false',
+                    'show_groups_to_users' => 'false',
                 ]
             )
         ;
@@ -33,6 +34,7 @@ class GroupSettingsSchema extends AbstractSettingsSchema
         $builder
             ->add('allow_group_categories', YesNoType::class)
             ->add('hide_course_group_if_no_tools_available', YesNoType::class)
+            ->add('show_groups_to_users', YesNoType::class);
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

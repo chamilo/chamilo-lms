@@ -1,55 +1,67 @@
 <div class="list-group">
-{% set current_namespace = app.request.get('namespace') %}
-{% set array = {
-    'admin': 'star',
-    'announcement': 'bullhorn',
-    'agenda': 'calendar-text',
-    'attendance': 'av-timer',
-    'cas': 'cloud-key',
-    'certificate': 'certificate',
-    'chat': 'chat-processing',
-    'course': 'book-open-page-variant',
-    'crons': 'clock-start',
-    'display': 'monitor-screenshot',
-    'document': 'bookshelf',
-    'dropbox': 'dropbox',
-    'editor': 'form-textarea',
-    'exercise': 'order-bool-ascending-variant',
-    'forum': 'comment-quote',
-    'glossary': 'alphabetical',
-    'gradebook': 'numeric-7-box-multiple',
-    'group': 'account-group',
-    'language': 'translate',
-    'lp': 'map-marker-path',
-    'mail': 'mailbox',
-    'message': 'message-reply-text',
-    'platform': 'cog',
-    'profile': 'account-settings',
-    'ppt_to_lp': 'map-marker-plus',
-    'registration': 'account-plus',
-    'search': 'book-search',
-    'security': 'security',
-    'session': 'google-classroom',
-    'skill': 'shield-star',
-    'social': 'linkedin',
-    'survey': 'form-dropdown',
-    'work': 'inbox-full',
-    'ticket': 'ticket-confirmation',
-    'tracking': 'chart-box',
-    'webservice': 'cloud-sync',
-    'stylesheets': 'language-css3',
-    'ai_helpers': 'robot',
-}
-%}
-{% for namespace in schemas|keys %}
-    {% set namespace = namespace | replace({'chamilo_core.settings.' : ''}) %}
-    <a
-        class="list-group-item border-0 {% if (current_namespace ==  namespace)  %} bg-gray-25 rounded-lg {% endif %} "
-        href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}"
-    >
-        <i class="mdi mdi-{{ array[namespace] | default('help-circle') }} ch-tool-icon-gradient" style="font-size: 32px; width: 32px; height: 32px; line-height: 32px;" aria-hidden="true" title="{{ namespace | capitalize | trans }}"></i>
+    {% set current_namespace = app.request.get('namespace') %}
+    {% set array = {
+        'admin': 'star',
+        'announcement': 'bullhorn',
+        'agenda': 'calendar-text',
+        'attendance': 'av-timer',
+        'cas': 'cloud-key',
+        'certificate': 'certificate',
+        'chat': 'chat-processing',
+        'course': 'book-open-page-variant',
+        'crons': 'clock-start',
+        'display': 'monitor-screenshot',
+        'document': 'bookshelf',
+        'dropbox': 'dropbox',
+        'editor': 'form-textarea',
+        'exercise': 'order-bool-ascending-variant',
+        'forum': 'comment-quote',
+        'glossary': 'alphabetical',
+        'gradebook': 'numeric-7-box-multiple',
+        'group': 'account-group',
+        'language': 'translate',
+        'lp': 'map-marker-path',
+        'mail': 'mailbox',
+        'message': 'message-reply-text',
+        'platform': 'cog',
+        'privacy': 'incognito',
+        'profile': 'account-settings',
+        'ppt_to_lp': 'map-marker-plus',
+        'registration': 'account-plus',
+        'search': 'book-search',
+        'security': 'security',
+        'session': 'google-classroom',
+        'skill': 'shield-star',
+        'social': 'linkedin',
+        'survey': 'form-dropdown',
+        'ticket': 'ticket-confirmation',
+        'tracking': 'chart-box',
+        'webservice': 'cloud-sync',
+        'work': 'inbox-full',
+        'workflows': 'chart-timeline-variant',
+        'stylesheets': 'language-css3',
+        'ai_helpers': 'robot',
+        'catalog': 'storefront-outline',
+        'catalogue': 'storefront-outline',
+        } %}
 
-        {{ namespace | capitalize | trans }}
-    </a>
-{% endfor %}
+    {% set namespaces = ordered_namespaces is defined
+        ? ordered_namespaces
+        : (schemas|keys|map(k => k|replace({'chamilo_core.settings.':''}))) %}
+
+    {% for namespace in namespaces %}
+        {% set label = namespace_labels[namespace] ?? (
+            namespace == 'cas' ? 'CAS' :
+            (namespace == 'lp' ? 'Learning path'|trans : (namespace|capitalize)|trans)
+            ) %}
+
+        <a class="list-group-item border-0 {% if current_namespace == namespace %} bg-gray-25 rounded-lg {% endif %}"
+           href="{{ path('chamilo_platform_settings', { 'namespace': namespace }) }}">
+            <i class="mdi mdi-{{ array[namespace] | default('help-circle') }} ch-tool-icon-gradient"
+               style="font-size:32px;width:32px;height:32px;line-height:32px"
+               aria-hidden="true" title="{{ label }}"></i>
+            {{ label }}
+        </a>
+    {% endfor %}
+
 </div>

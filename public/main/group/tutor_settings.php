@@ -33,7 +33,7 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
  */
 function sort_users($user_a, $user_b)
 {
-    $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+    $orderListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
     if ('true' === $orderListByOfficialCode) {
         $cmp = api_strcmp($user_a['official_code'], $user_b['official_code']);
         if (0 !== $cmp) {
@@ -108,7 +108,7 @@ if ($subscribedUsers) {
     $subscribedUsers = array_column($subscribedUsers, 'user_id');
 }
 
-$orderUserListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+$orderUserListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
 if (!empty($complete_user_list)) {
     usort($complete_user_list, 'sort_users');
     foreach ($complete_user_list as $index => $user) {

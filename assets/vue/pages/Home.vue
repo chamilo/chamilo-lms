@@ -51,7 +51,7 @@ import * as userRelCourseVoteService from "../services/userRelCourseVoteService"
 
 const router = useRouter()
 const platformConfigStore = usePlatformConfig()
-const redirectValue = platformConfigStore.getSetting("platform.redirect_index_to_url_for_logged_users")
+const redirectValue = platformConfigStore.getSetting("workflows.redirect_index_to_url_for_logged_users")
 
 if (typeof redirectValue === "string" && redirectValue.trim() !== "") {
   router.replace(`/${redirectValue}`)

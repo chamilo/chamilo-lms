@@ -30,7 +30,7 @@
           isAllowedToEdit &&
           !isSorting &&
           !isCustomizing &&
-          (session?.id ? 'true' === getSetting('course.allow_edit_tool_visibility_in_session') : true)
+          (session?.id ? 'true' === getSetting('session.allow_edit_tool_visibility_in_session') : true)
         "
         @click="changeVisibility(tool)"
       >

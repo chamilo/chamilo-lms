@@ -27,7 +27,6 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
                     'language_priority_2' => 'user_profil_lang',
                     'language_priority_3' => 'user_selected_lang',
                     'language_priority_4' => 'platform_lang',
-                    'hide_dltt_markup' => 'false',
                     'show_language_selector_in_menu' => 'true',
                     'language_flags_by_country' => 'false',
                     'allow_course_multiple_languages' => 'false',
@@ -87,7 +86,6 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             ->add('language_priority_4', ChoiceType::class, [
                 'choices' => $choices,
             ])
-            ->add('hide_dltt_markup')
             ->add('show_language_selector_in_menu', YesNoType::class)
             ->add('language_flags_by_country', YesNoType::class)
             ->add('allow_course_multiple_languages', YesNoType::class)

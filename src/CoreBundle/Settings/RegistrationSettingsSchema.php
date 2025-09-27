@@ -36,6 +36,9 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 'send_inscription_msg_to_inbox' => 'false',
                 'redirect_after_login' => '',
                 'hide_legal_accept_checkbox' => 'false',
+                'allow_double_validation_in_registration' => 'false',
+                'extldap_config' => '',
+                'user_hide_never_expire_option' => 'false',
             ])
             ->setTransformer('required_profile_fields', new ArrayToIdentifierTransformer())
             ->setTransformer('extendedprofile_registration', new ArrayToIdentifierTransformer())
@@ -103,6 +106,9 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 'required' => false,
             ])
             ->add('hide_legal_accept_checkbox', YesNoType::class)
+            ->add('allow_double_validation_in_registration', YesNoType::class)
+            ->add('extldap_config', TextareaType::class)
+            ->add('user_hide_never_expire_option', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

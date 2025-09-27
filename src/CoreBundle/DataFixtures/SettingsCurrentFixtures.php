@@ -115,6 +115,31 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'session' => [
                 [
+                    'name' => 'career_diagram_disclaimer',
+                    'title' => 'Display a disclaimer below the career diagram',
+                    'comment' => "Add a disclaimer below the career diagram. A language variable called 'Career diagram disclaimer' must exist in your sub-language.",
+                ],
+                [
+                    'name' => 'career_diagram_legend',
+                    'title' => 'Display a legend below the career diagram',
+                    'comment' => "Add a career legend below the career diagram. A language variable called 'Career diagram legend' must exist in your sub-language.",
+                ],
+                [
+                    'name' => 'allow_career_users',
+                    'title' => 'Enable career diagrams for users',
+                    'comment' => 'If career diagrams are enabled, users can only see them (and only the diagrams that correspond to their studies) if you enable this option.',
+                ],
+                [
+                    'name' => 'allow_edit_tool_visibility_in_session',
+                    'title' => 'Allow tool visibility edition in sessions',
+                    'comment' => 'When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow coaches in session courses to adapt tool visibilities to their needs.',
+                ],
+                [
+                    'name' => 'courses_list_session_title_link',
+                    'title' => 'Type of link for the session title',
+                    'comment' => 'On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title).',
+                ],
+                [
                     'name' => 'user_session_display_mode',
                     'title' => 'My Sessions display mode',
                     'comment' => 'Choose how the "My Sessions" page is displayed: as a modern visual block (card) view or the classic list style.',
@@ -163,11 +188,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'prevent_session_admins_to_manage_all_users',
                     'title' => 'Prevent session admins to manage all users',
                     'comment' => 'By enabling this option, session admins will only be able to see, in the administration page, the users they created.',
-                ],
-                [
-                    'name' => 'show_groups_to_users',
-                    'title' => 'Show classes to users',
-                    'comment' => 'Show the classes to users. Classes are a feature that allow you to register/unregister groups of users into a session or a course directly, reducing the administrative hassle. When you pick this option, learners will be able to see in which class they are through their social network interface.',
                 ],
                 [
                     'name' => 'allow_session_course_copy_for_teachers',
@@ -249,24 +269,19 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'course' => [
                 [
+                    'name' => 'profiling_filter_adding_users',
+                    'title' => 'Filter users on profile fields on subscription to course',
+                    'comment' => 'Allow teachers to filter the users based on extra fields on the page to subscribe users to their course.',
+                ],
+                [
                     'name' => 'course_sequence_valid_only_in_same_session',
                     'title' => 'Validate prerequisites only within the same session',
                     'comment' => 'When enabled, a course will be considered validated only if passed within the current session. If disabled, courses passed in other sessions will also unlock dependent courses.',
                 ],
                 [
-                    'name' => 'access_url_specific_files',
-                    'title' => 'Enable URL-specific files',
-                    'comment' => 'When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times.',
-                ],
-                [
                     'name' => 'allow_course_theme',
                     'title' => 'Allow course themes',
                     'comment' => "Allows course graphical themes and makes it possible to change the style sheet used by a course to any of the possible style sheets available to Chamilo. When a user enters the course, the style sheet of the course will have priority over the user's own style sheet and the platform's default style sheet.",
-                ],
-                [
-                    'name' => 'allow_users_to_create_courses',
-                    'title' => 'Allow non admin to create courses',
-                    'comment' => 'Allow non administrators (teachers) to create new courses on the server',
                 ],
                 [
                     'name' => 'breadcrumbs_course_homepage',
@@ -294,11 +309,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Create example material automatically when creating a new course',
                 ],
                 [
-                    'name' => 'go_to_course_after_login',
-                    'title' => 'Go directly to the course after login',
-                    'comment' => 'When a user is registered in one course, go directly to the course after login',
-                ],
-                [
                     'name' => 'send_email_to_admin_when_create_course',
                     'title' => 'E-mail alert on course creation',
                     'comment' => 'Send an email to the platform administrator each time a teacher creates a new course',
@@ -317,16 +327,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'student_view_enabled',
                     'title' => 'Enable learner view',
                     'comment' => 'Enable the learner view, which allows a teacher or admin to see a course as a learner would see it',
-                ],
-                [
-                    'name' => 'allow_public_certificates',
-                    'title' => 'Allow public certificates',
-                    'comment' => 'User certificates can be view by unregistered users.',
-                ],
-                [
-                    'name' => 'allow_user_course_subscription_by_course_admin',
-                    'title' => 'Allow User Course Subscription By Course Admininistrator',
-                    'comment' => 'Activate this option will allow course administrator to subscribe users inside a course',
                 ],
                 [
                     'name' => 'course_hide_tools',
@@ -354,11 +354,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time. This is a global setting. It is used when creating a new Learning Path but can then be redefined for each one.',
                 ],
                 [
-                    'name' => 'allow_lp_return_link',
-                    'title' => 'Show learning paths return link',
-                    'comment' => "Disable this option to hide the 'Return to homepage' button in the learning paths",
-                ],
-                [
                     'name' => 'course_creation_use_template',
                     'title' => 'Use template course for new courses',
                     'comment' => 'Set this to use the same template course (identified by its course numeric ID in the database) for all new courses that will be created on the platform. Please note that, if not properly planned, this setting might have a massive impact on space usage. The template course will be used as if the teacher did a copy of the course with the course backup tools, so no user content is copied, only teacher material. All other course-backup rules apply. Leave empty (or set to 0) to disable.',
@@ -367,31 +362,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'course_images_in_courses_list',
                     'title' => 'Courses custom icons',
                     'comment' => 'Use course images as the course icon in courses lists (instead of the default green blackboard icon).',
-                ],
-                [
-                    'name' => 'hide_scorm_copy_link',
-                    'title' => 'Hide SCORM Copy',
-                    'comment' => 'Hide the Learning Path Copy icon from the Learning Paths list',
-                ],
-                [
-                    'name' => 'hide_scorm_export_link',
-                    'title' => 'Hide SCORM Export',
-                    'comment' => 'Hide the SCORM Export icon from the Learning Paths list',
-                ],
-                [
-                    'name' => 'hide_scorm_pdf_link',
-                    'title' => 'Hide Learning Path PDF export',
-                    'comment' => 'Hide the Learning Path PDF Export icon from the Learning Paths list',
-                ],
-                [
-                    'name' => 'lp_show_reduced_report',
-                    'title' => 'Learning paths: show reduced report',
-                    'comment' => 'Inside the learning paths tool, when a user reviews his own progress (through the stats icon), show a shorten (less detailed) version of the progress report.',
-                ],
-                [
-                    'name' => 'teacher_can_select_course_template',
-                    'title' => 'Teacher can select a course as template',
-                    'comment' => 'Allow pick a course as template for the new course that teacher is creating',
                 ],
             ],
             'editor' => [
@@ -483,6 +453,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'group' => [
                 [
+                    'name' => 'show_groups_to_users',
+                    'title' => 'Show classes to users',
+                    'comment' => 'Show the classes to users. Classes are a feature that allow you to register/unregister groups of users into a session or a course directly, reducing the administrative hassle. When you pick this option, learners will be able to see in which class they are through their social network interface.',
+                ],
+                [
                     'name' => 'allow_group_categories',
                     'title' => 'Group categories',
                     'comment' => 'Allow teachers to create categories in the Groups tool?',
@@ -494,6 +469,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'registration' => [
+                [
+                    'name' => 'user_hide_never_expire_option',
+                    'title' => "Hide 'never expires' option for users",
+                    'comment' => "Remove the option 'never expires' when creating/editing a user account.",
+                ],
+                [
+                    'name' => 'extldap_config',
+                    'title' => 'LDAP connection configuration',
+                    'comment' => 'Array defining host and port for the LDAP server.',
+                ],
                 [
                     'name' => 'redirect_after_login',
                     'title' => 'Redirect after login (per profile)',
@@ -598,9 +583,24 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'display' => [
                 [
-                    'name' => 'allow_user_headings',
-                    'title' => 'Allow users profiling inside courses',
-                    'comment' => 'Can a teacher define learner profile fields to retrieve additional information?',
+                    'name' => 'show_tabs',
+                    'title' => 'Tabs in the header',
+                    'comment' => 'Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my courses page if these need to appear',
+                ],
+                [
+                    'name' => 'show_tabs_per_role',
+                    'title' => 'Show tabs per role',
+                    'comment' => 'Define header tabs visibility per role.',
+                ],
+                [
+                    'name' => 'pdf_logo_header',
+                    'title' => 'PDF header logo',
+                    'comment' => 'Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)',
+                ],
+                [
+                    'name' => 'gravatar_type',
+                    'title' => 'Gravatar avatar type',
+                    'comment' => "If the Gravatar option is enabled and the user doesn't have a picture configured on Gravatar, this option allows you to choose the type of avatar that Gravatar will generate for each user. Check <a href='http://en.gravatar.com/site/implement/images#default-image'>http://en.gravatar.com/site/implement/images#default-image</a> for avatar types examples.",
                 ],
                 [
                     'name' => 'display_categories_on_homepage',
@@ -678,16 +678,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'The hot courses list will be added in the index page',
                 ],
                 [
-                    'name' => 'show_link_bug_notification',
-                    'title' => 'Show link to report bug',
-                    'comment' => 'Show a link in the header to report a bug inside of our support platform (http://support.chamilo.org). When clicking on the link, the user is sent to the support platform, on a wiki page that describes the bug reporting process.',
-                ],
-                [
-                    'name' => 'show_link_ticket_notification',
-                    'title' => 'Show ticket creation link',
-                    'comment' => 'Show the ticket creation link to users on the right side of the portal',
-                ],
-                [
                     'name' => 'hide_home_top_when_connected',
                     'title' => 'Hide top content on homepage when logged in',
                     'comment' => 'On the platform homepage, this option allows you to hide the introduction block (to leave only the announcements, for example), for all users that are already logged in. The general introduction block will still appear to users not already logged in.',
@@ -735,11 +725,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => "By enabling this option, you will be able to define variations for each of the language terms used in the platform's interface, in the form of a new language based on and extending an existing language. You'll find this option in the languages section of the administration panel.",
                 ],
                 [
-                    'name' => 'hide_dltt_markup',
-                    'title' => 'Hide DLTT Markup',
-                    'comment' => 'Hide the [= ... =] markup when a language variable is not translated',
-                ],
-                [
                     'name' => 'show_different_course_language',
                     'title' => 'Show course languages',
                     'comment' => 'Show the language each course is in, next to the course title, on the homepage courses list',
@@ -751,6 +736,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'document' => [
+                [
+                    'name' => 'access_url_specific_files',
+                    'title' => 'Enable URL-specific files',
+                    'comment' => 'When this feature is enabled on a multi-URL configuration, you can go to the main URL and provide URL-specific versions of any file (in the documents tool). The original file will be replaced by the alternative whenever seeing it from a different URL. This allows you to customize each URL even further, while enjoying the advantage of re-using the same courses many times.',
+                ],
                 [
                     'name' => 'default_document_quotum',
                     'title' => 'Default hard disk space',
@@ -812,11 +802,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'The default document visibility for all courses',
                 ],
                 [
-                    'name' => 'enable_webcam_clip',
-                    'title' => 'Enable Webcam Clip',
-                    'comment' => 'Webcam Clip allow to users capture images from his webcam and send them to server in JPEG (.jpg or .jpeg) format',
-                ],
-                [
                     'name' => 'pdf_export_watermark_by_course',
                     'title' => 'Enable watermark definition by course',
                     'comment' => 'When this option is enabled, teachers can define their own watermark for the documents in their courses.',
@@ -868,6 +853,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'forum' => [
+                [
+                    'name' => 'community_managers_user_list',
+                    'title' => 'Community managers list',
+                    'comment' => 'Provide an array of user IDs that will be considered community managers in the special course designated as global forum. Community managers have additional privileges on the global forum.',
+                ],
                 [
                     'name' => 'default_forum_view',
                     'title' => 'Default forum view',
@@ -990,34 +980,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When editing the Gradebook settings',
                 ],
                 [
-                    'name' => 'add_gradebook_certificates_cron_task_enabled',
-                    'title' => 'Certificates auto-generation on WS call',
-                    'comment' => 'When enabled, and when using the WSCertificatesList webservice, this option will make sure that all certificates have been generated by users if they reached the sufficient score in all items defined in gradebooks for all courses and sessions (this might consume considerable processing resources on your server).',
-                ],
-                [
-                    'name' => 'certificate_filter_by_official_code',
-                    'title' => 'Certificates filter by official code',
-                    'comment' => 'Add a filter on the students official code to the certificates list.',
-                ],
-                [
                     'name' => 'gradebook_detailed_admin_view',
                     'title' => 'Show additional columns in gradebook',
                     'comment' => 'Show additional columns in the student view of the gradebook with the best score of all students, the relative position of the student looking at the report and the average score of the whole group of students.',
-                ],
-                [
-                    'name' => 'hide_certificate_export_link',
-                    'title' => 'Certificates: hide PDF export link for all',
-                    'comment' => 'Enable to completely remove the possibility to export certificates to PDF (for all users). If enabled, this includes hiding it from students.',
-                ],
-                [
-                    'name' => 'hide_certificate_export_link_students',
-                    'title' => 'Certificates: hide export link from students',
-                    'comment' => "If enabled, students won't be able to export their certificates to PDF. This option is available because, depending on the precise HTML structure of the certificate template, the PDF export might be of low quality. In this case, it is best to only show the HTML certificate to students.",
-                ],
-                [
-                    'name' => 'openbadges_backpack',
-                    'title' => 'OpenBadges backpack URL',
-                    'comment' => 'The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/',
                 ],
                 [
                     'name' => 'student_publication_to_take_in_gradebook',
@@ -1026,6 +991,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'platform' => [
+                [
+                    'name' => 'disable_copy_paste',
+                    'title' => 'Disable copy-pasting',
+                    'comment' => 'When enabled, this option disables as well as possible the copy-pasting mechanisms. Useful in restrictive exams setups.',
+                ],
                 [
                     'name' => 'session_admin_access_to_all_users_on_all_urls',
                     'title' => 'Allow session admins to see all users on all URLs',
@@ -1045,11 +1015,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'donotlistcampus',
                     'title' => 'Do not list this campus on chamilo.org',
                     'comment' => 'By default, Chamilo portals are automatically registered in a public list at chamilo.org, just using the title you gave to this portal (not the URL nor any private data). Check this box to avoid having the title of your portal appear.',
-                ],
-                [
-                    'name' => 'session_admin_user_subscription_search_extra_field_to_search',
-                    'title' => 'Extra user field used to search and name sessions',
-                    'comment' => 'This setting defines the extra user field key (e.g., "company") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register.',
                 ],
                 [
                     'name' => 'timezone',
@@ -1082,11 +1047,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Defines the environment type: "prod" (normal production), "validation" (like production but without reporting statistics), or "test" (debug mode with developer tools such as untranslated string indicators).',
                 ],
                 [
-                    'name' => 'show_tabs',
-                    'title' => 'Tabs in the header',
-                    'comment' => 'Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my courses page if these need to appear',
-                ],
-                [
                     'name' => 'site_name',
                     'title' => 'E-learning portal name',
                     'comment' => 'The Name of your Chamilo Portal (appears in the header)',
@@ -1107,39 +1067,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'If enabled, this option shows a banner on top of your platform that asks users to acknowledge that the platform is using cookies necessary to provide the user experience. The banner can easily be acknowledged and hidden by the user. This allows Chamilo to comply with EU web cookies regulations.',
                 ],
                 [
-                    'name' => 'gamification_mode',
-                    'title' => 'Gamification mode',
-                    'comment' => 'Activate the stars achievement in learning paths',
-                ],
-                [
-                    'name' => 'gravatar_enabled',
-                    'title' => 'Gravatar user pictures',
-                    'comment' => "Enable this option to search into the Gravatar repository for pictures of the current user, if the user hasn't defined a picture locally. This is great to auto-fill pictures on your site, in particular if your users are active internet users. Gravatar pictures can be configured easily, based on the e-mail address of a user, at http://en.gravatar.com/",
-                ],
-                [
-                    'name' => 'gravatar_type',
-                    'title' => 'Gravatar avatar type',
-                    'comment' => "If the Gravatar option is enabled and the user doesn't have a picture configured on Gravatar, this option allows you to choose the type of avatar that Gravatar will generate for each user. Check <a href='http://en.gravatar.com/site/implement/images#default-image'>http://en.gravatar.com/site/implement/images#default-image</a> for avatar types examples.",
-                ],
-                [
                     'name' => 'institution_address',
                     'title' => 'Institution address',
                     'comment' => 'Address',
-                ],
-                [
-                    'name' => 'load_term_conditions_section',
-                    'title' => 'Load term conditions section',
-                    'comment' => 'The legal agreement will appear during the login or when enter to a course.',
-                ],
-                [
-                    'name' => 'order_user_list_by_official_code',
-                    'title' => 'Order users by official code',
-                    'comment' => "Use the 'official code' to sort most students list on the platform, instead of their lastname or firstname.",
-                ],
-                [
-                    'name' => 'pdf_logo_header',
-                    'title' => 'PDF header logo',
-                    'comment' => 'Whether to use the image at var/themes/[your-theme]/images/pdf_logo_header.png as the PDF header logo for all PDF exports (instead of the normal portal logo)',
                 ],
             ],
             'mail' => [
@@ -1225,6 +1155,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'skill' => [
+                [
+                    'name' => 'openbadges_backpack',
+                    'title' => 'OpenBadges backpack URL',
+                    'comment' => 'The URL of the OpenBadges backpack server that will be used by default for all users wanting to export their badges. This defaults to the open and free Mozilla Foundation backpack repository: https://backpack.openbadges.org/',
+                ],
                 [
                     'name' => 'allow_hr_skills_management',
                     'title' => 'Allow HR skills management',
@@ -1327,6 +1262,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'hide_breadcrumb_if_not_allowed',
+                    'title' => "Hide breadcrumb if 'not allowed'",
+                    'comment' => 'If the user is not allowed to access a specific page, also hide the breadcrumb. This increases security by avoiding the display of unnecessary information.',
+                ],
+                [
+                    'name' => 'force_renew_password_at_first_login',
+                    'title' => 'Force password renewal at first login',
+                    'comment' => 'This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know.',
+                ],
+                [
+                    'name' => 'login_max_attempt_before_blocking_account',
+                    'title' => 'Max login attempts before lockdown',
+                    'comment' => 'Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin.',
+                ],
+                [
                     'name' => '2fa_enable',
                     'title' => 'Enable 2FA',
                     'comment' => "Add fields in the password update page to enable 2FA using a TOTP authenticator app. When disabled globally, users won't see 2FA fields and won't be prompted for 2FA at login, even if they had enabled it previously.",
@@ -1379,6 +1329,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'tracking' => [
                 [
+                    'name' => 'my_progress_course_tools_order',
+                    'title' => "Order of tools on 'My progress' page",
+                    'comment' => "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'.",
+                ],
+                [
+                    'name' => 'block_my_progress_page',
+                    'title' => "Prevent access to 'My progress'",
+                    'comment' => "In specific implementations like online exams, you might want to prevent user access to the 'My progress' page.",
+                ],
+                [
+                    'name' => 'tracking_skip_generic_data',
+                    'title' => 'Skip generic data in learner self-tracking page',
+                    'comment' => "If the 'My progress' page takes too long to load, you might want to remove the processing of generic statistics for the user. In this case enable this setting.",
+                ],
+                [
                     'name' => 'footer_extra_content',
                     'title' => 'Extra content in footer',
                     'comment' => 'You can add HTML code like meta tags',
@@ -1422,6 +1387,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'webservice' => [
+                [
+                    'name' => 'webservice_return_user_field',
+                    'title' => 'Webservices return user field',
+                    'comment' => "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id.",
+                ],
+                [
+                    'name' => 'webservice_enable_adminonly_api',
+                    'title' => 'Enable admin-only web services',
+                    'comment' => 'Some REST web services are marked for admins only and are disabled by default. Enable this feature to give access to these web services (to users with admin credentials, obviously).',
+                ],
+                [
+                    'name' => 'disable_webservices',
+                    'title' => 'Disable web services',
+                    'comment' => 'If you do not use web services, enable this to avoid any unnecessary security risk.',
+                ],
                 [
                     'name' => 'allow_download_documents_by_api_key',
                     'title' => 'Allow download course documents by API Key',
@@ -1474,9 +1454,14 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'ticket' => [
                 [
-                    'name' => 'show_terms_if_profile_completed',
-                    'title' => 'Terms and conditions only if profile complete',
-                    'comment' => "By enabling this option, terms and conditions will be available to the user only when the extra profile fields that start with 'terms_' and set to visible are completed.",
+                    'name' => 'show_link_bug_notification',
+                    'title' => 'Show link to report bug',
+                    'comment' => 'Show a link in the header to report a bug inside of our support platform (http://support.chamilo.org). When clicking on the link, the user is sent to the support platform, on a wiki page that describes the bug reporting process.',
+                ],
+                [
+                    'name' => 'show_link_ticket_notification',
+                    'title' => 'Show ticket creation link',
+                    'comment' => 'Show the ticket creation link to users on the right side of the portal',
                 ],
                 [
                     'name' => 'ticket_allow_category_edition',
@@ -1584,11 +1569,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'In multi-URL settings, allow admins and teachers to assign categories from the top URL to courses in the children URLs.',
                 ],
                 [
-                    'name' => 'allow_edit_tool_visibility_in_session',
-                    'title' => 'Allow tool visibility edition in sessions',
-                    'comment' => 'When using sessions, the default behaviour is to use the tool visibility defined in the base course. This setting changes that to allow coaches in session courses to adapt tool visibilities to their needs.',
-                ],
-                [
                     'name' => 'allow_public_course_with_no_terms_conditions',
                     'title' => 'Access public courses with terms and conditions',
                     'comment' => 'With this option enabled, if a course has public visibility and terms and conditions, those terms are disabled while the course is public.',
@@ -1669,26 +1649,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'On the ‘My courses’/’My sessions’ pages, show additional information regarding the score, progress and/or certificate acquisition by the student.',
                 ],
                 [
-                    'name' => 'course_visibility_change_only_admin',
-                    'title' => 'Course visibility changes for admins only',
-                    'comment' => 'Remove the possibility for non-admins to change the course visibility. Visibility can be an issue when there are too many teachers to control directly. Forcing visibilities allows the organization to better manage courses catalogues.',
-                ],
-                [
-                    'name' => 'courses_list_session_title_link',
-                    'title' => 'Type of link for the session title',
-                    'comment' => 'On the courses/sessions page, the session title can be either of the following : 0 = no link (hide session title) ; 1 = link title to a special session page ; 2 = link to the course if there is only one course ; 3 = session title makes the courses list foldable ; 4 = no link (show session title).',
-                ],
-                [
-                    'name' => 'disabled_edit_session_coaches_course_editing_course',
-                    'title' => 'Disable the ability to edit course coaches',
-                    'comment' => 'When disabled, admins do not have a link to quickly assign coaches to session-courses on the course edition page.',
-                ],
-                [
-                    'name' => 'enable_bootstrap_in_documents_html',
-                    'title' => 'Add Bootstrap lib headers to HTML documents viewer',
-                    'comment' => "When this setting is set to 'Yes', the HTML documents viewer adds the HTML headers for the inclusion of Bootstrap and Font Awesome, which were used in Chamilo 1. This might help compatibility between old content and a newer version of the platform.",
-                ],
-                [
                     'name' => 'enable_unsubscribe_button_on_my_course_page',
                     'title' => 'Show unsubscribe button in ‘My courses’',
                     'comment' => 'Add a button to unsubscribe from a course on the ‘My courses’ page.',
@@ -1719,16 +1679,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'When using resources sequencing with courses or sessions, show the dependencies of the course on the course’s homepage.',
                 ],
                 [
-                    'name' => 'show_all_sessions_on_my_course_page',
-                    'title' => "Show all sessions on 'My courses' page",
-                    'comment' => 'If enabled, this option show all sessions of the user in calendar-based view.',
-                ],
-                [
-                    'name' => 'show_simple_session_info',
-                    'title' => 'Show simple session info',
-                    'comment' => "Add coach and dates to the session's subtitle in the sessions' list.",
-                ],
-                [
                     'name' => 'view_grid_courses',
                     'title' => 'View courses in a grid layout',
                     'comment' => 'View courses in a layout with several courses per line. Otherwise, the layout will show one course per line.',
@@ -1755,22 +1705,47 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Allow session admins to download private certificates',
                     'comment' => 'If enabled, session administrators can download certificates even if they are not publicly published.',
                 ],
+                [
+                    'name' => 'allow_public_certificates',
+                    'title' => 'Allow public certificates',
+                    'comment' => 'User certificates can be view by unregistered users.',
+                ],
+                [
+                    'name' => 'certificate_pdf_orientation',
+                    'title' => 'PDF orientation for certificates',
+                    'comment' => 'Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates.',
+                ],
+                [
+                    'name' => 'allow_general_certificate',
+                    'title' => 'Enable general certificate',
+                    'comment' => 'A general certificate is a certificate grouping all the accomplishments by the user in the courses (s)he followed.',
+                ],
+                [
+                    'name' => 'hide_certificate_export_link',
+                    'title' => 'Certificates: hide PDF export link for all',
+                    'comment' => 'Enable to completely remove the possibility to export certificates to PDF (for all users). If enabled, this includes hiding it from students.',
+                ],
+                [
+                    'name' => 'add_gradebook_certificates_cron_task_enabled',
+                    'title' => 'Certificates auto-generation on WS call',
+                    'comment' => 'When enabled, and when using the WSCertificatesList webservice, this option will make sure that all certificates have been generated by users if they reached the sufficient score in all items defined in gradebooks for all courses and sessions (this might consume considerable processing resources on your server).',
+                ],
+                [
+                    'name' => 'certificate_filter_by_official_code',
+                    'title' => 'Certificates filter by official code',
+                    'comment' => 'Add a filter on the students official code to the certificates list.',
+                ],
+                [
+                    'name' => 'hide_certificate_export_link_students',
+                    'title' => 'Certificates: hide export link from students',
+                    'comment' => "If enabled, students won't be able to export their certificates to PDF. This option is available because, depending on the precise HTML structure of the certificate template, the PDF export might be of low quality. In this case, it is best to only show the HTML certificate to students.",
+                ],
             ],
             'admin' => [
-                [
-                    'name' => 'drh_allow_access_to_all_students',
-                    'title' => 'HRM can access all students from reporting pages',
-                    'comment' => '',
-                ],
                 [
                     'name' => 'max_anonymous_users',
                     'title' => 'Multiple anonymous users',
                     'comment' => 'Enable this option to allow multiple system users for anonymous users. This is useful when using this platform as a public showroom for some courses. Having multiple anonymous users will let tracking work for the duration of the experience for several users without mixing their data (which could otherwise confuse them).',
-                ],
-                [
-                    'name' => 'plugin_redirection_enabled',
-                    'title' => 'Enable only if you are using the Redirection plugin',
-                    'comment' => '',
                 ],
                 [
                     'name' => 'chamilo_latest_news',
@@ -1801,21 +1776,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'user_status_option_show_only_for_admin',
                     'title' => 'Define which roles are hidden to normal users',
                     'comment' => "The roles set to 'true' will only appear to administrators. Other users will not be able to see them.",
-                ],
-                [
-                    'name' => 'usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe',
-                    'title' => 'Disable user unsubscription from course/session on user unsubscription from group/class',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
-                    'title' => 'Disable user unsubscription from course on course removal from group/class',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
-                    'title' => 'Disable user unsubscription from session on session removal from group/class',
-                    'comment' => '',
                 ],
             ],
             'agenda' => [
@@ -1911,32 +1871,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide the option to send an announcement copy to HRM',
                     'comment' => "In the announcements form, an option normally appears to allow teachers to send a copy of the announcement to the user's HRM. Set this to 'Yes' to remote the option (and *not* send the copy).",
                 ],
-                [
-                    'name' => 'send_all_emails_to',
-                    'title' => 'Send all e-mails to',
-                    'comment' => 'Give a list of e-mail addresses to whom *all* e-mails sent from the platform will be sent. The e-mails are sent to these addresses as a visible destination.',
-                ],
             ],
             'document' => [
                 [
-                    'name' => 'allow_compilatio_tool',
-                    'title' => 'Enable Compilatio',
-                    'comment' => 'Compilatio is an anti-cheating service that compares text between two submissions and reports if there is a high probability the content (usually assignments) is not genuine.',
-                ],
-                [
-                    'name' => 'allow_general_certificate',
-                    'title' => 'Enable general certificate',
-                    'comment' => 'A general certificate is a certificate grouping all the accomplishments by the user in the courses (s)he followed.',
-                ],
-                [
-                    'name' => 'certificate_pdf_orientation',
-                    'title' => 'PDF orientation for certificates',
-                    'comment' => 'Set ‘portrait’ or ‘landscape’ (technical terms) for PDF certificates.',
-                ],
-                [
-                    'name' => 'compilatio_tool',
-                    'title' => 'Compilatio settings',
-                    'comment' => 'Configure the Compilatio connection details here.',
+                    'name' => 'video_features',
+                    'title' => 'Video features',
+                    'comment' => "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.",
                 ],
                 [
                     'name' => 'documents_custom_cloud_link_list',
@@ -1998,24 +1938,39 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'display' => [
                 [
-                    'name' => 'bug_report_link',
-                    'title' => 'Bug report link',
-                    'comment' => 'Provide link to a bug reporting platform if not using the internal ticket manager.',
+                    'name' => 'table_row_list',
+                    'title' => 'Default offered pagination numbers in tables',
+                    'comment' => 'Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].',
                 ],
                 [
-                    'name' => 'disable_copy_paste',
-                    'title' => 'Disable copy-pasting',
-                    'comment' => 'When enabled, this option disables as well as possible the copy-pasting mechanisms. Useful in restrictive exams setups.',
+                    'name' => 'table_default_row',
+                    'title' => 'Default number of table rows',
+                    'comment' => 'How many rows should be shown in all tables by default.',
+                ],
+                [
+                    'name' => 'hide_complete_name_in_whoisonline',
+                    'title' => "Hide the complete username in 'who is online'",
+                    'comment' => "The 'who is online' page (if enabled) will show a picture and a name for each user currently online. Enable this option to hide the names.",
+                ],
+                [
+                    'name' => 'hide_main_navigation_menu',
+                    'title' => 'Hide main navigation menu',
+                    'comment' => 'When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu.',
+                ],
+                [
+                    'name' => 'order_user_list_by_official_code',
+                    'title' => 'Order users by official code',
+                    'comment' => "Use the 'official code' to sort most students list on the platform, instead of their lastname or firstname.",
+                ],
+                [
+                    'name' => 'gravatar_enabled',
+                    'title' => 'Gravatar user pictures',
+                    'comment' => "Enable this option to search into the Gravatar repository for pictures of the current user, if the user hasn't defined a picture locally. This is great to auto-fill pictures on your site, in particular if your users are active internet users. Gravatar pictures can be configured easily, based on the e-mail address of a user, at http://en.gravatar.com/",
                 ],
                 [
                     'name' => 'hide_social_media_links',
                     'title' => 'Hide social media links',
                     'comment' => 'Some pages allow you to promote the portal or a course on social networks. Enable this setting to remove the links.',
-                ],
-                [
-                    'name' => 'use_virtual_keyboard',
-                    'title' => 'Use virtual keyboard',
-                    'comment' => 'Make a virtual keyboard appear. This is useful when setting up restrictive exams in a physical room where students have no keyboard to limit their ability to cheat.',
                 ],
             ],
             'editor' => [
@@ -2079,79 +2034,19 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'platform' => [
                 [
+                    'name' => 'use_virtual_keyboard',
+                    'title' => 'Use virtual keyboard',
+                    'comment' => 'Make a virtual keyboard appear. This is useful when setting up restrictive exams in a physical room where students have no keyboard to limit their ability to cheat.',
+                ],
+                [
                     'name' => 'hosting_limit_identical_email',
                     'title' => 'Limit identical email usage',
                     'comment' => 'Maximum number of accounts allowed to share the same e-mail address. Set to 0 to disable this limit.',
                 ],
                 [
-                    'name' => 'allow_double_validation_in_registration',
-                    'title' => 'Double validation for registration process',
-                    'comment' => 'Simply display a confirmation request on the registration page before going forward with the user creation.',
-                ],
-                [
-                    'name' => 'allow_working_time_edition',
-                    'title' => 'Enable edition of course work time',
-                    'comment' => 'Enable this feature to let teachers manually update the time spent in the course by learners.',
-                ],
-                [
-                    'name' => 'block_my_progress_page',
-                    'title' => "Prevent access to 'My progress'",
-                    'comment' => "In specific implementations like online exams, you might want to prevent user access to the 'My progress' page.",
-                ],
-                [
-                    'name' => 'default_menu_entry_for_course_or_session',
-                    'title' => 'Default menu entry for courses',
-                    'comment' => "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session.",
-                ],
-                [
-                    'name' => 'disable_user_conditions_sender_id',
-                    'title' => 'Internal ID of the user used to send disabled account notifications',
-                    'comment' => "Avoid being too personal with users by using a 'bot' account to send e-mails to users when their account is disabled for some reason.",
-                ],
-                [
-                    'name' => 'disable_webservices',
-                    'title' => 'Disable web services',
-                    'comment' => 'If you do not use web services, enable this to avoid any unnecessary security risk.',
-                ],
-                [
-                    'name' => 'extldap_config',
-                    'title' => 'LDAP connection configuration',
-                    'comment' => 'Array defining host and port for the LDAP server.',
-                ],
-                [
-                    'name' => 'force_renew_password_at_first_login',
-                    'title' => 'Force password renewal at first login',
-                    'comment' => 'This is one simple measure to increase the security of your portal by asking users to immediately change their password, so the one that was transfered by e-mail is no longer valid and they then will use one that they came up with and that they are the only person to know.',
-                ],
-                [
                     'name' => 'generate_random_login',
                     'title' => 'Generate random username',
                     'comment' => 'When importing users (batch processes), automatically generate a random string for username. Otherwise, the username will be generated on the basis of the firstname and lastname, or the prefix of the e-mail.',
-                ],
-                [
-                    'name' => 'hide_breadcrumb_if_not_allowed',
-                    'title' => "Hide breadcrumb if 'not allowed'",
-                    'comment' => 'If the user is not allowed to access a specific page, also hide the breadcrumb. This increases security by avoiding the display of unnecessary information.',
-                ],
-                [
-                    'name' => 'hide_complete_name_in_whoisonline',
-                    'title' => "Hide the complete username in 'who is online'",
-                    'comment' => "The 'who is online' page (if enabled) will show a picture and a name for each user currently online. Enable this option to hide the names.",
-                ],
-                [
-                    'name' => 'hide_main_navigation_menu',
-                    'title' => 'Hide main navigation menu',
-                    'comment' => 'When using Chamilo for a specific purpose (like one massive online exam), you might want to reduce distraction even more by removing the side menu.',
-                ],
-                [
-                    'name' => 'login_max_attempt_before_blocking_account',
-                    'title' => 'Max login attempts before lockdown',
-                    'comment' => 'Number of failed login attempts to tolerate before the user account is locked and has to be unlocked by an admin.',
-                ],
-                [
-                    'name' => 'multiple_url_hide_disabled_settings',
-                    'title' => 'Hide disabled settings in sub-URLs',
-                    'comment' => 'Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)',
                 ],
                 [
                     'name' => 'pdf_img_dpi',
@@ -2169,34 +2064,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
                 ],
                 [
-                    'name' => 'proxy_settings',
-                    'title' => 'Proxy settings',
-                    'comment' => 'Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.',
-                ],
-                [
-                    'name' => 'redirect_index_to_url_for_logged_users',
-                    'title' => 'Redirect index.php to given URL for authenticated users',
-                    'comment' => 'If you do not want to use the index page (announcements, popular courses, etc), you can define here the script (from the document root) where users will be redirected when trying to load the index.',
-                ],
-                [
-                    'name' => 'table_default_row',
-                    'title' => 'Default number of table rows',
-                    'comment' => 'How many rows should be shown in all tables by default.',
-                ],
-                [
-                    'name' => 'table_row_list',
-                    'title' => 'Default offered pagination numbers in tables',
-                    'comment' => 'Set the options you want to appear in the navigation around a table to show less or more rows on one page. e.g. [50, 100, 200, 500].',
-                ],
-                [
                     'name' => 'timepicker_increment',
                     'title' => 'Timepicker increment',
                     'comment' => 'Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc.',
-                ],
-                [
-                    'name' => 'tracking_skip_generic_data',
-                    'title' => 'Skip generic data in learner self-tracking page',
-                    'comment' => "If the 'My progress' page takes too long to load, you might want to remove the processing of generic statistics for the user. In this case enable this setting.",
                 ],
                 [
                     'name' => 'unoconv_binaries',
@@ -2204,29 +2074,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Give the system path to the UNO converter library to enable some extra exporting features.',
                 ],
                 [
-                    'name' => 'update_student_expiration_x_date',
-                    'title' => 'Set expiration date on first login',
-                    'comment' => "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in.",
-                ],
-                [
                     'name' => 'use_career_external_id_as_identifier_in_diagrams',
                     'title' => 'Use external career ID in diagrams',
                     'comment' => 'If using career diagrams, show an extra field instead of the internal career ID.',
-                ],
-                [
-                    'name' => 'user_edition_extra_field_to_check',
-                    'title' => 'Set an extra field as trigger for registration as ex-learner',
-                    'comment' => 'Give an extra field label here. If this extra field is updated for any user, a process is triggered to check the access to this user to courses with the same given extra field.',
-                ],
-                [
-                    'name' => 'user_hide_never_expire_option',
-                    'title' => "Hide 'never expires' option for users",
-                    'comment' => "Remove the option 'never expires' when creating/editing a user account.",
-                ],
-                [
-                    'name' => 'user_number_of_days_for_default_expiration_date_per_role',
-                    'title' => 'Default expiration days by role',
-                    'comment' => 'An array of role = > number which represents the number of days an account has before expiration, depending on the role.',
                 ],
                 [
                     'name' => 'user_status_show_option',
@@ -2237,21 +2087,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'user_status_show_options_enabled',
                     'title' => 'Selective display of roles',
                     'comment' => 'Enable to use an array to define which roles should be clearly displayed and which should be hidden.',
-                ],
-                [
-                    'name' => 'video_features',
-                    'title' => 'Video features',
-                    'comment' => "Array of extra features you can enable for the video player in Chamilo. Options include 'speed', which allows you to change the playback speed of a video.",
-                ],
-                [
-                    'name' => 'webservice_enable_adminonly_api',
-                    'title' => 'Enable admin-only web services',
-                    'comment' => 'Some REST web services are marked for admins only and are disabled by default. Enable this feature to give access to these web services (to users with admin credentials, obviously).',
-                ],
-                [
-                    'name' => 'webservice_return_user_field',
-                    'title' => 'Webservices return user field',
-                    'comment' => "Ask REST webservices (v2.php) to return another identifier for fields related to user ID. This is useful if the external system doesn't really deal with user IDs as they are in Chamilo, as it helps the external system match the user data return with some external data that is know to Chamilo. For example, if you use an external authentication system, you can return the extra field used to match the user with the external authentication system rather than user.id.",
                 ],
                 [
                     'name' => 'access_to_personal_file_for_all',
@@ -2282,6 +2117,31 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'lp' => [
+                [
+                    'name' => 'lp_show_reduced_report',
+                    'title' => 'Learning paths: show reduced report',
+                    'comment' => 'Inside the learning paths tool, when a user reviews his own progress (through the stats icon), show a shorten (less detailed) version of the progress report.',
+                ],
+                [
+                    'name' => 'hide_scorm_pdf_link',
+                    'title' => 'Hide Learning Path PDF export',
+                    'comment' => 'Hide the Learning Path PDF Export icon from the Learning Paths list',
+                ],
+                [
+                    'name' => 'hide_scorm_copy_link',
+                    'title' => 'Hide SCORM Copy',
+                    'comment' => 'Hide the Learning Path Copy icon from the Learning Paths list',
+                ],
+                [
+                    'name' => 'hide_scorm_export_link',
+                    'title' => 'Hide SCORM Export',
+                    'comment' => 'Hide the SCORM Export icon from the Learning Paths list',
+                ],
+                [
+                    'name' => 'allow_lp_return_link',
+                    'title' => 'Show learning paths return link',
+                    'comment' => "Disable this option to hide the 'Return to homepage' button in the learning paths",
+                ],
                 [
                     'name' => 'lp_prerequisite_on_quiz_unblock_if_max_attempt_reached',
                     'title' => 'Unlock prerequisites after last test attempt',
@@ -2316,11 +2176,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'hide_lp_time',
                     'title' => 'Hide time from learning paths records',
                     'comment' => 'Hide learning paths time spent in reports in general.',
-                ],
-                [
-                    'name' => 'lp_category_accordion',
-                    'title' => "Foldable learning paths' categories",
-                    'comment' => 'Enable to allow users to fold the categories in the learning paths list.',
                 ],
                 [
                     'name' => 'lp_minimum_time',
@@ -2451,11 +2306,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'lp_view_settings',
                     'title' => 'Learning path display settings',
                     'comment' => "Configure additional options for the learning paths display. Options include 'show_reporting_icon', 'hide_lp_arrow_navigation', 'show_toolbar_by_default', 'navigation_in_the_middle' and 'add_extra_quit_to_home_icon'.",
-                ],
-                [
-                    'name' => 'my_progress_course_tools_order',
-                    'title' => "Order of tools on 'My progress' page",
-                    'comment' => "Change the order of tools shown on the 'My progress' page for learners. Options include 'quizzes', 'learning_paths' and 'skills'.",
                 ],
                 [
                     'name' => 'scorm_api_extrafield_to_use_as_student_id',
@@ -2948,6 +2798,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'profile' => [
                 [
+                    'name' => 'show_terms_if_profile_completed',
+                    'title' => 'Terms and conditions only if profile complete',
+                    'comment' => "By enabling this option, terms and conditions will be available to the user only when the extra profile fields that start with 'terms_' and set to visible are completed.",
+                ],
+                [
+                    'name' => 'allow_user_headings',
+                    'title' => 'Allow users profiling inside courses',
+                    'comment' => 'Can a teacher define learner profile fields to retrieve additional information?',
+                ],
+                [
                     'name' => 'visible_options',
                     'title' => 'List of visible fields in profile',
                     'comment' => 'Controls which profile fields are visible to users and others.',
@@ -2958,44 +2818,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Add subject and body in the mailto: footer.',
                 ],
                 [
-                    'name' => 'allow_career_diagram',
-                    'title' => 'Enable career diagrams',
-                    'comment' => 'Career diagrams allow you to display diagrams of careers, skills and courses.',
-                ],
-                [
                     'name' => 'changeable_options',
                     'title' => 'Fields users are allowed to change in their profile',
                     'comment' => 'Select the fields users will be able to change on their profile page.',
-                ],
-                [
-                    'name' => 'data_protection_officer_email',
-                    'title' => 'Data protection officer e-mail address',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'data_protection_officer_name',
-                    'title' => 'Data protection officer name',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'data_protection_officer_role',
-                    'title' => 'Data protection officer role',
-                    'comment' => '',
-                ],
-                [
-                    'name' => 'disable_change_user_visibility_for_public_courses',
-                    'title' => 'Disable making tool users visible in public courses',
-                    'comment' => "Avoid anyone making the 'users' tool visible in a public course.",
-                ],
-                [
-                    'name' => 'disable_gdpr',
-                    'title' => 'Disable GDPR features',
-                    'comment' => 'If you already manage your personal data protection declaration to users elsewhere, you can safely disable this feature.',
-                ],
-                [
-                    'name' => 'hide_user_field_from_list',
-                    'title' => 'Hide fields from users list in course',
-                    'comment' => 'By default, we show all data from users in the users tool in the course. This array allows you to specify which fields you do not want to display. Only affects main fields (not extra fields).',
                 ],
                 [
                     'name' => 'hide_username_in_course_chat',
@@ -3018,19 +2843,9 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Set your own URL to a password reset page. Useful when using a federated account management system.',
                 ],
                 [
-                    'name' => 'profiling_filter_adding_users',
-                    'title' => 'Filter users on profile fields on subscription to course',
-                    'comment' => 'Allow teachers to filter the users based on extra fields on the page to subscribe users to their course.',
-                ],
-                [
                     'name' => 'registration_add_helptext_for_2_names',
                     'title' => 'Add helper to add two names in registration',
                     'comment' => 'Add help text for users to enter two names in the registration form when double lastnames are common.',
-                ],
-                [
-                    'name' => 'allow_career_users',
-                    'title' => 'Enable career diagrams for users',
-                    'comment' => 'If career diagrams are enabled, users can only see them (and only the diagrams that correspond to their studies) if you enable this option.',
                 ],
                 [
                     'name' => 'allow_social_map_fields',
@@ -3041,21 +2856,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'allow_teachers_to_classes',
                     'title' => 'Allow teachers to manage classes',
                     'comment' => '',
-                ],
-                [
-                    'name' => 'career_diagram_disclaimer',
-                    'title' => 'Display a disclaimer below the career diagram',
-                    'comment' => "Add a disclaimer below the career diagram. A language variable called 'Career diagram disclaimer' must exist in your sub-language.",
-                ],
-                [
-                    'name' => 'career_diagram_legend',
-                    'title' => 'Display a legend below the career diagram',
-                    'comment' => "Add a career legend below the career diagram. A language variable called 'Career diagram legend' must exist in your sub-language.",
-                ],
-                [
-                    'name' => 'community_managers_user_list',
-                    'title' => 'Community managers list',
-                    'comment' => 'Provide an array of user IDs that will be considered community managers in the special course designated as global forum. Community managers have additional privileges on the global forum.',
                 ],
                 [
                     'name' => 'linkedin_organization_id',
@@ -3186,6 +2986,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'proxy_settings',
+                    'title' => 'Proxy settings',
+                    'comment' => 'Some features of Chamilo will connect to the exterior from the server. For example to make sure an external content exists when creating a link or showing an embedded page in the learning path. If your Chamilo server uses a proxy to get out of its network, this would be the place to configure it.',
+                ],
+                [
                     'name' => 'password_rotation_days',
                     'title' => 'Password rotation interval (days)',
                     'comment' => 'Number of days before users must rotate their password (0 = disabled).',
@@ -3272,6 +3077,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'session' => [
+                [
+                    'name' => 'allow_career_diagram',
+                    'title' => 'Enable career diagrams',
+                    'comment' => 'Career diagrams allow you to display diagrams of careers, skills and courses.',
+                ],
+                [
+                    'name' => 'show_all_sessions_on_my_course_page',
+                    'title' => "Show all sessions on 'My courses' page",
+                    'comment' => 'If enabled, this option show all sessions of the user in calendar-based view.',
+                ],
+                [
+                    'name' => 'show_simple_session_info',
+                    'title' => 'Show simple session info',
+                    'comment' => "Add coach and dates to the session's subtitle in the sessions' list.",
+                ],
                 [
                     'name' => 'duplicate_specific_session_content_on_session_copy',
                     'title' => 'Enable the copy of session-specific content to another session',
@@ -3475,6 +3295,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'registration' => [
                 [
+                    'name' => 'allow_double_validation_in_registration',
+                    'title' => 'Double validation for registration process',
+                    'comment' => 'Simply display a confirmation request on the registration page before going forward with the user creation.',
+                ],
+                [
                     'name' => 'allow_fields_inscription',
                     'title' => 'Restrict fields shown during registration',
                     'comment' => "If you only want to show some of the available profile field, your can complete the array here with sub-elements 'fields' and 'extra_fields' containing arrays with a list of the fields to show.",
@@ -3501,6 +3326,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'work' => [
+                [
+                    'name' => 'compilatio_tool',
+                    'title' => 'Compilatio settings',
+                    'comment' => 'Configure the Compilatio connection details here.',
+                ],
+                [
+                    'name' => 'allow_compilatio_tool',
+                    'title' => 'Enable Compilatio',
+                    'comment' => 'Compilatio is an anti-cheating service that compares text between two submissions and reports if there is a high probability the content (usually assignments) is not genuine.',
+                ],
                 [
                     'name' => 'allow_my_student_publication_page',
                     'title' => 'Enable My assignments page',
@@ -3703,6 +3538,155 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'disclose_ai_assistance',
                     'title' => 'Disclose AI assistance',
                     'comment' => 'Show a tag on any content or feedback that has been generated or co-generated by any AI system, evidencing to the user that the content was built with the help of some AI system. Details about which AI system was used in which case are kept inside the database for audit, but are not directly accessible by the final user.',
+                ],
+            ],
+            'privacy' => [
+                [
+                    'name' => 'data_protection_officer_email',
+                    'title' => 'Data protection officer e-mail address',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'data_protection_officer_name',
+                    'title' => 'Data protection officer name',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'data_protection_officer_role',
+                    'title' => 'Data protection officer role',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'hide_user_field_from_list',
+                    'title' => 'Hide fields from users list in course',
+                    'comment' => 'By default, we show all data from users in the users tool in the course. This array allows you to specify which fields you do not want to display. Only affects main fields (not extra fields).',
+                ],
+                [
+                    'name' => 'disable_gdpr',
+                    'title' => 'Disable GDPR features',
+                    'comment' => 'If you already manage your personal data protection declaration to users elsewhere, you can safely disable this feature.',
+                ],
+                [
+                    'name' => 'disable_change_user_visibility_for_public_courses',
+                    'title' => 'Disable making tool users visible in public courses',
+                    'comment' => "Avoid anyone making the 'users' tool visible in a public course.",
+                ],
+            ],
+            'workflows' => [
+                [
+                    'name' => 'plugin_redirection_enabled',
+                    'title' => 'Enable redirection plugin',
+                    'comment' => 'Enable only if you are using the Redirection plugin',
+                ],
+                [
+                    'name' => 'usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe',
+                    'title' => 'Disable user unsubscription from course/session on user unsubscription from group/class',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'usergroup_do_not_unsubscribe_users_from_course_on_course_unsubscribe',
+                    'title' => 'Disable user unsubscription from course on course removal from group/class',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe',
+                    'title' => 'Disable user unsubscription from session on session removal from group/class',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'drh_allow_access_to_all_students',
+                    'title' => 'HRM can access all students from reporting pages',
+                    'comment' => '',
+                ],
+                [
+                    'name' => 'send_all_emails_to',
+                    'title' => 'Send all e-mails to',
+                    'comment' => 'Give a list of e-mail addresses to whom *all* e-mails sent from the platform will be sent. The e-mails are sent to these addresses as a visible destination.',
+                ],
+                [
+                    'name' => 'go_to_course_after_login',
+                    'title' => 'Go directly to the course after login',
+                    'comment' => 'When a user is registered in one course, go directly to the course after login',
+                ],
+                [
+                    'name' => 'allow_users_to_create_courses',
+                    'title' => 'Allow non admin to create courses',
+                    'comment' => 'Allow non administrators (teachers) to create new courses on the server',
+                ],
+                [
+                    'name' => 'allow_user_course_subscription_by_course_admin',
+                    'title' => 'Allow User Course Subscription By Course Admininistrator',
+                    'comment' => 'Activate this option will allow course administrator to subscribe users inside a course',
+                ],
+                [
+                    'name' => 'teacher_can_select_course_template',
+                    'title' => 'Teacher can select a course as template',
+                    'comment' => 'Allow pick a course as template for the new course that teacher is creating',
+                ],
+                [
+                    'name' => 'disabled_edit_session_coaches_course_editing_course',
+                    'title' => 'Disable the ability to edit course coaches',
+                    'comment' => 'When disabled, admins do not have a link to quickly assign coaches to session-courses on the course edition page.',
+                ],
+                [
+                    'name' => 'course_visibility_change_only_admin',
+                    'title' => 'Course visibility changes for admins only',
+                    'comment' => 'Remove the possibility for non-admins to change the course visibility. Visibility can be an issue when there are too many teachers to control directly. Forcing visibilities allows the organization to better manage courses catalogues.',
+                ],
+                [
+                    'name' => 'multiple_url_hide_disabled_settings',
+                    'title' => 'Hide disabled settings in sub-URLs',
+                    'comment' => 'Set to yes to hide settings completely in a sub-URL if the setting is disabled in the main URL (where the access_url_changeable field = 0)',
+                ],
+                [
+                    'name' => 'gamification_mode',
+                    'title' => 'Gamification mode',
+                    'comment' => 'Activate the stars achievement in learning paths',
+                ],
+                [
+                    'name' => 'load_term_conditions_section',
+                    'title' => 'Load term conditions section',
+                    'comment' => 'The legal agreement will appear during the login or when enter to a course.',
+                ],
+                [
+                    'name' => 'update_student_expiration_x_date',
+                    'title' => 'Set expiration date on first login',
+                    'comment' => "Array defining the 'days' and 'months' to set the account expiration date when the user first logs in.",
+                ],
+                [
+                    'name' => 'user_number_of_days_for_default_expiration_date_per_role',
+                    'title' => 'Default expiration days by role',
+                    'comment' => 'An array of role => number which represents the number of days an account has before expiration, depending on the role.',
+                ],
+                [
+                    'name' => 'user_edition_extra_field_to_check',
+                    'title' => 'Set an extra field as trigger for registration as ex-learner',
+                    'comment' => 'Give an extra field label here. If this extra field is updated for any user, a process is triggered to check the access to this user to courses with the same given extra field.',
+                ],
+                [
+                    'name' => 'allow_working_time_edition',
+                    'title' => 'Enable edition of course work time',
+                    'comment' => 'Enable this feature to let teachers manually update the time spent in the course by learners.',
+                ],
+                [
+                    'name' => 'disable_user_conditions_sender_id',
+                    'title' => 'Internal ID of the user used to send disabled account notifications',
+                    'comment' => "Avoid being too personal with users by using a 'bot' account to send e-mails to users when their account is disabled for some reason.",
+                ],
+                [
+                    'name' => 'redirect_index_to_url_for_logged_users',
+                    'title' => 'Redirect index.php to given URL for authenticated users',
+                    'comment' => 'If you do not want to use the index page (announcements, popular courses, etc), you can define here the script (from the document root) where users will be redirected when trying to load the index.',
+                ],
+                [
+                    'name' => 'default_menu_entry_for_course_or_session',
+                    'title' => 'Default menu entry for courses',
+                    'comment' => "Define the default sub-elements of the 'Courses' entry to display if user is not registered to any course nor session.",
+                ],
+                [
+                    'name' => 'session_admin_user_subscription_search_extra_field_to_search',
+                    'title' => 'Extra user field used to search and name sessions',
+                    'comment' => 'This setting defines the extra user field key (e.g., "company") that will be used to search for users and to define the name of the session when registering students from /admin-dashboard/register.',
                 ],
             ],
         ];

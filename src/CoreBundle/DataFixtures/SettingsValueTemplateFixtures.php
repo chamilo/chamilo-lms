@@ -28,6 +28,37 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
     public static function getTemplatesGrouped(): array
     {
         return [
+            'forum' => [
+                [
+                    'variable' => 'community_managers_user_list',
+                    'json_example' => [
+                        'users' => [1],
+                    ],
+                ],
+            ],
+            'tracking' => [
+                [
+                    'variable' => 'my_progress_course_tools_order',
+                    'json_example' => [
+                        'order' => ['quizzes', 'learning_paths', 'skills'],
+                    ],
+                ],
+            ],
+            'display' => [
+                [
+                    'variable' => 'show_tabs_per_role',
+                    'json_example' => [
+                        'SESSIONADMIN' => ['session_admin', 'my_courses'],
+                        'ADMIN' => ['platform_administration'],
+                    ],
+                ],
+                [
+                    'variable' => 'table_row_list',
+                    'json_example' => [
+                        'options' => [50, 100, 200, 500],
+                    ],
+                ],
+            ],
             'catalog' => [
                 [
                     'variable' => 'only_show_course_from_selected_category',
@@ -84,47 +115,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'variable' => 'proxy_settings',
-                    'json_example' => [
-                        'stream_context_create' => [
-                            'http' => [
-                                'proxy' => 'tcp://example.com:8080',
-                                'request_fulluri' => true,
-                            ],
-                        ],
-                        'curl_setopt_array' => [
-                            'CURLOPT_PROXY' => 'http://example.com',
-                            'CURLOPT_PROXYPORT' => '8080',
-                        ],
-                    ],
-                ],
-                [
-                    'variable' => 'video_features',
-                    'json_example' => [
-                        'features' => ['speed'],
-                    ],
-                ],
-                [
-                    'variable' => 'table_row_list',
-                    'json_example' => [
-                        'options' => [50, 100, 200, 500],
-                    ],
-                ],
-                [
-                    'variable' => 'extldap_config',
-                    'json_example' => [
-                        'host' => '',
-                        'port' => '',
-                    ],
-                ],
-                [
-                    'variable' => 'update_student_expiration_x_date',
-                    'json_example' => [
-                        'days' => 0,
-                        'months' => 0,
-                    ],
-                ],
-                [
                     'variable' => 'user_status_show_option',
                     'json_example' => [
                         'COURSEMANAGER' => true,
@@ -133,24 +123,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         'SESSIONADMIN' => false,
                         'STUDENT_BOSS' => false,
                         'INVITEE' => false,
-                    ],
-                ],
-                [
-                    'variable' => 'user_number_of_days_for_default_expiration_date_per_role',
-                    'json_example' => [
-                        'COURSEMANAGER' => 365,
-                        'STUDENT' => 31,
-                        'DRH' => 31,
-                        'SESSIONADMIN' => 60,
-                        'STUDENT_BOSS' => 60,
-                        'INVITEE' => 31,
-                    ],
-                ],
-                [
-                    'variable' => 'show_tabs_per_role',
-                    'json_example' => [
-                        'SESSIONADMIN' => ['session_admin', 'my_courses'],
-                        'ADMIN' => ['platform_administration'],
                     ],
                 ],
             ],
@@ -233,7 +205,25 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
             ],
-            'announcement' => [
+            'work' => [
+                [
+                    'variable' => 'compilatio_tool',
+                    'json_example' => [
+                        'settings' => [
+                            'key' => '',
+                            'soap_url' => '',
+                            'proxy_host' => '',
+                            'proxy_port' => '',
+                            'max_filesize' => '',
+                            'transport_mode' => '',
+                            'wget_uri' => '',
+                            'wget_login' => '',
+                            'wget_password' => '',
+                        ],
+                    ],
+                ],
+            ],
+            'workflows' => [
                 [
                     'variable' => 'send_all_emails_to',
                     'json_example' => [
@@ -241,6 +231,24 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             'admin1@example.com',
                             'admin2@example.com',
                         ],
+                    ],
+                ],
+                [
+                    'variable' => 'update_student_expiration_x_date',
+                    'json_example' => [
+                        'days' => 0,
+                        'months' => 0,
+                    ],
+                ],
+                [
+                    'variable' => 'user_number_of_days_for_default_expiration_date_per_role',
+                    'json_example' => [
+                        'COURSEMANAGER' => 365,
+                        'STUDENT' => 31,
+                        'DRH' => 31,
+                        'SESSIONADMIN' => 60,
+                        'STUDENT_BOSS' => 60,
+                        'INVITEE' => 31,
                     ],
                 ],
             ],
@@ -285,19 +293,9 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
             ],
             'document' => [
                 [
-                    'variable' => 'compilatio_tool',
+                    'variable' => 'video_features',
                     'json_example' => [
-                        'settings' => [
-                            'key' => '',
-                            'soap_url' => '',
-                            'proxy_host' => '',
-                            'proxy_port' => '',
-                            'max_filesize' => '',
-                            'transport_mode' => '',
-                            'wget_uri' => '',
-                            'wget_login' => '',
-                            'wget_password' => '',
-                        ],
+                        'features' => ['speed'],
                     ],
                 ],
                 [
@@ -468,12 +466,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                         ],
                     ],
                 ],
-                [
-                    'variable' => 'my_progress_course_tools_order',
-                    'json_example' => [
-                        'order' => ['quizzes', 'learning_paths', 'skills'],
-                    ],
-                ],
             ],
             'mail' => [
                 [
@@ -586,12 +578,6 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                     ],
                 ],
                 [
-                    'variable' => 'community_managers_user_list',
-                    'json_example' => [
-                        'users' => [1],
-                    ],
-                ],
-                [
                     'variable' => 'allow_social_map_fields',
                     'json_example' => [
                         'fields' => ['terms_villedustage', 'terms_ville'],
@@ -599,6 +585,13 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 ],
             ],
             'registration' => [
+                [
+                    'variable' => 'extldap_config',
+                    'json_example' => [
+                        'host' => '',
+                        'port' => '',
+                    ],
+                ],
                 [
                     'variable' => 'required_extra_fields_in_inscription',
                     'json_example' => [
@@ -658,6 +651,21 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                 ],
             ],
             'security' => [
+                [
+                    'variable' => 'proxy_settings',
+                    'json_example' => [
+                        'stream_context_create' => [
+                            'http' => [
+                                'proxy' => 'tcp://example.com:8080',
+                                'request_fulluri' => true,
+                            ],
+                        ],
+                        'curl_setopt_array' => [
+                            'CURLOPT_PROXY' => 'http://example.com',
+                            'CURLOPT_PROXYPORT' => '8080',
+                        ],
+                    ],
+                ],
                 [
                     'variable' => 'password_requirements',
                     'json_example' => [

@@ -32,8 +32,8 @@ if (empty($courseList) && empty($sessionList)) {
     );
 }
 
-$hideExportLink = api_get_setting('hide_certificate_export_link');
-$hideExportLinkStudent = api_get_setting('hide_certificate_export_link_students');
+$hideExportLink = api_get_setting('certificate.hide_certificate_export_link');
+$hideExportLinkStudent = api_get_setting('certificate.hide_certificate_export_link_students');
 $allowExport = true;
 if ('true' === $hideExportLink ||
     (api_is_student() && 'true' === $hideExportLinkStudent)
@@ -48,7 +48,7 @@ $template->assign('allow_export', $allowExport);
 $templateName = $template->get_template('gradebook/my_certificates.tpl');
 $content = $template->fetch($templateName);
 
-if ('true' === api_get_setting('allow_public_certificates')) {
+if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     $template->assign(
         'actions',
         Display::toolbarButton(

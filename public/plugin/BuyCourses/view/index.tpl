@@ -1,3 +1,4 @@
+{% autoescape false %}
 <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
 {% if is_granted('ROLE_ADMIN') %}
     <div class="row">
@@ -77,3 +78,4 @@
         </div>
     {% endif %}
 </div>
+{% endautoescape %}

@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div id="service" class="service">
     <div class="page-header">
         <h2>{{ service.title }}</h2>
@@ -106,3 +107,4 @@
         </div>
     </div>
 </div>
+{% endautoescape %}

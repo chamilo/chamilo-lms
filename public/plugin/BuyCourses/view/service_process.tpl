@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="actions">
     <a href="{{ url('index') }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
@@ -94,3 +95,4 @@
         $("label[for=submit]").remove();
     });
 </script>
+{% endautoescape %}

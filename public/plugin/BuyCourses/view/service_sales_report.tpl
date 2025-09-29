@@ -1,3 +1,4 @@
+{% autoescape false %}
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <script type="text/javascript" src="../resources/js/modals.js"></script>
 
@@ -114,3 +115,4 @@
         });
     });
 </script>
+{% endautoescape %}

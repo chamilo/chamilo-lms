@@ -1,1 +1,4 @@
+{% autoescape false %}
 {{ form }}
+{% endautoescape %}
+

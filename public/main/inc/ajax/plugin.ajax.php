@@ -193,6 +193,9 @@ try {
         case 'install':
             $appPlugin->install($pluginTitle);
 
+            // BBB persists the plugin entity in its installation process. It throws a duplicate key exception.
+            $pluginEntity = $pluginRepository->findOneBy(['title' => $pluginTitle]);
+
             if (!$pluginEntity) {
                 $pluginEntity = new PluginEntity();
             }

@@ -2868,9 +2868,9 @@ class BuyCoursesPlugin extends Plugin
                             AccessUrlRelSession::class,
                             'us',
                             Join::WITH,
-                            'us.sessionId = sc.session'
+                            'us.session = sc.session'
                         )->where(
-                            $qb->expr()->eq('us.accessUrlId ', $urlId)
+                            $qb->expr()->eq('us.url ', $urlId)
                         )
                         ->getDQL()
                 )
@@ -2887,8 +2887,8 @@ class BuyCoursesPlugin extends Plugin
                         ->getDQL()
                 )
             )
-        ->setFirstResult($first)
-        ->setMaxResults($maxResults);
+            ->setFirstResult($first)
+            ->setMaxResults($maxResults);
 
         return $qb;
     }

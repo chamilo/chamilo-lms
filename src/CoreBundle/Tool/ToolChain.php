@@ -164,6 +164,7 @@ class ToolChain
             'tracking',
             'course_setting',
             'course_maintenance',
+            'portfolio',
         ];
         $toolList = array_flip($toolList);
 

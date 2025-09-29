@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
@@ -38,8 +38,8 @@ class PortfolioCategory implements Stringable
     #[ORM\Column(name: 'is_visible', type: 'boolean', options: ['default' => true])]
     protected bool $isVisible = true;
 
-    #[ORM\OneToMany(targetEntity: Portfolio::class, mappedBy: 'category')]
-    protected ArrayCollection $items;
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Portfolio::class)]
+    protected Collection $items;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]

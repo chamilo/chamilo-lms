@@ -54,6 +54,8 @@ enum ToolIcon: string
     case MEMBER = 'account';
     // Notebook
     case NOTEBOOK = 'note';
+    // Portfolio
+    case PORTFOLIO = 'message-draw';
     // Settings
     case SETTINGS = 'cog';
     // Shortcut

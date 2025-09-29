@@ -633,18 +633,23 @@ abstract class AbstractLink implements GradebookItem
      */
     public static function getCurrentUserRanking($userId, $studentList)
     {
+        $previousScore = null;
         $ranking = null;
+        $position = null;
         $currentUserId = $userId;
         if (!empty($studentList) && !empty($currentUserId)) {
             $studentList = array_map('floatval', $studentList);
-            asort($studentList);
-            $ranking = $count = count($studentList);
-
-            foreach ($studentList as $userId => $position) {
+            arsort($studentList);
+            $count = count($studentList);
+            foreach ($studentList as $userId => $score) {
+                $position++;
+                if ($previousScore === null || $score < $previousScore) {
+                    $ranking = $position;
+                }
+                $previousScore = $score;
                 if ($currentUserId == $userId) {
                     break;
                 }
-                $ranking--;
             }
 
             // If no ranking was detected.

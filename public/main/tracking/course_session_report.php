@@ -74,7 +74,13 @@ if (!$export_to_xls) {
     echo '</div>';
 
     if (api_is_platform_admin()) {
-        echo MySpace::getAdminActions();
+        $actions = MySpace::generateAdminActionLinks();
+
+        echo '<ul class="list-disc m-y-2">';
+        foreach ($actions as $action) {
+            echo '<li><a href="'.$action['url'].'">'.$action['content'].'</a></li>'.PHP_EOL;
+        }
+        echo '</ul>';
     }
 
     echo '<h2>'.get_lang('Results of learning paths exercises by session').'</h2>';

@@ -37,7 +37,7 @@ $obj->setupBreadcrumb($interbreadcrumb, $action);
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_fields&type='.$extraFieldType;
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+//The order is important you need to check the $column variable in the model.ajax.php file
 $columns = $obj->getJqgridColumnNames();
 
 //Column config

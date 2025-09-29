@@ -165,6 +165,10 @@ function extractTermsFromLine(string $line, bool $isVue): array
         // trans("term"), ->trans("term"), .trans("term")
         preg_match_all('/(?:->|\.)?trans\s*\(\s*(["\'])(.*?)(?<!\\\\)\1\s*\)/x', $line, $matches);
         addUnescapedTerms($matches, $terms);
+
+        // 'display_text' => 'term',
+        preg_match_all('/.*\'display_text\'\s\=\>\s(\')(.*?)\'/x', $line, $matches);
+        addUnescapedTerms($matches, $terms);
     }
 
     return $terms;
@@ -193,6 +197,11 @@ function addUnescapedTerms(array $matches, array &$terms): void
             $term = unescape_double($term);
         } else {
             $term = unescape_single($term);
+        }
+        $first = substr($term, 0, 1);
+        $last = substr($term, -1);
+        if (($first === '"' && $last === '"') || ($first === "'" && $last === "'")) {
+            $term = substr($term, 1, strlen($term) - 2);
         }
         $terms[] = $term;
     }

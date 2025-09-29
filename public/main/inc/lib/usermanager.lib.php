@@ -346,7 +346,7 @@ class UserManager
             'false'
         );
 
-        if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('admin.plugin_redirection_enabled'))) {
+        if (!empty($redirectToURLAfterLogin) && ('true' === api_get_setting('workflows.plugin_redirection_enabled'))) {
             RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
         }
 
@@ -2703,7 +2703,7 @@ class UserManager
         $order = 'ORDER BY sc.title, s.title';
 
         // Order by date if showing all sessions
-        $showAllSessions = ('true' === api_get_setting('course.show_all_sessions_on_my_course_page'));
+        $showAllSessions = ('true' === api_get_setting('session.show_all_sessions_on_my_course_page'));
         if ($showAllSessions) {
             $order = 'ORDER BY s.accessStartDate';
         }
@@ -5431,7 +5431,7 @@ SQL;
      */
     public static function getUserSubscriptionTab($optionSelected = 1)
     {
-        $allowAdmin = api_get_setting('allow_user_course_subscription_by_course_admin');
+        $allowAdmin = api_get_setting('workflows.allow_user_course_subscription_by_course_admin');
         if (('true' === $allowAdmin && api_is_allowed_to_edit()) ||
             api_is_platform_admin()
         ) {
@@ -6155,7 +6155,7 @@ SQL;
      */
     public static function addUserCareer($userId, $careerId)
     {
-        if ('true' !== api_get_setting('profile.allow_career_users')) {
+        if ('true' !== api_get_setting('session.allow_career_users')) {
             return false;
         }
 
@@ -6176,7 +6176,7 @@ SQL;
      */
     public static function updateUserCareer($userCareerId, $data)
     {
-        if ('true' !== api_get_setting('profile.allow_career_users')) {
+        if ('true' !== api_get_setting('session.allow_career_users')) {
             return false;
         }
 
@@ -6403,7 +6403,7 @@ SQL;
 
     public static function redirectToResetPassword($userId): void
     {
-        if ('true' !== api_get_setting('platform.force_renew_password_at_first_login')) {
+        if ('true' !== api_get_setting('security.force_renew_password_at_first_login')) {
             return;
         }
         $askPassword = self::get_extra_user_data_by_field(

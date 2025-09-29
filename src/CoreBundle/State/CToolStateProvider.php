@@ -68,7 +68,7 @@ final class CToolStateProvider implements ProviderInterface
                 || $user->hasRole('ROLE_CURRENT_COURSE_SESSION_TEACHER')
         );
 
-        $allowVisibilityInSession = $this->settingsManager->getSetting('course.allow_edit_tool_visibility_in_session');
+        $allowVisibilityInSession = $this->settingsManager->getSetting('session.allow_edit_tool_visibility_in_session');
         $session = $this->getSession();
         $course = $this->getCourse();
 

@@ -20,7 +20,7 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin')) {
+if ('false' === api_get_setting('workflows.allow_user_course_subscription_by_course_admin')) {
     if (!api_is_platform_admin()) {
         api_not_allowed(true);
     }
@@ -193,7 +193,7 @@ if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_
         Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Clear filter results')).' '.get_lang('Clear filter results').'</a>';
 }
 $extraForm = '';
-if ('true' === api_get_setting('profiling_filter_adding_users')) {
+if ('true' === api_get_setting('course.profiling_filter_adding_users')) {
     $extraForm = display_extra_profile_fields_filter();
 }
 
@@ -354,7 +354,7 @@ function get_number_of_users()
             // we change the SQL when we have a filter
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                'true' === api_get_setting('profiling_filter_adding_users')
+                'true' === api_get_setting('course.profiling_filter_adding_users')
             ) {
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
@@ -402,7 +402,7 @@ function get_number_of_users()
         )";
 
         // we also want to search for users who have something in their profile fields that matches the keyword
-        if ('true' === api_get_setting('profiling_filter_adding_users')) {
+        if ('true' === api_get_setting('course.profiling_filter_adding_users')) {
             $additional_users = search_additional_profile_fields($keyword);
         }
 
@@ -501,7 +501,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                'true' === api_get_setting('profiling_filter_adding_users')
+                'true' === api_get_setting('course.profiling_filter_adding_users')
             ) {
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
@@ -529,7 +529,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
                 !empty($_GET['subscribe_user_filter_value']) &&
-                'true' === api_get_setting('profiling_filter_adding_users')
+                'true' === api_get_setting('course.profiling_filter_adding_users')
             ) {
                 $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                 $sql .= "
@@ -557,7 +557,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
                         !empty($_GET['subscribe_user_filter_value']) &&
-                        'true' === api_get_setting('profiling_filter_adding_users')
+                        'true' === api_get_setting('course.profiling_filter_adding_users')
                     ) {
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
@@ -652,7 +652,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     // applying the filter of the additional user profile fields
                     if (isset($_GET['subscribe_user_filter_value']) &&
                         !empty($_GET['subscribe_user_filter_value']) &&
-                        'true' === api_get_setting('profiling_filter_adding_users')
+                        'true' === api_get_setting('course.profiling_filter_adding_users')
                     ) {
                         $field_identification = explode('*', $_GET['subscribe_user_filter_value']);
                         $sql .= "
@@ -688,7 +688,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     )
                 ";
 
-        if ('true' === api_get_setting('profiling_filter_adding_users')) {
+        if ('true' === api_get_setting('course.profiling_filter_adding_users')) {
             // we also want to search for users who have something in
             // their profile fields that matches the keyword
             $additional_users = search_additional_profile_fields($keyword);

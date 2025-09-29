@@ -595,7 +595,7 @@ if ('true' === api_get_setting('allow_course_theme')) {
     $globalGroup[get_lang("Enable course themes")] = $group;
 }
 
-$allowLPReturnLink = api_get_setting('allow_lp_return_link');
+$allowLPReturnLink = api_get_setting('lp.allow_lp_return_link');
 if ('true' === $allowLPReturnLink) {
     $group = [
         $form->createElement(
@@ -727,7 +727,7 @@ $form->addPanelOption(
     false
 );
 
-if ('true' === api_get_setting('allow_public_certificates')) {
+if ('true' === api_get_setting('certificate.allow_public_certificates')) {
     $group = [];
     $group[] = $form->createElement(
         'radio',

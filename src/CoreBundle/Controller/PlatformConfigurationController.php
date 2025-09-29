@@ -105,9 +105,9 @@ class PlatformConfigurationController extends AbstractController
                 'platform.timezone',
                 'platform.registered',
                 'platform.donotlistcampus',
-                'platform.load_term_conditions_section',
+                'workflows.load_term_conditions_section',
                 'platform.cookie_warning',
-                'platform.show_tabs',
+                'display.show_tabs',
                 'catalog.show_courses_sessions',
                 'admin.administrator_name',
                 'admin.administrator_surname',
@@ -124,11 +124,11 @@ class PlatformConfigurationController extends AbstractController
                 'gradebook.gradebook_dependency',
                 'course.course_validation',
                 'course.student_view_enabled',
-                'course.allow_edit_tool_visibility_in_session',
+                'session.allow_edit_tool_visibility_in_session',
                 'session.limit_session_admin_role',
                 'session.allow_session_admin_read_careers',
                 'session.limit_session_admin_list_users',
-                'platform.redirect_index_to_url_for_logged_users',
+                'workflows.redirect_index_to_url_for_logged_users',
                 'language.platform_language',
                 'language.language_priority_1',
                 'language.language_priority_2',
@@ -143,38 +143,38 @@ class PlatformConfigurationController extends AbstractController
                 'attendance.multilevel_grading',
                 'attendance.enable_sign_attendance_sheet',
                 'exercise.allow_exercise_auto_launch',
-                'course.access_url_specific_files',
+                'document.access_url_specific_files',
                 'catalog.show_courses_descriptions_in_catalog',
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
                 'profile.use_users_timezone',
                 'registration.redirect_after_login',
-                'platform.show_tabs_per_role',
-                'platform.session_admin_user_subscription_search_extra_field_to_search',
+                'display.show_tabs_per_role',
+                'workflows.session_admin_user_subscription_search_extra_field_to_search',
                 'platform.push_notification_settings',
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
                 'message.allow_message_tool',
-                'course.hide_scorm_export_link',
+                'lp.hide_scorm_export_link',
                 'ai_helpers.enable_ai_helpers',
-                'course.hide_scorm_pdf_link',
-                'platform.table_default_row',
-                'platform.table_row_list',
+                'lp.hide_scorm_pdf_link',
+                'display.table_default_row',
+                'display.table_row_list',
                 'social.allow_social_tool',
                 'chat.allow_global_chat',
             ];
 
             $user = $this->userHelper->getCurrent();
 
-            $configuration['settings']['display.show_link_ticket_notification'] = 'false';
+            $configuration['settings']['ticket.show_link_ticket_notification'] = 'false';
 
             if (!empty($user)) {
                 $userIsAllowedInProject = $this->ticketProjectHelper->userIsAllowInProject(1);
 
                 if ($userIsAllowedInProject
-                    && 'true' === $settingsManager->getSetting('display.show_link_ticket_notification')
+                    && 'true' === $settingsManager->getSetting('ticket.show_link_ticket_notification')
                 ) {
-                    $configuration['settings']['display.show_link_ticket_notification'] = 'true';
+                    $configuration['settings']['ticket.show_link_ticket_notification'] = 'true';
                 }
             }
 

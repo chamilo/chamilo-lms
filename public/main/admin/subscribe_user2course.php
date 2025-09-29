@@ -199,7 +199,7 @@ if ($use_extra_fields) {
 $target_name = 'lastname';
 $orderBy = $target_name;
 $showOfficialCode = false;
-$orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+$orderListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
 if ('true' === $orderListByOfficialCode) {
     $showOfficialCode = true;
     $orderBy = " official_code, lastname, firstname";

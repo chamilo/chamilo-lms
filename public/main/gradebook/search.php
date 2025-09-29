@@ -10,7 +10,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-if ('true' != api_get_setting('allow_public_certificates')) {
+if ('true' != api_get_setting('certificate.allow_public_certificates')) {
     api_not_allowed(
         true,
         Display::return_message(get_lang('Certificates are not publicly available'), 'warning')

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class WebServiceSettingsSchema extends AbstractSettingsSchema
@@ -21,6 +22,9 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
                     'messaging_gdc_project_number' => '',
                     'messaging_gdc_api_key' => '',
                     'allow_download_documents_by_api_key' => 'false',
+                    'disable_webservices' => 'false',
+                    'webservice_enable_adminonly_api' => 'false',
+                    'webservice_return_user_field' => 'oauth2_id',
                 ]
             )
         ;
@@ -35,6 +39,9 @@ class WebServiceSettingsSchema extends AbstractSettingsSchema
             ->add('messaging_gdc_project_number')
             ->add('messaging_gdc_api_key')
             ->add('allow_download_documents_by_api_key', YesNoType::class)
+            ->add('disable_webservices', YesNoType::class)
+            ->add('webservice_enable_adminonly_api', YesNoType::class)
+            ->add('webservice_return_user_field', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

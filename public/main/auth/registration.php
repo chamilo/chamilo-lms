@@ -186,7 +186,7 @@ $termRegistered = Session::read('term_and_condition');
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $userAlreadyRegisteredShowTerms = isset($termRegistered['user_id']);
     // Ofaj change
-    if (true === api_is_anonymous() &&  'course' === api_get_setting('load_term_conditions_section')) {
+    if (true === api_is_anonymous() &&  'course' === api_get_setting('workflows.load_term_conditions_section')) {
         $userAlreadyRegisteredShowTerms = false;
     }
 }
@@ -663,7 +663,7 @@ if ($blockButton) {
         false
     );
 } else {
-    $allow = ('true' === api_get_setting('platform.allow_double_validation_in_registration'));
+    $allow = ('true' === api_get_setting('registration.allow_double_validation_in_registration'));
     ChamiloHelper::addLegalTermsFields($form, $userAlreadyRegisteredShowTerms);
     if ($allow && !$termActivated) {
         $htmlHeadXtra[] = '<script>
@@ -1022,7 +1022,7 @@ if ($form->validate()) {
     ];
 
     if ('true' === api_get_setting('allow_terms_conditions') && $userAlreadyRegisteredShowTerms) {
-        if ('login' === api_get_setting('load_term_conditions_section')) {
+        if ('login' === api_get_setting('workflows.load_term_conditions_section')) {
             header('Location: /home');
             exit;
             //$formData['action'] = api_get_path(WEB_PATH).'user_portal.php';

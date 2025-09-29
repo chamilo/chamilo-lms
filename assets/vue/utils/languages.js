@@ -401,7 +401,6 @@ export default [
     english_name: "spanish",
     isocode: "es",
     available: 1,
-
     format: "title last_name first_name",
     sort_by: "last_name",
   },

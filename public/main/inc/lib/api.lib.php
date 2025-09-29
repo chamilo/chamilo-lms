@@ -2924,7 +2924,7 @@ function api_is_allowed_to_create_course()
 
     // Teachers can only create courses
     if (api_is_teacher()) {
-        if ('true' === api_get_setting('allow_users_to_create_courses')) {
+        if ('true' === api_get_setting('workflows.allow_users_to_create_courses')) {
             return true;
         } else {
             return false;
@@ -6196,7 +6196,6 @@ function api_get_locked_settings()
         'upload_extensions_whitelist',
         'upload_extensions_skip',
         'upload_extensions_replace_by',
-        'hide_dltt_markup',
         'split_users_upload_directory',
         'permissions_for_new_directories',
         'permissions_for_new_files',
@@ -7652,7 +7651,7 @@ function api_get_language_translate_html(): string
 
 function api_protect_webservices()
 {
-    if (api_get_configuration_value('disable_webservices')) {
+    if ('true' === api_get_setting('webservice.disable_webservices')) {
         echo "Webservices are disabled. \n";
         echo "To enable, add \$_configuration['disable_webservices'] = true; in configuration.php";
         exit;

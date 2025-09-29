@@ -5,7 +5,7 @@
     </div>
     <div class="app-topbar__items">
       <BaseAppLink
-        v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('display.show_link_ticket_notification')"
+        v-if="!isAnonymous && 'false' !== platformConfigStore.getSetting('ticket.show_link_ticket_notification')"
         :url="ticketUrl"
         class="item-button"
       >
@@ -121,7 +121,7 @@ const userSubmenuItems = computed(() => {
     },
   ]
 
-  const tabs = platformConfigStore.getSetting("platform.show_tabs") || ""
+  const tabs = platformConfigStore.getSetting("display.show_tabs") || ""
   if (tabs.indexOf("topbar_certificate") > -1) {
     items[0].items.push({
       label: t("My General Certificate"),

@@ -102,7 +102,7 @@ function search_users($needle, $type)
         $order_clause = ' ORDER BY lastname, firstname, username';
         $showOfficialCode = false;
 
-        $orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+        $orderListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
         if ('true' === $orderListByOfficialCode) {
             $showOfficialCode = true;
             $order_clause = ' ORDER BY official_code, lastname, firstname, username';
@@ -382,7 +382,7 @@ $ajax_search = 'unique' == $add_type ? true : false;
 $order_clause = ' ORDER BY lastname, firstname, username';
 
 $showOfficialCode = false;
-$orderListByOfficialCode = api_get_setting('order_user_list_by_official_code');
+$orderListByOfficialCode = api_get_setting('display.order_user_list_by_official_code');
 if ('true' === $orderListByOfficialCode) {
     $showOfficialCode = true;
     $order_clause = ' ORDER BY official_code, lastname, firstname, username';

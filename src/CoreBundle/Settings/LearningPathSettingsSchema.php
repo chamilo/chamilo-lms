@@ -22,7 +22,6 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             'add_all_files_in_lp_export' => 'false',
             'show_prerequisite_as_blocked' => 'false',
             'hide_lp_time' => 'false',
-            'lp_category_accordion' => 'false',
             'lp_view_accordion' => 'false',
             'disable_js_in_lp_view' => 'false',
             'allow_teachers_to_access_blocked_lp_by_prerequisite' => 'false',
@@ -62,9 +61,13 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             'student_follow_page_add_lp_acquisition_info' => 'false',
             'student_follow_page_add_lp_invisible_checkbox' => 'false',
             'student_follow_page_include_not_subscribed_lp_students' => 'false',
-            'my_progress_course_tools_order' => '',
             'lp_enable_flow' => 'false',
             'lp_item_prerequisite_dates' => 'false',
+            'allow_lp_return_link' => 'true',
+            'hide_scorm_export_link' => 'false',
+            'hide_scorm_copy_link' => 'false',
+            'hide_scorm_pdf_link' => 'true',
+            'lp_show_reduced_report' => 'false',
         ]);
 
         $allowedTypes = [];
@@ -79,7 +82,6 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('add_all_files_in_lp_export', YesNoType::class)
             ->add('show_prerequisite_as_blocked', YesNoType::class)
             ->add('hide_lp_time', YesNoType::class)
-            ->add('lp_category_accordion', YesNoType::class)
             ->add('lp_view_accordion', YesNoType::class)
             ->add('disable_js_in_lp_view', YesNoType::class)
             ->add('allow_teachers_to_access_blocked_lp_by_prerequisite', YesNoType::class)
@@ -124,9 +126,13 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
             ->add('student_follow_page_add_lp_acquisition_info', YesNoType::class)
             ->add('student_follow_page_add_lp_invisible_checkbox', YesNoType::class)
             ->add('student_follow_page_include_not_subscribed_lp_students', YesNoType::class)
-            ->add('my_progress_course_tools_order', TextareaType::class)
             ->add('lp_enable_flow', YesNoType::class)
             ->add('lp_item_prerequisite_dates', YesNoType::class)
+            ->add('allow_lp_return_link', YesNoType::class)
+            ->add('hide_scorm_export_link', YesNoType::class)
+            ->add('hide_scorm_copy_link', YesNoType::class)
+            ->add('hide_scorm_pdf_link', YesNoType::class)
+            ->add('lp_show_reduced_report', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

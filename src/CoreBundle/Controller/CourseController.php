@@ -99,7 +99,7 @@ class CourseController extends ToolBaseController
 
         if ($user->isStudent()
             && 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
-            && 'course' === $settingsManager->getSetting('platform.load_term_conditions_section', true)
+            && 'course' === $settingsManager->getSetting('workflows.load_term_conditions_section', true)
         ) {
             $termAndConditionStatus = false;
             $extraValue = $extraFieldValuesRepository->findLegalAcceptByItemId($user->getId());
@@ -758,7 +758,7 @@ class CourseController extends ToolBaseController
         $isEnrolledInSessions = $this->isUserEnrolledInAnySession($user, $em);
 
         if (!$isEnrolledInCourses && !$isEnrolledInSessions) {
-            $defaultMenuEntry = $settingsManager->getSetting('platform.default_menu_entry_for_course_or_session');
+            $defaultMenuEntry = $settingsManager->getSetting('workflows.default_menu_entry_for_course_or_session');
             $isEnrolledInCourses = 'my_courses' === $defaultMenuEntry;
             $isEnrolledInSessions = 'my_sessions' === $defaultMenuEntry;
         }

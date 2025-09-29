@@ -51,8 +51,12 @@ $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
+$tpl->assign('courses', []);
+$tpl->assign('sessions', []);
 $tpl->assign('services', $services);
 $tpl->assign('service_pagination', $pagination);
+$tpl->assign('course_pagination', '');
+$tpl->assign('session_pagination', '');
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

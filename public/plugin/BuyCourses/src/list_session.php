@@ -48,7 +48,7 @@ $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
 
 $query = CoursesAndSessionsCatalog::browseSessions(null, ['start' => $first, 'length' => $pageSize], true);
-$sessions = new Paginator($query, $fetchJoinCollection = true);
+$sessions = new Paginator($query, true);
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
     $session->buyCourseData = [];
@@ -63,8 +63,12 @@ $pagesCount = ceil($totalItems / $pageSize);
 $url = api_get_self().'?type='.BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 $pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
+$tpl->assign('courses', []);
+$tpl->assign('services', []);
 $tpl->assign('sessions', $sessions);
 $tpl->assign('session_pagination', $pagination);
+$tpl->assign('course_pagination', '');
+$tpl->assign('service_pagination', '');
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

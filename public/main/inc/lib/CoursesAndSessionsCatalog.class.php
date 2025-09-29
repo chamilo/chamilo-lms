@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionResubscriptionEvent;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -727,11 +728,13 @@ class CoursesAndSessionsCatalog
      * @param array  $limit
      * @param bool   $returnQueryBuilder
      * @param bool   $getCount
-     *
-     * @return array|\Doctrine\ORM\Query The session list
      */
-    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
-    {
+    public static function browseSessions(
+        $date = null,
+        $limit = [],
+        $returnQueryBuilder = false,
+        $getCount = false
+    ): Query|array|int {
         $urlId = api_get_current_access_url_id();
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
@@ -748,9 +751,9 @@ class CoursesAndSessionsCatalog
                         ->from(AccessUrlRelSession::class, 'url')
                         ->join(Session::class, 's2')
                         ->where(
-                            $qb->expr()->eq('url.sessionId ', 's2.id')
+                            $qb->expr()->eq('url.session ', 's2.id')
                         )->andWhere(
-                            $qb->expr()->eq('url.accessUrlId ', $urlId))
+                            $qb->expr()->eq('url.url ', $urlId))
                         ->getDQL()
                 )
             )

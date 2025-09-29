@@ -13,7 +13,7 @@
     <div class="search">
         <div class="row">
             <div class="col-md-6">
-                <form method="post" action="{{ _p.web_self }}?action=display_sessions">
+                <form method="post" action="{{ app.request.requestUri }}?action=display_sessions">
                     <div class="form-group">
                         <label>{{ 'By date'|get_lang }}</label>
                         <div class="input-group">
@@ -29,7 +29,7 @@
                 </form>
             </div>
             <div class="col-md-6">
-                <form method="post" action="{{ _p.web_self }}?action=search_tag">
+                <form method="post" action="{{ app.request.requestUri }}?action=search_tag">
                     <label>{{ 'By tag'|get_lang }}</label>
                     <div class="input-group">
                         <input type="text" name="search_tag" title="{{ 'By tag'|get_lang }}" class="form-control"

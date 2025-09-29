@@ -13,7 +13,7 @@
             {% endset %}
 
             {% set title %}
-                <a href="{{ _p.web_self ~ '?' ~ {'category':category.code}|url_encode }}">
+                <a href="{{ app.request.requestUri ~ '?' ~ {'category':category.code}|url_encode }}">
                 <h5 class="title">
                     {{ category.title }}
                 </h5>

@@ -59,7 +59,7 @@
                     <td class="text-center">
                     {% if sale.invoice == 1 %}
                         <a href="{{ url('index') ~ 'plugin/BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 0}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
-                            <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                            <img src="{{ url('index') }}main/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
                             <br/>{{ sale.num_invoice }}
                         </a>
                     {% endif %}
@@ -68,11 +68,11 @@
                 <td class="text-center">
                     {% if sale.status == sale_status_pending %}
                         <div class="btn-group btn-group-xs" role="group" aria-label="...">
-                            <a title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
+                            <a title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ app.request.requestUri ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
                                class="btn btn--plain">
                                 <img src="{{ 'user_subscribe_session.png' | icon(22) }}" width="22" height="22 alt="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}">
                             </a>
-                            <a title="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}"
+                            <a title="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ app.request.requestUri ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}"
                                class="btn btn--plain">
                                 <img src="{{ 'delete.png' | icon(22) }}" width="22" height="22 alt="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}">
                             </a>

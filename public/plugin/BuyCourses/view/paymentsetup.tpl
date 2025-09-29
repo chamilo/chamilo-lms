@@ -15,7 +15,7 @@
 
 <p class="alert alert-info">
     {{ 'PluginInstruction'|get_plugin_lang('BuyCoursesPlugin') }}
-    <a href="{{ _p.web_main }}admin/configure_plugin.php?plugin=BuyCourses">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+    <a href="{{ url('index') }}main/admin/configure_plugin.php?plugin=BuyCourses">{{ 'ClickHere'|get_plugin_lang('BuyCoursesPlugin') }}</a>
 </p>
 
 {% if paypal_enable == "true" %}
@@ -87,7 +87,7 @@
                                     <td>{{ account.account }}</td>
                                     <td>{{ account.swift }}</td>
                                     <td>
-                                        <a href="{{ _p.web_self ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}"
+                                        <a href="{{ app.request.requestUri ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}"
                                            class="btn btn--danger btn-sm">
                                             <em class="fa fa-remove"></em> {{ 'Delete'|get_lang }}
                                         </a>

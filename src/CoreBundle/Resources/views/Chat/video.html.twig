@@ -6,7 +6,7 @@
         <h4>{{ 'Warning'|get_lang }}</h4>
         <div id="dlg-webrtc-help">
             <p>{{ 'WebRTCDialogHelp'|get_lang }}</p>
-            <img src="{{ _p.web_lib ~ 'javascript/chat/img/webrtc_' ~ (navigator_is_firefox ? 'firefox' : 'chrome') }}.png"
+            <img src="{{ url('index') ~ 'main/inc/lib/javascript/chat/img/webrtc_' ~ (navigator_is_firefox ? 'firefox' : 'chrome') }}.png"
                  alt="{{ 'Permissions'|get_lang }}" class="img-thumbnail img-fluid">
         </div>
     </div>

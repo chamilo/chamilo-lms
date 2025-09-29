@@ -59,7 +59,7 @@
                                 <img src="{{ 'bullet_grey.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}"
                                      title="{{ 'CourseVisibilityHidden'|get_lang }}">
                             {% endif %}
-                            <a href="{{ _p.web_course ~ item.path ~ item.code~ '/index.php' }}">
+                            <a href="{{ url('chamilo_core_course_home', { cid: item.id } ) }}">
                                 {{ item.title }}
                             </a>
                             <span class="label label-info">{{ item.code }}</span>
@@ -117,7 +117,7 @@
                     {% for item in sessions %}
                         <tr data-item="{{ item.id }}" data-type="session">
                             <td>
-                                <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.id}|url_encode() }}">{{ item.title }}</a>
+                                <a href="{{ url('index') ~ 'main/session/index.php?' ~ {'session_id': item.id}|url_encode() }}">{{ item.title }}</a>
                             </td>
                             <td class="text-center">
                                 {{ item.displayStartDate | api_convert_and_format_date(6)}}

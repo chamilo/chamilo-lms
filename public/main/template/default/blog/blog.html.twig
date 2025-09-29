@@ -22,7 +22,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="title-post">
-                                    <a href="{{ _p.web_self ~ '?' ~ _p.web_cid_query ~ '&' ~ {'action':'view_post', 'blog_id':item.id_blog, 'post_id':item.id_post}|url_encode }}#add_comment"
+                                    <a href="{{ app.request.requestUri ~ '?' ~ _p.web_cid_query ~ '&' ~ {'action':'view_post', 'blog_id':item.id_blog, 'post_id':item.id_post}|url_encode }}#add_comment"
                                        title="{{ item.title }}">{{ item.title }}</a>
                                 </h3>
                                 <div class="info-post">

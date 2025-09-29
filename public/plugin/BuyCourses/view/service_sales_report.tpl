@@ -54,7 +54,7 @@
                             <td class="text-center">
                             {% if sale.invoice == 1 %}
                                 <a href="{{ url('index') ~ 'plugin/BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 1}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
-                                    <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                                    <img src="{{ url('index') }}main/img/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
                                     <br>{{ sale.num_invoice }}
                                 </a>
                             {% endif %}

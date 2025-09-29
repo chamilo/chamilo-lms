@@ -30,7 +30,7 @@
             </td>
 {#            <td>#}
 {#                {% if is_granted('ROLE_ADMIN')) %}#}
-{#                    <a href="{{ _p.web_main }}admin/user_information.php?user_id={{ activity.user.id }}" >#}
+{#                    <a href="{{ url('index') }}main/admin/user_information.php?user_id={{ activity.user.id }}" >#}
 {#                        {{ activity.user.firstname }} {{ activity.user.lastname }} ({{ activity.user.username }})#}
 {#                    </a>#}
 {#                {% else %}#}

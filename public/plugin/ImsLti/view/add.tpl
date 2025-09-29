@@ -48,7 +48,7 @@
                                             {{ 'settings.png'|img(22, 'Configure'|get_lang) }}
                                         </a>
                                     {% else %}
-                                        <a href="{{ _p.web_self }}?type={{ tool.id }}&{{ _p.web_cid_query }}">
+                                        <a href="{{ app.request.requestUri }}?type={{ tool.id }}&{{ _p.web_cid_query }}">
                                             {{ 'add.png'|img(22, 'Add'|get_lang) }}
                                         </a>
                                     {% endif %}

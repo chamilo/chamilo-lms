@@ -9,7 +9,7 @@
     <nav aria-label="...">
         <ul class="pager">
             <li class="previous">
-                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year - 1, "user": user_id }|url_encode }}">
+                <a href="{{ app.request.requestUri ~ '?' ~ {"year": search_year - 1, "user": user_id }|url_encode }}">
                     <span aria-hidden="true">&larr;</span> {{ search_year - 1 }}
                 </a>
             </li>
@@ -17,7 +17,7 @@
                 {{ search_year }}
             </li>
             <li class="next">
-                <a href="{{ _p.web_self ~ '?' ~ {"year": search_year + 1, "user": user_id }|url_encode }}">
+                <a href="{{ app.request.requestUri ~ '?' ~ {"year": search_year + 1, "user": user_id }|url_encode }}">
                     {{ search_year + 1 }} <span aria-hidden="true">&rarr;</span>
                 </a>
             </li>

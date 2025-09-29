@@ -76,6 +76,8 @@ By default, it is installed in "dev" mode to have more debugging features at han
 mode, you will have to install yarn (see below), run `yarn encore prod` and modify the `.env` file at the root of
 your chamilo folder to change `APP_ENV` to `'prod'` instead of the default `'dev'`. See other installation methods below.
 
+Note: PHP's LDAP extension is only required if you need to connect to LDAP or a compatible system, or if you want to install Chamilo from sources (see below).
+
 #### Installing from sources
 
 ##### Quick step-by-step

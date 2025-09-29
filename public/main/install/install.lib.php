@@ -561,15 +561,6 @@ function display_requirements(
         ),
     ];
     $extensions[] = [
-        'title' => sprintf(get_lang('%s support'), 'LDAP'),
-        'url' => 'https://php.net/manual/en/book.ldap.php',
-        'status' => checkExtension(
-            'ldap',
-            get_lang('Yes'),
-            sprintf(get_lang('%s extension not available'), 'LDAP')
-        ),
-    ];
-    $extensions[] = [
         'title' => sprintf(get_lang('%s support'), 'Multibyte string'),
         'url' => 'https://php.net/manual/en/book.mbstring.php',
         'status' => checkExtension(
@@ -621,6 +612,17 @@ function display_requirements(
             true
         ),
     ];
+    $extensions[] = [
+        'title' => sprintf(get_lang('%s support'), 'LDAP'),
+        'url' => 'https://php.net/manual/en/book.ldap.php',
+        'status' => checkExtension(
+            'ldap',
+            get_lang('Yes'),
+            sprintf(get_lang('%s extension not available'), 'LDAP'),
+            true
+        ),
+    ];
+
     $extensions[] = [
         'title' => sprintf(get_lang('%s support'), 'Xapian'),
         'url' => 'https://xapian.org/',

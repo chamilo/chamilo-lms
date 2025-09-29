@@ -1125,7 +1125,7 @@ const deleteDocumentTemplate = async (documentId) => {
   try {
     await axios.post(`/template/document-templates/${documentId}/delete`)
     onUpdateOptions(options.value)
-    notification.showSuccessNotification(t("Template successfully deteled."))
+    notification.showSuccessNotification(t("Template successfully deleted."))
   } catch (error) {
     console.error("Error deleting the template:", error)
     notification.showErrorNotification(t("Error deleting the template."))

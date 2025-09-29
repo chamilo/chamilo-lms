@@ -29452,7 +29452,7 @@ msgstr "လက်မှတ်ကို မူလအတိုင်း အော�
 msgid "Error setting certificate as default"
 msgstr "လက်မှတ်ကို မူလအတိုင်း သတ်မှတ်ရာတွင် အမှားဖြစ်ပေါ်သည်"
 
-msgid "Template successfully deteled."
+msgid "Template successfully deleted."
 msgstr "တင်းပလိတ်ကို အောင်မြင်စွာ ဖျက်ပြီး။"
 
 msgid "Error deleting the template."

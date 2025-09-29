@@ -5,7 +5,7 @@
         id="course-name"
         v-model="courseName"
         :error-text="courseNameError"
-        :help-text="t('Write a short and striking course name, For example: Innovation Management')"
+        :help-text="t('Write a short and striking course name, for example: Innovation Management')"
         :is-invalid="isCourseNameInvalid"
         :label="t('Course name')"
         required
@@ -60,7 +60,7 @@
       <BaseButton
         class="mr-4"
         icon="back"
-        label="Back"
+        :label="t('Back')"
         type="secondary"
         @click="goBack"
       />

@@ -30448,3 +30448,15 @@ msgstr "Date de naissance"
 
 msgid "Are you sure to delete the friendship?"
 msgstr "Êtes vous sûr de supprimer la relation ?"
+
+msgid "Write a short and striking course name, for example: Innovation Management"
+msgstr "Écrivez un titre court et percutant pour votre cours, par exemple: Gestion de l'innovation"
+
+msgid "Show advanced settings"
+msgstr "Afficher les paramètres avancés"
+
+msgid "Hide advanced settings"
+msgstr "Cache les paramètres avancés"
+
+msgid "Course created successfully"
+msgstr "Cours créé"

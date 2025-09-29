@@ -52,14 +52,14 @@
                             {{ item.category }}
                         </div>
                     {% endif %}
-                    <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.title }}">
+                    <a href="{{ url('index') ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.title }}">
                         <img class="img-fluid" src="{{ item.image ? _p.web_upload ~ item.image : 'session_default.png'|icon() }}">
                     </a>
                 {% endset %}
                 {% set content %}
                     <div class="card-title">
                         <h5 class="title">
-                            <a href="{{ _p.web ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.title }}">
+                            <a href="{{ url('index') ~ 'session/' ~ item.id ~ '/about/' }}" title="{{ item.title }}">
                                 {{ item.title }}
                             </a>
                         </h5>
@@ -100,7 +100,7 @@
                                 {{ item.price }}
                             </div>
                         {% endif %}
-                        {% if _u.logged %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <div class="col-sm-8">
                                 <div class="btn-group btn-group-sm" role="group">
                                     {% if not item.sequences is empty %}
@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if _u.logged %}
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <script>
                                 $('#session-{{ item.id }}-sequences').popover({
                                     placement: 'bottom',
@@ -133,7 +133,7 @@
 
                                         {% for requirement in sequence.requirements %}
                                         content += '<li>';
-                                        content += '<a href="{{ _p.web ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.title }}</a>';
+                                        content += '<a href="{{ url('index') ~ 'session/' ~ requirement.id ~ '/about/' }}">{{ requirement.title }}</a>';
                                         content += '</li>';
                                         {% endfor %}
 
@@ -146,7 +146,7 @@
 
                                         {% for dependency in sequence.dependencies %}
                                         content += '<li>';
-                                        content += '<a href="{{ _p.web ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.title }}</a>';
+                                        content += '<a href="{{ url('index') ~ 'session/' ~ dependency.id ~ '/about/' }}">{{ dependency.title }}</a>';
                                         content += '</li>';
                                         {% endfor %}
 

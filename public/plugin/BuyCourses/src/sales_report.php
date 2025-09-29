@@ -198,6 +198,7 @@ $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
 $template->assign('invoicing_enable', $invoicingEnable);
+$template->assign('showing_services', false);
 
 $content = $template->fetch('BuyCourses/view/sales_report.tpl');
 

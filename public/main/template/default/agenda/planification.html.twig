@@ -1,6 +1,6 @@
 {% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
 
-{% set user_id = student_id == _u.id ? 0 : student_id %}
+{% set user_id = student_id == app.user.id ? 0 : student_id %}
 
 {% block content %}
     {% autoescape false %}
@@ -38,7 +38,7 @@
                 {% for session in sessions %}
                     <tr>
                         <td class="col-session" title="{{  session.title }}">
-                            <a href="{{ _p.web ~ 'session/' ~ session.id ~ '/about/' }}">
+                            <a href="{{ url('index') ~ 'session/' ~ session.id ~ '/about/' }}">
                                 {{  session.title }}
                             </a>
                         </td>

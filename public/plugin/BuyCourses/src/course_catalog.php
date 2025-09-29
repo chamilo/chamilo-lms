@@ -27,9 +27,9 @@ $form = new FormValidator(
 
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
-    $nameFilter = isset($formValues['name']) ? $formValues['name'] : null;
-    $minFilter = isset($formValues['min']) ? $formValues['min'] : 0;
-    $maxFilter = isset($formValues['max']) ? $formValues['max'] : 0;
+    $nameFilter = $formValues['name'] ?? null;
+    $minFilter = $formValues['min'] ?? 0;
+    $maxFilter = $formValues['max'] ?? 0;
 }
 
 $form->addHeader($plugin->get_lang('SearchFilter'));
@@ -76,14 +76,23 @@ if (api_is_platform_admin()) {
     ];
 }
 
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);
 $tpl->assign('search_filter_form', $form->returnForm());
 $tpl->assign('showing_courses', true);
+$tpl->assign('showing_sessions', false);
+$tpl->assign('showing_services', false);
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
+
+$countSessions = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
+
+$tpl->assign('coursesExist', true);
+$tpl->assign('sessionExist', $countSessions > 0);
 
 $content = $tpl->fetch('BuyCourses/view/catalog.tpl');
 

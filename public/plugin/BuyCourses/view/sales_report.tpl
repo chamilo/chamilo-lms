@@ -1,3 +1,4 @@
+{% autoescape false %}
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <ul class="nav nav-tabs buy-courses-sessions-tabs" role="tablist">
     <li id="buy-courses-sessions-tab" class="active" role="presentation">
@@ -57,7 +58,7 @@
                 {% if invoicing_enable %}
                     <td class="text-center">
                     {% if sale.invoice == 1 %}
-                        <a href="{{ _p.web_plugin ~ 'BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 0}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                        <a href="{{ url('index') ~ 'plugin/BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 0}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
                             <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
                             <br/>{{ sale.num_invoice }}
                         </a>
@@ -113,3 +114,4 @@
         });
     });
 </script>
+{% endautoescape %}

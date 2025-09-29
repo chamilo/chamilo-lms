@@ -49,7 +49,7 @@
                                         <td class="cycles">
                                             <h4 id="session-id-{{ sessionid }}">
                                                 <a title="{{ session.data.title }}"
-                                                   href="{{ _p.web }}main/session/resume_session.php?id_session={{ sessionid }}">
+                                                   href="{{ url('index') }}main/session/resume_session.php?id_session={{ sessionid }}">
                                                     {{ session.data.title }}
                                                 </a>
                                             </h4>
@@ -58,7 +58,7 @@
                                             <ul>
                                                 {% for course in session.courses %}
                                                     <li>
-                                                        <a href="{{ _p.web }}courses/{{ course.directory }}/index.php?sid={{ sessionid }}"
+                                                        <a href="{{ url('index') }}courses/{{ course.directory }}/index.php?sid={{ sessionid }}"
                                                            title="{{ course.title }}">
                                                             {{ course.title }}
                                                         </a>

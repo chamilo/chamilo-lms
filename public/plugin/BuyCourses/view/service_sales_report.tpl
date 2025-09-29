@@ -53,7 +53,7 @@
                         {% if invoicing_enable %}
                             <td class="text-center">
                             {% if sale.invoice == 1 %}
-                                <a href="{{ _p.web_plugin ~ 'BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 1}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 1}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
                                     <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
                                     <br>{{ sale.num_invoice }}
                                 </a>
@@ -81,7 +81,7 @@
             var action = $(this).attr('id');
             $.ajax({
                 data: 'id=' + id,
-                url: '{{ _p.web_plugin }}BuyCourses/src/buycourses.ajax.php?a=' + action,
+                url: '{{ url('index') }}plugin/BuyCourses/src/buycourses.ajax.php?a=' + action,
                 type: 'POST',
                 beforeSend: function () {
                     if (action == 'renewable_info') {

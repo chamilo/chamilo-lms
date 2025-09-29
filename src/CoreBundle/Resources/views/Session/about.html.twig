@@ -93,7 +93,7 @@
                                         {{ is_premium.total_price_formatted }}
                                     </div>
                                     <div class="buy-box">
-                                        <a href="{{ _p.web }}plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
+                                        <a href="{{ url('index') }}plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
                                            class="btn btn-lg btn--primary btn-block">{{ 'BuyNow'|trans }}</a>
                                     </div>
                                 </div>
@@ -106,7 +106,7 @@
                                             <p>
                                                 {{ sequence.title }} :
                                                 {% for requirement in sequence.requirements %}
-                                                    <a href="{{ _p.web ~ 'session/' ~ requirement.getId ~ '/about/' }}">
+                                                    <a href="{{ url('index') ~ 'session/' ~ requirement.getId ~ '/about/' }}">
                                                         {{ requirement.getTitle }}
                                                     </a>
                                                 {% endfor %}

@@ -16,7 +16,7 @@
                             </div>
                             {% elseif service.image %}
                             <div class="service-image">
-                                <a href="{{ _p.web }}service/{{ service.id }}">
+                                <a href="{{ url('index') }}service/{{ service.id }}">
                                     <img alt="{{ service.title }}" class="img-rounded img-responsive"
                                          src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                                 </a>
@@ -79,7 +79,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <a href="{{ _p.web_plugin ~ 'BuyCourses/src/service_process.php?t=4&i=' ~ service.id }}"
+                                    <a href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?t=4&i=' ~ service.id }}"
                                        class="btn btn--success btn-lg btn-block">
                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                     </a>

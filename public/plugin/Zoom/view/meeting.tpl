@@ -36,7 +36,7 @@
                     <input id="share_button_flash" type="text"
                            style="width:460px"
                            class="form-control" readonly
-                           value="{{ _p.web }}plugin/zoom/join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
+                           value="{{ url('index') }}plugin/zoom/join_meeting.php?meetingId={{ meeting.meetingId }}&{{ url_extra }}"
                     >
                     <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn--plain">
                         <span class="fa fa-copy"></span> {{ 'Copy text' | get_lang }}

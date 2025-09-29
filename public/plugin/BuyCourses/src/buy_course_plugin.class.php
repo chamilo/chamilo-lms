@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -664,10 +666,8 @@ class BuyCoursesPlugin extends Plugin
      * @param string $name Optional. The name filter
      * @param int    $min  Optional. The minimum price filter
      * @param int    $max  Optional. The maximum price filter
-     *
-     * @return array
      */
-    public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all')
+    public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all'): array|int
     {
         $courses = $this->filterCourseList($first, $pageSize, $name, $min, $max, $typeResult);
 
@@ -2510,10 +2510,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int    $min       Optional. The minimum price filter
      * @param int    $max       Optional. The maximum price filter
      * @param mixed  $appliesTo optional
-     *
-     * @return array
      */
-    public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all')
+    public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all'): array|int
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -2826,10 +2824,28 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    public static function returnPagination(
+        string $baseUrl,
+        string $currentPage,
+        string $pagesCount,
+        string $totalItems,
+        array $extraQueryParams = []
+    ): string {
+        $queryParams = HttpRequest::createFromGlobals()->query->all();
+
+        unset($queryParams['page']);
+
+        $url = $baseUrl.'?'.http_build_query(
+                array_merge($queryParams, $extraQueryParams)
+            );
+
+        return Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+    }
+
     /**
      * Filter the registered courses for show in plugin catalog.
      */
-    private function getCourses($first, $maxResults)
+    private function getCourses($first, $maxResults): QueryBuilder
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();

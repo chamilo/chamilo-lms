@@ -31,7 +31,7 @@
                         <img src="{{ message.form_user.avatar }}" alt="Avatar" class="rounded-circle user-avatar-md">
                     </div>
                     <div class="sender">
-                        <a href="{{ _p.web }}main/social/profile.php?u={{ message.form_user.id }}">{{ message.form_user.name }}</a>
+                        <a href="{{ url('index') }}main/social/profile.php?u={{ message.form_user.id }}">{{ message.form_user.name }}</a>
                         <div class="email">{{ message.form_user.email }}</div>
                     </div>
                 </div>

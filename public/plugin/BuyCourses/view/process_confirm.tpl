@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <a class="ajax" data-title="{{ course.title }}"
-                               href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
+                               href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
                                 <img alt="{{ course.title }}" class="img-responsive" style="width: 100%;"
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
@@ -18,7 +18,7 @@
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <h3>
                                 <a class="ajax" data-title="{{ course.title }}"
-                                   href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">{{ course.title }}</a>
+                                   href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">{{ course.title }}</a>
                             </h3>
                             <ul class="list-unstyled">
                                 {% for teacher in course.teachers %}
@@ -69,16 +69,16 @@
                 {% elseif buying_service %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
-                            <a href='{{ _p.web }}service/{{ service.id }}'>
+                            <a href='{{ url('index') }}service/{{ service.id }}'>
                                 <img alt="{{ service.title }}" class="img-responsive"
-                                     src="{{ service.image ? _p.web ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
+                                     src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
                             </a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <h3>
-                                <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.title }}</a>
+                                <a href='{{ url('index') }}service/{{ service.id }}'>{{ service.title }}</a>
                             </h3>
                             <ul class="list-unstyled">
                                 {% if service.applies_to == 0 %}
@@ -220,11 +220,11 @@
 
                         {% if buying_service %}
 
-                        var url = '{{ _p.web_plugin }}BuyCourses/src/buycourses.ajax.php?a=culqi_cargo_service&token_id=' + Culqi.token.id + '&service_sale_id=' + {{ buying_service.id }};
+                        var url = '{{ url('index') }}plugin/BuyCourses/src/buycourses.ajax.php?a=culqi_cargo_service&token_id=' + Culqi.token.id + '&service_sale_id=' + {{ buying_service.id }};
 
                         {% else %}
 
-                        var url = '{{ _p.web_plugin }}BuyCourses/src/buycourses.ajax.php?a=culqi_cargo&token_id=' + Culqi.token.id + '&sale_id=' + {{ sale.id }};
+                        var url = '{{ url('index') }}plugin/BuyCourses/src/buycourses.ajax.php?a=culqi_cargo&token_id=' + Culqi.token.id + '&sale_id=' + {{ sale.id }};
 
                         {% endif %}
 
@@ -237,7 +237,7 @@
                                 $("#cancel").prop("disabled", true);
                             },
                             success: function () {
-                                window.location = "{{ _p.web_plugin }}BuyCourses/index.php";
+                                window.location = "{{ url('index') }}plugin/BuyCourses/index.php";
                             }
                         })
                     }

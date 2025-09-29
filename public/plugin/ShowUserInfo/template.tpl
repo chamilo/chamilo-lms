@@ -4,7 +4,7 @@
     1. Shortcuts 
     
     _p = url chamilo paths
-    _u = user information of the current user
+    app.user = user information of the current user
     
     2. i18n
     
@@ -23,7 +23,7 @@
         You can also see more examples in main/template/default/layout
 #}
 
-{% if show_user_info.show_message is not null and _u.logged == 1 %}
+{% if show_user_info.show_message is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
     <div class="well">
         {{ "WelcomeToChamiloUserX" | get_lang | format(show_user_info.user_info.complete_name) }}            
     </div>

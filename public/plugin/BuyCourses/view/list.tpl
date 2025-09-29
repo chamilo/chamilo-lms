@@ -3,19 +3,19 @@
 {% if sessions_are_included or services_are_included %}
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
         <li role="presentation" class="{{ courses ? 'active' : '' }}">
-            <a href="{{ _p.web_plugin ~ 'BuyCourses/src/list.php' }}" >
+            <a href="{{ url('index') ~ 'plugin/BuyCourses/src/list.php' }}" >
                 {{ 'Courses'|get_lang }}
             </a>
         </li>
         {% if sessions_are_included %}
         <li role="presentation" class="{{ sessions ? 'active' : '' }}">
-            <a href="{{ _p.web_plugin ~ 'BuyCourses/src/list_session.php' }}" >
+            <a href="{{ url('index') ~ 'plugin/BuyCourses/src/list_session.php' }}" >
                 {{ 'Sessions'|get_lang }}</a>
         </li>
         {% endif %}
         {% if services_are_included %}
             <li role="presentation" class="{{ services ? 'active' : '' }}">
-                <a href="{{ _p.web_plugin ~ 'BuyCourses/src/list_service.php' }}">
+                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/list_service.php' }}">
                     {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
             </li>
@@ -83,7 +83,7 @@
                             </td>
                         {% endif %}
                         <td class="text-right">
-                            <a href="{{ _p.web_plugin ~ 'BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type':product_type_course}|url_encode() }}"
+                            <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type':product_type_course}|url_encode() }}"
                                class="btn btn--info btn-sm">
                                 <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
                             </a>
@@ -141,7 +141,7 @@
                                 </td>
                             {% endif %}
                             <td class="text-right">
-                                <a href="{{ _p.web_plugin ~ 'BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode() }}"
+                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode() }}"
                                    class="btn btn--info btn-sm">
                                     <em class="fa fa-wrench fa-fw"></em>
                                     {{ 'Configure'|get_lang }}
@@ -158,7 +158,7 @@
     {% if services_are_included %}
         <div role="tabpanel" class="tab-pane {{ services ? 'fade in active' : '' }} " id="services">
             <div class="table-responsive">
-                <a href="{{ _p.web_plugin ~ 'BuyCourses/src/services_add.php' }}" class="btn btn--primary">
+                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}" class="btn btn--primary">
                     <em class="fa fa-cart-plus fa-fw"></em> {{ 'NewService'| get_plugin_lang('BuyCoursesPlugin') }}
                 </a>
                 <br>
@@ -217,7 +217,7 @@
                                 </td>
                             {% endif %}
                             <td class="text-right">
-                                <a href="{{ _p.web_plugin ~ 'BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode() }}"
+                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode() }}"
                                    class="btn btn--info btn-sm">
                                     <em class="fa fa-wrench fa-fw"></em> {{ 'Edit'|get_lang }}
                                 </a>

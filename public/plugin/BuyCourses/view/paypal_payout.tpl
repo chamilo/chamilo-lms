@@ -79,7 +79,7 @@
 
             $.ajax({
                 data: {payouts: val},
-                url: '{{ _p.web_plugin ~ 'BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'processPayout' }|url_encode() }}',
+                url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'processPayout' }|url_encode() }}',
                 type: 'POST',
                 success: function (response) {
                     $("#content").html(response);
@@ -98,7 +98,7 @@
 
             $.ajax({
                 data: {payouts: val},
-                url: '{{ _p.web_plugin ~ 'BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'proceedPayout' }|url_encode() }}',
+                url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'proceedPayout' }|url_encode() }}',
                 type: 'POST',
                 beforeSend: function () {
                     $("#proceedPayout").hide();
@@ -116,7 +116,7 @@
             var id = this.id;
             $.ajax({
                 data: 'id=' + id,
-                url: '{{ _p.web_plugin ~ 'BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'cancelPayout' }|url_encode() }}',
+                url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'cancelPayout' }|url_encode() }}',
                 type: 'POST',
                 success: function () {
                     window.location.reload();

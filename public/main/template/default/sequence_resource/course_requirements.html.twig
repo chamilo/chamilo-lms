@@ -9,7 +9,7 @@
                     {{ 'ObjectIcon::SEQUENCE'|mdi_icon(48) }}
                     <p class="sequence-course">{{ course.title }}</p>
 
-                    {% if _u.logged %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <span class="label {{ course.status ? 'label-success' : 'label-danger' }}">
                             {% if course.status %}
                                 <em class="fa fa-check"></em> {{ 'Complete'|trans }}
@@ -28,7 +28,7 @@
     </div>
 
     <script>
-        var url = '{{ _p.web_ajax }}sequence.ajax.php?type={{ sequence_type }}';
+        var url = '{{ url('web_ajax') }}sequence.ajax.php?type={{ sequence_type }}';
         var sequenceId = '{{ key }}';
         $(function() {
             $.ajax({

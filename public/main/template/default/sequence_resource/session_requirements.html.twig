@@ -9,7 +9,7 @@
                     {{ 'ObjectIcon::SEQUENCE'|mdi_icon(48) }}
                     <p class="sequence-course">{{ session.title }}</p>
 
-                    {% if _u.logged %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <span class="label {{ session.status ? 'label-success' : 'label-danger' }}">
                             {% if session.status %}
                                 <em class="fa fa-check"></em> {{ 'Complete'|trans }}

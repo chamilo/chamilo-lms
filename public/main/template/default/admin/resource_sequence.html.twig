@@ -3,7 +3,7 @@
 {% block content %}
     {% autoescape false %}
         <script>
-          var url = '{{ _p.web_ajax }}sequence.ajax.php';
+          var url = '{{ url('web_ajax') }}sequence.ajax.php';
           var parentList = [];
           var resourceId = 0;
           var sequenceId = 0;

@@ -29,7 +29,7 @@
                 {{ activity.createdAt | api_convert_and_format_date(3)}}
             </td>
 {#            <td>#}
-{#                {% if _u.is_admin %}#}
+{#                {% if is_granted('ROLE_ADMIN')) %}#}
 {#                    <a href="{{ _p.web_main }}admin/user_information.php?user_id={{ activity.user.id }}" >#}
 {#                        {{ activity.user.firstname }} {{ activity.user.lastname }} ({{ activity.user.username }})#}
 {#                    </a>#}

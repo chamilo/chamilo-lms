@@ -21,11 +21,11 @@
                         {{ item.date_validity }}
                     </td>
                     <td>
-                        <a href="{{_p.web_plugin }}Justification/justification_by_user.php?a=edit&user_id={{ user_id }}&id={{ item.id }}"
+                        <a href="{{url('index') }}plugin/Justification/justification_by_user.php?a=edit&user_id={{ user_id }}&id={{ item.id }}"
                            class="btn btn-primary">
                             {{'Edit' | get_lang}}
                         </a>
-                        <a href="{{_p.web_plugin }}Justification/justification_by_user.php?a=delete&user_id={{ user_id }}&id={{ item.id }}"
+                        <a href="{{url('index') }}plugin/Justification/justification_by_user.php?a=delete&user_id={{ user_id }}&id={{ item.id }}"
                            class="btn btn-danger">
                             {{'Delete' | get_lang}}
                         </a>

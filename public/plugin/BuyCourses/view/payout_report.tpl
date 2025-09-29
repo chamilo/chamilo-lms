@@ -75,7 +75,7 @@
             var id = this.id;
             $.ajax({
                 data: 'id=' + id,
-                url: '{{ _p.web_plugin ~ 'BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'saleInfo' }|url_encode() }}',
+                url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'saleInfo' }|url_encode() }}',
                 type: 'POST',
                 success: function (response) {
                     $("#contentSale").html(response);
@@ -87,7 +87,7 @@
             var id = this.id;
             $.ajax({
                 data: 'id=' + id,
-                url: '{{ _p.web_plugin ~ 'BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'stats' }|url_encode() }}',
+                url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~  { 'a': 'stats' }|url_encode }}',
                 type: 'POST',
                 success: function (response) {
                     $("#contentStats").html(response);

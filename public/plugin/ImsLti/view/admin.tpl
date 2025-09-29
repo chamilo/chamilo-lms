@@ -22,20 +22,20 @@
         </td>
         <td class="text-right">
             {% if not is_child and tool.version == 'lti1p3' %}
-                <a href="{{ _p.web_plugin }}ImsLti/tool_settings.php?{{ url_params }}" class="ajax"
+                <a href="{{ url('index') }}plugin/ImsLti/tool_settings.php?{{ url_params }}" class="ajax"
                    data-title="{{ 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin') }}">
                     {{ 'webservices.png'|img(22, 'ConfigSettingsForTool'|get_plugin_lang('ImsLtiPlugin')) }}
                 </a>
             {% endif %}
 
             {% if not is_child %}
-                <a href="{{ _p.web_plugin }}ImsLti/multiply.php?{{ url_params }}">
+                <a href="{{ url('index') }}plugin/ImsLti/multiply.php?{{ url_params }}">
                     {{ 'multiplicate_survey.png'|img(22, 'AddInCourses'|get_plugin_lang('ImsLtiPlugin')) }}
                 </a>
             {% endif %}
 
             {% if not is_child %}
-                <a href="{{ _p.web_plugin }}ImsLti/session.php?{{ url_params }}">
+                <a href="{{ url('index') }}plugin/ImsLti/session.php?{{ url_params }}">
                     {{ 'session.png'|img(22, 'AddInSessions'|get_plugin_lang('ImsLtiPlugin')) }}
                 </a>
             {% endif %}
@@ -53,17 +53,17 @@
                         {% endif %}
                     {% endif %}
                     {% if url_eval_params is not null %}
-                        <a href="{{ _p.web_plugin }}ImsLti/gradebook/add_eval.php?{{ url_eval_params }}">
+                        <a href="{{ url('index') }}plugin/ImsLti/gradebook/add_eval.php?{{ url_eval_params }}">
                             {{ 'gradebook.png'|img(22, 'MakeQualifiable'|get_lang) }}
                         </a>
                     {% endif %}
                 {% endfor %}
             {% endif %}
 
-            <a href="{{ _p.web_plugin }}ImsLti/edit.php?{{ url_params }}">
+            <a href="{{ url('index') }}plugin/ImsLti/edit.php?{{ url_params }}">
                 {{ 'edit.png'|img(22, 'Edit'|get_lang) }}
             </a>
-            <a href="{{ _p.web_plugin }}ImsLti/delete.php?{{ url_params }}">
+            <a href="{{ url('index') }}plugin/ImsLti/delete.php?{{ url_params }}">
                 {{ 'delete.png'|img(22, 'Delete'|get_lang) }}
             </a>
         </td>
@@ -74,10 +74,10 @@
 
 {% autoescape 'html' %}
     <div class="btn-toolbar">
-        <a href="{{ _p.web_plugin }}ImsLti/platform.php" class="btn btn-link pull-right">
+        <a href="{{ url('index') }}plugin/ImsLti/platform.php" class="btn btn-link pull-right">
             <span class="fa fa-cogs fa-fw" aria-hidden="true"></span> {{ 'PlatformKeys'|get_plugin_lang('ImsLtiPlugin') }}
         </a>
-        <a href="{{ _p.web_plugin }}ImsLti/create.php" class="btn btn-primary">
+        <a href="{{ url('index') }}plugin/ImsLti/create.php" class="btn btn-primary">
             <span class="fa fa-plus fa-fw" aria-hidden="true"></span> {{ 'AddExternalTool'|get_plugin_lang('ImsLtiPlugin') }}
         </a>
     </div>

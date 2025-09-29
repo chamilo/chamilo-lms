@@ -15,7 +15,7 @@ $(function () {
 
         $self.replaceWith($loader);
 
-        $.get(_p.web_plugin + 'Bbb/ajax.php', {
+        $.get('/plugin/Bbb/ajax.php', {
             a: 'check_m4v',
             meeting: meetingId
         }, function (response) {

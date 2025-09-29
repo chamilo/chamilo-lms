@@ -4,8 +4,8 @@ $(function() {
     $(window).on("load", function (e) {
 {% endif %}
     var my_text = $(".glossary-content").html();
-    var ajaxRequestUrl = "{{ _p.web }}main/glossary/glossary_ajax_request.php?{{ _p.web_cid_query }}";
-    var imageSource = "{{ _p.web }}main/inc/lib/javascript/indicator.gif";
+    var ajaxRequestUrl = "{{ url('index') }}main/glossary/glossary_ajax_request.php?{{ _p.web_cid_query }}";
+    var imageSource = "{{ url('index') }}main/inc/lib/javascript/indicator.gif";
     var indicatorImage ='<img src="' + imageSource + '" />';
 
     $.ajax({

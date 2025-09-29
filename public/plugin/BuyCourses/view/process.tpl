@@ -1,5 +1,5 @@
 <div class="actions">
-    <a href="{{ _p.web }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
+    <a href="{{ url('index') }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
              title="{{ "Back"|get_lang }}"/>
     </a>
@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <a class="ajax" data-title="{{ course.title }}"
-                                   href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
+                                   href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
                                     <img alt="{{ course.title }}" class="img-rounded img-responsive"
                                          src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                                 </a>
@@ -38,7 +38,7 @@
                                 <div class="buy-item">
                                     <h3 class="title">
                                         <a class="ajax" data-title="{{ course.title }}"
-                                           href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
+                                           href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
                                             {{ course.title }}
                                         </a>
                                     </h3>
@@ -54,7 +54,7 @@
                                                 {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin') }} :
                                                 {% for teacher in course.teachers %}
                                                     <em class="fa fa-user" aria-hidden="true"></em>
-                                                    <a href="{{ _p.web }}main/social/profile.php?u={{ teacher.id }}"
+                                                    <a href="{{ url('index') }}main/social/profile.php?u={{ teacher.id }}"
                                                        class="teacher-item"> {{ teacher.name }}</a>,
                                                 {% endfor %}
                                             </p>
@@ -105,7 +105,7 @@
 
                                                     {% for coach in course.coaches %}
                                                         <em class="fa fa-user" aria-hidden="true"></em>
-                                                        <a href="{{ _p.web }}main/social/profile.php?u={{ coach.id }}"
+                                                        <a href="{{ url('index') }}main/social/profile.php?u={{ coach.id }}"
                                                            class="teacher-item">{{ coach.name }}</a>,
                                                     {% endfor %}
                                                 </p>

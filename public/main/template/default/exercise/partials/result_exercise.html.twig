@@ -85,7 +85,7 @@
                             {% endif %}
                         </div>
                         {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
-                            {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
+                            {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == app.user.id %}
                             <form id="quiz_confirm_saved_answers_form" class="space-y-4 mt-4">
                                 <label class="flex items-start space-x-2">
                                     <input type="checkbox"
@@ -119,7 +119,7 @@
     </div>
 
     {% if 'exercise.quiz_confirm_saved_answers'|api_get_setting == 'true' %}
-        {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == _u.id %}
+        {% set enable_form = data.track_confirmation.updatedAt is empty and data.track_confirmation.userId == app.user.id %}
         {% if enable_form %}
             <script>
                 $(function () {
@@ -144,7 +144,7 @@
                         checkbox.prop('disabled', true);
 
                         $.post(
-                            '{{ _p.web_ajax }}exercise.ajax.php?a=quiz_confirm_saved_answers',
+                            '{{ url('web_ajax') }}exercise.ajax.php?a=quiz_confirm_saved_answers',
                             xhrData
                         ).done(function () {
                             button.parents('.form-group').remove();

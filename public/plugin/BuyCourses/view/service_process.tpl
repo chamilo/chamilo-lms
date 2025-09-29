@@ -1,5 +1,5 @@
 <div class="actions">
-    <a href="{{ _p.web }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
+    <a href="{{ url('index') }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
              title="{{ "Back"|get_lang }}"/>
     </a>
@@ -15,7 +15,7 @@
                 {% if buying_service %}
                     <div class="row">
                         <div class="col-md-3">
-                            <a href='{{ _p.web }}service/{{ service.id }}'>
+                            <a href='{{ url('index') }}service/{{ service.id }}'>
                                 <img alt="{{ service.title }}" class="img-rounded img-responsive"
                                      src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                             </a>
@@ -42,7 +42,7 @@
                         <div class="col-md-9">
                             <div class="buy-item">
                                 <h3 class="title">
-                                    <a href='{{ _p.web }}service/{{ service.id }}'>{{ service.title }}</a>
+                                    <a href='{{ url('index') }}service/{{ service.id }}'>{{ service.title }}</a>
                                 </h3>
                                 {% if service.description %}
                                 <div class="description">

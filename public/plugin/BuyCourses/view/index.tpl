@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
-{% if _u.is_admin %}
+{% if is_granted('ROLE_ADMIN') %}
     <div class="row">
         <div class="col-md-12">
             <article class="jumbotron">
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    {% if _u.is_admin %}
+    {% if is_granted('ROLE_ADMIN') %}
         <div class="col-md-3">
             <div class="thumbnail">
                 <a href="src/list.php">

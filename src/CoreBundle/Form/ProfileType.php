@@ -81,10 +81,10 @@ class ProfileType extends AbstractType
         $fieldsMap = [
             'firstname' => ['field' => 'firstname', 'type' => TextType::class, 'label' => 'Firstname'],
             'lastname' => ['field' => 'lastname', 'type' => TextType::class, 'label' => 'Lastname'],
-            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official Code'],
-            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'Email'],
+            'officialcode' => ['field' => 'official_code', 'type' => TextType::class, 'label' => 'Official code'],
+            'email' => ['field' => 'email', 'type' => EmailType::class, 'label' => 'E-mail'],
             'picture' => ['field' => 'illustration', 'type' => IllustrationType::class, 'label' => 'Picture', 'mapped' => false],
-            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Login'],
+            'login' => ['field' => 'login', 'type' => TextType::class, 'label' => 'Username'],
             'password' => ['field' => 'password', 'type' => PasswordType::class, 'label' => 'Password', 'mapped' => false, 'required' => false],
             'language' => [
                 'field' => 'locale',
@@ -95,8 +95,8 @@ class ProfileType extends AbstractType
                 'placeholder' => null,
                 'choice_translation_domain' => false,
             ],
-            'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone Number'],
-            'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme'],
+            'phone' => ['field' => 'phone', 'type' => TextType::class, 'label' => 'Phone number'],
+            'theme' => ['field' => 'theme', 'type' => TextType::class, 'label' => 'Theme (stylesheet)'],
 
             // Core date_of_birth → entity property dateOfBirth
             'date_of_birth' => [

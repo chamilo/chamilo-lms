@@ -104,16 +104,6 @@ class MySpace
         }
         return $actions;
     }
-    /**
-     * Get admin actions.
-     *
-     * @return string
-     */
-    public static function getAdminActions(bool $display = false)
-    {
-        $actions = self::generateAdminActionLinks();
-        return Display::actions($actions);
-    }
 
     /**
      * @return string

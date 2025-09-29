@@ -88,7 +88,13 @@ Display::display_header($nameTools);
 echo '<div class="actions">';
 echo MySpace::getTopMenu();
 echo '</div>';
-echo MySpace::getAdminActions();
+$actions = MySpace::generateAdminActionLinks();
+
+echo '<ul class="list-disc m-y-2">';
+foreach ($actions as $action) {
+    echo '<li><a href="'.$action['url'].'">'.$action['content'].'</a></li>'.PHP_EOL;
+}
+echo '</ul>';
 
 if ('add_user' !== $action) {
     $form = new FormValidator('language_filter');

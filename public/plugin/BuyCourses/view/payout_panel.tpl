@@ -1,3 +1,4 @@
+{% autoescape false %}
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
 <div id="buy-courses-tabs">
@@ -50,3 +51,4 @@
     {% endif %}
 
 </div>
+{% endautoescape %}

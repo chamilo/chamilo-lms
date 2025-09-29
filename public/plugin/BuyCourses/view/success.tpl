@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="alert alert-info">
     {{ 'PayPalPaymentOKPleaseConfirm'|get_plugin_lang('BuyCoursesPlugin') }}
 </div>
@@ -68,3 +69,4 @@
 </div>
 
 {{ form }}
+{% endautoescape %}

@@ -1,3 +1,4 @@
+{% autoescape false %}
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
 <div class="panel panel-default">
@@ -120,3 +121,4 @@
         </div>
     </div>
 {% endif %}
+{% endautoescape %}

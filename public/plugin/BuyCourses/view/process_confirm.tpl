@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="row">
     <div id="message-alert"></div>
     <div class="col-md-5">
@@ -281,3 +282,4 @@
         {% endif %}
     })
 </script>
+{% endautoescape %}

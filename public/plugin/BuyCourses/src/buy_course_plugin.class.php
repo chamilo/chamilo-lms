@@ -1943,7 +1943,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         $payouts = Database::select(
-            "p.* , u.firstname, u.lastname, efv.value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
+            "p.* , u.firstname, u.lastname, efv.field_value as paypal_account, s.reference as sale_reference, s.price as item_price, c.iso_code",
             "$payoutsTable p $innerJoins",
             [
                 'where' => ['p.status = ? '.$condition.' '.$condition2 => $status],
@@ -1981,7 +1981,7 @@ class BuyCoursesPlugin extends Plugin
 
         $paypalFieldId = $paypalExtraField['id'];
         $paypalAccount = Database::select(
-            'value',
+            'field_value',
             $extraFieldValues,
             [
                 'where' => ['field_id = ? AND item_id = ?' => [(int) $paypalFieldId, (int) $userId]],
@@ -1993,7 +1993,7 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        if ('' === $paypalAccount['value']) {
+        if ('' === $paypalAccount['field_value']) {
             return false;
         }
 

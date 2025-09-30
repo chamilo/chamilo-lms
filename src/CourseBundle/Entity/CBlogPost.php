@@ -7,7 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use Chamilo\CourseBundle\Repository\CBlogPostRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,6 +22,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            processor: CBlogAssignAuthorProcessor::class
+        ),
+        new Patch(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or (object.getAuthor() != null and object.getAuthor() === user)"),
+        new Delete(security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or (object.getAuthor() != null and object.getAuthor() === user)"),
+    ],
     normalizationContext: ['groups' => ['blog_post:read']],
     denormalizationContext: ['groups' => ['blog_post:write']],
     paginationEnabled: true
@@ -41,10 +57,10 @@ class CBlogPost
     #[ORM\Column(name: 'date_creation', type: 'datetime')]
     protected DateTime $dateCreation;
 
-    #[Groups(['blog_post:read','blog_post:write'])]
+    #[Groups(['blog_post:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected User $author;
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    protected ?User $author = null;
 
     #[Groups(['blog_post:read','blog_post:write'])]
     #[ORM\ManyToOne(targetEntity: CBlog::class)]
@@ -109,15 +125,14 @@ class CBlogPost
         return $this;
     }
 
-    public function getAuthor(): User
+    public function getAuthor(): ?User
     {
-        return $this->author;
+        return $this->author ?? null;
     }
 
-    public function setAuthor(User $author): self
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
-
         return $this;
     }
 
@@ -161,5 +176,21 @@ class CBlogPost
         }
 
         return $this;
+    }
+
+    #[Groups(['blog_post:read'])]
+    public function getAuthorInfo(): array
+    {
+        $u = $this->getAuthor();
+        if (!$u) {
+            return ['id' => null, 'name' => '—'];
+        }
+        $name = method_exists($u, 'getFullName') ? $u->getFullName()
+            : (method_exists($u, 'getUsername') ? $u->getUsername() : 'User');
+
+        return [
+            'id'   => method_exists($u, 'getId') ? $u->getId() : null,
+            'name' => $name,
+        ];
     }
 }

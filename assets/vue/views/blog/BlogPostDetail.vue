@@ -2,9 +2,28 @@
   <div class="grid gap-6 lg:grid-cols-[2fr,1fr]">
     <div class="rounded-lg border bg-white shadow-sm p-5">
       <template v-if="!loading">
-        <h2 class="text-2xl font-bold">{{ post.title }}</h2>
-        <div class="text-sm text-gray-500 mb-4">
-          {{ t("By") }} {{ post.author }} · {{ formatDate(post.date) }}
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="text-2xl font-bold">{{ post.title }}</h2>
+            <div class="text-sm text-gray-500 mb-4">
+              {{ t("By") }} {{ post.author }} · {{ formatDate(post.date) }}
+            </div>
+          </div>
+
+          <div v-if="canEditPost" class="shrink-0 flex items-center gap-2">
+            <BaseButton
+              type="black"
+              icon="edit"
+              :label="t('Edit')"
+              @click="openEditPost"
+            />
+            <BaseButton
+              type="danger"
+              icon="trash"
+              :label="t('Delete')"
+              @click="confirmDeletePost"
+            />
+          </div>
         </div>
 
         <div class="prose max-w-none" v-html="post.fullText"></div>
@@ -22,7 +41,7 @@
 
         <!-- Rating block with floating picker -->
         <div class="mt-6 flex items-center gap-3 relative">
-          <span class="text-sm text-gray-600">
+          <span class="text-sm text-gray-600" aria-live="polite">
             {{ t("Rating") }}: {{ rating.average.toFixed(1) }} ★ ({{ rating.count }})
           </span>
 
@@ -57,9 +76,7 @@
                 class="h-9 rounded-lg border text-sm transition
                        hover:bg-yellow-50 hover:border-yellow-300
                        focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                :class="{
-                  'bg-yellow-100 border-yellow-300': hoverScore >= n
-                }"
+                :class="{ 'bg-yellow-100 border-yellow-300': hoverScore >= n }"
                 :aria-label="`Rate ${n}`"
                 :disabled="sendingRating"
                 @mouseenter="hoverScore = n"
@@ -105,28 +122,84 @@
       <div v-else-if="!comments.length" class="text-sm text-gray-500">{{ t("No comments yet.") }}</div>
       <ul v-else class="space-y-3">
         <li v-for="c in comments" :key="c.id" class="rounded bg-gray-20 p-3">
-          <div class="text-sm">{{ c.text }}</div>
+          <div class="flex items-start justify-between gap-2">
+            <div class="text-sm whitespace-pre-wrap">{{ c.text }}</div>
+            <div v-if="canEditComment(c)" class="shrink-0 flex gap-1">
+              <BaseButton
+                type="black"
+                :onlyIcon="true"
+                icon="edit"
+                :tooltip="t('Edit')"
+                aria-label="Edit comment"
+                @click="openEditComment(c)"
+              />
+              <BaseButton
+                type="danger"
+                :onlyIcon="true"
+                icon="trash"
+                :tooltip="t('Delete')"
+                aria-label="Delete comment"
+                @click="confirmDeleteComment(c)"
+              />
+            </div>
+          </div>
           <div class="text-xs text-gray-500 mt-1">— {{ c.author }} · {{ c.date }}</div>
         </li>
       </ul>
     </div>
 
-    <CommentDialog v-if="showComment" @close="showComment=false" @submitted="onComment" />
+    <CommentDialog
+      v-if="showComment"
+      @close="showComment=false"
+      @submitted="onComment"
+    />
+    <CommentDialog
+      v-if="showEditCommentDialog"
+      :initialText="editCommentText"
+      :dialogTitle="t('Edit Comment')"
+      :confirmLabel="t('Save')"
+      :headerIcon="'pencil'"
+      @close="showEditCommentDialog=false"
+      @submitted="onEditCommentSubmitted"
+    />
+
+    <PostCreateDialog
+      v-if="showEditPost"
+      mode="edit"
+      :initialTitle="editTitle"
+      :initialFullText="editText"
+      :dialogTitle="t('Edit Post')"
+      :confirmLabel="t('Save')"
+      :headerIcon="'pencil'"
+      :showFiles="false"
+      @close="showEditPost=false"
+      @save="onEditPostSave"
+    />
   </div>
 </template>
+
 <script setup>
-import { onMounted, onBeforeUnmount, ref } from "vue"
-import { useRoute } from "vue-router"
+import { onMounted, onBeforeUnmount, ref, computed } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import service from "../../services/blogs"
 import CommentDialog from "../../components/blog/CommentDialog.vue"
+import PostCreateDialog from "../../components/blog/PostCreateDialog.vue"
+import service from "../../services/blogs"
+import { useSecurityStore } from "../../store/securityStore"
 
 const { t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const blogId = Number(route.params.blogId)
 const postId = Number(route.params.postId)
 
+// Security / permissions
+const securityStore = useSecurityStore()
+const currentUserId = computed(() => securityStore.user?.id || null)
+const isTeacherOrAdmin = computed(() => securityStore.isTeacher || securityStore.isAdmin)
+
+// Data
 const post = ref(null)
 const comments = ref([])
 const loading = ref(true)
@@ -142,7 +215,30 @@ const triggerEl = ref(null)
 const pickerEl = ref(null)
 const hoverScore = ref(0)
 
-// Close popover when clicking outside
+// --- Edit post state ---
+const showEditPost = ref(false)
+const editTitle = ref("")
+const editText = ref("")
+
+// --- Edit comment state ---
+const showEditCommentDialog = ref(false)
+const editingComment = ref(null)
+const editCommentText = ref("")
+
+// Derived permissions
+const canEditPost = computed(() => {
+  const authorId = post.value?.authorId ?? post.value?.authorInfo?.id ?? null
+  if (isTeacherOrAdmin.value) return true
+  return authorId && currentUserId.value && authorId === currentUserId.value
+})
+
+function canEditComment(c) {
+  const authorId = c.authorId ?? c.authorInfo?.id ?? null
+  if (isTeacherOrAdmin.value) return true
+  return authorId && currentUserId.value && authorId === currentUserId.value
+}
+
+// Close rating popover when clicking outside
 function onDocClick(e) {
   const t = e.target
   if (!showPicker.value) return
@@ -173,6 +269,7 @@ function formatDate(d){
   try { return new Date(d).toLocaleString() } catch { return d }
 }
 
+// --- Loaders ---
 async function load() {
   loading.value = true
   try {
@@ -195,11 +292,64 @@ onMounted(async () => {
   await loadRating()
 })
 
+// --- New comment flow ---
 function openComment(){ showComment.value = true }
 async function onComment(payload){
   showComment.value = false
   await service.addComment(postId, { text: payload.text, blogId })
   await loadComments()
+}
+
+// --- Post edit/delete ---
+function openEditPost() {
+  editTitle.value = post.value?.title || ""
+  editText.value  = post.value?.fullText || ""
+  showEditPost.value = true
+}
+async function onEditPostSave({ title, fullText }) {
+  try {
+    await service.updatePost(postId, { title, fullText })
+    showEditPost.value = false
+    await load()
+  } catch (e) {
+    alert(t("Failed to update the post."))
+  }
+}
+async function confirmDeletePost() {
+  if (!confirm(t("Delete this post? This action cannot be undone."))) return
+  try {
+    await service.deletePost(postId)
+    router.push({ name: "BlogPosts", params: route.params, query: route.query })
+  } catch (e) {
+    alert(t("Failed to delete the post."))
+  }
+}
+
+// --- Comment edit/delete ---
+function openEditComment(c) {
+  editingComment.value = c
+  editCommentText.value = c.text || ""
+  showEditCommentDialog.value = true
+}
+async function onEditCommentSubmitted({ text }) {
+  if (!editingComment.value) return
+  try {
+    await service.updateComment(editingComment.value.id, { comment: text })
+    showEditCommentDialog.value = false
+    editingComment.value = null
+    await loadComments()
+  } catch (e) {
+    alert(t("Failed to update the comment."))
+  }
+}
+async function confirmDeleteComment(c) {
+  if (!confirm(t("Delete this comment?"))) return
+  try {
+    await service.deleteComment(c.id)
+    await loadComments()
+  } catch (e) {
+    alert(t("Failed to delete the comment."))
+  }
 }
 
 // Toggle popover anchored to the trigger

@@ -276,11 +276,19 @@ function mapPostRow(item) {
 
 /** Map a post detail row */
 function mapPostDetail(item) {
-  const base = mapPostRow(item)
+  const authorInfo = item.authorInfo || {}
+  const fallbackName =
+    item.author?.username || [item.author?.firstname, item.author?.lastname].filter(Boolean).join(" ") || "Author"
+
   return {
-    id: base.id,
-    title: base.title,
-    author: base.author,
+    id: extractId(item),
+    title: item.title ?? "",
+    author: authorInfo.name || fallbackName,
+    authorId: authorInfo.id ?? item.author?.id ?? null,
+    authorInfo: {
+      id: authorInfo.id ?? item.author?.id ?? null,
+      name: authorInfo.name || fallbackName,
+    },
     date: item.dateCreation ?? null,
     fullText: item.fullText ?? "",
     attachments: (item.attachments || []).map((a) => ({
@@ -297,13 +305,19 @@ function mapPostDetail(item) {
 /** Map a comment row */
 function mapCommentRow(item) {
   const id = extractId(item)
-  const authorName =
+  const authorInfo = item.authorInfo || {}
+  const fallbackName =
     item.author?.username || [item.author?.firstname, item.author?.lastname].filter(Boolean).join(" ") || "Author"
   const when = item.dateCreation ?? item.createdAt ?? item.updatedAt ?? null
   const text = item.text ?? item.content ?? item.comment ?? ""
   return {
     id,
-    author: authorName,
+    author: authorInfo.name || fallbackName,
+    authorId: authorInfo.id ?? item.author?.id ?? null,
+    authorInfo: {
+      id: authorInfo.id ?? item.author?.id ?? null,
+      name: authorInfo.name || fallbackName,
+    },
     text,
     date: when ? new Date(when).toISOString().slice(0, 16).replace("T", " ") : "",
   }
@@ -342,6 +356,28 @@ async function getPostApi(postId) {
     params: withCourseParams(),
   })
   return mapPostDetail(resp.data)
+}
+
+async function updatePost(postId, payload) {
+  return axios.patch(`${ENTRYPOINT}c_blog_posts/${postId}`, payload, {
+    params: withCourseParams(),
+    headers: { "Content-Type": "application/merge-patch+json" },
+  })
+}
+
+async function deletePost(postId) {
+  return axios.delete(`${ENTRYPOINT}c_blog_posts/${postId}`, { params: withCourseParams() })
+}
+
+async function updateComment(commentId, payload) {
+  return axios.patch(`${ENTRYPOINT}c_blog_comments/${commentId}`, payload, {
+    params: withCourseParams(),
+    headers: { "Content-Type": "application/merge-patch+json" },
+  })
+}
+
+async function deleteComment(commentId) {
+  return axios.delete(`${ENTRYPOINT}c_blog_comments/${commentId}`, { params: withCourseParams() })
 }
 
 /* === Attachments (CBlogAttachment) === */
@@ -665,6 +701,10 @@ export default {
   ratePost,
   getPostRating,
   getManyPostRatingsApi,
+  updatePost,
+  deletePost,
+  updateComment,
+  deleteComment,
 
   // Uploads / Attachments
   uploadResourceFileApi,

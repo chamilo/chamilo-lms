@@ -7981,7 +7981,7 @@ msgid "Score for the test"
 msgstr "Votre résultat"
 
 msgid "You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported."
-msgstr "Vous avez atteint le nombre maximum de tentatives pour cet exercice. En tant qu'administrateur de ce cours, vous pouvez toutefois essayer à nouveau, mais veuillez noter que vos résultats ne s'afficheront pas sur la page de résultats."
+msgstr "Vous avez atteint le nombre maximum de tentatives pour cet exercice. En tant que professeur de ce cours, vous pouvez toutefois essayer à nouveau, mais veuillez noter que vos résultats ne s'afficheront pas sur la page de résultats."
 
 msgid "Exercise added"
 msgstr "Exercice ajouté"

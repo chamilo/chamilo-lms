@@ -159,13 +159,15 @@ $attempt_count = Event::get_attempt_count(
 
 if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
-        Display::addFlash(
-            Display::return_message(
-                sprintf(get_lang('You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
-            'warning',
-            false
-            )
-        );
+        if (api_is_allowed_to_edit(true, true, true)) {
+            Display::addFlash(
+                Display::return_message(
+                    sprintf(get_lang('You have reached the maximum number of attempts for this test. Being a trainer, you can go on practicing but your Results will not be reported.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+                'warning',
+                false
+                )
+            );
+        }
 
         if (!in_array($origin, ['learnpath', 'embeddable'])) {
             $showFooter = true;

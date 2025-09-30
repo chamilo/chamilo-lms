@@ -4,11 +4,11 @@
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class UserGroup.
@@ -204,6 +204,20 @@ class UserGroupModel extends Model
 
             return $list;
         }
+    }
+
+    /**
+     * Returns all user groups (id + title), ordered by title.
+     * This method ignores multi-URL restrictions because it's used
+     * for initial assignment of groups to access URLs.
+     */
+    public function getAllUserGroups(): array
+    {
+        $sql = "SELECT id, title FROM {$this->table} ORDER BY title";
+
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql);
+
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**
@@ -1333,6 +1347,8 @@ class UserGroupModel extends Model
     }
 
     /**
+     * @deprecated Use UsergroupRepository::getByTitleInUrl().
+     *
      * @param string $title
      *
      * @return bool
@@ -1530,36 +1546,34 @@ class UserGroupModel extends Model
 
     /**
      * Select user group not in list.
-     *
-     * @param array $list
-     *
-     * @return array
      */
-    public function getUserGroupNotInList($list)
+    public function getUserGroupNotInList(array $list, int $accessUrlId): array
     {
-        if (empty($list)) {
-            return [];
-        }
+        $params = [];
 
-        $list = array_map('intval', $list);
-        $listToString = implode("','", $list);
+        $sql = "SELECT g.*
+            FROM {$this->table} g";
 
-        $sql = 'SELECT * ';
-        $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id)";
-            $urlCondition = " AND access_url_id = $urlId ";
+            $sql .= " LEFT JOIN {$this->access_url_rel_usergroup} a
+                  ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
+            $params[] = $accessUrlId;
+            $sql .= " WHERE a.usergroup_id IS NULL";
         } else {
-            $sql = " FROM $this->table g ";
+            $sql .= " WHERE 1=1";
         }
 
-        $sql .= " WHERE g.id NOT IN ('$listToString') $urlCondition ";
-        $result = Database::query($sql);
+        if (!empty($list)) {
+            $placeholders = implode(',', array_fill(0, count($list), '?'));
+            $sql .= " AND g.id NOT IN ($placeholders)";
+            $params = array_merge($params, array_map('intval', $list));
+        }
 
-        return Database::store_result($result, 'ASSOC');
+        $sql .= " ORDER BY g.title";
+
+        $stmt = Database::getManager()->getConnection()->executeQuery($sql, $params);
+
+        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**
@@ -1573,8 +1587,8 @@ class UserGroupModel extends Model
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
-        $params['url'] = isset($params['url']) ? $params['url'] : "";
-        $params['visibility'] = isset($params['visibility']) ? $params['visibility'] : Usergroup::GROUP_PERMISSION_OPEN;
+        $params['url'] = $params['url'] ?? "";
+        $params['visibility'] = $params['visibility'] ?? Usergroup::GROUP_PERMISSION_OPEN;
 
         $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {
@@ -1815,7 +1829,7 @@ class UserGroupModel extends Model
                 INNER JOIN $this->usergroup_rel_user_table c
                 ON c.user_id = u.id
                 WHERE u.active <> ".USER_SOFT_DELETED." AND c.usergroup_id = $id"
-                ;
+        ;
         if (!empty($orderBy)) {
             $orderBy = Database::escape_string($orderBy);
             $sql .= " ORDER BY $orderBy ";
@@ -1854,7 +1868,7 @@ class UserGroupModel extends Model
             true,
             false,
             [
-            'ToolbarSet' => 'Minimal',
+                'ToolbarSet' => 'Minimal',
             ]
         );
         $form->applyFilter('description', 'trim');
@@ -1869,7 +1883,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addText('url', get_lang('Url'), false);
+        $form->addText('url', get_lang('URL'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -2603,7 +2617,7 @@ class UserGroupModel extends Model
                 // I'm just a reader
                 $relation_group_title = get_lang('I am a reader');
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2612,11 +2626,11 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('I am an admin');
                 $links .= '<li class="'.('group_edit' == $show ? 'active' : '').'"><a href="group_edit.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
                 $links .= '<li class="'.('member_list' == $show ? 'active' : '').'"><a href="group_waiting_list.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 $links .= '<li class="'.('invite_friends' == $show ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2635,10 +2649,10 @@ class UserGroupModel extends Model
                 //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Members list').'</span></a></li>';
                 if (GROUP_PERMISSION_CLOSED == $group_info['visibility']) {
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.
-                                Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
+                        Display::getMdiIcon(ObjectIcon::WAITING_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
                         Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
@@ -2647,15 +2661,15 @@ class UserGroupModel extends Model
             case GROUP_USER_PERMISSION_HRM:
                 $relation_group_title = get_lang('I am a human resources manager');
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax" title="'.get_lang('Compose message').'" data-size="lg" data-title="'.get_lang('Compose message').'">'.
-                            Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).get_lang('Create thread').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create thread')).get_lang('Create thread').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).get_lang('Messages list').'</a></li>';
+                    Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Messages list')).get_lang('Messages list').'</a></li>';
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::INVITATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 $links .= '<li><a href="group_members.php?id='.$group_id.'">'.
-                            Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
+                    Display::getMdiIcon(ObjectIcon::GROUP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Members list')).get_lang('Members list').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
+                    Display::getMdiIcon(ActionIcon::EXIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 break;
             default:
                 //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('Join group'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Join group').'</a></span></li>';
@@ -3099,5 +3113,23 @@ class UserGroupModel extends Model
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
+    }
+
+    public static function getRoleName($relation)
+    {
+        switch ((int) $relation) {
+            case GROUP_USER_PERMISSION_ADMIN:
+                return get_lang('Admin');
+            case GROUP_USER_PERMISSION_READER:
+                return get_lang('Reader');
+            case GROUP_USER_PERMISSION_PENDING_INVITATION:
+                return get_lang('Pending invitation');
+            case GROUP_USER_PERMISSION_MODERATOR:
+                return get_lang('Moderator');
+            case GROUP_USER_PERMISSION_HRM:
+                return get_lang('Human Resources Manager');
+            default:
+                return get_lang('Custom or undefined role');
+        }
     }
 }

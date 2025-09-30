@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Enums\ObjectIcon;
+use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
-use Chamilo\CoreBundle\Component\Utils\ActionIcon;
-use Chamilo\CoreBundle\Component\Utils\ToolIcon;
-use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
-use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -312,7 +312,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroupModel();
-//        $usergroup->protectScript(null, true, true);
+        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -1226,7 +1226,7 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('e-mail'),
+            get_lang('E-mail'),
             get_lang('Man hours'),
             get_lang('Generated certificate'),
             get_lang('Approved'),
@@ -1440,7 +1440,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_all':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' === $_GET['type']) {
@@ -1485,7 +1485,7 @@ switch ($action) {
             exit;
         }
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         $columns = [
@@ -1514,7 +1514,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_others':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
 
@@ -1554,7 +1554,7 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('document.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
+        if (('true' === api_get_setting('work.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' == $_GET['type']) {
@@ -1859,7 +1859,7 @@ switch ($action) {
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('CertificateOfAchievement')
+                get_lang('Certificate of achievement')
             );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
@@ -1903,7 +1903,7 @@ switch ($action) {
                     ['target' => '_blank']
                 );
                 $detailButtons[] = Display::url(
-                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('WorksReport')),
+                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments report')),
                     api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
@@ -2621,7 +2621,7 @@ switch ($action) {
 
                 if ($isAllow) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
-                        $group['actions'] = Display::url(
+                        $group['actions'] .= Display::url(
                                 Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
                                 $urlUserGroup . '&id=' . $group['id']
                             ) . '&nbsp;';

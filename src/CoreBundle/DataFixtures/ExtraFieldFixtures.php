@@ -417,8 +417,9 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'display_text' => 'My terms',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
+                'visible_to_self' => false,
+                'visible_to_others' => false,
+                'changeable' => false,
             ],
             [
                 'variable' => 'new_tracking_system',
@@ -563,9 +564,9 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                     : (\defined(ExtraField::class.'::FIELD_TYPE_GEOLOCATION')
                         ? ExtraField::FIELD_TYPE_GEOLOCATION
                         : ExtraField::FIELD_TYPE_TEXT),
-                'visible_to_self' => true,
-                'visible_to_others' => true,
-                'changeable' => true,
+                'visible_to_self' => false,
+                'visible_to_others' => false,
+                'changeable' => false,
             ],
             [
                 'variable' => 'timezone',
@@ -596,9 +597,9 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                     : (\defined(ExtraField::class.'::FIELD_TYPE_GEOLOCATION')
                         ? ExtraField::FIELD_TYPE_GEOLOCATION
                         : ExtraField::FIELD_TYPE_TEXT),
-                'visible_to_self' => true,
-                'visible_to_others' => true,
-                'changeable' => true,
+                'visible_to_self' => false,
+                'visible_to_others' => false,
+                'changeable' => false,
             ],
             [
                 'variable' => 'time',

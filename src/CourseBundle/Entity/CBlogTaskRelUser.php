@@ -6,13 +6,28 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Table(name: 'c_blog_task_rel_user')]
+#[ORM\UniqueConstraint(name: 'uniq_task_user_blog_date', columns: ['task_id', 'user_id', 'blog_id', 'target_date'])]
 #[ORM\Entity]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(),
+    ],
+    normalizationContext: ['groups' => ['task_rel_user:read']],
+    denormalizationContext: ['groups' => ['task_rel_user:write']]
+)]
 class CBlogTaskRelUser
 {
     use UserTrait;
@@ -20,21 +35,26 @@ class CBlogTaskRelUser
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[Groups(['task_rel_user:read'])]
     protected ?int $iid = null;
 
     #[ORM\Column(name: 'target_date', type: 'date', nullable: false)]
+    #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
     protected DateTime $targetDate;
 
     #[ORM\ManyToOne(targetEntity: CBlogTask::class)]
-    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
+    #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
     protected ?CBlogTask $task = null;
 
     #[ORM\ManyToOne(targetEntity: CBlog::class)]
-    #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
+    #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
     protected ?CBlog $blog = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
     protected User $user;
 
     public function getIid(): ?int

@@ -25,6 +25,8 @@ import glossary from "./glossary"
 import attendance from "./attendance"
 import lpRoutes from "./lp"
 import dropboxRoutes from "./dropbox"
+import blogRoutes from "./blog"
+import blogAdminRoute from "./blogAdmin"
 import catalogue from "./catalogue"
 import { useSecurityStore } from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
@@ -240,6 +242,8 @@ const router = createRouter({
     attendance,
     lpRoutes,
     dropboxRoutes,
+    blogRoutes,
+    blogAdminRoute,
     accountRoutes,
     personalFileRoutes,
     messageRoutes,

@@ -32,6 +32,7 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
+use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
@@ -231,22 +232,64 @@ class CourseController extends ToolBaseController
             $shortcutQuery = $shortcutRepository->getResources($course->getResourceNode());
             $shortcuts = $shortcutQuery->getQuery()->getResult();
 
+            $courseNodeId = $course->getResourceNode()->getId();
+            $cid          = $course->getId();
+            $sid          = $this->getSessionId() ?: null;
+
+            /** @var CShortcut $shortcut */
             /** @var CShortcut $shortcut */
             foreach ($shortcuts as $shortcut) {
                 $resourceNode = $shortcut->getShortCutNode();
-                $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
 
+                // Try as CLink
+                $cLink = $em->getRepository(CLink::class)->findOneBy(['resourceNode' => $resourceNode]);
                 if ($cLink) {
+                    // Image (if any)
                     $shortcut->setCustomImageUrl(
                         $cLink->getCustomImage()
                             ? $assetRepository->getAssetUrl($cLink->getCustomImage())
                             : null
                     );
 
-                    $shortcut->target = $cLink->getTarget();
-                } else {
-                    $shortcut->setCustomImageUrl(null);
+                    // External link behavior
+                    $shortcut->setUrlOverride($cLink->getUrl()); // open external URL
+                    $shortcut->setIcon(null);                    // keep default icon for links
+                    $shortcut->target = $cLink->getTarget();     // e.g. "_blank"
+                    continue;
                 }
+
+                // Try as CBlog
+                $cBlog = $em->getRepository(CBlog::class)
+                    ->findOneBy(['resourceNode' => $resourceNode]);
+
+                if ($cBlog) {
+                    $courseNodeId = $course->getResourceNode()->getId();
+                    $cid          = $course->getId();
+                    $sid          = $this->getSessionId() ?: null;
+
+                    $qs = http_build_query(array_filter([
+                        'cid' => $cid,
+                        'sid' => $sid ?: null,
+                        'gid' => 0,
+                    ], static fn($v) => null !== $v));
+
+                    $shortcut->setUrlOverride(sprintf(
+                        '/resources/blog/%d/%d/posts?%s',
+                        $courseNodeId,
+                        $cBlog->getIid(),
+                        $qs
+                    ));
+                    $shortcut->setIcon('mdi-notebook-outline');  // blog icon
+                    $shortcut->setCustomImageUrl(null);          // blogs use icon by default
+                    $shortcut->target = '_self';
+                    continue;
+                }
+
+                // Fallback
+                $shortcut->setCustomImageUrl(null);
+                $shortcut->setUrlOverride(null);
+                $shortcut->setIcon(null);
+                $shortcut->target = '_self';
             }
         }
         $responseData = [

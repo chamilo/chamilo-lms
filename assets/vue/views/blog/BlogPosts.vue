@@ -411,7 +411,13 @@ async function loadPosts(){
 async function reload(){ if (viewMode.value==='posts') await loadPosts() }
 
 watch([q, sort, page, pageSize], () => { if(viewMode.value==='posts') loadPosts() })
-watch(viewMode, () => { if (viewMode.value==='posts') loadPosts() })
+watch(viewMode, () => {
+  if (viewMode.value === 'posts') {
+    loadPosts()
+  } else {
+    reloadTasks()
+  }
+})
 
 function go(row){
   router.push({
@@ -432,31 +438,8 @@ const assignments = ref([])
 
 async function reloadTasks(){
   const blogId = Number(route.params.blogId)
-  const assigneeId = currentUser.value?.id
-  const sid = session.value?.id || 0
-
-  // Guard: we need current user to filter "My tasks"
-  if (!assigneeId) {
-    tasks.value = []
-    return
-  }
-
   try {
-    // Prefer a dedicated endpoint if available:
-    // listMyTasks({ blogId, assigneeId, sessionId })
-    if (typeof service.listMyTasks === "function") {
-      tasks.value = await service.listMyTasks({
-        blogId,
-        assigneeId,
-        sessionId: sid,
-      })
-    } else {
-      // Fallback: fetch all, then filter on client
-      const all = await service.listTasks({ blogId, sessionId: sid })
-      tasks.value = Array.isArray(all)
-        ? all.filter(t => String(t.assigneeId) === String(assigneeId))
-        : []
-    }
+    tasks.value = await service.listTasks(blogId)
   } catch (e) {
     // eslint-disable-next-line no-console
     console.warn("reloadTasks() error", e)

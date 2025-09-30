@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
@@ -24,6 +25,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(),
         new GetCollection(),
         new Post(),
+        new Patch(security: "
+            object.getUser() === user
+            or is_granted('ROLE_CURRENT_COURSE_TEACHER')
+            or is_granted('ROLE_TEACHER')
+            or is_granted('ROLE_ADMIN')
+        "),
     ],
     normalizationContext: ['groups' => ['task_rel_user:read']],
     denormalizationContext: ['groups' => ['task_rel_user:write']]
@@ -31,6 +38,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class CBlogTaskRelUser
 {
     use UserTrait;
+
+    public const STATUS_OPEN = 0;
+    public const STATUS_IN_PROGRESS = 1;
+    public const STATUS_WAITING_TEST = 2;
+    public const STATUS_DONE = 3;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -56,6 +68,10 @@ class CBlogTaskRelUser
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
     protected User $user;
+
+    #[ORM\Column(name: 'status', type: 'smallint', options: ['default' => 0])]
+    #[Groups(['task_rel_user:read', 'task_rel_user:write'])]
+    protected int $status = self::STATUS_OPEN;
 
     public function getIid(): ?int
     {
@@ -94,6 +110,18 @@ class CBlogTaskRelUser
     public function setBlog(?CBlog $blog): self
     {
         $this->blog = $blog;
+
+        return $this;
+    }
+
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

@@ -6,10 +6,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\Post as PostOp;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CBlogComment;
 use Chamilo\CourseBundle\Entity\CBlogPost;
+use Chamilo\CourseBundle\Entity\CBlogTask;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
@@ -19,21 +21,20 @@ final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
 {
     public function __construct(
         private ProcessorInterface $persistProcessor,
-        private Security           $security,
+        private Security $security,
     ) {}
 
     /**
-     * @param CBlogPost|CBlogComment|null $data
+     * @param CBlogPost|CBlogComment|CBlogTask|null $data
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        // Only act on POST, delegate the rest untouched
-        $isCreate = ($operation->getName() === 'post' || str_contains(strtolower((string) $operation->getMethod()), 'post'));
-        if ($isCreate && ($data instanceof CBlogPost || $data instanceof CBlogComment)) {
+        $isCreate = $operation instanceof PostOp;
+
+        if ($isCreate && ($data instanceof CBlogPost || $data instanceof CBlogComment || $data instanceof CBlogTask)) {
             /** @var User|null $user */
             $user = $this->security->getUser();
 
-            // Safety: only set when we have a logged-in User and entity has no author yet
             if ($user instanceof User) {
                 if (method_exists($data, 'getAuthor') && method_exists($data, 'setAuthor') && null === $data->getAuthor()) {
                     $data->setAuthor($user);
@@ -46,7 +47,6 @@ final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
             }
         }
 
-        // Continue normal persistence flow
         return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
     }
 }

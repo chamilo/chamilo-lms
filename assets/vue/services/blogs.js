@@ -582,8 +582,9 @@ function mapTaskRow(row) {
     title: row.title ?? "",
     description: row.description ?? "",
     color: row.color ?? "#0ea5e9",
-    status: row.systemTask ? "System" : "Open",
     system: !!row.systemTask,
+    status: row.systemTask ? 1 : 0,
+    authorId: row.authorId ?? row.author?.id ?? null,
   }
 }
 
@@ -593,11 +594,13 @@ async function mapAssignmentRow(row) {
   const taskId = extractId(row.task)
   const targetDate = row.targetDate ?? row.target_date ?? null
   const u = await ensureUserInfo(row.user)
+  const status = typeof row.status === "number" ? row.status : 0
   return {
     id,
     taskId,
     user: { id: u.id, name: u.name, avatar: u.avatar },
     targetDate: targetDate ? String(targetDate).slice(0, 10) : null,
+    status, // 0..3
   }
 }
 
@@ -610,6 +613,30 @@ async function listTasks(blogId = resolveBlogIdFromPath()) {
   const resp = await axios.get(`${ENTRYPOINT}c_blog_tasks`, { params })
   const arr = resp?.data?.["hydra:member"] ?? []
   return arr.map(mapTaskRow)
+}
+
+/** PATCH /c_blog_tasks/{id} */
+async function updateTask(taskId, payload) {
+  await axios.patch(`${ENTRYPOINT}c_blog_tasks/${taskId}`, payload, {
+    params: withCourseParams(),
+    headers: { "Content-Type": "application/merge-patch+json" },
+  })
+  return { ok: true }
+}
+
+/** DELETE /c_blog_tasks/{id} */
+async function deleteTask(taskId) {
+  await axios.delete(`${ENTRYPOINT}c_blog_tasks/${taskId}`, { params: withCourseParams() })
+  return { ok: true }
+}
+
+/** PATCH /c_blog_task_rel_users/{id} */
+async function updateAssignment(assignmentId, payload) {
+  await axios.patch(`${ENTRYPOINT}c_blog_task_rel_users/${assignmentId}`, payload, {
+    params: withCourseParams(),
+    headers: { "Content-Type": "application/merge-patch+json" },
+  })
+  return { ok: true }
 }
 
 /** POST /c_blog_tasks */
@@ -749,6 +776,9 @@ export default {
   createTask,
   listAssignments,
   assignTask,
+  updateTask,
+  deleteTask,
+  updateAssignment,
 
   // Backward-compat alias used elsewhere in UI
   async listMembers() {

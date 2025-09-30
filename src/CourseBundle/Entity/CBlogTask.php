@@ -10,6 +10,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -19,7 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new Get(),
         new GetCollection(),
-        new Post(),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            processor: CBlogAssignAuthorProcessor::class
+        ),
+        new Patch(security: "object.getAuthor() === user or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new Delete(security: "object.getAuthor() === user or is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['blog_task:read']],
     denormalizationContext: ['groups' => ['blog_task:write']]
@@ -56,6 +65,11 @@ class CBlogTask
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     #[Groups(['blog_task:read', 'blog_task:write'])]
     protected ?CBlog $blog = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Groups(['blog_task:read'])]
+    protected ?User $author = null;
 
     public function getIid(): ?int
     {
@@ -132,5 +146,23 @@ class CBlogTask
         $this->blog = $blog;
 
         return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    #[Groups(['blog_task:read'])]
+    public function getAuthorId(): ?int
+    {
+        return method_exists($this->author,'getId') ? $this->author->getId() : null;
     }
 }

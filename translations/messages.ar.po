@@ -2745,7 +2745,7 @@ msgid "Course keywords (bold = not used)"
 msgstr "كلمات المقرر المفتاحية (العريضة- غير مستخدمة )"
 
 msgid "Total number of Links MD entries:"
-msgstr "Total number of Links MD entries:"
+msgstr "إجمالي عدد إدخالات روابط MD:"
 
 msgid "Forum deleted"
 msgstr "حذف المنتدى"
@@ -2850,7 +2850,7 @@ msgid "List View"
 msgstr "عرض القائمة"
 
 msgid "Threaded View"
-msgstr "Threaded View"
+msgstr "عرض متسلسل"
 
 msgid "Nested View"
 msgstr "عرض متداخل"
@@ -3168,7 +3168,7 @@ msgid "CSV import file must use , or ; as listseparator"
 msgstr "يجب أن يحتوي ملف CSV  على (,) أو (;) كفاصل بين محتويات القائمة"
 
 msgid "CSV import file must at least have columns URL and title"
-msgstr "CSV import file must at least have columns URL and title"
+msgstr "يجب أن يحتوي ملف الاستيراد CSV على الأعمدة URL وعنوان على الأقل"
 
 msgid "... - line 1 ="
 msgstr "... - line 1 ="
@@ -3210,7 +3210,8 @@ msgid "Select the \"target\" which shows the link on the homepage of the course"
 msgstr "اختر \"الهدف\" والذي يعرض رابط الصفحة الرئيسية للمقرر"
 
 msgid "Tracking DB."
-msgstr "Tracking DB."
+msgstr "قاعدة بيانات التتبع."
+
 
 msgid "Enable Tracking"
 msgstr "Enable Tracking"
@@ -3237,35 +3238,35 @@ msgid "Database Password"
 msgstr "Database Password"
 
 msgid "Main Chamilo database (DB)"
-msgstr "Main Chamilo database (DB)"
+msgstr "قاعدة بيانات تشاميلو الرئيسية (DB)"
 
 msgid "all fields required"
 msgstr "all fields required"
 
 msgid "Printable version"
-msgstr "Printable version"
+msgstr "نسخة قابلة للطباعة"
 
 msgid "Corresponding local path"
-msgstr "Corresponding local path"
+msgstr "المسار المحلي المقابل"
 
 msgid "Administrator e-mail"
 msgstr "Administrator email"
 
 msgid "Administrator Name"
-msgstr "Administrator Name"
+msgstr "اسم المسؤول"
 
 msgid "Surname of the Administrator"
 msgstr "Surname of the Administrator"
 
 msgid "Administrator login"
-msgstr "Administrator login"
+msgstr "دخول المسؤول"
 
 #, fuzzy
 msgid "Project manager"
 msgstr "Project manager"
 
 msgid "Your portal name"
-msgstr "Your portal name"
+msgstr "اسم بوابتك"
 
 msgid "The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues."
 msgstr "The install script will create the Chamilo main database(s). Please note that Chamilo will need to create several databases. If you are allowed to use only one database by your Hosting Service, Chamilo will not work, unless you chose the option \"One database\"."
@@ -3292,31 +3293,31 @@ msgid "MySQL database settings"
 msgstr "MySQL database settings"
 
 msgid "Main language"
-msgstr "Main language"
+msgstr "اللغة الرئيسية"
 
 msgid "License"
-msgstr "License"
+msgstr "الترخيص"
 
 msgid "Last check before install"
-msgstr "Last check before install"
+msgstr "آخر تحقق قبل التثبيت"
 
 msgid "Auto evaluation"
 msgstr "تقييم تلقائي"
 
 msgid "MySQL database prefix"
-msgstr "MySQL database prefix"
+msgstr "بادئة قاعدة بيانات MySQL"
 
 msgid "Leave empty if not requested"
 msgstr "Leave empty if not requested"
 
 msgid "Encrypt user passwords in database"
-msgstr "Encrypt user passwords in database"
+msgstr "تشفير كلمات مرور المستخدمين في قاعدة البيانات"
 
 msgid "Use one or several DB for Chamilo"
-msgstr "Use one or several DB for Chamilo"
+msgstr "استخدام قاعدة بيانات واحدة أو عدة لتشاميلو"
 
 msgid "Allow self-registration"
-msgstr "Allow self-registration"
+msgstr "السماح بالتسجيل الذاتي"
 
 msgid "(recommended)"
 msgstr "(موصى به)"
@@ -3325,10 +3326,10 @@ msgid "SCORM DB"
 msgstr "Scorm DB"
 
 msgid "Administrator last name"
-msgstr "Administrator last name"
+msgstr "لقب المسؤول"
 
 msgid "Administrator telephone"
-msgstr "Administrator telephone"
+msgstr "هاتف المسؤول"
 
 msgid "New note"
 msgstr "ملاحظة جديدة"
@@ -5538,6 +5539,7 @@ msgstr "LDAP خطأ الاتصال في"
 msgid "LDAP"
 msgstr "LDAP"
 
+
 msgid "Enable LDAP"
 msgstr "LDAP تمكين"
 
@@ -5589,8 +5591,10 @@ msgstr "LDAP يرجى اختيار الاصدار الخاص بالخادم"
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
+
 msgid "LDAP 3"
 msgstr "LDAP 3"
+
 
 msgid "Tutor identification field"
 msgstr "الحقل التعريفي الخاص بالمعلم"
@@ -6151,7 +6155,7 @@ msgid "Add LDAP users"
 msgstr "LDAP اضافة مستخدمين عبر"
 
 msgid "Academica"
-msgstr "Academica"
+msgstr "أكاديميكا"
 
 msgid "Add news"
 msgstr "اضافة اخبار"
@@ -6269,6 +6273,7 @@ msgstr "اظهار اسم وبريد المدرس في تذييل النظام"
 
 msgid "HTML"
 msgstr "HTML"
+
 
 msgid "Page Link"
 msgstr "رابط الصفحة"
@@ -6484,7 +6489,7 @@ msgid "Send this announcement by email to selected groups/users"
 msgstr "ارسل هذا التبليغ عبر البريد الى المستخدمين/المجاميع المحددين"
 
 msgid "On"
-msgstr "On"
+msgstr "تشغيل"
 
 msgid "registered users of the site"
 msgstr "المستخدمين المسجلين في الموقع"
@@ -8572,7 +8577,7 @@ msgid "Current course"
 msgstr "المقرر الحالي"
 
 msgid "Back"
-msgstr "Back"
+msgstr "عودة"
 
 msgid "Information"
 msgstr " معلومات"
@@ -8634,8 +8639,10 @@ msgstr "tahoma, arial, geneva, sans-serif"
 msgid ","
 msgstr ","
 
+
 msgid "."
 msgstr "."
+
 
 msgid "%b %d, %Y"
 msgstr "%b %d, %y"
@@ -8648,6 +8655,7 @@ msgstr "%B %d, %Y at %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
+
 
 msgid "Yes"
 msgstr "نعم"
@@ -8854,7 +8862,7 @@ msgid "Page"
 msgstr "الصفحة"
 
 msgid "English"
-msgstr "English"
+msgstr "الإنجليزية"
 
 msgid "Home"
 msgstr "البداية"
@@ -8926,7 +8934,7 @@ msgid "Portal Admin"
 msgstr "مدير المنصة"
 
 msgid "none"
-msgstr "none"
+msgstr "لا شيء"
 
 msgid "First select a course"
 msgstr "اختر المقرر الأول"
@@ -9271,10 +9279,10 @@ msgid "Anonymous"
 msgstr "مجهول"
 
 msgid "Create new global role"
-msgstr "Create new global role"
+msgstr "إنشاء دور عام جديد"
 
 msgid "Create new local role"
-msgstr "Create new local role"
+msgstr "إنشاء دور محلي جديد"
 
 msgid "Inbox"
 msgstr "البريد الوارد"
@@ -11029,13 +11037,13 @@ msgid "This e-mail address corresponds to the following user accounts."
 msgstr "هذا البريد الإلكتروني يرجع إلى حسابات المستخدم التالي"
 
 msgid "Chamilo can't handle the request automatically because the account has an external authentication source. Please take appropriate measures and notify the user."
-msgstr "Chamilo can't handle the request automatically because the account has an external authentication source. Please take appropriate measures and notify the user."
+msgstr "لا يمكن لتشاميلو التعامل مع الطلب تلقائياً لأن الحساب لديه مصدر مصادقة خارجي. يرجى اتخاذ الإجراءات المناسبة وإخطار المستخدم."
 
 msgid "Chamilo can't handle the request automatically because at least one of the accounts has an external authentication source. Please take appropriate measures for all accounts (including those with platform authentication) and notify the user."
-msgstr "Chamilo can't handle the request automatically because at least one of the accounts has an external authentication source. Please take appropriate measures for all accounts (including those with platform authentication) and notify the user."
+msgstr "لا يمكن لتشاميلو التعامل مع الطلب تلقائياً لأن حساباً واحداً على الأقل لديه مصدر مصادقة خارجي. يرجى اتخاذ الإجراءات المناسبة لجميع الحسابات (بما في ذلك تلك ذات المصادقة المنصة) وإخطار المستخدم."
 
 msgid "Chamilo can't handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result."
-msgstr "Chamilo can't handle the request automatically for this type of account. Your request has been sent to the platform administrator, who will take appropriate measures and notify you of the result."
+msgstr "لا يمكن لتشاميلو التعامل مع الطلب تلقائياً لهذا النوع من الحسابات. تم إرسال طلبك إلى مسؤول المنصة، الذي سيأخذ الإجراءات المناسبة ويخطرك بالنتيجة."
 
 msgid "Start with selecting a session below.<br />You can then see your progress for every course you are subscribed to."
 msgstr "Start with selecting a course session below.<br />You can then see your progress for every course you are subscribed to."
@@ -11929,7 +11937,7 @@ msgid "There is no strange case here"
 msgstr "لا يوجد حالة غريبة هنا"
 
 msgid "Ooops, problematic cases detected !!"
-msgstr "Ooops, problematic cases detected !!"
+msgstr "أوه، تم اكتشاف حالات مشكلة!!"
 
 msgid "Empty (or NULL)"
 msgstr "فارغة"
@@ -12010,7 +12018,7 @@ msgid "Correction"
 msgstr "التصحيح"
 
 msgid "Limit date"
-msgstr "Limit date"
+msgstr "تاريخ الحد"
 
 msgid "Sent date"
 msgstr "تاريخ الإرسال"
@@ -12019,10 +12027,10 @@ msgid "Notify"
 msgstr "الإعلام"
 
 msgid "Day of delay"
-msgstr "Day of delay"
+msgstr "يوم التأخير"
 
 msgid "No production"
-msgstr "No production"
+msgstr "لا إنتاج"
 
 msgid "No comment"
 msgstr "لا تعليق"
@@ -12079,7 +12087,7 @@ msgid "Trainer View"
 msgstr "واجهة المدرس"
 
 msgid "Coach interface"
-msgstr "Coach interface"
+msgstr "واجهة المدرب"
 
 msgid "Admin view"
 msgstr "واجهة الإدارة"
@@ -12184,13 +12192,13 @@ msgid "no such Links category"
 msgstr "لا يوجد تصنيف راوابط بهذا الإسم"
 
 msgid "(syntax error in manifest file...)"
-msgstr "(syntax error in manifest file...)"
+msgstr "(خطأ في بناء الجملة في ملف المانيفست...)"
 
 msgid "(empty manifest file...)"
-msgstr "(empty manifest file...)"
+msgstr "(ملف مانيفست فارغ...)"
 
 msgid "(no manifest file...)"
-msgstr "(no manifest file...)"
+msgstr "(لا يوجد ملف مانيفست...)"
 
 msgid "are not possible, it is not a folder..."
 msgstr "غير ممكن, هذا ليس مجلد ..."
@@ -12247,7 +12255,7 @@ msgid "root"
 msgstr "الجذر"
 
 msgid "Split manifests, and #MDe, if any:"
-msgstr "Split manifests, and #MDe, if any:"
+msgstr "تقسيم المانيفستات، و #MDe، إن وجد:"
 
 msgid "Manifest file replace has failed"
 msgstr "Manifest file replace has failed"
@@ -12256,10 +12264,10 @@ msgid "Manifest file has been replaced"
 msgstr "Manifest file has been replaced"
 
 msgid "New manifest file could not be opened (e.g. empty, too big)"
-msgstr "New manifest file could not be opened (e.g. empty, too big)"
+msgstr "لا يمكن فتح ملف المانيفست الجديد (مثل فارغ، كبير جداً)"
 
 msgid "Replace manifest file"
-msgstr "Replace manifest file"
+msgstr "استبدال ملف المانيفست"
 
 msgid "Table of contents successfully created."
 msgstr "لقد تم إنشاء جدول المحتويات بنجاح"
@@ -12925,7 +12933,7 @@ msgid "Identifier"
 msgstr "Identifier"
 
 msgid "unique identification for this learning object, composed of letters, digits, _-.()'!*"
-msgstr "unique identification for this learning object, composed of letters, digits, _-.()'!*"
+msgstr "معرف فريد لهذا الكائن التعليمي، مكون من حروف، أرقام، _-.()\'!*"
 
 msgid "title or name, and language of that title or name"
 msgstr "العنوان أو الإسم , و لغة العنوان أو الإسم"
@@ -12964,7 +12972,7 @@ msgid "Create"
 msgstr "إنشاء"
 
 msgid "obsolete entries removed for category"
-msgstr "obsolete entries removed for category"
+msgstr "تم إزالة الإدخالات القديمة للفئة"
 
 msgid " - duplicate categorynames were removed from the list!"
 msgstr " تم حذف التصنيفات المتكررة من القائمة"
@@ -13765,7 +13773,7 @@ msgid "Delete this task"
 msgstr "حذف هذه المهمة"
 
 msgid "This is a preset task. You can't delete a preset task."
-msgstr "This is a preset task. You can't delete a preset task."
+msgstr "هذه مهمة محددة مسبقاً. لا يمكن حذف مهمة محددة مسبقاً."
 
 msgid "Colour"
 msgstr "اللون"
@@ -14194,13 +14202,13 @@ msgid "Make all papers visible"
 msgstr "جعل جميع الاوراق مرئية"
 
 msgid "Administrator first name"
-msgstr "Administrator first name"
+msgstr "اسم المسؤول الأول"
 
 msgid "URL of this company"
 msgstr "URL of this organisation"
 
 msgid "User DB"
-msgstr "User DB"
+msgstr "قاعدة بيانات المستخدم"
 
 msgid "Please check these values"
 msgstr "Please check these values"
@@ -14266,7 +14274,7 @@ msgid "Content of the groups"
 msgstr "Content of the groups"
 
 msgid "Manual"
-msgstr "Manual"
+msgstr "دليل"
 
 msgid "You should write a message"
 msgstr "يجب عليك كتابة رسالة"
@@ -14281,28 +14289,28 @@ msgid "The teacher is set as you for now. You can change this setting later in t
 msgstr "تم تعيينك كمدرس حاليا، يمكنك تغيير هذه الاعدادات لاحقا في تهيئة اعدادات المقرر"
 
 msgid "Installation language"
-msgstr "Installation language"
+msgstr "لغة التثبيت"
 
 msgid "Please read the following requirements thoroughly."
 msgstr "Read thoroughly"
 
 msgid "Warning! The installer has detected an existing Chamilo platform on your system."
-msgstr "Warning! The installer has detected an existing Chamilo platform on your system."
+msgstr "تحذير! اكتشف مثبت البرنامج منصة تشاميلو موجودة على نظامك."
 
 msgid "New installation"
-msgstr "New installation"
+msgstr "تثبيت جديد"
 
 msgid "Check database connection"
-msgstr "Check database connection"
+msgstr "التحقق من اتصال قاعدة البيانات"
 
 msgid "Show Overview"
-msgstr "Show Overview"
+msgstr "عرض نظرة عامة"
 
 msgid "Install"
-msgstr "Install"
+msgstr "تثبيت"
 
 msgid "of"
-msgstr "of"
+msgstr "من"
 
 msgid "For more details"
 msgstr "For more details"
@@ -14314,7 +14322,7 @@ msgid "Your server must provide the following libraries to enable all features o
 msgstr "Libraries and features the server must provide to use Chamilo to its full extent"
 
 msgid "PHP version"
-msgstr "PHP version"
+msgstr "إصدار PHP"
 
 msgid "Support"
 msgstr "support"
@@ -14326,10 +14334,10 @@ msgid "Recommended settings"
 msgstr "Recommended settings"
 
 msgid "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server."
-msgstr "Recommended settings for your server configuration. These settings are set in the php.ini configuration file on your server."
+msgstr "الإعدادات الموصى بها لتكوين خادمك. يتم تعيين هذه الإعدادات في ملف تكوين php.ini على خادمك."
 
 msgid "Currently"
-msgstr "Currently"
+msgstr "حالياً"
 
 msgid "Directory and files permissions"
 msgstr "Directory and files permissions"
@@ -14338,34 +14346,34 @@ msgid "Some directories and the files they include must be writable by the web s
 msgstr "Some directories and the files they include must be writeable by the web server in order for Chamilo to run (students uploaded files, homepage html files, ...). This might imply a manual change on your server (outside of this interface)."
 
 msgid "Not writable"
-msgstr "Not writable"
+msgstr "غير قابل للكتابة"
 
 msgid "Writable"
-msgstr "Writable"
+msgstr "قابل للكتابة"
 
 msgid "LDAP Extension not available"
-msgstr "LDAP Extension not available"
+msgstr "امتداد LDAP غير متاح"
 
 msgid "GD Extension not available"
-msgstr "GD Extension not available"
+msgstr "امتداد GD غير متاح"
 
 msgid "Chamilo is free software distributed under the GNU General Public licence (GPL)."
-msgstr "Chamilo is free software distributed under the GNU General Public licence (GPL)."
+msgstr "تشاميلو برمجيات حرة موزعة تحت رخصة GPL العامة لـ GNU."
 
 msgid "I accept"
 msgstr "I accept"
 
 msgid "The following values will be written into your configuration file"
-msgstr "The following values will be written into your configuration file"
+msgstr "سيتم كتابة القيم التالية في ملف التكوين الخاص بك"
 
 msgid "Go to your newly created portal."
-msgstr "Go to your newly created portal."
+msgstr "اذهب إلى بوابتك الجديدة المُنشأة."
 
 msgid "When you enter your portal for the first time, the best way to understand it is to create a course with the 'Create course' link in the menu and play around a little."
 msgstr "When you enter your campus for the first time, the best way to understand it is to register with the option 'Create course area' and then follow the way."
 
 msgid "Update from Chamilo"
-msgstr "Update from Chamilo"
+msgstr "التحديث من تشاميلو"
 
 msgid "Please select the language you'd like to use when installing"
 msgstr "Please select the language you'd like to use when installing"
@@ -14389,7 +14397,7 @@ msgid "read warning below"
 msgstr "read warning below"
 
 msgid "Security advice"
-msgstr "Security advice"
+msgstr "نصيحة أمان"
 
 msgid "You have more than %d courses on your Chamilo platform ! Only %d courses have been updated. To update the other courses, %sclick here %s"
 msgstr "You have more than %d courses on your Chamilo platform ! Only %d courses have been updated. To update the other courses, %sclick here %s"
@@ -14401,13 +14409,13 @@ msgid "has not been found"
 msgstr "has not been found"
 
 msgid "Please go back to Step 1"
-msgstr "Please go back to Step 1"
+msgstr "يرجى العودة إلى الخطوة 1"
 
 msgid "has not been found in that directory"
-msgstr "has not been found in that directory"
+msgstr "لم يتم العثور عليه في ذلك المجلد"
 
 msgid "Old version's root path"
-msgstr "Old version's root path"
+msgstr "مسار الجذر للإصدار القديم"
 
 msgid "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the %s installation guide %s"
 msgstr "Some files or folders don't have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the %s installation guide %s"
@@ -14416,10 +14424,10 @@ msgid "The database server doesn't work or login / pass is bad"
 msgstr "The database server doesn't work or login / pass is bad"
 
 msgid "Please go back to Step"
-msgstr "Please go back to Step"
+msgstr "يرجى العودة إلى الخطوة"
 
 msgid "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
-msgstr "The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!"
+msgstr "سيقوم نص الترقية باستعادة وتحديث قواعد بيانات تشاميلو. للقيام بذلك، سيستخدم هذا النص قواعد البيانات والإعدادات المحددة أدناه. بسبب أن برمجياتنا تعمل على مجموعة واسعة من الأنظمة وبما أن بعضها قد لا يكون قد تم اختباره، نوصي بشدة بعمل نسخة احتياطية كاملة لقواعد بياناتك قبل المتابعة مع الترقية!"
 
 msgid "Optional parameters"
 msgstr "معلمات اختيارية"
@@ -14833,7 +14841,7 @@ msgid "Waiting for admin response"
 msgstr "انتظار معلومات مرتجعة من المدير"
 
 msgid "Re"
-msgstr "Re"
+msgstr "إعادة"
 
 msgid "Files attachments"
 msgstr "الملفات المرفقة"
@@ -16200,8 +16208,10 @@ msgstr ""
 msgid "%d %B %Y"
 msgstr "%d %B %Y"
 
+
 msgid "%A"
 msgstr "%A"
+
 
 msgid "Return to the course list"
 msgstr "العودة الى قائمة المقررات"

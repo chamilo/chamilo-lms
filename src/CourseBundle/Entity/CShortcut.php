@@ -48,9 +48,42 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     #[Groups(['cshortcut:read'])]
     public ?string $target = null;
 
+    /**
+     * Optional custom URL to override the default /r/.../link format.
+     * Example (for blogs): /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0
+     */
+    #[Groups(['cshortcut:read'])]
+    private ?string $urlOverride = null;
+
+    /**
+     * Optional icon name (e.g., 'mdi-notebook-outline' for CBlog).
+     */
+    #[Groups(['cshortcut:read'])]
+    private ?string $icon = null;
+
     public function __toString(): string
     {
         return $this->getTitle();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->id;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
     }
 
     public function getTitle(): string
@@ -58,34 +91,11 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
         return $this->title;
     }
 
-    public function getUrl(): string
-    {
-        return '/r/'.$this->getShortCutNode()->getResourceType()->getTool()->getTitle().
-            '/'.$this->getShortCutNode()->getResourceType()->getTitle().
-            '/'.$this->getShortCutNode()->getId().
-            '/link';
-    }
-
-    public function getTool(): string
-    {
-        return $this->getShortCutNode()->getResourceType()->getTool()->getTitle();
-    }
-
-    public function getType(): string
-    {
-        return $this->getShortCutNode()->getResourceType()->getTitle();
-    }
-
     public function setTitle(string $title): self
     {
         $this->title = $title;
 
         return $this;
-    }
-
-    public function getResourceIdentifier(): int
-    {
-        return $this->id;
     }
 
     public function getShortCutNode(): ResourceNode
@@ -100,6 +110,45 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
+    /**
+     * Main URL for the shortcut:
+     * - If a custom URL was set (e.g., for CBlog), return that one.
+     * - Otherwise, fallback to the legacy /r/{tool}/{type}/{nodeId}/link pattern.
+     */
+    public function getUrl(): string
+    {
+        if (!empty($this->urlOverride)) {
+            return $this->urlOverride;
+        }
+
+        return '/r/'.
+            $this->getShortCutNode()->getResourceType()->getTool()->getTitle().'/'.
+            $this->getShortCutNode()->getResourceType()->getTitle().'/'.
+            $this->getShortCutNode()->getId().
+            '/link';
+    }
+
+    /**
+     * Tool name (derived from the shortcut node).
+     */
+    public function getTool(): string
+    {
+        return $this->getShortCutNode()
+            ->getResourceType()
+            ->getTool()
+            ->getTitle();
+    }
+
+    /**
+     * Resource type name (derived from the shortcut node).
+     */
+    public function getType(): string
+    {
+        return $this->getShortCutNode()
+            ->getResourceType()
+            ->getTitle();
+    }
+
     public function getCustomImageUrl(): ?string
     {
         return $this->customImageUrl;
@@ -112,18 +161,35 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
         return $this;
     }
 
-    public function getId(): int
+    /**
+     * Set a custom URL that will be returned by getUrl().
+     * Use it, for example, to point a CBlog shortcut to:
+     *   /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0
+     */
+    public function setUrlOverride(?string $url): self
     {
-        return $this->id;
+        $this->urlOverride = $url;
+
+        return $this;
     }
 
-    public function getResourceName(): string
+    public function getUrlOverride(): ?string
     {
-        return $this->getTitle();
+        return $this->urlOverride;
     }
 
-    public function setResourceName(string $name): self
+    /**
+     * Set an icon name (e.g., 'mdi-notebook-outline').
+     */
+    public function setIcon(?string $icon): self
     {
-        return $this->setTitle($name);
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
     }
 }

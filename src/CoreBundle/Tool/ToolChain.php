@@ -151,6 +151,7 @@ class ToolChain
             'agenda',
             'forum',
             'dropbox',
+            'blog',
             'member',
             'group',
             'chat',

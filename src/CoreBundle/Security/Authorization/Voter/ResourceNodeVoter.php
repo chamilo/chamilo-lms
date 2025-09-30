@@ -119,6 +119,10 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
+        if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
+            return true;
+        }
+
         // @todo
         switch ($attribute) {
             case self::VIEW:
@@ -512,6 +516,27 @@ class ResourceNodeVoter extends Voter
 
         foreach ($roles as $role) {
             if ($acl->isAllowed($role, $linkId, $askedMask)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isBlogResource(ResourceNode $node): bool
+    {
+        $type = $node->getResourceType()?->getTitle();
+        if (\in_array($type, ['blog', 'blogs', 'c_blog', 'c_blogs'], true)) {
+            return true;
+        }
+
+        $firstLink = $node->getResourceLinks()->first();
+        if ($firstLink && method_exists($firstLink, 'getTool') && $firstLink->getTool()) {
+            $toolName = method_exists($firstLink->getTool(), 'getName')
+                ? $firstLink->getTool()->getName()
+                : $firstLink->getTool()->getTitle();
+
+            if (\in_array(\strtolower((string) $toolName), ['blog', 'blogs'], true)) {
                 return true;
             }
         }

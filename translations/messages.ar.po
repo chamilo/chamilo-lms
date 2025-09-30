@@ -3212,7 +3212,6 @@ msgstr "اختر \"الهدف\" والذي يعرض رابط الصفحة الر
 msgid "Tracking DB."
 msgstr "قاعدة بيانات التتبع."
 
-
 msgid "Enable Tracking"
 msgstr "Enable Tracking"
 
@@ -5539,7 +5538,6 @@ msgstr "LDAP خطأ الاتصال في"
 msgid "LDAP"
 msgstr "LDAP"
 
-
 msgid "Enable LDAP"
 msgstr "LDAP تمكين"
 
@@ -5591,10 +5589,8 @@ msgstr "LDAP يرجى اختيار الاصدار الخاص بالخادم"
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
-
 msgid "LDAP 3"
 msgstr "LDAP 3"
-
 
 msgid "Tutor identification field"
 msgstr "الحقل التعريفي الخاص بالمعلم"
@@ -6273,7 +6269,6 @@ msgstr "اظهار اسم وبريد المدرس في تذييل النظام"
 
 msgid "HTML"
 msgstr "HTML"
-
 
 msgid "Page Link"
 msgstr "رابط الصفحة"
@@ -8639,10 +8634,8 @@ msgstr "tahoma, arial, geneva, sans-serif"
 msgid ","
 msgstr ","
 
-
 msgid "."
 msgstr "."
-
 
 msgid "%b %d, %Y"
 msgstr "%b %d, %y"
@@ -8655,7 +8648,6 @@ msgstr "%B %d, %Y at %I:%M %p"
 
 msgid "%I:%M %p"
 msgstr "%I:%M %p"
-
 
 msgid "Yes"
 msgstr "نعم"
@@ -16203,15 +16195,13 @@ msgid "Click to show graphics"
 msgstr ""
 
 msgid "Quarterly report"
-msgstr ""
+msgstr "تقرير ربع سنوي"
 
 msgid "%d %B %Y"
 msgstr "%d %B %Y"
 
-
 msgid "%A"
 msgstr "%A"
-
 
 msgid "Return to the course list"
 msgstr "العودة الى قائمة المقررات"
@@ -18618,7 +18608,7 @@ msgid "%m/%d/%Y"
 msgstr "%m/%d/%Y"
 
 msgid "%B %d, %Y at %H:%M"
-msgstr "%B %d, %Y at %H:%M"
+msgstr "%B %d، %Y في %H:%M"
 
 msgid "Enable legal terms"
 msgstr "تفعيل الاحكام القانونية"
@@ -19917,7 +19907,7 @@ msgid "John"
 msgstr "الانضمام"
 
 msgid "Doe"
-msgstr "Doe"
+msgstr "دو"
 
 msgid "Attendances updated"
 msgstr "تم تحديث الحضور"
@@ -23997,10 +23987,10 @@ msgid "Portfolio item by %s"
 msgstr ""
 
 msgid "Copy to my portfolio"
-msgstr ""
+msgstr "نسخ إلى محفظتي"
 
 msgid "Copy to student portfolio"
-msgstr ""
+msgstr "نسخ إلى محفظة الطالب"
 
 msgid "Originally published as \"%s\" by %s"
 msgstr ""
@@ -24009,28 +23999,28 @@ msgid "Originally commented by %s in \"%s\""
 msgstr ""
 
 msgid "Item added to students own portfolio"
-msgstr ""
+msgstr "تم إضافة العنصر إلى محفظة الطالب الخاصة به"
 
 msgid "Mark comment as important"
-msgstr ""
+msgstr "وضع علامة على التعليق كمهم"
 
 msgid "Unmark comment as important"
-msgstr ""
+msgstr "إزالة علامة التعليق كمهم"
 
 msgid "Portfolio item marked as important"
-msgstr ""
+msgstr "تم وضع علامة على عنصر المحفظة كمهم"
 
 msgid "Select a learner portfolio"
-msgstr ""
+msgstr "اختر محفظة المتعلم"
 
 msgid "See my portfolio in this course"
-msgstr ""
+msgstr "عرض محفظتي في هذا المقرر"
 
 msgid "Portfolio details"
 msgstr ""
 
 msgid "Item title"
-msgstr ""
+msgstr "عنوان العنصر"
 
 msgid "Creation date: %s"
 msgstr ""
@@ -24048,7 +24038,7 @@ msgid "Item title: %s"
 msgstr ""
 
 msgid "No items in your portfolio"
-msgstr ""
+msgstr "لا توجد عناصر في محفظتك"
 
 msgid "You have not commented"
 msgstr ""
@@ -24060,7 +24050,7 @@ msgid "Portfolio comments"
 msgstr ""
 
 msgid "Comments made"
-msgstr ""
+msgstr "التعليقات المُنشرة"
 
 msgid "Grade this item"
 msgstr ""
@@ -24069,10 +24059,10 @@ msgid "Portfolio item was graded"
 msgstr ""
 
 msgid "Context for the comment to be grade"
-msgstr ""
+msgstr "سياق التعليق للتقييم"
 
 msgid "Grade this comment"
-msgstr ""
+msgstr "تقييم هذا التعليق"
 
 msgid "Portfolio comment was graded"
 msgstr ""
@@ -24096,28 +24086,28 @@ msgid "Student's assignments to be corrected"
 msgstr ""
 
 msgid "You will find below all the work that have been submitted by students in one of your course (it could be in the base course or in a course in a session). You can filter the list selecting a specific course or a work status."
-msgstr ""
+msgstr "ستجد أدناه جميع الأعمال التي قدمها الطلاب في أحد مقرراتك (قد تكون في المقرر الأساسي أو في مقرر في جلسة). يمكنك تصفية القائمة باختيار مقرر معين أو حالة عمل."
 
 msgid "Back to the main course portfolio"
-msgstr ""
+msgstr "العودة إلى محفظة المقرر الرئيسية"
 
 msgid "Export my portfolio data in a PDF file"
-msgstr ""
+msgstr "تصدير بيانات محفظتي إلى ملف PDF"
 
 msgid "Export my portfolio data in a ZIP file"
-msgstr ""
+msgstr "تصدير بيانات محفظتي إلى ملف ZIP"
 
 msgid "Categories are for organization only in personal portfolio."
-msgstr ""
+msgstr "الفئات للتنظيم فقط في المحفظة الشخصية."
 
 msgid "Export my portfolio data to a PDF file"
-msgstr ""
+msgstr "تصدير بيانات محفظتي إلى ملف PDF"
 
 msgid "Export my portfolio data to a ZIP file"
-msgstr ""
+msgstr "تصدير بيانات محفظتي إلى ملف ZIP"
 
 msgid "New learning path available"
-msgstr ""
+msgstr "مسار تعلم جديد متاح"
 
 msgid "There is a new learning path called %s that has been added to your %s course. Go to this learning path here : %s"
 msgstr ""
@@ -24126,10 +24116,10 @@ msgid "%s %% Completed"
 msgstr ""
 
 msgid "E-mail to teachers on new user's post in the portfolio tool"
-msgstr ""
+msgstr "بريد إلكتروني إلى المعلمين حول منشور مستخدم جديد في أداة المحفظة"
 
 msgid "There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>."
-msgstr ""
+msgstr "هناك منشور جديد بواسطة %s في محفظة المقرر %s. لعرضه <a href=\'%s\'>اذهب هنا</a>."
 
 msgid "[Portfolio] New post in course %s"
 msgstr ""
@@ -24138,121 +24128,121 @@ msgid "Ongoing training"
 msgstr ""
 
 msgid "Dear %s,<br /><br /> A new test/quiz %s has been added to course %s.<br /><br />Course: %s <br />Test/Quiz name: %s <br />"
-msgstr ""
+msgstr "عزيزي %s،<br /><br /> تم إضافة اختبار/كويز جديد %s إلى المقرر %s.<br /><br />المقرر: %s <br />اسم الاختبار/الكويز: %s <br />"
 
 msgid "Visit the test/quiz page <a href=\"%s\">%s</a><br />"
-msgstr ""
+msgstr "زيارة صفحة الاختبار/الكويز <a href=\"%s\">%s</a><br />"
 
 msgid "Dear %s,<br /><br />As his/her parent, you are receiving this e-mail to let you know that %s just got a new test/quiz %s in course %s.<br /><br />Learner: %s<br /> Course: %s<br />Test/Quiz name: %s<br />"
-msgstr ""
+msgstr "عزيزي %s،<br /><br />كوالد/ولي أمر، أنت تتلقى هذا البريد الإلكتروني لإخبارك أن %s حصل للتو على اختبار/كويز جديد %s في المقرر %s.<br /><br />المتعلم: %s<br /> المقرر: %s<br />اسم الاختبار/الكويز: %s<br />"
 
 msgid "Test duration: %s <br />"
-msgstr ""
+msgstr "مدة الاختبار: %s <br />"
 
 msgid "Test start date: %s <br />"
-msgstr ""
+msgstr "تاريخ بدء الاختبار: %s <br />"
 
 msgid "Test end date: %s <br />"
-msgstr ""
+msgstr "تاريخ انتهاء الاختبار: %s <br />"
 
 msgid "Career Diagram Legend"
 msgstr ""
 
 msgid "Career Diagram Disclaimer"
-msgstr ""
+msgstr "إخلاء مسؤولية رسم بياني المسار المهني"
 
 msgid "Successful Attempt"
-msgstr ""
+msgstr "محاولة ناجحة"
 
 msgid "Failed attempt"
-msgstr ""
+msgstr "محاولة فاشلة"
 
 msgid "Students with successful attempt"
-msgstr ""
+msgstr "الطلاب ذوي المحاولة الناجحة"
 
 msgid "Students with failed attempt"
-msgstr ""
+msgstr "الطلاب ذوي المحاولة الفاشلة"
 
 msgid "Exercise attempt stats report"
-msgstr ""
+msgstr "تقرير إحصائيات محاولات التمرين"
 
 msgid "Comparative group report"
-msgstr ""
+msgstr "تقرير مقارن للمجموعة"
 
 msgid "Courses usage"
-msgstr ""
+msgstr "استخدام المقررات"
 
 msgid "Hide connection time"
-msgstr ""
+msgstr "إخفاء وقت الاتصال"
 
 msgid "Course in which the question was initially created."
-msgstr ""
+msgstr "المقرر الذي تم إنشاء السؤال فيه أولاً."
 
 msgid "Apprenticeship contract"
-msgstr ""
+msgstr "عقد التدريب المهني"
 
 msgid "Export Common Cartridge v1.3"
-msgstr ""
+msgstr "تصدير Common Cartridge v1.3"
 
 msgid "Import Common Cartridge v1.3"
-msgstr ""
+msgstr "استيراد Common Cartridge v1.3"
 
 msgid "Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms."
-msgstr ""
+msgstr "تصدير محتوى المقرر في تنسيق IMS Common Cartridge 1.3، لمشاركته على منصات أخرى."
 
 msgid "Import a course in IMS Common Cartridge 1.3 format, from another platform compatible with this format. The version is important."
-msgstr ""
+msgstr "استيراد مقرر في تنسيق IMS Common Cartridge 1.3، من منصة أخرى متوافقة مع هذا التنسيق. الإصدار مهم."
 
 msgid "IMS CC file created."
-msgstr ""
+msgstr "تم إنشاء ملف IMS CC."
 
 msgid "IMS CC file"
-msgstr ""
+msgstr "ملف IMS CC"
 
 msgid "IMS CC file imported."
-msgstr ""
+msgstr "تم استيراد ملف IMS CC."
 
 msgid "Upload any IMS CC (.imscc or .zip) file in the right version and it will be extracted directly into your course."
-msgstr ""
+msgstr "تحميل أي ملف IMS CC (.imscc أو .zip) في الإصدار الصحيح وسيتم استخراجها مباشرة إلى المقرر."
 
 msgid "IMS Common Cartridge v1.3"
-msgstr ""
+msgstr "IMS Common Cartridge v1.3"
 
 msgid "Hide question number"
-msgstr ""
+msgstr "إخفاء رقم السؤال"
 
 msgid "Pending attempts"
 msgstr ""
 
 msgid "Edit in profile"
-msgstr ""
+msgstr "تحرير في الملف الشخصي"
 
 msgid "Guidance"
-msgstr ""
+msgstr "إرشاد"
 
 msgid "Remove time"
-msgstr ""
+msgstr "إزالة الوقت"
 
 msgid "Copy with session content"
-msgstr ""
+msgstr "نسخ مع محتوى الجلسة"
 
 msgid "Export by class"
 msgstr ""
 
 msgid "Upload answer"
-msgstr ""
+msgstr "تحميل الإجابة"
 
 msgid "Token expired, action already realized"
 msgstr ""
 
 msgid "Corrector"
-msgstr ""
+msgstr "مصحح"
 
 msgid "Correction date"
-msgstr ""
+msgstr "تاريخ التصحيح"
 
 msgid "Hide attempts table on start page"
-msgstr ""
+msgstr "إخفاء جدول المحاولات في صفحة البدء"
 
 msgid "Maximum progress in learning paths"
 msgstr ""
@@ -24261,16 +24251,16 @@ msgid "Hide skills"
 msgstr ""
 
 msgid "Options for hiding in export"
-msgstr ""
+msgstr "خيارات الإخفاء في التصدير"
 
 msgid "Hide assignments"
 msgstr ""
 
 msgid "Add survey to course"
-msgstr ""
+msgstr "إضافة استطلاع إلى المقرر"
 
 msgid "Move the current survey"
-msgstr ""
+msgstr "نقل الاستطلاع الحالي"
 
 msgid "Share events in course sessions"
 msgstr ""
@@ -24279,28 +24269,28 @@ msgid "Agenda events in the course will be visible in sessions"
 msgstr ""
 
 msgid "Agenda events only visible in current course"
-msgstr ""
+msgstr "أحداث الجدول الزمني مرئية فقط في المقرر الحالي"
 
 msgid "Test result"
-msgstr ""
+msgstr "نتيجة الاختبار"
 
 msgid "Filter by Learning Path"
-msgstr ""
+msgstr "تصفية حسب مسار التعلم"
 
 msgid "Share forums in all sessions"
 msgstr ""
 
 msgid "You have achieved a new skill."
-msgstr ""
+msgstr "لقد حققت مهارة جديدة."
 
 msgid "Hi, %s. You have achieved the skill \"%s\". To see the details go here: %s."
 msgstr ""
 
 msgid "To assign a new skill to this user, click <a href=\"%s\">here</a>"
-msgstr ""
+msgstr "لتعيين مهارة جديدة لهذا المستخدم، انقر <a href=\"%s\">هنا</a>"
 
 msgid "Add event in course calendar"
-msgstr ""
+msgstr "إضافة حدث في تقويم المقرر"
 
 msgid "Hours"
 msgstr ""
@@ -24309,10 +24299,10 @@ msgid "Reminder for event : %s"
 msgstr ""
 
 msgid "Add notification"
-msgstr ""
+msgstr "إضافة إشعار"
 
 msgid "Notification to remind the event"
-msgstr ""
+msgstr "إشعار لتذكير الحدث"
 
 msgid "Add tags"
 msgstr ""
@@ -24333,22 +24323,22 @@ msgid "You are registered in the training %s since the %s"
 msgstr ""
 
 msgid "You are receiving this message because you have completed a learning path with a %s% progress of your training.<br/>Your progress must be 100 to consider that your training was carried out.<br/>If you have the slightest problem, you should contact with your trainer."
-msgstr ""
+msgstr "أنت تتلقى هذه الرسالة لأنك أكملت مسار تعلم بتقدم %s% من تدريبك.<br/>يجب أن يكون تقدمك 100 للاعتبار بأن تدريبك قد تم تنفيذه.<br/>إذا كان لديك أدنى مشكلة، يجب الاتصال بمدربك."
 
 msgid "As a reminder, to access the training platform:<br/>1. Connect to the platform at the address: %s <br/>2. Then enter: <br/>Your username: %s <br/>Your password: This was emailed to you.<br/>if you forgot it and can't find it, you can retrieve it by going to %s <br/><br/>Thank you for doing what is necessary."
-msgstr ""
+msgstr "كتذكير، للوصول إلى منصة التدريب:<br/>1. الاتصال بالمنصة على العنوان: %s <br/>2. ثم أدخل: <br/>اسم المستخدم الخاص بك: %s <br/>كلمة المرور الخاصة بك: تم إرسالها إليك عبر البريد الإلكتروني.<br/>إذا نسيتها ولا يمكنك العثور عليها، يمكنك استرجاعها بالذهاب إلى %s <br/><br/>شكراً لفعل ما يلزم."
 
 msgid "The training center<p>%s</p>Trainers:<br/>%s"
 msgstr ""
 
 msgid "Get embedable link"
-msgstr ""
+msgstr "الحصول على رابط قابل للتضمين"
 
 msgid "Link to embed the exercise"
-msgstr ""
+msgstr "رابط لتضمين التمرين"
 
 msgid "Copy this url to include this exercise in an iframe:"
-msgstr ""
+msgstr "نسخ هذا الرابط لتضمين هذا التمرين في إطار:"
 
 msgid "Export extra fields"
 msgstr ""
@@ -24357,13 +24347,13 @@ msgid "Hide ex-learners"
 msgstr ""
 
 msgid "Certificate of achievement per learning path"
-msgstr ""
+msgstr "شهادة الإنجاز لكل مسار تعلم"
 
 msgid "You have obtained the following results in the training course:"
-msgstr ""
+msgstr "لقد حصلت على النتائج التالية في مقرر التدريب:"
 
 msgid "You have obtained the following results in the tests:"
-msgstr ""
+msgstr "لقد حصلت على النتائج التالية في الاختبارات:"
 
 msgid "Export LP Quiz results"
 msgstr ""
@@ -24372,22 +24362,22 @@ msgid "Learning path results"
 msgstr ""
 
 msgid "Active users in sessions per URL"
-msgstr ""
+msgstr "المستخدمون النشطون في الجلسات حسب الرابط"
 
 msgid "Next LP"
-msgstr ""
+msgstr "المسار التالي"
 
 msgid "No notification"
-msgstr ""
+msgstr "لا إشعار"
 
 msgid "Allow skills assignation by sub category"
-msgstr ""
+msgstr "السماح بتعيين المهارات حسب الفئة الفرعية"
 
 msgid "It allows the acquisition of skills by sub categories independently."
-msgstr ""
+msgstr "يسمح بتكتسب المهارات بواسطة الفئات الفرعية بشكل مستقل."
 
 msgid "Minimum score"
-msgstr ""
+msgstr "الحد الأدنى للدرجة"
 
 msgid "In LP"
 msgstr ""
@@ -24396,46 +24386,46 @@ msgid "Courses reports"
 msgstr ""
 
 msgid "Fill blanks or form with global score"
-msgstr ""
+msgstr "ملء الفراغات أو النموذج بالدرجة العامة"
 
 msgid "Matching with global score"
-msgstr ""
+msgstr "مطابقة بالدرجة العامة"
 
 msgid "Image zones with global score"
-msgstr ""
+msgstr "مناطق الصور بالدرجة العامة"
 
 msgid "Match by dragging with global score"
-msgstr ""
+msgstr "مطابقة بسحب بالدرجة العامة"
 
 msgid "Progress in session report"
-msgstr ""
+msgstr "تقرير التقدم في الجلسة"
 
 msgid "This question is shared with other exercises, are you sure you want to delete it?"
-msgstr ""
+msgstr "هذا السؤال مشترك مع تمارين أخرى، هل أنت متأكد من رغبتك في حذفه؟"
 
 msgid "View for tablet"
-msgstr ""
+msgstr "عرض للجهاز اللوحي"
 
 msgid "Disable signature"
-msgstr ""
+msgstr "تعطيل التوقيع"
 
 msgid "Enable signature"
-msgstr ""
+msgstr "تفعيل التوقيع"
 
 msgid "Sign"
-msgstr ""
+msgstr "توقيع"
 
 msgid "View signature"
-msgstr ""
+msgstr "عرض التوقيع"
 
 msgid "Download QR for attendance signature"
-msgstr ""
+msgstr "تنزيل رمز QR لتوقيع الحضور"
 
 msgid "Password requirement passed"
 msgstr ""
 
 msgid "Pending password requirement"
-msgstr ""
+msgstr "متطلب كلمة المرور معلق"
 
 msgid "Minimum %s special characters"
 msgstr ""
@@ -24450,22 +24440,22 @@ msgid "Not in any class"
 msgstr ""
 
 msgid "The account for username <i>%s</i> was disabled after %d failed login attempts."
-msgstr ""
+msgstr "تم تعطيل الحساب لاسم المستخدم <i>%s</i> بعد %d محاولات تسجيل دخول فاشلة."
 
 msgid "Answer list"
-msgstr ""
+msgstr "قائمة الإجابات"
 
 msgid "Enter a list of answers (one answer by line)"
-msgstr ""
+msgstr "أدخل قائمة بالإجابات (إجابة واحدة لكل سطر)"
 
 msgid "Or select a CSV file with a list of answers"
 msgstr ""
 
 msgid "Convert to multiple answer dropdown"
-msgstr ""
+msgstr "تحويل إلى قائمة منسدلة متعددة الإجابات"
 
 msgid "Multiple answer dropdown"
-msgstr ""
+msgstr "قائمة منسدلة متعددة الإجابات"
 
 msgid "Highlighted"
 msgstr ""
@@ -24504,31 +24494,31 @@ msgid "Unmarked as highlighted"
 msgstr ""
 
 msgid "Portfolio item set as a new template"
-msgstr ""
+msgstr "تم تعيين عنصر المحفظة كنموذج جديد"
 
 msgid "Portfolio item unset as template"
-msgstr ""
+msgstr "تم إلغاء تعيين عنصر المحفظة كنموذج"
 
 msgid "Global multiple answer dropdown"
-msgstr ""
+msgstr "قائمة منسدلة متعددة الإجابات عامة"
 
 msgid "[Portfolio] New comment in post %s"
 msgstr ""
 
 msgid "There is a new comment in the post <i>%s</i> from the <i>%s</i> course portfolio. To view it <a href='%s'>go here</a>."
-msgstr ""
+msgstr "هناك تعليق جديد في المنشور <i>%s</i> من محفظة المقرر <i>%s</i>. لعرضه <a href=\'%s\'>اذهب هنا</a>."
 
 msgid "Portfolio comment set as a new template"
-msgstr ""
+msgstr "تم تعيين تعليق المحفظة كنموذج جديد"
 
 msgid "Portfolio comment unset as template"
-msgstr ""
+msgstr "تم إلغاء تعيين تعليق المحفظة كنموذج"
 
 msgid "Make visible for teachers"
 msgstr ""
 
 msgid "Email alert to Teachers and Student on new comment in Portfolio"
-msgstr ""
+msgstr "تنبيه بريد إلكتروني إلى المعلمين والطلاب عند تعليق جديد في المحفظة"
 
 msgid "Tag"
 msgstr ""
@@ -24540,37 +24530,37 @@ msgid "Tag deleted"
 msgstr ""
 
 msgid "Comment by %s in <em>%s</em>"
-msgstr ""
+msgstr "تعليق بواسطة %s في <em>%s</em>"
 
 msgid "Portfolio tool introduction"
-msgstr ""
+msgstr "مقدمة أداة المحفظة"
 
 msgid "Access through LTI to Learning Path"
-msgstr ""
+msgstr "الوصول عبر LTI إلى مسار التعلم"
 
 msgid "User %s has not been registered to course %s"
 msgstr ""
 
 msgid "Open content in a new tab"
-msgstr ""
+msgstr "فتح المحتوى في تبويب جديد"
 
 msgid "There are users or courses using this language. Do you want to disable this language and set all these users and courses with the default portal language?"
-msgstr ""
+msgstr "هناك مستخدمون أو مقررات تستخدم هذه اللغة. هل تريد تعطيل هذه اللغة وتعيين جميع هؤلاء المستخدمين والمقررات بلغة البوابة الافتراضية؟"
 
 msgid "Number of users registered and connected"
 msgstr ""
 
 msgid "Number of users registered (total)"
-msgstr ""
+msgstr "عدد المستخدمين المسجلين (إجمالي)"
 
 msgid "Number of users registered (new vs previous quarter)"
-msgstr ""
+msgstr "عدد المستخدمين المسجلين (جديد مقابل الربع السابق)"
 
 msgid "Number of users who connected"
 msgstr ""
 
 msgid "*: Current quarter, incomplete data"
-msgstr ""
+msgstr "*: الربع الحالي، بيانات غير مكتملة"
 
 msgid "Q%s %s"
 msgstr ""
@@ -24582,28 +24572,28 @@ msgid "Number of existing and available courses"
 msgstr ""
 
 msgid "Number of existing courses (total)"
-msgstr ""
+msgstr "عدد المقررات الموجودة (إجمالي)"
 
 msgid "Number of available courses (not closed or hidden, total)"
-msgstr ""
+msgstr "عدد المقررات المتاحة (غير مغلقة أو مخفية، إجمالي)"
 
 msgid "Hours of training"
 msgstr ""
 
 msgid "Number of hours of training followed (total)"
-msgstr ""
+msgstr "عدد ساعات التدريب المتابعة (إجمالي)"
 
 msgid "Number of certificates generated"
 msgstr ""
 
 msgid "Number of certificates generated (total)"
-msgstr ""
+msgstr "عدد الشهادات المُولدة (إجمالي)"
 
 msgid "Number of sessions per duration"
-msgstr ""
+msgstr "عدد الجلسات حسب المدة"
 
 msgid "Sessions per duration (by quarter)"
-msgstr ""
+msgstr "الجلسات حسب المدة (حسب الربع)"
 
 msgid "Number of courses, sessions and subscribed users"
 msgstr ""
@@ -24615,7 +24605,7 @@ msgid "Number of subscribed users"
 msgstr ""
 
 msgid "Number of users who finished the course (as defined in gradebook)"
-msgstr ""
+msgstr "عدد المستخدمين الذين أنهوا المقرر (كما هو محدد في دفتر الدرجات)"
 
 msgid "List of course codes and sessions"
 msgstr ""
@@ -24624,10 +24614,10 @@ msgid "*: All users, including inactive, are included"
 msgstr ""
 
 msgid "Total disk usage"
-msgstr ""
+msgstr "إجمالي استخدام القرص"
 
 msgid "Edit portfolio comment"
-msgstr ""
+msgstr "تحرير تعليق المحفظة"
 
 msgid "Test '%s' not deleted"
 msgstr ""
@@ -24636,7 +24626,7 @@ msgid "Don't include users"
 msgstr ""
 
 msgid "The report doesn't include the list of users neither for session nor for each course"
-msgstr ""
+msgstr "لا يشمل التقرير قائمة المستخدمين لا للجلسة ولا لكل مقرر"
 
 msgid "Include extra fields"
 msgstr ""
@@ -24651,10 +24641,10 @@ msgid "Tags can be used"
 msgstr ""
 
 msgid "Invitation to the ((course_title)) course"
-msgstr ""
+msgstr "دعوة إلى مقرر ((course_title))"
 
 msgid "<p>Hello ((user_complete_name)).</p>"
-msgstr ""
+msgstr "<p>مرحباً ((user_complete_name)).</p>"
 
 msgid "%s's portfolio items"
 msgstr ""
@@ -24669,7 +24659,7 @@ msgid "Downloaded"
 msgstr ""
 
 msgid "You can only copy this course to a course for which you are a teacher"
-msgstr ""
+msgstr "يمكنك نسخ هذا المقرر فقط إلى مقرر تكون فيه معلماً"
 
 msgid "Remove users"
 msgstr ""
@@ -24687,16 +24677,16 @@ msgid "Send to users"
 msgstr ""
 
 msgid "Force users to change their password when they first log in"
-msgstr ""
+msgstr "إجبار المستخدمين على تغيير كلمة المرور عند تسجيل الدخول الأول"
 
 msgid "Please note that your username to access is %s"
 msgstr ""
 
 msgid "Note: If you do not remember your password, click on <a href=\"%s\">\"Forgot your password?\"</a>, enter your username and follow the instructions."
-msgstr ""
+msgstr "ملاحظة: إذا لم تتذكر كلمة المرور، انقر على <a href=\"%s\">\"نسيت كلمة المرور؟\"</a>، أدخل اسم المستخدم واتبع التعليمات."
 
 msgid "Bi-weekly"
-msgstr ""
+msgstr "كل أسبوعين"
 
 msgid "Every x days"
 msgstr ""
@@ -24705,16 +24695,16 @@ msgid "Number of days"
 msgstr ""
 
 msgid "Leave a comment"
-msgstr ""
+msgstr "اترك تعليقاً"
 
 msgid "Please leave a comment first"
-msgstr ""
+msgstr "يرجى ترك تعليق أولاً"
 
 msgid "Last quiz finalization date"
-msgstr ""
+msgstr "تاريخ إنهاء الكويز الأخير"
 
 msgid "Last lp's finalization date"
-msgstr ""
+msgstr "تاريخ إنهاء مسار التعلم الأخير"
 
 msgid "Must be in ALL the selected categories"
 msgstr ""
@@ -24723,97 +24713,97 @@ msgid "Report by attempts"
 msgstr ""
 
 msgid "Questions topic"
-msgstr ""
+msgstr "موضوع الأسئلة"
 
 msgid "The questions topic will be used as the name of the test and will be sent to the AI generator to generate questions in the language configured for this course, asking for them to be generated in the Aiken format so they can easily be imported into this course."
-msgstr ""
+msgstr "سيتم استخدام موضوع الأسئلة كاسم الاختبار وسيتم إرساله إلى مولد الذكاء الاصطناعي لتوليد أسئلة بلغة المقرر المُهيأة، مع طلب توليدها بتنسيق Aiken ليتم استيرادها بسهولة إلى هذا المقرر."
 
 msgid "AI Questions Generator"
-msgstr ""
+msgstr "مولد أسئلة الذكاء الاصطناعي"
 
 msgid "Most AI generators are limited in the number of characters they can return, and often your organization will be charged based on the number of characters returned, so please use with moderation, asking for smaller numbers first, then extending as you gain confidence."
-msgstr ""
+msgstr "معظم مولدات الذكاء الاصطناعي محدودة بعدد الأحرف التي يمكنها إرجاعها، وغالباً ما يتم فرض رسوم على منظمتك بناءً على عدد الأحرف المُعادة، لذا يرجى الاستخدام بحذر، اطلب أرقاماً أصغر أولاً، ثم توسع مع اكتساب الثقة."
 
 msgid "Use one (or more) of the following proposed tags to automatically generate a certificate or a skill and show them here when the student gets to this step, which requires all other steps to be finished first."
-msgstr ""
+msgstr "استخدم واحدة (أو أكثر) من العلامات المقترحة التالية لتوليد شهادة أو مهارة تلقائياً وعرضها هنا عندما يصل الطالب إلى هذه الخطوة، والتي تتطلب إنهاء جميع الخطوات الأخرى أولاً."
 
 msgid "Hi ((user_complete_name))."
-msgstr ""
+msgstr "مرحباً ((user_complete_name))."
 
 msgid "Invitation to session ((session_name))"
-msgstr ""
+msgstr "دعوة إلى الجلسة ((session_name))"
 
 msgid "Fill blanks or form with exact selection"
-msgstr ""
+msgstr "ملء الفراغات أو النموذج باختيار دقيق"
 
 msgid "Matching with exact selection"
-msgstr ""
+msgstr "مطابقة باختيار دقيق"
 
 msgid "Image zones with exact selection"
-msgstr ""
+msgstr "مناطق الصور باختيار دقيق"
 
 msgid "Match by dragging with exact selection"
-msgstr ""
+msgstr "مطابقة بسحب باختيار دقيق"
 
 msgid "Multiple answer dropdown with exact selection"
-msgstr ""
+msgstr "قائمة منسدلة متعددة الإجابات باختيار دقيق"
 
 msgid "AI learning path generator"
-msgstr ""
+msgstr "مولد مسار تعلم الذكاء الاصطناعي"
 
 msgid "Topic"
-msgstr ""
+msgstr "موضوع"
 
 msgid "Type the topic on which you want the AI Helper to develop a learning path. The more detailed the topic, the more precise the result will be."
-msgstr ""
+msgstr "اكتب الموضوع الذي تريد من مساعد الذكاء الاصطناعي تطويره كمسار تعلم. كلما كان الموضوع أكثر تفصيلاً، كان النتيجة أكثر دقة."
 
 msgid "Number of learning path items"
 msgstr ""
 
 msgid "This is the number of pages you want the AI Helper to generate in your learning path. Splitting the learning path in several pages, chapters, sections (however you want to call them) will help structure the course and also let you redistribute the content for better presentation."
-msgstr ""
+msgstr "هذا هو عدد الصفحات التي تريد من مساعد الذكاء الاصطناعي توليدها في مسار التعلم الخاص بك. تقسيم مسار التعلم إلى عدة صفحات أو فصول أو أقسام (كما تريد تسميتها) سيساعد في هيكلة المقرر وأيضاً في إعادة توزيع المحتوى لعرض أفضل."
 
 msgid "Rough maximum number of words (actually number of tokens) you want to get per page. More tokens will probably generate better content, but will also take more time to generate and cost more to your organisation, so use this carefully."
-msgstr ""
+msgstr "العدد التقريبي الأقصى للكلمات (في الواقع عدد الرموز) الذي تريده لكل صفحة. المزيد من الرموز من المحتمل أن تولد محتوى أفضل، لكنها ستستغرق وقتاً أطول للتوليد وتكلف منظمتك أكثر، لذا استخدم هذا بحذر."
 
 msgid "Only selected users will see the content"
-msgstr ""
+msgstr "سيتمكن المستخدمون المحددون فقط من رؤية المحتوى"
 
 msgid "Leave empty to enable the content for everyone"
-msgstr ""
+msgstr "اتركه فارغاً لتمكين المحتوى للجميع"
 
 msgid "Export courses reports complete"
-msgstr ""
+msgstr "تم اكتمال تصدير تقارير المقررات"
 
 msgid "The number of questions is limited to between %d and %d."
-msgstr ""
+msgstr "عدد الأسئلة محدود بين %d و %d."
 
 msgid "Add a test after each page"
-msgstr ""
+msgstr "إضافة اختبار بعد كل صفحة"
 
 msgid "Hidden but visible for me"
-msgstr ""
+msgstr "مخفي لكن مرئي لي"
 
 msgid "Conclusion"
-msgstr ""
+msgstr "خاتمة"
 
 msgid "Unable to access temp file"
-msgstr ""
+msgstr "عدم القدرة على الوصول إلى الملف المؤقت"
 
 msgid "Duplicated users"
 msgstr ""
 
 msgid "This report only lists users that have the same firstname and lastname."
-msgstr ""
+msgstr "يسرد هذا التقرير فقط المستخدمين الذين لديهم نفس الاسم الأول والأخير."
 
 msgid "By checking this box, you will remove all relationships of the HR manager with other sessions and courses. If what you want is to maintain those relationships, do NOT check this box."
-msgstr ""
+msgstr "بتحديد هذا المربع، ستزيل جميع العلاقات لمدير الموارد البشرية مع الجلسات والمقررات الأخرى. إذا كان ما تريده هو الحفاظ على هذه العلاقات، فلا تحدد هذا المربع."
 
 msgid "There is no class with the name \"%s\""
 msgstr ""
 
 msgid "Maximum number of subscriptions allowed. Leave at 0 to not limit it."
-msgstr ""
+msgstr "الحد الأقصى لعدد الاشتراكات المسموح بها. اتركه عند 0 لعدم الحد منه."
 
 msgid "Subscriptions"
 msgstr ""
@@ -24825,19 +24815,19 @@ msgid "Maximum number of subscriptions"
 msgstr ""
 
 msgid "No longer available"
-msgstr ""
+msgstr "غير متاح بعد الآن"
 
 msgid "Export all results from an exercise"
-msgstr ""
+msgstr "تصدير جميع النتائج من تمرين"
 
 msgid "No result found for export in this test."
-msgstr ""
+msgstr "لم يتم العثور على نتيجة للتصدير في هذا الاختبار."
 
 msgid "User %s has been changed to %s. To cancel, click <a href='%s'>here</a>."
-msgstr ""
+msgstr "تم تغيير المستخدم %s إلى %s. للإلغاء، انقر <a href=\'%s\'>هنا</a>."
 
 msgid "Ex-learner"
-msgstr ""
+msgstr "متعلم سابق"
 
 msgid "File size is too big"
 msgstr ""
@@ -24849,13 +24839,13 @@ msgid "Add picture for headers"
 msgstr ""
 
 msgid "This picture will be used in the course header and in the e-mails sent and PDFs generated from this course. The picture will have a ratio of 25:7. You can crop the picture you upload."
-msgstr ""
+msgstr "سيتم استخدام هذه الصورة في رأس المقرر وفي الرسائل الإلكترونية المرسلة والملفات PDF المُولدة من هذا المقرر. ستكون الصورة بنسبة 25:7. يمكنك قص الصورة التي تحملها."
 
 msgid "Delete picture for headers"
 msgstr ""
 
 msgid "The final picture must be in a 16:9 ratio, but you can crop the picture you upload."
-msgstr ""
+msgstr "يجب أن تكون الصورة النهائية بنسبة 16:9، لكن يمكنك قص الصورة التي تحملها."
 
 msgid "Export all results of all tests"
 msgstr ""
@@ -24864,13 +24854,13 @@ msgid "Click to view details"
 msgstr ""
 
 msgid "This report applies to all plateform activities of the user."
-msgstr ""
+msgstr "ينطبق هذا التقرير على جميع أنشطة المنصة للمستخدم."
 
 msgid "dd/mm/yyyy"
 msgstr ""
 
 msgid "Export certificates issue report"
-msgstr ""
+msgstr "تصدير تقرير إصدار الشهادات"
 
 msgid "Hide hierarchies"
 msgstr ""
@@ -24879,43 +24869,43 @@ msgid "Show hierarchies"
 msgstr ""
 
 msgid "Parent career"
-msgstr ""
+msgstr "المسار المهني الأب"
 
 msgid "This career cannot be deleted until all of its children have been deleted or moved to another career."
-msgstr ""
+msgstr "لا يمكن حذف هذا المسار المهني حتى يتم حذف جميع أطفاله أو نقلهم إلى مسار مهني آخر."
 
 msgid "This email is already in use by another user in the same file."
-msgstr ""
+msgstr "هذا البريد الإلكتروني مستخدم بالفعل بواسطة مستخدم آخر في نفس الملف."
 
 msgid "You have new posts in the following forums of your courses."
-msgstr ""
+msgstr "لديك منشورات جديدة في المنتديات التالية في مقرراتك."
 
 msgid "This identifier is internal to the system and should not contain spaces nor special characters. It can be used from plugins as well, to filter the elements it is attached to."
-msgstr ""
+msgstr "هذا المعرف داخلي للنظام ولا يجب أن يحتوي على مسافات أو أحرف خاصة. يمكن استخدامه من الإضافات أيضاً، لتصفية العناصر المرتبطة به."
 
 msgid "Include last login"
-msgstr ""
+msgstr "تضمين آخر تسجيل دخول"
 
 msgid "Duplicated users by e-mail"
-msgstr ""
+msgstr "مستخدمون مكررون بالبريد الإلكتروني"
 
 msgid "This report only lists users that have the same email."
-msgstr ""
+msgstr "يسرد هذا التقرير فقط المستخدمين الذين لديهم نفس البريد الإلكتروني."
 
 msgid "Stop notifying me"
-msgstr ""
+msgstr "إيقاف إخطاري"
 
 msgid "Expiration date cannot be empty."
-msgstr ""
+msgstr "تاريخ الانتهاء لا يمكن أن يكون فارغاً."
 
 msgid "E-mail not sent. You might have introduced an incorrect address, the address might belong to an inactive user, or the mail server is not correctly configured (check the mail.conf.php file)."
-msgstr ""
+msgstr "البريد الإلكتروني لم يُرسل. قد تكون قد أدخلت عنواناً غير صحيح، أو قد يكون العنوان يعود إلى مستخدم غير نشط، أو أن خادم البريد غير مُهيأ بشكل صحيح (تحقق من ملف mail.conf.php)."
 
 msgid "Your password has expired. Please set a new password before you continue."
-msgstr ""
+msgstr "انتهت صلاحية كلمة المرور الخاصة بك. يرجى تعيين كلمة مرور جديدة قبل المتابعة."
 
 msgid "Copy iframe code below to include the exercise :"
-msgstr ""
+msgstr "نسخ كود الإطار أدناه لتضمين التمرين:"
 
 msgid "My missing signatures"
 msgstr ""
@@ -24924,16 +24914,16 @@ msgid "Only show active users"
 msgstr ""
 
 msgid "Update courses list"
-msgstr ""
+msgstr "تحديث قائمة المقررات"
 
 msgid "A code is required"
 msgstr ""
 
 msgid "This course code does not exist"
-msgstr ""
+msgstr "رمز هذا المقرر غير موجود"
 
 msgid "Duplicate code"
-msgstr ""
+msgstr "رمز مكرر"
 
 msgid "The update failed for the following courses"
 msgstr ""
@@ -24943,3 +24933,450 @@ msgstr ""
 
 msgid "The attempted oral questions are %s"
 msgstr "محاولة الاسئلة الشفوية هي %s"
+
+msgid "Missing class title"
+msgstr "عنوان الفصل مفقود"
+
+msgid "Class title exists"
+msgstr "عنوان الفصل موجود"
+
+msgid "registered"
+msgstr "مسجل"
+
+msgid "You have been assigned the learner %s with url %s"
+msgstr "تم تعيين المتعلم %s لك مع الرابط %s"
+
+msgid "Hi,<br/><br/>User %s sent a follow up message about student %s.<br/><br/>The message can be seen here %s"
+msgstr "مرحباً،<br/><br/>أرسل المستخدم %s رسالة متابعة حول الطالب %s.<br/><br/>يمكن رؤية الرسالة هنا %s"
+
+msgid "Wrong number of days: %s: %s"
+msgstr "عدد أيام خاطئ: %s: %s"
+
+msgid "You can continue working on the platform during your internship. Your answers will help us offer you a personalized program based on your availability. <br><br>Indicate the dates and your availability"
+msgstr "يمكنك الاستمرار في العمل على المنصة أثناء تدريبك. ستساعد إجاباتك في تقديم برنامج مخصص بناءً على توافرك. <br><br>حدد التواريخ وتوافرك"
+
+msgid "My learning goals"
+msgstr "أهداف تعلمي"
+
+msgid "What do you want to learn? What area do you want to improve in? You can write your answers freely here."
+msgstr "ماذا تريد أن تتعلم؟ في أي مجال تريد التحسين؟ يمكنك كتابة إجاباتك بحرية هنا."
+
+msgid "My working method"
+msgstr "طريقة عملي"
+
+msgid "On the platform, you\'ll complete some activities independently, while others will be done in groups, accompanied by a tutor. Your answers will help us suggest a learning program that\'s tailored to your work style."
+msgstr "على المنصة، ستكمل بعض الأنشطة بشكل مستقل، بينما ستُنجز أخرى في مجموعات برفقة مدرب. ستساعد إجاباتك في اقتراح برنامج تعلم يتناسب مع أسلوب عملك."
+
+msgid "Availability before my internship/mobility"
+msgstr "التوافر قبل تدريبي/تنقلي"
+
+msgid "The platform offers numerous resources and learning courses available on specific dates. The first step is to assess your availability to be able to offer you a suitable learning program.<br><br>Indicate the dates and your availability"
+msgstr "تقدم المنصة موارد عديدة ودورات تعلم متاحة في تواريخ محددة. الخطوة الأولى هي تقييم توافرك لتقديم برنامج تعلم مناسب.<br><br>حدد التواريخ وتوافرك"
+
+msgid "The topics that interest me / My learning objectives"
+msgstr "المواضيع التي تهمني / أهداف تعلمي"
+
+msgid "The platform offers numerous resources and thematic learning courses to develop your skills. Now it\'s time to take stock of your interests to be offer you a personalized course program."
+msgstr "تقدم المنصة موارد عديدة ودورات تعلم موضوعية لتطوير مهاراتك. الآن حان الوقت لاتخاذ جرد لاهتماماتك لتقديم برنامج مقررات مخصص."
+
+msgid "My language level"
+msgstr "مستوى لغتي"
+
+msgid "The platform\'s resources are adapted to different language levels. The goal here is to take stock of what you can or already know how to do.<br><br>Tick the level that best suits you for each skill (listening, reading, participating in a conversation, speaking continuously, and writing).<br><br>"
+msgstr "موارد المنصة مُعدلة لمستويات لغوية مختلفة. الهدف هنا هو اتخاذ جرد لما يمكنك القيام به أو تعرفه بالفعل.<br><br>حدد المستوى الذي يناسبك الأفضل لكل مهارة (الاستماع، القراءة، المشاركة في محادثة، التحدث باستمرار، والكتابة).<br><br>"
+
+msgid "My work environment"
+msgstr "بيئة عملي"
+
+msgid "To work on the platform, I use:"
+msgstr "للعمل على المنصة، أستخدم:"
+
+msgid "Validate learning trail"
+msgstr "التحقق من مسار التعلم"
+
+msgid "Skills and objectives assessment"
+msgstr "تقييم المهارات والأهداف"
+
+msgid "Welcome to the platform! Do you want to brush up on your skills? The platform offers you a personalized program where, depending on your priorities and availability, you have access to numerous resources and can participate in learning courses. <br><br>The following questionnaire has two objectives: on the one hand, to make you reflect on your needs and understand your interests and on the other hand, to gather information to offer you a tailor-made learning trail.<br><br>Happy learning on the platform!"
+msgstr "مرحباً بك في المنصة! هل تريد تحسين مهاراتك؟ تقدم المنصة برنامجاً مخصصاً حيث، بناءً على أولوياتك وتوافرك، لديك وصول إلى موارد عديدة ويمكنك المشاركة في دورات تعلم. <br><br>للاستبيان التالي هدفان: من ناحية، جعلك تفكر في احتياجاتك وفهم اهتماماتك، ومن ناحية أخرى، جمع معلومات لتقديم مسار تعلم مصمم خصيصاً لك.<br><br>تعلم سعيداً على المنصة!"
+
+msgid "The learning courses are designed around the following main areas. Choose them in order of preference according to your priorities and interests.<br><br>"
+msgstr "تم تصميم دورات التعلم حول المجالات الرئيسية التالية. اخترها حسب ترتيب التفضيل وفقاً لأولوياتك واهتماماتك.<br><br>"
+
+msgid "Once the areas have been selected, choose 5 themes and objectives in order of preference.<br><br>"
+msgstr "بعد اختيار المجالات، اختر 5 مواضيع وأهداف حسب ترتيب التفضيل.<br><br>"
+
+msgid "PDF download unavailable"
+msgstr "تنزيل PDF غير متاح"
+
+msgid "Registering"
+msgstr "التسجيل"
+
+msgid "Hello,<br>You haven\'t logged into to your account for three months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "مرحباً،<br>لم تقم بتسجيل الدخول إلى حسابك لثلاثة أشهر. تم تعطيله الآن. إذا كنت ترغب في إعادة تفعيله، يرجى الاتصال بنا.<br><br>مع خالص التحية."
+
+msgid "Hello,<br>You haven\'t logged into your account for six months. It has now been deactivated. If you would like to reactivate it, please contact us.<br><br>Best regards."
+msgstr "مرحباً،<br>لم تقم بتسجيل الدخول إلى حسابك لستة أشهر. تم تعطيله الآن. إذا كنت ترغب في إعادة تفعيله، يرجى الاتصال بنا.<br><br>مع خالص التحية."
+
+msgid "Hello,<br>%s hasn\'t logged into PARKUR in the last six months. His account has just been deactivated.<br><br>Sincerely."
+msgstr "مرحباً،<br>%s لم يقم بتسجيل الدخول إلى PARKUR في آخر ستة أشهر. تم تعطيل حسابه للتو.<br><br>مع خالص التحية."
+
+msgid "An update is available. Click the button below to proceed with the update."
+msgstr "تحديث متاح. انقر على الزر أدناه للمتابعة مع التحديث."
+
+msgid "Update Chamilo"
+msgstr "تحديث تشاميلو"
+
+msgid "Verifying migration:"
+msgstr "التحقق من الهجرة:"
+
+msgid "Migration completed successfully!"
+msgstr "تم إكمال الهجرة بنجاح!"
+
+msgid "Please check the following error:"
+msgstr "يرجى التحقق من الخطأ التالي:"
+
+msgid "OK"
+msgstr "موافق"
+
+msgid "Migration failed!"
+msgstr "فشلت الهجرة!"
+
+msgid "Test e-mail sending"
+msgstr "اختبار إرسال البريد الإلكتروني"
+
+msgid "The last migration executed successfully was:"
+msgstr "آخر هجرة نجحت في التنفيذ كانت:"
+
+msgid "Please contact support with the error details."
+msgstr "يرجى الاتصال بالدعم مع تفاصيل الخطأ."
+
+msgid "Contact support"
+msgstr "الاتصال بالدعم"
+
+msgid "Skills History"
+msgstr "تاريخ المهارات"
+
+msgid "Badge"
+msgstr "شارة"
+
+msgid "Question media"
+msgstr "وسائط السؤال"
+
+msgid "ex. localhost"
+msgstr "مثال: localhost"
+
+msgid "ex. 3306"
+msgstr "مثال: 3306"
+
+msgid "ex. root"
+msgstr "مثال: root"
+
+msgid "CREATE TABLE works"
+msgstr "إنشاء جدول يعمل"
+
+msgid "ALTER TABLE works"
+msgstr "تعديل الجدول يعمل"
+
+msgid "DROP COLUMN works"
+msgstr "حذف العمود يعمل"
+
+msgid "Theme selected as current"
+msgstr "تم اختيار السمة كحالية"
+
+msgid "Color theme created"
+msgstr "تم إنشاء سمة اللون"
+
+msgid "You are editing logos for visual theme"
+msgstr "أنت تقوم بتحرير الشعارات للسمة البصرية"
+
+msgid "Header logo"
+msgstr "شعار الرأس"
+
+msgid "Effective preview"
+msgstr "معاينة فعالة"
+
+msgid "Using default theme logo"
+msgstr "استخدام شعار السمة الافتراضي"
+
+msgid "Files in current theme"
+msgstr "الملفات في السمة الحالية"
+
+msgid "No SVG uploaded"
+msgstr "لم يتم تحميل SVG"
+
+msgid "Remove SVG"
+msgstr "إزالة SVG"
+
+msgid "No PNG uploaded"
+msgstr "لم يتم تحميل PNG"
+
+msgid "Remove PNG"
+msgstr "إزالة PNG"
+
+msgid "Save header logo"
+msgstr "حفظ شعار الرأس"
+
+msgid "Email logo"
+msgstr "شعار البريد الإلكتروني"
+
+msgid "Save email logo"
+msgstr "حفظ شعار البريد الإلكتروني"
+
+msgid "PNG format required"
+msgstr "تنسيق PNG مطلوب"
+
+msgid "SVG format required"
+msgstr "تنسيق SVG مطلوب"
+
+msgid "Select at least one file"
+msgstr "حدد ملفاً واحداً على الأقل"
+
+msgid "Upload failed"
+msgstr "فشل التحميل"
+
+msgid "Deletion failed"
+msgstr "فشل الحذف"
+
+msgid "Drag to reorder"
+msgstr "اسحب لإعادة الترتيب"
+
+msgid "Clean temporary files"
+msgstr "تنظيف الملفات المؤقتة"
+
+msgid "Learning path title here"
+msgstr "عنوان مسار التعلم هنا"
+
+msgid "Publish / Hide"
+msgstr "نشر / إخفاء"
+
+msgid "Select which items to include in the PDF"
+msgstr "حدد العناصر المراد تضمينها في PDF"
+
+msgid "Open in a new tab"
+msgstr "فتح في تبويب جديد"
+
+msgid "Delete third party"
+msgstr "حذف الطرف الثالث"
+
+msgid "Copy link"
+msgstr "نسخ الرابط"
+
+msgid "Security tools and reports"
+msgstr "أدوات وتقارير الأمان"
+
+msgid "This field cannot be empty"
+msgstr "لا يمكن أن يكون هذا الحقل فارغاً"
+
+msgid "This is not a valid URL. Example: https://example.com"
+msgstr "هذا ليس رابط URL صالح. مثال: https://example.com"
+
+msgid "Are you sure you want to delete this?"
+msgstr "هل أنت متأكد من رغبتك في حذف هذا؟"
+
+msgid "Color theme"
+msgstr "سمة اللون"
+
+msgid "Logos will be applied to the current visual theme: "
+msgstr "سيتم تطبيق الشعارات على السمة البصرية الحالية: "
+
+msgid "Switch the active theme if you want to upload logos for a different one."
+msgstr "غيّر السمة النشطة إذا كنت تريد تحميل شعارات لسمة أخرى."
+
+msgid "Uploaded"
+msgstr "مُحمّل"
+
+msgid "Back to plugins"
+msgstr "عودة إلى الإضافات"
+
+msgid "Installing"
+msgstr "التثبيت"
+
+msgid "Processing"
+msgstr "المعالجة"
+
+msgid "Uninstalling"
+msgstr "إلغاء التثبيت"
+
+msgid "Enabling"
+msgstr "التفعيل"
+
+msgid "Disabling"
+msgstr "التعطيل"
+
+msgid "Allow PDF exports for this item"
+msgstr "السماح بتصدير PDF لهذا العنصر"
+
+msgid "Login attempts"
+msgstr "محاولات تسجيل الدخول"
+
+msgid "Background"
+msgstr "خلفية"
+
+msgid "Use custom date"
+msgstr "استخدام تاريخ مخصص"
+
+msgid "Achievement date"
+msgstr "تاريخ الإنجاز"
+
+msgid "Go to branding (logos)"
+msgstr "اذهب إلى العلامة التجارية (الشعارات)"
+
+msgid "Visual theme (assets)"
+msgstr "السمة البصرية (الأصول)"
+
+msgid "Branding (logos)"
+msgstr "العلامة التجارية (الشعارات)"
+
+msgid "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback."
+msgstr "تحميل شعارات الرأس والبريد الإلكتروني اختيارياً. يُفضل تنسيق SVG. يُستخدم PNG كبديل."
+
+msgid "Write a short and striking course name, for example: Innovation Management"
+msgstr "اكتب اسم مقرر قصير وجذاب، مثل: إدارة الابتكار"
+
+msgid "All attempts blocked because you did not reach the minimum score of %s % at one of your attempts."
+msgstr "جميع المحاولات محظورة لأنك لم تصل إلى الحد الأدنى للدرجة %s % في إحدى محاولاتك."
+
+msgid "Signed in as"
+msgstr "تسجيل الدخول كـ"
+
+msgid "Remember me"
+msgstr "تذكرني"
+
+msgid "Register oneself"
+msgstr "تسجيل الذات"
+
+msgid "Course introduction"
+msgstr "مقدمة المقرر"
+
+msgid "You don\'t have any course content yet."
+msgstr "ليس لديك أي محتوى مقرر بعد."
+
+msgid "You don\'t have any course yet."
+msgstr "ليس لديك أي مقرر بعد."
+
+msgid "You don\'t have any session yet."
+msgstr "ليس لديك أي جلسة بعد."
+
+msgid "Add a course introduction to display to your students."
+msgstr "أضف مقدمة مقرر لعرضها على طلابك."
+
+msgid "See as student"
+msgstr "عرض كطالب"
+
+msgid "Official code"
+msgstr "الكود الرسمي"
+
+msgid "Welcome, please go to diagnostic at %s."
+msgstr "مرحباً، يرجى الذهاب إلى التشخيص في %s."
+
+msgid "Your session search diagnosis is saved"
+msgstr "تم حفظ تشخيص بحث جلساتك"
+
+msgid "Send diagnostic finalization message"
+msgstr "إرسال رسالة إنهاء التشخيص"
+
+msgid "DiagnosticfinalizationmessageTitle"
+msgstr "عنوان رسالة إنهاء التشخيص"
+
+msgid "DiagnosticfinalizationmessageContent"
+msgstr "محتوى رسالة إنهاء التشخيص"
+
+msgid "Add a forumCategory"
+msgstr "إضافة فئة منتدى"
+
+msgid "Create surveyDoodle"
+msgstr "إنشاء استطلاع doodle"
+
+msgid "Sticky courses"
+msgstr "المقررات اللاصقة"
+
+msgid "Current session tab"
+msgstr "تبويب الجلسة الحالية"
+
+msgid "Upcoming session tab"
+msgstr "تبويب الجلسة القادمة"
+
+msgid "Past session tab"
+msgstr "تبويب الجلسة السابقة"
+
+msgid "By checking this box, I confirm that I accept the data processing by the platform"
+msgstr "بتحديد هذا المربع، أؤكد قبولي معالجة البيانات بواسطة المنصة"
+
+msgid "The platform owner, responsible for the processing, implements processing of personal data to respond to your contact request. The data is mandatory. In their absence, it will not be possible to process your request."
+msgstr "صاحب المنصة، المسؤول عن المعالجة، ينفذ معالجة بيانات شخصية للرد على طلب الاتصال الخاص بك. البيانات إلزامية. في غيابها، لن يكون من الممكن معالجة طلبك."
+
+msgid "Number of times the question was answered"
+msgstr "عدد مرات الإجابة على السؤال"
+
+msgid "Number of times this answer was selected"
+msgstr "عدد مرات اختيار هذه الإجابة"
+
+msgid "Text appearing at the end of the test when the user has succeeded or if no pass percentage was set."
+msgstr "النص الذي يظهر في نهاية الاختبار عند نجاح المستخدم أو إذا لم يتم تعيين نسبة نجاح."
+
+msgid "Text appearing at the end of the test when the user has failed."
+msgstr "النص الذي يظهر في نهاية الاختبار عند فشل المستخدم."
+
+msgid "Hide question numbering"
+msgstr "إخفاء ترقيم الأسئلة"
+
+msgid "Show score by category on a radar/spiderweb chart"
+msgstr "عرض الدرجة حسب الفئة في رسم بياني رادار/شبكة عنكبوتية"
+
+msgid "Direct pop-up mode"
+msgstr "وضع النوافذ المنبثقة المباشر"
+
+msgid "Prevent moving backwards between questions"
+msgstr "منع التحرك للخلف بين الأسئلة"
+
+msgid "Your browser does not support Javascript"
+msgstr "متصفحك لا يدعم جافاسكريبت"
+
+msgid "Unauthorised view access to resource"
+msgstr "وصول غير مصرح به لعرض المورد"
+
+msgid "This message was deleted when the user was removed from the platform on %s"
+msgstr "تم حذف هذه الرسالة عند إزالة المستخدم من المنصة في %s"
+
+msgid "My General Certificate"
+msgstr "شهادتي العامة"
+
+msgid "My Skills"
+msgstr "مهاراتي"
+
+msgid "Sign out"
+msgstr "تسجيل الخروج"
+
+msgid "Sessions catalogue"
+msgstr "كتالوج الجلسات"
+
+msgid "Email reply header"
+msgstr "رأس الرد على البريد الإلكتروني"
+
+msgid "My profile"
+msgstr "ملفي الشخصي"
+
+msgid "View all friends"
+msgstr "عرض جميع الأصدقاء"
+
+msgid "Mark as promoted message"
+msgstr "وضع علامة كرسالة مروجة"
+
+msgid "FAQ"
+msgstr "الأسئلة الشائعة"
+
+msgid "Created with Chamilo copyright year"
+msgstr "تم إنشاؤه باستخدام تشاميلو سنة حقوق النشر"
+
+msgid "Multiple choice with *other* option"
+msgstr "اختيار متعدد مع خيار *آخر*"
+
+msgid "Extra field to use as student ID for SCORM API"
+msgstr "حقل إضافي لاستخدامه كمعرف طالب لـ SCORM API"
+
+msgid "The name provided will be used as the identifier of the user extra field containing an ID that the remote SCORM API will recognize as a user ID. This is only useful if your remote SCORM provider asked you for something similar."
+msgstr "سيتم استخدام الاسم المقدم كمعرف للحقل الإضافي للمستخدم الذي يحتوي على معرف يتعرف عليه SCORM API البعيد كمعرف مستخدم. هذا مفيد فقط إذا طلب مزود SCORM البعيد شيئاً مشابهاً."
+
+msgid "Deleted users"
+msgstr "المستخدمون المحذوفون"

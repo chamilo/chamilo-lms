@@ -256,7 +256,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $plainPassword = null;
 
     #[ORM\Column(name: 'password', type: 'string', length: 255)]
-    protected string $password;
+    protected string $password = '';
 
     #[ORM\Column(name: 'username_canonical', type: 'string', length: 180)]
     protected string $usernameCanonical;

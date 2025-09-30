@@ -4,11 +4,11 @@
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Usergroup;
-use Chamilo\CoreBundle\Enums\ActionIcon;
-use Chamilo\CoreBundle\Enums\ObjectIcon;
-use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
 
 /**
  * Class UserGroup.
@@ -204,20 +204,6 @@ class UserGroupModel extends Model
 
             return $list;
         }
-    }
-
-    /**
-     * Returns all user groups (id + title), ordered by title.
-     * This method ignores multi-URL restrictions because it's used
-     * for initial assignment of groups to access URLs.
-     */
-    public function getAllUserGroups(): array
-    {
-        $sql = "SELECT id, title FROM {$this->table} ORDER BY title";
-
-        $stmt = Database::getManager()->getConnection()->executeQuery($sql);
-
-        return Database::store_result($stmt, 'ASSOC');
     }
 
     /**
@@ -1209,6 +1195,36 @@ class UserGroupModel extends Model
         }
     }
 
+    public function unsubscribe_only_courses_from_usergroup($usergroup_id, $delete_items, $sessionId = 0)
+    {
+        $sessionId = (int) $sessionId;
+        // Deleting items.
+        if (!empty($delete_items)) {
+            $user_list = $this->get_users_by_usergroup($usergroup_id);
+
+            $groupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            foreach ($delete_items as $course_id) {
+                $course_info = api_get_course_info_by_id($course_id);
+                if ($course_info) {
+                    Database::delete(
+                        $this->usergroup_rel_course_table,
+                        [
+                            'usergroup_id = ? AND course_id = ?' => [
+                                $usergroup_id,
+                                $course_id,
+                            ],
+                        ]
+                    );
+                }
+                if (0 != $sessionId && 0 != $groupId) {
+                    $this->subscribe_sessions_to_usergroup($groupId, [0]);
+                } else {
+                    $s = $sessionId;
+                }
+            }
+        }
+    }
+
     /**
      * Subscribe users to a group.
      *
@@ -1317,8 +1333,6 @@ class UserGroupModel extends Model
     }
 
     /**
-     * @deprecated Use UsergroupRepository::getByTitleInUrl().
-     *
      * @param string $title
      *
      * @return bool
@@ -1516,34 +1530,36 @@ class UserGroupModel extends Model
 
     /**
      * Select user group not in list.
+     *
+     * @param array $list
+     *
+     * @return array
      */
-    public function getUserGroupNotInList(array $list, int $accessUrlId): array
+    public function getUserGroupNotInList($list)
     {
-        $params = [];
+        if (empty($list)) {
+            return [];
+        }
 
-        $sql = "SELECT g.*
-            FROM {$this->table} g";
+        $list = array_map('intval', $list);
+        $listToString = implode("','", $list);
 
+        $sql = 'SELECT * ';
+        $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
-            $sql .= " LEFT JOIN {$this->access_url_rel_usergroup} a
-                  ON (g.id = a.usergroup_id AND a.access_url_id = ?)";
-            $params[] = $accessUrlId;
-            $sql .= " WHERE a.usergroup_id IS NULL";
+            $urlId = api_get_current_access_url_id();
+            $sql .= " FROM $this->table g
+                    INNER JOIN $this->access_url_rel_usergroup a
+                    ON (g.id = a.usergroup_id)";
+            $urlCondition = " AND access_url_id = $urlId ";
         } else {
-            $sql .= " WHERE 1=1";
+            $sql = " FROM $this->table g ";
         }
 
-        if (!empty($list)) {
-            $placeholders = implode(',', array_fill(0, count($list), '?'));
-            $sql .= " AND g.id NOT IN ($placeholders)";
-            $params = array_merge($params, array_map('intval', $list));
-        }
+        $sql .= " WHERE g.id NOT IN ('$listToString') $urlCondition ";
+        $result = Database::query($sql);
 
-        $sql .= " ORDER BY g.title";
-
-        $stmt = Database::getManager()->getConnection()->executeQuery($sql, $params);
-
-        return Database::store_result($stmt, 'ASSOC');
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**
@@ -1557,8 +1573,8 @@ class UserGroupModel extends Model
         $params['updated_at'] = $params['created_at'] = api_get_utc_datetime();
         $params['group_type'] = isset($params['group_type']) ? Usergroup::SOCIAL_CLASS : Usergroup::NORMAL_CLASS;
         $params['allow_members_leave_group'] = isset($params['allow_members_leave_group']) ? 1 : 0;
-        $params['url'] = $params['url'] ?? "";
-        $params['visibility'] = $params['visibility'] ?? Usergroup::GROUP_PERMISSION_OPEN;
+        $params['url'] = isset($params['url']) ? $params['url'] : "";
+        $params['visibility'] = isset($params['visibility']) ? $params['visibility'] : Usergroup::GROUP_PERMISSION_OPEN;
 
         $userGroupExists = $this->usergroup_exists(trim($params['title']));
         if (false === $userGroupExists) {
@@ -1853,7 +1869,7 @@ class UserGroupModel extends Model
         }
 
         // url
-        $form->addText('url', get_lang('URL'), false);
+        $form->addText('url', get_lang('Url'), false);
 
         // Picture
         //$allowed_picture_types = $this->getAllowedPictureExtensions();
@@ -3083,23 +3099,5 @@ class UserGroupModel extends Model
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
-    }
-
-    public static function getRoleName($relation)
-    {
-        switch ((int) $relation) {
-            case GROUP_USER_PERMISSION_ADMIN:
-                return get_lang('Admin');
-            case GROUP_USER_PERMISSION_READER:
-                return get_lang('Reader');
-            case GROUP_USER_PERMISSION_PENDING_INVITATION:
-                return get_lang('Pending invitation');
-            case GROUP_USER_PERMISSION_MODERATOR:
-                return get_lang('Moderator');
-            case GROUP_USER_PERMISSION_HRM:
-                return get_lang('Human Resources Manager');
-            default:
-                return get_lang('Custom or undefined role');
-        }
     }
 }

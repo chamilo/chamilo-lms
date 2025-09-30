@@ -2,13 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Enums\ActionIcon;
-use Chamilo\CoreBundle\Enums\ObjectIcon;
-use Chamilo\CoreBundle\Enums\StateIcon;
-use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
+use Chamilo\CoreBundle\Component\Utils\ActionIcon;
+use Chamilo\CoreBundle\Component\Utils\ToolIcon;
+use Chamilo\CoreBundle\Component\Utils\ObjectIcon;
+use Chamilo\CoreBundle\Component\Utils\StateIcon;
 
 require_once __DIR__.'/../global.inc.php';
 
@@ -312,7 +312,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroupModel();
-        $usergroup->protectScript(null, true, true);
+//        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -1226,7 +1226,7 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('E-mail'),
+            get_lang('e-mail'),
             get_lang('Man hours'),
             get_lang('Generated certificate'),
             get_lang('Approved'),
@@ -1440,7 +1440,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_all':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' === $_GET['type']) {
@@ -1485,7 +1485,7 @@ switch ($action) {
             exit;
         }
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
         $columns = [
@@ -1514,7 +1514,7 @@ switch ($action) {
         break;
     case 'get_work_user_list_others':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool'))) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool'))) {
             $plagiarismColumns = ['compilatio'];
         }
 
@@ -1554,7 +1554,7 @@ switch ($action) {
         break;
     case 'get_work_user_list':
         $plagiarismColumns = [];
-        if (('true' === api_get_setting('work.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
+        if (('true' === api_get_setting('document.allow_compilatio_tool')) && api_is_allowed_to_edit()) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && 'simple' == $_GET['type']) {
@@ -1859,7 +1859,7 @@ switch ($action) {
                 'ch-tool-icon',
                 null,
                 ICON_SIZE_SMALL,
-                get_lang('Certificate of achievement')
+                get_lang('CertificateOfAchievement')
             );
             foreach ($sessions as $session) {
                 $sessionEntity = api_get_session_entity($session['id']);
@@ -1903,7 +1903,7 @@ switch ($action) {
                     ['target' => '_blank']
                 );
                 $detailButtons[] = Display::url(
-                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignments report')),
+                    Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('WorksReport')),
                     api_get_path(WEB_CODE_PATH).'my_space/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
@@ -2585,13 +2585,25 @@ switch ($action) {
                     $course_id,
                     api_get_session_id()
                 )) {
-                    $url = 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&id_session='.api_get_session_id();
-                    $icon = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove the class without removing students')),
+                            'url' => 'class.php?action=remove_only_class_from_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&id_session=' . api_get_session_id(),
+                            'onclick' => "if (!confirm('". get_lang('Are you sure you want to remove the class without removing students') . "')) return false;"
+                        ],
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
+                            'url' => 'class.php?action=remove_class_from_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&id_session=' . api_get_session_id(),
+                            'onclick' => "if (!confirm('". get_lang('Are you sure you want to remove the class') . "')) return false;"
+                        ],
+                    ];
                 } else {
-                    $url = 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq(
-                        ).'&type=not_registered';
-                    $icon = Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add'));
+                    $actions = [
+                        [
+                            'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
+                            'url' => 'class.php?action=add_class_to_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&type=not_registered',
+                        ]
+                    ];
                 }
 
                 switch ($group['group_type']) {
@@ -2609,12 +2621,19 @@ switch ($action) {
 
                 if ($isAllow) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
-                        $group['actions'] .= Display::url(
+                        $group['actions'] = Display::url(
                                 Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
-                                $urlUserGroup.'&id='.$group['id']
-                            ).'&nbsp;';
+                                $urlUserGroup . '&id=' . $group['id']
+                            ) . '&nbsp;';
                     }
-                    $group['actions'] .= Display::url($icon, $url);
+
+                    for ($i = 0; $i < count($actions); $i++) {
+                        $group['actions'] .= Display::url(
+                            $actions[$i]['icon'],
+                            $actions[$i]['url'] ?? null,
+                            ['onclick' => $actions[$i]['onclick'] ??  '']
+                        );
+                    }
                 }
                 $new_result[] = $group;
             }

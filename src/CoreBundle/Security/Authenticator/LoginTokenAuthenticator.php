@@ -57,7 +57,7 @@ class LoginTokenAuthenticator extends AbstractAuthenticator
         return new SelfValidatingPassport(
             new UserBadge(
                 $username,
-                fn (string $username) => $this->userRepository->findOneBy(['usename' => $username])
+                fn (string $username) => $this->userRepository->findOneBy(['username' => $username])
             )
         );
     }

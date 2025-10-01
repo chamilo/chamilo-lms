@@ -41,7 +41,7 @@ class Version20250927180002 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
 
         $commentRows = $this->connection
-            ->executeQuery("SELECT id, author_id, item_id, visibility, date FROM portfolio_comment ORDER BY id ASC")
+            ->executeQuery("SELECT *, date FROM portfolio_comment ORDER BY id ASC")
             ->fetchAllAssociative();
 
         foreach ($commentRows as $commentRow) {
@@ -51,15 +51,18 @@ class Version20250927180002 extends AbstractMigrationChamilo
             $author = $userRepo->find($commentRow['author_id']);
             /** @var Portfolio $item */
             $item = $portfolioRepo->find($commentRow['item_id']);
+            /** @var PortfolioComment $parent */
+            $parent = $commentRow['parent_id'] ? $commentRepo->find($commentRow['parent_id']) : null;
             $visibility = (int) $commentRow['visibility'];
             $creationDate = new DateTime($commentRow['date']);
+            $resourceParent = $parent ?: $item;
 
-            $comment->setParent($item);
+            $comment->setParent($resourceParent);
 
             $resourceNode = $portfolioRepo->addResourceNode(
                 $comment,
                 $author,
-                $item
+                $resourceParent,
             );
 
             $this->entityManager->persist($resourceNode);

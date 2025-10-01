@@ -6,12 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\PortfolioRelTag;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelTag;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TagRepository extends ServiceEntityRepository
@@ -125,5 +130,26 @@ class TagRepository extends ServiceEntityRepository
         }
 
         return false;
+    }
+
+    public function findForPortfolioInCourseQuery(Course $course, ?Session $session = null): QueryBuilder
+    {
+        $qb = $this
+            ->createQueryBuilder('t')
+            ->innerJoin(PortfolioRelTag::class, 'prt', Join::WITH, 't = prt.tag')
+            ->where('prt.course = :course')
+            ->setParameter('course', $course)
+        ;
+
+        if ($session) {
+            $qb
+                ->andWhere('prt.session = :session')
+                ->setParameter('session', $session)
+            ;
+        } else {
+            $qb->andWhere('prt.session IS NULL');
+        }
+
+        return $qb;
     }
 }

@@ -1,237 +1,367 @@
 <?php
-/**
- * @license see /license.txt
- */
-use Chamilo\CoreBundle\Entity\Course;
+
+/* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioCategory;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\PortfolioComment;
+use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Event\AbstractEvent;
-use Chamilo\CoreBundle\Event\Events;
-use Chamilo\CoreBundle\Event\PortfolioItemDeletedEvent;
-use Chamilo\CoreBundle\Event\PortfolioItemVisibilityChangedEvent;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
-if (empty($_GET['cidReq'])) {
+if (empty($_GET['cid'])) {
     $cidReset = true;
 }
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
+if (api_get_course_entity()) {
+    api_protect_course_script(true);
+}
+
+$httpRequest = HttpRequest::createFromGlobals();
+$action = $httpRequest->query->get('action', 'list');
+
+// It validates the management of categories will be only for admins
+if (in_array($action, ['list_categories', 'add_category', 'edit_category']) && !api_is_platform_admin()) {
+    api_not_allowed(true);
+}
+
+// It includes the user language for translations
+$checkUserLanguage = true;
+if ($checkUserLanguage) {
+    $user = api_get_user_entity();
+    Container::$container->get('translator')->setLocale($user->getLocale());
+}
+
+$controller = new PortfolioController();
+
 $em = Database::getManager();
 
-$currentUserId = api_get_user_id();
-$userId = isset($_GET['user']) ? (int) $_GET['user'] : $currentUserId;
-$user = api_get_user_entity($userId);
-$course = api_get_course_entity(api_get_course_int_id());
-$session = api_get_session_entity(api_get_session_id());
-
-$action = isset($_GET['action']) ? $_GET['action'] : 'list';
-$cidreq = api_get_cidreq();
-$baseUrl = api_get_self().'?'.($cidreq ? $cidreq.'&' : '');
-$allowEdit = $currentUserId == $user->getId();
-
-if (isset($_GET['preview'])) {
-    $allowEdit = false;
-}
-
-$toolName = get_lang('Portfolio');
-$actions = [];
-$content = '';
-
-/**
- * Check if the portfolio item or category is valid for the current user.
- *
- * @param $item
- *
- * @return bool
- */
-$isValid = function ($item) use ($user, $course, $session) {
-    if (!$item) {
-        return false;
-    }
-
-    if (Portfolio::class == get_class($item)) {
-        if ($session && $item->getSession()->getId() != $session->getId()) {
-            return false;
-        }
-
-        if ($course && $item->getCourse()->getId() != $course->getId()) {
-            return false;
-        }
-    }
-
-    if ($item->getUser()->getId() != $user->getId()) {
-        return false;
-    }
-
-    return true;
-};
+$htmlHeadXtra[] = api_get_js('portfolio.js');
 
 switch ($action) {
-    case 'add_category':
-        require 'add_category.php';
-        break;
-    case 'edit_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-        if (!$id) {
-            break;
-        }
+    case 'translate_category':
+        $id = $httpRequest->query->getInt('id');
+        $languageId = $httpRequest->query->getInt('sub_language');
 
         /** @var PortfolioCategory $category */
         $category = $em->find(PortfolioCategory::class, $id);
 
-        if (!$isValid($category)) {
-            api_not_allowed(true);
+        if (empty($category)) {
+            break;
         }
 
-        require 'edit_category.php';
-        break;
+        $languages = $em
+            ->getRepository(Language::class)
+            ->findAllPlatformSubLanguages();
+
+        $controller->translateCategory($category, $languages, $languageId);
+
+        return;
+    case 'list_categories':
+        $controller->listCategories();
+
+        return;
+    case 'add_category':
+        $controller->addCategory();
+
+        return;
+    case 'edit_category':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var PortfolioCategory|null $category */
+        $category = $em->find(PortfolioCategory::class, $id);
+
+        if (empty($category)) {
+            break;
+        }
+
+        $controller->editCategory($category);
+
+        return;
     case 'hide_category':
     case 'show_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
-        if (!$id) {
+        $category = $em->find(PortfolioCategory::class, $id);
+
+        if (empty($category)) {
             break;
         }
 
-        /** @var PortfolioCategory $category */
-        $category = $em->find(PortfolioCategory::class, $id);
+        $controller->showHideCategory($category);
 
-        if (!$isValid($category)) {
-            api_not_allowed(true);
-        }
-
-        $category->setIsVisible(!$category->isVisible());
-
-        $em->persist($category);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('The visibility has been changed.'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        return;
     case 'delete_category':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
-        if (!$id) {
-            break;
-        }
-
-        /** @var PortfolioCategory $category */
+        /** @var PortfolioCategory|null $category */
         $category = $em->find(PortfolioCategory::class, $id);
 
-        if (!$isValid($category)) {
-            api_not_allowed(true);
+        if (empty($category)) {
+            break;
         }
 
-        $em->remove($category);
-        $em->flush();
+        $controller->deleteCategory($category);
 
-        Display::addFlash(
-            Display::return_message(get_lang('The category has been deleted.'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        return;
     case 'add_item':
-        require 'add_item.php';
-        break;
+        $controller->addItem();
+
+        return;
     case 'edit_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
-        if (!$id) {
+        /** @var Portfolio|null $item */
+        $item = $em->find(Portfolio::class, $id);
+
+        if (empty($item)) {
             break;
         }
 
-        /** @var CPortfolio $item */
+        $controller->editItem($item);
+
+        return;
+    case 'visibility':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio|null $item */
         $item = $em->find(Portfolio::class, $id);
 
-        if (!$isValid($item)) {
-            api_not_allowed(true);
+        if (empty($item)) {
+            break;
         }
 
-        require 'edit_item.php';
+        $controller->showHideItem($item);
+
+        return;
+    case 'item_visiblity_choose':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio $item */
+        $item = $em->find(Portfolio::class, $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->itemVisibilityChooser($item);
         break;
-    case 'hide_item':
-    case 'show_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    case 'comment_visiblity_choose':
+        $id = $httpRequest->query->getInt('id');
 
-        if (!$id) {
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
             break;
         }
 
-        /** @var Portfolio $item */
-        $item = $em->find(Portfolio::class, $id);
-
-        if (!$isValid($item)) {
-            api_not_allowed(true);
-        }
-
-        $item->setIsVisible(!$item->isVisible());
-
-        $em->persist($item);
-        $em->flush();
-
-        Container::getEventDispatcher()->dispatch(
-            new PortfolioItemVisibilityChangedEvent(['portfolio' => $item, 'visibility']),
-            Events::PORTFOLIO_ITEM_VISIBILITY_CHANGED
-        );
-
-        Display::addFlash(
-            Display::return_message(get_lang('The visibility has been changed.'), 'success')
-        );
-
-        header("Location: $baseUrl");
-        exit;
+        $controller->commentVisibilityChooser($comment);
+        break;
     case 'delete_item':
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = $httpRequest->query->getInt('id');
 
-        if (!$id) {
+        /** @var Portfolio|null $item */
+        $item = $em->find(Portfolio::class, $id);
+
+        if (empty($item)) {
             break;
         }
 
-        /** @var Portfolio $item */
+        $controller->deleteItem($item);
+
+        return;
+    case 'view':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio|null $item */
         $item = $em->find(Portfolio::class, $id);
 
-        if (!$isValid($item)) {
-            api_not_allowed(true);
+        if (empty($item)) {
+            break;
         }
 
-        Container::getEventDispatcher()->dispatch(
-            new PortfolioItemDeletedEvent(['item' => $item], AbstractEvent::TYPE_PRE),
-            Events::PORTFOLIO_ITEM_DELETED
-        );
+        $urlUser = $httpRequest->query->getInt('user');
 
-        $em->remove($item);
-        $em->flush();
+        $controller->view($item, $urlUser);
 
-        Display::addFlash(
-            Display::return_message(get_lang('Item deleted'), 'success')
-        );
+        return;
+    case 'copy':
+    case 'teacher_copy':
+        $type = $httpRequest->query->getAlpha('copy');
+        $id = $httpRequest->query->getInt('id');
 
-        header("Location: $baseUrl");
-        exit;
+        if ('item' === $type) {
+            $item = $em->find(Portfolio::class, $id);
+
+            if (empty($item)) {
+                break;
+            }
+
+            if ('copy' === $action) {
+                $controller->copyItem($item);
+            } elseif ('teacher_copy' === $action) {
+                $controller->teacherCopyItem($item);
+            }
+        } elseif ('comment' === $type) {
+            $comment = $em->find(PortfolioComment::class, $id);
+
+            if (empty($comment)) {
+                break;
+            }
+
+            if ('copy' === $action) {
+                $controller->copyComment($comment);
+            } elseif ('teacher_copy' === $action) {
+                $controller->teacherCopyComment($comment);
+            }
+        }
+
+        break;
+    case 'mark_important':
+        api_protect_teacher_script();
+
+        $item = $em->find(Portfolio::class, $httpRequest->query->getInt('item'));
+        $comment = $em->find(PortfolioComment::class, $httpRequest->query->getInt('id'));
+
+        if (empty($item) || empty($comment)) {
+            break;
+        }
+
+        $controller->markImportantCommentInItem($item, $comment);
+
+        return;
+    case 'details':
+        $controller->details($httpRequest);
+
+        return;
+    case 'export_pdf':
+        $controller->exportPdf($httpRequest);
+        break;
+    case 'export_zip':
+        $controller->exportZip($httpRequest);
+        break;
+    case 'qualify':
+        api_protect_teacher_script();
+
+        if ($httpRequest->query->has('item')) {
+            if ('1' !== api_get_course_setting('qualify_portfolio_item')) {
+                api_not_allowed(true);
+            }
+
+            /** @var Portfolio $item */
+            $item = $em->find(
+                Portfolio::class,
+                $httpRequest->query->getInt('item')
+            );
+
+            if (empty($item)) {
+                break;
+            }
+
+            $controller->qualifyItem($item);
+        } elseif ($httpRequest->query->has('comment')) {
+            if ('1' !== api_get_course_setting('qualify_portfolio_comment')) {
+                api_not_allowed(true);
+            }
+
+            /** @var Portfolio $item */
+            $comment = $em->find(
+                PortfolioComment::class,
+                $httpRequest->query->getInt('comment')
+            );
+
+            if (empty($comment)) {
+                break;
+            }
+
+            $controller->qualifyComment($comment);
+        }
+        break;
+    case 'download_attachment':
+        $controller->downloadAttachment($httpRequest);
+        break;
+    case 'delete_attachment':
+        $controller->deleteAttachment($httpRequest);
+        break;
+    case 'highlighted':
+        api_protect_teacher_script();
+
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio|null $item */
+        $item = $em->find(Portfolio::class, $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsHighlighted($item);
+        break;
+    case 'template':
+        $id = $httpRequest->query->getInt('id');
+
+        /** @var Portfolio|null $item */
+        $item = $em->find(Portfolio::class, $id);
+
+        if (empty($item)) {
+            break;
+        }
+
+        $controller->markAsTemplate($item);
+        break;
+    case 'template_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (empty($comment)) {
+            break;
+        }
+
+        $controller->markAsTemplateComment($comment);
+        break;
+    case 'edit_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->editComment($comment);
+        }
+
+        break;
+    case 'delete_comment':
+        $id = $httpRequest->query->getInt('id');
+
+        $comment = $em->find(PortfolioComment::class, $id);
+
+        if (!empty($comment)) {
+            $controller->deleteComment($comment);
+        }
+        break;
+    case 'tags':
+    case 'edit_tag':
+        $controller->listTags($httpRequest);
+        break;
+    case 'delete_tag':
+        $id = $httpRequest->query->getInt('id');
+
+        $tag = $em->find(Tag::class, $id);
+
+        if (empty($tag)) {
+            break;
+        }
+
+        $controller->deleteTag($tag);
+        break;
     case 'list':
     default:
-        require 'list.php';
+        $controller->index($httpRequest);
+
+        return;
 }
-
-/*
- * View
- */
-$this_section = $course ? SECTION_COURSES : SECTION_SOCIAL;
-
-$actions = implode(PHP_EOL, $actions);
-
-Display::display_header($toolName);
-Display::display_introduction_section(TOOL_PORTFOLIO);
-echo $actions ? Display::toolbarAction('portfolio-toolbar', [$actions]) : '';
-echo Display::page_header($toolName);
-echo $content;
-Display::display_footer();

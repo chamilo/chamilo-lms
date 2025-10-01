@@ -61,6 +61,7 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'platform_logo_url' => 'https://chamilo.org',
                     'use_career_external_id_as_identifier_in_diagrams' => 'false',
                     'portfolio_advanced_sharing' => 'false',
+                    'portfolio_show_base_course_post_in_sessions' => 'false',
                     'notification_event' => 'false',
                     'push_notification_settings' => '',
                     'hosting_limit_identical_email' => '0',
@@ -127,7 +128,8 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             ->add('user_status_show_option', TextareaType::class)
             ->add('platform_logo_url', TextType::class)
             ->add('use_career_external_id_as_identifier_in_diagrams', YesNoType::class)
-            ->add('portfolio_advanced_sharing', TextType::class)
+            ->add('portfolio_advanced_sharing', YesNoType::class)
+            ->add('portfolio_show_base_course_post_in_sessions', YesNoType::class)
             ->add('notification_event', YesNoType::class)
             ->add('push_notification_settings', TextareaType::class)
             ->add(

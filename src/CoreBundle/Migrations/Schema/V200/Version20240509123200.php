@@ -53,6 +53,7 @@ final class Version20240509123200 extends AbstractMigrationChamilo
             'tracking',
             'course_setting',
             'course_maintenance',
+            'portfolio',
         ];
 
         $courses = $courseRepo->findAll();

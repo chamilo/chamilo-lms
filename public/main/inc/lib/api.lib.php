@@ -161,6 +161,7 @@ define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
+define('TOOL_PORTFOLIO_COMMENT', 'portfolio_comment');
 define('TOOL_PLAGIARISM', 'compilatio');
 define('TOOL_XAPI', 'xapi');
 

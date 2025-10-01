@@ -20,21 +20,21 @@ class Version20250927180004 extends AbstractMigrationChamilo
         return 'Migrate portfolio attachments';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         /** @var PortfolioAttachmentRepository $attachmentRepo */
         $attachmentRepo = $this->container->get(PortfolioAttachmentRepository::class);
+
         /** @var PortfolioRepository $itemRepo */
         $itemRepo = $this->container->get(PortfolioRepository::class);
+
         /** @var PortfolioCommentRepository $itemRepo */
         $commentRepo = $this->container->get(PortfolioCommentRepository::class);
 
         $attachmentRows = $this->connection
-            ->executeQuery("SELECT * FROM portfolio_attachment")
-            ->fetchAllAssociative();
+            ->executeQuery('SELECT * FROM portfolio_attachment')
+            ->fetchAllAssociative()
+        ;
 
         foreach ($attachmentRows as $attachmentRow) {
             $userId = 0;
@@ -47,7 +47,8 @@ class Version20250927180004 extends AbstractMigrationChamilo
 
                 $itemRow = $this->connection
                     ->executeQuery("SELECT user_id FROM portfolio WHERE id = {$attachmentRow['origin_id']}")
-                    ->fetchAssociative();
+                    ->fetchAssociative()
+                ;
 
                 $userId = $itemRow['user_id'] ?? 0;
             } elseif (PortfolioAttachment::TYPE_COMMENT === (int) $attachmentRow['origin_type']) {
@@ -56,7 +57,8 @@ class Version20250927180004 extends AbstractMigrationChamilo
 
                 $commentRow = $this->connection
                     ->executeQuery("SELECT author_id FROM portfolio_comment WHERE id = {$attachmentRow['origin_id']}")
-                    ->fetchAssociative();
+                    ->fetchAssociative()
+                ;
 
                 $userId = $commentRow['author_id'] ?? 0;
             }

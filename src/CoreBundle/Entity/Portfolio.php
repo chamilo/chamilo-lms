@@ -12,12 +12,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use Stringable;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'portfolio')]
 #[ORM\Index(columns: ['category_id'], name: 'category')]
 #[ORM\Entity]
-class Portfolio extends AbstractResource implements ResourceInterface, \Stringable
+class Portfolio extends AbstractResource implements ResourceInterface, Stringable
 {
     use UserTrait;
 
@@ -65,14 +66,14 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
     #[ORM\Column(name: 'is_template', type: 'boolean', options: ['default' => false])]
     private bool $isTemplate = false;
 
-    #[ORM\ManyToOne(targetEntity: Portfolio::class, inversedBy: 'duplicates')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'duplicates')]
     #[ORM\JoinColumn(name: 'duplicated_from', onDelete: 'SET NULL')]
     private ?Portfolio $duplicatedFrom = null;
 
     /**
      * @var Collection<int, Portfolio>
      */
-    #[ORM\OneToMany(mappedBy: 'duplicatedFrom', targetEntity: Portfolio::class)]
+    #[ORM\OneToMany(mappedBy: 'duplicatedFrom', targetEntity: self::class)]
     private Collection $duplicates;
 
     public function __construct()
@@ -115,7 +116,7 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         return $this->id;
     }
 
-    public function setVisibility(int $visibility): Portfolio
+    public function setVisibility(int $visibility): self
     {
         $this->visibility = $visibility;
 
@@ -224,12 +225,12 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         return $this;
     }
 
-    public function getDuplicatedFrom(): ?Portfolio
+    public function getDuplicatedFrom(): ?self
     {
         return $this->duplicatedFrom;
     }
 
-    public function setDuplicatedFrom(?Portfolio $duplicatedFrom): Portfolio
+    public function setDuplicatedFrom(?self $duplicatedFrom): self
     {
         $this->duplicatedFrom = $duplicatedFrom;
 
@@ -244,7 +245,7 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         return $this->duplicates;
     }
 
-    public function addDuplicate(Portfolio $duplicate): Portfolio
+    public function addDuplicate(self $duplicate): self
     {
         if (!$this->duplicates->contains($duplicate)) {
             $this->duplicates->add($duplicate);
@@ -254,7 +255,7 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         return $this;
     }
 
-    public function removeDuplicate(Portfolio $duplicate): Portfolio
+    public function removeDuplicate(self $duplicate): self
     {
         if ($this->duplicates->removeElement($duplicate)) {
             // set the owning side to null (unless already changed)
@@ -286,8 +287,10 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
                         return null !== $resourceLink->getCourse()
                             && $resourceLink->getSession()
                             && $session->getId() === $resourceLink->getSession()->getId();
-                    });
-            });
+                    })
+                ;
+            })
+        ;
     }
 
     public function isDuplicatedInSessionId(int $sessionId): bool
@@ -300,8 +303,10 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
                         return null !== $resourceLink->getCourse()
                             && $resourceLink->getSession()
                             && $sessionId === $resourceLink->getSession()->getId();
-                    });
-            });
+                    })
+                ;
+            })
+        ;
     }
 
     public function reset(): void
@@ -314,7 +319,7 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
     /**
      * @throws Exception
      */
-    public function duplicateInSession(Session $session): Portfolio
+    public function duplicateInSession(Session $session): self
     {
         $firstResourceLink = $this->getResourceNode()->getResourceLinks()->first();
 

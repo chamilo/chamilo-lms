@@ -35,22 +35,28 @@ class Version20250927180002 extends AbstractMigrationChamilo
     {
         /** @var ResourceRepository $portfolioRepo */
         $portfolioRepo = $this->container->get(PortfolioRepository::class);
+
         /** @var ResourceRepository $commentRepo */
         $commentRepo = $this->container->get(PortfolioCommentRepository::class);
+
         /** @var UserRepository $userRepo */
         $userRepo = $this->container->get(UserRepository::class);
 
         $commentRows = $this->connection
-            ->executeQuery("SELECT * FROM portfolio_comment ORDER BY id ASC")
-            ->fetchAllAssociative();
+            ->executeQuery('SELECT * FROM portfolio_comment ORDER BY id ASC')
+            ->fetchAllAssociative()
+        ;
 
         foreach ($commentRows as $commentRow) {
             /** @var PortfolioComment $comment */
             $comment = $commentRepo->find($commentRow['id']);
+
             /** @var User $author */
             $author = $userRepo->find($commentRow['author_id']);
+
             /** @var Portfolio $item */
             $item = $portfolioRepo->find($commentRow['item_id']);
+
             /** @var PortfolioComment $parent */
             $parent = $commentRow['parent_id'] ? $commentRepo->find($commentRow['parent_id']) : null;
             $visibility = (int) $commentRow['visibility'];
@@ -70,7 +76,8 @@ class Version20250927180002 extends AbstractMigrationChamilo
 
             $resourceNode
                 ->setCreatedAt($creationDate)
-                ->setUpdatedAt($creationDate);
+                ->setUpdatedAt($creationDate)
+            ;
 
             $this->entityManager->flush();
 
@@ -84,12 +91,14 @@ class Version20250927180002 extends AbstractMigrationChamilo
                     "SELECT * FROM c_item_property
                         WHERE tool = 'portfolio_comment' AND ref = {$comment->getId()}"
                 )
-                ->fetchAllAssociative();
+                ->fetchAllAssociative()
+            ;
 
             if (empty($itemsProperty)) {
                 $itemRow = $this->connection
                     ->executeQuery("SELECT * FROM portfolio WHERE id = {$commentRow['item_id']}")
-                    ->fetchAssociative();
+                    ->fetchAssociative()
+                ;
 
                 if ($itemRow && !empty($itemRow['c_id'])) {
                     $course = $this->findCourse($itemRow['c_id']);

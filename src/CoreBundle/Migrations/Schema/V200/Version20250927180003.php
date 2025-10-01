@@ -32,7 +32,8 @@ class Version20250927180003 extends AbstractMigrationChamilo
                         AND (to_user_id IS NULL OR to_user_id = 0)
                         AND lastedit_type IN ('PortfolioUpdated', 'PortfolioCommentUpdated')"
             )
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         foreach ($itemsRows as $itemRow) {
             $lastUserId = $itemRow['lastedit_user_id'];

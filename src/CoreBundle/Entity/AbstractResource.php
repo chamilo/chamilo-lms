@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\UserCreatorTrait;
 use Chamilo\CourseBundle\Entity\CGroup;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -171,8 +172,8 @@ abstract class AbstractResource
         ?Session $session = null,
         ?CGroup $group = null,
         int $visibility = ResourceLink::VISIBILITY_PUBLISHED,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null,
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null,
     ): self {
         if (null === $this->getParent()) {
             throw new Exception('$resource->addCourseLink requires to set the parent first.');
@@ -292,8 +293,8 @@ abstract class AbstractResource
         ?Course $course = null,
         ?Session $session = null,
         ?CGroup $group = null,
-        ?\DateTime $createdAt = null,
-        ?\DateTime $updatedAt = null,
+        ?DateTime $createdAt = null,
+        ?DateTime $updatedAt = null,
     ): static {
         $resourceLink = (new ResourceLink())
             ->setVisibility(ResourceLink::VISIBILITY_PUBLISHED)

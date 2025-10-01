@@ -8,11 +8,12 @@ namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'portfolio_comment')]
-class PortfolioComment extends AbstractResource implements ResourceInterface, \Stringable
+class PortfolioComment extends AbstractResource implements ResourceInterface, Stringable
 {
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CoreBundle\Repository\Node;
@@ -26,18 +28,21 @@ class PortfolioCommentRepository extends ResourceRepository
         $qbComments = $this->createQueryBuilder('comment');
         $qbComments
             ->where('comment.author = :owner')
-            ->setParameter('owner', $user);
+            ->setParameter('owner', $user)
+        ;
 
         if ($course) {
             $qbComments
                 ->join('comment.item', 'item')
                 ->andWhere('item.course = :course')
-                ->setParameter('course', $course);
+                ->setParameter('course', $course)
+            ;
 
             if ($session) {
                 $qbComments
                     ->andWhere('item.session = :session')
-                    ->setParameter('session', $session);
+                    ->setParameter('session', $session)
+                ;
             } else {
                 $qbComments->andWhere('item.session IS NULL');
             }

@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\ResourceLink;
-use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
@@ -35,8 +34,9 @@ class Version20250927180001 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
 
         $portfolioRows = $this->connection
-            ->executeQuery("SELECT * FROM portfolio ORDER BY id ASC")
-            ->fetchAllAssociative();
+            ->executeQuery('SELECT * FROM portfolio ORDER BY id ASC')
+            ->fetchAllAssociative()
+        ;
 
         foreach ($portfolioRows as $portfolioRow) {
             $portfolioId = $portfolioRow['id'];
@@ -62,7 +62,8 @@ class Version20250927180001 extends AbstractMigrationChamilo
 
             $resourceNode
                 ->setCreatedAt($creationDate)
-                ->setUpdatedAt($updateDate);
+                ->setUpdatedAt($updateDate)
+            ;
 
             $this->entityManager->flush();
 
@@ -77,7 +78,8 @@ class Version20250927180001 extends AbstractMigrationChamilo
                     "SELECT * FROM c_item_property
                         WHERE tool = 'portfolio' AND ref = $portfolioId"
                 )
-                ->fetchAllAssociative();
+                ->fetchAllAssociative()
+            ;
 
             if (empty($itemsProperty) && $course) {
                 $courseLink = $portfolio->addCourseLink(

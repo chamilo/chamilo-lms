@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,15 +21,18 @@ class ExceptionController extends AbstractController
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
-        private AccessUrlRepository $accessUrlRepository
+        private AccessUrlRepository $accessUrlRepository,
+        private ThemeHelper $themeHelper,
     ) {}
 
     public function show(Exception $exception): Response
     {
+        // In dev, rethrow the exception so Symfony shows the debug page
         if ('dev' === (string) $this->getParameter('app_env')) {
             throw new HttpException($exception->getCode(), $exception->getMessage());
         }
 
+        // Resolve best template to render for this exception
         $name = 'exception';
         $code = $exception->getCode();
         $format = 'html';
@@ -53,12 +57,14 @@ class ExceptionController extends AbstractController
     #[Route(path: '/error')]
     public function error(Request $request): Response
     {
+        // Render a generic 500 with an optional message from session
         $message = $request->getSession()->get('error_message', '');
         $exception = new FlattenException();
         $exception->setCode(500);
 
         $exception->setMessage($message);
 
+        // Resolve best template to render for this exception
         $name = 'exception';
         $code = $exception->getCode();
         $format = 'html';
@@ -85,21 +91,9 @@ class ExceptionController extends AbstractController
     {
         $host = $request->getHost();
 
-        $accessUrl = $this->accessUrlRepository->find(1);
-        $themeHost = rtrim($accessUrl?->getUrl() ?? '', '/');
-        $themeName = 'chamilo';
-
-        $cssUrl = $themeHost
-            .$this->urlGenerator->generate('theme_asset', [
-                'name' => $themeName,
-                'path' => 'colors.css',
-            ], UrlGeneratorInterface::ABSOLUTE_PATH);
-
-        $logoUrl = $themeHost
-            .$this->urlGenerator->generate('theme_asset', [
-                'name' => $themeName,
-                'path' => 'images/header-logo.svg',
-            ], UrlGeneratorInterface::ABSOLUTE_PATH);
+        // Resolve theme-aware asset URLs (respects AccessUrl, user/course/LP settings, THEME_FALLBACK, DEFAULT_THEME)
+        $cssUrl  = $this->themeHelper->getThemeAssetUrl('colors.css', true); // absolute URL
+        $logoUrl = $this->themeHelper->getPreferredLogoUrl('header', true);  // absolute URL
 
         return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [
             'host' => $host,

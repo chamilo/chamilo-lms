@@ -223,7 +223,7 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
 
     public function getResourceName(): string
     {
-        return $this->getContent();
+        return 'portfolio_comment_'.$this->id;
     }
 
     public function setResourceName(string $name): static

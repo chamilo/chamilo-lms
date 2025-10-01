@@ -41,7 +41,7 @@ class Version20250927180002 extends AbstractMigrationChamilo
         $userRepo = $this->container->get(UserRepository::class);
 
         $commentRows = $this->connection
-            ->executeQuery("SELECT *, date FROM portfolio_comment ORDER BY id ASC")
+            ->executeQuery("SELECT * FROM portfolio_comment ORDER BY id ASC")
             ->fetchAllAssociative();
 
         foreach ($commentRows as $commentRow) {

@@ -6,35 +6,70 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
+use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
-use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
-use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
 
 class Version20250927180003 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Migrate portfolio comments to resource nodes';
+        return 'Save c_item_property.lastedit_user_id as track_e_default for portfolio items and comments';
     }
 
+    /**
+     * @throws Exception
+     */
     public function up(Schema $schema): void
     {
-        $this->addSql("ALTER TABLE portfolio DROP FOREIGN KEY FK_A9ED106291D79BD3");
-        $this->addSql("ALTER TABLE portfolio DROP FOREIGN KEY FK_A9ED1062A76ED395");
-        $this->addSql("ALTER TABLE portfolio DROP FOREIGN KEY FK_A9ED1062613FECDF");
-        $this->addSql("DROP INDEX course ON portfolio");
-        $this->addSql("DROP INDEX session ON portfolio");
-        $this->addSql("DROP INDEX user ON portfolio");
-        $this->addSql("ALTER TABLE portfolio DROP user_id, DROP c_id, DROP session_id, DROP creation_date, DROP update_date");
+        $itemsRows = $this->connection
+            ->executeQuery(
+                "SELECT * FROM c_item_property
+                    WHERE tool IN ('portfolio', 'portfolio_comment')
+                        AND (to_user_id IS NULL OR to_user_id = 0)
+                        AND lastedit_type IN ('PortfolioUpdated', 'PortfolioCommentUpdated')"
+            )
+            ->fetchAllAssociative();
 
-        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2A977936C");
-        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2F675F31B");
-        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2727ACA70");
-        $this->addSql("DROP INDEX IDX_C2C17DA2A977936C ON portfolio_comment");
-        $this->addSql("DROP INDEX IDX_C2C17DA2727ACA70 ON portfolio_comment");
-        $this->addSql("DROP INDEX IDX_C2C17DA2F675F31B ON portfolio_comment");
-        $this->addSql("ALTER TABLE portfolio_comment DROP author_id, DROP tree_root, DROP parent_id, DROP lft, DROP lvl, DROP rgt");
+        foreach ($itemsRows as $itemRow) {
+            $lastUserId = $itemRow['lastedit_user_id'];
+            $courseId = $itemRow['c_id'] ?: null;
+            $sessionId = $itemRow['session_id'] ?: null;
+            $date = $itemRow['lastedit_date'] ?: $itemRow['insert_date'];
+
+            $eventType = match ($itemRow['lastedit_type']) {
+                'PortfolioCommentUpdated' => 'portfolio_comment_updated',
+                'PortfolioUpdated' => 'portfolio_updated',
+                default => null,
+            };
+
+            $valueType = match ($itemRow['lastedit_type']) {
+                'PortfolioCommentUpdated' => 'portfolio_comment_id',
+                'PortfolioUpdated' => 'portfolio_id',
+                default => null,
+            };
+
+            if (!$eventType || !$valueType) {
+                continue;
+            }
+
+            $trackEvent = new TrackEDefault();
+            $trackEvent
+                ->setDefaultUserId($lastUserId)
+                ->setCId($courseId)
+                ->setSessionId($sessionId)
+                ->setDefaultDate(new DateTime($date, new DateTimeZone('UTC')))
+                ->setDefaultEventType($eventType)
+                ->setDefaultValueType($valueType)
+                ->setDefaultValue((string) $itemRow['ref'])
+            ;
+
+            $this->entityManager->persist($trackEvent);
+        }
+
+        $this->entityManager->flush();
     }
 }

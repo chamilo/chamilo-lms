@@ -480,7 +480,7 @@ class BuyCoursesPlugin extends Plugin
         return Database::insert(
             Database::get_main_table(self::TABLE_TRANSFER),
             [
-                'name' => $params['tname'],
+                'title' => $params['tname'],
                 'account' => $params['taccount'],
                 'swift' => $params['tswift'],
             ]

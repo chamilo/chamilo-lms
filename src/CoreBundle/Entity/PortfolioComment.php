@@ -11,11 +11,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'portfolio_comment')]
 #[Gedmo\Tree(type: 'nested')]
-class PortfolioComment
+class PortfolioComment extends AbstractResource implements ResourceInterface, \Stringable
 {
     public const VISIBILITY_VISIBLE = 1;
     public const VISIBILITY_PER_USER = 2;
@@ -65,9 +66,9 @@ class PortfolioComment
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?PortfolioComment $parent;
+    private ?PortfolioComment $commentParent;
 
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     #[ORM\OrderBy(['lft' => 'DESC'])]
     private Collection $children;
 
@@ -137,14 +138,14 @@ class PortfolioComment
         return $this;
     }
 
-    public function getParent(): ?self
+    public function getCommentParent(): ?PortfolioComment
     {
-        return $this->parent;
+        return $this->commentParent;
     }
 
-    public function setParent(?self $parent): self
+    public function setCommentParent(PortfolioComment $parent): static
     {
-        $this->parent = $parent;
+        $this->commentParent = $parent;
 
         return $this;
     }
@@ -169,6 +170,11 @@ class PortfolioComment
     public function setIsImportant(bool $isImportant): void
     {
         $this->isImportant = $isImportant;
+    }
+
+    public function getExcerpt(int $count = 190): string
+    {
+        return api_get_short_text_from_html($this->content, $count);
     }
 
     public function getScore(): ?float
@@ -213,5 +219,25 @@ class PortfolioComment
         $this->visibility = $visibility;
 
         return $this;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getContent();
+    }
+
+    public function setResourceName(string $name): static
+    {
+        return $this->setContent($name);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getContent();
+    }
+
+    public function getResourceIdentifier(): int|Uuid
+    {
+        return $this->getId();
     }
 }

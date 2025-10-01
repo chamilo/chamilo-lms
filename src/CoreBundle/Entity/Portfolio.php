@@ -6,21 +6,21 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Chamilo\CoreBundle\Entity\Repository\PortfolioRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'portfolio')]
 #[ORM\Index(columns: ['user_id'], name: 'user')]
 #[ORM\Index(columns: ['c_id'], name: 'course')]
 #[ORM\Index(columns: ['session_id'], name: 'session')]
 #[ORM\Index(columns: ['category_id'], name: 'category')]
-#[ORM\Entity(repositoryClass: PortfolioRepository::class)]
-class Portfolio
+#[ORM\Entity]
+class Portfolio extends AbstractResource implements ResourceInterface, \Stringable
 {
     use UserTrait;
 
@@ -110,12 +110,12 @@ class Portfolio
         return $this;
     }
 
-    public function getCourse(): Course
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    public function getSession(): Session
+    public function getSession(): ?Session
     {
         return $this->session;
     }
@@ -371,5 +371,25 @@ class Portfolio
         $this->addDuplicate($duplicate);
 
         return $duplicate;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function setResourceName(string $name): static
+    {
+        return $this->setTitle($name);
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getResourceIdentifier(): int|Uuid
+    {
+        return $this->getId();
     }
 }

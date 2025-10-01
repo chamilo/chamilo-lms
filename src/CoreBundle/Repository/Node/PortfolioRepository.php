@@ -4,16 +4,16 @@
 
 declare(strict_types=1);
 
-namespace Chamilo\CoreBundle\Repository;
+namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class PortfolioRepository extends ServiceEntityRepository
+class PortfolioRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

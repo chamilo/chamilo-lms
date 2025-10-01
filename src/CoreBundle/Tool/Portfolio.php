@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Tool;
 
 use Chamilo\CoreBundle\Entity\Portfolio as PortfolioEntity;
+use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 
 class Portfolio extends AbstractTool implements ToolInterface
@@ -35,6 +36,7 @@ class Portfolio extends AbstractTool implements ToolInterface
     {
         return [
             'portfolio_items' => PortfolioEntity::class,
+            'portfolio_comments' => PortfolioComment::class,
         ];
     }
 }

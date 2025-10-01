@@ -1,0 +1,168 @@
+{% autoescape false %}
+{% set edit_img = 'edit.png'|icon(22, 'Edit'|get_lang) %}
+{% set visible_img = 'visible.png'|icon(22, 'Invisible'|get_lang) %}
+{% set invisible_img = 'invisible.png'|icon(22, 'Visible'|get_lang) %}
+{% set delete_img = 'delete.png'|icon(22, 'Delete'|get_lang) %}
+{% set baseurl = _p.web_self ~ '?' ~ (_p.web_cid_query ? _p.web_cid_query ~ '&' : '') %}
+
+{% import '@ChamiloCore/Portfolio/items.html.twig' as items %}
+
+<div class="row">
+    {% if course %}
+        <div class="col-md-3">
+            {{ frm_student_list }}
+
+            <hr>
+
+            {{ frm_tag_list }}
+        </div>
+    {% endif %}
+
+    <div class="{{ course ? 'col-md-9' : 'col-xs-12'  }}">
+        {% if (categories) %}
+            <div class="btn-toolbar">
+                <div class="btn-group" data-toggle="buttons">
+                    {% for category in categories %}
+                        <label class="btn btn-default category-filters {{ category_id == category.id ? "active" : "" }}">
+                            <input type="radio" value="{{ category.id }}" {{ category_id == category.id ? "checked" : "" }}>
+                            {{ category.title }}
+                        </label>
+                    {% endfor %}
+                    <label class="btn btn-default category-filters {{ category_id == category.id ? "active" : "" }}">
+                        <input type="radio" value="0" {{ category_id == 0 ? "checked" : "" }}> {{ 'All'|get_lang }}
+                    </label>
+                </div>
+            </div>
+            {% if (subcategories) %}
+                <div class="btn-toolbar">
+                    {% for subcategory in subcategories %}
+                        <label class="btn btn-default">
+                            {% set checked = '' %}
+                            {% if (subcategory_ids == 'all') %}
+                                {% set checked = 'checked' %}
+                            {% else %}
+                                {% if subcategory.id in subcategory_ids %}
+                                    {% set checked = 'checked' %}
+                                {% endif %}
+                            {% endif %}
+                            <input type="checkbox" value="{{ subcategory.id }}" {{ checked }} class="subcategory-filters" />&nbsp;{{ subcategory.title }}
+                        </label>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+        {% if app.user.id != user.id %}
+            <h3>{{ user.completeName }} <small>{{ user.username }}</small></h3>
+        {% endif %}
+
+        {% if found_comments and uncategorized_items %}
+            <h4 class="page-header">{{ 'Posts'|get_lang }}</h4>
+        {% endif %}
+
+        {{ items.display(uncategorized_items, 0, _c, user, listByUser) }}
+
+        {% if found_comments %}
+            <section>
+                <h4 class="page-header">{{ 'Comments'|get_lang }}</h4>
+
+                {% for comment in found_comments %}
+                    {% set commentItem = comment.item %}
+                    <div>
+                        <article>
+                            <footer class="fa-lg">
+                                <p>
+                                    {{ 'CommentByUserXInItemY'|get_lang|format(comment.author.completeName, commentItem.title) }}
+                                </p>
+                                <p class="text-muted">
+                                    <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
+                                    {{ comment.date|date_to_time_ago }}
+                                </p>
+                            </footer>
+                            <p>
+                                {{ comment.excerpt(290) }}
+                                <a href="{{ baseurl ~ {'action':'view', 'id':commentItem.id}|url_encode ~ '#comment-' ~ comment.id }}">{{ 'SeeMore'|get_lang }}</a>
+                            </p>
+                        </article>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+
+        {% for category in portfolio %}
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <h4 class="page-header">
+                        <a href="#collapse-category-{{ category.id }}" role="button" data-toggle="collapse"
+                           aria-expanded="false" aria-controls="collapse-category-{{ category.id }}">
+                            {{ category.title }}
+                        </a>
+
+                        {% if app.user.id == category.user.id %}
+                            <div class="pull-right">
+                                <a href="{{ baseurl ~ {'action':'edit_category', 'id':category.id}|url_encode }}">
+                                    {{ edit_img }}
+                                </a>
+                                {% if category.isVisible %}
+                                    <a href="{{ baseurl ~ {'action':'hide_category', 'id':category.id}|url_encode }}">
+                                        {{ visible_img }}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ baseurl ~ {'action':'show_category', 'id':category.id}|url_encode }}">
+                                        {{ invisible_img }}
+                                    </a>
+                                {% endif %}
+                                <a href="{{ baseurl ~ {'action':'delete_category', 'id':category.id}|url_encode }}"
+                                   class="btn-delete">
+                                    {{ delete_img }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </h4>
+
+                    <div>
+                        {{ category.description }}
+                    </div>
+
+                    <div class="collapse" id="collapse-category-{{ category.id }}">
+                        {{
+                            items.display(
+                                category.items(course, session, app.user.id != category.user.id),
+                                category.id,
+                                _c
+                            )
+                        }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(document).on('ready', function () {
+        $('.btn-delete').on('click', function (e) {
+            if (!confirm('{{ 'NoteConfirmDelete'|get_lang }} ')) {
+                e.preventDefault();
+            }
+        });
+
+        {% if course %}
+            $('form#frm_student_list select[name="user"]').on('change', function (e) {
+                var newLocation = '{{ _p.web_self ~ '?' ~ _p.web_cid_query }}';
+
+                if (this.value) {
+                    newLocation += '&user=' + this.value;
+                }
+
+                location.href = newLocation;
+
+                this.disabled = true;
+            });
+        {% endif %}
+    });
+</script>
+{% if (js_script) %}
+    {{ js_script }}
+{% endif %}
+
+{% endautoescape %}

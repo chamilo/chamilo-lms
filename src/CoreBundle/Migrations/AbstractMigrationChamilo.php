@@ -227,7 +227,7 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
             $fileName = basename($documentPath);
         }
         $file = new UploadedFile($filePath, $fileName, $mimeType, null, true);
-        $repo->addFile($resource, $file);
+        $repo->addFile($resource, $file, $description);
 
         return true;
     }

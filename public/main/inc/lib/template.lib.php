@@ -166,6 +166,29 @@ class Template
         ];
     }
 
+    public static function getLegacyP(): array
+    {
+        return [
+            'web_self' => api_get_self(),
+            'web_cid_query' => api_get_cidreq(),
+        ];
+    }
+
+    public static function getLegacyC(): array
+    {
+        $course = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        if (!$course) {
+            return [];
+        }
+
+        return [
+            'id' => $course->getId(),
+            'session_id' => $session?->getId(),
+        ];
+    }
+
     /**
      * @param string $helpInput
      */

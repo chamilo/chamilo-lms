@@ -2064,6 +2064,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
                 ],
                 [
+                    'name' => 'portfolio_show_base_course_post_in_sessions',
+                    'title' => 'Show base course posts in session course',
+                    'comment' => 'Decide who can view the posts and comments of the portfolio.',
+                ],
+                [
                     'name' => 'timepicker_increment',
                     'title' => 'Timepicker increment',
                     'comment' => 'Minimal time increment (in minutes) when selecting a date and time with the timepicker widget. For example, it might not be useful to have less than 5 or 15 minutes increments when talking about assignment submission, availability of a test, start time of a session, etc.',

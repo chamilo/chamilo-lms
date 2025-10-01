@@ -16,11 +16,11 @@ use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\ORM\Query;
 
-final class Version20250923205900 extends AbstractMigrationChamilo
+final class Version20250928100200 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Seed missing course tools into existing courses (dropbox tool).';
+        return 'Seed missing course tools into existing courses (blog tool).';
     }
 
     public function up(Schema $schema): void
@@ -33,7 +33,7 @@ final class Version20250923205900 extends AbstractMigrationChamilo
         // Ensure global catalog is seeded (tool + resource_types)
         $toolChain->createTools();
 
-        $targetTitle = 'dropbox';
+        $targetTitle = 'blog';
 
         // Get Tool ID by title (fail fast if not found)
         $toolId = $this->entityManager

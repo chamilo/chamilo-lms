@@ -1709,7 +1709,7 @@ class SurveyUtil
 
         // First line (questions)
         $sql = "SELECT
-                    questions.question_id,
+                    questions.iid as question_id,
                     questions.type,
                     questions.survey_question,
                     count(options.iid) as number_of_options
@@ -1721,7 +1721,7 @@ class SurveyUtil
 				    survey_question NOT LIKE '%{{%' AND
 				    questions.type <> 'pagebreak' AND
 				    questions.survey_id = $surveyId
-				GROUP BY questions.question_id
+				GROUP BY questions.iid
 				ORDER BY questions.sort ASC";
         $result = Database::query($sql);
         $line = 1;
@@ -1816,7 +1816,7 @@ class SurveyUtil
         $old_user = '';
         $answers_of_user = [];
         $sql = "SELECT * FROM $table_survey_answer
-                WHERE c_id = $course_id AND survey_id = $surveyId";
+                WHERE survey_id = $surveyId";
         if (0 != $user_id) {
             $sql .= " AND user='".$user_id."' ";
         }

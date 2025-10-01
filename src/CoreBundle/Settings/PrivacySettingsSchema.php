@@ -40,4 +40,3 @@ final class PrivacySettingsSchema extends AbstractSettingsSchema
         $this->updateFormFieldsFromSettingsInfo($builder);
     }
 }
-

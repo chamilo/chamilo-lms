@@ -61,11 +61,11 @@ class CBlogComment
     #[ORM\Column(name: 'comment_id', type: 'integer', nullable: false, options: ['default' => 0])]
     protected int $commentId = 0;
 
-    #[Groups(['blog_comment:read','blog_comment:write'])]
+    #[Groups(['blog_comment:read', 'blog_comment:write'])]
     #[ORM\Column(name: 'title', type: 'string', length: 250, nullable: false)]
     protected string $title = '';
 
-    #[Groups(['blog_comment:read','blog_comment:write'])]
+    #[Groups(['blog_comment:read', 'blog_comment:write'])]
     #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
 
@@ -78,19 +78,23 @@ class CBlogComment
     #[ORM\Column(name: 'date_creation', type: 'datetime', nullable: false)]
     protected DateTime $dateCreation;
 
-    #[Groups(['blog_comment:read','blog_comment:write'])]
+    #[Groups(['blog_comment:read', 'blog_comment:write'])]
     #[ORM\ManyToOne(targetEntity: CBlog::class)]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CBlog $blog = null;
 
-    /** Real relation to the blog post (keeps DB column name post_id). */
-    #[Groups(['blog_comment:read','blog_comment:write'])]
+    /**
+     * Real relation to the blog post (keeps DB column name post_id).
+     */
+    #[Groups(['blog_comment:read', 'blog_comment:write'])]
     #[ORM\ManyToOne(targetEntity: CBlogPost::class)]
     #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected ?CBlogPost $post = null;
 
-    /** Optional: parent comment (threading). Kept nullable, matches parent_comment_id column. */
-    #[Groups(['blog_comment:read','blog_comment:write'])]
+    /**
+     * Optional: parent comment (threading). Kept nullable, matches parent_comment_id column.
+     */
+    #[Groups(['blog_comment:read', 'blog_comment:write'])]
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(name: 'parent_comment_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CBlogComment $parentComment = null;
@@ -114,7 +118,7 @@ class CBlogComment
         if (!isset($this->title)) {
             $this->title = '';
         }
-        if ($this->blog === null && $this->post instanceof CBlogPost) {
+        if (null === $this->blog && $this->post instanceof CBlogPost) {
             $this->blog = $this->post->getBlog();
         }
     }
@@ -208,12 +212,12 @@ class CBlogComment
         return $this;
     }
 
-    public function getParentComment(): ?CBlogComment
+    public function getParentComment(): ?self
     {
         return $this->parentComment;
     }
 
-    public function setParentComment(?CBlogComment $parentComment): self
+    public function setParentComment(?self $parentComment): self
     {
         $this->parentComment = $parentComment;
 
@@ -231,7 +235,7 @@ class CBlogComment
             : (method_exists($u, 'getUsername') ? $u->getUsername() : 'User');
 
         return [
-            'id'   => method_exists($u, 'getId') ? $u->getId() : null,
+            'id' => method_exists($u, 'getId') ? $u->getId() : null,
             'name' => $name,
         ];
     }

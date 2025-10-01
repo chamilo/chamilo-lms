@@ -7,9 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Controller\Api\CreateBlogAttachmentAction;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -40,33 +40,33 @@ class CBlogAttachment
     #[ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write','blog_post:read'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write', 'blog_post:read'])]
     #[ORM\Column(name: 'path', type: 'string', length: 255, nullable: false)]
     protected string $path;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write','blog_post:read'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write', 'blog_post:read'])]
     #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected ?string $comment = null;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write','blog_post:read'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write', 'blog_post:read'])]
     #[ORM\Column(name: 'size', type: 'integer', nullable: false)]
     protected int $size;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write','blog_post:read'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write', 'blog_post:read'])]
     #[ORM\Column(name: 'filename', type: 'string', length: 255, nullable: false)]
     protected string $filename;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write'])]
     #[ORM\ManyToOne(targetEntity: CBlog::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CBlog $blog = null;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write'])]
     #[ORM\ManyToOne(targetEntity: CBlogPost::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CBlogPost $post = null;
 
-    #[Groups(['blog_attachment:read','blog_attachment:write'])]
+    #[Groups(['blog_attachment:read', 'blog_attachment:write'])]
     #[ORM\ManyToOne(targetEntity: CBlogComment::class)]
     #[ORM\JoinColumn(name: 'comment_id', referencedColumnName: 'iid', nullable: true, onDelete: 'CASCADE')]
     protected ?CBlogComment $commentRef = null;

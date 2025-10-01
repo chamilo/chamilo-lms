@@ -50,7 +50,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
 
     /**
      * Optional custom URL to override the default /r/.../link format.
-     * Example (for blogs): /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0
+     * Example (for blogs): /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0.
      */
     #[Groups(['cshortcut:read'])]
     private ?string $urlOverride = null;
@@ -136,7 +136,8 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
         return $this->getShortCutNode()
             ->getResourceType()
             ->getTool()
-            ->getTitle();
+            ->getTitle()
+        ;
     }
 
     /**
@@ -146,7 +147,8 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     {
         return $this->getShortCutNode()
             ->getResourceType()
-            ->getTitle();
+            ->getTitle()
+        ;
     }
 
     public function getCustomImageUrl(): ?string
@@ -164,7 +166,7 @@ class CShortcut extends AbstractResource implements ResourceInterface, Stringabl
     /**
      * Set a custom URL that will be returned by getUrl().
      * Use it, for example, to point a CBlog shortcut to:
-     *   /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0
+     *   /resources/blog/{courseNodeId}/{blogId}/posts?cid=...&sid=...&gid=0.
      */
     public function setUrlOverride(?string $url): self
     {

@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDropboxFile;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 
 final class CDropboxFileRepository extends ResourceRepository
@@ -25,9 +26,9 @@ final class CDropboxFileRepository extends ResourceRepository
     public function findSentByContextAndCategory(int $cid, ?int $sid, int $uid, int $categoryId): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sid  = (int) ($sid ?? 0);
+        $sid = (int) ($sid ?? 0);
 
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         SELECT
             f.iid               AS id,
             f.title             AS title,
@@ -55,9 +56,9 @@ final class CDropboxFileRepository extends ResourceRepository
     SQL;
 
         return $conn->fetchAllAssociative($sql, [
-            'cid'        => $cid,
-            'sid'        => $sid,
-            'uid'        => $uid,
+            'cid' => $cid,
+            'sid' => $sid,
+            'uid' => $uid,
             'categoryId' => $categoryId,
         ]);
     }
@@ -70,9 +71,9 @@ final class CDropboxFileRepository extends ResourceRepository
     public function findReceivedByContextAndCategory(int $cid, ?int $sid, int $uid, int $categoryId): array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sid  = (int) ($sid ?? 0);
+        $sid = (int) ($sid ?? 0);
 
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         SELECT
             f.iid               AS id,
             f.title             AS title,
@@ -95,9 +96,9 @@ final class CDropboxFileRepository extends ResourceRepository
     SQL;
 
         return $conn->fetchAllAssociative($sql, [
-            'cid'        => $cid,
-            'uid'        => $uid,
-            'sid'        => $sid,
+            'cid' => $cid,
+            'uid' => $uid,
+            'sid' => $sid,
             'categoryId' => $categoryId,
         ]);
     }
@@ -121,9 +122,9 @@ final class CDropboxFileRepository extends ResourceRepository
         $conn = $this->getEntityManager()->getConnection();
         $targetCatId = (int) $targetCatId;
 
-        if ($area === 'sent') {
+        if ('sent' === $area) {
             // Move inside sender's space: update file's category if current user is the uploader.
-            $sql = <<<SQL
+            $sql = <<<'SQL'
         UPDATE c_dropbox_file
            SET cat_id = :targetCatId
          WHERE iid = :fileId
@@ -133,14 +134,14 @@ final class CDropboxFileRepository extends ResourceRepository
 
             return $conn->executeStatement($sql, [
                 'targetCatId' => $targetCatId,
-                'fileId'      => $fileId,
-                'cid'         => $cid,
-                'uid'         => $uid,
+                'fileId' => $fileId,
+                'cid' => $cid,
+                'uid' => $uid,
             ]);
         }
 
         // Move inside receiver's space: update the receiver's own category in c_dropbox_person.
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         UPDATE c_dropbox_person
            SET cat_id = :targetCatId
          WHERE c_id = :cid
@@ -150,9 +151,9 @@ final class CDropboxFileRepository extends ResourceRepository
 
         return $conn->executeStatement($sql, [
             'targetCatId' => $targetCatId,
-            'cid'         => $cid,
-            'fileId'      => $fileId,
-            'uid'         => $uid,
+            'cid' => $cid,
+            'fileId' => $fileId,
+            'uid' => $uid,
         ]);
     }
 
@@ -163,9 +164,9 @@ final class CDropboxFileRepository extends ResourceRepository
         }
 
         $conn = $this->getEntityManager()->getConnection();
-        $placeholders = implode(',', array_fill(0, count($fileIds), '?'));
+        $placeholders = implode(',', array_fill(0, \count($fileIds), '?'));
 
-        if ($area === 'sent') {
+        if ('sent' === $area) {
             $sql = "DELETE FROM c_dropbox_file
                     WHERE iid IN ($placeholders) AND c_id = ? AND session_id = ? AND uploader_id = ?";
             $params = array_merge($fileIds, [$cid, $sid ?? 0, $uid]);
@@ -189,7 +190,7 @@ final class CDropboxFileRepository extends ResourceRepository
         string $originalTitle,
         ?string $description = null
     ): CDropboxFile {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         $f = new CDropboxFile();
         $f->setCId($cid);

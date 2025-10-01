@@ -11,7 +11,11 @@ use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Controller\Api\VideoConferenceCallbackController;
 use Chamilo\CoreBundle\Repository\ConferenceActivityRepository;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+
+use const DATE_ATOM;
 
 /**
  * Conference Activity entity.
@@ -68,7 +72,9 @@ class ConferenceActivity
     #[ORM\Column(name: 'signed_at', type: 'datetime', nullable: true)]
     protected ?DateTime $signedAt = null;
 
-    /** Stores per-user analytics for the meeting (dashboard metrics). */
+    /**
+     * Stores per-user analytics for the meeting (dashboard metrics).
+     */
     #[ORM\Column(name: 'metrics', type: 'json', nullable: true)]
     protected ?array $metrics = null;
 
@@ -229,12 +235,14 @@ class ConferenceActivity
         return $this;
     }
 
-    /** Read a value from metrics by dot path, with a default if missing. */
+    /**
+     * Read a value from metrics by dot path, with a default if missing.
+     */
     public function getMetric(string $path, mixed $default = null): mixed
     {
         $data = $this->getMetrics();
         foreach (explode('.', $path) as $seg) {
-            if (!is_array($data) || !array_key_exists($seg, $data)) {
+            if (!\is_array($data) || !\array_key_exists($seg, $data)) {
                 return $default;
             }
             $data = $data[$seg];
@@ -243,18 +251,20 @@ class ConferenceActivity
         return $data;
     }
 
-    /** Set a value into metrics by dot path, creating nested arrays as needed. */
+    /**
+     * Set a value into metrics by dot path, creating nested arrays as needed.
+     */
     public function setMetric(string $path, mixed $value): self
     {
         $metrics = $this->getMetrics();
-        $ref =& $metrics;
+        $ref = &$metrics;
 
-        $parts = $path === '' ? [] : explode('.', $path);
+        $parts = '' === $path ? [] : explode('.', $path);
         foreach ($parts as $seg) {
-            if (!isset($ref[$seg]) || !is_array($ref[$seg])) {
+            if (!isset($ref[$seg]) || !\is_array($ref[$seg])) {
                 $ref[$seg] = [];
             }
-            $ref =& $ref[$seg];
+            $ref = &$ref[$seg];
         }
 
         $ref = $value;
@@ -262,7 +272,9 @@ class ConferenceActivity
         return $this->setMetrics($metrics);
     }
 
-    /** Increment an integer metric by dot path (initializes to 0 if missing). */
+    /**
+     * Increment an integer metric by dot path (initializes to 0 if missing).
+     */
     public function incMetric(string $path, int $by = 1): self
     {
         $current = (int) $this->getMetric($path, 0);
@@ -274,9 +286,9 @@ class ConferenceActivity
      * Start a named timer: stores ISO timestamp under "timers.{key}.on_at".
      * Timer is idempotent (won't overwrite if already running).
      */
-    public function startTimer(string $key, ?\DateTimeInterface $now = null): self
+    public function startTimer(string $key, ?DateTimeInterface $now = null): self
     {
-        $now ??= new \DateTimeImmutable();
+        $now ??= new DateTimeImmutable();
 
         if (!$this->getMetric("timers.$key.on_at")) {
             $this->setMetric("timers.$key.on_at", $now->format(DATE_ATOM));
@@ -289,13 +301,13 @@ class ConferenceActivity
      * Stop a named timer and add elapsed seconds to "totals.{key}_seconds".
      * If the timer is not running, this is a no-op.
      */
-    public function stopTimer(string $key, ?\DateTimeInterface $now = null): self
+    public function stopTimer(string $key, ?DateTimeInterface $now = null): self
     {
-        $now ??= new \DateTimeImmutable();
+        $now ??= new DateTimeImmutable();
         $onAt = $this->getMetric("timers.$key.on_at");
 
         if ($onAt) {
-            $started = \DateTimeImmutable::createFromFormat(DATE_ATOM, $onAt) ?: new \DateTimeImmutable($onAt);
+            $started = DateTimeImmutable::createFromFormat(DATE_ATOM, $onAt) ?: new DateTimeImmutable($onAt);
             $elapsed = max(0, $now->getTimestamp() - $started->getTimestamp());
 
             $this->incMetric("totals.{$key}_seconds", $elapsed);
@@ -312,14 +324,15 @@ class ConferenceActivity
     private function pruneEmpty(array $data): array
     {
         foreach ($data as $k => $v) {
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 $v = $this->pruneEmpty($v);
-                if ($v === []) {
+                if ([] === $v) {
                     unset($data[$k]);
+
                     continue;
                 }
                 $data[$k] = $v;
-            } elseif ($v === null || $v === '') {
+            } elseif (null === $v || '' === $v) {
                 unset($data[$k]);
             }
         }

@@ -20,27 +20,27 @@ final class Version20250924220200 extends AbstractMigrationChamilo
     {
         $settings = [
             [
-                'name'     => 'allow_global_chat',
-                'title'    => 'Allow global chat',
-                'comment'  => 'Users can chat with each other',
+                'name' => 'allow_global_chat',
+                'title' => 'Allow global chat',
+                'comment' => 'Users can chat with each other',
                 'category' => 'chat',
-                'default'  => 'false',
+                'default' => 'false',
             ],
             [
-                'name'     => 'hide_chat_video',
-                'title'    => 'Hide videochat option in global chat',
-                'comment'  => '',
+                'name' => 'hide_chat_video',
+                'title' => 'Hide videochat option in global chat',
+                'comment' => '',
                 'category' => 'chat',
-                'default'  => 'true',
+                'default' => 'true',
             ],
         ];
 
         foreach ($settings as $setting) {
             $variable = addslashes($setting['name']);
-            $title    = addslashes($setting['title']);
-            $comment  = addslashes($setting['comment']);
+            $title = addslashes($setting['title']);
+            $comment = addslashes($setting['comment']);
             $category = addslashes($setting['category']);
-            $default  = addslashes($setting['default']);
+            $default = addslashes($setting['default']);
 
             $sqlCheck = \sprintf(
                 "SELECT COUNT(*) AS count
@@ -49,7 +49,7 @@ final class Version20250924220200 extends AbstractMigrationChamilo
                 $variable
             );
 
-            $stmt   = $this->connection->executeQuery($sqlCheck);
+            $stmt = $this->connection->executeQuery($sqlCheck);
             $result = $stmt->fetchAssociative();
 
             if ($result && (int) $result['count'] > 0) {

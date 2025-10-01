@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Collator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -195,7 +196,6 @@ class SettingsController extends BaseController
         $schemas = $manager->getSchemas();
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
-
         $templateMap = [];
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
 
@@ -269,22 +269,25 @@ class SettingsController extends BaseController
     private function computeOrderedNamespacesByTranslatedLabel(array $schemas, Request $request): array
     {
         $namespaces = array_map(
-            static fn($k) => str_replace('chamilo_core.settings.', '', $k),
+            static fn ($k) => str_replace('chamilo_core.settings.', '', $k),
             array_keys($schemas)
         );
 
         $labelMap = [];
         foreach ($namespaces as $ns) {
-            if ($ns === 'cas') {
+            if ('cas' === $ns) {
                 $labelMap[$ns] = 'CAS';
+
                 continue;
             }
-            if ($ns === 'lp') {
+            if ('lp' === $ns) {
                 $labelMap[$ns] = $this->translator->trans('Learning path');
+
                 continue;
             }
-            if ($ns === 'ai_helpers') {
+            if ('ai_helpers' === $ns) {
                 $labelMap[$ns] = $this->translator->trans('AI helpers');
+
                 continue;
             }
 
@@ -292,7 +295,7 @@ class SettingsController extends BaseController
             $labelMap[$ns] = $this->translator->trans($key);
         }
 
-        $collator = class_exists(\Collator::class) ? new \Collator($request->getLocale()) : null;
+        $collator = class_exists(Collator::class) ? new Collator($request->getLocale()) : null;
         usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
             return $collator
                 ? $collator->compare($labelMap[$a], $labelMap[$b])
@@ -300,7 +303,7 @@ class SettingsController extends BaseController
         });
 
         $idx = array_search('ai_helpers', $namespaces, true);
-        if ($idx !== false) {
+        if (false !== $idx) {
             array_splice($namespaces, $idx, 1);
             array_splice($namespaces, 1, 0, ['ai_helpers']);
         }

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\DataFixtures\SettingsValueTemplateFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -40,16 +41,18 @@ final class Version20250926174000 extends AbstractMigrationChamilo
 
         foreach ($byVariable as $variable => $row) {
             if (!$this->isValidIdentifier($variable)) {
-                error_log(sprintf('[SKIP] Invalid variable name: "%s".', $variable));
+                error_log(\sprintf('[SKIP] Invalid variable name: "%s".', $variable));
+
                 continue;
             }
             $category = $row['category'];
             if (!$this->isValidIdentifier($category)) {
-                error_log(sprintf('[SKIP] Invalid category for "%s": "%s".', $variable, $category));
+                error_log(\sprintf('[SKIP] Invalid category for "%s": "%s".', $variable, $category));
+
                 continue;
             }
 
-            $title   = (string) $row['title'];
+            $title = (string) $row['title'];
             $comment = (string) $row['comment'];
 
             try {
@@ -57,18 +60,19 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                     'SELECT COUNT(*) FROM settings WHERE variable = ?',
                     [$variable]
                 );
-            } catch (\Throwable $e) {
-                error_log(sprintf('[ERROR] Existence check failed for "%s": %s', $variable, $e->getMessage()));
+            } catch (Throwable $e) {
+                error_log(\sprintf('[ERROR] Existence check failed for "%s": %s', $variable, $e->getMessage()));
+
                 continue;
             }
 
             if ($exists > 0) {
-                $sql    = 'UPDATE settings SET category = ?, title = ?, comment = ? WHERE variable = ?';
+                $sql = 'UPDATE settings SET category = ?, title = ?, comment = ? WHERE variable = ?';
                 $params = [$category, $title, $comment, $variable];
                 $this->addSql($sql, $params);
             } else {
                 $defaultValue = $defaults[$variable] ?? '';
-                $sql    = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url_changeable) VALUES (?, ?, ?, ?, ?, 0)';
+                $sql = 'INSERT INTO settings (variable, category, title, comment, selected_value, access_url_changeable) VALUES (?, ?, ?, ?, ?, 0)';
                 $params = [$variable, $category, $title, $comment, (string) $defaultValue];
                 $this->addSql($sql, $params);
             }
@@ -83,7 +87,7 @@ final class Version20250926174000 extends AbstractMigrationChamilo
     }
 
     /**
-     * Read fixtures and normalize to: [variable, category, title, comment]
+     * Read fixtures and normalize to: [variable, category, title, comment].
      */
     private function collectFromFixtures(array &$out, array $byCategory): void
     {
@@ -92,19 +96,20 @@ final class Version20250926174000 extends AbstractMigrationChamilo
 
             foreach ((array) $settings as $setting) {
                 $variable = (string) ($setting['name'] ?? $setting['variable'] ?? '');
-                if ($variable === '') {
-                    error_log(sprintf('[WARN] Missing "name" in fixture entry for category "%s" - skipping.', $category));
+                if ('' === $variable) {
+                    error_log(\sprintf('[WARN] Missing "name" in fixture entry for category "%s" - skipping.', $category));
+
                     continue;
                 }
 
-                $title   = (string) ($setting['title'] ?? $variable);
+                $title = (string) ($setting['title'] ?? $variable);
                 $comment = (string) ($setting['comment'] ?? '');
 
                 $out[] = [
                     'variable' => $variable,
                     'category' => $category,
-                    'title'    => $title,
-                    'comment'  => $comment,
+                    'title' => $title,
+                    'comment' => $comment,
                 ];
             }
         }
@@ -112,13 +117,14 @@ final class Version20250926174000 extends AbstractMigrationChamilo
 
     /**
      * Build default values map by scanning SettingsManager schemas.
-     * Returns: [ variable => defaultValueAsString, ... ]
+     * Returns: [ variable => defaultValueAsString, ... ].
      */
     private function buildDefaultsFromSchemas(): array
     {
         $map = [];
 
         $manager = null;
+
         try {
             if ($this->container->has('chamilo.settings_manager')) {
                 $manager = $this->container->get('chamilo.settings_manager');
@@ -127,19 +133,21 @@ final class Version20250926174000 extends AbstractMigrationChamilo
             } elseif ($this->container->has(SettingsManager::class)) {
                 $manager = $this->container->get(SettingsManager::class);
             }
-        } catch (\Throwable $e) {
-            error_log('[WARN] Unable to retrieve SettingsManager from container: ' . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log('[WARN] Unable to retrieve SettingsManager from container: '.$e->getMessage());
         }
 
         if (!$manager) {
             error_log('[WARN] SettingsManager not found; defaults map will be empty.');
+
             return $map;
         }
 
         try {
             $schemas = $manager->getSchemas();
-        } catch (\Throwable $e) {
-            error_log('[WARN] getSchemas() failed on SettingsManager: ' . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log('[WARN] getSchemas() failed on SettingsManager: '.$e->getMessage());
+
             return $map;
         }
 
@@ -148,8 +156,9 @@ final class Version20250926174000 extends AbstractMigrationChamilo
 
             try {
                 $settingsBag = $manager->load($namespace);
-            } catch (\Throwable $e) {
-                error_log(sprintf('[WARN] load("%s") failed: %s', $namespace, $e->getMessage()));
+            } catch (Throwable $e) {
+                error_log(\sprintf('[WARN] load("%s") failed: %s', $namespace, $e->getMessage()));
+
                 continue;
             }
 
@@ -163,8 +172,8 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                 } elseif (method_exists($settingsBag, 'toArray')) {
                     $parameters = (array) $settingsBag->toArray();
                 }
-            } catch (\Throwable $e) {
-                error_log(sprintf('[WARN] Could not extract parameters for "%s": %s', $namespace, $e->getMessage()));
+            } catch (Throwable $e) {
+                error_log(\sprintf('[WARN] Could not extract parameters for "%s": %s', $namespace, $e->getMessage()));
                 $parameters = [];
             }
 
@@ -179,22 +188,22 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                     foreach ($keys as $k) {
                         try {
                             $parameters[$k] = $settingsBag->get($k);
-                        } catch (\Throwable $e) {
+                        } catch (Throwable $e) {
                             // ignore
                         }
                     }
-                } catch (\Throwable $e) {
-                    error_log(sprintf('[WARN] Parameter keys iteration failed for "%s": %s', $namespace, $e->getMessage()));
+                } catch (Throwable $e) {
+                    error_log(\sprintf('[WARN] Parameter keys iteration failed for "%s": %s', $namespace, $e->getMessage()));
                 }
             }
 
             foreach ($parameters as $var => $val) {
                 $var = (string) $var;
-                if ($var === '') {
+                if ('' === $var) {
                     continue;
                 }
-                if (!array_key_exists($var, $map)) {
-                    $map[$var] = is_scalar($val) ? (string) $val : (string) json_encode($val);
+                if (!\array_key_exists($var, $map)) {
+                    $map[$var] = \is_scalar($val) ? (string) $val : (string) json_encode($val);
                 }
             }
         }
@@ -207,33 +216,36 @@ final class Version20250926174000 extends AbstractMigrationChamilo
      * For safety, we:
      *  - validate variable
      *  - JSON-encode examples with proper flags
-     *  - do existence checks with SELECTs
+     *  - do existence checks with SELECTs.
      */
     private function dryRunTemplatesUpsertAndLink(): void
     {
         $grouped = [];
+
         try {
             $grouped = (array) SettingsValueTemplateFixtures::getTemplatesGrouped();
-        } catch (\Throwable $e) {
-            error_log('[WARN] Unable to load SettingsValueTemplateFixtures::getTemplatesGrouped(): ' . $e->getMessage());
+        } catch (Throwable $e) {
+            error_log('[WARN] Unable to load SettingsValueTemplateFixtures::getTemplatesGrouped(): '.$e->getMessage());
+
             return;
         }
 
         foreach ($grouped as $category => $items) {
             foreach ((array) $items as $setting) {
-                $variable    = (string) ($setting['variable'] ?? $setting['name'] ?? '');
+                $variable = (string) ($setting['variable'] ?? $setting['name'] ?? '');
                 $jsonExample = $setting['json_example'] ?? null;
 
-                if ($variable === '' || !$this->isValidIdentifier($variable)) {
-                    error_log(sprintf('[SKIP] Invalid or empty template variable in category "%s".', (string) $category));
+                if ('' === $variable || !$this->isValidIdentifier($variable)) {
+                    error_log(\sprintf('[SKIP] Invalid or empty template variable in category "%s".', (string) $category));
+
                     continue;
                 }
 
                 // Serialize JSON example safely (string for SQL param preview)
                 try {
                     $jsonEncoded = json_encode($jsonExample, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-                } catch (\Throwable $e) {
-                    error_log(sprintf('[WARN] JSON encoding failed for variable "%s": %s', $variable, $e->getMessage()));
+                } catch (Throwable $e) {
+                    error_log(\sprintf('[WARN] JSON encoding failed for variable "%s": %s', $variable, $e->getMessage()));
                     $jsonEncoded = 'null';
                 }
 
@@ -243,19 +255,20 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                         'SELECT id FROM settings_value_template WHERE variable = ?',
                         [$variable]
                     );
-                } catch (\Throwable $e) {
-                    error_log(sprintf('[ERROR] Failed to check template existence for "%s": %s', $variable, $e->getMessage()));
+                } catch (Throwable $e) {
+                    error_log(\sprintf('[ERROR] Failed to check template existence for "%s": %s', $variable, $e->getMessage()));
+
                     continue;
                 }
 
                 if ($templateId) {
                     // UPDATE PREVIEW on existing template
-                    $sql    = 'UPDATE settings_value_template SET json_example = ?, updated_at = NOW() WHERE id = ?';
+                    $sql = 'UPDATE settings_value_template SET json_example = ?, updated_at = NOW() WHERE id = ?';
                     $params = [$jsonEncoded, $templateId];
                     $this->addSql($sql, $params);
                 } else {
                     // INSERT PREVIEW new template
-                    $sql    = 'INSERT INTO settings_value_template (variable, json_example, created_at, updated_at) VALUES (?, ?, NOW(), NOW())';
+                    $sql = 'INSERT INTO settings_value_template (variable, json_example, created_at, updated_at) VALUES (?, ?, NOW(), NOW())';
                     $params = [$variable, $jsonEncoded];
                     $this->addSql($sql, $params);
 
@@ -267,24 +280,26 @@ final class Version20250926174000 extends AbstractMigrationChamilo
                             'SELECT id FROM settings_value_template WHERE variable = ?',
                             [$variable]
                         );
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         $templateId = false;
                     }
                 }
 
                 // Link PREVIEW: settings.value_template_id = $templateId
                 if ($templateId) {
-                    $sql    = 'UPDATE settings SET value_template_id = ? WHERE variable = ?';
+                    $sql = 'UPDATE settings SET value_template_id = ? WHERE variable = ?';
                     $params = [$templateId, $variable];
                     $this->addSql($sql, $params);
                 } else {
-                    error_log(sprintf('[INFO] Skipping link preview for "%s" (no template id available in dry-run).', $variable));
+                    error_log(\sprintf('[INFO] Skipping link preview for "%s" (no template id available in dry-run).', $variable));
                 }
             }
         }
     }
 
-    /** Allow letters, numbers, underscore, dash and dot. */
+    /**
+     * Allow letters, numbers, underscore, dash and dot.
+     */
     private function isValidIdentifier(string $s): bool
     {
         return (bool) preg_match('/^[A-Za-z0-9_.-]+$/', $s);

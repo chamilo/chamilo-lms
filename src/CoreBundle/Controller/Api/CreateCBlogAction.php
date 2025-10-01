@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
@@ -43,7 +44,8 @@ class CreateCBlogAction extends BaseResourceFileAction
 
         $blog = (new CBlog())
             ->setTitle($title)
-            ->setBlogSubtitle($subtitle);
+            ->setBlogSubtitle($subtitle)
+        ;
 
         if (!empty($parentResourceNodeId)) {
             $blog->setParentResourceNode((int) $parentResourceNodeId);

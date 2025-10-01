@@ -92,7 +92,7 @@ class ExceptionController extends AbstractController
         $host = $request->getHost();
 
         // Resolve theme-aware asset URLs (respects AccessUrl, user/course/LP settings, THEME_FALLBACK, DEFAULT_THEME)
-        $cssUrl  = $this->themeHelper->getThemeAssetUrl('colors.css', true); // absolute URL
+        $cssUrl = $this->themeHelper->getThemeAssetUrl('colors.css', true); // absolute URL
         $logoUrl = $this->themeHelper->getPreferredLogoUrl('header', true);  // absolute URL
 
         return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [

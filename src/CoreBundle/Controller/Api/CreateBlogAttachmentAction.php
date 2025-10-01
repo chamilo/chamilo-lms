@@ -30,7 +30,6 @@ final class CreateBlogAttachmentAction
         UserHelper $userHelper,
         CBlogAttachmentRepository $attachRepo,
         ResourceNodeRepository $resourceNodeRepo
-
     ): JsonResponse {
         $user = $userHelper->getCurrent();
         if (!$user) {
@@ -41,7 +40,11 @@ final class CreateBlogAttachmentAction
         $file = $request->files->get('uploadFile');
         if (!$file) {
             foreach ($request->files as $val) {
-                if ($val instanceof UploadedFile) { $file = $val; break; }
+                if ($val instanceof UploadedFile) {
+                    $file = $val;
+
+                    break;
+                }
             }
         }
         if (!$file) {
@@ -51,12 +54,13 @@ final class CreateBlogAttachmentAction
         // IRIs
         $blogIri = (string) $request->request->get('blog', '');
         $postIri = (string) $request->request->get('post', '');
-        if ($blogIri === '' || $postIri === '') {
+        if ('' === $blogIri || '' === $postIri) {
             throw new BadRequestHttpException('Both "blog" and "post" are required IRIs.');
         }
 
         /** @var CBlog|null $blog */
         $blog = $em->getRepository(CBlog::class)->find(self::idFromIri($blogIri));
+
         /** @var CBlogPost|null $post */
         $post = $em->getRepository(CBlogPost::class)->find(self::idFromIri($postIri));
         if (!$blog || !$post) {
@@ -68,8 +72,8 @@ final class CreateBlogAttachmentAction
             throw new BadRequestHttpException('Blog has no resource node.');
         }
 
-        $original  = $file->getClientOriginalName() ?: 'upload.bin';
-        $filename  = $this->uniqueFilenameForAttachments($original, $attachRepo);
+        $original = $file->getClientOriginalName() ?: 'upload.bin';
+        $filename = $this->uniqueFilenameForAttachments($original, $attachRepo);
 
         $rf = new ResourceFile();
         $rf->setResourceNode($node);
@@ -93,11 +97,11 @@ final class CreateBlogAttachmentAction
         $em->flush();
 
         return new JsonResponse([
-            'ok'             => true,
-            'id'             => (int) $att->getIid(),
-            'filename'       => $att->getFilename(),
-            'size'           => $att->getSize(),
-            'path'           => $downloadUrl,
+            'ok' => true,
+            'id' => (int) $att->getIid(),
+            'filename' => $att->getFilename(),
+            'size' => $att->getSize(),
+            'path' => $downloadUrl,
             'resourceFileId' => (int) $rf->getId(),
         ], 201);
     }
@@ -112,12 +116,13 @@ final class CreateBlogAttachmentAction
         $candidate = $original;
         $i = 1;
         while ($repo->findOneBy(['filename' => $candidate])) {
-            $pi   = pathinfo($original);
+            $pi = pathinfo($original);
             $name = $pi['filename'] ?? 'file';
-            $ext  = isset($pi['extension']) ? '.'.$pi['extension'] : '';
+            $ext = isset($pi['extension']) ? '.'.$pi['extension'] : '';
             $candidate = $name.'_'.$i.$ext;
             $i++;
         }
+
         return $candidate;
     }
 }

@@ -28,11 +28,12 @@ final class CDropboxCategoryRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.cId = :cid')->setParameter('cid', $cid)
             ->andWhere('c.sessionId = :sid')->setParameter('sid', $sid ?? 0)
-            ->andWhere('c.userId = :uid')->setParameter('uid', $uid);
+            ->andWhere('c.userId = :uid')->setParameter('uid', $uid)
+        ;
 
-        if ($area === 'sent') {
+        if ('sent' === $area) {
             $qb->andWhere('c.sent = true');
-        } elseif ($area === 'received') {
+        } elseif ('received' === $area) {
             $qb->andWhere('c.received = true');
         }
 
@@ -52,8 +53,8 @@ final class CDropboxCategoryRepository extends ResourceRepository
         $cat->setSessionId($sid ?? 0);
         $cat->setUserId($uid);
         $cat->setTitle($title);
-        $cat->setReceived($area === 'received');
-        $cat->setSent($area === 'sent');
+        $cat->setReceived('received' === $area);
+        $cat->setSent('sent' === $area);
         $cat->setCatId(0); // will be mirrored to iid after first flush
 
         // 1st flush: ensure iid is generated.

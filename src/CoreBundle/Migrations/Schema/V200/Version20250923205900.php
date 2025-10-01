@@ -27,8 +27,9 @@ final class Version20250923205900 extends AbstractMigrationChamilo
     {
         /** @var ToolChain $toolChain */
         $toolChain = $this->container->get(ToolChain::class);
+
         /** @var SettingsManager $settings */
-        $settings  = $this->container->get(SettingsManager::class);
+        $settings = $this->container->get(SettingsManager::class);
 
         // Ensure global catalog is seeded (tool + resource_types)
         $toolChain->createTools();
@@ -39,16 +40,18 @@ final class Version20250923205900 extends AbstractMigrationChamilo
         $toolId = $this->entityManager
             ->createQuery('SELECT t.id FROM Chamilo\CoreBundle\Entity\Tool t WHERE t.title = :title')
             ->setParameter('title', $targetTitle)
-            ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR);
+            ->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR)
+        ;
 
-        if ($toolId === null) {
+        if (null === $toolId) {
             $this->write('Tool "'.$targetTitle.'" does not exist; aborting migration.');
+
             return;
         }
         $toolId = (int) $toolId;
 
         $activeOnCreate = $settings->getSetting('course.active_tools_on_create') ?? [];
-        $visible        = \in_array($targetTitle, $activeOnCreate, true);
+        $visible = \in_array($targetTitle, $activeOnCreate, true);
         $linkVisibility = $visible ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
 
         $batchSize = self::BATCH_SIZE;
@@ -70,13 +73,14 @@ final class Version20250923205900 extends AbstractMigrationChamilo
                 )
                 ->setParameter('title', $targetTitle)
                 ->setParameter('course', $this->entityManager->getReference(Course::class, $courseId))
-                ->getSingleScalarResult();
+                ->getSingleScalarResult()
+            ;
 
             if ($exists > 0) {
                 continue;
             }
 
-            $toolRef   = $this->entityManager->getReference(Tool::class, $toolId);
+            $toolRef = $this->entityManager->getReference(Tool::class, $toolId);
             $courseRef = $this->entityManager->getReference(Course::class, $courseId);
 
             $ctool = (new CTool())
@@ -86,7 +90,8 @@ final class Version20250923205900 extends AbstractMigrationChamilo
                 ->setCourse($courseRef)
                 ->setParent($courseRef)
                 ->setCreator($courseRef->getCreator())
-                ->addCourseLink($courseRef, null, null, $linkVisibility);
+                ->addCourseLink($courseRef, null, null, $linkVisibility)
+            ;
 
             $this->entityManager->persist($ctool);
 

@@ -34,7 +34,6 @@ final class CreateDropboxFileAction
         EntityManagerInterface $em,
         UserHelper $userHelper
     ): JsonResponse {
-
         $cid = (int) $request->query->get('cid', 0);
         $sid = (int) $request->query->get('sid', 0);
         $gid = (int) $request->query->get('gid', 0);
@@ -54,6 +53,7 @@ final class CreateDropboxFileAction
                 if ($val instanceof UploadedFile) {
                     $file = $val;
                     $request->files->set('uploadFile', $val);
+
                     break;
                 }
             }
@@ -63,27 +63,28 @@ final class CreateDropboxFileAction
         }
 
         $parentId = (int) $request->request->get('parentResourceNodeId', 0);
-        if ($parentId === 0) {
+        if (0 === $parentId) {
             $course = $courseRepo->find($cid);
             $parentId = $course?->getResourceNode()?->getId() ?? 0;
-            if ($parentId === 0) {
+            if (0 === $parentId) {
                 throw new BadRequestHttpException('parentResourceNodeId (categoryId) is required');
             }
         }
 
         $description = (string) $request->request->get('description', '');
-        $categoryId  = (int) $request->request->get('categoryId', 0);
+        $categoryId = (int) $request->request->get('categoryId', 0);
+
         /** @var string[] $tokens */
-        $tokens      = (array) ($request->request->all('recipients') ?? []);
+        $tokens = (array) ($request->request->all('recipients') ?? []);
 
         // Ensure filename uniqueness
-        $original  = $file->getClientOriginalName() ?: 'upload.bin';
+        $original = $file->getClientOriginalName() ?: 'upload.bin';
         $candidate = $original;
         $i = 1;
         while ($repo->findOneBy(['filename' => $candidate])) {
-            $pi   = pathinfo($original);
+            $pi = pathinfo($original);
             $name = $pi['filename'] ?? 'file';
-            $ext  = isset($pi['extension']) ? '.'.$pi['extension'] : '';
+            $ext = isset($pi['extension']) ? '.'.$pi['extension'] : '';
             $candidate = $name.'_'.$i.$ext;
             $i++;
         }
@@ -137,13 +138,13 @@ final class CreateDropboxFileAction
         $em->flush();
 
         return new JsonResponse([
-            'ok'         => true,
-            'iid'        => (int) $e->getIid(),
-            'title'      => $e->getTitle(),
-            'filename'   => $e->getFilename(),
-            'filesize'   => $e->getFilesize(),
+            'ok' => true,
+            'iid' => (int) $e->getIid(),
+            'title' => $e->getTitle(),
+            'filename' => $e->getFilename(),
+            'filesize' => $e->getFilesize(),
             'categoryId' => $e->getCatId(),
-            'message'    => 'File uploaded successfully',
+            'message' => 'File uploaded successfully',
         ], 201);
     }
 
@@ -152,7 +153,7 @@ final class CreateDropboxFileAction
         $tokens = array_values(array_filter(array_map('strval', $tokens)));
 
         // If there are no tokens (or only "self"), keep it visible to the course/session/group context only.
-        if (empty($tokens) || (count($tokens) === 1 && strtolower($tokens[0]) === 'self')) {
+        if (empty($tokens) || (1 === \count($tokens) && 'self' === strtolower($tokens[0]))) {
             return [[
                 'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
                 'cid' => $cid,
@@ -191,7 +192,6 @@ final class CreateDropboxFileAction
      * Extract only real recipient user IDs from tokens.
      * The uploader must NOT be included here, even if "self" is present.
      *
-     * @param array $tokens
      * @return int[]
      */
     private function extractUserIdsFromTokens(array $tokens): array
@@ -205,6 +205,7 @@ final class CreateDropboxFileAction
                 $ids[] = (int) $m[1];
             }
         }
-        return array_values(array_unique(array_filter($ids, fn($v) => (int)$v > 0)));
+
+        return array_values(array_unique(array_filter($ids, fn ($v) => (int) $v > 0)));
     }
 }

@@ -57,7 +57,8 @@ class CertificateSettingsSchema extends AbstractSettingsSchema
             ->add('hide_certificate_export_link', YesNoType::class)
             ->add('add_gradebook_certificates_cron_task_enabled', YesNoType::class)
             ->add('certificate_filter_by_official_code', YesNoType::class)
-            ->add('hide_certificate_export_link_students', YesNoType::class);
+            ->add('hide_certificate_export_link_students', YesNoType::class)
+        ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

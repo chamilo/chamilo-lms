@@ -7,11 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor;
 use Doctrine\ORM\Mapping as ORM;
@@ -163,6 +163,6 @@ class CBlogTask
     #[Groups(['blog_task:read'])]
     public function getAuthorId(): ?int
     {
-        return method_exists($this->author,'getId') ? $this->author->getId() : null;
+        return method_exists($this->author, 'getId') ? $this->author->getId() : null;
     }
 }

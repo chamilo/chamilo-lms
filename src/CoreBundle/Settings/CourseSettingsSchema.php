@@ -21,6 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+use const SORT_FLAG_CASE;
+use const SORT_NATURAL;
+
 class CourseSettingsSchema extends AbstractSettingsSchema
 {
     protected ToolChain $toolChain;
@@ -70,8 +73,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
         return $choices;
     }
-
-
 
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
@@ -158,7 +159,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
         $builder
             ->add('active_tools_on_create', ChoiceType::class, [
-                'choices'  => $toolChoices,
+                'choices' => $toolChoices,
                 'multiple' => true,
                 'expanded' => true,
             ])
@@ -188,7 +189,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ->add('course_validation', YesNoType::class)
             ->add('course_validation_terms_and_conditions_url', UrlType::class)
             ->add('course_hide_tools', ChoiceType::class, [
-                'choices'  => $toolChoices,
+                'choices' => $toolChoices,
                 'multiple' => true,
                 'expanded' => true,
             ])

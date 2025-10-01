@@ -28,5 +28,13 @@ class Version20250927180003 extends AbstractMigrationChamilo
         $this->addSql("DROP INDEX session ON portfolio");
         $this->addSql("DROP INDEX user ON portfolio");
         $this->addSql("ALTER TABLE portfolio DROP user_id, DROP c_id, DROP session_id, DROP creation_date, DROP update_date");
+
+        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2A977936C");
+        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2F675F31B");
+        $this->addSql("ALTER TABLE portfolio_comment DROP FOREIGN KEY FK_C2C17DA2727ACA70");
+        $this->addSql("DROP INDEX IDX_C2C17DA2A977936C ON portfolio_comment");
+        $this->addSql("DROP INDEX IDX_C2C17DA2727ACA70 ON portfolio_comment");
+        $this->addSql("DROP INDEX IDX_C2C17DA2F675F31B ON portfolio_comment");
+        $this->addSql("ALTER TABLE portfolio_comment DROP author_id, DROP tree_root, DROP parent_id, DROP lft, DROP lvl, DROP rgt");
     }
 }

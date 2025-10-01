@@ -1,23 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\UserTrait;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Table(name: 'portfolio')]
-#[ORM\Index(columns: ['user_id'], name: 'user')]
-#[ORM\Index(columns: ['c_id'], name: 'course')]
-#[ORM\Index(columns: ['session_id'], name: 'session')]
 #[ORM\Index(columns: ['category_id'], name: 'category')]
 #[ORM\Entity]
 class Portfolio extends AbstractResource implements ResourceInterface, \Stringable
@@ -42,24 +39,6 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
 
     #[ORM\Column(name: 'content', type: 'text')]
     protected string $content;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    protected User $user;
-
-    #[ORM\ManyToOne(targetEntity: Course::class)]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
-    protected ?Course $course;
-
-    #[ORM\ManyToOne(targetEntity: Session::class)]
-    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
-    protected ?Session $session;
-
-    #[ORM\Column(name: 'creation_date', type: 'datetime')]
-    protected DateTime $creationDate;
-
-    #[ORM\Column(name: 'update_date', type: 'datetime')]
-    protected DateTime $updateDate;
 
     #[ORM\Column(name: 'visibility', type: 'smallint', options: ['default' => self::VISIBILITY_VISIBLE])]
     protected int $visibility = self::VISIBILITY_VISIBLE;
@@ -103,30 +82,6 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         $this->duplicates = new ArrayCollection();
     }
 
-    public function setCourse(?Course $course = null): static
-    {
-        $this->course = $course;
-
-        return $this;
-    }
-
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
-
-    public function getSession(): ?Session
-    {
-        return $this->session;
-    }
-
-    public function setSession(?Session $session = null): static
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
     public function setTitle(string $title): static
     {
         $this->title = $title;
@@ -153,30 +108,6 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
     public function getContent(): string
     {
         return $this->content;
-    }
-
-    public function setCreationDate(DateTime $creationDate): static
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    public function getCreationDate(): DateTime
-    {
-        return $this->creationDate;
-    }
-
-    public function setUpdateDate(DateTime $updateDate): static
-    {
-        $this->updateDate = $updateDate;
-
-        return $this;
-    }
-
-    public function getUpdateDate(): DateTime
-    {
-        return $this->updateDate;
     }
 
     public function getId(): ?int
@@ -347,12 +278,30 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
 
     public function isDuplicatedInSession(Session $session): bool
     {
-        return $this->duplicates->exists(fn ($key, Portfolio $duplicated): bool => $duplicated->session === $session);
+        return $this->duplicates
+            ->exists(function ($key, Portfolio $duplicated) use ($session) {
+                return $duplicated->getResourceNode()
+                    ->getResourceLinks()
+                    ->exists(function ($key, ResourceLink $resourceLink) use ($session) {
+                        return null !== $resourceLink->getCourse()
+                            && $resourceLink->getSession()
+                            && $session->getId() === $resourceLink->getSession()->getId();
+                    });
+            });
     }
 
     public function isDuplicatedInSessionId(int $sessionId): bool
     {
-        return $this->duplicates->exists(fn ($key, Portfolio $duplicated): bool => $duplicated->session && $duplicated->session->getId() === $sessionId);
+        return $this->duplicates
+            ->exists(function ($key, Portfolio $duplicated) use ($sessionId) {
+                return $duplicated->getResourceNode()
+                    ->getResourceLinks()
+                    ->exists(function ($key, ResourceLink $resourceLink) use ($sessionId) {
+                        return null !== $resourceLink->getCourse()
+                            && $resourceLink->getSession()
+                            && $sessionId === $resourceLink->getSession()->getId();
+                    });
+            });
     }
 
     public function reset(): void
@@ -362,12 +311,20 @@ class Portfolio extends AbstractResource implements ResourceInterface, \Stringab
         $this->comments = new ArrayCollection();
     }
 
+    /**
+     * @throws Exception
+     */
     public function duplicateInSession(Session $session): Portfolio
     {
+        $firstResourceLink = $this->getResourceNode()->getResourceLinks()->first();
+
         $duplicate = clone $this;
         $duplicate->reset();
+        $duplicate->addCourseLink(
+            $firstResourceLink->getCourse(),
+            $session,
+        );
 
-        $duplicate->setSession($session);
         $this->addDuplicate($duplicate);
 
         return $duplicate;

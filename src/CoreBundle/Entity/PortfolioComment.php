@@ -7,15 +7,11 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'portfolio_comment')]
-#[Gedmo\Tree(type: 'nested')]
 class PortfolioComment extends AbstractResource implements ResourceInterface, \Stringable
 {
     public const VISIBILITY_VISIBLE = 1;
@@ -28,10 +24,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    private User $author;
 
     #[ORM\ManyToOne(targetEntity: Portfolio::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
@@ -46,32 +38,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isImportant;
 
-    #[Gedmo\TreeLeft]
-    #[ORM\Column(type: 'integer')]
-    private int $lft;
-
-    #[Gedmo\TreeLevel]
-    #[ORM\Column(type: 'integer')]
-    private int $lvl;
-
-    #[Gedmo\TreeRight]
-    #[ORM\Column(type: 'integer')]
-    private int $rgt;
-
-    #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: self::class)]
-    #[ORM\JoinColumn(name: 'tree_root', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?PortfolioComment $root;
-
-    #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ?PortfolioComment $commentParent;
-
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
-    #[ORM\OrderBy(['lft' => 'DESC'])]
-    private Collection $children;
-
     #[ORM\Column(type: 'float', nullable: true)]
     private ?float $score;
 
@@ -81,25 +47,12 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
     public function __construct()
     {
         $this->isImportant = false;
-        $this->children = new ArrayCollection();
         $this->visibility = self::VISIBILITY_VISIBLE;
     }
 
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function getAuthor(): User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(User $author): self
-    {
-        $this->author = $author;
-
-        return $this;
     }
 
     public function getItem(): Portfolio
@@ -138,30 +91,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
         return $this;
     }
 
-    public function getCommentParent(): ?PortfolioComment
-    {
-        return $this->commentParent;
-    }
-
-    public function setCommentParent(PortfolioComment $parent): static
-    {
-        $this->commentParent = $parent;
-
-        return $this;
-    }
-
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function setChildren(ArrayCollection $children): self
-    {
-        $this->children = $children;
-
-        return $this;
-    }
-
     public function isImportant(): bool
     {
         return $this->isImportant;
@@ -185,16 +114,6 @@ class PortfolioComment extends AbstractResource implements ResourceInterface, \S
     public function setScore(?float $score): void
     {
         $this->score = $score;
-    }
-
-    public function getRoot(): self
-    {
-        return $this->root;
-    }
-
-    public function getLvl(): int
-    {
-        return $this->lvl;
     }
 
     public function isTemplate(): bool

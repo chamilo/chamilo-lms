@@ -49,6 +49,24 @@ final class CShortcutRepository extends ResourceRepository
         return $shortcut;
     }
 
+    public function hardDeleteShortcutsForCourse(ResourceInterface $resource, Course $course): int
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+DELETE s
+FROM c_shortcut s
+INNER JOIN resource_node rn ON rn.id = s.resource_node_id
+WHERE s.shortcut_node_id = :shortcutNodeId
+  AND rn.parent_id       = :courseNodeId
+SQL;
+
+        return $conn->executeStatement($sql, [
+            'shortcutNodeId' => $resource->getResourceNode()->getId(),
+            'courseNodeId'   => $course->getResourceNode()->getId(),
+        ]);
+    }
+
     public function removeShortCut(ResourceInterface $resource): bool
     {
         $em = $this->getEntityManager();

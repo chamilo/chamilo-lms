@@ -118,6 +118,13 @@ services:
             $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
             $removeProcessor: '@api_platform.doctrine.orm.state.remove_processor'
 
+    Chamilo\CoreBundle\State\CBlogAssignAuthorProcessor:
+      arguments:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+        $security: '@security.helper'
+      tags:
+        - { name: 'api_platform.state_processor' }
+
     Chamilo\CoreBundle\EventSubscriber\AnonymousUserSubscriber:
       tags:
         - name: kernel.event_subscriber

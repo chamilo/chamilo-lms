@@ -53,7 +53,7 @@ final class CShortcutRepository extends ResourceRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = <<<SQL
+        $sql = <<<'SQL'
 DELETE s
 FROM c_shortcut s
 INNER JOIN resource_node rn ON rn.id = s.resource_node_id
@@ -63,7 +63,7 @@ SQL;
 
         return $conn->executeStatement($sql, [
             'shortcutNodeId' => $resource->getResourceNode()->getId(),
-            'courseNodeId'   => $course->getResourceNode()->getId(),
+            'courseNodeId' => $course->getResourceNode()->getId(),
         ]);
     }
 

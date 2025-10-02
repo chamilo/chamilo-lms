@@ -28,14 +28,14 @@ final class Version20250927022200 extends AbstractMigrationChamilo
 
         // Remove potential templates (no-op if none exist)
         $this->addSql(
-            "DELETE FROM settings_value_template WHERE variable IN (?)",
+            'DELETE FROM settings_value_template WHERE variable IN (?)',
             [$vars],
             [Connection::PARAM_STR_ARRAY]
         );
 
         // Remove catalog definitions
         $this->addSql(
-            "DELETE FROM settings WHERE variable IN (?)",
+            'DELETE FROM settings WHERE variable IN (?)',
             [$vars],
             [Connection::PARAM_STR_ARRAY]
         );

@@ -25,7 +25,8 @@ final class CDropboxFeedbackRepository extends ResourceRepository
             ->andWhere('f.cId = :cid')->setParameter('cid', $cid)
             ->andWhere('f.fileId = :fid')->setParameter('fid', $fileId)
             ->orderBy('f.feedbackDate', 'ASC')
-            ->getQuery()->getResult();
+            ->getQuery()->getResult()
+        ;
     }
 
     /**
@@ -33,7 +34,7 @@ final class CDropboxFeedbackRepository extends ResourceRepository
      */
     public function createForFile(int $cid, int $fileId, int $authorUserId, string $text): CDropboxFeedback
     {
-        $em   = $this->getEntityManager();
+        $em = $this->getEntityManager();
         $conn = $em->getConnection();
 
         $nextId = (int) $conn->fetchOne(
@@ -47,7 +48,8 @@ final class CDropboxFeedbackRepository extends ResourceRepository
             ->setAuthorUserId($authorUserId)
             ->setFeedback($text)
             ->setFeedbackDate(new DateTime())
-            ->setFeedbackId($nextId);
+            ->setFeedbackId($nextId)
+        ;
 
         $em->persist($f);
         $em->flush();
@@ -67,7 +69,7 @@ final class CDropboxFeedbackRepository extends ResourceRepository
         $fb->setFileId($fileId);
         $fb->setAuthorUserId($authorUserId);
         $fb->setFeedback($text);
-        $fb->setFeedbackDate(new \DateTime());
+        $fb->setFeedbackDate(new DateTime());
         $fb->setFeedbackId(0); // Will be aligned to iid after first flush
 
         // 1st flush: get autoincrement iid

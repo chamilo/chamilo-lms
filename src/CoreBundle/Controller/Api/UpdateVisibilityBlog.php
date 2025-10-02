@@ -6,11 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Repository\CBlogRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
@@ -32,9 +32,11 @@ class UpdateVisibilityBlog extends AbstractController
     public function __invoke(CBlog $blog, CBlogRepository $repo): CBlog
     {
         /** @var Course|null $course */
-        $course  = $this->cidReqHelper->getDoctrineCourseEntity();
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+
         /** @var Session|null $session */
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
+
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 

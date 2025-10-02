@@ -25,11 +25,11 @@ final class Version20250930125200 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_blog_task ADD COLUMN IF NOT EXISTS author_id INT DEFAULT NULL');
 
         // Normalize defaults/constraints
-        $this->addSql("ALTER TABLE c_blog_task MODIFY blog_id INT NOT NULL");
-        $this->addSql("ALTER TABLE c_blog_task MODIFY task_id INT NOT NULL DEFAULT 0");
+        $this->addSql('ALTER TABLE c_blog_task MODIFY blog_id INT NOT NULL');
+        $this->addSql('ALTER TABLE c_blog_task MODIFY task_id INT NOT NULL DEFAULT 0');
         $this->addSql("ALTER TABLE c_blog_task MODIFY description LONGTEXT NOT NULL DEFAULT ''");
         $this->addSql("ALTER TABLE c_blog_task MODIFY color VARCHAR(10) NOT NULL DEFAULT '#0ea5e9'");
-        $this->addSql("ALTER TABLE c_blog_task MODIFY system_task TINYINT(1) NOT NULL DEFAULT 0");
+        $this->addSql('ALTER TABLE c_blog_task MODIFY system_task TINYINT(1) NOT NULL DEFAULT 0');
 
         // FK + index for author_id
         $this->addSql('DROP INDEX IF EXISTS IDX_BE09DF0BF675F31B ON c_blog_task');

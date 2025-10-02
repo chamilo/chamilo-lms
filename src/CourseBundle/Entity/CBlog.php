@@ -19,8 +19,8 @@ use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\Controller\Api\CreateCBlogAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityBlog;
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CourseBundle\Repository\CBlogRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -63,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
             ],
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
-            validationContext: ['groups' => ['Default','blog:write']],
+            validationContext: ['groups' => ['Default', 'blog:write']],
             deserialize: false
         ),
         new Get(security: "is_granted('VIEW', object.resourceNode)"),
@@ -95,11 +95,11 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     protected ?int $iid = null;
 
     #[Assert\NotBlank]
-    #[Groups(['blog:read','blog:write'])]
+    #[Groups(['blog:read', 'blog:write'])]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
 
-    #[Groups(['blog:read','blog:write'])]
+    #[Groups(['blog:read', 'blog:write'])]
     #[ORM\Column(name: 'blog_subtitle', type: 'string', length: 250, nullable: true)]
     protected ?string $blogSubtitle = null;
 
@@ -117,25 +117,58 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
         $this->dateCreation = new DateTime();
     }
 
-    public function getIid(): ?int { return $this->iid; }
+    public function getIid(): ?int
+    {
+        return $this->iid;
+    }
 
-    public function getTitle(): string { return $this->title; }
-    public function setTitle(string $title): self { $this->title = $title; return $this; }
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
-    public function getBlogSubtitle(): ?string { return $this->blogSubtitle; }
-    public function setBlogSubtitle(?string $blogSubtitle): self { $this->blogSubtitle = $blogSubtitle; return $this; }
+        return $this;
+    }
 
-    public function getDateCreation(): DateTime { return $this->dateCreation; }
-    public function setDateCreation(DateTime $dateCreation): self { $this->dateCreation = $dateCreation; return $this; }
+    public function getBlogSubtitle(): ?string
+    {
+        return $this->blogSubtitle;
+    }
+    public function setBlogSubtitle(?string $blogSubtitle): self
+    {
+        $this->blogSubtitle = $blogSubtitle;
 
-    /** @return Collection<int, CBlogAttachment> */
-    public function getAttachments(): Collection { return $this->attachments; }
+        return $this;
+    }
+
+    public function getDateCreation(): DateTime
+    {
+        return $this->dateCreation;
+    }
+    public function setDateCreation(DateTime $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CBlogAttachment>
+     */
+    public function getAttachments(): Collection
+    {
+        return $this->attachments;
+    }
     public function addAttachment(CBlogAttachment $attachment): self
     {
         if (!$this->attachments->contains($attachment)) {
             $this->attachments->add($attachment);
             $attachment->setBlog($this);
         }
+
         return $this;
     }
     public function removeAttachment(CBlogAttachment $attachment): self
@@ -145,6 +178,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
                 $attachment->setBlog(null);
             }
         }
+
         return $this;
     }
 
@@ -163,7 +197,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
                 : (method_exists($u, 'getUsername') ? $u->getUsername() : 'Owner');
 
             return [
-                'id'   => method_exists($u, 'getId') ? $u->getId() : null,
+                'id' => method_exists($u, 'getId') ? $u->getId() : null,
                 'name' => $name,
             ];
         }
@@ -190,6 +224,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
                 $visible ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT
             );
         }
+
         return $this;
     }
 
@@ -205,9 +240,21 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     }
 
     // === ResourceInterface ===
-    public function getResourceIdentifier(): int { return (int) ($this->getIid() ?? 0); }
-    public function getResourceName(): string { return $this->getTitle(); }
-    public function setResourceName(string $name): self { return $this->setTitle($name); }
+    public function getResourceIdentifier(): int
+    {
+        return (int) ($this->getIid() ?? 0);
+    }
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+    public function setResourceName(string $name): self
+    {
+        return $this->setTitle($name);
+    }
 
-    public function __toString(): string { return $this->getTitle(); }
+    public function __toString(): string
+    {
+        return $this->getTitle();
+    }
 }

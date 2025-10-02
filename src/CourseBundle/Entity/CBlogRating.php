@@ -41,25 +41,25 @@ class CBlogRating
     protected ?int $iid = null;
 
     // IMPORTANT: this must be in write group so Api Platform will set it
-    #[Groups(['blog_rating:read','blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write'])]
     #[ORM\Column(name: 'rating_type', type: 'string', length: 40, nullable: false)]
     protected string $ratingType = 'post';
 
-    #[Groups(['blog_rating:read','blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write'])]
     #[ORM\Column(name: 'rating', type: 'integer', nullable: false)]
     protected int $rating;
 
-    #[Groups(['blog_rating:read','blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write'])]
     #[ORM\ManyToOne(targetEntity: CBlog::class)]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CBlog $blog = null;
 
-    #[Groups(['blog_rating:read','blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $user = null;
 
-    #[Groups(['blog_rating:read','blog_rating:write'])]
+    #[Groups(['blog_rating:read', 'blog_rating:write'])]
     #[ORM\ManyToOne(targetEntity: CBlogPost::class)]
     #[ORM\JoinColumn(name: 'post_id', referencedColumnName: 'iid', nullable: false, onDelete: 'CASCADE')]
     protected ?CBlogPost $post = null;
@@ -86,6 +86,7 @@ class CBlogRating
     public function setRatingType(string $ratingType): self
     {
         $this->ratingType = $ratingType;
+
         return $this;
     }
 
@@ -97,6 +98,7 @@ class CBlogRating
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
         return $this;
     }
 
@@ -108,6 +110,7 @@ class CBlogRating
     public function setBlog(?CBlog $blog): self
     {
         $this->blog = $blog;
+
         return $this;
     }
 
@@ -119,6 +122,7 @@ class CBlogRating
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -130,6 +134,7 @@ class CBlogRating
     public function setPost(?CBlogPost $post): self
     {
         $this->post = $post;
+
         return $this;
     }
 }

@@ -43,7 +43,6 @@ class CDropboxFeedback
     #[ORM\Column(name: 'feedback_date', type: 'datetime', nullable: false)]
     protected DateTime $feedbackDate;
 
-
     public function getIid(): ?int
     {
         return $this->iid;

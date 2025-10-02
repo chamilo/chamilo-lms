@@ -93,11 +93,10 @@ class AdminController extends BaseController
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/resources_info', name: 'admin_resources_info', methods: ['GET'])]
     public function listResourcesInfo(
-        Request                $request,
+        Request $request,
         ResourceNodeRepository $resourceNodeRepo,
         EntityManagerInterface $em
-    ): Response
-    {
+    ): Response {
         $resourceTypeId = $request->query->getInt('type');
         $resourceTypes = $em->getRepository(ResourceType::class)->findAll();
 
@@ -117,7 +116,8 @@ class AdminController extends BaseController
                 ->where('rn.resourceType = :type')
                 ->setParameter('type', $resourceTypeId)
                 ->getQuery()
-                ->getResult();
+                ->getResult()
+            ;
 
             /** Aggregate by course/session key */
             $seen = [];
@@ -140,10 +140,10 @@ class AdminController extends BaseController
                         'id' => $sid ?: $cid,
                         'courseId' => $cid,
                         'sessionId' => $sid,
-                        'title' => $sid ? ($session->getTitle() . ' - ' . $course->getTitle()) : $course->getTitle(),
+                        'title' => $sid ? ($session->getTitle().' - '.$course->getTitle()) : $course->getTitle(),
                         'url' => $sid
-                            ? '/course/' . $cid . '/home?sid=' . $sid
-                            : '/course/' . $cid . '/home',
+                            ? '/course/'.$cid.'/home?sid='.$sid
+                            : '/course/'.$cid.'/home',
                         'count' => 0,
                         'items' => [],
                         'users' => [],
@@ -160,7 +160,7 @@ class AdminController extends BaseController
                 }
             }
 
-            /** Populate users depending on the resource type */
+            /* Populate users depending on the resource type */
             if (!empty($seen)) {
                 $usersMap = $this->fetchUsersForType($typeTitle, $em, $keysMeta);
                 foreach ($usersMap as $key => $names) {
@@ -169,16 +169,17 @@ class AdminController extends BaseController
                     }
                 }
                 // Show the "Users" column only if there's any user to display
-                $showUsers = array_reduce($seen, fn($acc, $row) => $acc || !empty($row['users']), false);
+                $showUsers = array_reduce($seen, fn ($acc, $row) => $acc || !empty($row['users']), false);
             }
 
             /** Normalize output */
             $courses = array_values(array_map(function ($row) {
                 $row['items'] = array_values(array_unique($row['items']));
+
                 return $row;
             }, $seen));
 
-            usort($courses, fn($a, $b) => strnatcasecmp($a['title'], $b['title']));
+            usort($courses, fn ($a, $b) => strnatcasecmp($a['title'], $b['title']));
         }
 
         return $this->render('@ChamiloCore/Admin/resources_info.html.twig', [
@@ -312,11 +313,12 @@ class AdminController extends BaseController
      * Returns a map key => [user names...] depending on the selected resource type.
      *
      * @param array<string,array{cid:int,sid:int}> $keysMeta
+     *
      * @return array<string,string[]>
      */
     private function fetchUsersForType(?string $typeTitle, EntityManagerInterface $em, array $keysMeta): array
     {
-        $type = is_string($typeTitle) ? strtolower($typeTitle) : '';
+        $type = \is_string($typeTitle) ? strtolower($typeTitle) : '';
 
         return match ($type) {
             'dropbox' => $this->fetchDropboxRecipients($em, $keysMeta),
@@ -329,6 +331,7 @@ class AdminController extends BaseController
      * Default behavior: list users tied to ResourceLink.user (user-scoped visibility).
      *
      * @param array<string,array{cid:int,sid:int}> $keysMeta
+     *
      * @return array<string,string[]>
      */
     private function fetchUsersFromResourceLinks(EntityManagerInterface $em, array $keysMeta): array
@@ -346,6 +349,7 @@ class AdminController extends BaseController
            LEFT JOIN rl.user u
           WHERE rl.user IS NOT NULL'
         );
+
         /** @var ResourceLink[] $links */
         $links = $q->getResult();
 
@@ -370,6 +374,7 @@ class AdminController extends BaseController
         foreach ($out as $k => $arr) {
             $out[$k] = array_values(array_unique(array_filter($arr)));
         }
+
         return $out;
     }
 
@@ -377,6 +382,7 @@ class AdminController extends BaseController
      * Dropbox-specific: list real recipients from c_dropbox_person (joined with c_dropbox_file and user).
      *
      * @param array<string,array{cid:int,sid:int}> $keysMeta
+     *
      * @return array<string,string[]>
      */
     private function fetchDropboxRecipients(EntityManagerInterface $em, array $keysMeta): array
@@ -385,7 +391,7 @@ class AdminController extends BaseController
             return [];
         }
 
-        $cids = array_values(array_unique(array_map(fn($m) => (int) $m['cid'], $keysMeta)));
+        $cids = array_values(array_unique(array_map(fn ($m) => (int) $m['cid'], $keysMeta)));
         if (!$cids) {
             return [];
         }
@@ -415,7 +421,7 @@ class AdminController extends BaseController
                 continue; // ignore entries not displayed in the table
             }
             $uname = trim((string) ($r['uname'] ?? ''));
-            if ($uname !== '') {
+            if ('' !== $uname) {
                 $out[$key][] = $uname;
             }
         }
@@ -423,12 +429,15 @@ class AdminController extends BaseController
         foreach ($out as $k => $arr) {
             $out[$k] = array_values(array_unique(array_filter($arr)));
         }
+
         return $out;
     }
 
-    /** Helper to build the aggregation key for course/session rows. */
+    /**
+     * Helper to build the aggregation key for course/session rows.
+     */
     private static function makeKey(int $cid, int $sid): string
     {
-        return $sid > 0 ? ('s' . $sid . '-' . $cid) : ('c' . $cid);
+        return $sid > 0 ? ('s'.$sid.'-'.$cid) : ('c'.$cid);
     }
 }

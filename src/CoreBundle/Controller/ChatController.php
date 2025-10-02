@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CChatConversation;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
+use Chat;
 use CourseChatUtils;
 use Doctrine\Persistence\ManagerRegistry;
 use Event;
@@ -217,17 +218,17 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $chat = new \Chat();
+        $chat = new Chat();
 
         ob_start();
         $ret = $chat->startSession();
         $echoed = ob_get_clean();
 
-        if ($echoed !== '') {
+        if ('' !== $echoed) {
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (is_string($ret)) {
+        if (\is_string($ret)) {
             return JsonResponse::fromJsonString($ret);
         }
 
@@ -242,7 +243,7 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new Response('', 403);
         }
 
-        $chat = new \Chat();
+        $chat = new Chat();
         $html = $chat->getContacts();
 
         return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
@@ -256,17 +257,17 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $chat = new \Chat();
+        $chat = new Chat();
 
         ob_start();
         $ret = $chat->heartbeat();
         $echoed = ob_get_clean();
 
-        if ($echoed !== '') {
+        if ('' !== $echoed) {
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (is_string($ret)) {
+        if (\is_string($ret)) {
             return JsonResponse::fromJsonString($ret);
         }
 
@@ -281,19 +282,19 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $to      = (int) $req->request->get('to', 0);
+        $to = (int) $req->request->get('to', 0);
         $message = (string) $req->request->get('message', '');
-        $chat = new \Chat();
+        $chat = new Chat();
 
         ob_start();
         $ret = $chat->send(api_get_user_id(), $to, $message);
         $echoed = ob_get_clean();
 
-        if ($echoed !== '') {
+        if ('' !== $echoed) {
             return JsonResponse::fromJsonString($echoed);
         }
 
-        if (is_string($ret)) {
+        if (\is_string($ret)) {
             return JsonResponse::fromJsonString($ret);
         }
 
@@ -310,7 +311,7 @@ class ChatController extends AbstractResourceController implements CourseControl
 
         $status = (int) $req->request->get('status', 0);
 
-        $chat = new \Chat();
+        $chat = new Chat();
         $chat->setUserStatus($status);
 
         return new JsonResponse(['ok' => true, 'status' => $status]);
@@ -324,18 +325,19 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $peerId  = (int) $req->query->get('user_id', 0);
+        $peerId = (int) $req->query->get('user_id', 0);
         $visible = (int) $req->query->get('visible_messages', 0);
 
         if (!$peerId) {
             return new JsonResponse([]);
         }
 
-        $chat  = new \Chat();
+        $chat = new Chat();
         $items = $chat->getPreviousMessages($peerId, api_get_user_id(), $visible);
 
         if (!empty($items)) {
             sort($items);
+
             return new JsonResponse($items);
         }
 
@@ -350,7 +352,8 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new Response('', 403);
         }
 
-        $html = \CourseChatUtils::prepareMessage((string) $req->request->get('message', ''));
+        $html = CourseChatUtils::prepareMessage((string) $req->request->get('message', ''));
+
         return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
     }
 
@@ -364,9 +367,9 @@ class ChatController extends AbstractResourceController implements CourseControl
 
         $raw = (string) $req->request->get('ids', '');
         $ids = [];
-        if ($raw !== '') {
+        if ('' !== $raw) {
             $tryJson = json_decode($raw, true);
-            if (is_array($tryJson)) {
+            if (\is_array($tryJson)) {
                 $ids = array_filter(array_map('intval', $tryJson));
             } else {
                 $ids = array_filter(array_map('intval', preg_split('/[,\s]+/', $raw)));
@@ -378,14 +381,14 @@ class ChatController extends AbstractResourceController implements CourseControl
             $ui = api_get_user_info($id, true);
             $v = $ui['user_is_online_in_chat'] ?? $ui['user_is_online'] ?? $ui['online'] ?? null;
             $online = false;
-            if ($v !== null) {
-                if (is_string($v)) {
-                    $online = preg_match('/^(1|true|online|on)$/i', $v) === 1;
+            if (null !== $v) {
+                if (\is_string($v)) {
+                    $online = 1 === preg_match('/^(1|true|online|on)$/i', $v);
                 } else {
                     $online = !empty($v);
                 }
             }
-            if ($online === false && !empty($ui['last_connection'])) {
+            if (false === $online && !empty($ui['last_connection'])) {
                 $ts = api_strtotime($ui['last_connection'], 'UTC');
                 $online = (time() - $ts) <= 120;
             }
@@ -409,11 +412,13 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['ok' => false, 'error' => 'bad_params'], 400);
         }
 
-        $chat = new \Chat();
+        $chat = new Chat();
+
         try {
             $n = $chat->ackReadUpTo($peerId, api_get_user_id(), $lastSeenId);
+
             return new JsonResponse(['ok' => true, 'updated' => $n]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return new JsonResponse(['ok' => false, 'error' => $e->getMessage()], 500);
         }
     }

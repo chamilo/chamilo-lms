@@ -536,7 +536,7 @@ class ResourceNodeVoter extends Voter
                 ? $firstLink->getTool()->getName()
                 : $firstLink->getTool()->getTitle();
 
-            if (\in_array(\strtolower((string) $toolName), ['blog', 'blogs'], true)) {
+            if (\in_array(strtolower((string) $toolName), ['blog', 'blogs'], true)) {
                 return true;
             }
         }

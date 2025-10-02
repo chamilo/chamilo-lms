@@ -126,7 +126,7 @@ class SessionAdminController extends BaseController
             $isDownloadAllowed = false;
 
             if (!empty($path)) {
-                $hash = \pathinfo($path, PATHINFO_FILENAME);
+                $hash = pathinfo($path, PATHINFO_FILENAME);
                 $downloadUrl = '/certificates/'.$hash.'.pdf';
 
                 $isPlatformAdmin = $user && $user->isAdmin();

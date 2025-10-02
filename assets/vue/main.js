@@ -26,6 +26,8 @@ import sessionService from "./services/session"
 import socialPostService from "./services/socialpost"
 
 import makeCrudModule from "./store/modules/crud"
+import installHttpErrors from "./plugins/httpErrors"
+import uxModule from "./store/modules/ux"
 
 import VueFlatPickr from "vue-flatpickr-component"
 import "flatpickr/dist/flatpickr.css"
@@ -171,6 +173,8 @@ store.registerModule(
   }),
 )
 
+store.registerModule("ux", uxModule)
+
 // Vue setup.
 const app = createApp(App)
 
@@ -233,5 +237,13 @@ try {
     watch(loc, applyPrimeLocale)
   }
 } catch {}
+
+installHttpErrors({
+  store,
+  t: (key, params) => i18n.global.t(key, params),
+  on401: (err) => console.warn("Unauthorized", err?.response?.data?.error || "Unauthorized"),
+  on403: (msg) => console.info("Forbidden shown:", msg),
+  on500: (err) => console.error("Server error", err?.response?.data?.detail || "Server error"),
+})
 
 app.mount("#app")

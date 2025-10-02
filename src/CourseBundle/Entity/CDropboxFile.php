@@ -79,7 +79,9 @@ class CDropboxFile extends AbstractResource implements ResourceInterface, String
         $this->lastUploadDate = $now;
     }
 
-    /** Required by ResourceInterface */
+    /**
+     * Required by ResourceInterface.
+     */
     public function getResourceIdentifier(): int
     {
         return (int) $this->getIid();

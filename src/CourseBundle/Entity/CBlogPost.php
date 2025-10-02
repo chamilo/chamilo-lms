@@ -45,11 +45,11 @@ class CBlogPost
     #[ORM\Id, ORM\Column(type: 'integer'), ORM\GeneratedValue]
     protected ?int $iid = null;
 
-    #[Groups(['blog_post:read','blog_post:write'])]
+    #[Groups(['blog_post:read', 'blog_post:write'])]
     #[ORM\Column(type: 'string', length: 250)]
     protected string $title;
 
-    #[Groups(['blog_post:read','blog_post:write'])]
+    #[Groups(['blog_post:read', 'blog_post:write'])]
     #[ORM\Column(name: 'full_text', type: 'text')]
     protected string $fullText;
 
@@ -62,7 +62,7 @@ class CBlogPost
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     protected ?User $author = null;
 
-    #[Groups(['blog_post:read','blog_post:write'])]
+    #[Groups(['blog_post:read', 'blog_post:write'])]
     #[ORM\ManyToOne(targetEntity: CBlog::class)]
     #[ORM\JoinColumn(name: 'blog_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
     protected ?CBlog $blog = null;
@@ -133,6 +133,7 @@ class CBlogPost
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
         return $this;
     }
 
@@ -148,7 +149,9 @@ class CBlogPost
         return $this;
     }
 
-    /** @return Collection<int, CBlogAttachment> */
+    /**
+     * @return Collection<int, CBlogAttachment>
+     */
     public function getAttachments(): Collection
     {
         return $this->attachments;
@@ -189,7 +192,7 @@ class CBlogPost
             : (method_exists($u, 'getUsername') ? $u->getUsername() : 'User');
 
         return [
-            'id'   => method_exists($u, 'getId') ? $u->getId() : null,
+            'id' => method_exists($u, 'getId') ? $u->getId() : null,
             'name' => $name,
         ];
     }

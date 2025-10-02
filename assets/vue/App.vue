@@ -4,16 +4,30 @@
     v-if="!platformConfigurationStore.isLoading"
     :show-breadcrumb="route.meta.showBreadcrumb"
   >
-    <slot />
+    <!-- 403 banner shown INSIDE the layout -->
     <div
-      id="legacy_content"
-      ref="legacyContainer"
-    />
-    <ConfirmDialog />
+      v-if="forbiddenMsg"
+      class="forbidden-banner container max-w-2xl mx-auto mt-6"
+      role="alert"
+      aria-live="polite"
+    >
+      <div class="flex items-center gap-4 rounded-2xl p-6 bg-warning text-white/80 shadow">
+        <i class="mdi mdi-alert-outline text-4xl text-white"></i>
+        <p class="font-extrabold text-xl text-white" v-text="forbiddenMsg" />
+      </div>
+    </div>
 
-    <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
-    <DockedChat v-if="showGlobalChat" />
+    <!-- Page content; optionally dim/disable when forbidden -->
+    <div :class="{ 'opacity-50 pointer-events-none': !!forbiddenMsg }">
+      <slot />
+      <div id="legacy_content" ref="legacyContainer" />
+      <ConfirmDialog />
+      <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
+      <DockedChat v-if="showGlobalChat" />
+    </div>
   </component>
+
+  <!-- Toasts -->
   <Toast position="top-center">
     <template #message="slotProps">
       <span
@@ -64,6 +78,10 @@ import apolloClient from "./config/apolloClient"
 import { useAccessUrlChooser } from "./composables/accessurl/accessUrlChooser"
 import AccessUrlChooser from "./components/accessurl/AccessUrlChooser.vue"
 import { setLocale } from "./i18n"
+import { useStore } from "vuex"
+
+const vuex = useStore()
+const forbiddenMsg = computed(() => vuex.state.ux?.forbiddenMessage)
 
 provide(DefaultApolloClient, apolloClient)
 
@@ -159,17 +177,13 @@ onUpdated(() => {
 })
 
 axios.interceptors.response.use(
-  undefined,
-  (error) =>
-    new Promise(() => {
-      if (401 === error.response?.status) {
-        notification.showWarningNotification(error.response.data?.error)
-      } else if (500 === error.response?.status) {
-        notification.showWarningNotification(error.response.data?.detail)
-      }
-
-      throw error
-    }),
+  (r) => r,
+  (error) => {
+    const s = error?.response?.status
+    if (s === 401) notification.showWarningNotification(error.response?.data?.error || "Unauthorized")
+    else if (s === 500) notification.showWarningNotification(error.response?.data?.detail || "Server error")
+    return Promise.reject(error)
+  }
 )
 
 platformConfigurationStore.initialize()
@@ -218,5 +232,14 @@ const showGlobalChat = computed(() => {
   const visible = securityStore.isAuthenticated && allowGlobalChat.value
   console.log("[CHAT] showGlobalChat=", visible, "| isAuthenticated=", securityStore.isAuthenticated, "| allowGlobalChat=", allowGlobalChat.value)
   return visible
+})
+
+watch(forbiddenMsg, (msg) => {
+  if (msg) {
+    const legacy = document.getElementById('legacy_content')
+    if (legacy) legacy.innerHTML = ''
+    const section = document.getElementById('sectionMainContent')
+    if (section) section.innerHTML = ''
+  }
 })
 </script>

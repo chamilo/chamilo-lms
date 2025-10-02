@@ -30,7 +30,6 @@ final class Version20250929114100 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_blog_attachment ADD CONSTRAINT FK_E769AADC4B89032C FOREIGN KEY (post_id) REFERENCES c_blog_post (iid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE c_blog_attachment ADD CONSTRAINT FK_E769AADCF8697D13 FOREIGN KEY (comment_id) REFERENCES c_blog_comment (iid) ON DELETE CASCADE');
 
-
         // Ensure columns exist
         $this->addSql('ALTER TABLE c_blog_comment ADD COLUMN IF NOT EXISTS post_id INT DEFAULT NULL');
         $this->addSql('ALTER TABLE c_blog_comment ADD COLUMN IF NOT EXISTS parent_comment_id INT DEFAULT NULL');

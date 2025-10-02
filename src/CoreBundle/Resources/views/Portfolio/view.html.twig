@@ -1,0 +1,96 @@
+{% if item.isHighlighted %}
+    <span class="label label-success">
+        <span class="fa fa-fw fa-star-o" aria-hidden="true"></span>
+        {{ 'Highlighted'|get_lang }}
+    </span>
+{% endif %}
+
+<article class="portfolio-item">
+    <header>
+        <h4 class="h3">{{ item.title|remove_xss }}</h4>
+
+        <ul class="fa-ul list-inline">
+            <li>
+                <span class="fa-li fa fa-user" aria-hidden="true"></span>
+                {{ item.user.completeName }}
+            </li>
+            <li>
+                <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                {{ 'CreationDate'|get_lang ~ ': ' ~ item.creationDate|date_to_time_ago }}
+            </li>
+
+            {% if last_edit %}
+                <li>
+                    <span class="fa-li fa fa-clock-o" aria-hidden="true"></span>
+                    {{ 'UpdatedDateXByUserY'|get_lang|format(last_edit.date|date_to_time_ago, last_edit.user) }}
+                </li>
+            {% elseif item.creationDate != item.updateDate %}
+                <li>
+                    <span class="fa-li fa fa fa-clock-o" aria-hidden="true"></span>
+                    {{ 'UpdatedDateX'|get_lang|format(item.updateDate|date_to_time_ago) }}
+                </li>
+            {% endif %}
+
+            {% if _c is empty %}
+                {% if item.session %}
+                    <li>
+                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                        {{ 'Course'|get_lang ~ ': ' ~ item.session.name ~ ' (' ~ item.course.title ~ ')' }}
+                    </li>
+                {% elseif not item.session and item.course %}
+                    <li>
+                        <span class="fa-li fa fa-book" aria-hidden="true"></span>
+                        {{ 'Course'|get_lang ~ ': ' ~ item.course.title }}
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </header>
+
+    {{ item_content|remove_xss }}
+
+    {% if attachment_list %}
+        <section>
+            {{ attachment_list }}
+        </section>
+    {% endif %}
+
+    <section id="portfolio-item-comments">
+        <h1 class="h3">
+            <span class="fa fa-fw fa-comment-o" aria-hidden="true"></span>
+            {{ 'XComments'|get_lang|format(count_comments) }}
+        </h1>
+
+        {{ comments }}
+
+        {{ form }}
+    </section>
+</article>
+
+<script>
+    $(function () {
+        var frmCommentTop = $("#frm_comment").offset().top;
+
+        $('.btn-reply-to').on('click', function (e) {
+            e.preventDefault();
+
+            var comment = $.extend(
+                {},
+                {'id': 0},
+                $(this).data('comment')
+            );
+
+            if (!comment.id) {
+                return;
+            }
+
+            var $frm = $('form#frm_comment');
+
+            $frm.find('#frm_comment_parent').val(comment.id);
+
+            CKEDITOR.instances.content.setData('');
+
+            $('html, body').animate({scrollTop: frmCommentTop});
+        });
+    });
+</script>

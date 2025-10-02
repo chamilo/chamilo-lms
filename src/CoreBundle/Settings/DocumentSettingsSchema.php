@@ -148,7 +148,7 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('access_url_specific_files', YesNoType::class)
             ->add('video_features', TextareaType::class, [
                 'attr' => ['rows' => 4, 'style' => 'font-family: monospace;'],
-                'help' => "JSON opcional. Ej: {\"speed\": true}",
+                'help' => 'JSON opcional. Ej: {"speed": true}',
             ])
         ;
 

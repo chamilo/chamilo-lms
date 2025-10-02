@@ -326,10 +326,11 @@ class BuyCoursesPlugin extends Plugin
      * catalog for 1.11.x , the main purpose is to show if a course or session is in sale it shows in the main platform
      * course catalog so the old BuyCourses plugin catalog can be deprecated.
      *
-     * @param int $productId   course or session id
+     * @param int $productId course or session id
      * @param int $productType course or session type
      *
      * @return mixed bool|string html
+     * @throws Exception
      */
     public function buyCoursesForGridCatalogValidator($productId, $productType)
     {
@@ -341,7 +342,7 @@ class BuyCoursesPlugin extends Plugin
         if ($paypal || $transfer) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
-            if ($item) {
+            if (!empty($item)) {
                 $html .= '<span class="label label-primary label-price">
                             <strong>'.$item['total_price_formatted'].'</strong>
                           </span>';
@@ -543,8 +544,9 @@ class BuyCoursesPlugin extends Plugin
      * @param int $itemType  The item type
      *
      * @return array
+     * @throws Exception
      */
-    public function getItemByProduct($productId, $itemType)
+    public function getItemByProduct(int $productId, int $itemType): array
     {
         $buyItemTable = Database::get_main_table(self::TABLE_ITEM);
         $buyCurrencyTable = Database::get_main_table(self::TABLE_CURRENCY);
@@ -561,8 +563,8 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     'i.product_id = ? AND i.product_type = ?' => [
-                        (int) $productId,
-                        (int) $itemType,
+                        $productId,
+                        $itemType,
                     ],
                 ],
             ],
@@ -570,7 +572,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if (empty($product)) {
-            return false;
+            return [];
         }
 
         $this->setPriceSettings($product, self::TAX_APPLIES_TO_ONLY_COURSE);
@@ -595,12 +597,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int    $start
      * @param int    $end
-     * @param string $name       Optional. The name filter.
-     * @param int    $min        Optional. The minimum price filter.
-     * @param int    $max        Optional. The maximum price filter.
+     * @param string $name Optional. The name filter.
+     * @param int    $min Optional. The minimum price filter.
+     * @param int    $max Optional. The maximum price filter.
      * @param string $typeResult Optional. 'all', 'first' or 'count'.
      *
      * @return array|int
+     * @throws Exception
      */
     public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
@@ -666,8 +669,9 @@ class BuyCoursesPlugin extends Plugin
      * Lists current user course details.
      *
      * @param string $name Optional. The name filter
-     * @param int    $min  Optional. The minimum price filter
-     * @param int    $max  Optional. The maximum price filter
+     * @param int    $min Optional. The minimum price filter
+     * @param int    $max Optional. The maximum price filter
+     * @throws Exception
      */
     public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all'): array|int
     {
@@ -752,6 +756,7 @@ class BuyCoursesPlugin extends Plugin
      * @param int $courseId The course ID
      *
      * @return array
+     * @throws Exception
      */
     public function getCourseInfo($courseId)
     {
@@ -819,11 +824,12 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get session info.
      *
-     * @param array $sessionId The session ID
+     * @param int $sessionId The session ID
      *
      * @return array
+     * @throws Exception
      */
-    public function getSessionInfo($sessionId)
+    public function getSessionInfo(int $sessionId): array
     {
         $entityManager = Database::getManager();
         $session = $entityManager->find(Session::class, $sessionId);
@@ -1642,6 +1648,7 @@ class BuyCoursesPlugin extends Plugin
      * @param array $defaultCurrency Optional. Currency data
      *
      * @return array
+     * @throws Exception
      */
     public function getCourseForConfiguration(Course $course, $defaultCurrency = null)
     {
@@ -1661,7 +1668,7 @@ class BuyCoursesPlugin extends Plugin
 
         $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
 
-        if (false !== $item) {
+        if (!empty($item)) {
             $courseItem['item_id'] = $item['id'];
             $courseItem['visible'] = true;
             $courseItem['currency'] = $item['iso_code'];
@@ -1891,14 +1898,17 @@ class BuyCoursesPlugin extends Plugin
      * @param int $saleId The sale ID
      *
      * @return array
+     * @throws Exception
      */
-    public function getBeneficiariesBySale($saleId)
+    public function getBeneficiariesBySale(int $saleId): array
     {
         $sale = $this->getSale($saleId);
         $item = $this->getItemByProduct($sale['product_id'], $sale['product_type']);
-        $itemBeneficiaries = $this->getItemBeneficiaries($item['id']);
+        if (!empty($item)) {
+            return $this->getItemBeneficiaries($item['id']);
+        }
 
-        return $itemBeneficiaries;
+        return [];
     }
 
     /**
@@ -1911,12 +1921,13 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      */
     public function getPayouts(
-        $status = self::PAYOUT_STATUS_PENDING,
-        $payoutId = false,
-        $userId = false
-    ) {
-        $condition = ($payoutId) ? 'AND p.id = '.((int) $payoutId) : '';
-        $condition2 = ($userId) ? ' AND p.user_id = '.((int) $userId) : '';
+        int $status = self::PAYOUT_STATUS_PENDING,
+        int $payoutId = 0,
+        int $userId = 0
+    ): array
+    {
+        $condition = ($payoutId > 0) ? 'AND p.id = '.$payoutId : '';
+        $condition2 = ($userId > 0) ? ' AND p.user_id = '.$userId : '';
         $typeResult = ($condition) ? 'first' : 'all';
         $payoutsTable = Database::get_main_table(self::TABLE_PAYPAL_PAYOUTS);
         $saleTable = Database::get_main_table(self::TABLE_SALE);

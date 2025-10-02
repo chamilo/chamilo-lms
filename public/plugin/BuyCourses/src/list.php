@@ -34,7 +34,7 @@ $courses = new Paginator($query, true);
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
-    if (false !== $item) {
+    if (!empty($item)) {
         $course->buyCourseData = $item;
     }
 }

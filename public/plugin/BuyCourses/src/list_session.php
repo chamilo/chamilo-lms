@@ -52,7 +52,7 @@ $sessions = new Paginator($query, true);
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
     $session->buyCourseData = [];
-    if (false !== $item) {
+    if (!empty($item)) {
         $session->buyCourseData = $item;
     }
 }

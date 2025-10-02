@@ -11,30 +11,46 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\Environment;
 
-class ExceptionListener
+/**
+ * Unifies 403 handling for HTML pages (legacy/Symfony/Vue shell) with the yellow banner.
+ * Keeps the profiler in dev for errors that are NOT 403.
+ */
+final class ExceptionListener
 {
-    protected Environment $twig;
-    protected TokenStorageInterface $tokenStorage;
-    protected UrlGeneratorInterface $router;
-
-    public function __construct(Environment $twig, TokenStorageInterface $tokenStorage, UrlGeneratorInterface $router)
-    {
-        $this->twig = $twig;
-        $this->tokenStorage = $tokenStorage;
-        $this->router = $router;
-    }
+    public function __construct(
+        private readonly Environment $twig,
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly UrlGeneratorInterface $router
+    ) {}
 
     public function __invoke(ExceptionEvent $event): void
     {
-        // You get the exception object from the received event
-        $exception = $event->getThrowable();
-        $request = $event->getRequest();
+        // If another listener already set a Response, do nothing
+        if ($event->hasResponse()) {
+            return;
+        }
 
-        if ($exception instanceof NotAllowedException) {
+        $exception = $event->getThrowable();
+        $request   = $event->getRequest();
+
+        // Leave /api routes to the JSON listener
+        $path = $request->getPathInfo() ?? $request->getRequestUri();
+        if (\is_string($path) && str_starts_with($path, '/api/')) {
+            return;
+        }
+
+        // 403: legacy NotAllowed or Symfony AccessDenied
+        if ($exception instanceof NotAllowedException
+            || $exception instanceof AccessDeniedHttpException
+            || $exception instanceof AccessDeniedException
+        ) {
+            // If no token (not logged in), redirect to login with "redirect" back param
             if (null === $this->tokenStorage->getToken()) {
                 $loginUrl = $this->router->generate(
                     'login',
@@ -46,19 +62,23 @@ class ExceptionListener
                 return;
             }
 
-            $severity = $exception->getSeverity();
-            $message = $exception->getMessage();
-            if (\in_array($severity, ['info', 'warning', 'success'], true)) {
-                $html = $this->twig->render('@ChamiloCore/Exception/not_allowed_message.html.twig', [
-                    'message' => $message,
-                    'severity' => $severity,
-                ]);
-                $event->setResponse(new Response($html, 200));
+            $message = $exception instanceof NotAllowedException
+                ? $exception->getMessage()
+                : 'You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.';
 
-                return;
-            }
+            $severity = $exception instanceof NotAllowedException ? $exception->getSeverity() : 'warning';
+
+            $html = $this->twig->render('@ChamiloCore/Exception/not_allowed_message.html.twig', [
+                'message'  => $message,
+                'severity' => $severity,
+            ]);
+
+            // Important: status 403 for consistency
+            $event->setResponse(new Response($html, Response::HTTP_FORBIDDEN));
+            return;
         }
 
+        // In dev/test, let the Symfony exception handler/profiler render the page
         if (isset($_SERVER['APP_ENV']) && \in_array($_SERVER['APP_ENV'], ['dev', 'test'], true)) {
             return;
         }
@@ -70,12 +90,11 @@ class ExceptionListener
             ]
         );
 
-        // Customize your response object to display the exception details
+        // Build a generic error response
         $response = new Response();
         $response->setContent($message);
 
-        // HttpExceptionInterface is a special type of exception that
-        // holds status code and header details
+        // HttpExceptionInterface carries status code and headers
         if ($exception instanceof HttpExceptionInterface) {
             $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
@@ -83,7 +102,7 @@ class ExceptionListener
             $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        // sends the modified response object to the event
+        // Send the modified response back to the event
         $event->setResponse($response);
     }
 }

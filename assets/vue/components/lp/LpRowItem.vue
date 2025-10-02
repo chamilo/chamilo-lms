@@ -37,7 +37,7 @@ const progressTextClass = computed(() => {
 </script>
 
 <template>
-  <article class="relative flex items-center gap-4 pl-5 pr-4 py-3 rounded-2xl border border-gray-25 bg-support-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+  <article class="relative md:flex items-center gap-4 pl-5 pr-4 py-3 rounded-2xl border border-gray-25 bg-support-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)] w-full">
     <span class="absolute left-0 top-0 bottom-0 w-1.5 bg-support-5" aria-hidden />
     <button
       v-if="canEdit"
@@ -55,39 +55,67 @@ const progressTextClass = computed(() => {
       </svg>
     </button>
 
-    <div class="ml-5 w-24 h-24 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">
-      <img v-if="lp.coverUrl" :src="lp.coverUrl" alt="" class="w-full h-full object-cover" />
-      <div v-else class="w-full h-full grid place-content-center text-gray-40">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="opacity-70">
-          <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.5" />
-          <path d="M3 16l4-4 3 3 5-5 6 6" stroke-width="1.5" />
-          <circle cx="9" cy="8" r="1.3" stroke-width="1.2" />
-        </svg>
+    <div class="flex gap-4 w-full">
+      <div class="ml-5 w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden ring-1 ring-gray-25 bg-gray-15 shrink-0">
+        <img v-if="lp.coverUrl" :src="lp.coverUrl" alt="" class="w-full h-full object-cover" />
+        <div v-else class="w-full h-full grid place-content-center text-gray-40">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="opacity-70">
+            <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="1.5" />
+            <path d="M3 16l4-4 3 3 5-5 6 6" stroke-width="1.5" />
+            <circle cx="9" cy="8" r="1.3" stroke-width="1.2" />
+          </svg>
+        </div>
       </div>
+      <div class="flex-1 min-w-0 md:flex md:flex-col md:justify-center">
+        <h3 class="font-semibold text-gray-90 md:truncate text-lg md:text-2xl leading-none md:leading-4">
+          <button
+            class="text-left hover:underline focus:underline underline-offset-2"
+            @click="emit('open', lp)"
+            :title="t('Open')"
+          >
+            {{ lp.title || t('Learning path title here') }}
+          </button>
+        </h3>
+        <p v-if="dateText" class="text-caption text-gray-50 mt-8 hidden md:block">{{ dateText }}</p>
+        <div v-if="lp.prerequisiteName" class="mt-1 text-caption hidden md:block">
+          <span class="text-support-5 font-medium">{{ t('Prerequisites') }}</span>
+          <span class="text-support-5">{{ lp.prerequisiteName }}</span>
+        </div>
+      </div>
+      <BaseDropdownMenu
+        :dropdown-id="`row-${lp.iid}`"
+        class="row-start-1 col-start-5 relative block md:hidden h-fit"
+      >
+        <template #button>
+          <span
+            class="list-none w-8 h-8 rounded-lg border border-gray-25 grid place-content-center hover:bg-gray-15 cursor-pointer"
+            :title="t('More')"
+            :aria-label="t('More')"
+          >
+            <i class="mdi mdi-dots-vertical text-lg" aria-hidden></i>
+          </span>
+        </template>
+        <template #menu>
+          <div class="absolute right-0 z-50 w-52 bg-white border border-gray-25 rounded-xl shadow-xl p-1">
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('open', lp)">{{ t('Open') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('toggle-publish', lp)">{{ t('Publish / Hide') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15" @click="emit('build', lp)">{{ t('Edit learnpath') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 text-danger" @click="emit('delete', lp)">{{ t('Delete') }}</button>
+            <button v-if="canExportScorm" class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden" @click="emit('export-scorm', lp)">{{ t('Export as SCORM') }}</button>
+            <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-15 md:hidden" @click="emit('settings', lp)">{{ t('Settings') }}</button>
+          </div>
+        </template>
+      </BaseDropdownMenu>
     </div>
-
-    <div class="flex-1 min-w-0">
-      <h3 class="font-semibold text-gray-90 truncate">
-        <button
-          class="text-left hover:underline focus:underline underline-offset-2"
-          @click="emit('open', lp)"
-          :title="t('Open')"
-        >
-          {{ lp.title || t('Learning path title here') }}
-        </button>
-      </h3>
-
-      <p v-if="dateText" class="text-caption text-gray-50 mt-8">{{ dateText }}</p>
-
-      <div v-if="lp.prerequisiteName" class="mt-1 text-caption">
-        <span class="text-support-5 font-medium">{{ t('Prerequisites') }}</span>
-        <span class="text-support-5">{{ lp.prerequisiteName }}</span>
-      </div>
+    <p v-if="dateText" class="text-caption text-gray-50 mt-4 block md:hidden ml-5">{{ dateText }}</p>
+    <div v-if="lp.prerequisiteName" class="mt-1 text-caption">
+      <span class="text-support-5 font-medium">{{ t('Prerequisites') }}</span>
+      <span class="text-support-5">{{ lp.prerequisiteName }}</span>
     </div>
 
     <template v-if="canEdit">
-      <div class="ml-auto flex-column items-center">
-        <div class="flex  gap-x-3">
+      <div class="ml-5 md:ml-auto md:flex-col flex items-end justify-between md:justify-start">
+        <div class="flex gap-x-3 order-2 md:order1 mt-5 md:mt-0">
           <button class="row-start-1 col-start-1 opacity-70 hover:opacity-100" :title="t('Reports')" :aria-label="t('Reports')" @click="emit('report', lp)">
             <i class="mdi mdi-chart-box-outline text-xl" />
           </button>
@@ -104,7 +132,7 @@ const progressTextClass = computed(() => {
           </button>
             <button
             v-if="canExportScorm"
-            class="row-start-1 col-start-4 opacity-70 hover:opacity-100"
+            class="row-start-1 col-start-4 opacity-70 hover:opacity-100 hidden md:block"
             :title="t('Export as SCORM')"
             :aria-label="t('Export as SCORM')"
             @click="emit('export-scorm', lp)"
@@ -113,7 +141,7 @@ const progressTextClass = computed(() => {
           </button>
           <button
             v-if="canExportPdf"
-            class="row-start-1 col-start-5 opacity-70 hover:opacity-100"
+            class="row-start-1 col-start-5 opacity-70 hover:opacity-100 hidden md:block"
             :title="t('Export to PDF')"
             :aria-label="t('Export to PDF')"
             @click="emit('export-pdf', lp)"
@@ -134,7 +162,7 @@ const progressTextClass = computed(() => {
           </button>
           <BaseDropdownMenu
             :dropdown-id="`row-${lp.iid}`"
-            class="row-start-1 col-start-5 relative"
+            class="row-start-1 col-start-5 relative hidden md:block"
           >
             <template #button>
               <span
@@ -156,11 +184,11 @@ const progressTextClass = computed(() => {
           </BaseDropdownMenu>
         </div>
 
-        <div class="row-start-2 col-start-1 col-end-5 flex items-center gap-2 justify-self-end mt-5">
-          <span class="text-caption text-gray-50">
+        <div class="row-start-2 col-start-1 col-end-5 flex items-center gap-2 justify-self-end mt-5 order-1 md:order-2">
+          <span class="text-caption text-gray-50 order-2 md:order-1">
             {{ ringValue(lp.progress) === 100 ? t('Completed') : t('Progress') }}
           </span>
-          <div class="relative w-10 h-10">
+          <div class="relative w-10 h-10 order-1 md:order-2">
             <svg viewBox="0 0 37 37" class="w-10 h-10">
               <circle cx="18.5" cy="19" r="16" stroke-width="3.5" class="text-gray-25" fill="none" stroke="currentColor" />
               <circle

@@ -3190,7 +3190,7 @@ class BuyCoursesPlugin extends Plugin
         foreach ($courseIds as $courseId) {
             $courses[] = Database::getManager()->find(
                 Course::class,
-                $courseId
+                $courseId['id']
             );
         }
 

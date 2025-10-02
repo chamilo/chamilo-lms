@@ -134,7 +134,7 @@
                                             {% elseif session.enrolled == "NO" %}
                                                 <div class="toolbar">
                                                     <a class="btn btn-success btn-block btn-sm"
-                                                       href="{{ url('index') ~ '/plugin/buycourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
+                                                       href="{{ url('index') ~ '/plugin/BuyCourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -206,7 +206,7 @@
                                                     <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                                 <a class="btn btn-success btn-block btn-sm" title=""
-                                                   href="{{ url('index') ~ 'plugin/buycourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
+                                                   href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
                                                     <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                             </div>

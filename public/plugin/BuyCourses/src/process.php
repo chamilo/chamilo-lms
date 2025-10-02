@@ -57,7 +57,10 @@ if ($form->validate()) {
         exit;
     }
 
-    $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
+    $saleId = false;
+    if (!empty($item)) {
+        $saleId = $plugin->registerSale($item['id'], $formValues['payment_type']);
+    }
 
     if (false !== $saleId) {
         $_SESSION['bc_sale_id'] = $saleId;

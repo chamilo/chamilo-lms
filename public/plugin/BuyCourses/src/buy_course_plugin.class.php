@@ -791,22 +791,11 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $courseDescription = $entityManager->getRepository(CCourseDescription::class)
-            ->findOneBy(
-                [
-                    'cId' => $course->getId(),
-                    'sessionId' => 0,
-                ],
-                [
-                    'descriptionType' => 'ASC',
-                ]
-            );
-
         $globalParameters = $this->getGlobalParameters();
         $courseInfo = [
             'id' => $course->getId(),
             'title' => $course->getTitle(),
-            'description' => $courseDescription ? $courseDescription->getContent() : null,
+            'description' => $course->getDescription(),
             'code' => $course->getCode(),
             'visual_code' => $course->getVisualCode(),
             'teachers' => [],

@@ -25,6 +25,12 @@ class Version20250927180003 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema): void
     {
+        if (!$schema->hasTable('c_item_property')) {
+            $this->write('Skipping migration as c_item_property table does not exist');
+
+            return;
+        }
+
         $itemsRows = $this->connection
             ->executeQuery(
                 "SELECT * FROM c_item_property

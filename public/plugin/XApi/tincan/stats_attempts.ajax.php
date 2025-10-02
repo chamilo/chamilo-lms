@@ -75,7 +75,7 @@ $actor = new Agent(
     InverseFunctionalIdentifier::withMbox(
         IRI::fromString('mailto:'.$student->getEmail())
     ),
-    $student->getCompleteName()
+    $student->getFullName()
 );
 
 try {

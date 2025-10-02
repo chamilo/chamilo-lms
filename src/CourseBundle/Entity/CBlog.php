@@ -193,7 +193,7 @@ class CBlog extends AbstractResource implements ResourceInterface, Stringable
     {
         if (method_exists($this, 'getCreator') && null !== $this->getCreator()) {
             $u = $this->getCreator();
-            $name = method_exists($u, 'getCompleteName') ? $u->getCompleteName()
+            $name = method_exists($u, 'getFullName') ? $u->getFullName()
                 : (method_exists($u, 'getUsername') ? $u->getUsername() : 'Owner');
 
             return [

@@ -156,7 +156,7 @@ $statsAndData = (function() use ($actRepo, $meetingRepo, $ROOM_OPEN, $ROOM_CLOSE
         }
 
         $uid  = (int)$u->getId();
-        $name = method_exists($u,'getCompleteName') ? $u->getCompleteName() : trim(($u->getLastname().' '.$u->getFirstname()));
+        $name = method_exists($u,'getFullName') ? $u->getFullName() : trim(($u->getLastname().' '.$u->getFirstname()));
         if (!isset($grouped[$mid]['rows'][$uid])) {
             $grouped[$mid]['rows'][$uid] = [
                 'user_id'=>$uid, 'user'=>$name ?: ('#'.$uid),

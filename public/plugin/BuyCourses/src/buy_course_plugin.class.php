@@ -655,7 +655,7 @@ class BuyCoursesPlugin extends Plugin
 
                 foreach ($userCourseSubscriptions as $userCourseSubscription) {
                     $user = $userCourseSubscription->getUser();
-                    $sessionCourseData['coaches'][] = $user->getCompleteName();
+                    $sessionCourseData['coaches'][] = $user->getFullName();
                 }
                 $sessionData['courses'][] = $sessionCourseData;
             }
@@ -818,9 +818,10 @@ class BuyCoursesPlugin extends Plugin
         $courseTeachers = $course->getTeachersSubscriptions();
 
         foreach ($courseTeachers as $teachers) {
+            /* @var User $user */
             $user = $teachers->getUser();
             $teacher['id'] = $user->getId();
-            $teacher['name'] = $user->getCompleteName();
+            $teacher['name'] = $user->getFullName();
             $courseInfo['teachers'][] = $teacher;
         }
 
@@ -896,7 +897,7 @@ class BuyCoursesPlugin extends Plugin
             foreach ($userCourseSubscriptions as $userCourseSubscription) {
                 $user = $userCourseSubscription->getUser();
                 $coaches['id'] = $user->getUserId();
-                $coaches['name'] = $user->getCompleteName();
+                $coaches['name'] = $user->getFullName();
                 $sessionCourseData['coaches'][] = $coaches;
             }
 

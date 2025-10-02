@@ -29,7 +29,7 @@ class User extends BaseActor
             InverseFunctionalIdentifier::withMbox(
                 IRI::fromString('mailto:'.$this->user->getEmail())
             ),
-            $this->user->getCompleteName()
+            $this->user->getFullName()
         );
     }
 }

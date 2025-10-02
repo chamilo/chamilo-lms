@@ -58,7 +58,7 @@ class PortfolioNotifier
 
         $messageContent .= '<br><br><figure>'
             .'<blockquote>'.$comment->getExcerpt().'</blockquote>'
-            .'<figcaption>'.$comment->getAuthor()->getCompleteName().'</figcaption>'
+            .'<figcaption>'.$comment->getAuthor()->getFullName().'</figcaption>'
             .'</figure>';
 
         foreach ($userIdListToSend as $userIdToSend) {

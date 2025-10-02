@@ -86,7 +86,7 @@ if (!$session) {
 $choices = [];
 /** @var User $user */
 foreach ($subscribedUsers as $user) {
-    $choices[$user->getId()] = $user->getCompleteNameWithClasses();
+    $choices[$user->getId()] = $user->getFullNameWithClasses();
 }
 
 // Getting subscribed users to a LP.

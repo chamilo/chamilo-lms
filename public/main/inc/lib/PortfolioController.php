@@ -721,7 +721,7 @@ class PortfolioController
                 $origin = $this->em->find(Portfolio::class, $item->getOrigin());
 
                 $form->addLabel(
-                    sprintf(get_lang('Portfolio item by %s'), $origin->getUser()->getCompleteName()),
+                    sprintf(get_lang('Portfolio item by %s'), $origin->getUser()->getFullName()),
                     Display::panel(
                         Security::remove_XSS($origin->getContent())
                     )
@@ -730,7 +730,7 @@ class PortfolioController
                 $origin = $this->em->find(PortfolioComment::class, $item->getOrigin());
 
                 $form->addLabel(
-                    sprintf(get_lang('Comment by %s'), $origin->getAuthor()->getCompleteName()),
+                    sprintf(get_lang('Comment by %s'), $origin->getAuthor()->getFullName()),
                     Display::panel(
                         Security::remove_XSS($origin->getContent())
                     )
@@ -1225,7 +1225,7 @@ class PortfolioController
 
                     return '<article class="media" id="comment-'.$node['id'].'">
                         <div class="media-left"><img class="media-object thumbnail" src="'.$userPicture.'" alt="'
-                        .$author->getCompleteName().'"></div>
+                        .$author->getFullName().'"></div>
                         <div class="media-body">';
                 },
                 'childClose' => '</div></article>',
@@ -1337,7 +1337,7 @@ class PortfolioController
 
                     $nodeHtml = '<div class="pull-right">'.implode(PHP_EOL, $commentActions).'</div>'.PHP_EOL
                         .'<footer class="media-heading h4">'.PHP_EOL
-                        .'<p>'.$comment->getAuthor()->getCompleteName().'</p>'.PHP_EOL;
+                        .'<p>'.$comment->getAuthor()->getFullName().'</p>'.PHP_EOL;
 
                     if ($comment->isImportant()
                         && ($this->itemBelongToOwner($comment->getItem()) || $isAllowedToEdit)
@@ -1382,7 +1382,7 @@ class PortfolioController
                     'last_edit',
                     [
                         'date' => $propertyInfo['lastedit_date'],
-                        'user' => api_get_user_entity($propertyInfo['lastedit_user_id'])->getCompleteName(),
+                        'user' => api_get_user_entity($propertyInfo['lastedit_user_id'])->getFullName(),
                     ]
                 );
             }
@@ -1505,7 +1505,7 @@ class PortfolioController
         $portfolio
             ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
-                sprintf(get_lang('Portfolio item by %s'), $originItem->getUser()->getCompleteName())
+                sprintf(get_lang('Portfolio item by %s'), $originItem->getUser()->getFullName())
             )
             ->setContent('')
             ->setUser($this->owner)
@@ -1539,7 +1539,7 @@ class PortfolioController
         $portfolio
             ->setVisibility(Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER)
             ->setTitle(
-                sprintf(get_lang('Comment by %s'), $originComment->getAuthor()->getCompleteName())
+                sprintf(get_lang('Comment by %s'), $originComment->getAuthor()->getFullName())
             )
             ->setContent('')
             ->setUser($this->owner)
@@ -1582,7 +1582,7 @@ class PortfolioController
         }
 
         $form->addLabel(
-            sprintf(get_lang('"Portfolio item by %s"'), $originItem->getUser()->getCompleteName()),
+            sprintf(get_lang('"Portfolio item by %s"'), $originItem->getUser()->getFullName()),
             Display::panel(
                 Security::remove_XSS($originItem->getContent())
             )
@@ -1673,7 +1673,7 @@ class PortfolioController
         }
 
         $form->addLabel(
-            sprintf(get_lang('PortfolioCommentFromXUser'), $originComment->getAuthor()->getCompleteName()),
+            sprintf(get_lang('Comment from %s'), $originComment->getAuthor()->getFullName()),
             Display::panel(
                 Security::remove_XSS($originComment->getContent())
             )
@@ -1831,7 +1831,7 @@ class PortfolioController
                     ]
                 )
                 ->addOption(
-                    $this->owner->getCompleteName(),
+                    $this->owner->getFullName(),
                     $this->owner->getId(),
                     [
                         'data-avatarurl' => UserManager::getUserPicture($this->owner->getId()),
@@ -2148,7 +2148,7 @@ class PortfolioController
             }
         }
 
-        $pdfContent = Display::page_header($this->owner->getCompleteName());
+        $pdfContent = Display::page_header($this->owner->getFullName());
 
         if ($this->course) {
             $pdfContent .= '<p>'.get_lang('Course').': ';
@@ -2231,7 +2231,7 @@ class PortfolioController
             $pdfContent .= Display::return_message(get_lang('You have not commented'), 'warning');
         }
 
-        $pdfName = $this->owner->getCompleteName()
+        $pdfName = $this->owner->getFullName()
             .($this->course ? '_'.$this->course->getCode() : '')
             .'_'.get_lang('Portfolio');
 
@@ -2463,7 +2463,7 @@ class PortfolioController
             $this->formatZipIndexFile($tblItems, $tblComments)
         );
 
-        $zipName = $this->owner->getCompleteName()
+        $zipName = $this->owner->getFullName()
             .($this->course ? '_'.$this->course->getCode() : '')
             .'_'.get_lang('Portfolio');
         $tempZipFile = $sysArchivePath."portfolio/$zipName.zip";
@@ -3660,7 +3660,7 @@ class PortfolioController
 
         if ($listByUser) {
             $slctUser->addOption(
-                $this->owner->getCompleteName(),
+                $this->owner->getFullName(),
                 $this->owner->getId(),
                 [
                     'data-avatarurl' => UserManager::getUserPicture($this->owner->getId()),
@@ -4173,7 +4173,7 @@ class PortfolioController
                     get_lang('Originally published as "%s" by %s'),
                     [
                         "<cite>{$origin->getTitle(true)}</cite>",
-                        $origin->getUser()->getCompleteName(),
+                        $origin->getUser()->getFullName(),
                     ]
                 );
             }
@@ -4185,7 +4185,7 @@ class PortfolioController
                 $originContentFooter = vsprintf(
                     get_lang('Originally commented by %s in "%s"'),
                     [
-                        $origin->getAuthor()->getCompleteName(),
+                        $origin->getAuthor()->getFullName(),
                         "<cite>{$origin->getItem()->getTitle(true)}</cite>",
                     ]
                 );
@@ -4240,7 +4240,7 @@ class PortfolioController
                         .sprintf(
                             get_lang('Updated on %s by %s'),
                             api_convert_and_format_date($propertyInfo['lastedit_date'], DATE_TIME_FORMAT_LONG),
-                            api_get_user_entity($propertyInfo['lastedit_user_id'])->getCompleteName()
+                            api_get_user_entity($propertyInfo['lastedit_user_id'])->getFullName()
                         )
                         .'</li>';
                 }
@@ -4364,7 +4364,7 @@ class PortfolioController
 
     private function formatZipIndexFile(HTML_Table $tblItems, HTML_Table $tblComments): string
     {
-        $htmlContent = Display::page_header($this->owner->getCompleteNameWithUsername());
+        $htmlContent = Display::page_header($this->owner->getFullNameWithUsername());
         $htmlContent .= Display::page_subheader2(get_lang('Portfolio items'));
 
         $htmlContent .= $tblItems->getRowCount() > 0

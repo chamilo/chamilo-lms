@@ -22,7 +22,7 @@
                         {% if show_tutor and session.generalCoach %}
                             <div class="session-tutor">
                                 <em class="fa fa-user"></em> {{ 'SessionGeneralCoach'|trans }}:
-                                <em>{{ session.generalCoach.getCompleteName() }}</em>
+                                <em>{{ session.generalCoach.getFullName() }}</em>
                             </div>
                         {% endif %}
                         {% if session.getShowDescription() %}

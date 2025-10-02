@@ -50,11 +50,11 @@ $registration = (string) Uuid::uuid4();
 $actor = new Agent(
     InverseFunctionalIdentifier::withAccount(
         new Account(
-            $user->getCompleteName(),
+            $user->getFullName(),
             IRL::fromString(api_get_path(WEB_PATH))
         )
     ),
-    $user->getCompleteName()
+    $user->getFullName()
 );
 $verb = new Verb(
     IRI::fromString('http://adlnet.gov/expapi/verbs/launched'),

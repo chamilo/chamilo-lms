@@ -42,7 +42,7 @@ class Portfolio extends BaseActivity
                     [
                         $langIso => sprintf(
                             get_lang("%s's portfolio items"),
-                            $this->owner->getCompleteNameWithUsername()
+                            $this->owner->getFullNameWithUsername()
                         ),
                     ]
                 ),

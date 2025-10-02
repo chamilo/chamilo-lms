@@ -963,7 +963,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     /**
      * Returns the list of classes for the user.
      */
-    public function getCompleteNameWithClasses(): string
+    public function getFullNameWithClasses(): string
     {
         $classSubscription = $this->getClasses();
         $classList = [];
@@ -2658,5 +2658,10 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->passwordUpdatedAt = $date;
 
         return $this;
+    }
+
+    public function getFullNameWithUsername(): string
+    {
+        return $this->getFullName().' ('.$this->getUsername().')';
     }
 }

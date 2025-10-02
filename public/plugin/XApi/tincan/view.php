@@ -47,7 +47,7 @@ $actor = new Agent(
     InverseFunctionalIdentifier::withMbox(
         IRI::fromString('mailto:'.$user->getEmail())
     ),
-    $user->getCompleteName()
+    $user->getFullName()
 );
 $state = new State(
     $activity,

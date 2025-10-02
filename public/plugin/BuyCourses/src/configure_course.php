@@ -65,7 +65,7 @@ if ($editingCourse) {
     foreach ($teachers as $courseTeacher) {
         $teacher = $courseTeacher->getUser();
         $teachersOptions[] = [
-            'text' => $teacher->getCompleteName(),
+            'text' => $teacher->getFullName(),
             'value' => $teacher->getId(),
         ];
         $defaultBeneficiaries[] = $teacher->getId();
@@ -130,7 +130,7 @@ if ($editingCourse) {
             }
 
             $courseCoachesOptions[] = [
-                'text' => $courseCoach->getCompleteName(),
+                'text' => $courseCoach->getFullName(),
                 'value' => $courseCoach->getId(),
             ];
             $defaultBeneficiaries[] = $courseCoach->getId();

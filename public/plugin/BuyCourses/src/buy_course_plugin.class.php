@@ -14,6 +14,7 @@ use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\Intl\Currencies;
 
 /**
  * Plugin class for the BuyCourses plugin.
@@ -756,7 +757,7 @@ class BuyCoursesPlugin extends Plugin
             if ('BRL' === $isoCode) {
                 $symbol = 'R$';
             } else {
-                $symbol = Symfony\Component\Intl\Intl::getCurrencyBundle()->getCurrencySymbol($isoCode);
+                $symbol = Currencies::getSymbol($isoCode);
             }
             $result = $symbol.' '.$price;
         }

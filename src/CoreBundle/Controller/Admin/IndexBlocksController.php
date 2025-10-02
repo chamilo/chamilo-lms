@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Admin;
 
+use AppPlugin;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Page;
 use Chamilo\CoreBundle\Entity\PageCategory;
@@ -13,9 +14,12 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
+use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Plugin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,6 +42,8 @@ class IndexBlocksController extends BaseController
         private readonly PageCategoryRepository $pageCategoryRepository,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly PluginRepository $pluginRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {
         $this->extAuthSource = [
             'extldap' => [],
@@ -133,6 +139,12 @@ class IndexBlocksController extends BaseController
                 'editable' => false,
                 'items' => $this->getItemsChamilo(),
                 'extraContent' => $this->getExtraContent('block-admin-chamilo'),
+            ];
+
+            $json['plugins'] = [
+                'id' => 'block-admin-plugins',
+                'editable' => false,
+                'items' => $this->getItemsPlugins(),
             ];
         }
 
@@ -856,6 +868,35 @@ class IndexBlocksController extends BaseController
                 'class' => 'item-export-exercise-results',
                 'url' => '/main/admin/export_exercise_results.php',
                 'label' => $this->translator->trans('Export all results from an exercise'),
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getItemsPlugins(): array
+    {
+        $items = [];
+
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        $appPlugin = new AppPlugin();
+        $plugins = $this->pluginRepository->getInstalledPlugins();
+
+        foreach ($plugins as $plugin) {
+            $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
+            /** @var Plugin $objPlugin */
+            $objPlugin = $pluginInfo['obj'];
+            $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
+            $configuration = $pluginInUrl->getConfiguration();
+
+            if (!in_array('menu_administrator', $configuration['regions'] ?? [])) {
+                continue;
+            }
+
+            $items[] = [
+                'class' => 'item-plugin-'.$pluginInfo['title'],
+                'url' => $objPlugin->getAdminUrl(),
+                'label' => $pluginInfo['title'],
             ];
         }
 

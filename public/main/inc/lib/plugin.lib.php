@@ -457,13 +457,13 @@ class AppPlugin
         foreach ([$pluginName, strtolower($pluginName), ucfirst(strtolower($pluginName))] as $dir) {
             $path = $pluginPath . "$dir/plugin.php";
             if (is_file($path)) {
-                require_once $path;
+                $fileToLoad = true;
+                include_once $path;
                 $pluginDir = $dir;
                 break;
             }
         }
 
-        $instance = null;
         if (isset($plugin_info['plugin_class']) && class_exists($plugin_info['plugin_class'], false)) {
             $cls = $plugin_info['plugin_class'];
             $instance = method_exists($cls, 'create') ? $cls::create() : new $cls();

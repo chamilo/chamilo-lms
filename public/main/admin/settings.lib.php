@@ -447,35 +447,43 @@ function uploadStylesheet($values, $picture)
 /**
  * Store plugin regions.
  */
-function storeRegions()
+function storeRegions(): void
 {
+    $currentAccessUrl = Container::getAccessUrlUtil()->getCurrent();
+    $pluginRepo = Container::getPluginRepository();
+    $em = Container::getEntityManager();
+
     $plugin_obj = new AppPlugin();
-
-    // Get a list of all current 'Plugins' settings
-    $installed_plugins = $plugin_obj->getInstalledPlugins();
-    $shortlist_installed = [];
-    if (!empty($installed_plugins)) {
-        foreach ($installed_plugins as $plugin) {
-            if (isset($plugin['subkey'])) {
-                $shortlist_installed[] = $plugin['subkey'];
-            }
-        }
-    }
-
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {
-        if (isset($_POST['plugin_'.$plugin])) {
-            $areas_to_installed = $_POST['plugin_'.$plugin];
-            if (!empty($areas_to_installed)) {
-                $plugin_obj->removeAllRegions($plugin);
-                foreach ($areas_to_installed as $region) {
-                    if (!empty($region) && '-1' != $region) {
-                        $plugin_obj->add_to_region($plugin, $region);
-                    }
-                }
-            }
+        if (!isset($_POST['plugin_'.$plugin])) {
+            continue;
         }
+
+        $areas_to_installed = array_filter(
+            $_POST['plugin_'.$plugin] ?? [],
+            fn ($region) => !empty($region) && '-1' != $region
+        );
+
+        if (empty($areas_to_installed)) {
+            continue;
+        }
+
+        $entityPlugin = $pluginRepo->getInstalledByName($plugin);
+
+        if (!$entityPlugin) {
+            continue;
+        }
+
+        $pluginInUrl = $entityPlugin->getOrCreatePluginConfiguration($currentAccessUrl);
+
+        $pluginConfiguration = $pluginInUrl->getConfiguration();
+        $pluginConfiguration['regions'] = $areas_to_installed;
+
+        $pluginInUrl->setConfiguration($pluginConfiguration);
+
+        $em->flush();
     }
 }
 

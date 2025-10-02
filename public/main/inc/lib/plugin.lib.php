@@ -500,51 +500,6 @@ class AppPlugin
     }
 
     /**
-     * Remove all regions of an specific plugin.
-     *
-     * @param string $plugin
-     */
-    public function removeAllRegions($plugin)
-    {
-        $access_url_id = api_get_current_access_url_id();
-        if (!empty($plugin)) {
-            api_delete_settings_params(
-                [
-                    'category = ? AND type = ? AND access_url = ? AND subkey = ? ' => [
-                        'Plugins',
-                        'region',
-                        $access_url_id,
-                        $plugin,
-                    ],
-                ]
-            );
-        }
-    }
-
-    /**
-     * Add a plugin to a region.
-     *
-     * @param string $plugin
-     * @param string $region
-     */
-    public function add_to_region($plugin, $region)
-    {
-        api_add_setting(
-            $plugin,
-            $region,
-            $plugin,
-            'region',
-            'Plugins',
-            $plugin,
-            '',
-            '',
-            '',
-            api_get_current_access_url_id(),
-            1
-        );
-    }
-
-    /**
      * @param int $courseId
      */
     public function install_course_plugins(int $courseId): void

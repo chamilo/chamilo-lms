@@ -26,7 +26,7 @@ class AccessUrlRelPlugin
     private ?AccessUrl $url = null;
 
     #[ORM\Column]
-    private ?bool $active = null;
+    private bool $active = false;
 
     #[ORM\Column(nullable: true)]
     private ?array $configuration = null;
@@ -60,9 +60,9 @@ class AccessUrlRelPlugin
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isActive(): bool
     {
-        return $this->active;
+        return $this->active ?: false;
     }
 
     public function setActive(bool $active): static

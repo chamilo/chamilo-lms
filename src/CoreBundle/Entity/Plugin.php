@@ -162,7 +162,7 @@ class Plugin
         return $this;
     }
 
-    private function getOrCreatePluginConfiguration(AccessUrl $currentAccessUrl): AccessUrlRelPlugin
+    public function getOrCreatePluginConfiguration(AccessUrl $currentAccessUrl): AccessUrlRelPlugin
     {
         $pluginConfiguration = $this->getConfigurationsByAccessUrl($currentAccessUrl);
 

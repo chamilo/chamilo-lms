@@ -155,6 +155,8 @@ class BuyCoursesPlugin extends Plugin
         }
 
         require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/database.php';
+
+        return true;
     }
 
     /**
@@ -680,6 +682,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $courseCatalog = [];
+        /* @var Course $course */
         foreach ($courses as $course) {
             $item = $this->getItemByProduct(
                 $course->getId(),
@@ -700,9 +703,10 @@ class BuyCoursesPlugin extends Plugin
                 'enrolled' => $this->getUserStatusForCourse(api_get_user_id(), $course),
             ];
 
-            foreach ($course->getTeachers() as $courseUser) {
+            foreach ($course->getTeachersSubscriptions() as $courseUser) {
+                /* @var CourseRelUser $courseUser */
                 $teacher = $courseUser->getUser();
-                $courseItem['teachers'][] = $teacher->getCompleteName();
+                $courseItem['teachers'][] = $teacher->getFullName();
             }
 
             // Check images
@@ -950,7 +954,7 @@ class BuyCoursesPlugin extends Plugin
             $globalTaxPerc = $globalParameters['global_tax_perc'];
             $precision = 2;
             $taxPerc = is_null($item['tax_perc']) ? $globalTaxPerc : $item['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision, PHP_ROUND_HALF_UP);
             $price = $priceWithoutTax + $taxAmount;
         }
 
@@ -2222,7 +2226,7 @@ class BuyCoursesPlugin extends Plugin
             }
             //$taxPerc = is_null($product['tax_perc']) ? $globalTaxPerc : $product['tax_perc'];
 
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision, PHP_ROUND_HALF_UP);
             $product['tax_amount'] = $taxAmount;
             $priceWithTax = $priceWithoutTax + $taxAmount;
             $product['total_price'] = $priceWithTax;
@@ -2601,7 +2605,7 @@ class BuyCoursesPlugin extends Plugin
             $globalTaxPerc = $globalParameters['global_tax_perc'];
             $precision = 2;
             $taxPerc = is_null($service['tax_perc']) ? $globalTaxPerc : $service['tax_perc'];
-            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision);
+            $taxAmount = round($priceWithoutTax * $taxPerc / 100, $precision, PHP_ROUND_HALF_UP);
             $price = $priceWithoutTax + $taxAmount;
         }
 

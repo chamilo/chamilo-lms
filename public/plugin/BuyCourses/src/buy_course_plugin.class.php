@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -714,17 +715,30 @@ class BuyCoursesPlugin extends Plugin
             }
 
             // Check images
-            $possiblePath = api_get_path(SYS_COURSE_PATH);
-            $possiblePath .= $course->getDirectory();
-            $possiblePath .= '/course-pic.png';
-
-            if (file_exists($possiblePath)) {
-                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+            $imgUrl = $this->getCourseIllustrationUrl($course);
+            if (!empty($imgUrl)) {
+                $courseItem['course_img'] = $imgUrl;
             }
             $courseCatalog[] = $courseItem;
         }
 
         return $courseCatalog;
+    }
+
+    /**
+     * Returns the course illustration URL or null if none.
+     */
+    private function getCourseIllustrationUrl(Course $course): ?string
+    {
+        $illustrationRepo = Container::getIllustrationRepository();
+
+        $url = $illustrationRepo->getIllustrationUrl($course, 'course_picture_medium');
+
+        if (empty($url)) {
+            $url = $illustrationRepo->getIllustrationUrl($course, 'course_picture_original');
+        }
+
+        return $url ?: null;
     }
 
     /**
@@ -861,14 +875,9 @@ class BuyCoursesPlugin extends Plugin
             'item' => $item,
         ];
 
-        $fieldValue = new ExtraFieldValue('session');
-        $sessionImage = $fieldValue->get_values_by_handler_and_field_variable(
-            $session->getId(),
-            'image'
-        );
-
-        if (!empty($sessionImage)) {
-            $sessionInfo['image'] = api_get_path(WEB_UPLOAD_PATH).$sessionImage['value'];
+        $imgUrl = $this->getSessionIllustrationUrl($session);
+        if (!empty($imgUrl)) {
+            $sessionInfo['image'] = $imgUrl;
         }
 
         $sessionCourses = $session->getCourses();
@@ -895,6 +904,23 @@ class BuyCoursesPlugin extends Plugin
         }
 
         return $sessionInfo;
+    }
+
+    /**
+     * Returns the session picture URL or null if none.
+     */
+    private function getSessionIllustrationUrl(Session $session): ?string
+    {
+        $assetRepo = Container::getAssetRepository();
+        $asset = $session->getImage(); // Asset|null
+
+        if (!$asset) {
+            return null;
+        }
+
+        $url = $assetRepo->getAssetUrl($asset);
+
+        return $url ?: null;
     }
 
     /**

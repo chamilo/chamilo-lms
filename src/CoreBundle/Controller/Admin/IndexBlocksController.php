@@ -884,12 +884,13 @@ class IndexBlocksController extends BaseController
 
         foreach ($plugins as $plugin) {
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
+
             /** @var Plugin $objPlugin */
             $objPlugin = $pluginInfo['obj'];
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration();
 
-            if (!in_array('menu_administrator', $configuration['regions'] ?? [])) {
+            if (!\in_array('menu_administrator', $configuration['regions'] ?? [])) {
                 continue;
             }
 

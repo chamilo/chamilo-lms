@@ -17,8 +17,8 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use DateTime;
 use DateTimeZone;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
+use Exception;
 
 class Version20250927180002 extends AbstractMigrationChamilo
 {
@@ -28,7 +28,7 @@ class Version20250927180002 extends AbstractMigrationChamilo
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function up(Schema $schema): void
     {

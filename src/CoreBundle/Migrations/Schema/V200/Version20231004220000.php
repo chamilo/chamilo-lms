@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\ORM\Exception\ORMException;
 use Exception;
 
 class Version20231004220000 extends AbstractMigrationChamilo

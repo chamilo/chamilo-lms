@@ -16,9 +16,6 @@ class Version20251001120000 extends AbstractMigrationChamilo
         return 'Add missing foreign keys for LTI tables';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $tblExternalTool = $schema->getTable('lti_external_tool');

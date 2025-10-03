@@ -2079,9 +2079,6 @@ $_configuration['auth_password_links'] = [
 // Use exercise score in platform settings in gradebook total rows/columns.
 //$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
 
-// Use exercise score in platform settings in gradebook total rows/columns.
-//$_configuration['gradebook_use_exercise_score_settings_in_total'] = false;
-
 // Show a link on the results page to download an answers report
 //$_configuration['quiz_results_answers_report'] = false;
 

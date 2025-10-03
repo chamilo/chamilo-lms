@@ -10,11 +10,13 @@ use Exception;
 use ExternalNotificationConnectPlugin;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 
 trait RequestTrait
 {
     /**
+     * @throws GuzzleException
      * @throws Exception
      */
     protected function doCreateRequest($json): ?array
@@ -66,7 +68,7 @@ trait RequestTrait
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function doEditRequest(array $json): array
     {
@@ -108,7 +110,7 @@ trait RequestTrait
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function doVisibilityRequest(array $data)
     {
@@ -150,7 +152,7 @@ trait RequestTrait
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     protected function doDeleteRequest(int $contentId, string $contentType): array
     {

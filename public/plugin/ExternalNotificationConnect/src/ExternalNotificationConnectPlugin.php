@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\ExternalNotificationConnect\Entity\AccessToken;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Firebase\JWT\JWT;
@@ -52,7 +54,7 @@ class ExternalNotificationConnectPlugin extends Plugin
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function install()
+    public function install(): void
     {
         $em = Database::getManager();
 
@@ -67,14 +69,14 @@ class ExternalNotificationConnectPlugin extends Plugin
         $this->installDBTables();
     }
 
-    public function uninstall()
+    public function uninstall(): void
     {
         $this->uninstallDBTables();
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws OptimisticLockException
+     * @throws ORMException
      * @throws Exception
      */
     public function getAccessToken()
@@ -116,7 +118,7 @@ class ExternalNotificationConnectPlugin extends Plugin
         return $accessToken->getToken();
     }
 
-    private function installDBTables()
+    private function installDBTables(): void
     {
         $em = Database::getManager();
 
@@ -130,7 +132,7 @@ class ExternalNotificationConnectPlugin extends Plugin
         }
     }
 
-    private function uninstallDBTables()
+    private function uninstallDBTables(): void
     {
         $em = Database::getManager();
 

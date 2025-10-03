@@ -30,7 +30,7 @@ class LegalRepository extends ServiceEntityRepository
      *
      * @throws Exception
      */
-    public function countAllActiveLegalTerms()
+    public function countAllActiveLegalTerms(): int
     {
         $qb = $this->createQueryBuilder('l');
         $qb->select('l.languageId, COUNT(l.id)')

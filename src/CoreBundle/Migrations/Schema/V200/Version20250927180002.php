@@ -28,7 +28,6 @@ class Version20250927180002 extends AbstractMigrationChamilo
     }
 
     /**
-     * @throws Exception
      * @throws \Exception
      */
     public function up(Schema $schema): void

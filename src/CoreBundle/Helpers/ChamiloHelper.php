@@ -77,7 +77,7 @@ class ChamiloHelper
      *
      * @deprecated
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getPlatformLogoPath(
         string $theme = '',
@@ -152,7 +152,7 @@ class ChamiloHelper
      * Return a <img> if the logo image exists.
      * Otherwise, return a <h2> with the institution name.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getPlatformLogo(
         string $theme = '',
@@ -230,7 +230,7 @@ class ChamiloHelper
      * @param string $datetime  Datetime to be modified as accepted by the Datetime class constructor
      * @param bool   $operation True for Add, False to Subtract
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function addOrSubTimeToDateTime(
         string $time,
@@ -257,7 +257,7 @@ class ChamiloHelper
      *
      * @param string|null $directory The course directory/path that appears in the URL
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCourseIdByDirectory(?string $directory = null): int
     {
@@ -375,7 +375,7 @@ class ChamiloHelper
      * @param null|string $utcTime Optional. The time to ve converted.
      *                             See api_get_local_time.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getServerMidnightTime(?string $utcTime = null): DateTime
     {

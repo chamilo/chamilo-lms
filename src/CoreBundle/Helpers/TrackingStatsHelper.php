@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Tracking;
@@ -159,12 +160,12 @@ class TrackingStatsHelper
             ->andWhere('e.visible = 1')
             ->andWhere('c.visible = 1')
             ->andWhere('r.user = :user')
-            ->setParameter('course', $course)
-            ->setParameter('user', $user)
+            ->setParameter('course', $course, ParameterType::INTEGER)
+            ->setParameter('user', $user, ParameterType::INTEGER)
         ;
 
         if ($session) {
-            $qb->andWhere('c.session = :session')->setParameter('session', $session);
+            $qb->andWhere('c.session = :session')->setParameter('session', $session, ParameterType::INTEGER);
         } else {
             $qb->andWhere('c.session IS NULL');
         }
@@ -276,7 +277,7 @@ class TrackingStatsHelper
         ;
 
         if ($session) {
-            $qb->setParameter('session', $session);
+            $qb->setParameter('session', $session, ParameterType::INTEGER);
         }
 
         $rows = $qb->getQuery()->getArrayResult();
@@ -310,9 +311,9 @@ class TrackingStatsHelper
                 ->where('scru.course = :course')
                 ->andWhere('scru.session = :session')
                 ->andWhere('u.active = :active')
-                ->setParameter('course', $course)
-                ->setParameter('session', $session)
-                ->setParameter('active', User::ACTIVE)
+                ->setParameter('course', $course, ParameterType::INTEGER)
+                ->setParameter('session', $session, ParameterType::INTEGER)
+                ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
                 ->getQuery()
                 ->getResult()
             ;

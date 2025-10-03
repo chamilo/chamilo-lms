@@ -302,6 +302,7 @@ class TrackingStatsHelper
      * Returns student users for a course/session.
      *
      * @return User[]
+     *
      * @throws Exception
      */
     private function getStudentParticipants(Course $course, ?Session $session): array

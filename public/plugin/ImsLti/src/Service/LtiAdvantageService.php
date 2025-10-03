@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,15 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class LtiAdvantageService
 {
-    /**
-     * @var ImsLtiTool
-     */
-    protected $tool;
+    protected ExternalTool $tool;
 
     /**
      * LtiAdvantageService constructor.
      */
-    public function __construct(ImsLtiTool $tool)
+    public function __construct(ExternalTool $tool)
     {
         $this->tool = $tool;
     }
@@ -26,7 +23,7 @@ abstract class LtiAdvantageService
     /**
      * @return LtiAdvantageService
      */
-    public function setTool(ImsLtiTool $tool)
+    public function setTool(ExternalTool $tool)
     {
         $this->tool = $tool;
 

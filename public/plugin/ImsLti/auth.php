@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\PluginBundle\ImsLti\Entity\Platform;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\Platform;
 use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -67,9 +67,9 @@ try {
     }
 
     try {
-        /** @var ImsLtiTool $tool */
+        /** @var ExternalTool $tool */
         $tool = $em
-            ->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolLogin);
+            ->find(ExternalTool::class, $ltiToolLogin);
     } catch (\Exception $e) {
         api_not_allowed(true);
     }
@@ -88,9 +88,8 @@ try {
         throw LtiAuthException::unregisteredRedirectUri();
     }
 
-    /** @var Platform|null $platform */
     $platform = $em
-        ->getRepository('ChamiloPluginBundle:ImsLti\Platform')
+        ->getRepository(Platform::class)
         ->findOneBy([]);
     $session = api_get_session_entity(api_get_session_id());
     $course = api_get_course_entity(api_get_course_int_id());
@@ -111,7 +110,7 @@ try {
 
     // User info
     if ($tool->isSharingName()) {
-        $jwtContent['name'] = $user->getFullName();
+        $jwtContent['name'] = $user->getFullname();
         $jwtContent['given_name'] = $user->getFirstname();
         $jwtContent['family_name'] = $user->getLastname();
     }

@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
@@ -22,7 +23,7 @@ $criteria = Criteria::create()
         Criteria::expr()->isNull('parent')
     );
 
-$tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->matching($criteria);
+$tools = $em->getRepository(ExternalTool::class)->matching($criteria);
 
 $categoriesGradeBook = [];
 foreach ($tools as $tool) {
@@ -39,7 +40,7 @@ foreach ($tools as $tool) {
     }
 }
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 
 $htmlHeadXtra[] = api_get_css(
     api_get_path(WEB_PLUGIN_PATH).'ImsLti/assets/style.css'

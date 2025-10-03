@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -18,9 +18,9 @@ $toolId = str_replace('tool:', '', $_POST['data']);
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 /** @var Course $course */
-$course = $em->find(Course::class, api_get_course_int_id());
-/** @var ImsLtiTool|null $ltiTool */
-$ltiTool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
+$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+/** @var ExternalTool|null $ltiTool */
+$ltiTool = $em->find(ExternalTool::class, $toolId);
 
 if (!$ltiTool) {
     api_not_allowed();

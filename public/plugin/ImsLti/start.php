@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -9,8 +9,8 @@ api_protect_course_script();
 
 $em = Database::getManager();
 
-/** @var ImsLtiTool $tool */
-$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : null;
+/** @var ExternalTool|null $tool */
+$tool = isset($_GET['id']) ? $em->find(ExternalTool::class, intval($_GET['id'])) : null;
 $user = api_get_user_entity(
     api_get_user_id()
 );

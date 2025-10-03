@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookResult;
-use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
+use Chamilo\LtiBundle\Entity\LineItem;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -20,10 +20,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/context_id/lineitems/line_item_id/results';
 
-    /**
-     * @var LineItem|null
-     */
-    private $lineItem;
+    private ?LineItem $lineItem;
 
     /**
      * LtiResultsResource constructor.
@@ -40,7 +37,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
+        $this->lineItem = Database::getManager()->find(LineItem::class, (int) $lineItemId);
     }
 
     /**

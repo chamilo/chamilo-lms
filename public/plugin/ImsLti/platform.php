@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\Platform;
+use Chamilo\LtiBundle\Entity\Platform;
 
 $cidReset = true;
 
@@ -17,7 +17,7 @@ if ($plugin->get('enabled') !== 'true') {
 
 /** @var Platform $platform */
 $platform = Database::getManager()
-    ->getRepository('ChamiloPluginBundle:ImsLti\Platform')
+    ->getRepository(Platform::class)
     ->findOneBy([]);
 
 $table = new HTML_Table(['class' => 'table table-striped']);
@@ -30,7 +30,7 @@ $table->setCellContents(1, 2, $platform ? nl2br($platform->getPrivateKey()) : ''
 $table->updateCellAttributes(1, 1, ['style' => 'font-family: monospace; font-size: 10px;']);
 $table->updateCellAttributes(1, 2, ['style' => 'font-family: monospace; font-size: 10px;']);
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $template = new Template($plugin->get_lang('PlatformKeys'));

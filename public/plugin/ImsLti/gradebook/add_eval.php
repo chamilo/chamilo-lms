@@ -1,9 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
+/**
+ * @package plugin.ims_lti
+ */
+
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -18,9 +21,9 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : null;
 $is_allowedToEdit = $is_courseAdmin;
 
 $em = Database::getManager();
-/** @var Course $course */
-$course = $em->find(Course::class, api_get_course_int_id());
-$ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+/** @var \Chamilo\CoreBundle\Entity\Course $course */
+$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
+$ltiToolRepo = $em->getRepository(ExternalTool::class);
 
 $categories = Category::load(null, null, $course->getCode(), null, null, $sessionId);
 
@@ -56,11 +59,11 @@ $form->removeElement('name');
 $form->removeElement('addresult');
 $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
 $form->insertElementBefore($slcLtiTools, 'hid_category_id');
-$form->addRule('name', get_lang('Required field'), 'required');
+$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
+/** @var array<int, ExternalTool> $ltiTools */
 $ltiTools = $ltiToolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 
-/** @var ImsLtiTool $ltiTool */
 foreach ($ltiTools as $ltiTool) {
     $slcLtiTools->addOption($ltiTool->getName(), $ltiTool->getId());
 }
@@ -68,7 +71,7 @@ foreach ($ltiTools as $ltiTool) {
 if ($form->validate()) {
     $values = $form->exportValues();
 
-    /** @var ImsLtiTool $ltiTool */
+    /** @var ExternalTool|null $ltiTool */
     $ltiTool = $ltiToolRepo->find($values['name']);
 
     if (!$ltiTool) {
@@ -99,7 +102,7 @@ if ($form->validate()) {
     $eval->add();
 
     /** @var GradebookEvaluation $gradebookEval */
-    $gradebookEval = $em->find(GradebookEvaluation::class, $eval->get_id());
+    $gradebookEval = $em->find('ChamiloCoreBundle:GradebookEvaluation', $eval->get_id());
     $ltiTool->setGradebookEval($gradebookEval);
 
     $em->persist($ltiTool);
@@ -135,7 +138,7 @@ $(document).ready( function() {
 });
 </script>';
 
-Display::display_header(get_lang('Add classroom activity'));
+Display::display_header(get_lang('NewEvaluation'));
 
 $form->display();
 

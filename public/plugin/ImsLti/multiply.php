@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
@@ -17,12 +17,12 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'));
+        throw new Exception(get_lang('NotAllowed'));
     }
 
     $request = Request::createFromGlobals();
-    /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $request->query->getInt('id'));
+    /** @var ExternalTool|null $tool */
+    $tool = $em->find(ExternalTool::class, $request->query->getInt('id'));
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -54,7 +54,7 @@ try {
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course', 'multiple' => true]
     );
     $form->addCheckBox('all_courses', '', $plugin->get_lang('AddInAllCourses'));
-    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('The tool is now visible.'));
+    $form->addCheckBox('tool_visible', get_lang('SetVisible'), get_lang('ToolIsNowVisible'));
     $form->addButtonExport(get_lang('Save'));
 
     if ($form->validate()) {
@@ -74,7 +74,6 @@ try {
         if ($courseIdsToDelete) {
             $toolLinks = [];
 
-            /** @var ImsLtiTool $childInCourse */
             foreach ($tool->getChildrenInCourses($courseIdsToDelete) as $childInCourse) {
                 $toolLinks[] = "ImsLti/start.php?id={$childInCourse->getId()}";
 
@@ -116,7 +115,7 @@ try {
         }
 
         Display::addFlash(
-            Display::return_message(get_lang('Item updated'))
+            Display::return_message(get_lang('ItemUpdated'))
         );
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
@@ -133,7 +132,7 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInCourses'));

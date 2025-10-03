@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 /**
  * Class LtiContentItem.
@@ -52,10 +52,8 @@ class LtiResourceLink extends LtiContentItemType
 
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return ImsLtiTool
      */
-    public function save(ImsLtiTool $baseTool, Course $course)
+    public function save(ExternalTool $baseTool, Course $course): ExternalTool
     {
         $newTool = $this->createTool($baseTool);
         $newTool->setActiveDeepLinking(false);
@@ -119,10 +117,7 @@ class LtiResourceLink extends LtiContentItemType
         }
     }
 
-    /**
-     * @return ImsLtiTool
-     */
-    private function createTool(ImsLtiTool $baseTool)
+    private function createTool(ExternalTool $baseTool): ExternalTool
     {
         $newTool = clone $baseTool;
         $newTool->setParent($baseTool);

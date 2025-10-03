@@ -18,29 +18,34 @@ class Token
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[ORM\ManyToOne(targetEntity: ExternalTool::class)]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ExternalTool $tool;
+    private ?ExternalTool $tool;
+
     #[ORM\Column(name: 'scope', type: 'json')]
     private array $scope;
+
     #[ORM\Column(name: 'hash', type: 'string')]
     private string $hash;
+
     #[ORM\Column(name: 'created_at', type: 'integer')]
     private int $createdAt;
+
     #[ORM\Column(name: 'expires_at', type: 'integer')]
     private int $expiresAt;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTool(): ExternalTool
+    public function getTool(): ?ExternalTool
     {
         return $this->tool;
     }
 
-    public function setTool(ExternalTool $tool): static
+    public function setTool(?ExternalTool $tool): static
     {
         $this->tool = $tool;
 
@@ -102,7 +107,7 @@ class Token
 
     public function generateHash(): static
     {
-        $this->hash = sha1(uniqid((string) random_int(0, mt_getrandmax())));
+        $this->hash = sha1(uniqid((string) mt_rand()));
 
         return $this;
     }

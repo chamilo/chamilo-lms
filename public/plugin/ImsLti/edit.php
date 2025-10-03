@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\Form\FrmEdit;
 
 $cidReset = true;
@@ -19,8 +19,8 @@ $toolId = intval($_REQUEST['id']);
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 
-/** @var ImsLtiTool $tool */
-$tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
+/** @var ExternalTool|null $tool */
+$tool = $em->find(ExternalTool::class, $toolId);
 
 if (!$tool) {
     Display::addFlash(
@@ -89,7 +89,6 @@ if ($form->validate()) {
     }
 
     if (null == $tool->getParent()) {
-        /** @var ImsLtiTool $child */
         foreach ($tool->getChildren() as $child) {
             $child
                 ->setLaunchUrl($tool->getLaunchUrl())
@@ -132,7 +131,7 @@ if ($form->validate()) {
     $form->setDefaultValues();
 }
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $template = new Template($plugin->get_lang('EditExternalTool'));

@@ -5,11 +5,11 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
-use Chamilo\PluginBundle\ImsLti\Entity\Platform;
-use Chamilo\PluginBundle\ImsLti\Entity\Token;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\LineItem;
+use Chamilo\LtiBundle\Entity\Platform;
+use Chamilo\LtiBundle\Entity\Token;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 
@@ -58,7 +58,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * Get the plugin directory name.
      */
-    public function get_name()
+    public function get_name(): string
     {
         return 'ImsLti';
     }
@@ -88,7 +88,7 @@ class ImsLtiPlugin extends Plugin
 
         /** @var Platform $platform */
         $platform = $em
-            ->getRepository('ChamiloPluginBundle:ImsLti\Platform')
+            ->getRepository(Platform::class)
             ->findOneBy([]);
 
         if ($this->get('enabled') === 'true') {
@@ -130,10 +130,10 @@ class ImsLtiPlugin extends Plugin
     /**
      * @return CTool
      */
-    public function findCourseToolByLink(Course $course, ImsLtiTool $ltiTool)
+    public function findCourseToolByLink(Course $course, ExternalTool $ltiTool)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository(CTool::class);
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
 
         /** @var CTool $cTool */
         $cTool = $toolRepo->findOneBy(
@@ -149,7 +149,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function updateCourseTool(CTool $courseTool, ImsLtiTool $ltiTool)
+    public function updateCourseTool(CTool $courseTool, ExternalTool $ltiTool)
     {
         $em = Database::getManager();
 
@@ -172,7 +172,7 @@ class ImsLtiPlugin extends Plugin
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addCourseTool(Course $course, ImsLtiTool $ltiTool, $isVisible = true)
+    public function addCourseTool(Course $course, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
             $ltiTool->getName(),
@@ -198,7 +198,7 @@ class ImsLtiPlugin extends Plugin
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addCourseSessionTool(Course $course, Session $session, ImsLtiTool $ltiTool, $isVisible = true)
+    public function addCourseSessionTool(Course $course, Session $session, ExternalTool $ltiTool, $isVisible = true)
     {
         $cTool = $this->createLinkToCourseTool(
             $ltiTool->getName(),
@@ -304,7 +304,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * @return string
      */
-    public static function getLaunchUserIdClaim(ImsLtiTool $tool, User $user)
+    public static function getLaunchUserIdClaim(ExternalTool $tool, User $user)
     {
         if (null !== $tool->getParent()) {
             $tool = $tool->getParent();
@@ -332,7 +332,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * @return string
      */
-    public static function getRoleScopeMentor(User $currentUser, ImsLtiTool $tool)
+    public static function getRoleScopeMentor(User $currentUser, ExternalTool $tool)
     {
         $scope = self::getRoleScopeMentorAsArray($currentUser, $tool, true);
 
@@ -346,7 +346,7 @@ class ImsLtiPlugin extends Plugin
      *
      * @return array
      */
-    public static function getRoleScopeMentorAsArray(User $user, ImsLtiTool $tool, $generateIdForTool = false)
+    public static function getRoleScopeMentorAsArray(User $user, ExternalTool $tool, $generateIdForTool = false)
     {
         if (DRH !== $user->getStatus()) {
             return [];
@@ -371,18 +371,18 @@ class ImsLtiPlugin extends Plugin
     /**
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function saveItemAsLtiLink(array $contentItem, ImsLtiTool $baseLtiTool, Course $course)
+    public function saveItemAsLtiLink(array $contentItem, ExternalTool $baseLtiTool, Course $course)
     {
         $em = Database::getManager();
-        $ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+        $ltiToolRepo = $em->getRepository(ExternalTool::class);
 
         $url = empty($contentItem['url']) ? $baseLtiTool->getLaunchUrl() : $contentItem['url'];
 
-        /** @var ImsLtiTool $newLtiTool */
+        /** @var ExternalTool|null $newLtiTool */
         $newLtiTool = $ltiToolRepo->findOneBy(['launchUrl' => $url, 'parent' => $baseLtiTool, 'course' => $course]);
 
         if (null === $newLtiTool) {
-            $newLtiTool = new ImsLtiTool();
+            $newLtiTool = new ExternalTool();
             $newLtiTool
                 ->setLaunchUrl($url)
                 ->setParent(
@@ -449,9 +449,9 @@ class ImsLtiPlugin extends Plugin
     public static function existsToolInCourse($toolId, Course $course)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+        $toolRepo = $em->getRepository(ExternalTool::class);
 
-        /** @var ImsLtiTool $tool */
+        /** @var ExternalTool|null $tool */
         $tool = $toolRepo->findOneBy(['id' => $toolId, 'course' => $course]);
 
         return !empty($tool);
@@ -509,7 +509,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * @return array
      */
-    public function removeUrlParamsFromLaunchParams(ImsLtiTool $tool, array &$params)
+    public function removeUrlParamsFromLaunchParams(ExternalTool $tool, array &$params)
     {
         $urlQuery = parse_url($tool->getLaunchUrl(), PHP_URL_QUERY);
 
@@ -538,12 +538,12 @@ class ImsLtiPlugin extends Plugin
         $em = Database::getManager();
         $q = $em
             ->createQuery(
-                'DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool
+                'DELETE FROM Chamilo\LtiBundle\ExternalTool tool
                     WHERE tool.course = :c_id and tool.parent IS NOT NULL'
             );
         $q->execute(['c_id' => (int) $courseId]);
 
-        $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
+        $em->createQuery('DELETE FROM Chamilo\LtiBundle\ExternalTool tool WHERE tool.course = :c_id')
             ->execute(['c_id' => (int) $courseId]);
     }
 
@@ -557,7 +557,7 @@ class ImsLtiPlugin extends Plugin
         return trim($webPath, " /");
     }
 
-    public static function getCoursesForParentTool(ImsLtiTool $tool, Session $session = null)
+    public static function getCoursesForParentTool(ExternalTool $tool, Session $session = null)
     {
         if ($tool->getParent()) {
             return [];
@@ -566,7 +566,7 @@ class ImsLtiPlugin extends Plugin
         $children = $tool->getChildren();
 
         if ($session) {
-            $children = $children->filter(function (ImsLtiTool $tool) use ($session) {
+            $children = $children->filter(function (ExternalTool $tool) use ($session) {
                 if (null === $tool->getSession()) {
                     return false;
                 }
@@ -579,7 +579,7 @@ class ImsLtiPlugin extends Plugin
             });
         }
 
-        return $children->map(function (ImsLtiTool $tool) {
+        return $children->map(function (ExternalTool $tool) {
             return $tool->getCourse();
         });
     }
@@ -587,11 +587,9 @@ class ImsLtiPlugin extends Plugin
     /**
      * It gets the public key from jwks or rsa keys.
      *
-     * @param ImsLtiTool $tool
-     *
      * @return mixed|string|null
      */
-    public static function getToolPublicKey(ImsLtiTool $tool)
+    public static function getToolPublicKey(ExternalTool $tool)
     {
         $publicKey = '';
         if (!empty($tool->getJwksUrl())) {
@@ -630,20 +628,19 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
-     * @throws \Doctrine\DBAL\Exception
      */
     private function createPluginTables()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema(
             [
-                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(ExternalTool::class),
                 $em->getClassMetadata(LineItem::class),
                 $em->getClassMetadata(Platform::class),
                 $em->getClassMetadata(Token::class),
@@ -653,21 +650,19 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Drops the plugin tables on database.
-     *
-     * @throws \Doctrine\DBAL\Exception
      */
     private function dropPluginTables()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 
         $schemaTool = new SchemaTool($em);
         $schemaTool->dropSchema(
             [
-                $em->getClassMetadata(ImsLtiTool::class),
+                $em->getClassMetadata(ExternalTool::class),
                 $em->getClassMetadata(LineItem::class),
                 $em->getClassMetadata(Platform::class),
                 $em->getClassMetadata(Token::class),
@@ -705,7 +700,7 @@ class ImsLtiPlugin extends Plugin
     /**
      * @return string
      */
-    private static function generateToolLink(ImsLtiTool $tool)
+    private static function generateToolLink(ExternalTool $tool)
     {
         return 'ImsLti/start.php?id='.$tool->getId();
     }

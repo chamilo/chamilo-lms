@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
 
 $cidReset = true;
@@ -19,7 +20,7 @@ $form->build();
 if ($form->validate()) {
     $formValues = $form->exportValues();
 
-    $externalTool = new ImsLtiTool();
+    $externalTool = new ExternalTool();
     $externalTool
         ->setName($formValues['name'])
         ->setDescription(
@@ -100,7 +101,7 @@ if ($form->validate()) {
 
 $form->setDefaultValues();
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $pageTitle = $plugin->get_lang('AddExternalTool');

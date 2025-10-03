@@ -3,8 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class ImsLti.
@@ -29,7 +29,7 @@ class ImsLti
         Session $session = null,
         $domain = '',
         $ltiVersion = self::V_1P1,
-        ImsLtiTool $tool
+        ExternalTool $tool
     ) {
         $isLti1p3 = $ltiVersion === self::V_1P3;
 
@@ -43,7 +43,7 @@ class ImsLti
             '$Person.sourcedId' => $isLti1p3
                 ? self::getPersonSourcedId($domain, $user)
                 : "$domain:".ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
-            '$Person.name.full' => $user->getFullName(),
+            '$Person.name.full' => $user->getFullname(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
             '$Person.address.street1' => $user->getAddress(),
@@ -99,7 +99,7 @@ class ImsLti
         Session $session = null,
         $domain = '',
         $ltiVersion = self::V_1P1,
-        ImsLtiTool $tool
+        ExternalTool $tool
     ) {
         $substitutables = self::getSubstitutableVariables($user, $course, $session, $domain, $ltiVersion, $tool);
         $variables = array_keys($substitutables);
@@ -182,7 +182,7 @@ class ImsLti
      *
      * @return array
      */
-    public static function getAdvantageServices(ImsLtiTool $tool)
+    public static function getAdvantageServices(ExternalTool $tool)
     {
         return [
             new LtiAssignmentGradesService($tool),

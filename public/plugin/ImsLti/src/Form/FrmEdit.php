@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\Form;
 
 use Category;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Display;
 use Exception;
 use FormValidator;
@@ -18,10 +18,7 @@ use LtiNamesRoleProvisioningService;
  */
 class FrmEdit extends FormValidator
 {
-    /**
-     * @var ImsLtiTool|null
-     */
-    private $tool;
+    private ?ExternalTool $tool;
 
     /**
      * FrmAdd constructor.
@@ -32,7 +29,7 @@ class FrmEdit extends FormValidator
     public function __construct(
         $name,
         $attributes = [],
-        ImsLtiTool $tool = null
+        ?ExternalTool $tool = null
     ) {
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 
@@ -105,7 +102,7 @@ class FrmEdit extends FormValidator
         );
         $this->addSelect(
             'document_target',
-            get_lang("Link's target"),
+            get_lang('LinkTarget'),
             ['iframe' => 'iframe', 'window' => 'window']
         );
 

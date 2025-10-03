@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
@@ -20,11 +20,11 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('You are not allowed here.'));
+        throw new Exception(get_lang('NotAllowed'));
     }
 
-    /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolId);
+    /** @var ExternalTool|null $tool */
+    $tool = $em->find(ExternalTool::class, $ltiToolId);
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -75,7 +75,7 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInSessions'));

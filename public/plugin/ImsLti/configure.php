@@ -1,8 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -11,9 +10,9 @@ api_protect_teacher_script();
 
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
-$toolsRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+$toolsRepo = $em->getRepository(ExternalTool::class);
 
-/** @var ImsLtiTool $baseTool */
+/** @var ExternalTool|null $baseTool */
 $baseTool = isset($_REQUEST['type']) ? $toolsRepo->find(intval($_REQUEST['type'])) : null;
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'add';
 
@@ -44,7 +43,7 @@ switch ($action) {
         if ($form->validate()) {
             $formValues = $form->getSubmitValues();
 
-            $tool = new ImsLtiTool();
+            $tool = new ExternalTool();
 
             if ($baseTool) {
                 $tool = clone $baseTool;
@@ -157,11 +156,11 @@ switch ($action) {
         $form->setDefaultValues();
         break;
     case 'edit':
-        /** @var ImsLtiTool|null $tool */
+        /** @var ExternalTool|null $tool */
         $tool = null;
 
         if (!empty($_REQUEST['id'])) {
-            $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $_REQUEST['id']);
+            $tool = $em->find(ExternalTool::class, (int) $_REQUEST['id']);
         }
 
         if (empty($tool) ||
@@ -264,7 +263,7 @@ $actions = Display::url(
 
 if (!empty($categories)) {
     $actions .= Display::url(
-        Display::return_icon('gradebook.png', get_lang('Add to gradebook'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
         './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
     );
 }

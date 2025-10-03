@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -10,7 +10,7 @@ header('Content-Type: application/xml');
 $url = api_get_path(WEB_PATH).'lti/os';
 
 $em = Database::getManager();
-$toolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+$toolRepo = $em->getRepository(ExternalTool::class);
 
 $headers = OAuthUtil::get_headers();
 
@@ -31,7 +31,7 @@ if (empty($authParams) || empty($authParams['oauth_consumer_key']) || empty($aut
 $tools = $toolRepo->findBy(['consumerKey' => $authParams['oauth_consumer_key']]);
 $toolIsFound = false;
 
-/** @var ImsLtiTool $tool */
+/** @var ExternalTool $tool */
 foreach ($tools as $tool) {
     $consumer = new OAuthConsumer($tool->getConsumerKey(), $tool->getSharedSecret());
     $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();

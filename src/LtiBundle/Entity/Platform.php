@@ -12,18 +12,21 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Platform
 {
-    #[ORM\Column(name: 'public_key', type: 'text')]
-    public string $publicKey;
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
+    #[ORM\Column(name: 'public_key', type: 'text')]
+    public string $publicKey;
+
     #[ORM\Column(name: 'kid', type: 'string')]
     private string $kid;
+
     #[ORM\Column(name: 'private_key', type: 'text')]
     private string $privateKey;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

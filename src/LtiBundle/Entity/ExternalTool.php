@@ -7,14 +7,17 @@ declare(strict_types=1);
 namespace Chamilo\LtiBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceToRootInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use LtiAssignmentGradesService;
+use LtiNamesRoleProvisioningService;
 use Stringable;
 use UnserializeApi;
 
@@ -25,9 +28,9 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public const V_1P1 = 'lti1p1';
     public const V_1P3 = 'lti1p3';
 
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected ?int $id = null;
 
     #[ORM\Column(name: 'title', type: 'string')]
@@ -35,6 +38,9 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected ?string $description;
+
+    #[ORM\Column(name: 'public_key', type: 'text', nullable: true)]
+    public ?string $publicKey;
 
     #[ORM\Column(name: 'launch_url', type: 'string')]
     protected string $launchUrl;
@@ -54,37 +60,31 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     #[ORM\Column(name: 'privacy', type: 'text', nullable: true, options: ['default' => null])]
     protected ?string $privacy;
 
-    #[ORM\ManyToOne(targetEntity: Course::class)]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
-    protected ?Course $course;
-
     #[ORM\ManyToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'gradebook_eval_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    protected ?GradebookEvaluation $gradebookEval;
-
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id')]
-    protected ?ExternalTool $parent;
-
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    protected Collection $children;
+    private ?GradebookEvaluation $gradebookEval;
 
     #[ORM\Column(name: 'client_id', type: 'string', nullable: true)]
-    private ?string $clientId = null;
+    private ?string $clientId;
+
     #[ORM\Column(name: 'login_url', type: 'string', nullable: true)]
-    private ?string $loginUrl = null;
+    private ?string $loginUrl;
 
     #[ORM\Column(name: 'redirect_url', type: 'string', nullable: true)]
-    private ?string $redirectUrl = null;
+    private ?string $redirectUrl;
+
+    #[ORM\Column(name: 'jwks_url', type: 'string', nullable: true)]
+    private ?string $jwksUrl;
 
     #[ORM\Column(name: 'advantage_services', type: 'json', nullable: true)]
     private ?array $advantageServices;
 
-    #[ORM\OneToMany(targetEntity: LineItem::class, mappedBy: 'tool')]
+    #[ORM\OneToMany(mappedBy: 'tool', targetEntity: LineItem::class)]
     private Collection $lineItems;
 
-    #[ORM\Column(name: 'version', type: 'string', options: ['default' => 'lti1p1'])]
+    #[ORM\Column(name: 'version', type: 'string', options: ['default' => self::V_1P3])]
     private string $version;
+
     #[ORM\Column(name: 'launch_presentation', type: 'json')]
     private array $launchPresentation;
 
@@ -96,17 +96,12 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         $this->description = null;
         $this->customParams = null;
         $this->activeDeepLinking = false;
-        $this->course = null;
         $this->gradebookEval = null;
         $this->privacy = null;
         $this->consumerKey = null;
         $this->sharedSecret = null;
-        $this->parent = null;
-        $this->children = new ArrayCollection();
-        $this->consumerKey = null;
-        $this->sharedSecret = null;
         $this->lineItems = new ArrayCollection();
-        $this->version = self::V_1P1;
+        $this->version = self::V_1P3;
         $this->launchPresentation = [
             'document_target' => 'iframe',
         ];
@@ -118,7 +113,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->getTitle();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -173,7 +168,9 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function isGlobal(): bool
     {
-        return null === $this->course;
+        $resourceNode = $this->resourceNode->getResourceLinks()->first();
+
+        return !$resourceNode;
     }
 
     public function encodeCustomParams(array $params): ?string
@@ -241,18 +238,6 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function setActiveDeepLinking(bool $activeDeepLinking): static
     {
         $this->activeDeepLinking = $activeDeepLinking;
-
-        return $this;
-    }
-
-    public function getCourse(): ?Course
-    {
-        return $this->course;
-    }
-
-    public function setCourse(?Course $course = null): static
-    {
-        $this->course = $course;
 
         return $this;
     }
@@ -328,22 +313,10 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function setToolParent(self $parent): static
     {
-        $this->parent = $parent;
+        $this->resourceNode->setParent($parent->getResourceNode());
         $this->sharedSecret = $parent->getSharedSecret();
         $this->consumerKey = $parent->getConsumerKey();
         $this->privacy = $parent->getPrivacy();
-
-        return $this;
-    }
-
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function setChildren(Collection $children): static
-    {
-        $this->children = $children;
 
         return $this;
     }
@@ -387,6 +360,18 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
+    }
+
+    public function getJwksUrl(): ?string
+    {
+        return $this->jwksUrl;
+    }
+
+    public function setJwksUrl(?string $jwksUrl): static
+    {
+        $this->jwksUrl = $jwksUrl;
+
+        return $this;
     }
 
     public function setRedirectUrl(?string $redirectUrl): static
@@ -506,7 +491,7 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this;
     }
 
-    public function getDocumentTarget()
+    public function getDocumentTarget(): string
     {
         return $this->launchPresentation['document_target'] ?: 'iframe';
     }
@@ -532,10 +517,13 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return null;
     }
 
+    // @TODO: move it to repository
     public function getChildrenInCourses(array $coursesId): Collection
     {
-        return $this->children->filter(
-            fn (self $child) => \in_array($child->getCourse()->getId(), $coursesId, true)
+        return $this->resourceNode->getChildren()->filter(
+            fn(ResourceNode $child) => $child->getResourceLinks()->exists(
+                fn(ResourceLink $link) => ($course = $link->getCourse()) && in_array($course->getId(), $coursesId)
+            )
         );
     }
 
@@ -544,9 +532,9 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
         return $this->getTitle();
     }
 
-    public function setResourceName(string $title): static
+    public function setResourceName(string $name): static
     {
-        return $this->setTitle($title);
+        return $this->setTitle($name);
     }
 
     public function getResourceIdentifier(): int

@@ -19,22 +19,28 @@ class LineItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
     #[ORM\ManyToOne(targetEntity: ExternalTool::class, inversedBy: 'lineItems')]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ExternalTool $tool;
+
     #[ORM\OneToOne(targetEntity: GradebookEvaluation::class)]
     #[ORM\JoinColumn(name: 'evaluation', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private GradebookEvaluation $evaluation;
-    #[ORM\Column(name: 'resource_id', type: 'string', nullable: true)]
-    private string $resourceId;
-    #[ORM\Column(name: 'tag', type: 'string', nullable: true)]
-    private string $tag;
-    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
-    private DateTime $startDate;
-    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
-    private DateTime $endDate;
 
-    public function getId(): int
+    #[ORM\Column(name: 'resource_id', type: 'string', nullable: true)]
+    private ?string $resourceId;
+
+    #[ORM\Column(name: 'tag', type: 'string', nullable: true)]
+    private ?string $tag;
+
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
+    private ?DateTime $startDate;
+
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
+    private ?DateTime $endDate;
+
+    public function getId(): ?int
     {
         return $this->id;
     }

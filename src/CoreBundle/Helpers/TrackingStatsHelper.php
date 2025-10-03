@@ -17,11 +17,14 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Tracking;
 
 use const PATHINFO_FILENAME;
+use const PHP_ROUND_HALF_UP;
 
 /**
  * Helper for progress/grade/certificate aggregated statistics,
@@ -68,7 +71,7 @@ class TrackingStatsHelper
             $sum += (float) $pct;
         }
 
-        $avg = round($sum / $count, 2);
+        $avg = round($sum / $count, 2, PHP_ROUND_HALF_UP);
 
         return ['avg' => $avg, 'count' => $count];
     }
@@ -159,12 +162,12 @@ class TrackingStatsHelper
             ->andWhere('e.visible = 1')
             ->andWhere('c.visible = 1')
             ->andWhere('r.user = :user')
-            ->setParameter('course', $course)
-            ->setParameter('user', $user)
+            ->setParameter('course', $course, ParameterType::INTEGER)
+            ->setParameter('user', $user, ParameterType::INTEGER)
         ;
 
         if ($session) {
-            $qb->andWhere('c.session = :session')->setParameter('session', $session);
+            $qb->andWhere('c.session = :session')->setParameter('session', $session, ParameterType::INTEGER);
         } else {
             $qb->andWhere('c.session IS NULL');
         }
@@ -180,9 +183,9 @@ class TrackingStatsHelper
         $pct = ($score / $max) * 100.0;
 
         return [
-            'score' => round($score, 2),
-            'max' => round($max, 2),
-            'percentage' => round($pct, 2),
+            'score' => round($score, 2, PHP_ROUND_HALF_UP),
+            'max' => round($max, 2, PHP_ROUND_HALF_UP),
+            'percentage' => round($pct, 2, PHP_ROUND_HALF_UP),
         ];
     }
 
@@ -205,7 +208,7 @@ class TrackingStatsHelper
             $sumPct += $this->getUserAvgExerciseScore($user, $course, $session);
         }
 
-        return ['avg' => round($sumPct / $n, 2), 'participants' => $n];
+        return ['avg' => round($sumPct / $n, 2, PHP_ROUND_HALF_UP), 'participants' => $n];
     }
 
     /**
@@ -276,7 +279,7 @@ class TrackingStatsHelper
         ;
 
         if ($session) {
-            $qb->setParameter('session', $session);
+            $qb->setParameter('session', $session, ParameterType::INTEGER);
         }
 
         $rows = $qb->getQuery()->getArrayResult();
@@ -292,13 +295,15 @@ class TrackingStatsHelper
             $totalAvg += $userAvg;
         }
 
-        return ['avg' => round($totalAvg / $n, 2), 'participants' => $n];
+        return ['avg' => round($totalAvg / $n, 2, PHP_ROUND_HALF_UP), 'participants' => $n];
     }
 
     /**
      * Returns student users for a course/session.
      *
      * @return User[]
+     *
+     * @throws Exception
      */
     private function getStudentParticipants(Course $course, ?Session $session): array
     {
@@ -310,9 +315,9 @@ class TrackingStatsHelper
                 ->where('scru.course = :course')
                 ->andWhere('scru.session = :session')
                 ->andWhere('u.active = :active')
-                ->setParameter('course', $course)
-                ->setParameter('session', $session)
-                ->setParameter('active', User::ACTIVE)
+                ->setParameter('course', $course, ParameterType::INTEGER)
+                ->setParameter('session', $session, ParameterType::INTEGER)
+                ->setParameter('active', User::ACTIVE, ParameterType::INTEGER)
                 ->getQuery()
                 ->getResult()
             ;

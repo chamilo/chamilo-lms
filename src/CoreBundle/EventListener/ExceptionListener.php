@@ -10,11 +10,11 @@ use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Twig\Environment;
 
 /**
@@ -37,7 +37,7 @@ final class ExceptionListener
         }
 
         $exception = $event->getThrowable();
-        $request   = $event->getRequest();
+        $request = $event->getRequest();
 
         // Leave /api routes to the JSON listener
         $path = $request->getPathInfo() ?? $request->getRequestUri();
@@ -69,12 +69,13 @@ final class ExceptionListener
             $severity = $exception instanceof NotAllowedException ? $exception->getSeverity() : 'warning';
 
             $html = $this->twig->render('@ChamiloCore/Exception/not_allowed_message.html.twig', [
-                'message'  => $message,
+                'message' => $message,
                 'severity' => $severity,
             ]);
 
             // Important: status 403 for consistency
             $event->setResponse(new Response($html, Response::HTTP_FORBIDDEN));
+
             return;
         }
 

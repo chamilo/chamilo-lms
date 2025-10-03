@@ -14,6 +14,7 @@ use DateTime;
 use DateTimeZone;
 use Display;
 use Event;
+use Exception;
 use ExtraFieldValue;
 use FormValidator;
 use LegalManager;
@@ -21,6 +22,7 @@ use MessageManager;
 use Template;
 use UserManager;
 
+use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
 
 class ChamiloHelper
@@ -226,7 +228,7 @@ class ChamiloHelper
     /**
      * Adds or Subtract a time in hh:mm:ss to a datetime.
      *
-     * @param string $time      Time to add or substract in hh:mm:ss format
+     * @param string $time      Time to add or subtract in hh:mm:ss format
      * @param string $datetime  Datetime to be modified as accepted by the Datetime class constructor
      * @param bool   $operation True for Add, False to Subtract
      *
@@ -348,7 +350,7 @@ class ChamiloHelper
             // the last value by 100, which is a bit overboard for just one chart
             foreach ($palette as $index => $color) {
                 $components = explode(',', trim($color));
-                $components[3] = round((int) $components[3] / 100, 1);
+                $components[3] = round((int) $components[3] / 100, 1, PHP_ROUND_HALF_UP);
                 $palette[$index] = implode(',', $components);
             }
         }

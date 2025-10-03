@@ -1536,7 +1536,7 @@ function getAllWorkListStudent(
  * @param ?string $where_condition
  * @param ?bool   $getCount
  *
- * @return array
+ * @return int|array
  * @throws Exception
  */
 function getWorkListTeacher(

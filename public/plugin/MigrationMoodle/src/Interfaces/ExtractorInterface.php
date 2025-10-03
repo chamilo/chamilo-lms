@@ -14,7 +14,7 @@ interface ExtractorInterface
     public function filter(array $sourceData);
 
     /**
-     * @throws Exception
+     * @throws \Exception
      *
      * @return iterable
      */

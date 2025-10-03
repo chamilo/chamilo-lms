@@ -17,12 +17,14 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use DateTime;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Tracking;
 
 use const PATHINFO_FILENAME;
+use const PHP_ROUND_HALF_UP;
 
 /**
  * Helper for progress/grade/certificate aggregated statistics,
@@ -69,7 +71,7 @@ class TrackingStatsHelper
             $sum += (float) $pct;
         }
 
-        $avg = round($sum / $count, 2);
+        $avg = round($sum / $count, 2, PHP_ROUND_HALF_UP);
 
         return ['avg' => $avg, 'count' => $count];
     }
@@ -181,9 +183,9 @@ class TrackingStatsHelper
         $pct = ($score / $max) * 100.0;
 
         return [
-            'score' => round($score, 2),
-            'max' => round($max, 2),
-            'percentage' => round($pct, 2),
+            'score' => round($score, 2, PHP_ROUND_HALF_UP),
+            'max' => round($max, 2, PHP_ROUND_HALF_UP),
+            'percentage' => round($pct, 2, PHP_ROUND_HALF_UP),
         ];
     }
 
@@ -206,7 +208,7 @@ class TrackingStatsHelper
             $sumPct += $this->getUserAvgExerciseScore($user, $course, $session);
         }
 
-        return ['avg' => round($sumPct / $n, 2), 'participants' => $n];
+        return ['avg' => round($sumPct / $n, 2, PHP_ROUND_HALF_UP), 'participants' => $n];
     }
 
     /**
@@ -293,13 +295,14 @@ class TrackingStatsHelper
             $totalAvg += $userAvg;
         }
 
-        return ['avg' => round($totalAvg / $n, 2), 'participants' => $n];
+        return ['avg' => round($totalAvg / $n, 2, PHP_ROUND_HALF_UP), 'participants' => $n];
     }
 
     /**
      * Returns student users for a course/session.
      *
      * @return User[]
+     * @throws Exception
      */
     private function getStudentParticipants(Course $course, ?Session $session): array
     {

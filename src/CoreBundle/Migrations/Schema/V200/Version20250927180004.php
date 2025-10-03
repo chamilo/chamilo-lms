@@ -6,11 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
-use Chamilo\CoreBundle\Entity\PortfolioAttachment;
+use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\Node\PortfolioCommentRepository;
 use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
-use Chamilo\CoreBundle\Repository\PortfolioAttachmentRepository;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version20250927180004 extends AbstractMigrationChamilo
@@ -22,9 +21,6 @@ class Version20250927180004 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
-        /** @var PortfolioAttachmentRepository $attachmentRepo */
-        $attachmentRepo = $this->container->get(PortfolioAttachmentRepository::class);
-
         /** @var PortfolioRepository $itemRepo */
         $itemRepo = $this->container->get(PortfolioRepository::class);
 
@@ -41,7 +37,7 @@ class Version20250927180004 extends AbstractMigrationChamilo
             $resource = null;
             $resourceRepo = null;
 
-            if (PortfolioAttachment::TYPE_ITEM === (int) $attachmentRow['origin_type']) {
+            if (Portfolio::TYPE_ITEM === (int) $attachmentRow['origin_type']) {
                 $resourceRepo = $itemRepo;
                 $resource = $itemRepo->find($attachmentRow['origin_id']);
 
@@ -51,7 +47,7 @@ class Version20250927180004 extends AbstractMigrationChamilo
                 ;
 
                 $userId = $itemRow['user_id'] ?? 0;
-            } elseif (PortfolioAttachment::TYPE_COMMENT === (int) $attachmentRow['origin_type']) {
+            } elseif (Portfolio::TYPE_COMMENT === (int) $attachmentRow['origin_type']) {
                 $resourceRepo = $commentRepo;
                 $resource = $commentRepo->find($attachmentRow['origin_id']);
 

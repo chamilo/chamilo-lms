@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
@@ -11,7 +11,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_admin_script();
 
 $plugin = ImsLtiPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
 
 $request = Request::createFromGlobals();
 $ltiToolId = $request->query->getInt('id');
@@ -20,7 +20,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('You are not allowed here.'));
+        throw new Exception(get_lang('NotAllowed'));
     }
 
     /** @var ImsLtiTool $tool */
@@ -66,7 +66,7 @@ try {
             exit;
         }
 
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/multiply_session.php?id='.$formValues['tool_id'].'&session_id='.$formValues['sessions']);
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/multiply_session.php?id='.$formValues['tool_id'].'&session_id='.$formValues['sessions']);
 
         exit;
     }
@@ -75,8 +75,8 @@ try {
 
     $content = $form->returnForm();
 
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
 
     $template = new Template($plugin->get_lang('AddInSessions'));
     $template->assign('header', $plugin->get_lang('AddInSessions'));
@@ -87,5 +87,5 @@ try {
         Display::return_message($exception->getMessage(), 'error')
     );
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
 }

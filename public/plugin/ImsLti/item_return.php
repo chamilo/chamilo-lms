@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -18,7 +18,7 @@ $toolId = str_replace('tool:', '', $_POST['data']);
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 /** @var Course $course */
-$course = $em->find(Course::class, api_get_course_int_id());
+$course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
 /** @var ImsLtiTool|null $ltiTool */
 $ltiTool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
 
@@ -32,7 +32,7 @@ $consumer = new OAuthConsumer(
 );
 $hmacMethod = new OAuthSignatureMethod_HMAC_SHA1();
 
-$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ImsLti/item_return.php');
+$request = OAuthRequest::from_request('POST', api_get_path(WEB_PLUGIN_PATH).'ims_lti/item_return.php');
 $request->sign_request($hmacMethod, $consumer, '');
 $signature = $request->get_parameter('oauth_signature');
 
@@ -55,7 +55,7 @@ foreach ($contentItems as $contentItem) {
     }
 }
 
-$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/start.php?id='.$ltiTool->getId();
+$currentUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/start.php?id='.$ltiTool->getId();
 ?>
 <!DOCTYPE html>
 <html>

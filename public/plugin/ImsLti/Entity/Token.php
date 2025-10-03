@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\ImsLti\Entity;
@@ -14,11 +15,11 @@ class Token
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id;
+    protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: ImsLtiTool::class)]
     #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private ImsLtiTool $tool;
+    private ?ImsLtiTool $tool;
 
     #[ORM\Column(name: 'scope', type: 'json')]
     private array $scope;
@@ -37,12 +38,12 @@ class Token
         return $this->id;
     }
 
-    public function getTool(): ImsLtiTool
+    public function getTool(): ?ImsLtiTool
     {
         return $this->tool;
     }
 
-    public function setTool(ImsLtiTool $tool): static
+    public function setTool(?ImsLtiTool $tool): static
     {
         $this->tool = $tool;
 

@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\ImsLti\Form;
 
 use Category;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Display;
 use FormValidator;
 use ImsLti;
@@ -104,7 +104,7 @@ class FrmAdd extends FormValidator
         );
         $this->addSelect(
             'document_target',
-            get_lang("Link's target"),
+            get_lang('LinkTarget'),
             ['iframe' => 'iframe', 'window' => 'window']
         );
 

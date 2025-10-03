@@ -222,7 +222,7 @@ class LtiContextMembershipResource extends LtiAdvantageServiceResource
 
         return [
             'id' => api_get_path(WEB_PLUGIN_PATH)
-                ."ImsLti/nrps2.php/{$this->course->getId()}/memberships?"
+                ."ims_lti/nrps2.php/{$this->course->getId()}/memberships?"
                 .http_build_query(
                     [
                         't' => $this->tool->getId(),

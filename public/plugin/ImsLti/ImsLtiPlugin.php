@@ -5,11 +5,11 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
-use Chamilo\PluginBundle\ImsLti\Entity\Platform;
-use Chamilo\PluginBundle\ImsLti\Entity\Token;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\PluginBundle\Entity\ImsLti\Platform;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 
@@ -60,7 +60,7 @@ class ImsLtiPlugin extends Plugin
      */
     public function get_name()
     {
-        return 'ImsLti';
+        return 'ims_lti';
     }
 
     /**
@@ -133,7 +133,7 @@ class ImsLtiPlugin extends Plugin
     public function findCourseToolByLink(Course $course, ImsLtiTool $ltiTool)
     {
         $em = Database::getManager();
-        $toolRepo = $em->getRepository(CTool::class);
+        $toolRepo = $em->getRepository('ChamiloCourseBundle:CTool');
 
         /** @var CTool $cTool */
         $cTool = $toolRepo->findOneBy(
@@ -620,7 +620,7 @@ class ImsLtiPlugin extends Plugin
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php'
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
         );
 
         return $text;
@@ -630,13 +630,12 @@ class ImsLtiPlugin extends Plugin
      * Creates the plugin tables on database.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
-     * @throws \Doctrine\DBAL\Exception
      */
     private function createPluginTables()
     {
         $em = Database::getManager();
 
-        if ($em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if ($em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 
@@ -653,14 +652,12 @@ class ImsLtiPlugin extends Plugin
 
     /**
      * Drops the plugin tables on database.
-     *
-     * @throws \Doctrine\DBAL\Exception
      */
     private function dropPluginTables()
     {
         $em = Database::getManager();
 
-        if (!$em->getConnection()->createSchemaManager()->tablesExist([self::TABLE_TOOL])) {
+        if (!$em->getConnection()->getSchemaManager()->tablesExist([self::TABLE_TOOL])) {
             return;
         };
 
@@ -677,7 +674,7 @@ class ImsLtiPlugin extends Plugin
 
     private function removeTools()
     {
-        $sql = "DELETE FROM c_tool WHERE link LIKE 'ImsLti/start.php%' AND category = 'plugin'";
+        $sql = "DELETE FROM c_tool WHERE link LIKE 'ims_lti/start.php%' AND category = 'plugin'";
         Database::query($sql);
     }
 
@@ -688,7 +685,7 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('ConfigureExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH).'ImsLti/configure.php?'.api_get_cidreq(),
+            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
             'cog',
             'primary'
         );
@@ -707,7 +704,7 @@ class ImsLtiPlugin extends Plugin
      */
     private static function generateToolLink(ImsLtiTool $tool)
     {
-        return 'ImsLti/start.php?id='.$tool->getId();
+        return 'ims_lti/start.php?id='.$tool->getId();
     }
 
     /**

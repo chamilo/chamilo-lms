@@ -106,7 +106,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
      */
     public static function getLineItemsUrl($contextId, $toolId, array $extraParams = [])
     {
-        $base = api_get_path(WEB_PLUGIN_PATH).'ImsLti/ags2.php';
+        $base = api_get_path(WEB_PLUGIN_PATH).'ims_lti/ags2.php';
         $resource = str_replace(
             'context_id',
             $contextId,
@@ -127,7 +127,7 @@ class LtiAssignmentGradesService extends LtiAdvantageService
      */
     public static function getLineItemUrl($contextId, $lineItemId, $toolId)
     {
-        $base = api_get_path(WEB_PLUGIN_PATH).'ImsLti/ags2.php';
+        $base = api_get_path(WEB_PLUGIN_PATH).'ims_lti/ags2.php';
         $resource = str_replace(
             ['context_id', 'line_item_id'],
             [$contextId, $lineItemId],

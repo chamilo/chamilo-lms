@@ -3,8 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class ImsLti.
@@ -43,7 +43,7 @@ class ImsLti
             '$Person.sourcedId' => $isLti1p3
                 ? self::getPersonSourcedId($domain, $user)
                 : "$domain:".ImsLtiPlugin::getLaunchUserIdClaim($tool, $user),
-            '$Person.name.full' => $user->getFullName(),
+            '$Person.name.full' => $user->getFullname(),
             '$Person.name.family' => $user->getLastname(),
             '$Person.name.given' => $user->getFirstname(),
             '$Person.address.street1' => $user->getAddress(),

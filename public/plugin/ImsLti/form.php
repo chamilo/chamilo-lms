@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -24,7 +24,7 @@ $session = api_get_session_entity();
 $course = api_get_course_entity();
 $user = api_get_user_entity(api_get_user_id());
 
-$pluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
+$pluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
 $toolUserId = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
 $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));
 

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\ImsLti\Entity;
@@ -9,13 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Platform
 {
-    #[ORM\Column(name: 'public_key', type: 'text')]
-    public string $publicKey;
-
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    protected ?int $id;
+    protected ?int $id = null;
+
+    #[ORM\Column(name: 'public_key', type: 'text')]
+    public string $publicKey;
 
     #[ORM\Column(name: 'kid', type: 'string')]
     private string $kid;
@@ -40,9 +41,11 @@ class Platform
         return $this->kid;
     }
 
-    public function setKid(string $kid): void
+    public function setKid(string $kid): static
     {
         $this->kid = $kid;
+
+        return $this;
     }
 
     public function getPrivateKey(): string

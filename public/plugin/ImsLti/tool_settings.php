@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,7 +12,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_block_anonymous_users(false);
 
 $plugin = ImsLtiPlugin::create();
-$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ims_lti/';
 
 $request = Request::createFromGlobals();
 $response = new Response();
@@ -21,7 +21,7 @@ $em = Database::getManager();
 
 try {
     if ($plugin->get('enabled') !== 'true') {
-        throw new Exception(get_lang('Not allowed'));
+        throw new Exception(get_lang('Forbidden'));
     }
 
     /** @var ImsLtiTool $tool */

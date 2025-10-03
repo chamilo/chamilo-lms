@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -19,12 +19,12 @@ if (!$tool) {
 }
 
 $links = [];
-$links[] = 'ImsLti/start.php?id='.$tool->getId();
+$links[] = 'ims_lti/start.php?id='.$tool->getId();
 
 if (!$tool->getParent()) {
     /** @var ImsLtiTool $child */
     foreach ($tool->getChildren() as $child) {
-        $links[] = "ImsLti/start.php?id=".$child->getId();
+        $links[] = "ims_lti/start.php?id=".$child->getId();
     }
 }
 
@@ -39,5 +39,5 @@ Display::addFlash(
     Display::return_message($plugin->get_lang('ToolDeleted'), 'success')
 );
 
-header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
+header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
 exit;

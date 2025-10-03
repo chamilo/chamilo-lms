@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\PluginBundle\ImsLti\Entity\Platform;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\Platform;
 use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -111,7 +111,7 @@ try {
 
     // User info
     if ($tool->isSharingName()) {
-        $jwtContent['name'] = $user->getFullName();
+        $jwtContent['name'] = $user->getFullname();
         $jwtContent['given_name'] = $user->getFirstname();
         $jwtContent['family_name'] = $user->getLastname();
     }
@@ -185,7 +185,7 @@ try {
             'title' => $tool->getName(),
             'text' => $tool->getDescription(),
             'data' => "tool:{$tool->getId()}",
-            'deep_link_return_url' => $webPluginPath.'ImsLti/item_return2.php',
+            'deep_link_return_url' => $webPluginPath.'ims_lti/item_return2.php',
         ];
     } else {
         $jwtContent['https://purl.imsglobal.org/spec/lti/claim/message_type'] = 'LtiResourceLinkRequest';

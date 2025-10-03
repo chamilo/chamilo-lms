@@ -2,7 +2,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -255,7 +255,7 @@ $template->assign('added_tools', $addedTools);
 $template->assign('global_tools', $globalTools);
 $template->assign('form', $form->returnForm());
 
-$content = $template->fetch('ImsLti/view/add.tpl');
+$content = $template->fetch('ims_lti/view/add.tpl');
 
 $actions = Display::url(
     Display::return_icon('add.png', $plugin->get_lang('AddExternalTool'), [], ICON_SIZE_MEDIUM),
@@ -264,7 +264,7 @@ $actions = Display::url(
 
 if (!empty($categories)) {
     $actions .= Display::url(
-        Display::return_icon('gradebook.png', get_lang('Add to gradebook'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
         './gradebook/add_eval.php?selectcat='.$categories[0]->get_id().'&'.api_get_cidreq()
     );
 }

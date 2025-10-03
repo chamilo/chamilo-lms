@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -28,9 +28,9 @@ $is1p3 = !empty($publicKey) && !empty($tool->getClientId()) &&
     !empty($tool->getLoginUrl()) && !empty($tool->getRedirectUrl());
 
 if ($is1p3) {
-    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/login.php?id='.$tool->getId();
+    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/login.php?id='.$tool->getId();
 } else {
-    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ImsLti/form.php?'.http_build_query(['id' => $tool->getId()]);
+    $launchUrl = api_get_path(WEB_PLUGIN_PATH).'ims_lti/form.php?'.http_build_query(['id' => $tool->getId()]);
 }
 
 if ($tool->getDocumentTarget() == 'window') {
@@ -43,7 +43,7 @@ $template->assign('tool', $tool);
 
 $template->assign('launch_url', $launchUrl);
 
-$content = $template->fetch('ImsLti/view/start.tpl');
+$content = $template->fetch('ims_lti/view/start.tpl');
 
 $template->assign('header', $pageTitle);
 $template->assign('content', $content);

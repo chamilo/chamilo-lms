@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;

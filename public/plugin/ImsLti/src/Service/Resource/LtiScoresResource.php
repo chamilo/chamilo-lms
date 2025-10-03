@@ -3,8 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultLog;
-use Chamilo\PluginBundle\ImsLti\Entity\LineItem;
-use Chamilo\CoreBundle\Entity\User;
+use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -144,7 +144,7 @@ class LtiScoresResource extends LtiAdvantageServiceResource
         $evaluation = $this->lineItem->getEvaluation();
 
         $result = Database::getManager()
-            ->getRepository(GradebookResult::class)
+            ->getRepository('ChamiloCoreBundle:GradebookResult')
             ->findOneBy(
                 [
                     'userId' => $data['userId'],

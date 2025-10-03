@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\ImsLti\Entity;
@@ -7,173 +8,91 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class ImsLtiTool.
- *
- * @ORM\Table(name="plugin_ims_lti_tool")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_ims_lti_tool')]
+#[ORM\Entity]
 class ImsLtiTool
 {
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="public_key", type="text", nullable=true)
-     */
-    public $publicKey;
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string")
-     */
-    private $name = '';
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description = null;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="launch_url", type="string")
-     */
-    private $launchUrl = '';
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="consumer_key", type="string", nullable=true)
-     */
-    private $consumerKey = '';
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="shared_secret", type="string", nullable=true)
-     */
-    private $sharedSecret = '';
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="custom_params", type="text", nullable=true)
-     */
-    private $customParams = null;
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="active_deep_linking", type="boolean", nullable=false, options={"default": false})
-     */
-    private $activeDeepLinking = false;
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="privacy", type="text", nullable=true, options={"default": null})
-     */
-    private $privacy = null;
-    /**
-     * @var Course|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
-     */
-    private $course = null;
-    /**
-     * @var Session|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     */
-    private $session = null;
-    /**
-     * @var GradebookEvaluation|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="gradebook_eval_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    private $gradebookEval = null;
-    /**
-     * @var ImsLtiTool|null
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $parent;
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", mappedBy="parent")
-     */
-    private $children;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="client_id", type="string", nullable=true)
-     */
-    private $clientId;
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="login_url", type="string", nullable=true)
-     */
-    private $loginUrl;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    protected ?int $id = null;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="redirect_url", type="string", nullable=true)
-     */
-    private $redirectUrl;
+    #[ORM\Column(name: 'public_key', type: 'text', nullable: true)]
+    public ?string $publicKey;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="jwks_url", type="string", nullable=true)
-     */
-    private $jwksUrl;
+    #[ORM\Column(name: 'name', type: 'string')]
+    private string $name = '';
 
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="advantage_services", type="json", nullable=true)
-     */
-    private $advantageServices;
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    private ?string $description;
 
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\LineItem", mappedBy="tool")
-     */
-    private $lineItems;
+    #[ORM\Column(name: 'launch_url', type: 'string')]
+    private string $launchUrl = '';
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="version", type="string", options={"default": "lti1p1"})
-     */
-    private $version;
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="launch_presentation", type="json")
-     */
-    private $launchPresentation;
+    #[ORM\Column(name: 'consumer_key', type: 'string', nullable: true)]
+    private ?string $consumerKey;
 
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="replacement_params", type="json")
-     */
-    private $replacementParams;
+    #[ORM\Column(name: 'shared_secret', type: 'string', nullable: true)]
+    private ?string $sharedSecret;
+
+    #[ORM\Column(name: 'custom_params', type: 'text', nullable: true)]
+    private ?string $customParams;
+
+    #[ORM\Column(name: 'active_deep_linking', type: 'boolean', nullable: false, options: ['default' => false])]
+    private bool $activeDeepLinking;
+
+    #[ORM\Column(name: 'privacy', type: 'text', nullable: true, options: ['default' => null])]
+    private ?string $privacy;
+
+    #[ORM\ManyToOne(targetEntity: Course::class)]
+    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
+    private ?Course $course;
+
+    #[ORM\ManyToOne(targetEntity: Session::class)]
+    #[ORM\JoinColumn(name: 'session_id', referencedColumnName: 'id')]
+    private ?Session $session;
+
+    #[ORM\ManyToOne(targetEntity: GradebookEvaluation::class)]
+    #[ORM\JoinColumn(name: 'gradebook_eval_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    private ?GradebookEvaluation $gradebookEval;
+
+    #[ORM\ManyToOne(targetEntity: ImsLtiTool::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    private ?ImsLtiTool $parent;
+
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: ImsLtiTool::class)]
+    private Collection $children;
+
+    #[ORM\Column(name: 'client_id', type: 'string', nullable: true)]
+    private ?string $clientId;
+
+    #[ORM\Column(name: 'login_url', type: 'string', nullable: true)]
+    private ?string $loginUrl;
+
+    #[ORM\Column(name: 'redirect_url', type: 'string', nullable: true)]
+    private ?string $redirectUrl;
+
+    #[ORM\Column(name: 'jwks_url', type: 'string', nullable: true)]
+    private ?string $jwksUrl;
+
+    #[ORM\Column(name: 'advantage_services', type: 'json', nullable: true)]
+    private ?array $advantageServices;
+
+    #[ORM\OneToMany(mappedBy: 'tool', targetEntity: LineItem::class)]
+    private Collection $lineItems;
+
+    #[ORM\Column(name: 'version', type: 'string', options: ['default' => 'lti1p1'])]
+    private string $version;
+
+    #[ORM\Column(name: 'launch_presentation', type: 'json')]
+    private array $launchPresentation;
+
+    #[ORM\Column(name: 'replacement_params', type: 'json')]
+    private array $replacementParams;
 
     /**
      * ImsLtiTool constructor.
@@ -197,106 +116,65 @@ class ImsLtiTool
         $this->replacementParams = [];
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ImsLtiTool
-     */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string|null $description
-     *
-     * @return ImsLtiTool
-     */
-    public function setDescription($description)
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLaunchUrl()
+    public function getLaunchUrl(): string
     {
         return $this->launchUrl;
     }
 
-    /**
-     * @param string $launchUrl
-     *
-     * @return ImsLtiTool
-     */
-    public function setLaunchUrl($launchUrl)
+    public function setLaunchUrl(string $launchUrl): static
     {
         $this->launchUrl = $launchUrl;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getCustomParams()
+    public function getCustomParams(): ?string
     {
         return $this->customParams;
     }
 
-    /**
-     * @param string|null $customParams
-     *
-     * @return ImsLtiTool
-     */
-    public function setCustomParams($customParams)
+    public function setCustomParams(?string $customParams): static
     {
         $this->customParams = $customParams;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isGlobal()
+    public function isGlobal(): bool
     {
         return $this->course === null;
     }
 
-    /**
-     * @return string|null
-     */
-    public function encodeCustomParams(array $params)
+    public function encodeCustomParams(array $params): ?string
     {
         if (empty($params)) {
             return null;
@@ -311,10 +189,7 @@ class ImsLtiTool
         return implode("\n", $pairs);
     }
 
-    /**
-     * @return array
-     */
-    public function getCustomParamsAsArray()
+    public function getCustomParamsAsArray(): array
     {
         $params = [];
         $lines = explode("\n", $this->customParams);
@@ -332,10 +207,7 @@ class ImsLtiTool
         return $params;
     }
 
-    /**
-     * @return array
-     */
-    public function parseCustomParams()
+    public function parseCustomParams(): array
     {
         if (empty($this->customParams)) {
             return [];
@@ -359,113 +231,61 @@ class ImsLtiTool
         return $params;
     }
 
-    /**
-     * Get activeDeepLinking.
-     *
-     * @return bool
-     */
-    public function isActiveDeepLinking()
+    public function isActiveDeepLinking(): bool
     {
         return $this->activeDeepLinking;
     }
 
-    /**
-     * Set activeDeepLinking.
-     *
-     * @param bool $activeDeepLinking
-     *
-     * @return ImsLtiTool
-     */
-    public function setActiveDeepLinking($activeDeepLinking)
+    public function setActiveDeepLinking(bool $activeDeepLinking): static
     {
         $this->activeDeepLinking = $activeDeepLinking;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course|null
-     */
-    public function getCourse()
+    public function getCourse(): ?Course
     {
         return $this->course;
     }
 
-    /**
-     * Set course.
-     *
-     * @return ImsLtiTool
-     */
-    public function setCourse(Course $course = null)
+    public function setCourse(?Course $course): static
     {
         $this->course = $course;
 
         return $this;
     }
 
-    /**
-     * Get session.
-     *
-     * @return Session|null
-     */
-    public function getSession()
+    public function getSession(): ?Session
     {
         return $this->session;
     }
 
-    /**
-     * Set session.
-     *
-     * @param Session|null $course
-     *
-     * @return ImsLtiTool
-     */
-    public function setSession(Session $session = null)
+    public function setSession(?Session $session): static
     {
         $this->session = $session;
 
         return $this;
     }
 
-    /**
-     * Get gradebookEval.
-     *
-     * @return GradebookEvaluation|null
-     */
-    public function getGradebookEval()
+    public function getGradebookEval(): ?GradebookEvaluation
     {
         return $this->gradebookEval;
     }
 
-    /**
-     * Set gradebookEval.
-     *
-     * @param GradebookEvaluation|null $gradebookEval
-     *
-     * @return ImsLtiTool
-     */
-    public function setGradebookEval($gradebookEval)
+    public function setGradebookEval(?GradebookEvaluation $gradebookEval): static
     {
         $this->gradebookEval = $gradebookEval;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isSharingName()
+    public function isSharingName(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
         return (bool) $unserialize['share_name'];
     }
 
-    /**
-     * @return mixed
-     */
     public function unserializePrivacy()
     {
         return \UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
@@ -474,35 +294,26 @@ class ImsLtiTool
     /**
      * @return bool
      */
-    public function isSharingEmail()
+    public function isSharingEmail(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
         return (bool) $unserialize['share_email'];
     }
 
-    /**
-     * @return bool
-     */
-    public function isSharingPicture()
+    public function isSharingPicture(): bool
     {
         $unserialize = $this->unserializePrivacy();
 
         return (bool) $unserialize['share_picture'];
     }
 
-    /**
-     * @return ImsLtiTool|null
-     */
     public function getParent()
     {
         return $this->parent;
     }
 
-    /**
-     * @return ImsLtiTool
-     */
-    public function setParent(ImsLtiTool $parent)
+    public function setParent(ImsLtiTool $parent): static
     {
         $this->parent = $parent;
 
@@ -513,67 +324,40 @@ class ImsLtiTool
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSharedSecret()
+    public function getSharedSecret(): ?string
     {
         return $this->sharedSecret;
     }
 
-    /**
-     * @param string $sharedSecret
-     *
-     * @return ImsLtiTool
-     */
-    public function setSharedSecret($sharedSecret)
+    public function setSharedSecret(?string $sharedSecret): static
     {
         $this->sharedSecret = $sharedSecret;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getConsumerKey()
+    public function getConsumerKey(): ?string
     {
         return $this->consumerKey;
     }
 
-    /**
-     * @param string $consumerKey
-     *
-     * @return ImsLtiTool
-     */
-    public function setConsumerKey($consumerKey)
+    public function setConsumerKey(?string $consumerKey): static
     {
         $this->consumerKey = $consumerKey;
 
         return $this;
     }
 
-    /**
-     * Get privacy.
-     *
-     * @return string|null
-     */
-    public function getPrivacy()
+    public function getPrivacy(): ?string
     {
         return $this->privacy;
     }
 
-    /**
-     * Set privacy.
-     *
-     * @param bool $shareName
-     * @param bool $shareEmail
-     * @param bool $sharePicture
-     *
-     * @return ImsLtiTool
-     */
-    public function setPrivacy($shareName = false, $shareEmail = false, $sharePicture = false)
-    {
+    public function setPrivacy(
+        bool $shareName = false,
+        bool $shareEmail = false,
+        bool $sharePicture = false
+    ): static {
         $this->privacy = serialize(
             [
                 'share_name' => $shareName,
@@ -585,108 +369,55 @@ class ImsLtiTool
         return $this;
     }
 
-    /**
-     * Get loginUrl.
-     *
-     * @return string|null
-     */
-    public function getLoginUrl()
+    public function getLoginUrl(): ?string
     {
         return $this->loginUrl;
     }
 
-    /**
-     * Set loginUrl.
-     *
-     * @param string|null $loginUrl
-     *
-     * @return ImsLtiTool
-     */
-    public function setLoginUrl($loginUrl)
+    public function setLoginUrl(?string $loginUrl): static
     {
         $this->loginUrl = $loginUrl;
 
         return $this;
     }
 
-    /**
-     * Get redirectUlr.
-     *
-     * @return string|null
-     */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }
 
-    /**
-     * Set redirectUrl.
-     *
-     * @param string|null $redirectUrl
-     *
-     * @return ImsLtiTool
-     */
-    public function setRedirectUrl($redirectUrl)
+    public function setRedirectUrl(?string $redirectUrl): static
     {
         $this->redirectUrl = $redirectUrl;
 
         return $this;
     }
 
-    /**
-     * Get jwksUrl.
-     *
-     * @return string|null
-     */
-    public function getJwksUrl()
+    public function getJwksUrl(): ?string
     {
         return $this->jwksUrl;
     }
 
-    /**
-     * Set jwksUrl.
-     *
-     * @param string|null $jwksUrl
-     *
-     * @return ImsLtiTool
-     */
-    public function setJwksUrl($jwksUrl)
+    public function setJwksUrl(?string $jwksUrl): static
     {
         $this->jwksUrl = $jwksUrl;
 
         return $this;
     }
 
-    /**
-     * Get clientId.
-     *
-     * @return string
-     */
-    public function getClientId()
+    public function getClientId(): ?string
     {
         return $this->clientId;
     }
 
-    /**
-     * Set clientId.
-     *
-     * @param string $clientId
-     *
-     * @return ImsLtiTool
-     */
-    public function setClientId($clientId)
+    public function setClientId(?string $clientId): static
     {
         $this->clientId = $clientId;
 
         return $this;
     }
 
-    /**
-     * Get advantageServices.
-     *
-     * @return array
-     */
-    public function getAdvantageServices()
+    public function getAdvantageServices(): ?array
     {
         if (empty($this->advantageServices)) {
             $this->advantageServices = [];
@@ -701,26 +432,14 @@ class ImsLtiTool
         );
     }
 
-    /**
-     * Set advantageServices.
-     *
-     * @param array $advantageServices
-     *
-     * @return ImsLtiTool
-     */
-    public function setAdvantageServices($advantageServices)
+    public function setAdvantageServices($advantageServices): static
     {
         $this->advantageServices = $advantageServices;
 
         return $this;
     }
 
-    /**
-     * Add LineItem to lineItems.
-     *
-     * @return $this
-     */
-    public function addLineItem(LineItem $lineItem)
+    public function addLineItem(LineItem $lineItem): static
     {
         $lineItem->setTool($this);
 
@@ -729,17 +448,13 @@ class ImsLtiTool
         return $this;
     }
 
-    /**
-     * @param int    $resourceLinkId
-     * @param int    $resourceId
-     * @param string $tag
-     * @param int    $limit
-     * @param int    $page
-     *
-     * @return ArrayCollection
-     */
-    public function getLineItems($resourceLinkId = 0, $resourceId = 0, $tag = '', $limit = 0, $page = 1)
-    {
+    public function getLineItems(
+        int $resourceLinkId = 0,
+        int $resourceId = 0,
+        string $tag = '',
+        int $limit = 0,
+        int $page = 1
+    ): Collection {
         $criteria = Criteria::create();
 
         if ($resourceLinkId) {
@@ -754,9 +469,6 @@ class ImsLtiTool
             $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
         }
 
-        $limit = (int) $limit;
-        $page = (int) $page;
-
         if ($limit > 0) {
             $criteria->setMaxResults($limit);
 
@@ -768,46 +480,26 @@ class ImsLtiTool
         return $this->lineItems->matching($criteria);
     }
 
-    /**
-     * Set lineItems.
-     *
-     * @return $this
-     */
-    public function setLineItems(ArrayCollection $lineItems)
+    public function setLineItems(ArrayCollection $lineItems): static
     {
         $this->lineItems = $lineItems;
 
         return $this;
     }
 
-    /**
-     * Get version.
-     *
-     * @return string
-     */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
 
-    /**
-     * Set version.
-     *
-     * @param string $version
-     *
-     * @return ImsLtiTool
-     */
-    public function setVersion($version)
+    public function setVersion(string $version): static
     {
         $this->version = $version;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getVersionName()
+    public function getVersionName(): string
     {
         if (\ImsLti::V_1P1 === $this->version) {
             return 'LTI 1.0 / 1.1';
@@ -816,58 +508,36 @@ class ImsLtiTool
         return 'LTI 1.3';
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * @param string $target
-     *
-     * @return $this
-     */
-    public function setDocumenTarget($target)
+    public function setDocumenTarget(string $target): static
     {
         $this->launchPresentation['document_target'] = in_array($target, ['iframe', 'window']) ? $target : 'iframe';
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDocumentTarget()
+    public function getDocumentTarget(): string
     {
         return $this->launchPresentation['document_target'] ?: 'iframe';
     }
 
-    /**
-     * @return array
-     */
-    public function getLaunchPresentation()
+    public function getLaunchPresentation(): array
     {
         return $this->launchPresentation;
     }
 
-    /**
-     * @param string $replacement
-     *
-     * @return ImsLtiTool
-     */
-    public function setReplacementForUserId($replacement)
+    public function setReplacementForUserId(string $replacement): static
     {
         $this->replacementParams['user_id'] = $replacement;
 
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getReplacementForUserId()
+    public function getReplacementForUserId(): ?string
     {
         if (!empty($this->replacementParams['user_id'])) {
             return $this->replacementParams['user_id'];
@@ -876,10 +546,7 @@ class ImsLtiTool
         return null;
     }
 
-    /**
-     * @return ArrayCollection
-     */
-    public function getChildrenInCourses(array $coursesId)
+    public function getChildrenInCourses(array $coursesId): Collection
     {
         return $this->children->filter(
             function (ImsLtiTool $child) use ($coursesId) {
@@ -889,13 +556,9 @@ class ImsLtiTool
     }
 
     /**
-     * Map the key from custom param.
-     *
-     * @param string $key
-     *
-     * @return string
+     * Map the key from custom params.
      */
-    private static function filterSpecialChars($key)
+    private static function filterSpecialChars(string $key): string
     {
         $newKey = '';
         $key = strtolower($key);
@@ -916,12 +579,7 @@ class ImsLtiTool
         return $newKey;
     }
 
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    private static function filterSpaces($value)
+    private static function filterSpaces(string $value): string
     {
         $newValue = preg_replace('/\s+/', ' ', $value);
 

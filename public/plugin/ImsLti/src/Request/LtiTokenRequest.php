@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool;
-use Chamilo\PluginBundle\ImsLti\Entity\Token;
+use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\PluginBundle\Entity\ImsLti\Token;
 use Firebase\JWT\JWT;
 
 /**

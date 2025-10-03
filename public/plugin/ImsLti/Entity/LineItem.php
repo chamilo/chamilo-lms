@@ -4,234 +4,133 @@
 namespace Chamilo\PluginBundle\ImsLti\Entity;
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class LineItem.
- *
- * @ORM\Table(name="plugin_ims_lti_lineitem")
- * @ORM\Entity()
- */
+#[ORM\Table(name: 'plugin_ims_lti_lineitem')]
+#[ORM\Entity]
 class LineItem
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
-    protected $id;
-    /**
-     * @var ImsLtiTool
-     *
-     * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\ImsLti\Entity\ImsLtiTool", inversedBy="lineItems")
-     * @ORM\JoinColumn(name="tool_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $tool;
-    /**
-     * @var GradebookEvaluation
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\GradebookEvaluation")
-     * @ORM\JoinColumn(name="evaluation", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     */
-    private $evaluation;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="resource_id", type="string", nullable=true)
-     */
-    private $resourceId;
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tag", type="string", nullable=true)
-     */
-    private $tag;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="start_date", type="datetime", nullable=true)
-     */
-    private $startDate;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="end_date", type="datetime", nullable=true)
-     */
-    private $endDate;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    protected ?int $id = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    #[ORM\ManyToOne(targetEntity: ImsLtiTool::class, inversedBy: 'lineItems')]
+    #[ORM\JoinColumn(name: 'tool_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private ImsLtiTool $tool;
+
+    #[ORM\OneToOne(inversedBy: 'lineItems', targetEntity: GradebookEvaluation::class)]
+    #[ORM\JoinColumn(name: 'evaluation', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    private GradebookEvaluation $evaluation;
+
+    #[ORM\Column(name: 'resource_id', type: 'string', nullable: true)]
+    private ?string $resourceId;
+
+    #[ORM\Column(name: 'tag', type: 'string', nullable: true)]
+    private ?string $tag;
+
+    #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
+    private ?DateTime $startDate;
+    #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
+    private ?DateTime $endDate;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get tool.
-     *
-     * @return ImsLtiTool
-     */
-    public function getTool()
+    public function getTool(): ImsLtiTool
     {
         return $this->tool;
     }
 
-    /**
-     * Set tool.
-     *
-     * @param ImsLtiTool $tool
-     *
-     * @return LineItem
-     */
-    public function setTool($tool)
+    public function setTool(ImsLtiTool $tool): static
     {
         $this->tool = $tool;
 
         return $this;
     }
 
-    /**
-     * Get evaluation.
-     *
-     * @return GradebookEvaluation
-     */
-    public function getEvaluation()
+    public function getEvaluation(): GradebookEvaluation
     {
         return $this->evaluation;
     }
 
-    /**
-     * Set evaluation.
-     *
-     * @param GradebookEvaluation $evaluation
-     *
-     * @return LineItem
-     */
-    public function setEvaluation($evaluation)
+    public function setEvaluation(GradebookEvaluation $evaluation): static
     {
         $this->evaluation = $evaluation;
 
         return $this;
     }
 
-    /**
-     * Get tag.
-     *
-     * @return string
-     */
-    public function getTag()
+    public function getTag(): ?string
     {
         return $this->tag;
     }
 
-    /**
-     * Set tag.
-     *
-     * @param string $tag
-     *
-     * @return LineItem
-     */
-    public function setTag($tag)
+    public function setTag(?string $tag): static
     {
         $this->tag = $tag;
 
         return $this;
     }
 
-    /**
-     * Get startDate.
-     *
-     * @return \DateTime
-     */
-    public function getStartDate()
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    /**
-     * Set startDate.
-     *
-     * @param \DateTime $startDate
-     *
-     * @return LineItem
-     */
-    public function setStartDate($startDate)
+    public function setStartDate(?DateTime$startDate): static
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    /**
-     * Get endDate.
-     *
-     * @return \DateTime
-     */
-    public function getEndDate()
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    /**
-     * Set endDate.
-     *
-     * @param \DateTime $endDate
-     *
-     * @return LineItem
-     */
-    public function setEndDate($endDate)
+    public function setEndDate(?DateTime $endDate): static
     {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getResourceId()
+    public function getResourceId(): ?string
     {
         return $this->resourceId;
     }
 
-    /**
-     * @param string $resourceId
-     *
-     * @return LineItem
-     */
-    public function setResourceId($resourceId)
+    public function setResourceId($resourceId): static
     {
         $this->resourceId = $resourceId;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $baseTool = $this->tool->getParent() ?: $this->tool;
 
         $data = [
             'scoreMaximum' => $this->evaluation->getMax(),
-            'label' => $this->evaluation->getName(),
+            'label' => $this->evaluation->getTitle(),
             'tag' => (string) $this->tag,
             'resourceLinkId' => (string) $baseTool->getId(),
             'resourceId' => (string) $this->resourceId,
         ];
 
         if ($this->startDate) {
-            $data['startDateTime'] = $this->startDate->format(\DateTime::ATOM);
+            $data['startDateTime'] = $this->startDate->format(DateTimeInterface::ATOM);
         }
 
         if ($this->endDate) {
-            $data['endDateTime'] = $this->endDate->format(\DateTime::ATOM);
+            $data['endDateTime'] = $this->endDate->format(DateTimeInterface::ATOM);
         }
 
         return $data;

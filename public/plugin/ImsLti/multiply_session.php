@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
@@ -24,8 +24,8 @@ try {
     $ltiToolId = $request->query->getInt('id');
     $sessionId = $request->query->getInt('session_id');
 
-    /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $ltiToolId);
+    /** @var ExternalTool|null $tool */
+    $tool = $em->find(ExternalTool::class, $ltiToolId);
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));
@@ -86,7 +86,6 @@ try {
         if ($courseIdsToDelete) {
             $toolLinks = [];
 
-            /** @var ImsLtiTool $childInCourse */
             foreach ($tool->getChildrenInCourses($courseIdsToDelete) as $childInCourse) {
                 $toolLinks[] = "ims_lti/start.php?id={$childInCourse->getId()}";
 

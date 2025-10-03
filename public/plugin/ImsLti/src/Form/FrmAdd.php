@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\ImsLti\Form;
 
 use Category;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Display;
 use FormValidator;
 use ImsLti;
@@ -17,10 +17,7 @@ use LtiNamesRoleProvisioningService;
  */
 class FrmAdd extends FormValidator
 {
-    /**
-     * @var ImsLtiTool|null
-     */
-    private $baseTool;
+    private ?ExternalTool $baseTool;
     /**
      * @var bool
      */
@@ -35,7 +32,7 @@ class FrmAdd extends FormValidator
     public function __construct(
         $name,
         $attributes = [],
-        ImsLtiTool $tool = null
+        ?ExternalTool $tool = null
     ) {
         parent::__construct($name, 'POST', '', '', $attributes, self::LAYOUT_HORIZONTAL, true);
 

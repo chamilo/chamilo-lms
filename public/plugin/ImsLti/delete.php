@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -11,8 +11,8 @@ api_protect_admin_script();
 
 $em = Database::getManager();
 
-/** @var ImsLtiTool $tool */
-$tool = isset($_GET['id']) ? $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', intval($_GET['id'])) : 0;
+/** @var ExternalTool|null $tool */
+$tool = isset($_GET['id']) ? $em->find(ExternalTool::class, intval($_GET['id'])) : 0;
 
 if (!$tool) {
     api_not_allowed(true);
@@ -22,7 +22,6 @@ $links = [];
 $links[] = 'ims_lti/start.php?id='.$tool->getId();
 
 if (!$tool->getParent()) {
-    /** @var ImsLtiTool $child */
     foreach ($tool->getChildren() as $child) {
         $links[] = "ims_lti/start.php?id=".$child->getId();
     }

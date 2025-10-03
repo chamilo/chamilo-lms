@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 /**
  * Class LtiContentItemType.
@@ -19,7 +19,7 @@ abstract class LtiContentItemType
         $this->validateItemData($itemData);
     }
 
-    abstract public function save(ImsLtiTool $baseTool, Course $course);
+    abstract public function save(ExternalTool $baseTool, Course $course);
 
     /**
      * @throws Exception

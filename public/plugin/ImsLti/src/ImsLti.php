@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -29,7 +29,7 @@ class ImsLti
         Session $session = null,
         $domain = '',
         $ltiVersion = self::V_1P1,
-        ImsLtiTool $tool
+        ExternalTool $tool
     ) {
         $isLti1p3 = $ltiVersion === self::V_1P3;
 
@@ -99,7 +99,7 @@ class ImsLti
         Session $session = null,
         $domain = '',
         $ltiVersion = self::V_1P1,
-        ImsLtiTool $tool
+        ExternalTool $tool
     ) {
         $substitutables = self::getSubstitutableVariables($user, $course, $session, $domain, $ltiVersion, $tool);
         $variables = array_keys($substitutables);
@@ -182,7 +182,7 @@ class ImsLti
      *
      * @return array
      */
-    public static function getAdvantageServices(ImsLtiTool $tool)
+    public static function getAdvantageServices(ExternalTool $tool)
     {
         return [
             new LtiAssignmentGradesService($tool),

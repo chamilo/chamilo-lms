@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Firebase\JWT\JWT;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -36,8 +36,8 @@ try {
     }
 
     $toolId = str_replace('tool:', '', $payload['https://purl.imsglobal.org/spec/lti-dl/claim/data']);
-    /** @var ImsLtiTool $ltiTool */
-    $ltiTool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
+    /** @var ExternalTool|null $ltiTool */
+    $ltiTool = $em->find(ExternalTool::class, $toolId);
 
     if (empty($ltiTool)) {
         throw new Exception('LTI tool not found');

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
-use Chamilo\PluginBundle\Entity\ImsLti\Token;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\Token;
 use Firebase\JWT\JWT;
 
 /**
@@ -10,10 +10,7 @@ use Firebase\JWT\JWT;
  */
 class LtiTokenRequest
 {
-    /**
-     * @var ImsLtiTool
-     */
-    private $tool;
+    private ExternalTool $tool;
 
     /**
      * Validate the request's client assertion. Return the right tool.
@@ -21,10 +18,8 @@ class LtiTokenRequest
      * @param string $clientAssertion
      *
      * @throws Exception
-     *
-     * @return ImsLtiTool
      */
-    public function validateClientAssertion($clientAssertion)
+    public function validateClientAssertion($clientAssertion): ExternalTool
     {
         $parts = explode('.', $clientAssertion);
 
@@ -40,7 +35,7 @@ class LtiTokenRequest
         }
 
         $this->tool = Database::getManager()
-            ->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')
+            ->getRepository(ExternalTool::class)
             ->findOneBy(['clientId' => $claims['sub']]);
 
         if (!$this->tool ||

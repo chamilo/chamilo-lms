@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\Platform;
+use Chamilo\LtiBundle\Entity\Platform;
 
 $cidReset = true;
 
@@ -17,7 +17,7 @@ if ($plugin->get('enabled') !== 'true') {
 
 /** @var Platform $platform */
 $platform = Database::getManager()
-    ->getRepository('ChamiloPluginBundle:ImsLti\Platform')
+    ->getRepository(Platform::class)
     ->findOneBy([]);
 
 $table = new HTML_Table(['class' => 'table table-striped']);

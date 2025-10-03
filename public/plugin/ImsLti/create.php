@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\ImsLti\Form\FrmAdd;
 
 $cidReset = true;
@@ -19,7 +20,7 @@ $form->build();
 if ($form->validate()) {
     $formValues = $form->exportValues();
 
-    $externalTool = new ImsLtiTool();
+    $externalTool = new ExternalTool();
     $externalTool
         ->setName($formValues['name'])
         ->setDescription(

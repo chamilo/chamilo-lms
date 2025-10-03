@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,8 +24,8 @@ try {
         throw new Exception(get_lang('Forbidden'));
     }
 
-    /** @var ImsLtiTool $tool */
-    $tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $request->query->get('id'));
+    /** @var ExternalTool|null $tool */
+    $tool = $em->find(ExternalTool::class, $request->query->get('id'));
 
     if (!$tool) {
         throw new Exception($plugin->get_lang('NoTool'));

@@ -3,7 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\GradebookResultLog;
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\LtiBundle\Entity\LineItem;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -36,10 +36,7 @@ class LtiScoresResource extends LtiAdvantageServiceResource
     const GRADING_FAILED = 'Failed';
     const GRADING_NOT_READY = 'NotReady';
 
-    /**
-     * @var LineItem|null
-     */
-    private $lineItem;
+    private ?LineItem $lineItem;
 
     /**
      * LtiScoresResource constructor.
@@ -56,7 +53,7 @@ class LtiScoresResource extends LtiAdvantageServiceResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
+        $this->lineItem = Database::getManager()->find(LineItem::class, (int) $lineItemId);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\LtiBundle\Entity\LineItem;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -20,10 +20,7 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
 {
     const URL_TEMPLATE = '/context_id/lineitems/line_item_id';
 
-    /**
-     * @var LineItem|null
-     */
-    private $lineItem;
+    private ?LineItem $lineItem;
 
     /**
      * LtiLineItemResource constructor.
@@ -40,7 +37,7 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
     {
         parent::__construct($toolId, $courseId);
 
-        $this->lineItem = Database::getManager()->find('ChamiloPluginBundle:ImsLti\LineItem', (int) $lineItemId);
+        $this->lineItem = Database::getManager()->find(LineItem::class, (int) $lineItemId);
     }
 
     /**

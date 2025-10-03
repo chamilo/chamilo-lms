@@ -1,7 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\PluginBundle\Form\FrmEdit;
 
 $cidReset = true;
@@ -19,8 +19,8 @@ $toolId = intval($_REQUEST['id']);
 $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 
-/** @var ImsLtiTool $tool */
-$tool = $em->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', $toolId);
+/** @var ExternalTool|null $tool */
+$tool = $em->find(ExternalTool::class, $toolId);
 
 if (!$tool) {
     Display::addFlash(
@@ -89,7 +89,6 @@ if ($form->validate()) {
     }
 
     if (null == $tool->getParent()) {
-        /** @var ImsLtiTool $child */
         foreach ($tool->getChildren() as $child) {
             $child
                 ->setLaunchUrl($tool->getLaunchUrl())

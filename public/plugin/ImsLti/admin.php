@@ -1,6 +1,7 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\LtiBundle\Entity\ExternalTool;
 use Doctrine\Common\Collections\Criteria;
 
 $cidReset = true;
@@ -22,7 +23,7 @@ $criteria = Criteria::create()
         Criteria::expr()->isNull('parent')
     );
 
-$tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->matching($criteria);
+$tools = $em->getRepository(ExternalTool::class)->matching($criteria);
 
 $categoriesGradeBook = [];
 foreach ($tools as $tool) {

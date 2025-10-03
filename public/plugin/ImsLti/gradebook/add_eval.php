@@ -6,7 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
+use Chamilo\LtiBundle\Entity\ExternalTool;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
@@ -23,7 +23,7 @@ $is_allowedToEdit = $is_courseAdmin;
 $em = Database::getManager();
 /** @var \Chamilo\CoreBundle\Entity\Course $course */
 $course = $em->find('ChamiloCoreBundle:Course', api_get_course_int_id());
-$ltiToolRepo = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool');
+$ltiToolRepo = $em->getRepository(ExternalTool::class);
 
 $categories = Category::load(null, null, $course->getCode(), null, null, $sessionId);
 
@@ -61,9 +61,9 @@ $slcLtiTools = $form->createElement('select', 'name', get_lang('Tool'));
 $form->insertElementBefore($slcLtiTools, 'hid_category_id');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
+/** @var array<int, ExternalTool> $ltiTools */
 $ltiTools = $ltiToolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 
-/** @var ImsLtiTool $ltiTool */
 foreach ($ltiTools as $ltiTool) {
     $slcLtiTools->addOption($ltiTool->getName(), $ltiTool->getId());
 }
@@ -71,7 +71,7 @@ foreach ($ltiTools as $ltiTool) {
 if ($form->validate()) {
     $values = $form->exportValues();
 
-    /** @var ImsLtiTool $ltiTool */
+    /** @var ExternalTool|null $ltiTool */
     $ltiTool = $ltiToolRepo->find($values['name']);
 
     if (!$ltiTool) {

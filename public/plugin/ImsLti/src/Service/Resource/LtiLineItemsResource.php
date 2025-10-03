@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\PluginBundle\Entity\ImsLti\LineItem;
+use Chamilo\LtiBundle\Entity\LineItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -96,10 +96,8 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws TransactionRequiredException
-     *
-     * @return LineItem
      */
-    public function createLineItem(array $data)
+    public function createLineItem(array $data): LineItem
     {
         $caterories = Category::load(null, null, $this->course->getCode());
         /** @var Category $gradebookCategory */

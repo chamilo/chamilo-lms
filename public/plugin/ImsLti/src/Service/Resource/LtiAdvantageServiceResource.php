@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool;
-use Chamilo\PluginBundle\Entity\ImsLti\Token;
+use Chamilo\LtiBundle\Entity\ExternalTool;
+use Chamilo\LtiBundle\Entity\Token;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
@@ -33,10 +33,8 @@ abstract class LtiAdvantageServiceResource
      * @var Course
      */
     protected $course;
-    /**
-     * @var ImsLtiTool
-     */
-    protected $tool;
+
+    protected ExternalTool $tool;
 
     /**
      * LtiAdvantageServiceResource constructor.
@@ -51,7 +49,7 @@ abstract class LtiAdvantageServiceResource
     public function __construct($toolId, $courseId)
     {
         $this->course = api_get_course_entity((int) $courseId);
-        $this->tool = Database::getManager()->find('ChamiloPluginBundle:ImsLti\ImsLtiTool', (int) $toolId);
+        $this->tool = Database::getManager()->find(ExternalTool::class, (int) $toolId);
     }
 
     /**
@@ -100,7 +98,7 @@ abstract class LtiAdvantageServiceResource
 
         /** @var Token $token */
         $token = Database::getManager()
-            ->getRepository('ChamiloPluginBundle:ImsLti\Token')
+            ->getRepository(Token::class)
             ->findOneBy(['hash' => $hash]);
 
         if (!$token) {

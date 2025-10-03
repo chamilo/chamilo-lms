@@ -58,9 +58,9 @@ class ImsLtiPlugin extends Plugin
     /**
      * Get the plugin directory name.
      */
-    public function get_name()
+    public function get_name(): string
     {
-        return 'ims_lti';
+        return 'ImsLti';
     }
 
     /**
@@ -618,7 +618,7 @@ class ImsLtiPlugin extends Plugin
         $text = $this->get_lang('ImsLtiDescription');
         $text .= sprintf(
             $this->get_lang('ManageToolButton'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php'
+            api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php'
         );
 
         return $text;
@@ -672,7 +672,7 @@ class ImsLtiPlugin extends Plugin
 
     private function removeTools()
     {
-        $sql = "DELETE FROM c_tool WHERE link LIKE 'ims_lti/start.php%' AND category = 'plugin'";
+        $sql = "DELETE FROM c_tool WHERE link LIKE 'ImsLti/start.php%' AND category = 'plugin'";
         Database::query($sql);
     }
 
@@ -683,7 +683,7 @@ class ImsLtiPlugin extends Plugin
     {
         $button = Display::toolbarButton(
             $this->get_lang('ConfigureExternalTool'),
-            api_get_path(WEB_PLUGIN_PATH).'ims_lti/configure.php?'.api_get_cidreq(),
+            api_get_path(WEB_PLUGIN_PATH).'ImsLti/configure.php?'.api_get_cidreq(),
             'cog',
             'primary'
         );
@@ -702,7 +702,7 @@ class ImsLtiPlugin extends Plugin
      */
     private static function generateToolLink(ExternalTool $tool)
     {
-        return 'ims_lti/start.php?id='.$tool->getId();
+        return 'ImsLti/start.php?id='.$tool->getId();
     }
 
     /**

@@ -31,7 +31,7 @@ $table->updateCellAttributes(1, 1, ['style' => 'font-family: monospace; font-siz
 $table->updateCellAttributes(1, 2, ['style' => 'font-family: monospace; font-size: 10px;']);
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php', 'name' => $plugin->get_title()];
 
 $template = new Template($plugin->get_lang('PlatformKeys'));
 $template->assign('header', $plugin->get_lang('PlatformKeys'));

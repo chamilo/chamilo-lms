@@ -19,11 +19,11 @@ if (!$tool) {
 }
 
 $links = [];
-$links[] = 'ims_lti/start.php?id='.$tool->getId();
+$links[] = 'ImsLti/start.php?id='.$tool->getId();
 
 if (!$tool->getParent()) {
     foreach ($tool->getChildren() as $child) {
-        $links[] = "ims_lti/start.php?id=".$child->getId();
+        $links[] = "ImsLti/start.php?id=".$child->getId();
     }
 }
 
@@ -38,5 +38,5 @@ Display::addFlash(
     Display::return_message($plugin->get_lang('ToolDeleted'), 'success')
 );
 
-header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
+header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ImsLti/admin.php');
 exit;

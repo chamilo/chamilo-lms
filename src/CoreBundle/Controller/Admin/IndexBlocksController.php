@@ -889,12 +889,16 @@ class IndexBlocksController extends BaseController
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration();
 
+            if ($accessUrl->getId() !== $pluginInUrl->getUrl()?->getId()) {
+                continue;
+            }
+
             if (!in_array('menu_administrator', $configuration['regions'] ?? [])) {
                 continue;
             }
 
             $items[] = [
-                'class' => 'item-plugin-'.$pluginInfo['title'],
+                'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
                 'url' => $objPlugin->getAdminUrl(),
                 'label' => $pluginInfo['title'],
             ];

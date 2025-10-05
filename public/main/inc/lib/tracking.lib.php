@@ -2395,12 +2395,12 @@ class Tracking
             }
 
             // Compose a filter based on optional session id given
-            $condition_session = '';
+            $sessionCondition = '';
             $session = null;
-            if (isset($sessionId)) {
-                $session = api_get_session_entity($course_info['real_id']);
+            if ($sessionId !== null) {
+                $session = api_get_session_entity($sessionId);
+                $sessionCondition = api_get_session_condition($sessionId);
             }
-            $sessionCondition = api_get_session_condition($sessionId);
 
             $condition_active = '';
             if (1 == $active_filter) {
@@ -2418,7 +2418,7 @@ class Tracking
 
             $quizRepo = Container::getQuizRepository();
             $course = api_get_course_entity($course_info['real_id']);
-            $qb = $quizRepo->getResourcesByCourse($course, $session);
+            $qb = $quizRepo->getResourcesByCourse($course, $session, null, null, false);
             $qb
                 ->select('count(resource)')
                 ->setMaxResults(1);

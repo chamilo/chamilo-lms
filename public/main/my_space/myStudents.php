@@ -1962,7 +1962,7 @@ if (empty($details)) {
                     0
                 );
 
-                $lp_name = '-';
+                $lp_name = '';
 
                 $myStudentsQuizTrackingEvent = new MyStudentsQuizTrackingEvent(
                     ['exercise_id' => $exercise_id, 'student_id' => $studentId],

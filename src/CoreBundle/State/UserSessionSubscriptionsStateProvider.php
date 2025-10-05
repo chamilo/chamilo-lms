@@ -35,7 +35,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
     /**
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): iterable
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $user = $this->userRepository->find($uriVariables['id']);
 

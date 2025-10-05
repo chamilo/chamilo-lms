@@ -58,6 +58,7 @@ use Chamilo\CourseBundle\Repository\CCalendarEventAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CourseBundle\Repository\CDropboxFileRepository;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CForumCategoryRepository;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
@@ -480,9 +481,9 @@ class Container
         return self::$container->get(CNotebookRepository::class);
     }
 
-    public static function getDropboxFileRepository(): CDropboxFile
+    public static function getDropboxFileRepository(): CDropboxFileRepository
     {
-        return self::$container->get(CDropboxFile::class);
+        return self::$container->get(CDropboxFileRepository::class);
     }
 
     public static function getPersonalFileRepository(): PersonalFileRepository

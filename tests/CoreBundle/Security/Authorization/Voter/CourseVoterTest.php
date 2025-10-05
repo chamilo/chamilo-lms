@@ -11,25 +11,34 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use Symfony\Component\Security\Core\Security;
 
 class CourseVoterTest extends WebTestCase
 {
     use ChamiloTestTrait;
 
     // @dataProvider provideVoteTests not working
+
+    /**
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
     public function testVote(): void
     {
         $client = static::createClient();
         $tests = $this->provideVoteTests();
         $entity_manager = $this->getContainer()->get(EntityManagerInterface::class);
+        $translator = $this->getContainer()->get('translator');
         $request_stack = $this->getMockedRequestStack([
             'query' => ['sid' => 1],
         ]);
         $security = $this->getContainer()->get(Security::class);
-        $voter = new CourseVoter($security, $request_stack, $entity_manager);
+        $voter = new CourseVoter($security, $translator, $request_stack, $entity_manager);
         foreach ($tests as $message => $test) {
             [$expected, $user, $course] = $test;
             $client->loginUser($user);
@@ -38,7 +47,11 @@ class CourseVoterTest extends WebTestCase
         }
     }
 
-    public function provideVoteTests()
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function provideVoteTests(): Generator
     {
         $em = $this->getEntityManager();
         $admin = $this->getAdmin();

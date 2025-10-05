@@ -16,7 +16,9 @@ use Chamilo\CourseBundle\Entity\CBlogTask;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * Assigns current authenticated user as author on POST if none provided.
+ * Assigns the current authenticated user as author on POST if none provided.
+ *
+ * @implements ProcessorInterface<CBlogPost|CBlogComment|CBlogTask, CBlogPost|CBlogComment|CBlogTask>
  */
 final readonly class CBlogAssignAuthorProcessor implements ProcessorInterface
 {

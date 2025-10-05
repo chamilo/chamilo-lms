@@ -16,12 +16,15 @@ use Chamilo\CourseBundle\Repository\CLpRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
-final class LpCollectionStateProvider implements ProviderInterface
+/**
+ * @template-implements ProviderInterface<CLp>
+ */
+final readonly class LpCollectionStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly CLpRepository $lpRepo,
-        private readonly Security $security
+        private EntityManagerInterface $em,
+        private CLpRepository $lpRepo,
+        private Security $security
     ) {}
 
     public function supports(Operation $op, array $uriVariables = [], array $ctx = []): bool

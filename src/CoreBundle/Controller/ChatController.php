@@ -229,7 +229,7 @@ class ChatController extends AbstractResourceController implements CourseControl
         }
 
         if (\is_string($ret)) {
-            return JsonResponse::fromJsonString($ret);
+            return JsonResponse::fromJsonString((string) $ret);
         }
 
         return new JsonResponse($ret ?? []);

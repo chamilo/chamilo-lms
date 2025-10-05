@@ -521,8 +521,8 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
     public function getChildrenInCourses(array $coursesId): Collection
     {
         return $this->resourceNode->getChildren()->filter(
-            fn(ResourceNode $child) => $child->getResourceLinks()->exists(
-                fn(ResourceLink $link) => ($course = $link->getCourse()) && in_array($course->getId(), $coursesId)
+            fn (ResourceNode $child) => $child->getResourceLinks()->exists(
+                fn (ResourceLink $link) => ($course = $link->getCourse()) && \in_array($course->getId(), $coursesId)
             )
         );
     }

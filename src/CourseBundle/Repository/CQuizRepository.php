@@ -32,7 +32,7 @@ final class CQuizRepository extends ResourceRepository implements ResourceWithLi
         bool $onlyPublished = true,
         ?int $categoryId = null
     ): QueryBuilder {
-        $qb = $this->getResourcesByCourse($course, $session);
+        $qb = $this->getResourcesByCourse($course, $session, null, null, $onlyPublished);
 
         if ($onlyPublished) {
             $this->addDateFilterQueryBuilder(new DateTime(), $qb);

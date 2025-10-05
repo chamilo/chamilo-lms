@@ -23,12 +23,12 @@ class Version20251002110001 extends AbstractMigrationChamilo
     {
         $lineItem = $schema->getTable('lti_lineitem');
 
-        if ($lineItem->hasIndex('IDX_5C76B75D8F7B22CC')) {
-            $this->addSql("DROP INDEX IDX_5C76B75D8F7B22CC ON lti_lineitem");
-        }
-
         if ($lineItem->hasForeignKey('FK_5C76B75D8F7B22CC')) {
             $this->addSql("ALTER TABLE lti_lineitem DROP FOREIGN KEY FK_5C76B75D8F7B22CC");
+        }
+
+        if ($lineItem->hasIndex('IDX_5C76B75D8F7B22CC')) {
+            $this->addSql("DROP INDEX IDX_5C76B75D8F7B22CC ON lti_lineitem");
         }
 
         if ($lineItem->hasColumn('tool_id')) {
@@ -39,12 +39,12 @@ class Version20251002110001 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE lti_lineitem ADD CONSTRAINT FK_5C76B75D8F7B22CC FOREIGN KEY (tool_id) REFERENCES lti_external_tool (id) ON DELETE CASCADE");
         $this->addSql("CREATE INDEX IDX_5C76B75D8F7B22CC ON lti_lineitem (tool_id)");
 
-        if ($lineItem->hasIndex('UNIQ_5C76B75D1323A575')) {
-            $this->addSql("DROP INDEX UNIQ_5C76B75D1323A575 ON lti_lineitem");
-        }
-
         if ($lineItem->hasForeignKey('FK_5C76B75D1323A575')) {
             $this->addSql("ALTER TABLE lti_lineitem DROP FOREIGN KEY FK_5C76B75D1323A575");
+        }
+
+        if ($lineItem->hasIndex('UNIQ_5C76B75D1323A575')) {
+            $this->addSql("DROP INDEX UNIQ_5C76B75D1323A575 ON lti_lineitem");
         }
 
         if ($lineItem->hasColumn('evaluation')) {
@@ -56,37 +56,37 @@ class Version20251002110001 extends AbstractMigrationChamilo
         $this->addSql("CREATE UNIQUE INDEX UNIQ_5C76B75D1323A575 ON lti_lineitem (evaluation)");
 
         if ($lineItem->hasColumn('resource_id')) {
-            $this->addSql("ALTER TABLE DROP COLUMN resource_id");
+            $this->addSql("ALTER TABLE lti_lineitem DROP COLUMN resource_id");
         }
 
         $this->addSql("ALTER TABLE lti_lineitem ADD resource_id VARCHAR(255) DEFAULT NULL");
 
         if ($lineItem->hasColumn('tag')) {
-            $this->addSql("ALTER TABLE DROP COLUMN tag");
+            $this->addSql("ALTER TABLE lti_lineitem DROP COLUMN tag");
         }
 
         $this->addSql("ALTER TABLE lti_lineitem ADD tag VARCHAR(255) DEFAULT NULL");
 
         if ($lineItem->hasColumn('start_date')) {
-            $this->addSql("ALTER TABLE DROP COLUMN start_date");
+            $this->addSql("ALTER TABLE lti_lineitem DROP COLUMN start_date");
         }
 
         $this->addSql("ALTER TABLE lti_lineitem ADD start_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)'");
 
         if ($lineItem->hasColumn('end_date')) {
-            $this->addSql("ALTER TABLE DROP COLUMN end_date");
+            $this->addSql("ALTER TABLE lti_lineitem DROP COLUMN end_date");
         }
 
         $this->addSql("ALTER TABLE lti_lineitem ADD end_date DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime)'");
 
         $externalTool = $schema->getTable('lti_external_tool');
 
-        if ($externalTool->hasIndex('UNIQ_DB0E04E41BAD783F')) {
-            $this->addSql("DROP INDEX UNIQ_DB0E04E41BAD783F ON lti_external_tool");
-        }
-
         if ($externalTool->hasForeignKey('FK_DB0E04E41BAD783F')) {
             $this->addSql("ALTER TABLE lti_external_tool DROP FOREIGN KEY FK_DB0E04E41BAD783F");
+        }
+
+        if ($externalTool->hasIndex('UNIQ_DB0E04E41BAD783F')) {
+            $this->addSql("DROP INDEX UNIQ_DB0E04E41BAD783F ON lti_external_tool");
         }
 
         if ($externalTool->hasColumn('resource_node_id')) {
@@ -97,12 +97,12 @@ class Version20251002110001 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE lti_external_tool ADD CONSTRAINT FK_DB0E04E41BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE');
         $this->addSql("CREATE UNIQUE INDEX UNIQ_DB0E04E41BAD783F ON lti_external_tool (resource_node_id)");
 
-        if ($externalTool->hasIndex('IDX_DB0E04E482F80D8B')) {
-            $this->addSql("DROP INDEX IDX_DB0E04E482F80D8B ON lti_external_tool");
-        }
-
         if ($externalTool->hasForeignKey('FK_DB0E04E482F80D8B')) {
             $this->addSql("ALTER TABLE lti_external_tool DROP FOREIGN KEY FK_DB0E04E482F80D8B");
+        }
+
+        if ($externalTool->hasIndex('IDX_DB0E04E482F80D8B')) {
+            $this->addSql("DROP INDEX IDX_DB0E04E482F80D8B ON lti_external_tool");
         }
 
         if ($externalTool->hasColumn('gradebook_eval_id')) {
@@ -217,12 +217,12 @@ class Version20251002110001 extends AbstractMigrationChamilo
 
         $token = $schema->getTable('lti_token');
 
-        if ($token->hasIndex('IDX_EA71C468F7B22CC')) {
-            $this->addSql("DROP INDEX IDX_EA71C468F7B22CC ON lti_token");
-        }
-
         if ($token->hasForeignKey('FK_EA71C468F7B22CC')) {
             $this->addSql("ALTER TABLE lti_token DROP FOREIGN KEY FK_EA71C468F7B22CC");
+        }
+
+        if ($token->hasIndex('IDX_EA71C468F7B22CC')) {
+            $this->addSql("DROP INDEX IDX_EA71C468F7B22CC ON lti_token");
         }
 
         if ($token->hasColumn('tool_id')) {
@@ -259,19 +259,19 @@ class Version20251002110001 extends AbstractMigrationChamilo
 
         $platform = $schema->getTable('lti_platform');
 
-        if ($token->hasColumn('public_key')) {
+        if ($platform->hasColumn('public_key')) {
             $this->addSql("ALTER TABLE lti_platform DROP COLUMN public_key");
         }
 
         $this->addSql("ALTER TABLE lti_platform ADD public_key LONGTEXT NOT NULL");
 
-        if ($token->hasColumn('kid')) {
+        if ($platform->hasColumn('kid')) {
             $this->addSql("ALTER TABLE lti_platform DROP COLUMN kid");
         }
 
         $this->addSql("ALTER TABLE lti_platform ADD kid VARCHAR(255) NOT NULL");
 
-        if ($token->hasColumn('private_key')) {
+        if ($platform->hasColumn('private_key')) {
             $this->addSql("ALTER TABLE lti_platform DROP COLUMN private_key");
         }
 

@@ -11,26 +11,24 @@
         </h4>
       </div>
 
-      <div class="space-y-4">
-        <p
-          v-if="props.description"
-          class="text-body-4"
-          v-text="props.description"
-        />
+      <p
+        v-if="props.description"
+        class="text-body-4"
+        v-text="props.description"
+      />
 
-        <form
-          v-if="props.searchUrl"
-          :action="props.searchUrl"
-          method="get"
-        >
-          <BaseInputGroup
-            :button-label="t('Search')"
-            :input-placeholder="t('Keyword')"
-            button-icon="search"
-            input-name="keyword"
-          />
-        </form>
-      </div>
+      <form
+        v-if="props.searchUrl"
+        :action="props.searchUrl"
+        method="get"
+      >
+        <BaseInputGroup
+          :button-label="t('Search')"
+          :input-placeholder="t('Keyword')"
+          button-icon="search"
+          input-name="keyword"
+        />
+      </form>
 
       <div class="p-menu p-component p-ripple-disabled">
         <ul
@@ -81,6 +79,7 @@ const { t } = useI18n()
 
 const modelExtraContent = defineModel("extraContent", {
   type: Object,
+  default: null,
 })
 
 const props = defineProps({

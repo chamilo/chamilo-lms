@@ -26,7 +26,7 @@ const securityStore = useSecurityStore()
 
 const { t, locale } = useI18n()
 
-const newExtraContent = ref(modelExtraContent.value.content)
+const newExtraContent = ref(modelExtraContent.value?.content)
 
 async function saveExtraContent() {
   if (modelExtraContent.value["@id"]) {
@@ -81,7 +81,7 @@ async function saveExtraContent() {
         align="right"
       />
       <div
-        v-if="modelExtraContent.content"
+        v-if="modelExtraContent?.content"
         class="text-body-2"
         v-html="modelExtraContent.content"
       />
@@ -95,7 +95,7 @@ async function saveExtraContent() {
     </template>
   </Inplace>
   <div
-    v-else-if="modelExtraContent.content"
+    v-else-if="modelExtraContent?.content"
     class="text-body-2"
     v-html="modelExtraContent.content"
   />

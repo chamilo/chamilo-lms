@@ -82,6 +82,14 @@
     />
 
     <AdminBlock
+      v-if="blockPlugins.items.length > 0"
+      :id="blockPlugins.id"
+      :items="blockPlugins.items"
+      :title="t('Plugins')"
+      icon="plugin"
+    />
+
+    <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
       v-model:extra-content="blockSettings.extraContent"
@@ -272,6 +280,7 @@ const {
   loadBlocks,
   blockNewsStatusEl,
   blockSupportStatusEl,
+  blockPlugins,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

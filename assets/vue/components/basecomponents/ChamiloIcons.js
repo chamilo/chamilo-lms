@@ -87,6 +87,7 @@ export const chamiloIconToClass = {
   "package": "",
   "pencil-off": "",
   "play-box-outline": "",
+  "plugin": "mdi mdi-puzzle",
   "plus": "mdi mdi-plus",
   "record-add": "mdi mdi-microphone-plus",
   "record-generic": "mdi mdi-microphone",

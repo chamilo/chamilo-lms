@@ -68,16 +68,16 @@ const progressTextClass = computed(() => {
           </button>
         </h3>
 
-        <div v-if="lp.prerequisiteName" class="mt-1 text-caption text-support-5 flex items-center gap-1.5">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          <span class="font-medium">{{ t('Prerequisites') }}</span>
-          <span class="text-support-5">{{ lp.prerequisiteName }}</span>
-        </div>
+        
       </div>
-
-      <p class="col-span-2 mt-3 text-caption text-gray-50">
+      <div v-if="lp.prerequisiteName" class="mt-1 text-caption text-support-5 flex items-center gap-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span class="font-medium">{{ t('Prerequisites') }}</span>
+        <span class="text-support-5">{{ lp.prerequisiteName }}</span>
+      </div>
+      <p v-if="dateText" class="col-span-2 mt-3 text-caption text-gray-50">
         {{ dateText }}
       </p>
     </div>

@@ -17,7 +17,7 @@ import "select2/dist/js/select2.full.min"
 import "select2/dist/css/select2.min.css"
 import "moment"
 //require('flatpickr');
-import "jquery-ui-dist/jquery-ui.js"
+import "jquery-ui/dist/jquery-ui"
 import "./main"
 
 // Date time settings.

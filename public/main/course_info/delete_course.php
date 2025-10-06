@@ -27,13 +27,20 @@ $tool_name = get_lang('Completely delete this course');
 $type_info_message = 'warning';
 if (isset($_GET['delete']) && 'yes' === $_GET['delete'] && $_GET['course_code'] && !empty($_GET['course_code'])) {
     if ($current_course_code == $_GET['course_code']) {
-        CourseManager::delete_course($_course['sysCode']);
-        // DELETE CONFIRMATION MESSAGE
-        Session::erase('_cid');
-        Session::erase('_real_cid');
-        $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
-        $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
-        $message .= get_lang('has been deleted');
+        if (!CourseManager::delete_course($_course['sysCode'])) {
+            // DELETE ERROR MESSAGE
+            $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
+            $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
+            $message .= '<p>'.get_lang('An error occurred while trying to delete the course').'</p>';
+            $type_info_message = 'error';
+        } else {
+            // DELETE CONFIRMATION MESSAGE
+            Session::erase('_cid');
+            Session::erase('_real_cid');
+            $message = '<h3>'.get_lang('Course title').' : '.$current_course_name.'</h3>';
+            $message .= '<h3>'.get_lang('Course code').' : '.$current_course_code.'</h3>';
+            $message .= get_lang('has been deleted');
+        }
         $message .= '<br /><br /><a href="../../index.php">'.get_lang('Back to Home Page.').'</a>';
     } else {
         /* message if code course is incorrect */

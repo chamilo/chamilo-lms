@@ -1983,8 +1983,14 @@ if (empty($details)) {
                         2,
                         1
                     );
-                    $score_percentage = $scores_lp[0];
-                    $lp_name = $scores_lp[1];
+
+                    if (is_array($scores_lp) && array_key_exists(0, $scores_lp) && array_key_exists(1, $scores_lp)) {
+                        $score_percentage = $scores_lp[0];
+                        $lp_name = $scores_lp[1];
+                    } else {
+                        $score_percentage = $score_percentage ?: 0;
+                        $lp_name = $lp_name ?: '';
+                    }
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('No learning path');
 

@@ -12,6 +12,7 @@ const props = defineProps({
   canExportPdf: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
+  buildDates: { type: Function, required: true },
 })
 const emit = defineEmits([
   "open","edit","report","settings", "build",
@@ -19,7 +20,7 @@ const emit = defineEmits([
 ])
 
 const dateText = computed(() => {
-  const v = props.lp?.dateText ?? ""
+  const v = props.buildDates ? props.buildDates(props.lp) : ""
   return typeof v === "string" ? v.trim() : ""
 })
 

@@ -19,6 +19,7 @@ const props = defineProps({
   canAutoLaunch: { type: Boolean, default: false },
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
+  buildDates: { type: Function, required: false },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
@@ -187,6 +188,7 @@ function onChangeCat() {
             :canExportScorm="canExportScorm"
             :canExportPdf="canExportPdf"
             :canAutoLaunch="canAutoLaunch"
+            :buildDates="buildDates"
           @toggle-auto-launch="$emit('toggle-auto-launch', element)"
           @open="$emit('open', element)"
           @edit="$emit('edit', element)"

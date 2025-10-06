@@ -163,6 +163,7 @@
         :canExportScorm="canExportScorm"
         :canExportPdf="canExportPdf"
         :canAutoLaunch="canAutoLaunch"
+        :buildDates="buildDates"
         @toggle-auto-launch="onToggleAutoLaunch"
         @open="openLegacy"
         @edit="goEdit"

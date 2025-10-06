@@ -5578,245 +5578,6 @@ function api_protect_global_admin_script()
 }
 
 /**
- * Check browser support for specific file types or features
- * This function checks if the user's browser supports a file format or given
- * feature, or returns the current browser and major version when
- * $format=check_browser. Only a limited number of formats and features are
- * checked by this method. Make sure you check its definition first.
- *
- * @param string $format Can be a file format (extension like svg, webm, ...) or a feature (like autocapitalize, ...)
- *
- * @deprecated
- *
- * @return bool or return text array if $format=check_browser
- *
- * @author Juan Carlos Raña Trabado
- */
-function api_browser_support($format = '')
-{
-    return true;
-
-    $browser = new Browser();
-    $current_browser = $browser->getBrowser();
-    $a_versiontemp = explode('.', $browser->getVersion());
-    $current_majorver = $a_versiontemp[0];
-
-    static $result;
-
-    if (isset($result[$format])) {
-        return $result[$format];
-    }
-
-    // Native svg support
-    if ('svg' == $format) {
-        if (('Internet Explorer' == $current_browser && $current_majorver >= 9) ||
-            ('Firefox' == $current_browser && $current_majorver > 1) ||
-            ('Safari' == $current_browser && $current_majorver >= 4) ||
-            ('Chrome' == $current_browser && $current_majorver >= 1) ||
-            ('Opera' == $current_browser && $current_majorver >= 9)
-        ) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('pdf' == $format) {
-        // native pdf support
-        if ('Chrome' == $current_browser && $current_majorver >= 6) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('tif' == $format || 'tiff' == $format) {
-        //native tif support
-        if ('Safari' == $current_browser && $current_majorver >= 5) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('ogg' == $format || 'ogx' == $format || 'ogv' == $format || 'oga' == $format) {
-        //native ogg, ogv,oga support
-        if (('Firefox' == $current_browser && $current_majorver >= 3) ||
-            ('Chrome' == $current_browser && $current_majorver >= 3) ||
-            ('Opera' == $current_browser && $current_majorver >= 9)) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('mpg' == $format || 'mpeg' == $format) {
-        //native mpg support
-        if (('Safari' == $current_browser && $current_majorver >= 5)) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('mp4' == $format) {
-        //native mp4 support (TODO: Android, iPhone)
-        if ('Android' == $current_browser || 'iPhone' == $current_browser) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('mov' == $format) {
-        //native mov support( TODO:check iPhone)
-        if ('Safari' == $current_browser && $current_majorver >= 5 || 'iPhone' == $current_browser) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('avi' == $format) {
-        //native avi support
-        if ('Safari' == $current_browser && $current_majorver >= 5) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('wmv' == $format) {
-        //native wmv support
-        if ('Firefox' == $current_browser && $current_majorver >= 4) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('webm' == $format) {
-        //native webm support (TODO:check IE9, Chrome9, Android)
-        if (('Firefox' == $current_browser && $current_majorver >= 4) ||
-            ('Opera' == $current_browser && $current_majorver >= 9) ||
-            ('Internet Explorer' == $current_browser && $current_majorver >= 9) ||
-            ('Chrome' == $current_browser && $current_majorver >= 9) ||
-            'Android' == $current_browser
-        ) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('wav' == $format) {
-        //native wav support (only some codecs !)
-        if (('Firefox' == $current_browser && $current_majorver >= 4) ||
-            ('Safari' == $current_browser && $current_majorver >= 5) ||
-            ('Opera' == $current_browser && $current_majorver >= 9) ||
-            ('Internet Explorer' == $current_browser && $current_majorver >= 9) ||
-            ('Chrome' == $current_browser && $current_majorver > 9) ||
-            'Android' == $current_browser ||
-            'iPhone' == $current_browser
-        ) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('mid' == $format || 'kar' == $format) {
-        //native midi support (TODO:check Android)
-        if ('Opera' == $current_browser && $current_majorver >= 9 || 'Android' == $current_browser) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('wma' == $format) {
-        //native wma support
-        if ('Firefox' == $current_browser && $current_majorver >= 4) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('au' == $format) {
-        //native au support
-        if ('Safari' == $current_browser && $current_majorver >= 5) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('mp3' == $format) {
-        //native mp3 support (TODO:check Android, iPhone)
-        if (('Safari' == $current_browser && $current_majorver >= 5) ||
-            ('Chrome' == $current_browser && $current_majorver >= 6) ||
-            ('Internet Explorer' == $current_browser && $current_majorver >= 9) ||
-            'Android' == $current_browser ||
-            'iPhone' == $current_browser ||
-            'Firefox' == $current_browser
-        ) {
-            $result[$format] = true;
-
-            return true;
-        } else {
-            $result[$format] = false;
-
-            return false;
-        }
-    } elseif ('autocapitalize' == $format) {
-        // Help avoiding showing the autocapitalize option if the browser doesn't
-        // support it: this attribute is against the HTML5 standard
-        if ('Safari' == $current_browser || 'iPhone' == $current_browser) {
-            return true;
-        } else {
-            return false;
-        }
-    } elseif ("check_browser" == $format) {
-        $array_check_browser = [$current_browser, $current_majorver];
-
-        return $array_check_browser;
-    } else {
-        $result[$format] = false;
-
-        return false;
-    }
-}
-
-/**
  * This function checks if exist path and file browscap.ini
  * In order for this to work, your browscap configuration setting in php.ini
  * must point to the correct location of the browscap.ini file on your system
@@ -5850,12 +5611,6 @@ function api_get_js($file)
 function api_get_build_js($file)
 {
     return '<script src="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'"></script>'."\n";
-}
-
-function api_get_build_css($file, $media = 'screen')
-{
-    return '<link
-        href="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";
 }
 
 /**
@@ -5910,14 +5665,6 @@ function api_get_bootstrap_and_font_awesome($returnOnlyPath = false, $returnFile
 }
 
 /**
- * Returns the js header to include the jquery library.
- */
-function api_get_jquery_js()
-{
-    return api_get_asset('jquery/jquery.min.js');
-}
-
-/**
  * Returns the jquery path.
  *
  * @return string
@@ -5943,21 +5690,11 @@ function api_get_jquery_ui_css_web_path()
     return api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
 }
 
-/**
- * Returns the jquery-ui library js headers.
- *
- * @return string html tags
- */
-function api_get_jquery_ui_js()
-{
-    $libraries = [];
-
-    return api_get_jquery_libraries_js($libraries);
-}
-
 function api_get_jqgrid_js()
 {
-    return api_get_build_css('legacy_free-jqgrid.css').PHP_EOL
+    return '<link
+        href="'.api_get_path(WEB_PUBLIC_PATH).'build/legacy_free-jqgrid.css" rel="stylesheet" media="screen" type="text/css" />'
+        .PHP_EOL
         .api_get_build_js('legacy_free-jqgrid.js');
 }
 
@@ -5974,7 +5711,7 @@ function api_get_jquery_libraries_js($libraries)
     $js = '';
 
     //Document multiple upload funcionality
-    if (in_array('jquery-uploadzs', $libraries)) {
+    if (in_array('jquery-upload', $libraries)) {
         $js .= api_get_asset('blueimp-load-image/js/load-image.all.min.js');
         $js .= api_get_asset('blueimp-canvas-to-blob/js/canvas-to-blob.min.js');
         $js .= api_get_asset('jquery-file-upload/js/jquery.iframe-transport.js');

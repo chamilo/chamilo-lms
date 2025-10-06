@@ -695,7 +695,6 @@ class Template
             $extraHeaders = '';
             //$extraHeaders = '<script>var _p = '.json_encode($this->getWebPaths(), JSON_PRETTY_PRINT).'</script>';
             //Adding jquery ui by default
-            $extraHeaders .= api_get_jquery_ui_js();
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as &$this_html_head) {
                     $extraHeaders .= $this_html_head."\n";
@@ -846,15 +845,9 @@ class Template
             'autofocus' => 'autofocus',
             'icon' => 'user fa-fw',
             'placeholder' => get_lang('Username'),
+            'autocapitalize' => 'none',
         ];
 
-        // Avoid showing the autocapitalize option if the browser doesn't
-        // support it: this attribute is against the HTML5 standard
-        /*$browserAutoCapitalize = false;
-        if (api_browser_support('autocapitalize')) {
-            $browserAutoCapitalize = false;
-            $params['autocapitalize'] = 'none';
-        }*/
         $form->addText(
             '_username',
             get_lang('Username'),

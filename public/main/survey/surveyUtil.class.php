@@ -3710,7 +3710,7 @@ class SurveyUtil
     public static function drawChart($chartData, $hasSerie = false, $chartContainerId = 'chartContainer', $loadLibs = true)
     {
         $htmlChart = '';
-        //if (api_browser_support('svg')) {
+
         if (true) {
             $serie = [];
             $order = [];

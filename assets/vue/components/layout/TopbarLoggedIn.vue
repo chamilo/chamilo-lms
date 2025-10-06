@@ -83,6 +83,18 @@ const notification = useNotification()
 const cidReqStore = useCidReqStore()
 const securityStore = useSecurityStore()
 
+const showPendingSurveys = computed(() => {
+  return platformConfigStore.getSetting("survey.show_pending_survey_in_menu") === "true"
+})
+
+const pendingSurveysUrl = computed(() => {
+  try {
+    const r = router.resolve({ name: "SurveyPending" })
+    if (r?.href) return r.href
+  } catch {}
+  return "/main/survey/pending.php"
+})
+
 const isAnonymous = computed(() => {
   const u = props.currentUser || securityStore.user || {}
   const roles = Array.isArray(u.roles) ? u.roles : []
@@ -120,6 +132,13 @@ const userSubmenuItems = computed(() => {
       ],
     },
   ]
+
+  if (showPendingSurveys.value) {
+    items[0].items.push({
+      label: t("Pending surveys"),
+      url: pendingSurveysUrl.value,
+    })
+  }
 
   const tabs = platformConfigStore.getSetting("display.show_tabs") || ""
   if (tabs.indexOf("topbar_certificate") > -1) {

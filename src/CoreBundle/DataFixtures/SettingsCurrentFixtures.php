@@ -3441,6 +3441,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'survey' => [
                 [
+                    'name' => 'show_pending_survey_in_menu',
+                    'title' => 'Show "Pending surveys" in menu',
+                    'comment' => 'Display a menu item that lets users access their pending surveys.',
+                ],
+                [
                     'name' => 'hide_survey_edition',
                     'title' => 'Prevent survey edition',
                     'comment' => 'Prevent editing surveys for all surveys listed here (by code). Use * to prevent edition of all surveys.',

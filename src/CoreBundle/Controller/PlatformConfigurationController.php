@@ -162,6 +162,7 @@ class PlatformConfigurationController extends AbstractController
                 'display.table_row_list',
                 'social.allow_social_tool',
                 'chat.allow_global_chat',
+                'survey.show_pending_survey_in_menu',
             ];
 
             $user = $this->userHelper->getCurrent();

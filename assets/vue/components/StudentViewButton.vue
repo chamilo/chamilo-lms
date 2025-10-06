@@ -6,12 +6,13 @@
     :on-label="t('Switch to teacher view')"
     off-icon="eye-off"
     on-icon="eye-on"
+    :onlyIcon="isOnlyIcon"
   />
 </template>
 
 <script setup>
 import BaseToggleButton from "./basecomponents/BaseToggleButton.vue"
-import { computed } from "vue"
+import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import { useI18n } from "vue-i18n"
 import { usePlatformConfig } from "../store/platformConfig"
 import { useCidReqStore } from "../store/cidReq"
@@ -54,4 +55,19 @@ const showButton = computed(() =>
   (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
   platformConfigStore.getSetting("course.student_view_enabled") === "true"
 )
+
+const windowSize = ref(window.innerWidth)
+
+function updateSize() {
+  windowSize.value = window.innerWidth
+}
+
+onMounted(() => {
+  window.addEventListener("resize", updateSize)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateSize)
+})
+
+const isOnlyIcon = computed(() => windowSize.value <= 768)
 </script>

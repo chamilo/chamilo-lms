@@ -1,7 +1,7 @@
 /* For licensing terms, see /license.txt */
 
 import $ from "jquery"
-import "jquery-ui-dist/jquery-ui.js"
+import "jquery-ui/dist/jquery-ui"
 
 window.jQuery = $
 window.$ = $

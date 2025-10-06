@@ -79,6 +79,7 @@ export function useIndexBlocks() {
   const blockPlatform = ref(null)
   const blockChamilo = ref(null)
   const blockSecurity = ref(null)
+  const blockPlugins = ref(null)
 
   async function loadBlocks() {
     const blocks = await adminService.findBlocks()
@@ -92,7 +93,8 @@ export function useIndexBlocks() {
     blockSettings.value = blocks.settings || null
     blockPlatform.value = blocks.platform || null
     blockChamilo.value = blocks.chamilo || null
-    blockSecurity.value  = blocks.security || null
+    blockSecurity.value = blocks.security || null
+    blockPlugins.value = blocks.plugins || null
   }
 
   return {
@@ -113,5 +115,6 @@ export function useIndexBlocks() {
     loadNews,
     blockSupportStatusEl,
     loadSupport,
+    blockPlugins,
   }
 }

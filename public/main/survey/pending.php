@@ -20,15 +20,29 @@ foreach ($pendingList as $pending) {
     $session = $pending->getSession();
     $survey = $pending->getSurvey();
 
-    //$course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
-    $session = $session ? ['id' => $session->getId(), 'name' => $session->getTitle()] : null;
-    $courseInfo = api_get_course_info_by_id($course->getId());
-    $surveysData[$survey->getIid()] = [
+    $courseArr = null;
+    if ($course) {
+        $courseArr = [
+            'id' => $course->getId(),
+            'code' => $course->getCode(),
+            'title' => $course->getTitle(),
+        ];
+    }
+
+    $sessionArr = null;
+    if ($session) {
+        $sessionArr = [
+            'id' => $session->getId(),
+            'name' => $session->getTitle(),
+        ];
+    }
+
+    $surveysData[] = [
         'title' => $survey->getTitle(),
         'avail_from' => $survey->getAvailFrom(),
         'avail_till' => $survey->getAvailTill(),
-        'course' => $course,
-        'session' => $session,
+        'course' => $courseArr,
+        'session' => $sessionArr,
         'link' => SurveyUtil::generateFillSurveyLink(
             $survey,
             $pending->getInvitationCode(),

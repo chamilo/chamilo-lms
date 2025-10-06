@@ -28,6 +28,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             'hide_survey_edition' => '',
             'survey_additional_teacher_modify_actions' => '',
             'show_surveys_base_in_sessions' => 'false',
+            'show_pending_survey_in_menu' => 'false',
         ]);
     }
 
@@ -50,6 +51,7 @@ class SurveySettingsSchema extends AbstractSettingsSchema
             ->add('hide_survey_edition', TextareaType::class)
             ->add('survey_additional_teacher_modify_actions', TextareaType::class)
             ->add('show_surveys_base_in_sessions', YesNoType::class)
+            ->add('show_pending_survey_in_menu', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

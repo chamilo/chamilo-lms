@@ -20,7 +20,7 @@ class Maintenance extends AbstractTool implements ToolInterface
 
     public function getLink(): string
     {
-        return '/main/course_info/maintenance.php';
+        return '/resources/course_maintenance/:nodeId/';
     }
 
     public function getCategory(): string

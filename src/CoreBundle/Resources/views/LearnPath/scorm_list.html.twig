@@ -11,7 +11,7 @@
         {% endif %}
 
         {% set itemLevel = 'level_' ~ (item.lvl - 1) %}
-        {% set itemStatusClass = status_list[item.iid] %}
+        {% set itemStatusClass = status_list[item.iid]|default('') %}
         {% set accordionClass = item.itemType == 'dir' and 'true' == chamilo_settings_get('lp.lp_view_accordion') ? 'accordion' : '' %}
         <div id="toc_{{ item.iid }}"
              class=" scorm_item_normal {{ itemStatusClass }} {{ itemClass }} item-{{ item.itemType }} {{ accordionClass }}">

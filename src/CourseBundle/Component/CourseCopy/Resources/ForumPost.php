@@ -4,28 +4,34 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
-/**
- * A forum-post.
- *
- * @author Bart Mollet <bart.mollet@hogent.be>
- */
 class ForumPost extends Resource
 {
-    /**
-     * Create a new ForumPost.
-     */
+    public ?string $title = null;
+    public ?string $text = null;
+    public ?string $poster_name = null;
+
     public function __construct($obj)
     {
         parent::__construct($obj->post_id, RESOURCE_FORUMPOST);
         $this->obj = $obj;
+
+        $this->title       = (string)($obj->post_title ?? $obj->title ?? '');
+        $this->text        = (string)($obj->post_text  ?? $obj->text  ?? '');
+        $this->poster_name = (string)($obj->poster_name ?? '');
     }
 
-    /**
-     * Show this resource.
-     */
     public function show()
     {
         parent::show();
-        echo $this->obj->title.' ('.$this->obj->poster_name.', '.$this->obj->post_date.')';
+
+        $date = $this->obj->post_date ?? ($this->obj->time ?? null);
+        $dateStr = $date ? api_convert_and_format_date($date) : '';
+
+        $extra = $this->poster_name ? $this->poster_name : '';
+        if ($dateStr) {
+            $extra = $extra ? ($extra.', '.$dateStr) : $dateStr;
+        }
+
+        echo $this->title.($extra ? ' ('.$extra.')' : '');
     }
 }

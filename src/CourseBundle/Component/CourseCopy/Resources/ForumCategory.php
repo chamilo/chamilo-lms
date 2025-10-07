@@ -4,28 +4,23 @@
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
-/**
- * A forum-category.
- *
- * @author Bart Mollet <bart.mollet@hogent.be>
- */
 class ForumCategory extends Resource
 {
-    /**
-     * Create a new ForumCategory.
-     */
+    public ?string $title = null;
+    public ?string $description = null;
+
     public function __construct($obj)
     {
         parent::__construct($obj->cat_id, RESOURCE_FORUMCATEGORY);
         $this->obj = $obj;
+
+        $this->title       = (string) ($obj->cat_title ?? $obj->title ?? '');
+        $this->description = (string) ($obj->cat_comment ?? $obj->description ?? '');
     }
 
-    /**
-     * Show this resource.
-     */
     public function show()
     {
         parent::show();
-        echo $this->obj->title;
+        echo $this->obj->cat_title ?? $this->obj->title ?? '';
     }
 }

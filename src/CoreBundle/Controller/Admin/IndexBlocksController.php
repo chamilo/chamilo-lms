@@ -146,6 +146,13 @@ class IndexBlocksController extends BaseController
                 'editable' => false,
                 'items' => $this->getItemsPlugins(),
             ];
+
+            /* Health check */
+            $json['health_check'] = [
+                'id' => 'block-admin-health-check',
+                'editable' => false,
+                'items' => $this->getItemsHealthCheck(),
+            ];
         }
 
         /* Sessions */
@@ -902,6 +909,30 @@ class IndexBlocksController extends BaseController
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
                 'url' => $objPlugin->getAdminUrl(),
                 'label' => $pluginInfo['title'],
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getItemsHealthCheck(): array
+    {
+        $items =   [];
+
+        /* Check if dsn or email is defined : */
+        $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn');
+        $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email');
+        if (empty($mailDsn) || empty($mailSender)) {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-error',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings need to be configured'),
+            ];
+        } else {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-success',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings are OK'),
             ];
         }
 

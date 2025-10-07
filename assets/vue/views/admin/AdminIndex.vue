@@ -90,6 +90,14 @@
     />
 
     <AdminBlock
+      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
+      :id="blockHealthCheck.id"
+      :items="blockHealthCheck.items"
+      :title="t('Health check')"
+      icon="multiple-marked"
+    />
+
+    <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
       v-model:extra-content="blockSettings.extraContent"
@@ -281,6 +289,7 @@ const {
   blockNewsStatusEl,
   blockSupportStatusEl,
   blockPlugins,
+  blockHealthCheck,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

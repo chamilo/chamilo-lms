@@ -147,5 +147,5 @@
     "autoprefixer": "10.4.5"
   },
   "license": "GPL-3.0",
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.10.3"
 }

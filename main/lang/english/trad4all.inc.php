@@ -9112,4 +9112,5 @@ $TimeSpentInCoursesLastWeek = "Time spent in courses last week";
 $ProgressionInSessions = "Session progress";
 $synthesis = "Synthesis";
 $WeeklyTimeSummary = "Weekly time spent summary";
+$ExistingUserWithSameExtraFieldValue = "An existing user with the same %s was found (ID %d), enrolling instead of creating.";
 ?>

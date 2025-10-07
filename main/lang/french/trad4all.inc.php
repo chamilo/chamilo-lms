@@ -6606,7 +6606,7 @@ $DateExpiredNotBeLessDeadLine = "La date de blocage effectif de l'envoi du trava
 $NotRevised = "Non coté";
 $DirExists = "Opération impossible, un répertoire du même nom existe déjà (peut-être dans une autre session).";
 $DocMv = "Document déplacé.";
-$ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Aucune classe n'a été programmée aujourd'hui. Choisissez un autre you ou ajoutez votre classe vous-même en utilisant les icônes d'action.";
+$ThereIsNoClassScheduledTodayTryPickingAnotherDay = "Aucune classe n'a été programmée aujourd'hui. Choisissez un autre jour ou ajoutez votre classe vous-même en utilisant les icônes d'action.";
 $AddToCalendar = "Ajouter au calendrier";
 $TotalWeight = "Poids total";
 $RandomPick = "Sélection aléatoire";
@@ -9047,4 +9047,5 @@ $TimeSpentInCoursesLastWeek = "Temps passé dans les cours la semaine dernière"
 $ProgressionInSessions = "Progression dans les sessions";
 $synthesis = "Synthèse";
 $WeeklyTimeSummary = "Synthèse des temps passés par semaine";
+$ExistingUserWithSameExtraFieldValue = "Un utilisateur existant avec le même %s a été trouvé (ID %d), inscription au lieu de créer.";
 ?>

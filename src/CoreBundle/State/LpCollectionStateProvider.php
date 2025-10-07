@@ -32,7 +32,7 @@ final readonly class LpCollectionStateProvider implements ProviderInterface
         return CLp::class === $op->getClass() && 'get_lp_collection_with_progress' === $op->getName();
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         $f = $context['filters'] ?? [];
         $parentNodeId = (int) ($f['resourceNode.parent'] ?? 0);

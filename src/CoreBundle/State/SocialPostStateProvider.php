@@ -27,7 +27,7 @@ readonly class SocialPostStateProvider implements ProviderInterface
         private SettingsManager $settingsManager,
     ) {}
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if ('true' !== $this->settingsManager->getSetting('social.allow_social_tool')) {
             throw new AccessDeniedHttpException();

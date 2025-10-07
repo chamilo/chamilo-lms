@@ -43,7 +43,7 @@ class TicketStatus
         return $this->code;
     }
 
-    public function setCode(string|int $code): self
+    public function setCode(int|string $code): self
     {
         $this->code = (string) $code;
 

@@ -269,24 +269,23 @@ function get_course_data(
         ]);
 
         $isInCatalogue = null !== $record;
-        $catalogueUrl = api_get_self().'?toggle_catalogue='.$course['id'].'&sec_token='.Security::getTokenFromSession();
 
-        $actions[] = Display::url(
-            Display::getMdiIcon(
-                $isInCatalogue ? StateIcon::CATALOGUE_OFF : StateIcon::CATALOGUE_ON,
-                'ch-tool-icon',
-                null,
-                ICON_SIZE_SMALL,
-                $isInCatalogue ? get_lang('Remove from catalogue') : get_lang('Add to catalogue'),
-                [
-                    'class' => $isInCatalogue ? 'text-warning' : 'text-muted',
-                ]
-            ),
-            $catalogueUrl,
-            [
-                'title' => $isInCatalogue ? get_lang('Remove from catalogue') : get_lang('Add to catalogue'),
-            ]
-        );
+        $actions[] = '
+        <form method="post" style="display:inline;">
+            <input type="hidden" name="action" value="toggle_catalogue">
+            <input type="hidden" name="course_id" value="' . $course['id'] . '">
+            <input type="hidden" name="sec_token" value="' . Security::getTokenFromSession() . '">
+            <button type="submit" class="btn btn-link p-0 text-decoration-none cursor-pointer" title="' . 
+                ($isInCatalogue ? get_lang('Remove from catalogue') : get_lang('Add to catalogue')) . '">
+                ' . Display::getMdiIcon(
+                    $isInCatalogue ? StateIcon::CATALOGUE_OFF : StateIcon::CATALOGUE_ON,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    $isInCatalogue ? get_lang('Remove from catalogue') : get_lang('Add to catalogue')
+                ) . '
+            </button>
+        </form>';
 
         $courseItem = [
             $course['col0'],
@@ -376,41 +375,41 @@ if (isset($_POST['action']) && Security::check_token('post')) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
     }
-}
 
-if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
-    $courseId = (int) $_GET['toggle_catalogue'];
-    $accessUrlId = api_get_current_access_url_id();
-    $em = Database::getManager();
-    $repo = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
-    $course = api_get_course_entity($courseId);
-    $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
+    // Toggle catalogue
+    if ('toggle_catalogue' == $_POST['action']) {
+        $courseId = (int) $_POST['course_id'];
+        $accessUrlId = api_get_current_access_url_id();
+        $em = Database::getManager();
+        $repo = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
+        $course = api_get_course_entity($courseId);
+        $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
 
-    if ($course && $accessUrl) {
-        $record = $repo->findOneBy([
-            'course' => $course,
-            'accessUrl' => $accessUrl,
-            'usergroup' => null,
-        ]);
+        if ($course && $accessUrl) {
+            $record = $repo->findOneBy([
+                'course' => $course,
+                'accessUrl' => $accessUrl,
+                'usergroup' => null,
+            ]);
 
-        if ($record) {
-            $em->remove($record);
-            Display::addFlash(Display::return_message(get_lang('Removed from catalogue')));
-        } else {
-            $newRel = new CatalogueCourseRelAccessUrlRelUsergroup();
-            $newRel->setCourse($course);
-            $newRel->setAccessUrl($accessUrl);
-            $newRel->setUsergroup(null);
+            if ($record) {
+                $em->remove($record);
+                Display::addFlash(Display::return_message(get_lang('Removed from catalogue')));
+            } else {
+                $newRel = new CatalogueCourseRelAccessUrlRelUsergroup();
+                $newRel->setCourse($course);
+                $newRel->setAccessUrl($accessUrl);
+                $newRel->setUsergroup(null);
 
-            $em->persist($newRel);
-            Display::addFlash(Display::return_message(get_lang('Added to catalogue'), 'success'));
+                $em->persist($newRel);
+                Display::addFlash(Display::return_message(get_lang('Added to catalogue'), 'success'));
+            }
+
+            $em->flush();
         }
-
-        $em->flush();
     }
-
-    api_location(api_get_self());
 }
+
 $content = '';
 $message = '';
 $actions = '';

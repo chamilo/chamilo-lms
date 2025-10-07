@@ -70,7 +70,7 @@ final class Version20250707212800 extends AbstractMigrationChamilo
             if ('ssl' === $smtpSecure) {
                 $mailerScheme = 'smtps';
             } elseif ('tls' === $smtpSecure) {
-                $query = '?encryption=tls';
+                $query = '?require_tls=true';
             }
         }
 

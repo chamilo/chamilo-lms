@@ -123,20 +123,7 @@ final class Version20250926174000 extends AbstractMigrationChamilo
     {
         $map = [];
 
-        $manager = null;
-
-        try {
-            if ($this->container->has('chamilo.settings_manager')) {
-                $manager = $this->container->get('chamilo.settings_manager');
-            } elseif ($this->container->has('chamilo.core.settings_manager')) {
-                $manager = $this->container->get('chamilo.core.settings_manager');
-            } elseif ($this->container->has(SettingsManager::class)) {
-                $manager = $this->container->get(SettingsManager::class);
-            }
-        } catch (Throwable $e) {
-            error_log('[WARN] Unable to retrieve SettingsManager from container: '.$e->getMessage());
-        }
-
+        $manager = $this->container->get(SettingsManager::class);
         if (!$manager) {
             error_log('[WARN] SettingsManager not found; defaults map will be empty.');
 

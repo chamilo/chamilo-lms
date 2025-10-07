@@ -114,8 +114,8 @@
               confirmReset: '{{ "Are you sure you want to clear this chat?"|trans|e('js') }}'
             };
 
-            // ---------- helpers (comments in English) ----------
-            const ajaxUrl = '{{ url('chat_ajax') ~ '?' ~ course_url_params }}';
+            // ---------- helpers ----------
+            const ajaxUrl = '{{ url('chamilo_core_chat_ajax') ~ '?' ~ course_url_params }}';
             const myUserId = {{ user.user_id }};
             const restrictToCoach = {{ restrict_to_coach ? 'true' : 'false' }};
             const parentNodeId = {{ chat_parent_node_id|default('0') }};

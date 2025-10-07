@@ -43,9 +43,9 @@ $selectedUntil = $limitDate->format('Y-m-d');
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
 
-    $selectedCourse = $formValues['course'];
-    $selectedSession = $formValues['session'];
-    $selectedTeacher = $formValues['teacher'];
+    $selectedCourse = $formValues['course'] ?? null;
+    $selectedSession = $formValues['session'] ?? null;
+    $selectedTeacher = $formValues['teacher'] ?? null;
 
     if (!empty($formValues['from'])) {
         $selectedFrom = Security::remove_XSS($formValues['from']);

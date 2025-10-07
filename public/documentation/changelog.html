@@ -20,7 +20,7 @@
 
 
     <a id="2.0-alpha.5"></a>
-    <h1>Chamilo 2.0 alpha 5 - Album, 2025-10-07</h1>
+    <h1>Chamilo 2.0 alpha 5 - Album, 2025-10-08</h1>
     <h3>Release notes - summary</h3>
     <p>
         Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
@@ -77,6 +77,22 @@
     <h3>Fixed</h3>
 
     <ul aria-live="off">
+        <li>[2025-10-08] (<a href="https://github.com/chamilo/chamilo-lms/commit/00e9aa40de8c2beaa38970649f7840c92a048870">00e9aa40</a>) Language: Add new language terms</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/9375243cfb4de1ec812fec1b17dcf806b986e110">9375243c</a>) Language: Fix language terms in about.html.twig</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c9d56051eb062cb9072166200a46bd1ba118ef1c">c9d56051</a>) QA: Change Behat tests to PHP 8.2 and 8.3 for now (8.4 not yet supported)</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/eecf9482f431b928863e211ffa3b09ce10b8e3b8">eecf9482</a>) Internal: Add validation on array contents in CourseMaintenanceController.php</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/4751c1ce33f07a000fecb8da4505fd07a4ea75fd">4751c1ce</a>) Internal: Fix mailer dsn migration when using tls</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/73a309f525aac2010a3c19986db54cc090405989">73a309f5</a>) Internal: Fix psalm error in mail settings migration</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c73bef78eaec4510661be1306a4021b86c42452d">c73bef78</a>) Internal: Stricter code in attendancelink.class.php</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/c86a4878f2c3dec8100940133f6a23f69598be11">c86a4878</a>) Internal: general fixes and cleanup</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/e848995885dac96f1f5143e2aa13644d2fc74f0e">e8489958</a>) Internal: general fixes and cleanup</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/632ef2fb8a15131e723a0cd9818fc951a3c6ea6a">632ef2fb</a>) Internal: Make c_blog_task.description nullable and drop invalid default on TEXT/LONGTEXT</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/fc96b436f715ad383f36bd97b8f6335d65e55da0">fc96b436</a>) Vendor: bump yarn version to 4.10.3</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/13a9179e4ef8a18d47f7441b0dd6f5803c520990">13a9179e</a>) Internal: Minor: Fix validations in SettingsManager class</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/b57945408a5a8dec2b76b814e7f46e6c2961840a">b5794540</a>) Internal: Minor: fix chat ajax url from chat tool</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/9df6319e8e7db4112c26fcc69e9cf26761d4e863">9df6319e</a>) Tracking: Fix form values validation in teacher_time_report.php</li>
+        <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/35dce5146d8b1c7e5d76e0e69cbae683e3bb0bab">35dce514</a>) Course: Reimplement and enhance Course Backup/Restore</li>
+        <li>[2025-10-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/7337d9b4b196710281b7c4ad9852a73a7a98666c">7337d9b4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4316">GH#4316</a>) Survey: Add “Pending surveys” in user menu</li>
         <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/d8488a60ad0dba5f8c8c1ad7aab90dc814ae8b51">d8488a60</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4763">GH#4763</a>) Learnpath: Fix dates not showing in lp lists in categories</li>
         <li>[2025-10-07] (<a href="https://github.com/chamilo/chamilo-lms/commit/8adf95c40ced21f70ea99542c1720fab77f7b6de">8adf95c4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6609">GH#6609</a>) Learnpath: Add responsive style to the learning path list</li>
         <li>[2025-10-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/7337d9b4b196710281b7c4ad9852a73a7a98666c">7337d9b4</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4316">GH#4316</a>) Survey: Add “Pending surveys” in user menu</li>
@@ -137,8 +153,6 @@
         <li>[2025-09-29] (<a href="https://github.com/chamilo/chamilo-lms/commit/64b3aa12c06f756af1ad768c3eb6668c1d09b07a">64b3aa12</a> - <a href="https://task.beeznest.com/issues/22990">BT#22990</a>) Gradebook: #fix ranking calculation to show same position for users with the same score</li>
         <li>[2025-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/e324b4279d681db781113c35a7b1bf8aebbad3cf">e324b427</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6819">GH#6819</a>) Admin: Improve settings categorization</li>
         <li>[2025-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/cfd44943f9cc704bf93b2bc4333f4ae4036c8034">cfd44943</a>) Install: Fix language selection flow, i18n sync, and labels</li>
-
-
         <li>[2025-09-27] (<a href="https://github.com/chamilo/chamilo-lms/commit/34dab6fad85fc9a30453c21a99f7e458c62d15ab">34dab6fa</a>) Documentation: Update changelog for alpha.5</li>
         <li>[2025-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/a912253c7851c41dec60b3e586ad82476c866524">a912253c</a>) Dropbox: Minor, fix error typo in query</li>
         <li>[2025-09-26] (<a href="https://github.com/chamilo/chamilo-lms/commit/772f7b089dc35d58c197c1c50f97c4f78bb9d2a0">772f7b08</a>) Dropbox: Stabilize migrations and tool seeding</li>

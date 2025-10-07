@@ -14,9 +14,16 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{JsonResponse, Request};
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
+use const PATHINFO_EXTENSION;
 
 #[Route(
     '/course_maintenance/{node}',
@@ -25,7 +32,9 @@ use Symfony\Component\Routing\Attribute\Route;
 )]
 class CourseMaintenanceController extends AbstractController
 {
-    /** @var bool Debug flag (true by default). Toggle via ?debug=0|1 or X-Debug: 0|1 */
+    /**
+     * @var bool Debug flag (true by default). Toggle via ?debug=0|1 or X-Debug: 0|1
+     */
     private bool $debug = true;
 
     #[Route('/import/options', name: 'import_options', methods: ['GET'])]
@@ -35,12 +44,12 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[importOptions] called', ['node' => $node, 'debug' => $this->debug]);
 
         return $this->json([
-            'sources'       => ['local', 'server'],
+            'sources' => ['local', 'server'],
             'importOptions' => ['full_backup', 'select_items'],
-            'sameName'      => ['skip', 'rename', 'overwrite'],
-            'defaults'      => [
-                'importOption'       => 'full_backup',
-                'sameName'           => 'rename',
+            'sameName' => ['skip', 'rename', 'overwrite'],
+            'defaults' => [
+                'importOption' => 'full_backup',
+                'sameName' => 'rename',
                 'sameFileNameOption' => 2,
             ],
         ]);
@@ -53,18 +62,20 @@ class CourseMaintenanceController extends AbstractController
         $file = $req->files->get('file');
         if (!$file) {
             $this->logDebug('[importUpload] missing file');
+
             return $this->json(['error' => 'Missing file'], 400);
         }
 
         $this->logDebug('[importUpload] received', [
             'original_name' => $file->getClientOriginalName(),
-            'size'          => $file->getSize(),
-            'mime'          => $file->getClientMimeType(),
+            'size' => $file->getSize(),
+            'mime' => $file->getClientMimeType(),
         ]);
 
         $backupId = CourseArchiver::importUploadedFile($file->getRealPath());
-        if ($backupId === false) {
+        if (false === $backupId) {
             $this->logDebug('[importUpload] archive dir not writable');
+
             return $this->json(['error' => 'Archive directory is not writable'], 500);
         }
 
@@ -80,16 +91,18 @@ class CourseMaintenanceController extends AbstractController
     public function importServerPick(int $node, Request $req): JsonResponse
     {
         $this->setDebugFromRequest($req);
-        $payload  = json_decode($req->getContent() ?: "{}", true);
+        $payload = json_decode($req->getContent() ?: '{}', true);
         $filename = $payload['filename'] ?? null;
         if (!$filename) {
             $this->logDebug('[importServerPick] missing filename');
+
             return $this->json(['error' => 'Missing filename'], 400);
         }
 
         $path = rtrim(CourseArchiver::getBackupDir(), '/').'/'.$filename;
         if (!is_file($path)) {
             $this->logDebug('[importServerPick] file not found', ['path' => $path]);
+
             return $this->json(['error' => 'File not found'], 404);
         }
 
@@ -114,8 +127,8 @@ class CourseMaintenanceController extends AbstractController
             $course = CourseArchiver::readCourse($backupId, false);
 
             $this->logDebug('[importResources] course loaded', [
-                'has_resources' => is_array($course->resources ?? null),
-                'keys'          => array_keys((array) ($course->resources ?? [])),
+                'has_resources' => \is_array($course->resources ?? null),
+                'keys' => array_keys((array) ($course->resources ?? [])),
             ]);
             $this->logDebug('[importResources] resources snapshot', $this->snapshotResources($course));
             $this->logDebug('[importResources] forum counts', $this->snapshotForumCounts($course));
@@ -123,7 +136,7 @@ class CourseMaintenanceController extends AbstractController
             $tree = $this->buildResourceTreeForVue($course);
             $this->logDebug(
                 '[importResources] UI tree groups',
-                array_map(fn($g) => ['type' => $g['type'], 'title' => $g['title'], 'items' => count($g['items'] ?? [])], $tree)
+                array_map(fn ($g) => ['type' => $g['type'], 'title' => $g['title'], 'items' => \count($g['items'] ?? [])], $tree)
             );
 
             if ($this->debug && $req->query->getBoolean('debug')) {
@@ -132,7 +145,7 @@ class CourseMaintenanceController extends AbstractController
                 @file_put_contents(
                     $base.'/'.preg_replace('/[^a-zA-Z0-9._-]/', '_', $backupId).'.json',
                     json_encode([
-                        'tree'           => $tree,
+                        'tree' => $tree,
                         'resources_keys' => array_keys((array) ($course->resources ?? [])),
                     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
                 );
@@ -145,13 +158,14 @@ class CourseMaintenanceController extends AbstractController
             }
 
             return $this->json([
-                'tree'     => $tree,
+                'tree' => $tree,
                 'warnings' => $warnings,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logDebug('[importResources] exception', ['message' => $e->getMessage()]);
+
             return $this->json([
-                'tree'     => [],
+                'tree' => [],
                 'warnings' => ['Error reading backup: '.$e->getMessage()],
             ], 200);
         }
@@ -169,54 +183,58 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[importRestore] begin', ['node' => $node, 'backupId' => $backupId]);
 
         try {
-            $payload = json_decode($req->getContent() ?: "{}", true);
-            $importOption       = (string) ($payload['importOption'] ?? 'full_backup');
-            $sameFileNameOption = (int)    ($payload['sameFileNameOption'] ?? 2);
-            $selectedResources  = (array)  ($payload['resources'] ?? []);
+            $payload = json_decode($req->getContent() ?: '{}', true);
+            $importOption = (string) ($payload['importOption'] ?? 'full_backup');
+            $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
+            $selectedResources = (array) ($payload['resources'] ?? []);
 
             $this->logDebug('[importRestore] input', [
-                'importOption'       => $importOption,
+                'importOption' => $importOption,
                 'sameFileNameOption' => $sameFileNameOption,
-                'selectedTypes'      => array_keys($selectedResources),
+                'selectedTypes' => array_keys($selectedResources),
             ]);
 
             $backupDir = CourseArchiver::getBackupDir();
             $this->logDebug('[importRestore] backup dir', $backupDir);
             $path = rtrim($backupDir, '/').'/'.$backupId;
             $this->logDebug('[importRestore] path exists?', [
-                'path'     => $path,
-                'exists'   => is_file($path),
+                'path' => $path,
+                'exists' => is_file($path),
                 'readable' => is_readable($path),
             ]);
 
             /** @var Course $course */
             $course = CourseArchiver::readCourse($backupId, false);
 
-            if (!is_object($course) || empty($course->resources) || !is_array($course->resources)) {
+            if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
                 $this->logDebug('[importRestore] course empty resources');
+
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
 
             $this->logDebug('[importRestore] BEFORE filter keys', array_keys($course->resources));
             $this->logDebug('[importRestore] BEFORE forum counts', $this->snapshotForumCounts($course));
 
-            if ($importOption === 'select_items') {
+            if ('select_items' === $importOption) {
                 $hasAny = false;
                 foreach ($selectedResources as $t => $ids) {
-                    if (is_array($ids) && !empty($ids)) {
+                    if (\is_array($ids) && !empty($ids)) {
                         $hasAny = true;
+
                         break;
                     }
                 }
                 if (!$hasAny) {
                     $this->logDebug('[importRestore] empty selection');
+
                     return $this->json(['error' => 'No resources selected'], 400);
                 }
 
                 $course = $this->filterLegacyCourseBySelection($course, $selectedResources);
 
-                if (empty($course->resources) || count((array) $course->resources) === 0) {
+                if (empty($course->resources) || 0 === \count((array) $course->resources)) {
                     $this->logDebug('[importRestore] selection produced no resources');
+
                     return $this->json(['error' => 'Selection produced no resources to restore'], 400);
                 }
             }
@@ -240,25 +258,26 @@ class CourseMaintenanceController extends AbstractController
 
             CourseArchiver::cleanBackupDir();
 
-            $courseId    = (int) ($restorer->destination_course_info['real_id'] ?? 0);
-            $sessionId   = 0;
-            $groupId     = 0;
-            $redirectUrl = sprintf('/course/%d/home?sid=%d&gid=%d', $courseId, $sessionId, $groupId);
+            $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
+            $sessionId = 0;
+            $groupId = 0;
+            $redirectUrl = \sprintf('/course/%d/home?sid=%d&gid=%d', $courseId, $sessionId, $groupId);
 
             $this->logDebug('[importRestore] done, redirect', ['url' => $redirectUrl]);
 
             return $this->json([
-                'ok'          => true,
-                'message'     => 'Import finished',
+                'ok' => true,
+                'message' => 'Import finished',
                 'redirectUrl' => $redirectUrl,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logDebug('[importRestore] exception', [
                 'message' => $e->getMessage(),
-                'file'    => $e->getFile().':'.$e->getLine(),
+                'file' => $e->getFile().':'.$e->getLine(),
             ]);
+
             return $this->json([
-                'error'   => 'Restore failed: '.$e->getMessage(),
+                'error' => 'Restore failed: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
@@ -270,12 +289,7 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         $current = api_get_course_info();
-        $courseList = CourseManager::getCoursesFollowedByUser(
-            api_get_user_id(),
-            COURSEMANAGER,
-            null, null, null, null, false, null, null, false,
-            'ORDER BY c.title'
-        );
+        $courseList = CourseManager::getCoursesFollowedByUser(api_get_user_id());
 
         $courses = [];
         foreach ($courseList as $c) {
@@ -286,11 +300,11 @@ class CourseMaintenanceController extends AbstractController
         }
 
         return $this->json([
-            'courses'  => $courses,
+            'courses' => $courses,
             'defaults' => [
-                'copyOption'         => 'full_copy',
-                'includeUsers'       => false,
-                'resetDates'         => true,
+                'copyOption' => 'full_copy',
+                'includeUsers' => false,
+                'resetDates' => true,
                 'sameFileNameOption' => 2,
             ],
         ]);
@@ -301,7 +315,7 @@ class CourseMaintenanceController extends AbstractController
     {
         $this->setDebugFromRequest($req);
         $sourceCourseCode = trim((string) $req->query->get('sourceCourseId', ''));
-        if ($sourceCourseCode === '') {
+        if ('' === $sourceCourseCode) {
             return $this->json(['error' => 'Missing sourceCourseId'], 400);
         }
 
@@ -347,14 +361,14 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         try {
-            $payload = json_decode($req->getContent() ?: "{}", true);
+            $payload = json_decode($req->getContent() ?: '{}', true);
 
-            $sourceCourseId       = (string) ($payload['sourceCourseId'] ?? '');
-            $copyOption           = (string) ($payload['copyOption'] ?? 'full_copy');
-            $sameFileNameOption   = (int)    ($payload['sameFileNameOption'] ?? 2);
-            $selectedResourcesMap = (array)  ($payload['resources'] ?? []);
+            $sourceCourseId = (string) ($payload['sourceCourseId'] ?? '');
+            $copyOption = (string) ($payload['copyOption'] ?? 'full_copy');
+            $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
+            $selectedResourcesMap = (array) ($payload['resources'] ?? []);
 
-            if ($sourceCourseId === '') {
+            if ('' === $sourceCourseId) {
                 return $this->json(['error' => 'Missing sourceCourseId'], 400);
             }
 
@@ -383,10 +397,10 @@ class CourseMaintenanceController extends AbstractController
             ]);
             $legacyCourse = $cb->build(0, $sourceCourseId);
 
-            if ($copyOption === 'select_items') {
+            if ('select_items' === $copyOption) {
                 $legacyCourse = $this->filterLegacyCourseBySelection($legacyCourse, $selectedResourcesMap);
 
-                if (empty($legacyCourse->resources) || !is_array($legacyCourse->resources)) {
+                if (empty($legacyCourse->resources) || !\is_array($legacyCourse->resources)) {
                     return $this->json(['error' => 'Selection produced no resources to copy'], 400);
                 }
             }
@@ -401,16 +415,16 @@ class CourseMaintenanceController extends AbstractController
             $restorer->restore();
 
             $dest = api_get_course_info();
-            $redirectUrl = sprintf('/course/%d/home', (int) $dest['real_id']);
+            $redirectUrl = \sprintf('/course/%d/home', (int) $dest['real_id']);
 
             return $this->json([
-                'ok'          => true,
-                'message'     => 'Copy finished',
+                'ok' => true,
+                'message' => 'Copy finished',
                 'redirectUrl' => $redirectUrl,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
-                'error'   => 'Copy failed: '.$e->getMessage(),
+                'error' => 'Copy failed: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
@@ -438,9 +452,9 @@ class CourseMaintenanceController extends AbstractController
         // Build legacy Course from CURRENT course (not “source”)
         $cb = new CourseBuilder();
         $cb->set_tools_to_build([
-            'documents','forums','tool_intro','links','quizzes','quiz_questions','assets','surveys',
-            'survey_questions','announcements','events','course_descriptions','glossary','wiki',
-            'thematic','attendance','works','gradebook','learnpath_category','learnpaths',
+            'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
+            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
+            'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
         ]);
         $course = $cb->build(0, api_get_course_id());
 
@@ -454,14 +468,14 @@ class CourseMaintenanceController extends AbstractController
     public function recycleExecute(Request $req, EntityManagerInterface $em): JsonResponse
     {
         try {
-            $p = json_decode($req->getContent() ?: "{}", true);
-            $recycleOption = (string)($p['recycleOption'] ?? 'select_items'); // 'full_recycle' | 'select_items'
-            $resourcesMap  = (array) ($p['resources'] ?? []);
-            $confirmCode   = (string)($p['confirm'] ?? '');
+            $p = json_decode($req->getContent() ?: '{}', true);
+            $recycleOption = (string) ($p['recycleOption'] ?? 'select_items'); // 'full_recycle' | 'select_items'
+            $resourcesMap = (array) ($p['resources'] ?? []);
+            $confirmCode = (string) ($p['confirm'] ?? '');
 
-            $type = $recycleOption === 'full_recycle' ? 'full_backup' : 'select_items';
+            $type = 'full_recycle' === $recycleOption ? 'full_backup' : 'select_items';
 
-            if ($type === 'full_backup') {
+            if ('full_backup' === $type) {
                 if ($confirmCode !== api_get_course_id()) {
                     return $this->json(['error' => 'Course code confirmation mismatch'], 400);
                 }
@@ -473,7 +487,7 @@ class CourseMaintenanceController extends AbstractController
 
             $courseCode = api_get_course_id();
             $courseInfo = api_get_course_info($courseCode);
-            $courseId   = (int)($courseInfo['real_id'] ?? 0);
+            $courseId = (int) ($courseInfo['real_id'] ?? 0);
             if ($courseId <= 0) {
                 return $this->json(['error' => 'Invalid course id'], 400);
             }
@@ -487,12 +501,12 @@ class CourseMaintenanceController extends AbstractController
             $recycler->recycle($type, $resourcesMap);
 
             return $this->json([
-                'ok'      => true,
+                'ok' => true,
                 'message' => 'Recycle finished',
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
-                'error'   => 'Recycle failed: '.$e->getMessage(),
+                'error' => 'Recycle failed: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -506,10 +520,10 @@ class CourseMaintenanceController extends AbstractController
         }
 
         try {
-            $payload = json_decode($req->getContent() ?: "{}", true);
-            $confirm = trim((string)($payload['confirm'] ?? ''));
+            $payload = json_decode($req->getContent() ?: '{}', true);
+            $confirm = trim((string) ($payload['confirm'] ?? ''));
 
-            if ($confirm === '') {
+            if ('' === $confirm) {
                 return $this->json(['error' => 'Missing confirmation value'], 400);
             }
 
@@ -519,30 +533,30 @@ class CourseMaintenanceController extends AbstractController
                 return $this->json(['error' => 'Unable to resolve current course'], 400);
             }
 
-            $officialCode = (string)($courseInfo['official_code'] ?? '');
-            $runtimeCode  = (string)api_get_course_id();                 // often equals official code
-            $sysCode      = (string)($courseInfo['sysCode'] ?? '');       // used by legacy delete
+            $officialCode = (string) ($courseInfo['official_code'] ?? '');
+            $runtimeCode = (string) api_get_course_id();                 // often equals official code
+            $sysCode = (string) ($courseInfo['sysCode'] ?? '');       // used by legacy delete
 
-            if ($sysCode === '') {
+            if ('' === $sysCode) {
                 return $this->json(['error' => 'Invalid course system code'], 400);
             }
 
             // Accept either official_code or api_get_course_id() as confirmation
-            $matches = \hash_equals($officialCode, $confirm) || \hash_equals($runtimeCode, $confirm);
+            $matches = hash_equals($officialCode, $confirm) || hash_equals($runtimeCode, $confirm);
             if (!$matches) {
                 return $this->json(['error' => 'Course code confirmation mismatch'], 400);
             }
 
             // Legacy delete (removes course data + unregisters members in this course)
             // Throws on failure or returns void
-            \CourseManager::delete_course($sysCode);
+            CourseManager::delete_course($sysCode);
 
             // Best-effort cleanup of legacy course session flags
             try {
                 $ses = $req->getSession();
                 $ses?->remove('_cid');
                 $ses?->remove('_real_cid');
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // swallow — not critical
             }
 
@@ -551,13 +565,13 @@ class CourseMaintenanceController extends AbstractController
             $redirectUrl = '/index.php';
 
             return $this->json([
-                'ok'          => true,
-                'message'     => 'Course deleted successfully',
+                'ok' => true,
+                'message' => 'Course deleted successfully',
                 'redirectUrl' => $redirectUrl,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
-                'error'   => 'Failed to delete course: '.$e->getMessage(),
+                'error' => 'Failed to delete course: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
             ], 500);
         }
@@ -593,9 +607,9 @@ class CourseMaintenanceController extends AbstractController
         // Build legacy Course from CURRENT course (same approach as recycle)
         $cb = new CourseBuilder();
         $cb->set_tools_to_build([
-            'documents','forums','tool_intro','links','quizzes','quiz_questions','assets','surveys',
-            'survey_questions','announcements','events','course_descriptions','glossary','wiki',
-            'thematic','attendance','works','gradebook','learnpath_category','learnpaths',
+            'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
+            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
+            'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
         ]);
         $course = $cb->build(0, api_get_course_id());
 
@@ -611,28 +625,28 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         // Read payload (basic validation)
-        $p = json_decode($req->getContent() ?: "{}", true);
-        $moodleVersion = (string)($p['moodleVersion'] ?? '4');     // '3' | '4'
-        $scope         = (string)($p['scope'] ?? 'full');          // 'full' | 'selected'
-        $adminId       = trim((string)($p['adminId'] ?? ''));
-        $adminLogin    = trim((string)($p['adminLogin'] ?? ''));
-        $adminEmail    = trim((string)($p['adminEmail'] ?? ''));
-        $resources     = (array)($p['resources'] ?? []);
+        $p = json_decode($req->getContent() ?: '{}', true);
+        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');     // '3' | '4'
+        $scope = (string) ($p['scope'] ?? 'full');          // 'full' | 'selected'
+        $adminId = trim((string) ($p['adminId'] ?? ''));
+        $adminLogin = trim((string) ($p['adminLogin'] ?? ''));
+        $adminEmail = trim((string) ($p['adminEmail'] ?? ''));
+        $resources = (array) ($p['resources'] ?? []);
 
-        if ($adminId === '' || $adminLogin === '' || $adminEmail === '') {
+        if ('' === $adminId || '' === $adminLogin || '' === $adminEmail) {
             return $this->json(['error' => 'Missing required fields (adminId, adminLogin, adminEmail)'], 400);
         }
-        if ($scope === 'selected' && empty($resources)) {
+        if ('selected' === $scope && empty($resources)) {
             return $this->json(['error' => 'No resources selected'], 400);
         }
-        if (!in_array($moodleVersion, ['3','4'], true)) {
+        if (!\in_array($moodleVersion, ['3', '4'], true)) {
             return $this->json(['error' => 'Unsupported Moodle version'], 400);
         }
 
         // Stub response while implementation is in progress
         // Use 202 so the frontend can show a notice without treating it as a failure.
         return new JsonResponse([
-            'ok'      => false,
+            'ok' => false,
             'message' => 'Moodle export is under construction. No .mbz file was generated.',
             // you may also return a placeholder downloadUrl later
             // 'downloadUrl' => null,
@@ -659,9 +673,9 @@ class CourseMaintenanceController extends AbstractController
 
         $cb = new CourseBuilder();
         $cb->set_tools_to_build([
-            'documents','forums','tool_intro','links','quizzes','quiz_questions','assets','surveys',
-            'survey_questions','announcements','events','course_descriptions','glossary','wiki',
-            'thematic','attendance','works','gradebook','learnpath_category','learnpaths',
+            'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
+            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
+            'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
         ]);
         $course = $cb->build(0, api_get_course_id());
 
@@ -676,21 +690,21 @@ class CourseMaintenanceController extends AbstractController
     {
         $this->setDebugFromRequest($req);
 
-        $p        = json_decode($req->getContent() ?: "{}", true);
-        $scope    = (string)($p['scope'] ?? 'full');   // 'full' | 'selected'
-        $resources= (array)($p['resources'] ?? []);
+        $p = json_decode($req->getContent() ?: '{}', true);
+        $scope = (string) ($p['scope'] ?? 'full');   // 'full' | 'selected'
+        $resources = (array) ($p['resources'] ?? []);
 
-        if (!in_array($scope, ['full', 'selected'], true)) {
+        if (!\in_array($scope, ['full', 'selected'], true)) {
             return $this->json(['error' => 'Unsupported scope'], 400);
         }
-        if ($scope === 'selected' && empty($resources)) {
+        if ('selected' === $scope && empty($resources)) {
             return $this->json(['error' => 'No resources selected'], 400);
         }
 
         // TODO: Generate IMS CC 1.3 cartridge (.imscc or .zip)
         // For now, return an informative 202 “under construction”.
         return new JsonResponse([
-            'ok'      => false,
+            'ok' => false,
             'message' => 'Common Cartridge 1.3 export is under construction. No file was generated.',
             // 'downloadUrl' => null, // set when implemented
         ], 202);
@@ -706,14 +720,14 @@ class CourseMaintenanceController extends AbstractController
             return $this->json(['error' => 'Missing file'], 400);
         }
         $ext = strtolower(pathinfo($file->getClientOriginalName() ?? '', PATHINFO_EXTENSION));
-        if (!in_array($ext, ['imscc','zip'], true)) {
+        if (!\in_array($ext, ['imscc', 'zip'], true)) {
             return $this->json(['error' => 'Unsupported file type. Please upload .imscc or .zip'], 400);
         }
 
         // TODO: Parse/restore CC 1.3. For now, just acknowledge.
         // You can temporarily move the uploaded file into a working dir if useful.
         return $this->json([
-            'ok'      => true,
+            'ok' => true,
             'message' => 'CC 1.3 import endpoint is under construction. File received successfully.',
         ]);
     }
@@ -724,9 +738,6 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Build a Vue-friendly tree from legacy Course.
-     *
-     * @param object $course
-     * @return array
      */
     private function buildResourceTreeForVue(object $course): array
     {
@@ -734,7 +745,7 @@ class CourseMaintenanceController extends AbstractController
             $this->logDebug('[buildResourceTreeForVue] start');
         }
 
-        $resources = is_object($course) && isset($course->resources) && is_array($course->resources)
+        $resources = \is_object($course) && isset($course->resources) && \is_array($course->resources)
             ? $course->resources
             : [];
 
@@ -750,27 +761,27 @@ class CourseMaintenanceController extends AbstractController
 
         // Forums block
         $hasForumData =
-            (!empty($resources['forum']) || !empty($resources['Forum'])) ||
-            (!empty($resources['forum_category']) || !empty($resources['Forum_Category'])) ||
-            (!empty($resources['forum_topic']) || !empty($resources['ForumTopic'])) ||
-            (!empty($resources['thread']) || !empty($resources['post']) || !empty($resources['forum_post']));
+            (!empty($resources['forum']) || !empty($resources['Forum']))
+            || (!empty($resources['forum_category']) || !empty($resources['Forum_Category']))
+            || (!empty($resources['forum_topic']) || !empty($resources['ForumTopic']))
+            || (!empty($resources['thread']) || !empty($resources['post']) || !empty($resources['forum_post']));
 
         if ($hasForumData) {
             $tree[] = $this->buildForumTreeForVue(
                 $course,
                 $legacyTitles['forum'] ?? ($fallbackTitles['forum'] ?? 'Forums')
             );
-            $skipTypes['forum']          = true;
+            $skipTypes['forum'] = true;
             $skipTypes['forum_category'] = true;
-            $skipTypes['forum_topic']    = true;
-            $skipTypes['forum_post']     = true;
-            $skipTypes['thread']         = true;
-            $skipTypes['post']           = true;
+            $skipTypes['forum_topic'] = true;
+            $skipTypes['forum_post'] = true;
+            $skipTypes['thread'] = true;
+            $skipTypes['post'] = true;
         }
 
         // Other tools
         foreach ($resources as $rawType => $items) {
-            if (!is_array($items) || empty($items)) {
+            if (!\is_array($items) || empty($items)) {
                 continue;
             }
             $typeKey = $this->normalizeTypeKey($rawType);
@@ -780,29 +791,30 @@ class CourseMaintenanceController extends AbstractController
 
             $groupTitle = $legacyTitles[$typeKey] ?? ($fallbackTitles[$typeKey] ?? ucfirst($typeKey));
             $group = [
-                'type'  => $typeKey,
+                'type' => $typeKey,
                 'title' => (string) $groupTitle,
                 'items' => [],
             ];
 
-            if ($typeKey === 'gradebook') {
+            if ('gradebook' === $typeKey) {
                 $group['items'][] = [
-                    'id'         => 'all',
-                    'label'      => 'Gradebook (all)',
-                    'extra'      => new \stdClass(),
+                    'id' => 'all',
+                    'label' => 'Gradebook (all)',
+                    'extra' => new stdClass(),
                     'selectable' => true,
                 ];
                 $tree[] = $group;
+
                 continue;
             }
 
             foreach ($items as $id => $obj) {
-                if (!is_object($obj)) {
+                if (!\is_object($obj)) {
                     continue;
                 }
 
                 $idKey = is_numeric($id) ? (int) $id : (string) $id;
-                if ((is_int($idKey) && $idKey <= 0) || (is_string($idKey) && $idKey === '')) {
+                if ((\is_int($idKey) && $idKey <= 0) || (\is_string($idKey) && '' === $idKey)) {
                     continue;
                 }
 
@@ -810,17 +822,17 @@ class CourseMaintenanceController extends AbstractController
                     continue;
                 }
 
-                $label = $this->resolveItemLabel($typeKey, $obj, is_int($idKey) ? $idKey : 0);
-                if ($typeKey === 'tool_intro' && $label === '#0' && is_string($idKey)) {
+                $label = $this->resolveItemLabel($typeKey, $obj, \is_int($idKey) ? $idKey : 0);
+                if ('tool_intro' === $typeKey && '#0' === $label && \is_string($idKey)) {
                     $label = $idKey;
                 }
 
                 $extra = $this->buildExtra($typeKey, $obj);
 
                 $group['items'][] = [
-                    'id'         => $idKey,
-                    'label'      => $label,
-                    'extra'      => $extra ?: new \stdClass(),
+                    'id' => $idKey,
+                    'label' => $label,
+                    'extra' => $extra ?: new stdClass(),
                     'selectable' => true,
                 ];
             }
@@ -828,7 +840,7 @@ class CourseMaintenanceController extends AbstractController
             if (!empty($group['items'])) {
                 usort(
                     $group['items'],
-                    static fn($a, $b) => strcasecmp((string) $a['label'], (string) $b['label'])
+                    static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label'])
                 );
                 $tree[] = $group;
             }
@@ -836,28 +848,29 @@ class CourseMaintenanceController extends AbstractController
 
         // Preferred order
         $preferredOrder = [
-            'announcement','document','course_description','learnpath','quiz','forum','glossary','link',
-            'survey','thematic','work','attendance','wiki','calendar_event','tool_intro','gradebook',
+            'announcement', 'document', 'course_description', 'learnpath', 'quiz', 'forum', 'glossary', 'link',
+            'survey', 'thematic', 'work', 'attendance', 'wiki', 'calendar_event', 'tool_intro', 'gradebook',
         ];
         usort($tree, static function ($a, $b) use ($preferredOrder) {
             $ia = array_search($a['type'], $preferredOrder, true);
             $ib = array_search($b['type'], $preferredOrder, true);
-            if ($ia !== false && $ib !== false) {
+            if (false !== $ia && false !== $ib) {
                 return $ia <=> $ib;
             }
-            if ($ia !== false) {
+            if (false !== $ia) {
                 return -1;
             }
-            if ($ib !== false) {
+            if (false !== $ib) {
                 return 1;
             }
+
             return strcasecmp($a['title'], $b['title']);
         });
 
         if ($this->debug) {
             $this->logDebug(
                 '[buildResourceTreeForVue] end groups',
-                array_map(fn($g) => ['type' => $g['type'], 'items' => count($g['items'] ?? [])], $tree)
+                array_map(fn ($g) => ['type' => $g['type'], 'items' => \count($g['items'] ?? [])], $tree)
             );
         }
 
@@ -866,27 +879,23 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Build forum tree (Category → Forum → Topic).
-     *
-     * @param object $course
-     * @param string $groupTitle
-     * @return array
      */
     private function buildForumTreeForVue(object $course, string $groupTitle): array
     {
         $this->logDebug('[buildForumTreeForVue] start');
 
-        $res = is_array($course->resources ?? null) ? $course->resources : [];
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
 
-        $catRaw   = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
-        $forumRaw = $res['forum']          ?? $res['Forum']          ?? [];
-        $topicRaw = $res['forum_topic']    ?? $res['ForumTopic']     ?? ($res['thread'] ?? []);
-        $postRaw  = $res['forum_post']     ?? $res['Forum_Post']     ?? ($res['post'] ?? []);
+        $catRaw = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
+        $forumRaw = $res['forum'] ?? $res['Forum'] ?? [];
+        $topicRaw = $res['forum_topic'] ?? $res['ForumTopic'] ?? ($res['thread'] ?? []);
+        $postRaw = $res['forum_post'] ?? $res['Forum_Post'] ?? ($res['post'] ?? []);
 
         $this->logDebug('[buildForumTreeForVue] raw counts', [
-            'categories' => is_array($catRaw) ? count($catRaw) : 0,
-            'forums'     => is_array($forumRaw) ? count($forumRaw) : 0,
-            'topics'     => is_array($topicRaw) ? count($topicRaw) : 0,
-            'posts'      => is_array($postRaw) ? count($postRaw) : 0,
+            'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
+            'forums' => \is_array($forumRaw) ? \count($forumRaw) : 0,
+            'topics' => \is_array($topicRaw) ? \count($topicRaw) : 0,
+            'posts' => \is_array($postRaw) ? \count($postRaw) : 0,
         ]);
 
         $cats = [];
@@ -896,22 +905,22 @@ class CourseMaintenanceController extends AbstractController
 
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !is_object($obj)) {
+            if ($id <= 0 || !\is_object($obj)) {
                 continue;
             }
             $label = $this->resolveItemLabel('forum_category', $this->objectEntity($obj), $id);
             $cats[$id] = [
-                'id'         => $id,
-                'type'       => 'forum_category',
-                'label'      => $label,
+                'id' => $id,
+                'type' => 'forum_category',
+                'label' => $label,
                 'selectable' => false,
-                'children'   => [],
+                'children' => [],
             ];
         }
 
         foreach ($forumRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !is_object($obj)) {
+            if ($id <= 0 || !\is_object($obj)) {
                 continue;
             }
             $forums[$id] = $this->objectEntity($obj);
@@ -919,7 +928,7 @@ class CourseMaintenanceController extends AbstractController
 
         foreach ($topicRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !is_object($obj)) {
+            if ($id <= 0 || !\is_object($obj)) {
                 continue;
             }
             $topics[$id] = $this->objectEntity($obj);
@@ -927,10 +936,10 @@ class CourseMaintenanceController extends AbstractController
 
         foreach ($postRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !is_object($obj)) {
+            if ($id <= 0 || !\is_object($obj)) {
                 continue;
             }
-            $e   = $this->objectEntity($obj);
+            $e = $this->objectEntity($obj);
             $tid = (int) ($e->thread_id ?? 0);
             if ($tid > 0) {
                 $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1;
@@ -940,12 +949,12 @@ class CourseMaintenanceController extends AbstractController
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id'         => $uncatKey,
-                'type'       => 'forum_category',
-                'label'      => 'Uncategorized',
+                'id' => $uncatKey,
+                'type' => 'forum_category',
+                'label' => 'Uncategorized',
                 'selectable' => false,
-                'children'   => [],
-                '_virtual'   => true,
+                'children' => [],
+                '_virtual' => true,
             ];
         }
 
@@ -956,12 +965,12 @@ class CourseMaintenanceController extends AbstractController
             }
 
             $forumNode = [
-                'id'         => $fid,
-                'type'       => 'forum',
-                'label'      => $this->resolveItemLabel('forum', $f, $fid),
-                'extra'      => $this->buildExtra('forum', $f) ?: new \stdClass(),
+                'id' => $fid,
+                'type' => 'forum',
+                'label' => $this->resolveItemLabel('forum', $f, $fid),
+                'extra' => $this->buildExtra('forum', $f) ?: new stdClass(),
                 'selectable' => true,
-                'children'   => [],
+                'children' => [],
             ];
 
             foreach ($topics as $tid => $t) {
@@ -970,35 +979,35 @@ class CourseMaintenanceController extends AbstractController
                 }
 
                 $author = (string) ($t->thread_poster_name ?? $t->poster_name ?? '');
-                $date   = (string) ($t->thread_date ?? '');
+                $date = (string) ($t->thread_date ?? '');
                 $nPosts = (int) ($postCountByTopic[$tid] ?? 0);
 
                 $topicLabel = $this->resolveItemLabel('forum_topic', $t, $tid);
                 $meta = [];
-                if ($author !== '') {
+                if ('' !== $author) {
                     $meta[] = $author;
                 }
-                if ($date !== '') {
+                if ('' !== $date) {
                     $meta[] = $date;
                 }
                 if ($meta) {
                     $topicLabel .= ' ('.implode(', ', $meta).')';
                 }
                 if ($nPosts > 0) {
-                    $topicLabel .= ' — '.$nPosts.' post'.($nPosts === 1 ? '' : 's');
+                    $topicLabel .= ' — '.$nPosts.' post'.(1 === $nPosts ? '' : 's');
                 }
 
                 $forumNode['children'][] = [
-                    'id'         => $tid,
-                    'type'       => 'forum_topic',
-                    'label'      => $topicLabel,
-                    'extra'      => new \stdClass(),
+                    'id' => $tid,
+                    'type' => 'forum_topic',
+                    'label' => $topicLabel,
+                    'extra' => new stdClass(),
                     'selectable' => true,
                 ];
             }
 
             if ($forumNode['children']) {
-                usort($forumNode['children'], static fn($a, $b) => strcasecmp($a['label'], $b['label']));
+                usort($forumNode['children'], static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
             }
 
             $cats[$catId]['children'][] = $forumNode;
@@ -1008,21 +1017,22 @@ class CourseMaintenanceController extends AbstractController
             if (!empty($c['_virtual']) && empty($c['children'])) {
                 return false;
             }
+
             return true;
         }));
 
         foreach ($catNodes as &$c) {
             if (!empty($c['children'])) {
-                usort($c['children'], static fn($a, $b) => strcasecmp($a['label'], $b['label']));
+                usort($c['children'], static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
             }
         }
         unset($c);
-        usort($catNodes, static fn($a, $b) => strcasecmp($a['label'], $b['label']));
+        usort($catNodes, static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
 
-        $this->logDebug('[buildForumTreeForVue] end', ['categories' => count($catNodes)]);
+        $this->logDebug('[buildForumTreeForVue] end', ['categories' => \count($catNodes)]);
 
         return [
-            'type'  => 'forum',
+            'type' => 'forum',
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
@@ -1030,40 +1040,37 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Normalize a raw type to a lowercase key.
-     *
-     * @param int|string $raw
-     * @return string
      */
     private function normalizeTypeKey(int|string $raw): string
     {
-        if (is_int($raw)) {
+        if (\is_int($raw)) {
             return (string) $raw;
         }
 
         $s = strtolower(str_replace(['\\', ' '], ['/', '_'], (string) $raw));
 
         $map = [
-            'forum_category'          => 'forum_category',
-            'forumtopic'              => 'forum_topic',
-            'forum_topic'             => 'forum_topic',
-            'forum_post'              => 'forum_post',
-            'thread'                  => 'forum_topic',
-            'post'                    => 'forum_post',
-            'exercise_question'       => 'exercise_question',
-            'surveyquestion'          => 'survey_question',
-            'surveyinvitation'        => 'survey_invitation',
-            'SurveyQuestion'          => 'survey_question',
-            'SurveyInvitation'        => 'survey_invitation',
-            'Survey'                  => 'survey',
-            'link_category'           => 'link_category',
-            'coursecopylearnpath'     => 'learnpath',
-            'coursecopytestcategory'  => 'test_category',
-            'coursedescription'       => 'course_description',
-            'session_course'          => 'session_course',
-            'gradebookbackup'         => 'gradebook',
-            'scormdocument'           => 'scorm',
-            'tool/introduction'       => 'tool_intro',
-            'tool_introduction'       => 'tool_intro',
+            'forum_category' => 'forum_category',
+            'forumtopic' => 'forum_topic',
+            'forum_topic' => 'forum_topic',
+            'forum_post' => 'forum_post',
+            'thread' => 'forum_topic',
+            'post' => 'forum_post',
+            'exercise_question' => 'exercise_question',
+            'surveyquestion' => 'survey_question',
+            'surveyinvitation' => 'survey_invitation',
+            'SurveyQuestion' => 'survey_question',
+            'SurveyInvitation' => 'survey_invitation',
+            'Survey' => 'survey',
+            'link_category' => 'link_category',
+            'coursecopylearnpath' => 'learnpath',
+            'coursecopytestcategory' => 'test_category',
+            'coursedescription' => 'course_description',
+            'session_course' => 'session_course',
+            'gradebookbackup' => 'gradebook',
+            'scormdocument' => 'scorm',
+            'tool/introduction' => 'tool_intro',
+            'tool_introduction' => 'tool_intro',
         ];
 
         return $map[$s] ?? $s;
@@ -1077,17 +1084,17 @@ class CourseMaintenanceController extends AbstractController
     private function getSkipTypeKeys(): array
     {
         return [
-            'forum_category'     => true,
-            'forum_topic'        => true,
-            'forum_post'         => true,
-            'thread'             => true,
-            'post'               => true,
-            'exercise_question'  => true,
-            'survey_question'    => true,
-            'survey_invitation'  => true,
-            'session_course'     => true,
-            'scorm'              => true,
-            'asset'              => true,
+            'forum_category' => true,
+            'forum_topic' => true,
+            'forum_post' => true,
+            'thread' => true,
+            'post' => true,
+            'exercise_question' => true,
+            'survey_question' => true,
+            'survey_invitation' => true,
+            'session_course' => true,
+            'scorm' => true,
+            'asset' => true,
         ];
     }
 
@@ -1099,70 +1106,62 @@ class CourseMaintenanceController extends AbstractController
     private function getDefaultTypeTitles(): array
     {
         return [
-            'announcement'        => 'Announcements',
-            'document'            => 'Documents',
-            'glossary'            => 'Glossaries',
-            'calendar_event'      => 'Calendar events',
-            'event'               => 'Calendar events',
-            'link'                => 'Links',
-            'course_description'  => 'Course descriptions',
-            'learnpath'           => 'Parcours',
-            'learnpath_category'  => 'Learning path categories',
-            'forum'               => 'Forums',
-            'forum_category'      => 'Forum categories',
-            'quiz'                => 'Exercices',
-            'test_category'       => 'Test categories',
-            'wiki'                => 'Wikis',
-            'thematic'            => 'Thematics',
-            'attendance'          => 'Attendances',
-            'work'                => 'Works',
-            'session_course'      => 'Session courses',
-            'gradebook'           => 'Gradebook',
-            'scorm'               => 'SCORM packages',
-            'survey'              => 'Surveys',
-            'survey_question'     => 'Survey questions',
-            'survey_invitation'   => 'Survey invitations',
-            'asset'               => 'Assets',
-            'tool_intro'          => 'Tool introductions',
+            'announcement' => 'Announcements',
+            'document' => 'Documents',
+            'glossary' => 'Glossaries',
+            'calendar_event' => 'Calendar events',
+            'event' => 'Calendar events',
+            'link' => 'Links',
+            'course_description' => 'Course descriptions',
+            'learnpath' => 'Parcours',
+            'learnpath_category' => 'Learning path categories',
+            'forum' => 'Forums',
+            'forum_category' => 'Forum categories',
+            'quiz' => 'Exercices',
+            'test_category' => 'Test categories',
+            'wiki' => 'Wikis',
+            'thematic' => 'Thematics',
+            'attendance' => 'Attendances',
+            'work' => 'Works',
+            'session_course' => 'Session courses',
+            'gradebook' => 'Gradebook',
+            'scorm' => 'SCORM packages',
+            'survey' => 'Surveys',
+            'survey_question' => 'Survey questions',
+            'survey_invitation' => 'Survey invitations',
+            'asset' => 'Assets',
+            'tool_intro' => 'Tool introductions',
         ];
     }
 
     /**
      * Decide if an item is selectable (UI).
-     *
-     * @param string $type
-     * @param object $obj
-     * @return bool
      */
     private function isSelectableItem(string $type, object $obj): bool
     {
-        if ($type === 'document') {
+        if ('document' === $type) {
             return true;
         }
+
         return true;
     }
 
     /**
      * Resolve label for an item with fallbacks.
-     *
-     * @param string $type
-     * @param object $obj
-     * @param int    $fallbackId
-     * @return string
      */
     private function resolveItemLabel(string $type, object $obj, int $fallbackId): string
     {
         $entity = $this->objectEntity($obj);
 
         foreach (['title', 'name', 'subject', 'question', 'display', 'code', 'description'] as $k) {
-            if (isset($entity->$k) && is_string($entity->$k) && trim($entity->$k) !== '') {
-                return trim((string) $entity->$k);
+            if (isset($entity->{$k}) && \is_string($entity->{$k}) && '' !== trim($entity->{$k})) {
+                return trim((string) $entity->{$k});
             }
         }
 
-        if (isset($obj->params) && is_array($obj->params)) {
+        if (isset($obj->params) && \is_array($obj->params)) {
             foreach (['title', 'name', 'subject', 'display', 'description'] as $k) {
-                if (!empty($obj->params[$k]) && is_string($obj->params[$k])) {
+                if (!empty($obj->params[$k]) && \is_string($obj->params[$k])) {
                     return (string) $obj->params[$k];
                 }
             }
@@ -1175,8 +1174,10 @@ class CourseMaintenanceController extends AbstractController
                 }
                 if (!empty($obj->path)) {
                     $base = basename((string) $obj->path);
-                    return $base !== '' ? $base : (string) $obj->path;
+
+                    return '' !== $base ? $base : (string) $obj->path;
                 }
+
                 break;
 
             case 'course_description':
@@ -1194,24 +1195,28 @@ class CourseMaintenanceController extends AbstractController
                     7 => 'Assessment',
                     8 => 'Custom',
                 ];
+
                 return $names[$t] ?? ('#'.$fallbackId);
 
             case 'announcement':
                 if (!empty($obj->title)) {
                     return (string) $obj->title;
                 }
+
                 break;
 
             case 'forum':
                 if (!empty($entity->forum_title)) {
                     return (string) $entity->forum_title;
                 }
+
                 break;
 
             case 'forum_category':
                 if (!empty($entity->cat_title)) {
                     return (string) $entity->cat_title;
                 }
+
                 break;
 
             case 'link':
@@ -1221,36 +1226,42 @@ class CourseMaintenanceController extends AbstractController
                 if (!empty($obj->url)) {
                     return (string) $obj->url;
                 }
+
                 break;
 
             case 'survey':
                 if (!empty($obj->title)) {
                     return trim((string) $obj->title);
                 }
+
                 break;
 
             case 'learnpath':
                 if (!empty($obj->name)) {
                     return (string) $obj->name;
                 }
+
                 break;
 
             case 'thematic':
-                if (isset($obj->params['title']) && is_string($obj->params['title'])) {
+                if (isset($obj->params['title']) && \is_string($obj->params['title'])) {
                     return (string) $obj->params['title'];
                 }
+
                 break;
 
             case 'quiz':
                 if (!empty($entity->title)) {
                     return (string) $entity->title;
                 }
+
                 break;
 
             case 'forum_topic':
                 if (!empty($entity->thread_title)) {
                     return (string) $entity->thread_title;
                 }
+
                 break;
         }
 
@@ -1259,85 +1270,86 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Extract wrapped entity (->obj) or the object itself.
-     *
-     * @param object $resource
-     * @return object
      */
     private function objectEntity(object $resource): object
     {
-        if (isset($resource->obj) && is_object($resource->obj)) {
+        if (isset($resource->obj) && \is_object($resource->obj)) {
             return $resource->obj;
         }
+
         return $resource;
     }
 
     /**
      * Extra payload per item for UI (optional).
-     *
-     * @param string $type
-     * @param object $obj
-     * @return array
      */
     private function buildExtra(string $type, object $obj): array
     {
         $extra = [];
 
         $get = static function (object $o, string $k, $default = null) {
-            return (isset($o->$k) && (is_string($o->$k) || is_numeric($o->$k))) ? $o->$k : $default;
+            return (isset($o->{$k}) && (\is_string($o->{$k}) || is_numeric($o->{$k}))) ? $o->{$k} : $default;
         };
 
         switch ($type) {
             case 'document':
-                $extra['path']     = (string) ($get($obj, 'path', '') ?? '');
+                $extra['path'] = (string) ($get($obj, 'path', '') ?? '');
                 $extra['filetype'] = (string) ($get($obj, 'file_type', '') ?? '');
-                $extra['size']     = (string) ($get($obj, 'size', '') ?? '');
+                $extra['size'] = (string) ($get($obj, 'size', '') ?? '');
+
                 break;
 
             case 'link':
-                $extra['url']    = (string) ($get($obj, 'url', '') ?? '');
+                $extra['url'] = (string) ($get($obj, 'url', '') ?? '');
                 $extra['target'] = (string) ($get($obj, 'target', '') ?? '');
+
                 break;
 
             case 'forum':
                 $entity = $this->objectEntity($obj);
                 $extra['category_id'] = (string) ($entity->forum_category ?? '');
                 $extra['default_view'] = (string) ($entity->default_view ?? '');
+
                 break;
 
             case 'learnpath':
-                $extra['name']  = (string) ($get($obj, 'name', '') ?? '');
-                $extra['items'] = isset($obj->items) && is_array($obj->items) ? array_map(static function ($i) {
+                $extra['name'] = (string) ($get($obj, 'name', '') ?? '');
+                $extra['items'] = isset($obj->items) && \is_array($obj->items) ? array_map(static function ($i) {
                     return [
-                        'id'    => (int) ($i['id'] ?? 0),
+                        'id' => (int) ($i['id'] ?? 0),
                         'title' => (string) ($i['title'] ?? ''),
-                        'type'  => (string) ($i['item_type'] ?? ''),
-                        'path'  => (string) ($i['path'] ?? ''),
+                        'type' => (string) ($i['item_type'] ?? ''),
+                        'path' => (string) ($i['path'] ?? ''),
                     ];
                 }, $obj->items) : [];
+
                 break;
 
             case 'thematic':
-                if (isset($obj->params) && is_array($obj->params)) {
+                if (isset($obj->params) && \is_array($obj->params)) {
                     $extra['active'] = (string) ($obj->params['active'] ?? '');
                 }
+
                 break;
 
             case 'quiz':
                 $entity = $this->objectEntity($obj);
-                $extra['question_ids'] = isset($entity->question_ids) && is_array($entity->question_ids)
+                $extra['question_ids'] = isset($entity->question_ids) && \is_array($entity->question_ids)
                     ? array_map('intval', $entity->question_ids)
                     : [];
+
                 break;
 
             case 'survey':
                 $entity = $this->objectEntity($obj);
-                $extra['question_ids'] = isset($entity->question_ids) && is_array($entity->question_ids)
+                $extra['question_ids'] = isset($entity->question_ids) && \is_array($entity->question_ids)
                     ? array_map('intval', $entity->question_ids)
                     : [];
+
                 break;
         }
 
-        return array_filter($extra, static fn($v) => !($v === '' || $v === null || $v === []));
+        return array_filter($extra, static fn ($v) => !('' === $v || null === $v || [] === $v));
     }
 
     // --------------------------------------------------------------------------------
@@ -1346,67 +1358,70 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Get first existing key from candidates.
-     *
-     * @param array $orig
-     * @param array $candidates
-     * @return string|null
      */
     private function firstExistingKey(array $orig, array $candidates): ?string
     {
         foreach ($candidates as $k) {
-            if (isset($orig[$k]) && is_array($orig[$k]) && !empty($orig[$k])) {
+            if (isset($orig[$k]) && \is_array($orig[$k]) && !empty($orig[$k])) {
                 return $k;
             }
         }
+
         return null;
     }
 
     /**
      * Filter legacy Course by UI selections (and pull dependencies).
      *
-     * @param object $course
-     * @param array  $selected [type => [id => true]]
-     * @return object
+     * @param array $selected [type => [id => true]]
      */
     private function filterLegacyCourseBySelection(object $course, array $selected): object
     {
         $this->logDebug('[filterSelection] start', ['selected_types' => array_keys($selected)]);
 
-        if (empty($course->resources) || !is_array($course->resources)) {
+        if (empty($course->resources) || !\is_array($course->resources)) {
             $this->logDebug('[filterSelection] course has no resources');
+
             return $course;
         }
+
+        /** @var array<string,mixed> $orig */
         $orig = $course->resources;
+
+        $getBucket = static function (array $a, string $key): array {
+            return (isset($a[$key]) && \is_array($a[$key])) ? $a[$key] : [];
+        };
 
         // Forums flow
         $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'] ?? [])), true);
         if (!empty($selForums)) {
-            $forums = $orig['forum'] ?? [];
+            $forums = $getBucket($orig, 'forum');
             $catsToKeep = [];
+
             foreach ($forums as $fid => $f) {
                 if (!isset($selForums[(string) $fid])) {
                     continue;
                 }
-                $e = isset($f->obj) && is_object($f->obj) ? $f->obj : $f;
+                $e = (isset($f->obj) && \is_object($f->obj)) ? $f->obj : $f;
                 $cid = (int) ($e->forum_category ?? 0);
                 if ($cid > 0) {
                     $catsToKeep[$cid] = true;
                 }
             }
 
-            $threads = $orig['thread'] ?? [];
+            $threads = $getBucket($orig, 'thread');
             $threadToKeep = [];
             foreach ($threads as $tid => $t) {
-                $e = isset($t->obj) && is_object($t->obj) ? $t->obj : $t;
+                $e = (isset($t->obj) && \is_object($t->obj)) ? $t->obj : $t;
                 if (isset($selForums[(string) ($e->forum_id ?? '')])) {
                     $threadToKeep[(int) $tid] = true;
                 }
             }
 
-            $posts = $orig['post'] ?? [];
+            $posts = $getBucket($orig, 'post');
             $postToKeep = [];
             foreach ($posts as $pid => $p) {
-                $e = isset($p->obj) && is_object($p->obj) ? $p->obj : $p;
+                $e = (isset($p->obj) && \is_object($p->obj)) ? $p->obj : $p;
                 if (isset($threadToKeep[(int) ($e->thread_id ?? 0)])) {
                     $postToKeep[(int) $pid] = true;
                 }
@@ -1414,49 +1429,58 @@ class CourseMaintenanceController extends AbstractController
 
             $out = [];
             foreach ($selected as $type => $ids) {
-                if (!is_array($ids) || empty($ids)) {
+                if (!\is_array($ids) || empty($ids)) {
                     continue;
                 }
-                if (!empty($orig[$type])) {
-                    $out[$type] = array_intersect_key($orig[$type], $ids);
+                $bucket = $getBucket($orig, (string) $type);
+                if (!empty($bucket)) {
+                    $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
+                    $out[$type] = array_intersect_key($bucket, $idsMap);
                 }
             }
 
-            if (!empty($orig['Forum_Category'])) {
+            $forumCat = $getBucket($orig, 'Forum_Category');
+            if (!empty($forumCat)) {
                 $out['Forum_Category'] = array_intersect_key(
-                    $orig['Forum_Category'],
+                    $forumCat,
                     array_fill_keys(array_map('strval', array_keys($catsToKeep)), true)
                 );
             }
-            if (!empty($orig['forum'])) {
-                $out['forum'] = array_intersect_key($orig['forum'], $selForums);
+
+            $forumBucket = $getBucket($orig, 'forum');
+            if (!empty($forumBucket)) {
+                $out['forum'] = array_intersect_key($forumBucket, $selForums);
             }
-            if (!empty($orig['thread'])) {
+
+            $threadBucket = $getBucket($orig, 'thread');
+            if (!empty($threadBucket)) {
                 $out['thread'] = array_intersect_key(
-                    $orig['thread'],
+                    $threadBucket,
                     array_fill_keys(array_map('strval', array_keys($threadToKeep)), true)
                 );
             }
-            if (!empty($orig['post'])) {
+
+            $postBucket = $getBucket($orig, 'post');
+            if (!empty($postBucket)) {
                 $out['post'] = array_intersect_key(
-                    $orig['post'],
+                    $postBucket,
                     array_fill_keys(array_map('strval', array_keys($postToKeep)), true)
                 );
             }
 
-            if (!empty($out['forum']) && empty($out['Forum_Category']) && !empty($orig['Forum_Category'])) {
-                $out['Forum_Category'] = $orig['Forum_Category'];
+            if (!empty($out['forum']) && empty($out['Forum_Category']) && !empty($forumCat)) {
+                $out['Forum_Category'] = $forumCat;
             }
 
             $course->resources = array_filter($out);
 
             $this->logDebug('[filterSelection] end', [
-                'kept_types'   => array_keys($course->resources),
+                'kept_types' => array_keys($course->resources),
                 'forum_counts' => [
-                    'Forum_Category' => is_array($course->resources['Forum_Category'] ?? null) ? count($course->resources['Forum_Category']) : 0,
-                    'forum'          => is_array($course->resources['forum'] ?? null) ? count($course->resources['forum']) : 0,
-                    'thread'         => is_array($course->resources['thread'] ?? null) ? count($course->resources['thread']) : 0,
-                    'post'           => is_array($course->resources['post'] ?? null) ? count($course->resources['post']) : 0,
+                    'Forum_Category' => \is_array($course->resources['Forum_Category'] ?? null) ? \count($course->resources['Forum_Category']) : 0,
+                    'forum' => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
+                    'thread' => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
+                    'post' => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
                 ],
             ]);
 
@@ -1470,7 +1494,7 @@ class CourseMaintenanceController extends AbstractController
 
         $keep = [];
         foreach ($selected as $type => $ids) {
-            if (!is_array($ids) || empty($ids)) {
+            if (!\is_array($ids) || empty($ids)) {
                 continue;
             }
 
@@ -1479,35 +1503,40 @@ class CourseMaintenanceController extends AbstractController
                 $legacyKey = $alias[$type];
             }
 
-            if (!empty($orig[$legacyKey])) {
-                $keep[$legacyKey] = array_intersect_key($orig[$legacyKey], $ids);
+            $bucket = $getBucket($orig, (string) $legacyKey);
+            if (!empty($bucket)) {
+                $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
+                $keep[$legacyKey] = array_intersect_key($bucket, $idsMap);
             }
         }
 
         // Gradebook bucket
         $gbKey = $this->firstExistingKey($orig, ['gradebook', 'Gradebook', 'GradebookBackup', 'gradebookbackup']);
         if ($gbKey && !empty($selected['gradebook'])) {
-            $selIds = array_keys(array_filter((array) $selected['gradebook']));
-            $firstItem = is_array($orig[$gbKey]) ? reset($orig[$gbKey]) : null;
+            $gbBucket = $getBucket($orig, $gbKey);
+            if (!empty($gbBucket)) {
+                $selIds = array_keys(array_filter((array) $selected['gradebook']));
+                $firstItem = reset($gbBucket);
 
-            if (in_array('all', $selIds, true) || !is_object($firstItem)) {
-                $keep[$gbKey] = $orig[$gbKey];
-                $this->logDebug('[filterSelection] kept full gradebook bucket', ['key' => $gbKey, 'count' => is_array($orig[$gbKey]) ? count($orig[$gbKey]) : 0]);
-            } else {
-                $keep[$gbKey] = array_intersect_key($orig[$gbKey], array_fill_keys(array_map('strval', $selIds), true));
-                $this->logDebug('[filterSelection] kept partial gradebook bucket', ['key' => $gbKey, 'count' => is_array($keep[$gbKey]) ? count($keep[$gbKey]) : 0]);
+                if (\in_array('all', $selIds, true) || !\is_object($firstItem)) {
+                    $keep[$gbKey] = $gbBucket;
+                    $this->logDebug('[filterSelection] kept full gradebook bucket', ['key' => $gbKey, 'count' => \count($gbBucket)]);
+                } else {
+                    $keep[$gbKey] = array_intersect_key($gbBucket, array_fill_keys(array_map('strval', $selIds), true));
+                    $this->logDebug('[filterSelection] kept partial gradebook bucket', ['key' => $gbKey, 'count' => \count($keep[$gbKey])]);
+                }
             }
         }
 
         // Quizzes → questions (+ images)
         $quizKey = $this->firstExistingKey($orig, ['quiz', 'Quiz']);
         if ($quizKey && !empty($keep[$quizKey])) {
-            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question', 'exercise_question', (defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '')]);
+            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question', 'exercise_question', \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '']);
             if ($questionKey) {
                 $qids = [];
                 foreach ($keep[$quizKey] as $qid => $qwrap) {
-                    $q = (isset($qwrap->obj) && is_object($qwrap->obj)) ? $qwrap->obj : $qwrap;
-                    if (!empty($q->question_ids) && is_array($q->question_ids)) {
+                    $q = (isset($qwrap->obj) && \is_object($qwrap->obj)) ? $qwrap->obj : $qwrap;
+                    if (!empty($q->question_ids) && \is_array($q->question_ids)) {
                         foreach ($q->question_ids as $sid) {
                             $qids[(string) $sid] = true;
                         }
@@ -1515,37 +1544,34 @@ class CourseMaintenanceController extends AbstractController
                 }
 
                 if (!empty($qids)) {
-                    $selQ = array_intersect_key($orig[$questionKey], $qids);
+                    $questionBucket = $getBucket($orig, $questionKey);
+                    $selQ = array_intersect_key($questionBucket, $qids);
                     if (!empty($selQ)) {
                         $keep[$questionKey] = $selQ;
                         $this->logDebug('[filterSelection] pulled question bucket for quizzes', [
-                            'quiz_count'     => count($keep[$quizKey]),
-                            'question_key'   => $questionKey,
-                            'questions_kept' => count($keep[$questionKey]),
+                            'quiz_count' => \count($keep[$quizKey]),
+                            'question_key' => $questionKey,
+                            'questions_kept' => \count($keep[$questionKey]),
                         ]);
 
-                        $docKey = $this->firstExistingKey($orig, ['document', 'Document', (defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '')]);
+                        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
                         if ($docKey) {
-                            $imageQuizBucket = $orig[$docKey]['image_quiz'] ?? null;
-                            if (is_array($imageQuizBucket) && !empty($imageQuizBucket)) {
+                            $docBucket = $getBucket($orig, $docKey);
+                            $imageQuizBucket = (isset($docBucket['image_quiz']) && \is_array($docBucket['image_quiz'])) ? $docBucket['image_quiz'] : [];
+                            if (!empty($imageQuizBucket)) {
                                 $needed = [];
                                 foreach ($keep[$questionKey] as $qid => $qwrap) {
-                                    $q = (isset($qwrap->obj) && is_object($qwrap->obj)) ? $qwrap->obj : $qwrap;
+                                    $q = (isset($qwrap->obj) && \is_object($qwrap->obj)) ? $qwrap->obj : $qwrap;
                                     $pic = (string) ($q->picture ?? '');
-                                    if ($pic !== '' && isset($imageQuizBucket[$pic])) {
+                                    if ('' !== $pic && isset($imageQuizBucket[$pic])) {
                                         $needed[$pic] = true;
                                     }
                                 }
                                 if (!empty($needed)) {
-                                    if (!isset($keep[$docKey]) || !is_array($keep[$docKey])) {
-                                        $keep[$docKey] = [];
-                                    }
-                                    if (!isset($keep[$docKey]['image_quiz']) || !is_array($keep[$docKey]['image_quiz'])) {
-                                        $keep[$docKey]['image_quiz'] = [];
-                                    }
+                                    $keep[$docKey] = $keep[$docKey] ?? [];
                                     $keep[$docKey]['image_quiz'] = array_intersect_key($imageQuizBucket, $needed);
                                     $this->logDebug('[filterSelection] included image_quiz docs for questions', [
-                                        'count' => count($keep[$docKey]['image_quiz']),
+                                        'count' => \count($keep[$docKey]['image_quiz']),
                                     ]);
                                 }
                             }
@@ -1560,38 +1586,40 @@ class CourseMaintenanceController extends AbstractController
         // Surveys → questions (+ invitations)
         $surveyKey = $this->firstExistingKey($orig, ['survey', 'Survey']);
         if ($surveyKey && !empty($keep[$surveyKey])) {
-            $surveyQuestionKey = $this->firstExistingKey($orig, ['Survey_Question', 'survey_question', (defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '')]);
-            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation', 'survey_invitation', (defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '')]);
+            $surveyQuestionKey = $this->firstExistingKey($orig, ['Survey_Question', 'survey_question', \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '']);
+            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation', 'survey_invitation', \defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '']);
 
             if ($surveyQuestionKey) {
                 $neededQids = [];
                 $selSurveyIds = array_map('strval', array_keys($keep[$surveyKey]));
 
                 foreach ($keep[$surveyKey] as $sid => $sWrap) {
-                    $s = (isset($sWrap->obj) && is_object($sWrap->obj)) ? $sWrap->obj : $sWrap;
-                    if (!empty($s->question_ids) && is_array($s->question_ids)) {
+                    $s = (isset($sWrap->obj) && \is_object($sWrap->obj)) ? $sWrap->obj : $sWrap;
+                    if (!empty($s->question_ids) && \is_array($s->question_ids)) {
                         foreach ($s->question_ids as $qid) {
                             $neededQids[(string) $qid] = true;
                         }
                     }
                 }
 
-                if (empty($neededQids) && is_array($orig[$surveyQuestionKey])) {
-                    foreach ($orig[$surveyQuestionKey] as $qid => $qWrap) {
-                        $q = (isset($qWrap->obj) && is_object($qWrap->obj)) ? $qWrap->obj : $qWrap;
+                if (empty($neededQids)) {
+                    $surveyQBucket = $getBucket($orig, $surveyQuestionKey);
+                    foreach ($surveyQBucket as $qid => $qWrap) {
+                        $q = (isset($qWrap->obj) && \is_object($qWrap->obj)) ? $qWrap->obj : $qWrap;
                         $qSurveyId = (string) ($q->survey_id ?? '');
-                        if ($qSurveyId !== '' && in_array($qSurveyId, $selSurveyIds, true)) {
+                        if ('' !== $qSurveyId && \in_array($qSurveyId, $selSurveyIds, true)) {
                             $neededQids[(string) $qid] = true;
                         }
                     }
                 }
 
                 if (!empty($neededQids)) {
-                    $keep[$surveyQuestionKey] = array_intersect_key($orig[$surveyQuestionKey], $neededQids);
+                    $surveyQBucket = $getBucket($orig, $surveyQuestionKey);
+                    $keep[$surveyQuestionKey] = array_intersect_key($surveyQBucket, $neededQids);
                     $this->logDebug('[filterSelection] pulled question bucket for surveys', [
-                        'survey_count'    => count($keep[$surveyKey]),
-                        'question_key'    => $surveyQuestionKey,
-                        'questions_kept'  => count($keep[$surveyQuestionKey]),
+                        'survey_count' => \count($keep[$surveyKey]),
+                        'question_key' => $surveyQuestionKey,
+                        'questions_kept' => \count($keep[$surveyQuestionKey]),
                     ]);
                 } else {
                     $this->logDebug('[filterSelection] surveys selected but no matching questions found');
@@ -1600,20 +1628,23 @@ class CourseMaintenanceController extends AbstractController
                 $this->logDebug('[filterSelection] surveys selected but no question bucket found in backup');
             }
 
-            if ($surveyInvitationKey && !empty($orig[$surveyInvitationKey])) {
-                $neededInv = [];
-                foreach ($orig[$surveyInvitationKey] as $iid => $invWrap) {
-                    $inv = (isset($invWrap->obj) && is_object($invWrap->obj)) ? $invWrap->obj : $invWrap;
-                    $sid = (string) ($inv->survey_id ?? '');
-                    if ($sid !== '' && isset($keep[$surveyKey][$sid])) {
-                        $neededInv[(string) $iid] = true;
+            if ($surveyInvitationKey) {
+                $invBucket = $getBucket($orig, $surveyInvitationKey);
+                if (!empty($invBucket)) {
+                    $neededInv = [];
+                    foreach ($invBucket as $iid => $invWrap) {
+                        $inv = (isset($invWrap->obj) && \is_object($invWrap->obj)) ? $invWrap->obj : $invWrap;
+                        $sid = (string) ($inv->survey_id ?? '');
+                        if ('' !== $sid && isset($keep[$surveyKey][$sid])) {
+                            $neededInv[(string) $iid] = true;
+                        }
                     }
-                }
-                if (!empty($neededInv)) {
-                    $keep[$surveyInvitationKey] = array_intersect_key($orig[$surveyInvitationKey], $neededInv);
-                    $this->logDebug('[filterSelection] included survey invitations', [
-                        'invitations_kept' => count($keep[$surveyInvitationKey]),
-                    ]);
+                    if (!empty($neededInv)) {
+                        $keep[$surveyInvitationKey] = array_intersect_key($invBucket, $neededInv);
+                        $this->logDebug('[filterSelection] included survey invitations', [
+                            'invitations_kept' => \count($keep[$surveyInvitationKey]),
+                        ]);
+                    }
                 }
             }
         }
@@ -1628,22 +1659,19 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Map UI options (1/2/3) to legacy file policy.
-     *
-     * @param int $opt
-     * @return int
      */
     private function mapSameNameOption(int $opt): int
     {
-        $opt = in_array($opt, [1, 2, 3], true) ? $opt : 2;
+        $opt = \in_array($opt, [1, 2, 3], true) ? $opt : 2;
 
-        if (!defined('FILE_SKIP')) {
-            define('FILE_SKIP', 1);
+        if (!\defined('FILE_SKIP')) {
+            \define('FILE_SKIP', 1);
         }
-        if (!defined('FILE_RENAME')) {
-            define('FILE_RENAME', 2);
+        if (!\defined('FILE_RENAME')) {
+            \define('FILE_RENAME', 2);
         }
-        if (!defined('FILE_OVERWRITE')) {
-            define('FILE_OVERWRITE', 3);
+        if (!\defined('FILE_OVERWRITE')) {
+            \define('FILE_OVERWRITE', 3);
         }
 
         return match ($opt) {
@@ -1655,9 +1683,6 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Set debug mode from Request (query/header).
-     *
-     * @param Request|null $req
-     * @return void
      */
     private function setDebugFromRequest(?Request $req): void
     {
@@ -1667,22 +1692,19 @@ class CourseMaintenanceController extends AbstractController
         // Query param wins
         if ($req->query->has('debug')) {
             $this->debug = $req->query->getBoolean('debug');
+
             return;
         }
         // Fallback to header
         $hdr = $req->headers->get('X-Debug');
-        if ($hdr !== null) {
+        if (null !== $hdr) {
             $val = trim((string) $hdr);
-            $this->debug = ($val !== '' && $val !== '0' && strcasecmp($val, 'false') !== 0);
+            $this->debug = ('' !== $val && '0' !== $val && 0 !== strcasecmp($val, 'false'));
         }
     }
 
     /**
      * Debug logger with stage + compact JSON payload.
-     *
-     * @param string $stage
-     * @param mixed  $payload
-     * @return void
      */
     private function logDebug(string $stage, mixed $payload = null): void
     {
@@ -1690,18 +1712,20 @@ class CourseMaintenanceController extends AbstractController
             return;
         }
         $prefix = 'COURSE_DEBUG';
-        if ($payload === null) {
+        if (null === $payload) {
             error_log("$prefix: $stage");
+
             return;
         }
         // Safe/short json
         $json = null;
+
         try {
             $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            if ($json !== null && strlen($json) > 8000) {
+            if (null !== $json && \strlen($json) > 8000) {
                 $json = substr($json, 0, 8000).'…(truncated)';
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $json = '[payload_json_error: '.$e->getMessage().']';
         }
         error_log("$prefix: $stage -> $json");
@@ -1709,58 +1733,54 @@ class CourseMaintenanceController extends AbstractController
 
     /**
      * Snapshot of resources bag for quick inspection.
-     *
-     * @param object $course
-     * @param int    $maxTypes
-     * @param int    $maxItemsPerType
-     * @return array
      */
     private function snapshotResources(object $course, int $maxTypes = 20, int $maxItemsPerType = 3): array
     {
         $out = [];
-        $res = is_array($course->resources ?? null) ? $course->resources : [];
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
         $i = 0;
         foreach ($res as $type => $bag) {
             if ($i++ >= $maxTypes) {
                 $out['__notice'] = 'types truncated';
+
                 break;
             }
-            $snap = ['count' => is_array($bag) ? count($bag) : 0, 'sample' => []];
-            if (is_array($bag)) {
+            $snap = ['count' => \is_array($bag) ? \count($bag) : 0, 'sample' => []];
+            if (\is_array($bag)) {
                 $j = 0;
                 foreach ($bag as $id => $obj) {
                     if ($j++ >= $maxItemsPerType) {
                         $snap['sample'][] = ['__notice' => 'truncated'];
+
                         break;
                     }
-                    $entity = (is_object($obj) && isset($obj->obj) && is_object($obj->obj)) ? $obj->obj : $obj;
+                    $entity = (\is_object($obj) && isset($obj->obj) && \is_object($obj->obj)) ? $obj->obj : $obj;
                     $snap['sample'][] = [
-                        'id'          => (string) $id,
-                        'cls'         => is_object($obj) ? get_class($obj) : gettype($obj),
-                        'entity_keys' => is_object($entity) ? array_slice(array_keys((array) $entity), 0, 12) : [],
+                        'id' => (string) $id,
+                        'cls' => \is_object($obj) ? $obj::class : \gettype($obj),
+                        'entity_keys' => \is_object($entity) ? \array_slice(array_keys((array) $entity), 0, 12) : [],
                     ];
                 }
             }
             $out[(string) $type] = $snap;
         }
+
         return $out;
     }
 
     /**
      * Snapshot of forum-family counters.
-     *
-     * @param object $course
-     * @return array
      */
     private function snapshotForumCounts(object $course): array
     {
-        $r = is_array($course->resources ?? null) ? $course->resources : [];
-        $get = fn($a, $b) => is_array(($r[$a] ?? $r[$b] ?? null)) ? count($r[$a] ?? $r[$b]) : 0;
+        $r = \is_array($course->resources ?? null) ? $course->resources : [];
+        $get = fn ($a, $b) => \is_array($r[$a] ?? $r[$b] ?? null) ? \count($r[$a] ?? $r[$b]) : 0;
+
         return [
             'Forum_Category' => $get('Forum_Category', 'forum_category'),
-            'forum'          => $get('forum', 'Forum'),
-            'thread'         => $get('thread', 'forum_topic'),
-            'post'           => $get('post', 'forum_post'),
+            'forum' => $get('forum', 'Forum'),
+            'thread' => $get('thread', 'forum_topic'),
+            'post' => $get('post', 'forum_post'),
         ];
     }
 }

@@ -207,7 +207,7 @@ class SessionAdminController extends BaseController
             return $courseItems;
         }, $results);
 
-        $flatItems = array_merge(...$items);
+        $flatItems = array_merge([], ...array_values($items));
 
         return $this->json([
             'items' => $flatItems,

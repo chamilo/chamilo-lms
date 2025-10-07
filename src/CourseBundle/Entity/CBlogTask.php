@@ -49,7 +49,7 @@ class CBlogTask
     #[Groups(['blog_task:read', 'blog_task:write', 'task_rel_user:read'])]
     protected string $title;
 
-    #[ORM\Column(name: 'description', type: 'text', nullable: false, options: ['default' => ''])]
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     #[Groups(['blog_task:read', 'blog_task:write'])]
     protected string $description = '';
 
@@ -102,7 +102,7 @@ class CBlogTask
 
     public function getDescription(): string
     {
-        return $this->description;
+        return $this->description ?? '';
     }
 
     public function setDescription(string $description): self

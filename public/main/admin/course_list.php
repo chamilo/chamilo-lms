@@ -240,25 +240,24 @@ function get_course_data(
             ),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
-        $actions[] = Display::url(
-            Display::getMdiIcon(
-                ActionIcon::DELETE,
-                'ch-tool-icon',
-                null,
-                ICON_SIZE_SMALL,
-                get_lang('Delete')
-            ),
-            $path.'admin/course_list.php?'
-            .http_build_query([
-                'delete_course' => $course['col0'],
-                'sec_token' => Security::getTokenFromSession(),
-            ]),
-            [
-                'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES))
-                    ."')) return false;",
-            ]
-        );
+        // Delete course action
+        $actions[] = '
+        <form method="post" style="display:inline;" onsubmit="return confirm(\'' . 
+            addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES)) . 
+            '\');">
+            <input type="hidden" name="action" value="delete_course">
+            <input type="hidden" name="course_code" value="' . $course['col0'] . '">
+            <input type="hidden" name="sec_token" value="' . Security::getTokenFromSession() . '">
+            <button type="submit" class="btn btn-link p-0 text-decoration-none cursor-pointer" title="' . get_lang('Delete') . '">
+                ' . Display::getMdiIcon(
+                    ActionIcon::DELETE,
+                    'ch-tool-icon',
+                    null,
+                    ICON_SIZE_SMALL,
+                    get_lang('Delete')
+                ) . '
+            </button>
+        </form>';
 
         $em = Database::getManager();
         /** @var CatalogueCourseRelAccessUrlRelUsergroupRepository $repo */
@@ -356,7 +355,7 @@ function get_course_visibility_icon(int $visibility): string
     };
 }
 
-if (isset($_POST['action']) && Security::check_token('get')) {
+if (isset($_POST['action']) && Security::check_token('post')) {
     // Delete selected courses
     if ('delete_courses' == $_POST['action']) {
         if (!empty($_POST['course'])) {
@@ -369,7 +368,13 @@ if (isset($_POST['action']) && Security::check_token('get')) {
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-        api_location(api_get_self());
+    }
+
+    if ('delete_course' == $_POST['action']) {
+        $result = CourseManager::delete_course($_POST['course_code']);
+        if ($result) {
+            Display::addFlash(Display::return_message(get_lang('Deleted')));
+        }
     }
 }
 
@@ -463,15 +468,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $content .= $form->returnForm();
 } else {
     $tool_name = get_lang('Course list');
-    if (isset($_GET['delete_course']) && Security::check_token('get')) {
-        $result = CourseManager::delete_course($_GET['delete_course']);
-        if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Deleted')));
-        }
-
-        api_location(api_get_self());
-    }
-
     if (isset($_GET['new_course_id'])) {
         $courseId = (int) $_GET['new_course_id'];
         $course = api_get_course_entity($courseId);

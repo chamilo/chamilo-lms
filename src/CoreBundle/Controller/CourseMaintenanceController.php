@@ -1393,8 +1393,8 @@ class CourseMaintenanceController extends AbstractController
         };
 
         // Forums flow
-        if (!empty($selected)) {
-            $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'] ?? [])), true);
+        if (!empty($selected) && !empty($selected['forum'])) {
+            $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'])), true);
             if (!empty($selForums)) {
                 $forums = $getBucket($orig, 'forum');
                 $catsToKeep = [];

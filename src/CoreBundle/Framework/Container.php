@@ -50,7 +50,6 @@ use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
-use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\CourseBundle\Repository\CAnnouncementAttachmentRepository;
 use Chamilo\CourseBundle\Repository\CAnnouncementRepository;
 use Chamilo\CourseBundle\Repository\CAttendanceRepository;
@@ -233,7 +232,7 @@ class Container
         return self::getLegacyHelper()->getAuthorizationChecker();
     }
 
-    public static function getTokenStorage(): TokenStorageInterface|TokenStorage
+    public static function getTokenStorage(): TokenStorage|TokenStorageInterface
     {
         return self::getLegacyHelper()->getTokenStorage();
     }

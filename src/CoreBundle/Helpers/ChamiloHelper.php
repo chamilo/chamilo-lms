@@ -16,6 +16,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Display;
+use DocumentManager;
 use Event;
 use Exception;
 use ExtraFieldValue;
@@ -24,6 +25,7 @@ use LegalManager;
 use MessageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Template;
+use Throwable;
 use UserManager;
 
 use const PHP_ROUND_HALF_UP;
@@ -696,26 +698,29 @@ class ChamiloHelper
 
         if (!self::legacyFileUsable($filePath)) {
             error_log("LEGACY_FILE: Cannot attach to {$class} – file not found or unreadable: {$basename}");
+
             return false;
         }
 
         // If the repository doesn't expose addFile(), use the Asset flow.
         if (!method_exists($repo, 'addFile')) {
-            error_log("LEGACY_FILE: Repository ".get_class($repo)." has no addFile(), falling back to Asset flow");
+            error_log('LEGACY_FILE: Repository '.$repo::class.' has no addFile(), falling back to Asset flow');
+
             return self::attachLegacyFileToResource($filePath, $resource, $fileName);
         }
 
         try {
             $mimeType = self::legacyDetectMime($filePath);
-            $finalName = $fileName !== '' ? $fileName : $basename;
+            $finalName = '' !== $fileName ? $fileName : $basename;
 
             // UploadedFile in "test mode" (last arg true) avoids PHP upload checks.
             $uploaded = new UploadedFile($filePath, $finalName, $mimeType, null, true);
             $repo->addFile($resource, $uploaded, $description);
 
             return true;
-        } catch (\Throwable $e) {
-            error_log("LEGACY_FILE EXCEPTION (addFile): ".$e->getMessage());
+        } catch (Throwable $e) {
+            error_log('LEGACY_FILE EXCEPTION (addFile): '.$e->getMessage());
+
             return false;
         }
     }
@@ -736,11 +741,13 @@ class ChamiloHelper
 
         if (!self::legacyFileUsable($filePath)) {
             error_log("LEGACY_FILE: Cannot attach Asset to {$class} – file not found or unreadable: {$basename}");
+
             return false;
         }
 
         if (!method_exists($resource, 'getResourceNode') || null === $resource->getResourceNode()) {
             error_log("LEGACY_FILE: Resource has no ResourceNode – cannot attach Asset (class: {$class})");
+
             return false;
         }
 
@@ -751,22 +758,23 @@ class ChamiloHelper
             if (method_exists($assetRepo, 'createFromLocalPath')) {
                 $asset = $assetRepo->createFromLocalPath(
                     $filePath,
-                    $fileName !== '' ? $fileName : $basename
+                    '' !== $fileName ? $fileName : $basename
                 );
             } else {
                 // Fallback: simulate an upload-like array for createFromRequest().
                 $mimeType = self::legacyDetectMime($filePath);
                 $fakeUpload = [
                     'tmp_name' => $filePath,
-                    'name'     => $fileName !== '' ? $fileName : $basename,
-                    'type'     => $mimeType,
-                    'size'     => @filesize($filePath) ?: null,
-                    'error'    => 0,
+                    'name' => '' !== $fileName ? $fileName : $basename,
+                    'type' => $mimeType,
+                    'size' => @filesize($filePath) ?: null,
+                    'error' => 0,
                 ];
 
                 $asset = (new Asset())
                     ->setTitle($fakeUpload['name'])
-                    ->setCompressed(false);
+                    ->setCompressed(false)
+                ;
 
                 // AssetRepository::createFromRequest(Asset $asset, array $uploadLike)
                 $assetRepo->createFromRequest($asset, $fakeUpload);
@@ -775,6 +783,7 @@ class ChamiloHelper
             // Attach to the resource's node.
             if (method_exists($assetRepo, 'attachToNode')) {
                 $assetRepo->attachToNode($asset, $resource->getResourceNode());
+
                 return true;
             }
 
@@ -782,13 +791,16 @@ class ChamiloHelper
             $repo = self::guessResourceRepository($resource);
             if ($repo && method_exists($repo, 'attachAssetToResource')) {
                 $repo->attachAssetToResource($resource, $asset);
+
                 return true;
             }
 
-            error_log("LEGACY_FILE: No method to attach Asset to node (missing attachToNode/attachAssetToResource)");
+            error_log('LEGACY_FILE: No method to attach Asset to node (missing attachToNode/attachAssetToResource)');
+
             return false;
-        } catch (\Throwable $e) {
-            error_log("LEGACY_FILE EXCEPTION (Asset attach): ".$e->getMessage());
+        } catch (Throwable $e) {
+            error_log('LEGACY_FILE EXCEPTION (Asset attach): '.$e->getMessage());
+
             return false;
         }
     }
@@ -804,6 +816,7 @@ class ChamiloHelper
                 return $p;
             }
         }
+
         return null;
     }
 
@@ -815,6 +828,7 @@ class ChamiloHelper
     private static function legacyDetectMime(string $filePath): string
     {
         $mime = @mime_content_type($filePath);
+
         return $mime ?: 'application/octet-stream';
     }
 
@@ -825,10 +839,11 @@ class ChamiloHelper
     private static function guessResourceRepository(AbstractResource $resource): ?ResourceRepository
     {
         try {
-            $em = \Database::getManager();
-            $repo = $em->getRepository(get_class($resource));
+            $em = Database::getManager();
+            $repo = $em->getRepository($resource::class);
+
             return $repo instanceof ResourceRepository ? $repo : null;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }
@@ -842,7 +857,7 @@ class ChamiloHelper
         AbstractResource $ownerResource,
         string $fileName = ''
     ): array {
-        $basename = $fileName !== '' ? $fileName : basename($filePath);
+        $basename = '' !== $fileName ? $fileName : basename($filePath);
 
         if (!self::legacyFileUsable($filePath)) {
             return ['ok' => false, 'asset' => null, 'url' => null, 'error' => "File not found or unreadable: $basename"];
@@ -858,17 +873,17 @@ class ChamiloHelper
                 $mimeType = self::legacyDetectMime($filePath);
                 $fakeUpload = [
                     'tmp_name' => $filePath,
-                    'name'     => $basename,
-                    'type'     => $mimeType,
-                    'size'     => @filesize($filePath) ?: null,
-                    'error'    => 0,
+                    'name' => $basename,
+                    'type' => $mimeType,
+                    'size' => @filesize($filePath) ?: null,
+                    'error' => 0,
                 ];
                 $asset = (new Asset())->setTitle($basename)->setCompressed(false);
                 $assetRepo->createFromRequest($asset, $fakeUpload);
             }
 
             if (!method_exists($ownerResource, 'getResourceNode') || null === $ownerResource->getResourceNode()) {
-                return ['ok' => false, 'asset' => null, 'url' => null, 'error' => "Owner resource has no ResourceNode"];
+                return ['ok' => false, 'asset' => null, 'url' => null, 'error' => 'Owner resource has no ResourceNode'];
             }
 
             if (method_exists($assetRepo, 'attachToNode')) {
@@ -876,7 +891,7 @@ class ChamiloHelper
             } else {
                 $repo = self::guessResourceRepository($ownerResource);
                 if (!$repo || !method_exists($repo, 'attachAssetToResource')) {
-                    return ['ok' => false, 'asset' => $asset, 'url' => null, 'error' => "No way to attach asset to node"];
+                    return ['ok' => false, 'asset' => $asset, 'url' => null, 'error' => 'No way to attach asset to node'];
                 }
                 $repo->attachAssetToResource($ownerResource, $asset);
             }
@@ -890,8 +905,7 @@ class ChamiloHelper
             }
 
             return ['ok' => true, 'asset' => $asset, 'url' => $url, 'error' => null];
-
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return ['ok' => false, 'asset' => null, 'url' => null, 'error' => $e->getMessage()];
         }
     }
@@ -906,11 +920,11 @@ class ChamiloHelper
         string $backupRoot,
         array $extraRoots = []
     ): string {
-        if ($html === '') {
+        if ('' === $html) {
             return $html;
         }
 
-        $sources = \DocumentManager::get_resources_from_source_html($html, false, TOOL_DOCUMENT, 1);
+        $sources = DocumentManager::get_resources_from_source_html($html, false, TOOL_DOCUMENT, 1);
         if (empty($sources)) {
             return $html;
         }
@@ -919,16 +933,16 @@ class ChamiloHelper
 
         foreach ($sources as $s) {
             [$realUrl, $scope, $kind] = $s;
-            if ($scope !== 'local') {
+            if ('local' !== $scope) {
                 continue;
             }
 
             $pos = strpos($realUrl, 'document/');
-            if ($pos === false) {
+            if (false === $pos) {
                 continue;
             }
 
-            $relAfterDocument = ltrim(substr($realUrl, $pos + strlen('document/')), '/');
+            $relAfterDocument = ltrim(substr($realUrl, $pos + \strlen('document/')), '/');
 
             $candidates = [];
             foreach ($roots as $root) {
@@ -944,7 +958,8 @@ class ChamiloHelper
 
             $attached = self::attachLegacyFileWithPublicUrl($filePath, $ownerResource, basename($filePath));
             if (!$attached['ok'] || empty($attached['url'])) {
-                error_log("LEGACY_REWRITE: failed for $realUrl (".$attached['error'].")");
+                error_log("LEGACY_REWRITE: failed for $realUrl (".$attached['error'].')');
+
                 continue;
             }
 

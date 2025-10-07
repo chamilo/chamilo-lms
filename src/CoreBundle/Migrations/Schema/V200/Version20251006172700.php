@@ -13,7 +13,7 @@ final class Version20251006172700 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return "Add survey setting: show_pending_survey_in_menu=false";
+        return 'Add survey setting: show_pending_survey_in_menu=false';
     }
 
     public function up(Schema $schema): void
@@ -27,7 +27,7 @@ final class Version20251006172700 extends AbstractMigrationChamilo
         $sqlCheck = "SELECT COUNT(*) AS c FROM settings WHERE variable = '$variable'";
         $result = $this->connection->executeQuery($sqlCheck)->fetchAssociative();
 
-        if ($result && (int)$result['c'] > 0) {
+        if ($result && (int) $result['c'] > 0) {
             $this->addSql("
                 UPDATE settings
                 SET title = '$title',
@@ -57,6 +57,6 @@ final class Version20251006172700 extends AbstractMigrationChamilo
               AND subkey IS NULL
               AND access_url = 1
         ");
-        $this->write("Removed setting: show_pending_survey_in_menu");
+        $this->write('Removed setting: show_pending_survey_in_menu');
     }
 }

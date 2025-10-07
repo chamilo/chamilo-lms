@@ -40,7 +40,7 @@ class ExtraFieldRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getHandlerFieldInfoByFieldVariable(string $variable, int $itemType): bool|array
+    public function getHandlerFieldInfoByFieldVariable(string $variable, int $itemType): array|bool
     {
         $extraField = $this->findOneBy([
             'variable' => $variable,

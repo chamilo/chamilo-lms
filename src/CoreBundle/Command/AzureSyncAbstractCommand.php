@@ -96,7 +96,7 @@ abstract class AzureSyncAbstractCommand extends Command
                     $this->providerParams['script_users_delta'] ? "/v1.0/users/delta?$query" : "/v1.0/users?$query",
                     $token
                 );
-            } catch (GuzzleException|Exception $e) {
+            } catch (Exception|GuzzleException $e) {
                 throw new Exception('Exception when requesting users from Azure: '.$e->getMessage());
             }
 
@@ -148,7 +148,7 @@ abstract class AzureSyncAbstractCommand extends Command
                     "/v1.0/groups/$groupUid/members?$query",
                     $token
                 );
-            } catch (GuzzleException|Exception $e) {
+            } catch (Exception|GuzzleException $e) {
                 throw new Exception('Exception when requesting group members from Azure: '.$e->getMessage());
             }
 

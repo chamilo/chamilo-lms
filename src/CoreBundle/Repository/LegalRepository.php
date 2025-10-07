@@ -142,7 +142,7 @@ class LegalRepository extends ServiceEntityRepository
             }
 
             return $result;
-        } catch (NoResultException|NonUniqueResultException $e) {
+        } catch (NonUniqueResultException|NoResultException $e) {
             return null;
         }
     }

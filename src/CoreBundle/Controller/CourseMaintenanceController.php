@@ -1543,9 +1543,7 @@ class CourseMaintenanceController extends AbstractController
                     }
                 }
 
-                if (empty($qids)) {
-                    // no-op
-                } else {
+                if (!empty($qids)) {
                     $questionBucket = $getBucket($orig, $questionKey);
                     $selQ = array_intersect_key($questionBucket, $qids);
                     if (!empty($selQ)) {

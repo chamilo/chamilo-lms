@@ -30700,3 +30700,39 @@ msgstr "Show advanced settings"
 
 msgid "Hide advanced settings"
 msgstr "Hide advanced settings"
+
+msgid "Quality"
+msgstr "Quality"
+
+msgid "Remedial courses list"
+msgstr "Remedial courses list"
+
+msgid "Request account deletion"
+msgstr "Request account deletion"
+
+msgid "Justification for account deletion"
+msgstr "Justification for account deletion"
+
+msgid "Request for legal agreement's consent removal"
+msgstr "Request for legal agreement's consent removal"
+
+msgid "Justification for consent removal"
+msgstr "Justification for consent removal"
+
+msgid "Terms enabled"
+msgstr "Terms enabled"
+
+msgid "Revision Language"
+msgstr "Revision Language"
+
+msgid "Session career link"
+msgstr "Session career link"
+
+msgid "Successful authentication handlers"
+msgstr "Successful authentication handlers"
+
+msgid "Popular courses"
+msgstr "Popular courses"
+
+msgid "Already logged in"
+msgstr "Already logged in"

@@ -20,12 +20,6 @@ class Version20250721200725 extends AbstractMigrationChamilo
 
         $legacyMailConfig = file_exists($oldMailConfPath);
 
-        if ($legacyMailConfig) {
-            include $oldMailConfPath;
-
-            global $platform_email;
-        }
-
         $envFile = $projectDir.'/.env';
 
         $dotenv = new Dotenv();
@@ -68,8 +62,8 @@ class Version20250721200725 extends AbstractMigrationChamilo
         }
 
         if ($legacyMailConfig) {
+            include $oldMailConfPath;
             $settings['mailer_exclude_json'] = $platform_email['EXCLUDE_JSON'] ?? false;
-
             $dkim = [
                 'enable' => $platform_email['DKIM'] ?? false,
                 'selector' => $platform_email['DKIM_SELECTOR'] ?? '',

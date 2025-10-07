@@ -8,7 +8,7 @@
                 {% if not 'course_about_teacher_name_hide'|api_get_configuration_value %}
                     <div class="course-short mt-2">
                         <ul>
-                            <li class="author">{{ "Professors"|trans }}:</li>
+                            <li class="author">{{ "Teachers"|trans }}:</li>
                             {% for teacher in teachers %}
                                 <li>{{ teacher.complete_name }}{% if not loop.last %} |{% endif %}</li>
                             {% endfor %}
@@ -46,7 +46,7 @@
                                     <a href="https://www.facebook.com/sharer/sharer.php?u={{ url }}" target="_blank" class="facebook">
                                         <em class="fab fa-facebook-square"></em> Facebook
                                     </a>
-                                    <a href="https://twitter.com/home?{{ {'status': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
+                                    <a href="https://x.com/home?{{ {'status': course.title ~ ' ' ~ url }|url_encode }}" target="_blank" class="twitter">
                                         <em class="fab fa-twitter"></em> Twitter
                                     </a>
                                     <a href="https://www.linkedin.com/shareArticle?{{ {'mini': 'true', 'url': url , 'title': course.title }|url_encode }}" target="_blank" class="linkedin">
@@ -92,16 +92,16 @@
                                     {% if not is_granted('IS_AUTHENTICATED') %}
                                         {% if 'allow_registration'|api_get_setting != 'false' %}
                                             <a href="{{ base_url ~ '/main/auth/registration.php?c=' ~ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">
-                                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'Sign Up'|trans }}
+                                                <i class="fa fa-pencil" aria-hidden="true"></i> {{ 'Sign up'|trans }}
                                             </a>
                                         {% endif %}
                                     {% elseif subscription %}
-                                        <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course Homepage'|trans }}</a>
+                                        <a href="{{ base_url }}/course/{{ course.id }}/home?sid=0" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Course homepage'|trans }}</a>
                                     {% elseif allow_subscribe %}
                                         <a href="{{ base_url }}/main/auth/registration.php?c={{ course.code }}" class="btn btn--success w-full py-2 mt-2 text-white bg-green-600 rounded hover:bg-green-700">{{ 'Subscribe'|trans }}</a>
                                     {% else %}
                                         <button class="btn btn--success w-full py-2 mt-2 text-white bg-gray-400 rounded" title="{{ 'Subscription is not allowed for this course'|trans }}" disabled>
-                                            {{ 'Subscription Not Available'|trans }}
+                                            {{ 'Subscription not allowed'|trans }}
                                         </button>
                                     {% endif %}
                                 </div>
@@ -114,7 +114,7 @@
                                         {{ is_premium.iso_code }} {{ is_premium.price }}
                                     </div>
                                     <div class="buy-box mt-2">
-                                        <a href="{{ base_url }}/plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn--primary w-full py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700">{{ 'Buy Now'|trans }}</a>
+                                        <a href="{{ base_url }}/plugin/BuyCourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}" class="btn btn--primary w-full py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700">{{ 'Buy now'|trans }}</a>
                                     </div>
                                 </div>
                             {% endif %}
@@ -152,14 +152,14 @@
             $('.course-information').readmore({
               speed: 100,
               lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
-              moreLink: '<a class="read-more" href="#">{{ 'Read more' | trans }}</a>',
+              moreLink: '<a class="read-more" href="#">{{ 'Read more...' | trans }}</a>',
               collapsedHeight: 730,
               heightMargin: 100
             });
             $('.open-more').readmore({
               speed: 100,
               lessLink: '<a class="hide-content" href="#">{{ 'Set invisible' | trans }}</a>',
-              moreLink: '<a class="read-more" href="#">{{ 'Read more' | trans }}</a>',
+              moreLink: '<a class="read-more" href="#">{{ 'Read more...' | trans }}</a>',
               collapsedHeight: 90,
               heightMargin: 20
             });

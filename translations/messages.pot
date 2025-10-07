@@ -30665,3 +30665,39 @@ msgstr ""
 
 msgid "Hide advanced settings"
 msgstr ""
+
+msgid "Quality"
+msgstr ""
+
+msgid "Remedial courses list"
+msgstr ""
+
+msgid "Request account deletion"
+msgstr ""
+
+msgid "Justification for account deletion"
+msgstr ""
+
+msgid "Request for legal agreement's consent removal"
+msgstr ""
+
+msgid "Justification for consent removal"
+msgstr ""
+
+msgid "Terms enabled"
+msgstr ""
+
+msgid "Revision Language"
+msgstr ""
+
+msgid "Session career link"
+msgstr ""
+
+msgid "Successful authentication handlers"
+msgstr ""
+
+msgid "Popular courses"
+msgstr ""
+
+msgid "Already logged in"
+msgstr ""

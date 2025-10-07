@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use ChamiloSession as Session;
 use Database;
 use DateInterval;
@@ -19,6 +22,7 @@ use ExtraFieldValue;
 use FormValidator;
 use LegalManager;
 use MessageManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Template;
 use UserManager;
 
@@ -672,5 +676,281 @@ class ChamiloHelper
         Display::display_footer();
 
         exit;
+    }
+
+    /**
+     * Try to add a legacy file to a Resource using the repository's addFile() API.
+     * Falls back to attachLegacyFileToResource() if addFile() is not available.
+     *
+     * Returns true on success, false otherwise. Logs in English.
+     */
+    public static function addLegacyFileToResource(
+        string $filePath,
+        ResourceRepository $repo,
+        AbstractResource $resource,
+        string $fileName = '',
+        string $description = ''
+    ): bool {
+        $class = $resource::class;
+        $basename = basename($filePath);
+
+        if (!self::legacyFileUsable($filePath)) {
+            error_log("LEGACY_FILE: Cannot attach to {$class} – file not found or unreadable: {$basename}");
+            return false;
+        }
+
+        // If the repository doesn't expose addFile(), use the Asset flow.
+        if (!method_exists($repo, 'addFile')) {
+            error_log("LEGACY_FILE: Repository ".get_class($repo)." has no addFile(), falling back to Asset flow");
+            return self::attachLegacyFileToResource($filePath, $resource, $fileName);
+        }
+
+        try {
+            $mimeType = self::legacyDetectMime($filePath);
+            $finalName = $fileName !== '' ? $fileName : $basename;
+
+            // UploadedFile in "test mode" (last arg true) avoids PHP upload checks.
+            $uploaded = new UploadedFile($filePath, $finalName, $mimeType, null, true);
+            $repo->addFile($resource, $uploaded, $description);
+
+            return true;
+        } catch (\Throwable $e) {
+            error_log("LEGACY_FILE EXCEPTION (addFile): ".$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Create an Asset for a legacy file and attach it to the resource's node.
+     * Generic path that works for any AbstractResource with a ResourceNode.
+     *
+     * Returns true on success, false otherwise. Logs in English.
+     */
+    public static function attachLegacyFileToResource(
+        string $filePath,
+        AbstractResource $resource,
+        string $fileName = ''
+    ): bool {
+        $class = $resource::class;
+        $basename = basename($filePath);
+
+        if (!self::legacyFileUsable($filePath)) {
+            error_log("LEGACY_FILE: Cannot attach Asset to {$class} – file not found or unreadable: {$basename}");
+            return false;
+        }
+
+        if (!method_exists($resource, 'getResourceNode') || null === $resource->getResourceNode()) {
+            error_log("LEGACY_FILE: Resource has no ResourceNode – cannot attach Asset (class: {$class})");
+            return false;
+        }
+
+        try {
+            $assetRepo = Container::getAssetRepository();
+
+            // Prefer a dedicated helper if available.
+            if (method_exists($assetRepo, 'createFromLocalPath')) {
+                $asset = $assetRepo->createFromLocalPath(
+                    $filePath,
+                    $fileName !== '' ? $fileName : $basename
+                );
+            } else {
+                // Fallback: simulate an upload-like array for createFromRequest().
+                $mimeType = self::legacyDetectMime($filePath);
+                $fakeUpload = [
+                    'tmp_name' => $filePath,
+                    'name'     => $fileName !== '' ? $fileName : $basename,
+                    'type'     => $mimeType,
+                    'size'     => @filesize($filePath) ?: null,
+                    'error'    => 0,
+                ];
+
+                $asset = (new Asset())
+                    ->setTitle($fakeUpload['name'])
+                    ->setCompressed(false);
+
+                // AssetRepository::createFromRequest(Asset $asset, array $uploadLike)
+                $assetRepo->createFromRequest($asset, $fakeUpload);
+            }
+
+            // Attach to the resource's node.
+            if (method_exists($assetRepo, 'attachToNode')) {
+                $assetRepo->attachToNode($asset, $resource->getResourceNode());
+                return true;
+            }
+
+            // If the resource repository exposes a direct helper:
+            $repo = self::guessResourceRepository($resource);
+            if ($repo && method_exists($repo, 'attachAssetToResource')) {
+                $repo->attachAssetToResource($resource, $asset);
+                return true;
+            }
+
+            error_log("LEGACY_FILE: No method to attach Asset to node (missing attachToNode/attachAssetToResource)");
+            return false;
+        } catch (\Throwable $e) {
+            error_log("LEGACY_FILE EXCEPTION (Asset attach): ".$e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Pick the first path that exists (file) from a candidate list.
+     * Returns the absolute path or null.
+     */
+    public static function firstExistingPath(array $candidates): ?string
+    {
+        foreach ($candidates as $p) {
+            if (self::legacyFileUsable($p)) {
+                return $p;
+            }
+        }
+        return null;
+    }
+
+    private static function legacyFileUsable(string $filePath): bool
+    {
+        return is_file($filePath) && is_readable($filePath);
+    }
+
+    private static function legacyDetectMime(string $filePath): string
+    {
+        $mime = @mime_content_type($filePath);
+        return $mime ?: 'application/octet-stream';
+    }
+
+    /**
+     * Best-effort guess to find the resource repository via Doctrine.
+     * Returns null if the repo is not a ResourceRepository.
+     */
+    private static function guessResourceRepository(AbstractResource $resource): ?ResourceRepository
+    {
+        try {
+            $em = \Database::getManager();
+            $repo = $em->getRepository(get_class($resource));
+            return $repo instanceof ResourceRepository ? $repo : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Attach a legacy file as Asset to an AbstractResource and return public URL.
+     * Returns ['ok'=>bool, 'asset'=>?Asset, 'url'=>?string, 'error'=>?string].
+     */
+    public static function attachLegacyFileWithPublicUrl(
+        string $filePath,
+        AbstractResource $ownerResource,
+        string $fileName = ''
+    ): array {
+        $basename = $fileName !== '' ? $fileName : basename($filePath);
+
+        if (!self::legacyFileUsable($filePath)) {
+            return ['ok' => false, 'asset' => null, 'url' => null, 'error' => "File not found or unreadable: $basename"];
+        }
+
+        try {
+            $assetRepo = Container::getAssetRepository();
+
+            // Prefer helper if exists
+            if (method_exists($assetRepo, 'createFromLocalPath')) {
+                $asset = $assetRepo->createFromLocalPath($filePath, $basename);
+            } else {
+                $mimeType = self::legacyDetectMime($filePath);
+                $fakeUpload = [
+                    'tmp_name' => $filePath,
+                    'name'     => $basename,
+                    'type'     => $mimeType,
+                    'size'     => @filesize($filePath) ?: null,
+                    'error'    => 0,
+                ];
+                $asset = (new Asset())->setTitle($basename)->setCompressed(false);
+                $assetRepo->createFromRequest($asset, $fakeUpload);
+            }
+
+            if (!method_exists($ownerResource, 'getResourceNode') || null === $ownerResource->getResourceNode()) {
+                return ['ok' => false, 'asset' => null, 'url' => null, 'error' => "Owner resource has no ResourceNode"];
+            }
+
+            if (method_exists($assetRepo, 'attachToNode')) {
+                $assetRepo->attachToNode($asset, $ownerResource->getResourceNode());
+            } else {
+                $repo = self::guessResourceRepository($ownerResource);
+                if (!$repo || !method_exists($repo, 'attachAssetToResource')) {
+                    return ['ok' => false, 'asset' => $asset, 'url' => null, 'error' => "No way to attach asset to node"];
+                }
+                $repo->attachAssetToResource($ownerResource, $asset);
+            }
+
+            // Get a public URL if the repo/asset exposes one
+            $url = null;
+            if (method_exists($assetRepo, 'getPublicUrl')) {
+                $url = $assetRepo->getPublicUrl($asset);
+            } elseif (method_exists($asset, 'getPublicPath')) {
+                $url = $asset->getPublicPath();
+            }
+
+            return ['ok' => true, 'asset' => $asset, 'url' => $url, 'error' => null];
+
+        } catch (\Throwable $e) {
+            return ['ok' => false, 'asset' => null, 'url' => null, 'error' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Rewrite legacy course URLs (like "document/...") inside $html to Asset URLs.
+     * Each found local file is attached to $ownerResource as an Asset.
+     */
+    public static function rewriteLegacyCourseUrlsToAssets(
+        string $html,
+        AbstractResource $ownerResource,
+        string $backupRoot,
+        array $extraRoots = []
+    ): string {
+        if ($html === '') {
+            return $html;
+        }
+
+        $sources = \DocumentManager::get_resources_from_source_html($html, false, TOOL_DOCUMENT, 1);
+        if (empty($sources)) {
+            return $html;
+        }
+
+        $roots = array_values(array_unique(array_filter(array_merge([$backupRoot], $extraRoots))));
+
+        foreach ($sources as $s) {
+            [$realUrl, $scope, $kind] = $s;
+            if ($scope !== 'local') {
+                continue;
+            }
+
+            $pos = strpos($realUrl, 'document/');
+            if ($pos === false) {
+                continue;
+            }
+
+            $relAfterDocument = ltrim(substr($realUrl, $pos + strlen('document/')), '/');
+
+            $candidates = [];
+            foreach ($roots as $root) {
+                $base = rtrim($root, '/');
+                $candidates[] = $base.'/document/'.$relAfterDocument;
+                $candidates[] = $base.'/courses/document/'.$relAfterDocument;
+            }
+
+            $filePath = self::firstExistingPath($candidates);
+            if (!$filePath) {
+                continue;
+            }
+
+            $attached = self::attachLegacyFileWithPublicUrl($filePath, $ownerResource, basename($filePath));
+            if (!$attached['ok'] || empty($attached['url'])) {
+                error_log("LEGACY_REWRITE: failed for $realUrl (".$attached['error'].")");
+                continue;
+            }
+
+            $html = str_replace($realUrl, $attached['url'], $html);
+        }
+
+        return $html;
     }
 }

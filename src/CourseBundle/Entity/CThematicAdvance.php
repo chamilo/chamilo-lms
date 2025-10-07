@@ -28,7 +28,7 @@ class CThematicAdvance implements Stringable // extends AbstractResource impleme
 
     #[ORM\ManyToOne(targetEntity: CAttendance::class)]
     #[ORM\JoinColumn(name: 'attendance_id', referencedColumnName: 'iid', onDelete: 'CASCADE')]
-    protected CAttendance $attendance;
+    protected ?CAttendance $attendance = null;
 
     #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected ?string $content = null;

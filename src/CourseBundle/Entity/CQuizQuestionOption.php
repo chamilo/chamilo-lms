@@ -39,6 +39,11 @@ class CQuizQuestionOption
         return $this;
     }
 
+    public function getIid()
+    {
+        return $this->iid;
+    }
+
     /**
      * Get name.
      *

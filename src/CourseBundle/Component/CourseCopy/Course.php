@@ -227,6 +227,20 @@ class Course
                         case RESOURCE_FORUM:
                         case RESOURCE_QUIZ:
                         case RESOURCE_FORUMCATEGORY:
+                            if (isset($resource->title)) {
+                                $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                            }
+                            if (isset($resource->description)) {
+                                $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                            }
+                            if (isset($resource->obj)) {
+                                foreach (['cat_title','cat_comment','title','description'] as $f) {
+                                    if (isset($resource->obj->$f) && is_string($resource->obj->$f)) {
+                                        $resource->obj->$f = api_to_system_encoding($resource->obj->$f, $this->encoding);
+                                    }
+                                }
+                            }
+                            break;
                         case RESOURCE_LINK:
                         case RESOURCE_LINKCATEGORY:
                         case RESOURCE_TEST_CATEGORY:
@@ -235,15 +249,15 @@ class Course
 
                             break;
                         case RESOURCE_FORUMPOST:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->text = api_to_system_encoding($resource->text, $this->encoding);
-                            $resource->poster_name = api_to_system_encoding($resource->poster_name, $this->encoding);
-
+                            if (isset($resource->title))       { $resource->title = api_to_system_encoding($resource->title, $this->encoding); }
+                            if (isset($resource->text))        { $resource->text  = api_to_system_encoding($resource->text,  $this->encoding); }
+                            if (isset($resource->poster_name)) { $resource->poster_name = api_to_system_encoding($resource->poster_name, $this->encoding); }
                             break;
+
                         case RESOURCE_FORUMTOPIC:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->topic_poster_name = api_to_system_encoding($resource->topic_poster_name, $this->encoding);
-                            $resource->title_qualify = api_to_system_encoding($resource->title_qualify, $this->encoding);
+                            if (isset($resource->title))             { $resource->title = api_to_system_encoding($resource->title, $this->encoding); }
+                            if (isset($resource->topic_poster_name)) { $resource->topic_poster_name = api_to_system_encoding($resource->topic_poster_name, $this->encoding); }
+                            if (isset($resource->title_qualify))     { $resource->title_qualify = api_to_system_encoding($resource->title_qualify, $this->encoding); }
 
                             break;
                         case RESOURCE_GLOSSARY:

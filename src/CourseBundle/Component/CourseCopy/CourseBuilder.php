@@ -1,1906 +1,2309 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
-use Category;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\LearnPathCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Link;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Work;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCalendarEventAttachment;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CGlossary;
+use Chamilo\CourseBundle\Entity\CLink;
+use Chamilo\CourseBundle\Entity\CLinkCategory;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
-use CourseManager;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyQuestion;
+use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
+use Chamilo\CourseBundle\Entity\CThematic;
+use Chamilo\CourseBundle\Entity\CThematicAdvance;
+use Chamilo\CourseBundle\Entity\CThematicPlan;
+use Chamilo\CourseBundle\Entity\CTool;
+use Chamilo\CourseBundle\Entity\CToolIntro;
+use Chamilo\CourseBundle\Entity\CWiki;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Database;
-use Doctrine\DBAL\Exception;
-use DocumentManager;
-use learnpath;
-use Link as LinkManager;
-use TestCategory;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class CourseBuilder
- * Builds a course-object from a Chamilo-course.
- *
- * @author Bart Mollet <bart.mollet@hogent.be>
+ * CourseBuilder focused on Doctrine/ResourceNode export (keeps legacy orchestration).
  */
 class CourseBuilder
 {
-    /** @var Course */
+    /** @var Course Legacy course container used by the exporter */
     public $course;
 
-    /* With this array you can filter the tools you want to be parsed by
-    default all tools are included */
-    public $tools_to_build = [
-        'announcements',
-        'attendance',
-        'course_descriptions',
-        'documents',
-        'events',
-        'forum_category',
-        'forums',
-        'forum_topics',
-        'glossary',
-        'quizzes',
-        'test_category',
-        'learnpath_category',
-        'learnpaths',
-        'links',
-        'surveys',
-        'tool_intro',
-        'thematic',
-        'wiki',
-        'works',
-        'gradebook',
+    /** @var array<string> Only the tools to build (defaults kept) */
+    public array $tools_to_build = [
+        'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions',
+        'assets', 'surveys', 'survey_questions', 'announcements', 'events',
+        'course_descriptions', 'glossary', 'wiki', 'thematic', 'attendance', 'works',
+        'gradebook', 'learnpath_category', 'learnpaths',
     ];
 
-    public $toolToName = [
-        'announcements' => RESOURCE_ANNOUNCEMENT,
-        'attendance' => RESOURCE_ATTENDANCE,
-        'course_descriptions' => RESOURCE_COURSEDESCRIPTION,
-        'documents' => RESOURCE_DOCUMENT,
-        'events' => RESOURCE_EVENT,
-        'forum_category' => RESOURCE_FORUMCATEGORY,
-        'forums' => RESOURCE_FORUM,
-        'forum_topics' => RESOURCE_FORUMTOPIC,
-        'glossary' => RESOURCE_GLOSSARY,
-        'quizzes' => RESOURCE_QUIZ,
-        'test_category' => RESOURCE_TEST_CATEGORY,
+    /** @var array<string, int|string> Legacy constant map (extend as you add tools) */
+    public array $toolToName = [
+        'documents'          => RESOURCE_DOCUMENT,
+        'forums'             => RESOURCE_FORUM,
+        'tool_intro'         => RESOURCE_TOOL_INTRO,
+        'links'              => RESOURCE_LINK,
+        'quizzes'            => RESOURCE_QUIZ,
+        'quiz_questions'     => RESOURCE_QUIZQUESTION,
+        'assets'             => 'asset',
+        'surveys'            => RESOURCE_SURVEY,
+        'survey_questions'   => RESOURCE_SURVEYQUESTION,
+        'announcements'      => RESOURCE_ANNOUNCEMENT,
+        'events'             => RESOURCE_EVENT,
+        'course_descriptions'=> RESOURCE_COURSEDESCRIPTION,
+        'glossary'           => RESOURCE_GLOSSARY,
+        'wiki'               => RESOURCE_WIKI,
+        'thematic'           => RESOURCE_THEMATIC,
+        'attendance'         => RESOURCE_ATTENDANCE,
+        'works'              => RESOURCE_WORK,
+        'gradebook'          => RESOURCE_GRADEBOOK,
+        'learnpaths'         => RESOURCE_LEARNPATH,
         'learnpath_category' => RESOURCE_LEARNPATH_CATEGORY,
-        'learnpaths' => RESOURCE_LEARNPATH,
-        'links' => RESOURCE_LINK,
-        'surveys' => RESOURCE_SURVEY,
-        'tool_intro' => RESOURCE_TOOL_INTRO,
-        'thematic' => RESOURCE_THEMATIC,
-        'wiki' => RESOURCE_WIKI,
-        'works' => RESOURCE_WORK,
-        'gradebook' => RESOURCE_GRADEBOOK,
     ];
 
-    /* With this array you can filter wich elements of the tools are going
-    to be added in the course obj (only works with LPs) */
-    public $specific_id_list = [];
-    public $documentsAddedInText = [];
+    /** @var array<string, array<int>> Optional whitelist of IDs per tool */
+    public array $specific_id_list = [];
+
+    /** @var array<int, array{0:string,1:string,2:string}> Documents referenced inside HTML */
+    public array $documentsAddedInText = [];
+
+    /** Doctrine services */
+    private $em = null;       // Doctrine EntityManager
+    private $docRepo = null;  // CDocumentRepository
 
     /**
-     * Create a new CourseBuilder.
+     * Constructor (keeps legacy init; wires Doctrine repositories).
      *
-     * @param string $type
-     * @param null   $course
+     * @param string     $type   'partial'|'complete'
+     * @param array|null $course Optional course info array
      */
     public function __construct($type = '', $course = null)
     {
+        // Legacy behavior preserved
         $_course = api_get_course_info();
-
         if (!empty($course['official_code'])) {
             $_course = $course;
         }
 
-        $this->course = new Course();
-        $this->course->code = $_course['code'];
-        $this->course->type = $type;
-        //   $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
-        //        $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
+        $this->course           = new Course();
+        $this->course->code     = $_course['code'];
+        $this->course->type     = $type;
         $this->course->encoding = api_get_system_encoding();
-        $this->course->info = $_course;
+        $this->course->info     = $_course;
+
+        $this->em     = Database::getManager();
+        $this->docRepo = Container::getDocumentRepository();
+
+        // Use $this->em / $this->docRepo in build_documents() when needed.
     }
 
     /**
-     * @param array $list
+     * Merge a parsed list of document refs into memory.
+     *
+     * @param array<int, array{0:string,1:string,2:string}> $list
      */
-    public function addDocumentList($list)
+    public function addDocumentList(array $list): void
     {
         foreach ($list as $item) {
-            if (!in_array($item[0], $this->documentsAddedInText)) {
+            if (!in_array($item[0], $this->documentsAddedInText, true)) {
                 $this->documentsAddedInText[$item[0]] = $item;
             }
         }
     }
 
     /**
-     * @param string $text
+     * Parse HTML and collect referenced course documents.
+     *
+     * @param string $html HTML content
      */
-    public function findAndSetDocumentsInText($text)
+    public function findAndSetDocumentsInText(string $html = ''): void
     {
-        $documentList = DocumentManager::get_resources_from_source_html($text);
+        if ($html === '') {
+            return;
+        }
+        $documentList = \DocumentManager::get_resources_from_source_html($html);
         $this->addDocumentList($documentList);
     }
 
     /**
-     * Parse documents added in the documentsAddedInText variable.
+     * Resolve collected HTML links to CDocument iids via the ResourceNode tree and build them.
+     *
+     * @return void
      */
-    public function restoreDocumentsFromList()
+    public function restoreDocumentsFromList(): void
     {
-        if (!empty($this->documentsAddedInText)) {
-            $list = [];
-            $courseInfo = api_get_course_info();
-            foreach ($this->documentsAddedInText as $item) {
-                // Get information about source url
-                $url = $item[0]; // url
-                $scope = $item[1]; // scope (local, remote)
-                $type = $item[2]; // type (rel, abs, url)
+        if (empty($this->documentsAddedInText)) {
+            return;
+        }
 
-                $origParseUrl = parse_url($url);
-                $realOrigPath = isset($origParseUrl['path']) ? $origParseUrl['path'] : null;
+        $courseInfo = api_get_course_info();
+        $courseCode = (string) ($courseInfo['code'] ?? '');
+        if ($courseCode === '') {
+            return;
+        }
 
-                if ('local' == $scope) {
-                    if ('abs' == $type || 'rel' == $type) {
-                        $documentFile = strstr($realOrigPath, 'document');
-                        if (false !== strpos($realOrigPath, $documentFile)) {
-                            $documentFile = str_replace('document', '', $documentFile);
-                            $itemDocumentId = DocumentManager::get_document_id($courseInfo, $documentFile);
-                            // Document found! Add it to the list
-                            if ($itemDocumentId) {
-                                $list[] = $itemDocumentId;
-                            }
-                        }
-                    }
-                }
+        /** @var CourseEntity|null $course */
+        $course = $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode]);
+        if (!$course instanceof CourseEntity) {
+            return;
+        }
+
+        // Documents root under the course
+        $root = $this->docRepo->getCourseDocumentsRootNode($course);
+        if (!$root instanceof ResourceNode) {
+            return;
+        }
+
+        $iids = [];
+
+        foreach ($this->documentsAddedInText as $item) {
+            [$url, $scope, $type] = $item; // url, scope(local/remote), type(rel/abs/url)
+            if ($scope !== 'local' || !\in_array($type, ['rel', 'abs'], true)) {
+                continue;
             }
 
+            $segments = $this->extractDocumentSegmentsFromUrl((string) $url);
+            if (!$segments) {
+                continue;
+            }
+
+            // Walk the ResourceNode tree by matching child titles
+            $node = $this->resolveNodeBySegments($root, $segments);
+            if (!$node) {
+                continue;
+            }
+
+            $resource = $this->docRepo->getResourceByResourceNode($node);
+            if ($resource instanceof CDocument && is_int($resource->getIid())) {
+                $iids[] = $resource->getIid();
+            }
+        }
+
+        $iids = array_values(array_unique($iids));
+        if ($iids) {
             $this->build_documents(
                 api_get_session_id(),
-                api_get_course_int_id(),
+                (int) $course->getId(),
                 true,
-                $list
+                $iids
             );
         }
     }
 
     /**
-     * @param array $array
+     * Extract path segments after "/document".
+     *
+     * @param  string        $url
+     * @return array<string>
      */
-    public function set_tools_to_build($array)
+    private function extractDocumentSegmentsFromUrl(string $url): array
+    {
+        $decoded = urldecode($url);
+        if (!preg_match('#/document(/.*)$#', $decoded, $m)) {
+            return [];
+        }
+        $tail = trim($m[1], '/'); // e.g. "Folder/Sub/file.pdf"
+        if ($tail === '') {
+            return [];
+        }
+
+        $parts = array_values(array_filter(explode('/', $tail), static fn($s) => $s !== ''));
+        return array_map(static fn($s) => trim($s), $parts);
+    }
+
+    /**
+     * Walk children by title from a given parent node.
+     *
+     * @param  ResourceNode       $parent
+     * @param  array<int,string>  $segments
+     * @return ResourceNode|null
+     */
+    private function resolveNodeBySegments(ResourceNode $parent, array $segments): ?ResourceNode
+    {
+        $node = $parent;
+        foreach ($segments as $title) {
+            $child = $this->docRepo->findChildNodeByTitle($node, $title);
+            if (!$child instanceof ResourceNode) {
+                return null;
+            }
+            $node = $child;
+        }
+        return $node;
+    }
+
+    /**
+     * Set tools to build.
+     *
+     * @param array<string> $array
+     */
+    public function set_tools_to_build(array $array): void
     {
         $this->tools_to_build = $array;
     }
 
     /**
-     * @param array $array
+     * Set specific id list per tool.
+     *
+     * @param array<string, array<int>> $array
      */
-    public function set_tools_specific_id_list($array)
+    public function set_tools_specific_id_list(array $array): void
     {
         $this->specific_id_list = $array;
     }
 
     /**
-     * Get the created course.
+     * Get legacy Course container.
      *
-     * @return course The course
+     * @return Course
      */
-    public function get_course()
+    public function get_course(): Course
     {
         return $this->course;
     }
 
     /**
-     * Build the course-object.
+     * Build the course (documents already repo-based; other tools preserved).
      *
-     * @param int    $session_id
-     * @param string $courseCode
-     * @param bool   $withBaseContent   true if you want to get the elements that exists in the course and
-     *                                  in the session, (session_id = 0 or session_id = X)
-     * @param array  $parseOnlyToolList
-     * @param array  $toolsFromPost
-     *
-     * @return Course The course object structure
+     * @param  int                $session_id
+     * @param  string             $courseCode
+     * @param  bool               $withBaseContent
+     * @param  array<int|string>  $parseOnlyToolList
+     * @param  array<string,mixed> $toolsFromPost
+     * @return Course
      */
     public function build(
-        $session_id = 0,
-        $courseCode = '',
-        $withBaseContent = false,
-        $parseOnlyToolList = [],
-        $toolsFromPost = []
-    ) {
-        $course = api_get_course_info($courseCode);
-        $courseId = $course['real_id'];
-        foreach ($this->tools_to_build as $tool) {
-            if (!empty($parseOnlyToolList) && !in_array($this->toolToName[$tool], $parseOnlyToolList)) {
-                continue;
-            }
-            $function_build = 'build_'.$tool;
-            $specificIdList = isset($this->specific_id_list[$tool]) ? $this->specific_id_list[$tool] : null;
-            $buildOrphanQuestions = true;
-            if ('quizzes' === $tool) {
-                if (!isset($toolsFromPost[RESOURCE_QUIZ][-1])) {
-                    $buildOrphanQuestions = false;
-                }
-
-                // Force orphan load
-                if ('complete' === $this->course->type) {
-                    $buildOrphanQuestions = true;
-                }
-
-                $this->build_quizzes(
-                    $session_id,
-                    $courseId,
-                    $withBaseContent,
-                    $specificIdList,
-                    $buildOrphanQuestions
-                );
-            } else {
-                $this->$function_build(
-                    $session_id,
-                    $courseId,
-                    $withBaseContent,
-                    $specificIdList
-                );
-            }
-        }
-
-        // Add asset
-        /*if ($course['course_image_source'] && basename($course['course_image_source']) !== 'course.png') {
-            // Add course image courses/XXX/course-pic85x85.png
-            $asset = new Asset(
-                $course['course_image_source'],
-                basename($course['course_image_source']),
-                basename($course['course_image_source'])
-            );
-            $this->course->add_resource($asset);
-
-            $asset = new Asset(
-                $course['course_image_large_source'],
-                basename($course['course_image_large_source']),
-                basename($course['course_image_large_source'])
-            );
-            $this->course->add_resource($asset);
-        }*/
-
-        // Once we've built the resources array a bit more, try to get items
-        // from the item_property table and order them in the "resources" array
-        $table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        foreach ($this->course->resources as $type => $resources) {
-            if (!empty($parseOnlyToolList) && !in_array($this->toolToName[$tool], $parseOnlyToolList)) {
-                continue;
-            }
-            foreach ($resources as $id => $resource) {
-                if ($resource) {
-                    $tool = $resource->get_tool();
-                    if (null != $tool) {
-                        $sql = "SELECT * FROM $table
-                                WHERE
-                                    c_id = $courseId AND
-                                    tool = '".$tool."' AND
-                                    ref = '".$resource->get_id()."'";
-                        $res = Database::query($sql);
-                        $properties = [];
-                        while ($property = Database::fetch_array($res)) {
-                            $properties[] = $property;
-                        }
-                        $this->course->resources[$type][$id]->item_properties = $properties;
-                    }
-                }
-            }
-        }
-
-        return $this->course;
-    }
-
-    /**
-     * Build the documents.
-     *
-     * @param int   $session_id
-     * @param int   $courseId
-     * @param bool  $withBaseContent
-     * @param array $idList
-     */
-    public function build_documents(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table_doc = Database::get_course_table(TABLE_DOCUMENT);
-        $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        // Remove chat_files and shared_folder files
-        $avoid_paths = "
-                         path NOT LIKE '/shared_folder%' AND
-                         path NOT LIKE '/chat_files%' AND
-                         path NOT LIKE '/../exercises/%'
-                         ";
-        $documentCondition = '';
-        if (!empty($idList)) {
-            $idList = array_unique($idList);
-            $idList = array_map('intval', $idList);
-            $documentCondition = ' d.iid IN ("'.implode('","', $idList).'") AND ';
-        }
-
-        if (!empty($courseId) && !empty($session_id)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $session_condition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true,
-                    'd.session_id'
-                );
-            } else {
-                $session_condition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    false,
-                    'd.session_id'
-                );
-            }
-
-            if (!empty($this->course->type) && 'partial' == $this->course->type) {
-                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d
-                        INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
-                        WHERE
-                            d.c_id = $courseId AND
-                            p.c_id = $courseId AND
-                            tool = '".TOOL_DOCUMENT."' AND
-                            $documentCondition
-                            p.visibility != 2 AND
-                            path NOT LIKE '/images/gallery%' AND
-                            $avoid_paths
-                            $session_condition
-                        ORDER BY path";
-            } else {
-                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d
-                        INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
-                        WHERE
-                            d.c_id = $courseId AND
-                            p.c_id = $courseId AND
-                            tool = '".TOOL_DOCUMENT."' AND
-                            $documentCondition
-                            $avoid_paths AND
-                            p.visibility != 2 $session_condition
-                        ORDER BY path";
-            }
-
-            $db_result = Database::query($sql);
-            while ($obj = Database::fetch_object($db_result)) {
-                $doc = new Document(
-                    $obj->iid,
-                    $obj->path,
-                    $obj->comment,
-                    $obj->title,
-                    $obj->filetype,
-                    $obj->size
-                );
-                $this->course->add_resource($doc);
-            }
-        } else {
-            if (!empty($this->course->type) && 'partial' == $this->course->type) {
-                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d
-                        INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
-                        WHERE
-                            d.c_id = $courseId AND
-                            p.c_id = $courseId AND
-                            tool = '".TOOL_DOCUMENT."' AND
-                            $documentCondition
-                            p.visibility != 2 AND
-                            path NOT LIKE '/images/gallery%' AND
-                            $avoid_paths AND
-                            (d.session_id = 0 OR d.session_id IS NULL)
-                        ORDER BY path";
-            } else {
-                $sql = "SELECT d.iid, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d
-                        INNER JOIN $table_prop p
-                        ON (p.ref = d.id AND d.c_id = p.c_id)
-                        WHERE
-                            d.c_id = $courseId AND
-                            p.c_id = $courseId AND
-                            tool = '".TOOL_DOCUMENT."' AND
-                            $documentCondition
-                            p.visibility != 2 AND
-                            $avoid_paths AND
-                            (d.session_id = 0 OR d.session_id IS NULL)
-                        ORDER BY path";
-            }
-
-            $result = Database::query($sql);
-            while ($obj = Database::fetch_object($result)) {
-                $doc = new Document(
-                    $obj->iid,
-                    $obj->path,
-                    $obj->comment,
-                    $obj->title,
-                    $obj->filetype,
-                    $obj->size
-                );
-                $this->course->add_resource($doc);
-            }
-        }
-    }
-
-    /**
-     * Build the forums.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     */
-    public function build_forums(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table = Database::get_course_table(TABLE_FORUM);
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $idCondition = '';
-        if (!empty($idList)) {
-            $idList = array_unique($idList);
-            $idList = array_map('intval', $idList);
-            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
-        }
-
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId $sessionCondition $idCondition";
-        $sql .= ' ORDER BY forum_title, forum_category';
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $forum = new Forum($obj);
-            $this->course->add_resource($forum);
-        }
-    }
-
-    /**
-     * Build a forum-category.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     */
-    public function build_forum_category(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table = Database::get_course_table(TABLE_FORUM_CATEGORY);
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $idCondition = '';
-        if (!empty($idList)) {
-            $idList = array_unique($idList);
-            $idList = array_map('intval', $idList);
-            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
-        }
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId $sessionCondition $idCondition
-                ORDER BY title";
-
-        $result = Database::query($sql);
-        while ($obj = Database::fetch_object($result)) {
-            $forumCategory = new ForumCategory($obj);
-            $this->course->add_resource($forumCategory);
-        }
-    }
-
-    /**
-     * Build the forum-topics.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     */
-    public function build_forum_topics(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table = Database::get_course_table(TABLE_FORUM_THREAD);
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $idCondition = '';
-        if (!empty($idList)) {
-            $idList = array_map('intval', $idList);
-            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
-        }
-
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId
-                $sessionCondition
-                $idCondition
-                ORDER BY title ";
-        $result = Database::query($sql);
-
-        while ($obj = Database::fetch_object($result)) {
-            $forumTopic = new ForumTopic($obj);
-            $this->course->add_resource($forumTopic);
-            $this->build_forum_posts($courseId, $obj->thread_id, $obj->forum_id);
-        }
-    }
-
-    /**
-     * Build the forum-posts
-     * TODO: All tree structure of posts should be built, attachments for example.
-     *
-     * @param int   $courseId  Internal course ID
-     * @param int   $thread_id Internal thread ID
-     * @param int   $forum_id  Internal forum ID
-     * @param array $idList
-     */
-    public function build_forum_posts(
-        $courseId = 0,
-        $thread_id = null,
-        $forum_id = null,
-        $idList = []
-    ) {
-        $table = Database::get_course_table(TABLE_FORUM_POST);
-        $courseId = (int) $courseId;
-        $sql = "SELECT * FROM $table WHERE c_id = $courseId ";
-        if (!empty($thread_id) && !empty($forum_id)) {
-            $forum_id = (int) $forum_id;
-            $thread_id = (int) $thread_id;
-            $sql .= " AND thread_id = $thread_id AND forum_id = $forum_id ";
-        }
-
-        if (!empty($idList)) {
-            $idList = array_map('intval', $idList);
-            $sql .= ' AND iid IN ("'.implode('","', $idList).'") ';
-        }
-
-        $sql .= ' ORDER BY post_id ASC LIMIT 1';
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $forum_post = new ForumPost($obj);
-            $this->course->add_resource($forum_post);
-        }
-    }
-
-    /**
-     * Build the links.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     */
-    public function build_links(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $categories = LinkManager::getLinkCategories(
-            $courseId,
-            $session_id,
-            $withBaseContent
-        );
-
-        // Adding empty category
-        $categories[] = ['id' => 0];
-
-        foreach ($categories as $category) {
-            $this->build_link_category($category);
-
-            $links = LinkManager::getLinksPerCategory(
-                $category['id'],
-                $courseId,
-                $session_id,
-                $withBaseContent
-            );
-
-            foreach ($links as $item) {
-                if (!empty($idList)) {
-                    if (!in_array($item['id'], $idList)) {
-                        continue;
-                    }
-                }
-
-                $link = new Link(
-                    $item['id'],
-                    $item['title'],
-                    $item['url'],
-                    $item['description'],
-                    $item['category_id'],
-                    $item['on_homepage']
-                );
-                $link->target = $item['target'];
-                $this->course->add_resource($link);
-                $this->course->resources[RESOURCE_LINK][$item['id']]->add_linked_resource(
-                    RESOURCE_LINKCATEGORY,
-                    $item['category_id']
-                );
-            }
-        }
-    }
-
-    /**
-     * Build tool intro.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     */
-    public function build_tool_intro(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table = Database::get_course_table(TABLE_TOOL_INTRO);
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $courseId = (int) $courseId;
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId $sessionCondition";
-
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $tool_intro = new ToolIntro($obj->id, $obj->intro_text);
-            $this->course->add_resource($tool_intro);
-        }
-    }
-
-    /**
-     * Build a link category.
-     *
-     * @param int $category Internal link ID
-     *
-     * @return int
-     */
-    public function build_link_category($category)
-    {
-        if (empty($category) || empty($category['category_title'])) {
-            return 0;
-        }
-
-        $linkCategory = new LinkCategory(
-            $category['id'],
-            $category['category_title'],
-            $category['description'],
-            $category['display_order']
-        );
-        $this->course->add_resource($linkCategory);
-
-        return $category['id'];
-    }
-
-    /**
-     * Build the Quizzes.
-     *
-     * @param int   $session_id           Internal session ID
-     * @param int   $courseId             Internal course ID
-     * @param bool  $withBaseContent      Whether to include content from the course without session or not
-     * @param array $idList               If you want to restrict the structure to only the given IDs
-     * @param bool  $buildOrphanQuestions
-     */
-    public function build_quizzes(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = [],
-        $buildOrphanQuestions = true
-    ) {
-        $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
-        $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $table_doc = Database::get_course_table(TABLE_DOCUMENT);
-
-        $courseId = (int) $courseId;
-        $idCondition = '';
-        if (!empty($idList)) {
-            $idList = array_map('intval', $idList);
-            $idCondition = ' iid IN ("'.implode('","', $idList).'") AND ';
-        }
-
-        if (!empty($courseId) && !empty($session_id)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true
-                );
-            } else {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true
-                );
-            }
-
-            // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
-            $sql = "SELECT * FROM $table_qui
-                    WHERE
-                      c_id = $courseId AND
-                      $idCondition
-                      active >=0
-                      $sessionCondition ";
-        } else {
-            // Select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
-            $sql = "SELECT * FROM $table_qui
-                    WHERE
-                      c_id = $courseId AND
-                      $idCondition
-                      active >=0 AND
-                      (session_id = 0 OR session_id IS NULL)";
-        }
-
-        $sql .= ' ORDER BY title';
-        $db_result = Database::query($sql);
-        $questionList = [];
-        while ($obj = Database::fetch_object($db_result)) {
-            if (strlen($obj->sound) > 0) {
-                $sql = "SELECT id FROM $table_doc
-                        WHERE c_id = $courseId AND path = '/audio/".$obj->sound."'";
-                $res = Database::query($sql);
-                $doc = Database::fetch_object($res);
-                $obj->sound = $doc->id;
-            }
-            $this->findAndSetDocumentsInText($obj->description);
-
-            $quiz = new Quiz($obj);
-            $sql = 'SELECT * FROM '.$table_rel.'
-                    WHERE c_id = '.$courseId.' AND quiz_id = '.$obj->id;
-            $db_result2 = Database::query($sql);
-            while ($obj2 = Database::fetch_object($db_result2)) {
-                $quiz->add_question($obj2->question_id, $obj2->question_order);
-                $questionList[] = $obj2->question_id;
-            }
-            $this->course->add_resource($quiz);
-        }
-
-        if (!empty($courseId)) {
-            $this->build_quiz_questions($courseId, $questionList, $buildOrphanQuestions);
-        } else {
-            $this->build_quiz_questions(0, $questionList, $buildOrphanQuestions);
-        }
-    }
-
-    /**
-     * Build the Quiz-Questions.
-     *
-     * @param int   $courseId             Internal course ID
-     * @param array $questionList
-     * @param bool  $buildOrphanQuestions
-     */
-    public function build_quiz_questions($courseId = 0, $questionList = [], $buildOrphanQuestions = true)
-    {
-        $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
-        $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $courseId = (int) $courseId;
-        $questionListToString = implode("','", $questionList);
-
-        // Building normal tests (many queries)
-        $sql = "SELECT * FROM $table_que
-                WHERE c_id = $courseId AND id IN ('$questionListToString')";
-        $result = Database::query($sql);
-
-        while ($obj = Database::fetch_object($result)) {
-            // find the question category
-            // @todo : need to be adapted for multi category questions in 1.10
-            $question_category_id = TestCategory::getCategoryForQuestion(
-                $obj->id,
-                $courseId
-            );
-
-            $this->findAndSetDocumentsInText($obj->description);
-
-            // build the backup resource question object
-            $question = new QuizQuestion(
-                $obj->id,
-                $obj->question,
-                $obj->description,
-                $obj->ponderation,
-                $obj->type,
-                $obj->position,
-                $obj->picture,
-                $obj->level,
-                $obj->extra,
-                $question_category_id
-            );
-            $question->addPicture($this);
-
-            $sql = 'SELECT * FROM '.$table_ans.'
-                    WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
-            $db_result2 = Database::query($sql);
-            while ($obj2 = Database::fetch_object($db_result2)) {
-                $question->add_answer(
-                    $obj2->id,
-                    $obj2->answer,
-                    $obj2->correct,
-                    $obj2->comment,
-                    $obj2->ponderation,
-                    $obj2->position,
-                    $obj2->hotspot_coordinates,
-                    $obj2->hotspot_type
-                );
-
-                $this->findAndSetDocumentsInText($obj2->answer);
-                $this->findAndSetDocumentsInText($obj2->comment);
-
-                if (MULTIPLE_ANSWER_TRUE_FALSE == $obj->type) {
-                    $table_options = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-                    $sql = 'SELECT * FROM '.$table_options.'
-                            WHERE c_id = '.$courseId.' AND question_id = '.$obj->id;
-                    $db_result3 = Database::query($sql);
-                    while ($obj3 = Database::fetch_object($db_result3)) {
-                        $question_option = new QuizQuestionOption($obj3);
-                        $question->add_option($question_option);
-                    }
-                }
-            }
-            $this->course->add_resource($question);
-        }
-
-        if ($buildOrphanQuestions) {
-            // Building a fictional test for collecting orphan questions.
-            // When a course is emptied this option should be activated (true).
-            //$build_orphan_questions = !empty($_POST['recycle_option']);
-
-            // 1st union gets the orphan questions from deleted exercises
-            // 2nd union gets the orphan questions from question that were deleted in a exercise.
-            $sql = " (
-                        SELECT question_id, q.* FROM $table_que q
-                        INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        INNER JOIN $table_qui ex
-                        ON (ex.id = r.quiz_id AND ex.c_id = r.c_id)
-                        WHERE ex.c_id = $courseId AND ex.active = '-1'
-                    )
-                    UNION
-                     (
-                        SELECT question_id, q.* FROM $table_que q
-                        left OUTER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        WHERE q.c_id = $courseId AND r.question_id is null
-                     )
-                     UNION
-                     (
-                        SELECT question_id, q.* FROM $table_que q
-                        INNER JOIN $table_rel r
-                        ON (q.c_id = r.c_id AND q.id = r.question_id)
-                        WHERE r.c_id = $courseId AND (r.quiz_id = '-1' OR r.quiz_id = '0')
-                     )
-                 ";
-
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $orphanQuestionIds = [];
-                while ($obj = Database::fetch_object($result)) {
-                    // Orphan questions
-                    if (!empty($obj->question_id)) {
-                        $obj->id = $obj->question_id;
-                    }
-
-                    // Avoid adding the same question twice
-                    if (!isset($this->course->resources[$obj->id])) {
-                        // find the question category
-                        // @todo : need to be adapted for multi category questions in 1.10
-                        $question_category_id = TestCategory::getCategoryForQuestion($obj->id, $courseId);
-                        $question = new QuizQuestion(
-                            $obj->id,
-                            $obj->question,
-                            $obj->description,
-                            $obj->ponderation,
-                            $obj->type,
-                            $obj->position,
-                            $obj->picture,
-                            $obj->level,
-                            $obj->extra,
-                            $question_category_id
-                        );
-                        $question->addPicture($this);
-                        $sql = "SELECT * FROM $table_ans
-                                WHERE c_id = $courseId AND question_id = ".$obj->id;
-                        $db_result2 = Database::query($sql);
-                        if (Database::num_rows($db_result2)) {
-                            while ($obj2 = Database::fetch_object($db_result2)) {
-                                $question->add_answer(
-                                    $obj2->id,
-                                    $obj2->answer,
-                                    $obj2->correct,
-                                    $obj2->comment,
-                                    $obj2->ponderation,
-                                    $obj2->position,
-                                    $obj2->hotspot_coordinates,
-                                    $obj2->hotspot_type
-                                );
-                            }
-                            $orphanQuestionIds[] = $obj->id;
-                        }
-                        $this->course->add_resource($question);
-                    }
-                }
-            }
-        }
-
-        $obj = [
-            'id' => -1,
-            'title' => get_lang('Orphan questions'),
-            'type' => 2,
-        ];
-        $newQuiz = new Quiz((object) $obj);
-        if (!empty($orphanQuestionIds)) {
-            foreach ($orphanQuestionIds as $index => $orphanId) {
-                $order = $index + 1;
-                $newQuiz->add_question($orphanId, $order);
-            }
-        }
-        $this->course->add_resource($newQuiz);
-    }
-
-    /**
-     * @deprecated
-     * Build the orphan questions
-     */
-    public function build_quiz_orphan_questions()
-    {
-        $table_qui = Database::get_course_table(TABLE_QUIZ_TEST);
-        $table_rel = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $table_que = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
-
-        $courseId = api_get_course_int_id();
-
-        $sql = 'SELECT *
-                FROM '.$table_que.' as questions
-                LEFT JOIN '.$table_rel.' as quizz_questions
-                ON questions.id=quizz_questions.question_id
-                LEFT JOIN '.$table_qui.' as exercises
-                ON quizz_questions.quiz_id = exercises.id
-                WHERE
-                    questions.c_id = quizz_questions.c_id AND
-                    questions.c_id = exercises.c_id AND
-                    exercises.c_id = '.$courseId.' AND
-                    (quizz_questions.quiz_id IS NULL OR
-                    exercises.active = -1)';
-
-        $db_result = Database::query($sql);
-        if (Database::num_rows($db_result) > 0) {
-            // This is the fictional test for collecting orphan questions.
-            $orphan_questions = new Quiz(
-                -1,
-                get_lang('Orphan questions'),
-                '',
-                0,
-                0,
-                1,
-                '',
-                0
-            );
-
-            $this->course->add_resource($orphan_questions);
-            while ($obj = Database::fetch_object($db_result)) {
-                $question = new QuizQuestion(
-                    $obj->id,
-                    $obj->question,
-                    $obj->description,
-                    $obj->ponderation,
-                    $obj->type,
-                    $obj->position,
-                    $obj->picture,
-                    $obj->level,
-                    $obj->extra
-                );
-                $question->addPicture($this);
-
-                $sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
-                $db_result2 = Database::query($sql);
-                while ($obj2 = Database::fetch_object($db_result2)) {
-                    $question->add_answer(
-                        $obj2->id,
-                        $obj2->answer,
-                        $obj2->correct,
-                        $obj2->comment,
-                        $obj2->ponderation,
-                        $obj2->position,
-                        $obj2->hotspot_coordinates,
-                        $obj2->hotspot_type
-                    );
-                }
-                $this->course->add_resource($question);
-            }
-        }
-    }
-
-    /**
-     * Build the test category.
-     *
-     * @param int   $sessionId       Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList          If you want to restrict the structure to only the given IDs
-     *
-     * @todo add course session
-     */
-    public function build_test_category(
-        $sessionId = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        // get all test category in course
-        $category = new TestCategory();
-        $categories = $category->getCategories();
-        foreach ($categories as $category) {
-            $this->findAndSetDocumentsInText($category->getDescription());
-            /** @var TestCategory $category */
-            $courseCopyTestCategory = new CourseCopyTestCategory(
-                $category->id,
-                $category->name,
-                $category->description
-            );
-            $this->course->add_resource($courseCopyTestCategory);
-        }
-    }
-
-    /**
-     * Build the Surveys.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
-     */
-    public function build_surveys(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-        $table_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-
-        $courseId = (int) $courseId;
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $sql = 'SELECT * FROM '.$table_survey.'
-                WHERE c_id = '.$courseId.' '.$sessionCondition;
-        if ($id_list) {
-            $sql .= ' AND iid IN ('.implode(', ', $id_list).')';
-        }
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $survey = new Survey(
-                $obj->survey_id,
-                $obj->code,
-                $obj->title,
-                $obj->subtitle,
-                $obj->author,
-                $obj->lang,
-                $obj->avail_from,
-                $obj->avail_till,
-                $obj->is_shared,
-                $obj->template,
-                $obj->intro,
-                $obj->surveythanks,
-                $obj->creation_date,
-                $obj->invited,
-                $obj->answered,
-                $obj->invite_mail,
-                $obj->reminder_mail,
-                $obj->one_question_per_page,
-                $obj->shuffle
-            );
-            $sql = 'SELECT * FROM '.$table_question.'
-                    WHERE c_id = '.$courseId.' AND survey_id = '.$obj->survey_id;
-            $db_result2 = Database::query($sql);
-            while ($obj2 = Database::fetch_object($db_result2)) {
-                $survey->add_question($obj2->question_id);
-            }
-            $this->course->add_resource($survey);
-        }
-        $this->build_survey_questions($courseId);
-    }
-
-    /**
-     * Build the Survey Questions.
-     *
-     * @param int $courseId Internal course ID
-     */
-    public function build_survey_questions($courseId)
-    {
-        $table_que = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_opt = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-
-        $courseId = (int) $courseId;
-        $idList = isset($this->specific_id_list['surveys']) ? $this->specific_id_list['surveys'] : [];
-
-        $sql = 'SELECT * FROM '.$table_que.' WHERE c_id = '.$courseId.'  ';
-
-        if (!empty($idList)) {
-            $sql .= ' AND survey_id IN ('.implode(', ', $idList).')';
-        }
-
-        $db_result = Database::query($sql);
-        $is_required = 0;
-        while ($obj = Database::fetch_object($db_result)) {
-            if (isset($obj->is_required)) {
-                $is_required = $obj->is_required;
-            }
-            $question = new SurveyQuestion(
-                $obj->question_id,
-                $obj->survey_id,
-                $obj->survey_question,
-                $obj->survey_question_comment,
-                $obj->type,
-                $obj->display,
-                $obj->sort,
-                $obj->shared_question_id,
-                $obj->max_value,
-                $is_required
-            );
-            $sql = 'SELECT * FROM '.$table_opt.'
-                    WHERE c_id = '.$courseId.' AND question_id = '.$obj->question_id;
-            $db_result2 = Database::query($sql);
-            while ($obj2 = Database::fetch_object($db_result2)) {
-                $question->add_answer($obj2->option_text, $obj2->sort);
-            }
-            $this->course->add_resource($question);
-        }
-    }
-
-    /**
-     * Build the announcements.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
-     */
-    public function build_announcements(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $courseId = (int) $courseId;
-
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE c_id = '.$courseId.' '.$sessionCondition;
-        $db_result = Database::query($sql);
-        $table_attachment = Database::get_course_table(
-            TABLE_ANNOUNCEMENT_ATTACHMENT
-        );
-        while ($obj = Database::fetch_object($db_result)) {
-            if (empty($obj->id)) {
-                continue;
-            }
-            $sql = 'SELECT path, comment, filename, size
-                    FROM '.$table_attachment.'
-                    WHERE c_id = '.$courseId.' AND announcement_id = '.$obj->id.'';
-            $result = Database::query($sql);
-            $attachment_obj = Database::fetch_object($result);
-            $att_path = $att_filename = $att_size = $atth_comment = '';
-
-            if (!empty($attachment_obj)) {
-                $att_path = $attachment_obj->path;
-                $att_filename = $attachment_obj->filename;
-                $att_size = $attachment_obj->size;
-                $atth_comment = $attachment_obj->comment;
-            }
-
-            $announcement = new Announcement(
-                $obj->id,
-                $obj->title,
-                $obj->content,
-                $obj->end_date,
-                $obj->display_order,
-                $obj->email_sent,
-                $att_path,
-                $att_filename,
-                $att_size,
-                $atth_comment
-            );
-            $this->course->add_resource($announcement);
-        }
-    }
-
-    /**
-     * Build the events.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
-     */
-    public function build_events(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table = Database::get_course_table(TABLE_AGENDA);
-
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-
-        $courseId = (int) $courseId;
-
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE c_id = '.$courseId.' '.$sessionCondition;
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $table_attachment = Database::get_course_table(
-                TABLE_AGENDA_ATTACHMENT
-            );
-            $sql = 'SELECT path, comment, filename, size
-                    FROM '.$table_attachment.'
-                    WHERE c_id = '.$courseId.' AND agenda_id = '.$obj->id.'';
-            $result = Database::query($sql);
-
-            $attachment_obj = Database::fetch_object($result);
-            $att_path = $att_filename = $att_size = $atth_comment = '';
-            if (!empty($attachment_obj)) {
-                $att_path = $attachment_obj->path;
-                $att_filename = $attachment_obj->filename;
-                $att_size = $attachment_obj->size;
-                $atth_comment = $attachment_obj->comment;
-            }
-            $event = new CalendarEvent(
-                $obj->id,
-                $obj->title,
-                $obj->content,
-                $obj->start_date,
-                $obj->end_date,
-                $att_path,
-                $att_filename,
-                $att_size,
-                $atth_comment,
-                $obj->all_day
-            );
-            $this->course->add_resource($event);
-        }
-    }
-
-    /**
-     * Build the course-descriptions.
-     *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
-     */
-    public function build_course_descriptions(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-        $courseId = (int) $courseId;
-
-        if (!empty($session_id) && !empty($courseId)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true
-                );
-            } else {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true
-                );
-            }
-            $sql = 'SELECT * FROM '.$table.'
-                    WHERE c_id = '.$courseId.' '.$sessionCondition;
-        } else {
-            $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-            $sql = 'SELECT * FROM '.$table.'
-                    WHERE c_id = '.$courseId.'  AND session_id = 0';
-        }
-
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $cd = new CourseDescription(
-                $obj->id,
-                $obj->title,
-                $obj->content,
-                $obj->description_type
-            );
-            $this->course->add_resource($cd);
-        }
-    }
-
-    /**
-     * @param int   $session_id
-     * @param int   $courseId
-     * @param bool  $withBaseContent
-     * @param array $idList
-     */
-    public function build_learnpath_category($session_id = 0, $courseId = 0, $withBaseContent = false, $idList = [])
-    {
-        $categories = learnpath::getCategories($courseId);
-
-        /** @var CLpCategory $item */
-        foreach ($categories as $item) {
-            $categoryId = $item->getId();
-            if (!empty($idList)) {
-                if (!in_array($categoryId, $idList)) {
+        int $session_id = 0,
+        string $courseCode = '',
+        bool $withBaseContent = false,
+        array $parseOnlyToolList = [],
+        array $toolsFromPost = []
+    ): Course {
+        /** @var CourseEntity|null $courseEntity */
+        $courseEntity = $courseCode !== ''
+            ? $this->em->getRepository(CourseEntity::class)->findOneBy(['code' => $courseCode])
+            : $this->em->getRepository(CourseEntity::class)->find(api_get_course_int_id());
+
+        /** @var SessionEntity|null $sessionEntity */
+        $sessionEntity = $session_id
+            ? $this->em->getRepository(SessionEntity::class)->find($session_id)
+            : null;
+
+        // Legacy DTO where resources[...] are built
+        $legacyCourse = $this->course;
+
+        foreach ($this->tools_to_build as $toolKey) {
+            if (!empty($parseOnlyToolList)) {
+                $const = $this->toolToName[$toolKey] ?? null;
+                if ($const !== null && !in_array($const, $parseOnlyToolList, true)) {
                     continue;
                 }
             }
-            $category = new LearnPathCategory($categoryId, $item);
-            $this->course->add_resource($category);
+
+            if ($toolKey === 'documents') {
+                $ids = $this->specific_id_list['documents'] ?? [];
+                $this->build_documents_with_repo($courseEntity, $sessionEntity, $withBaseContent, $ids);
+            }
+
+            if ($toolKey === 'forums' || $toolKey === 'forum') {
+                $ids = $this->specific_id_list['forums'] ?? $this->specific_id_list['forum'] ?? [];
+                $this->build_forum_category($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                $this->build_forums($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                $this->build_forum_topics($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                $this->build_forum_posts($legacyCourse, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'tool_intro') {
+                $this->build_tool_intro($legacyCourse, $courseEntity, $sessionEntity);
+            }
+
+            if ($toolKey === 'links') {
+                $ids = $this->specific_id_list['links'] ?? [];
+                $this->build_links($legacyCourse, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'quizzes' || $toolKey === 'quiz') {
+                $ids = $this->specific_id_list['quizzes'] ?? $this->specific_id_list['quiz'] ?? [];
+                $neededQuestionIds = $this->build_quizzes($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                // Always export question bucket required by the quizzes
+                $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $neededQuestionIds);
+                error_log(
+                    'COURSE_BUILD: quizzes='.count($legacyCourse->resources[RESOURCE_QUIZ] ?? []).
+                    ' quiz_questions='.count($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? [])
+                );
+            }
+
+            if ($toolKey === 'quiz_questions') {
+                $ids = $this->specific_id_list['quiz_questions'] ?? [];
+                $this->build_quiz_questions($legacyCourse, $courseEntity, $sessionEntity, $ids);
+                error_log(
+                    'COURSE_BUILD: explicit quiz_questions='.count($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? [])
+                );
+            }
+
+            if ($toolKey === 'surveys' || $toolKey === 'survey') {
+                $ids = $this->specific_id_list['surveys'] ?? $this->specific_id_list['survey'] ?? [];
+                $neededQ = $this->build_surveys($this->course, $courseEntity, $sessionEntity, $ids);
+                $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, $neededQ);
+            }
+
+            if ($toolKey === 'survey_questions') {
+                $this->build_survey_questions($this->course, $courseEntity, $sessionEntity, []);
+            }
+
+            if ($toolKey === 'announcements') {
+                $ids = $this->specific_id_list['announcements'] ?? [];
+                $this->build_announcements($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'events') {
+                $ids = $this->specific_id_list['events'] ?? [];
+                $this->build_events($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'course_descriptions') {
+                $ids = $this->specific_id_list['course_descriptions'] ?? [];
+                $this->build_course_descriptions($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'glossary') {
+                $ids = $this->specific_id_list['glossary'] ?? [];
+                $this->build_glossary($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'wiki') {
+                $ids = $this->specific_id_list['wiki'] ?? [];
+                $this->build_wiki($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'thematic') {
+                $ids = $this->specific_id_list['thematic'] ?? [];
+                $this->build_thematic($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'attendance') {
+                $ids = $this->specific_id_list['attendance'] ?? [];
+                $this->build_attendance($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'works') {
+                $ids = $this->specific_id_list['works'] ?? [];
+                $this->build_works($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'gradebook') {
+                $this->build_gradebook($this->course, $courseEntity, $sessionEntity);
+            }
+
+            if ($toolKey === 'learnpath_category') {
+                $ids = $this->specific_id_list['learnpath_category'] ?? [];
+                $this->build_learnpath_category($this->course, $courseEntity, $sessionEntity, $ids);
+            }
+
+            if ($toolKey === 'learnpaths') {
+                $ids = $this->specific_id_list['learnpaths'] ?? [];
+                $this->build_learnpaths($this->course, $courseEntity, $sessionEntity, $ids, true);
+            }
+        }
+
+        return $this->course;
+    }
+
+    /**
+     * Export Learnpath categories (CLpCategory).
+     *
+     * @param  object            $legacyCourse
+     * @param  CourseEntity|null $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>        $ids
+     * @return void
+     */
+    private function build_learnpath_category(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getLpCategoryRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CLpCategory[] $rows */
+        $rows = $qb->getQuery()->getResult();
+
+        foreach ($rows as $cat) {
+            $iid   = (int) $cat->getIid();
+            $title = (string) $cat->getTitle();
+
+            $payload = [
+                'id'    => $iid,
+                'title' => $title,
+            ];
+
+            $legacyCourse->resources[RESOURCE_LEARNPATH_CATEGORY][$iid] =
+                $this->mkLegacyItem(RESOURCE_LEARNPATH_CATEGORY, $iid, $payload);
         }
     }
 
     /**
-     * Build the learnpaths.
+     * Export Learnpaths (CLp) + items, with optional SCORM folder packing.
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
-     * @param bool  $addScormFolder
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $idList
+     * @param  bool               $addScormFolder
+     * @return void
      */
-    public function build_learnpaths(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = [],
-        $addScormFolder = true
-    ) {
-        $table_main = Database::get_course_table(TABLE_LP_MAIN);
-        $table_item = Database::get_course_table(TABLE_LP_ITEM);
-        $table_tool = Database::get_course_table(TABLE_TOOL_LIST);
+    private function build_learnpaths(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $idList = [],
+        bool $addScormFolder = true
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
 
-        $courseId = (int) $courseId;
+        $lpRepo = Container::getLpRepository();
+        $qb     = $lpRepo->getResourcesByCourse($courseEntity, $sessionEntity);
 
-        if (!empty($session_id) && !empty($courseId)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true
-                );
-            } else {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true
-                );
+        if (!empty($idList)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $idList))));
+        }
+
+        /** @var CLp[] $lps */
+        $lps = $qb->getQuery()->getResult();
+
+        foreach ($lps as $lp) {
+            $iid    = (int) $lp->getIid();
+            $lpType = (int) $lp->getLpType(); // 1=LP, 2=SCORM, 3=AICC
+
+            $items = [];
+            /** @var CLpItem $it */
+            foreach ($lp->getItems() as $it) {
+                $items[] = [
+                    'id'               => (int) $it->getIid(),
+                    'item_type'        => (string) $it->getItemType(),
+                    'ref'              => (string) $it->getRef(),
+                    'title'            => (string) $it->getTitle(),
+                    'name'             => (string) $lp->getTitle(),
+                    'description'      => (string) ($it->getDescription() ?? ''),
+                    'path'             => (string) $it->getPath(),
+                    'min_score'        => (float) $it->getMinScore(),
+                    'max_score'        => $it->getMaxScore() !== null ? (float) $it->getMaxScore() : null,
+                    'mastery_score'    => $it->getMasteryScore() !== null ? (float) $it->getMasteryScore() : null,
+                    'parent_item_id'   => (int) $it->getParentItemId(),
+                    'previous_item_id' => $it->getPreviousItemId() !== null ? (int) $it->getPreviousItemId() : null,
+                    'next_item_id'     => $it->getNextItemId() !== null ? (int) $it->getNextItemId() : null,
+                    'display_order'    => (int) $it->getDisplayOrder(),
+                    'prerequisite'     => (string) ($it->getPrerequisite() ?? ''),
+                    'parameters'       => (string) ($it->getParameters() ?? ''),
+                    'launch_data'      => (string) $it->getLaunchData(),
+                    'audio'            => (string) ($it->getAudio() ?? ''),
+                ];
             }
-            $sql = 'SELECT * FROM '.$table_main.'
-                    WHERE c_id = '.$courseId.'  '.$sessionCondition;
-        } else {
-            $sql = 'SELECT * FROM '.$table_main.'
-                    WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
+
+            $payload = [
+                'id'               => $iid,
+                'lp_type'          => $lpType,
+                'title'            => (string) $lp->getTitle(),
+                'path'             => (string) $lp->getPath(),
+                'ref'              => (string) ($lp->getRef() ?? ''),
+                'description'      => (string) ($lp->getDescription() ?? ''),
+                'content_local'    => (string) $lp->getContentLocal(),
+                'default_encoding' => (string) $lp->getDefaultEncoding(),
+                'default_view_mod' => (string) $lp->getDefaultViewMod(),
+                'prevent_reinit'   => (bool) $lp->getPreventReinit(),
+                'force_commit'     => (bool) $lp->getForceCommit(),
+                'content_maker'    => (string) $lp->getContentMaker(),
+                'display_order'    => (int) $lp->getDisplayNotAllowedLp(),
+                'js_lib'           => (string) $lp->getJsLib(),
+                'content_license'  => (string) $lp->getContentLicense(),
+                'debug'            => (bool) $lp->getDebug(),
+                'visibility'       => '1',
+                'author'           => (string) $lp->getAuthor(),
+                'use_max_score'    => (int) $lp->getUseMaxScore(),
+                'autolaunch'       => (int) $lp->getAutolaunch(),
+                'created_on'       => $this->fmtDate($lp->getCreatedOn()),
+                'modified_on'      => $this->fmtDate($lp->getModifiedOn()),
+                'published_on'     => $this->fmtDate($lp->getPublishedOn()),
+                'expired_on'       => $this->fmtDate($lp->getExpiredOn()),
+                'session_id'       => (int) ($sessionEntity?->getId() ?? 0),
+                'category_id'      => (int) ($lp->getCategory()?->getIid() ?? 0),
+                'items'            => $items,
+            ];
+
+            $legacyCourse->resources[RESOURCE_LEARNPATH][$iid] =
+                $this->mkLegacyItem(RESOURCE_LEARNPATH, $iid, $payload, ['items']);
         }
 
-        if (!empty($id_list)) {
-            $id_list = array_map('intval', $id_list);
-            $sql .= ' AND id IN ('.implode(', ', $id_list).') ';
-        }
-
-        $result = Database::query($sql);
-        if ($result) {
-            while ($obj = Database::fetch_object($result)) {
-                $items = [];
-                $sql = "SELECT * FROM $table_item
-                        WHERE c_id = '$courseId' AND lp_id = ".$obj->id;
-                $resultItem = Database::query($sql);
-                while ($obj_item = Database::fetch_object($resultItem)) {
-                    $item['id'] = $obj_item->iid;
-                    $item['item_type'] = $obj_item->item_type;
-                    $item['ref'] = $obj_item->ref;
-                    $item['title'] = $obj_item->title;
-                    $item['description'] = $obj_item->description;
-                    $item['path'] = $obj_item->path;
-                    $item['min_score'] = $obj_item->min_score;
-                    $item['max_score'] = $obj_item->max_score;
-                    $item['mastery_score'] = $obj_item->mastery_score;
-                    $item['parent_item_id'] = $obj_item->parent_item_id;
-                    $item['previous_item_id'] = $obj_item->previous_item_id;
-                    $item['next_item_id'] = $obj_item->next_item_id;
-                    $item['display_order'] = $obj_item->display_order;
-                    $item['prerequisite'] = $obj_item->prerequisite;
-                    $item['parameters'] = $obj_item->parameters;
-                    $item['launch_data'] = $obj_item->launch_data;
-                    $item['audio'] = $obj_item->audio;
-                    $items[] = $item;
-                }
-
-                $sql = "SELECT id FROM $table_tool
-                        WHERE
-                            c_id = $courseId AND
-                            (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' AND image='scormbuilder.gif') AND
-                            visibility = '1' ";
-                $db_tool = Database::query($sql);
-                $visibility = '0';
-                if (Database::num_rows($db_tool)) {
-                    $visibility = '1';
-                }
-
-                $lp = new CourseCopyLearnpath(
-                    $obj->id,
-                    $obj->lp_type,
-                    $obj->title,
-                    $obj->path,
-                    $obj->ref,
-                    $obj->description,
-                    $obj->content_local,
-                    $obj->default_encoding,
-                    $obj->default_view_mod,
-                    $obj->prevent_reinit,
-                    $obj->force_commit,
-                    $obj->content_maker,
-                    $obj->display_order,
-                    $obj->js_lib,
-                    $obj->content_license,
-                    $obj->debug,
-                    $visibility,
-                    $obj->author,
-                    //$obj->preview_image,
-                    $obj->use_max_score,
-                    $obj->autolaunch,
-                    $obj->created_on,
-                    $obj->modified_on,
-                    $obj->published_on,
-                    $obj->expired_on,
-                    $obj->session_id,
-                    $obj->category_id,
-                    $items
-                );
-
-                $this->course->add_resource($lp);
-
-                /*if (!empty($obj->preview_image)) {
-                    // Add LP teacher image
-                    $asset = new Asset(
-                        $obj->preview_image,
-                        '/upload/learning_path/images/'.$obj->preview_image,
-                        '/upload/learning_path/images/'.$obj->preview_image
-                    );
-                    $this->course->add_resource($asset);
-                }*/
-            }
-        }
-
-        // Save scorm directory (previously build_scorm_documents())
-        if ($addScormFolder) {
-            $i = 1;
-            if ($dir = @opendir($this->course->backup_path.'/scorm')) {
-                while ($file = readdir($dir)) {
-                    if (is_dir($this->course->backup_path.'/scorm/'.$file) &&
-                        !in_array($file, ['.', '..'])
-                    ) {
-                        $doc = new ScormDocument($i++, '/'.$file, $file);
-                        $this->course->add_resource($doc);
+        // Optional: pack “scorm” folder (legacy parity)
+        if ($addScormFolder && isset($this->course->backup_path)) {
+            $scormDir = rtrim((string) $this->course->backup_path, '/') . '/scorm';
+            if (is_dir($scormDir) && ($dh = @opendir($scormDir))) {
+                $i = 1;
+                while (false !== ($file = readdir($dh))) {
+                    if ($file === '.' || $file === '..') {
+                        continue;
+                    }
+                    if (is_dir($scormDir . '/' . $file)) {
+                        $payload = ['path' => '/' . $file, 'name' => (string) $file];
+                        $legacyCourse->resources['scorm'][$i] =
+                            $this->mkLegacyItem('scorm', $i, $payload);
+                        $i++;
                     }
                 }
-                closedir($dir);
+                closedir($dh);
             }
         }
     }
 
     /**
-     * Build the glossaries.
+     * Export Gradebook (categories + evaluations + links).
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @return void
      */
-    public function build_glossary(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
-
-        $courseId = (int) $courseId;
-
-        if (!empty($session_id) && !empty($courseId)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true
-                );
-            } else {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true
-                );
-            }
-
-            //@todo check this queries are the same ...
-            if (!empty($this->course->type) && 'partial' == $this->course->type) {
-                $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' '.$sessionCondition;
-            } else {
-                $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' '.$sessionCondition;
-            }
-        } else {
-            $table_glossary = Database::get_course_table(TABLE_GLOSSARY);
-            //@todo check this queries are the same ... ayayay
-            if (!empty($this->course->type) && 'partial' == $this->course->type) {
-                $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
-            } else {
-                $sql = 'SELECT * FROM '.$table_glossary.' g
-                        WHERE g.c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
-            }
+    private function build_gradebook(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
         }
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $doc = new Glossary(
-                $obj->glossary_id,
-                $obj->name,
-                $obj->description,
-                $obj->display_order
-            );
-            $this->course->add_resource($doc);
+
+        /** @var EntityManagerInterface $em */
+        $em = \Database::getManager();
+        $catRepo = $em->getRepository(GradebookCategory::class);
+
+        $criteria = ['course' => $courseEntity];
+        if ($sessionEntity) {
+            $criteria['session'] = $sessionEntity;
         }
+
+        /** @var GradebookCategory[] $cats */
+        $cats = $catRepo->findBy($criteria);
+        if (!$cats) {
+            return;
+        }
+
+        $payloadCategories = [];
+        foreach ($cats as $cat) {
+            $payloadCategories[] = $this->serializeGradebookCategory($cat);
+        }
+
+        $backup = new GradeBookBackup($payloadCategories);
+        $legacyCourse->add_resource($backup);
     }
 
-    /*
-     * Build session course by jhon
+    /**
+     * Serialize GradebookCategory (and nested parts) to array for restore.
+     *
+     * @param  GradebookCategory $c
+     * @return array<string,mixed>
      */
-    public function build_session_course()
+    private function serializeGradebookCategory(GradebookCategory $c): array
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $list_course = CourseManager::get_course_list();
-        $list = [];
-        foreach ($list_course as $_course) {
-            $this->course = new Course();
-            $this->course->code = $_course['code'];
-            $this->course->type = 'partial';
-            $this->course->path = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/';
-            $this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['directory'];
-            $this->course->encoding = api_get_system_encoding(); //current platform encoding
-            $courseId = $_course['real_id'];
-            $sql = "SELECT s.id, name, c_id
-                    FROM $tbl_session_course sc
-                    INNER JOIN $tbl_session s
-                    ON sc.session_id = s.id
-                    WHERE sc.c_id = '$courseId' ";
-            $query_session = Database::query($sql);
-            while ($rows_session = Database::fetch_assoc($query_session)) {
-                $session = new CourseSession(
-                    $rows_session['id'],
-                    $rows_session['name']
-                );
-                $this->course->add_resource($session);
-            }
-            $list[] = $this->course;
+        $arr = [
+            'id'                         => (int) $c->getId(),
+            'title'                      => (string) $c->getTitle(),
+            'description'                => (string) ($c->getDescription() ?? ''),
+            'weight'                     => (float) $c->getWeight(),
+            'visible'                    => (bool) $c->getVisible(),
+            'locked'                     => (int) $c->getLocked(),
+            'parent_id'                  => $c->getParent() ? (int) $c->getParent()->getId() : 0,
+            'generate_certificates'      => (bool) $c->getGenerateCertificates(),
+            'certificate_validity_period'=> $c->getCertificateValidityPeriod(),
+            'is_requirement'             => (bool) $c->getIsRequirement(),
+            'default_lowest_eval_exclude'=> (bool) $c->getDefaultLowestEvalExclude(),
+            'minimum_to_validate'        => $c->getMinimumToValidate(),
+            'gradebooks_to_validate_in_dependence' => $c->getGradeBooksToValidateInDependence(),
+            'allow_skills_by_subcategory'=> $c->getAllowSkillsBySubcategory(),
+            // camelCase duplicates (future-proof)
+            'generateCertificates'       => (bool) $c->getGenerateCertificates(),
+            'certificateValidityPeriod'  => $c->getCertificateValidityPeriod(),
+            'isRequirement'              => (bool) $c->getIsRequirement(),
+            'defaultLowestEvalExclude'   => (bool) $c->getDefaultLowestEvalExclude(),
+            'minimumToValidate'          => $c->getMinimumToValidate(),
+            'gradeBooksToValidateInDependence' => $c->getGradeBooksToValidateInDependence(),
+            'allowSkillsBySubcategory'   => $c->getAllowSkillsBySubcategory(),
+        ];
+
+        if ($c->getGradeModel()) {
+            $arr['grade_model_id'] = (int) $c->getGradeModel()->getId();
         }
 
-        return $list;
+        // Evaluations
+        $arr['evaluations'] = [];
+        foreach ($c->getEvaluations() as $e) {
+            /** @var GradebookEvaluation $e */
+            $arr['evaluations'][] = [
+                'title'         => (string) $e->getTitle(),
+                'description'   => (string) ($e->getDescription() ?? ''),
+                'weight'        => (float)  $e->getWeight(),
+                'max'           => (float)  $e->getMax(),
+                'type'          => (string) $e->getType(),
+                'visible'       => (int)    $e->getVisible(),
+                'locked'        => (int)    $e->getLocked(),
+                'best_score'    => $e->getBestScore(),
+                'average_score' => $e->getAverageScore(),
+                'score_weight'  => $e->getScoreWeight(),
+                'min_score'     => $e->getMinScore(),
+            ];
+        }
+
+        // Links
+        $arr['links'] = [];
+        foreach ($c->getLinks() as $l) {
+            /** @var GradebookLink $l */
+            $arr['links'][] = [
+                'type'          => (int)   $l->getType(),
+                'ref_id'        => (int)   $l->getRefId(),
+                'weight'        => (float) $l->getWeight(),
+                'visible'       => (int)   $l->getVisible(),
+                'locked'        => (int)   $l->getLocked(),
+                'best_score'    => $l->getBestScore(),
+                'average_score' => $l->getAverageScore(),
+                'score_weight'  => $l->getScoreWeight(),
+                'min_score'     => $l->getMinScore(),
+            ];
+        }
+
+        return $arr;
     }
 
     /**
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * Export Works (root folders only; include assignment params).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
      */
-    public function build_wiki(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $tbl_wiki = Database::get_course_table(TABLE_WIKI);
-        $courseId = (int) $courseId;
+    private function build_works(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
 
-        if (!empty($session_id) && !empty($courseId)) {
-            $session_id = (int) $session_id;
-            if ($withBaseContent) {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true,
-                    true
+        $repo = Container::getStudentPublicationRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        $qb
+            ->andWhere('resource.publicationParent IS NULL')
+            ->andWhere('resource.filetype = :ft')->setParameter('ft', 'folder')
+            ->andWhere('resource.active = 1');
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CStudentPublication[] $rows */
+        $rows = $qb->getQuery()->getResult();
+
+        foreach ($rows as $row) {
+            $iid   = (int) $row->getIid();
+            $title = (string) $row->getTitle();
+            $desc  = (string) ($row->getDescription() ?? '');
+
+            // Detect documents linked in description
+            $this->findAndSetDocumentsInText($desc);
+
+            $asgmt     = $row->getAssignment();
+            $expiresOn = $asgmt?->getExpiresOn()?->format('Y-m-d H:i:s');
+            $endsOn    = $asgmt?->getEndsOn()?->format('Y-m-d H:i:s');
+            $addToCal  = $asgmt && $asgmt->getEventCalendarId() > 0 ? 1 : 0;
+            $enableQ   = (bool) ($asgmt?->getEnableQualification() ?? false);
+
+            $params = [
+                'id'                             => $iid,
+                'title'                          => $title,
+                'description'                    => $desc,
+                'weight'                         => (float) $row->getWeight(),
+                'qualification'                  => (float) $row->getQualification(),
+                'allow_text_assignment'          => (int)   $row->getAllowTextAssignment(),
+                'default_visibility'             => (bool)  ($row->getDefaultVisibility() ?? false),
+                'student_delete_own_publication' => (bool)  ($row->getStudentDeleteOwnPublication() ?? false),
+                'extensions'                     => $row->getExtensions(),
+                'group_category_work_id'         => (int)   $row->getGroupCategoryWorkId(),
+                'post_group_id'                  => (int)   $row->getPostGroupId(),
+                'enable_qualification'           => $enableQ,
+                'add_to_calendar'                => $addToCal ? 1 : 0,
+                'expires_on'                     => $expiresOn ?: null,
+                'ends_on'                        => $endsOn   ?: null,
+                'name'                           => $title,
+                'url'                            => null,
+            ];
+
+            $legacy = new Work($params);
+            $legacyCourse->add_resource($legacy);
+        }
+    }
+
+    /**
+     * Export Attendance + calendars.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_attendance(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getAttendanceRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CAttendance[] $rows */
+        $rows = $qb->getQuery()->getResult();
+
+        foreach ($rows as $row) {
+            $iid    = (int) $row->getIid();
+            $title  = (string) $row->getTitle();
+            $desc   = (string) ($row->getDescription() ?? '');
+            $active = (int) $row->getActive();
+
+            $this->findAndSetDocumentsInText($desc);
+
+            $params = [
+                'id'                       => $iid,
+                'title'                    => $title,
+                'description'              => $desc,
+                'active'                   => $active,
+                'attendance_qualify_title' => (string) ($row->getAttendanceQualifyTitle() ?? ''),
+                'attendance_qualify_max'   => (int) $row->getAttendanceQualifyMax(),
+                'attendance_weight'        => (float) $row->getAttendanceWeight(),
+                'locked'                   => (int) $row->getLocked(),
+                'name'                     => $title,
+            ];
+
+            $legacy = new Attendance($params);
+
+            /** @var CAttendanceCalendar $cal */
+            foreach ($row->getCalendars() as $cal) {
+                $calArr = [
+                    'id'              => (int) $cal->getIid(),
+                    'attendance_id'   => $iid,
+                    'date_time'       => $cal->getDateTime()?->format('Y-m-d H:i:s') ?? '',
+                    'done_attendance' => (bool) $cal->getDoneAttendance(),
+                    'blocked'         => (bool) $cal->getBlocked(),
+                    'duration'        => $cal->getDuration() !== null ? (int) $cal->getDuration() : null,
+                ];
+                $legacy->add_attendance_calendar($calArr);
+            }
+
+            $legacyCourse->add_resource($legacy);
+        }
+    }
+
+    /**
+     * Export Thematic + advances + plans (and collect linked docs).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_thematic(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getThematicRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CThematic[] $rows */
+        $rows = $qb->getQuery()->getResult();
+
+        foreach ($rows as $row) {
+            $iid     = (int) $row->getIid();
+            $title   = (string) $row->getTitle();
+            $content = (string) ($row->getContent() ?? '');
+            $active  = (bool) $row->getActive();
+
+            $this->findAndSetDocumentsInText($content);
+
+            $params = [
+                'id'      => $iid,
+                'title'   => $title,
+                'content' => $content,
+                'active'  => $active,
+            ];
+
+            $legacy = new Thematic($params);
+
+            /** @var CThematicAdvance $adv */
+            foreach ($row->getAdvances() as $adv) {
+                $attendanceId = 0;
+                try {
+                    $refAtt = new \ReflectionProperty(CThematicAdvance::class, 'attendance');
+                    if ($refAtt->isInitialized($adv)) {
+                        $att = $adv->getAttendance();
+                        if ($att) {
+                            $attendanceId = (int) $att->getIid();
+                        }
+                    }
+                } catch (\Throwable) {
+                    // keep $attendanceId = 0
+                }
+
+                $advArr = [
+                    'id'            => (int) $adv->getIid(),
+                    'thematic_id'   => (int) $row->getIid(),
+                    'content'       => (string) ($adv->getContent() ?? ''),
+                    'start_date'    => $adv->getStartDate()?->format('Y-m-d H:i:s') ?? '',
+                    'duration'      => (int) $adv->getDuration(),
+                    'done_advance'  => (bool) $adv->getDoneAdvance(),
+                    'attendance_id' => $attendanceId,
+                    'room_id'       => (int) ($adv->getRoom()?->getId() ?? 0),
+                ];
+
+                $this->findAndSetDocumentsInText((string) $advArr['content']);
+                $legacy->addThematicAdvance($advArr);
+            }
+
+            /** @var CThematicPlan $pl */
+            foreach ($row->getPlans() as $pl) {
+                $plArr = [
+                    'id'               => (int) $pl->getIid(),
+                    'thematic_id'      => $iid,
+                    'title'            => (string) $pl->getTitle(),
+                    'description'      => (string) ($pl->getDescription() ?? ''),
+                    'description_type' => (int) $pl->getDescriptionType(),
+                ];
+                $this->findAndSetDocumentsInText((string) $plArr['description']);
+                $legacy->addThematicPlan($plArr);
+            }
+
+            $legacyCourse->add_resource($legacy);
+        }
+    }
+
+    /**
+     * Export Wiki pages (content + metadata; collect docs in content).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_wiki(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getWikiRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CWiki[] $pages */
+        $pages = $qb->getQuery()->getResult();
+
+        foreach ($pages as $page) {
+            $iid      = (int) $page->getIid();
+            $pageId   = (int) ($page->getPageId() ?? $iid);
+            $reflink  = (string) $page->getReflink();
+            $title    = (string) $page->getTitle();
+            $content  = (string) $page->getContent();
+            $userId   = (int) $page->getUserId();
+            $groupId  = (int) ($page->getGroupId() ?? 0);
+            $progress = (string) ($page->getProgress() ?? '');
+            $version  = (int) ($page->getVersion() ?? 1);
+            $dtime    = $page->getDtime()?->format('Y-m-d H:i:s') ?? '';
+
+            $this->findAndSetDocumentsInText($content);
+
+            $legacy = new Wiki(
+                $iid,
+                $pageId,
+                $reflink,
+                $title,
+                $content,
+                $userId,
+                $groupId,
+                $dtime,
+                $progress,
+                $version
+            );
+
+            $this->course->add_resource($legacy);
+        }
+    }
+
+    /**
+     * Export Glossary terms (collect docs in descriptions).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_glossary(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getGlossaryRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CGlossary[] $terms */
+        $terms = $qb->getQuery()->getResult();
+
+        foreach ($terms as $term) {
+            $iid   = (int) $term->getIid();
+            $title = (string) $term->getTitle();
+            $desc  = (string) ($term->getDescription() ?? '');
+
+            $this->findAndSetDocumentsInText($desc);
+
+            $legacy = new Glossary(
+                $iid,
+                $title,
+                $desc,
+                0
+            );
+
+            $this->course->add_resource($legacy);
+        }
+    }
+
+    /**
+     * Export Course descriptions (collect docs in HTML).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_course_descriptions(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = Container::getCourseDescriptionRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CCourseDescription[] $rows */
+        $rows = $qb->getQuery()->getResult();
+
+        foreach ($rows as $row) {
+            $iid   = (int) $row->getIid();
+            $title = (string) ($row->getTitle() ?? '');
+            $html  = (string) ($row->getContent() ?? '');
+            $type  = (int) $row->getDescriptionType();
+
+            $this->findAndSetDocumentsInText($html);
+
+            $export = new CourseDescription(
+                $iid,
+                $title,
+                $html,
+                $type
+            );
+
+            $this->course->add_resource($export);
+        }
+    }
+
+    /**
+     * Export Calendar events (first attachment as legacy, all as assets).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_events(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $eventRepo = Container::getCalendarEventRepository();
+        $qb        = $eventRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CCalendarEvent[] $events */
+        $events = $qb->getQuery()->getResult();
+
+        /** @var KernelInterface $kernel */
+        $kernel      = Container::$container->get('kernel');
+        $projectDir  = rtrim($kernel->getProjectDir(), '/');
+        $resourceBase = $projectDir . '/var/upload/resource';
+
+        /** @var ResourceNodeRepository $rnRepo */
+        $rnRepo = Container::$container->get(ResourceNodeRepository::class);
+
+        foreach ($events as $ev) {
+            $iid       = (int) $ev->getIid();
+            $title     = (string) $ev->getTitle();
+            $content   = (string) ($ev->getContent() ?? '');
+            $startDate = $ev->getStartDate()?->format('Y-m-d H:i:s') ?? '';
+            $endDate   = $ev->getEndDate()?->format('Y-m-d H:i:s') ?? '';
+            $allDay    = (int) $ev->isAllDay();
+
+            $firstPath = $firstName = $firstComment = '';
+            $firstSize = 0;
+
+            /** @var CCalendarEventAttachment $att */
+            foreach ($ev->getAttachments() as $att) {
+                $node = $att->getResourceNode();
+                $abs  = null;
+                $size = 0;
+                $relForZip = null;
+
+                if ($node) {
+                    $file = $node->getFirstResourceFile();
+                    if ($file) {
+                        $storedRel = (string) $rnRepo->getFilename($file);
+                        if ($storedRel !== '') {
+                            $candidate = $resourceBase . $storedRel;
+                            if (is_readable($candidate)) {
+                                $abs  = $candidate;
+                                $size = (int) $file->getSize();
+                                if ($size <= 0 && is_file($candidate)) {
+                                    $st   = @stat($candidate);
+                                    $size = $st ? (int) $st['size'] : 0;
+                                }
+                                $base = basename($storedRel) ?: (string) $att->getIid();
+                                $relForZip = 'upload/calendar/' . $base;
+                            }
+                        }
+                    }
+                }
+
+                if ($abs && $relForZip) {
+                    $this->tryAddAsset($relForZip, $abs, $size);
+                } else {
+                    error_log('COURSE_BUILD: event attachment file not found (event_iid='
+                        . $iid . '; att_iid=' . (int) $att->getIid() . ')');
+                }
+
+                if ($firstName === '' && $relForZip) {
+                    $firstPath    = substr($relForZip, strlen('upload/calendar/'));
+                    $firstName    = (string) $att->getFilename();
+                    $firstComment = (string) ($att->getComment() ?? '');
+                    $firstSize    = (int) $size;
+                }
+            }
+
+            $export = new CalendarEvent(
+                $iid,
+                $title,
+                $content,
+                $startDate,
+                $endDate,
+                $firstPath,
+                $firstName,
+                $firstSize,
+                $firstComment,
+                $allDay
+            );
+
+            $this->course->add_resource($export);
+        }
+    }
+
+    /**
+     * Export Announcements (first attachment legacy, all as assets).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_announcements(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity) {
+            return;
+        }
+
+        $annRepo = Container::getAnnouncementRepository();
+        $qb      = $annRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CAnnouncement[] $anns */
+        $anns = $qb->getQuery()->getResult();
+
+        /** @var KernelInterface $kernel */
+        $kernel       = Container::$container->get('kernel');
+        $projectDir   = rtrim($kernel->getProjectDir(), '/');
+        $resourceBase = $projectDir . '/var/upload/resource';
+
+        /** @var ResourceNodeRepository $rnRepo */
+        $rnRepo = Container::$container->get(ResourceNodeRepository::class);
+
+        foreach ($anns as $a) {
+            $iid   = (int) $a->getIid();
+            $title = (string) $a->getTitle();
+            $html  = (string) ($a->getContent() ?? '');
+            $date  = $a->getEndDate()?->format('Y-m-d H:i:s') ?? '';
+            $email = (bool) $a->getEmailSent();
+
+            $firstPath = $firstName = $firstComment = '';
+            $firstSize = 0;
+
+            $attachmentsArr = [];
+
+            /** @var CAnnouncementAttachment $att */
+            foreach ($a->getAttachments() as $att) {
+                $relPath  = ltrim((string) $att->getPath(), '/');
+                $assetRel = 'upload/announcements/' . $relPath;
+
+                $abs = null;
+                $node = $att->getResourceNode();
+                if ($node) {
+                    $file = $node->getFirstResourceFile();
+                    if ($file) {
+                        $storedRel = (string) $rnRepo->getFilename($file);
+                        if ($storedRel !== '') {
+                            $candidate = $resourceBase . $storedRel;
+                            if (is_readable($candidate)) {
+                                $abs = $candidate;
+                            }
+                        }
+                    }
+                }
+
+                if ($abs) {
+                    $this->tryAddAsset($assetRel, $abs, (int) $att->getSize());
+                } else {
+                    error_log('COURSE_BUILD: announcement attachment not found (iid=' . (int) $att->getIid() . ')');
+                }
+
+                $attachmentsArr[] = [
+                    'path'          => $relPath,
+                    'filename'      => (string) $att->getFilename(),
+                    'size'          => (int) $att->getSize(),
+                    'comment'       => (string) ($att->getComment() ?? ''),
+                    'asset_relpath' => $assetRel,
+                ];
+
+                if ($firstName === '') {
+                    $firstPath    = $relPath;
+                    $firstName    = (string) $att->getFilename();
+                    $firstSize    = (int) $att->getSize();
+                    $firstComment = (string) ($att->getComment() ?? '');
+                }
+            }
+
+            $payload = [
+                'title'               => $title,
+                'content'             => $html,
+                'date'                => $date,
+                'display_order'       => 0,
+                'email_sent'          => $email ? 1 : 0,
+                'attachment_path'     => $firstPath,
+                'attachment_filename' => $firstName,
+                'attachment_size'     => $firstSize,
+                'attachment_comment'  => $firstComment,
+                'attachments'         => $attachmentsArr,
+            ];
+
+            $legacyCourse->resources[RESOURCE_ANNOUNCEMENT][$iid] =
+                $this->mkLegacyItem(RESOURCE_ANNOUNCEMENT, $iid, $payload, ['attachments']);
+        }
+    }
+
+    /**
+     * Register an asset to be packed into the export ZIP.
+     *
+     * @param  string $relPath Relative path inside the ZIP
+     * @param  string $absPath Absolute filesystem path
+     * @param  int    $size
+     * @return void
+     */
+    private function addAsset(string $relPath, string $absPath, int $size = 0): void
+    {
+        if (!isset($this->course->resources['asset']) || !is_array($this->course->resources['asset'])) {
+            $this->course->resources['asset'] = [];
+        }
+        $this->course->resources['asset'][$relPath] = [
+            'abs'  => $absPath,
+            'size' => $size,
+        ];
+    }
+
+    /**
+     * Try to add an asset only if file exists.
+     *
+     * @param  string $relPath
+     * @param  string $absPath
+     * @param  int    $size
+     * @return void
+     */
+    private function tryAddAsset(string $relPath, string $absPath, int $size = 0): void
+    {
+        if (is_file($absPath) && is_readable($absPath)) {
+            $this->addAsset($relPath, $absPath, $size);
+        } else {
+            error_log('COURSE_BUILD: asset missing: ' . $absPath);
+        }
+    }
+
+    /**
+     * Export Surveys; returns needed Question IDs for follow-up export.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $surveyIds
+     * @return array<int>
+     */
+    private function build_surveys(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $surveyIds
+    ): array {
+        if (!$courseEntity) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('s')
+            ->from(CSurvey::class, 's')
+            ->innerJoin('s.resourceNode', 'rn')
+            ->leftJoin('rn.resourceLinks', 'links')
+            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
+            ->andWhere($sessionEntity
+                ? '(links.session IS NULL OR links.session = :session)'
+                : 'links.session IS NULL'
+            )
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL');
+
+        if ($sessionEntity) {
+            $qb->setParameter('session', $sessionEntity);
+        }
+        if (!empty($surveyIds)) {
+            $qb->andWhere('s.iid IN (:ids)')->setParameter('ids', array_map('intval', $surveyIds));
+        }
+
+        /** @var CSurvey[] $surveys */
+        $surveys = $qb->getQuery()->getResult();
+
+        $neededQuestionIds = [];
+
+        foreach ($surveys as $s) {
+            $iid  = (int) $s->getIid();
+            $qIds = [];
+
+            foreach ($s->getQuestions() as $q) {
+                /** @var CSurveyQuestion $q */
+                $qid = (int) $q->getIid();
+                $qIds[] = $qid;
+                $neededQuestionIds[$qid] = true;
+            }
+
+            $payload = [
+                'code'                    => (string) ($s->getCode() ?? ''),
+                'title'                   => (string) $s->getTitle(),
+                'subtitle'                => (string) ($s->getSubtitle() ?? ''),
+                'author'                  => '',
+                'lang'                    => (string) ($s->getLang() ?? ''),
+                'avail_from'              => $s->getAvailFrom()?->format('Y-m-d H:i:s'),
+                'avail_till'              => $s->getAvailTill()?->format('Y-m-d H:i:s'),
+                'is_shared'               => (string) ($s->getIsShared() ?? '0'),
+                'template'                => (string) ($s->getTemplate() ?? 'template'),
+                'intro'                   => (string) ($s->getIntro() ?? ''),
+                'surveythanks'            => (string) ($s->getSurveythanks() ?? ''),
+                'creation_date'           => $s->getCreationDate()?->format('Y-m-d H:i:s') ?: date('Y-m-d H:i:s'),
+                'invited'                 => (int) $s->getInvited(),
+                'answered'                => (int) $s->getAnswered(),
+                'invite_mail'             => (string) $s->getInviteMail(),
+                'reminder_mail'           => (string) $s->getReminderMail(),
+                'mail_subject'            => (string) $s->getMailSubject(),
+                'anonymous'               => (string) $s->getAnonymous(),
+                'shuffle'                 => (bool) $s->getShuffle(),
+                'one_question_per_page'   => (bool) $s->getOneQuestionPerPage(),
+                'visible_results'         => $s->getVisibleResults(),
+                'display_question_number' => (bool) $s->isDisplayQuestionNumber(),
+                'survey_type'             => (int) $s->getSurveyType(),
+                'show_form_profile'       => (int) $s->getShowFormProfile(),
+                'form_fields'             => (string) $s->getFormFields(),
+                'duration'                => $s->getDuration(),
+                'question_ids'            => $qIds,
+                'survey_id'               => $iid,
+            ];
+
+            $legacyCourse->resources[RESOURCE_SURVEY][$iid] =
+                $this->mkLegacyItem(RESOURCE_SURVEY, $iid, $payload);
+
+            error_log('COURSE_BUILD: SURVEY iid=' . $iid . ' qids=[' . implode(',', $qIds) . ']');
+        }
+
+        return array_keys($neededQuestionIds);
+    }
+
+    /**
+     * Export Survey Questions (answers promoted at top level).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $questionIds
+     * @return void
+     */
+    private function build_survey_questions(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $questionIds
+    ): void {
+        if (!$courseEntity) {
+            return;
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('q', 's')
+            ->from(CSurveyQuestion::class, 'q')
+            ->innerJoin('q.survey', 's')
+            ->innerJoin('s.resourceNode', 'rn')
+            ->leftJoin('rn.resourceLinks', 'links')
+            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
+            ->andWhere($sessionEntity
+                ? '(links.session IS NULL OR links.session = :session)'
+                : 'links.session IS NULL'
+            )
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL')
+            ->orderBy('s.iid', 'ASC')
+            ->addOrderBy('q.sort', 'ASC');
+
+        if ($sessionEntity) {
+            $qb->setParameter('session', $sessionEntity);
+        }
+        if (!empty($questionIds)) {
+            $qb->andWhere('q.iid IN (:ids)')->setParameter('ids', array_map('intval', $questionIds));
+        }
+
+        /** @var CSurveyQuestion[] $questions */
+        $questions = $qb->getQuery()->getResult();
+
+        $exported = 0;
+
+        foreach ($questions as $q) {
+            $qid = (int) $q->getIid();
+            $sid = (int) $q->getSurvey()->getIid();
+
+            $answers = [];
+            foreach ($q->getOptions() as $opt) {
+                /** @var CSurveyQuestionOption $opt */
+                $answers[] = [
+                    'option_text' => (string) $opt->getOptionText(),
+                    'sort'        => (int) $opt->getSort(),
+                    'value'       => (int) $opt->getValue(),
+                ];
+            }
+
+            $payload = [
+                'survey_id'               => $sid,
+                'survey_question'         => (string) $q->getSurveyQuestion(),
+                'survey_question_comment' => (string) ($q->getSurveyQuestionComment() ?? ''),
+                'type'                    => (string) $q->getType(),
+                'display'                 => (string) $q->getDisplay(),
+                'sort'                    => (int) $q->getSort(),
+                'shared_question_id'      => $q->getSharedQuestionId(),
+                'max_value'               => $q->getMaxValue(),
+                'is_required'             => (bool) $q->isMandatory(),
+                'answers'                 => $answers,
+            ];
+
+            $legacyCourse->resources[RESOURCE_SURVEYQUESTION][$qid] =
+                $this->mkLegacyItem(RESOURCE_SURVEYQUESTION, $qid, $payload, ['answers']);
+
+            $exported++;
+            error_log('COURSE_BUILD: SURVEY_Q qid=' . $qid . ' survey=' . $sid . ' answers=' . count($answers));
+        }
+
+        error_log('COURSE_BUILD: survey questions exported=' . $exported);
+    }
+
+    /**
+     * Export Quizzes and return required Question IDs.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $quizIds
+     * @return array<int>
+     */
+    private function build_quizzes(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $quizIds
+    ): array {
+        if (!$courseEntity) {
+            return [];
+        }
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('q')
+            ->from(CQuiz::class, 'q')
+            ->innerJoin('q.resourceNode', 'rn')
+            ->leftJoin('rn.resourceLinks', 'links')
+            ->andWhere('links.course = :course')->setParameter('course', $courseEntity)
+            ->andWhere($sessionEntity
+                ? '(links.session IS NULL OR links.session = :session)'
+                : 'links.session IS NULL'
+            )
+            ->andWhere('links.deletedAt IS NULL')
+            ->andWhere('links.endVisibilityAt IS NULL');
+
+        if ($sessionEntity) {
+            $qb->setParameter('session', $sessionEntity);
+        }
+        if (!empty($quizIds)) {
+            $qb->andWhere('q.iid IN (:ids)')->setParameter('ids', array_map('intval', $quizIds));
+        }
+
+        /** @var CQuiz[] $quizzes */
+        $quizzes = $qb->getQuery()->getResult();
+        $neededQuestionIds = [];
+
+        foreach ($quizzes as $quiz) {
+            $iid = (int) $quiz->getIid();
+
+            $payload = [
+                'title'                   => (string) $quiz->getTitle(),
+                'description'             => (string) ($quiz->getDescription() ?? ''),
+                'type'                    => (int) $quiz->getType(),
+                'random'                  => (int) $quiz->getRandom(),
+                'random_answers'          => (bool) $quiz->getRandomAnswers(),
+                'results_disabled'        => (int) $quiz->getResultsDisabled(),
+                'max_attempt'             => (int) $quiz->getMaxAttempt(),
+                'feedback_type'           => (int) $quiz->getFeedbackType(),
+                'expired_time'            => (int) $quiz->getExpiredTime(),
+                'review_answers'          => (int) $quiz->getReviewAnswers(),
+                'random_by_category'      => (int) $quiz->getRandomByCategory(),
+                'text_when_finished'      => (string) ($quiz->getTextWhenFinished() ?? ''),
+                'text_when_finished_failure' => (string) ($quiz->getTextWhenFinishedFailure() ?? ''),
+                'display_category_name'   => (int) $quiz->getDisplayCategoryName(),
+                'save_correct_answers'    => (int) ($quiz->getSaveCorrectAnswers() ?? 0),
+                'propagate_neg'           => (int) $quiz->getPropagateNeg(),
+                'hide_question_title'     => (bool) $quiz->isHideQuestionTitle(),
+                'hide_question_number'    => (int) $quiz->getHideQuestionNumber(),
+                'question_selection_type' => (int) ($quiz->getQuestionSelectionType() ?? 0),
+                'access_condition'        => (string) ($quiz->getAccessCondition() ?? ''),
+                'pass_percentage'         => $quiz->getPassPercentage(),
+                'start_time'              => $quiz->getStartTime()?->format('Y-m-d H:i:s'),
+                'end_time'                => $quiz->getEndTime()?->format('Y-m-d H:i:s'),
+                'question_ids'            => [],
+                'question_orders'         => [],
+            ];
+
+            $rels = $this->em->createQueryBuilder()
+                ->select('rel', 'qq')
+                ->from(CQuizRelQuestion::class, 'rel')
+                ->innerJoin('rel.question', 'qq')
+                ->andWhere('rel.quiz = :quiz')
+                ->setParameter('quiz', $quiz)
+                ->orderBy('rel.questionOrder', 'ASC')
+                ->getQuery()->getResult();
+
+            foreach ($rels as $rel) {
+                $qid = (int) $rel->getQuestion()->getIid();
+                $payload['question_ids'][]    = $qid;
+                $payload['question_orders'][] = (int) $rel->getQuestionOrder();
+                $neededQuestionIds[$qid] = true;
+            }
+
+            $legacyCourse->resources[RESOURCE_QUIZ][$iid] =
+                $this->mkLegacyItem(
+                    RESOURCE_QUIZ,
+                    $iid,
+                    $payload,
+                    ['question_ids', 'question_orders']
                 );
+        }
+
+        error_log(
+            'COURSE_BUILD: build_quizzes done; total=' . count($quizzes)
+        );
+
+        return array_keys($neededQuestionIds);
+    }
+
+    /**
+     * Safe count helper for mixed values.
+     *
+     * @param  mixed $v
+     * @return int
+     */
+    private function safeCount(mixed $v): int
+    {
+        return (is_array($v) || $v instanceof \Countable) ? \count($v) : 0;
+    }
+
+    /**
+     * Export Quiz Questions (answers and options promoted).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $questionIds
+     * @return void
+     */
+    private function build_quiz_questions(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $questionIds
+    ): void {
+        if (!$courseEntity) {
+            return;
+        }
+
+        error_log('COURSE_BUILD: build_quiz_questions start ids=' . json_encode(array_values($questionIds)));
+        error_log('COURSE_BUILD: build_quiz_questions exported=' . $this->safeCount($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? 0));
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('qq')
+            ->from(CQuizQuestion::class, 'qq')
+            ->innerJoin('qq.resourceNode', 'qrn')
+            ->leftJoin('qrn.resourceLinks', 'qlinks')
+            ->andWhere('qlinks.course = :course')->setParameter('course', $courseEntity)
+            ->andWhere($sessionEntity
+                ? '(qlinks.session IS NULL OR qlinks.session = :session)'
+                : 'qlinks.session IS NULL'
+            )
+            ->andWhere('qlinks.deletedAt IS NULL')
+            ->andWhere('qlinks.endVisibilityAt IS NULL');
+
+        if ($sessionEntity) {
+            $qb->setParameter('session', $sessionEntity);
+        }
+        if (!empty($questionIds)) {
+            $qb->andWhere('qq.iid IN (:ids)')->setParameter('ids', array_map('intval', $questionIds));
+        }
+
+        /** @var CQuizQuestion[] $questions */
+        $questions = $qb->getQuery()->getResult();
+
+        error_log('COURSE_BUILD: build_quiz_questions start ids=' . json_encode(array_values($questionIds)));
+        error_log('COURSE_BUILD: build_quiz_questions exported=' . $this->safeCount($legacyCourse->resources[RESOURCE_QUIZQUESTION] ?? 0));
+
+        $this->exportQuestionsWithAnswers($legacyCourse, $questions);
+    }
+
+    /**
+     * Internal exporter for quiz questions + answers (+ options for MATF type).
+     *
+     * @param  object                $legacyCourse
+     * @param  array<int,CQuizQuestion> $questions
+     * @return void
+     */
+    private function exportQuestionsWithAnswers(object $legacyCourse, array $questions): void
+    {
+        foreach ($questions as $q) {
+            $qid = (int) $q->getIid();
+
+            $payload = [
+                'question'       => (string) $q->getQuestion(),
+                'description'    => (string) ($q->getDescription() ?? ''),
+                'ponderation'    => (float) $q->getPonderation(),
+                'position'       => (int) $q->getPosition(),
+                'type'           => (int) $q->getType(),
+                'quiz_type'      => (int) $q->getType(),
+                'picture'        => (string) ($q->getPicture() ?? ''),
+                'level'          => (int) $q->getLevel(),
+                'extra'          => (string) ($q->getExtra() ?? ''),
+                'feedback'       => (string) ($q->getFeedback() ?? ''),
+                'question_code'  => (string) ($q->getQuestionCode() ?? ''),
+                'mandatory'      => (int) $q->getMandatory(),
+                'duration'       => $q->getDuration(),
+                'parent_media_id'=> $q->getParentMediaId(),
+                'answers'        => [],
+            ];
+
+            $ans = $this->em->createQueryBuilder()
+                ->select('a')
+                ->from(CQuizAnswer::class, 'a')
+                ->andWhere('a.question = :q')->setParameter('q', $q)
+                ->orderBy('a.position', 'ASC')
+                ->getQuery()->getResult();
+
+            foreach ($ans as $a) {
+                $payload['answers'][] = [
+                    'id'                  => (int) $a->getIid(),
+                    'answer'              => (string) $a->getAnswer(),
+                    'comment'             => (string) ($a->getComment() ?? ''),
+                    'ponderation'         => (float) $a->getPonderation(),
+                    'position'            => (int) $a->getPosition(),
+                    'hotspot_coordinates' => $a->getHotspotCoordinates(),
+                    'hotspot_type'        => $a->getHotspotType(),
+                    'correct'             => $a->getCorrect(),
+                ];
+            }
+
+            if (defined('MULTIPLE_ANSWER_TRUE_FALSE') && MULTIPLE_ANSWER_TRUE_FALSE === (int) $q->getType()) {
+                $opts = $this->em->createQueryBuilder()
+                    ->select('o')
+                    ->from(CQuizQuestionOption::class, 'o')
+                    ->andWhere('o.question = :q')->setParameter('q', $q)
+                    ->orderBy('o.position', 'ASC')
+                    ->getQuery()->getResult();
+
+                $payload['question_options'] = array_map(static fn($o) => [
+                    'id'       => (int) $o->getIid(),
+                    'name'     => (string) $o->getTitle(),
+                    'position' => (int) $o->getPosition(),
+                ], $opts);
+            }
+
+            $legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid] =
+                $this->mkLegacyItem(RESOURCE_QUIZQUESTION, $qid, $payload, ['answers', 'question_options']);
+
+            error_log('COURSE_BUILD: QQ qid=' . $qid .
+                ' quiz_type=' . ($legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid]->quiz_type ?? 'missing') .
+                ' answers=' . count($legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid]->answers ?? [])
+            );
+        }
+    }
+
+    /**
+     * Export Link category as legacy item.
+     *
+     * @param  CLinkCategory $category
+     * @return void
+     */
+    private function build_link_category(CLinkCategory $category): void
+    {
+        $id = (int) $category->getIid();
+        if ($id <= 0) {
+            return;
+        }
+
+        $payload = [
+            'title'         => (string) $category->getTitle(),
+            'description'   => (string) ($category->getDescription() ?? ''),
+            'category_title'=> (string) $category->getTitle(),
+        ];
+
+        $this->course->resources[RESOURCE_LINKCATEGORY][$id] =
+            $this->mkLegacyItem(RESOURCE_LINKCATEGORY, $id, $payload);
+    }
+
+    /**
+     * Export Links (and their categories once).
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_links(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $linkRepo = Container::getLinkRepository();
+        $catRepo  = Container::getLinkCategoryRepository();
+
+        $qb = $linkRepo->getResourcesByCourse($courseEntity, $sessionEntity);
+
+        if (!empty($ids)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $ids))));
+        }
+
+        /** @var CLink[] $links */
+        $links = $qb->getQuery()->getResult();
+
+        $exportedCats = [];
+
+        foreach ($links as $link) {
+            $iid   = (int) $link->getIid();
+            $title = (string) $link->getTitle();
+            $url   = (string) $link->getUrl();
+            $desc  = (string) ($link->getDescription() ?? '');
+            $tgt   = (string) ($link->getTarget() ?? '');
+
+            $cat   = $link->getCategory();
+            $catId = (int) ($cat?->getIid() ?? 0);
+
+            if ($catId > 0 && !isset($exportedCats[$catId])) {
+                $this->build_link_category($cat);
+                $exportedCats[$catId] = true;
+            }
+
+            $payload = [
+                'title'       => $title !== '' ? $title : $url,
+                'url'         => $url,
+                'description' => $desc,
+                'target'      => $tgt,
+                'category_id' => $catId,
+                'on_homepage' => false,
+            ];
+
+            $legacyCourse->resources[RESOURCE_LINK][$iid] =
+                $this->mkLegacyItem(RESOURCE_LINK, $iid, $payload);
+        }
+    }
+
+    /**
+     * Format DateTime as string "Y-m-d H:i:s".
+     *
+     * @param  \DateTimeInterface|null $dt
+     * @return string
+     */
+    private function fmtDate(?\DateTimeInterface $dt): string
+    {
+        return $dt ? $dt->format('Y-m-d H:i:s') : '';
+    }
+
+    /**
+     * Create a legacy item object, promoting selected array keys to top-level.
+     *
+     * @param  string             $type
+     * @param  int                $sourceId
+     * @param  array|object       $obj
+     * @param  array<int,string>  $arrayKeysToPromote
+     * @return \stdClass
+     */
+    private function mkLegacyItem(string $type, int $sourceId, array|object $obj, array $arrayKeysToPromote = []): \stdClass
+    {
+        $o = new \stdClass();
+        $o->type           = $type;
+        $o->source_id      = $sourceId;
+        $o->destination_id = -1;
+        $o->has_obj        = true;
+        $o->obj            = (object) $obj;
+
+        foreach ((array) $obj as $k => $v) {
+            if (is_scalar($v) || $v === null) {
+                if (!property_exists($o, $k)) {
+                    $o->$k = $v;
+                }
+            }
+        }
+        foreach ($arrayKeysToPromote as $k) {
+            if (isset($obj[$k]) && is_array($obj[$k])) {
+                $o->$k = $obj[$k];
+            }
+        }
+
+        // Ensure "name" for restorer display
+        if (!isset($o->name) || $o->name === '' || $o->name === null) {
+            if (isset($obj['name']) && $obj['name'] !== '') {
+                $o->name = (string) $obj['name'];
+            } elseif (isset($obj['title']) && $obj['title'] !== '') {
+                $o->name = (string) $obj['title'];
             } else {
-                $sessionCondition = api_get_session_condition(
-                    $session_id,
-                    true
-                );
+                $o->name = $type . ' ' . $sourceId;
             }
-            $sql = 'SELECT * FROM '.$tbl_wiki.'
-                    WHERE c_id = '.$courseId.' '.$sessionCondition;
-        } else {
-            $tbl_wiki = Database::get_course_table(TABLE_WIKI);
-            $sql = 'SELECT * FROM '.$tbl_wiki.'
-                    WHERE c_id = '.$courseId.' AND (session_id = 0 OR session_id IS NULL)';
         }
-        $db_result = Database::query($sql);
-        while ($obj = Database::fetch_object($db_result)) {
-            $wiki = new Wiki(
-                $obj->id,
-                $obj->page_id,
-                $obj->reflink,
-                $obj->title,
-                $obj->content,
-                $obj->user_id,
-                $obj->group_id,
-                $obj->dtime,
-                $obj->progress,
-                $obj->version
-            );
-            $this->course->add_resource($wiki);
+
+        return $o;
+    }
+
+    /**
+     * Build an id filter closure.
+     *
+     * @param  array<int> $idsFilter
+     * @return \Closure(int):bool
+     */
+    private function makeIdFilter(array $idsFilter): \Closure
+    {
+        if (empty($idsFilter)) {
+            return static fn(int $id): bool => true;
+        }
+        $set = array_fill_keys(array_map('intval', $idsFilter), true);
+        return static fn(int $id): bool => isset($set[$id]);
+    }
+
+    /**
+     * Export Tool intro (tool -> intro text) for visible tools.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity|null  $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @return void
+     */
+    private function build_tool_intro(
+        object $legacyCourse,
+        ?CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity
+    ): void {
+        if (!$courseEntity instanceof CourseEntity) {
+            return;
+        }
+
+        $repo = $this->em->getRepository(CToolIntro::class);
+
+        $qb = $repo->createQueryBuilder('ti')
+            ->innerJoin('ti.courseTool', 'ct')
+            ->andWhere('ct.course = :course')
+            ->setParameter('course', $courseEntity);
+
+        if ($sessionEntity) {
+            $qb->andWhere('ct.session = :session')->setParameter('session', $sessionEntity);
+        } else {
+            $qb->andWhere('ct.session IS NULL');
+        }
+
+        $qb->andWhere('ct.visibility = :vis')->setParameter('vis', true);
+
+        /** @var CToolIntro[] $intros */
+        $intros = $qb->getQuery()->getResult();
+
+        foreach ($intros as $intro) {
+            $ctool    = $intro->getCourseTool();       // CTool
+            $titleKey = (string) $ctool->getTitle();   // e.g. 'documents', 'forum'
+            if ($titleKey === '') {
+                continue;
+            }
+
+            $payload = [
+                'id'         => $titleKey,
+                'intro_text' => (string) $intro->getIntroText(),
+            ];
+
+            // Use 0 as source_id (unused by restore)
+            $legacyCourse->resources[RESOURCE_TOOL_INTRO][$titleKey] =
+                $this->mkLegacyItem(RESOURCE_TOOL_INTRO, 0, $payload);
         }
     }
 
     /**
-     * Build the Surveys.
+     * Export Forum categories.
      *
-     * @param int   $session_id      Internal session ID
-     * @param int   $courseId        Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list         If you want to restrict the structure to only the given IDs
+     * @param  object             $legacyCourse
+     * @param  CourseEntity       $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
      */
-    public function build_thematic(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $table_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $table_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
-        $courseId = (int) $courseId;
+    private function build_forum_category(
+        object $legacyCourse,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        $repo = Container::getForumCategoryRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $categories = $qb->getQuery()->getResult();
 
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $session_id = (int) $session_id;
-        if ($withBaseContent) {
-            $sessionCondition = api_get_session_condition(
-                $session_id,
-                true,
-                true
-            );
-        } else {
-            $sessionCondition = api_get_session_condition($session_id, true);
-        }
+        $keep = $this->makeIdFilter($ids);
 
-        $sql = "SELECT * FROM $table_thematic
-                WHERE c_id = $courseId $sessionCondition ";
-        $db_result = Database::query($sql);
-        while ($row = Database::fetch_assoc($db_result)) {
-            $thematic = new Thematic($row);
-            $sql = 'SELECT * FROM '.$table_thematic_advance.'
-                    WHERE c_id = '.$courseId.' AND thematic_id = '.$row['id'];
-
-            $result = Database::query($sql);
-            while ($sub_row = Database::fetch_assoc($result)) {
-                $thematic->addThematicAdvance($sub_row);
+        foreach ($categories as $cat) {
+            /** @var CForumCategory $cat */
+            $id = (int) $cat->getIid();
+            if (!$keep($id)) {
+                continue;
             }
 
-            $items = api_get_item_property_by_tool(
-                'thematic_plan',
-                $courseInfo['code'],
-                $session_id
-            );
+            $payload = [
+                'title'       => (string) $cat->getTitle(),
+                'description' => (string) ($cat->getCatComment() ?? ''),
+                'cat_title'   => (string) $cat->getTitle(),
+                'cat_comment' => (string) ($cat->getCatComment() ?? ''),
+            ];
 
-            $thematic_plan_id_list = [];
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    $thematic_plan_id_list[] = $item['ref'];
+            $legacyCourse->resources[RESOURCE_FORUMCATEGORY][$id] =
+                $this->mkLegacyItem(RESOURCE_FORUMCATEGORY, $id, $payload);
+        }
+    }
+
+    /**
+     * Export Forums.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity       $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_forums(
+        object $legacyCourse,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        $repo = Container::getForumRepository();
+        $qb   = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $forums = $qb->getQuery()->getResult();
+
+        $keep = $this->makeIdFilter($ids);
+
+        foreach ($forums as $f) {
+            /** @var CForum $f */
+            $id = (int) $f->getIid();
+            if (!$keep($id)) {
+                continue;
+            }
+
+            $payload = [
+                'title'                      => (string) $f->getTitle(),
+                'description'                => (string) ($f->getForumComment() ?? ''),
+                'forum_title'                => (string) $f->getTitle(),
+                'forum_comment'              => (string) ($f->getForumComment() ?? ''),
+                'forum_category'             => (int) ($f->getForumCategory()?->getIid() ?? 0),
+                'allow_anonymous'            => (int) ($f->getAllowAnonymous() ?? 0),
+                'allow_edit'                 => (int) ($f->getAllowEdit() ?? 0),
+                'approval_direct_post'       => (string) ($f->getApprovalDirectPost() ?? '0'),
+                'allow_attachments'          => (int) ($f->getAllowAttachments() ?? 1),
+                'allow_new_threads'          => (int) ($f->getAllowNewThreads() ?? 1),
+                'default_view'               => (string) ($f->getDefaultView() ?? 'flat'),
+                'forum_of_group'             => (string) ($f->getForumOfGroup() ?? '0'),
+                'forum_group_public_private' => (string) ($f->getForumGroupPublicPrivate() ?? 'public'),
+                'moderated'                  => (int) ($f->isModerated() ? 1 : 0),
+                'start_time'                 => $this->fmtDate($f->getStartTime()),
+                'end_time'                   => $this->fmtDate($f->getEndTime()),
+            ];
+
+            $legacyCourse->resources[RESOURCE_FORUM][$id] =
+                $this->mkLegacyItem(RESOURCE_FORUM, $id, $payload);
+        }
+    }
+
+    /**
+     * Export Forum threads.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity       $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_forum_topics(
+        object $legacyCourse,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        $repo    = Container::getForumThreadRepository();
+        $qb      = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
+        $threads = $qb->getQuery()->getResult();
+
+        $keep = $this->makeIdFilter($ids);
+
+        foreach ($threads as $t) {
+            /** @var CForumThread $t */
+            $id = (int) $t->getIid();
+            if (!$keep($id)) {
+                continue;
+            }
+
+            $payload = [
+                'title'                => (string) $t->getTitle(),
+                'thread_title'         => (string) $t->getTitle(),
+                'title_qualify'        => (string) ($t->getThreadTitleQualify() ?? ''),
+                'topic_poster_name'    => (string) ($t->getUser()?->getUsername() ?? ''),
+                'forum_id'             => (int) ($t->getForum()?->getIid() ?? 0),
+                'thread_date'          => $this->fmtDate($t->getThreadDate()),
+                'thread_sticky'        => (int) ($t->getThreadSticky() ? 1 : 0),
+                'thread_title_qualify' => (string) ($t->getThreadTitleQualify() ?? ''),
+                'thread_qualify_max'   => (float) $t->getThreadQualifyMax(),
+                'thread_weight'        => (float) $t->getThreadWeight(),
+                'thread_peer_qualify'  => (int) ($t->isThreadPeerQualify() ? 1 : 0),
+            ];
+
+            $legacyCourse->resources[RESOURCE_FORUMTOPIC][$id] =
+                $this->mkLegacyItem(RESOURCE_FORUMTOPIC, $id, $payload);
+        }
+    }
+
+    /**
+     * Export first post for each thread as topic root post.
+     *
+     * @param  object             $legacyCourse
+     * @param  CourseEntity       $courseEntity
+     * @param  SessionEntity|null $sessionEntity
+     * @param  array<int>         $ids
+     * @return void
+     */
+    private function build_forum_posts(
+        object $legacyCourse,
+        CourseEntity $courseEntity,
+        ?SessionEntity $sessionEntity,
+        array $ids
+    ): void {
+        $repoThread = Container::getForumThreadRepository();
+        $repoPost   = Container::getForumPostRepository();
+
+        $qb      = $repoThread->getResourcesByCourse($courseEntity, $sessionEntity);
+        $threads = $qb->getQuery()->getResult();
+
+        $keep = $this->makeIdFilter($ids);
+
+        foreach ($threads as $t) {
+            /** @var CForumThread $t */
+            $threadId = (int) $t->getIid();
+            if (!$keep($threadId)) {
+                continue;
+            }
+
+            $first = $repoPost->findOneBy(['thread' => $t], ['postDate' => 'ASC', 'iid' => 'ASC']);
+            if (!$first) {
+                continue;
+            }
+
+            $postId = (int) $first->getIid();
+            $titleFromPost = trim((string) $first->getTitle());
+            if ($titleFromPost === '') {
+                $plain = trim(strip_tags((string) ($first->getPostText() ?? '')));
+                $titleFromPost = mb_substr($plain !== '' ? $plain : 'Post', 0, 60);
+            }
+
+            $payload = [
+                'title'             => $titleFromPost,
+                'post_title'        => $titleFromPost,
+                'post_text'         => (string) ($first->getPostText() ?? ''),
+                'thread_id'         => $threadId,
+                'forum_id'          => (int) ($t->getForum()?->getIid() ?? 0),
+                'post_notification' => (int) ($first->getPostNotification() ? 1 : 0),
+                'visible'           => (int) ($first->getVisible() ? 1 : 0),
+                'status'            => (int) ($first->getStatus() ?? CForumPost::STATUS_VALIDATED),
+                'post_parent_id'    => (int) ($first->getPostParent()?->getIid() ?? 0),
+                'poster_id'         => (int) ($first->getUser()?->getId() ?? 0),
+                'text'              => (string) ($first->getPostText() ?? ''),
+                'poster_name'       => (string) ($first->getUser()?->getUsername() ?? ''),
+                'post_date'         => $this->fmtDate($first->getPostDate()),
+            ];
+
+            $legacyCourse->resources[RESOURCE_FORUMPOST][$postId] =
+                $this->mkLegacyItem(RESOURCE_FORUMPOST, $postId, $payload);
+        }
+    }
+
+    /* -----------------------------------------------------------------
+     * Documents (Chamilo 2 style)
+     * ----------------------------------------------------------------- */
+
+    /**
+     * New Chamilo 2 build: CDocumentRepository-based (instead of legacy tables).
+     *
+     * @param  CourseEntity|null  $course
+     * @param  SessionEntity|null $session
+     * @param  bool               $withBaseContent
+     * @param  array<int>         $idList
+     * @return void
+     */
+    private function build_documents_with_repo(
+        ?CourseEntity $course,
+        ?SessionEntity $session,
+        bool $withBaseContent,
+        array $idList = []
+    ): void {
+        if (!$course instanceof CourseEntity) {
+            return;
+        }
+
+        $qb = $this->docRepo->getResourcesByCourse(
+            $course,
+            $session,
+            null,
+            null,
+            true,
+            false
+        );
+
+        if (!empty($idList)) {
+            $qb->andWhere('resource.iid IN (:ids)')
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $idList))));
+        }
+
+        /** @var CDocument[] $docs */
+        $docs = $qb->getQuery()->getResult();
+
+        foreach ($docs as $doc) {
+            $node     = $doc->getResourceNode();
+            $filetype = $doc->getFiletype(); // 'file'|'folder'|...
+            $title    = $doc->getTitle();
+            $comment  = $doc->getComment() ?? '';
+            $iid      = (int) $doc->getIid();
+            $fullPath = $doc->getFullPath();
+
+            // Determine size
+            $size = 0;
+            if ($filetype === 'folder') {
+                $size = $this->docRepo->getFolderSize($node, $course, $session);
+            } else {
+                /** @var Collection<int,ResourceFile>|null $files */
+                $files = $node?->getResourceFiles();
+                if ($files && $files->count() > 0) {
+                    /** @var ResourceFile $first */
+                    $first = $files->first();
+                    $size  = (int) $first->getSize();
                 }
             }
-            if (count($thematic_plan_id_list) > 0) {
-                $sql = "SELECT tp.*
-                        FROM $table_thematic_plan tp
-                            INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)
-                        WHERE
-                            t.c_id = $courseId AND
-                            tp.c_id = $courseId AND
-                            thematic_id = {$row['id']}  AND
-                            tp.id IN (".implode(', ', $thematic_plan_id_list).') ';
 
-                $result = Database::query($sql);
-                while ($sub_row = Database::fetch_assoc($result)) {
-                    $thematic->addThematicPlan($sub_row);
-                }
-            }
-            $this->course->add_resource($thematic);
+            $exportDoc = new Document(
+                $iid,
+                '/' . $fullPath,
+                $comment,
+                $title,
+                $filetype,
+                (string) $size
+            );
+
+            $this->course->add_resource($exportDoc);
         }
     }
 
     /**
-     * Build the attendances.
+     * Backward-compatible wrapper for build_documents_with_repo().
      *
-     * @param int   $session_id Internal session ID
-     * @param int   $courseId Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $id_list If you want to restrict the structure to only the given IDs
-     * @throws \Exception
-     * @throws Exception
+     * @param  int    $session_id
+     * @param  int    $courseId
+     * @param  bool   $withBaseContent
+     * @param  array<int> $idList
+     * @return void
      */
-    public function build_attendance(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false,
-        $id_list = []
-    ) {
-        $table_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $table_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $sessionCondition = api_get_session_condition($session_id, true, $withBaseContent);
-        $courseId = (int) $courseId;
-
-        $sql = 'SELECT * FROM '.$table_attendance.'
-                WHERE c_id = '.$courseId.' '.$sessionCondition;
-        $db_result = Database::query($sql);
-        while ($row = Database::fetch_assoc($db_result)) {
-            $obj = new Attendance($row);
-            $sql = 'SELECT * FROM '.$table_attendance_calendar.'
-                    WHERE c_id = '.$courseId.' AND attendance_id = '.$row['id'];
-
-            $result = Database::query($sql);
-            while ($sub_row = Database::fetch_assoc($result)) {
-                $obj->add_attendance_calendar($sub_row);
-            }
-            $this->course->add_resource($obj);
-        }
-    }
-
-    /**
-     * Build the works (or "student publications", or "assignments").
-     *
-     * @param int   $session_id Internal session ID
-     * @param int   $courseId Internal course ID
-     * @param bool  $withBaseContent Whether to include content from the course without session or not
-     * @param array $idList If you want to restrict the structure to only the given IDs
-     * @throws Exception
-     */
-    public function build_works(
+    public function build_documents(
         int $session_id = 0,
         int $courseId = 0,
-        $withBaseContent = false,
-        $idList = []
-    ) {
-        $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sessionCondition = api_get_session_condition(
-            $session_id,
-            true,
-            $withBaseContent
-        );
-        $courseId = (int) $courseId;
+        bool $withBaseContent = false,
+        array $idList = []
+    ): void {
+        /** @var CourseEntity|null $course */
+        $course = $this->em->getRepository(CourseEntity::class)->find($courseId);
+        /** @var SessionEntity|null $session */
+        $session = $session_id ? $this->em->getRepository(SessionEntity::class)->find($session_id) : null;
 
-        $idCondition = '';
-        if (!empty($idList)) {
-            $idList = array_map('intval', $idList);
-            $idCondition = ' AND iid IN ("'.implode('","', $idList).'") ';
-        }
-
-        $sql = "SELECT * FROM $table_work
-                WHERE
-                    c_id = $courseId
-                    $sessionCondition AND
-                    filetype = 'folder' AND
-                    parent_id = 0 AND
-                    active = 1
-                    $idCondition
-                ";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_assoc($result)) {
-            $obj = new Work($row);
-            $this->course->add_resource($obj);
-        }
-    }
-
-    /**
-     * @param int  $session_id
-     * @param int  $courseId
-     * @param bool $withBaseContent
-     */
-    public function build_gradebook(
-        $session_id = 0,
-        $courseId = 0,
-        $withBaseContent = false
-    ) {
-        $courseInfo = api_get_course_info_by_id($courseId);
-        $courseCode = $courseInfo['code'];
-        $cats = Category::load(
-            null,
-            null,
-            $courseCode,
-            null,
-            null,
-            $session_id
-        );
-
-        if (!empty($cats)) {
-            /** @var Category $cat */
-            foreach ($cats as $cat) {
-                $cat->evaluations = $cat->get_evaluations(null, false);
-                $cat->links = $cat->get_links(null, false);
-                $cat->subCategories = $cat->get_subcategories(
-                    null,
-                    $courseCode,
-                    $session_id
-                );
-            }
-            $obj = new GradeBookBackup($cats);
-            $this->course->add_resource($obj);
-        }
+        $this->build_documents_with_repo($course, $session, $withBaseContent, $idList);
     }
 }

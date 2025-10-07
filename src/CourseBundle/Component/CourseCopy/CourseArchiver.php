@@ -9,6 +9,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
 use DateTime;
 use PclZip;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
@@ -270,16 +271,214 @@ class CourseArchiver
     }
 
     /**
-     * Read a course-object from a zip-file.
-     *
-     * @param string $filename
-     * @param bool   $delete   Delete the file after reading the course?
-     *
-     * @return Course The course
-     *
-     * @todo Check if the archive is a correct Chamilo-export
+     * Read a legacy course backup (.zip) and return a Course object.
+     * - Extracts the zip into a temp dir.
+     * - Finds and decodes course_info.dat (base64 + serialize).
+     * - Registers legacy aliases/stubs BEFORE unserialize (critical).
+     * - Normalizes common identifier fields to int after unserialize.
      */
-    public static function readCourse($filename, $delete = false)
+    public static function readCourse(string $filename, bool $delete = false): false|Course
     {
+        // Clean temp backup dirs and ensure backup dir exists
+        self::cleanBackupDir();
+        self::createBackupDir();
+
+        $backupDir = rtrim(self::getBackupDir(), '/').'/';
+        $zipPath   = $backupDir.$filename;
+
+        if (!is_file($zipPath)) {
+            throw new \RuntimeException('Backup file not found: '.$filename);
+        }
+
+        // 1) Extract zip into a temp directory
+        $tmp = $backupDir.'CourseArchiver_'.uniqid('', true).'/';
+        (new Filesystem())->mkdir($tmp);
+
+        $zip = new ZipArchive();
+        if (true !== $zip->open($zipPath)) {
+            throw new \RuntimeException('Cannot open zip: '.$filename);
+        }
+        if (!$zip->extractTo($tmp)) {
+            $zip->close();
+            throw new \RuntimeException('Cannot extract zip: '.$filename);
+        }
+        $zip->close();
+
+        // 2) Read and decode course_info.dat (base64 + serialize)
+        $courseInfoDat = $tmp.'course_info.dat';
+        if (!is_file($courseInfoDat)) {
+            // Fallback: search nested locations
+            $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($tmp));
+            foreach ($rii as $f) {
+                if ($f->isFile() && $f->getFilename() === 'course_info.dat') {
+                    $courseInfoDat = $f->getPathname();
+                    break;
+                }
+            }
+            if (!is_file($courseInfoDat)) {
+                throw new \RuntimeException('course_info.dat not found in backup');
+            }
+        }
+
+        $raw = file_get_contents($courseInfoDat);
+        $payload = base64_decode($raw, true);
+        if ($payload === false) {
+            throw new \RuntimeException('course_info.dat is not valid base64');
+        }
+
+        // 3) Coerce numeric-string identifiers to integers *before* unserialize
+        //    This prevents "Cannot assign string to property ... of type int"
+        //    on typed properties (handles public/protected/private names).
+        $payload = self::coerceNumericStringsInSerialized($payload);
+
+        // 4) Register legacy aliases BEFORE unserialize (critical for v1 backups)
+        self::registerLegacyAliases();
+
+        // 5) Unserialize using UnserializeApi if present (v1-compatible)
+        if (class_exists('UnserializeApi')) {
+            /** @var Course $course */
+            $course = \UnserializeApi::unserialize('course', $payload);
+        } else {
+            /** @var Course|false $course */
+            $course = @unserialize($payload, ['allowed_classes' => true]);
+        }
+
+        if (!is_object($course)) {
+            throw new \RuntimeException('Could not unserialize legacy course');
+        }
+
+        // 6) Normalize common numeric identifiers after unserialize (extra safety)
+        self::normalizeIds($course);
+
+        // 7) Optionally delete uploaded file (compat with v1)
+        if ($delete && is_file($zipPath)) {
+            @unlink($zipPath);
+        }
+
+        // Keep temp dir until restore phase if files are needed later (compat with v1)
+        return $course;
+    }
+
+    /**
+     * Convert selected numeric-string fields to integers inside the serialized payload
+     * to avoid "Cannot assign string to property ... of type int" on typed properties.
+     *
+     * It handles public, protected ("\0*\0key") and private ("\0Class\0key") property names.
+     * We only coerce known identifier keys to keep it safe.
+     */
+    private static function coerceNumericStringsInSerialized(string $ser): string
+    {
+        // Identifier keys that must be integers
+        $keys = [
+            'id','iid','c_id','parent_id','thematic_id','attendance_id',
+            'room_id','display_order','session_id','category_id',
+        ];
+
+        /**
+         * Build a pattern that matches any of these name encodings:
+         *  - public:   "id"
+         *  - protected:"\0*\0id"
+         *  - private:  "\0SomeClass\0id"
+         *
+         * We don't touch the key itself (so its s:N length stays valid).
+         * We only replace the *value* part: s:M:"123"  =>  i:123
+         */
+        $alternatives = [];
+        foreach ($keys as $k) {
+            // public
+            $alternatives[] = preg_quote($k, '/');
+            // protected
+            $alternatives[] = "\x00\*\x00".preg_quote($k, '/');
+            // private (class-specific; we accept any class name between NULs)
+            $alternatives[] = "\x00[^\x00]+\x00".preg_quote($k, '/');
+        }
+        $nameAlt = '(?:'.implode('|', $alternatives).')';
+
+        // Full pattern:
+        // (s:\d+:"<any of the above forms>";) s:\d+:"(<digits>)";
+        // Note: we *must not* use /u because of NUL bytes; keep binary-safe regex.
+        $pattern = '/(s:\d+:"'.$nameAlt.'";)s:\d+:"(\d+)";/s';
+
+        return preg_replace_callback(
+            $pattern,
+            static fn($m) => $m[1].'i:'.$m[2].';',
+            $ser
+        );
+    }
+
+
+    /**
+     * Recursively cast common identifier fields to int after unserialize.
+     * Safe to call on arrays/objects/stdClass/legacy resource objects.
+     */
+    private static function normalizeIds(mixed &$node): void
+    {
+        $castKeys = [
+            'id','iid','c_id','parent_id','thematic_id','attendance_id',
+            'room_id','display_order','session_id','category_id',
+        ];
+
+        if (is_array($node)) {
+            foreach ($node as $k => &$v) {
+                if (is_string($k) && in_array($k, $castKeys, true) && (is_string($v) || is_numeric($v))) {
+                    $v = (int) $v;
+                } else {
+                    self::normalizeIds($v);
+                }
+            }
+            return;
+        }
+
+        if (is_object($node)) {
+            foreach (get_object_vars($node) as $k => $v) {
+                if (in_array($k, $castKeys, true) && (is_string($v) || is_numeric($v))) {
+                    $node->$k = (int) $v;
+                    continue;
+                }
+                self::normalizeIds($node->$k);
+            }
+        }
+    }
+
+
+    /** Keep the old alias map so unserialize works exactly like v1 */
+    private static function registerLegacyAliases(): void
+    {
+        $aliases = [
+            'Chamilo\CourseBundle\Component\CourseCopy\Course'                 => 'Course',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Announcement' => 'Announcement',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Attendance'   => 'Attendance',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\CalendarEvent'=> 'CalendarEvent',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyLearnpath' => 'CourseCopyLearnpath',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseCopyTestCategory' => 'CourseCopyTestCategory',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseDescription' => 'CourseDescription',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\CourseSession' => 'CourseSession',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Document'     => 'Document',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Forum'        => 'Forum',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumCategory'=> 'ForumCategory',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumPost'    => 'ForumPost',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\ForumTopic'   => 'ForumTopic',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Glossary'     => 'Glossary',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\GradeBookBackup' => 'GradeBookBackup',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Link'         => 'Link',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\LinkCategory' => 'LinkCategory',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Quiz'         => 'Quiz',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestion' => 'QuizQuestion',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\QuizQuestionOption' => 'QuizQuestionOption',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\ScormDocument'=> 'ScormDocument',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Survey'       => 'Survey',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyInvitation' => 'SurveyInvitation',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\SurveyQuestion'=> 'SurveyQuestion',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Thematic'     => 'Thematic',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\ToolIntro'    => 'ToolIntro',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Wiki'         => 'Wiki',
+            'Chamilo\CourseBundle\Component\CourseCopy\Resources\Work'         => 'Work',
+        ];
+
+        foreach ($aliases as $fqcn => $alias) {
+            if (!class_exists($alias)) {
+                class_alias($fqcn, $alias);
+            }
+        }
     }
 }

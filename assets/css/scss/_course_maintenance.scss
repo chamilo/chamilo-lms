@@ -1,0 +1,40 @@
+
+.cm-root { width: 100%; }
+:host, .cm-root { overflow-x: hidden; }
+.cm-layout {
+  .cm-tab {
+    @apply inline-flex items-center rounded-lg px-3 py-2 text-gray-90
+    hover:bg-gray-15
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-25;
+  }
+  .cm-tab__icon { @apply text-base mr-2; }
+  .cm-tab--active {
+    @apply ring-1 font-semibold;
+    color: rgb(var(--color-primary-base));
+    border-color: rgb(var(--color-primary-base));
+    background-color: color-mix(in oklab, rgb(var(--color-primary-base)) 14%, #fff);
+  }
+  .cm-tab--active .cm-tab__icon {
+    color: rgb(var(--color-primary-base));
+  }
+  .cm-tab--danger { @apply text-danger; }
+  .cm-tab--danger:hover { @apply bg-support-6; }
+  .cm-tab--danger.cm-tab--active {
+    color: rgb(var(--color-danger-base));
+    border-color: rgb(var(--color-danger-base));
+    background-color: color-mix(in oklab, rgb(var(--color-danger-base)) 14%, #fff);
+  }
+  .btn-primary{
+    @apply inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary{
+    @apply inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-90 ring-1 ring-gray-25 hover:bg-gray-15 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-danger{
+    @apply inline-flex items-center gap-2 rounded-md bg-danger px-4 py-2 text-sm font-medium text-white hover:bg-danger/90 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .chk-success { accent-color: rgb(var(--color-success-base)); }
+  .opacity-60:hover { opacity: .85; }
+  .link {color: #0ea5e9;text-decoration: none;cursor: pointer;}
+  .link:hover {text-decoration: underline;}
+}

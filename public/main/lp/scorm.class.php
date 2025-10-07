@@ -454,14 +454,12 @@ class scorm extends learnpath
     /**
      * Imports a zip file into the Chamilo structure.
      *
-     * @param string    $zipFileInfo       Zip file info as given by $_FILES['userFile']
-     * @param string    $currentDir
-     * @param array     $courseInfo
-     * @param bool      $updateDirContents
-     * @param learnpath $lpToCheck
-     * @param bool      $allowHtaccess
+     * If $currentDir is provided (absolute path or repository-relative folder that
+     * actually contains imsmanifest.xml), it will be used to set $this->current_dir.
+     * Otherwise, we derive $this->current_dir from AssetRepository::getFolder($asset)
+     * plus the top-level dir and the manifest subfolder.
      *
-     * @return string $current_dir Absolute path to the imsmanifest.xml file or empty string on error
+     * @return Asset|false
      */
     public function import_package(
         $zipFileInfo,
@@ -473,33 +471,33 @@ class scorm extends learnpath
     ) {
         $this->debug = 100;
         if ($this->debug) {
-            error_log(
-                'In scorm::import_package('.print_r($zipFileInfo, true).',"'.$currentDir.'") method'
-            );
+            error_log('In scorm::import_package('.print_r($zipFileInfo, true).',"'.$currentDir.'") method');
         }
 
         $zipFilePath = $zipFileInfo['tmp_name'];
         $zipFileName = $zipFileInfo['name'];
 
-        $currentDir = api_replace_dangerous_char(trim($currentDir)); // Current dir we are in, inside scorm/
+        $currentDir = str_replace('\\', '/', trim((string)$currentDir));
+        $currentDir = preg_replace('#/{2,}#', '/', $currentDir);
+        $currentDir = rtrim($currentDir, '/');
 
         if ($this->debug > 1) {
             error_log('import_package() - current_dir = '.$currentDir, 0);
         }
 
-        // Get name of the zip file without the extension.
-        $fileInfo = pathinfo($zipFileName);
-        $filename = $fileInfo['basename'];
-        $extension = $fileInfo['extension'];
-        $fileBaseName = str_replace('.'.$extension, '', $filename); // Filename without its extension.
-        $this->zipname = $fileBaseName; // Save for later in case we don't have a title.
+        $fileInfo     = pathinfo($zipFileName);
+        $filename     = $fileInfo['basename'] ?? $zipFileName;
+        $extension    = $fileInfo['extension'] ?? '';
+        $fileBaseName = $extension !== '' ? str_replace('.'.$extension, '', $filename) : $filename;
+        $this->zipname = $fileBaseName;
         $newDir = api_replace_dangerous_char(trim($fileBaseName));
         $this->subdir = $newDir;
+
         if ($this->debug) {
             error_log('$zipFileName: '.$zipFileName);
             error_log('Received zip file name: '.$zipFilePath);
-            error_log("subdir is first set to : ".$this->subdir);
-            error_log("base file name is : ".$fileBaseName);
+            error_log('subdir is first set to : '.$this->subdir);
+            error_log('base file name is : '.$fileBaseName);
         }
 
         $zipFile = new ZipFile();
@@ -516,35 +514,30 @@ class scorm extends learnpath
                 $file = $fileName;
                 $this->set_error_msg("File $file contains a PHP script");
             } elseif (stristr($fileName, 'imsmanifest.xml')) {
-                if ($fileName == basename($fileName)) {
-                } else {
-                    if ($this->debug) {
-                        error_log("subdir is now ".$this->subdir);
-                    }
-                }
                 $packageType = 'scorm';
                 $manifestList[] = $fileName;
             }
             $realFileSize += $size;
         }
 
-        // Now get the shortest path (basically, the imsmanifest that is the closest to the root).
-        $shortestPath = $manifestList[0];
-        $slashCount = substr_count($shortestPath, '/');
-        foreach ($manifestList as $manifestPath) {
-            $tmpSlashCount = substr_count($manifestPath, '/');
-            if ($tmpSlashCount < $slashCount) {
-                $shortestPath = $manifestPath;
-                $slashCount = $tmpSlashCount;
+        $shortestPath = $manifestList[0] ?? '';
+        if (!empty($manifestList)) {
+            $slashCount = substr_count($shortestPath, '/');
+            foreach ($manifestList as $manifestPath) {
+                $tmpSlashCount = substr_count($manifestPath, '/');
+                if ($tmpSlashCount < $slashCount) {
+                    $shortestPath = $manifestPath;
+                    $slashCount = $tmpSlashCount;
+                }
             }
         }
 
         $firstDir = $this->subdir;
-        $this->subdir .= '/'.dirname($shortestPath); // Do not concatenate because already done above.
+        $this->subdir .= '/'.dirname($shortestPath);
         if ($this->debug) {
-            error_log("subdir is now (2): ".$this->subdir);
+            error_log('subdir is now (2): '.$this->subdir);
         }
-        $this->manifestToString = $zipFile->getEntryContents($shortestPath);
+        $this->manifestToString = $shortestPath ? $zipFile->getEntryContents($shortestPath) : '';
 
         if ($this->debug) {
             error_log("Package type is now: '$packageType'");
@@ -558,52 +551,10 @@ class scorm extends learnpath
             return false;
         }
 
-        // Todo check filesize
-        /*if (!enough_size($realFileSize, $courseSysDir, $maxFilledSpace)) {
-            if ($this->debug > 1) {
-                error_log('Not enough space to store package');
-            }
-            Display::addFlash(
-                Display::return_message(
-                    get_lang(
-                        'The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'
-                    )
-                )
-            );
 
-            return false;
-        }*/
-
-        /*if ($updateDirContents && $lpToCheck) {
-            $originalPath = str_replace('/.', '', $lpToCheck->path);
-            if ($originalPath != $newDir) {
-                Display::addFlash(Display::return_message(get_lang('The file to upload is not valid.')));
-
-                return false;
-            }
-        }
-
-        // It happens on Linux that $newDir sometimes doesn't start with '/'
-        if ('/' !== $newDir[0]) {
-            $newDir = '/'.$newDir;
-        }
-
-        if ('/' === $newDir[strlen($newDir) - 1]) {
-            $newDir = substr($newDir, 0, -1);
-        }*/
-
-        /* Uncompressing phase */
-        /*
-            We need to process each individual file in the zip archive to
-            - add it to the database
-            - parse & change relative html links
-            - make sure the filenames are secure (filter funny characters or php extensions)
-        */
-
-        // 1. Upload zip file
         $request = Container::getRequest();
         $uploadFile = null;
-        if ($request->files->has('user_file')) {
+        if ($request && $request->files->has('user_file')) {
             $uploadFile = $request->files->get('user_file');
         }
 
@@ -611,16 +562,42 @@ class scorm extends learnpath
         $asset = (new Asset())
             ->setCategory(Asset::SCORM)
             ->setTitle($zipFileName)
-            ->setFile($uploadFile)
-            ->setCompressed(true)
-        ;
-        $repo->update($asset);
+            ->setCompressed(true);
 
-        // 2. Unzip file
+        if ($uploadFile) {
+            $asset->setFile($uploadFile);
+            $repo->update($asset);
+        } else {
+            $repo->createFromRequest($asset, $zipFileInfo);
+        }
+
         $repo->unZipFile($asset, $firstDir);
         $this->asset = $asset;
 
-        return $asset;
+        if (!empty($currentDir) && @is_file($currentDir.'/imsmanifest.xml')) {
+            $this->current_dir = $currentDir;
+            if ($this->debug) {
+                error_log('Using caller-provided current_dir: '.$this->current_dir);
+            }
+            return true;
+        }
+
+        $baseFolder  = rtrim((string) $repo->getFolder($asset), '/');
+        $manifestDir = dirname($shortestPath);
+
+        $resolved = $baseFolder.'/'.$firstDir;
+        if ($manifestDir !== '.' && $manifestDir !== DIRECTORY_SEPARATOR) {
+            $resolved .= '/'.$manifestDir;
+        }
+        $resolved = preg_replace('#/{2,}#', '/', str_replace('\\', '/', $resolved));
+        $this->current_dir = rtrim($resolved, '/');
+
+        if ($this->debug) {
+            error_log('Resolved current_dir: '.$this->current_dir);
+            error_log('Expected imsmanifest.xml at: '.$this->current_dir.'/imsmanifest.xml');
+        }
+
+        return true;
     }
 
     /**

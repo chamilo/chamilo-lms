@@ -380,12 +380,12 @@ class GradebookCategory
         return $this->isRequirement;
     }
 
-    public function getGradeBooksToValidateInDependence(): int
+    public function getGradeBooksToValidateInDependence(): ?int
     {
         return $this->gradeBooksToValidateInDependence;
     }
 
-    public function setGradeBooksToValidateInDependence(int $value): self
+    public function setGradeBooksToValidateInDependence(?int $value): self
     {
         $this->gradeBooksToValidateInDependence = $value;
 

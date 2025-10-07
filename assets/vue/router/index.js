@@ -27,6 +27,7 @@ import lpRoutes from "./lp"
 import dropboxRoutes from "./dropbox"
 import blogRoutes from "./blog"
 import blogAdminRoute from "./blogAdmin"
+import courseMaintenanceRoute from "./coursemaintenance"
 import catalogue from "./catalogue"
 import { useSecurityStore } from "../store/securityStore"
 import MyCourseList from "../views/user/courses/List.vue"
@@ -244,6 +245,7 @@ const router = createRouter({
     dropboxRoutes,
     blogRoutes,
     blogAdminRoute,
+    courseMaintenanceRoute,
     accountRoutes,
     personalFileRoutes,
     messageRoutes,
@@ -267,7 +269,7 @@ router.beforeEach(async (to, from, next) => {
     sessionStorage.clear()
   }
 
-  const preservedParams = ['origin', 'isStudentView']
+  const preservedParams = ["origin", "isStudentView"]
   const mergedQuery = { ...to.query }
 
   let shouldRedirect = false

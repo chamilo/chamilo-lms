@@ -1393,99 +1393,102 @@ class CourseMaintenanceController extends AbstractController
         };
 
         // Forums flow
-        $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'] ?? [])), true);
-        if (!empty($selForums)) {
-            $forums = $getBucket($orig, 'forum');
-            $catsToKeep = [];
+        if (!empty($selected) && !empty($selected['forum'])) {
+            $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'])), true);
+            if (!empty($selForums)) {
+                $forums = $getBucket($orig, 'forum');
+                $catsToKeep = [];
 
-            foreach ($forums as $fid => $f) {
-                if (!isset($selForums[(string) $fid])) {
-                    continue;
+                foreach ($forums as $fid => $f) {
+                    if (!isset($selForums[(string) $fid])) {
+                        continue;
+                    }
+                    $e = (isset($f->obj) && \is_object($f->obj)) ? $f->obj : $f;
+                    $cid = (int) ($e->forum_category ?? 0);
+                    if ($cid > 0) {
+                        $catsToKeep[$cid] = true;
+                    }
                 }
-                $e = (isset($f->obj) && \is_object($f->obj)) ? $f->obj : $f;
-                $cid = (int) ($e->forum_category ?? 0);
-                if ($cid > 0) {
-                    $catsToKeep[$cid] = true;
+
+                $threads = $getBucket($orig, 'thread');
+                $threadToKeep = [];
+                foreach ($threads as $tid => $t) {
+                    $e = (isset($t->obj) && \is_object($t->obj)) ? $t->obj : $t;
+                    if (isset($selForums[(string) ($e->forum_id ?? '')])) {
+                        $threadToKeep[(int) $tid] = true;
+                    }
                 }
-            }
 
-            $threads = $getBucket($orig, 'thread');
-            $threadToKeep = [];
-            foreach ($threads as $tid => $t) {
-                $e = (isset($t->obj) && \is_object($t->obj)) ? $t->obj : $t;
-                if (isset($selForums[(string) ($e->forum_id ?? '')])) {
-                    $threadToKeep[(int) $tid] = true;
+                $posts = $getBucket($orig, 'post');
+                $postToKeep = [];
+                foreach ($posts as $pid => $p) {
+                    $e = (isset($p->obj) && \is_object($p->obj)) ? $p->obj : $p;
+                    if (isset($threadToKeep[(int) ($e->thread_id ?? 0)])) {
+                        $postToKeep[(int) $pid] = true;
+                    }
                 }
-            }
 
-            $posts = $getBucket($orig, 'post');
-            $postToKeep = [];
-            foreach ($posts as $pid => $p) {
-                $e = (isset($p->obj) && \is_object($p->obj)) ? $p->obj : $p;
-                if (isset($threadToKeep[(int) ($e->thread_id ?? 0)])) {
-                    $postToKeep[(int) $pid] = true;
+                $out = [];
+                foreach ($selected as $type => $ids) {
+                    if (!\is_array($ids) || empty($ids)) {
+                        continue;
+                    }
+                    $bucket = $getBucket($orig, (string) $type);
+                    if (!empty($bucket)) {
+                        $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
+                        $out[$type] = array_intersect_key($bucket, $idsMap);
+                    }
                 }
-            }
 
-            $out = [];
-            foreach ($selected as $type => $ids) {
-                if (!\is_array($ids) || empty($ids)) {
-                    continue;
+                $forumCat = $getBucket($orig, 'Forum_Category');
+                if (!empty($forumCat)) {
+                    $out['Forum_Category'] = array_intersect_key(
+                        $forumCat,
+                        array_fill_keys(array_map('strval', array_keys($catsToKeep)), true)
+                    );
                 }
-                $bucket = $getBucket($orig, (string) $type);
-                if (!empty($bucket)) {
-                    $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
-                    $out[$type] = array_intersect_key($bucket, $idsMap);
+
+                $forumBucket = $getBucket($orig, 'forum');
+                if (!empty($forumBucket)) {
+                    $out['forum'] = array_intersect_key($forumBucket, $selForums);
                 }
+
+                $threadBucket = $getBucket($orig, 'thread');
+                if (!empty($threadBucket)) {
+                    $out['thread'] = array_intersect_key(
+                        $threadBucket,
+                        array_fill_keys(array_map('strval', array_keys($threadToKeep)), true)
+                    );
+                }
+
+                $postBucket = $getBucket($orig, 'post');
+                if (!empty($postBucket)) {
+                    $out['post'] = array_intersect_key(
+                        $postBucket,
+                        array_fill_keys(array_map('strval', array_keys($postToKeep)), true)
+                    );
+                }
+
+                if (!empty($out['forum']) && empty($out['Forum_Category']) && !empty($forumCat)) {
+                    $out['Forum_Category'] = $forumCat;
+                }
+
+                $course->resources = array_filter($out);
+
+                $this->logDebug('[filterSelection] end', [
+                    'kept_types' => array_keys($course->resources),
+                    'forum_counts' => [
+                        'Forum_Category' => \is_array($course->resources['Forum_Category'] ?? null) ? \count($course->resources['Forum_Category']) : 0,
+                        'forum' => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
+                        'thread' => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
+                        'post' => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
+                    ],
+                ]);
+
+                return $course;
             }
-
-            $forumCat = $getBucket($orig, 'Forum_Category');
-            if (!empty($forumCat)) {
-                $out['Forum_Category'] = array_intersect_key(
-                    $forumCat,
-                    array_fill_keys(array_map('strval', array_keys($catsToKeep)), true)
-                );
-            }
-
-            $forumBucket = $getBucket($orig, 'forum');
-            if (!empty($forumBucket)) {
-                $out['forum'] = array_intersect_key($forumBucket, $selForums);
-            }
-
-            $threadBucket = $getBucket($orig, 'thread');
-            if (!empty($threadBucket)) {
-                $out['thread'] = array_intersect_key(
-                    $threadBucket,
-                    array_fill_keys(array_map('strval', array_keys($threadToKeep)), true)
-                );
-            }
-
-            $postBucket = $getBucket($orig, 'post');
-            if (!empty($postBucket)) {
-                $out['post'] = array_intersect_key(
-                    $postBucket,
-                    array_fill_keys(array_map('strval', array_keys($postToKeep)), true)
-                );
-            }
-
-            if (!empty($out['forum']) && empty($out['Forum_Category']) && !empty($forumCat)) {
-                $out['Forum_Category'] = $forumCat;
-            }
-
-            $course->resources = array_filter($out);
-
-            $this->logDebug('[filterSelection] end', [
-                'kept_types' => array_keys($course->resources),
-                'forum_counts' => [
-                    'Forum_Category' => \is_array($course->resources['Forum_Category'] ?? null) ? \count($course->resources['Forum_Category']) : 0,
-                    'forum' => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
-                    'thread' => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
-                    'post' => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
-                ],
-            ]);
-
-            return $course;
         }
+
 
         // Generic + quiz/survey/gradebook flows
         $alias = [

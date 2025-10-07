@@ -156,9 +156,8 @@ class CourseChatUtils
     }
 
     /** Sanitize and convert message to safe HTML */
-    public function prepareMessage($message)
+    public static function prepareMessage($message): string
     {
-        $this->dbg('prepareMessage.in', ['len' => strlen((string) $message)]);
         if (empty($message)) {
             return '';
         }
@@ -181,7 +180,6 @@ class CourseChatUtils
         );
 
         $message = MarkdownExtra::defaultTransform($message);
-        $this->dbg('prepareMessage.out', ['len' => strlen($message)]);
 
         return $message;
     }
@@ -312,7 +310,7 @@ class CourseChatUtils
             $isMaster  = api_is_course_admin();
             $timeNow   = date('d/m/y H:i:s');
             $userPhoto = \UserManager::getUserPicture($this->userId);
-            $htmlMsg   = $this->prepareMessage($message);
+            $htmlMsg   = self::prepareMessage($message);
 
             $bubble = $isMaster
                 ? '<div class="message-teacher"><div class="content-message"><div class="chat-message-block-name">'

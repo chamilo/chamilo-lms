@@ -18,14 +18,6 @@ class Version20250721200725 extends AbstractMigrationChamilo
         $updateRootPath = $this->getUpdateRootPath();
         $oldMailConfPath = $updateRootPath.'/app/config/mail.conf.php';
 
-        $legacyMailConfig = file_exists($oldMailConfPath);
-
-        if ($legacyMailConfig) {
-            include $oldMailConfPath;
-
-            global $platform_email;
-        }
-
         $envFile = $projectDir.'/.env';
 
         $dotenv = new Dotenv();
@@ -67,7 +59,29 @@ class Version20250721200725 extends AbstractMigrationChamilo
             $settings['mailer_debug_enable'] = !empty($_ENV['SMTP_DEBUG']) ? 'true' : 'false';
         }
 
-        if ($legacyMailConfig) {
+        if (file_exists($oldMailConfPath)) {
+            /** @var array{
+             *   EXCLUDE_JSON?: bool,
+             *   DKIM?: bool,
+             *   DKIM_SELECTOR?: string,
+             *   DKIM_DOMAIN?: string,
+             *   DKIM_PRIVATE_KEY_STRING?: string,
+             *   DKIM_PRIVATE_KEY?: string,
+             *   DKIM_PASSPHRASE?: string,
+             *   XOAUTH2_METHOD?: bool,
+             *   XOAUTH2_URL_AUTHORIZE?: string,
+             *   XOAUTH2_URL_ACCES_TOKEN?: string,
+             *   XOAUTH2_URL_RESOURCE_OWNER_DETAILS?: string,
+             *   XOAUTH2_SCOPES?: string,
+             *   XOAUTH2_CLIENT_ID?: string,
+             *   XOAUTH2_CLIENT_SECRET?: string,
+             *   XOAUTH2_REFRESH_TOKEN?: string,
+             * } $platform_email
+             */
+            $platform_email = [];
+
+            include $oldMailConfPath;
+
             $settings['mailer_exclude_json'] = $platform_email['EXCLUDE_JSON'] ?? false;
 
             $dkim = [

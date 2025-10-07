@@ -34,9 +34,31 @@ final class Version20250707212800 extends AbstractMigrationChamilo
             return [];
         }
 
-        include $oldMailConfPath;
+        /** @var array{
+         *   SMTP_USER?: string,
+         *   SMTP_PASS?: string,
+         *   SMTP_HOST?: string,
+         *   SMTP_PORT?: string,
+         *   EXCLUDE_JSON?: bool,
+         *   DKIM?: bool,
+         *   DKIM_SELECTOR?: string,
+         *   DKIM_DOMAIN?: string,
+         *   DKIM_PRIVATE_KEY_STRING?: string,
+         *   DKIM_PRIVATE_KEY?: string,
+         *   DKIM_PASSPHRASE?: string,
+         *   XOAUTH2_METHOD?: bool,
+         *   XOAUTH2_URL_AUTHORIZE?: string,
+         *   XOAUTH2_URL_ACCES_TOKEN?: string,
+         *   XOAUTH2_URL_RESOURCE_OWNER_DETAILS?: string,
+         *   XOAUTH2_SCOPES?: string,
+         *   XOAUTH2_CLIENT_ID?: string,
+         *   XOAUTH2_CLIENT_SECRET?: string,
+         *   XOAUTH2_REFRESH_TOKEN?: string,
+         * } $platform_email
+         */
+        $platform_email = [];
 
-        global $platform_email;
+        include $oldMailConfPath;
 
         $mailerScheme = 'null';
         $smtpSecure = $platform_email['SMTP_SECURE'] ?? '';

@@ -301,7 +301,7 @@ function save_data(array $users, bool $sendMail = false, ?string $targetFolder =
                 $user_id       = $existing;
                 $returnMessage = Display::return_message(
                     sprintf(
-                        'An existing user with the same %s was found (ID %d), enrolling instead of creating.',
+                        get_lang('ExistingUserWithSameExtraFieldValue'),
                         $uniqueField,
                         $existing
                     ),

@@ -18,8 +18,6 @@ class Version20250721200725 extends AbstractMigrationChamilo
         $updateRootPath = $this->getUpdateRootPath();
         $oldMailConfPath = $updateRootPath.'/app/config/mail.conf.php';
 
-        $legacyMailConfig = file_exists($oldMailConfPath);
-
         $envFile = $projectDir.'/.env';
 
         $dotenv = new Dotenv();
@@ -40,7 +38,7 @@ class Version20250721200725 extends AbstractMigrationChamilo
                 if ('ssl' === $smtpSecure) {
                     $mailerScheme = 'smtps';
                 } elseif ('tls' === $smtpSecure) {
-                    $query = '?encryption=tls';
+                    $query = '?require_tls=true';
                 }
             }
 
@@ -61,9 +59,31 @@ class Version20250721200725 extends AbstractMigrationChamilo
             $settings['mailer_debug_enable'] = !empty($_ENV['SMTP_DEBUG']) ? 'true' : 'false';
         }
 
-        if ($legacyMailConfig) {
+        if (file_exists($oldMailConfPath)) {
+            /** @var array{
+             *   EXCLUDE_JSON?: bool,
+             *   DKIM?: bool,
+             *   DKIM_SELECTOR?: string,
+             *   DKIM_DOMAIN?: string,
+             *   DKIM_PRIVATE_KEY_STRING?: string,
+             *   DKIM_PRIVATE_KEY?: string,
+             *   DKIM_PASSPHRASE?: string,
+             *   XOAUTH2_METHOD?: bool,
+             *   XOAUTH2_URL_AUTHORIZE?: string,
+             *   XOAUTH2_URL_ACCES_TOKEN?: string,
+             *   XOAUTH2_URL_RESOURCE_OWNER_DETAILS?: string,
+             *   XOAUTH2_SCOPES?: string,
+             *   XOAUTH2_CLIENT_ID?: string,
+             *   XOAUTH2_CLIENT_SECRET?: string,
+             *   XOAUTH2_REFRESH_TOKEN?: string,
+             * } $platform_email
+             */
+            $platform_email = [];
+
             include $oldMailConfPath;
+
             $settings['mailer_exclude_json'] = $platform_email['EXCLUDE_JSON'] ?? false;
+
             $dkim = [
                 'enable' => $platform_email['DKIM'] ?? false,
                 'selector' => $platform_email['DKIM_SELECTOR'] ?? '',

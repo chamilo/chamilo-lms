@@ -1,0 +1,98 @@
+{% extends "@ChamiloCore/Layout/base-layout.html.twig" %}
+
+{% block chamilo_wrap %}
+
+    {%- include '@ChamiloCore/Layout/vue_setup.html.twig' %}
+
+    <section id="sectionMainContent" class="section-content">
+
+        {%- block content %}
+
+            <div>
+                <div class="app-breadcrumb">
+                    <nav class="p-breadcrumb p-component">
+                        <ol class="p-breadcrumb-list">
+                            <li class="p-menuitem">
+                                <a href="/main/admin/usergroups.php" class="p-menuitem-link">Classes</a>
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                {{ usergroupName }}
+                            </li>
+                            /
+                            <li class="p-menuitem">
+                                Overview
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <a href="/main/admin/usergroups.php"
+                   title="{{ 'Go back to the list of classes'|trans }}">
+                    <i class="ch-tool-icon mdi mdi-arrow-left-bold-box" style="font-size: 32px"></i>
+                </a>
+                <h2>{{ 'Overview class'|trans }} : {{ usergroupName }}</h2>
+            </div>
+
+            <hr>
+
+            {% if error is not null %}
+                <div class="alert alert-danger">
+                    <p>{{ error }}</p>
+                </div>
+            {% endif %}
+
+            {% if warning is not null %}
+                <div class="alert alert-warning">
+                    <p>{{ warning }}</p>
+                </div>
+            {% endif %}
+
+            {% if (usersSubscribedToUsergroup|length + coursesSubscribedToUsergroup|length) > 0 %}
+                <div style="display: flex">
+                    <input style="height: 32px; width: 20vw" id="search-input" type="text"
+                           placeholder="Barre de recherche">
+                    <i class="ch-tool-icon mdi mdi-account-search" style="font-size: 32px"></i>
+                </div>
+            {% endif %}
+
+            {% if usersSubscribedToUsergroup|length > 0 %}
+                <div>
+                    <b>{{ 'Users subscribed to this class'|trans }}</b>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                        {% for user in usersSubscribedToUsergroup %}
+                            <li class="user-display">{{ user.identity }} ( {{ user.email }} )</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if coursesSubscribedToUsergroup|length > 0 %}
+                <div>
+                    <b>{{ 'Courses subscribed to the class'|trans }}</b>
+                    <ul style='list-style-type: disc; padding-left: 1.5vw;'>
+                        {% for course in coursesSubscribedToUsergroup %}
+                            <li class="user-display">[{{ course.code }}] {{ course.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+        {% endblock %}
+
+    </section>
+
+    <script>
+      document.getElementById("search-input").addEventListener("input", function(e) {
+        const searchTerm = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        const users = document.querySelectorAll(".user-display")
+
+        users.forEach(user => {
+          const text = user.textContent.split("(")[0].trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          user.style.display = text.includes(searchTerm) ? "" : "none"
+        })
+      })
+    </script>
+
+{% endblock %}
+
+

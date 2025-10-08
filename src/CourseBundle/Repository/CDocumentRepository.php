@@ -379,8 +379,8 @@ final class CDocumentRepository extends ResourceRepository
 
         // Try common i18n variants first
         $candidates = array_values(array_unique(array_filter([
-            \function_exists('get_lang') ? get_lang('LearningPaths') : null,
-            \function_exists('get_lang') ? get_lang('LearningPath') : null,
+            \function_exists('get_lang') ? get_lang('Learning paths') : null,
+            \function_exists('get_lang') ? get_lang('Learning path') : null,
             'Learning paths',
             'Learning path',
         ])));

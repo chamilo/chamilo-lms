@@ -30736,3 +30736,168 @@ msgstr "Popular courses"
 
 msgid "Already logged in"
 msgstr "Already logged in"
+
+msgid "GDPR compliance"
+msgstr "GDPR compliance"
+
+msgid "Azure UID (internal ID)"
+msgstr "Azure UID (internal ID)"
+
+msgid "Azure ID (mailNickname)"
+msgstr "Azure ID (mailNickname)"
+
+msgid "Organisation e-mail"
+msgstr "Organization e-mail"
+
+msgid "UID"
+msgstr "UID"
+
+msgid "Office phone extension"
+msgstr "Office phone extension"
+
+msgid "Office address"
+msgstr "Office address"
+
+msgid "Number of days for completion"
+msgstr "Number of days for completion"
+
+msgid "Event notifications"
+msgstr "Event notifications"
+
+msgid "Skip automatic validation"
+msgstr "Skip automatic validation"
+
+msgid "Use alternate tracking system"
+msgstr "Use alternate tracking system"
+
+msgid "My terms"
+msgstr "My terms"
+
+msgid "Moodle password"
+msgstr "Moodle password"
+
+msgid "Long term authentication request token used"
+msgstr "Long term authentication request token used"
+
+msgid "Is from new login"
+msgstr "Is from new login"
+
+msgid "End pause date"
+msgstr "End pause date"
+
+msgid "Downloaded at"
+msgstr "Downloaded at"
+
+msgid "Disable import calendar"
+msgstr "Disable import calendar"
+
+msgid "Disable all emails"
+msgstr "Disable all emails"
+
+msgid "Differentiation"
+msgstr "Differentiation"
+
+msgid "Credentials type"
+msgstr "Credentials type"
+
+msgid "Collapsed"
+msgstr "Collapsed"
+
+msgid "Career diagram"
+msgstr "Career diagram"
+
+msgid "Career URLs"
+msgstr "Career URLs"
+
+msgid "Career ID"
+msgstr "Career ID"
+
+msgid "CAS user"
+msgstr "CAS user"
+
+msgid "Buyer's address"
+msgstr "Buyer's address"
+
+msgid "Buyer's VAT/Tax ID"
+msgstr "Buyer's VAT/Tax ID"
+
+msgid "Buyer's company"
+msgstr "Buyer's company"
+
+msgid "Block Category"
+msgstr "Block category"
+
+msgid "Authentication method"
+msgstr "Authentication method"
+
+msgid "Authentication date"
+msgstr "Authentication date"
+
+msgid "Ask for new password"
+msgstr "Ask for new password"
+
+msgid "Ask for revision"
+msgstr "Ask for revision"
+
+msgid "Advanced courses list"
+msgstr "Advanced courses list"
+
+msgid "User address"
+msgstr "User address"
+
+msgid "Considered working time"
+msgstr "Considered working time"
+
+msgid "Send to coaches"
+msgstr "Send to coaches"
+
+msgid "In multiple languages"
+msgstr "In multiple languages"
+
+msgid "Show in catalogue"
+msgstr "Show in catalogue"
+
+msgid "Is mandatory"
+msgstr "Is mandatory"
+
+msgid "Lock course in session"
+msgstr "Lock course in session"
+
+msgid "Send to users in session"
+msgstr "Send to users in session"
+
+msgid "Date to send notification"
+msgstr "Date to send notification"
+
+msgid "Send notification at a specific date"
+msgstr "Send notification at a specific date"
+
+msgid "Notify of group messages by email"
+msgstr "Notify of group messages by email"
+
+msgid "Notify of messages by email"
+msgstr "Notify of messages by email"
+
+msgid "Notify of invitations by email"
+msgstr "Notify of invitations by email"
+
+msgid "Account locked until"
+msgstr "Account locked until"
+
+msgid "Google Calendar URL"
+msgstr "Google Calendar URL"
+
+msgid "User chat status"
+msgstr "User chat status"
+
+msgid "Update script type"
+msgstr "Update script type"
+
+msgid "My test conditions"
+msgstr "My test conditions"
+
+msgid "GDPR"
+msgstr "GDPR"
+
+msgid "2FA activated successfully."
+msgstr "2FA activated successfully."

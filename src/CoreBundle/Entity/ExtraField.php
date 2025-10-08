@@ -38,6 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 ),
 ]
 #[ORM\Table(name: 'extra_field')]
+#[ORM\UniqueConstraint(name: "uniq_extra_field_variable_itemtype", columns: ["variable","item_type"])]
 #[ORM\Entity]
 #[ORM\MappedSuperclass]
 #[ApiFilter(filterClass: SearchFilter::class, properties: ['variable'])]

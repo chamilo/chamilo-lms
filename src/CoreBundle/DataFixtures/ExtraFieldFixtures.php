@@ -25,7 +25,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
         return [
             [
                 'variable' => 'legal_accept',
-                'display_text' => 'Legal',
+                'display_text' => 'Legal agreement accepted',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
@@ -43,7 +43,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'tags',
-                'display_text' => 'tags',
+                'display_text' => 'Tags',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TAG,
             ],
@@ -81,7 +81,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'video_url',
-                'display_text' => 'VideoUrl',
+                'display_text' => 'Video URL',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'visible_to_self' => true,
@@ -130,7 +130,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'linkedin_url',
-                'display_text' => 'LinkedInUrl',
+                'display_text' => 'LinkedIn profile URL',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
@@ -259,12 +259,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [
-                'variable' => 'azure_id',
-                'display_text' => 'Azure ID',
-                'item_type' => ExtraField::USER_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
-            ],
-            [
                 'variable' => 'birthday',
                 'display_text' => 'Birthday',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
@@ -380,7 +374,7 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
             ],
             [
                 'variable' => 'gdpr',
-                'display_text' => 'GDPR compliance',
+                'display_text' => 'GDPR',
                 'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
                 'visible_to_self' => false,
@@ -473,12 +467,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'variable' => 'office_phone_extension',
                 'display_text' => 'Office phone extension',
                 'item_type' => ExtraField::COURSE_FIELD_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
-            ],
-            [
-                'variable' => 'organisationemail',
-                'display_text' => 'Organisational email',
-                'item_type' => ExtraField::USER_FIELD_TYPE,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
             ],
             [

@@ -919,12 +919,12 @@ class IndexBlocksController extends BaseController
 
     private function getItemsHealthCheck(): array
     {
-        $items =   [];
+        $items = [];
 
         // Check if dsn or email is defined :
         $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn', true);
         $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email', true);
-        if ((empty($mailDsn) || $mailDsn == 'null://null') && empty($mailSender)) {
+        if ((empty($mailDsn) || 'null://null' == $mailDsn) && empty($mailSender)) {
             $items[] = [
                 'className' => 'item-health-check-mail-settings text-error',
                 'url' => '/admin/settings/mail',

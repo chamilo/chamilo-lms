@@ -20,16 +20,13 @@ export function useFileUtils() {
     if (!isFile(fileData)) {
       return false
     }
-    const mimeType = fileData.resourceNode.firstResourceFile.mimeType
-    return mimeType.split("/")[1].toLowerCase() === "html"
+    const mimeType = fileData.resourceNode.firstResourceFile.mimeType || ""
+    const [type, sub] = mimeType.split("/")
+    return (type?.toLowerCase() === "text" && sub?.toLowerCase() === "html") || sub?.toLowerCase() === "html"
   }
 
   const isPreviewable = (fileData) => {
-    return (
-      isImage(fileData) ||
-      isVideo(fileData) ||
-      isAudio(fileData)
-    )
+    return isImage(fileData) || isVideo(fileData) || isAudio(fileData) || isHtml(fileData)
   }
 
   return {

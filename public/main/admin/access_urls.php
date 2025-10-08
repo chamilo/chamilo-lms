@@ -87,8 +87,6 @@ if (!api_is_admin_in_all_active_urls()) {
             $url_string .= $u->getUrl() . '<br />';
         }
     }
-}
-if (!empty($url_string)) {
     echo Display::return_message(
         get_lang('Admin user should be registered here') . '<br />' . $url_string,
         'warning',

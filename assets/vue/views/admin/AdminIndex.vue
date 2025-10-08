@@ -90,14 +90,6 @@
     />
 
     <AdminBlock
-      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
-      :id="blockHealthCheck.id"
-      :items="blockHealthCheck.items"
-      :title="t('Health check')"
-      icon="multiple-marked"
-    />
-
-    <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
       v-model:extra-content="blockSettings.extraContent"
@@ -106,6 +98,14 @@
       :items="blockSettings.items"
       :title="t('System')"
       icon="settings"
+    />
+
+    <AdminBlock
+      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
+      :id="blockHealthCheck.id"
+      :items="blockHealthCheck.items"
+      :title="t('Health check')"
+      icon="multiple-marked"
     />
 
     <div

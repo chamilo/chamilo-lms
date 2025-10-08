@@ -1489,7 +1489,6 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-
         // Generic + quiz/survey/gradebook flows
         $alias = [
             'tool_intro' => 'Tool introduction',

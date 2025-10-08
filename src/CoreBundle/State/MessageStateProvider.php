@@ -7,18 +7,16 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Doctrine\Orm\Paginator;
-use ApiPlatform\Doctrine\Orm\State\CollectionProvider;
-use ApiPlatform\Doctrine\Orm\State\ItemProvider;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\Entity\Message;
-use Doctrine\Common\Collections\Collection;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use LogicException;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @template-implements ProviderInterface<Message>
@@ -26,17 +24,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 final class MessageStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly CollectionProvider $collectionProvider,
-        private readonly ItemProvider $itemProvider,
+        #[Autowire(service: 'api_platform.doctrine.orm.state.collection_provider')]
+        private readonly ProviderInterface $collectionProvider,
+        #[Autowire(service: 'api_platform.doctrine.orm.state.item_provider')]
+        private readonly ProviderInterface $itemProvider,
         private readonly EntityManagerInterface $entityManager,
-        private readonly Security $security,
+        private readonly UserHelper $userHelper,
         private readonly RequestStack $requestStack
     ) {}
 
     /**
      * Provides data based on the operation type (collection or item).
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): Paginator|Message|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         if ($operation instanceof CollectionOperationInterface) {
             return $this->handleCollection($operation, $context);
@@ -49,11 +49,11 @@ final class MessageStateProvider implements ProviderInterface
     /**
      * Handles collection-level operations with filtering and pagination.
      */
-    private function handleCollection(Operation $operation, array $context): Paginator
+    private function handleCollection(Operation $operation, array $context): array|Paginator
     {
-        $user = $this->security->getUser();
+        $user = $this->userHelper->getCurrent();
         if (!$user) {
-            throw new LogicException('User not found.');
+            throw new AccessDeniedHttpException('User not found.');
         }
 
         // Retrieve initial filters if they exist
@@ -75,8 +75,21 @@ final class MessageStateProvider implements ProviderInterface
             return $this->collectionProvider->provide($operation, [], $context);
         }
 
-        // Build custom query for advanced filters
+        // Build a custom query for advanced filters
         return $this->applyCustomQuery($operation, $context, $filters);
+    }
+
+    /**
+     * Merges request filters into the provided filter array.
+     */
+    private function applyFilters(array &$filters): void
+    {
+        $request = $this->requestStack->getMainRequest();
+
+        if ($request) {
+            $requestFilters = $request->query->all();
+            $filters = array_merge($filters, $requestFilters);
+        }
     }
 
     /**
@@ -99,8 +112,8 @@ final class MessageStateProvider implements ProviderInterface
         ;
 
         // Count query for total items
-        $countQueryBuilder = $this->createQueryWithFilters($filters, true);
-        $totalItems = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
+        // $countQueryBuilder = $this->createQueryWithFilters($filters, true);
+        // $totalItems = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
         // Doctrine Paginator
         $doctrinePaginator = new \Doctrine\ORM\Tools\Pagination\Paginator($queryBuilder, true);
@@ -170,17 +183,5 @@ final class MessageStateProvider implements ProviderInterface
         }
 
         return $queryBuilder;
-    }
-
-    /**
-     * Merges request filters into the provided filter array.
-     */
-    private function applyFilters(array &$filters): void
-    {
-        $request = $this->requestStack->getMainRequest();
-        if ($request) {
-            $requestFilters = $request->query->all();
-            $filters = array_merge($filters, $requestFilters);
-        }
     }
 }

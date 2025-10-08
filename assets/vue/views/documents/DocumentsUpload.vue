@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, ref, watch, onBeforeUnmount } from "vue"
 import "@uppy/core/dist/style.css"
 import "@uppy/dashboard/dist/style.css"
 import "@uppy/image-editor/dist/style.css"
@@ -77,7 +77,7 @@ const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { gid, sid, cid } = useCidReq()
-const { onCreated, onError } = useUpload()
+const { onCreated } = useUpload()
 const { t } = useI18n()
 const allowedFiletypes = ["file", "video", "certificate"]
 const filetypeQuery = route.query.filetype
@@ -100,8 +100,8 @@ const resourceLinkList = ref(
   ]),
 )
 
-let uppy = ref()
-uppy.value = new Uppy()
+const uppy = new Uppy({ autoProceed: false })
+  .use(Webcam)
   .use(ImageEditor, {
     cropperOptions: {
       viewMode: 1,
@@ -126,11 +126,10 @@ uppy.value = new Uppy()
     formData: true,
     fieldName: "uploadFile",
   })
-  .on("upload-success", (item, response) => {
+  .on("upload-success", (_item, response) => {
     onCreated(response.body)
   })
   .on("complete", () => {
-    console.log("Upload complete, sending message...")
     const parentNodeId = parentResourceNodeId.value
     localStorage.setItem("isUploaded", "true")
     localStorage.setItem("uploadParentNodeId", parentNodeId)
@@ -147,7 +146,7 @@ uppy.value = new Uppy()
     }, 2000)
   })
 
-uppy.value.setMeta({
+uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
   resourceLinkList: resourceLinkList.value,
@@ -156,31 +155,27 @@ uppy.value.setMeta({
 })
 
 if (filetype === "certificate") {
-  uppy.value.opts.restrictions.allowedFileTypes = [".html"]
+  uppy.setOptions({ restrictions: { allowedFileTypes: [".html"] } })
 } else if (filetype === "video") {
-  uppy.value.opts.restrictions.allowedFileTypes = ["video/*"]
-} else if (filetype === "file") {
-  uppy.value.opts.restrictions.allowedFileTypes = null
+  uppy.setOptions({ restrictions: { allowedFileTypes: ["video/*"] } })
+} else {
+  uppy.setOptions({ restrictions: { allowedFileTypes: null } })
 }
 
 watch(isUncompressZipEnabled, () => {
-  uppy.value.setOptions({
-    meta: {
-      isUncompressZipEnabled: isUncompressZipEnabled.value,
-    },
+  uppy.setOptions({
+    meta: { isUncompressZipEnabled: isUncompressZipEnabled.value },
   })
 })
 
 watch(fileExistsOption, () => {
-  uppy.value.setOptions({
-    meta: {
-      fileExistsOption: fileExistsOption.value,
-    },
+  uppy.setOptions({
+    meta: { fileExistsOption: fileExistsOption.value },
   })
 })
 
 function back() {
-  let queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
+  const queryParams = { cid, sid, gid, filetype, tab: route.query.tab }
   if (route.query.tab) {
     router.push({
       name: "FileManagerList",
@@ -191,4 +186,8 @@ function back() {
     router.back()
   }
 }
+
+onBeforeUnmount(() => {
+  try { uppy.close() } catch {}
+})
 </script>

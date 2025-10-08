@@ -105,7 +105,8 @@ class ImportCGlossaryAction
                 // Check if the term already exists
                 $qb = $repo->getResourcesByCourse($course, $session)
                     ->andWhere('resource.title = :title')
-                    ->setParameter('title', $termToUpdate);
+                    ->setParameter('title', $termToUpdate)
+                ;
 
                 /** @var CGlossary $existingGlossaryTerm */
                 $existingGlossaryTerm = $qb->getQuery()->getOneOrNullResult();
@@ -120,7 +121,8 @@ class ImportCGlossaryAction
         foreach ($data as $term => $description) {
             $qb = $repo->getResourcesByCourse($course, $session)
                 ->andWhere('resource.title = :title')
-                ->setParameter('title', $term);
+                ->setParameter('title', $term)
+            ;
 
 
             /** @var CGlossary $existingNewGlossaryTerm */

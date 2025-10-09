@@ -1432,7 +1432,7 @@ final class WikiManager
             $emailTo = $uInfo['email'];
             $from    = (string) api_get_setting('emailAdministrator');
 
-            $subject = get_lang('Email wiki changes').' - '.$courseTitle;
+            $subject = get_lang('Notify Wiki changes').' - '.$courseTitle;
 
             $body  = get_lang('Dear user').' '.api_get_person_name($uInfo['firstname'] ?? '', $uInfo['lastname'] ?? '').',<br /><br />';
             if ((int)$ctx['sessionId'] === 0) {
@@ -2480,18 +2480,18 @@ final class WikiManager
         <i>'.get_lang('old version of').'</i>
         <font style="background-color:#aaaaaa">'.$oldTime.'</font>)
         '.get_lang('Legend').':
-        <span class="diffAdded">'.get_lang('Wiki diff added line').'</span>
-        <span class="diffDeleted">'.get_lang('Wiki diff deleted line').'</span>
-        <span class="diffMoved">'.get_lang('Wiki diff moved line').'</span></font>
+        <span class="diffAdded">'.get_lang('A line has been added').'</span>
+        <span class="diffDeleted">'.get_lang('A line has been deleted').'</span>
+        <span class="diffMoved">'.get_lang('A line has been moved').'</span></font>
     </div>';
 
             echo '<table>'.diff((string)$oldContent, (string)$versionNew->getContent(), true, 'format_table_line').'</table>';
             echo '<br /><strong>'.get_lang('Legend').'</strong><div class="diff">';
             echo '<table><tr><td></td><td>';
-            echo '<span class="diffEqual">'.get_lang('Wiki diff unchanged line').'</span><br />';
-            echo '<span class="diffAdded">'.get_lang('Wiki diff added line').'</span><br />';
-            echo '<span class="diffDeleted">'.get_lang('Wiki diff deleted line').'</span><br />';
-            echo '<span class="diffMoved">'.get_lang('Wiki diff moved line').'</span><br />';
+            echo '<span class="diffEqual">'.get_lang('Line without changes').'</span><br />';
+            echo '<span class="diffAdded">'.get_lang('A line has been added').'</span><br />';
+            echo '<span class="diffDeleted">'.get_lang('A line has been deleted').'</span><br />';
+            echo '<span class="diffMoved">'.get_lang('A line has been moved').'</span><br />';
             echo '</td></tr></table>';
         }
 
@@ -2504,8 +2504,8 @@ final class WikiManager
             echo '<style>del{background:#fcc}ins{background:#cfc}</style>'.$renderer->render($diff);
             echo '<br /><strong>'.get_lang('Legend').'</strong><div class="diff">';
             echo '<table><tr><td></td><td>';
-            echo '<span class="diffAddedTex">'.get_lang('Wiki diff added tex').'</span><br />';
-            echo '<span class="diffDeletedTex">'.get_lang('Wiki diff deleted tex').'</span><br />';
+            echo '<span class="diffAddedTex">'.get_lang('Text added').'</span><br />';
+            echo '<span class="diffDeletedTex">'.get_lang('Text deleted').'</span><br />';
             echo '</td></tr></table>';
         }
     }
@@ -2604,7 +2604,7 @@ final class WikiManager
         $contentA =
             '<div align="center" style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
             '<table border="0">'.
-            '<tr><td style="font-size:24px">'.get_lang('Assignment desc').'</td></tr>'.
+            '<tr><td style="font-size:24px">'.get_lang('Assignment proposed by the trainer').'</td></tr>'.
             '<tr><td>'.$tPhoto.'<br />'.Display::tag(
                 'span',
                 api_get_person_name($tInfo['firstname'], $tInfo['lastname']),
@@ -2626,14 +2626,14 @@ final class WikiManager
             if ($uid === 0 || $uid === $teacherId) { continue; }
 
             $uPic   = UserManager::getUserPicture($uid);
-            $uLogin = api_htmlentities(sprintf(get_lang('LoginX'), (string)$u['username']), ENT_QUOTES);
+            $uLogin = api_htmlentities(sprintf(get_lang('Login: %s'), (string)$u['username']), ENT_QUOTES);
             $uName  = api_get_person_name((string)$u['firstname'], (string)$u['lastname']).' . '.$uLogin;
             $uPhoto = '<img src="'.$uPic.'" alt="'.$uName.'" width="40" height="50" align="bottom" title="'.$uName.'" />';
 
             $isTutor  = $groupInfo && GroupManager::is_tutor_of_group($uid, $groupInfo);
             $isMember = $groupInfo && GroupManager::is_subscribed($uid, $groupInfo);
-            $status   = ($isTutor && $isMember) ? get_lang('Group tutor and member')
-                : ($isTutor ? get_lang('GroupTutor') : ' ');
+            $status   = ($isTutor && $isMember) ? get_lang('Coach and group member')
+                : ($isTutor ? get_lang('Group tutor') : ' ');
 
             if ($assignmentType === 1) {
                 $studentValues               = $values;
@@ -2642,10 +2642,10 @@ final class WikiManager
                 $studentValues['content']    =
                     '<div align="center" style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
                     '<table border="0">'.
-                    '<tr><td style="font-size:24px">'.get_lang('Assignment work').'</td></tr>'.
+                    '<tr><td style="font-size:24px">'.get_lang('Learner paper').'</td></tr>'.
                     '<tr><td>'.$uPhoto.'<br />'.$uName.'</td></tr>'.
                     '</table></div>'.
-                    '[[ '.$link2teacher.' | '.get_lang('Assignment link to teacher page').' ]] ';
+                    '[[ '.$link2teacher.' | '.get_lang('Acces to trainer page').' ]] ';
 
                 $allStudentsItems[] =
                     '<li>'.
@@ -2666,13 +2666,13 @@ final class WikiManager
             if ($assignmentType === 1) {
                 $teacherValues               = $values;
                 $teacherValues['title']      = $titleOrig;
-                $teacherValues['comment']    = get_lang('Assignment desc');
+                $teacherValues['comment']    = get_lang('Assignment proposed by the trainer');
                 sort($allStudentsItems);
 
                 $teacherValues['content'] =
                     $contentA.$contentB.'<br/>'.
                     '<div align="center" style="font-size:18px;background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
-                    get_lang('AssignmentLinkstoStudentsPage').'</div><br/>'.
+                    get_lang('Access to the papers written by learners').'</div><br/>'.
                     '<div style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
                     '<ol>'.implode('', $allStudentsItems).'</ol>'.
                     '</div><br/>';
@@ -2740,7 +2740,7 @@ final class WikiManager
         api_item_property_update($_course, 'wiki', $newWiki->getIid(), 'WikiAdded', api_get_user_id(), $groupInfo);
         self::check_emailcue((string)$r_reflink, 'P', $r_dtime, (int)$r_user_id);
 
-        return get_lang('Page restored');
+        return get_lang('The page has been restored. You can view it by clicking');
     }
 
     public function restorePage()
@@ -2763,7 +2763,7 @@ final class WikiManager
                 ((int)$current_row['assignment'] === 1)) &&
             (!api_is_allowed_to_edit(false, true) && (int)$ctx['groupId'] === 0)
         ) {
-            Display::addFlash(Display::return_message(get_lang('Only edit pages course manager'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('The Main Page can be edited by a teacher only'), 'normal', false));
             return false;
         }
 
@@ -2777,7 +2777,7 @@ final class WikiManager
             ) {
                 $PassEdit = true;
             } else {
-                Display::addFlash(Display::return_message(get_lang('Only edit pages group members'), 'normal', false));
+                Display::addFlash(Display::return_message(get_lang('Trainers and group members only can edit pages of the group Wiki'), 'normal', false));
                 $PassEdit = false;
             }
         } else {
@@ -4556,7 +4556,7 @@ final class WikiManager
         $ctx = self::ctx();
         $url = $ctx['baseUrl'];
 
-        echo '<div class="actions">'.get_lang('Most linked pages').'</div>';
+        echo '<div class="actions">'.get_lang('Pages most linked').'</div>';
 
         // All existing page reflinks in context
         $qbPages = self::repo()->createQueryBuilder('w')
@@ -4956,7 +4956,7 @@ final class WikiManager
         echo '</table><br/>';
 
         echo '<table class="table table-hover table-striped data_table">';
-        echo '<thead><tr><th colspan="2">'.get_lang('Pages').' '.get_lang('And').' '.get_lang('Versions').'</th></tr></thead>';
+        echo '<thead><tr><th colspan="2">'.get_lang('Pages').' '.get_lang('and').' '.get_lang('Versions').'</th></tr></thead>';
         echo '<tr><td>'.get_lang('Pages').' - '.get_lang('Number of contributions').'</td><td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td></tr>';
         echo '<tr><td>'.get_lang('Total of empty pages').'</td><td>'.$total_empty_content_lv.' ('.get_lang('Versions').': '.$total_empty_content.')</td></tr>';
         echo '<tr><td>'.get_lang('Number of visits').'</td><td>'.$total_visits_lv.' ('.get_lang('Versions').': '.$total_visits.')</td></tr>';
@@ -5671,7 +5671,7 @@ final class WikiManager
             ->getQuery()->getOneOrNullResult();
 
         if (!$last || !$first) {
-            Display::addFlash(Display::return_message(get_lang('DiscussNotAvailable'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('Discuss not available'), 'normal', false));
             return;
         }
 

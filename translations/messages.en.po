@@ -30901,3 +30901,6 @@ msgstr "GDPR"
 
 msgid "2FA activated successfully."
 msgstr "2FA activated successfully."
+
+msgid "Duplicate submission ignored"
+msgstr "Duplicate submission ignored"

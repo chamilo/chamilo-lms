@@ -30866,3 +30866,6 @@ msgstr ""
 
 msgid "2FA activated successfully."
 msgstr ""
+
+msgid "Duplicate submission ignored"
+msgstr ""

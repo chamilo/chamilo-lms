@@ -134,20 +134,4 @@ final class Version20250306101000 extends AbstractMigrationChamilo
             );
         }
     }
-
-    private function getPluginDirectoryList(): array
-    {
-        $pluginDir = $this->container->getParameter('kernel.project_dir').'/public/plugin';
-
-        $finder = new Finder();
-        $finder->directories()->in($pluginDir)->depth('== 0');
-
-        $directories = [];
-
-        foreach ($finder as $entry) {
-            $directories[] = $entry->getFilename();
-        }
-
-        return $directories;
-    }
 }

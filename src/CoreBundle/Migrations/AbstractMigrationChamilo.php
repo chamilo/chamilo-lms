@@ -29,6 +29,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractMigrationChamilo extends AbstractMigration
@@ -436,5 +437,21 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         }
 
         return $this->container->getParameter('kernel.project_dir');
+    }
+
+    protected function getPluginDirectoryList(): array
+    {
+        $pluginDir = $this->container->getParameter('kernel.project_dir').'/public/plugin';
+
+        $finder = new Finder();
+        $finder->directories()->in($pluginDir)->depth('== 0');
+
+        $directories = [];
+
+        foreach ($finder as $entry) {
+            $directories[] = $entry->getFilename();
+        }
+
+        return $directories;
     }
 }

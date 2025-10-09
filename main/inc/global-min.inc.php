@@ -226,6 +226,23 @@ foreach ($result as &$row) {
 
 ini_set('log_errors', '1');
 
+// Including configuration files
+$configurationFiles = [
+    'mail.conf.php',
+    'profile.conf.php',
+    'course_info.conf.php',
+    'add_course.conf.php',
+    'events.conf.php',
+    'auth.conf.php',
+];
+
+foreach ($configurationFiles as $file) {
+    $file = api_get_path(CONFIGURATION_PATH).$file;
+    if (file_exists($file)) {
+        require_once $file;
+    }
+}
+
 /**
  * Include the trad4all language file.
  */

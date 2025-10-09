@@ -439,19 +439,60 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
         return $this->container->getParameter('kernel.project_dir');
     }
 
-    protected function getPluginDirectoryList(): array
+    protected static function pluginNameReplacements(): array
     {
-        $pluginDir = $this->container->getParameter('kernel.project_dir').'/public/plugin';
-
-        $finder = new Finder();
-        $finder->directories()->in($pluginDir)->depth('== 0');
-
-        $directories = [];
-
-        foreach ($finder as $entry) {
-            $directories[] = $entry->getFilename();
-        }
-
-        return $directories;
+        return [
+            'bbb' => 'Bbb',
+            'before_login' => 'BeforeLogin',
+            'buycourses' => 'BuyCourses',
+            'card_game' => 'CardGame',
+            'check_extra_field_author_company' => 'CheckExtraFieldAuthorCompany',
+            'cleandeletedfiles' => 'CleanDeletedFiles',
+            'courseblock' => 'CourseBlock',
+            'coursehomenotify' => 'CourseHomeNotify',
+            'courselegal' => 'CourseLegal',
+            'customcertificate' => 'CustomCertificate',
+            'customfooter' => 'CustomFooter',
+            'dashboard' => 'Dashboard',
+            'dictionary' => 'Dictionary',
+            'embedregistry' => 'EmbedRegistry',
+            'exercise_signature' => 'ExerciseSignature',
+            'ext_auth_chamilo_logout_button_behaviour' => 'ExtAuthChamiloLogoutButtonBehaviour',
+            'externalnotificationconnect' => 'ExternalNotificationConnect',
+            'extramenufromwebservice' => 'ExtraMenuFromWebservice',
+            'google_maps' => 'GoogleMaps',
+            'grading_electronic' => 'GradingElectronic',
+            'h5pimport' => 'H5pImport',
+            'hello_world' => 'HelloWorld',
+            'ims_lti' => 'ImsLti',
+            'justification' => 'Justification',
+            'learning_calendar' => 'LearningCalendar',
+            'lti_provider' => 'LtiProvider',
+            'maintenancemode' => 'MaintenanceMode',
+            'migrationmoodle' => 'MigrationMoodle',
+            'nosearchindex' => 'NoSearchIndex',
+            'notebookteacher' => 'NotebookTeacher',
+            'onlyoffice' => 'Onlyoffice',
+            'pausetraining' => 'PauseTraining',
+            'pens' => 'Pens',
+            'positioning' => 'Positioning',
+            'questionoptionsevaluation' => 'QuestionOptionsEvaluation',
+            'redirection' => 'Redirection',
+            'resubscription' => 'Resubscription',
+            'rss' => 'Rss',
+            'search_course' => 'SearchCourse',
+            'show_regions' => 'ShowRegions',
+            'show_user_info' => 'ShowUserInfo',
+            'static' => 'Static',
+            'studentfollowup' => 'StudentFollowUp',
+            'surveyexportcsv' => 'SurveyExportCsv',
+            'surveyexporttxt' => 'SurveyExportTxt',
+            'test2pdf' => 'Test2Pdf',
+            'toplinks' => 'TopLinks',
+            'tour' => 'Tour',
+            'userremoteservice' => 'UserRemoteService',
+            'xapi' => 'XApi',
+            'zoom' => 'Zoom',
+        ];
     }
 }

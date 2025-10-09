@@ -48,7 +48,7 @@ class ImportCGlossaryAction
         }
 
         $data = [];
-        //include first row
+        // include first row
         if ('csv' === $fileType) {
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
                 while (($row = fgetcsv($handle, 0, ';')) !== false) {
@@ -59,7 +59,7 @@ class ImportCGlossaryAction
                 fclose($handle);
             }
         } elseif ('xls' === $fileType) {
-            //include first row
+            // include first row
             $spreadsheet = IOFactory::load($file->getPathname());
             $sheet = $spreadsheet->getActiveSheet();
             foreach ($sheet->getRowIterator() as $row) {
@@ -118,7 +118,6 @@ class ImportCGlossaryAction
                 ->andWhere('resource.title = :title')
                 ->setParameter('title', $term)
             ;
-
 
             /** @var CGlossary $existingNewGlossaryTerm */
             $existingNewGlossaryTerm = $qb->getQuery()->getOneOrNullResult();

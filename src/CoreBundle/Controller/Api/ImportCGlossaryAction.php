@@ -50,7 +50,6 @@ class ImportCGlossaryAction
         $data = [];
         if ('csv' === $fileType) {
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
-                $header = fgetcsv($handle, 0, ';');
                 while (($row = fgetcsv($handle, 0, ';')) !== false) {
                     $term = isset($row[0]) ? trim($row[0]) : '';
                     $definition = isset($row[1]) ? trim($row[1]) : '';
@@ -61,13 +60,7 @@ class ImportCGlossaryAction
         } elseif ('xls' === $fileType) {
             $spreadsheet = IOFactory::load($file->getPathname());
             $sheet = $spreadsheet->getActiveSheet();
-            $firstRow = true;
             foreach ($sheet->getRowIterator() as $row) {
-                if ($firstRow) {
-                    $firstRow = false;
-
-                    continue;
-                }
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
                 $rowData = [];

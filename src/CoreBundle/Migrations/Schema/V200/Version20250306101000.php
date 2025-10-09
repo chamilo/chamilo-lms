@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Plugin;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
+use Symfony\Component\Finder\Finder;
 
 final class Version20250306101000 extends AbstractMigrationChamilo
 {
@@ -21,9 +22,17 @@ final class Version20250306101000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $directories = $this->getPluginDirectoryList();
+
         foreach ($this->getPluginTitles() as $pluginTitle) {
             if (\is_array($pluginTitle) && isset($pluginTitle['title'])) {
                 $pluginTitle = (string) $pluginTitle['title'];
+            }
+
+            $pluginTitle = str_replace(' ', '', ucwords(str_replace('_', ' ', $pluginTitle)));
+
+            if (!\in_array($pluginTitle, $directories)) {
+                continue;
             }
 
             $pluginId = $this->insertPlugin($pluginTitle);
@@ -124,5 +133,21 @@ final class Version20250306101000 extends AbstractMigrationChamilo
                 ]
             );
         }
+    }
+
+    private function getPluginDirectoryList(): array
+    {
+        $pluginDir = $this->container->getParameter('kernel.project_dir').'/public/plugin';
+
+        $finder = new Finder();
+        $finder->directories()->in($pluginDir)->depth('== 0');
+
+        $directories = [];
+
+        foreach ($finder as $entry) {
+            $directories[] = $entry->getFilename();
+        }
+
+        return $directories;
     }
 }

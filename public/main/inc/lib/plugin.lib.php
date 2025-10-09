@@ -454,8 +454,13 @@ class AppPlugin
         $pluginPath  = api_get_path(SYS_PLUGIN_PATH);
 
         $pluginDir = null;
-        foreach ([$pluginName, strtolower($pluginName), ucfirst(strtolower($pluginName))] as $dir) {
-            $path = $pluginPath . "$dir/plugin.php";
+        $posibleName = [
+            $pluginName,
+            strtolower($pluginName),
+            ucfirst(strtolower($pluginName)),
+        ];
+        foreach ($posibleName as $dir) {
+            $path = $pluginPath."$dir/plugin.php";
             if (is_file($path)) {
                 $fileToLoad = true;
                 include_once $path;

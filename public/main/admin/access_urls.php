@@ -79,13 +79,14 @@ if ($httpRequest->query->has('action')) {
 $parameters['sec_token'] = Security::get_token();
 
 // Checking if the admin is registered in all sites
-$url_string = '';
-foreach ($url_list as $u) {
-    if (!in_array($u->getId(), $my_user_url_list)) {
-        $url_string .= $u->getUrl() . '<br />';
+if (!api_is_admin_in_all_active_urls()) {
+    // Get the list of unregistered urls
+    $url_string = '';
+    foreach ($url_list as $u) {
+        if (!in_array($u->getId(), $my_user_url_list)) {
+            $url_string .= $u->getUrl() . '<br />';
+        }
     }
-}
-if (!empty($url_string)) {
     echo Display::return_message(
         get_lang('Admin user should be registered here') . '<br />' . $url_string,
         'warning',

@@ -100,6 +100,14 @@
       icon="settings"
     />
 
+    <AdminBlock
+      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
+      :id="blockHealthCheck.id"
+      :items="blockHealthCheck.items"
+      :title="t('Health check')"
+      icon="multiple-marked"
+    />
+
     <div
       v-if="securityStore.isAdmin"
       class="admin-index__block-container block-admin-version"
@@ -281,6 +289,7 @@ const {
   blockNewsStatusEl,
   blockSupportStatusEl,
   blockPlugins,
+  blockHealthCheck,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {

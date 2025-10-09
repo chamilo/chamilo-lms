@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
@@ -44,6 +45,7 @@ class IndexBlocksController extends BaseController
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly PluginRepository $pluginRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlRepository $accessUrlRepository,
     ) {
         $this->extAuthSource = [
             'extldap' => [],
@@ -145,6 +147,13 @@ class IndexBlocksController extends BaseController
                 'id' => 'block-admin-plugins',
                 'editable' => false,
                 'items' => $this->getItemsPlugins(),
+            ];
+
+            /* Health check */
+            $json['health_check'] = [
+                'id' => 'block-admin-health-check',
+                'editable' => false,
+                'items' => $this->getItemsHealthCheck(),
             ];
         }
 
@@ -902,6 +911,45 @@ class IndexBlocksController extends BaseController
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
                 'url' => $objPlugin->getAdminUrl(),
                 'label' => $pluginInfo['title'],
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getItemsHealthCheck(): array
+    {
+        $items = [];
+
+        // Check if dsn or email is defined :
+        $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn', true);
+        $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email', true);
+        if ((empty($mailDsn) || 'null://null' == $mailDsn) && empty($mailSender)) {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-error',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings need to be configured'),
+            ];
+        } else {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-success',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings are OK'),
+            ];
+        }
+
+        // Check if the admin user has access to all URLs
+        if (api_is_admin_in_all_active_urls()) {
+            $items[] = [
+                'className' => 'item-health-check-admin-urls text-success',
+                'url' => '/main/admin/access_urls.php',
+                'label' => $this->translator->trans('Admin has access to all active URLs'),
+            ];
+        } else {
+            $items[] = [
+                'className' => 'item-health-check-admin-urls text-error',
+                'url' => '/main/admin/access_url_edit_users_to_url.php',
+                'label' => $this->translator->trans('Admin does not have access to all active URLs'),
             ];
         }
 

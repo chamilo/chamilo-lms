@@ -5259,6 +5259,43 @@ function api_get_access_url_from_user($user_id)
     return $list;
 }
 
+/** 
+ * Checks whether the current admin user in in all access urls.
+ *
+ * @return bool
+ */
+function api_is_admin_in_all_active_urls()
+{
+    if (api_is_platform_admin()) {
+        $urls = api_get_active_urls();
+        $user_url_list = api_get_access_url_from_user(api_get_user_id());
+        foreach ($urls as $url) {
+            if (!in_array($url['id'], $user_url_list)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/**
+ * Gets all the access urls in the database.
+ *
+ * @return array
+ */
+function api_get_active_urls()
+{
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $sql = "SELECT * FROM $table WHERE active = 1";
+    $result = Database::query($sql);
+    // Fetch all rows as associative arrays
+    $urls = [];
+    while ($row = Database::fetch_assoc($result)) {
+        $urls[] = $row;
+    }
+    return $urls;
+}
+
 /**
  * Checks whether the curent user is in a group or not.
  *

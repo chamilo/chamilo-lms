@@ -111,6 +111,17 @@ if (api_is_allowed_to_edit()) {
                 Display::addFlash(Display::return_message(get_lang('Deleted')));
             }
             break;
+        case 'remove_only_class_from_course':
+            $id = $_GET['id'];
+            if (!empty($id)) {
+                $usergroup->unsubscribe_only_courses_from_usergroup(
+                    $id,
+                    [api_get_course_int_id()]
+                );
+                Display::addFlash(Display::return_message(get_lang('Removed')));
+            }
+            break;
+
     }
 }
 

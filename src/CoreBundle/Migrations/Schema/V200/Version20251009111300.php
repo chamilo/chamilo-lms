@@ -23,28 +23,28 @@ class Version20251009111300 extends AbstractMigrationChamilo
      */
     public function up(Schema $schema): void
     {
-        $directories = $this->getPluginDirectoryList();
+        $replacements = self::pluginNameReplacements();
         $idListToDelete = [];
 
         $pluginRows = $this->connection->executeQuery("SELECT id, title, source FROM plugin")->fetchAllAssociative();
 
         foreach ($pluginRows as $pluginRow) {
-            $title = str_replace(' ', '', ucwords(str_replace('_', ' ', $pluginRow['title'])));
+            $title = $pluginRow['title'];
 
-            if (!\in_array($title, $directories)) {
+            if (!array_key_exists($title, $replacements)) {
                 $idListToDelete[] = $pluginRow['id'];
 
                 continue;
             }
 
-            $source = \in_array($title, AppPlugin::getOfficialPlugins())
+            $source = \in_array($replacements[$title], AppPlugin::getOfficialPlugins())
                 ? Plugin::SOURCE_OFFICIAL
                 : Plugin::SOURCE_THIRD_PARTY;
 
             $this->connection->update(
                 'plugin',
                 [
-                    'title' => $title,
+                    'title' => $replacements[$title],
                     'source' => $source,
                 ],
                 ['id' => $pluginRow['id']]

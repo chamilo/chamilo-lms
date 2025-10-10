@@ -28,43 +28,43 @@ class DocumentUsageAction extends AbstractController
 
     public function __invoke($cid): JsonResponse
     {
-        $course_id = (int) $cid;
-        $session_id = api_get_session_id();
-        $group_id = api_get_group_id();
+        $courseId = (int) $cid;
+        $sessionId = api_get_session_id();
+        $groupId = api_get_group_id();
 
-        $course_entity = $this->courseRepository->find($course_id);
-        if (!$course_entity) {
+        $courseEntity = $this->courseRepository->find($courseId);
+        if (!$courseEntity) {
             return new JsonResponse(['error' => 'Course not found'], 404);
         }
 
-        $session_entity = api_get_session_entity();
+        $sessionEntity = api_get_session_entity();
 
-        $total_quota_bytes = ($course_entity->getDiskQuota() * 1024 * 1024) ?? DEFAULT_DOCUMENT_QUOTA;
-        $used_quota_bytes = $this->documentRepository->getTotalSpaceByCourse($course_entity);
+        $totalQuotaBytes = ($courseEntity->getDiskQuota() * 1024 * 1024) ?? DEFAULT_DOCUMENT_QUOTA;
+        $usedQuotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity);
         
         $chartData = [];
 
         // Process sessions
-        $this->processCourseSessions($course_entity, $session_id, $total_quota_bytes, $used_quota_bytes, $chartData);
+        $this->processCourseSessions($courseEntity, $sessionId, $totalQuotaBytes, $usedQuotaBytes, $chartData);
 
         // Process groups
-        $this->processCourseGroups($course_entity, $group_id, $total_quota_bytes, $used_quota_bytes, $chartData);
+        $this->processCourseGroups($courseEntity, $groupId, $totalQuotaBytes, $usedQuotaBytes, $chartData);
 
         // Process user documents
-        $users = $this->courseRepository->getUsersByCourse($course_entity);
+        $users = $this->courseRepository->getUsersByCourse($courseEntity);
         foreach ($users as $user) {
-            $user_id = $user->getId();
-            $user_name = $user->getFullName();
-            $this->processUserDocuments($course_entity, $session_entity, $user_id, $user_name, $total_quota_bytes, $chartData);
+            $userId = $user->getId();
+            $userName = $user->getFullName();
+            $this->processUserDocuments($courseEntity, $sessionEntity, $userId, $userName, $totalQuotaBytes, $chartData);
         }
 
         // Add available space
-        $available_bytes = $total_quota_bytes - $used_quota_bytes;
-        $available_percentage = $this->calculatePercentage($available_bytes, $total_quota_bytes);
+        $availableBytes = $totalQuotaBytes - $usedQuotaBytes;
+        $availablePercentage = $this->calculatePercentage($availableBytes, $totalQuotaBytes);
         
         $chartData[] = [
-            'label' => addslashes(get_lang('Available space')) . ' (' . format_file_size($available_bytes) . ')',
-            'percentage' => $available_percentage,
+            'label' => addslashes(get_lang('Available space')) . ' (' . format_file_size($availableBytes) . ')',
+            'percentage' => $availablePercentage,
         ];
 
         return new JsonResponse([
@@ -75,88 +75,88 @@ class DocumentUsageAction extends AbstractController
         ]);
     }
 
-    private function processCourseSessions($course_entity, int $session_id, int $total_quota_bytes, int &$used_quota_bytes, array &$chartData): void
+    private function processCourseSessions($courseEntity, int $sessionId, int $totalQuotaBytes, int &$usedQuotaBytes, array &$chartData): void
     {
-        $sessions = $this->sessionRepository->getSessionsByCourse($course_entity);
+        $sessions = $this->sessionRepository->getSessionsByCourse($courseEntity);
 
         foreach ($sessions as $session) {
-            $quota_bytes = $this->documentRepository->getTotalSpaceByCourse($course_entity, null, $session);
+            $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, null, $session);
             
-            if ($quota_bytes > 0) {
-                $session_name = $session->getTitle();
-                if ($session_id === $session->getId()) {
-                    $session_name .= ' * ';
+            if ($quotaBytes > 0) {
+                $sessionName = $session->getTitle();
+                if ($sessionId === $session->getId()) {
+                    $sessionName .= ' * ';
                 }
                 
-                $used_quota_bytes += $quota_bytes;
+                $usedQuotaBytes += $quotaBytes;
                 $chartData[] = [
-                    'label' => addslashes(get_lang('Session') . ': ' . $session_name) . ' (' . format_file_size($quota_bytes) . ')',
-                    'percentage' => $this->calculatePercentage($quota_bytes, $total_quota_bytes),
+                    'label' => addslashes(get_lang('Session') . ': ' . $sessionName) . ' (' . format_file_size($quotaBytes) . ')',
+                    'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
                 ];
             }
         }
     }
 
-    private function processCourseGroups($course_entity, int $group_id, int $total_quota_bytes, int &$used_quota_bytes, array &$chartData): void
+    private function processCourseGroups($courseEntity, int $groupId, int $totalQuotaBytes, int &$usedQuotaBytes, array &$chartData): void
     {
-        $groups_list = $this->groupRepository->findAllByCourse($course_entity)->getQuery()->getResult();
+        $groupsList = $this->groupRepository->findAllByCourse($courseEntity)->getQuery()->getResult();
         
-        foreach ($groups_list as $group_entity) {
-            $quota_bytes = $this->documentRepository->getTotalSpaceByCourse($course_entity, $group_entity->getIid());
+        foreach ($groupsList as $groupEntity) {
+            $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, $groupEntity->getIid());
             
-            if ($quota_bytes > 0) {
-                $group_name = $group_entity->getTitle();
-                if ($group_id === $group_entity->getIid()) {
-                    $group_name .= ' * ';
+            if ($quotaBytes > 0) {
+                $groupName = $groupEntity->getTitle();
+                if ($groupId === $groupEntity->getIid()) {
+                    $groupName .= ' * ';
                 }
                 
-                $used_quota_bytes += $quota_bytes;
+                $usedQuotaBytes += $quotaBytes;
                 $chartData[] = [
-                    'label' => addslashes(get_lang('Group') . ': ' . $group_name) . ' (' . format_file_size($quota_bytes) . ')',
-                    'percentage' => $this->calculatePercentage($quota_bytes, $total_quota_bytes),
+                    'label' => addslashes(get_lang('Group') . ': ' . $groupName) . ' (' . format_file_size($quotaBytes) . ')',
+                    'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
                 ];
             }
         }
     }
 
-    private function processUserDocuments($course_entity, $session_entity, int $user_id, string $user_name, int $total_quota_bytes, array &$chartData): void
+    private function processUserDocuments($courseEntity, $sessionEntity, int $userId, string $userName, int $totalQuotaBytes, array &$chartData): void
     {
-        $documents_list = $this->documentRepository->getAllDocumentDataByUserAndGroup($course_entity);
-        $user_quota_bytes = 0;
+        $documentsList = $this->documentRepository->getAllDocumentDataByUserAndGroup($courseEntity);
+        $userQuotaBytes = 0;
 
-        foreach ($documents_list as $document_entity) {
-            if ($document_entity->getResourceNode()->getCreator()?->getId() === $user_id 
-                && $document_entity->getFiletype() === 'file') {
-                $resourceFiles = $document_entity->getResourceNode()->getResourceFiles();
+        foreach ($documentsList as $documentEntity) {
+            if ($documentEntity->getResourceNode()->getCreator()?->getId() === $userId 
+                && $documentEntity->getFiletype() === 'file') {
+                $resourceFiles = $documentEntity->getResourceNode()->getResourceFiles();
                 if (!$resourceFiles->isEmpty()) {
-                    $user_quota_bytes += $resourceFiles->first()->getSize();
+                    $userQuotaBytes += $resourceFiles->first()->getSize();
                 }
             }
         }
 
-        if ($user_quota_bytes > 0) {
+        if ($userQuotaBytes > 0) {
             $chartData[] = [
-                'label' => addslashes(get_lang('Teacher') . ': ' . $user_name) . ' (' . format_file_size($user_quota_bytes) . ')',
-                'percentage' => $this->calculatePercentage($user_quota_bytes, $total_quota_bytes),
+                'label' => addslashes(get_lang('Teacher') . ': ' . $userName) . ' (' . format_file_size($userQuotaBytes) . ')',
+                'percentage' => $this->calculatePercentage($userQuotaBytes, $totalQuotaBytes),
             ];
 
             // Handle session context
-            if ($session_entity) {
-                $session_total_quota = $this->calculateSessionTotalQuota($session_entity);
-                if ($session_total_quota > 0) {
+            if ($sessionEntity) {
+                $sessionTotalQuota = $this->calculateSessionTotalQuota($sessionEntity);
+                if ($sessionTotalQuota > 0) {
                     $chartData[] = [
-                        'label' => addslashes(sprintf(get_lang('TeacherXInSession'), $user_name)),
-                        'percentage' => $this->calculatePercentage($user_quota_bytes, $session_total_quota),
+                        'label' => addslashes(sprintf(get_lang('TeacherXInSession'), $userName)),
+                        'percentage' => $this->calculatePercentage($userQuotaBytes, $sessionTotalQuota),
                     ];
                 }
             }
         }
     }
 
-    private function calculateSessionTotalQuota($session_entity): int
+    private function calculateSessionTotalQuota($sessionEntity): int
     {
         $total = 0;
-        $sessionCourses = $session_entity->getCourses();
+        $sessionCourses = $sessionEntity->getCourses();
         
         foreach ($sessionCourses as $courseEntity) {
             $total += DocumentManager::get_course_quota($courseEntity->getId());
@@ -165,12 +165,12 @@ class DocumentUsageAction extends AbstractController
         return $total;
     }
 
-    private function calculatePercentage(int $bytes, int $total_bytes): float
+    private function calculatePercentage(int $bytes, int $totalBytes): float
     {
-        if ($total_bytes === 0) {
+        if ($totalBytes === 0) {
             return 0.0;
         }
         
-        return round(($bytes / $total_bytes) * 100, 2);
+        return round(($bytes / $totalBytes) * 100, 2);
     }
 }

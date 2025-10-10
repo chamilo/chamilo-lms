@@ -13,18 +13,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
-
 #[AsController]
 class DocumentUsageAction extends AbstractController
 {
-    
     public function __construct(
         private readonly CourseRepository $courseRepository,
         private readonly CDocumentRepository $documentRepository,
         private readonly CGroupRepository $groupRepository,
         private readonly SessionRepository $sessionRepository,
-    ) {
-    }
+    ) {}
 
     public function __invoke($cid): JsonResponse
     {
@@ -41,7 +38,7 @@ class DocumentUsageAction extends AbstractController
 
         $totalQuotaBytes = ($courseEntity->getDiskQuota() * 1024 * 1024) ?? DEFAULT_DOCUMENT_QUOTA;
         $usedQuotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity);
-        
+
         $chartData = [];
 
         // Process sessions
@@ -61,9 +58,9 @@ class DocumentUsageAction extends AbstractController
         // Add available space
         $availableBytes = $totalQuotaBytes - $usedQuotaBytes;
         $availablePercentage = $this->calculatePercentage($availableBytes, $totalQuotaBytes);
-        
+
         $chartData[] = [
-            'label' => addslashes(get_lang('Available space')) . ' (' . format_file_size($availableBytes) . ')',
+            'label' => addslashes(get_lang('Available space')).' ('.format_file_size($availableBytes).')',
             'percentage' => $availablePercentage,
         ];
 
@@ -81,16 +78,16 @@ class DocumentUsageAction extends AbstractController
 
         foreach ($sessions as $session) {
             $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, null, $session);
-            
+
             if ($quotaBytes > 0) {
                 $sessionName = $session->getTitle();
                 if ($sessionId === $session->getId()) {
                     $sessionName .= ' * ';
                 }
-                
+
                 $usedQuotaBytes += $quotaBytes;
                 $chartData[] = [
-                    'label' => addslashes(get_lang('Session') . ': ' . $sessionName) . ' (' . format_file_size($quotaBytes) . ')',
+                    'label' => addslashes(get_lang('Session').': '.$sessionName).' ('.format_file_size($quotaBytes).')',
                     'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
                 ];
             }
@@ -100,19 +97,19 @@ class DocumentUsageAction extends AbstractController
     private function processCourseGroups($courseEntity, int $groupId, int $totalQuotaBytes, int &$usedQuotaBytes, array &$chartData): void
     {
         $groupsList = $this->groupRepository->findAllByCourse($courseEntity)->getQuery()->getResult();
-        
+
         foreach ($groupsList as $groupEntity) {
             $quotaBytes = $this->documentRepository->getTotalSpaceByCourse($courseEntity, $groupEntity->getIid());
-            
+
             if ($quotaBytes > 0) {
                 $groupName = $groupEntity->getTitle();
                 if ($groupId === $groupEntity->getIid()) {
                     $groupName .= ' * ';
                 }
-                
+
                 $usedQuotaBytes += $quotaBytes;
                 $chartData[] = [
-                    'label' => addslashes(get_lang('Group') . ': ' . $groupName) . ' (' . format_file_size($quotaBytes) . ')',
+                    'label' => addslashes(get_lang('Group').': '.$groupName).' ('.format_file_size($quotaBytes).')',
                     'percentage' => $this->calculatePercentage($quotaBytes, $totalQuotaBytes),
                 ];
             }
@@ -125,8 +122,8 @@ class DocumentUsageAction extends AbstractController
         $userQuotaBytes = 0;
 
         foreach ($documentsList as $documentEntity) {
-            if ($documentEntity->getResourceNode()->getCreator()?->getId() === $userId 
-                && $documentEntity->getFiletype() === 'file') {
+            if ($documentEntity->getResourceNode()->getCreator()?->getId() === $userId
+                && 'file' === $documentEntity->getFiletype()) {
                 $resourceFiles = $documentEntity->getResourceNode()->getResourceFiles();
                 if (!$resourceFiles->isEmpty()) {
                     $userQuotaBytes += $resourceFiles->first()->getSize();
@@ -136,7 +133,7 @@ class DocumentUsageAction extends AbstractController
 
         if ($userQuotaBytes > 0) {
             $chartData[] = [
-                'label' => addslashes(get_lang('Teacher') . ': ' . $userName) . ' (' . format_file_size($userQuotaBytes) . ')',
+                'label' => addslashes(get_lang('Teacher').': '.$userName).' ('.format_file_size($userQuotaBytes).')',
                 'percentage' => $this->calculatePercentage($userQuotaBytes, $totalQuotaBytes),
             ];
 
@@ -145,7 +142,7 @@ class DocumentUsageAction extends AbstractController
                 $sessionTotalQuota = $this->calculateSessionTotalQuota($sessionEntity);
                 if ($sessionTotalQuota > 0) {
                     $chartData[] = [
-                        'label' => addslashes(sprintf(get_lang('TeacherXInSession'), $userName)),
+                        'label' => addslashes(\sprintf(get_lang('TeacherXInSession'), $userName)),
                         'percentage' => $this->calculatePercentage($userQuotaBytes, $sessionTotalQuota),
                     ];
                 }
@@ -157,20 +154,20 @@ class DocumentUsageAction extends AbstractController
     {
         $total = 0;
         $sessionCourses = $sessionEntity->getCourses();
-        
+
         foreach ($sessionCourses as $courseEntity) {
             $total += DocumentManager::get_course_quota($courseEntity->getId());
         }
-        
+
         return $total;
     }
 
     private function calculatePercentage(int $bytes, int $totalBytes): float
     {
-        if ($totalBytes === 0) {
+        if (0 === $totalBytes) {
             return 0.0;
         }
-        
+
         return round(($bytes / $totalBytes) * 100, 2);
     }
 }

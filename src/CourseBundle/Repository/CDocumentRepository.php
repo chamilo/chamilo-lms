@@ -369,13 +369,6 @@ final class CDocumentRepository extends ResourceRepository
     /**
      * Fetches all document data for the given user/group using Doctrine ORM.
      *
-     * @param Course      $course
-     * @param string      $path
-     * @param int         $toGroupId
-     * @param int|null    $toUserId
-     * @param bool        $search
-     * @param Session|null $session
-     *
      * @return CDocument[]
      */
     public function getAllDocumentDataByUserAndGroup(
@@ -387,65 +380,73 @@ final class CDocumentRepository extends ResourceRepository
         ?Session $session = null
     ): array {
         $qb = $this->createQueryBuilder('d');
-        
+
         $qb->innerJoin('d.resourceNode', 'rn')
             ->innerJoin('rn.resourceLinks', 'rl')
             ->where('rl.course = :course')
-            ->setParameter('course', $course);
-        
+            ->setParameter('course', $course)
+        ;
+
         // Session filtering
         if ($session) {
             $qb->andWhere('(rl.session = :session OR rl.session IS NULL)')
-            ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
-        
+
         // Path filtering - convert document.lib.php logic to Doctrine
-        if ($path !== '/') {
+        if ('/' !== $path) {
             // The original uses LIKE with path patterns
-            $pathPattern = rtrim($path, '/') . '/%';
+            $pathPattern = rtrim($path, '/').'/%';
             $qb->andWhere('rn.title LIKE :pathPattern OR rn.title = :exactPath')
-            ->setParameter('pathPattern', $pathPattern)
-            ->setParameter('exactPath', ltrim($path, '/'));
-            
+                ->setParameter('pathPattern', $pathPattern)
+                ->setParameter('exactPath', ltrim($path, '/'))
+            ;
+
             // Exclude deeper nested paths if not searching
             if (!$search) {
                 // Exclude paths with additional slashes beyond the current level
-                $excludePattern = rtrim($path, '/') . '/%/%';
+                $excludePattern = rtrim($path, '/').'/%/%';
                 $qb->andWhere('rn.title NOT LIKE :excludePattern')
-                ->setParameter('excludePattern', $excludePattern);
+                    ->setParameter('excludePattern', $excludePattern)
+                ;
             }
         }
-        
+
         // User/Group filtering
-        if ($toUserId !== null) {
+        if (null !== $toUserId) {
             if ($toUserId > 0) {
                 $qb->andWhere('rl.user = :userId')
-                ->setParameter('userId', $toUserId);
+                    ->setParameter('userId', $toUserId)
+                ;
             } else {
                 $qb->andWhere('rl.user IS NULL');
             }
         } else {
             if ($toGroupId > 0) {
                 $qb->andWhere('rl.group = :groupId')
-                ->setParameter('groupId', $toGroupId);
+                    ->setParameter('groupId', $toGroupId)
+                ;
             } else {
                 $qb->andWhere('rl.group IS NULL');
             }
         }
-        
+
         // Exclude deleted documents (like %_DELETED_% in original)
         $qb->andWhere('rn.title NOT LIKE :deletedPattern')
-        ->setParameter('deletedPattern', '%_DELETED_%');
-        
+            ->setParameter('deletedPattern', '%_DELETED_%')
+        ;
+
         // Order by creation date (equivalent to last.iid DESC)
         $qb->orderBy('rn.createdAt', 'DESC')
-        ->addOrderBy('rn.id', 'DESC');
-        
+            ->addOrderBy('rn.id', 'DESC')
+        ;
+
         return $qb->getQuery()->getResult();
     }
-    
+
     /**
      * Ensure "Learning paths" exists directly under the course resource node.
      * Links are created for course (and optional session) context.

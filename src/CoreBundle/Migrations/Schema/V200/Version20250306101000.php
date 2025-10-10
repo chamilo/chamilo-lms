@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Plugin;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
-use Symfony\Component\Finder\Finder;
 
 final class Version20250306101000 extends AbstractMigrationChamilo
 {
@@ -29,7 +28,7 @@ final class Version20250306101000 extends AbstractMigrationChamilo
                 $pluginTitle = (string) $pluginTitle['title'];
             }
 
-            if (!array_key_exists($pluginTitle, $replacements)) {
+            if (!\array_key_exists($pluginTitle, $replacements)) {
                 continue;
             }
 

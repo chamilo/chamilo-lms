@@ -449,4 +449,23 @@ class CourseRepository extends ResourceRepository
             ->getResult()
         ;
     }
+
+    public function getUsersByCourse(Course $course): array
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb
+            ->select('DISTINCT user')
+            ->from(User::class, 'user')
+            ->innerJoin(CourseRelUser::class, 'courseRelUser', Join::WITH, 'courseRelUser.user = user.id')
+            ->where('courseRelUser.course = :course')
+            ->setParameter('course', $course)
+            ->orderBy('user.lastname', 'ASC')
+            ->addOrderBy('user.firstname', 'ASC')
+        ;
+
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }

@@ -392,7 +392,6 @@
     :style="{ width: '28rem' }"
     :title="t('Space available')"
   >
-    <p>This feature is in development, this is a mockup with placeholder data!</p>
     <BaseChart :data="usageData" />
   </BaseDialog>
 
@@ -947,10 +946,32 @@ function showSlideShowWithFirstImage() {
   document.querySelector('button.fancybox-button--play')?.click()
 }
 
-function showUsageDialog() {
-  usageData.value = {
-    datasets: [{ data: [83, 14, 5] }],
-    labels: ["Course", "Teacher", "Available space"],
+async function showUsageDialog() {
+  try {
+    const response = await axios.get(`/api/documents/${cid}/usage`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+
+    usageData.value = response.data
+  } catch (error) {
+    console.error("Error fetching storage usage:", error)
+
+    usageData.value = {
+      datasets: [{
+        data: [100],
+        backgroundColor: ['#CCCCCC', '#CCCCCC', '#CCCCCC'],
+        borderWidth: 2,
+        borderColor: '#E0E0E0'
+      }],
+      labels: [
+        t('Course storage (unavailable)'), 
+        t('Teacher storage (unavailable)'), 
+        t('Total storage (unavailable)')
+      ],
+    }
   }
   isFileUsageDialogVisible.value = true
 }

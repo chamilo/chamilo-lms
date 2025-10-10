@@ -1965,24 +1965,19 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-        // --- Añadir carpetas padre de los documentos seleccionados ---
-        // (para preservar estructura aunque el usuario no marque las carpetas)
         $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
         if ($docKey && !empty($keep[$docKey])) {
             $docBucket = $getBucket($orig, $docKey);
 
-            // Indexar carpetas por su ruta relativa a "document/"
             $foldersByRel = [];
             foreach ($docBucket as $fid => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
-
-                // Detectar folder (por file_type o por path con "/")
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
                 $isFolder = ('folder' === $ftRaw);
                 if (!$isFolder) {
                     $pTest = (string) ($e->path ?? '');
                     if ('' !== $pTest) {
-                        $isFolder = ('/' === substr($pTest, -1)); // ej: "document/folder-001/"
+                        $isFolder = ('/' === substr($pTest, -1));
                     }
                 }
                 if (!$isFolder) {
@@ -1994,7 +1989,6 @@ class CourseMaintenanceController extends AbstractController
                     continue;
                 }
 
-                // Relativo a "document/…"
                 $frel = '/'.ltrim(substr($p, 8), '/');
                 $frel = rtrim($frel, '/').'/';
                 if ('//' !== $frel) {
@@ -2002,12 +1996,10 @@ class CourseMaintenanceController extends AbstractController
                 }
             }
 
-            // Determinar carpetas necesarias para cada archivo ya seleccionado
             $needFolderIds = [];
             foreach ($keep[$docKey] as $id => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
 
-                // Si es carpeta ya está incluida
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
                 $isFolder = ('folder' === $ftRaw) || ('/' === substr((string) ($e->path ?? ''), -1));
                 if ($isFolder) {
@@ -2019,14 +2011,12 @@ class CourseMaintenanceController extends AbstractController
                     continue;
                 }
 
-                // "/subdir/…" relativo a "document/"
                 $rel = '/'.ltrim(substr($p, 8), '/');
                 $dir = rtrim(\dirname($rel), '/');
                 if ('' === $dir) {
                     continue;
-                } // archivo en raíz
+                }
 
-                // Subir por todos los ancestros y marcarlos si existen en el bucket
                 $acc = '';
                 foreach (array_filter(explode('/', $dir)) as $seg) {
                     $acc .= '/'.$seg;
@@ -2048,14 +2038,12 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-        // --- Links → categorías usadas ---
         $lnkKey = $this->firstExistingKey(
             $orig,
             ['link', 'Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']
         );
 
         if ($lnkKey && !empty($keep[$lnkKey])) {
-            // IDs de categorías realmente usadas por los links seleccionados
             $catIdsUsed = [];
             foreach ($keep[$lnkKey] as $lid => $lWrap) {
                 $L = (isset($lWrap->obj) && \is_object($lWrap->obj)) ? $lWrap->obj : $lWrap;
@@ -2065,7 +2053,6 @@ class CourseMaintenanceController extends AbstractController
                 }
             }
 
-            // Busca el bucket original tal cual venga en el backup
             $catKey = $this->firstExistingKey(
                 $orig,
                 ['link_category', 'Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']
@@ -2074,14 +2061,8 @@ class CourseMaintenanceController extends AbstractController
             if ($catKey && !empty($catIdsUsed)) {
                 $catBucket = $getBucket($orig, $catKey);
                 if (!empty($catBucket)) {
-                    // Subconjunto de categorías realmente referenciadas
                     $subset = array_intersect_key($catBucket, $catIdsUsed);
-
-                    // 1) Conserva el nombre ORIGINAL del bucket (sin renombrar)
                     $keep[$catKey] = $subset;
-
-                    // 2) Además, crea un espejo bajo 'link_category' por compatibilidad
-                    //    (esto evita problemas si el restorer espera esta clave)
                     $keep['link_category'] = $subset;
 
                     $this->logDebug('[filterSelection] pulled link categories for selected links', [
@@ -2237,7 +2218,7 @@ class CourseMaintenanceController extends AbstractController
      * Assumes that hydrateLpDependenciesFromSnapshot() has already been called, so
      * $course->resources contains LP + necessary dependencies (docs, links, quiz, etc.).
      *
-     * @param object $course Legacy Course with already hydrated resources
+     * @param object   $course        Legacy Course with already hydrated resources
      * @param string[] $selectedTypes Types marked by the UI (e.g., ['learnpath'])
      *
      * @return array<string, array<int|string, bool>>

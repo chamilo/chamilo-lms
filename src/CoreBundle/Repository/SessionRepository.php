@@ -86,6 +86,17 @@ class SessionRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function getSessionsByCourse(Course $course): array
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        return $qb
+            ->innerJoin('s.courses', 'src')
+            ->where($qb->expr()->eq('src.course', ':course'))
+            ->setParameter('course', $course)
+            ->getQuery()->getResult();
+    }
+
     /**
      * @return array<int, Session>
      *

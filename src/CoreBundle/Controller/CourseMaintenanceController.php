@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\{JsonResponse, Request};
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
+use const ARRAY_FILTER_USE_BOTH;
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -183,17 +184,25 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[importRestore] begin', ['node' => $node, 'backupId' => $backupId]);
 
         try {
+            // Read payload
             $payload = json_decode($req->getContent() ?: '{}', true);
             $importOption = (string) ($payload['importOption'] ?? 'full_backup');
             $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
+
+            /** @var array<string,array> $selectedResources */
             $selectedResources = (array) ($payload['resources'] ?? []);
+
+            /** @var string[] $selectedTypes */
+            $selectedTypes = array_map('strval', (array) ($payload['selectedTypes'] ?? []));
 
             $this->logDebug('[importRestore] input', [
                 'importOption' => $importOption,
                 'sameFileNameOption' => $sameFileNameOption,
-                'selectedTypes' => array_keys($selectedResources),
+                'selectedTypes' => $selectedTypes,
+                'hasResourcesMap' => !empty($selectedResources),
             ]);
 
+            // Resolve file path
             $backupDir = CourseArchiver::getBackupDir();
             $this->logDebug('[importRestore] backup dir', $backupDir);
             $path = rtrim($backupDir, '/').'/'.$backupId;
@@ -203,6 +212,7 @@ class CourseMaintenanceController extends AbstractController
                 'readable' => is_readable($path),
             ]);
 
+            // Load legacy Course
             /** @var Course $course */
             $course = CourseArchiver::readCourse($backupId, false);
 
@@ -212,10 +222,31 @@ class CourseMaintenanceController extends AbstractController
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
 
+            // Snapshots before filtering (debug)
             $this->logDebug('[importRestore] BEFORE filter keys', array_keys($course->resources));
             $this->logDebug('[importRestore] BEFORE forum counts', $this->snapshotForumCounts($course));
+            $this->logDebug('[importRestore] BEFORE resources snapshot', $this->snapshotResources($course));
 
+            $resourcesAll = (array) ($course->resources ?? []);
+            $this->logDebug('[importRestore] resources_all snapshot captured', ['keys' => array_keys($resourcesAll)]);
+
+            // Partial selection logic
             if ('select_items' === $importOption) {
+                $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll ?? []);
+
+                // If the UI sent only high-level types (e.g., ["learnpath"]) and no item map,
+                // build a resources selection map from those types.
+                if (empty($selectedResources) && !empty($selectedTypes)) {
+                    if (method_exists($this, 'buildSelectionFromTypes')) {
+                        $selectedResources = $this->buildSelectionFromTypes($course, $selectedTypes);
+                    }
+                    $this->logDebug('[importRestore] built selection from types', [
+                        'selectedTypes' => $selectedTypes,
+                        'built_keys' => array_keys($selectedResources),
+                    ]);
+                }
+
+                // Validate selection map
                 $hasAny = false;
                 foreach ($selectedResources as $t => $ids) {
                     if (\is_array($ids) && !empty($ids)) {
@@ -230,6 +261,9 @@ class CourseMaintenanceController extends AbstractController
                     return $this->json(['error' => 'No resources selected'], 400);
                 }
 
+                // Filter legacy course by selection (keeps only selected buckets/ids).
+                // Dependency pulling for LP/quizzes/surveys/etc. should be handled inside the Restorer,
+                // using the full snapshot we pass below (no dynamic properties on $course).
                 $course = $this->filterLegacyCourseBySelection($course, $selectedResources);
 
                 if (empty($course->resources) || 0 === \count((array) $course->resources)) {
@@ -239,25 +273,33 @@ class CourseMaintenanceController extends AbstractController
                 }
             }
 
+            // Snapshots after filtering (debug)
             $this->logDebug('[importRestore] AFTER filter keys', array_keys($course->resources));
             $this->logDebug('[importRestore] AFTER forum counts', $this->snapshotForumCounts($course));
             $this->logDebug('[importRestore] AFTER resources snapshot', $this->snapshotResources($course));
 
+            // Restore
             $restorer = new CourseRestorer($course);
             $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
+
+            if (method_exists($restorer, 'setResourcesAllSnapshot')) {
+                $restorer->setResourcesAllSnapshot($resourcesAll);
+                $this->logDebug('[importRestore] restorer snapshot forwarded', ['keys' => array_keys($resourcesAll)]);
+            }
             if (method_exists($restorer, 'setDebug')) {
                 $restorer->setDebug($this->debug);
-                $this->logDebug('[importRestore] restorer debug forwarded', ['debug' => $this->debug]);
             }
 
-            $this->logDebug('[importRestore] calling restore()');
             $restorer->restore();
+
             $this->logDebug('[importRestore] restore() finished', [
                 'dest_course_id' => $restorer->destination_course_info['real_id'] ?? null,
             ]);
 
+            // Cleanup temporary backup dir
             CourseArchiver::cleanBackupDir();
 
+            // Redirect info
             $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
             $sessionId = 0;
             $groupId = 0;
@@ -725,7 +767,6 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // TODO: Parse/restore CC 1.3. For now, just acknowledge.
-        // You can temporarily move the uploaded file into a working dir if useful.
         return $this->json([
             'ok' => true,
             'message' => 'CC 1.3 import endpoint is under construction. File received successfully.',
@@ -735,6 +776,131 @@ class CourseMaintenanceController extends AbstractController
     // --------------------------------------------------------------------------------
     // Helpers to build the Vue-ready resource tree
     // --------------------------------------------------------------------------------
+
+    /**
+     * Copies the dependencies (document, link, quiz, etc.) to $course->resources
+     * that reference the selected LearnPaths, taking the items from the full snapshot.
+     *
+     * It doesn't break anything if something is missing or comes in a different format: it's defensive.
+     */
+    private function hydrateLpDependenciesFromSnapshot(object $course, array $snapshot): void
+    {
+        if (empty($course->resources['learnpath']) || !\is_array($course->resources['learnpath'])) {
+            return;
+        }
+
+        $depTypes = [
+            'document', 'link', 'quiz', 'work', 'survey',
+            'Forum_Category', 'forum', 'thread', 'post',
+            'Exercise_Question', 'survey_question', 'Link_Category',
+        ];
+
+        $need = [];
+        $addNeed = function (string $type, $id) use (&$need): void {
+            $t = (string) $type;
+            $i = is_numeric($id) ? (int) $id : (string) $id;
+            if ('' === $i || 0 === $i) {
+                return;
+            }
+            $need[$t] ??= [];
+            $need[$t][$i] = true;
+        };
+
+        foreach ($course->resources['learnpath'] as $lpId => $lpWrap) {
+            $lp = \is_object($lpWrap) && isset($lpWrap->obj) ? $lpWrap->obj : $lpWrap;
+
+            if (\is_object($lpWrap) && !empty($lpWrap->linked_resources) && \is_array($lpWrap->linked_resources)) {
+                foreach ($lpWrap->linked_resources as $t => $ids) {
+                    if (!\is_array($ids)) {
+                        continue;
+                    }
+                    foreach ($ids as $rid) {
+                        $addNeed($t, $rid);
+                    }
+                }
+            }
+
+            $items = [];
+            if (\is_object($lp) && !empty($lp->items) && \is_array($lp->items)) {
+                $items = $lp->items;
+            } elseif (\is_object($lpWrap) && !empty($lpWrap->items) && \is_array($lpWrap->items)) {
+                $items = $lpWrap->items;
+            }
+
+            foreach ($items as $it) {
+                $ito = \is_object($it) ? $it : (object) $it;
+
+                if (!empty($ito->linked_resources) && \is_array($ito->linked_resources)) {
+                    foreach ($ito->linked_resources as $t => $ids) {
+                        if (!\is_array($ids)) {
+                            continue;
+                        }
+                        foreach ($ids as $rid) {
+                            $addNeed($t, $rid);
+                        }
+                    }
+                }
+
+                foreach (['document_id' => 'document', 'doc_id' => 'document', 'resource_id' => null, 'link_id' => 'link', 'quiz_id' => 'quiz', 'work_id' => 'work'] as $field => $typeGuess) {
+                    if (isset($ito->{$field}) && '' !== $ito->{$field} && null !== $ito->{$field}) {
+                        $rid = is_numeric($ito->{$field}) ? (int) $ito->{$field} : (string) $ito->{$field};
+                        $t = $typeGuess ?: (string) ($ito->type ?? '');
+                        if ('' !== $t) {
+                            $addNeed($t, $rid);
+                        }
+                    }
+                }
+
+                if (!empty($ito->type) && isset($ito->ref)) {
+                    $addNeed((string) $ito->type, $ito->ref);
+                }
+            }
+        }
+
+        if (empty($need)) {
+            $core = ['document', 'link', 'quiz', 'work', 'survey', 'Forum_Category', 'forum', 'thread', 'post', 'Exercise_Question', 'survey_question', 'Link_Category'];
+            foreach ($core as $k) {
+                if (!empty($snapshot[$k]) && \is_array($snapshot[$k])) {
+                    $course->resources[$k] ??= [];
+                    if (0 === \count($course->resources[$k])) {
+                        $course->resources[$k] = $snapshot[$k];
+                    }
+                }
+            }
+            $this->logDebug('[LP-deps] fallback filled from snapshot', [
+                'bags' => array_keys(array_filter($course->resources, fn ($v, $k) => \in_array($k, $core, true) && \is_array($v) && \count($v) > 0, ARRAY_FILTER_USE_BOTH)),
+            ]);
+
+            return;
+        }
+
+        foreach ($need as $type => $idMap) {
+            if (empty($snapshot[$type]) || !\is_array($snapshot[$type])) {
+                continue;
+            }
+
+            $course->resources[$type] ??= [];
+
+            foreach (array_keys($idMap) as $rid) {
+                $src = $snapshot[$type][$rid]
+                    ?? $snapshot[$type][(string) $rid]
+                    ?? null;
+
+                if (!$src) {
+                    continue;
+                }
+
+                if (!isset($course->resources[$type][$rid]) && !isset($course->resources[$type][(string) $rid])) {
+                    $course->resources[$type][$rid] = $src;
+                }
+            }
+        }
+
+        $this->logDebug('[LP-deps] hydrated', [
+            'types' => array_keys($need),
+            'counts' => array_map(fn ($t) => isset($course->resources[$t]) && \is_array($course->resources[$t]) ? \count($course->resources[$t]) : 0, array_keys($need)),
+        ]);
+    }
 
     /**
      * Build a Vue-friendly tree from legacy Course.
@@ -777,6 +943,21 @@ class CourseMaintenanceController extends AbstractController
             $skipTypes['forum_post'] = true;
             $skipTypes['thread'] = true;
             $skipTypes['post'] = true;
+        }
+
+        // Links block (Category → Link)
+        $hasLinkData =
+            (!empty($resources['link']) || !empty($resources['Link']))
+            || (!empty($resources['link_category']) || !empty($resources['Link_Category']));
+
+        if ($hasLinkData) {
+            $tree[] = $this->buildLinkTreeForVue(
+                $course,
+                $legacyTitles['link'] ?? ($fallbackTitles['link'] ?? 'Links')
+            );
+            // Prevent generic loop from adding separate "link" and "link_category" groups
+            $skipTypes['link'] = true;
+            $skipTypes['link_category'] = true;
         }
 
         // Other tools
@@ -823,6 +1004,21 @@ class CourseMaintenanceController extends AbstractController
                 }
 
                 $label = $this->resolveItemLabel($typeKey, $obj, \is_int($idKey) ? $idKey : 0);
+                if ('document' === $typeKey) {
+                    $e = $this->objectEntity($obj);
+                    $rawPath = (string) ($e->path ?? '');
+                    if ('' !== $rawPath) {
+                        $rel = ltrim($rawPath, '/');
+                        $rel = preg_replace('~^document/?~', '', $rel);
+                        $filetype = (string) ($e->filetype ?? $e->file_type ?? '');
+                        if ('folder' === $filetype) {
+                            $rel = rtrim($rel, '/').'/';
+                        }
+                        if ('' !== $rel) {
+                            $label = $rel;
+                        }
+                    }
+                }
                 if ('tool_intro' === $typeKey && '#0' === $label && \is_string($idKey)) {
                     $label = $idKey;
                 }
@@ -886,6 +1082,7 @@ class CourseMaintenanceController extends AbstractController
 
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
 
+        // Buckets (accept legacy casings / aliases)
         $catRaw = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
         $forumRaw = $res['forum'] ?? $res['Forum'] ?? [];
         $topicRaw = $res['forum_topic'] ?? $res['ForumTopic'] ?? ($res['thread'] ?? []);
@@ -898,11 +1095,47 @@ class CourseMaintenanceController extends AbstractController
             'posts' => \is_array($postRaw) ? \count($postRaw) : 0,
         ]);
 
-        $cats = [];
-        $forums = [];
-        $topics = [];
-        $postCountByTopic = [];
+        // Classifiers (defensive)
+        $isForum = function (object $o): bool {
+            $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
+            if (isset($e->forum_title) && \is_string($e->forum_title)) {
+                return true;
+            }
+            if (isset($e->default_view) || isset($e->allow_anonymous)) {
+                return true;
+            }
+            if ((isset($e->forum_category) || isset($e->forum_category_id) || isset($e->category_id)) && !isset($e->forum_id)) {
+                return true;
+            }
 
+            return false;
+        };
+        $isTopic = function (object $o): bool {
+            $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
+            if (isset($e->forum_id) && (isset($e->thread_title) || isset($e->thread_date) || isset($e->poster_name))) {
+                return true;
+            }
+            if (isset($e->forum_id) && !isset($e->forum_title)) {
+                return true;
+            }
+
+            return false;
+        };
+        $getForumCategoryId = function (object $forum): int {
+            $e = (isset($forum->obj) && \is_object($forum->obj)) ? $forum->obj : $forum;
+            $cid = (int) ($e->forum_category ?? 0);
+            if ($cid <= 0) {
+                $cid = (int) ($e->forum_category_id ?? 0);
+            }
+            if ($cid <= 0) {
+                $cid = (int) ($e->category_id ?? 0);
+            }
+
+            return $cid;
+        };
+
+        // Categories
+        $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
             if ($id <= 0 || !\is_object($obj)) {
@@ -917,35 +1150,6 @@ class CourseMaintenanceController extends AbstractController
                 'children' => [],
             ];
         }
-
-        foreach ($forumRaw as $id => $obj) {
-            $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
-            $forums[$id] = $this->objectEntity($obj);
-        }
-
-        foreach ($topicRaw as $id => $obj) {
-            $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
-            $topics[$id] = $this->objectEntity($obj);
-        }
-
-        foreach ($postRaw as $id => $obj) {
-            $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
-            $e = $this->objectEntity($obj);
-            $tid = (int) ($e->thread_id ?? 0);
-            if ($tid > 0) {
-                $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1;
-            }
-        }
-
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
@@ -958,12 +1162,62 @@ class CourseMaintenanceController extends AbstractController
             ];
         }
 
+        // Forums
+        $forums = [];
+        foreach ($forumRaw as $id => $obj) {
+            $id = (int) $id;
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
+            if (!$isForum($obj)) {
+                $this->logDebug('[buildForumTreeForVue] skipped non-forum in forum bag', ['id' => $id]);
+
+                continue;
+            }
+            $forums[$id] = $this->objectEntity($obj);
+        }
+
+        // Topics + post counts
+        $topics = [];
+        $postCountByTopic = [];
+        foreach ($topicRaw as $id => $obj) {
+            $id = (int) $id;
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
+            if ($isForum($obj) && !$isTopic($obj)) {
+                $this->logDebug('[buildForumTreeForVue] WARNING: forum object found in topic bag; skipping', ['id' => $id]);
+
+                continue;
+            }
+            if (!$isTopic($obj)) {
+                $this->logDebug('[buildForumTreeForVue] skipped non-topic in topic bag', ['id' => $id]);
+
+                continue;
+            }
+            $topics[$id] = $this->objectEntity($obj);
+        }
+        foreach ($postRaw as $id => $obj) {
+            $id = (int) $id;
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
+            $e = $this->objectEntity($obj);
+            $tid = (int) ($e->thread_id ?? 0);
+            if ($tid > 0) {
+                $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1;
+            }
+        }
+
+        // Forums → attach topics
+        // Forums → attach topics
         foreach ($forums as $fid => $f) {
-            $catId = (int) ($f->forum_category ?? 0);
+            $catId = $getForumCategoryId($f);
             if (!isset($cats[$catId])) {
                 $catId = $uncatKey;
             }
 
+            // Build the forum node first (children will be appended below)
             $forumNode = [
                 'id' => $fid,
                 'type' => 'forum',
@@ -971,6 +1225,9 @@ class CourseMaintenanceController extends AbstractController
                 'extra' => $this->buildExtra('forum', $f) ?: new stdClass(),
                 'selectable' => true,
                 'children' => [],
+                // UI hints (do not affect structure)
+                'has_children' => false,  // will become true if a topic is attached
+                'ui_depth' => 2,      // category=1, forum=2, topic=3 (purely informational)
             ];
 
             foreach ($topics as $tid => $t) {
@@ -1003,16 +1260,20 @@ class CourseMaintenanceController extends AbstractController
                     'label' => $topicLabel,
                     'extra' => new stdClass(),
                     'selectable' => true,
+                    'ui_depth' => 3,
                 ];
             }
 
+            // sort topics (if any) and mark has_children for UI
             if ($forumNode['children']) {
-                usort($forumNode['children'], static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
+                usort($forumNode['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+                $forumNode['has_children'] = true; // <- tell UI to show a reserved toggle space
             }
 
             $cats[$catId]['children'][] = $forumNode;
         }
 
+        // Drop empty virtual category and sort forums per category
         $catNodes = array_values(array_filter($cats, static function ($c) {
             if (!empty($c['_virtual']) && empty($c['children'])) {
                 return false;
@@ -1021,13 +1282,52 @@ class CourseMaintenanceController extends AbstractController
             return true;
         }));
 
-        foreach ($catNodes as &$c) {
-            if (!empty($c['children'])) {
-                usort($c['children'], static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
+        // --------- FLATTEN STRAY FORUMS (defensive) ----------
+        foreach ($catNodes as &$cat) {
+            if (empty($cat['children'])) {
+                continue;
             }
+
+            $lift = [];           // forums to lift to category level
+            foreach ($cat['children'] as $idx => &$forumNode) {
+                if (($forumNode['type'] ?? '') !== 'forum') {
+                    continue;
+                }
+                if (empty($forumNode['children'])) {
+                    continue;
+                }
+
+                // scan children and lift any forum wrongly nested inside
+                $keepChildren = [];
+                foreach ($forumNode['children'] as $child) {
+                    if (($child['type'] ?? '') === 'forum') {
+                        // move this stray forum up to category level
+                        $lift[] = $child;
+                        $this->logDebug('[buildForumTreeForVue] flatten: lifted stray forum from inside another forum', [
+                            'parent_forum_id' => $forumNode['id'] ?? null,
+                            'lifted_forum_id' => $child['id'] ?? null,
+                            'cat_id' => $cat['id'] ?? null,
+                        ]);
+                    } else {
+                        $keepChildren[] = $child; // keep real topics
+                    }
+                }
+                $forumNode['children'] = $keepChildren;
+            }
+            unset($forumNode);
+
+            // Append lifted forums as siblings (top-level under the category)
+            if ($lift) {
+                foreach ($lift as $n) {
+                    $cat['children'][] = $n;
+                }
+            }
+
+            // sort forums at category level
+            usort($cat['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
         }
-        unset($c);
-        usort($catNodes, static fn ($a, $b) => strcasecmp($a['label'], $b['label']));
+        unset($cat);
+        // --------- /FLATTEN STRAY FORUMS ----------
 
         $this->logDebug('[buildForumTreeForVue] end', ['categories' => \count($catNodes)]);
 
@@ -1095,6 +1395,7 @@ class CourseMaintenanceController extends AbstractController
             'session_course' => true,
             'scorm' => true,
             'asset' => true,
+            'link_category' => true,
         ];
     }
 
@@ -1169,13 +1470,26 @@ class CourseMaintenanceController extends AbstractController
 
         switch ($type) {
             case 'document':
+                // 1) ruta cruda tal como viene del backup/DB
+                $raw = (string) ($entity->path ?? $obj->path ?? '');
+                if ('' !== $raw) {
+                    // 2) normalizar a ruta relativa y quitar prefijo "document/" si viniera en el path del backup
+                    $rel = ltrim($raw, '/');
+                    $rel = preg_replace('~^document/?~', '', $rel);
+
+                    // 3) carpeta ⇒ que termine con "/"
+                    $fileType = (string) ($entity->file_type ?? $obj->file_type ?? '');
+                    if ('folder' === $fileType) {
+                        $rel = rtrim($rel, '/').'/';
+                    }
+
+                    // 4) si la ruta quedó vacía, usa basename como último recurso
+                    return '' !== $rel ? $rel : basename($raw);
+                }
+
+                // fallback: título o nombre de archivo
                 if (!empty($obj->title)) {
                     return (string) $obj->title;
-                }
-                if (!empty($obj->path)) {
-                    $base = basename((string) $obj->path);
-
-                    return '' !== $base ? $base : (string) $obj->path;
                 }
 
                 break;
@@ -1651,6 +1965,138 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
+        // --- Añadir carpetas padre de los documentos seleccionados ---
+        // (para preservar estructura aunque el usuario no marque las carpetas)
+        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
+        if ($docKey && !empty($keep[$docKey])) {
+            $docBucket = $getBucket($orig, $docKey);
+
+            // Indexar carpetas por su ruta relativa a "document/"
+            $foldersByRel = [];
+            foreach ($docBucket as $fid => $res) {
+                $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
+
+                // Detectar folder (por file_type o por path con "/")
+                $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
+                $isFolder = ('folder' === $ftRaw);
+                if (!$isFolder) {
+                    $pTest = (string) ($e->path ?? '');
+                    if ('' !== $pTest) {
+                        $isFolder = ('/' === substr($pTest, -1)); // ej: "document/folder-001/"
+                    }
+                }
+                if (!$isFolder) {
+                    continue;
+                }
+
+                $p = (string) ($e->path ?? '');
+                if ('' === $p) {
+                    continue;
+                }
+
+                // Relativo a "document/…"
+                $frel = '/'.ltrim(substr($p, 8), '/');
+                $frel = rtrim($frel, '/').'/';
+                if ('//' !== $frel) {
+                    $foldersByRel[$frel] = $fid;
+                }
+            }
+
+            // Determinar carpetas necesarias para cada archivo ya seleccionado
+            $needFolderIds = [];
+            foreach ($keep[$docKey] as $id => $res) {
+                $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
+
+                // Si es carpeta ya está incluida
+                $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
+                $isFolder = ('folder' === $ftRaw) || ('/' === substr((string) ($e->path ?? ''), -1));
+                if ($isFolder) {
+                    continue;
+                }
+
+                $p = (string) ($e->path ?? '');
+                if ('' === $p) {
+                    continue;
+                }
+
+                // "/subdir/…" relativo a "document/"
+                $rel = '/'.ltrim(substr($p, 8), '/');
+                $dir = rtrim(\dirname($rel), '/');
+                if ('' === $dir) {
+                    continue;
+                } // archivo en raíz
+
+                // Subir por todos los ancestros y marcarlos si existen en el bucket
+                $acc = '';
+                foreach (array_filter(explode('/', $dir)) as $seg) {
+                    $acc .= '/'.$seg;
+                    $accKey = rtrim($acc, '/').'/';
+                    if (isset($foldersByRel[$accKey])) {
+                        $needFolderIds[$foldersByRel[$accKey]] = true;
+                    }
+                }
+            }
+
+            if (!empty($needFolderIds)) {
+                $added = array_intersect_key($docBucket, $needFolderIds);
+                $keep[$docKey] += $added;
+
+                $this->logDebug('[filterSelection] added parent folders for selected documents', [
+                    'doc_key' => $docKey,
+                    'added_folders' => \count($added),
+                ]);
+            }
+        }
+
+        // --- Links → categorías usadas ---
+        $lnkKey = $this->firstExistingKey(
+            $orig,
+            ['link', 'Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']
+        );
+
+        if ($lnkKey && !empty($keep[$lnkKey])) {
+            // IDs de categorías realmente usadas por los links seleccionados
+            $catIdsUsed = [];
+            foreach ($keep[$lnkKey] as $lid => $lWrap) {
+                $L = (isset($lWrap->obj) && \is_object($lWrap->obj)) ? $lWrap->obj : $lWrap;
+                $cid = (int) ($L->category_id ?? 0);
+                if ($cid > 0) {
+                    $catIdsUsed[(string) $cid] = true;
+                }
+            }
+
+            // Busca el bucket original tal cual venga en el backup
+            $catKey = $this->firstExistingKey(
+                $orig,
+                ['link_category', 'Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']
+            );
+
+            if ($catKey && !empty($catIdsUsed)) {
+                $catBucket = $getBucket($orig, $catKey);
+                if (!empty($catBucket)) {
+                    // Subconjunto de categorías realmente referenciadas
+                    $subset = array_intersect_key($catBucket, $catIdsUsed);
+
+                    // 1) Conserva el nombre ORIGINAL del bucket (sin renombrar)
+                    $keep[$catKey] = $subset;
+
+                    // 2) Además, crea un espejo bajo 'link_category' por compatibilidad
+                    //    (esto evita problemas si el restorer espera esta clave)
+                    $keep['link_category'] = $subset;
+
+                    $this->logDebug('[filterSelection] pulled link categories for selected links', [
+                        'link_key' => $lnkKey,
+                        'category_key' => $catKey,
+                        'links_kept' => \count($keep[$lnkKey]),
+                        'cats_kept' => \count($subset),
+                        'mirrored_to' => 'link_category',
+                    ]);
+                }
+            } else {
+                $this->logDebug('[filterSelection] link category bucket not found in backup');
+            }
+        }
+
         $course->resources = array_filter($keep);
         $this->logDebug('[filterSelection] non-forum flow end', [
             'kept_types' => array_keys($course->resources),
@@ -1783,6 +2229,170 @@ class CourseMaintenanceController extends AbstractController
             'forum' => $get('forum', 'Forum'),
             'thread' => $get('thread', 'forum_topic'),
             'post' => $get('post', 'forum_post'),
+        ];
+    }
+
+    /**
+     * Builds the selection map [type => [id => true]] from high-level types.
+     * Assumes that hydrateLpDependenciesFromSnapshot() has already been called, so
+     * $course->resources contains LP + necessary dependencies (docs, links, quiz, etc.).
+     *
+     * @param object $course Legacy Course with already hydrated resources
+     * @param string[] $selectedTypes Types marked by the UI (e.g., ['learnpath'])
+     *
+     * @return array<string, array<int|string, bool>>
+     */
+    private function buildSelectionFromTypes(object $course, array $selectedTypes): array
+    {
+        $selectedTypes = array_map(
+            fn ($t) => $this->normalizeTypeKey((string) $t),
+            $selectedTypes
+        );
+
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
+
+        $coreDeps = [
+            'document', 'link', 'quiz', 'work', 'survey',
+            'Forum_Category', 'forum', 'thread', 'post',
+            'exercise_question', 'survey_question', 'link_category',
+        ];
+
+        $presentKeys = array_fill_keys(array_map(
+            fn ($k) => $this->normalizeTypeKey((string) $k),
+            array_keys($res)
+        ), true);
+
+        $out = [];
+
+        $addBucket = function (string $typeKey) use (&$out, $res): void {
+            if (!isset($res[$typeKey]) || !\is_array($res[$typeKey]) || empty($res[$typeKey])) {
+                return;
+            }
+            $ids = [];
+            foreach ($res[$typeKey] as $id => $_) {
+                $ids[(string) $id] = true;
+            }
+            if ($ids) {
+                $out[$typeKey] = $ids;
+            }
+        };
+
+        foreach ($selectedTypes as $t) {
+            $addBucket($t);
+
+            if ('learnpath' === $t) {
+                foreach ($coreDeps as $depRaw) {
+                    $dep = $this->normalizeTypeKey($depRaw);
+                    if (isset($presentKeys[$dep])) {
+                        $addBucket($dep);
+                    }
+                }
+            }
+        }
+
+        $this->logDebug('[buildSelectionFromTypes] built', [
+            'selectedTypes' => $selectedTypes,
+            'kept_types' => array_keys($out),
+        ]);
+
+        return $out;
+    }
+
+    /**
+     * Build link tree (Category → Link). Categories are not selectable; links are.
+     */
+    private function buildLinkTreeForVue(object $course, string $groupTitle): array
+    {
+        $this->logDebug('[buildLinkTreeForVue] start');
+
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
+
+        // Buckets from backup (accept both legacy casings)
+        $catRaw = $res['link_category'] ?? $res['Link_Category'] ?? [];
+        $linkRaw = $res['link'] ?? $res['Link'] ?? [];
+
+        $this->logDebug('[buildLinkTreeForVue] raw counts', [
+            'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
+            'links' => \is_array($linkRaw) ? \count($linkRaw) : 0,
+        ]);
+
+        // Map of categories
+        $cats = [];
+        foreach ($catRaw as $id => $obj) {
+            $id = (int) $id;
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
+            $e = $this->objectEntity($obj);
+            $label = $this->resolveItemLabel('link_category', $e, $id);
+
+            $cats[$id] = [
+                'id' => $id,
+                'type' => 'link_category',
+                'label' => '' !== $label ? $label : ('Category #'.$id),
+                'selectable' => false,
+                'children' => [],
+            ];
+        }
+
+        // Virtual "Uncategorized" bucket
+        $uncatKey = -9999;
+        if (!isset($cats[$uncatKey])) {
+            $cats[$uncatKey] = [
+                'id' => $uncatKey,
+                'type' => 'link_category',
+                'label' => 'Uncategorized',
+                'selectable' => false,
+                'children' => [],
+                '_virtual' => true,
+            ];
+        }
+
+        // Assign links to categories
+        foreach ($linkRaw as $id => $obj) {
+            $id = (int) $id;
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
+            $e = $this->objectEntity($obj);
+
+            $cid = (int) ($e->category_id ?? 0);
+            if (!isset($cats[$cid])) {
+                $cid = $uncatKey;
+            }
+
+            $cats[$cid]['children'][] = [
+                'id' => $id,
+                'type' => 'link',
+                'label' => $this->resolveItemLabel('link', $e, $id),
+                'extra' => $this->buildExtra('link', $e) ?: new stdClass(),
+                'selectable' => true,
+            ];
+        }
+
+        // Drop empty virtual category and sort
+        $catNodes = array_values(array_filter($cats, static function ($c) {
+            if (!empty($c['_virtual']) && empty($c['children'])) {
+                return false;
+            }
+
+            return true;
+        }));
+
+        foreach ($catNodes as &$c) {
+            if (!empty($c['children'])) {
+                usort($c['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+            }
+        }
+        unset($c);
+        usort($catNodes, static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+
+        $this->logDebug('[buildLinkTreeForVue] end', ['categories' => \count($catNodes)]);
+
+        return [
+            'type' => 'link',
+            'title' => $groupTitle,
+            'items' => $catNodes,
         ];
     }
 }

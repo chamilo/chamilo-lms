@@ -1,200 +1,211 @@
 {% autoescape false %}
-
-<script>
-    function datetime_by_attendance(attendance_id, thematic_advance_id) {
+    {# ---------- JS helpers from legacy ---------- #}
+    <script>
+      function datetime_by_attendance(attendance_id, thematic_advance_id) {
         $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {},
-            type: "GET",
-            url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=get_datetime_by_attendance' }}",
-            data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
-            success: function(data) {
-                $("#div_datetime_attendance").html(data);
-                if (thematic_advance_id == 0) {
-                    $("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
-                }
+          contentType: "application/x-www-form-urlencoded",
+          type: "GET",
+          url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=get_datetime_by_attendance' }}",
+          data: "attendance_id=" + attendance_id + "&thematic_advance_id=" + thematic_advance_id,
+          success: function (data) {
+            $("#div_datetime_attendance").html(data);
+            if (thematic_advance_id == 0) {
+              $("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
             }
+          },
         });
-    }
+      }
 
-    function updateDoneThematicAdvance(advanceId) {
+      function updateDoneThematicAdvance(advanceId) {
         $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(myObject) {},
-            type: "GET",
-            url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=update_done_thematic_advance' }}",
-            data: "thematic_advance_id="+advanceId,
-            success: function(data) {
-                $("#div_result").html(data);
-            }
+          contentType: "application/x-www-form-urlencoded",
+          type: "GET",
+          url: "/main/inc/ajax/thematic.ajax.php?{{ course_url_params ~ '&a=update_done_thematic_advance' }}",
+          data: "thematic_advance_id=" + advanceId,
+          success: function (data) {
+            $("#div_result").html(data);
+          },
         });
 
         // clean all radios
-        for (var i=0; i< $(".done_thematic").length;i++) {
-            var id_radio_thematic = $(".done_thematic").get(i).id;
-            $("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
+        for (var i = 0; i < $(".done_thematic").length; i++) {
+          var id_radio_thematic = $(".done_thematic").get(i).id;
+          $("#td_" + id_radio_thematic).css({ backgroundColor: "#FFF" });
         }
 
         // set background to previous radios
-        for (var i=0; i < $(".done_thematic").length;i++) {
-            var id_radio_thematic = $(".done_thematic").get(i).id;
-            $("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
-            if ($(".done_thematic").get(i).value == advanceId) {
-                break;
-            }
+        for (var i = 0; i < $(".done_thematic").length; i++) {
+          var id_radio_thematic = $(".done_thematic").get(i).id;
+          $("#td_" + id_radio_thematic).css({ backgroundColor: "#E5EDF9" });
+          if ($(".done_thematic").get(i).value == advanceId) {
+            break;
+          }
         }
-    }
-</script>
+      }
+    </script>
+    {% if data is not empty %}
+        {% set tutor = is_granted('ROLE_TEACHER') %}
 
-{% if data is not empty %}
-{% set tutor = is_granted('ROLE_TEACHER') %}
-<div id="course-progress" class="thematic">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="bar-progress">
-                <div class="float-right">
-                    <div class="score-progress">
-                        <h3>{{ 'Progress' | trans }}: <span id="div_result">{{ score_progress }}</span> %</h3>
-                    </div>
+        <div id="course-progress" class="w-full px-4 sm:px-6 lg:px-8">
+            {# Header: progress #}
+            <div class="mb-6 flex items-center justify-between">
+                <h2 class="text-xl font-semibold text-gray-90">{{ 'Progression du cours'|trans }}</h2>
+                <div class="inline-flex items-center gap-2">
+                    <span class="text-sm text-gray-50">{{ 'Progress'|trans }}:</span>
+                    <span class="rounded-full border border-gray-25 bg-support-2 px-2.5 py-1 text-sm font-semibold text-gray-90">
+          <span id="div_result">{{ score_progress }}</span>%
+        </span>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table width="100%" class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" style="width: 35%">{{ 'Thematic' | trans }}</th>
-                            <th scope="col" style="width: 40%">{{ 'Thematic plan' | trans }}</th>
-                            <th scope="col" style="width: 25%">{{ 'Thematic advance' | trans }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in data %}
-                        <tr>
-                            <td id="id-thematic-{{ item.iid }}">
-                                {% if session_star is not defined %}
-                                    <h5>{{ item.title }}</h5>
-                                {% else %}
-                                    <h5>{{ item.title }} {{ session_star }}</h5>
-                                {% endif %}
-                                {{ item.content }}
-                                <div class="btn-group btn-group-sm">
-                                    {{ extra[item.iid]['toolbar'] }}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="thematic_plan_{{ item.iid }}">
-                                    {% if tutor %}
-                                        <div class="btn-group">
-                                            <a title="{{ 'Edit thematic section' | trans }}"
-                                               href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.iid }}&width=700&height=500"
-                                               class="btn btn--secondary-outline btn-sm">
-                                                {{ 'ActionIcon::EDIT' | mdi_icon }}
-                                            </a>
-                                        </div>
-                                    {% endif %}
 
-                                    {% if item.plans is empty %}
-                                        <div class="alert-thematic">
-                                            <div class="alert alert-info" role="alert">{{ 'There is no thematic plan for now' | trans }}</div>
-                                        </div>
-                                    {% else %}
-                                        {% for plan in item.plans %}
-                                            <h5>{{ plan.title }}</h5>
-                                            {{ plan.description }}
-                                        {% endfor %}
+            {# Loop Thematics #}
+            <div class="space-y-8">
+                {% for item in data %}
+                    <section class="rounded-2xl border border-gray-25 bg-white p-6 shadow-sm">
+                        <div class="mb-5 flex items-start justify-between gap-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold leading-tight text-gray-90">
+                                    {{ 'Thematic'|trans }} {{ '%03d'|format(loop.index) }}
+                                </h3>
+                                <p class="mt-1 text-xl font-bold text-gray-90">{{ item.title }}</p>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-2">
+                                {{ extra[item.iid]['toolbar'] }}
+                            </div>
+                        </div>
+
+                        <div class="mt-2 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                            <div class="min-w-0">
+                                <h4 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-50">
+                                    {{ 'Thematic'|trans }}
+                                </h4>
+                                <article class="prose max-w-none text-gray-90">
+                                    {{ item.content }}
+                                </article>
+                            </div>
+
+                            <div class="min-w-0">
+                                <div class="mb-3 flex items-center justify-between">
+                                    <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'Thematic plan'|trans }}
+                                    </h4>
+                                    {% if tutor %}
+                                        <a
+                                                href="index.php?{{ course_url_params }}&origin=thematic_details&action=thematic_plan_list&thematic_id={{ item.iid }}&width=700&height=500"
+                                                title="{{ 'Edit thematic section' | trans }}"
+                                        >
+                                            {{ 'ActionIcon::EDIT' | mdi_icon }}
+                                        </a>
                                     {% endif %}
                                 </div>
-                            </td>
-                            <td>
-                                <div class="thematic-advance">
-                                {% if tutor %}
-                                    <div class="btn-group">
-                                        <a title="{{ 'New thematic advance' | trans }}"
-                                           href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.iid }}"
-                                           class="btn btn--secondary-outline btn-sm">
+
+                                {% if item.plans is empty %}
+                                    <div class="rounded-lg border border-gray-25 bg-support-2 p-4 text-sm text-gray-90">
+                                        {{ 'There is no thematic plan for now' | trans }}
+                                    </div>
+                                {% else %}
+                                    <div class="space-y-4">
+                                        {% for plan in item.plans %}
+                                            <article class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">
+                                                <h5 class="mb-2 text-base font-semibold text-gray-90">{{ plan.title }}</h5>
+                                                <div class="prose max-w-none text-gray-90">
+                                                    {{ plan.description }}
+                                                </div>
+                                            </article>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="min-w-0">
+                                <div class="mb-3 flex items-center justify-between">
+                                    <h4 class="text-sm font-semibold uppercase tracking-wide text-gray-50">
+                                        {{ 'Thematic advance'|trans }}
+                                    </h4>
+                                    {% if tutor %}
+                                        <a
+                                                href="index.php?{{ course_url_params }}&action=thematic_advance_add&thematic_id={{ item.iid }}"
+                                                title="{{ 'New thematic advance' | trans }}"
+                                        >
                                             {{ 'ActionIcon::ADD' | mdi_icon }}
                                         </a>
-                                    </div>
-                                {% endif %}
-                                <table width="100%" class="table">
-                                {% if item.advances is not empty %}
-                                    {% for advance in item.advances %}
-                                        <tr>
-                                            <td style="width: 90%"
-                                                class="thematic_advance_content"
-                                                id="thematic_advance_content_id_{{ advance.iid }}">
-                                                <div id="thematic_advance_{{ advance.iid }}">
-                                                <strong>{{ advance.startDate | format_date }}</strong>
-                                                {{ advance.content }}
-                                                </div>
-                                                {% if tutor %}
-                                                    <div class="toolbar-actions">
-                                                        <div id="thematic_advance_tools_{{ advance.iid }}" class="thematic_advance_actions">
-                                                            <div class="btn-group btn-group-sm">
-                                                                <a class="btn btn--plain btn-sm"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
-                                                                   title="{{ 'Edit' |trans }}">
-                                                                    {{ 'ActionIcon::EDIT' | mdi_icon }}
-                                                                </a>
-                                                                <a class="btn btn--plain btn-sm"
-                                                                   onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
-                                                                   href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
-                                                                   title="{{ 'Delete' |trans }}">
-                                                                    {{ 'ActionIcon::DELETE' | mdi_icon }}
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                {% endif %}
-                                                </div>
-                                            </td>
-                                            {% if advance.doneAdvance == 1 %}
-                                                {% set color = "background-color:#E5EDF9;" %}
-                                            {% else %}
-                                                {% set color = "background-color:#FFFFFF;" %}
-                                            {% endif %}
-                                            {% if tutor %}
-                                                <td
-                                                    style="width: 10%; {{ color }}"
-                                                    id="td_done_thematic_{{ advance.iid }}">
-                                                    {% set check = ""  %}
-                                                    {% if extra[item.iid]['last_done'] == advance.iid %}
-                                                        {% set check = "checked"  %}
-                                                    {% endif %}
-                                                    <input
-                                                        type="radio"
-                                                        class="done_thematic"
-                                                       id="done_thematic_{{ advance.iid }}"
-                                                       name="done_thematic"
-                                                       value="{{ advance.iid }}" {{ check }}
-                                                       onclick="updateDoneThematicAdvance(this.value);"
-                                                    />
-                                            {% else %}
-                                                </td>
-                                            {% endif %}
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <div class="alert alert-info" role="alert">
+                                    {% endif %}
+                                </div>
+
+                                {% if item.advances is empty %}
+                                    <div class="rounded-lg border border-gray-25 bg-support-2 p-4 text-sm text-gray-90">
                                         {{ 'There is no thematic advance' | trans }}
                                     </div>
+                                {% else %}
+                                    <ol class="space-y-3">
+                                        {% for advance in item.advances %}
+                                            <li class="rounded-lg border border-gray-25 bg-white p-4 shadow-sm">
+                                                <div class="thematic_advance_content" id="thematic_advance_content_id_{{ advance.iid }}">
+                                                    <p class="text-xs font-medium uppercase tracking-wide text-gray-50">
+                                                        <strong>{{ advance.startDate | format_date }}</strong>
+                                                    </p>
+                                                    <div class="prose mt-1 max-w-none text-gray-90" id="thematic_advance_{{ advance.iid }}">
+                                                        {{ advance.content }}
+                                                    </div>
+
+                                                    {% if tutor %}
+                                                        <div class="mt-3">
+                                                            <div id="thematic_advance_tools_{{ advance.iid }}" class="thematic_advance_actions hidden">
+                                                                <div class="flex items-center gap-2">
+                                                                    <a
+                                                                            href="index.php?{{ course_url_params }}&action=thematic_advance_edit&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
+                                                                            title="{{ 'Edit' |trans }}"
+                                                                    >
+                                                                        {{ 'ActionIcon::EDIT' | mdi_icon }}
+                                                                    </a>
+                                                                    <a
+                                                                            onclick="javascript:if(!confirm('{{ 'Are you sure to delete' | trans }}')) return false;"
+                                                                            href="index.php?{{ course_url_params }}&action=thematic_advance_delete&thematic_id={{ item.iid }}&thematic_advance_id={{ advance.iid }}"
+                                                                            title="{{ 'Delete' |trans }}"
+                                                                    >
+                                                                        {{ 'ActionIcon::DELETE' | mdi_icon }}
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+
+                                                {% set bg = (advance.doneAdvance == 1) ? 'background-color:#E5EDF9;' : 'background-color:#FFFFFF;' %}
+                                                <div class="mt-3 flex items-center justify-end">
+                                                    <div id="td_done_thematic_{{ advance.iid }}" style="{{ bg }}" class="rounded-md px-2 py-1">
+                                                        {% set check = (extra[item.iid]['last_done'] == advance.iid) ? 'checked' : '' %}
+                                                        <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-gray-90">
+                                                            <input
+                                                                    type="radio"
+                                                                    class="done_thematic h-4 w-4 rounded-full border-gray-25 text-primary focus:ring-primary"
+                                                                    id="done_thematic_{{ advance.iid }}"
+                                                                    name="done_thematic"
+                                                                    value="{{ advance.iid }}" {{ check }}
+                                                                    onclick="updateDoneThematicAdvance(this.value);"
+                                                            />
+                                                            <span>{{ 'Done'|trans }}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
                                 {% endif %}
-                                </table>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                    </section>
+                {% endfor %}
             </div>
         </div>
-    </div>
-</div>
-{% else %}
-    {% if is_allowed_to_edit %}
-        {{ no_data }}
     {% else %}
-        <div class="alert alert-info" role="alert">{{ 'There is no thematic section' | trans }}</div>
+        {% if is_allowed_to_edit %}
+            {{ no_data }}
+        {% else %}
+            <div class="rounded-lg border border-gray-25 bg-support-2 p-4 text-sm text-gray-90">
+                {{ 'There is no thematic section' | trans }}
+            </div>
+        {% endif %}
     {% endif %}
-{% endif %}
 {% endautoescape %}

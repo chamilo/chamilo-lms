@@ -24,6 +24,7 @@ use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
+use Chamilo\CoreBundle\Controller\Api\DocumentUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
@@ -211,6 +212,16 @@ use Symfony\Component\Validator\Constraints as Assert;
             ),
             provider: DocumentCollectionStateProvider::class
         ),
+        new Get(
+            uriTemplate: '/documents/{cid}/usage',
+            controller: DocumentUsageAction::class,
+            openapiContext: [
+                'summary' => 'Get usage/quota information for documents.',
+            ],
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'api_documents_usage'
+        )
     ],
     normalizationContext: [
         'groups' => ['document:read', 'resource_node:read'],

@@ -9,10 +9,16 @@
       :header="t('Term')"
       field="title"
     />
-    <Column
-      :header="t('Definition')"
-      field="description"
-    />
+
+    <Column :header="t('Definition')">
+      <template #body="{ data }">
+        <div
+          class="prose max-w-none"
+          v-html="sanitize(data.description)"
+        ></div>
+      </template>
+    </Column>
+
     <Column :header="t('Actions')">
       <template #body="{ data }">
         <BaseButton
@@ -41,6 +47,7 @@ import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
+import DOMPurify from "dompurify"
 
 const { t } = useI18n()
 
@@ -56,4 +63,5 @@ defineProps({
 })
 
 const emit = defineEmits(["edit", "delete"])
+const sanitize = (html) => DOMPurify.sanitize(html ?? "", { ADD_ATTR: ["target", "rel"] })
 </script>

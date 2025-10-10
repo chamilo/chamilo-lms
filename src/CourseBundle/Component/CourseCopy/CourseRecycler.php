@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -43,6 +44,9 @@ final class CourseRecycler
 
         // If your EM doesn't have wrapInTransaction(), replace by $this->em->transactional(fn() => { ... })
         $this->em->wrapInTransaction(function () use ($isFull, $selected) {
+
+            $this->unplugCertificateDocsForCourse();
+
             // Links & categories
             $this->recycleGeneric($isFull, CLink::class, $selected['link'] ?? []);
             $this->recycleGeneric($isFull, CLinkCategory::class, $selected['link_category'] ?? [], autoClean: true);
@@ -205,6 +209,33 @@ final class CourseRecycler
     }
 
     /**
+     * Force-unlink associations that can trigger cascade-persist on delete.
+     * We always null GradebookCategory->document before removing the category.
+     */
+    private function preUnlinkBeforeDelete(array $entities): void
+    {
+        $changed = false;
+
+        foreach ($entities as $e) {
+            if ($e instanceof GradebookCategory
+                && method_exists($e, 'getDocument')
+                && method_exists($e, 'setDocument')
+            ) {
+                if ($e->getDocument() !== null) {
+                    // Prevent "new entity found through relationship" on flush
+                    $e->setDocument(null);
+                    $this->em->persist($e);
+                    $changed = true;
+                }
+            }
+        }
+
+        if ($changed) {
+            $this->em->flush();
+        }
+    }
+
+    /**
      * Hard-deletes a list of resources. If repository doesn't provide hardDelete(),
      * falls back to EM->remove() and a final flush (expect proper cascade mappings).
      */
@@ -212,19 +243,21 @@ final class CourseRecycler
     {
         $repo = $this->em->getRepository($entityClass);
 
+        // Unlink problematic associations up front (prevents cascade-persist on flush)
+        $this->preUnlinkBeforeDelete($resources);
+
         $usedFallback = false;
         foreach ($resources as $res) {
             if (method_exists($repo, 'hardDelete')) {
-                // hardDelete takes care of Resource, ResourceNode, Links and Files (Flysystem)
+                // Repo handles full hard delete (nodes/links/files)
                 $repo->hardDelete($res);
             } else {
-                // Fallback: standard remove. Ensure your mappings cascade what you need.
+                // Fallback: standard remove (expect proper cascades elsewhere)
                 $this->em->remove($res);
                 $usedFallback = true;
             }
         }
 
-        // One flush at the end. If hardDelete() already flushed internally, this is harmless.
         if ($usedFallback) {
             $this->em->flush();
         }
@@ -294,6 +327,41 @@ final class CourseRecycler
             }
         }
         if ($changed) {
+            $this->em->flush();
+        }
+    }
+
+    private function unplugCertificateDocsForCourse(): void
+    {
+        // Detach any certificate-type document from gradebook categories of this course
+        // Reason: avoid "A new entity was found through the relationship ... #document" on flush.
+        $qb = $this->em->createQueryBuilder()
+            ->select('c', 'd')
+            ->from(GradebookCategory::class, 'c')
+            ->innerJoin('c.course', 'course')
+            ->leftJoin('c.document', 'd')
+            ->where('course.id = :cid')
+            ->andWhere('d IS NOT NULL')
+            ->andWhere('d.filetype = :ft')
+            ->setParameter('cid', $this->courseId)
+            ->setParameter('ft', 'certificate');
+
+        /** @var GradebookCategory[] $cats */
+        $cats = $qb->getQuery()->getResult();
+
+        $changed = false;
+        foreach ($cats as $cat) {
+            $doc = $cat->getDocument();
+            if ($doc instanceof CDocument) {
+                // Prevent transient Document from being cascaded/persisted during delete
+                $cat->setDocument(null);
+                $this->em->persist($cat);
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            // Materialize unlink before any deletion happens
             $this->em->flush();
         }
     }

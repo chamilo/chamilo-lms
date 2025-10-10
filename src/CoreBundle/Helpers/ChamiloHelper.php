@@ -28,8 +28,11 @@ use Template;
 use Throwable;
 use UserManager;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const PHP_ROUND_HALF_UP;
 use const PHP_SAPI;
+use const PHP_URL_PATH;
 
 class ChamiloHelper
 {
@@ -805,21 +808,6 @@ class ChamiloHelper
         }
     }
 
-    /**
-     * Pick the first path that exists (file) from a candidate list.
-     * Returns the absolute path or null.
-     */
-    public static function firstExistingPath(array $candidates): ?string
-    {
-        foreach ($candidates as $p) {
-            if (self::legacyFileUsable($p)) {
-                return $p;
-            }
-        }
-
-        return null;
-    }
-
     private static function legacyFileUsable(string $filePath): bool
     {
         return is_file($filePath) && is_readable($filePath);
@@ -849,123 +837,218 @@ class ChamiloHelper
     }
 
     /**
-     * Attach a legacy file as Asset to an AbstractResource and return public URL.
-     * Returns ['ok'=>bool, 'asset'=>?Asset, 'url'=>?string, 'error'=>?string].
+     * Scan HTML for legacy /courses/<dir>/document/... references found in a ZIP,
+     * ensure those files are created as Documents, and return URL maps to rewrite the HTML.
+     *
+     * Returns: ['byRel' => [ "document/..." => "public-url" ],
+     *           'byBase'=> [ "file.ext"     => "public-url" ] ]
+     *
+     * @param mixed $docRepo
+     * @param mixed $courseEntity
+     * @param mixed $session
+     * @param mixed $group
      */
-    public static function attachLegacyFileWithPublicUrl(
-        string $filePath,
-        AbstractResource $ownerResource,
-        string $fileName = ''
+    public static function buildUrlMapForHtmlFromPackage(
+        string $html,
+        string $courseDir,
+        string $srcRoot,
+        array &$folders,
+        callable $ensureFolder,
+        $docRepo,
+        $courseEntity,
+        $session,
+        $group,
+        int $session_id,
+        int $file_option,
+        ?callable $dbg = null
     ): array {
-        $basename = '' !== $fileName ? $fileName : basename($filePath);
+        $byRel = [];
+        $byBase = [];
 
-        if (!self::legacyFileUsable($filePath)) {
-            return ['ok' => false, 'asset' => null, 'url' => null, 'error' => "File not found or unreadable: $basename"];
+        $DBG = $dbg ?: static function ($m, $c = []): void { /* no-op */ };
+
+        // src|href pointing to …/courses/<dir>/document/... (host optional)
+        $depRegex = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/[^\/]+\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
+
+        if (!preg_match_all($depRegex, $html, $mm) || empty($mm['full'])) {
+            return ['byRel' => $byRel, 'byBase' => $byBase];
         }
 
-        try {
-            $assetRepo = Container::getAssetRepository();
+        // Normalize a full URL to a "document/..." relative path inside the package
+        $toRel = static function (string $full) use ($courseDir): string {
+            $urlPath = parse_url(html_entity_decode($full, ENT_QUOTES | ENT_HTML5), PHP_URL_PATH) ?: $full;
+            $urlPath = preg_replace('#^/courses/([^/]+)/#i', '/courses/'.$courseDir.'/', $urlPath);
+            $rel = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $urlPath) ?: $urlPath;
 
-            // Prefer helper if exists
-            if (method_exists($assetRepo, 'createFromLocalPath')) {
-                $asset = $assetRepo->createFromLocalPath($filePath, $basename);
-            } else {
-                $mimeType = self::legacyDetectMime($filePath);
-                $fakeUpload = [
-                    'tmp_name' => $filePath,
-                    'name' => $basename,
-                    'type' => $mimeType,
-                    'size' => @filesize($filePath) ?: null,
-                    'error' => 0,
-                ];
-                $asset = (new Asset())->setTitle($basename)->setCompressed(false);
-                $assetRepo->createFromRequest($asset, $fakeUpload);
+            return ltrim($rel, '/'); // "document/..."
+        };
+
+        foreach ($mm['full'] as $fullUrl) {
+            $rel = $toRel($fullUrl); // e.g. "document/img.png"
+            if (!str_starts_with($rel, 'document/')) {
+                continue;
+            }   // STRICT: only /document/*
+            if (isset($byRel[$rel])) {
+                continue;
             }
 
-            if (!method_exists($ownerResource, 'getResourceNode') || null === $ownerResource->getResourceNode()) {
-                return ['ok' => false, 'asset' => null, 'url' => null, 'error' => 'Owner resource has no ResourceNode'];
-            }
+            $basename = basename(parse_url($fullUrl, PHP_URL_PATH) ?: $fullUrl);
+            $byBase[$basename] = $byBase[$basename] ?? null;
 
-            if (method_exists($assetRepo, 'attachToNode')) {
-                $assetRepo->attachToNode($asset, $ownerResource->getResourceNode());
-            } else {
-                $repo = self::guessResourceRepository($ownerResource);
-                if (!$repo || !method_exists($repo, 'attachAssetToResource')) {
-                    return ['ok' => false, 'asset' => $asset, 'url' => null, 'error' => 'No way to attach asset to node'];
+            $parentRelPath = '/'.trim(\dirname('/'.$rel), '/'); // "/document" or "/document/foo"
+            $depTitle = basename($rel);
+            $depAbs = rtrim($srcRoot, '/').'/'.$rel;
+
+            // Do NOT create a top-level "/document" root
+            $parentId = 0;
+            if ('/document' !== $parentRelPath) {
+                $parentId = $folders[$parentRelPath] ?? 0;
+                if (!$parentId) {
+                    $parentId = $ensureFolder($parentRelPath);
+                    $folders[$parentRelPath] = $parentId;
+                    $DBG('helper.ensureFolder', ['parentRelPath' => $parentRelPath, 'parentId' => $parentId]);
                 }
-                $repo->attachAssetToResource($ownerResource, $asset);
+            } else {
+                $parentRelPath = '/';
             }
 
-            // Get a public URL if the repo/asset exposes one
-            $url = null;
-            if (method_exists($assetRepo, 'getPublicUrl')) {
-                $url = $assetRepo->getPublicUrl($asset);
-            } elseif (method_exists($asset, 'getPublicPath')) {
-                $url = $asset->getPublicPath();
+            if (!is_file($depAbs) || !is_readable($depAbs)) {
+                $DBG('helper.dep.missing', ['rel' => $rel, 'abs' => $depAbs]);
+
+                continue;
             }
 
-            return ['ok' => true, 'asset' => $asset, 'url' => $url, 'error' => null];
-        } catch (Throwable $e) {
-            return ['ok' => false, 'asset' => null, 'url' => null, 'error' => $e->getMessage()];
+            // Collision check under parent
+            $parentRes = $parentId ? $docRepo->find($parentId) : $courseEntity;
+            $findExisting = function ($t) use ($docRepo, $parentRes, $courseEntity, $session, $group) {
+                $e = $docRepo->findCourseResourceByTitle($t, $parentRes->getResourceNode(), $courseEntity, $session, $group);
+
+                return $e && method_exists($e, 'getIid') ? $e->getIid() : null;
+            };
+
+            $finalTitle = $depTitle;
+            $existsIid = $findExisting($finalTitle);
+            if ($existsIid) {
+                $FILE_SKIP = \defined('FILE_SKIP') ? FILE_SKIP : 2;
+                if ($file_option === $FILE_SKIP) {
+                    $existingDoc = $docRepo->find($existsIid);
+                    if ($existingDoc) {
+                        $url = $docRepo->getResourceFileUrl($existingDoc);
+                        if ($url) {
+                            $byRel[$rel] = $url;
+                            $byBase[$basename] = $byBase[$basename] ?: $url;
+                            $DBG('helper.dep.reuse', ['rel' => $rel, 'iid' => $existsIid, 'url' => $url]);
+                        }
+                    }
+
+                    continue;
+                }
+                // Rename on collision
+                $pi = pathinfo($depTitle);
+                $name = $pi['filename'] ?? $depTitle;
+                $ext2 = isset($pi['extension']) && '' !== $pi['extension'] ? '.'.$pi['extension'] : '';
+                $i = 1;
+                while ($findExisting($finalTitle)) {
+                    $finalTitle = $name.'_'.$i.$ext2;
+                    $i++;
+                }
+            }
+
+            // Create the non-HTML dependency from the package
+            try {
+                $entity = DocumentManager::addDocument(
+                    ['real_id' => $courseEntity->getId(), 'code' => method_exists($courseEntity, 'getCode') ? $courseEntity->getCode() : null],
+                    $parentRelPath, // metadata path (no "/document" root)
+                    'file',
+                    (int) (@filesize($depAbs) ?: 0),
+                    $finalTitle,
+                    null,
+                    0,
+                    null,
+                    0,
+                    (int) $session_id,
+                    0,
+                    false,
+                    '',
+                    $parentId,
+                    $depAbs
+                );
+                $iid = method_exists($entity, 'getIid') ? $entity->getIid() : 0;
+                $url = $docRepo->getResourceFileUrl($entity);
+
+                $DBG('helper.dep.created', ['rel' => $rel, 'iid' => $iid, 'url' => $url]);
+
+                if ($url) {
+                    $byRel[$rel] = $url;
+                    $byBase[$basename] = $byBase[$basename] ?: $url;
+                }
+            } catch (Throwable $e) {
+                $DBG('helper.dep.error', ['rel' => $rel, 'err' => $e->getMessage()]);
+            }
         }
+
+        $byBase = array_filter($byBase);
+
+        return ['byRel' => $byRel, 'byBase' => $byBase];
     }
 
     /**
-     * Rewrite legacy course URLs (like "document/...") inside $html to Asset URLs.
-     * Each found local file is attached to $ownerResource as an Asset.
+     * Rewrite src|href that point to /courses/<dir>/document/... using:
+     *  - exact match by relative path ("document/...") via $urlMapByRel
+     *  - basename fallback ("file.ext") via $urlMapByBase
+     *
+     * Returns: ['html'=>..., 'replaced'=>N, 'misses'=>M]
      */
-    public static function rewriteLegacyCourseUrlsToAssets(
+    public static function rewriteLegacyCourseUrlsWithMap(
         string $html,
-        AbstractResource $ownerResource,
-        string $backupRoot,
-        array $extraRoots = []
-    ): string {
-        if ('' === $html) {
-            return $html;
-        }
+        string $courseDir,
+        array $urlMapByRel,
+        array $urlMapByBase
+    ): array {
+        $replaced = 0;
+        $misses = 0;
 
-        $sources = DocumentManager::get_resources_from_source_html($html, false, TOOL_DOCUMENT, 1);
-        if (empty($sources)) {
-            return $html;
-        }
+        $pattern = '/(?P<attr>src|href)\s*=\s*["\'](?P<full>(?:(?P<scheme>https?:)?\/\/[^"\']+)?(?P<path>\/courses\/(?P<dir>[^\/]+)\/document\/[^"\']+\.[a-z0-9]{1,8}))["\']/i';
 
-        $roots = array_values(array_unique(array_filter(array_merge([$backupRoot], $extraRoots))));
+        $html = preg_replace_callback($pattern, function ($m) use ($courseDir, $urlMapByRel, $urlMapByBase, &$replaced, &$misses) {
+            $attr = $m['attr'];
+            $fullUrl = html_entity_decode($m['full'], ENT_QUOTES | ENT_HTML5);
+            $path = $m['path']; // /courses/<dir>/document/...
+            $matchDir = $m['dir'];
 
-        foreach ($sources as $s) {
-            [$realUrl, $scope, $kind] = $s;
-            if ('local' !== $scope) {
-                continue;
+            // Normalize to current course directory
+            $effectivePath = $path;
+            if (0 !== strcasecmp($matchDir, $courseDir)) {
+                $effectivePath = preg_replace('#^/courses/'.preg_quote($matchDir, '#').'/#i', '/courses/'.$courseDir.'/', $path) ?: $path;
             }
 
-            $pos = strpos($realUrl, 'document/');
-            if (false === $pos) {
-                continue;
+            // "document/...."
+            $relInPackage = preg_replace('#^/courses/'.preg_quote($courseDir, '#').'/#i', '', $effectivePath) ?: $effectivePath;
+            $relInPackage = ltrim($relInPackage, '/'); // document/...
+
+            // 1) exact rel match
+            if (isset($urlMapByRel[$relInPackage])) {
+                $newUrl = $urlMapByRel[$relInPackage];
+                $replaced++;
+
+                return $attr.'="'.htmlspecialchars($newUrl, ENT_QUOTES | ENT_HTML5).'"';
             }
 
-            $relAfterDocument = ltrim(substr($realUrl, $pos + \strlen('document/')), '/');
+            // 2) basename fallback
+            $base = basename(parse_url($effectivePath, PHP_URL_PATH) ?: $effectivePath);
+            if (isset($urlMapByBase[$base])) {
+                $newUrl = $urlMapByBase[$base];
+                $replaced++;
 
-            $candidates = [];
-            foreach ($roots as $root) {
-                $base = rtrim($root, '/');
-                $candidates[] = $base.'/document/'.$relAfterDocument;
-                $candidates[] = $base.'/courses/document/'.$relAfterDocument;
+                return $attr.'="'.htmlspecialchars($newUrl, ENT_QUOTES | ENT_HTML5).'"';
             }
 
-            $filePath = self::firstExistingPath($candidates);
-            if (!$filePath) {
-                continue;
-            }
+            // Not found → keep original
+            $misses++;
 
-            $attached = self::attachLegacyFileWithPublicUrl($filePath, $ownerResource, basename($filePath));
-            if (!$attached['ok'] || empty($attached['url'])) {
-                error_log("LEGACY_REWRITE: failed for $realUrl (".$attached['error'].')');
+            return $m[0];
+        }, $html);
 
-                continue;
-            }
-
-            $html = str_replace($realUrl, $attached['url'], $html);
-        }
-
-        return $html;
+        return ['html' => $html, 'replaced' => $replaced, 'misses' => $misses];
     }
 }

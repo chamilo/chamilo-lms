@@ -23,19 +23,19 @@ export default {
     },
     {
       name: "AttendanceSheetList",
-      path: ":id?/sheet-list",
+      path: ":id/sheet-list",
       component: () => import("../views/attendance/AttendanceSheetList.vue"),
       meta: { breadcrumb: "Sheet list" },
     },
     {
       name: "AttendanceCalendarList",
-      path: ":id?/calendar",
+      path: ":id/calendar",
       component: () => import("../views/attendance/AttendanceCalendarList.vue"),
       meta: { breadcrumb: "Calendar" },
     },
     {
       name: "AttendanceAddCalendarEvent",
-      path: ":id?/calendar/create",
+      path: ":id/calendar/create",
       component: () => import("../views/attendance/AttendanceCalendarAdd.vue"),
       meta: { breadcrumb: "Add calendar" },
     },

@@ -18,20 +18,17 @@ class Version20251009111300 extends AbstractMigrationChamilo
         return 'Fix plugin titles and remove plugins without a corresponding directory';
     }
 
-    /**
-     * @inheritDoc
-     */
     public function up(Schema $schema): void
     {
         $replacements = self::pluginNameReplacements();
         $idListToDelete = [];
 
-        $pluginRows = $this->connection->executeQuery("SELECT id, title, source FROM plugin")->fetchAllAssociative();
+        $pluginRows = $this->connection->executeQuery('SELECT id, title, source FROM plugin')->fetchAllAssociative();
 
         foreach ($pluginRows as $pluginRow) {
             $title = $pluginRow['title'];
 
-            if (!array_key_exists($title, $replacements)) {
+            if (!\array_key_exists($title, $replacements)) {
                 $idListToDelete[] = $pluginRow['id'];
 
                 continue;

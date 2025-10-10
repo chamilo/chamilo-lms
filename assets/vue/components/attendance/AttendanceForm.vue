@@ -200,7 +200,7 @@ const submitForm = async () => {
         name: "AttendanceAddCalendarEvent",
         params: {
           node: getNodeId(created.resourceNode),
-          id: created.id,
+          id: created.iid,
         },
         query: {
           cid: route.query.cid,

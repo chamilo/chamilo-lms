@@ -605,7 +605,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "\u4fe1\u606f",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -884,5 +884,7 @@
     "Branding (logos)": "Branding (logos)",
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
     "Updated": "\u66f4\u65b0",
-    "Sessions catalogue": "Sessions catalogue"
+    "Sessions catalogue": "Sessions catalogue",
+    "Course settings": "\u8bfe\u7a0b\u8bbe\u7f6e",
+    "Course maintenance": "Course maintenance"
 }

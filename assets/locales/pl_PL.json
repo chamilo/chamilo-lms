@@ -707,7 +707,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "informacje",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1023,5 +1023,7 @@
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
     "Updated": "Zaktualizowana",
     "Sessions catalogue": "Sessions catalogue",
-    "Videoconference": "Wideokonferencja"
+    "Videoconference": "Wideokonferencja",
+    "Course settings": "Ustawienia kursu",
+    "Course maintenance": "Course maintenance"
 }

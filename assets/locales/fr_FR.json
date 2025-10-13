@@ -511,9 +511,9 @@
     "Repeat type": "Cycle",
     "Repeat end date": "Fin de la r\u00e9p\u00e9tition",
     "Duration (minutes)": "Duration (minutes)",
-    "Daily": "Vue par jour",
-    "Weekly": "Vue par semaine",
-    "Bi-weekly": "Bi-semanal",
+    "Daily": "Quotidien",
+    "Weekly": "Hebdomadaire",
+    "Bi-weekly": "Bi-hebdomadaire",
     "Monthly, by date": "Chaque mois, par date",
     "Gradebook options": "Gradebook options",
     "Qualify attendance gradebook": "Qualify attendance gradebook",
@@ -789,7 +789,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "Information",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1124,5 +1124,7 @@
     "Explore more courses": "Explorer plus de cours",
     "Sessions catalogue": "Catalogue de sessions",
     "Root": "Racine",
-    "Videoconference": "Vid\u00e9oconf\u00e9rence"
+    "Videoconference": "Vid\u00e9oconf\u00e9rence",
+    "Course settings": "Param\u00e8tres du cours",
+    "Course maintenance": "Maintenance du cours"
 }

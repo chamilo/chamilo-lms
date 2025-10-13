@@ -699,7 +699,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "inform\u0101cija",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1006,5 +1006,7 @@
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
     "Updated": "P\u0113d\u0113j\u0101s izmai\u0146as",
     "Sessions catalogue": "Sessions catalogue",
-    "Videoconference": "Videokonference"
+    "Videoconference": "Videokonference",
+    "Course settings": "Kursa iestat\u012bjumi",
+    "Course maintenance": "Course maintenance"
 }

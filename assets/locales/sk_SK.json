@@ -741,7 +741,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "Inform\u00e1cia",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1063,5 +1063,7 @@
     "Updated": "D\u00e1tum aktualiz\u00e1cie",
     "Sessions catalogue": "Sessions catalogue",
     "Root": "Kore\u0148",
-    "Videoconference": "Videokonferencia"
+    "Videoconference": "Videokonferencia",
+    "Course settings": "Nastavenie kurzu",
+    "Course maintenance": "Course maintenance"
 }

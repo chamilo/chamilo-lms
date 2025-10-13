@@ -742,7 +742,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "Informaci\u00f3",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1065,5 +1065,7 @@
     "Updated": "\u00daltima modificaci\u00f3",
     "Sessions catalogue": "Sessions catalogue",
     "Root": "Arrel",
-    "Videoconference": "Videoconfer\u00e8ncia"
+    "Videoconference": "Videoconfer\u00e8ncia",
+    "Course settings": "Configuraci\u00f3 del curs",
+    "Course maintenance": "Course maintenance"
 }

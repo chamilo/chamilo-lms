@@ -8,6 +8,8 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  *  Class DocumentManager
@@ -867,10 +869,10 @@ class DocumentManager
      * @return array document content
      */
     public static function get_document_data_by_id(
-        int    $id,
+        int $id,
         string $course_code,
-        bool   $load_parents = false,
-        int    $session_id = null,
+        bool $load_parents = false,
+        int $session_id = null,
         bool $ignoreDeleted = false
     ): bool|array {
         $course_info = api_get_course_info($course_code);
@@ -878,47 +880,95 @@ class DocumentManager
             return false;
         }
 
-        $course_id = $course_info['real_id'];
-        $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
-        $groupId = api_get_group_id();
+        $course_id  = (int) $course_info['real_id'];
+        $session_id = empty($session_id) ? api_get_session_id() : $session_id;
 
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
 
         $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE iid = $id";
         $result = Database::query($sql);
-        if ($result && 1 == Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
+        if (!$result || Database::num_rows($result) != 1) {
+            return false;
+        }
 
-            // Adjust paths for URLs based on new system
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id;
-            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id;
-            // Consider storing a relative path or identifier in the database to construct paths
-            $row['basename'] = $id;  // You may store and use titles or another unique identifier
+        $row = Database::fetch_assoc($result);
 
-            // Handling the parent ID should be adjusted if the path isn't available
-            $row['parent_id'] = $row['parent_resource_node_id'] ?? '0';  // Adjust according to your schema
+        try {
+            /** @var EntityManagerInterface $em */
+            $em = \Database::getManager();
 
-            $parents = [];
-            if ($load_parents) {
-                // Modify this logic to work with parent IDs stored directly in the database
-                $current_id = $row['parent_id'];
-                while ($current_id != '0') {
-                    $parent_data = self::get_document_data_by_id($current_id, $course_code, false, $session_id);
-                    if ($parent_data) {
-                        $parents[] = $parent_data;
-                        $current_id = $parent_data['parent_id'] ?? '0';
-                    } else {
-                        break;
+            /** @var Course|null $courseEntity */
+            $courseEntity = $em->getRepository(Course::class)
+                ->findOneBy(['code' => $course_code]);
+
+            if ($courseEntity) {
+                /** @var CDocumentRepository $docRepo */
+                $docRepo = Container::getDocumentRepository();
+
+                $qb = $docRepo->getResourcesByCourse($courseEntity,);
+                $qb->andWhere('resource.iid = :iid')->setParameter('iid', $id);
+                /** @var CDocument[] $docs */
+                $docs = $qb->getQuery()->getResult();
+                $doc  = $docs[0] ?? null;
+
+                if ($doc) {
+                    $fullPath  = (string) $doc->getFullPath();
+                    $filetype  = (string) $doc->getFiletype();
+                    $title     = (string) $doc->getTitle();
+                    $size      = 0;
+
+                    $node = $doc->getResourceNode();
+                    if ($node && $filetype === 'file') {
+                        $file = $node->getFirstResourceFile();
+                        if ($file) {
+                            $size = (int) $file->getSize();
+                        }
+                    } elseif ($node && $filetype === 'folder') {
+                        $size = (int) $docRepo->getFolderSize($node, $courseEntity, null);
+                    }
+
+                    $row['path']       = $row['path']       ?? ('document/' . ltrim($fullPath, '/'));
+                    $row['full_path']  = $row['full_path']  ?? $row['path'];
+                    $row['filetype']   = $row['filetype']   ?? $filetype;
+                    $row['file_type']  = $row['file_type']  ?? $filetype;
+                    $row['title']      = $row['title']      ?? $title;
+                    $row['size']       = $row['size']       ?? $size;
+                    if (empty($row['parent_id'])) {
+                        $parentNode = $node?->getParent();
+                        if ($parentNode) {
+                            $parentResource = $docRepo->getResourceByResourceNode($parentNode);
+                            $row['parent_id'] = $parentResource?->getIid() ?? '0';
+                        } else {
+                            $row['parent_id'] = '0';
+                        }
                     }
                 }
             }
-            $row['parents'] = array_reverse($parents);
-
-            return $row;
+        } catch (\Throwable $e) {
+            error_log('DOC_COMPAT: Fail CDocument iid='.$id.' -> '.$e->getMessage());
         }
 
-        return false;
+        $row['url']          = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id;
+        $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id;
+        $row['basename']     = $row['basename'] ?? $id;
+
+        $parents = [];
+        if ($load_parents) {
+            $current_id = $row['parent_id'] ?? '0';
+            $guard = 0;
+            while ($current_id != '0' && $guard++ < 64) {
+                $parent_data = self::get_document_data_by_id((int)$current_id, $course_code, false, $session_id);
+                if (!$parent_data) {
+                    break;
+                }
+                $parents[]  = $parent_data;
+                $current_id = $parent_data['parent_id'] ?? '0';
+            }
+        }
+        $row['parents'] = array_reverse($parents);
+
+        return $row;
     }
 
     /**

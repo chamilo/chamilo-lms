@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,19 +17,19 @@ class ForumPost extends Resource
         parent::__construct($obj->post_id, RESOURCE_FORUMPOST);
         $this->obj = $obj;
 
-        $this->title       = (string)($obj->post_title ?? $obj->title ?? '');
-        $this->text        = (string)($obj->post_text  ?? $obj->text  ?? '');
-        $this->poster_name = (string)($obj->poster_name ?? '');
+        $this->title = (string) ($obj->post_title ?? $obj->title ?? '');
+        $this->text = (string) ($obj->post_text ?? $obj->text ?? '');
+        $this->poster_name = (string) ($obj->poster_name ?? '');
     }
 
-    public function show()
+    public function show(): void
     {
         parent::show();
 
         $date = $this->obj->post_date ?? ($this->obj->time ?? null);
         $dateStr = $date ? api_convert_and_format_date($date) : '';
 
-        $extra = $this->poster_name ? $this->poster_name : '';
+        $extra = $this->poster_name ?: '';
         if ($dateStr) {
             $extra = $extra ? ($extra.', '.$dateStr) : $dateStr;
         }

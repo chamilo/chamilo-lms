@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
+use Chamilo\CoreBundle\Entity\Course as CoreCourse;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
@@ -25,7 +27,6 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CThematic;
 use Chamilo\CourseBundle\Entity\CWiki;
-use Chamilo\CoreBundle\Entity\Course as CoreCourse;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class CourseRecycler
@@ -36,13 +37,17 @@ final class CourseRecycler
         private readonly int $courseId
     ) {}
 
-    /** $type: 'full_backup' | 'select_items' ; $selected: [type => [id => true]] */
+    /**
+     * $type: 'full_backup' | 'select_items' ; $selected: [type => [id => true]].
+     */
     public function recycle(string $type, array $selected): void
     {
-        $isFull = ($type === 'full_backup');
+        $isFull = ('full_backup' === $type);
 
         // If your EM doesn't have wrapInTransaction(), replace by $this->em->transactional(fn() => { ... })
-        $this->em->wrapInTransaction(function () use ($isFull, $selected) {
+        $this->em->wrapInTransaction(function () use ($isFull, $selected): void {
+            $this->unplugCertificateDocsForCourse();
+
             // Links & categories
             $this->recycleGeneric($isFull, CLink::class, $selected['link'] ?? []);
             $this->recycleGeneric($isFull, CLinkCategory::class, $selected['link_category'] ?? [], autoClean: true);
@@ -108,9 +113,10 @@ final class CourseRecycler
             if ($autoClean) {
                 $this->autoCleanIfSupported($entityClass);
             }
-            if ($scormCleanup && $entityClass === CLp::class) {
+            if ($scormCleanup && CLp::class === $entityClass) {
                 $this->cleanupScormDirsForAllLp();
             }
+
             return;
         }
 
@@ -119,6 +125,7 @@ final class CourseRecycler
             if ($autoClean) {
                 $this->autoCleanIfSupported($entityClass);
             }
+
             return;
         }
 
@@ -127,18 +134,21 @@ final class CourseRecycler
         if ($autoClean) {
             $this->autoCleanIfSupported($entityClass);
         }
-        if ($scormCleanup && $entityClass === CLp::class) {
+        if ($scormCleanup && CLp::class === $entityClass) {
             $this->cleanupScormDirsForLpIds($ids);
         }
     }
 
-    /** LP categories: detach LPs and then delete selected/all categories */
+    /**
+     * LP categories: detach LPs and then delete selected/all categories.
+     */
     private function recycleLpCategories(bool $isFull, array $idsMap): void
     {
         if ($isFull) {
             // Detach all categories from LPs in course
             $this->clearLpCategoriesForCourse();
             $this->deleteAllOfTypeForCourse(CLpCategory::class);
+
             return;
         }
 
@@ -152,21 +162,24 @@ final class CourseRecycler
         $this->deleteSelectedOfTypeForCourse(CLpCategory::class, $ids);
     }
 
-    /** Normalizes IDs from [id => true] maps into int/string scalars */
+    /**
+     * Normalizes IDs from [id => true] maps into int/string scalars.
+     */
     private function ids(array $map): array
     {
         return array_values(array_filter(array_map(
-            static fn($k) => is_numeric($k) ? (int) $k : (string) $k,
+            static fn ($k) => is_numeric($k) ? (int) $k : (string) $k,
             array_keys($map)
-        ), static fn($v) => $v !== '' && $v !== null));
+        ), static fn ($v) => '' !== $v && null !== $v));
     }
 
-    /** Lightweight Course reference for query builders */
+    /**
+     * Lightweight Course reference for query builders.
+     */
     private function courseRef(): CoreCourse
     {
         /** @var CoreCourse $ref */
-        $ref = $this->em->getReference(CoreCourse::class, $this->courseId);
-        return $ref;
+        return $this->em->getReference(CoreCourse::class, $this->courseId);
     }
 
     /**
@@ -185,6 +198,7 @@ final class CourseRecycler
             if ($ids && \count($ids) > 0) {
                 $qb->andWhere('resource.iid IN (:ids)')->setParameter('ids', $ids);
             }
+
             return $qb->getQuery()->getResult();
         }
 
@@ -195,13 +209,41 @@ final class CourseRecycler
             ->innerJoin('resource.resourceNode', 'node')
             ->innerJoin('node.resourceLinks', 'links')
             ->andWhere('links.course = :course')
-            ->setParameter('course', $this->courseRef());
+            ->setParameter('course', $this->courseRef())
+        ;
 
         if ($ids && \count($ids) > 0) {
             $qb->andWhere('resource.iid IN (:ids)')->setParameter('ids', $ids);
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Force-unlink associations that can trigger cascade-persist on delete.
+     * We always null GradebookCategory->document before removing the category.
+     */
+    private function preUnlinkBeforeDelete(array $entities): void
+    {
+        $changed = false;
+
+        foreach ($entities as $e) {
+            if ($e instanceof GradebookCategory
+                && method_exists($e, 'getDocument')
+                && method_exists($e, 'setDocument')
+            ) {
+                if (null !== $e->getDocument()) {
+                    // Prevent "new entity found through relationship" on flush
+                    $e->setDocument(null);
+                    $this->em->persist($e);
+                    $changed = true;
+                }
+            }
+        }
+
+        if ($changed) {
+            $this->em->flush();
+        }
     }
 
     /**
@@ -212,25 +254,29 @@ final class CourseRecycler
     {
         $repo = $this->em->getRepository($entityClass);
 
+        // Unlink problematic associations up front (prevents cascade-persist on flush)
+        $this->preUnlinkBeforeDelete($resources);
+
         $usedFallback = false;
         foreach ($resources as $res) {
             if (method_exists($repo, 'hardDelete')) {
-                // hardDelete takes care of Resource, ResourceNode, Links and Files (Flysystem)
+                // Repo handles full hard delete (nodes/links/files)
                 $repo->hardDelete($res);
             } else {
-                // Fallback: standard remove. Ensure your mappings cascade what you need.
+                // Fallback: standard remove (expect proper cascades elsewhere)
                 $this->em->remove($res);
                 $usedFallback = true;
             }
         }
 
-        // One flush at the end. If hardDelete() already flushed internally, this is harmless.
         if ($usedFallback) {
             $this->em->flush();
         }
     }
 
-    /** Deletes all resources of a type in the course */
+    /**
+     * Deletes all resources of a type in the course.
+     */
     private function deleteAllOfTypeForCourse(string $entityClass): void
     {
         $resources = $this->fetchResourcesForCourse($entityClass, null);
@@ -239,7 +285,9 @@ final class CourseRecycler
         }
     }
 
-    /** Deletes selected resources (by iid) of a type in the course */
+    /**
+     * Deletes selected resources (by iid) of a type in the course.
+     */
     private function deleteSelectedOfTypeForCourse(string $entityClass, array $ids): void
     {
         if (!$ids) {
@@ -251,7 +299,9 @@ final class CourseRecycler
         }
     }
 
-    /** Optional post-clean for empty categories if repository supports it */
+    /**
+     * Optional post-clean for empty categories if repository supports it.
+     */
     private function autoCleanIfSupported(string $entityClass): void
     {
         $repo = $this->em->getRepository($entityClass);
@@ -260,7 +310,9 @@ final class CourseRecycler
         }
     }
 
-    /** Detach categories from ALL LPs in course (repo-level bulk method preferred if available) */
+    /**
+     * Detach categories from ALL LPs in course (repo-level bulk method preferred if available).
+     */
     private function clearLpCategoriesForCourse(): void
     {
         $lps = $this->fetchResourcesForCourse(CLp::class, null);
@@ -279,7 +331,9 @@ final class CourseRecycler
         }
     }
 
-    /** Detach categories only for LPs that are linked to given category ids */
+    /**
+     * Detach categories only for LPs that are linked to given category ids.
+     */
     private function clearLpCategoriesForIds(array $catIds): void
     {
         $lps = $this->fetchResourcesForCourse(CLp::class, null);
@@ -287,7 +341,7 @@ final class CourseRecycler
         foreach ($lps as $lp) {
             $cat = method_exists($lp, 'getCategory') ? $lp->getCategory() : null;
             $catId = $cat?->getId();
-            if ($catId !== null && \in_array($catId, $catIds, true) && method_exists($lp, 'setCategory')) {
+            if (null !== $catId && \in_array($catId, $catIds, true) && method_exists($lp, 'setCategory')) {
                 $lp->setCategory(null);
                 $this->em->persist($lp);
                 $changed = true;
@@ -298,14 +352,54 @@ final class CourseRecycler
         }
     }
 
-    /** SCORM directory cleanup for ALL LPs (hook your storage service here if needed) */
+    private function unplugCertificateDocsForCourse(): void
+    {
+        // Detach any certificate-type document from gradebook categories of this course
+        // Reason: avoid "A new entity was found through the relationship ... #document" on flush.
+        $qb = $this->em->createQueryBuilder()
+            ->select('c', 'd')
+            ->from(GradebookCategory::class, 'c')
+            ->innerJoin('c.course', 'course')
+            ->leftJoin('c.document', 'd')
+            ->where('course.id = :cid')
+            ->andWhere('d IS NOT NULL')
+            ->andWhere('d.filetype = :ft')
+            ->setParameter('cid', $this->courseId)
+            ->setParameter('ft', 'certificate')
+        ;
+
+        /** @var GradebookCategory[] $cats */
+        $cats = $qb->getQuery()->getResult();
+
+        $changed = false;
+        foreach ($cats as $cat) {
+            $doc = $cat->getDocument();
+            if ($doc instanceof CDocument) {
+                // Prevent transient Document from being cascaded/persisted during delete
+                $cat->setDocument(null);
+                $this->em->persist($cat);
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            // Materialize unlink before any deletion happens
+            $this->em->flush();
+        }
+    }
+
+    /**
+     * SCORM directory cleanup for ALL LPs (hook your storage service here if needed).
+     */
     private function cleanupScormDirsForAllLp(): void
     {
         // If you have a storage/scorm service, invoke it here.
         // By default, nothing: hardDelete already deletes files linked to ResourceNode.
     }
 
-    /** SCORM directory cleanup for selected LPs */
+    /**
+     * SCORM directory cleanup for selected LPs.
+     */
     private function cleanupScormDirsForLpIds(array $lpIds): void
     {
         // Same as above, but limited to provided LP ids.

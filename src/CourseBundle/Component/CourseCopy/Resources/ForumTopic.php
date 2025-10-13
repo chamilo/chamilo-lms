@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,16 +17,16 @@ class ForumTopic extends Resource
         parent::__construct($obj->thread_id, RESOURCE_FORUMTOPIC);
         $this->obj = $obj;
 
-        $this->title             = (string)($obj->thread_title ?? $obj->title ?? '');
-        $this->topic_poster_name = (string)($obj->thread_poster_name ?? $obj->topic_poster_name ?? '');
-        $this->title_qualify     = (string)($obj->thread_title_qualify ?? $obj->title_qualify ?? '');
+        $this->title = (string) ($obj->thread_title ?? $obj->title ?? '');
+        $this->topic_poster_name = (string) ($obj->thread_poster_name ?? $obj->topic_poster_name ?? '');
+        $this->title_qualify = (string) ($obj->thread_title_qualify ?? $obj->title_qualify ?? '');
     }
 
-    public function show()
+    public function show(): void
     {
         parent::show();
 
-        $date  = $this->obj->thread_date ?? ($this->obj->time ?? null);
+        $date = $this->obj->thread_date ?? ($this->obj->time ?? null);
         $extra = $date ? api_convert_and_format_date($date) : '';
 
         if (!empty($this->obj->thread_poster_id)) {

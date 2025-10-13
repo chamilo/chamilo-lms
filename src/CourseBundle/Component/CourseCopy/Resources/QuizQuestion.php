@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -63,17 +65,11 @@ class QuizQuestion extends Resource
     public $question_category;
 
     /**
-     * QuizQuestion constructor.
-     *
      * @param int    $id
      * @param string $question
      * @param string $description
      * @param int    $ponderation
-     * @param        $type
-     * @param        $position
      * @param string $picture
-     * @param        $level
-     * @param        $extra
      * @param int    $question_category
      */
     public function __construct(
@@ -101,7 +97,7 @@ class QuizQuestion extends Resource
         $this->picture = $picture;
     }
 
-    public function addPicture(CourseBuilder $courseBuilder)
+    public function addPicture(CourseBuilder $courseBuilder): void
     {
         if (!empty($this->picture)) {
             $courseInfo = $courseBuilder->course->info;
@@ -150,7 +146,7 @@ class QuizQuestion extends Resource
         $position,
         $hotspot_coordinates,
         $hotspot_type
-    ) {
+    ): void {
         $answer = [];
         $answer['id'] = $answer_id;
         $answer['answer'] = $answer_text;
@@ -166,7 +162,7 @@ class QuizQuestion extends Resource
     /**
      * @param QuizQuestionOption $option
      */
-    public function add_option($option)
+    public function add_option($option): void
     {
         $this->question_options[$option->obj->id] = $option;
     }
@@ -174,7 +170,7 @@ class QuizQuestion extends Resource
     /**
      * Show this question.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->question;

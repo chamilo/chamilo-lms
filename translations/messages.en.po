@@ -29114,8 +29114,8 @@ msgstr "Error deleting message"
 msgid "You are adding calendar events for attendance"
 msgstr "You are adding calendar events for attendance"
 
-msgid "Add attendance calendar"
-msgstr "Add attendance calendar"
+msgid "Add attendance date"
+msgstr "Add attendance date"
 
 msgid "Back to attendance sheet"
 msgstr "Back to attendance sheet"

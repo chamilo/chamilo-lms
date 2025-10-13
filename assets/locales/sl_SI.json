@@ -778,7 +778,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "Informacije",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1111,5 +1111,7 @@
     "Explore more courses": "Razi\u0161\u010di ve\u010d te\u010dajev",
     "Sessions catalogue": "Sessions catalogue",
     "Root": "Koren",
-    "Videoconference": "Videokonferenca"
+    "Videoconference": "Videokonferenca",
+    "Course settings": "Nastavitve te\u010daja",
+    "Course maintenance": "Course maintenance"
 }

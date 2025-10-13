@@ -726,7 +726,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "informatii",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1045,5 +1045,7 @@
     "Updated": "Ultima modificare",
     "Sessions catalogue": "Sessions catalogue",
     "Root": "R\u0103d\u0103cin\u0103",
-    "Videoconference": "Videoconferinta"
+    "Videoconference": "Videoconferinta",
+    "Course settings": "Setarile cursului",
+    "Course maintenance": "Course maintenance"
 }

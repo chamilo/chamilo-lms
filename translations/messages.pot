@@ -29082,7 +29082,7 @@ msgstr ""
 msgid "You are adding calendar events for attendance"
 msgstr ""
 
-msgid "Add attendance calendar"
+msgid "Add attendance date"
 msgstr ""
 
 msgid "Back to attendance sheet"

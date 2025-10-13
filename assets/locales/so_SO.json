@@ -399,7 +399,7 @@
     "Please provide a title and some text": "Please provide a title and some text",
     "Text submitted successfully": "Text submitted successfully",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -644,5 +644,6 @@
     "Visual theme (assets)": "Visual theme (assets)",
     "Branding (logos)": "Branding (logos)",
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
-    "Sessions catalogue": "Sessions catalogue"
+    "Sessions catalogue": "Sessions catalogue",
+    "Course maintenance": "Course maintenance"
 }

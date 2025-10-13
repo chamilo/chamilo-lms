@@ -781,7 +781,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": " \u0645\u0639\u0644\u0648\u0645\u0627\u062a",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1115,5 +1115,7 @@
     "Explore more courses": "\u0627\u0633\u062a\u0643\u0634\u0627\u0641 \u0645\u0642\u0631\u0631\u0627\u062a \u0627\u0643\u062b\u0631",
     "Sessions catalogue": "\u0643\u062a\u0627\u0644\u0648\u062c \u0627\u0644\u062c\u0644\u0633\u0627\u062a",
     "Root": "\u0627\u0644\u0627\u0633\u0627\u0633",
-    "Videoconference": "\u0645\u0624\u062a\u0645\u0631\u0627\u062a \u0627\u0644\u0641\u064a\u062f\u064a\u0648"
+    "Videoconference": "\u0645\u0624\u062a\u0645\u0631\u0627\u062a \u0627\u0644\u0641\u064a\u062f\u064a\u0648",
+    "Course settings": "\u0627\u0639\u062f\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u0642\u0631\u0631",
+    "Course maintenance": "Course maintenance"
 }

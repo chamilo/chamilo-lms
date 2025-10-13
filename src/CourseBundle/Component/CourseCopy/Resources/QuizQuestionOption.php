@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -11,11 +13,8 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  */
 class QuizQuestionOption extends Resource
 {
-    public $obj; //question_option
+    public $obj; // question_option
 
-    /**
-     * QuizQuestionOption constructor.
-     */
     public function __construct($obj)
     {
         parent::__construct($obj->id, RESOURCE_QUIZQUESTION);

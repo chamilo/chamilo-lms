@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -12,8 +14,6 @@ class GradeBookBackup extends Resource
     public $categories;
 
     /**
-     * GradeBookBackup constructor.
-     *
      * @param array $categories
      */
     public function __construct($categories)

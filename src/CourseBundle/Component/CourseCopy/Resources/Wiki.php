@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -24,18 +26,8 @@ class Wiki extends Resource
     public $version;
 
     /**
-     * Wiki constructor.
-     *
      * @param int $id
      * @param int $page_id
-     * @param $reflink
-     * @param $title
-     * @param $content
-     * @param $user_id
-     * @param $group_id
-     * @param $timestamp
-     * @param $progress
-     * @param $version
      */
     public function __construct(
         $id,
@@ -62,9 +54,9 @@ class Wiki extends Resource
         $this->version = $version;
     }
 
-    public function show()
+    public function show(): void
     {
         parent::show();
-        echo $this->reflink.' ('.(empty($this->group_id) ? get_lang('Everyone') : get_lang('Group').' '.$this->group_id).') '.'<i>('.$this->dtime.')</i>';
+        echo $this->reflink.' ('.(empty($this->group_id) ? get_lang('Everyone') : get_lang('Group').' '.$this->group_id).') <i>('.$this->dtime.')</i>';
     }
 }

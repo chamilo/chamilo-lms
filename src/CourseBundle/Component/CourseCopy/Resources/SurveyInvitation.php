@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,18 +17,22 @@ class SurveyInvitation extends Resource
      * Survey code.
      */
     public $code;
+
     /**
      * User info.
      */
     public $user;
+
     /**
      * Invitation code.
      */
     public $invitation_code;
+
     /**
      * Invitation date.
      */
     public $invitation_date;
+
     /**
      * Reminder date.
      */
@@ -55,7 +61,7 @@ class SurveyInvitation extends Resource
     /**
      * Show this invitation.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->invitation_code;

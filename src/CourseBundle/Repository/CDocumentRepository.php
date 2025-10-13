@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -399,6 +402,126 @@ final class CDocumentRepository extends ResourceRepository
             ResourceLink::VISIBILITY_DRAFT,
             $session
         );
+    }
+
+    /**
+     * Recursively list all files (not folders) under a CDocument folder by its iid.
+     * Returns items ready for exporters.
+     */
+    public function listFilesByParentIid(int $parentIid): array
+    {
+        $em = $this->getEntityManager();
+
+        /** @var CDocument|null $parentDoc */
+        $parentDoc = $this->findOneBy(['iid' => $parentIid]);
+        if (!$parentDoc instanceof CDocument) {
+            return [];
+        }
+
+        $parentNode = $parentDoc->getResourceNode();
+        if (!$parentNode instanceof ResourceNode) {
+            return [];
+        }
+
+        $out = [];
+        $stack = [$parentNode->getId()];
+
+        $projectDir   = Container::$container->get('kernel')->getProjectDir();
+        $resourceBase = rtrim($projectDir, '/').'/var/upload/resource';
+
+        /** @var ResourceNodeRepository $rnRepo */
+        $rnRepo = Container::$container->get(ResourceNodeRepository::class);
+
+        while ($stack) {
+            $pid = array_pop($stack);
+
+            $qb = $em->createQueryBuilder()
+                ->select('d', 'rn')
+                ->from(CDocument::class, 'd')
+                ->innerJoin('d.resourceNode', 'rn')
+                ->andWhere('rn.parent = :pid')
+                ->setParameter('pid', $pid);
+
+            /** @var CDocument[] $children */
+            $children = $qb->getQuery()->getResult();
+
+            foreach ($children as $doc) {
+                $filetype = (string) $doc->getFiletype();
+                $rn = $doc->getResourceNode();
+
+                if ($filetype === 'folder') {
+                    if ($rn) {
+                        $stack[] = $rn->getId();
+                    }
+                    continue;
+                }
+
+                if ($filetype === 'file') {
+                    $fullPath = (string) $doc->getFullPath(); // e.g. "document/Folder/file.ext"
+                    $relPath  = preg_replace('#^document/+#', '', $fullPath) ?? $fullPath;
+
+                    $absPath = null;
+                    $size    = 0;
+
+                    if ($rn) {
+                        $file = $rn->getFirstResourceFile(); /** @var ResourceFile|null $file */
+                        if ($file) {
+                            $storedRel = (string) $rnRepo->getFilename($file);
+                            if ($storedRel !== '') {
+                                $candidate = $resourceBase.$storedRel;
+                                if (is_readable($candidate)) {
+                                    $absPath = $candidate;
+                                    $size    = (int) $file->getSize();
+                                    if ($size <= 0 && is_file($candidate)) {
+                                        $st   = @stat($candidate);
+                                        $size = $st ? (int) $st['size'] : 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $out[] = [
+                        'id'       => (int) $doc->getIid(),
+                        'path'     => $relPath,
+                        'size'     => (int) $size,
+                        'title'    => (string) $doc->getTitle(),
+                        'abs_path' => $absPath,
+                    ];
+                }
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * Return absolute filesystem path for a file CDocument if resolvable; null otherwise.
+     */
+    public function getAbsolutePathForDocument(CDocument $doc): ?string
+    {
+        $rn = $doc->getResourceNode();
+        if (!$rn) {
+            return null;
+        }
+
+        /** @var ResourceNodeRepository $rnRepo */
+        $rnRepo = Container::$container->get(ResourceNodeRepository::class);
+        $file   = $rn->getFirstResourceFile(); /** @var ResourceFile|null $file */
+        if (!$file) {
+            return null;
+        }
+
+        $storedRel = (string) $rnRepo->getFilename($file);
+        if ($storedRel === '') {
+            return null;
+        }
+
+        $projectDir   = Container::$container->get('kernel')->getProjectDir();
+        $resourceBase = rtrim($projectDir, '/').'/var/upload/resource';
+
+        $candidate = $resourceBase.$storedRel;
+        return is_readable($candidate) ? $candidate : null;
     }
 
     private function safeTitle(string $name): string

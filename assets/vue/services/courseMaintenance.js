@@ -107,9 +107,12 @@ const base = {
   copyExecute: (node) => `/course_maintenance/${node}/copy/execute`,
 
   // Export Moodle (.mbz)
-  moodleExportOptions:  (node) => `/course_maintenance/${node}/moodle/export/options`,
-  moodleExportResources:(node) => `/course_maintenance/${node}/moodle/export/resources`,
-  moodleExportExecute:  (node) => `/course_maintenance/${node}/moodle/export/execute`,
+  moodleExportOptions: (node) => `/course_maintenance/${node}/moodle/export/options`,
+  moodleExportResources: (node) => `/course_maintenance/${node}/moodle/export/resources`,
+  moodleExportExecute: (node) => `/course_maintenance/${node}/moodle/export/execute`,
+
+  // Moodle import (.mbz)
+  moodleImport: (node) => `/course_maintenance/${node}/moodle/import`,
 
   recycleCourse: (node) => `/course_maintenance/${node}/recycle`,
   recycleOptions: (node) => `/course_maintenance/${node}/recycle/options`,
@@ -233,7 +236,55 @@ async function moodleExportResources(node = resolveNodeFromPath()) {
 }
 
 async function moodleExportExecute(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.moodleExportExecute(node), payload, { params: withCourseParams() })
+  const resp = await http.post(base.moodleExportExecute(node), payload, {
+    params: withCourseParams(),
+    responseType: "blob",
+    validateStatus: () => true,
+  })
+
+  const ct = String(resp.headers["content-type"] || "")
+  const cd = String(resp.headers["content-disposition"] || "")
+
+  if (ct.includes("application/json")) {
+    const json = await new Response(resp.data).json().catch(() => ({}))
+    if (resp.status >= 400) {
+      const err = new Error(json?.error || "Request failed")
+      err.response = { status: resp.status, data: json }
+      throw err
+    }
+    return json
+  }
+
+  if (ct.includes("application/zip") || ct.includes("application/octet-stream")) {
+    let filename = "backup.mbz"
+    const m = cd.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/)
+    if (m) filename = decodeURIComponent(m[1] || m[2] || filename)
+
+    const url = URL.createObjectURL(resp.data)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    URL.revokeObjectURL(url)
+
+    return { ok: true, message: "Download started", filename }
+  }
+
+  const err = new Error("Unexpected response type")
+  err.response = { status: resp.status }
+  throw err
+}
+
+async function importFromMoodle(node = resolveNodeFromPath(), file) {
+  if (!file) throw new Error("Missing .mbz file")
+  const fd = new FormData()
+  fd.append("file", file, file.name || "backup.mbz")
+  const resp = await http.post(base.moodleImport(node), fd, {
+    headers: { "Content-Type": "multipart/form-data" },
+    params: withCourseParams(),
+  })
   return resp.data
 }
 
@@ -298,6 +349,8 @@ export default {
   moodleExportOptions,
   moodleExportResources,
   moodleExportExecute,
+
+  importFromMoodle,
 
   cc13ExportOptions,
   cc13ExportResources,

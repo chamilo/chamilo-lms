@@ -6,31 +6,31 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CourseBundle\Component\CourseCopy\Course;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{JsonResponse, Request};
+use Symfony\Component\HttpFoundation\{BinaryFileResponse, JsonResponse, Request, ResponseHeaderBag};
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 
 use const ARRAY_FILTER_USE_BOTH;
-use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
 
-#[Route(
-    '/course_maintenance/{node}',
-    name: 'cm_',
-    requirements: ['node' => '\d+']
-)]
+#[IsGranted('ROLE_TEACHER')]
+#[Route('/course_maintenance/{node}', name: 'cm_', requirements: ['node' => '\d+'])]
 class CourseMaintenanceController extends AbstractController
 {
     /**
@@ -60,11 +60,21 @@ class CourseMaintenanceController extends AbstractController
     public function importUpload(int $node, Request $req): JsonResponse
     {
         $this->setDebugFromRequest($req);
-        $file = $req->files->get('file');
-        if (!$file) {
-            $this->logDebug('[importUpload] missing file');
 
-            return $this->json(['error' => 'Missing file'], 400);
+        $file = $req->files->get('file');
+        if (!$file || !$file->isValid()) {
+            return $this->json(['error' => 'Invalid upload'], 400);
+        }
+
+        $maxBytes = 1024 * 1024 * 512;
+        if ($file->getSize() > $maxBytes) {
+            return $this->json(['error' => 'File too large'], 413);
+        }
+
+        $allowed = ['zip', 'mbz', 'gz', 'tgz'];
+        $ext = strtolower($file->guessExtension() ?: pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+        if (!\in_array($ext, $allowed, true)) {
+            return $this->json(['error' => 'Unsupported file type'], 415);
         }
 
         $this->logDebug('[importUpload] received', [
@@ -93,16 +103,17 @@ class CourseMaintenanceController extends AbstractController
     {
         $this->setDebugFromRequest($req);
         $payload = json_decode($req->getContent() ?: '{}', true);
-        $filename = $payload['filename'] ?? null;
-        if (!$filename) {
-            $this->logDebug('[importServerPick] missing filename');
 
-            return $this->json(['error' => 'Missing filename'], 400);
+        $filename = basename((string) ($payload['filename'] ?? ''));
+        if ('' === $filename || preg_match('/[\/\\\]/', $filename)) {
+            return $this->json(['error' => 'Invalid filename'], 400);
         }
 
         $path = rtrim(CourseArchiver::getBackupDir(), '/').'/'.$filename;
-        if (!is_file($path)) {
-            $this->logDebug('[importServerPick] file not found', ['path' => $path]);
+        $realBase = realpath(CourseArchiver::getBackupDir());
+        $realPath = realpath($path);
+        if (!$realBase || !$realPath || 0 !== strncmp($realBase, $realPath, \strlen($realBase)) || !is_file($realPath)) {
+            $this->logDebug('[importServerPick] file not found or outside base', ['path' => $path]);
 
             return $this->json(['error' => 'File not found'], 404);
         }
@@ -124,8 +135,7 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[importResources] begin', ['node' => $node, 'backupId' => $backupId]);
 
         try {
-            /** @var Course $course */
-            $course = CourseArchiver::readCourse($backupId, false);
+            $course = $this->loadLegacyCourseForAnyBackup($backupId);
 
             $this->logDebug('[importResources] course loaded', [
                 'has_resources' => \is_array($course->resources ?? null),
@@ -140,19 +150,6 @@ class CourseMaintenanceController extends AbstractController
                 array_map(fn ($g) => ['type' => $g['type'], 'title' => $g['title'], 'items' => \count($g['items'] ?? [])], $tree)
             );
 
-            if ($this->debug && $req->query->getBoolean('debug')) {
-                $base = $this->getParameter('kernel.project_dir').'/var/log/course_backup_debug';
-                @mkdir($base, 0775, true);
-                @file_put_contents(
-                    $base.'/'.preg_replace('/[^a-zA-Z0-9._-]/', '_', $backupId).'.json',
-                    json_encode([
-                        'tree' => $tree,
-                        'resources_keys' => array_keys((array) ($course->resources ?? [])),
-                    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-                );
-                $this->logDebug('[importResources] wrote debug snapshot to var/log/course_backup_debug');
-            }
-
             $warnings = [];
             if (empty($tree)) {
                 $warnings[] = 'Backup has no selectable resources.';
@@ -166,9 +163,10 @@ class CourseMaintenanceController extends AbstractController
             $this->logDebug('[importResources] exception', ['message' => $e->getMessage()]);
 
             return $this->json([
+                'ok' => false,
                 'tree' => [],
                 'warnings' => ['Error reading backup: '.$e->getMessage()],
-            ], 200);
+            ], 500);
         }
     }
 
@@ -178,13 +176,16 @@ class CourseMaintenanceController extends AbstractController
         requirements: ['backupId' => '.+'],
         methods: ['POST']
     )]
-    public function importRestore(int $node, string $backupId, Request $req): JsonResponse
-    {
+    public function importRestore(
+        int $node,
+        string $backupId,
+        Request $req,
+        EntityManagerInterface $em
+    ): JsonResponse {
         $this->setDebugFromRequest($req);
         $this->logDebug('[importRestore] begin', ['node' => $node, 'backupId' => $backupId]);
 
         try {
-            // Read payload
             $payload = json_decode($req->getContent() ?: '{}', true);
             $importOption = (string) ($payload['importOption'] ?? 'full_backup');
             $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
@@ -202,53 +203,28 @@ class CourseMaintenanceController extends AbstractController
                 'hasResourcesMap' => !empty($selectedResources),
             ]);
 
-            // Resolve file path
-            $backupDir = CourseArchiver::getBackupDir();
-            $this->logDebug('[importRestore] backup dir', $backupDir);
-            $path = rtrim($backupDir, '/').'/'.$backupId;
-            $this->logDebug('[importRestore] path exists?', [
-                'path' => $path,
-                'exists' => is_file($path),
-                'readable' => is_readable($path),
-            ]);
-
-            // Load legacy Course
-            /** @var Course $course */
-            $course = CourseArchiver::readCourse($backupId, false);
-
+            $course = $this->loadLegacyCourseForAnyBackup($backupId);
             if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
-                $this->logDebug('[importRestore] course empty resources');
-
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
 
-            // Snapshots before filtering (debug)
-            $this->logDebug('[importRestore] BEFORE filter keys', array_keys($course->resources));
-            $this->logDebug('[importRestore] BEFORE forum counts', $this->snapshotForumCounts($course));
-            $this->logDebug('[importRestore] BEFORE resources snapshot', $this->snapshotResources($course));
+            $resourcesAll = (array) $course->resources;
+            $this->logDebug('[importRestore] BEFORE filter keys', array_keys($resourcesAll));
 
-            $resourcesAll = (array) ($course->resources ?? []);
-            $this->logDebug('[importRestore] resources_all snapshot captured', ['keys' => array_keys($resourcesAll)]);
+            // Detect source BEFORE any filtering (meta may be dropped by filters)
+            $importSource = $this->getImportSource($course);
+            $isMoodle = ('moodle' === $importSource);
+            $this->logDebug('[importRestore] detected import source', ['import_source' => $importSource, 'isMoodle' => $isMoodle]);
 
-            // Partial selection logic
             if ('select_items' === $importOption) {
-                $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll ?? []);
+                $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll);
 
-                // If the UI sent only high-level types (e.g., ["learnpath"]) and no item map,
-                // build a resources selection map from those types.
                 if (empty($selectedResources) && !empty($selectedTypes)) {
-                    if (method_exists($this, 'buildSelectionFromTypes')) {
-                        $selectedResources = $this->buildSelectionFromTypes($course, $selectedTypes);
-                    }
-                    $this->logDebug('[importRestore] built selection from types', [
-                        'selectedTypes' => $selectedTypes,
-                        'built_keys' => array_keys($selectedResources),
-                    ]);
+                    $selectedResources = $this->buildSelectionFromTypes($course, $selectedTypes);
                 }
 
-                // Validate selection map
                 $hasAny = false;
-                foreach ($selectedResources as $t => $ids) {
+                foreach ($selectedResources as $ids) {
                     if (\is_array($ids) && !empty($ids)) {
                         $hasAny = true;
 
@@ -256,61 +232,123 @@ class CourseMaintenanceController extends AbstractController
                     }
                 }
                 if (!$hasAny) {
-                    $this->logDebug('[importRestore] empty selection');
-
                     return $this->json(['error' => 'No resources selected'], 400);
                 }
 
-                // Filter legacy course by selection (keeps only selected buckets/ids).
-                // Dependency pulling for LP/quizzes/surveys/etc. should be handled inside the Restorer,
-                // using the full snapshot we pass below (no dynamic properties on $course).
                 $course = $this->filterLegacyCourseBySelection($course, $selectedResources);
-
                 if (empty($course->resources) || 0 === \count((array) $course->resources)) {
-                    $this->logDebug('[importRestore] selection produced no resources');
-
                     return $this->json(['error' => 'Selection produced no resources to restore'], 400);
                 }
             }
 
-            // Snapshots after filtering (debug)
-            $this->logDebug('[importRestore] AFTER filter keys', array_keys($course->resources));
-            $this->logDebug('[importRestore] AFTER forum counts', $this->snapshotForumCounts($course));
-            $this->logDebug('[importRestore] AFTER resources snapshot', $this->snapshotResources($course));
+            $this->logDebug('[importRestore] AFTER filter keys', array_keys((array) $course->resources));
 
-            // Restore
-            $restorer = new CourseRestorer($course);
-            $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
+            // NON-MOODLE
+            if (!$isMoodle) {
+                $this->logDebug('[importRestore] non-Moodle backup -> using CourseRestorer');
+                $this->normalizeBucketsForRestorer($course);
 
-            if (method_exists($restorer, 'setResourcesAllSnapshot')) {
-                $restorer->setResourcesAllSnapshot($resourcesAll);
-                $this->logDebug('[importRestore] restorer snapshot forwarded', ['keys' => array_keys($resourcesAll)]);
+                $restorer = new CourseRestorer($course);
+                $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
+                if (method_exists($restorer, 'setResourcesAllSnapshot')) {
+                    $restorer->setResourcesAllSnapshot($resourcesAll);
+                }
+                if (method_exists($restorer, 'setDebug')) {
+                    $restorer->setDebug($this->debug);
+                }
+                $restorer->restore();
+
+                CourseArchiver::cleanBackupDir();
+
+                $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
+                $redirectUrl = \sprintf('/course/%d/home?sid=0&gid=0', $courseId);
+
+                return $this->json([
+                    'ok' => true,
+                    'message' => 'Import finished',
+                    'redirectUrl' => $redirectUrl,
+                ]);
             }
-            if (method_exists($restorer, 'setDebug')) {
-                $restorer->setDebug($this->debug);
+
+            // MOODLE
+            $this->logDebug('[importRestore] Moodle backup -> using MoodleImport.*');
+
+            $backupPath = $this->resolveBackupPath($backupId);
+            $ci = api_get_course_info();
+            $cid = (int) ($ci['real_id'] ?? 0);
+            $sid = 0;
+
+            $presentBuckets = array_map('strtolower', array_keys((array) $course->resources));
+            $present = static fn (string $k): bool => \in_array(strtolower($k), $presentBuckets, true);
+
+            $wantedGroups = [];
+            $mark = static function (array &$dst, bool $cond, string $key): void { if ($cond) { $dst[$key] = true; } };
+
+            if ('full_backup' === $importOption) {
+                $mark($wantedGroups, $present('link') || $present('link_category'), 'links');
+                $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
+                $mark($wantedGroups, $present('document'), 'documents');
+                $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
+                $mark($wantedGroups, $present('scorm'), 'scorm');
+            } else {
+                $mark($wantedGroups, $present('link'), 'links');
+                $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
+                $mark($wantedGroups, $present('document'), 'documents');
+                $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
+                $mark($wantedGroups, $present('scorm'), 'scorm');
             }
 
-            $restorer->restore();
+            if (empty($wantedGroups)) {
+                CourseArchiver::cleanBackupDir();
 
-            $this->logDebug('[importRestore] restore() finished', [
-                'dest_course_id' => $restorer->destination_course_info['real_id'] ?? null,
-            ]);
+                return $this->json([
+                    'ok' => true,
+                    'message' => 'Nothing to import for Moodle (no supported resource groups present)',
+                    'stats' => new stdClass(),
+                ]);
+            }
 
-            // Cleanup temporary backup dir
+            $importer = new MoodleImport(debug: $this->debug);
+            $stats = [];
+
+            // LINKS
+            if (!empty($wantedGroups['links']) && method_exists($importer, 'restoreLinks')) {
+                $stats['links'] = $importer->restoreLinks($backupPath, $em, $cid, $sid, $course);
+            }
+
+            // FORUMS
+            if (!empty($wantedGroups['forums']) && method_exists($importer, 'restoreForums')) {
+                $stats['forums'] = $importer->restoreForums($backupPath, $em, $cid, $sid, $course);
+            }
+
+            // DOCUMENTS
+            if (!empty($wantedGroups['documents']) && method_exists($importer, 'restoreDocuments')) {
+                $stats['documents'] = $importer->restoreDocuments(
+                    $backupPath,
+                    $em,
+                    $cid,
+                    $sid,
+                    $sameFileNameOption,
+                    $course
+                );
+            }
+
+            // QUIZZES
+            if (!empty($wantedGroups['quizzes']) && method_exists($importer, 'restoreQuizzes')) {
+                $stats['quizzes'] = $importer->restoreQuizzes($backupPath, $em, $cid, $sid);
+            }
+
+            // SCORM
+            if (!empty($wantedGroups['scorm']) && method_exists($importer, 'restoreScorm')) {
+                $stats['scorm'] = $importer->restoreScorm($backupPath, $em, $cid, $sid);
+            }
+
             CourseArchiver::cleanBackupDir();
-
-            // Redirect info
-            $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
-            $sessionId = 0;
-            $groupId = 0;
-            $redirectUrl = \sprintf('/course/%d/home?sid=%d&gid=%d', $courseId, $sessionId, $groupId);
-
-            $this->logDebug('[importRestore] done, redirect', ['url' => $redirectUrl]);
 
             return $this->json([
                 'ok' => true,
-                'message' => 'Import finished',
-                'redirectUrl' => $redirectUrl,
+                'message' => 'Moodle import finished',
+                'stats' => $stats,
             ]);
         } catch (Throwable $e) {
             $this->logDebug('[importRestore] exception', [
@@ -620,25 +658,21 @@ class CourseMaintenanceController extends AbstractController
     }
 
     #[Route('/moodle/export/options', name: 'moodle_export_options', methods: ['GET'])]
-    public function moodleExportOptions(int $node, Request $req): JsonResponse
+    public function moodleExportOptions(int $node, Request $req, UserRepository $users): JsonResponse
     {
-        $this->setDebugFromRequest($req);
+        $defaults = [
+            'moodleVersion' => '4',
+            'scope' => 'full',
+            'admin' => $users->getDefaultAdminForExport(),
+        ];
 
-        // Defaults for the UI
-        $payload = [
+        return $this->json([
             'versions' => [
                 ['value' => '3', 'label' => 'Moodle 3.x'],
                 ['value' => '4', 'label' => 'Moodle 4.x'],
             ],
-            'defaults' => [
-                'moodleVersion' => '4',
-                'scope' => 'full', // 'full' | 'selected'
-            ],
-            // Optional friendly note until real export is implemented
-            'message' => 'Moodle export endpoints are under construction.',
-        ];
-
-        return $this->json($payload);
+            'defaults' => $defaults,
+        ]);
     }
 
     #[Route('/moodle/export/resources', name: 'moodle_export_resources', methods: ['GET'])]
@@ -662,37 +696,75 @@ class CourseMaintenanceController extends AbstractController
     }
 
     #[Route('/moodle/export/execute', name: 'moodle_export_execute', methods: ['POST'])]
-    public function moodleExportExecute(int $node, Request $req): JsonResponse
+    public function moodleExportExecute(int $node, Request $req, UserRepository $users): JsonResponse|BinaryFileResponse
     {
         $this->setDebugFromRequest($req);
 
-        // Read payload (basic validation)
         $p = json_decode($req->getContent() ?: '{}', true);
-        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');     // '3' | '4'
-        $scope = (string) ($p['scope'] ?? 'full');          // 'full' | 'selected'
-        $adminId = trim((string) ($p['adminId'] ?? ''));
+        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');   // '3' | '4'
+        $scope = (string) ($p['scope'] ?? 'full');        // 'full' | 'selected'
+        $adminId = (int) ($p['adminId'] ?? 0);
         $adminLogin = trim((string) ($p['adminLogin'] ?? ''));
         $adminEmail = trim((string) ($p['adminEmail'] ?? ''));
-        $resources = (array) ($p['resources'] ?? []);
+        $selected = (array) ($p['resources'] ?? []);
 
-        if ('' === $adminId || '' === $adminLogin || '' === $adminEmail) {
-            return $this->json(['error' => 'Missing required fields (adminId, adminLogin, adminEmail)'], 400);
-        }
-        if ('selected' === $scope && empty($resources)) {
-            return $this->json(['error' => 'No resources selected'], 400);
-        }
         if (!\in_array($moodleVersion, ['3', '4'], true)) {
             return $this->json(['error' => 'Unsupported Moodle version'], 400);
         }
+        if ('selected' === $scope && empty($selected)) {
+            return $this->json(['error' => 'No resources selected'], 400);
+        }
 
-        // Stub response while implementation is in progress
-        // Use 202 so the frontend can show a notice without treating it as a failure.
-        return new JsonResponse([
-            'ok' => false,
-            'message' => 'Moodle export is under construction. No .mbz file was generated.',
-            // you may also return a placeholder downloadUrl later
-            // 'downloadUrl' => null,
-        ], 202);
+        if ($adminId <= 0 || '' === $adminLogin || '' === $adminEmail) {
+            $adm = $users->getDefaultAdminForExport();
+            $adminId = $adminId > 0 ? $adminId : (int) ($adm['id'] ?? 1);
+            $adminLogin = '' !== $adminLogin ? $adminLogin : (string) ($adm['username'] ?? 'admin');
+            $adminEmail = '' !== $adminEmail ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
+        }
+
+        // Build legacy Course from CURRENT course (same approach as recycle)
+        $cb = new CourseBuilder();
+        $cb->set_tools_to_build([
+            'documents', 'links', 'quizzes', 'quiz_questions', 'surveys', 'survey_questions',
+            'announcements', 'events', 'course_descriptions', 'glossary', 'wiki', 'thematic',
+            'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths', 'tool_intro',
+            'forums',
+        ]);
+        $course = $cb->build(0, api_get_course_id());
+
+        // IMPORTANT: when scope === 'selected', use the same robust selection filter as copy-course
+        if ('selected' === $scope) {
+            // This method trims buckets to only selected items and pulls needed deps (LP/quiz/survey)
+            $course = $this->filterLegacyCourseBySelection($course, $selected);
+
+            // Safety guard: fail if nothing remains after filtering
+            if (empty($course->resources) || !\is_array($course->resources)) {
+                return $this->json(['error' => 'Selection produced no resources to export'], 400);
+            }
+        }
+
+        try {
+            // Pass selection flag to exporter so it does NOT re-hydrate from a complete snapshot.
+            $selectionMode = ('selected' === $scope);
+            $exporter = new MoodleExport($course, $selectionMode);
+            $exporter->setAdminUserData($adminId, $adminLogin, $adminEmail);
+
+            $courseId = api_get_course_id();
+            $exportDir = 'moodle_export_'.date('Ymd_His');
+            $versionNum = ('3' === $moodleVersion) ? 3 : 4;
+
+            $mbzPath = $exporter->export($courseId, $exportDir, $versionNum);
+
+            $resp = new BinaryFileResponse($mbzPath);
+            $resp->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                basename($mbzPath)
+            );
+
+            return $resp;
+        } catch (Throwable $e) {
+            return $this->json(['error' => 'Moodle export failed: '.$e->getMessage()], 500);
+        }
     }
 
     #[Route('/cc13/export/options', name: 'cc13_export_options', methods: ['GET'])]
@@ -1359,9 +1431,7 @@ class CourseMaintenanceController extends AbstractController
             'exercise_question' => 'exercise_question',
             'surveyquestion' => 'survey_question',
             'surveyinvitation' => 'survey_invitation',
-            'SurveyQuestion' => 'survey_question',
-            'SurveyInvitation' => 'survey_invitation',
-            'Survey' => 'survey',
+            'survey' => 'survey',
             'link_category' => 'link_category',
             'coursecopylearnpath' => 'learnpath',
             'coursecopytestcategory' => 'test_category',
@@ -1702,6 +1772,14 @@ class CourseMaintenanceController extends AbstractController
         /** @var array<string,mixed> $orig */
         $orig = $course->resources;
 
+        // Keep meta buckets (keys starting with "__") so we don't lose import_source, etc.
+        $__metaBuckets = [];
+        foreach ($orig as $k => $v) {
+            if (\is_string($k) && str_starts_with($k, '__')) {
+                $__metaBuckets[$k] = $v;
+            }
+        }
+
         $getBucket = static function (array $a, string $key): array {
             return (isset($a[$key]) && \is_array($a[$key])) ? $a[$key] : [];
         };
@@ -1787,7 +1865,13 @@ class CourseMaintenanceController extends AbstractController
                     $out['Forum_Category'] = $forumCat;
                 }
 
-                $course->resources = array_filter($out);
+                // Preserve meta buckets
+                if (!empty($__metaBuckets)) {
+                    $out = array_filter($out);
+                    $course->resources = $__metaBuckets + $out;
+                } else {
+                    $course->resources = array_filter($out);
+                }
 
                 $this->logDebug('[filterSelection] end', [
                     'kept_types' => array_keys($course->resources),
@@ -2078,7 +2162,13 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-        $course->resources = array_filter($keep);
+        $keep = array_filter($keep);
+        if (!empty($__metaBuckets)) {
+            $course->resources = $__metaBuckets + $keep;
+        } else {
+            $course->resources = $keep;
+        }
+
         $this->logDebug('[filterSelection] non-forum flow end', [
             'kept_types' => array_keys($course->resources),
         ]);
@@ -2375,5 +2465,187 @@ class CourseMaintenanceController extends AbstractController
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
+    }
+
+    /**
+     * Leaves only the items selected by the UI in $course->resources.
+     * Expects $selected with the following form:
+     * [
+     * "documents" => ["123" => true, "124" => true],
+     * "links" => ["7" => true],
+     * "quiz" => ["45" => true],
+     * ...
+     * ].
+     */
+    private function filterCourseResources(object $course, array $selected): void
+    {
+        if (!isset($course->resources) || !\is_array($course->resources)) {
+            return;
+        }
+
+        $typeMap = [
+            'documents' => RESOURCE_DOCUMENT,
+            'links' => RESOURCE_LINK,
+            'quizzes' => RESOURCE_QUIZ,
+            'quiz' => RESOURCE_QUIZ,
+            'quiz_questions' => RESOURCE_QUIZQUESTION,
+            'surveys' => RESOURCE_SURVEY,
+            'survey' => RESOURCE_SURVEY,
+            'survey_questions' => RESOURCE_SURVEYQUESTION,
+            'announcements' => RESOURCE_ANNOUNCEMENT,
+            'events' => RESOURCE_EVENT,
+            'course_descriptions' => RESOURCE_COURSEDESCRIPTION,
+            'glossary' => RESOURCE_GLOSSARY,
+            'wiki' => RESOURCE_WIKI,
+            'thematic' => RESOURCE_THEMATIC,
+            'attendance' => RESOURCE_ATTENDANCE,
+            'works' => RESOURCE_WORK,
+            'gradebook' => RESOURCE_GRADEBOOK,
+            'learnpaths' => RESOURCE_LEARNPATH,
+            'learnpath_category' => RESOURCE_LEARNPATH_CATEGORY,
+            'tool_intro' => RESOURCE_TOOL_INTRO,
+            'forums' => RESOURCE_FORUM,
+            'forum' => RESOURCE_FORUM,
+            'forum_topic' => RESOURCE_FORUMTOPIC,
+            'forum_post' => RESOURCE_FORUMPOST,
+        ];
+
+        $allowed = [];
+        foreach ($selected as $k => $idsMap) {
+            $key = $typeMap[$k] ?? $k;
+            $allowed[$key] = array_fill_keys(array_map('intval', array_keys((array) $idsMap)), true);
+        }
+
+        foreach ($course->resources as $rtype => $bucket) {
+            if (!isset($allowed[$rtype])) {
+                continue;
+            }
+            $keep = $allowed[$rtype];
+            $filtered = [];
+            foreach ((array) $bucket as $id => $obj) {
+                $iid = (int) ($obj->source_id ?? $id);
+                if (isset($keep[$iid])) {
+                    $filtered[$id] = $obj;
+                }
+            }
+            $course->resources[$rtype] = $filtered;
+        }
+    }
+
+    /**
+     * Returns the absolute path of the backupId in the backup directory.
+     */
+    private function resolveBackupPath(string $backupId): string
+    {
+        $backupDir = rtrim(CourseArchiver::getBackupDir(), '/');
+
+        return $backupDir.'/'.$backupId;
+    }
+
+    /**
+     * Heuristic: Does it look like a Moodle package?
+     * - If the extension (.mbz, .tgz, .gz) is used, we treat it as Moodle.
+     * - If it's a .zip file but CourseArchiver fails or contains "moodle_backup.xml," it's also Moodle.
+     */
+    private function isLikelyMoodlePackage(string $path, ?Throwable $priorError = null): bool
+    {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        if (\in_array($ext, ['mbz', 'tgz', 'gz'], true)) {
+            return true;
+        }
+        if ('zip' === $ext && $priorError) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Load a legacy course from a Chamilo or Moodle backup, testing both readers.
+     * - First try CourseArchiver (Chamilo).
+     * - If that fails, retry MoodleImport.
+     */
+    private function loadLegacyCourseForAnyBackup(string $backupId): object
+    {
+        $path = $this->resolveBackupPath($backupId);
+        $this->logDebug('[loadLegacyCourseForAnyBackup] try Chamilo first', ['path' => $path]);
+
+        // Chamilo ZIP (course_info.dat)
+        try {
+            $course = CourseArchiver::readCourse($backupId, false);
+            if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
+                throw new RuntimeException('Invalid Chamilo backup structure (empty resources)');
+            }
+
+            return $course;
+        } catch (Throwable $e) {
+            $this->logDebug('[loadLegacyCourseForAnyBackup] Chamilo reader failed, will try Moodle', ['err' => $e->getMessage()]);
+            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+            if (!\in_array($ext, ['mbz', 'zip', 'gz', 'tgz'], true)) {
+                throw $e;
+            }
+        }
+
+        // Moodle (.mbz/.zip/.tgz)
+        $this->logDebug('[loadLegacyCourseForAnyBackup] using MoodleImport');
+        $importer = new MoodleImport(debug: $this->debug);
+        $course = $importer->buildLegacyCourseFromMoodleArchive($path);
+
+        if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
+            throw new RuntimeException('Moodle backup contains no importable resources');
+        }
+
+        return $course;
+    }
+
+    private function normalizeBucketsForRestorer(object $course): void
+    {
+        if (!isset($course->resources) || !\is_array($course->resources)) {
+            return;
+        }
+
+        $map = [
+            'link' => RESOURCE_LINK,
+            'link_category' => RESOURCE_LINKCATEGORY,
+            'forum' => RESOURCE_FORUM,
+            'forum_category' => RESOURCE_FORUMCATEGORY,
+            'forum_topic' => RESOURCE_FORUMTOPIC,
+            'forum_post' => RESOURCE_FORUMPOST,
+            'thread' => RESOURCE_FORUMTOPIC,
+            'post' => RESOURCE_FORUMPOST,
+            'document' => RESOURCE_DOCUMENT,
+            'quiz' => RESOURCE_QUIZ,
+            'exercise_question' => RESOURCE_QUIZQUESTION,
+            'survey' => RESOURCE_SURVEY,
+            'survey_question' => RESOURCE_SURVEYQUESTION,
+            'tool_intro' => RESOURCE_TOOL_INTRO,
+        ];
+
+        $res = $course->resources;
+        foreach ($map as $from => $to) {
+            if (isset($res[$from]) && \is_array($res[$from])) {
+                if (!isset($res[$to])) {
+                    $res[$to] = $res[$from];
+                }
+                unset($res[$from]);
+            }
+        }
+
+        $course->resources = $res;
+    }
+
+    /**
+     * Read import_source without depending on filtered resources.
+     * Falls back to $course->info['__import_source'] if needed.
+     */
+    private function getImportSource(object $course): string
+    {
+        $src = strtolower((string) ($course->resources['__meta']['import_source'] ?? ''));
+        if ('' !== $src) {
+            return $src;
+        }
+
+        // Fallbacks (defensive)
+        return strtolower((string) ($course->info['__import_source'] ?? ''));
     }
 }

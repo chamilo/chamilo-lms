@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -38,7 +40,7 @@ class CourseCopyTestCategory extends Resource
     /**
      * Show the test_category title, used in the partial recycle_course.php form.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->title;

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -1310,7 +1311,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function findByAuthsource(string $authentication): array
+    public function findByAuthsource(string $authentication)
     {
         $qb = $this->getOrCreateQueryBuilder(null, 'u');
 
@@ -1340,5 +1341,76 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 'ids' => $ids,
             ])
         ;
+    }
+
+    public function findOnePlatformAdmin(?int $accessUrlId = null): ?User
+    {
+        $qb = $this->createQueryBuilder('u');
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
+
+        if ($accessUrlId === null) {
+            $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 0;
+        }
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->like('u.roles', ':super'),
+            $qb->expr()->like('u.roles', ':admin')
+        ))
+            ->setParameter('super', '%ROLE_SUPER_ADMIN%')
+            ->setParameter('admin', '%ROLE_ADMIN%')
+            ->orderBy('u.id', 'ASC')
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Returns the "package" {id, username, email} to autocomplete the export.
+     * Try: Admin::class -> roles -> current user -> fallback "1/admin/admin@example.com".
+     */
+    public function getDefaultAdminForExport(): array
+    {
+        $em = $this->getEntityManager();
+        try {
+            $adminEntity = $em->getRepository(Admin::class)
+                ->createQueryBuilder('a')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if ($adminEntity && $adminEntity->getUser()) {
+                $u = $adminEntity->getUser();
+                return [
+                    'id'       => (string) $u->getId(),
+                    'username' => (string) $u->getUsername(),
+                    'email'    => (string) ($u->getEmail() ?? ''),
+                ];
+            }
+        } catch (\Throwable $e) {}
+
+        $u = $this->findOnePlatformAdmin();
+        if ($u instanceof User) {
+            return [
+                'id'       => (string) $u->getId(),
+                'username' => (string) $u->getUsername(),
+                'email'    => (string) ($u->getEmail() ?? ''),
+            ];
+        }
+
+        $me = api_get_user_info();
+        if (!empty($me['id'])) {
+            return [
+                'id'       => (string) $me['id'],
+                'username' => (string) ($me['username'] ?? ''),
+                'email'    => (string) ($me['email'] ?? ''),
+            ];
+        }
+
+        return [
+            'id'       => '1',
+            'username' => 'admin',
+            'email'    => 'admin@example.com',
+        ];
     }
 }

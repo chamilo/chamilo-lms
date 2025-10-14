@@ -361,7 +361,8 @@ function isActive(item) {
   try {
     if (item.route) {
       const resolved = router.resolve(item.route)
-      //compares the resolved paths      return resolved.path === route.path
+      //compares the resolved paths
+      return resolved.path === route.path
     }
     if (item.url) {
       // handles both absolute and relative URLs

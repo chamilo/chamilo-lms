@@ -75,9 +75,19 @@ final class CCalendarEventRepository extends ResourceRepository
 
         foreach ($remindersInfo as $reminderInfo) {
             $reminder = new AgendaReminder();
-            $reminder->count = (int) $reminderInfo[0];
-            $reminder->period = $reminderInfo[1];
+            $reminder->count = max(0, (int) ($reminderInfo[0] ?? 0));
+            $period = (string) ($reminderInfo[1] ?? '');
 
+            if ($period === 'w') {
+                $reminder->count = $reminder->count * 7;
+                $period = 'd';
+            }
+
+            if (!in_array($period, ['i','h','d'], true)) {
+                $period = 'i';
+            }
+
+            $reminder->period = $period;
             $reminder->decodeDateInterval();
 
             $event->addReminder($reminder);

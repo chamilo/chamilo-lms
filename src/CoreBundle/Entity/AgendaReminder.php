@@ -88,12 +88,18 @@ class AgendaReminder
 
     public function decodeDateInterval(): static
     {
-        $this->dateInterval = match ($this->period) {
-            'i' => DateInterval::createFromDateString("{$this->count} minutes"),
-            'h' => DateInterval::createFromDateString("{$this->count} hours"),
-            'd' => DateInterval::createFromDateString("{$this->count} days"),
-            default => null,
+        $count = max(0, (int) $this->count);
+        $period = (string) $this->period;
+
+        $isoSpec = match ($period) {
+            'i' => "PT{$count}M",
+            'h' => "PT{$count}H",
+            'd' => "P{$count}D",
+            'w' => "P{$count}W",
+            default => "PT0M",
         };
+
+        $this->dateInterval = new \DateInterval($isoSpec);
 
         return $this;
     }

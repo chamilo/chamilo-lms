@@ -6,7 +6,7 @@
     <Breadcrumb :model="itemList">
       <template #item="{ item, props }">
         <BaseAppLink
-          v-if="item.route || item.url"
+          v-if="(item.route || item.url) && !isActive(item)"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
@@ -353,5 +353,30 @@ function handleBreadcrumbClick(item) {
   if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
     window.location.href = router.resolve(item.route).href
   }
+}
+
+// Returns true if the item matches the current route (so it should be displayed as non-clickable text)
+function isActive(item) {
+  if (!item) return false
+  try {
+    if (item.route) {
+      const resolved = router.resolve(item.route)
+      //compares the resolved paths      return resolved.path === route.path
+    }
+    if (item.url) {
+      // handles both absolute and relative URLs
+      const raw = item.url.toString()
+      try {
+        const url = raw.startsWith("http") ? new URL(raw) : new URL(raw, window.location.origin)
+        return url.pathname === route.path
+      } catch (e) {
+        // if parsing fails, simply compares the fragments
+        return raw === route.path || raw === window.location.href
+      }
+    }
+  } catch (e) {
+    return false
+  }
+  return false
 }
 </script>

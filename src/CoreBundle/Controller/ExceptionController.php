@@ -91,9 +91,22 @@ class ExceptionController extends AbstractController
     {
         $host = $request->getHost();
 
-        // Resolve theme-aware asset URLs (respects AccessUrl, user/course/LP settings, THEME_FALLBACK, DEFAULT_THEME)
-        $cssUrl = $this->themeHelper->getThemeAssetUrl('colors.css', true); // absolute URL
-        $logoUrl = $this->themeHelper->getPreferredLogoUrl('header', true);  // absolute URL
+        // Try to detect a valid AccessUrl (the first active one as fallback)
+        $accessUrl = $this->accessUrlRepository->findOneBy(['active' => 1], ['id' => 'ASC']);
+
+        // Base host to use (fallback to AccessUrl[1] if current host is unknown)
+        $baseHost = rtrim($accessUrl?->getUrl() ?? '', '/');
+
+        // Resolve theme-aware asset URLs
+        $cssUrl  = $this->themeHelper->getThemeAssetUrl('colors.css', true); // still theme-aware
+        $logoUrl = $this->themeHelper->getPreferredLogoUrl('header', true);  // absolute but invalid host may persist
+
+        // Fix: if the generated logo URL contains the invalid host, rebuild it with main AccessUrl
+        if (false !== strpos($logoUrl, $host) && !empty($baseHost)) {
+            $parsed = parse_url($logoUrl);
+            $path = $parsed['path'] ?? '';
+            $logoUrl = $baseHost.$path;
+        }
 
         return $this->render('@ChamiloCore/Exception/undefined_url.html.twig', [
             'host' => $host,

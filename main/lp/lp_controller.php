@@ -1238,6 +1238,69 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
+    case 'reorder_categories':
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed(true);
+        }
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $catOrder = isset($_POST['order']) ? (array) $_POST['order'] : [];
+        $tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
+
+        Database::query('START TRANSACTION');
+        $pos = 1;
+        foreach ($catOrder as $catId) {
+            $catId = (int)$catId;
+            if ($catId > 0) {
+                $catSessionId = (int) learnpath::getCategorySessionId($catId);
+                if ($catSessionId !== 0 && $catSessionId !== $sessionId) {
+                    continue;
+                }
+            }
+            $sql = "UPDATE $tableCategory SET position = $pos WHERE c_id = $courseId AND id = $catId";
+            Database::query($sql);
+            $pos++;
+        }
+        Database::query('COMMIT');
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => true]);
+        exit;
+        break;
+
+    case 'reorder_lps':
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed(true);
+        }
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $tableLp = Database::get_course_table(TABLE_LP_MAIN);
+
+        $lists = isset($_POST['lists']) ? (array) $_POST['lists'] : [];
+
+        if (!empty($sessionId)) {
+            api_not_allowed(true);
+        }
+
+        Database::query('START TRANSACTION');
+
+        foreach ($lists as $categoryIdStr => $lpIds) {
+            $categoryId = (int)$categoryIdStr;
+            $pos = 1;
+            foreach ((array)$lpIds as $lpId) {
+                $lpId = (int)$lpId;
+                $sql = "UPDATE $tableLp
+                    SET category_id = ".($categoryId ?: 0).", display_order = $pos
+                    WHERE c_id = $courseId AND id = $lpId";
+                Database::query($sql);
+                $pos++;
+            }
+        }
+
+        Database::query('COMMIT');
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => true]);
+        exit;
+        break;
     case 'edit':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

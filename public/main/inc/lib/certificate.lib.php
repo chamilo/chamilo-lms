@@ -350,6 +350,11 @@ class Certificate extends Model
         $categoryId = (int) $categoryId;
         $user_id = (int) $user_id;
 
+        $categoryCondition = 'cat_id = "'.$categoryId.'"';
+        if ($categoryId == 0) {
+            $categoryCondition = 'cat_id IS NULL';
+        }
+
         if ($updateCertificateData &&
             !UserManager::is_user_certified($categoryId, $user_id)
         ) {
@@ -358,7 +363,7 @@ class Certificate extends Model
             $sql = 'UPDATE '.$table.' SET
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
-                    WHERE cat_id = "'.$categoryId.'" AND user_id="'.$user_id.'" ';
+                    WHERE '.$categoryCondition.' AND user_id="'.$user_id.'" ';
             Database::query($sql);
         }
     }

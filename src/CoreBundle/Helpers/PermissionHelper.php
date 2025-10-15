@@ -17,15 +17,21 @@ class PermissionHelper
     ) {}
 
     /**
-     * Returns the list of role codes currently stored in the 'role' table.
+     * Returns the list of role codes currently stored in the 'role' table,
+     * excluding internal roles like ANONYMOUS (not assignable).
      *
      * @return string[]
      */
     public function getUserRoles(): array
     {
-        $roles = $this->roleRepository->findAll();
+        $qb = $this->roleRepository->createQueryBuilder('r')
+            ->where('r.code <> :anon')
+            ->setParameter('anon', 'ANONYMOUS')
+            ->orderBy('r.constantValue', 'ASC');
 
-        return array_map(fn ($r) => $r->getCode(), $roles);
+        $roles = $qb->getQuery()->getResult();
+
+        return array_map(static fn ($r) => $r->getCode(), $roles);
     }
 
     /**

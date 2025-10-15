@@ -16,6 +16,13 @@ class RoleFixtures extends Fixture
     {
         $roles = [
             [
+                'code' => 'ANONYMOUS',
+                'constantValue' => 0,
+                'title' => 'Anonymous',
+                'description' => 'Unauthenticated users',
+                'systemRole' => true,
+            ],
+            [
                 'code' => 'INVITEE',
                 'constantValue' => 1,
                 'title' => 'Invitee',
@@ -41,13 +48,6 @@ class RoleFixtures extends Fixture
                 'constantValue' => 4,
                 'title' => 'Administrator',
                 'description' => 'Platform administrators',
-                'systemRole' => true,
-            ],
-            [
-                'code' => 'SUPER_ADMIN',
-                'constantValue' => 5,
-                'title' => 'Super Administrator',
-                'description' => 'Super admin users',
                 'systemRole' => true,
             ],
             [

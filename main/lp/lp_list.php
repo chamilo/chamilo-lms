@@ -942,6 +942,7 @@ foreach ($categories as $item) {
             );
 
             $listData[] = [
+                'lp_id' => $id,
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
                 'title' => $my_title,

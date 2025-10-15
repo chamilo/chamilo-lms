@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Doctrine\Orm\Extension\PaginationExtension;
+use ApiPlatform\Doctrine\Orm\Paginator;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
@@ -75,6 +76,20 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             $context
         );
 
-        return $this->paginationExtension->getResult($qb, Session::class, $operation, $context);
+        $paginator = $this->paginationExtension->getResult($qb, Session::class, $operation, $context);
+
+        // Convert paginator to array since paginationEnabled is false
+        $result = $paginator;
+
+        if ($result instanceof Paginator) {
+            return iterator_to_array($result);
+        }
+
+        // If it's already an array or collection, convert to array
+        if (is_iterable($result)) {
+            return \is_array($result) ? $result : iterator_to_array($result);
+        }
+
+        return [];
     }
 }

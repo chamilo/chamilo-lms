@@ -96,6 +96,12 @@ if (!empty($courseId) && $courseId > 0) {
 
 // JavaScript for form submission (page reload on change)
 $htmlHeadXtra[] = "
+<style>
+.select2-selection, .select2-selection__rendered {
+    height: 38px !important;
+    line-height: 38px !important;
+}
+</style>
 <script>
 $(document).ready(function() {
     // Initialize Select2

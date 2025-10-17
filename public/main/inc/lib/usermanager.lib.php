@@ -1344,6 +1344,8 @@ class UserManager
     /**
      * Check if a username is available.
      *
+     * @deprecated Use Chamilo\CoreBundle\Repository\Node\UserRepository::isUsernameAvailable() instead
+     *
      * @param string $username the wanted username
      *
      * @return bool true if the wanted username is available

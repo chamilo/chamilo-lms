@@ -35,7 +35,6 @@ readonly class LdapAuthenticatorHelper
             throw new NotAllowedException();
         }
 
-
         $request = $this->requestStack->getCurrentRequest();
         $dataCorrespondence = $this->ldapConfig['data_correspondence'];
 
@@ -72,6 +71,23 @@ readonly class LdapAuthenticatorHelper
             ->toArray();
     }
 
+    /**
+     * @return array<int, Entry>
+     */
+    private function queryByOu(string $ou): array
+    {
+        try {
+            $this->ldap->bind($this->ldapConfig['search_dn'], $this->ldapConfig['search_password']);
+        } catch (InvalidCredentialsException) {
+            throw new NotAllowedException();
+        }
+
+        return $this->ldap
+            ->query($this->ldapConfig['base_dn'], "(ou=*$ou)")
+            ->execute()
+            ->toArray();
+    }
+
     public function countUsers(array $params): int
     {
         return count($this->queryAllUsers());
@@ -104,6 +120,28 @@ readonly class LdapAuthenticatorHelper
             $user[] = $ldapUser->getAttribute($userIdentifier)[0];
 
             $users[] = $user;
+        }
+
+        return $users;
+    }
+
+    public function getUsersByOu(string $ou): array
+    {
+        $ldapUsers = $this->queryByOu($ou);
+        $userIdentifier = $this->ldapConfig['uid_key'];
+        $passwordAttribute = $this->ldapConfig['password_attribute'];
+        $dataCorrespondence = $this->ldapConfig['data_correspondence'];
+
+        $users = [];
+
+        foreach ($ldapUsers as $ldapUser) {
+            $users[] = [
+                'username' => $ldapUser->getAttribute($userIdentifier)[0],
+                'firstname' => $ldapUser->getAttribute($dataCorrespondence['firstname'])[0],
+                'lastname' => $ldapUser->getAttribute($dataCorrespondence['lastname'])[0],
+                'email' => $ldapUser->getAttribute($dataCorrespondence['email'])[0],
+                'password' => $ldapUser->getAttribute($passwordAttribute)[0],
+            ];
         }
 
         return $users;

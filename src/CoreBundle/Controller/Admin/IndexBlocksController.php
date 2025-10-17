@@ -384,7 +384,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (\count($this->extAuthSource['ldap']) > 0) {
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
                 'url' => '/main/admin/ldap_import_students.php',
@@ -813,7 +813,8 @@ class IndexBlocksController extends BaseController
             'url' => '/main/session/session_import_drh.php',
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
-        if (\count($this->extAuthSource['ldap']) > 0) {
+
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
                 'url' => '/main/admin/ldap_import_students_to_session.php',

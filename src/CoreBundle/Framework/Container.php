@@ -631,6 +631,11 @@ class Container
         return self::$container->get('form.factory');
     }
 
+    public static function getCQuizRepository(): CQuizRepository
+    {
+        return self::$container->get(CQuizRepository::class);
+    }
+
     public static function addFlash(string $message, string $type = 'success'): void
     {
         $type = match ($type) {

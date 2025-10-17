@@ -202,9 +202,9 @@ $form->addDateTimePicker('start_date', get_lang('Start date'));
 $form->addDateTimePicker('end_date', get_lang('End date'));
 
 // Validation rules
-$form->addRule('session_id', get_lang('Required'), 'required');
-$form->addRule('selected_course', get_lang('Required'), 'required');
-$form->addRule('exerciseId', get_lang('Required'), 'required');
+$form->addRule('session_id', get_lang('Required field'), 'required');
+$form->addRule('selected_course', get_lang('Required field'), 'required');
+$form->addRule('exerciseId', get_lang('Required field'), 'required');
 
 // Export button
 $form->addButtonExport(get_lang('Export'), 'submit');

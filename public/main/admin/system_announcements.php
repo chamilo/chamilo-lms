@@ -37,6 +37,11 @@ $repo = Container::getSysAnnouncementRepository();
 
 $visibleList = api_get_user_roles();
 
+if (!array_key_exists('ROLE_ANONYMOUS', $visibleList)) {
+// Prefix to make it appear at the top; adapt the label if needed
+   $visibleList = array_merge(['ROLE_ANONYMOUS' => get_lang('Anonymous')], $visibleList);
+}
+
 $tool_name = null;
 if (empty($_GET['lang'])) {
     $_GET['lang'] = $_SESSION['user_language_choice'] ?? null;
@@ -438,7 +443,12 @@ if ($show_announcement_list) {
         $row[] = $announcement->getTitle();
         $row[] = api_convert_and_format_date($announcement->getDateStart());
         $row[] = api_convert_and_format_date($announcement->getDateEnd());
-        $row[] = implode(', ', $announcement->getRoles());
+        $announcementRoles = $announcement->getRoles(); // tableau d'identifiants
+        $displayRoles = [];
+        foreach ($announcementRoles as $r) {
+            $displayRoles[] = $visibleList[$r] ?? $r;
+        }
+        $row[] = implode(', ', $displayRoles);
 
         $row[] = $announcement->getLang();
         $confirmMsg = addslashes(api_htmlentities(get_lang('Please confirm your choice')));

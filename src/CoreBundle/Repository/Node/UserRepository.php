@@ -62,6 +62,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         parent::__construct($registry, User::class);
     }
 
+    public function isUsernameAvailable(string $username): bool
+    {
+        return 0 === $this->count(['username' => $username]);
+    }
+
     public function loadUserByIdentifier(string $identifier): ?User
     {
         return $this->findOneBy([

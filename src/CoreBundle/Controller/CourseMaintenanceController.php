@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
@@ -22,6 +25,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{BinaryFileResponse, JsonResponse, Request, ResponseHeaderBag};
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 use const ARRAY_FILTER_USE_BOTH;
@@ -773,10 +777,9 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         return $this->json([
-            'defaults' => [
-                'scope' => 'full', // 'full' | 'selected'
-            ],
-            'message' => 'Common Cartridge 1.3 export is under construction. You can already pick items and submit.',
+            'defaults' => ['scope' => 'full'],
+            'supportedTypes' => Cc13Capabilities::exportableTypes(), // ['document','link','forum']
+            'message' => 'Common Cartridge 1.3: documents (webcontent) and links (HTML stub as webcontent). Forums not exported yet.',
         ]);
     }
 
@@ -786,42 +789,155 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         $cb = new CourseBuilder();
-        $cb->set_tools_to_build([
-            'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
-            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
-            'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
-        ]);
+        $cb->set_tools_to_build(['documents', 'links', 'forums']);
         $course = $cb->build(0, api_get_course_id());
 
-        $tree = $this->buildResourceTreeForVue($course);
-        $warnings = empty($tree) ? ['This course has no resources.'] : [];
+        $treeAll = $this->buildResourceTreeForVue($course);
+        $tree    = Cc13Capabilities::filterTree($treeAll);
 
-        return $this->json(['tree' => $tree, 'warnings' => $warnings]);
+        // Count exportables using "items"
+        $exportableCount = 0;
+        foreach ($tree as $group) {
+            if (empty($group['items']) || !\is_array($group['items'])) { continue; }
+
+            if (($group['type'] ?? '') === 'forum') {
+                foreach ($group['items'] as $cat) {
+                    foreach (($cat['items'] ?? []) as $forumNode) {
+                        if (($forumNode['type'] ?? '') === 'forum') { $exportableCount++; }
+                    }
+                }
+            } else {
+                $exportableCount += \count($group['items'] ?? []);
+            }
+        }
+
+        $warnings = [];
+        if ($exportableCount === 0) {
+            $warnings[] = 'This course has no CC 1.3 exportable resources (documents, links or forums).';
+        }
+
+        return $this->json([
+            'supportedTypes' => Cc13Capabilities::exportableTypes(), // ['document','link','forum']
+            'tree'           => $tree,
+            'preview'        => ['counts' => ['total' => $exportableCount]],
+            'warnings'       => $warnings,
+        ]);
     }
 
     #[Route('/cc13/export/execute', name: 'cc13_export_execute', methods: ['POST'])]
     public function cc13ExportExecute(int $node, Request $req): JsonResponse
     {
-        $this->setDebugFromRequest($req);
+        $payload  = json_decode((string) $req->getContent(), true) ?: [];
+        // If the client sent "resources", treat as selected even if scope says "full".
+        $scope    = (string) ($payload['scope'] ?? (!empty($payload['resources']) ? 'selected' : 'full'));
+        $selected = (array)  ($payload['resources'] ?? []);
 
-        $p = json_decode($req->getContent() ?: '{}', true);
-        $scope = (string) ($p['scope'] ?? 'full');   // 'full' | 'selected'
-        $resources = (array) ($p['resources'] ?? []);
+        // Normalize selection structure (documents/links/forums/…)
+        $normSel = Cc13Capabilities::filterSelection($selected);
 
-        if (!\in_array($scope, ['full', 'selected'], true)) {
-            return $this->json(['error' => 'Unsupported scope'], 400);
+        // Builder setup
+        $tools = ['documents', 'links', 'forums'];
+        $cb    = new CourseBuilder();
+
+        $selectionMode = false;
+
+        try {
+            if ($scope === 'selected') {
+                // Build a full snapshot first to expand any category-only selections.
+                $cbFull = new CourseBuilder();
+                $cbFull->set_tools_to_build($tools);
+                $courseFull = $cbFull->build(0, api_get_course_id());
+
+                $expanded = $this->expandCc13SelectionFromCategories($courseFull, $normSel);
+
+                // Build per-tool ID map for CourseBuilder
+                $map = [];
+                if (!empty($expanded['documents'])) { $map['documents'] = array_map('intval', array_keys($expanded['documents'])); }
+                if (!empty($expanded['links']))     { $map['links']     = array_map('intval', array_keys($expanded['links'])); }
+                if (!empty($expanded['forums']))    { $map['forums']    = array_map('intval', array_keys($expanded['forums'])); }
+
+                if (empty($map)) {
+                    return $this->json(['error' => 'Please select at least one resource.'], 400);
+                }
+
+                $cb->set_tools_to_build($tools);
+                $cb->set_tools_specific_id_list($map);
+                $selectionMode = true;
+            } else {
+                $cb->set_tools_to_build($tools);
+            }
+
+            $course = $cb->build(0, api_get_course_id());
+
+            // Safety net: if selection mode, ensure resources are filtered
+            if ($selectionMode) {
+                // Convert to the expected structure for filterCourseResources()
+                $safeSelected = [
+                    'documents' => array_fill_keys(array_map('intval', array_keys($normSel['documents'] ?? [])), true),
+                    'links'     => array_fill_keys(array_map('intval', array_keys($normSel['links'] ?? [])), true),
+                    'forums'    => array_fill_keys(array_map('intval', array_keys($normSel['forums'] ?? [])), true),
+                ];
+                // Also include expansions from categories
+                $fullSnapshot = isset($courseFull) ? $courseFull : $course;
+                $expandedAll  = $this->expandCc13SelectionFromCategories($fullSnapshot, $normSel);
+                foreach (['documents','links','forums'] as $k) {
+                    foreach (array_keys($expandedAll[$k] ?? []) as $idStr) {
+                        $safeSelected[$k][(int)$idStr] = true;
+                    }
+                }
+
+                $this->filterCourseResources($course, $safeSelected);
+                if (empty($course->resources) || !\is_array($course->resources)) {
+                    return $this->json(['error' => 'Nothing to export after filtering your selection.'], 400);
+                }
+            }
+
+            $exporter  = new Cc13Export($course, $selectionMode, /*debug*/ false);
+            $imsccPath = $exporter->export(api_get_course_id());
+            $fileName  = basename($imsccPath);
+
+            $downloadUrl = $this->generateUrl(
+                    'cm_cc13_export_download',
+                    ['node' => $node],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                ).'?file='.rawurlencode($fileName);
+
+            return $this->json([
+                'ok'          => true,
+                'file'        => $fileName,
+                'downloadUrl' => $downloadUrl,
+                'message'     => 'Export finished.',
+            ]);
+        } catch (\RuntimeException $e) {
+            if (stripos($e->getMessage(), 'Nothing to export') !== false) {
+                return $this->json(['error' => 'Nothing to export (no compatible resources found).'], 400);
+            }
+            return $this->json(['error' => 'CC 1.3 export failed: '.$e->getMessage()], 500);
         }
-        if ('selected' === $scope && empty($resources)) {
-            return $this->json(['error' => 'No resources selected'], 400);
+    }
+
+    #[Route('/cc13/export/download', name: 'cc13_export_download', methods: ['GET'])]
+    public function cc13ExportDownload(int $node, Request $req): BinaryFileResponse|JsonResponse
+    {
+        // Validate the filename we will serve
+        $file = basename((string) $req->query->get('file', ''));
+        // Example pattern: ABC123_cc13_20251017_195455.imscc
+        if ($file === '' || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
+            return $this->json(['error' => 'Invalid file'], 400);
         }
 
-        // TODO: Generate IMS CC 1.3 cartridge (.imscc or .zip)
-        // For now, return an informative 202 “under construction”.
-        return new JsonResponse([
-            'ok' => false,
-            'message' => 'Common Cartridge 1.3 export is under construction. No file was generated.',
-            // 'downloadUrl' => null, // set when implemented
-        ], 202);
+        $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file;
+        if (!is_file($abs)) {
+            return $this->json(['error' => 'File not found'], 404);
+        }
+
+        // Stream file to the browser
+        $resp = new BinaryFileResponse($abs);
+        $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file);
+        // A sensible CC mime; many LMS aceptan zip también
+        $resp->headers->set('Content-Type', 'application/vnd.ims.ccv1p3+imscc');
+
+        return $resp;
     }
 
     #[Route('/cc13/import', name: 'cc13_import', methods: ['POST'])]
@@ -829,20 +945,51 @@ class CourseMaintenanceController extends AbstractController
     {
         $this->setDebugFromRequest($req);
 
-        $file = $req->files->get('file');
-        if (!$file) {
-            return $this->json(['error' => 'Missing file'], 400);
-        }
-        $ext = strtolower(pathinfo($file->getClientOriginalName() ?? '', PATHINFO_EXTENSION));
-        if (!\in_array($ext, ['imscc', 'zip'], true)) {
-            return $this->json(['error' => 'Unsupported file type. Please upload .imscc or .zip'], 400);
-        }
+        try {
+            $file = $req->files->get('file');
+            if (!$file || !$file->isValid()) {
+                return $this->json(['error' => 'Missing or invalid upload.'], 400);
+            }
 
-        // TODO: Parse/restore CC 1.3. For now, just acknowledge.
-        return $this->json([
-            'ok' => true,
-            'message' => 'CC 1.3 import endpoint is under construction. File received successfully.',
-        ]);
+            $ext = strtolower(pathinfo($file->getClientOriginalName() ?? '', PATHINFO_EXTENSION));
+            if (!in_array($ext, ['imscc', 'zip'], true)) {
+                return $this->json(['error' => 'Unsupported file type. Please upload .imscc or .zip'], 415);
+            }
+
+            // Move to a temp file
+            $tmpZip = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.
+                'cc13_'.date('Ymd_His').'_'.bin2hex(random_bytes(3)).'.'.$ext;
+            $file->move(dirname($tmpZip), basename($tmpZip));
+
+            // Extract
+            $extractDir = Imscc13Import::unzip($tmpZip);
+
+            // Detect and validate format
+            $format = Imscc13Import::detectFormat($extractDir);
+            if ($format !== Imscc13Import::FORMAT_IMSCC13) {
+                Imscc13Import::rrmdir($extractDir);
+                @unlink($tmpZip);
+
+                return $this->json(['error' => 'This package is not a Common Cartridge 1.3.'], 400);
+            }
+
+            // Execute import (creates Chamilo resources)
+            $importer = new Imscc13Import();
+            $importer->execute($extractDir);
+
+            // Cleanup
+            Imscc13Import::rrmdir($extractDir);
+            @unlink($tmpZip);
+
+            return $this->json([
+                'ok' => true,
+                'message' => 'CC 1.3 import completed successfully.',
+            ]);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'error' => 'CC 1.3 import failed: '.$e->getMessage(),
+            ], 500);
+        }
     }
 
     // --------------------------------------------------------------------------------
@@ -1146,7 +1293,8 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Build forum tree (Category → Forum → Topic).
+     * Build forum tree (Category → Forum → Topic) for the UI.
+     * Uses only "items" (no "children") and sets UI hints (has_children, item_count).
      */
     private function buildForumTreeForVue(object $course, string $groupTitle): array
     {
@@ -1154,83 +1302,70 @@ class CourseMaintenanceController extends AbstractController
 
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
 
-        // Buckets (accept legacy casings / aliases)
-        $catRaw = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
-        $forumRaw = $res['forum'] ?? $res['Forum'] ?? [];
-        $topicRaw = $res['forum_topic'] ?? $res['ForumTopic'] ?? ($res['thread'] ?? []);
-        $postRaw = $res['forum_post'] ?? $res['Forum_Post'] ?? ($res['post'] ?? []);
+        // Buckets (defensive: accept legacy casings / aliases)
+        $catRaw   = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
+        $forumRaw = $res['forum']          ?? $res['Forum']          ?? [];
+        $topicRaw = $res['forum_topic']    ?? $res['ForumTopic']     ?? ($res['thread'] ?? []);
+        $postRaw  = $res['forum_post']     ?? $res['Forum_Post']     ?? ($res['post'] ?? []);
 
         $this->logDebug('[buildForumTreeForVue] raw counts', [
             'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
-            'forums' => \is_array($forumRaw) ? \count($forumRaw) : 0,
-            'topics' => \is_array($topicRaw) ? \count($topicRaw) : 0,
-            'posts' => \is_array($postRaw) ? \count($postRaw) : 0,
+            'forums'     => \is_array($forumRaw) ? \count($forumRaw) : 0,
+            'topics'     => \is_array($topicRaw) ? \count($topicRaw) : 0,
+            'posts'      => \is_array($postRaw) ? \count($postRaw) : 0,
         ]);
 
-        // Classifiers (defensive)
+        // Quick classifiers (defensive)
         $isForum = function (object $o): bool {
             $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
-            if (isset($e->forum_title) && \is_string($e->forum_title)) {
-                return true;
-            }
-            if (isset($e->default_view) || isset($e->allow_anonymous)) {
-                return true;
-            }
-            if ((isset($e->forum_category) || isset($e->forum_category_id) || isset($e->category_id)) && !isset($e->forum_id)) {
-                return true;
-            }
-
+            if (isset($e->forum_title) && \is_string($e->forum_title)) { return true; }
+            if (isset($e->default_view) || isset($e->allow_anonymous)) { return true; }
+            if ((isset($e->forum_category) || isset($e->forum_category_id) || isset($e->category_id)) && !isset($e->forum_id)) { return true; }
             return false;
         };
         $isTopic = function (object $o): bool {
             $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
-            if (isset($e->forum_id) && (isset($e->thread_title) || isset($e->thread_date) || isset($e->poster_name))) {
-                return true;
-            }
-            if (isset($e->forum_id) && !isset($e->forum_title)) {
-                return true;
-            }
-
+            if (isset($e->forum_id) && (isset($e->thread_title) || isset($e->thread_date) || isset($e->poster_name))) { return true; }
+            if (isset($e->forum_id) && !isset($e->forum_title)) { return true; }
             return false;
         };
         $getForumCategoryId = function (object $forum): int {
             $e = (isset($forum->obj) && \is_object($forum->obj)) ? $forum->obj : $forum;
             $cid = (int) ($e->forum_category ?? 0);
-            if ($cid <= 0) {
-                $cid = (int) ($e->forum_category_id ?? 0);
-            }
-            if ($cid <= 0) {
-                $cid = (int) ($e->category_id ?? 0);
-            }
-
+            if ($cid <= 0) { $cid = (int) ($e->forum_category_id ?? 0); }
+            if ($cid <= 0) { $cid = (int) ($e->category_id ?? 0); }
             return $cid;
         };
 
-        // Categories
+        // Build categories
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             $label = $this->resolveItemLabel('forum_category', $this->objectEntity($obj), $id);
             $cats[$id] = [
-                'id' => $id,
-                'type' => 'forum_category',
-                'label' => $label,
+                'id'         => $id,
+                'type'       => 'forum_category',
+                'label'      => $label,
                 'selectable' => false,
-                'children' => [],
+                'items'      => [],
+                // UI hints
+                'has_children' => false,
+                'item_count'   => 0,
             ];
         }
+        // Virtual "Uncategorized"
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id' => $uncatKey,
-                'type' => 'forum_category',
-                'label' => 'Uncategorized',
+                'id'         => $uncatKey,
+                'type'       => 'forum_category',
+                'label'      => 'Uncategorized',
                 'selectable' => false,
-                'children' => [],
-                '_virtual' => true,
+                'items'      => [],
+                '_virtual'   => true,
+                'has_children' => false,
+                'item_count'   => 0,
             ];
         }
 
@@ -1238,173 +1373,132 @@ class CourseMaintenanceController extends AbstractController
         $forums = [];
         foreach ($forumRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             if (!$isForum($obj)) {
-                $this->logDebug('[buildForumTreeForVue] skipped non-forum in forum bag', ['id' => $id]);
-
+                $this->logDebug('[buildForumTreeForVue] skipped non-forum in forum bucket', ['id' => $id]);
                 continue;
             }
             $forums[$id] = $this->objectEntity($obj);
         }
 
-        // Topics + post counts
+        // Topics (+ post counts)
         $topics = [];
         $postCountByTopic = [];
         foreach ($topicRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             if ($isForum($obj) && !$isTopic($obj)) {
-                $this->logDebug('[buildForumTreeForVue] WARNING: forum object found in topic bag; skipping', ['id' => $id]);
-
+                $this->logDebug('[buildForumTreeForVue] WARNING: forum object found in topic bucket; skipping', ['id' => $id]);
                 continue;
             }
-            if (!$isTopic($obj)) {
-                $this->logDebug('[buildForumTreeForVue] skipped non-topic in topic bag', ['id' => $id]);
-
-                continue;
-            }
+            if (!$isTopic($obj)) { continue; }
             $topics[$id] = $this->objectEntity($obj);
         }
         foreach ($postRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             $e = $this->objectEntity($obj);
             $tid = (int) ($e->thread_id ?? 0);
-            if ($tid > 0) {
-                $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1;
-            }
+            if ($tid > 0) { $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1; }
         }
 
-        // Forums → attach topics
-        // Forums → attach topics
+        // Attach topics to forums and forums to categories
         foreach ($forums as $fid => $f) {
             $catId = $getForumCategoryId($f);
-            if (!isset($cats[$catId])) {
-                $catId = $uncatKey;
-            }
+            if (!isset($cats[$catId])) { $catId = $uncatKey; }
 
-            // Build the forum node first (children will be appended below)
             $forumNode = [
-                'id' => $fid,
-                'type' => 'forum',
-                'label' => $this->resolveItemLabel('forum', $f, $fid),
-                'extra' => $this->buildExtra('forum', $f) ?: new stdClass(),
+                'id'         => $fid,
+                'type'       => 'forum',
+                'label'      => $this->resolveItemLabel('forum', $f, $fid),
+                'extra'      => $this->buildExtra('forum', $f) ?: new \stdClass(),
                 'selectable' => true,
-                'children' => [],
-                // UI hints (do not affect structure)
-                'has_children' => false,  // will become true if a topic is attached
-                'ui_depth' => 2,      // category=1, forum=2, topic=3 (purely informational)
+                'items'      => [],
+                // UI hints
+                'has_children' => false,
+                'item_count'   => 0,
+                'ui_depth'     => 2,
             ];
 
             foreach ($topics as $tid => $t) {
-                if ((int) ($t->forum_id ?? 0) !== $fid) {
-                    continue;
-                }
+                if ((int) ($t->forum_id ?? 0) !== $fid) { continue; }
 
-                $author = (string) ($t->thread_poster_name ?? $t->poster_name ?? '');
-                $date = (string) ($t->thread_date ?? '');
-                $nPosts = (int) ($postCountByTopic[$tid] ?? 0);
+                $author  = (string) ($t->thread_poster_name ?? $t->poster_name ?? '');
+                $date    = (string) ($t->thread_date ?? '');
+                $nPosts  = (int) ($postCountByTopic[$tid] ?? 0);
 
                 $topicLabel = $this->resolveItemLabel('forum_topic', $t, $tid);
                 $meta = [];
-                if ('' !== $author) {
-                    $meta[] = $author;
-                }
-                if ('' !== $date) {
-                    $meta[] = $date;
-                }
-                if ($meta) {
-                    $topicLabel .= ' ('.implode(', ', $meta).')';
-                }
-                if ($nPosts > 0) {
-                    $topicLabel .= ' — '.$nPosts.' post'.(1 === $nPosts ? '' : 's');
-                }
+                if ($author !== '') { $meta[] = $author; }
+                if ($date   !== '') { $meta[] = $date; }
+                if ($meta) { $topicLabel .= ' ('.implode(', ', $meta).')'; }
+                if ($nPosts > 0) { $topicLabel .= ' — '.$nPosts.' post'.(1 === $nPosts ? '' : 's'); }
 
-                $forumNode['children'][] = [
-                    'id' => $tid,
-                    'type' => 'forum_topic',
-                    'label' => $topicLabel,
-                    'extra' => new stdClass(),
+                $forumNode['items'][] = [
+                    'id'         => $tid,
+                    'type'       => 'forum_topic',
+                    'label'      => $topicLabel,
+                    'extra'      => new \stdClass(),
                     'selectable' => true,
-                    'ui_depth' => 3,
+                    'ui_depth'   => 3,
+                    'item_count' => 0,
                 ];
             }
 
-            // sort topics (if any) and mark has_children for UI
-            if ($forumNode['children']) {
-                usort($forumNode['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
-                $forumNode['has_children'] = true; // <- tell UI to show a reserved toggle space
+            if (!empty($forumNode['items'])) {
+                usort($forumNode['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+                $forumNode['has_children'] = true;
+                $forumNode['item_count']   = \count($forumNode['items']);
             }
 
-            $cats[$catId]['children'][] = $forumNode;
+            $cats[$catId]['items'][] = $forumNode;
         }
 
-        // Drop empty virtual category and sort forums per category
+        // Remove empty virtual category; sort forums inside each category
         $catNodes = array_values(array_filter($cats, static function ($c) {
-            if (!empty($c['_virtual']) && empty($c['children'])) {
-                return false;
-            }
-
+            if (!empty($c['_virtual']) && empty($c['items'])) { return false; }
             return true;
         }));
 
-        // --------- FLATTEN STRAY FORUMS (defensive) ----------
+        // Flatten stray forums (defensive) and finalize UI hints
         foreach ($catNodes as &$cat) {
-            if (empty($cat['children'])) {
-                continue;
-            }
-
-            $lift = [];           // forums to lift to category level
-            foreach ($cat['children'] as $idx => &$forumNode) {
-                if (($forumNode['type'] ?? '') !== 'forum') {
-                    continue;
-                }
-                if (empty($forumNode['children'])) {
-                    continue;
-                }
-
-                // scan children and lift any forum wrongly nested inside
-                $keepChildren = [];
-                foreach ($forumNode['children'] as $child) {
-                    if (($child['type'] ?? '') === 'forum') {
-                        // move this stray forum up to category level
-                        $lift[] = $child;
-                        $this->logDebug('[buildForumTreeForVue] flatten: lifted stray forum from inside another forum', [
-                            'parent_forum_id' => $forumNode['id'] ?? null,
-                            'lifted_forum_id' => $child['id'] ?? null,
-                            'cat_id' => $cat['id'] ?? null,
-                        ]);
-                    } else {
-                        $keepChildren[] = $child; // keep real topics
+            if (!empty($cat['items'])) {
+                $lift = [];
+                foreach ($cat['items'] as &$forumNode) {
+                    if (($forumNode['type'] ?? '') !== 'forum' || empty($forumNode['items'])) { continue; }
+                    $keep = [];
+                    foreach ($forumNode['items'] as $child) {
+                        if (($child['type'] ?? '') === 'forum') {
+                            $lift[] = $child;
+                            $this->logDebug('[buildForumTreeForVue] flatten: lifted nested forum', [
+                                'parent_forum_id' => $forumNode['id'] ?? null,
+                                'lifted_forum_id' => $child['id'] ?? null,
+                                'cat_id'          => $cat['id'] ?? null,
+                            ]);
+                        } else {
+                            $keep[] = $child;
+                        }
                     }
+                    $forumNode['items']        = $keep;
+                    $forumNode['has_children'] = !empty($keep);
+                    $forumNode['item_count']   = \count($keep);
                 }
-                $forumNode['children'] = $keepChildren;
-            }
-            unset($forumNode);
+                unset($forumNode);
 
-            // Append lifted forums as siblings (top-level under the category)
-            if ($lift) {
-                foreach ($lift as $n) {
-                    $cat['children'][] = $n;
-                }
+                foreach ($lift as $n) { $cat['items'][] = $n; }
+                usort($cat['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
             }
 
-            // sort forums at category level
-            usort($cat['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+            // UI hints for category
+            $cat['has_children'] = !empty($cat['items']);
+            $cat['item_count']   = \count($cat['items'] ?? []);
         }
         unset($cat);
-        // --------- /FLATTEN STRAY FORUMS ----------
 
         $this->logDebug('[buildForumTreeForVue] end', ['categories' => \count($catNodes)]);
 
         return [
-            'type' => 'forum',
+            'type'  => 'forum',
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
@@ -2370,98 +2464,95 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Build link tree (Category → Link). Categories are not selectable; links are.
+     * Build link tree (Category → Link) for the UI.
+     * Categories are not selectable; links are leaves (item_count = 0).
      */
     private function buildLinkTreeForVue(object $course, string $groupTitle): array
     {
         $this->logDebug('[buildLinkTreeForVue] start');
 
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
-
-        // Buckets from backup (accept both legacy casings)
-        $catRaw = $res['link_category'] ?? $res['Link_Category'] ?? [];
-        $linkRaw = $res['link'] ?? $res['Link'] ?? [];
+        $catRaw  = $res['link_category'] ?? $res['Link_Category'] ?? [];
+        $linkRaw = $res['link']          ?? $res['Link']          ?? [];
 
         $this->logDebug('[buildLinkTreeForVue] raw counts', [
             'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
-            'links' => \is_array($linkRaw) ? \count($linkRaw) : 0,
+            'links'      => \is_array($linkRaw) ? \count($linkRaw) : 0,
         ]);
 
-        // Map of categories
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             $e = $this->objectEntity($obj);
             $label = $this->resolveItemLabel('link_category', $e, $id);
 
             $cats[$id] = [
-                'id' => $id,
-                'type' => 'link_category',
-                'label' => '' !== $label ? $label : ('Category #'.$id),
-                'selectable' => false,
-                'children' => [],
+                'id'           => $id,
+                'type'         => 'link_category',
+                'label'        => $label !== '' ? $label : ('Category #'.$id),
+                'selectable'   => false,
+                'items'        => [],
+                'has_children' => false,
+                'item_count'   => 0,
             ];
         }
 
-        // Virtual "Uncategorized" bucket
+        // Virtual "Uncategorized"
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id' => $uncatKey,
-                'type' => 'link_category',
-                'label' => 'Uncategorized',
-                'selectable' => false,
-                'children' => [],
-                '_virtual' => true,
+                'id'           => $uncatKey,
+                'type'         => 'link_category',
+                'label'        => 'Uncategorized',
+                'selectable'   => false,
+                'items'        => [],
+                '_virtual'     => true,
+                'has_children' => false,
+                'item_count'   => 0,
             ];
         }
 
         // Assign links to categories
         foreach ($linkRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) {
-                continue;
-            }
+            if ($id <= 0 || !\is_object($obj)) { continue; }
             $e = $this->objectEntity($obj);
 
             $cid = (int) ($e->category_id ?? 0);
-            if (!isset($cats[$cid])) {
-                $cid = $uncatKey;
-            }
+            if (!isset($cats[$cid])) { $cid = $uncatKey; }
 
-            $cats[$cid]['children'][] = [
-                'id' => $id,
-                'type' => 'link',
-                'label' => $this->resolveItemLabel('link', $e, $id),
-                'extra' => $this->buildExtra('link', $e) ?: new stdClass(),
+            $cats[$cid]['items'][] = [
+                'id'         => $id,
+                'type'       => 'link',
+                'label'      => $this->resolveItemLabel('link', $e, $id),
+                'extra'      => $this->buildExtra('link', $e) ?: new \stdClass(),
                 'selectable' => true,
+                'item_count' => 0,
             ];
         }
 
-        // Drop empty virtual category and sort
+        // Drop empty virtual category, sort, and finalize UI hints
         $catNodes = array_values(array_filter($cats, static function ($c) {
-            if (!empty($c['_virtual']) && empty($c['children'])) {
-                return false;
-            }
-
+            if (!empty($c['_virtual']) && empty($c['items'])) { return false; }
             return true;
         }));
 
         foreach ($catNodes as &$c) {
-            if (!empty($c['children'])) {
-                usort($c['children'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
+            if (!empty($c['items'])) {
+                usort($c['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
             }
+            $c['has_children'] = !empty($c['items']);
+            $c['item_count']   = \count($c['items'] ?? []);
         }
         unset($c);
+
         usort($catNodes, static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
 
         $this->logDebug('[buildLinkTreeForVue] end', ['categories' => \count($catNodes)]);
 
         return [
-            'type' => 'link',
+            'type'  => 'link',
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
@@ -2647,5 +2738,112 @@ class CourseMaintenanceController extends AbstractController
 
         // Fallbacks (defensive)
         return strtolower((string) ($course->info['__import_source'] ?? ''));
+    }
+
+    /**
+     * Builds a CC 1.3 preview from the legacy Course (only the implemented one).
+     * Returns a structure intended for rendering/committing before the actual export.
+     */
+    private function buildCc13Preview(object $course): array
+    {
+        $ims = [
+            'supportedTypes' => Cc13Capabilities::exportableTypes(), // ['document']
+            'resources' => [
+                'webcontent' => [],
+            ],
+            'counts' => ['files' => 0, 'folders' => 0],
+            'defaultSelection' => [
+                'documents' => [],
+            ],
+        ];
+
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
+        $docKey = null;
+
+        foreach (['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : ''] as $cand) {
+            if ($cand && isset($res[$cand]) && \is_array($res[$cand]) && !empty($res[$cand])) {
+                $docKey = $cand;
+                break;
+            }
+        }
+        if (!$docKey) {
+            return $ims;
+        }
+
+        foreach ($res[$docKey] as $iid => $wrap) {
+            if (!\is_object($wrap)) {
+                continue;
+            }
+            $e = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
+
+            $rawPath = (string) ($e->path ?? $e->full_path ?? '');
+            if ('' === $rawPath) {
+                continue;
+            }
+            $rel = ltrim(preg_replace('~^/?document/?~', '', $rawPath), '/');
+
+            $fileType = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
+            $isDir = ($fileType === 'folder') || (substr($rawPath, -1) === '/');
+
+            $title = (string) ($e->title ?? $wrap->name ?? basename($rel));
+            $ims['resources']['webcontent'][] = [
+                'id' => (int) $iid,
+                'cc_type' => 'webcontent',
+                'title' => $title !== '' ? $title : basename($rel),
+                'rel' => $rel,
+                'is_dir' => $isDir,
+                'would_be_manifest_entry' => !$isDir,
+            ];
+
+            if (!$isDir) {
+                $ims['defaultSelection']['documents'][(int) $iid] = true;
+                $ims['counts']['files']++;
+            } else {
+                $ims['counts']['folders']++;
+            }
+        }
+
+        return $ims;
+    }
+
+    /**
+     * Expand category selections (link/forum) to their item IDs using a full course snapshot.
+     * Returns ['documents'=>[id=>true], 'links'=>[id=>true], 'forums'=>[id=>true]] merged with $normSel.
+     */
+    private function expandCc13SelectionFromCategories(object $course, array $normSel): array
+    {
+        $out = [
+            'documents' => (array) ($normSel['documents'] ?? []),
+            'links'     => (array) ($normSel['links']     ?? []),
+            'forums'    => (array) ($normSel['forums']    ?? []),
+        ];
+
+        $res = \is_array($course->resources ?? null) ? $course->resources : [];
+
+        // Link categories → link IDs
+        if (!empty($normSel['link_category']) && \is_array($res['link'] ?? $res['Link'] ?? null)) {
+            $selCats = array_fill_keys(array_map('strval', array_keys($normSel['link_category'])), true);
+            $links   = $res['link'] ?? $res['Link'];
+            foreach ($links as $lid => $wrap) {
+                if (!\is_object($wrap)) { continue; }
+                $e = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
+                $cid = (string) (int) ($e->category_id ?? 0);
+                if (isset($selCats[$cid])) { $out['links'][(string)$lid] = true; }
+            }
+        }
+
+        // Forum categories → forum IDs
+        if (!empty($normSel['forum_category']) && \is_array($res['forum'] ?? $res['Forum'] ?? null)) {
+            $selCats = array_fill_keys(array_map('strval', array_keys($normSel['forum_category'])), true);
+            $forums  = $res['forum'] ?? $res['Forum'];
+            foreach ($forums as $fid => $wrap) {
+                if (!\is_object($wrap)) { continue; }
+                $e = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
+                $cid = (string) (int) ($e->forum_category ?? $e->forum_category_id ?? $e->category_id ?? 0);
+                if (isset($selCats[$cid])) { $out['forums'][(string)$fid] = true; }
+            }
+        }
+
+        return $out;
     }
 }

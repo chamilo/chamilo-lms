@@ -64,76 +64,143 @@ class Certificate extends Model
         $updateCertificateData = true,
         $pathToCertificate = ''
     ) {
-        $this->table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $this->user_id = !empty($userId) ? $userId : api_get_user_id();
+        $this->table   = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $this->user_id = !empty($userId) ? (int) $userId : api_get_user_id();
 
+        // Load legacy row if an ID is provided
         if (!empty($certificate_id)) {
             $certificate = $this->get($certificate_id);
-            if (!empty($certificate) && is_array($certificate)) {
+            if (is_array($certificate) && !empty($certificate)) {
                 $this->certificate_data = $certificate;
-                $this->user_id = $this->certificate_data['user_id'];
+                $this->user_id = (int) $this->certificate_data['user_id'];
             }
         }
 
-        if ($this->user_id) {
-            // To force certification generation
-            if ($this->force_certificate_generation) {
-                $this->generate(['certificate_path' => ''], $sendNotification);
+        if (empty($this->user_id)) {
+            // No user context, nothing else to do.
+            return;
+        }
+
+        $certRepo   = Container::getGradeBookCertificateRepository();
+        $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+
+        // Try to preload an existing resource to avoid unnecessary work.
+        try {
+            $existing = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
+            if ($existing && $existing->hasResourceNode()) {
+                // Resource-first model: legacy path is not used anymore.
+                $this->certification_user_path = 'resource://user_certificate';
+                $this->html_file = '';
+                $this->certificate_data['path_certificate'] = '';
+                $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($existing);
             }
-            if (
-                isset($this->certificate_data)
-                && $this->certificate_data
-                && empty($this->certificate_data['path_certificate'])
-            ) {
+        } catch (\Throwable $e) {
+            // Non-fatal; generation can still proceed if needed.
+            error_log('[CERT::__construct] preload resource error: '.$e->getMessage());
+        }
+
+        // Keep original behavior: optionally generate on construct.
+        if ($this->force_certificate_generation) {
+            try {
                 $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                // Refresh in-memory HTML for PDF generation after generate().
+                $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
+                if ($refetched && $refetched->hasResourceNode()) {
+                    $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($refetched);
+                    $this->certification_user_path = 'resource://user_certificate';
+                }
+            } catch (\Throwable $e) {
+                error_log('[CERT::__construct] generate-on-construct failed: '.$e->getMessage());
+            }
+        }
+
+        // If still empty legacy path but we have a row, keep original fallback.
+        if (
+            isset($this->certificate_data) &&
+            $this->certificate_data &&
+            empty($this->certificate_data['path_certificate']) &&
+            !$this->force_certificate_generation
+        ) {
+            try {
+                $this->generate(['certificate_path' => $pathToCertificate], $sendNotification);
+                $refetched = $certRepo->getCertificateByUserId($categoryId === 0 ? null : $categoryId, $this->user_id);
+                if ($refetched && $refetched->hasResourceNode()) {
+                    $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($refetched);
+                    $this->certification_user_path = 'resource://user_certificate';
+                }
+            } catch (\Throwable $e) {
+                error_log('[CERT::__construct] generate (no legacy path) failed: '.$e->getMessage());
             }
         }
 
         // Setting the qr and html variables
-        if (isset($certificate_id) &&
+        if (
+            isset($certificate_id) &&
             !empty($this->certification_user_path) &&
-            isset($this->certificate_data['path_certificate'])
+            isset($this->certificate_data['path_certificate']) &&
+            !empty($this->certificate_data['path_certificate'])
         ) {
-            //$pathinfo = pathinfo($this->certificate_data['path_certificate']);
+            // Legacy: path points to a file name; we only keep it for BC.
             $this->html_file = $this->certificate_data['path_certificate'];
-            //$this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         } else {
-            //$this->checkCertificatePath();
             if ('true' === api_get_setting('certificate.allow_general_certificate')) {
-                // General certificate
-                // store as a Resource (resource_type = user_certificate) instead of PersonalFile
-                $repo     = Container::getGradeBookCertificateRepository();
-                $content  = $this->generateCustomCertificate();
-                $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
-                $hash     = hash('sha256', $this->user_id.$categoryId);
-                $fileName = $hash.'.html';
-
+                // Guard: if a resource already exists, just populate file_content and exit.
                 try {
-                    // upsertCertificateResource(catId, userId, score, htmlContent, pdfBinary?, legacyFileName?)
-                    $cert = $repo->upsertCertificateResource(0, $this->user_id, 100.0, $content, null, $fileName);
-
-                    // Keep legacy compatibility fields
-                    if ($updateCertificateData) {
-                        $repo->registerUserInfoAboutCertificate(0, $this->user_id, 100.0, $fileName);
+                    $already = $certRepo->getCertificateByUserId(null, $this->user_id); // general certificate => null cat
+                    if ($already && $already->hasResourceNode()) {
+                        $this->certification_user_path = 'resource://user_certificate';
+                        $this->certificate_data['path_certificate'] = '';
+                        $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($already);
+                        return; // Nothing else to do.
                     }
-
-                    $this->certificate_data['path_certificate'] = $fileName;
-                    // Optionally keep the in-memory HTML content
-                    $this->certificate_data['file_content'] = $repo->getResourceFileContent($cert);
                 } catch (\Throwable $e) {
-                    error_log('[CERT] general certificate upsert error: '.$e->getMessage());
+                    error_log('[CERT::__construct] check-existing general cert error: '.$e->getMessage());
                 }
 
+                // General certificate
+                // store as a Resource (resource_type = user_certificate) instead of PersonalFile
+                $cert = null;
+                try {
+                    // Build HTML content (always available for PDF even if upsert fails).
+                    $content = $this->generateCustomCertificate();
 
-                if (null !== $cert) {
-                    // Updating the path
-                    self::updateUserCertificateInfo(
+                    $hash     = hash('sha256', $this->user_id.$categoryId);
+                    $fileName = $hash.'.html';
+
+                    // upsertCertificateResource(catId, userId, score, htmlContent, pdfBinary?, legacyFileName?)
+                    $cert = $certRepo->upsertCertificateResource(0, $this->user_id, 100.0, $content, null, $fileName);
+
+                    // Keep legacy compatibility fields in DB if required
+                    if ($updateCertificateData) {
+                        $certRepo->registerUserInfoAboutCertificate(0, $this->user_id, 100.0, $fileName);
+                    }
+
+                    // Update in-memory fields for downstream consumers (PDF)
+                    $this->certification_user_path = 'resource://user_certificate';
+                    $this->certificate_data['path_certificate'] = $fileName;
+
+                    // Ensure file_content is always available (avoid undefined index)
+                    try {
+                        $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($cert);
+                    } catch (\Throwable $ignored) {
+                        // Fallback: use raw generated HTML so PDF creation never crashes.
+                        $this->certificate_data['file_content'] = $content;
+                    }
+
+                    // Optional: keep the legacy user-certificate metadata updated
+                    $this->updateUserCertificateInfo(
                         0,
                         $this->user_id,
                         $fileName,
                         $updateCertificateData
                     );
-                    $this->certificate_data['path_certificate'] = $fileName;
+                } catch (\Throwable $e) {
+                    // Do not break the constructor; log and keep going
+                    error_log('[CERT] general certificate upsert error: '.$e->getMessage());
+                    // As a last resort, populate file_content with a minimal HTML to avoid PDF fatal errors
+                    if (empty($this->certificate_data['file_content'])) {
+                        $this->certificate_data['file_content'] = '<html><body><p></p></body></html>';
+                    }
                 }
             }
         }
@@ -808,6 +875,19 @@ class Certificate extends Model
         $params['bottom'] = 0;
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
+
+        if (empty($this->certificate_data['file_content'])) {
+            try {
+                $certRepo   = Container::getGradeBookCertificateRepository();
+                $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+                $entity     = $certRepo->getCertificateByUserId(0 === $categoryId ? null : $categoryId, $this->user_id);
+                if ($entity && $entity->hasResourceNode()) {
+                    $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($entity);
+                }
+            } catch (\Throwable $e) {
+                error_log('[CERT::generatePdfFromCustomCertificate] fallback read error: '.$e->getMessage());
+            }
+        }
 
         $pdf->content_to_pdf(
             $this->certificate_data['file_content'],

@@ -8,6 +8,17 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
 api_block_anonymous_users();
 GradebookUtils::block_students();
+ 
+if (isset($_GET['import'])) {
+    $queryString = $_SERVER['QUERY_STRING'];
+    $webPath = api_get_path(WEB_CODE_PATH);
+    $newUrl = $webPath . 'gradebook/gradebook_view_result.php';
+    if (!empty($queryString)) {
+        $newUrl .= '?' . $queryString;
+    }
+    header("Location: $newUrl");
+    exit;
+}
 
 $selectEval = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
 

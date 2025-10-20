@@ -30869,3 +30869,6 @@ msgstr ""
 
 msgid "Duplicate submission ignored"
 msgstr ""
+
+msgid "Show free users (not enrolled)"
+msgstr ""

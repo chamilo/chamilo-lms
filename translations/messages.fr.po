@@ -30460,3 +30460,6 @@ msgstr "Cache les paramètres avancés"
 
 msgid "Course created successfully"
 msgstr "Cours créé"
+
+msgid "Show free users (not enrolled)"
+msgstr "Afficher les utilisateurs libres (non inscrits)"

@@ -168,36 +168,56 @@ class Certificate extends Model
     }
 
     /**
-     *  Generates an HTML Certificate and fills the path_certificate field in the DB.
+     * Generates (or updates) the user's certificate as a Resource.
+     *
+     * - Stores the HTML in a ResourceNode (resource_type = user_certificate or fallback handled at repository level).
+     * - Fills $this->certificate_data['file_content'] with the HTML to avoid PDF errors.
+     * - Keeps legacy DB info via registerUserInfoAboutCertificate() (no PersonalFile usage).
      *
      * @param array $params
      * @param bool  $sendNotification
      *
-     * @return bool|int
+     * @return bool
      */
     public function generate($params = [], $sendNotification = false)
     {
-        $result = false;
-        $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
-        $categoryId = 0;
-        $isCertificateAvailableInCategory = false;
-        $category = null;
-        if (isset($this->certificate_data['cat_id'])) {
-            $categoryId = (int) $this->certificate_data['cat_id'];
-            $myCategory = Category::load($categoryId);
-            $repo = Container::getGradeBookCategoryRepository();
-            /** @var GradebookCategory $category */
-            $category = $repo->find($categoryId);
-            $isCertificateAvailableInCategory = !empty($categoryId) && $myCategory[0]->is_certificate_available($this->user_id);
-        }
+        // Safe defaults
+        $params = is_array($params) ? $params : [];
+        $params['hide_print_button'] = isset($params['hide_print_button'])
+            ? (bool) $params['hide_print_button']
+            : false;
 
         $certRepo = Container::getGradeBookCertificateRepository();
 
-        if ($isCertificateAvailableInCategory && null !== $category) {
-            $courseInfo = api_get_course_info($category->getCourse()->getCode());
-            $courseId   = $courseInfo['real_id'];
-            $sessionId  = $category->getSession() ? $category->getSession()->getId() : 0;
+        $categoryId = 0;
+        $category   = null;
+        $isCertificateAvailableInCategory = false;
 
+        // If the certificate is linked to a Gradebook category, check availability
+        if (isset($this->certificate_data['cat_id'])) {
+            $categoryId = (int) $this->certificate_data['cat_id'];
+
+            // Category::load() returns an array
+            $myCategory = Category::load($categoryId);
+
+            $repo = Container::getGradeBookCategoryRepository();
+            /** @var \Chamilo\CoreBundle\Entity\GradebookCategory|null $category */
+            $category = $repo->find($categoryId);
+
+            if (!empty($categoryId) && !empty($myCategory) && isset($myCategory[0])) {
+                $isCertificateAvailableInCategory = $myCategory[0]->is_certificate_available($this->user_id);
+            }
+        }
+
+        // Path A: course/session-bound certificate
+        if ($isCertificateAvailableInCategory && null !== $category) {
+            // Course/session info
+            $course     = $category->getCourse();
+            $courseInfo = api_get_course_info($course->getCode());
+            $courseId   = $courseInfo['real_id'];
+            $sessionId  = $category->getSession() ? (int) $category->getSession()->getId() : 0;
+
+            // Award related skill
             $skill = new SkillModel();
             $skill->addSkillToUser(
                 $this->user_id,
@@ -206,63 +226,88 @@ class Certificate extends Model
                 $sessionId
             );
 
-            if (!empty($this->certificate_data)) {
-                $gb = GradebookUtils::get_user_certificate_content(
-                    $this->user_id,
-                    $category->getCourse()->getId(),
-                    $category->getSession() ? $category->getSession()->getId() : 0,
-                    false,
-                    $params['hide_print_button']
-                );
+            // Build certificate HTML and score
+            $gb = GradebookUtils::get_user_certificate_content(
+                $this->user_id,
+                $course->getId(),
+                $sessionId,
+                false,
+                $params['hide_print_button']
+            );
 
-                $html  = is_array($gb) && isset($gb['content']) ? $gb['content'] : '';
+            $html  = '';
+            $score = 100.0;
+
+            if (is_array($gb)) {
+                $html  = isset($gb['content']) ? (string) $gb['content'] : '';
                 $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
-
-                try {
-                    // Upsert como Resource (resource_type = user_certificate)
-                    $certEntity = $certRepo->upsertCertificateResource($categoryId, $this->user_id, $score, $html);
-                    $certRepo->registerUserInfoAboutCertificate($categoryId, $this->user_id, $score);
-
-                    $this->certification_user_path = 'resource://user_certificate';
-                    $this->certificate_data['path_certificate'] = '';
-
-                    if ($this->isHtmlFileGenerated() && $sendNotification) {
-                        $subject = get_lang('Certificate notification');
-                        $message = nl2br(get_lang('((user_first_name)),'));
-                        $htmlUrl = $certRepo->getResourceFileUrl($certEntity);
-
-                        self::sendNotification(
-                            $subject,
-                            $message,
-                            api_get_user_info($this->user_id),
-                            $courseInfo,
-                            [
-                                'score_certificate' => $score,
-                                'html_url'          => $htmlUrl,
-                            ]
-                        );
-                    }
-
-                    return true;
-                } catch (\Throwable $e) {
-                    error_log('[CERTIFICATE::generate] upsert error: '.$e->getMessage());
-                    return false;
-                }
+            } elseif (is_string($gb) && $gb !== '') {
+                // Some custom implementations might return a raw string
+                $html = $gb;
             }
-        } else {
-            $gbHtml = $this->generateCustomCertificate();
+
+            if ($html === '') {
+                error_log('[CERT::generate] Empty HTML content for category certificate (cat='.$categoryId.', user='.$this->user_id.').');
+                return false;
+            }
+
             try {
-                $certEntity = $certRepo->upsertCertificateResource(0, $this->user_id, 100.0, $gbHtml);
-                $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($certEntity);
-                $this->certificate_data['path_certificate'] = '';
+                // Persist as Resource and register legacy info (no PersonalFile)
+                $entity = $certRepo->upsertCertificateResource($categoryId, $this->user_id, $score, $html);
+                $certRepo->registerUserInfoAboutCertificate($categoryId, $this->user_id, $score);
+
+                // Ensure PDF flow has the HTML in memory
+                $this->certificate_data['file_content']   = $html;
+                $this->certificate_data['path_certificate'] = ''; // stored as resource, no legacy file path
+
+                // Send notification if required (we have course context here)
+                if ($sendNotification) {
+                    $subject = get_lang('Certificate notification');
+                    $message = nl2br(get_lang('((user_first_name)),'));
+                    $htmlUrl = $certRepo->getResourceFileUrl($entity);
+
+                    self::sendNotification(
+                        $subject,
+                        $message,
+                        api_get_user_info($this->user_id),
+                        $courseInfo,
+                        [
+                            'score_certificate' => $score,
+                            'html_url'          => $htmlUrl,
+                        ]
+                    );
+                }
+
                 return true;
             } catch (\Throwable $e) {
-                error_log('[CERTIFICATE::generate] general certificate upsert error: '.$e->getMessage());
+                error_log('[CERT::generate] Upsert failed for category certificate (cat='.$categoryId.', user='.$this->user_id.'): '.$e->getMessage());
                 return false;
             }
         }
 
-        return false;
+        // Path B: general (portal-wide) certificate
+        try {
+            $html   = $this->generateCustomCertificate('');
+            $score  = 100.0;
+
+            if ($html === '') {
+                error_log('[CERT::generate] Empty HTML content for general certificate (user='.$this->user_id.').');
+                return false;
+            }
+
+            $entity = $certRepo->upsertCertificateResource(0, $this->user_id, $score, $html);
+            $certRepo->registerUserInfoAboutCertificate(0, $this->user_id, $score);
+
+            // Ensure PDF flow has the HTML in memory
+            $this->certificate_data['file_content']     = $html;
+            $this->certificate_data['path_certificate'] = ''; // stored as resource
+
+            // No course context here, so we skip notification (sendNotification would fail its own checks)
+            return true;
+        } catch (\Throwable $e) {
+            error_log('[CERT::generate] General certificate upsert failed (user='.$this->user_id.'): '.$e->getMessage());
+            return false;
+        }
     }
 
     /**

@@ -1050,6 +1050,7 @@ $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
 $template->assign('allow_min_time', $allowMinTime);
 $template->assign('allow_dates_for_student', $allowDatesForStudent);
+$template->assign('sec_token', $token);
 
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);

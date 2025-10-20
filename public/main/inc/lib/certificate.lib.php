@@ -101,14 +101,31 @@ class Certificate extends Model
             //$this->checkCertificatePath();
             if ('true' === api_get_setting('certificate.allow_general_certificate')) {
                 // General certificate
+                // store as a Resource (resource_type = user_certificate) instead of PersonalFile
+                $repo     = Container::getGradeBookCertificateRepository();
+                $content  = $this->generateCustomCertificate();
                 $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
-                $name = hash('sha256', $this->user_id . $categoryId);
-                $fileName = $name . '.html';
-                $content = $this->generateCustomCertificate();
-                $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
-                $personalFile = $gradebookCertificateRepo->generateCertificatePersonalFile($this->user_id, $fileName, $content);
+                $hash     = hash('sha256', $this->user_id.$categoryId);
+                $fileName = $hash.'.html';
 
-                if (null !== $personalFile) {
+                try {
+                    // upsertCertificateResource(catId, userId, score, htmlContent, pdfBinary?, legacyFileName?)
+                    $cert = $repo->upsertCertificateResource(0, $this->user_id, 100.0, $content, null, $fileName);
+
+                    // Keep legacy compatibility fields
+                    if ($updateCertificateData) {
+                        $repo->registerUserInfoAboutCertificate(0, $this->user_id, 100.0, $fileName);
+                    }
+
+                    $this->certificate_data['path_certificate'] = $fileName;
+                    // Optionally keep the in-memory HTML content
+                    $this->certificate_data['file_content'] = $repo->getResourceFileContent($cert);
+                } catch (\Throwable $e) {
+                    error_log('[CERT] general certificate upsert error: '.$e->getMessage());
+                }
+
+
+                if (null !== $cert) {
                     // Updating the path
                     self::updateUserCertificateInfo(
                         0,
@@ -133,15 +150,21 @@ class Certificate extends Model
      */
     public function deleteCertificate(): bool
     {
-        if (!empty($this->certificate_data)) {
-            $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
-            $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
-            $gradebookCertificateRepo->deleteCertificateAndRelatedFiles($this->certificate_data['user_id'], $categoryId);
-
-            return true;
+        if (empty($this->certificate_data)) {
+            return false;
         }
 
-        return false;
+        $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+        $certRepo   = Container::getGradeBookCertificateRepository();
+
+        try {
+            $certRepo->deleteCertificateResource($this->certificate_data['user_id'], $categoryId);
+
+            return true;
+        } catch (\Throwable $e) {
+            error_log('[CERTIFICATE::deleteCertificate] delete error: '.$e->getMessage());
+            return false;
+        }
     }
 
     /**
@@ -167,13 +190,13 @@ class Certificate extends Model
             $category = $repo->find($categoryId);
             $isCertificateAvailableInCategory = !empty($categoryId) && $myCategory[0]->is_certificate_available($this->user_id);
         }
-        $container = Container::getResourceNodeRepository();
-        $filesystem = $container->getFileSystem();
+
+        $certRepo = Container::getGradeBookCertificateRepository();
 
         if ($isCertificateAvailableInCategory && null !== $category) {
             $courseInfo = api_get_course_info($category->getCourse()->getCode());
-            $courseId = $courseInfo['real_id'];
-            $sessionId = $category->getSession() ? $category->getSession()->getId() : 0;
+            $courseId   = $courseInfo['real_id'];
+            $sessionId  = $category->getSession() ? $category->getSession()->getId() : 0;
 
             $skill = new SkillModel();
             $skill->addSkillToUser(
@@ -184,7 +207,7 @@ class Certificate extends Model
             );
 
             if (!empty($this->certificate_data)) {
-                $newContentHtml = GradebookUtils::get_user_certificate_content(
+                $gb = GradebookUtils::get_user_certificate_content(
                     $this->user_id,
                     $category->getCourse()->getId(),
                     $category->getSession() ? $category->getSession()->getId() : 0,
@@ -192,69 +215,51 @@ class Certificate extends Model
                     $params['hide_print_button']
                 );
 
-                if ($category->getId() == $categoryId) {
-                    $myPathCertificate = $this->certificate_data['path_certificate'] ?? '';
+                $html  = is_array($gb) && isset($gb['content']) ? $gb['content'] : '';
+                $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
 
-                    if ($filesystem->fileExists($myPathCertificate) &&
-                        !$this->force_certificate_generation
-                    ) {
-                        // Seems that the file was already generated
-                        return true;
-                    } else {
-                        // Creating new name
-                        $name = hash('sha256', $this->user_id . $categoryId);
-                        $fileName = $name . '.html';
-                        $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
-                        $personalFile = $gradebookCertificateRepo->generateCertificatePersonalFile($this->user_id, $fileName, $newContentHtml['content']);
+                try {
+                    // Upsert como Resource (resource_type = user_certificate)
+                    $certEntity = $certRepo->upsertCertificateResource($categoryId, $this->user_id, $score, $html);
+                    $certRepo->registerUserInfoAboutCertificate($categoryId, $this->user_id, $score);
 
-                        if (null !== $personalFile) {
-                            $result = true;
-                            // Updating the path
-                            $this->updateUserCertificateInfo(
-                                $this->certificate_data['cat_id'],
-                                $this->user_id,
-                                $fileName
-                            );
-                            $this->certification_user_path = $fileName;
-                            $this->certificate_data['path_certificate'] = $fileName;
+                    $this->certification_user_path = 'resource://user_certificate';
+                    $this->certificate_data['path_certificate'] = '';
 
-                            if ($this->isHtmlFileGenerated()) {
-                                if ($sendNotification) {
-                                    $subject = get_lang('Certificate notification');
-                                    $message = nl2br(get_lang('((user_first_name)),'));
-                                    $score = $this->certificate_data['score_certificate'];
-                                    self::sendNotification(
-                                        $subject,
-                                        $message,
-                                        api_get_user_info($this->user_id),
-                                        $courseInfo,
-                                        [
-                                            'score_certificate' => $score,
-                                        ]
-                                    );
-                                }
-                            }
-                        }
+                    if ($this->isHtmlFileGenerated() && $sendNotification) {
+                        $subject = get_lang('Certificate notification');
+                        $message = nl2br(get_lang('((user_first_name)),'));
+                        $htmlUrl = $certRepo->getResourceFileUrl($certEntity);
 
-                        return $result;
+                        self::sendNotification(
+                            $subject,
+                            $message,
+                            api_get_user_info($this->user_id),
+                            $courseInfo,
+                            [
+                                'score_certificate' => $score,
+                                'html_url'          => $htmlUrl,
+                            ]
+                        );
                     }
+
+                    return true;
+                } catch (\Throwable $e) {
+                    error_log('[CERTIFICATE::generate] upsert error: '.$e->getMessage());
+                    return false;
                 }
             }
         } else {
-            $name = hash('sha256', $this->user_id . $categoryId);
-            $fileName = $name . '.html';
-            $certificateContent = $this->generateCustomCertificate($fileName);
-
-            $gradebookCertificateRepo = Container::getGradeBookCertificateRepository();
-            $personalFile = $gradebookCertificateRepo->generateCertificatePersonalFile($this->user_id, $fileName, $certificateContent);
-
-            if ($personalFile !== null) {
-                $personalRepo = Container::getPersonalFileRepository();
-                $this->certificate_data['file_content'] = $personalRepo->getResourceFileContent($personalFile);
-                $this->certificate_data['path_certificate'] = $fileName;
+            $gbHtml = $this->generateCustomCertificate();
+            try {
+                $certEntity = $certRepo->upsertCertificateResource(0, $this->user_id, 100.0, $gbHtml);
+                $this->certificate_data['file_content'] = $certRepo->getResourceFileContent($certEntity);
+                $this->certificate_data['path_certificate'] = '';
+                return true;
+            } catch (\Throwable $e) {
+                error_log('[CERTIFICATE::generate] general certificate upsert error: '.$e->getMessage());
+                return false;
             }
-
-            return true;
         }
 
         return false;
@@ -301,7 +306,11 @@ class Certificate extends Model
 
         $currentUserInfo = api_get_user_info();
         $url = '';
-        if (!empty($certificateInfo['path_certificate'])) {
+
+        // Prefer resource URL if present
+        if (!empty($certificateInfo['html_url'])) {
+            $url = $certificateInfo['html_url'];
+        } elseif (!empty($certificateInfo['path_certificate'])) {
             $hash = pathinfo($certificateInfo['path_certificate'], PATHINFO_FILENAME);
             $url = api_get_path(WEB_PATH) . 'certificates/' . $hash . '.html';
         }
@@ -347,25 +356,17 @@ class Certificate extends Model
         $path_certificate,
         $updateCertificateData = true
     ) {
-        $categoryId = (int) $categoryId;
-        $user_id = (int) $user_id;
-
-        $categoryCondition = 'cat_id = "'.$categoryId.'"';
-        if ($categoryId == 0) {
-            $categoryCondition = 'cat_id IS NULL';
+        if (!$updateCertificateData) {
+            return;
         }
+        $certRepo = Container::getGradeBookCertificateRepository();
 
-        if ($updateCertificateData &&
-            !UserManager::is_user_certified($categoryId, $user_id)
-        ) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-            $now = api_get_utc_datetime();
-            $sql = 'UPDATE '.$table.' SET
-                        path_certificate="'.Database::escape_string($path_certificate).'",
-                        created_at = "'.$now.'"
-                    WHERE '.$categoryCondition.' AND user_id="'.$user_id.'" ';
-            Database::query($sql);
-        }
+        $certRepo->registerUserInfoAboutCertificate(
+            (int)$categoryId,
+            (int)$user_id,
+            (float)($this->certificate_data['score_certificate'] ?? 100.0),
+            (string)$path_certificate
+        );
     }
 
     /**
@@ -522,17 +523,22 @@ class Certificate extends Model
      */
     public function isAvailable()
     {
-        if (empty($this->certificate_data['path_certificate'])) {
+        $certRepo = Container::getGradeBookCertificateRepository();
+
+        $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+
+        try {
+            $entity = $certRepo->getCertificateByUserId(0 === $categoryId ? null : $categoryId, $this->user_id);
+            if (!$entity || !$entity->hasResourceNode()) {
+                return false;
+            }
+
+            $node = $entity->getResourceNode();
+            return $node->hasResourceFile() && $node->getResourceFiles()->count() > 0;
+        } catch (\Throwable $e) {
+            error_log('[CERTIFICATE::isAvailable] check error: '.$e->getMessage());
             return false;
         }
-
-        $container = Container::getResourceNodeRepository();
-        $filesystem = $container->getFileSystem();
-        if (!$filesystem->fileExists($this->certificate_data['path_certificate'])) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -540,20 +546,21 @@ class Certificate extends Model
      */
     public function show()
     {
-        $container = Container::getResourceNodeRepository();
-        $filesystem = $container->getFileSystem();
-        if ($filesystem->fileExists($this->certificate_data['path_certificate'])) {
-            // Needed in order to browsers don't add custom CSS
+        $certRepo = Container::getGradeBookCertificateRepository();
+        $categoryId = isset($this->certificate_data['cat_id']) ? (int) $this->certificate_data['cat_id'] : 0;
+
+        try {
+            $entity = $certRepo->getCertificateByUserId(0 === $categoryId ? null : $categoryId, $this->user_id);
+            if (!$entity || !$entity->hasResourceNode()) {
+                api_not_allowed(true);
+            }
+
+            // Read HTML content from the Resource layer
             $certificateContent = '<!DOCTYPE html>';
-            $certificateContent .= $filesystem->read($this->certificate_data['path_certificate']);
+            $certificateContent .= $certRepo->getResourceFileContent($entity);
+            $certificateContent = str_replace(' media="screen"', '', $certificateContent);
 
-            // Remove media=screen to be available when printing a document
-            $certificateContent = str_replace(
-                ' media="screen"',
-                '',
-                $certificateContent
-            );
-
+            // Track “downloaded_at” (legacy extra fields)
             if ($this->user_id == api_get_user_id() &&
                 !empty($this->certificate_data) &&
                 isset($this->certificate_data['id'])
@@ -575,10 +582,11 @@ class Certificate extends Model
 
             header('Content-Type: text/html; charset='.api_get_system_encoding());
             echo $certificateContent;
-
             return;
+        } catch (\Throwable $e) {
+            error_log('[CERTIFICATE::show] read error: '.$e->getMessage());
+            api_not_allowed(true);
         }
-        api_not_allowed(true);
     }
 
     /**

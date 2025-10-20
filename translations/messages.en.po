@@ -30904,3 +30904,6 @@ msgstr "2FA activated successfully."
 
 msgid "Duplicate submission ignored"
 msgstr "Duplicate submission ignored"
+
+msgid "Show free users (not enrolled)"
+msgstr "Show free users (not enrolled)"

@@ -7,6 +7,8 @@
  * a CSV file.
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Validates imported data.
  */
@@ -54,7 +56,7 @@ function validate_data($user_classes)
 
             $username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);
             // 3.2. Check whether username exists.
-            if (UserManager::is_username_available($username)) {
+            if (Container::getUserRepository()->isUsernameAvailable($username)) {
                 $user_class['error'] = get_lang('Unknown user').': '.$username;
                 $errors[] = $user_class;
             }

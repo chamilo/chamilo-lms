@@ -237,7 +237,12 @@ class Certificate extends Model
     /**
      * Generates (or updates) the user's certificate as a Resource.
      *
-     * - Stores the HTML in a ResourceNode (resource_type = user_certificate or fallback handled at repository level).
+     * Template strategy is centralized here:
+     *  1) If the Gradebook category HAS a default template (document) => use it.
+     *  2) If it DOES NOT => fall back to the portal "custom" template (legacy behavior).
+     * In both cases we store a category-bound Resource (cat_id), so pages don't need to re-implement fallbacks.
+     *
+     * - Stores the HTML in a ResourceNode (resource_type = user_certificate).
      * - Fills $this->certificate_data['file_content'] with the HTML to avoid PDF errors.
      * - Keeps legacy DB info via registerUserInfoAboutCertificate() (no PersonalFile usage).
      *
@@ -254,7 +259,17 @@ class Certificate extends Model
             ? (bool) $params['hide_print_button']
             : false;
 
-        $certRepo = Container::getGradeBookCertificateRepository();
+        // Repository (required).
+        try {
+            $certRepo = Container::getGradeBookCertificateRepository();
+        } catch (\Throwable $e) {
+            error_log('[CERT::generate] FATAL: cannot get GradeBookCertificateRepository: '.$e->getMessage());
+            return false;
+        }
+        if (!$certRepo) {
+            error_log('[CERT::generate] FATAL: GradeBookCertificateRepository is NULL');
+            return false;
+        }
 
         $categoryId = 0;
         $category   = null;
@@ -267,16 +282,21 @@ class Certificate extends Model
             // Category::load() returns an array
             $myCategory = Category::load($categoryId);
 
-            $repo = Container::getGradeBookCategoryRepository();
-            /** @var \Chamilo\CoreBundle\Entity\GradebookCategory|null $category */
-            $category = $repo->find($categoryId);
+            try {
+                $repo = Container::getGradeBookCategoryRepository();
+                /** @var GradebookCategory|null $category */
+                $category = $repo ? $repo->find($categoryId) : null;
+            } catch (\Throwable $e) {
+                error_log('[CERT::generate] category repo fetch failed: '.$e->getMessage());
+                $category = null;
+            }
 
             if (!empty($categoryId) && !empty($myCategory) && isset($myCategory[0])) {
                 $isCertificateAvailableInCategory = $myCategory[0]->is_certificate_available($this->user_id);
             }
         }
 
-        // Path A: course/session-bound certificate
+        // Path A: course/session-bound certificate (category context)
         if ($isCertificateAvailableInCategory && null !== $category) {
             // Course/session info
             $course     = $category->getCourse();
@@ -284,16 +304,35 @@ class Certificate extends Model
             $courseId   = $courseInfo['real_id'];
             $sessionId  = $category->getSession() ? (int) $category->getSession()->getId() : 0;
 
-            // Award related skill
-            $skill = new SkillModel();
-            $skill->addSkillToUser(
-                $this->user_id,
-                $category,
-                $courseId,
-                $sessionId
-            );
+            try {
+                $skill = new SkillModel();
+                $skill->addSkillToUser(
+                    $this->user_id,
+                    $category,
+                    $courseId,
+                    $sessionId
+                );
+            } catch (\Throwable $e) {
+                error_log('[CERT::generate] addSkillToUser failed: '.$e->getMessage());
+            }
 
-            // Build certificate HTML and score
+            $categoryHasDefaultTemplate = false;
+            $documentIdForLog = null;
+            try {
+                $doc = $category->getDocument();
+                if ($doc !== null) {
+                    $categoryHasDefaultTemplate = true;
+                    try {
+                        $documentIdForLog = method_exists($doc, 'getId') ? $doc->getId() : null;
+                    } catch (\Throwable $ignored) {
+                        $documentIdForLog = null;
+                    }
+                }
+            } catch (\Throwable $e) {
+                error_log('[CERT::generate] getDocument() failed (no default template): '.$e->getMessage());
+                $categoryHasDefaultTemplate = false;
+            }
+
             $gb = GradebookUtils::get_user_certificate_content(
                 $this->user_id,
                 $course->getId(),
@@ -302,19 +341,41 @@ class Certificate extends Model
                 $params['hide_print_button']
             );
 
-            $html  = '';
             $score = 100.0;
+            if (is_array($gb) && isset($gb['score'])) {
+                $score = (float)$gb['score'];
+            }
 
-            if (is_array($gb)) {
-                $html  = isset($gb['content']) ? (string) $gb['content'] : '';
-                $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
-            } elseif (is_string($gb) && $gb !== '') {
-                // Some custom implementations might return a raw string
-                $html = $gb;
+            $html   = '';
+            $source = '';
+
+            if ($categoryHasDefaultTemplate) {
+                if (is_array($gb) && !empty($gb['content'])) {
+                    $html   = (string)$gb['content'];
+                    $source = 'DEFAULT_TEMPLATE';
+                } elseif (is_string($gb) && $gb !== '') {
+                    $html   = $gb;
+                    $source = 'DEFAULT_TEMPLATE';
+                }
+            } else {
+                error_log(sprintf(
+                    '[CERT::generate] course DEFAULT template NOT found. cat=%d user=%d -> fallback to CUSTOM',
+                    (int)$categoryId,
+                    (int)$this->user_id
+                ));
             }
 
             if ($html === '') {
-                error_log('[CERT::generate] Empty HTML content for category certificate (cat='.$categoryId.', user='.$this->user_id.').');
+                $html   = $this->generateCustomCertificate('');
+                $source = 'CUSTOM_TEMPLATE_FALLBACK';
+            }
+
+            if ($html === '') {
+                error_log(sprintf(
+                    '[CERT::generate] Empty HTML on category path. cat=%d user=%d',
+                    (int)$categoryId,
+                    (int)$this->user_id
+                ));
                 return false;
             }
 
@@ -324,14 +385,19 @@ class Certificate extends Model
                 $certRepo->registerUserInfoAboutCertificate($categoryId, $this->user_id, $score);
 
                 // Ensure PDF flow has the HTML in memory
-                $this->certificate_data['file_content']   = $html;
-                $this->certificate_data['path_certificate'] = ''; // stored as resource, no legacy file path
+                $this->certificate_data['file_content']     = $html;
+                $this->certificate_data['path_certificate'] = '';
 
                 // Send notification if required (we have course context here)
                 if ($sendNotification) {
                     $subject = get_lang('Certificate notification');
                     $message = nl2br(get_lang('((user_first_name)),'));
-                    $htmlUrl = $certRepo->getResourceFileUrl($entity);
+                    $htmlUrl = '';
+                    try {
+                        $htmlUrl = $certRepo->getResourceFileUrl($entity);
+                    } catch (\Throwable $e) {
+                        error_log('[CERT::generate] getResourceFileUrl failed for notification: '.$e->getMessage());
+                    }
 
                     self::sendNotification(
                         $subject,
@@ -347,32 +413,42 @@ class Certificate extends Model
 
                 return true;
             } catch (\Throwable $e) {
-                error_log('[CERT::generate] Upsert failed for category certificate (cat='.$categoryId.', user='.$this->user_id.'): '.$e->getMessage());
+                error_log(sprintf(
+                    '[CERT::generate] Upsert FAILED (course). cat=%d user=%d err=%s',
+                    (int)$categoryId,
+                    (int)$this->user_id,
+                    $e->getMessage()
+                ));
                 return false;
             }
         }
 
         // Path B: general (portal-wide) certificate
         try {
-            $html   = $this->generateCustomCertificate('');
-            $score  = 100.0;
+            $html  = $this->generateCustomCertificate('');
+            $score = 100.0;
 
             if ($html === '') {
-                error_log('[CERT::generate] Empty HTML content for general certificate (user='.$this->user_id.').');
+                error_log(sprintf(
+                    '[CERT::generate] Empty HTML on general path. user=%d',
+                    (int)$this->user_id
+                ));
                 return false;
             }
 
             $entity = $certRepo->upsertCertificateResource(0, $this->user_id, $score, $html);
             $certRepo->registerUserInfoAboutCertificate(0, $this->user_id, $score);
 
-            // Ensure PDF flow has the HTML in memory
             $this->certificate_data['file_content']     = $html;
-            $this->certificate_data['path_certificate'] = ''; // stored as resource
+            $this->certificate_data['path_certificate'] = ''; // resource
 
-            // No course context here, so we skip notification (sendNotification would fail its own checks)
             return true;
         } catch (\Throwable $e) {
-            error_log('[CERT::generate] General certificate upsert failed (user='.$this->user_id.'): '.$e->getMessage());
+            error_log(sprintf(
+                '[CERT::generate] Upsert FAILED (general). user=%d err=%s',
+                (int)$this->user_id,
+                $e->getMessage()
+            ));
             return false;
         }
     }
@@ -876,6 +952,7 @@ class Certificate extends Model
         $page_format = 'landscape' == $params['orientation'] ? 'A4-L' : 'A4';
         $pdf = new PDF($page_format, $params['orientation'], $params);
 
+        // Safety: ensure HTML content is present; fetch from Resource if needed.
         if (empty($this->certificate_data['file_content'])) {
             try {
                 $certRepo   = Container::getGradeBookCertificateRepository();

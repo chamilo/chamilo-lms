@@ -113,10 +113,11 @@ class SectionExport
 
         $activities = $this->getActivitiesForSection($generalLearnpath, true);
 
-        if (!in_array('folder', array_column($activities, 'modulename'))) {
+        $ya = array_column($activities, 'modulename');
+        if (!in_array('folder', $ya, true)) {
             $activities[] = [
-                'id' => 0,
-                'moduleid' => 0,
+                'id' => ActivityExport::DOCS_MODULE_ID,
+                'moduleid' => ActivityExport::DOCS_MODULE_ID,
                 'modulename' => 'folder',
                 'name' => 'Documents',
                 'sectionid' => 0,

@@ -256,22 +256,23 @@ class FileExport
     /**
      * Get file data for files inside a folder.
      */
-    private function getFolderFileData(array $file, int $sourceId, string $parentPath = '/Documents/'): array
+    private function getFolderFileData(array $file, int $sourceId, string $parentPath = '/'): array
     {
         $adminData = MoodleExport::getAdminUserData();
         $adminId = $adminData['id'];
         $contenthash = hash('sha1', basename($file['path']));
         $mimetype = $this->getMimeType($file['path']);
         $filename = basename($file['path']);
-        $filepath = $this->ensureTrailingSlash($parentPath);
+        $relDir = dirname($file['path']);
+        $filepath = $this->ensureTrailingSlash($relDir === '.' ? '/' : '/'.$relDir.'/');
 
         return [
             'id' => $file['id'],
             'contenthash' => $contenthash,
-            'contextid' => $sourceId,
+            'contextid' => ActivityExport::DOCS_MODULE_ID,
             'component' => 'mod_folder',
             'filearea' => 'content',
-            'itemid' => (int) $file['id'],
+            'itemid' => ActivityExport::DOCS_MODULE_ID,
             'filepath' => $filepath,
             'documentpath' => 'document/'.$file['path'],
             'filename' => $filename,

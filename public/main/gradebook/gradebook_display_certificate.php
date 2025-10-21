@@ -336,43 +336,109 @@ if (0 == count($certificate_list)) {
             echo '<td width="30%">'.get_lang('Date').' : '.api_convert_and_format_date($valueCertificate['created_at']).'</td>';
             echo '<td width="20%">';
 
-            // Normalize and availability checks
-            $pathRaw = isset($valueCertificate['path_certificate']) ? (string) $valueCertificate['path_certificate'] : '';
-            $path    = ltrim($pathRaw, '/'); // ensure no leading slash
-            $hasPath = $path !== '';
-            $hash    = $hasPath ? pathinfo($path, PATHINFO_FILENAME) : '';
-
-            // Admin can bypass publish flag for visibility
+            /**
+             * Resource-first per-course certificate resolution.
+             * - First: try to resolve a Resource certificate for (cat_id, user_id).
+             * - Never fallback to the user's general/custom certificate here.
+             * - If no Resource exists, use legacy path_certificate (HTML/PDF in /certificates/).
+             * - Keep publish flag behavior; platform admins bypass publish.
+             */
             $isPublished = !empty($valueCertificate['publish']) || api_is_platform_admin();
-            $isAvailable = $hasPath && $isPublished;
 
-            // Build URLs only if available
-            $htmlUrl = $isAvailable ? api_get_path(WEB_PATH).'certificates/'.$hash.'.html' : '';
-            $pdfUrl  = $isAvailable ? api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf'  : '';
+            $certRepo = Container::getGradeBookCertificateRepository();
+            $router   = null;
+            try {
+                $router = Container::getRouter(); // Might not exist in some installs; guarded below.
+            } catch (\Throwable $e) {
+                // Non-fatal. We'll just skip route generation if router is not available.
+            }
 
-            // HTML certificate button/link
+            $htmlUrl     = '';
+            $pdfUrl      = '';
+            $isAvailable = false;
+
+            // Try to resolve the per-category (course/session) resource
+            try {
+                $entity = $certRepo->getCertificateByUserId(
+                    $categoryId === 0 ? null : (int) $categoryId,
+                    (int) $value['user_id']
+                );
+
+                if ($entity && $entity->hasResourceNode()) {
+                    // HTML is served through the Resource layer (secured, hashed filename)
+                    $htmlUrl     = (string) $certRepo->getResourceFileUrl($entity);
+                    $isAvailable = $isPublished && $htmlUrl !== '';
+
+                    // PDF is served by your Symfony controller (update the route name/params if needed)
+                    if ($router && $isAvailable) {
+                        // Attempt 1: route by certificateId (common signature)
+                        try {
+                            $pdfUrl = $router->generate('gradebook_certificate_pdf', [
+                                'certificateId' => (int) $valueCertificate['id'],
+                            ]);
+                        } catch (\Throwable $e1) {
+                            // Attempt 2: route by userId+catId (alternative signature)
+                            try {
+                                $pdfUrl = $router->generate('gradebook_certificate_pdf', [
+                                    'userId' => (int) $value['user_id'],
+                                    'catId'  => (int) $categoryId,
+                                ]);
+                            } catch (\Throwable $e2) {
+                                // Route not found or wrong signature: leave $pdfUrl empty.
+                                error_log('[gradebook_display_certificate] PDF route resolution failed: '.$e2->getMessage());
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                error_log('[gradebook_display_certificate] resource resolve error: '.$e->getMessage());
+            }
+
+            // Legacy per-course fallback ONLY if no resource is available.
+            // IMPORTANT: do NOT fallback to general/custom certificate on this screen.
+            if (!$isAvailable) {
+                $pathRaw = isset($valueCertificate['path_certificate']) ? (string) $valueCertificate['path_certificate'] : '';
+                $path    = ltrim($pathRaw, '/'); // normalize: remove leading slash if present
+                $hasPath = $path !== '';
+                $hash    = $hasPath ? pathinfo($path, PATHINFO_FILENAME) : '';
+
+                $isAvailable = $hasPath && $isPublished;
+
+                if ($isAvailable) {
+                    $htmlUrl = api_get_path(WEB_PATH).'certificates/'.$hash.'.html';
+                    $pdfUrl  = api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf';
+                }
+            }
+
+            // Render buttons (enabled/disabled) preserving existing UI
             if ($isAvailable) {
+                // HTML certificate button/link
                 echo Display::url(
                     get_lang('Certificate'),
                     $htmlUrl,
                     ['target' => '_blank', 'class' => 'btn btn--plain']
                 );
+
+                // PDF download icon/link (only if we have a URL)
+                if (!empty($pdfUrl)) {
+                    echo Display::url(
+                        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
+                        $pdfUrl,
+                        ['target' => '_blank', 'title' => 'Download PDF certificate']
+                    );
+                } else {
+                    // Route not available: show disabled icon with a clear tooltip
+                    echo '<button type="button" class="btn btn-link disabled" disabled '
+                        .'title="PDF route unavailable">'
+                        .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF route unavailable'))
+                        .'</button>';
+                }
             } else {
-                // Disabled button with clear message
+                // Disabled HTML button
                 echo '<button type="button" class="btn btn--plain disabled" disabled '
                     .'title="Certificate not available"> '.get_lang('Certificate').' </button>';
-            }
-            echo PHP_EOL;
 
-            // PDF download button/link (mdi icon)
-            if ($isAvailable) {
-                echo Display::url(
-                    Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Download')),
-                    $pdfUrl,
-                    ['target' => '_blank', 'title' => 'Download PDF certificate']
-                );
-            } else {
-                // Disabled icon with tooltip
+                // Disabled PDF icon
                 echo '<button type="button" class="btn btn-link disabled" disabled '
                     .'title="PDF download unavailable">'
                     .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF download unavailable'))

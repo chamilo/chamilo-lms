@@ -8,6 +8,7 @@
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\LdapAuthenticatorHelper;
+use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
 
 // resetting the course id
@@ -135,7 +136,12 @@ if (empty($annee) && empty($course)) {
     $userid_match_login = [];
     foreach ($id as $form_index => $user_id) {
         if (is_array($_POST['checkboxes']) && in_array($form_index, array_values($_POST['checkboxes']))) {
-            $tmp = ldap_add_user($user_id);
+            /** @var LdapAuthenticator $userAuthenticator */
+            $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
+            $ldapUser = $userAuthenticator->getUserProvider()->loadUserByIdentifier($user_id);
+            $user = $userAuthenticator->createUser($ldapUser);
+
+            $tmp = $user->getId();
             $UserList[] = $tmp;
             $userid_match_login[$tmp] = $user_id;
         }

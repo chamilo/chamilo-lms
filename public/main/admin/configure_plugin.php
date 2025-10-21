@@ -24,7 +24,7 @@ if (!$plugin) {
 
 $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
-$pluginConfiguration = $plugin->getConfigurationsByAccessUrl($accessUrl);
+$pluginConfiguration = $plugin->getOrCreatePluginConfiguration($accessUrl);
 
 $appPlugin = new AppPlugin();
 $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle(), true);

@@ -6118,7 +6118,7 @@ class SessionManager
                 $statusStr = strtolower(trim(api_utf8_decode($nodeUser->Status)));
                 $status = $statusStr === 'teacher' ? 1 : 5;
 
-                if (UserManager::is_username_available($username)) {
+                if (Container::getUserRepository()->isUsernameAvailable($username)) {
                     if (empty($password)) {
                         $password = api_generate_password();
                     }

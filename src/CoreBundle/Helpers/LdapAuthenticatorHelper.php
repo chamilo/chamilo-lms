@@ -83,7 +83,7 @@ readonly class LdapAuthenticatorHelper
         }
 
         return $this->ldap
-            ->query($this->ldapConfig['base_dn'], "(ou=*$ou)")
+            ->query("ou=$ou,".$this->ldapConfig['base_dn'], "(objectClass=inetOrgPerson)")
             ->execute()
             ->toArray();
     }

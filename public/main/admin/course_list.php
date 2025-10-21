@@ -374,11 +374,10 @@ if (isset($_POST['action']) && Security::check_token('get')) {
 
 if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
     $courseId = (int) $_GET['toggle_catalogue'];
-    $accessUrlId = api_get_current_access_url_id();
     $em = Database::getManager();
     $repo = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
     $course = api_get_course_entity($courseId);
-    $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
     if ($course && $accessUrl) {
         $record = $repo->findOneBy([

@@ -369,7 +369,6 @@ if (isset($_POST['action']) && Security::check_token('get')) {
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-        api_location(api_get_self());
     }
 }
 
@@ -403,8 +402,6 @@ if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
 
         $em->flush();
     }
-
-    api_location(api_get_self());
 }
 $content = '';
 $message = '';
@@ -468,8 +465,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-
-        api_location(api_get_self());
     }
 
     if (isset($_GET['new_course_id'])) {

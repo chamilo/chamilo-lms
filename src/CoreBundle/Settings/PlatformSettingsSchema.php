@@ -49,7 +49,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'allow_my_files' => 'true',
                     'registered' => 'false',
                     'server_type' => 'prod',
-                    'show_tabs' => array_values(array_diff(self::$tabs, ['videoconference', 'diagnostics'])),
                     'chamilo_database_version' => '2.0.0',
                     'unoconv_binaries' => '/usr/bin/unoconv',
                     'pdf_img_dpi' => '96',
@@ -70,10 +69,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                     'disable_copy_paste' => 'false',
                 ]
             )
-            ->setTransformer(
-                'show_tabs',
-                new ArrayToIdentifierTransformer()
-            )
         ;
 
         $allowedTypes = [
@@ -81,7 +76,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
             'institution_url' => ['string'],
             'site_name' => ['string'],
             'timezone' => ['string'],
-            'show_tabs' => ['array', 'null'],
         ];
 
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -110,14 +104,6 @@ class PlatformSettingsSchema extends AbstractSettingsSchema
                         'Test/Development' => 'test',
                     ],
                 ]
-            )
-            ->add(
-                'show_tabs',
-                ChoiceType::class,
-                [
-                    'multiple' => true,
-                    'choices' => self::$tabs,
-                ],
             )
             ->add('unoconv_binaries', TextType::class)
             ->add('pdf_img_dpi', TextType::class)

@@ -10,20 +10,38 @@ use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
-use Mpdf\Mpdf;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
+use PDF;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ExportCGlossaryAction
+readonly class ExportCGlossaryAction
 {
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em, KernelInterface $kernel, TranslatorInterface $translator): Response
-    {
+    public function __construct(
+        private TranslatorInterface $translator,
+    ) {}
+
+    /**
+     * @throws Exception|NotSupported|ORMException|OptimisticLockException|TransactionRequiredException
+     */
+    public function __invoke(
+        Request $request,
+        CGlossaryRepository $repo,
+        EntityManager $em,
+        KernelInterface $kernel,
+        TranslatorInterface $translator
+    ): Response {
         $format = $request->get('format');
         $cid = $request->request->get('cid');
         $sid = $request->request->get('sid');
@@ -36,42 +54,50 @@ class ExportCGlossaryAction
         $course = null;
         $session = null;
         if (0 !== $cid) {
-            $course = $em->getRepository(Course::class)->find($cid);
+            $course = $em->find(Course::class, $cid);
         }
         if (0 !== $sid) {
-            $session = $em->getRepository(Session::class)->find($sid);
+            $session = $em->find(Session::class, $sid);
         }
 
         $qb = $repo->getResourcesByCourse($course, $session);
         $glossaryItems = $qb->getQuery()->getResult();
 
-        $exportFilePath = $this->generateExportFile($glossaryItems, $format, $exportPath, $translator);
+        $exportFilePath = $this->generateExportFile(
+            $glossaryItems,
+            $format,
+            $exportPath,
+            $course,
+            $session
+        );
 
-        $file = new File($exportFilePath);
-        $response = new Response($file->getContent());
-        $response->headers->set('Content-Type', $file->getMimeType());
-        $response->headers->set('Content-Disposition', 'attachment; filename="glossary.'.$format.'"');
-
-        unlink($exportFilePath);
+        $response = new BinaryFileResponse(
+            new File($exportFilePath)
+        );
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $response->getFile()->getFilename()
+        );
 
         return $response;
     }
 
-    private function generateExportFile(array $glossaryItems, string $format, string $exportPath, TranslatorInterface $translator): string
-    {
-        switch ($format) {
-            case 'csv':
-                return $this->generateCsvFile($glossaryItems, $exportPath);
-
-            case 'xls':
-                return $this->generateExcelFile($glossaryItems, $exportPath);
-
-            case 'pdf':
-                return $this->generatePdfFile($glossaryItems, $exportPath, $translator);
-
-            default:
-                throw new NotSupported('Export format not supported');
-        }
+    /**
+     * @throws NotSupported|Exception
+     */
+    private function generateExportFile(
+        array $glossaryItems,
+        string $format,
+        string $exportPath,
+        ?Course $course,
+        ?Session $session = null,
+    ): string {
+        return match ($format) {
+            'csv' => $this->generateCsvFile($glossaryItems, $exportPath),
+            'xls' => $this->generateExcelFile($glossaryItems, $exportPath),
+            'pdf' => $this->generatePdfFile($glossaryItems, $course, $session),
+            default => throw new NotSupported('Export format not supported'),
+        };
     }
 
     private function generateCsvFile(array $glossaryItems, string $exportPath): string
@@ -88,6 +114,9 @@ class ExportCGlossaryAction
         return $csvFilePath;
     }
 
+    /**
+     * @throws Exception
+     */
     private function generateExcelFile(array $glossaryItems, string $exportPath): string
     {
         $excelFilePath = $exportPath.'/glossary.xlsx';
@@ -107,15 +136,15 @@ class ExportCGlossaryAction
         return $excelFilePath;
     }
 
-    private function generatePdfFile(array $glossaryItems, string $exportPath, TranslatorInterface $translator): string
+    private function generatePdfFile(
+        array $glossaryItems,
+        ?Course $course,
+        ?Session $session = null,
+    ): string
     {
-        $pdfFilePath = $exportPath.'/glossary.pdf';
-
-        $mpdf = new Mpdf();
-
-        $html = '<h1>'.$translator->trans('Glossary').'</h1>';
+        $html = '<h1>'.$this->translator->trans('Glossary').'</h1>';
         $html .= '<table>';
-        $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Term definition').'</th></tr>';
+        $html .= '<tr><th>'.$this->translator->trans('Term').'</th><th>'.$this->translator->trans('Term definition').'</th></tr>';
 
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
@@ -126,10 +155,17 @@ class ExportCGlossaryAction
         }
         $html .= '</table>';
 
-        $mpdf->WriteHTML($html);
-
-        $mpdf->Output($pdfFilePath, 'F');
-
-        return $pdfFilePath;
+        return (new PDF())
+            ->content_to_pdf(
+                $html,
+                null,
+                get_lang('Glossary').'_'.$course->getCode(),
+                $course->getCode(),
+                'F',
+                false,
+                null,
+                false,
+                true
+            );
     }
 }

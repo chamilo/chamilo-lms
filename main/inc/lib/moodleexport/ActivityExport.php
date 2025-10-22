@@ -14,6 +14,7 @@ use Exception;
 abstract class ActivityExport
 {
     protected $course;
+    public const DOCS_MODULE_ID = 1000000;
 
     public function __construct($course)
     {
@@ -251,5 +252,27 @@ abstract class ActivityExport
         $xmlContent .= '</calendar>'.PHP_EOL;
 
         $this->createXmlFile('calendar', $xmlContent, $destinationDir);
+    }
+
+    /**
+     * Returns the title of the item in the LP (if it exists); otherwise, $fallback.
+     */
+    protected function lpItemTitle(int $sectionId, string $itemType, int $resourceId, ?string $fallback): string
+    {
+        if (!isset($this->course->resources[RESOURCE_LEARNPATH])) {
+            return $fallback ?? '';
+        }
+        foreach ($this->course->resources[RESOURCE_LEARNPATH] as $lp) {
+            if ((int) $lp->source_id !== $sectionId || empty($lp->items)) {
+                continue;
+            }
+            foreach ($lp->items as $it) {
+                $type = $it['item_type'] === 'student_publication' ? 'work' : $it['item_type'];
+                if ($type === $itemType && (int) $it['path'] === $resourceId) {
+                    return $it['title'] ?? ($fallback ?? '');
+                }
+            }
+        }
+        return $fallback ?? '';
     }
 }

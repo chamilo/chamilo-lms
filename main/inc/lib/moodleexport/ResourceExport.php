@@ -46,12 +46,17 @@ class ResourceExport extends ActivityExport
     {
         $resource = $this->course->resources[RESOURCE_DOCUMENT][$resourceId];
 
+        $name = $resource->title;
+        if ($sectionId > 0) {
+            $name = $this->lpItemTitle($sectionId, RESOURCE_DOCUMENT, $resourceId, $name);
+        }
+
         return [
             'id' => $resourceId,
             'moduleid' => $resource->source_id,
             'modulename' => 'resource',
             'contextid' => $resource->source_id,
-            'name' => $resource->title,
+            'name' => $name,
             'intro' => $resource->comment ?? '',
             'sectionid' => $sectionId,
             'sectionnumber' => 1,

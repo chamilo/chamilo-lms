@@ -32,7 +32,7 @@ class MySpace
             ['url' => api_get_path(WEB_CODE_PATH).'mySpace/ti_report.php',                          'content' => get_lang('TIReport')],
             ['url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global.php',              'content' => get_lang('QuestionStats')],
             ['url' => api_get_path(WEB_CODE_PATH).'mySpace/question_stats_global_detail.php',       'content' => get_lang('ExerciseAttemptStatsReport')],
-            ['url' => api_get_path(WEB_CODE_PATH).'mySpace/duplicated_users.php',                   'content' => 'Duplicated users'],
+            ['url' => api_get_path(WEB_CODE_PATH).'mySpace/duplicated_users.php',                   'content' => get_lang('DuplicatedUsers')],
         ];
 
         $field = new ExtraField('user');

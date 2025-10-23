@@ -9048,4 +9048,13 @@ $ProgressionInSessions = "Progression dans les sessions";
 $synthesis = "Synthèse";
 $WeeklyTimeSummary = "Synthèse des temps passés par semaine";
 $ExistingUserWithSameExtraFieldValue = "Un utilisateur existant avec le même %s a été trouvé (ID %d), inscription au lieu de créer.";
+$SelectExtraField = "Sélectionnez le champ extra sur lequel effectuer la recherche";
+$WhatToDoWithUnifiedUsers = "Que faire avec les utilisateurs unifiés";
+$ExtraFieldNotFound = "Champ extra non trouvé";
+$NoDuplicatesFound = "Aucun doublon trouvé";
+$UnifyToThisUser = "Unifier sur cet utilisateur";
+$Unify = "Unifier";
+$AreYouSureToUnify = "Êtes-vous sûr d'unifier";
+$FinalUser = "Utilisateur final";
+$WillMergeNUsers = "Fusionnera {n} utilisateurs";
 ?>

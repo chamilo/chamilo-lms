@@ -151,10 +151,10 @@ echo '      <div class="form-group">';
 echo '        <label class="col-sm-3 control-label">'.get_lang('WhatToDoWithUnifiedUsers').'</label>';
 echo '        <div class="col-sm-6">';
 echo '          <div class="radio"><label>';
-echo '            <input type="radio" name="unify_mode" value="deactivate" '.($actionMode==='deactivate'?'checked':'').'> '.get_lang('DeactivateUsers');
+echo '            <input type="radio" name="unify_mode" value="deactivate" '.($actionMode==='deactivate'?'checked':'').'> '.get_lang('Deactivate');
 echo '          </label></div>';
 echo '          <div class="radio"><label>';
-echo '            <input type="radio" name="unify_mode" value="delete" '.($actionMode==='delete'?'checked':'').'> '.get_lang('DeleteUsers');
+echo '            <input type="radio" name="unify_mode" value="delete" '.($actionMode==='delete'?'checked':'').'> '.get_lang('Delete');
 echo '          </label></div>';
 echo '        </div>';
 echo '      </div>';
@@ -184,7 +184,7 @@ if ($doSearch) {
     $dups    = MySpace::duGetDuplicateValues($fieldId, $urlId);
 
     echo "<div class='panel panel-default'>";
-    echo "  <div class='panel-heading'><strong>".get_lang('ResultsFor').": </strong><code>".htmlspecialchars($selectedVar)."</code></div>";
+    echo "  <div class='panel-heading'><strong>".get_lang('SearchResultsFor').": </strong><code>".htmlspecialchars($selectedVar)."</code></div>";
     echo "  <div class='panel-body'>";
 
     if (empty($dups)) {

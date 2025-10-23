@@ -210,6 +210,7 @@ if ($doSearch) {
             echo "  <th>".get_lang('LastName')."</th>";
             echo "  <th>".get_lang('Email')."</th>";
             echo "  <th>".get_lang('UserId')."</th>";
+            echo "  <th>".get_lang('RegistrationDate')."</th>";
             echo "  <th class='text-center'>".get_lang('UnifyToThisUser')."</th>";
             echo "</tr></thead><tbody>";
 
@@ -222,6 +223,7 @@ if ($doSearch) {
                 echo "  <td>".htmlspecialchars($u['lastname'])."</td>";
                 echo "  <td>".htmlspecialchars($u['email'])."</td>";
                 echo "  <td>".$uid."</td>";
+                echo "  <td>".htmlspecialchars($u['registration_date'])."</td>";
                 echo "  <td class='text-center'>";
                 echo "    <button type='button' class='btn btn-xs btn-danger'".
                     " data-toggle='modal' data-target='#confirmUnify'".

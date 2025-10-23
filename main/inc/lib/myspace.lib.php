@@ -4748,7 +4748,7 @@ class MySpace
         $tblRel  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $valueSql = "'".Database::escape_string($value)."'";
 
-        $sql = "SELECT DISTINCT u.id AS user_id, u.username, u.firstname, u.lastname, u.email
+        $sql = "SELECT DISTINCT u.id AS user_id, u.username, u.firstname, u.lastname, u.email, u.registration_date
         FROM $tblUser u
         JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
         JOIN $tblVals v ON v.item_id = u.id AND v.field_id = $fieldId

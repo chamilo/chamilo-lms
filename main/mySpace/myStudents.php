@@ -656,6 +656,11 @@ $drh_can_access_all_courses = false;
 if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
     $drh_can_access_all_courses = true;
 }
+// Allow teachers to access tracking of all courses/sessions when enabled in configuration
+$teacherCanAccessAll = api_get_configuration_value('teacher_access_all_tracking');
+if (!$drh_can_access_all_courses && $teacherCanAccessAll && api_is_teacher()) {
+    $drh_can_access_all_courses = true;
+}
 
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 $courses_in_session_by_coach = [];

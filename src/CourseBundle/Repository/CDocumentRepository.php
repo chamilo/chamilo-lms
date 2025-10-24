@@ -426,7 +426,7 @@ final class CDocumentRepository extends ResourceRepository
         $out = [];
         $stack = [$parentNode->getId()];
 
-        $projectDir   = Container::$container->get('kernel')->getProjectDir();
+        $projectDir = Container::$container->get('kernel')->getProjectDir();
         $resourceBase = rtrim($projectDir, '/').'/var/upload/resource';
 
         /** @var ResourceNodeRepository $rnRepo */
@@ -440,7 +440,8 @@ final class CDocumentRepository extends ResourceRepository
                 ->from(CDocument::class, 'd')
                 ->innerJoin('d.resourceNode', 'rn')
                 ->andWhere('rn.parent = :pid')
-                ->setParameter('pid', $pid);
+                ->setParameter('pid', $pid)
+            ;
 
             /** @var CDocument[] $children */
             $children = $qb->getQuery()->getResult();
@@ -449,31 +450,34 @@ final class CDocumentRepository extends ResourceRepository
                 $filetype = (string) $doc->getFiletype();
                 $rn = $doc->getResourceNode();
 
-                if ($filetype === 'folder') {
+                if ('folder' === $filetype) {
                     if ($rn) {
                         $stack[] = $rn->getId();
                     }
+
                     continue;
                 }
 
-                if ($filetype === 'file') {
+                if ('file' === $filetype) {
                     $fullPath = (string) $doc->getFullPath(); // e.g. "document/Folder/file.ext"
-                    $relPath  = preg_replace('#^document/+#', '', $fullPath) ?? $fullPath;
+                    $relPath = preg_replace('#^document/+#', '', $fullPath) ?? $fullPath;
 
                     $absPath = null;
-                    $size    = 0;
+                    $size = 0;
 
                     if ($rn) {
-                        $file = $rn->getFirstResourceFile(); /** @var ResourceFile|null $file */
+                        $file = $rn->getFirstResourceFile();
+
+/** @var ResourceFile|null $file */
                         if ($file) {
                             $storedRel = (string) $rnRepo->getFilename($file);
-                            if ($storedRel !== '') {
+                            if ('' !== $storedRel) {
                                 $candidate = $resourceBase.$storedRel;
                                 if (is_readable($candidate)) {
                                     $absPath = $candidate;
-                                    $size    = (int) $file->getSize();
+                                    $size = (int) $file->getSize();
                                     if ($size <= 0 && is_file($candidate)) {
-                                        $st   = @stat($candidate);
+                                        $st = @stat($candidate);
                                         $size = $st ? (int) $st['size'] : 0;
                                     }
                                 }
@@ -482,10 +486,10 @@ final class CDocumentRepository extends ResourceRepository
                     }
 
                     $out[] = [
-                        'id'       => (int) $doc->getIid(),
-                        'path'     => $relPath,
-                        'size'     => (int) $size,
-                        'title'    => (string) $doc->getTitle(),
+                        'id' => (int) $doc->getIid(),
+                        'path' => $relPath,
+                        'size' => (int) $size,
+                        'title' => (string) $doc->getTitle(),
                         'abs_path' => $absPath,
                     ];
                 }
@@ -507,20 +511,23 @@ final class CDocumentRepository extends ResourceRepository
 
         /** @var ResourceNodeRepository $rnRepo */
         $rnRepo = Container::$container->get(ResourceNodeRepository::class);
-        $file   = $rn->getFirstResourceFile(); /** @var ResourceFile|null $file */
+        $file = $rn->getFirstResourceFile();
+
+/** @var ResourceFile|null $file */
         if (!$file) {
             return null;
         }
 
         $storedRel = (string) $rnRepo->getFilename($file);
-        if ($storedRel === '') {
+        if ('' === $storedRel) {
             return null;
         }
 
-        $projectDir   = Container::$container->get('kernel')->getProjectDir();
+        $projectDir = Container::$container->get('kernel')->getProjectDir();
         $resourceBase = rtrim($projectDir, '/').'/var/upload/resource';
 
         $candidate = $resourceBase.$storedRel;
+
         return is_readable($candidate) ? $candidate : null;
     }
 

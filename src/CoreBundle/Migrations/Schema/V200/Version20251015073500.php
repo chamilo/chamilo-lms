@@ -30,7 +30,7 @@ final class Version20251015073500 extends AbstractMigrationChamilo
             'SESSION_MANAGER',
             'STUDENT_BOSS',
         ];
-        $inList = "'" . implode("','", array_map('addslashes', $canonical)) . "'";
+        $inList = "'".implode("','", array_map('addslashes', $canonical))."'";
 
         $this->addSql("
             INSERT INTO role (code, constant_value, title, description, system_role, created_at)
@@ -57,15 +57,15 @@ final class Version20251015073500 extends AbstractMigrationChamilo
         $this->write('Removed non-canonical roles and related PRR rows.');
 
         $defaults = [
-            'INVITEE'          => [1,  'Invitee',               'Invited users',                               1],
-            'STUDENT'          => [2,  'Student',               'Students of courses or sessions',             1],
-            'TEACHER'          => [3,  'Teacher',               'Teachers of courses or sessions',             1],
-            'ADMIN'            => [4,  'Administrator',         'Platform administrators',                     1],
-            'GLOBAL_ADMIN'     => [6,  'Global Administrator',  'Global admin users',                          1],
-            'HR'               => [7,  'HR Manager',            'Human resources managers',                    0],
-            'QUESTION_MANAGER' => [8,  'Question Bank Manager', 'Manages the question bank across courses',    0],
-            'SESSION_MANAGER'  => [9,  'Session Manager',       'Manages sessions and session content',        0],
-            'STUDENT_BOSS'     => [10, 'Student Boss',          'Manages groups of students',                  0],
+            'INVITEE' => [1, 'Invitee', 'Invited users', 1],
+            'STUDENT' => [2, 'Student', 'Students of courses or sessions', 1],
+            'TEACHER' => [3, 'Teacher', 'Teachers of courses or sessions', 1],
+            'ADMIN' => [4, 'Administrator', 'Platform administrators', 1],
+            'GLOBAL_ADMIN' => [6, 'Global Administrator', 'Global admin users', 1],
+            'HR' => [7, 'HR Manager', 'Human resources managers', 0],
+            'QUESTION_MANAGER' => [8, 'Question Bank Manager', 'Manages the question bank across courses', 0],
+            'SESSION_MANAGER' => [9, 'Session Manager', 'Manages sessions and session content', 0],
+            'STUDENT_BOSS' => [10, 'Student Boss', 'Manages groups of students', 0],
         ];
 
         foreach ($defaults as $code => [$const, $title, $desc, $sys]) {

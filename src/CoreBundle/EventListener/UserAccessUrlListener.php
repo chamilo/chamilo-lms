@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
@@ -35,7 +34,7 @@ final readonly class UserAccessUrlListener
 
         try {
             $isAllowed = $this->accessUrlRepo->isUrlActiveForUser($currentAccessUrl, $user);
-        } catch (NoResultException|NonUniqueResultException $e) {
+        } catch (NonUniqueResultException|NoResultException $e) {
             throw new CustomUserMessageAuthenticationException('Unable to verify user authentication');
         }
 

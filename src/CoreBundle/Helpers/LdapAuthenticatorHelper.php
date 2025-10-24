@@ -63,12 +63,13 @@ readonly class LdapAuthenticatorHelper
             $ldapQuery[] = "(employeeType=$keywordType)";
         }
 
-        $query = count($ldapQuery) > 1 ? '(& '.implode(' ', $ldapQuery).' )' : $ldapQuery[0];
+        $query = \count($ldapQuery) > 1 ? '(& '.implode(' ', $ldapQuery).' )' : $ldapQuery[0];
 
         return $this->ldap
             ->query($this->ldapConfig['base_dn'], $query)
             ->execute()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
@@ -83,14 +84,15 @@ readonly class LdapAuthenticatorHelper
         }
 
         return $this->ldap
-            ->query("ou=$ou,".$this->ldapConfig['base_dn'], "(objectClass=inetOrgPerson)")
+            ->query("ou=$ou,".$this->ldapConfig['base_dn'], '(objectClass=inetOrgPerson)')
             ->execute()
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     public function countUsers(array $params): int
     {
-        return count($this->queryAllUsers());
+        return \count($this->queryAllUsers());
     }
 
     public function getAllUsers(int $from, int $numberOfItems, int $column, string $direction, array $params): array

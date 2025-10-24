@@ -78,12 +78,12 @@ final class CCalendarEventRepository extends ResourceRepository
             $reminder->count = max(0, (int) ($reminderInfo[0] ?? 0));
             $period = (string) ($reminderInfo[1] ?? '');
 
-            if ($period === 'w') {
-                $reminder->count = $reminder->count * 7;
+            if ('w' === $period) {
+                $reminder->count *= 7;
                 $period = 'd';
             }
 
-            if (!in_array($period, ['i','h','d'], true)) {
+            if (!\in_array($period, ['i', 'h', 'd'], true)) {
                 $period = 'i';
             }
 

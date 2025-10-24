@@ -96,10 +96,10 @@ class AgendaReminder
             'h' => "PT{$count}H",
             'd' => "P{$count}D",
             'w' => "P{$count}W",
-            default => "PT0M",
+            default => 'PT0M',
         };
 
-        $this->dateInterval = new \DateInterval($isoSpec);
+        $this->dateInterval = new DateInterval($isoSpec);
 
         return $this;
     }

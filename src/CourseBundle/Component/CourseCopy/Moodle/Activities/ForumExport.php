@@ -82,7 +82,7 @@ class ForumExport extends ActivityExport
                             $msg = (string) ($post->obj->post_text ?? '');
                             $posts[] = [
                                 'id' => (int) ($post->obj->post_id ?? $postId),
-                                'parent' => (int) ($post->obj->parent_id ?? 0),
+                                'parent' => (int) ($post->obj->post_parent_id ?? $post->obj->parent_id ?? 0),
                                 'userid' => $adminId,
                                 'created' => $created,
                                 'modified' => $created,

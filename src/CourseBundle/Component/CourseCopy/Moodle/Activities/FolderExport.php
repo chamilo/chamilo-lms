@@ -24,22 +24,31 @@ class FolderExport extends ActivityExport
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Prepare destination directory for the activity
+        @error_log('[FolderExport::export] Start. activityId='.(int)$activityId.' moduleId='.(int)$moduleId.' sectionId='.(int)$sectionId.' exportDir='.$exportDir);
+
         $folderDir = $this->prepareActivityDirectory($exportDir, 'folder', (int) $moduleId);
+        @error_log('[FolderExport::export] Activity dir='.$folderDir);
 
-        // Gather data
         $folderData = $this->getData((int) $activityId, (int) $sectionId);
+        if (!$folderData) {
+            @error_log('[FolderExport::export] ERROR: getData returned null for activityId='.$activityId);
+            return;
+        }
 
-        // Generate activity files
+        $refs = $this->getFilesForFolder((int) $activityId);
+        @error_log('[FolderExport::export] inforef files='.count($refs['files']).' users='.count($refs['users']));
+
         $this->createFolderXml($folderData, $folderDir);
         $this->createModuleXml($folderData, $folderDir);
         $this->createGradesXml($folderData, $folderDir);
         $this->createFiltersXml($folderData, $folderDir);
         $this->createGradeHistoryXml($folderData, $folderDir);
-        $this->createInforefXml($this->getFilesForFolder((int) $activityId), $folderDir);
+        $this->createInforefXml($refs, $folderDir);
         $this->createRolesXml($folderData, $folderDir);
         $this->createCommentsXml($folderData, $folderDir);
         $this->createCalendarXml($folderData, $folderDir);
+
+        @error_log('[FolderExport::export] Done. folderName='.$folderData['name'].' activityDir='.$folderDir);
     }
 
     /**
@@ -47,13 +56,12 @@ class FolderExport extends ActivityExport
      */
     public function getData(int $folderId, int $sectionId): ?array
     {
-        // Virtual "Documents" folder at section level
         if (0 === $folderId) {
             return [
-                'id' => 0,
-                'moduleid' => 0,
+                'id' => ActivityExport::DOCS_MODULE_ID,
+                'moduleid' => ActivityExport::DOCS_MODULE_ID,
                 'modulename' => 'folder',
-                'contextid' => 0,
+                'contextid' => ActivityExport::DOCS_MODULE_ID,
                 'name' => 'Documents',
                 'sectionid' => $sectionId,
                 'sectionnumber' => 0,
@@ -63,7 +71,6 @@ class FolderExport extends ActivityExport
             ];
         }
 
-        // Real folder coming from course resources
         $folder = $this->course->resources[RESOURCE_DOCUMENT][$folderId] ?? null;
         if (null === $folder) {
             return null;
@@ -114,6 +121,7 @@ class FolderExport extends ActivityExport
      */
     private function getFilesForFolder(int $folderId): array
     {
+        @error_log('[FolderExport::getFilesForFolder] Start. folderId='.$folderId);
         $files = [];
 
         if (0 === $folderId) {
@@ -124,14 +132,16 @@ class FolderExport extends ActivityExport
                         'id' => (int) $doc->source_id,
                         'contenthash' => hash('sha1', basename((string) $doc->path)),
                         'filename' => basename((string) $doc->path),
-                        'filepath' => '/Documents/',
+                        'filepath' => '/', // <- CRÍTICO para Folder
                         'filesize' => (int) $doc->size,
                         'mimetype' => $this->getMimeType((string) $doc->path),
                     ];
                 }
             }
+            @error_log('[FolderExport::getFilesForFolder] Collected root docs='.count($files));
         }
 
+        @error_log('[FolderExport::getFilesForFolder] Done. Returning files='.count($files));
         return ['users' => [], 'files' => $files];
     }
 

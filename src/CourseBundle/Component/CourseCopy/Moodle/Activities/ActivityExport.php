@@ -26,6 +26,8 @@ abstract class ActivityExport
      */
     protected $course;
 
+    public const DOCS_MODULE_ID = 1000000;
+
     public function __construct($course)
     {
         $this->course = $course;
@@ -131,42 +133,65 @@ abstract class ActivityExport
      */
     protected function createInforefXml(array $references, string $directory): void
     {
+        @error_log('[ActivityExport::createInforefXml] Start. Dir='.$directory);
+
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xml .= '<inforef>'.PHP_EOL;
 
+        $userCount = 0;
         if (!empty($references['users']) && \is_array($references['users'])) {
             $xml .= ' <userref>'.PHP_EOL;
             foreach ($references['users'] as $uid) {
                 $xml .= ' <user><id>'.htmlspecialchars((string) $uid).'</id></user>'.PHP_EOL;
+                $userCount++;
             }
             $xml .= ' </userref>'.PHP_EOL;
         }
 
+        $fileCount = 0;
+        $resolvedByHash = 0;
+
         if (!empty($references['files']) && \is_array($references['files'])) {
             $xml .= ' <fileref>'.PHP_EOL;
+
             foreach ($references['files'] as $file) {
                 $fid = null;
+                $hash = null;
+
                 if (\is_array($file)) {
-                    $fid = $file['id'] ?? null;
-                    $ch = $file['contenthash'] ?? null;
-                    if ($ch) {
-                        $resolved = FileIndex::resolveByContenthash((string) $ch);
-                        if (null !== $resolved) {
-                            $fid = $resolved;
+                    $fid  = $file['id'] ?? null;
+                    $hash = $file['contenthash'] ?? null;
+
+                    if ($hash) {
+                        $tmp = \Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\FileIndex::resolveByContenthash((string) $hash);
+                        if (null !== $tmp) {
+                            $fid = $tmp;
+                            $resolvedByHash++;
+                        } else {
+                            @error_log('[ActivityExport::createInforefXml] WARNING: Could not resolve contenthash='.$hash.' to a file id.');
                         }
                     }
                 } else {
                     $fid = $file;
                 }
-                if (null !== $fid) {
-                    $xml .= ' <file><id>'.htmlspecialchars((string) $fid).'</id></file>'.PHP_EOL;
+
+                if (null === $fid) {
+                    @error_log('[ActivityExport::createInforefXml] WARNING: Null file id entry skipped.');
+                    continue;
                 }
+
+                $xml .= ' <file><id>'.htmlspecialchars((string) $fid).'</id></file>'.PHP_EOL;
+                $fileCount++;
             }
+
             $xml .= ' </fileref>'.PHP_EOL;
         }
 
         $xml .= '</inforef>'.PHP_EOL;
+
         $this->createXmlFile('inforef', $xml, $directory);
+
+        @error_log('[ActivityExport::createInforefXml] Done. users='.$userCount.' files='.$fileCount.' resolvedByHash='.$resolvedByHash.' Dir='.$directory);
     }
 
     /**

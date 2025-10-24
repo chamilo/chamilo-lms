@@ -516,6 +516,9 @@ class MoodleImport
             ?? $xp->query('//content')->item(0)?->nodeValue
             ?? '');
 
+        // NEW: normalize @@PLUGINFILE@@ placeholders so local files resolve
+        $content = $this->normalizePluginfileContent($content);
+
         return [
             'name' => $name,
             'content' => $content,
@@ -2021,5 +2024,25 @@ class MoodleImport
         }
 
         return $o;
+    }
+
+    /**
+     * Replace Moodle @@PLUGINFILE@@ placeholders with package-local /document/ URLs
+     * so that later HTML URL mapping can resolve and rewire them correctly.
+     * Examples:
+     *   @@PLUGINFILE@@/Documents/foo.png  -> /document/foo.png
+     *   @@PLUGINFILE@@/documents/bar.pdf  -> /document/bar.pdf
+     */
+    private function normalizePluginfileContent(string $html): string
+    {
+        if ('' === $html) {
+            return $html;
+        }
+
+        // Case-insensitive replace; keep a single leading slash
+        // Handles both Documents/ and documents/
+        $html = preg_replace('~@@PLUGINFILE@@/(?:Documents|documents)/~i', '/document/', $html);
+
+        return $html;
     }
 }

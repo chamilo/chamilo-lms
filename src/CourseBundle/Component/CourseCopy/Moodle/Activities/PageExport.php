@@ -175,13 +175,10 @@ class PageExport extends ActivityExport
 
     /**
      * Normalize HTML content by rewriting course document URLs to @@PLUGINFILE@@ tokens.
-     * Covers:
-     *  - <img src="..."> (existing behavior)
-     *  - <a href="...">
-     *  - <link href="...">
-     *  - <source src="..."> (audio/video)
-     *  - poster="..." on <video>
-     *  - url(...) in inline style="" and <style> blocks.
+     * Now also handles:
+     *  - srcset="... 1x, ... 2x" on <img>
+     *  - data="..." (e.g. <object data="...">)
+     * Existing behaviors for src|href|poster, inline styles and <style> remain.
      */
     private function normalizeContent(string $html): string
     {
@@ -189,9 +186,42 @@ class PageExport extends ActivityExport
             return $html;
         }
 
-        // 1) Generic attributes: src|href|poster on any tag
+        // 0) Handle srcset specifically (multiple candidates)
         $html = (string) preg_replace_callback(
-            '~\b(src|href|poster)\s*=\s*([\'"])([^\'"]+)\2~i',
+            '~\bsrcset\s*=\s*([\'"])(.*?)\1~is',
+            function (array $m): string {
+                $q = $m[1];
+                $val = $m[2];
+
+                // Split by commas but keep descriptors (e.g., "image@2x.png 2x")
+                $parts = array_map('trim', explode(',', $val));
+                foreach ($parts as &$p) {
+                    if ('' === $p) {
+                        continue;
+                    }
+                    // First token is the URL, the rest (if any) are descriptors
+                    // e.g., "foo.png 2x" -> ["foo.png","2x"]
+                    $tokens = preg_split('/\s+/', $p, -1, PREG_SPLIT_NO_EMPTY);
+                    if (empty($tokens)) {
+                        continue;
+                    }
+                    $url = $tokens[0];
+                    $new = $this->rewriteDocUrl($url);
+                    if ($new !== $url) {
+                        $tokens[0] = $new;
+                        $p = implode(' ', $tokens);
+                    }
+                }
+                $newVal = implode(', ', $parts);
+
+                return 'srcset='.$q.$newVal.$q;
+            },
+            $html
+        );
+
+        // 1) Generic attributes: src|href|poster|data on any tag
+        $html = (string) preg_replace_callback(
+            '~\b(src|href|poster|data)\s*=\s*([\'"])([^\'"]+)\2~i',
             function (array $m): string {
                 $attr = $m[1];
                 $q = $m[2];

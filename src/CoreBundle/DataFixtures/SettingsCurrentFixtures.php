@@ -584,12 +584,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             'display' => [
                 [
                     'name' => 'show_tabs',
-                    'title' => 'Tabs in the header',
-                    'comment' => 'Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my courses page if these need to appear',
+                    'title' => 'Main menu entries',
+                    'comment' => 'Check the entrie you want to see appear in the main menu',
                 ],
                 [
                     'name' => 'show_tabs_per_role',
-                    'title' => 'Show tabs per role',
+                    'title' => 'Main menu entries per role',
                     'comment' => 'Define header tabs visibility per role.',
                 ],
                 [

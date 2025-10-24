@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
@@ -26,69 +28,24 @@ class CertificateController extends AbstractController
     public function __construct(
         private readonly GradebookCertificateRepository $certificateRepository,
         private readonly SettingsManager $settingsManager,
-        private readonly UserHelper $userHelper
+        private readonly UserHelper $userHelper,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
     ) {}
 
     #[Route('/{hash}.html', name: 'chamilo_certificate_public_view', methods: ['GET'])]
     public function view(string $hash): Response
     {
-        // Build the expected certificate filename from the hash
-        $filename = $hash.'.html';
-        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
+        // Resolve certificate row (keeps legacy path logic working)
+        [$certificate] = $this->resolveCertificateByHash($hash);
 
-        $certificate = null;
-        $matchedPath = '';
-        foreach ($candidates as $cand) {
-            $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
-            if ($row) {
-                $certificate = $row;
-                $matchedPath = $cand;
+        // Permission checks
+        $this->assertCertificateAccess($certificate);
 
-                break;
-            }
-        }
-        if (!$certificate) {
-            throw new NotFoundHttpException('The requested certificate does not exist.');
-        }
+        // Read HTML from resource storage (new) or personal-file (legacy)
+        $html = $this->readCertificateHtml($certificate, $hash);
+        $html = str_replace(' media="screen"', '', $html);
 
-        // Check if public access is globally allowed and certificate is marked as published
-        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
-        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
-        $user = $this->userHelper->getCurrent();
-        $securityUser = $this->getUser();
-        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
-        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
-
-        if (!$isOwner && !$isPlatformAdmin) {
-            $isPublic = ($allowPublic && $certificate->getPublish());
-            $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
-            if (!$isPublic && !$isSessAdminAllowed) {
-                throw new AccessDeniedHttpException('The requested certificate is not public.');
-            }
-        }
-
-        // Fetch the actual certificate file from personal files using its title
-        $personalFileRepo = Container::getPersonalFileRepository();
-        $pf = null;
-        $pfMatch = '';
-        foreach ($candidates as $cand) {
-            $row = $personalFileRepo->findOneBy(['title' => $cand]);
-            if ($row) {
-                $pf = $row;
-                $pfMatch = $cand;
-
-                break;
-            }
-        }
-        if (!$pf) {
-            throw new NotFoundHttpException('The certificate file was not found.');
-        }
-
-        $content = $personalFileRepo->getResourceFileContent($pf);
-        $content = str_replace(' media="screen"', '', $content);
-
-        // Return the certificate as a raw HTML response
-        return new Response('<!DOCTYPE html>'.$content, 200, [
+        return new Response('<!DOCTYPE html>'.$html, 200, [
             'Content-Type' => 'text/html; charset=UTF-8',
         ]);
     }
@@ -96,75 +53,203 @@ class CertificateController extends AbstractController
     #[Route('/{hash}.pdf', name: 'chamilo_certificate_public_pdf', methods: ['GET'])]
     public function downloadPdf(string $hash): Response
     {
-        $filename = $hash.'.html';
-        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
+        // Resolve certificate row
+        [$certificate] = $this->resolveCertificateByHash($hash);
 
-        $certificate = null;
-        $matchedPath = '';
-        foreach ($candidates as $cand) {
-            $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
-            if ($row) {
-                $certificate = $row;
-                $matchedPath = $cand;
+        // Permission checks
+        $this->assertCertificateAccess($certificate);
 
-                break;
-            }
-        }
-        if (!$certificate) {
-            throw $this->createNotFoundException('The requested certificate does not exist.');
-        }
-
-        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
-        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
-        $user = $this->userHelper->getCurrent();
-        $securityUser = $this->getUser();
-        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
-        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
-
-        if (!$isOwner && !$isPlatformAdmin) {
-            $isPublic = ($allowPublic && $certificate->getPublish());
-            $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
-            if (!$isPublic && !$isSessAdminAllowed) {
-                throw new AccessDeniedHttpException('The requested certificate is not public.');
-            }
-        }
-
-        $personalFileRepo = Container::getPersonalFileRepository();
-        $pf = null;
-        $pfMatch = '';
-        foreach ($candidates as $cand) {
-            $row = $personalFileRepo->findOneBy(['title' => $cand]);
-            if ($row) {
-                $pf = $row;
-                $pfMatch = $cand;
-
-                break;
-            }
-        }
-        if (!$pf) {
-            throw $this->createNotFoundException('The certificate file was not found.');
-        }
-
-        $html = $personalFileRepo->getResourceFileContent($pf);
+        // Read HTML and render PDF
+        $html = $this->readCertificateHtml($certificate, $hash);
         $html = str_replace(' media="screen"', '', $html);
 
         try {
             $mpdf = new Mpdf([
-                'format' => 'A4',
+                'format'  => 'A4',
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ]);
             $mpdf->WriteHTML($html);
+            $pdfBinary = $mpdf->Output('', Destination::STRING_RETURN);
 
             return new Response(
-                $mpdf->Output('certificate.pdf', Destination::DOWNLOAD),
+                $pdfBinary,
                 200,
                 [
-                    'Content-Type' => 'application/pdf',
+                    'Content-Type'        => 'application/pdf',
                     'Content-Disposition' => 'attachment; filename="certificate.pdf"',
                 ]
             );
         } catch (MpdfException $e) {
             throw new RuntimeException('Failed to generate PDF: '.$e->getMessage(), 500, $e);
         }
+    }
+
+    /**
+     * Resolve the certificate row via path.
+     *
+     * @return array{0: GradebookCertificate, 1: string}
+     *
+     * @throws NotFoundHttpException
+     */
+    private function resolveCertificateByHash(string $hash): array
+    {
+        $filename   = $hash.'.html';
+        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
+
+        $certificate = null;
+        $matchedPath = '';
+
+        foreach ($candidates as $cand) {
+            $row = $this->certificateRepository->findOneBy(['pathCertificate' => $cand]);
+            if ($row) {
+                $certificate = $row;
+                $matchedPath = $cand;
+                break;
+            }
+        }
+
+        if (!$certificate instanceof GradebookCertificate) {
+            throw new NotFoundHttpException('The requested certificate does not exist.');
+        }
+
+        return [$certificate, $matchedPath];
+    }
+
+    /**
+     * Owner/admin OR (public+published) OR (session admin if allowed).
+     *
+     * @throws AccessDeniedHttpException
+     */
+    private function assertCertificateAccess(GradebookCertificate $certificate): void
+    {
+        $allowPublic       = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
+        $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
+
+        $user         = $this->userHelper->getCurrent();
+        $securityUser = $this->getUser();
+
+        $isOwner         = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
+        $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
+
+        if ($isOwner || $isPlatformAdmin) {
+            return;
+        }
+
+        $isPublic           = ($allowPublic && $certificate->getPublish());
+        $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
+
+        if (!$isPublic && !$isSessAdminAllowed) {
+            throw new AccessDeniedHttpException('The requested certificate is not public.');
+        }
+    }
+
+    /**
+     * Returns certificate HTML from resource-node (new flow) or personal file (legacy).
+     *
+     * It tries multiple physical paths to accommodate different storage layouts:
+     *  1) node->getPath() + ResourceFile->title
+     *  2) node->getPath() + ResourceFile->original_name
+     *  3) sharded path "resource/<a>/<b>/<c>/<file>" using title
+     *  4) sharded path "resource/<a>/<b>/<c>/<file>" using original_name
+     *  5) final fallback: generic getResourceNodeFileContent()
+     *  6) legacy fallback: PersonalFile by title
+     *
+     * @throws NotFoundHttpException
+     */
+    private function readCertificateHtml(GradebookCertificate $certificate, string $hash): string
+    {
+        // Preferred flow: read from ResourceNode
+        if ($certificate->hasResourceNode()) {
+            $node = $certificate->getResourceNode();
+            $fs   = $this->resourceNodeRepository->getFileSystem();
+
+            if ($fs) {
+                $basePath = rtrim((string) $node->getPath(), '/');
+
+                // Helper to create sharded path: resource/7/4/3/<filename>
+                $sharded = static function (string $filename): string {
+                    $a = $filename[0] ?? '_';
+                    $b = $filename[1] ?? '_';
+                    $c = $filename[2] ?? '_';
+
+                    return sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
+                };
+
+                // Try via ResourceFile->title first (this is usually the stored physical filename)
+                foreach ($node->getResourceFiles() as $rf) {
+                    $title = (string) $rf->getTitle();
+                    if ($title !== '') {
+                        if ($basePath !== '') {
+                            $p = $basePath.'/'.$title;
+                            if ($fs->fileExists($p)) {
+                                $content = $fs->read($p);
+                                if ($content !== false && $content !== null) {
+                                    return $content;
+                                }
+                            }
+                        }
+
+                        $p2 = $sharded($title);
+                        if ($fs->fileExists($p2)) {
+                            $content = $fs->read($p2);
+                            if ($content !== false && $content !== null) {
+                                return $content;
+                            }
+                        }
+                    }
+                }
+
+                // Try via ResourceFile->original_name
+                foreach ($node->getResourceFiles() as $rf) {
+                    $orig = (string) $rf->getOriginalName();
+                    if ($orig !== '') {
+                        if ($basePath !== '') {
+                            $p = $basePath.'/'.$orig;
+                            if ($fs->fileExists($p)) {
+                                $content = $fs->read($p);
+                                if ($content !== false && $content !== null) {
+                                    return $content;
+                                }
+                            }
+                        }
+
+                        $p2 = $sharded($orig);
+                        if ($fs->fileExists($p2)) {
+                            $content = $fs->read($p2);
+                            if ($content !== false && $content !== null) {
+                                return $content;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Final resource fallback (may still fail if no default file is set)
+            try {
+                return $this->resourceNodeRepository->getResourceNodeFileContent($node);
+            } catch (\Throwable $e) {
+                // Continue to legacy fallback
+            }
+        }
+
+        // Legacy flow: PersonalFile by title
+        $filename   = $hash.'.html';
+        $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
+
+        $personalFileRepo = Container::getPersonalFileRepository();
+        $pf = null;
+        foreach ($candidates as $cand) {
+            $row = $personalFileRepo->findOneBy(['title' => $cand]);
+            if ($row) {
+                $pf = $row;
+                break;
+            }
+        }
+
+        if (!$pf) {
+            throw new NotFoundHttpException('The certificate file was not found.');
+        }
+
+        return $personalFileRepo->getResourceFileContent($pf);
     }
 }

@@ -298,22 +298,38 @@ async function cc13ExportResources(node = resolveNodeFromPath()) {
   return resp.data
 }
 async function cc13ExportExecute(node = resolveNodeFromPath(), payload) {
-  const resp = await http.post(base.cc13ExportExecute(node), payload, { params: withCourseParams() })
-  return resp.data
+  const resp = await http.post(base.cc13ExportExecute(node), payload, {
+    params: withCourseParams(),
+    headers: { Accept: "application/json" },
+  })
+  return resp.data // { ok, file, downloadUrl, message }
 }
 
 // CC 1.3 import
 async function cc13Import(node = resolveNodeFromPath(), fileOrOptions) {
+  // File upload path
   if (typeof File !== "undefined" && fileOrOptions instanceof File) {
     const fd = new FormData()
-    fd.append("file", fileOrOptions, fileOrOptions.name)
+    fd.append("file", fileOrOptions, fileOrOptions.name || "package.imscc")
     const resp = await http.post(base.cc13Import(node), fd, {
       headers: { "Content-Type": "multipart/form-data" },
       params: withCourseParams(),
+      validateStatus: () => true,
+      responseType: "json",
     })
-    return resp.data
+    if (resp.status >= 400) {
+      const msg = resp.data?.error || resp.data?.message || "Import failed"
+      const err = new Error(msg)
+      err.response = { status: resp.status, data: resp.data }
+      throw err
+    }
+    return resp.data // { ok:true, message:"..." }
   }
-  const resp = await http.post(base.cc13Import(node), fileOrOptions || {}, { params: withCourseParams() })
+
+  // Optional JSON mode (if later you add server switches)
+  const resp = await http.post(base.cc13Import(node), fileOrOptions || {}, {
+    params: withCourseParams(),
+  })
   return resp.data
 }
 

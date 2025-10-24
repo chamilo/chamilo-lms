@@ -6,47 +6,42 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Dto;
 
-use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-)]
 class CreateUserOnAccessUrlInput
 {
     #[Assert\NotBlank]
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private string $username;
 
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private string $email;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?string $firstname = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?string $lastname = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?string $password = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?string $locale = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?string $timezone = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private ?int $status = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     public ?array $extraFields = null;
 
-    #[Groups(['write'])]
+    #[Groups(['user:write'])]
     private bool $sendEmail = true;
 
     public function getUsername(): string

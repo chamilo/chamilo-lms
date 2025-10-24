@@ -591,6 +591,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $matching->count() > 0;
     }
 
+    /**
+     * @return Collection<int, CourseRelUser>
+     */
     #[SerializedName('teachers')]
     #[Groups(['course:read'])]
     public function getTeachersSubscriptions(): Collection

@@ -549,9 +549,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     /**
      * Get the coaches for a course within a session.
      *
-     * @return Collection|array
+     * @return array<int, User>
      */
-    public function getCoachesForSessionCourse(Session $session, Course $course)
+    public function getCoachesForSessionCourse(Session $session, Course $course): array
     {
         $qb = $this->createQueryBuilder('u');
 

@@ -18,9 +18,8 @@
 <body>
 <div class="version" aria-label="2.0">
 
-
-    <a id="2.0-alpha.5"></a>
-    <h1>Chamilo 2.0 alpha 5 - Album, 2025-10-09</h1>
+    <a id="2.0-beta.1"></a>
+    <h1>Chamilo 2.0 beta 1 - Metronum, 2025-10-?</h1>
     <h3>Release notes - summary</h3>
     <p>
         Chamilo 2.0 (stable) will be a major release, a new branch for the Chamilo software.
@@ -31,21 +30,105 @@
         VueJS as our main frontend framework and TailwindCSS as our CSS framework.
     </p>
     <p>
-        For the first time in 15 years (since its launch in 2010),
+        For the first time in 16 years (since its launch in 2010),
         Chamilo considerably changes appearance, with a new, foldable left menu (meant
-        to improve space usage on mobile devices), with a streamlined (and open source) set of
+        to improve space usage on mobile devices), with a streamlined (and Open Source) set of
         icons, and with a design that will allow more flexibility and speed across devices.
     </p>
     <p>
-        This is an ALPHA release, meaning it is NOT finished and it is meant for testing and development
+        This is an BETA release, meaning it is NOT finished and it is meant for testing and development
         only. It should *NOT* be used in production unless you have a full-time dedicated IT team or official
-        provider supporting you. To install this alpha version for testing, please read /README.md.
+        provider supporting you. To install this beta version for testing, please read /README.md.
     </p>
     <p>
-        An alpha version, to us, means that (except for unforeseen issues) the database files structure are fixed
-        (although some files could still be added/removed before the beta release). The visual design is *NOT* important
-        to us in this alpha version.
+        A beta version, to us, means that the database and files structure are fixed until the stable release,
+        meaning integrators can now join to provide or update plugins that will be delivered later on
+        as part of the upcoming Chamilo 2.0 stable, and translators can start working with us to ensure
+        all translations are updated.
+        Testers can now also report bugs, as these are the main focus of the beta phase.
+        The visual design is *NOT* important to us in this beta version.
     </p>
+    <h3>Release name</h3>
+    <p><a href="https://fr.wikipedia.org/wiki/Liste_des_camps_romains_d'Ast%C3%A9rix_le_Gaulois#Camps_romains_situ%C3%A9s_en_Corse"></a>Metronum (fiction village name, see French art)</p>
+
+    <h3>Security fixes</h3>
+    <ul aria-live="off">
+        <li>None</li>
+    </ul>
+
+    <h3>Added</h3>
+    <ul aria-live="off">
+        <li>None</li>
+    </ul>
+
+    <h3>Changed</h3>
+    <ul aria-live="off">
+        <li>None</li>
+    </ul>
+
+    <h3>Fixed</h3>
+    <ul aria-live="off">
+        <li>[2025-10-24] (<a href="https://github.com/chamilo/chamilo-lms/commit/d96ae324056c56b0b8752b78951ef74dc7e87134">d96ae324</a>) Internal: Maintenance: Fix GradeBookBackup::show() declaration</li>
+        <li>[2025-10-22] (<a href="https://github.com/chamilo/chamilo-lms/commit/4e0f81acca69f24f679a0e75bdf050f0c5dcdab1">4e0f81ac</a> - <a href="https://task.beeznest.com/issues/22957">BT#22957</a>) Internal: API: Adjust serialization groups for CreateUserOnAccessUrlInput and User entity</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/2551703dcca254d8b7121e7a940cb1208d293113">2551703d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6926">GH#6926</a>) Internal: Update titles/comments for show_tabs and show_tabs_per_role</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/c6d5c0c797eebc897dfcbf57cd4a5ee4bd6137ff">c6d5c0c7</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6926">GH#6926</a>) Internal: Fix show_tabs inconsistencies</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/e3f051fb694b61985335e64f637620788d3f5592">e3f051fb</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5074">GH#5074</a>) Gradebook: check course certificate resource from gradebook</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/20dcb9549b0173743578bfbfb4b7c1fabcc65a56">20dcb954</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5074">GH#5074</a>) Gradebook: use course certificate resource, not general custom</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/8bced1857bf4d1d3eb6a8ed7206b6ddbee8db758">8bced185</a>) Plugin: Refactor plugin configuration retrieval to create if not exists</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a1a74d633c1c8c34502d16271ada9faabde07883">a1a74d63</a>) Internal: Remove show_tabs settings from PlatformSettingsSchema show_tabs belongs to DisplaySettingsSchema</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/a5d1513d63402c5842f2d8f4165264ea66cbfb60">a5d1513d</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6722">GH#6722</a>) Glossary: Fix XLSX and CSV exported</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/42f642cf64b3ccbb5104e313023d2f74e0867547">42f642cf</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6722">GH#6722</a>) Glossary: Fix PDF exported</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/bf32af52ae8902b7d602e97954197588db82547b">bf32af52</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6722">GH#6722</a>) Fix legacy SYS_ARCHIVE_PATH to use the environment cache directory</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/4fb42ac30807ff2c382a70dc4912a924d8d0eb7c">4fb42ac3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6722">GH#6722</a>) Use environment cache directory as temp directory for mpdf</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/783f3c4cd4132398ef1da6e13f77481bb25a0e7f">783f3c4c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6814">GH#6814</a>) User AccessUrlHelper::getCurrent() instead of api_get_current_access_url_id</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/4c0750e941da3bf286941bdfb791128c73aa8e92">4c0750e9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6814">GH#6814</a>) Fix flash messages not displayed in course list actions</li>
+        <li>[2025-10-21] (<a href="https://github.com/chamilo/chamilo-lms/commit/f8f7fad019d2c7b1a31d82b121dd0875758be2e4">f8f7fad0</a> - <a href="https://task.beeznest.com/issues/22999">BT#22999</a>) Exercise: Persist question order & resume position across sessions</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/1508a1b1c25a9091504337114b7085603b0148c3">1508a1b1</a>) Certificate: safe resource upsert; avoid undefined file_content</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/39557ea2d38da5b77a1ec55329d300b8469c71e5">39557ea2</a>) Vendor: Update JS libs</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/87aac6f2cb2fa6d9ee8a112c0a4b334c896eaaa3">87aac6f2</a>) Vendor: Update PHP libs</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/3d3752c978357713e8836156b95cbaba9447e43f">3d3752c9</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5074">GH#5074</a>) Certificate: Fix 500: generate certificates via Resource and fill file_content</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ee0586545ab308e59cc89c0c668f5288b4ebeb4">1ee05865</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Refactor: Replace `UserManager::is_username_available` calls with `UserRepository::isUsernameAvailable` and remove deprecated method</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/1d2b3601e2ec40045ef8cff7c2d5be08c896809d">1d2b3601</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Auth: Restore LDAP users registration into a session</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/569642148b69d68603c1547ad24bea8044a61f84">56964214</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Auth: Fix LDAP users registration into a course</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/5127ba08cb6aa8a474cdca2d069004701b371d8d">5127ba08</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5074">GH#5074</a>) Certificate: Migrate to Resource (‘user_certificate’) and replace PersonalFile</li>
+        <li>[2025-10-20] (<a href="https://github.com/chamilo/chamilo-lms/commit/6f63e07a9d86af6846c4cb97d47cb329d638f470">6f63e07a</a> - <a href="https://task.beeznest.com/issues/23019">BT#23019</a>) Language add missing translation for new funcionality to track user not subscribed in course</li>
+        <li>[2025-10-19] (<a href="https://github.com/chamilo/chamilo-lms/commit/1ff1bd5c9aef4c0f93917b8d3583351b0d41b34c">1ff1bd5c</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6870">GH#6870</a>) Course: Add Expor/Import IMC CC 1.3 from course maintenance</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/b3d31e87ef08fe81f07d0bdaa6a59ba7f1f9ee21">b3d31e87</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Internal: mark UserManager::is_username_available as deprecated in favor of UserRepository::isUsernameAvailable</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/58e22594c2bbf600d6b6c430d74cf50451bd03fd">58e22594</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Auth: Restore page to import LDAP users into a course</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/ab425bba5cc09e9a0dae3eb59f5cdfb101f94965">ab425bba</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Auth: Fix default value for dn_string in LDAP config</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/2f6b6c692e46ee3efed8cb327c7242603dbc9892">2f6b6c69</a> - <a href="https://task.beeznest.com/issues/22300">BT#22300</a>) Auth: Restore page to import LDAP users into the platform</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/4a24eb47c4169c03510a4f44c39561734a8180a0">4a24eb47</a>) Install: Update acceptable origin versions for migration process</li>
+        <li>[2025-10-17] (<a href="https://github.com/chamilo/chamilo-lms/commit/6ce51f296e8f01c4efe6cd0cc1b53fd57f8059d8">6ce51f29</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/5200">GH#5200</a>) Announcement: Enable announcements to be visible to ANONYMOUS users</li>
+        <li>[2025-10-16] (<a href="https://github.com/chamilo/chamilo-lms/commit/79cd1f345f065b2df748e9eac7858fe4547b3818">79cd1f34</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6863">GH#6863</a>) Attendance: Fix timepicker increment</li>
+        <li>[2025-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/48108f5d39e2cd55fa24a28d50904f31550017c1">48108f5d</a> - <a href="https://task.beeznest.com/issues/23033">BT#23033</a>) Gradebook: Certificate: fix query to use null instead of 0 when updating certificate info</li>
+        <li>[2025-10-15] (<a href="https://github.com/chamilo/chamilo-lms/commit/792abf35806815f81e03a5afb3bec712db736c73">792abf35</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6910">GH#6910</a>) Internal: add ANONYMOUS in fixtures; clean roles via migration (drop SUPER_ADMIN)</li>
+        <li>[2025-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/932049aa526cce330ea5059f87d502a43e56bbef">932049aa</a> - <a href="https://task.beeznest.com/issues/22944">BT#22944</a>) Internal: Hide public menu on undefined-url; keep language switcher only</li>
+        <li>[2025-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/84fee6b666efc4a5c370622afdee372c2099a6ca">84fee6b6</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6907">GH#6907</a>) Internal: Fixes to settings migration</li>
+        <li>[2025-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/26ae244ff062159b33c5b5d79a5bc2512a3f3235">26ae244f</a> - <a href="https://task.beeznest.com/issues/23004">BT#23004</a>) Internal: Convert UTC times to local timezone in event reminder command</li>
+        <li>[2025-10-14] (<a href="https://github.com/chamilo/chamilo-lms/commit/ab1b3dd210c57a32cb569e80c0e4da34a997ff37">ab1b3dd2</a> - <a href="https://task.beeznest.com/issues/23005">BT#23005</a>) Announcement: fix calendar event reminders — enable add/remove</li>
+        <li>[2025-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/3a365382c7d01eaeba25d439d6fe005c6fd12ab4">3a365382</a> - <a href="https://task.beeznest.com/issues/23006">BT#23006</a>) User: Fix tags editable from edit profile form</li>
+        <li>[2025-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/7f071a8c33d603d9787543a3e1565b7e8e63ba47">7f071a8c</a> - <a href="https://task.beeznest.com/issues/22944">BT#22944</a>) Internal: Fix redirect loop for theme assets on undefined-url</li>
+        <li>[2025-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/5a0434b34b7f9703bebaf9223596f4a2c373c2e6">5a0434b3</a> - <a href="https://task.beeznest.com/issues/23020">BT#23020</a>) Course: Fix query for non-registered active users in course tracking</li>
+        <li>[2025-10-13] (<a href="https://github.com/chamilo/chamilo-lms/commit/255fe88903c98301b43b8cc9aafabafc336ad74f">255fe889</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6870">GH#6870</a>) Course: Add export/import as mbz file (moodle format), cleaning code</li>
+        <li>[2025-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/e6d7686a9bf2c81195b023c64761f13d6a70c687">e6d7686a</a>) Attendance: fix routing — use iid, enforce :id, use course node on back</li>
+        <li>[2025-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/854c8158ffd387a976c713f373ca8fa8355b9220">854c8158</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6870">GH#6870</a>) Course: Minor: cleaning code with phpcs</li>
+        <li>[2025-10-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/bf28c2f2c3ea495f1dea86e1a59adfc3b76090ba">bf28c2f2</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/6870">GH#6870</a>) Course: Improve and fix course maintenance (import/copy/recycle/delete)</li>
+    </ul>
+
+    <h3>Removed</h3>
+    <ul aria-live="off">
+        <li>None</li>
+    </ul>
+
+    <h3>Known issues</h3>
+    <ul aria-live="off">
+        <li>Customizations of in-course tools (titles, icons, etc) at the course level are lost in migration from 1.11.</li>
+    </ul>
+
+
+    <a id="2.0-alpha.5"></a>
+    <h1>Chamilo 2.0 alpha 5 - Album, 2025-10-09</h1>
+
     <h3>Release name</h3>
     <p><a href="https://fr.wikipedia.org/wiki/Liste_des_camps_romains_d'Ast%C3%A9rix_le_Gaulois#Camps_romains_situ%C3%A9s_en_Corse"></a>Album (fiction village name, see French art)</p>
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder;
 
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ActivityExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AssignExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FeedbackExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ForumExport;
@@ -77,53 +78,82 @@ class MoodleExport
      */
     public function export(string $courseId, string $exportDir, int $version)
     {
+        @error_log('[MoodleExport::export] Start. courseId='.$courseId.' exportDir='.$exportDir.' version='.$version);
+
         $tempDir = api_get_path(SYS_ARCHIVE_PATH).$exportDir;
 
         if (!is_dir($tempDir)) {
             if (!mkdir($tempDir, api_get_permissions_for_new_directories(), true)) {
+                @error_log('[MoodleExport::export] ERROR cannot create tempDir='.$tempDir);
                 throw new Exception(get_lang('ErrorCreatingDirectory'));
             }
+            @error_log('[MoodleExport::export] Created tempDir='.$tempDir);
         }
 
         $courseInfo = api_get_course_info($courseId);
         if (!$courseInfo) {
+            @error_log('[MoodleExport::export] ERROR CourseNotFound id='.$courseId);
             throw new Exception(get_lang('CourseNotFound'));
         }
 
-        // Generate the moodle_backup.xml
+        // 1) Create Moodle backup skeleton (backup.xml + dirs)
         $this->createMoodleBackupXml($tempDir, $version);
+        @error_log('[MoodleExport::export] moodle_backup.xml generated');
 
-        // Get the activities from the course
+        // 2) <<< INSERT HERE >>> Enqueue URL activities before collecting all activities
+        //    We build URL activities from the "link" bucket and push them into the pipeline.
+        //    This must happen BEFORE calling getActivities() so they are included.
+        if (method_exists($this, 'enqueueUrlActivities')) {
+            @error_log('[MoodleExport::export] Enqueuing URL activities …');
+            $this->enqueueUrlActivities();
+            @error_log('[MoodleExport::export] URL activities enqueued');
+        } else {
+            @error_log('[MoodleExport::export][WARN] enqueueUrlActivities() not found; skipping URL activities');
+        }
+
+        // 3) Gather activities (now includes URLs)
         $activities = $this->getActivities();
+        @error_log('[MoodleExport::export] Activities count='.count($activities));
 
-        // Export course-related files
+        // 4) Export course structure (sections + activities metadata)
         $courseExport = new CourseExport($this->course, $activities);
         $courseExport->exportCourse($tempDir);
+        @error_log('[MoodleExport::export] course/ exported');
 
-        // Export files-related data and actual files
+        // 5) Page export (collect extra files from HTML pages)
         $pageExport = new PageExport($this->course);
         $pageFiles = [];
         $pageData = $pageExport->getData(0, 1);
         if (!empty($pageData['files'])) {
             $pageFiles = $pageData['files'];
         }
+        @error_log('[MoodleExport::export] pageFiles from PageExport='.count($pageFiles));
+
+        // 6) Files export (documents, attachments, + pages’ files)
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
-        $filesData['files'] = array_merge($filesData['files'], $pageFiles);
+        @error_log('[MoodleExport::export] getFilesData='.count($filesData['files'] ?? []));
+        $filesData['files'] = array_merge($filesData['files'] ?? [], $pageFiles);
+        @error_log('[MoodleExport::export] merged files='.count($filesData['files'] ?? []));
         $fileExport->exportFiles($filesData, $tempDir);
 
-        // Export sections of the course
+        // 7) Sections export (topics/weeks descriptors)
         $this->exportSections($tempDir);
+        @error_log('[MoodleExport::export] sections/ exported');
 
-        // Export all root XML files
+        // 8) Root XMLs (course/activities indexes)
         $this->exportRootXmlFiles($tempDir);
+        @error_log('[MoodleExport::export] root XMLs exported');
 
-        // Compress everything into a .mbz (ZIP) file
+        // 9) Create .mbz archive
         $exportedFile = $this->createMbzFile($tempDir);
+        @error_log('[MoodleExport::export] mbz created at '.$exportedFile);
 
-        // Clean up temporary directory
+        // 10) Cleanup temp dir
         $this->cleanupTempDir($tempDir);
+        @error_log('[MoodleExport::export] tempDir removed '.$tempDir);
 
+        @error_log('[MoodleExport::export] Done. file='.$exportedFile);
         return $exportedFile;
     }
 
@@ -500,31 +530,33 @@ class MoodleExport
         return $sections;
     }
 
+    // src/.../MoodleExport.php
     private function getActivities(): array
     {
+        @error_log('[MoodleExport::getActivities] Start');
+
         $activities = [];
         $glossaryAdded = false;
 
-        // Safely resolve the documents bucket (accept constant or plain 'document')
+        // Build a "documents" bucket (root-level files/folders)
         $docBucket = [];
         if (\defined('RESOURCE_DOCUMENT') && isset($this->course->resources[RESOURCE_DOCUMENT]) && \is_array($this->course->resources[RESOURCE_DOCUMENT])) {
             $docBucket = $this->course->resources[RESOURCE_DOCUMENT];
         } elseif (isset($this->course->resources['document']) && \is_array($this->course->resources['document'])) {
             $docBucket = $this->course->resources['document'];
         }
+        @error_log('[MoodleExport::getActivities] docBucket='.count($docBucket));
 
-        // If there are documents selected/present, add a visible "folder" activity like before
+        // Add a visible "Documents" folder activity if we actually have documents
         if (!empty($docBucket)) {
-            // NOTE: This creates the visible Folder activity in Moodle that groups all documents.
-            // Files themselves will also be exported by FileExport as usual.
-            $documentsFolder = [
-                'id' => 0,
+            $activities[] = [
+                'id'        => ActivityExport::DOCS_MODULE_ID,
                 'sectionid' => 0,
-                'modulename' => 'folder',
-                'moduleid' => 0,
-                'title' => 'Documents',
+                'modulename'=> 'folder',
+                'moduleid'  => ActivityExport::DOCS_MODULE_ID,
+                'title'     => 'Documents',
             ];
-            $activities[] = $documentsFolder;
+            @error_log('[MoodleExport::getActivities] Added visible folder activity "Documents" (moduleid=' . ActivityExport::DOCS_MODULE_ID . ').');
         }
 
         $htmlPageIds = [];
@@ -540,7 +572,7 @@ class MoodleExport
                 $title = '';
                 $id = 0;
 
-                // QUIZ
+                // Quiz
                 if (RESOURCE_QUIZ === $resourceType && ($resource->obj->iid ?? 0) > 0) {
                     $exportClass = QuizExport::class;
                     $moduleName = 'quiz';
@@ -548,14 +580,14 @@ class MoodleExport
                     $title = (string) $resource->obj->title;
                 }
 
-                // URL (Link)
+                // URL
                 if (RESOURCE_LINK === $resourceType && ($resource->source_id ?? 0) > 0) {
                     $exportClass = UrlExport::class;
                     $moduleName = 'url';
                     $id = (int) $resource->source_id;
                     $title = (string) ($resource->title ?? '');
                 }
-                // GLOSSARY (only once)
+                // Glossary (only once)
                 elseif (RESOURCE_GLOSSARY === $resourceType && ($resource->glossary_id ?? 0) > 0 && !$glossaryAdded) {
                     $exportClass = GlossaryExport::class;
                     $moduleName = 'glossary';
@@ -563,24 +595,23 @@ class MoodleExport
                     $title = get_lang('Glossary');
                     $glossaryAdded = true;
                 }
-                // FORUM
+                // Forum
                 elseif (RESOURCE_FORUM === $resourceType && ($resource->source_id ?? 0) > 0) {
                     $exportClass = ForumExport::class;
                     $moduleName = 'forum';
                     $id = (int) ($resource->obj->iid ?? 0);
                     $title = (string) ($resource->obj->forum_title ?? '');
                 }
-                // DOCUMENT → page/resource only when it really qualifies
+                // Documents (as Page or Resource)
                 elseif (RESOURCE_DOCUMENT === $resourceType && ($resource->source_id ?? 0) > 0) {
                     $resPath = (string) ($resource->path ?? '');
                     $resTitle = (string) ($resource->title ?? '');
                     $fileType = (string) ($resource->file_type ?? '');
 
-                    // Root = only one slash (e.g., "/foo.pdf")
                     $isRoot = ('' !== $resPath && 1 === substr_count($resPath, '/'));
                     $ext = '' !== $resPath ? pathinfo($resPath, PATHINFO_EXTENSION) : '';
 
-                    // Root HTML becomes a Moodle 'page'
+                    // Root HTML -> export as "page"
                     if ('html' === $ext && $isRoot) {
                         $exportClass = PageExport::class;
                         $moduleName = 'page';
@@ -589,7 +620,7 @@ class MoodleExport
                         $htmlPageIds[] = $id;
                     }
 
-                    // Root FILE (not already exported as 'page') becomes a Moodle 'resource'
+                    // Regular file -> export as "resource" (avoid colliding with pages)
                     if ('file' === $fileType && !\in_array($resource->source_id, $htmlPageIds, true)) {
                         $resourceExport = new ResourceExport($this->course);
                         if ($resourceExport->getSectionIdForActivity((int) $resource->source_id, $resourceType) > 0) {
@@ -602,21 +633,26 @@ class MoodleExport
                         }
                     }
                 }
-                // COURSE INTRO
-                elseif (RESOURCE_TOOL_INTRO === $resourceType && ($resource->source_id ?? '') === 'course_homepage') {
-                    $exportClass = PageExport::class;
-                    $moduleName = 'page';
-                    $id = 0;
-                    $title = get_lang('Introduction');
+                // *** Tool Intro -> treat "course_homepage" as a Page activity (id=0) ***
+                elseif (RESOURCE_TOOL_INTRO === $resourceType) {
+                    // IMPORTANT: do not check source_id; the real key is obj->id
+                    $objId = (string) ($resource->obj->id ?? '');
+                    if ($objId === 'course_homepage') {
+                        $exportClass = PageExport::class;
+                        $moduleName = 'page';
+                        // Keep activity id = 0 → PageExport::getData(0, ...) reads the intro HTML
+                        $id = 0;
+                        $title = get_lang('Introduction');
+                    }
                 }
-                // ASSIGN
+                // Assignments
                 elseif (RESOURCE_WORK === $resourceType && ($resource->source_id ?? 0) > 0) {
                     $exportClass = AssignExport::class;
                     $moduleName = 'assign';
                     $id = (int) $resource->source_id;
                     $title = (string) ($resource->params['title'] ?? '');
                 }
-                // FEEDBACK (Survey)
+                // Surveys -> Feedback
                 elseif (RESOURCE_SURVEY === $resourceType && ($resource->source_id ?? 0) > 0) {
                     $exportClass = FeedbackExport::class;
                     $moduleName = 'feedback';
@@ -624,21 +660,141 @@ class MoodleExport
                     $title = (string) ($resource->params['title'] ?? '');
                 }
 
+                // Emit activity if resolved
                 if ($exportClass && $moduleName) {
                     /** @var object $exportInstance */
                     $exportInstance = new $exportClass($this->course);
+                    $sectionId = $exportInstance->getSectionIdForActivity($id, $resourceType);
                     $activities[] = [
                         'id' => $id,
-                        'sectionid' => $exportInstance->getSectionIdForActivity($id, $resourceType),
+                        'sectionid' => $sectionId,
                         'modulename' => $moduleName,
                         'moduleid' => $id,
                         'title' => $title,
                     ];
+                    @error_log('[MoodleExport::getActivities] ADD modulename='.$moduleName.' moduleid='.$id.' sectionid='.$sectionId.' title="'.str_replace(["\n","\r"],' ',$title).'"');
                 }
             }
         }
 
+        @error_log('[MoodleExport::getActivities] Done. total='.count($activities));
         return $activities;
+    }
+
+    /**
+     * Collect Moodle URL activities from legacy "link" bucket.
+     *
+     * It is defensive against different wrappers:
+     * - Accepts link objects as $wrap->obj or directly as $wrap.
+     * - Resolves title from title|name|url (last-resort).
+     * - Maps category_id to a section name (category title) if available.
+     *
+     * @return UrlExport[]
+     */
+    private function buildUrlActivities(): array
+    {
+        $res = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+
+        // Buckets (defensive: allow legacy casings)
+        $links = $res['link'] ?? $res['Link'] ?? [];
+        $cats  = $res['link_category'] ?? $res['Link_Category'] ?? [];
+
+        // Map category_id → label for section naming
+        $catLabel = [];
+        foreach ($cats as $cid => $cwrap) {
+            if (!\is_object($cwrap)) {
+                continue;
+            }
+            $c = (isset($cwrap->obj) && \is_object($cwrap->obj)) ? $cwrap->obj : $cwrap;
+            $label = '';
+            foreach (['title', 'name'] as $k) {
+                if (!empty($c->{$k}) && \is_string($c->{$k})) {
+                    $label = trim((string) $c->{$k});
+                    break;
+                }
+            }
+            $catLabel[(int) $cid] = $label !== '' ? $label : ('Category #'.(int) $cid);
+        }
+
+        $out = [];
+        foreach ($links as $id => $lwrap) {
+            if (!\is_object($lwrap)) {
+                continue;
+            }
+            $L = (isset($lwrap->obj) && \is_object($lwrap->obj)) ? $lwrap->obj : $lwrap;
+
+            $url = (string) ($L->url ?? '');
+            if ($url === '') {
+                // Skip invalid URL records
+                continue;
+            }
+
+            // Resolve a robust title
+            $title = '';
+            foreach (['title', 'name'] as $k) {
+                if (!empty($L->{$k}) && \is_string($L->{$k})) {
+                    $title = trim((string) $L->{$k});
+                    break;
+                }
+            }
+            if ($title === '') {
+                $title = $url; // last resort: use the URL itself
+            }
+
+            $target = (string) ($L->target ?? '');
+            $intro  = (string) ($L->description ?? '');
+            $cid    = (int) ($L->category_id ?? 0);
+
+            $sectionName = $catLabel[$cid] ?? null;
+
+            // UrlExport ctor: (string $title, string $url, ?string $section = null, ?string $introHtml = null, ?string $target = null)
+            $urlAct = new UrlExport($title, $url, $sectionName ?: null, $intro ?: null, $target ?: null);
+            if (method_exists($urlAct, 'setLegacyId')) {
+                $urlAct->setLegacyId((int) $id);
+            }
+
+            $out[] = $urlAct;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Enqueue all URL activities into the export pipeline.
+     * Will try queueActivity(), then addActivity(), then $this->activities[].
+     */
+    private function enqueueUrlActivities(): void
+    {
+        $urls = $this->buildUrlActivities();
+
+        if (empty($urls)) {
+            @error_log('[MoodleExport] No URL activities to enqueue');
+            return;
+        }
+
+        if (method_exists($this, 'queueActivity')) {
+            foreach ($urls as $act) {
+                $this->queueActivity($act);
+            }
+            @error_log('[MoodleExport] URL activities enqueued via queueActivity(): '.count($urls));
+            return;
+        }
+
+        if (method_exists($this, 'addActivity')) {
+            foreach ($urls as $act) {
+                $this->addActivity($act);
+            }
+            @error_log('[MoodleExport] URL activities appended via addActivity(): '.count($urls));
+            return;
+        }
+
+        if (property_exists($this, 'activities') && \is_array($this->activities)) {
+            array_push($this->activities, ...$urls);
+            @error_log('[MoodleExport] URL activities appended to $this->activities: '.count($urls));
+            return;
+        }
+
+        @error_log('[MoodleExport][WARN] Could not enqueue URL activities (no compatible method found)');
     }
 
     private function exportSections(string $exportDir): void

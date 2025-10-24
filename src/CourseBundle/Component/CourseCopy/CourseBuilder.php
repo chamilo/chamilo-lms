@@ -342,7 +342,6 @@ class CourseBuilder
 
         // Legacy DTO where resources[...] are built
         $legacyCourse = $this->course;
-
         foreach ($this->tools_to_build as $toolKey) {
             if (!empty($parseOnlyToolList)) {
                 $const = $this->toolToName[$toolKey] ?? null;
@@ -1947,7 +1946,8 @@ class CourseBuilder
     }
 
     /**
-     * Export Tool intro (tool -> intro text) for visible tools.
+     * Export Tool intro only for the course_homepage tool.
+     * Prefers the session-specific intro when both (session and base) exist.
      */
     private function build_tool_intro(
         object $legacyCourse,
@@ -1960,39 +1960,59 @@ class CourseBuilder
 
         $repo = $this->em->getRepository(CToolIntro::class);
 
+        // Base query: join with tool, filter by course and the specific title
         $qb = $repo->createQueryBuilder('ti')
             ->innerJoin('ti.courseTool', 'ct')
             ->andWhere('ct.course = :course')
+            ->andWhere('ct.title = :title')
             ->setParameter('course', $courseEntity)
-        ;
+            ->setParameter('title', 'course_homepage');
 
+        // Session fallback: when a session is given, fetch both (session AND null)
         if ($sessionEntity) {
-            $qb->andWhere('ct.session = :session')->setParameter('session', $sessionEntity);
+            $qb->andWhere($qb->expr()->orX('ct.session = :session', 'ct.session IS NULL'))
+                ->setParameter('session', $sessionEntity);
         } else {
             $qb->andWhere('ct.session IS NULL');
         }
 
-        $qb->andWhere('ct.visibility = :vis')->setParameter('vis', true);
-
-        /** @var CToolIntro[] $intros */
-        $intros = $qb->getQuery()->getResult();
-
-        foreach ($intros as $intro) {
-            $ctool = $intro->getCourseTool();       // CTool
-            $titleKey = (string) $ctool->getTitle();   // e.g. 'documents', 'forum'
-            if ('' === $titleKey) {
-                continue;
-            }
-
-            $payload = [
-                'id' => $titleKey,
-                'intro_text' => (string) $intro->getIntroText(),
-            ];
-
-            // Use 0 as source_id (unused by restore)
-            $legacyCourse->resources[RESOURCE_TOOL_INTRO][$titleKey] =
-                $this->mkLegacyItem(RESOURCE_TOOL_INTRO, 0, $payload);
+        /** @var CToolIntro[] $rows */
+        $rows = $qb->getQuery()->getResult();
+        if (!$rows) {
+            return; // Nothing to export
         }
+
+        // Prefer the session-bound intro if present; otherwise, use the base (session IS NULL)
+        $selected = null;
+        foreach ($rows as $row) {
+            $tool = $row->getCourseTool();
+            if ($sessionEntity && $tool && $tool->getSession()) {
+                $selected = $row; // session-specific hit
+                break;
+            }
+            if (!$selected) {
+                $selected = $row; // keep the base as fallback
+            }
+        }
+
+        if (!$selected) {
+            return;
+        }
+
+        $ctool = $selected->getCourseTool();
+        $titleKey = (string) ($ctool?->getTitle() ?? 'course_homepage');
+        if ($titleKey === '') {
+            $titleKey = 'course_homepage'; // safety net
+        }
+
+        $payload = [
+            'id'         => $titleKey,
+            'intro_text' => (string) $selected->getIntroText(),
+        ];
+
+        // Use 0 as source_id (unused by restore)
+        $legacyCourse->resources[RESOURCE_TOOL_INTRO][$titleKey] =
+            $this->mkLegacyItem(RESOURCE_TOOL_INTRO, 0, $payload);
     }
 
     /**
@@ -2196,49 +2216,55 @@ class CourseBuilder
             return;
         }
 
-        $qb = $this->docRepo->getResourcesByCourse(
-            $course,
-            $session,
-            null,
-            null,
-            true,
-            false
-        );
+        $qb = $this->docRepo->getResourcesByCourse($course, $session, null, null, true, false);
 
         if (!empty($idList)) {
             $qb->andWhere('resource.iid IN (:ids)')
-                ->setParameter('ids', array_values(array_unique(array_map('intval', $idList))))
-            ;
+                ->setParameter('ids', array_values(array_unique(array_map('intval', $idList))));
         }
 
         /** @var CDocument[] $docs */
         $docs = $qb->getQuery()->getResult();
 
-        foreach ($docs as $doc) {
-            $node = $doc->getResourceNode();
-            $filetype = $doc->getFiletype(); // 'file'|'folder'|...
-            $title = $doc->getTitle();
-            $comment = $doc->getComment() ?? '';
-            $iid = (int) $doc->getIid();
-            $fullPath = $doc->getFullPath();
+        $documentsRoot = $this->docRepo->getCourseDocumentsRootNode($course);
 
-            // Determine size
+        foreach ($docs as $doc) {
+            $node     = $doc->getResourceNode();
+            $filetype = $doc->getFiletype(); // 'file' | 'folder' | ...
+            $title    = $doc->getTitle();
+            $comment  = $doc->getComment() ?? '';
+            $iid      = (int) $doc->getIid();
+
             $size = 0;
             if ('folder' === $filetype) {
                 $size = $this->docRepo->getFolderSize($node, $course, $session);
             } else {
-                /** @var Collection<int,ResourceFile>|null $files */
                 $files = $node?->getResourceFiles();
                 if ($files && $files->count() > 0) {
                     /** @var ResourceFile $first */
                     $first = $files->first();
-                    $size = (int) $first->getSize();
+                    $size  = (int) $first->getSize();
                 }
+            }
+
+            $rel = '';
+            if ($node instanceof ResourceNode) {
+                if ($documentsRoot instanceof ResourceNode) {
+                    $rel = $node->getPathForDisplayRemoveBase((string) $documentsRoot->getPath()); // e.g. "folder001/file.ext"
+                } else {
+                    $rel = $node->convertPathForDisplay((string) $node->getPath()); // e.g. "Documents/folder001/file.ext"
+                    $rel = preg_replace('~^/?Documents/?~i', '', (string) $rel) ?? $rel;
+                }
+            }
+            $rel = trim((string) $rel, '/');
+            $pathForSelector = 'document' . ($rel !== '' ? '/'.$rel : '');
+            if ($filetype === 'folder') {
+                $pathForSelector = rtrim($pathForSelector, '/').'/';
             }
 
             $exportDoc = new Document(
                 $iid,
-                '/'.$fullPath,
+                $pathForSelector,
                 $comment,
                 $title,
                 $filetype,

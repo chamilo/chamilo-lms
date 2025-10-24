@@ -93,7 +93,7 @@ This version of Chamilo requires the following software stack.
   You are ready to go. Open your browser on your subdomain (elearning.yourdomain.com in the example above), keep your database credentials at hand, and let the Chamilo installer guide you.
 
   <h3>Sessions and Redis</h3>
-  In this alpha version, there are known issues with sessions not getting updated fast enough, which can be solved (temporarily) by using a Redis server. Check the command line instructions for more about this. This is a temporary situation that we expect to fix before the stable release.
+  In this beta version, there are known issues with sessions not getting updated fast enough, which can be solved (temporarily) by using a Redis server. Check the command line instructions for more about this. This is a temporary situation that we expect to fix before the stable release.
 
   <h2>Command line installation</h2>
 
@@ -107,10 +107,10 @@ apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis
 a2enmod rewrite
 cd /var/www/
 mkdir chamilo
-wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-alpha.1/chamilo2.0.0-alpha.1.tar.gz
+wget https://github.com/chamilo/chamilo-lms/releases/download/v2.0.0-beta.1/chamilo2.0.0-beta.1.tar.gz
 # about 400MB
-tar zxf chamilo2.0.0-alpha.1.tar.gz
-rm chamilo2.0.0-alpha.1.tar.gz
+tar zxf chamilo2.0.0-beta.1.tar.gz
+rm chamilo2.0.0-beta.1.tar.gz
 cd chamilo
 touch .env
 chown -R www-data: var .env

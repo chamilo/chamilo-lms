@@ -2782,6 +2782,7 @@ class DocumentManager
 
         global $css, $img_dir, $default_course_dir, $js;
         $codePath = api_get_path(REL_CODE_PATH);
+        $imgPath = api_get_path(WEB_PATH).'img/';
         $dir = '/certificates';
         $comment = null;
         $title = get_lang('Default certificate');
@@ -2789,8 +2790,8 @@ class DocumentManager
         $fileType = 'certificate';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
-        $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{COURSE_DIR}'];
-        $replace = [$css.$js, $img_dir, $codePath, $default_course_dir];
+        $search = ['{CSS}', '{IMG_DIR}', '{REL_CODE_PATH}', '{IMG_PATH}'];
+        $replace = [$css.$js, $img_dir, $codePath, $imgPath];
 
         $fileContent = str_replace($search, $replace, $templateContent);
         $saveFilePath = "$dir/$fileName.html";

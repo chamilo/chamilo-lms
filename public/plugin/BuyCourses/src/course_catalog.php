@@ -76,7 +76,7 @@ if (api_is_platform_admin()) {
     ];
 }
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);

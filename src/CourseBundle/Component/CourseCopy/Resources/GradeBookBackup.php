@@ -23,9 +23,9 @@ class GradeBookBackup extends Resource
     }
 
     /**
-     * @return string
+     * @return void
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo get_lang('All');

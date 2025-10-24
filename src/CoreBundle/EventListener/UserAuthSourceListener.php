@@ -9,8 +9,10 @@ namespace Chamilo\CoreBundle\EventListener;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Symfony\Component\Ldap\Security\LdapBadge;
+use Symfony\Component\Ldap\Security\LdapUser;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
@@ -18,12 +20,17 @@ final readonly class UserAuthSourceListener
 {
     public function __construct(
         private AccessUrlHelper $accessUrlHelper,
+        private UserRepository $userRepo,
     ) {}
 
     public function __invoke(CheckPassportEvent $event): void
     {
         $passport = $event->getPassport();
         $user = $passport->getUser();
+
+        if ($user instanceof LdapUser) {
+            $user = $this->userRepo->findOneBy(['username' => $user->getUserIdentifier()]);
+        }
 
         if (!$user instanceof User) {
             return;

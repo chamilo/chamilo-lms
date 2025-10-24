@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -19,11 +20,11 @@ final class Version20251021202800 extends AbstractMigrationChamilo
 
     private const UPDATES = [
         'show_tabs' => [
-            'title'   => 'Main menu entries',
+            'title' => 'Main menu entries',
             'comment' => 'Check the entrie you want to see appear in the main menu',
         ],
         'show_tabs_per_role' => [
-            'title'   => 'Main menu entries per role',
+            'title' => 'Main menu entries per role',
             'comment' => 'Define header tabs visibility per role.',
         ],
     ];
@@ -40,13 +41,16 @@ final class Version20251021202800 extends AbstractMigrationChamilo
                 [$meta['title'], $meta['comment'], $var]
             );
 
-            $this->dbg(sprintf(
+            $this->dbg(\sprintf(
                 "[UP] variable='%s' -> title='%s', comment='%s', category='display' (rows=%d)",
-                $var, $meta['title'], $meta['comment'], $affected
+                $var,
+                $meta['title'],
+                $meta['comment'],
+                $affected
             ));
 
-            if ($affected === 0) {
-                $this->dbg(sprintf("[WARN] No rows found for variable='%s' to update.", $var));
+            if (0 === $affected) {
+                $this->dbg(\sprintf("[WARN] No rows found for variable='%s' to update.", $var));
             }
         }
     }
@@ -54,7 +58,7 @@ final class Version20251021202800 extends AbstractMigrationChamilo
     private function dbg(string $msg): void
     {
         if (self::DEBUG) {
-            error_log('[MIG][show_tabs_titles] ' . $msg);
+            error_log('[MIG][show_tabs_titles] '.$msg);
         }
     }
 }

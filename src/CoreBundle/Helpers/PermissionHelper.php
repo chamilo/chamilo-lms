@@ -27,7 +27,8 @@ class PermissionHelper
         $qb = $this->roleRepository->createQueryBuilder('r')
             ->where('r.code <> :anon')
             ->setParameter('anon', 'ANONYMOUS')
-            ->orderBy('r.constantValue', 'ASC');
+            ->orderBy('r.constantValue', 'ASC')
+        ;
 
         $roles = $qb->getQuery()->getResult();
 

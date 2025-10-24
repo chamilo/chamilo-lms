@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -32,20 +33,22 @@ final class Version20251021200200 extends AbstractMigrationChamilo
 
             if (empty($rows)) {
                 $this->dbg("No '{$var}' entries found, skipping.");
+
                 continue;
             }
 
             $byUrl = [];
             foreach ($rows as $r) {
-                $urlKey = $r['access_url'] === null ? 'NULL' : (string)$r['access_url'];
+                $urlKey = null === $r['access_url'] ? 'NULL' : (string) $r['access_url'];
                 $byUrl[$urlKey][] = $r;
             }
 
             foreach ($byUrl as $urlKey => $group) {
                 $main = null;
                 foreach ($group as $r) {
-                    if ($r['category'] === 'display') {
+                    if ('display' === $r['category']) {
                         $main = $r;
+
                         break;
                     }
                 }
@@ -83,7 +86,7 @@ final class Version20251021200200 extends AbstractMigrationChamilo
     private function dbg(string $msg): void
     {
         if (self::DEBUG) {
-            error_log('[MIG][show_tabs] ' . $msg);
+            error_log('[MIG][show_tabs] '.$msg);
         }
     }
 }

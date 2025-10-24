@@ -136,42 +136,29 @@ class CourseMaintenanceController extends AbstractController
     public function importResources(int $node, string $backupId, Request $req): JsonResponse
     {
         $this->setDebugFromRequest($req);
-        $this->logDebug('[importResources] begin', ['node' => $node, 'backupId' => $backupId]);
+        $mode = strtolower((string) $req->query->get('mode', 'auto')); // 'auto' | 'dat' | 'moodle'
 
-        try {
-            $course = $this->loadLegacyCourseForAnyBackup($backupId);
+        // Reutilizas TU loader actual con el nuevo flag
+        $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
 
-            $this->logDebug('[importResources] course loaded', [
-                'has_resources' => \is_array($course->resources ?? null),
-                'keys' => array_keys((array) ($course->resources ?? [])),
-            ]);
-            $this->logDebug('[importResources] resources snapshot', $this->snapshotResources($course));
-            $this->logDebug('[importResources] forum counts', $this->snapshotForumCounts($course));
+        // Lo demás igual
+        $this->logDebug('[importResources] course loaded', [
+            'has_resources' => \is_array($course->resources ?? null),
+            'keys' => array_keys((array) ($course->resources ?? [])),
+        ]);
 
-            $tree = $this->buildResourceTreeForVue($course);
-            $this->logDebug(
-                '[importResources] UI tree groups',
-                array_map(fn ($g) => ['type' => $g['type'], 'title' => $g['title'], 'items' => \count($g['items'] ?? [])], $tree)
-            );
+        $tree = $this->buildResourceTreeForVue($course);
 
-            $warnings = [];
-            if (empty($tree)) {
-                $warnings[] = 'Backup has no selectable resources.';
-            }
-
-            return $this->json([
-                'tree' => $tree,
-                'warnings' => $warnings,
-            ]);
-        } catch (Throwable $e) {
-            $this->logDebug('[importResources] exception', ['message' => $e->getMessage()]);
-
-            return $this->json([
-                'ok' => false,
-                'tree' => [],
-                'warnings' => ['Error reading backup: '.$e->getMessage()],
-            ], 500);
+        $warnings = [];
+        if (empty($tree)) {
+            $warnings[] = 'Backup has no selectable resources.';
         }
+
+        return $this->json([
+            'tree'     => $tree,
+            'warnings' => $warnings,
+            'meta'     => ['import_source' => $course->resources['__meta']['import_source'] ?? null],
+        ]);
     }
 
     #[Route(
@@ -670,11 +657,26 @@ class CourseMaintenanceController extends AbstractController
             'admin' => $users->getDefaultAdminForExport(),
         ];
 
+        $tools = [
+            ['value' => 'documents', 'label' => 'Documents (files & root HTML pages)'],
+            ['value' => 'links', 'label' => 'Links (URL)'],
+            ['value' => 'forums', 'label' => 'Forums'],
+            ['value' => 'quizzes', 'label' => 'Quizzes', 'implies' => ['quiz_questions']],
+            ['value' => 'surveys', 'label' => 'Surveys', 'implies' => ['survey_questions']],
+            ['value' => 'works', 'label' => 'Tasks'],
+            ['value' => 'glossary', 'label' => 'Glossary'],
+            ['value' => 'learnpaths', 'label' => 'Paths learning'],
+            ['value' => 'tool_intro', 'label' => 'Course Introduction'],
+        ];
+
+        $defaults['tools'] = array_column($tools, 'value');
+
         return $this->json([
             'versions' => [
                 ['value' => '3', 'label' => 'Moodle 3.x'],
                 ['value' => '4', 'label' => 'Moodle 4.x'],
             ],
+            'tools' => $tools,
             'defaults' => $defaults,
         ]);
     }
@@ -682,21 +684,80 @@ class CourseMaintenanceController extends AbstractController
     #[Route('/moodle/export/resources', name: 'moodle_export_resources', methods: ['GET'])]
     public function moodleExportResources(int $node, Request $req): JsonResponse
     {
+        // Enable/disable debug from request
         $this->setDebugFromRequest($req);
+        $this->logDebug('[moodleExportResources] start', ['node' => $node]);
 
-        // Build legacy Course from CURRENT course (same approach as recycle)
-        $cb = new CourseBuilder();
-        $cb->set_tools_to_build([
-            'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
-            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
-            'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
-        ]);
-        $course = $cb->build(0, api_get_course_id());
+        try {
+            // Normalize incoming tools from query (?tools[]=documents&tools[]=links ...)
+            $selectedTools = $this->normalizeSelectedTools($req->query->all('tools'));
 
-        $tree = $this->buildResourceTreeForVue($course);
-        $warnings = empty($tree) ? ['This course has no resources.'] : [];
+            // Default toolset tailored for Moodle export picker:
+            $defaultToolsForMoodle = [
+                'documents', 'links', 'forums',
+                'quizzes', 'quiz_questions',
+                'surveys', 'survey_questions',
+                'learnpaths', 'learnpath_category',
+                'works', 'glossary',
+                'tool_intro',
+            ];
 
-        return $this->json(['tree' => $tree, 'warnings' => $warnings]);
+            // Use client tools if provided; otherwise our Moodle-safe defaults
+            $tools = !empty($selectedTools) ? $selectedTools : $defaultToolsForMoodle;
+
+            // Policy for this endpoint:
+            //  - Never show gradebook
+            //  - Always include tool_intro in the picker (harmless if empty)
+            $tools = array_values(array_diff($tools, ['gradebook']));
+            if (!in_array('tool_intro', $tools, true)) {
+                $tools[] = 'tool_intro';
+            }
+
+            $this->logDebug('[moodleExportResources] tools to build', $tools);
+
+            // Build legacy Course snapshot from CURRENT course (not from a source course)
+            $cb = new CourseBuilder();
+            $cb->set_tools_to_build($tools);
+            $course = $cb->build(0, api_get_course_id());
+
+            // Build the UI-friendly tree
+            $tree = $this->buildResourceTreeForVue($course);
+
+            // Basic warnings for the client
+            $warnings = empty($tree) ? ['This course has no resources.'] : [];
+
+            // Some compact debug about the resulting tree
+            if ($this->debug) {
+                $this->logDebug(
+                    '[moodleExportResources] tree summary',
+                    array_map(
+                        fn ($g) => [
+                            'type'     => $g['type'] ?? '',
+                            'title'    => $g['title'] ?? '',
+                            'items'    => isset($g['items']) ? \count((array) $g['items']) : null,
+                            'children' => isset($g['children']) ? \count((array) $g['children']) : null,
+                        ],
+                        $tree
+                    )
+                );
+            }
+
+            return $this->json([
+                'tree'     => $tree,
+                'warnings' => $warnings,
+            ]);
+        } catch (\Throwable $e) {
+            // Defensive error path
+            $this->logDebug('[moodleExportResources] exception', [
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile().':'.$e->getLine(),
+            ]);
+
+            return $this->json([
+                'error'   => 'Failed to build resource tree for Moodle export.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     #[Route('/moodle/export/execute', name: 'moodle_export_execute', methods: ['POST'])]
@@ -705,18 +766,33 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
 
         $p = json_decode($req->getContent() ?: '{}', true);
-        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');   // '3' | '4'
-        $scope = (string) ($p['scope'] ?? 'full');        // 'full' | 'selected'
+        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');
+        $scope = (string) ($p['scope'] ?? 'full');
         $adminId = (int) ($p['adminId'] ?? 0);
         $adminLogin = trim((string) ($p['adminLogin'] ?? ''));
         $adminEmail = trim((string) ($p['adminEmail'] ?? ''));
         $selected = (array) ($p['resources'] ?? []);
+        $toolsInput = (array) ($p['tools'] ?? []);
 
         if (!\in_array($moodleVersion, ['3', '4'], true)) {
             return $this->json(['error' => 'Unsupported Moodle version'], 400);
         }
         if ('selected' === $scope && empty($selected)) {
             return $this->json(['error' => 'No resources selected'], 400);
+        }
+
+        // Normalize tools from client (adds implied deps)
+        $tools = $this->normalizeSelectedTools($toolsInput);
+
+        // If scope=selected, merge inferred tools from selection
+        if ('selected' === $scope) {
+            $inferred = $this->inferToolsFromSelection($selected);
+            $tools = $this->normalizeSelectedTools(array_merge($tools, $inferred));
+        }
+
+        $tools = array_values(array_unique(array_diff($tools, ['gradebook'])));
+        if (!in_array('tool_intro', $tools, true)) {
+            $tools[] = 'tool_intro';
         }
 
         if ($adminId <= 0 || '' === $adminLogin || '' === $adminEmail) {
@@ -726,13 +802,18 @@ class CourseMaintenanceController extends AbstractController
             $adminEmail = '' !== $adminEmail ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
         }
 
-        // Build legacy Course from CURRENT course (same approach as recycle)
+        $this->logDebug('[moodleExportExecute] tools for CourseBuilder', $tools);
+
+        // Build legacy Course from CURRENT course
         $cb = new CourseBuilder();
-        $cb->set_tools_to_build([
-            'documents', 'links', 'quizzes', 'quiz_questions', 'surveys', 'survey_questions',
-            'announcements', 'events', 'course_descriptions', 'glossary', 'wiki', 'thematic',
-            'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths', 'tool_intro',
-            'forums',
+        $cb->set_tools_to_build(!empty($tools) ? $tools : [
+            // Fallback should mirror the Moodle-safe list used in the picker
+            'documents', 'links', 'forums',
+            'quizzes', 'quiz_questions',
+            'surveys', 'survey_questions',
+            'learnpaths', 'learnpath_category',
+            'works', 'glossary',
+            'tool_intro',
         ]);
         $course = $cb->build(0, api_get_course_id());
 
@@ -740,7 +821,6 @@ class CourseMaintenanceController extends AbstractController
         if ('selected' === $scope) {
             // This method trims buckets to only selected items and pulls needed deps (LP/quiz/survey)
             $course = $this->filterLegacyCourseBySelection($course, $selected);
-
             // Safety guard: fail if nothing remains after filtering
             if (empty($course->resources) || !\is_array($course->resources)) {
                 return $this->json(['error' => 'Selection produced no resources to export'], 400);
@@ -769,6 +849,45 @@ class CourseMaintenanceController extends AbstractController
         } catch (Throwable $e) {
             return $this->json(['error' => 'Moodle export failed: '.$e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Normalize tool list to supported ones and add implied dependencies.
+     *
+     * @param array<int,string>|null $tools
+     * @return string[]
+     */
+    private function normalizeSelectedTools(?array $tools): array
+    {
+        // Single list of supported tool buckets (must match CourseBuilder/exporters)
+        $all = [
+            'documents','links','quizzes','quiz_questions','surveys','survey_questions',
+            'announcements','events','course_descriptions','glossary','wiki','thematic',
+            'attendance','works','gradebook','learnpath_category','learnpaths','tool_intro','forums',
+        ];
+
+        // Implied dependencies
+        $deps = [
+            'quizzes'    => ['quiz_questions'],
+            'surveys'    => ['survey_questions'],
+            'learnpaths' => ['learnpath_category'],
+        ];
+
+        $sel = is_array($tools) ? array_values(array_intersect($tools, $all)) : [];
+
+        foreach ($sel as $t) {
+            foreach ($deps[$t] ?? [] as $d) {
+                $sel[] = $d;
+            }
+        }
+
+        // Unique and preserve a sane order based on $all
+        $sel = array_values(array_unique($sel));
+        usort($sel, static function ($a, $b) use ($all) {
+            return array_search($a, $all, true) <=> array_search($b, $all, true);
+        });
+
+        return $sel;
     }
 
     #[Route('/cc13/export/options', name: 'cc13_export_options', methods: ['GET'])]
@@ -992,9 +1111,406 @@ class CourseMaintenanceController extends AbstractController
         }
     }
 
-    // --------------------------------------------------------------------------------
-    // Helpers to build the Vue-ready resource tree
-    // --------------------------------------------------------------------------------
+    #[Route(
+        '/import/{backupId}/diagnose',
+        name: 'import_diagnose',
+        requirements: ['backupId' => '.+'],
+        methods: ['GET']
+    )]
+    public function importDiagnose(int $node, string $backupId, Request $req): JsonResponse
+    {
+        $this->setDebugFromRequest($req);
+        $this->logDebug('[importDiagnose] begin', ['node' => $node, 'backupId' => $backupId]);
+
+        try {
+            // Resolve absolute path of the uploaded/selected backup
+            $path = $this->resolveBackupPath($backupId);
+            if (!is_file($path)) {
+                return $this->json(['error' => 'Backup file not found', 'path' => $path], 404);
+            }
+
+            // Read course_info.dat bytes from ZIP
+            $ci = $this->readCourseInfoFromZip($path);
+            if (empty($ci['ok'])) {
+                $this->logDebug('[importDiagnose] course_info.dat not found or unreadable', $ci);
+
+                return $this->json([
+                    'meta' => [
+                        'backupId' => $backupId,
+                        'path'     => $path,
+                    ],
+                    'zip' => [
+                        'error'           => $ci['error'] ?? 'unknown error',
+                        'zip_list_sample' => $ci['zip_list_sample'] ?? [],
+                        'num_files'       => $ci['num_files'] ?? null,
+                    ],
+                ], 200);
+            }
+
+            $raw  = (string) $ci['data'];
+            $size = (int) ($ci['size'] ?? strlen($raw));
+            $md5  = md5($raw);
+
+            // Detect & decode content
+            $probe = $this->decodeCourseInfo($raw);
+
+            // Build a tiny scan snapshot (only keys, no grafo)
+            $scan = [
+                'has_graph'      => false,
+                'resources_keys' => [],
+                'note'           => 'No graph parsed',
+            ];
+
+            if (!empty($probe['is_serialized']) && isset($probe['value']) && \is_object($probe['value'])) {
+                /** @var object $course */
+                $course = $probe['value'];
+                $scan['has_graph'] = true;
+                $scan['resources_keys'] = (isset($course->resources) && \is_array($course->resources))
+                    ? array_keys($course->resources)
+                    : [];
+                $scan['note'] = 'Parsed PHP serialized graph';
+            } elseif (!empty($probe['is_json']) && \is_array($probe['json_preview'])) {
+                $jp = $probe['json_preview'];
+                $scan['has_graph'] = true;
+                $scan['resources_keys'] = (isset($jp['resources']) && \is_array($jp['resources']))
+                    ? array_keys($jp['resources'])
+                    : [];
+                $scan['note'] = 'Parsed JSON document';
+            }
+
+            $probeOut = $probe;
+            unset($probeOut['value'], $probeOut['decoded']);
+
+            $out = [
+                'meta' => [
+                    'backupId' => $backupId,
+                    'path'     => $path,
+                    'node'     => $node,
+                ],
+                'zip' => [
+                    'name'  => $ci['name'] ?? null,
+                    'index' => $ci['index'] ?? null,
+                ],
+                'course_info_dat' => [
+                    'size_bytes' => $size,
+                    'md5'        => $md5,
+                ],
+                'probe' => $probeOut,
+                'scan'  => $scan,
+            ];
+
+            $this->logDebug('[importDiagnose] done', [
+                'encoding'       => $probeOut['encoding'] ?? null,
+                'has_graph'      => $scan['has_graph'],
+                'resources_keys' => $scan['resources_keys'],
+            ]);
+
+            return $this->json($out);
+        } catch (\Throwable $e) {
+            $this->logDebug('[importDiagnose] exception', ['message' => $e->getMessage()]);
+
+            return $this->json([
+                'error' => 'Diagnosis failed: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Try to detect and decode course_info.dat content.
+     * Hardened: preprocess typed-prop numeric strings and register legacy aliases
+     * before attempting unserialize. Falls back to relaxed mode to avoid typed
+     * property crashes during diagnosis.
+     */
+    private function decodeCourseInfo(string $raw): array
+    {
+        $r = [
+            'encoding'      => 'raw',
+            'decoded_len'   => strlen($raw),
+            'magic_hex'     => bin2hex(substr($raw, 0, 8)),
+            'magic_ascii'   => preg_replace('/[^\x20-\x7E]/', '.', substr($raw, 0, 16)),
+            'steps'         => [],
+            'decoded'       => null,
+            'is_serialized' => false,
+            'is_json'       => false,
+            'json_preview'  => null,
+        ];
+
+        $isJson = static function (string $s): bool {
+            $t = ltrim($s);
+            return $t !== '' && ($t[0] === '{' || $t[0] === '[');
+        };
+
+        // Centralized tolerant unserialize with typed-props preprocessing
+        $tryUnserializeTolerant = function (string $s, string $label) use (&$r) {
+            $ok = false; $val = null; $err = null; $relaxed = false;
+
+            // Ensure legacy aliases and coerce numeric strings before unserialize
+            try {
+                CourseArchiver::ensureLegacyAliases();
+            } catch (\Throwable) { /* ignore */ }
+
+            try {
+                $s = CourseArchiver::preprocessSerializedPayloadForTypedProps($s);
+            } catch (\Throwable) { /* ignore */ }
+
+            // Strict mode
+            set_error_handler(static function(){});
+            try {
+                $val = @unserialize($s, ['allowed_classes' => true]);
+                $ok  = ($val !== false) || (trim($s) === 'b:0;');
+            } catch (\Throwable $e) {
+                $err = $e->getMessage();
+                $ok  = false;
+            } finally {
+                restore_error_handler();
+            }
+            $r['steps'][] = ['action' => "unserialize[$label][strict]", 'ok' => $ok, 'error' => $err];
+
+            // Relaxed fallback (no class instantiation) + deincomplete to stdClass
+            if (!$ok) {
+                $err2 = null;
+                set_error_handler(static function(){});
+                try {
+                    $tmp = @unserialize($s, ['allowed_classes' => false]);
+                    if ($tmp !== false || trim($s) === 'b:0;') {
+                        $val = $this->deincomplete($tmp);
+                        $ok  = true;
+                        $relaxed = true;
+                        $err = null;
+                    }
+                } catch (\Throwable $e2) {
+                    $err2 = $e2->getMessage();
+                } finally {
+                    restore_error_handler();
+                }
+                $r['steps'][] = ['action' => "unserialize[$label][relaxed]", 'ok' => $ok, 'error' => $err2];
+            }
+
+            if ($ok) {
+                $r['is_serialized'] = true;
+                $r['decoded'] = null; // keep payload minimal
+                $r['used_relaxed'] = $relaxed;
+                return $val;
+            }
+            return null;
+        };
+
+        // 0) JSON as-is?
+        if ($isJson($raw)) {
+            $r['encoding'] = 'json';
+            $r['is_json']  = true;
+            $r['json_preview'] = json_decode($raw, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+
+            return $r;
+        }
+
+        // Direct PHP serialize (strict then relaxed, after preprocessing)
+        if (($u = $tryUnserializeTolerant($raw, 'raw')) !== null) {
+            $r['encoding'] = 'php-serialize';
+            return $r + ['value' => $u];
+        }
+
+        // GZIP
+        if (strncmp($raw, "\x1F\x8B", 2) === 0) {
+            $dec = @gzdecode($raw);
+            $r['steps'][] = ['action' => 'gzdecode', 'ok' => $dec !== false];
+            if ($dec !== false) {
+                if ($isJson($dec)) {
+                    $r['encoding'] = 'gzip+json';
+                    $r['is_json']  = true;
+                    $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+                    return $r;
+                }
+                if (($u = $tryUnserializeTolerant($dec, 'gzip')) !== null) {
+                    $r['encoding'] = 'gzip+php-serialize';
+                    return $r + ['value' => $u];
+                }
+            }
+        }
+
+        // ZLIB/DEFLATE
+        $z2 = substr($raw, 0, 2);
+        if ($z2 === "\x78\x9C" || $z2 === "\x78\xDA") {
+            $dec = @gzuncompress($raw);
+            $r['steps'][] = ['action' => 'gzuncompress', 'ok' => $dec !== false];
+            if ($dec !== false) {
+                if ($isJson($dec)) {
+                    $r['encoding'] = 'zlib+json';
+                    $r['is_json']  = true;
+                    $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+                    return $r;
+                }
+                if (($u = $tryUnserializeTolerant($dec, 'zlib')) !== null) {
+                    $r['encoding'] = 'zlib+php-serialize';
+                    return $r + ['value' => $u];
+                }
+            }
+            $dec2 = @gzinflate($raw);
+            $r['steps'][] = ['action' => 'gzinflate', 'ok' => $dec2 !== false];
+            if ($dec2 !== false) {
+                if ($isJson($dec2)) {
+                    $r['encoding'] = 'deflate+json';
+                    $r['is_json']  = true;
+                    $r['json_preview'] = json_decode($dec2, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+                    return $r;
+                }
+                if (($u = $tryUnserializeTolerant($dec2, 'deflate')) !== null) {
+                    $r['encoding'] = 'deflate+php-serialize';
+                    return $r + ['value' => $u];
+                }
+            }
+        }
+
+        // BASE64 (e.g. "Tzo0ODoi..." -> base64('O:48:"Chamilo...'))
+        if (preg_match('~^[A-Za-z0-9+/=\r\n]+$~', $raw)) {
+            $dec = base64_decode($raw, true);
+            $r['steps'][] = ['action' => 'base64_decode', 'ok' => $dec !== false];
+            if ($dec !== false) {
+                if ($isJson($dec)) {
+                    $r['encoding'] = 'base64(json)';
+                    $r['is_json']  = true;
+                    $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+                    return $r;
+                }
+                if (($u = $tryUnserializeTolerant($dec, 'base64')) !== null) {
+                    $r['encoding'] = 'base64(php-serialize)';
+                    return $r + ['value' => $u];
+                }
+                // base64 + gzip nested
+                if (strncmp($dec, "\x1F\x8B", 2) === 0) {
+                    $dec2 = @gzdecode($dec);
+                    $r['steps'][] = ['action' => 'base64+gzdecode', 'ok' => $dec2 !== false];
+                    if ($dec2 !== false && ($u = $tryUnserializeTolerant($dec2, 'base64+gzip')) !== null) {
+                        $r['encoding'] = 'base64(gzip+php-serialize)';
+                        return $r + ['value' => $u];
+                    }
+                }
+            }
+        }
+
+        // Nested ZIP?
+        if (strncmp($raw, "PK\x03\x04", 4) === 0) {
+            $r['encoding'] = 'nested-zip';
+        }
+
+        return $r;
+    }
+
+    /**
+     * Replace any __PHP_Incomplete_Class instances with stdClass (deep).
+     * Also traverses arrays and objects (diagnostics-only).
+     */
+    private function deincomplete(mixed $v): mixed
+    {
+        if ($v instanceof \__PHP_Incomplete_Class) {
+            $o = new \stdClass();
+            foreach (get_object_vars($v) as $k => $vv) {
+                $o->{$k} = $this->deincomplete($vv);
+            }
+            return $o;
+        }
+        if (is_array($v)) {
+            foreach ($v as $k => $vv) {
+                $v[$k] = $this->deincomplete($vv);
+            }
+            return $v;
+        }
+        if (is_object($v)) {
+            foreach (get_object_vars($v) as $k => $vv) {
+                $v->{$k} = $this->deincomplete($vv);
+            }
+            return $v;
+        }
+        return $v;
+    }
+
+    /**
+     * Return [ok, name, index, size, data] for the first matching entry of course_info.dat (case-insensitive).
+     * Also tries common subpaths, e.g., "course/course_info.dat".
+     */
+    private function readCourseInfoFromZip(string $zipPath): array
+    {
+        $candidates = [
+            'course_info.dat',
+            'course/course_info.dat',
+            'backup/course_info.dat',
+        ];
+
+        $zip = new \ZipArchive();
+        if (true !== ($err = $zip->open($zipPath))) {
+            return ['ok' => false, 'error' => 'Failed to open ZIP (ZipArchive::open error '.$err.')'];
+        }
+
+        // First: direct name lookup (case-insensitive)
+        $foundIdx = null;
+        $foundName = null;
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $st = $zip->statIndex($i);
+            if (!$st || !isset($st['name'])) { continue; }
+            $name = (string) $st['name'];
+            $base = strtolower(basename($name));
+            if ($base === 'course_info.dat') {
+                $foundIdx = $i;
+                $foundName = $name;
+                break;
+            }
+        }
+
+        // Try specific candidate paths if direct scan failed
+        if ($foundIdx === null) {
+            foreach ($candidates as $cand) {
+                $idx = $zip->locateName($cand, \ZipArchive::FL_NOCASE);
+                if ($idx !== false) {
+                    $foundIdx = $idx;
+                    $foundName = $zip->getNameIndex($idx);
+                    break;
+                }
+            }
+        }
+
+        if ($foundIdx === null) {
+            // Build a short listing for debugging
+            $list = [];
+            $limit = min($zip->numFiles, 200);
+            for ($i = 0; $i < $limit; $i++) {
+                $n = $zip->getNameIndex($i);
+                if ($n !== false) { $list[] = $n; }
+            }
+            $zip->close();
+
+            return [
+                'ok' => false,
+                'error' => 'course_info.dat not found in archive',
+                'zip_list_sample' => $list,
+                'num_files' => $zip->numFiles,
+            ];
+        }
+
+        $stat = $zip->statIndex($foundIdx);
+        $size = (int) ($stat['size'] ?? 0);
+        $fp   = $zip->getStream($foundName);
+        if (!$fp) {
+            $zip->close();
+            return ['ok' => false, 'error' => 'Failed to open stream for course_info.dat (getStream)'];
+        }
+
+        $data = stream_get_contents($fp);
+        fclose($fp);
+        $zip->close();
+
+        if (!is_string($data)) {
+            return ['ok' => false, 'error' => 'Failed to read course_info.dat contents'];
+        }
+
+        return [
+            'ok'        => true,
+            'name'      => $foundName,
+            'index'     => $foundIdx,
+            'size'      => $size,
+            'data'      => $data,
+        ];
+    }
 
     /**
      * Copies the dependencies (document, link, quiz, etc.) to $course->resources
@@ -1144,6 +1660,123 @@ class CourseMaintenanceController extends AbstractController
 
         $tree = [];
 
+        if (!empty($resources['document']) && \is_array($resources['document'])) {
+            $docs = $resources['document'];
+
+            $normalize = function (string $rawPath, string $title, string $filetype): string {
+                $p = trim($rawPath, '/');
+                $p = (string) preg_replace('~^(?:document/)+~i', '', $p);
+                $parts = array_values(array_filter(explode('/', $p), 'strlen'));
+
+                // host
+                if (!empty($parts) && ($parts[0] === 'localhost' || str_contains($parts[0], '.'))) {
+                    array_shift($parts);
+                }
+                // course-code
+                if (!empty($parts) && preg_match('~^[A-Z0-9_-]{6,}$~', $parts[0])) {
+                    array_shift($parts);
+                }
+
+                $clean = implode('/', $parts);
+                if ($clean === '' && $filetype !== 'folder') {
+                    $clean = $title;
+                }
+                if ($filetype === 'folder') {
+                    $clean = rtrim($clean, '/').'/';
+                }
+                return $clean;
+            };
+
+            $folderIdByPath = [];
+            foreach ($docs as $obj) {
+                if (!\is_object($obj)) { continue; }
+                $ft = (string)($obj->filetype ?? $obj->file_type ?? '');
+                if ($ft !== 'folder') { continue; }
+                $rel = $normalize((string)$obj->path, (string)$obj->title, $ft);
+                $key = rtrim($rel, '/');
+                if ($key !== '') {
+                    $folderIdByPath[strtolower($key)] = (int) $obj->source_id;
+                }
+            }
+
+            $docRoot = [];
+            $findChild = static function (array &$children, string $label): ?int {
+                foreach ($children as $i => $n) {
+                    if ((string)($n['label'] ?? '') === $label) { return $i; }
+                }
+                return null;
+            };
+
+            foreach ($docs as $obj) {
+                if (!\is_object($obj)) { continue; }
+
+                $title    = (string) $obj->title;
+                $filetype = (string) ($obj->filetype ?? $obj->file_type ?? '');
+                $rel      = $normalize((string) $obj->path, $title, $filetype);
+                $parts    = array_values(array_filter(explode('/', trim($rel, '/')), 'strlen'));
+
+                $cursor =& $docRoot;
+                $soFar = '';
+                $total = \count($parts);
+
+                for ($i = 0; $i < $total; $i++) {
+                    $seg      = $parts[$i];
+                    $isLast   = ($i === $total - 1);
+                    $isFolder = (!$isLast) || ($filetype === 'folder');
+
+                    $soFar = ltrim($soFar.'/'.$seg, '/');
+                    $label = $seg . ($isFolder ? '/' : '');
+
+                    $idx = $findChild($cursor, $label);
+                    if ($idx === null) {
+                        if ($isFolder) {
+                            $folderId = $folderIdByPath[strtolower($soFar)] ?? null;
+                            $node = [
+                                'id'         => $folderId ?? ('dir:'.$soFar),
+                                'label'      => $label,
+                                'selectable' => true,
+                                'children'   => [],
+                            ];
+                        } else {
+                            $node = [
+                                'id'         => (int) $obj->source_id,
+                                'label'      => $label,
+                                'selectable' => true,
+                            ];
+                        }
+                        $cursor[] = $node;
+                        $idx = \count($cursor) - 1;
+                    }
+
+                    if ($isFolder) {
+                        if (!isset($cursor[$idx]['children']) || !\is_array($cursor[$idx]['children'])) {
+                            $cursor[$idx]['children'] = [];
+                        }
+                        $cursor =& $cursor[$idx]['children'];
+                    }
+                }
+            }
+
+            $sortTree = null;
+            $sortTree = function (array &$nodes) use (&$sortTree) {
+                usort($nodes, static fn($a, $b) => strcasecmp((string)$a['label'], (string)$b['label']));
+                foreach ($nodes as &$n) {
+                    if (isset($n['children']) && \is_array($n['children'])) {
+                        $sortTree($n['children']);
+                    }
+                }
+            };
+            $sortTree($docRoot);
+
+            $tree[] = [
+                'type'     => 'document',
+                'title'    => $legacyTitles['document'] ?? ($fallbackTitles['document'] ?? 'Documents'),
+                'children' => $docRoot,
+            ];
+
+            $skipTypes['document'] = true;
+        }
+
         // Forums block
         $hasForumData =
             (!empty($resources['forum']) || !empty($resources['Forum']))
@@ -1174,12 +1807,10 @@ class CourseMaintenanceController extends AbstractController
                 $course,
                 $legacyTitles['link'] ?? ($fallbackTitles['link'] ?? 'Links')
             );
-            // Prevent generic loop from adding separate "link" and "link_category" groups
             $skipTypes['link'] = true;
             $skipTypes['link_category'] = true;
         }
 
-        // Other tools
         foreach ($resources as $rawType => $items) {
             if (!\is_array($items) || empty($items)) {
                 continue;
@@ -1204,7 +1835,6 @@ class CourseMaintenanceController extends AbstractController
                     'selectable' => true,
                 ];
                 $tree[] = $group;
-
                 continue;
             }
 
@@ -1223,21 +1853,7 @@ class CourseMaintenanceController extends AbstractController
                 }
 
                 $label = $this->resolveItemLabel($typeKey, $obj, \is_int($idKey) ? $idKey : 0);
-                if ('document' === $typeKey) {
-                    $e = $this->objectEntity($obj);
-                    $rawPath = (string) ($e->path ?? '');
-                    if ('' !== $rawPath) {
-                        $rel = ltrim($rawPath, '/');
-                        $rel = preg_replace('~^document/?~', '', $rel);
-                        $filetype = (string) ($e->filetype ?? $e->file_type ?? '');
-                        if ('folder' === $filetype) {
-                            $rel = rtrim($rel, '/').'/';
-                        }
-                        if ('' !== $rel) {
-                            $label = $rel;
-                        }
-                    }
-                }
+
                 if ('tool_intro' === $typeKey && '#0' === $label && \is_string($idKey)) {
                     $label = $idKey;
                 }
@@ -1285,12 +1901,13 @@ class CourseMaintenanceController extends AbstractController
         if ($this->debug) {
             $this->logDebug(
                 '[buildResourceTreeForVue] end groups',
-                array_map(fn ($g) => ['type' => $g['type'], 'items' => \count($g['items'] ?? [])], $tree)
+                array_map(fn ($g) => ['type' => $g['type'], 'items' => \count($g['items'] ?? []), 'children' => \count($g['children'] ?? [])], $tree)
             );
         }
 
         return $tree;
     }
+
 
     /**
      * Build forum tree (Category → Forum → Topic) for the UI.
@@ -1346,26 +1963,27 @@ class CourseMaintenanceController extends AbstractController
             $cats[$id] = [
                 'id'         => $id,
                 'type'       => 'forum_category',
-                'label'      => $label,
-                'selectable' => false,
+                'label'      => ($label !== '' ? $label : 'Category #'.$id).'/',
+                'selectable' => true,
                 'items'      => [],
-                // UI hints
                 'has_children' => false,
                 'item_count'   => 0,
+                'extra'      => ['filetype' => 'folder'],
             ];
         }
         // Virtual "Uncategorized"
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id'         => $uncatKey,
-                'type'       => 'forum_category',
-                'label'      => 'Uncategorized',
-                'selectable' => false,
-                'items'      => [],
-                '_virtual'   => true,
+                'id'           => $uncatKey,
+                'type'         => 'forum_category',
+                'label'        => 'Uncategorized/',
+                'selectable'   => true,
+                'items'        => [],
+                '_virtual'     => true,
                 'has_children' => false,
                 'item_count'   => 0,
+                'extra'        => ['filetype' => 'folder'],
             ];
         }
 
@@ -1855,6 +2473,10 @@ class CourseMaintenanceController extends AbstractController
      */
     private function filterLegacyCourseBySelection(object $course, array $selected): object
     {
+        // Sanitize incoming selection (frontend sometimes sends synthetic groups)
+        $selected = array_filter($selected, 'is_array');
+        unset($selected['undefined']);
+
         $this->logDebug('[filterSelection] start', ['selected_types' => array_keys($selected)]);
 
         if (empty($course->resources) || !\is_array($course->resources)) {
@@ -1866,7 +2488,7 @@ class CourseMaintenanceController extends AbstractController
         /** @var array<string,mixed> $orig */
         $orig = $course->resources;
 
-        // Keep meta buckets (keys starting with "__") so we don't lose import_source, etc.
+        // Preserve meta buckets (keys that start with "__")
         $__metaBuckets = [];
         foreach ($orig as $k => $v) {
             if (\is_string($k) && str_starts_with($k, '__')) {
@@ -1874,15 +2496,17 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-        $getBucket = static function (array $a, string $key): array {
-            return (isset($a[$key]) && \is_array($a[$key])) ? $a[$key] : [];
-        };
+        $getBucket = fn (array $a, string $key): array => (isset($a[$key]) && \is_array($a[$key])) ? $a[$key] : [];
 
-        // Forums flow
-        if (!empty($selected) && !empty($selected['forum'])) {
+        // ---------- Forums flow ----------
+        if (!empty($selected['forum'])) {
             $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'])), true);
             if (!empty($selForums)) {
-                $forums = $getBucket($orig, 'forum');
+                // tolerant lookups
+                $forums  = $this->findBucket($orig, 'forum');
+                $threads = $this->findBucket($orig, 'forum_topic');
+                $posts   = $this->findBucket($orig, 'forum_post');
+
                 $catsToKeep = [];
 
                 foreach ($forums as $fid => $f) {
@@ -1890,13 +2514,12 @@ class CourseMaintenanceController extends AbstractController
                         continue;
                     }
                     $e = (isset($f->obj) && \is_object($f->obj)) ? $f->obj : $f;
-                    $cid = (int) ($e->forum_category ?? 0);
+                    $cid = (int) ($e->forum_category ?? $e->forum_category_id ?? $e->category_id ?? 0);
                     if ($cid > 0) {
                         $catsToKeep[$cid] = true;
                     }
                 }
 
-                $threads = $getBucket($orig, 'thread');
                 $threadToKeep = [];
                 foreach ($threads as $tid => $t) {
                     $e = (isset($t->obj) && \is_object($t->obj)) ? $t->obj : $t;
@@ -1905,7 +2528,6 @@ class CourseMaintenanceController extends AbstractController
                     }
                 }
 
-                $posts = $getBucket($orig, 'post');
                 $postToKeep = [];
                 foreach ($posts as $pid => $p) {
                     $e = (isset($p->obj) && \is_object($p->obj)) ? $p->obj : $p;
@@ -1919,61 +2541,61 @@ class CourseMaintenanceController extends AbstractController
                     if (!\is_array($ids) || empty($ids)) {
                         continue;
                     }
-                    $bucket = $getBucket($orig, (string) $type);
-                    if (!empty($bucket)) {
+                    $bucket = $this->findBucket($orig, (string) $type);
+                    $key    = $this->findBucketKey($orig, (string) $type);
+                    if ($key !== null && !empty($bucket)) {
                         $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
-                        $out[$type] = array_intersect_key($bucket, $idsMap);
+                        $out[$key] = $this->intersectBucketByIds($bucket, $idsMap);
                     }
                 }
 
-                $forumCat = $getBucket($orig, 'Forum_Category');
-                if (!empty($forumCat)) {
-                    $out['Forum_Category'] = array_intersect_key(
-                        $forumCat,
-                        array_fill_keys(array_map('strval', array_keys($catsToKeep)), true)
-                    );
+                $forumCat     = $this->findBucket($orig, 'forum_category');
+                $forumBucket  = $this->findBucket($orig, 'forum');
+                $threadBucket = $this->findBucket($orig, 'forum_topic');
+                $postBucket   = $this->findBucket($orig, 'forum_post');
+
+                if (!empty($forumCat) && !empty($catsToKeep)) {
+                    $out[$this->findBucketKey($orig, 'forum_category') ?? 'Forum_Category'] =
+                        array_intersect_key(
+                            $forumCat,
+                            array_fill_keys(array_map('strval', array_keys($catsToKeep)), true)
+                        );
                 }
 
-                $forumBucket = $getBucket($orig, 'forum');
                 if (!empty($forumBucket)) {
-                    $out['forum'] = array_intersect_key($forumBucket, $selForums);
+                    $out[$this->findBucketKey($orig, 'forum') ?? 'forum'] =
+                        array_intersect_key($forumBucket, $selForums);
                 }
-
-                $threadBucket = $getBucket($orig, 'thread');
                 if (!empty($threadBucket)) {
-                    $out['thread'] = array_intersect_key(
-                        $threadBucket,
-                        array_fill_keys(array_map('strval', array_keys($threadToKeep)), true)
-                    );
+                    $out[$this->findBucketKey($orig, 'forum_topic') ?? 'thread'] =
+                        array_intersect_key(
+                            $threadBucket,
+                            array_fill_keys(array_map('strval', array_keys($threadToKeep)), true)
+                        );
                 }
-
-                $postBucket = $getBucket($orig, 'post');
                 if (!empty($postBucket)) {
-                    $out['post'] = array_intersect_key(
-                        $postBucket,
-                        array_fill_keys(array_map('strval', array_keys($postToKeep)), true)
-                    );
+                    $out[$this->findBucketKey($orig, 'forum_post') ?? 'post'] =
+                        array_intersect_key(
+                            $postBucket,
+                            array_fill_keys(array_map('strval', array_keys($postToKeep)), true)
+                        );
                 }
 
+                // If we have forums but no Forum_Category (edge), keep original categories
                 if (!empty($out['forum']) && empty($out['Forum_Category']) && !empty($forumCat)) {
                     $out['Forum_Category'] = $forumCat;
                 }
 
-                // Preserve meta buckets
-                if (!empty($__metaBuckets)) {
-                    $out = array_filter($out);
-                    $course->resources = $__metaBuckets + $out;
-                } else {
-                    $course->resources = array_filter($out);
-                }
+                $out = array_filter($out);
+                $course->resources = !empty($__metaBuckets) ? ($__metaBuckets + $out) : $out;
 
-                $this->logDebug('[filterSelection] end', [
+                $this->logDebug('[filterSelection] end (forums)', [
                     'kept_types' => array_keys($course->resources),
                     'forum_counts' => [
                         'Forum_Category' => \is_array($course->resources['Forum_Category'] ?? null) ? \count($course->resources['Forum_Category']) : 0,
-                        'forum' => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
-                        'thread' => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
-                        'post' => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
+                        'forum'          => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
+                        'thread'         => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
+                        'post'           => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
                     ],
                 ]);
 
@@ -1981,30 +2603,24 @@ class CourseMaintenanceController extends AbstractController
             }
         }
 
-        // Generic + quiz/survey/gradebook flows
-        $alias = [
-            'tool_intro' => 'Tool introduction',
-        ];
-
+        // ---------- Generic + quiz/survey/gradebook ----------
         $keep = [];
         foreach ($selected as $type => $ids) {
             if (!\is_array($ids) || empty($ids)) {
                 continue;
             }
-
-            $legacyKey = $type;
-            if (!isset($orig[$legacyKey]) && isset($alias[$type])) {
-                $legacyKey = $alias[$type];
+            $legacyKey = $this->findBucketKey($orig, (string) $type);
+            if ($legacyKey === null) {
+                continue;
             }
-
-            $bucket = $getBucket($orig, (string) $legacyKey);
-            if (!empty($bucket)) {
+            $bucket = $orig[$legacyKey] ?? [];
+            if (!empty($bucket) && \is_array($bucket)) {
                 $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
-                $keep[$legacyKey] = array_intersect_key($bucket, $idsMap);
+                $keep[$legacyKey] = $this->intersectBucketByIds($bucket, $idsMap);
             }
         }
 
-        // Gradebook bucket
+        // Gradebook
         $gbKey = $this->firstExistingKey($orig, ['gradebook', 'Gradebook', 'GradebookBackup', 'gradebookbackup']);
         if ($gbKey && !empty($selected['gradebook'])) {
             $gbBucket = $getBucket($orig, $gbKey);
@@ -2014,18 +2630,18 @@ class CourseMaintenanceController extends AbstractController
 
                 if (\in_array('all', $selIds, true) || !\is_object($firstItem)) {
                     $keep[$gbKey] = $gbBucket;
-                    $this->logDebug('[filterSelection] kept full gradebook bucket', ['key' => $gbKey, 'count' => \count($gbBucket)]);
+                    $this->logDebug('[filterSelection] kept full gradebook', ['key' => $gbKey, 'count' => \count($gbBucket)]);
                 } else {
                     $keep[$gbKey] = array_intersect_key($gbBucket, array_fill_keys(array_map('strval', $selIds), true));
-                    $this->logDebug('[filterSelection] kept partial gradebook bucket', ['key' => $gbKey, 'count' => \count($keep[$gbKey])]);
+                    $this->logDebug('[filterSelection] kept partial gradebook', ['key' => $gbKey, 'count' => \count($keep[$gbKey])]);
                 }
             }
         }
 
-        // Quizzes → questions (+ images)
-        $quizKey = $this->firstExistingKey($orig, ['quiz', 'Quiz']);
+        // Quizzes -> questions (+ images)
+        $quizKey = $this->firstExistingKey($orig, ['quiz','Quiz']);
         if ($quizKey && !empty($keep[$quizKey])) {
-            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question', 'exercise_question', \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '']);
+            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question','exercise_question', \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '']);
             if ($questionKey) {
                 $qids = [];
                 foreach ($keep[$quizKey] as $qid => $qwrap) {
@@ -2036,19 +2652,13 @@ class CourseMaintenanceController extends AbstractController
                         }
                     }
                 }
-
                 if (!empty($qids)) {
                     $questionBucket = $getBucket($orig, $questionKey);
                     $selQ = array_intersect_key($questionBucket, $qids);
                     if (!empty($selQ)) {
                         $keep[$questionKey] = $selQ;
-                        $this->logDebug('[filterSelection] pulled question bucket for quizzes', [
-                            'quiz_count' => \count($keep[$quizKey]),
-                            'question_key' => $questionKey,
-                            'questions_kept' => \count($keep[$questionKey]),
-                        ]);
 
-                        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
+                        $docKey = $this->firstExistingKey($orig, ['document','Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
                         if ($docKey) {
                             $docBucket = $getBucket($orig, $docKey);
                             $imageQuizBucket = (isset($docBucket['image_quiz']) && \is_array($docBucket['image_quiz'])) ? $docBucket['image_quiz'] : [];
@@ -2064,27 +2674,24 @@ class CourseMaintenanceController extends AbstractController
                                 if (!empty($needed)) {
                                     $keep[$docKey] = $keep[$docKey] ?? [];
                                     $keep[$docKey]['image_quiz'] = array_intersect_key($imageQuizBucket, $needed);
-                                    $this->logDebug('[filterSelection] included image_quiz docs for questions', [
-                                        'count' => \count($keep[$docKey]['image_quiz']),
-                                    ]);
                                 }
                             }
                         }
                     }
                 }
             } else {
-                $this->logDebug('[filterSelection] quizzes selected but no question bucket found in backup');
+                $this->logDebug('[filterSelection] quizzes selected but no question bucket found');
             }
         }
 
-        // Surveys → questions (+ invitations)
-        $surveyKey = $this->firstExistingKey($orig, ['survey', 'Survey']);
+        // Surveys -> questions (+ invitations)
+        $surveyKey = $this->firstExistingKey($orig, ['survey','Survey']);
         if ($surveyKey && !empty($keep[$surveyKey])) {
-            $surveyQuestionKey = $this->firstExistingKey($orig, ['Survey_Question', 'survey_question', \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '']);
-            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation', 'survey_invitation', \defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '']);
+            $surveyQuestionKey   = $this->firstExistingKey($orig, ['Survey_Question','survey_question', \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '']);
+            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation','survey_invitation', \defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '']);
 
             if ($surveyQuestionKey) {
-                $neededQids = [];
+                $neededQids   = [];
                 $selSurveyIds = array_map('strval', array_keys($keep[$surveyKey]));
 
                 foreach ($keep[$surveyKey] as $sid => $sWrap) {
@@ -2095,7 +2702,6 @@ class CourseMaintenanceController extends AbstractController
                         }
                     }
                 }
-
                 if (empty($neededQids)) {
                     $surveyQBucket = $getBucket($orig, $surveyQuestionKey);
                     foreach ($surveyQBucket as $qid => $qWrap) {
@@ -2106,20 +2712,12 @@ class CourseMaintenanceController extends AbstractController
                         }
                     }
                 }
-
                 if (!empty($neededQids)) {
                     $surveyQBucket = $getBucket($orig, $surveyQuestionKey);
                     $keep[$surveyQuestionKey] = array_intersect_key($surveyQBucket, $neededQids);
-                    $this->logDebug('[filterSelection] pulled question bucket for surveys', [
-                        'survey_count' => \count($keep[$surveyKey]),
-                        'question_key' => $surveyQuestionKey,
-                        'questions_kept' => \count($keep[$surveyQuestionKey]),
-                    ]);
-                } else {
-                    $this->logDebug('[filterSelection] surveys selected but no matching questions found');
                 }
             } else {
-                $this->logDebug('[filterSelection] surveys selected but no question bucket found in backup');
+                $this->logDebug('[filterSelection] surveys selected but no question bucket found');
             }
 
             if ($surveyInvitationKey) {
@@ -2135,15 +2733,13 @@ class CourseMaintenanceController extends AbstractController
                     }
                     if (!empty($neededInv)) {
                         $keep[$surveyInvitationKey] = array_intersect_key($invBucket, $neededInv);
-                        $this->logDebug('[filterSelection] included survey invitations', [
-                            'invitations_kept' => \count($keep[$surveyInvitationKey]),
-                        ]);
                     }
                 }
             }
         }
 
-        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
+        // Documents: add parent folders for selected files
+        $docKey = $this->firstExistingKey($orig, ['document','Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
         if ($docKey && !empty($keep[$docKey])) {
             $docBucket = $getBucket($orig, $docKey);
 
@@ -2151,49 +2747,30 @@ class CourseMaintenanceController extends AbstractController
             foreach ($docBucket as $fid => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
-                $isFolder = ('folder' === $ftRaw);
-                if (!$isFolder) {
-                    $pTest = (string) ($e->path ?? '');
-                    if ('' !== $pTest) {
-                        $isFolder = ('/' === substr($pTest, -1));
-                    }
-                }
-                if (!$isFolder) {
-                    continue;
-                }
+                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && substr((string) $e->path, -1) === '/');
+                if (!$isFolder) { continue; }
 
                 $p = (string) ($e->path ?? '');
-                if ('' === $p) {
-                    continue;
-                }
+                if ('' === $p) { continue; }
 
                 $frel = '/'.ltrim(substr($p, 8), '/');
                 $frel = rtrim($frel, '/').'/';
-                if ('//' !== $frel) {
-                    $foldersByRel[$frel] = $fid;
-                }
+                if ('//' !== $frel) { $foldersByRel[$frel] = $fid; }
             }
 
             $needFolderIds = [];
             foreach ($keep[$docKey] as $id => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
-
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
-                $isFolder = ('folder' === $ftRaw) || ('/' === substr((string) ($e->path ?? ''), -1));
-                if ($isFolder) {
-                    continue;
-                }
+                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && substr((string) $e->path, -1) === '/');
+                if ($isFolder) { continue; }
 
                 $p = (string) ($e->path ?? '');
-                if ('' === $p) {
-                    continue;
-                }
+                if ('' === $p) { continue; }
 
                 $rel = '/'.ltrim(substr($p, 8), '/');
                 $dir = rtrim(\dirname($rel), '/');
-                if ('' === $dir) {
-                    continue;
-                }
+                if ('' === $dir) { continue; }
 
                 $acc = '';
                 foreach (array_filter(explode('/', $dir)) as $seg) {
@@ -2204,67 +2781,40 @@ class CourseMaintenanceController extends AbstractController
                     }
                 }
             }
-
             if (!empty($needFolderIds)) {
                 $added = array_intersect_key($docBucket, $needFolderIds);
                 $keep[$docKey] += $added;
-
-                $this->logDebug('[filterSelection] added parent folders for selected documents', [
-                    'doc_key' => $docKey,
-                    'added_folders' => \count($added),
-                ]);
             }
         }
 
-        $lnkKey = $this->firstExistingKey(
-            $orig,
-            ['link', 'Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']
-        );
-
+        // Links -> pull categories used by the selected links
+        $lnkKey = $this->firstExistingKey($orig, ['link','Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']);
         if ($lnkKey && !empty($keep[$lnkKey])) {
             $catIdsUsed = [];
             foreach ($keep[$lnkKey] as $lid => $lWrap) {
                 $L = (isset($lWrap->obj) && \is_object($lWrap->obj)) ? $lWrap->obj : $lWrap;
                 $cid = (int) ($L->category_id ?? 0);
-                if ($cid > 0) {
-                    $catIdsUsed[(string) $cid] = true;
-                }
+                if ($cid > 0) { $catIdsUsed[(string) $cid] = true; }
             }
 
-            $catKey = $this->firstExistingKey(
-                $orig,
-                ['link_category', 'Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']
-            );
-
+            $catKey = $this->firstExistingKey($orig, ['link_category','Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']);
             if ($catKey && !empty($catIdsUsed)) {
                 $catBucket = $getBucket($orig, $catKey);
                 if (!empty($catBucket)) {
                     $subset = array_intersect_key($catBucket, $catIdsUsed);
                     $keep[$catKey] = $subset;
-                    $keep['link_category'] = $subset;
-
-                    $this->logDebug('[filterSelection] pulled link categories for selected links', [
-                        'link_key' => $lnkKey,
-                        'category_key' => $catKey,
-                        'links_kept' => \count($keep[$lnkKey]),
-                        'cats_kept' => \count($subset),
-                        'mirrored_to' => 'link_category',
-                    ]);
+                    $keep['link_category'] = $subset; // mirror for convenience
                 }
-            } else {
-                $this->logDebug('[filterSelection] link category bucket not found in backup');
             }
         }
 
         $keep = array_filter($keep);
-        if (!empty($__metaBuckets)) {
-            $course->resources = $__metaBuckets + $keep;
-        } else {
-            $course->resources = $keep;
-        }
+        $course->resources = !empty($__metaBuckets) ? ($__metaBuckets + $keep) : $keep;
 
         $this->logDebug('[filterSelection] non-forum flow end', [
-            'kept_types' => array_keys($course->resources),
+            'selected_types' => array_keys($selected),
+            'orig_types'     => array_keys($orig),
+            'kept_types'     => array_keys($course->resources ?? []),
         ]);
 
         return $course;
@@ -2486,15 +3036,15 @@ class CourseMaintenanceController extends AbstractController
             if ($id <= 0 || !\is_object($obj)) { continue; }
             $e = $this->objectEntity($obj);
             $label = $this->resolveItemLabel('link_category', $e, $id);
-
             $cats[$id] = [
                 'id'           => $id,
                 'type'         => 'link_category',
-                'label'        => $label !== '' ? $label : ('Category #'.$id),
-                'selectable'   => false,
+                'label'        => (($label !== '' ? $label : ('Category #'.$id)).'/'),
+                'selectable'   => true,
                 'items'        => [],
                 'has_children' => false,
                 'item_count'   => 0,
+                'extra'        => ['filetype' => 'folder'],
             ];
         }
 
@@ -2504,12 +3054,13 @@ class CourseMaintenanceController extends AbstractController
             $cats[$uncatKey] = [
                 'id'           => $uncatKey,
                 'type'         => 'link_category',
-                'label'        => 'Uncategorized',
-                'selectable'   => false,
+                'label'        => 'Uncategorized/',
+                'selectable'   => true,
                 'items'        => [],
                 '_virtual'     => true,
                 'has_children' => false,
                 'item_count'   => 0,
+                'extra'        => ['filetype' => 'folder'],
             ];
         }
 
@@ -2624,69 +3175,117 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Returns the absolute path of the backupId in the backup directory.
+     * Resolve absolute path of a backupId inside the backups directory, with safety checks.
      */
     private function resolveBackupPath(string $backupId): string
     {
-        $backupDir = rtrim(CourseArchiver::getBackupDir(), '/');
+        $base = rtrim((string) CourseArchiver::getBackupDir(), DIRECTORY_SEPARATOR);
+        $baseReal = realpath($base) ?: $base;
 
-        return $backupDir.'/'.$backupId;
+        $file = basename($backupId);
+        $path = $baseReal . DIRECTORY_SEPARATOR . $file;
+
+        $real = realpath($path);
+
+        if ($real !== false && strncmp($real, $baseReal, strlen($baseReal)) === 0) {
+            return $real;
+        }
+
+        return $path;
     }
 
     /**
-     * Heuristic: Does it look like a Moodle package?
-     * - If the extension (.mbz, .tgz, .gz) is used, we treat it as Moodle.
-     * - If it's a .zip file but CourseArchiver fails or contains "moodle_backup.xml," it's also Moodle.
+     * Load a legacy Course object from any backup:
+     * - Chamilo (.zip with course_info.dat) → CourseArchiver::readCourse() or lenient fallback (your original logic)
+     * - Moodle (.mbz/.tgz/.gz or ZIP with moodle_backup.xml) → MoodleImport builder
+     *
+     * IMPORTANT:
+     * - Keeps your original Chamilo flow intact (strict → fallback manual decode/unserialize).
+     * - Tries Moodle only when the package looks like Moodle.
+     * - Adds __meta.import_source = "chamilo" | "moodle" for downstream logic.
      */
-    private function isLikelyMoodlePackage(string $path, ?Throwable $priorError = null): bool
-    {
-        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (\in_array($ext, ['mbz', 'tgz', 'gz'], true)) {
-            return true;
-        }
-        if ('zip' === $ext && $priorError) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Load a legacy course from a Chamilo or Moodle backup, testing both readers.
-     * - First try CourseArchiver (Chamilo).
-     * - If that fails, retry MoodleImport.
-     */
-    private function loadLegacyCourseForAnyBackup(string $backupId): object
+    private function loadLegacyCourseForAnyBackup(string $backupId, string $force = 'auto'): object
     {
         $path = $this->resolveBackupPath($backupId);
-        $this->logDebug('[loadLegacyCourseForAnyBackup] try Chamilo first', ['path' => $path]);
 
-        // Chamilo ZIP (course_info.dat)
-        try {
-            $course = CourseArchiver::readCourse($backupId, false);
-            if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
-                throw new RuntimeException('Invalid Chamilo backup structure (empty resources)');
-            }
-
-            return $course;
-        } catch (Throwable $e) {
-            $this->logDebug('[loadLegacyCourseForAnyBackup] Chamilo reader failed, will try Moodle', ['err' => $e->getMessage()]);
-            $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-            if (!\in_array($ext, ['mbz', 'zip', 'gz', 'tgz'], true)) {
-                throw $e;
-            }
+        $force = strtolower($force);
+        if ('dat' === $force || 'chamilo' === $force) {
+            $looksMoodle = false;
+            $preferChamilo = true;
+        } elseif ('moodle' === $force) {
+            $looksMoodle = true;
+            $preferChamilo = false;
+        } else {
+            $looksMoodle   = $this->isMoodleByExt($path) || $this->zipHasMoodleBackupXml($path);
+            $preferChamilo = $this->zipHasCourseInfoDat($path);
         }
 
-        // Moodle (.mbz/.zip/.tgz)
-        $this->logDebug('[loadLegacyCourseForAnyBackup] using MoodleImport');
-        $importer = new MoodleImport(debug: $this->debug);
-        $course = $importer->buildLegacyCourseFromMoodleArchive($path);
+        if ($preferChamilo || !$looksMoodle) {
+            CourseArchiver::setDebug($this->debug);
 
-        if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
-            throw new RuntimeException('Moodle backup contains no importable resources');
+            try {
+                $course = CourseArchiver::readCourse($backupId, false);
+                if (\is_object($course)) {
+                    // … (resto igual)
+                    if (!isset($course->resources) || !\is_array($course->resources)) { $course->resources = []; }
+                    $course->resources['__meta'] = (array) ($course->resources['__meta'] ?? []);
+                    $course->resources['__meta']['import_source'] = 'chamilo';
+                    return $course;
+                }
+            } catch (\Throwable $e) {
+                $this->logDebug('[loadLegacyCourseForAnyBackup] readCourse() failed', ['error' => $e->getMessage()]);
+            }
+
+            $zipPath = $this->resolveBackupPath($backupId);
+            $ci = $this->readCourseInfoFromZip($zipPath);
+            if (empty($ci['ok'])) {
+                if ($looksMoodle) {
+                    $this->logDebug('[loadLegacyCourseForAnyBackup] no course_info.dat, trying MoodleImport as last resort');
+                    return $this->loadMoodleCourseOrFail($path);
+                }
+                throw new \RuntimeException('course_info.dat not found in backup');
+            }
+
+            $raw = (string) $ci['data'];
+            $payload = base64_decode($raw, true);
+            if ($payload === false) { $payload = $raw; }
+
+            $payload = CourseArchiver::preprocessSerializedPayloadForTypedProps($payload);
+            CourseArchiver::ensureLegacyAliases();
+
+            set_error_handler(static function () {});
+            try {
+                if (class_exists(\UnserializeApi::class)) {
+                    $c = \UnserializeApi::unserialize('course', $payload);
+                } else {
+                    $c = @unserialize($payload, ['allowed_classes' => true]);
+                }
+            } finally {
+                restore_error_handler();
+            }
+
+            if (!\is_object($c ?? null)) {
+                if ($looksMoodle) {
+                    $this->logDebug('[loadLegacyCourseForAnyBackup] Chamilo fallback failed, trying MoodleImport');
+                    return $this->loadMoodleCourseOrFail($path);
+                }
+                throw new \RuntimeException('Could not unserialize course (fallback)');
+            }
+
+            if (!isset($c->resources) || !\is_array($c->resources)) { $c->resources = []; }
+            $c->resources['__meta'] = (array) ($c->resources['__meta'] ?? []);
+            $c->resources['__meta']['import_source'] = 'chamilo';
+
+            return $c;
         }
 
-        return $course;
+        // Moodle path
+        if ($looksMoodle) {
+            $this->logDebug('[loadLegacyCourseForAnyBackup] using MoodleImport');
+            return $this->loadMoodleCourseOrFail($path);
+        }
+
+        throw new \RuntimeException('Unsupported package: neither course_info.dat nor moodle_backup.xml found.');
     }
 
     private function normalizeBucketsForRestorer(object $course): void
@@ -2845,5 +3444,222 @@ class CourseMaintenanceController extends AbstractController
         }
 
         return $out;
+    }
+
+    /**
+     * Infer tool buckets required by a given selection payload (used in 'selected' scope).
+     *
+     * Expected selection items like: { "type": "document"|"quiz"|"survey"|... , "id": <int> }
+     *
+     * @param array<int,array<string,mixed>> $selected
+     * @return string[]
+     */
+    private function inferToolsFromSelection(array $selected): array
+    {
+        $has = static fn(string $k): bool =>
+            !empty($selected[$k]) && \is_array($selected[$k]) && \count($selected[$k]) > 0;
+
+        $want = [];
+
+        // documents
+        if ($has('document')) {
+            $want[] = 'documents';
+        }
+
+        // links (categories imply links too)
+        if ($has('link') || $has('link_category')) {
+            $want[] = 'links';
+        }
+
+        // forums (any of the family implies forums)
+        if ($has('forum') || $has('forum_category') || $has('forum_topic') || $has('thread') || $has('post') || $has('forum_post')) {
+            $want[] = 'forums';
+        }
+
+        // quizzes / questions
+        if ($has('quiz') || $has('exercise') || $has('exercise_question')) {
+            $want[] = 'quizzes';
+            $want[] = 'quiz_questions';
+        }
+
+        // surveys / questions / invitations
+        if ($has('survey') || $has('survey_question') || $has('survey_invitation')) {
+            $want[] = 'surveys';
+            $want[] = 'survey_questions';
+        }
+
+        // learnpaths
+        if ($has('learnpath') || $has('learnpath_category')) {
+            $want[] = 'learnpaths';
+            $want[] = 'learnpath_category';
+        }
+
+        // others
+        if ($has('work'))     { $want[] = 'works'; }
+        if ($has('glossary')) { $want[] = 'glossary'; }
+        if ($has('tool_intro')) { $want[] = 'tool_intro'; }
+
+        // Dedup
+        return array_values(array_unique(array_filter($want)));
+    }
+
+    private function intersectBucketByIds(array $bucket, array $idsMap): array
+    {
+        $out = [];
+        foreach ($bucket as $id => $obj) {
+            $ent = (isset($obj->obj) && \is_object($obj->obj)) ? $obj->obj : $obj;
+            $k1  = (string) $id;
+            $k2  = (string) ($ent->source_id ?? $obj->source_id ?? '');
+            if (isset($idsMap[$k1]) || ($k2 !== '' && isset($idsMap[$k2]))) {
+                $out[$id] = $obj;
+            }
+        }
+        return $out;
+    }
+
+    private function bucketKeyCandidates(string $type): array
+    {
+        $t = $this->normalizeTypeKey($type);
+
+        // Constants (string values) if defined
+        $RD  = \defined('RESOURCE_DOCUMENT')       ? (string) RESOURCE_DOCUMENT       : '';
+        $RL  = \defined('RESOURCE_LINK')           ? (string) RESOURCE_LINK           : '';
+        $RF  = \defined('RESOURCE_FORUM')          ? (string) RESOURCE_FORUM          : '';
+        $RFT = \defined('RESOURCE_FORUMTOPIC')     ? (string) RESOURCE_FORUMTOPIC     : '';
+        $RFP = \defined('RESOURCE_FORUMPOST')      ? (string) RESOURCE_FORUMPOST      : '';
+        $RQ  = \defined('RESOURCE_QUIZ')           ? (string) RESOURCE_QUIZ           : '';
+        $RQQ = \defined('RESOURCE_QUIZQUESTION')   ? (string) RESOURCE_QUIZQUESTION   : '';
+        $RS  = \defined('RESOURCE_SURVEY')         ? (string) RESOURCE_SURVEY         : '';
+        $RSQ = \defined('RESOURCE_SURVEYQUESTION') ? (string) RESOURCE_SURVEYQUESTION : '';
+
+        $map = [
+            'document'         => ['document', 'Document', $RD],
+            'link'             => ['link', 'Link', $RL],
+            'link_category'    => ['link_category', 'Link_Category'],
+            'forum'            => ['forum', 'Forum', $RF],
+            'forum_category'   => ['forum_category', 'Forum_Category'],
+            'forum_topic'      => ['forum_topic', 'thread', $RFT],
+            'forum_post'       => ['forum_post', 'post', $RFP],
+            'quiz'             => ['quiz', 'Quiz', $RQ],
+            'exercise_question'=> ['Exercise_Question', 'exercise_question', $RQQ],
+            'survey'           => ['survey', 'Survey', $RS],
+            'survey_question'  => ['Survey_Question', 'survey_question', $RSQ],
+            'tool_intro'       => ['tool_intro', 'Tool introduction'],
+        ];
+
+        $c = $map[$t] ?? [$t, ucfirst($t)];
+        return array_values(array_filter($c, static fn($x) => $x !== ''));
+    }
+
+    private function findBucketKey(array $res, string $type): ?string
+    {
+        $key = $this->firstExistingKey($res, $this->bucketKeyCandidates($type));
+        return $key !== null ? (string) $key : null;
+    }
+
+    private function findBucket(array $res, string $type): array
+    {
+        $k = $this->findBucketKey($res, $type);
+        return ($k !== null && isset($res[$k]) && \is_array($res[$k])) ? $res[$k] : [];
+    }
+
+    /** True if file extension suggests a Moodle backup. */
+    private function isMoodleByExt(string $path): bool
+    {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        return in_array($ext, ['mbz','tgz','gz'], true);
+    }
+
+    /** Quick ZIP probe for 'moodle_backup.xml'. Safe no-op for non-zip files. */
+    private function zipHasMoodleBackupXml(string $path): bool
+    {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        // Many .mbz are plain ZIPs; try to open if extension is zip/mbz
+        if (!in_array($ext, ['zip','mbz'], true)) {
+            return false;
+        }
+        $zip = new \ZipArchive();
+        if (true !== ($err = $zip->open($path))) {
+            return false;
+        }
+        $idx = $zip->locateName('moodle_backup.xml', \ZipArchive::FL_NOCASE);
+        $zip->close();
+        return ($idx !== false);
+    }
+
+    /** Quick ZIP probe for 'course_info.dat'. Safe no-op for non-zip files. */
+    private function zipHasCourseInfoDat(string $path): bool
+    {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        if (!in_array($ext, ['zip','mbz'], true)) {
+            return false;
+        }
+        $zip = new \ZipArchive();
+        if (true !== ($err = $zip->open($path))) {
+            return false;
+        }
+        // common locations
+        foreach (['course_info.dat','course/course_info.dat','backup/course_info.dat'] as $cand) {
+            $idx = $zip->locateName($cand, \ZipArchive::FL_NOCASE);
+            if ($idx !== false) { $zip->close(); return true; }
+        }
+        $zip->close();
+        return false;
+    }
+
+    /**
+     * Build legacy Course graph from a Moodle archive and set __meta.import_source.
+     * Throws RuntimeException on failure.
+     */
+    private function loadMoodleCourseOrFail(string $absPath): object
+    {
+        if (!class_exists(MoodleImport::class)) {
+            throw new \RuntimeException('MoodleImport class not available');
+        }
+        $importer = new MoodleImport(debug: $this->debug);
+
+        if (!method_exists($importer, 'buildLegacyCourseFromMoodleArchive')) {
+            throw new \RuntimeException('MoodleImport::buildLegacyCourseFromMoodleArchive() not available');
+        }
+
+        $course = $importer->buildLegacyCourseFromMoodleArchive($absPath);
+
+        if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
+            throw new \RuntimeException('Moodle backup contains no importable resources');
+        }
+
+        $course->resources['__meta'] = (array) ($course->resources['__meta'] ?? []);
+        $course->resources['__meta']['import_source'] = 'moodle';
+
+        return $course;
+    }
+
+    /**
+     * Recursively sanitize an unserialized PHP graph:
+     * - Objects are cast to arrays, keys like "\0Class\0prop" become "prop"
+     * - Returns arrays/stdClass with only public-like keys
+     */
+    private function sanitizePhpGraph(mixed $value): mixed
+    {
+        if (\is_array($value)) {
+            $out = [];
+            foreach ($value as $k => $v) {
+                $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
+                $out[$ck] = $this->sanitizePhpGraph($v);
+            }
+            return $out;
+        }
+
+        if (\is_object($value)) {
+            $arr = (array) $value;
+            $clean = [];
+            foreach ($arr as $k => $v) {
+                $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
+                $clean[$ck] = $this->sanitizePhpGraph($v);
+            }
+            return (object) $clean;
+        }
+
+        return $value;
     }
 }

@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 use const PHP_EOL;
 
@@ -203,20 +204,20 @@ class SendEventRemindersCommand extends Command
     {
         // User explicit timezone (if present and valid)
         $tzId = $user?->getTimezone();
-        if (\is_string($tzId) && $tzId !== '') {
+        if (\is_string($tzId) && '' !== $tzId) {
             try {
                 return new DateTimeZone($tzId);
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // keep going
             }
         }
 
         // Platform timezone setting (equivalent to api_get_setting('platform.timezone', false, 'timezones'))
         $platformTz = (string) ($this->settingsManager->getSetting('platform.timezone', false, 'timezones') ?? '');
-        if ($platformTz !== '') {
+        if ('' !== $platformTz) {
             try {
                 return new DateTimeZone($platformTz);
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // keep going
             }
         }

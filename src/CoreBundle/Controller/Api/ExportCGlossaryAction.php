@@ -14,6 +14,7 @@ use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\TransactionRequiredException;
+use Export;
 use PDF;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -23,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use const ENT_QUOTES;
 
 readonly class ExportCGlossaryAction
 {
@@ -112,12 +115,12 @@ readonly class ExportCGlossaryAction
 
     private function generateCsvFile(array $glossaryItems, Course $course): string
     {
-        return \Export::arrayToCsv($glossaryItems, 'glossary_course_'.$course->getCode(), true);
+        return Export::arrayToCsv($glossaryItems, 'glossary_course_'.$course->getCode(), true);
     }
 
     private function generateExcelFile(array $glossaryItems, Course $course): string
     {
-        return \Export::arrayToXls($glossaryItems, 'glossary_course_'.$course->getCode(), true);
+        return Export::arrayToXls($glossaryItems, 'glossary_course_'.$course->getCode(), true);
     }
 
     private function generatePdfFile(array $glossaryItems, Course $course): string
@@ -146,6 +149,7 @@ readonly class ExportCGlossaryAction
                 null,
                 false,
                 true
-            );
+            )
+        ;
     }
 }

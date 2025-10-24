@@ -19,6 +19,8 @@ use DateTimeImmutable;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class GradebookCertificateRepository extends ResourceRepository
@@ -36,7 +38,8 @@ class GradebookCertificateRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('gc')
             ->where('gc.user = :userId')
             ->setParameter('userId', $userId)
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         if (0 === $catId) {
             $catId = null;
@@ -46,7 +49,8 @@ class GradebookCertificateRepository extends ResourceRepository
             $qb->andWhere('gc.category IS NULL');
         } else {
             $qb->andWhere('gc.category = :catId')
-                ->setParameter('catId', $catId);
+                ->setParameter('catId', $catId)
+            ;
         }
 
         $qb->orderBy('gc.id', 'ASC');
@@ -100,7 +104,7 @@ class GradebookCertificateRepository extends ResourceRepository
     /**
      * Helper: resolve the ResourceType 'files' from the Tool 'files' (personal space).
      *
-     * @throws \RuntimeException if not found.
+     * @throws RuntimeException if not found
      */
     private function getPersonalFilesResourceType(): ResourceType
     {
@@ -114,7 +118,8 @@ class GradebookCertificateRepository extends ResourceRepository
             ->andWhere('t.title = :toolTitle')
             ->setParameter('rtTitle', 'files')
             ->setParameter('toolTitle', 'files')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         $rt = $qb->getQuery()->getOneOrNullResult();
         if ($rt instanceof ResourceType) {
@@ -123,7 +128,7 @@ class GradebookCertificateRepository extends ResourceRepository
 
         $rt = $em->getRepository(ResourceType::class)->findOneBy(['title' => 'files']);
         if (!$rt) {
-            throw new \RuntimeException("ResourceType 'files' not found.");
+            throw new RuntimeException("ResourceType 'files' not found.");
         }
 
         return $rt;
@@ -148,7 +153,7 @@ class GradebookCertificateRepository extends ResourceRepository
         /** @var User|null $user */
         $user = $em->getRepository(User::class)->find($userId);
         if (!$user) {
-            throw new \InvalidArgumentException("User {$userId} not found.");
+            throw new InvalidArgumentException("User {$userId} not found.");
         }
 
         /** @var GradebookCategory|null $category */
@@ -169,11 +174,11 @@ class GradebookCertificateRepository extends ResourceRepository
         }
 
         // Deterministic filename for legacy parity (used historically to build URLs)
-        $logicalFileName = ltrim(hash('sha256', $userId . ($catId ?: 0)) . '.html', '/');
+        $logicalFileName = ltrim(hash('sha256', $userId.($catId ?: 0)).'.html', '/');
 
         // Ensure resource node exists with ResourceType 'files', under the user's node
         if (!$cert->hasResourceNode()) {
-            $filesRt    = $this->getPersonalFilesResourceType();
+            $filesRt = $this->getPersonalFilesResourceType();
             $parentNode = $user->getResourceNode();
             $this->createNodeForCertificateWithoutSlugify($cert, $user, $parentNode, $filesRt, $logicalFileName);
 
@@ -194,7 +199,7 @@ class GradebookCertificateRepository extends ResourceRepository
 
         // Optional PDF attachment
         if (null !== $pdfBinary) {
-            $pdfName = preg_replace('/\.html$/i', '.pdf', $logicalFileName) ?: ($logicalFileName . '.pdf');
+            $pdfName = preg_replace('/\.html$/i', '.pdf', $logicalFileName) ?: ($logicalFileName.'.pdf');
             $this->addFileFromString($cert, $pdfName, 'application/pdf', $pdfBinary, true);
         }
 
@@ -245,11 +250,12 @@ class GradebookCertificateRepository extends ResourceRepository
      */
     private function basicSlug(string $text): string
     {
-        $text = \iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
-        $text = \preg_replace('~[^\\pL\\d]+~u', '-', $text ?? '');
-        $text = \trim((string) $text, '-');
-        $text = \preg_replace('~[^-a-z0-9]+~i', '', $text);
-        $text = \strtolower($text);
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text ?? '');
+        $text = trim((string) $text, '-');
+        $text = preg_replace('~[^-a-z0-9]+~i', '', $text);
+        $text = strtolower($text);
+
         return $text ?: 'resource';
     }
 
@@ -257,7 +263,7 @@ class GradebookCertificateRepository extends ResourceRepository
      * LEGACY (kept for backward-compatibility):
      * Creates a PersonalFile under the user's personal files (old behavior).
      *
-     * @deprecated Prefer upsertCertificateResource().
+     * @deprecated prefer upsertCertificateResource()
      */
     public function generateCertificatePersonalFile(int $userId, string $fileName, string $certificateContent): ?PersonalFile
     {
@@ -300,6 +306,7 @@ class GradebookCertificateRepository extends ResourceRepository
     public function deleteCertificateAndRelatedFiles(int $userId, int $catId): bool
     {
         $em = $this->getEntityManager();
+
         /** @var GradebookCertificate|null $certificate */
         $certificate = $this->getCertificateByUserId($catId, $userId);
 
@@ -310,6 +317,7 @@ class GradebookCertificateRepository extends ResourceRepository
         // attached ResourceNode -> hard delete (cascades)
         if ($certificate->hasResourceNode()) {
             $this->hardDelete($certificate);
+
             return true;
         }
 

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
 
 final class Version20251020121000 extends AbstractMigrationChamilo
 {
@@ -28,8 +29,10 @@ final class Version20251020121000 extends AbstractMigrationChamilo
     {
         /** @var GradebookCertificateRepository $certRepo */
         $certRepo = $this->container->get(GradebookCertificateRepository::class);
+
         /** @var PersonalFileRepository $personalRepo */
         $personalRepo = $this->container->get(PersonalFileRepository::class);
+
         /** @var ResourceNodeRepository $rnRepo */
         $rnRepo = $this->container->get(ResourceNodeRepository::class);
 
@@ -46,37 +49,45 @@ final class Version20251020121000 extends AbstractMigrationChamilo
         $q = $em->createQuery($dql)->setParameter('empty', '');
 
         $migrated = 0;
-        $skipped  = 0;
-        $errors   = 0;
+        $skipped = 0;
+        $errors = 0;
 
         foreach ($q->toIterable() as $gc) {
             \assert($gc instanceof GradebookCertificate);
 
-            $user   = $gc->getUser();
+            $user = $gc->getUser();
             $userId = (int) $user->getId();
-            $catId  = $gc->getCategory() ? (int) $gc->getCategory()->getId() : 0;
-            $score  = (float) $gc->getScoreCertificate();
-            $path   = (string) ($gc->getPathCertificate() ?? '');
+            $catId = $gc->getCategory() ? (int) $gc->getCategory()->getId() : 0;
+            $score = (float) $gc->getScoreCertificate();
+            $path = (string) ($gc->getPathCertificate() ?? '');
 
             // Find the legacy PersonalFile (robust title search + optional creator-scope search).
             $pf = $this->findLegacyPersonalFile($personalRepo, $gc);
             if (!$pf) {
-                $this->dbg(sprintf(
+                $this->dbg(\sprintf(
                     '[skip] gc#%d user=%d cat=%d -> legacy PersonalFile not found for "%s"',
-                    (int) $gc->getId(), $userId, $catId, $path
+                    (int) $gc->getId(),
+                    $userId,
+                    $catId,
+                    $path
                 ));
                 $skipped++;
+
                 continue;
             }
 
             // Read the legacy HTML (robust strategy).
             $html = $this->readLegacyHtml($personalRepo, $rnRepo, $pf);
-            if (!is_string($html) || $html === '') {
-                $this->dbg(sprintf(
+            if (!\is_string($html) || '' === $html) {
+                $this->dbg(\sprintf(
                     '[error] gc#%d user=%d cat=%d -> failed to read legacy HTML content from PF (title="%s")',
-                    (int) $gc->getId(), $userId, $catId, (string) $pf->getTitle()
+                    (int) $gc->getId(),
+                    $userId,
+                    $catId,
+                    (string) $pf->getTitle()
                 ));
                 $errors++;
+
                 continue;
             }
 
@@ -90,21 +101,28 @@ final class Version20251020121000 extends AbstractMigrationChamilo
                 $em->clear();
 
                 $migrated++;
-                $this->dbg(sprintf(
+                $this->dbg(\sprintf(
                     '[ok] gc#%d user=%d cat=%d -> migrated to resource (cert id=%d) and removed PF "%s"',
-                    (int) $gc->getId(), $userId, $catId, (int) $cert->getId(), (string) $pf->getTitle()
+                    (int) $gc->getId(),
+                    $userId,
+                    $catId,
+                    (int) $cert->getId(),
+                    (string) $pf->getTitle()
                 ));
-            } catch (\Throwable $e) {
-                $this->dbg(sprintf(
+            } catch (Throwable $e) {
+                $this->dbg(\sprintf(
                     '[error] gc#%d user=%d cat=%d -> upsert failed: %s',
-                    (int) $gc->getId(), $userId, $catId, $e->getMessage()
+                    (int) $gc->getId(),
+                    $userId,
+                    $catId,
+                    $e->getMessage()
                 ));
                 $errors++;
                 // Do not remove PF on failure
             }
         }
 
-        $summary = sprintf('Summary: migrated=%d skipped=%d errors=%d', $migrated, $skipped, $errors);
+        $summary = \sprintf('Summary: migrated=%d skipped=%d errors=%d', $migrated, $skipped, $errors);
         $this->write("\n".$summary."\n");
         $this->dbg($summary);
     }
@@ -136,19 +154,19 @@ final class Version20251020121000 extends AbstractMigrationChamilo
         GradebookCertificate $gc
     ): ?PersonalFile {
         $title = (string) ($gc->getPathCertificate() ?? '');
-        if ($title === '') {
+        if ('' === $title) {
             return null;
         }
 
         $variants = [$title];
 
         // With and without a leading slash
-        if ($title[0] !== '/') {
+        if ('/' !== $title[0]) {
             $variants[] = '/'.$title;
         }
 
         // Also try by basename (in case a full path was stored)
-        $base = \basename($title);
+        $base = basename($title);
         if ($base !== $title) {
             $variants[] = $base;
         }
@@ -157,7 +175,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
         $noExt = preg_replace('/\.html$/i', '', $base);
         if ($noExt && $noExt !== $base) {
             $variants[] = $noExt;
-        } elseif ($base !== '' && stripos($base, '.html') === false) {
+        } elseif ('' !== $base && false === stripos($base, '.html')) {
             $variants[] = $base.'.html';
         }
 
@@ -170,17 +188,17 @@ final class Version20251020121000 extends AbstractMigrationChamilo
 
         // search by creator scope if the helper exists
         $user = $gc->getUser();
-        if (\method_exists($personalRepo, 'getResourceByCreatorFromTitle')) {
+        if (method_exists($personalRepo, 'getResourceByCreatorFromTitle')) {
             try {
                 $candidate = $personalRepo->getResourceByCreatorFromTitle(
-                    $base !== '' ? $base : $title,
+                    '' !== $base ? $base : $title,
                     $user,
                     $user->getResourceNode()
                 );
                 if ($candidate instanceof PersonalFile) {
                     return $candidate;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->dbg('Creator-scoped PF lookup failed: '.$e->getMessage());
             }
         }
@@ -189,7 +207,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
     }
 
     /**
-     * Read HTML from PersonalFile
+     * Read HTML from PersonalFile.
      */
     private function readLegacyHtml(
         PersonalFileRepository $personalRepo,
@@ -199,10 +217,10 @@ final class Version20251020121000 extends AbstractMigrationChamilo
         // Repository helper
         try {
             $content = $personalRepo->getResourceFileContent($pf);
-            if (is_string($content) && $content !== '') {
+            if (\is_string($content) && '' !== $content) {
                 return $content;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->dbg('[info] PF read via repository failed: '.$e->getMessage());
         }
 
@@ -219,7 +237,8 @@ final class Version20251020121000 extends AbstractMigrationChamilo
                         $a = $filename[0] ?? '_';
                         $b = $filename[1] ?? '_';
                         $c = $filename[2] ?? '_';
-                        return sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
+
+                        return \sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
                     };
 
                     foreach ($node->getResourceFiles() as $rf) {
@@ -228,14 +247,14 @@ final class Version20251020121000 extends AbstractMigrationChamilo
                         $t = (string) $rf->getTitle();
                         $o = (string) $rf->getOriginalName();
 
-                        if ($t !== '') {
-                            if ($basePath !== '') {
+                        if ('' !== $t) {
+                            if ('' !== $basePath) {
                                 $candidates[] = $basePath.'/'.$t;
                             }
                             $candidates[] = $sharded($t);
                         }
-                        if ($o !== '') {
-                            if ($basePath !== '') {
+                        if ('' !== $o) {
+                            if ('' !== $basePath) {
                                 $candidates[] = $basePath.'/'.$o;
                             }
                             $candidates[] = $sharded($o);
@@ -244,7 +263,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
                         foreach ($candidates as $p) {
                             if ($fs->fileExists($p)) {
                                 $data = $fs->read($p);
-                                if (is_string($data) && $data !== '') {
+                                if (\is_string($data) && '' !== $data) {
                                     return $data;
                                 }
                             }
@@ -252,7 +271,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
                     }
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->dbg('[info] PF read via filesystem failed: '.$e->getMessage());
         }
 
@@ -262,7 +281,7 @@ final class Version20251020121000 extends AbstractMigrationChamilo
             if ($node) {
                 return $rnRepo->getResourceNodeFileContent($node);
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->dbg('[info] PF read via node fallback failed: '.$e->getMessage());
         }
 

@@ -41,6 +41,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 use const MB_CASE_LOWER;
 
@@ -1316,7 +1317,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function findByAuthsource(string $authentication)
+    public function findByAuthsource(string $authentication): void
     {
         $qb = $this->getOrCreateQueryBuilder(null, 'u');
 
@@ -1353,7 +1354,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $qb = $this->createQueryBuilder('u');
         $this->addActiveAndNotAnonUserQueryBuilder($qb);
 
-        if ($accessUrlId === null) {
+        if (null === $accessUrlId) {
             $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 0;
         }
         $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
@@ -1365,7 +1366,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->setParameter('super', '%ROLE_SUPER_ADMIN%')
             ->setParameter('admin', '%ROLE_ADMIN%')
             ->orderBy('u.id', 'ASC')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         return $qb->getQuery()->getOneOrNullResult();
     }
@@ -1377,45 +1379,49 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     public function getDefaultAdminForExport(): array
     {
         $em = $this->getEntityManager();
+
         try {
             $adminEntity = $em->getRepository(Admin::class)
                 ->createQueryBuilder('a')
                 ->setMaxResults(1)
                 ->getQuery()
-                ->getOneOrNullResult();
+                ->getOneOrNullResult()
+            ;
 
             if ($adminEntity && $adminEntity->getUser()) {
                 $u = $adminEntity->getUser();
+
                 return [
-                    'id'       => (string) $u->getId(),
+                    'id' => (string) $u->getId(),
                     'username' => (string) $u->getUsername(),
-                    'email'    => (string) ($u->getEmail() ?? ''),
+                    'email' => (string) ($u->getEmail() ?? ''),
                 ];
             }
-        } catch (\Throwable $e) {}
+        } catch (Throwable $e) {
+        }
 
         $u = $this->findOnePlatformAdmin();
         if ($u instanceof User) {
             return [
-                'id'       => (string) $u->getId(),
+                'id' => (string) $u->getId(),
                 'username' => (string) $u->getUsername(),
-                'email'    => (string) ($u->getEmail() ?? ''),
+                'email' => (string) ($u->getEmail() ?? ''),
             ];
         }
 
         $me = api_get_user_info();
         if (!empty($me['id'])) {
             return [
-                'id'       => (string) $me['id'],
+                'id' => (string) $me['id'],
                 'username' => (string) ($me['username'] ?? ''),
-                'email'    => (string) ($me['email'] ?? ''),
+                'email' => (string) ($me['email'] ?? ''),
             ];
         }
 
         return [
-            'id'       => '1',
+            'id' => '1',
             'username' => 'admin',
-            'email'    => 'admin@example.com',
+            'email' => 'admin@example.com',
         ];
     }
 }

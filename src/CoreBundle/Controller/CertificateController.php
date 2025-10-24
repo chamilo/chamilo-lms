@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 #[Route('/certificates')]
 class CertificateController extends AbstractController
@@ -65,7 +66,7 @@ class CertificateController extends AbstractController
 
         try {
             $mpdf = new Mpdf([
-                'format'  => 'A4',
+                'format' => 'A4',
                 'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf/',
             ]);
             $mpdf->WriteHTML($html);
@@ -75,7 +76,7 @@ class CertificateController extends AbstractController
                 $pdfBinary,
                 200,
                 [
-                    'Content-Type'        => 'application/pdf',
+                    'Content-Type' => 'application/pdf',
                     'Content-Disposition' => 'attachment; filename="certificate.pdf"',
                 ]
             );
@@ -93,7 +94,7 @@ class CertificateController extends AbstractController
      */
     private function resolveCertificateByHash(string $hash): array
     {
-        $filename   = $hash.'.html';
+        $filename = $hash.'.html';
         $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
 
         $certificate = null;
@@ -104,6 +105,7 @@ class CertificateController extends AbstractController
             if ($row) {
                 $certificate = $row;
                 $matchedPath = $cand;
+
                 break;
             }
         }
@@ -122,20 +124,20 @@ class CertificateController extends AbstractController
      */
     private function assertCertificateAccess(GradebookCertificate $certificate): void
     {
-        $allowPublic       = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
+        $allowPublic = 'true' === $this->settingsManager->getSetting('certificate.allow_public_certificates', true);
         $allowSessionAdmin = 'true' === $this->settingsManager->getSetting('certificate.session_admin_can_download_all_certificates', true);
 
-        $user         = $this->userHelper->getCurrent();
+        $user = $this->userHelper->getCurrent();
         $securityUser = $this->getUser();
 
-        $isOwner         = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
+        $isOwner = $securityUser && method_exists($securityUser, 'getId') && $user->getId() === $securityUser->getId();
         $isPlatformAdmin = method_exists($user, 'isAdmin') && $user->isAdmin();
 
         if ($isOwner || $isPlatformAdmin) {
             return;
         }
 
-        $isPublic           = ($allowPublic && $certificate->getPublish());
+        $isPublic = ($allowPublic && $certificate->getPublish());
         $isSessAdminAllowed = ($allowSessionAdmin && method_exists($user, 'isSessionAdmin') && $user->isSessionAdmin());
 
         if (!$isPublic && !$isSessAdminAllowed) {
@@ -161,7 +163,7 @@ class CertificateController extends AbstractController
         // Preferred flow: read from ResourceNode
         if ($certificate->hasResourceNode()) {
             $node = $certificate->getResourceNode();
-            $fs   = $this->resourceNodeRepository->getFileSystem();
+            $fs = $this->resourceNodeRepository->getFileSystem();
 
             if ($fs) {
                 $basePath = rtrim((string) $node->getPath(), '/');
@@ -172,18 +174,18 @@ class CertificateController extends AbstractController
                     $b = $filename[1] ?? '_';
                     $c = $filename[2] ?? '_';
 
-                    return sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
+                    return \sprintf('resource/%s/%s/%s/%s', $a, $b, $c, $filename);
                 };
 
                 // Try via ResourceFile->title first (this is usually the stored physical filename)
                 foreach ($node->getResourceFiles() as $rf) {
                     $title = (string) $rf->getTitle();
-                    if ($title !== '') {
-                        if ($basePath !== '') {
+                    if ('' !== $title) {
+                        if ('' !== $basePath) {
                             $p = $basePath.'/'.$title;
                             if ($fs->fileExists($p)) {
                                 $content = $fs->read($p);
-                                if ($content !== false && $content !== null) {
+                                if (false !== $content && null !== $content) {
                                     return $content;
                                 }
                             }
@@ -192,7 +194,7 @@ class CertificateController extends AbstractController
                         $p2 = $sharded($title);
                         if ($fs->fileExists($p2)) {
                             $content = $fs->read($p2);
-                            if ($content !== false && $content !== null) {
+                            if (false !== $content && null !== $content) {
                                 return $content;
                             }
                         }
@@ -202,12 +204,12 @@ class CertificateController extends AbstractController
                 // Try via ResourceFile->original_name
                 foreach ($node->getResourceFiles() as $rf) {
                     $orig = (string) $rf->getOriginalName();
-                    if ($orig !== '') {
-                        if ($basePath !== '') {
+                    if ('' !== $orig) {
+                        if ('' !== $basePath) {
                             $p = $basePath.'/'.$orig;
                             if ($fs->fileExists($p)) {
                                 $content = $fs->read($p);
-                                if ($content !== false && $content !== null) {
+                                if (false !== $content && null !== $content) {
                                     return $content;
                                 }
                             }
@@ -216,7 +218,7 @@ class CertificateController extends AbstractController
                         $p2 = $sharded($orig);
                         if ($fs->fileExists($p2)) {
                             $content = $fs->read($p2);
-                            if ($content !== false && $content !== null) {
+                            if (false !== $content && null !== $content) {
                                 return $content;
                             }
                         }
@@ -227,13 +229,13 @@ class CertificateController extends AbstractController
             // Final resource fallback (may still fail if no default file is set)
             try {
                 return $this->resourceNodeRepository->getResourceNodeFileContent($node);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Continue to legacy fallback
             }
         }
 
         // Legacy flow: PersonalFile by title
-        $filename   = $hash.'.html';
+        $filename = $hash.'.html';
         $candidates = [$filename, '/'.$filename, $hash, '/'.$hash];
 
         $personalFileRepo = Container::getPersonalFileRepository();
@@ -242,6 +244,7 @@ class CertificateController extends AbstractController
             $row = $personalFileRepo->findOneBy(['title' => $cand]);
             if ($row) {
                 $pf = $row;
+
                 break;
             }
         }

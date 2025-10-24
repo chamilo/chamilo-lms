@@ -82,32 +82,66 @@ class SectionExport
     {
         $generalItems = [];
 
+        // Map legacy resource types to their primary identifier field
         $resourceTypes = [
-            RESOURCE_DOCUMENT => 'source_id',
-            RESOURCE_QUIZ => 'source_id',
-            RESOURCE_GLOSSARY => 'glossary_id',
-            RESOURCE_LINK => 'source_id',
-            RESOURCE_WORK => 'source_id',
-            RESOURCE_FORUM => 'source_id',
-            RESOURCE_SURVEY => 'source_id',
-            RESOURCE_TOOL_INTRO => 'source_id',
+            RESOURCE_DOCUMENT    => 'source_id',
+            RESOURCE_QUIZ        => 'source_id',
+            RESOURCE_GLOSSARY    => 'glossary_id',
+            RESOURCE_LINK        => 'source_id',
+            RESOURCE_WORK        => 'source_id',
+            RESOURCE_FORUM       => 'source_id',
+            RESOURCE_SURVEY      => 'source_id',
+            RESOURCE_TOOL_INTRO  => 'source_id',
         ];
 
         foreach ($resourceTypes as $resourceType => $idKey) {
-            if (!empty($this->course->resources[$resourceType])) {
-                foreach ($this->course->resources[$resourceType] as $id => $resource) {
-                    if (!$this->isItemInLearnpath($resource, (string) $resourceType)) {
-                        $title = RESOURCE_WORK === $resourceType
-                            ? ($resource->params['title'] ?? '')
-                            : ($resource->title ?? $resource->name);
+            if (empty($this->course->resources[$resourceType]) || !\is_array($this->course->resources[$resourceType])) {
+                continue;
+            }
+
+            foreach ($this->course->resources[$resourceType] as $bagKey => $resource) {
+                // Skip items that are already part of a learnpath
+                if ($this->isItemInLearnpath($resource, (string) $resourceType)) {
+                    continue;
+                }
+
+                // --- Special case: Tool intro as course homepage → export as Moodle "page" (id=0) ---
+                if (RESOURCE_TOOL_INTRO === $resourceType) {
+                    // We rely on obj->id === 'course_homepage'
+                    $objId = (string) ($resource->obj->id ?? '');
+                    if ('course_homepage' === $objId) {
                         $generalItems[] = [
-                            'id' => $resource->{$idKey},
-                            'item_type' => $resourceType,
-                            'path' => $id,
-                            'title' => $title,
+                            // Keep this literal so downstream code can detect it easily
+                            'id'        => 'course_homepage',
+                            'item_type' => 'page', // already normalized for addActivityToList()
+                            'path'      => 0,      // PageExport::getData(0, ...) will read intro HTML
+                            'title'     => get_lang('Introduction'),
                         ];
                     }
+                    // Do not add any other tool-intro variants here
+                    continue;
                 }
+
+                // --- Default handling for other resource types ---
+                // Robust title resolution (avoid notices if properties are missing)
+                $title =
+                    (RESOURCE_WORK === $resourceType)
+                        ? (string) ($resource->params['title'] ?? ($resource->title ?? ''))
+                        : (string) ($resource->title ?? ($resource->name ?? ''));
+
+                // Resolve the primary id safely; skip if missing (defensive)
+                $primaryId = $resource->{$idKey} ?? null;
+                if (null === $primaryId) {
+                    // Defensive log could be added here if needed
+                    continue;
+                }
+
+                $generalItems[] = [
+                    'id'        => $primaryId,
+                    'item_type' => $resourceType,
+                    'path'      => $bagKey,
+                    'title'     => $title,
+                ];
             }
         }
 

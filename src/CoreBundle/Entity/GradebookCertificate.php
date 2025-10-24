@@ -53,6 +53,7 @@ class GradebookCertificate extends AbstractResource implements ResourceInterface
     {
         $user = isset($this->user) ? $this->user->getUsername() : 'user';
         $when = isset($this->createdAt) ? $this->createdAt->format('Y-m-d H:i') : 'pending';
+
         return "Certificate for {$user} ({$when})";
     }
 

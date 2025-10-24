@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { watch, toRefs, nextTick } from "vue"
+import { watch, toRefs } from "vue"
 import useResourceSelection from "../../composables/coursemaintenance/useResourceSelection"
 
 const props = defineProps({
@@ -103,7 +103,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"])
 
-// hook with shared logic
+// Shared selection logic (composable)
 const sel = useResourceSelection()
 const {
   tree,
@@ -121,13 +121,115 @@ const {
   expandAll,
 } = sel
 
-// sync in/out
+/**
+ * Transform the "Documents" group into a real folder/file tree using relative paths.
+ * - Real folders (filetype === 'folder' or path ends with '/') remain as selectable only if they were.
+ * - Synthetic folders (created by this function) are NOT selectable and use string ids (__dir__<rel>).
+ * - Adds node.meta with the relative path to improve search filtering.
+ * - Keeps everything else unchanged for other groups.
+ */
+function treeifyDocuments(groups) {
+  const out = Array.isArray(groups) ? groups : []
+  for (const g of out) {
+    if (!g || g.type !== "document") continue
+
+    const flat = Array.isArray(g.children) ? g.children : Array.isArray(g.items) ? g.items : []
+    if (!flat.length) continue
+
+    // Compute relative path (strip "document/" prefix if present)
+    const relOf = (n) => {
+      const raw = String(n?.extra?.path || n?.label || "").trim()
+      if (!raw) return null
+      let rel = raw.replace(/^\/?document\/?/, "").replace(/\\/g, "/")
+      const isFolder = String(n?.extra?.filetype || "").toLowerCase() === "folder" || /\/$/.test(rel)
+      if (isFolder) rel = rel.replace(/\/+$/, "") + "/"
+      return rel.replace(/^\/+/, "")
+    }
+
+    // Index existing (real) folders
+    const folderMap = new Map() // rel => node
+    for (const it of flat) {
+      const rel = relOf(it)
+      if (!rel) continue
+      const isFolder = String(it?.extra?.filetype || "").toLowerCase() === "folder" || rel.endsWith("/")
+      if (isFolder) {
+        it.label = (rel.replace(/\/$/, "").split("/").pop() || "/") + "/"
+        it.meta = rel
+        it.children = Array.isArray(it.children) ? it.children : []
+        folderMap.set(rel, it)
+      }
+    }
+
+    // Create synthetic folder if missing for a given relative path
+    const ensureFolder = (rel) => {
+      if (folderMap.has(rel)) return folderMap.get(rel)
+      const name = rel.replace(/\/$/, "").split("/").pop() || "/"
+      const synthetic = {
+        id: `__dir__${rel}`,
+        type: "document",
+        label: name + "/",
+        meta: rel,
+        selectable: false, // synthetic folders shouldn't be checkable
+        children: [],
+        extra: { filetype: "folder" },
+      }
+      folderMap.set(rel, synthetic)
+      return synthetic
+    }
+
+    const parentRelOf = (rel, isFolder) => {
+      const clean = isFolder ? rel.replace(/\/+$/, "") : rel
+      const dir = clean.includes("/") ? clean.slice(0, clean.lastIndexOf("/")) : ""
+      return dir ? dir + "/" : ""
+    }
+
+    const root = { children: [] }
+
+    // Place each item under its parent folder chain
+    for (const it of flat) {
+      const rel = relOf(it)
+      if (!rel) continue
+      const isFolder = String(it?.extra?.filetype || "").toLowerCase() === "folder" || rel.endsWith("/")
+      const parentRel = parentRelOf(rel, isFolder)
+      const parent = parentRel ? ensureFolder(parentRel) : root
+
+      if (isFolder) {
+        const f = ensureFolder(rel)
+        if (!parent.children.includes(f)) parent.children.push(f)
+      } else {
+        const n = { ...it, meta: rel, label: rel.split("/").pop() }
+        parent.children.push(n)
+      }
+    }
+
+    // Sort: folders first, then files (case-insensitive)
+    const sortChildren = (list) => {
+      list.sort((a, b) => {
+        const af = (a.extra?.filetype || "").toLowerCase() === "folder" || /\/$/.test(a.label || "")
+        const bf = (b.extra?.filetype || "").toLowerCase() === "folder" || /\/$/.test(b.label || "")
+        if (af !== bf) return af ? -1 : 1
+        return String(a.label || "").localeCompare(String(b.label || ""), undefined, { sensitivity: "base" })
+      })
+      for (const n of list) if (n.children?.length) sortChildren(n.children)
+    }
+    sortChildren(root.children)
+
+    g.children = root.children
+    delete g.items
+  }
+  return out
+}
+
+// sync input => internal tree
 const { groups, modelValue } = toRefs(props)
 watch(
   groups,
   (arr) => {
-    const norm = normalizeTreeForSelection(Array.isArray(arr) ? JSON.parse(JSON.stringify(arr)) : [])
-    // ensure top-level children
+    // Normalize the incoming tree first (ensures leaves have id/type/selectable)
+    let norm = normalizeTreeForSelection(Array.isArray(arr) ? JSON.parse(JSON.stringify(arr)) : [])
+    // Build the folder/file hierarchy only for Documents
+    norm = treeifyDocuments(norm)
+    // Ensure top-level children exist
     tree.value = norm.map((g) =>
       Array.isArray(g.children) ? g : { ...g, children: Array.isArray(g.items) ? g.items : [] },
     )
@@ -135,7 +237,7 @@ watch(
   { immediate: true },
 )
 
-// auto expand on first data
+// auto expand on first data load
 watch(tree, (v) => {
   if (Array.isArray(v) && v.length) {
     forceOpen.value = true
@@ -147,6 +249,7 @@ watch(tree, (v) => {
 
 let syncing = false
 
+// v-model (in) -> local
 watch(
   modelValue,
   (v) => {
@@ -160,6 +263,7 @@ watch(
   { immediate: true },
 )
 
+// local -> v-model (out)
 watch(
   selections,
   (v) => {
@@ -175,7 +279,7 @@ watch(
 </script>
 
 <script>
-/* inline child components to keep it self-contained */
+/* Inline child components to keep it self-contained */
 export default {
   components: {
     GroupBlock: {
@@ -190,7 +294,7 @@ export default {
       },
       emits: ["select-group"],
       components: {
-        /* <-- REGISTER TreeNode LOCALLY HERE */
+        /* <-- Tree node item (no type badge; uses folder/file icon) */
         TreeNode: {
           name: "TreeNode",
           props: {
@@ -220,14 +324,12 @@ export default {
             onCheck(e) {
               this.$emit("toggle", e.target.checked)
             },
-            badgeTone() {
-              return "bg-gray-10 text-gray-90 ring-gray-25"
-            },
           },
           template: `
             <li class="p-3 rounded-lg hover:bg-gray-15 transition">
               <div class="flex items-start gap-3">
 
+                <!-- Disclosure -->
                 <div class="mt-0.5 w-5 flex items-center justify-center">
                   <button
                     class="text-gray-50 hover:text-gray-90"
@@ -238,6 +340,7 @@ export default {
                   </button>
                 </div>
 
+                <!-- Checkbox only for checkable nodes -->
                 <template v-if="isNodeCheckable(node)">
                   <input type="checkbox" :checked="checked" @change="onCheck" class="mt-0.5 chk-success"/>
                 </template>
@@ -245,13 +348,15 @@ export default {
                   <span class="mt-0.5 w-5"></span>
                 </template>
 
+                <!-- Label with folder/file icon (no type badge) -->
                 <div class="flex-1">
                   <div class="flex items-center gap-2">
-        <span class="rounded px-2 py-0.5 text-xs font-semibold ring-1 ring-inset" :class="badgeTone()">
-          {{ (node.titleType || node.type || '').toUpperCase() }}
-        </span>
-                    <span class="text-sm text-gray-90">{{ node.label || node.title || '—' }}</span>
-                    <span v-if="node.meta" class="text-xs text-gray-50">· {{ node.meta }}</span>
+                    <i
+                      :class="((node.extra && node.extra.filetype === 'folder') || /\\/$/.test(node.label || ''))
+                        ? 'mdi mdi-folder'
+                        : 'mdi mdi-file-outline'"></i>
+                    <span class="text-sm text-gray-90 break-all">{{ node.label || node.title || '—' }}</span>
+                    <span v-if="node.meta" class="text-xs text-gray-50 break-all">· {{ node.meta }}</span>
                   </div>
 
                   <ul v-if="open && node.children && node.children.length" class="mt-2 ml-7 space-y-2">

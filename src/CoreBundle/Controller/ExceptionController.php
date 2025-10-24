@@ -98,11 +98,11 @@ class ExceptionController extends AbstractController
         $baseHost = rtrim($accessUrl?->getUrl() ?? '', '/');
 
         // Resolve theme-aware asset URLs
-        $cssUrl  = $this->themeHelper->getThemeAssetUrl('colors.css', true); // still theme-aware
+        $cssUrl = $this->themeHelper->getThemeAssetUrl('colors.css', true); // still theme-aware
         $logoUrl = $this->themeHelper->getPreferredLogoUrl('header', true);  // absolute but invalid host may persist
 
         // Fix: if the generated logo URL contains the invalid host, rebuild it with main AccessUrl
-        if (false !== strpos($logoUrl, $host) && !empty($baseHost)) {
+        if (str_contains($logoUrl, $host) && !empty($baseHost)) {
             $parsed = parse_url($logoUrl);
             $path = $parsed['path'] ?? '';
             $logoUrl = $baseHost.$path;

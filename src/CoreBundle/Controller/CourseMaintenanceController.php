@@ -138,10 +138,8 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
         $mode = strtolower((string) $req->query->get('mode', 'auto')); // 'auto' | 'dat' | 'moodle'
 
-        // Reutilizas TU loader actual con el nuevo flag
         $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
 
-        // Lo demás igual
         $this->logDebug('[importResources] course loaded', [
             'has_resources' => \is_array($course->resources ?? null),
             'keys' => array_keys((array) ($course->resources ?? [])),
@@ -178,6 +176,9 @@ class CourseMaintenanceController extends AbstractController
 
         try {
             $payload = json_decode($req->getContent() ?: '{}', true);
+            // Keep mode consistent with GET /import/{backupId}/resources
+            $mode = strtolower((string) ($payload['mode'] ?? 'auto'));
+
             $importOption = (string) ($payload['importOption'] ?? 'full_backup');
             $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
 
@@ -192,15 +193,21 @@ class CourseMaintenanceController extends AbstractController
                 'sameFileNameOption' => $sameFileNameOption,
                 'selectedTypes' => $selectedTypes,
                 'hasResourcesMap' => !empty($selectedResources),
+                'mode' => $mode,
             ]);
 
-            $course = $this->loadLegacyCourseForAnyBackup($backupId);
+            // Load with same mode to avoid switching source on POST
+            $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
             if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
 
-            $resourcesAll = (array) $course->resources;
+            $resourcesAll = $course->resources;
             $this->logDebug('[importRestore] BEFORE filter keys', array_keys($resourcesAll));
+
+            // Always hydrate LP dependencies (even in full_backup).
+            $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll);
+            $this->logDebug('[importRestore] AFTER hydrate keys', array_keys((array) $course->resources));
 
             // Detect source BEFORE any filtering (meta may be dropped by filters)
             $importSource = $this->getImportSource($course);
@@ -208,8 +215,6 @@ class CourseMaintenanceController extends AbstractController
             $this->logDebug('[importRestore] detected import source', ['import_source' => $importSource, 'isMoodle' => $isMoodle]);
 
             if ('select_items' === $importOption) {
-                $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll);
-
                 if (empty($selectedResources) && !empty($selectedTypes)) {
                     $selectedResources = $this->buildSelectionFromTypes($course, $selectedTypes);
                 }
@@ -218,7 +223,6 @@ class CourseMaintenanceController extends AbstractController
                 foreach ($selectedResources as $ids) {
                     if (\is_array($ids) && !empty($ids)) {
                         $hasAny = true;
-
                         break;
                     }
                 }
@@ -237,7 +241,11 @@ class CourseMaintenanceController extends AbstractController
             // NON-MOODLE
             if (!$isMoodle) {
                 $this->logDebug('[importRestore] non-Moodle backup -> using CourseRestorer');
+                // Trace around normalization to detect bucket drops
+                $this->logDebug('[importRestore] BEFORE normalize', array_keys((array) $course->resources));
+
                 $this->normalizeBucketsForRestorer($course);
+                $this->logDebug('[importRestore] AFTER  normalize', array_keys((array) $course->resources));
 
                 $restorer = new CourseRestorer($course);
                 $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
@@ -276,15 +284,16 @@ class CourseMaintenanceController extends AbstractController
             $mark = static function (array &$dst, bool $cond, string $key): void { if ($cond) { $dst[$key] = true; } };
 
             if ('full_backup' === $importOption) {
+                // Be tolerant with plural 'documents'
                 $mark($wantedGroups, $present('link') || $present('link_category'), 'links');
                 $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
-                $mark($wantedGroups, $present('document'), 'documents');
+                $mark($wantedGroups, $present('document') || $present('documents'), 'documents');
                 $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
                 $mark($wantedGroups, $present('scorm'), 'scorm');
             } else {
                 $mark($wantedGroups, $present('link'), 'links');
                 $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
-                $mark($wantedGroups, $present('document'), 'documents');
+                $mark($wantedGroups, $present('document') || $present('documents'), 'documents');
                 $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
                 $mark($wantedGroups, $present('scorm'), 'scorm');
             }
@@ -3288,40 +3297,158 @@ class CourseMaintenanceController extends AbstractController
         throw new \RuntimeException('Unsupported package: neither course_info.dat nor moodle_backup.xml found.');
     }
 
+    /**
+     * Normalize resource buckets to the exact keys supported by CourseRestorer.
+     * Only the canonical keys below are produced; common aliases are mapped.
+     * - Never drop data: merge buckets; keep __meta as-is.
+     * - Make sure "document" survives if it existed before.
+     */
     private function normalizeBucketsForRestorer(object $course): void
     {
         if (!isset($course->resources) || !\is_array($course->resources)) {
             return;
         }
 
-        $map = [
-            'link' => RESOURCE_LINK,
-            'link_category' => RESOURCE_LINKCATEGORY,
-            'forum' => RESOURCE_FORUM,
-            'forum_category' => RESOURCE_FORUMCATEGORY,
-            'forum_topic' => RESOURCE_FORUMTOPIC,
-            'forum_post' => RESOURCE_FORUMPOST,
-            'thread' => RESOURCE_FORUMTOPIC,
-            'post' => RESOURCE_FORUMPOST,
-            'document' => RESOURCE_DOCUMENT,
-            'quiz' => RESOURCE_QUIZ,
-            'exercise_question' => RESOURCE_QUIZQUESTION,
-            'survey' => RESOURCE_SURVEY,
-            'survey_question' => RESOURCE_SURVEYQUESTION,
-            'tool_intro' => RESOURCE_TOOL_INTRO,
+        // Canonical keys -> constants used by the restorer (reference only)
+        $allowed = [
+            'link'              => \defined('RESOURCE_LINK') ? RESOURCE_LINK : null,
+            'link_category'     => \defined('RESOURCE_LINKCATEGORY') ? RESOURCE_LINKCATEGORY : null,
+            'forum'             => \defined('RESOURCE_FORUM') ? RESOURCE_FORUM : null,
+            'forum_category'    => \defined('RESOURCE_FORUMCATEGORY') ? RESOURCE_FORUMCATEGORY : null,
+            'forum_topic'       => \defined('RESOURCE_FORUMTOPIC') ? RESOURCE_FORUMTOPIC : null,
+            'forum_post'        => \defined('RESOURCE_FORUMPOST') ? RESOURCE_FORUMPOST : null,
+            'document'          => \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : null,
+            'quiz'              => \defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : null,
+            'exercise_question' => \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : null,
+            'survey'            => \defined('RESOURCE_SURVEY') ? RESOURCE_SURVEY : null,
+            'survey_question'   => \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : null,
+            'tool_intro'        => \defined('RESOURCE_TOOL_INTRO') ? RESOURCE_TOOL_INTRO : null,
         ];
 
-        $res = $course->resources;
-        foreach ($map as $from => $to) {
-            if (isset($res[$from]) && \is_array($res[$from])) {
-                if (!isset($res[$to])) {
-                    $res[$to] = $res[$from];
-                }
-                unset($res[$from]);
+        // Minimal, well-scoped alias map (input -> canonical)
+        $alias = [
+            // docs
+            'documents'            => 'document',
+            'document'             => 'document',
+            'document '            => 'document',
+            'Document'             => 'document',
+
+            // tool intro
+            'tool introduction'    => 'tool_intro',
+            'tool_introduction'    => 'tool_intro',
+            'tool/introduction'    => 'tool_intro',
+            'tool intro'           => 'tool_intro',
+            'Tool introduction'    => 'tool_intro',
+
+            // forums
+            'forum'                => 'forum',
+            'forums'               => 'forum',
+            'forum_category'       => 'forum_category',
+            'Forum_Category'       => 'forum_category',
+            'forumcategory'        => 'forum_category',
+            'forum_topic'          => 'forum_topic',
+            'forumtopic'           => 'forum_topic',
+            'thread'               => 'forum_topic',
+            'forum_post'           => 'forum_post',
+            'forumpost'            => 'forum_post',
+            'post'                 => 'forum_post',
+
+            // links
+            'link'                 => 'link',
+            'links'                => 'link',
+            'link_category'        => 'link_category',
+            'link category'        => 'link_category',
+
+            // quiz + questions
+            'quiz'                 => 'quiz',
+            'exercise_question'    => 'exercise_question',
+            'Exercise_Question'    => 'exercise_question',
+            'exercisequestion'     => 'exercise_question',
+
+            // surveys
+            'survey'               => 'survey',
+            'surveys'              => 'survey',
+            'survey_question'      => 'survey_question',
+            'surveyquestion'       => 'survey_question',
+        ];
+
+        $before = $course->resources;
+
+        // Keep meta buckets verbatim
+        $meta = [];
+        foreach ($before as $k => $v) {
+            if (\is_string($k) && str_starts_with($k, '__')) {
+                $meta[$k] = $v;
+                unset($before[$k]);
             }
         }
 
-        $course->resources = $res;
+        $hadDocument =
+            isset($before['document']) ||
+            isset($before['Document']) ||
+            isset($before['documents']);
+
+        // Merge helper (preserve numeric/string ids)
+        $merge = static function (array $dst, array $src): array {
+            foreach ($src as $id => $obj) {
+                if (!array_key_exists($id, $dst)) {
+                    $dst[$id] = $obj;
+                }
+            }
+            return $dst;
+        };
+
+        $out = [];
+
+        foreach ($before as $rawKey => $bucket) {
+            if (!\is_array($bucket)) {
+                // Unexpected shape; skip silently (defensive)
+                continue;
+            }
+
+            // Normalize key shape first
+            $k = (string) $rawKey;
+            $norm = strtolower(trim($k));
+            $norm = strtr($norm, ['\\' => '/', '-' => '_']);  // cheap normalization
+            // Map via alias table if present
+            $canon = $alias[$norm] ?? $alias[str_replace('/', '_', $norm)] ?? null;
+
+            // If still unknown, try a sane guess: underscores + lowercase
+            if (null === $canon) {
+                $guess = str_replace(['/', ' '], '_', $norm);
+                $canon = \array_key_exists($guess, $allowed) ? $guess : null;
+            }
+
+            // Only produce buckets with canonical keys we support; unknown keys are ignored here
+            if (null !== $canon && \array_key_exists($canon, $allowed)) {
+                $out[$canon] = isset($out[$canon]) ? $merge($out[$canon], $bucket) : $bucket;
+            }
+        }
+
+        // Hard safety net: if a "document" bucket existed before, ensure it remains.
+        if ($hadDocument && !isset($out['document'])) {
+            $out['document'] = (array) ($before['document'] ?? $before['Document'] ?? $before['documents'] ?? []);
+        }
+
+        // Gentle ordering to keep things readable
+        $order = [
+            'announcement', 'document', 'link', 'link_category',
+            'forum', 'forum_category', 'forum_topic', 'forum_post',
+            'quiz', 'exercise_question',
+            'survey', 'survey_question',
+            'learnpath', 'tool_intro',
+            'work',
+        ];
+        $w = [];
+        foreach ($order as $i => $key) { $w[$key] = $i; }
+        uksort($out, static function ($a, $b) use ($w) {
+            $wa = $w[$a] ?? 9999;
+            $wb = $w[$b] ?? 9999;
+            return $wa <=> $wb ?: strcasecmp($a, $b);
+        });
+
+        // Final assign (meta first, then normalized buckets)
+        $course->resources = $meta + $out;
     }
 
     /**

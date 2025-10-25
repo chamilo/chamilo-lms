@@ -418,29 +418,107 @@ class CourseRestorer
             return;
         }
 
-        $courseInfo = $this->destination_course_info;
-        $docRepo = Container::getDocumentRepository();
-        $courseEntity = api_get_course_entity($courseInfo['real_id']);
-        $session = api_get_session_entity((int) $session_id);
-        $group = api_get_group_entity(0);
+        $courseInfo   = $this->destination_course_info;
+        $docRepo      = Container::getDocumentRepository();
+        $courseEntity = api_get_course_entity($this->destination_course_id);
+        $session      = api_get_session_entity((int) $session_id);
+        $group        = api_get_group_entity(0);
 
-        // copyMode=false => import from backup_path (package)
-        $copyMode = empty($this->course->backup_path);
-        $srcRoot = $copyMode ? null : rtrim((string) $this->course->backup_path, '/').'/';
-        $courseDir = $courseInfo['directory'] ?? $courseInfo['code'] ?? '';
+        // Resolve the import root deterministically:
+        $resolveImportRoot = function (): string {
+            // explicit meta archiver_root
+            $metaRoot = (string) ($this->course->resources['__meta']['archiver_root'] ?? '');
+            if ($metaRoot !== '' && is_dir($metaRoot) && (is_file($metaRoot.'/course_info.dat') || is_dir($metaRoot.'/document'))) {
+                $this->dlog('resolveImportRoot: using meta.archiver_root', ['dir' => $metaRoot]);
+
+                return rtrim($metaRoot, '/');
+            }
+
+            // backup_path may be a dir or a zip
+            $bp = (string) ($this->course->backup_path ?? '');
+            if ($bp !== '') {
+                if (is_dir($bp) && (is_file($bp.'/course_info.dat') || is_dir($bp.'/document'))) {
+                    $this->dlog('resolveImportRoot: using backup_path (dir)', ['dir' => $bp]);
+
+                    return rtrim($bp, '/');
+                }
+
+                // if backup_path is a .zip, try to find its extracted sibling under the same folder
+                if (is_file($bp) && preg_match('/\.zip$/i', $bp)) {
+                    $base = dirname($bp);
+                    $cands = glob($base.'/CourseArchiver_*', GLOB_ONLYDIR) ?: [];
+                    if (empty($cands) && is_dir($base)) {
+                        // fallback in envs where glob is restricted
+                        $tmp = array_diff(scandir($base) ?: [], ['.', '..']);
+                        foreach ($tmp as $name) {
+                            if (strpos($name, 'CourseArchiver_') === 0 && is_dir($base.'/'.$name)) {
+                                $cands[] = $base.'/'.$name;
+                            }
+                        }
+                    }
+                    usort($cands, static function ($a, $b) {
+                        return (filemtime($b) ?: 0) <=> (filemtime($a) ?: 0);
+                    });
+                    foreach ($cands as $dir) {
+                        if (is_file($dir.'/course_info.dat') || is_dir($dir.'/document')) {
+                            $this->dlog('resolveImportRoot: using sibling CourseArchiver', ['dir' => $dir]);
+                            // cache for later
+                            $this->course->resources['__meta']['archiver_root'] = rtrim($dir, '/');
+
+                            return rtrim($dir, '/');
+                        }
+                    }
+                    $this->dlog('resolveImportRoot: no sibling CourseArchiver found next to zip', ['base' => $base]);
+                }
+            }
+
+            // scan del directorio oficial de backups del archiver
+            $scanBase = $this->getCourseBackupsBase();
+            if (is_dir($scanBase)) {
+                $cands = glob($scanBase.'/CourseArchiver_*', GLOB_ONLYDIR) ?: [];
+                if (empty($cands)) {
+                    $tmp = array_diff(scandir($scanBase) ?: [], ['.', '..']);
+                    foreach ($tmp as $name) {
+                        if (strpos($name, 'CourseArchiver_') === 0 && is_dir($scanBase.'/'.$name)) {
+                            $cands[] = $scanBase.'/'.$name;
+                        }
+                    }
+                }
+                usort($cands, static function ($a, $b) {
+                    return (filemtime($b) ?: 0) <=> (filemtime($a) ?: 0);
+                });
+                foreach ($cands as $dir) {
+                    if (is_file($dir.'/course_info.dat') || is_dir($dir.'/document')) {
+                        $this->dlog('resolveImportRoot: using scanned CourseArchiver', ['dir' => $dir, 'scanBase' => $scanBase]);
+                        $this->course->resources['__meta']['archiver_root'] = rtrim($dir, '/');
+
+                        return rtrim($dir, '/');
+                    }
+                }
+            }
+
+            $this->dlog('resolveImportRoot: no valid import root found, falling back to copy mode');
+
+            return '';
+        };
+
+        $backupRoot = $resolveImportRoot();
+        $copyMode   = $backupRoot === '';
+        $srcRoot    = $copyMode ? null : ($backupRoot.'/');
 
         $this->dlog('restore_documents: begin', [
-            'files' => \count($this->course->resources[RESOURCE_DOCUMENT] ?? []),
+            'files'   => \count($this->course->resources[RESOURCE_DOCUMENT] ?? []),
             'session' => (int) $session_id,
-            'mode' => $copyMode ? 'copy' : 'import',
+            'mode'    => $copyMode ? 'copy' : 'import',
             'srcRoot' => $srcRoot,
         ]);
 
         $DBG = function (string $msg, array $ctx = []): void {
+            // Keep these concise to avoid noisy logs in production
             error_log('[RESTORE:HTMLURL] '.$msg.(empty($ctx) ? '' : ' '.json_encode($ctx)));
         };
 
-        // Create folder chain under Documents (skipping "document" as root) and return destination parent iid
+        // Ensure a folder chain exists under Documents (skipping "document" as root)
         $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $DBG) {
             $rel = '/'.ltrim($relPath, '/');
             if ('/' === $rel || '' === $rel) {
@@ -448,20 +526,20 @@ class CourseRestorer
             }
 
             $parts = array_values(array_filter(explode('/', trim($rel, '/'))));
-            // skip root "document"
+            // Skip "document" root if present
             $start = 0;
             if (isset($parts[0]) && 'document' === $parts[0]) {
                 $start = 1;
             }
 
-            $accum = '';
+            $accum    = '';
             $parentId = 0;
             for ($i = $start; $i < \count($parts); $i++) {
-                $seg = $parts[$i];
+                $seg   = $parts[$i];
                 $accum = $accum.'/'.$seg;
 
                 $parentRes = $parentId ? $docRepo->find($parentId) : $courseEntity;
-                $title = $seg;
+                $title     = $seg;
 
                 $existing = $docRepo->findCourseResourceByTitle(
                     $title,
@@ -473,11 +551,10 @@ class CourseRestorer
 
                 if ($existing) {
                     $parentId = method_exists($existing, 'getIid') ? $existing->getIid() : 0;
-
                     continue;
                 }
 
-                $entity = DocumentManager::addDocument(
+                $entity   = DocumentManager::addDocument(
                     ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                     $accum,
                     'folder',
@@ -502,7 +579,7 @@ class CourseRestorer
             return $parentId;
         };
 
-        // Robust HTML detection
+        // Robust HTML detection (extension sniff + small content probe + mimetype)
         $isHtmlFile = function (string $filePath, string $nameGuess): bool {
             $ext1 = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             $ext2 = strtolower(pathinfo($nameGuess, PATHINFO_EXTENSION));
@@ -510,7 +587,7 @@ class CourseRestorer
                 return true;
             }
             $peek = (string) @file_get_contents($filePath, false, null, 0, 2048);
-            if ('' === $peek) {
+            if ($peek === '') {
                 return false;
             }
             $s = strtolower($peek);
@@ -531,32 +608,33 @@ class CourseRestorer
             return false;
         };
 
-        // Create folders coming in the backup (keep your original behavior, but skipping "document" root)
+        // Create folders found in the backup (keep behavior but skip "document" root)
         $folders = [];
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
             if (FOLDER !== $item->file_type) {
                 continue;
             }
 
-            $rel = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
-            if ('/' === $rel) {
+            // Strip leading "document/"
+            $rel = '/'.ltrim(substr($item->path, 8), '/');
+            if ($rel === '/') {
                 continue;
             }
 
-            $parts = array_values(array_filter(explode('/', $rel)));
-            $accum = '';
+            $parts    = array_values(array_filter(explode('/', $rel)));
+            $accum    = '';
             $parentId = 0;
 
             foreach ($parts as $i => $seg) {
                 $accum .= '/'.$seg;
+
                 if (isset($folders[$accum])) {
                     $parentId = $folders[$accum];
-
                     continue;
                 }
 
                 $parentResource = $parentId ? $docRepo->find($parentId) : $courseEntity;
-                $title = ($i === \count($parts) - 1) ? ($item->title ?: $seg) : $seg;
+                $title          = ($i === \count($parts) - 1) ? ($item->title ?: $seg) : $seg;
 
                 $existing = $docRepo->findCourseResourceByTitle(
                     $title,
@@ -599,37 +677,43 @@ class CourseRestorer
             }
         }
 
-        // GLOBAL PRE-SCAN with helper: build URL maps for all HTML dependencies (non-HTML files)
-        $urlMapByRel = [];
+        // GLOBAL PRE-SCAN: build URL maps for HTML dependencies (only in import-from-package mode)
+        $urlMapByRel  = [];
         $urlMapByBase = [];
 
         foreach ($this->course->resources[RESOURCE_DOCUMENT] as $k => $item) {
-            if (DOCUMENT !== $item->file_type) {
+            if (DOCUMENT !== $item->file_type || $copyMode) {
                 continue;
             }
-            if ($copyMode) {
-                continue;
-            } // only when importing from package
 
             $rawTitle = $item->title ?: basename((string) $item->path);
-            $srcPath = $srcRoot.$item->path;
+            $srcPath  = $srcRoot.$item->path;
+
+            // Fallback: if primary root is wrong, try archiver_root
+            if ((!is_file($srcPath) || !is_readable($srcPath))) {
+                $altRoot = rtrim((string) ($this->course->resources['__meta']['archiver_root'] ?? ''), '/').'/';
+                if ($altRoot && $altRoot !== $srcRoot && is_readable($altRoot.$item->path)) {
+                    $srcPath = $altRoot.$item->path;
+                    $this->dlog('restore_documents: pre-scan fallback to alt root', ['src' => $srcPath]);
+                }
+            }
+
             if (!is_file($srcPath) || !is_readable($srcPath)) {
                 continue;
             }
 
-            // Only HTML
             if (!$isHtmlFile($srcPath, $rawTitle)) {
                 continue;
             }
 
             $html = (string) @file_get_contents($srcPath);
-            if ('' === $html) {
+            if ($html === '') {
                 continue;
             }
 
             $maps = ChamiloHelper::buildUrlMapForHtmlFromPackage(
                 $html,
-                $courseDir,
+                ($courseInfo['directory'] ?? $courseInfo['code'] ?? ''),
                 $srcRoot,
                 $folders,
                 $ensureFolder,
@@ -642,7 +726,6 @@ class CourseRestorer
                 $DBG
             );
 
-            // Merge without overwriting previously resolved keys
             foreach ($maps['byRel'] as $kRel => $vUrl) {
                 if (!isset($urlMapByRel[$kRel])) {
                     $urlMapByRel[$kRel] = $vUrl;
@@ -662,51 +745,58 @@ class CourseRestorer
                 continue;
             }
 
-            $srcPath = null;
+            $srcPath  = null;
             $rawTitle = $item->title ?: basename((string) $item->path);
 
             if ($copyMode) {
+                // Copy from existing document (legacy copy flow)
                 $srcDoc = null;
                 if (!empty($item->source_id)) {
                     $srcDoc = $docRepo->find((int) $item->source_id);
                 }
                 if (!$srcDoc) {
                     $this->dlog('restore_documents: source CDocument not found by source_id', ['source_id' => $item->source_id ?? null]);
-
                     continue;
                 }
                 $srcPath = $this->resourceFileAbsPathFromDocument($srcDoc);
                 if (!$srcPath) {
                     $this->dlog('restore_documents: source file not readable from ResourceFile', ['source_id' => (int) $item->source_id]);
-
                     continue;
                 }
             } else {
+                // Import from extracted package
                 $srcPath = $srcRoot.$item->path;
+
+                // Fallback to archiver_root if primary root is wrong
+                if (!is_file($srcPath) || !is_readable($srcPath)) {
+                    $altRoot = rtrim((string) ($this->course->resources['__meta']['archiver_root'] ?? ''), '/').'/';
+                    if ($altRoot && $altRoot !== $srcRoot && is_readable($altRoot.$item->path)) {
+                        $srcPath = $altRoot.$item->path;
+                        $this->dlog('restore_documents: fallback to alt root', ['src' => $srcPath]);
+                    }
+                }
+
                 if (!is_file($srcPath) || !is_readable($srcPath)) {
                     $this->dlog('restore_documents: source file not found/readable', ['src' => $srcPath]);
-
                     continue;
                 }
             }
 
-            $isHtml = $isHtmlFile($srcPath, $rawTitle);
-
-            $rel = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
+            $isHtml    = $isHtmlFile($srcPath, $rawTitle);
+            $rel       = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
             $parentRel = rtrim(\dirname($rel), '/');
-            $parentId = $folders[$parentRel] ?? 0;
+            $parentId  = $folders[$parentRel] ?? 0;
             if (!$parentId) {
-                $parentId = $ensureFolder($parentRel);
+                $parentId            = $ensureFolder($parentRel);
                 $folders[$parentRel] = $parentId;
             }
             $parentRes = $parentId ? $docRepo->find($parentId) : $courseEntity;
 
-            $baseTitle = $rawTitle;
+            $baseTitle  = $rawTitle;
             $finalTitle = $baseTitle;
 
-            $findExisting = function ($t) use ($docRepo, $parentRes, $courseEntity, $session, $group) {
+            $findExisting = function (string $t) use ($docRepo, $parentRes, $courseEntity, $session, $group) {
                 $e = $docRepo->findCourseResourceByTitle($t, $parentRes->getResourceNode(), $courseEntity, $session, $group);
-
                 return $e && method_exists($e, 'getIid') ? $e->getIid() : null;
             };
 
@@ -715,21 +805,20 @@ class CourseRestorer
                 $this->dlog('restore_documents: collision', ['title' => $finalTitle, 'policy' => $this->file_option]);
                 if (FILE_SKIP === $this->file_option) {
                     $this->course->resources[RESOURCE_DOCUMENT][$k]->destination_id = $existsIid;
-
                     continue;
                 }
-                $pi = pathinfo($baseTitle);
+                $pi   = pathinfo($baseTitle);
                 $name = $pi['filename'] ?? $baseTitle;
-                $ext2 = isset($pi['extension']) && '' !== $pi['extension'] ? '.'.$pi['extension'] : '';
-                $i = 1;
+                $ext2 = (isset($pi['extension']) && $pi['extension'] !== '') ? '.'.$pi['extension'] : '';
+                $i    = 1;
                 while ($findExisting($finalTitle)) {
                     $finalTitle = $name.'_'.$i.$ext2;
                     $i++;
                 }
             }
 
-            // Build content/realPath
-            $content = '';
+            // Build content or set realPath for binary files
+            $content  = '';
             $realPath = '';
 
             if ($isHtml) {
@@ -738,11 +827,15 @@ class CourseRestorer
                     $raw = utf8_encode($raw);
                 }
 
-                // Rewrite using both maps (exact rel + basename fallback) BEFORE addDocument
-                $DBG('html:rewrite:before', ['title' => $finalTitle, 'byRel' => \count($urlMapByRel), 'byBase' => \count($urlMapByBase)]);
+                // Rewrite using maps (exact rel + basename fallback) BEFORE addDocument
+                $DBG('html:rewrite:before', [
+                    'title' => $finalTitle,
+                    'byRel' => \count($urlMapByRel),
+                    'byBase' => \count($urlMapByBase),
+                ]);
                 $rew = ChamiloHelper::rewriteLegacyCourseUrlsWithMap(
                     $raw,
-                    $courseDir,
+                    ($courseInfo['directory'] ?? $courseInfo['code'] ?? ''),
                     $urlMapByRel,
                     $urlMapByBase
                 );
@@ -776,10 +869,10 @@ class CourseRestorer
 
                 $this->dlog('restore_documents: file created', [
                     'title' => $finalTitle,
-                    'iid' => $iid,
-                    'mode' => $copyMode ? 'copy' : 'import',
+                    'iid'   => $iid,
+                    'mode'  => $copyMode ? 'copy' : 'import',
                 ]);
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->dlog('restore_documents: file create failed', ['title' => $finalTitle, 'error' => $e->getMessage()]);
             }
         }
@@ -2681,8 +2774,8 @@ class CourseRestorer
                 ->setPropagateNeg((int) $quiz->propagate_neg)
                 ->setHideQuestionTitle((bool) ($quiz->hide_question_title ?? false))
                 ->setHideQuestionNumber((int) ($quiz->hide_question_number ?? 0))
-                ->setStartTime(!empty($quiz->start_time) ? new DateTime($quiz->start_time) : null)
-                ->setEndTime(!empty($quiz->end_time) ? new DateTime($quiz->end_time) : null)
+                ->setStartTime(!empty($quiz->start_time) ? new DateTime((string) $quiz->start_time) : null)
+                ->setEndTime(!empty($quiz->end_time) ? new DateTime((string) $quiz->end_time) : null)
             ;
 
             if (isset($quiz->access_condition) && '' !== $quiz->access_condition) {
@@ -5857,5 +5950,20 @@ class CourseRestorer
             // Never break the flow due to maintenance logic
             error_log('COURSE_DEBUG: resetDoctrineIfClosed failed: '.$e->getMessage());
         }
+    }
+
+    private function getCourseBackupsBase(): string
+    {
+        try {
+            if (method_exists(CourseArchiver::class, 'getBackupDir')) {
+                $dir = rtrim(CourseArchiver::getBackupDir(), '/');
+                if ($dir !== '') {
+                    return $dir;
+                }
+            }
+        } catch (\Throwable $e) {
+        }
+
+        return rtrim(api_get_path(SYS_ARCHIVE_PATH), '/').'/course_backups';
     }
 }

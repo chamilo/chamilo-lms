@@ -3309,29 +3309,35 @@ class CourseMaintenanceController extends AbstractController
             return;
         }
 
-        // Canonical keys -> constants used by the restorer (reference only)
-        $allowed = [
-            'link'              => \defined('RESOURCE_LINK') ? RESOURCE_LINK : null,
-            'link_category'     => \defined('RESOURCE_LINKCATEGORY') ? RESOURCE_LINKCATEGORY : null,
-            'forum'             => \defined('RESOURCE_FORUM') ? RESOURCE_FORUM : null,
-            'forum_category'    => \defined('RESOURCE_FORUMCATEGORY') ? RESOURCE_FORUMCATEGORY : null,
-            'forum_topic'       => \defined('RESOURCE_FORUMTOPIC') ? RESOURCE_FORUMTOPIC : null,
-            'forum_post'        => \defined('RESOURCE_FORUMPOST') ? RESOURCE_FORUMPOST : null,
-            'document'          => \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : null,
-            'quiz'              => \defined('RESOURCE_QUIZ') ? RESOURCE_QUIZ : null,
-            'exercise_question' => \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : null,
-            'survey'            => \defined('RESOURCE_SURVEY') ? RESOURCE_SURVEY : null,
-            'survey_question'   => \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : null,
-            'tool_intro'        => \defined('RESOURCE_TOOL_INTRO') ? RESOURCE_TOOL_INTRO : null,
-        ];
+        // Split meta buckets
+        $all = $course->resources;
+        $meta = [];
+        foreach ($all as $k => $v) {
+            if (\is_string($k) && str_starts_with($k, '__')) {
+                $meta[$k] = $v;
+                unset($all[$k]);
+            }
+        }
 
-        // Minimal, well-scoped alias map (input -> canonical)
-        $alias = [
-            // docs
-            'documents'            => 'document',
-            'document'             => 'document',
-            'document '            => 'document',
-            'Document'             => 'document',
+        // Start from current
+        $out = $all;
+
+        // merge array buckets preserving numeric/string ids
+        $merge = static function (array $dst, array $src): array {
+            foreach ($src as $id => $obj) {
+                if (!\array_key_exists($id, $dst)) {
+                    $dst[$id] = $obj;
+                }
+            }
+            return $dst;
+        };
+
+        // safe alias map (input -> canonical). Extend only if needed.
+        $aliases = [
+            // documents
+            'documents'          => 'document',
+            'Document'           => 'document',
+            'document '          => 'document',
 
             // tool intro
             'tool introduction'    => 'tool_intro',
@@ -3341,96 +3347,70 @@ class CourseMaintenanceController extends AbstractController
             'Tool introduction'    => 'tool_intro',
 
             // forums
-            'forum'                => 'forum',
-            'forums'               => 'forum',
-            'forum_category'       => 'forum_category',
-            'Forum_Category'       => 'forum_category',
-            'forumcategory'        => 'forum_category',
-            'forum_topic'          => 'forum_topic',
-            'forumtopic'           => 'forum_topic',
-            'thread'               => 'forum_topic',
-            'forum_post'           => 'forum_post',
-            'forumpost'            => 'forum_post',
-            'post'                 => 'forum_post',
+            'forums'             => 'forum',
+            'Forum'              => 'forum',
+            'Forum_Category'     => 'forum_category',
+            'forumcategory'      => 'forum_category',
+            'thread'             => 'forum_topic',
+            'Thread'             => 'forum_topic',
+            'forumtopic'         => 'forum_topic',
+            'post'               => 'forum_post',
+            'Post'               => 'forum_post',
+            'forumpost'          => 'forum_post',
 
             // links
-            'link'                 => 'link',
-            'links'                => 'link',
-            'link_category'        => 'link_category',
-            'link category'        => 'link_category',
+            'links'              => 'link',
+            'link category'      => 'link_category',
 
             // quiz + questions
-            'quiz'                 => 'quiz',
-            'exercise_question'    => 'exercise_question',
-            'Exercise_Question'    => 'exercise_question',
-            'exercisequestion'     => 'exercise_question',
+            'Exercise_Question'  => 'exercise_question',
+            'exercisequestion'   => 'exercise_question',
 
             // surveys
-            'survey'               => 'survey',
-            'surveys'              => 'survey',
-            'survey_question'      => 'survey_question',
-            'surveyquestion'       => 'survey_question',
+            'surveys'            => 'survey',
+            'surveyquestion'     => 'survey_question',
+
+            // announcements
+            'announcements'      => 'announcement',
+            'Announcements'      => 'announcement',
         ];
 
-        $before = $course->resources;
-
-        // Keep meta buckets verbatim
-        $meta = [];
-        foreach ($before as $k => $v) {
-            if (\is_string($k) && str_starts_with($k, '__')) {
-                $meta[$k] = $v;
-                unset($before[$k]);
+        // Normalize keys (case/spacing) and apply alias merges
+        foreach ($all as $rawKey => $_bucket) {
+            if (!\is_array($_bucket)) {
+                continue; // defensive
             }
-        }
-
-        $hadDocument =
-            isset($before['document']) ||
-            isset($before['Document']) ||
-            isset($before['documents']);
-
-        // Merge helper (preserve numeric/string ids)
-        $merge = static function (array $dst, array $src): array {
-            foreach ($src as $id => $obj) {
-                if (!array_key_exists($id, $dst)) {
-                    $dst[$id] = $obj;
-                }
-            }
-            return $dst;
-        };
-
-        $out = [];
-
-        foreach ($before as $rawKey => $bucket) {
-            if (!\is_array($bucket)) {
-                // Unexpected shape; skip silently (defensive)
-                continue;
-            }
-
-            // Normalize key shape first
             $k = (string) $rawKey;
-            $norm = strtolower(trim($k));
-            $norm = strtr($norm, ['\\' => '/', '-' => '_']);  // cheap normalization
-            // Map via alias table if present
-            $canon = $alias[$norm] ?? $alias[str_replace('/', '_', $norm)] ?? null;
+            $norm = strtolower(trim(strtr($k, ['\\' => '/', '-' => '_'])));
+            $norm2 = str_replace('/', '_', $norm);
 
-            // If still unknown, try a sane guess: underscores + lowercase
-            if (null === $canon) {
-                $guess = str_replace(['/', ' '], '_', $norm);
-                $canon = \array_key_exists($guess, $allowed) ? $guess : null;
+            $canonical = null;
+            if (isset($aliases[$norm])) {
+                $canonical = $aliases[$norm];
+            } elseif (isset($aliases[$norm2])) {
+                $canonical = $aliases[$norm2];
             }
 
-            // Only produce buckets with canonical keys we support; unknown keys are ignored here
-            if (null !== $canon && \array_key_exists($canon, $allowed)) {
-                $out[$canon] = isset($out[$canon]) ? $merge($out[$canon], $bucket) : $bucket;
+            if ($canonical && $canonical !== $rawKey) {
+                // Merge into canonical and drop the alias key
+                $out[$canonical] = isset($out[$canonical]) && \is_array($out[$canonical])
+                    ? $merge($out[$canonical], $_bucket)
+                    : $_bucket;
+                unset($out[$rawKey]);
+            }
+            // else: leave as-is (pass-through)
+        }
+
+        // Safety: if there was any docs bucket under an alias, ensure 'document' is present.
+        if (!isset($out['document'])) {
+            if (isset($all['documents']) && \is_array($all['documents'])) {
+                $out['document'] = $all['documents'];
+            } elseif (isset($all['Document']) && \is_array($all['Document'])) {
+                $out['document'] = $all['Document'];
             }
         }
 
-        // Hard safety net: if a "document" bucket existed before, ensure it remains.
-        if ($hadDocument && !isset($out['document'])) {
-            $out['document'] = (array) ($before['document'] ?? $before['Document'] ?? $before['documents'] ?? []);
-        }
-
-        // Gentle ordering to keep things readable
+        // Gentle ordering for readability only (does not affect presence)
         $order = [
             'announcement', 'document', 'link', 'link_category',
             'forum', 'forum_category', 'forum_topic', 'forum_post',
@@ -3444,11 +3424,14 @@ class CourseMaintenanceController extends AbstractController
         uksort($out, static function ($a, $b) use ($w) {
             $wa = $w[$a] ?? 9999;
             $wb = $w[$b] ?? 9999;
-            return $wa <=> $wb ?: strcasecmp($a, $b);
+            return $wa <=> $wb ?: strcasecmp((string) $a, (string) $b);
         });
 
-        // Final assign (meta first, then normalized buckets)
+        // Final assign: meta first, then normalized buckets
         $course->resources = $meta + $out;
+
+        // Debug trace to verify we didn't lose keys
+        $this->logDebug('[normalizeBucketsForRestorer] final keys', array_keys((array) $course->resources));
     }
 
     /**

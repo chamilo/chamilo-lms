@@ -1659,74 +1659,110 @@ class CourseRestorer
     /**
      * Restore tool introductions.
      *
+     * Accept multiple bucket spellings to be robust against controller normalization:
+     * - RESOURCE_TOOL_INTRO (if defined)
+     * - 'Tool introduction' (legacy)
+     * - 'tool_intro' / 'tool introduction' / 'tool_introduction'
+     *
      * @param mixed $sessionId
      */
     public function restore_tool_intro($sessionId = 0): void
     {
         $resources = $this->course->resources ?? [];
 
+        // Detect the right bucket key (be generous with aliases)
         $bagKey = null;
-        if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
-            $bagKey = RESOURCE_TOOL_INTRO;
-        } elseif (!empty($resources['Tool introduction'])) {
-            $bagKey = 'Tool introduction';
+        $candidates = [];
+
+        if (\defined('RESOURCE_TOOL_INTRO')) {
+            $candidates[] = RESOURCE_TOOL_INTRO;
         }
-        if (null === $bagKey || empty($resources[$bagKey]) || !\is_array($resources[$bagKey])) {
+
+        // Common spellings seen in exports / normalizers
+        $candidates = array_merge($candidates, [
+            'Tool introduction',
+            'tool introduction',
+            'tool_introduction',
+            'tool/intro',
+            'tool_intro',
+        ]);
+
+        foreach ($candidates as $k) {
+            if (!empty($resources[$k]) && \is_array($resources[$k])) {
+                $bagKey = $k;
+                break;
+            }
+        }
+
+        if (null === $bagKey) {
+            $this->dlog('restore_tool_intro: no matching bucket found', [
+                'available_keys' => array_keys((array) $resources),
+            ]);
             return;
         }
 
         $sessionId = (int) $sessionId;
-        $this->dlog('restore_tool_intro: begin', ['count' => \count($resources[$bagKey])]);
+        $this->dlog('restore_tool_intro: begin', [
+            'bucket' => $bagKey,
+            'count'  => \count($resources[$bagKey]),
+        ]);
 
-        $em = Database::getManager();
-        $course = api_get_course_entity($this->destination_course_id);
+        $em      = Database::getManager();
+        $course  = api_get_course_entity($this->destination_course_id);
         $session = $sessionId ? api_get_session_entity($sessionId) : null;
 
-        $toolRepo = $em->getRepository(Tool::class);
-        $cToolRepo = $em->getRepository(CTool::class);
-        $introRepo = $em->getRepository(CToolIntro::class);
+        $toolRepo   = $em->getRepository(Tool::class);
+        $cToolRepo  = $em->getRepository(CTool::class);
+        $introRepo  = $em->getRepository(CToolIntro::class);
 
         foreach ($resources[$bagKey] as $rawId => $tIntro) {
-            // Resolve tool key
+            // Resolve tool key (id may be missing in some dumps)
             $toolKey = trim((string) ($tIntro->id ?? ''));
             if ('' === $toolKey || '0' === $toolKey) {
                 $toolKey = (string) $rawId;
             }
             $alias = strtolower($toolKey);
+
+            // Normalize common aliases to platform keys
             if ('homepage' === $alias || 'course_home' === $alias) {
                 $toolKey = 'course_homepage';
             }
 
             $this->dlog('restore_tool_intro: resolving tool key', [
-                'raw_id' => (string) $rawId,
-                'obj_id' => isset($tIntro->id) ? (string) $tIntro->id : null,
-                'toolKey' => $toolKey,
+                'raw_id'   => (string) $rawId,
+                'obj_id'   => isset($tIntro->id) ? (string) $tIntro->id : null,
+                'toolKey'  => $toolKey,
             ]);
 
             // Already mapped?
             $mapped = (int) ($tIntro->destination_id ?? 0);
             if ($mapped > 0) {
-                $this->dlog('restore_tool_intro: already mapped, skipping', ['src_id' => $toolKey, 'dst_id' => $mapped]);
-
+                $this->dlog('restore_tool_intro: already mapped, skipping', [
+                    'src_id' => $toolKey, 'dst_id' => $mapped,
+                ]);
                 continue;
             }
 
-            // Rewrite HTML using the central helper
+            // Rewrite HTML using centralized helper (keeps document links consistent)
             $introHtml = $this->rewriteHtmlForCourse((string) ($tIntro->intro_text ?? ''), $sessionId, '[tool_intro.intro]');
 
-            // Find platform Tool entity
+            // Find platform Tool entity by title; try a couple of fallbacks
             $toolEntity = $toolRepo->findOneBy(['title' => $toolKey]);
             if (!$toolEntity) {
+                // Fallbacks: lower/upper case attempts
+                $toolEntity = $toolRepo->findOneBy(['title' => strtolower($toolKey)])
+                    ?: $toolRepo->findOneBy(['title' => ucfirst(strtolower($toolKey))]);
+            }
+            if (!$toolEntity) {
                 $this->dlog('restore_tool_intro: missing Tool entity, skipping', ['tool' => $toolKey]);
-
                 continue;
             }
 
-            // Find or create course tool (CTool)
+            // Ensure a CTool exists for this course/session+tool
             $cTool = $cToolRepo->findOneBy([
-                'course' => $course,
+                'course'  => $course,
                 'session' => $session,
-                'title' => $toolKey,
+                'title'   => $toolKey,
             ]);
 
             if (!$cTool) {
@@ -1739,9 +1775,7 @@ class CourseRestorer
                     ->setVisibility(true)
                     ->setParent($course)
                     ->setCreator($course->getCreator() ?? null)
-                    ->addCourseLink($course)
-                ;
-
+                    ->addCourseLink($course, $session);
                 $em->persist($cTool);
                 $em->flush();
 
@@ -1751,7 +1785,7 @@ class CourseRestorer
                 ]);
             }
 
-            // Intro entity (create/overwrite/skip according to policy)
+            // Create/overwrite intro according to file policy
             $intro = $introRepo->findOneBy(['courseTool' => $cTool]);
 
             if ($intro) {
@@ -1774,9 +1808,7 @@ class CourseRestorer
                 $intro = (new CToolIntro())
                     ->setCourseTool($cTool)
                     ->setIntroText($introHtml)
-                    ->setParent($course)
-                ;
-
+                    ->setParent($course);
                 $em->persist($intro);
                 $em->flush();
 
@@ -1786,8 +1818,8 @@ class CourseRestorer
                 ]);
             }
 
-            // Map destination id back
-            $this->course->resources[$bagKey][$rawId] ??= new stdClass();
+            // Map destination id back into the bucket used
+            $this->course->resources[$bagKey][$rawId] ??= new \stdClass();
             $this->course->resources[$bagKey][$rawId]->destination_id = (int) $intro->getIid();
         }
 

@@ -64,6 +64,12 @@
             @change="onLocalFile"
             class="w-full rounded border border-gray-25 p-2 text-sm"
           />
+          <div
+            v-if="backupType === 'local' && localFile"
+            class="mt-1 text-tiny text-gray-50"
+          >
+            {{ localFile.name }}
+          </div>
 
           <!-- Server archive -->
           <label class="mt-4 flex items-center gap-2">
@@ -159,7 +165,7 @@
         <button
           class="btn-primary"
           @click="nextFromStep1"
-          :disabled="loading"
+          :disabled="loading || !canContinueFromStep1"
         >
           <i class="mdi mdi-arrow-right"></i> {{ t("Continue") }}
         </button>
@@ -243,7 +249,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted, watch, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import svc from "../../services/courseMaintenance"
@@ -272,6 +278,17 @@ const backupId = ref("")
 const tree = ref([]) // groups as returned by backend
 const notices = ref([])
 const selections = ref({}) // { [type]: { [id]: 1 } }
+
+const canContinueFromStep1 = computed(() => {
+  if (backupType.value === "local") return !!localFile.value
+  if (backupType.value === "server") return !!serverFilename.value
+  return false
+})
+
+watch(backupType, (v) => {
+  if (v === "local") serverFilename.value = ""
+  else localFile.value = null
+})
 
 /* Lifecycle */
 onMounted(bootstrap)

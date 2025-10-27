@@ -36,6 +36,7 @@
               :to="tabTo('CMImportBackup')"
               class="cm-tab"
               active-class="cm-tab--active"
+              @click="goToTab('CMImportBackup', $event)"
             >
               <i class="mdi mdi-tray-arrow-down cm-tab__icon"></i>
               <span>{{ t("Import backup") }}</span>
@@ -46,6 +47,7 @@
               :to="tabTo('CMCreateBackup')"
               class="cm-tab"
               active-class="cm-tab--active"
+              @click="goToTab('CMCreateBackup', $event)"
             >
               <i class="mdi mdi-content-save cm-tab__icon"></i>
               <span>{{ t("Create backup") }}</span>
@@ -56,6 +58,7 @@
               :to="tabTo('CMCopyCourse')"
               class="cm-tab"
               active-class="cm-tab--active"
+              @click="goToTab('CMCopyCourse', $event)"
             >
               <i class="mdi mdi-content-copy cm-tab__icon"></i>
               <span>{{ t("Copy course") }}</span>
@@ -66,6 +69,7 @@
               :to="tabTo('CMCc13')"
               class="cm-tab"
               active-class="cm-tab--active"
+              @click="goToTab('CMCc13', $event)"
             >
               <i class="mdi mdi-layers cm-tab__icon"></i>
               <span>{{ t("IMS CC 1.3") }}</span>
@@ -76,7 +80,7 @@
               :to="tabTo('CMRecycle')"
               class="cm-tab"
               active-class="cm-tab--active"
-              @click.prevent="refreshRecycleTab"
+              @click="goToTab('CMRecycle', $event)"
             >
               <i class="mdi mdi-recycle cm-tab__icon"></i>
               <span>{{ t("Recycle course") }}</span>
@@ -87,6 +91,7 @@
               :to="tabTo('CMDelete')"
               class="cm-tab cm-tab--danger"
               active-class="cm-tab--active"
+              @click="goToTab('CMDelete', $event)"
             >
               <i class="mdi mdi-trash-can-outline cm-tab__icon"></i>
               <span>{{ t("Delete course") }}</span>
@@ -128,9 +133,11 @@ function tabTo(name) {
   }
 }
 
-function refreshRecycleTab() {
+function goToTab(name, evt) {
+  if (route.name !== name) return
+  evt?.preventDefault?.()
   router.push({
-    name: "CMRecycle",
+    name,
     params: { node },
     query: { ...route.query, _r: Date.now().toString() },
   })

@@ -206,6 +206,9 @@ class SettingsController extends BaseController
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
             }
         }
+        $platform = [
+            'server_type' => (string) $manager->getSetting('platform.server_type', true),
+        ];
 
         return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
             'schemas' => $schemas,
@@ -216,6 +219,7 @@ class SettingsController extends BaseController
             'template_map' => $templateMap,
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
+            'platform' => $platform,
         ]);
     }
 

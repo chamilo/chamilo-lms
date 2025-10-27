@@ -2221,6 +2221,8 @@ class Display
 
                 return $html;
                 break;
+            case 'm4a':  // for ipad ios26
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'">';
             case 'wav':
             case 'ogg':
                 $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'"></audio>';

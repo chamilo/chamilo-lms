@@ -472,7 +472,6 @@ class CourseRestorer
                 }
             }
 
-            // scan del directorio oficial de backups del archiver
             $scanBase = $this->getCourseBackupsBase();
             if (is_dir($scanBase)) {
                 $cands = glob($scanBase.'/CourseArchiver_*', GLOB_ONLYDIR) ?: [];
@@ -785,6 +784,20 @@ class CourseRestorer
             $isHtml    = $isHtmlFile($srcPath, $rawTitle);
             $rel       = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
             $parentRel = rtrim(\dirname($rel), '/');
+
+            if (!empty($item->destination_id) && !$isHtml) {
+                $maybeExisting = $docRepo->find((int) $item->destination_id);
+                if ($maybeExisting) {
+                    $this->dlog('restore_documents: already mapped asset, skipping', [
+                        'src' => $item->path ?? null,
+                        'dst_iid' => (int) $item->destination_id,
+                    ]);
+                    continue;
+                } else {
+                    $item->destination_id = 0;
+                }
+            }
+
             $parentId  = $folders[$parentRel] ?? 0;
             if (!$parentId) {
                 $parentId            = $ensureFolder($parentRel);
@@ -1023,6 +1036,15 @@ class CourseRestorer
             if (!\is_object($forumRes) || !\is_object($forumRes->obj)) {
                 continue;
             }
+
+            if ((int) ($forumRes->destination_id ?? 0) > 0) {
+                $this->dlog('restore_forums: already mapped, skipping', [
+                    'src_forum_id' => (int) $srcForumId,
+                    'dst_forum_iid' => (int) $forumRes->destination_id,
+                ]);
+                continue;
+            }
+
             $p = (array) $forumRes->obj;
 
             $dstCategory = null;
@@ -1500,6 +1522,16 @@ class CourseRestorer
         };
 
         foreach ($resources[RESOURCE_LINK] as $oldLinkId => $link) {
+
+            $mapped = (int) ($this->course->resources[RESOURCE_LINK][$oldLinkId]->destination_id ?? 0);
+            if ($mapped > 0) {
+                $this->dlog('restore_links: already mapped, skipping', [
+                    'src_link_id' => (int) $oldLinkId,
+                    'dst_link_id' => $mapped,
+                ]);
+                continue;
+            }
+
             $rawUrl = (string) ($link->url ?? ($link->extra['url'] ?? ''));
             $rawTitle = (string) ($link->title ?? ($link->extra['title'] ?? ''));
             $rawDesc = (string) ($link->description ?? ($link->extra['description'] ?? ''));
@@ -2753,6 +2785,10 @@ class CourseRestorer
         }
 
         foreach ($resources[RESOURCE_QUIZ] as $id => $quizWrap) {
+            if ((int) ($this->course->resources[RESOURCE_QUIZ][$id]->destination_id ?? 0) > 0) {
+                $this->dlog('RESTORE_QUIZ: already mapped, skipping', ['src_quiz_id' => (int) $id]);
+                continue;
+            }
             $quiz = isset($quizWrap->obj) ? $quizWrap->obj : $quizWrap;
 
             // Rewrite HTML-bearing fields

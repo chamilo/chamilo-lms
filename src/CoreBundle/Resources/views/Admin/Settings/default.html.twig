@@ -72,15 +72,35 @@
                                                         {{ field.vars.label|trans }}
                                                     </h3>
 
-                                                    {% if template_map[fieldName] is defined %}
-                                                        <a href="#"
-                                                           class="text-info hover:text-info-dark show-template flex items-center gap-2"
-                                                           data-template-id="{{ template_map[fieldName] }}"
-                                                           title="{{ 'Show JSON Template'|trans }}">
-                                                            <i class="mdi mdi-information-outline text-info text-lg"></i>
-                                                            <span class="text-body-2">{{ 'Show JSON Template'|trans }}</span>
-                                                        </a>
-                                                    {% endif %}
+                                                    <div class="flex items-center gap-2">
+                                                        {% if template_map[fieldName] is defined %}
+                                                            <a href="#"
+                                                               class="text-info hover:text-info-dark show-template flex items-center gap-2"
+                                                               data-template-id="{{ template_map[fieldName] }}"
+                                                               title="{{ 'Show JSON Template'|trans }}">
+                                                                <i class="mdi mdi-information-outline text-info text-lg"></i>
+                                                                <span class="text-body-2">{{ 'Show JSON Template'|trans }}</span>
+                                                            </a>
+                                                        {% endif %}
+
+
+                                                        {% if platform is defined and settings.platform.server_type is defined and settings.platform.server_type == 'test' %}
+
+                                                            <span
+                                                                    class="ml-3 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
+                                                                    title="{{ namespace ~ '.' ~ fieldName }}"
+                                                                    role="img"
+                                                                    aria-hidden="true"
+                                                                    data-field-id="{{ field.vars.id }}"
+                                                                    data-namespace="{{ namespace }}"
+                                                                    data-field-name="{{ fieldName }}"
+        {% if template_map[fieldName] is defined %} data-template-id="{{ template_map[fieldName] }}" {% endif %}
+    >
+        <i class="mdi mdi-alphabetical course-tool__icon bg-primary-bgdisabled text-base" aria-hidden="true"></i>
+    </span>
+                                                        {% endif %}
+
+                                                    </div>
                                                 </div>
 
                                                 <div class="mb-2">

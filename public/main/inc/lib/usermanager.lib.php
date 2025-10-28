@@ -162,7 +162,7 @@ class UserManager
         $creatorEmail = $creatorInfo['email'] ?? '';
 
         // First check if the login exists.
-        if (!self::is_username_available($loginName)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($loginName)) {
             Display::addFlash(
                 Display::return_message(get_lang('This login is already taken !'))
             );
@@ -1123,7 +1123,7 @@ class UserManager
 
         // If username is different from original then check if it exists.
         if ($originalUsername !== $username) {
-            $available = self::is_username_available($username);
+            $available = Container::getUserRepository()->isUsernameAvailable($username);
             if (false === $available) {
                 return false;
             }
@@ -1342,28 +1342,6 @@ class UserManager
     }
 
     /**
-     * Check if a username is available.
-     *
-     * @param string $username the wanted username
-     *
-     * @return bool true if the wanted username is available
-     * @assert ('') === false
-     * @assert ('xyzxyzxyz') === true
-     */
-    public static function is_username_available($username)
-    {
-        if (empty($username)) {
-            return false;
-        }
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT username FROM $table_user
-                WHERE username = '".Database::escape_string($username)."'";
-        $res = Database::query($sql);
-
-        return 0 == Database::num_rows($res);
-    }
-
-    /**
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
      *
      * @param string $firstname the first name of the user
@@ -1433,10 +1411,10 @@ class UserManager
         } else {
             $username = self::create_username($firstname, $lastname);
         }
-        if (!self::is_username_available($username)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($username)) {
             $i = 2;
             $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
-            while (!self::is_username_available($temp_username)) {
+            while (!Container::getUserRepository()->isUsernameAvailable($temp_username)) {
                 $i++;
                 $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
             }

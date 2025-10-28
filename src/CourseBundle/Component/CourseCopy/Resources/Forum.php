@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -103,6 +105,8 @@ class Forum extends Resource
 
     /**
      * Create a new Forum.
+     *
+     * @param mixed $obj
      */
     public function __construct($obj)
     {
@@ -113,7 +117,7 @@ class Forum extends Resource
     /**
      * Show this resource.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->obj->forum_title;

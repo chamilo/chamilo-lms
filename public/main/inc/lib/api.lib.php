@@ -761,7 +761,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_CODE_PATH => $root_sys.'public/main/',
         SYS_CSS_PATH => $root_sys.'public/build/css/',
         SYS_PLUGIN_PATH => $root_sys.'public/plugin/',
-        SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
+        SYS_ARCHIVE_PATH => Container::$container ? Container::getCacheDir() : $root_sys.'var/cache/',
         SYS_TEST_PATH => $root_sys.'tests/',
         SYS_TEMPLATE_PATH => $root_sys.'public/main/template/',
         SYS_PUBLIC_PATH => $root_sys.'public/',

@@ -1,14 +1,28 @@
 <?php
+
 /* For licensing terms, see /license.txt */
+
 /**
  * @author Mustapha Alouani
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\LdapAuthenticatorHelper;
+use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
+use Symfony\Component\Ldap\Security\LdapUserProvider;
+
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
-require '../auth/ldap/authldap.php';
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
+/** @var LdapAuthenticatorHelper $ldapHelper */
+$ldapHelper = Container::$container->get(LdapAuthenticatorHelper::class);
+$userRepo = Container::getUserRepository();
 
 $action = @$_GET["action"] ?: null;
 $login_as_user_id = @$_GET["user_id"] ?: null;
@@ -61,9 +75,13 @@ if (isset($_GET['action'])) {
                 $UserList = [];
                 $userid_match_login = [];
                 foreach ($id as $user_id) {
-                    $tmp = ldap_add_user($user_id);
-                    $UserList[] = $tmp;
-                    $userid_match_login[$tmp] = $user_id;
+                    /** @var LdapAuthenticator $userAuthenticator */
+                    $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
+                    $ldapUser = $userAuthenticator->getUserProvider()->loadUserByIdentifier($user_id);
+                    $user = $userAuthenticator->createUser($ldapUser);
+
+                    $UserList[] = $user->getId();
+                    $userid_match_login[$user->getId()] = $user_id;
                 }
                 if (isset($_GET['id_session']) && ($_GET['id_session'] == strval(intval($_GET['id_session']))) && ($_GET['id_session'] > 0)) {
                     ldap_add_user_to_session($UserList, $_GET['id_session']);
@@ -117,9 +135,12 @@ if (isset($_POST['action'])) {
                 $number_of_added_users = 0;
                 $UserList = [];
                 foreach ($_POST['id'] as $index => $user_id) {
-                    if ($user_id != $_user['user_id']) {
-                        $UserList[] = ldap_add_user($user_id);
-                    }
+                    /** @var LdapAuthenticator $userAuthenticator */
+                    $userAuthenticator = Container::$container->get(LdapAuthenticator::class);
+                    $ldapUser = $userAuthenticator->getUserProvider()->loadUserByIdentifier($user_id);
+                    $user = $userAuthenticator->createUser($ldapUser);
+
+                    $UserList[] = $user->getId();
                 }
                 if (isset($_GET['id_session']) && ("" != trim($_GET['id_session']))) {
                     addUserToSession($UserList, $_GET['id_session']);
@@ -174,8 +195,8 @@ if (isset($_GET['id_session'])) {
 $parameters['sec_token'] = Security::get_token();
 $table = new SortableTable(
     'users',
-    'ldap_get_number_of_users',
-    'ldap_get_user_data',
+    $ldapHelper->countUsers(...),
+    $ldapHelper->getAllUsers(...),
     (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2
 );
 $table->set_additional_parameters($parameters);
@@ -190,9 +211,33 @@ if (api_is_western_name_order()) {
 }
 $table->set_header(4, get_lang('E-mail'));
 $table->set_header(5, get_lang('Detail'));
-//$table->set_column_filter(5, 'email_filter');
-//$table->set_column_filter(5, 'active_filter');
-$table->set_column_filter(5, 'modify_filter');
+$table->set_column_filter(
+    5,
+    function (string $username, string $urlParams, array $row) use ($userRepo) {
+        $icon = ActionIcon::REFRESH;
+
+        if ($userRepo->isUsernameAvailable($username)) {
+            $icon = ActionIcon::ADD_USER;
+        }
+
+        $queryParams = [
+            'id' => [$username],
+            'action' => 'add_user',
+            'sec_token' => Security::getTokenFromSession(),
+        ];
+
+        return Display::url(
+            Display::getMdiIcon($icon, '', null, ICON_SIZE_SMALL, get_lang('AddUsers')),
+            'ldap_users_list.php?'.http_build_query($queryParams),
+            [
+                'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),
+                'data-confirm-text' => get_lang('Yes'),
+                'data-cancel-text' => get_lang('Cancel'),
+                'class' => 'delete-swal',
+            ]
+        );
+    }
+);
 $table->set_form_actions(['add_user' => get_lang('Add LDAP users')]);
 $table->display();
 

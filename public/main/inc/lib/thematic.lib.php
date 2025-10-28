@@ -126,15 +126,15 @@ class Thematic
         $params = '&thematic_id=' . $thematicId . '&sec_token=' . Security::get_token();
 
         if ($currentOrder > 0) {
-            $toolbarThematic .= '<a class="btn btn--plain" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Up')) . '</a>';
+            $toolbarThematic .= '<a class="btn btn--default" href="'.api_get_self().'?action=moveup&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Up')) . '</a>';
         } else {
-            $toolbarThematic .= '<div class="btn btn--plain">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, '') . '</div>';
+            $toolbarThematic .= '<div class="btn btn--default">' . Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, '') . '</div>';
         }
 
         if ($currentOrder < $maxOrder - 1) {
-            $toolbarThematic .= '<a class="btn btn--plain" href="'.api_get_self().'?action=movedown&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Down')) . '</a>';
+            $toolbarThematic .= '<a class="btn btn--default" href="'.api_get_self().'?action=movedown&'.api_get_cidreq().$params.'">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Down')) . '</a>';
         } else {
-            $toolbarThematic .= '<div class="btn btn--plain">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_TINY, '') . '</div>';
+            $toolbarThematic .= '<div class="btn btn--default">' . Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, '') . '</div>';
         }
 
         return $toolbarThematic;

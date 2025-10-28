@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 use const PHP_EOL;
 
@@ -92,7 +93,9 @@ class SendEventRemindersCommand extends Command
                 continue;
             }
 
-            $eventDetails = $this->generateEventDetails($event);
+            // NOTE: keep this call (without user) if you rely on it elsewhere; it does not change behavior.
+            // We now format per-user inside sendReminderMessage().
+            $eventDetails = $this->generateEventDetails($event, null);
 
             $initialSentRemindersCount = $sentRemindersCount;
 
@@ -193,6 +196,47 @@ class SendEventRemindersCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * Resolve the DateTimeZone to use for a given user (CLI-safe, no legacy api_* calls).
+     * Priority: user's timezone -> platform timezone setting -> UTC.
+     */
+    private function resolveTimezoneForUser(?User $user): DateTimeZone
+    {
+        // User explicit timezone (if present and valid)
+        $tzId = $user?->getTimezone();
+        if (\is_string($tzId) && '' !== $tzId) {
+            try {
+                return new DateTimeZone($tzId);
+            } catch (Throwable) {
+                // keep going
+            }
+        }
+
+        // Platform timezone setting (equivalent to api_get_setting('platform.timezone', false, 'timezones'))
+        $platformTz = (string) ($this->settingsManager->getSetting('platform.timezone', false, 'timezones') ?? '');
+        if ('' !== $platformTz) {
+            try {
+                return new DateTimeZone($platformTz);
+            } catch (Throwable) {
+                // keep going
+            }
+        }
+
+        return new DateTimeZone('UTC');
+    }
+
+    /**
+     * Format a UTC DateTime into the user's local timezone, CLI-safe.
+     */
+    private function formatForUser(DateTime $utc, ?User $user): string
+    {
+        $dt = (clone $utc);
+        $dt->setTimezone($this->resolveTimezoneForUser($user));
+
+        // Keep the existing format as used previously.
+        return $dt->format('Y-m-d H:i:s');
+    }
+
     private function sendReminderMessage(User $user, CCalendarEvent $event, int $senderId, bool $debug, SymfonyStyle $io, int &$sentRemindersCount): void
     {
         $locale = $user->getLocale() ?: 'en';
@@ -202,7 +246,9 @@ class SendEventRemindersCommand extends Command
             $this->translator->trans('Reminder for event : %s'),
             $event->getTitle()
         );
-        $messageContent = implode(PHP_EOL, $this->generateEventDetails($event));
+
+        // IMPORTANT: build details with user's timezone applied
+        $messageContent = implode(PHP_EOL, $this->generateEventDetails($event, $user));
 
         $this->messageHelper->sendMessage(
             $user->getId(),
@@ -237,7 +283,11 @@ class SendEventRemindersCommand extends Command
             : 1;
     }
 
-    private function generateEventDetails(CCalendarEvent $event): array
+    /**
+     * Build event details text. If $user is provided, dates are converted to user's local timezone.
+     * Otherwise, keep UTC (backward compatible path).
+     */
+    private function generateEventDetails(CCalendarEvent $event, ?User $user = null): array
     {
         $details = [];
         $details[] = \sprintf('<p><strong>%s</strong></p>', $event->getTitle());
@@ -245,15 +295,23 @@ class SendEventRemindersCommand extends Command
         if ($event->isAllDay()) {
             $details[] = \sprintf('<p class="small">%s</p>', $this->translator->trans('All day'));
         } else {
+            $fromStr = $user
+                ? $this->formatForUser($event->getStartDate(), $user)
+                : $event->getStartDate()->format('Y-m-d H:i:s');
+
             $details[] = \sprintf(
                 '<p class="small">%s</p>',
-                $this->translator->trans('From %s', ['%s' => $event->getStartDate()->format('Y-m-d H:i:s')])
+                $this->translator->trans('From %s', ['%s' => $fromStr])
             );
 
             if ($event->getEndDate()) {
+                $untilStr = $user
+                    ? $this->formatForUser($event->getEndDate(), $user)
+                    : $event->getEndDate()->format('Y-m-d H:i:s');
+
                 $details[] = \sprintf(
                     '<p class="small">%s</p>',
-                    $this->translator->trans('Until %s', ['%s' => $event->getEndDate()->format('Y-m-d H:i:s')])
+                    $this->translator->trans('Until %s', ['%s' => $untilStr])
                 );
             }
         }

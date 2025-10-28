@@ -96,6 +96,8 @@ Event::registerLog($logInfo);
 
 $announcementAttachmentIsDisabled = ('true' === api_get_setting('announcement.disable_announcement_attachment'));
 $thisAnnouncementId = null;
+$htmlHeadXtra[] = api_get_css_asset('select2/css/select2.min.css');
+$htmlHeadXtra[] = api_get_asset('select2/js/select2.min.j');
 
 switch ($action) {
     case 'move':
@@ -700,13 +702,36 @@ switch ($action) {
                 ->setType('button')
             ;
             $form->addHtml('<hr>');
-
-            $htmlHeadXtra[] = '<script>$(function () {'
-                .Agenda::getJsForReminders('#announcement_add_notification')
-                .'});</script>'
-            ;
-
             $form->addHtml('</div>');
+            $htmlHeadXtra[] = '<script>
+            $(function () {
+              var $list = $("#notification_list");
+
+              $(document).on("click", "#announcement_add_notification", function (e) {
+                e.preventDefault();
+
+                var $row = $(`
+                  <div class="js-reminder-row flex items-center gap-2 mb-2">
+                    <input type="number" min="0" step="1" name="notification_count[]" class="form-control w-24" value="0" />
+                    <select name="notification_period[]" class="form-control js-reminder-period w-44">
+                      <option value="i">'.addslashes(get_lang('Minutes')).'</option>
+                      <option value="h">'.addslashes(get_lang('Hours')).'</option>
+                      <option value="d">'.addslashes(get_lang('Days')).'</option>
+                      <option value="w">'.addslashes(get_lang('Weeks')).'</option>
+                    </select>
+                    <button type="button" class="btn btn--danger js-reminder-remove" title="'.addslashes(get_lang('Delete')).'">×</button>
+                  </div>
+                `);
+
+                $list.append($row);
+              });
+
+              $(document).on("click", ".js-reminder-remove", function (e) {
+                e.preventDefault();
+                $(this).closest(".js-reminder-row").remove();
+              });
+            });
+            </script>';
         }
 
         if ($showSubmitButton) {

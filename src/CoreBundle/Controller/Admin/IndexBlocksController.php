@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
@@ -34,7 +35,7 @@ class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
     private bool $isSessionAdmin = false;
-    private array $extAuthSource = [];
+    private bool $isLdapActive;
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -46,11 +47,9 @@ class IndexBlocksController extends BaseController
         private readonly PluginRepository $pluginRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly AccessUrlRepository $accessUrlRepository,
+        AuthenticationConfigHelper $authConfigHelper,
     ) {
-        $this->extAuthSource = [
-            'extldap' => [],
-            'ldap' => [],
-        ];
+        $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
 
     public function __invoke(): JsonResponse
@@ -222,7 +221,7 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Anonymise users list'),
             ];
 
-            if (\count($this->extAuthSource['extldap']) > 0) {
+            if ($this->isLdapActive) {
                 $items[] = [
                     'class' => 'item-user-ldap-list',
                     'url' => '/main/admin/ldap_users_list.php',
@@ -394,7 +393,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (\count($this->extAuthSource['ldap']) > 0) {
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
                 'url' => '/main/admin/ldap_import_students.php',
@@ -823,13 +822,15 @@ class IndexBlocksController extends BaseController
             'url' => '/main/session/session_import_drh.php',
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
-        if (\count($this->extAuthSource['ldap']) > 0) {
+
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
                 'url' => '/main/admin/ldap_import_students_to_session.php',
                 'label' => $this->translator->trans('Import LDAP users into a session'),
             ];
         }
+
         $items[] = [
             'class' => 'item-session-export',
             'url' => '/main/session/session_export.php',

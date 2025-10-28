@@ -754,7 +754,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "informazioni",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -1077,5 +1077,7 @@
     "Updated": "Aggiorna la data",
     "Sessions catalogue": "Sessions catalogue",
     "Root": "Radice",
-    "Videoconference": "Videoconferenza"
+    "Videoconference": "Videoconferenza",
+    "Course settings": "Configurazione del modulo",
+    "Course maintenance": "Course maintenance"
 }

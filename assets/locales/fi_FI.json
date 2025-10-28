@@ -617,7 +617,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "Informaatio",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -905,5 +905,7 @@
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
     "Updated": "Muokkaus p\u00e4iv\u00e4",
     "Sessions catalogue": "Sessions catalogue",
-    "Videoconference": "Videoneuvottelu"
+    "Videoconference": "Videoneuvottelu",
+    "Course settings": "Kurssin asetukset",
+    "Course maintenance": "Course maintenance"
 }

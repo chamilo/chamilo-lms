@@ -10,23 +10,21 @@
             <div class="grid-tools">
                 {% for row in grid.rows %}
                     {% set last_row = loop.last %}
-                    {% spaceless %}
-                        {% set gridColumns %}
-                            {% for column in grid.columns %}
-                                {% if column.visible(grid.isReadyForExport) %}
-                                    <div class="items-tools {{ column.renderBlockId }} ">
-                                        <div class="tools mt-3 mb-3">
-                                            {#                        {% if column.align != 'left'%} align-{{ column.align }}{% endif %}#}
-                                            {#                        {% if loop.last %} last-column{% endif %}#}
-                                            {#                        {% if last_row %} last-row{% endif %}#}
-                                            {{ grid_cell(column, row, grid)|raw }}
-                                        </div>
+                    {% set gridColumns %}
+                        {% for column in grid.columns %}
+                            {% if column.visible(grid.isReadyForExport) %}
+                                <div class="items-tools {{ column.renderBlockId }} ">
+                                    <div class="tools mt-3 mb-3">
+                                        {#                        {% if column.align != 'left'%} align-{{ column.align }}{% endif %}#}
+                                        {#                        {% if loop.last %} last-column{% endif %}#}
+                                        {#                        {% if last_row %} last-row{% endif %}#}
+                                        {{ grid_cell(column, row, grid)|raw }}
                                     </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% endset %}
-                        {{ gridColumns }}
-                    {% endspaceless %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endset %}
+                    {{~ gridColumns }}
                 {% endfor %}
             </div>
         </section>

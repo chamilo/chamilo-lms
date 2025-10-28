@@ -585,9 +585,9 @@ switch ($action) {
                 if (api_is_allowed_to_edit(null, true)) {
                     // Thematic title
                     $toolbarThematic = Display::url(
-                        Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Copy')),
+                        Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy')),
                         'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$id.$params.$url_token,
-                        ['class' => 'btn btn--plain']
+                        ['class' => 'btn btn--default']
                     );
                     if (0 == api_get_session_id()) {
                         $link = $thematic->getResourceNode()->getResourceLinkByContext($course, $session);
@@ -599,33 +599,33 @@ switch ($action) {
                     if (true) {
                         //if (api_get_session_id() == $thematic->getSessionId()) {
                         $toolbarThematic .= Display::url(
-                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Export to PDF')),
+                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
                             api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
                                 [
                                     'action' => 'export_single_thematic',
                                     'thematic_id' => $id,
                                 ]
                             ),
-                            ['class' => 'btn btn--plain']
+                            ['class' => 'btn btn--default']
                         );
                         /*$toolbarThematic .= Display::url(
-                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Export latest version of this page to Documents')),
+                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export latest version of this page to Documents')),
                             api_get_self().'?'.api_get_cidreq().$url_token.'&'.http_build_query(
                                 ['action' => 'export_single_documents', 'thematic_id' => $id]
                             ),
-                            ['class' => 'btn btn--plain']
+                            ['class' => 'btn btn--default']
                         );*/
                         $toolbarThematic .= '<a
-                            class="btn btn--plain"
+                            class="btn btn--default"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
-                            .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Edit')).'</a>';
+                            .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
                         $toolbarThematic .= '<a
-                            class="btn btn--plain"
+                            class="btn btn--default"
                             onclick="javascript:if(!confirm(\''
                             .get_lang('Are you sure you want to delete')
                             .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
                             .$id.$params.$url_token.'">'
-                            .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_TINY, get_lang('Delete')).'</a>';
+                            .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
                     }
                 }
                 $extra[$thematic->getIid()]['toolbar'] = $toolbarThematic;

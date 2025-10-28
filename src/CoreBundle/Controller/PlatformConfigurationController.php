@@ -96,6 +96,7 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['admin.chamilo_support'] = $settingsManager->getSetting('admin.chamilo_support', true);
         $configuration['settings']['platform.session_admin_access_to_all_users_on_all_urls'] = $settingsManager->getSetting('platform.session_admin_access_to_all_users_on_all_urls', true);
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
+        $configuration['settings']['platform.timepicker_increment'] = $settingsManager->getSetting('platform.timepicker_increment', true);
 
         $variables = [];
 

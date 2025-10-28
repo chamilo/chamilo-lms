@@ -805,22 +805,17 @@ class BuyCoursesPlugin extends Plugin
             'course_img' => null,
         ];
 
-        $courseTeachers = $course->getTeachersSubscriptions();
-
-        foreach ($courseTeachers as $teachers) {
-            /* @var User $user */
+        foreach ($course->getTeachersSubscriptions() as $teachers) {
             $user = $teachers->getUser();
-            $teacher['id'] = $user->getId();
-            $teacher['name'] = $user->getFullName();
-            $courseInfo['teachers'][] = $teacher;
+            $courseInfo['teachers'][] = [
+                'id' => $user->getId(),
+                'name' => $user->getFullName(),
+            ];
         }
 
-        $possiblePath = api_get_path(SYS_COURSE_PATH);
-        $possiblePath .= $course->getDirectory();
-        $possiblePath .= '/course-pic.png';
-
-        if (file_exists($possiblePath)) {
-            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+        $imgUrl = $this->getCourseIllustrationUrl($course);
+        if (!empty($imgUrl)) {
+            $courseInfo['course_img'] = $imgUrl;
         }
 
         return $courseInfo;
@@ -999,6 +994,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_amount' => $taxAmount,
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => (int) $paymentType,
+            'invoice' => 0, //default value if no invoice
         ];
 
         return Database::insert(self::TABLE_SALE, $values);

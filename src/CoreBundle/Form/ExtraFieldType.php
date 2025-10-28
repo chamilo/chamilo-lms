@@ -158,8 +158,7 @@ class ExtraFieldType extends AbstractType
                     $defaultOptions['expanded'] = false;
                     $defaultOptions['multiple'] = true;
 
-                    // Preload existing user tags as choices (if any)
-                    $class = 'select2_extra_rel_tag';
+                    $class = 'select2_user_rel_tag';
                     $choices = [];
                     $choicesAttributes = [];
                     if ($item instanceof User) {
@@ -175,13 +174,13 @@ class ExtraFieldType extends AbstractType
                     }
                     $defaultOptions['choices'] = $choices;
                     $defaultOptions['choice_attr'] = $choicesAttributes;
-                    $defaultOptions['data'] = $choices;
-
-                    $defaultOptions['attr'] = [
+                    $defaultOptions['data'] = array_values($choices);
+                    $defaultOptions['attr'] = array_merge($defaultOptions['attr'] ?? [], [
                         'class' => $class,
                         'style' => 'width:500px',
-                        'data.field_id' => $extraField->getId(),
-                    ];
+                        'data.field_id' => (string) $extraField->getId(),
+                    ]);
+
                     $builder->add($variable, ChoiceType::class, $defaultOptions);
 
                     break;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -12,11 +14,9 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  */
 class Quiz extends Resource
 {
-    public $obj; //question
+    public $obj; // question
 
     /**
-     * Quiz constructor.
-     *
      * @param int $obj
      */
     public function __construct($obj)
@@ -32,7 +32,7 @@ class Quiz extends Resource
      * @param int $id
      * @param int $questionOrder
      */
-    public function add_question($id, $questionOrder)
+    public function add_question($id, $questionOrder): void
     {
         $this->obj->question_ids[] = $id;
         $this->obj->question_orders[] = $questionOrder;
@@ -41,7 +41,7 @@ class Quiz extends Resource
     /**
      * Show this question.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->obj->title;

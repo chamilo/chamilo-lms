@@ -6,6 +6,9 @@
 /**
  * Code
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 exit(); //not yet functional, needs to be revised
 
 $cidReset = true;
@@ -100,7 +103,7 @@ foreach ($Sessions as $session) {
 					$expiration_date = '';
 					$active = 1;
 					// Ajout de l'utilisateur
-					if (UserManager::is_username_available($username)) {
+					if (Container::getUserRepository()->isUsernameAvailable($username)) {
                         $user_id = UserManager::create_user(
                             $firstname,
                             $lastname,

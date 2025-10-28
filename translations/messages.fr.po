@@ -1475,10 +1475,10 @@ msgid "Month view"
 msgstr "Vue par mois"
 
 msgid "Weekly"
-msgstr "Vue par semaine"
+msgstr "Hebdomadaire"
 
 msgid "Daily"
-msgstr "Vue par jour"
+msgstr "Quotidien"
 
 msgid "Add event to the agenda"
 msgstr "Ajouter un événement perso"
@@ -25544,7 +25544,7 @@ msgstr ""
 "et suivez les instructions."
 
 msgid "Bi-weekly"
-msgstr "Bi-semanal"
+msgstr "Bi-hebdomadaire"
 
 msgid "Every x days"
 msgstr "Tous les x jours"
@@ -30460,3 +30460,6 @@ msgstr "Cache les paramètres avancés"
 
 msgid "Course created successfully"
 msgstr "Cours créé"
+
+msgid "Show free users (not enrolled)"
+msgstr "Afficher les utilisateurs libres (non inscrits)"

@@ -3,6 +3,8 @@
 
 /**
  * Configuration script for the Buy Courses plugin.
+ *
+ * @package chamilo.plugin.buycourses
  */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -42,6 +44,7 @@ if (empty($currency)) {
     Display::addFlash(
         Display::return_message($plugin->get_lang('CurrencyIsNotConfigured'), 'error')
     );
+    $currency = null;
 }
 
 $currencyIso = null;
@@ -71,30 +74,54 @@ if ($editingCourse) {
         $defaultBeneficiaries[] = $teacher->getId();
     }
 
-    $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
-    if (!empty($currentBeneficiaries)) {
-        $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-        if ('true' === $commissionsEnable) {
-            $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
-            foreach ($defaultCommissions as $defaultCommission) {
-                $commissions .= $defaultCommission.',';
+    if (!empty($courseItem['item_id'])) {
+        $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['course_id']);
+
+        if (!empty($currentBeneficiaries)) {
+            $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
+
+            if ('true' === $commissionsEnable) {
+                $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
+
+                foreach ($defaultCommissions as $defaultCommission) {
+                    $commissions .= $defaultCommission.',';
+                }
+
+                $commissions = substr($commissions, 0, -1);
             }
-            $commissions = substr($commissions, 0, -1);
+        }
+
+        $currencyIso = $courseItem['currency'];
+        $formDefaults = [
+            'product_type' => get_lang('Course'),
+            'id' => $courseItem['course_id'],
+            'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+            'name' => $courseItem['course_title'],
+            'visible' => $courseItem['visible'],
+            'price' => $courseItem['price'],
+            'tax_perc' => $courseItem['tax_perc'],
+            'beneficiaries' => $defaultBeneficiaries,
+        ];
+
+        if ('true' == $commissionsEnable) {
+            $formDefaults['commissions'] = $commissions;
+        }
+    } else {
+        $formDefaults = [
+            'product_type' => get_lang('Course'),
+            'id' => $courseItem['course_id'],
+            'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+            'name' => $courseItem['course_title'],
+            'visible' => false,
+            'price' => 0,
+            'tax_perc' => 0,
+            'beneficiaries' => [],
+        ];
+
+        if ('true' == $commissionsEnable) {
+            $formDefaults['commissions'] = $commissions;
         }
     }
-
-    $currencyIso = $courseItem['currency'];
-    $formDefaults = [
-        'product_type' => get_lang('Course'),
-        'id' => $courseItem['course_id'],
-        'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
-        'name' => $courseItem['course_title'],
-        'visible' => $courseItem['visible'],
-        'price' => $courseItem['price'],
-        'tax_perc' => $courseItem['tax_perc'],
-        'beneficiaries' => $defaultBeneficiaries,
-        'true' == $commissionsEnable ? 'commissions' : '' => 'true' == $commissionsEnable ? $commissions : '',
-    ];
 } elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
@@ -137,7 +164,9 @@ if ($editingCourse) {
         }
     }
 
-    $currentBeneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+    if ($sessionItem['item_id']) {
+        $currentBeneficiaries = $plugin->getItemBeneficiaries($sessionItem['item_id']);
+    }
 
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
@@ -163,8 +192,11 @@ if ($editingCourse) {
         'price' => $sessionItem['price'],
         'tax_perc' => $sessionItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
-        'true' == $commissionsEnable ? 'commissions' : '' => 'true' == $commissionsEnable ? $commissions : '',
     ];
+
+    if ('true' == $commissionsEnable) {
+        $formDefaults['commissions'] = $commissions;
+    }
 } else {
     api_not_allowed(true);
 }
@@ -296,7 +328,7 @@ if ($form->validate()) {
         $plugin->deleteItemBeneficiaries($productItem['id']);
 
         if (isset($formValues['beneficiaries'])) {
-            if ('true' === $commissionsEnable) {
+            if ($commissionsEnable === 'true') {
                 $usersId = $formValues['beneficiaries'];
                 $commissions = explode(',', $formValues['commissions']);
                 $commissions = (count($usersId) != count($commissions))
@@ -310,26 +342,41 @@ if ($form->validate()) {
             }
             $plugin->registerItemBeneficiaries($productItem['id'], $beneficiaries);
         }
-    } else {
+    } elseif (!empty($productItem['id'])) {
         $plugin->deleteItem($productItem['id']);
     }
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/list.php');
+    $url = 'list.php';
+
+    if ($type == 2) {
+        $url = 'list_session.php';
+    }
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/'.$url);
     exit;
 }
 
 $form->setDefaults($formDefaults);
 
-$templateName = $plugin->get_lang('AvailableCourse');
-
+$templateName = '';
 $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
 ];
-$interbreadcrumb[] = [
-    'url' => 'list.php',
-    'name' => $plugin->get_lang('AvailableCourses'),
-];
+switch ($type) {
+    case 2:
+        $interbreadcrumb[] = [
+            'url' => 'list_session.php',
+            'name' => $plugin->get_lang('Sessions'),
+        ];
+        $templateName = $plugin->get_lang('Sessions');
+        break;
+    default:
+        $interbreadcrumb[] = [
+            'url' => 'list.php',
+            'name' => $plugin->get_lang('Available Courses'),
+        ];
+        $templateName = $plugin->get_lang('Available course');
+}
 
 $template = new Template($templateName);
 $template->assign('header', $templateName);

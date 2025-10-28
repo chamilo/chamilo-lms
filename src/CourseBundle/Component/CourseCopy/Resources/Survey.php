@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,57 +17,70 @@ class Survey extends Resource
      * The survey code.
      */
     public $code;
+
     /**
      * The title and subtitle.
      */
     public $title;
     public $subtitle;
+
     /**
      * The author's name.
      */
     public $author;
+
     /**
      * The survey's language.
      */
     public $lang;
+
     /**
      * The availability period.
      */
     public $avail_from;
     public $avail_till;
+
     /**
      * Flag for shared status.
      */
     public $is_shared;
+
     /**
      * Template used.
      */
     public $template;
+
     /**
      * Introduction text.
      */
     public $intro;
+
     /**
      * Thanks text.
      */
     public $surveythanks;
+
     /**
      * Creation date.
      */
     public $creation_date;
+
     /**
      * Invitation status.
      */
     public $invited;
+
     /**
      * Answer status.
      */
     public $answered;
+
     /**
      * Invitation and reminder mail contents.
      */
     public $invite_mail;
     public $reminder_mail;
+
     /**
      * Questions and invitations lists.
      */
@@ -93,6 +108,7 @@ class Survey extends Resource
      * @param string $reminder_mail
      * @param int    $oneQuestionPerPage
      * @param int    $shuffle
+     * @param mixed  $id
      */
     public function __construct(
         $id,
@@ -140,16 +156,20 @@ class Survey extends Resource
 
     /**
      * Add a question to this survey.
+     *
+     * @param mixed $id
      */
-    public function add_question($id)
+    public function add_question($id): void
     {
         $this->question_ids[] = $id;
     }
 
     /**
      * Add an invitation to this survey.
+     *
+     * @param mixed $id
      */
-    public function add_invitation($id)
+    public function add_invitation($id): void
     {
         $this->invitation_ids[] = $id;
     }
@@ -157,7 +177,7 @@ class Survey extends Resource
     /**
      * Show this survey.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->code.' - '.$this->title;

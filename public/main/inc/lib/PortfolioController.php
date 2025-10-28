@@ -1432,7 +1432,7 @@ class PortfolioController
 
                 if ($item->getVisibility() === Portfolio::VISIBILITY_HIDDEN) {
                     $actions[] = Display::url(
-                        Display::return_icon('invisible.png', get_lang('Make Visible'), [], ICON_SIZE_MEDIUM),
+                        Display::return_icon('invisible.png', get_lang('Make visible'), [], ICON_SIZE_MEDIUM),
                         $visibilityUrl
                     );
                 } elseif ($item->getVisibility() === Portfolio::VISIBILITY_VISIBLE) {
@@ -1598,7 +1598,7 @@ class PortfolioController
         );
         $form->addSelectAjax(
             'students',
-            get_lang('Students'),
+            get_lang('Learners'),
             [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",
@@ -1689,7 +1689,7 @@ class PortfolioController
         );
         $form->addSelectAjax(
             'students',
-            get_lang('Students'),
+            get_lang('Learners'),
             [],
             [
                 'url' => api_get_path(WEB_AJAX_PATH)."course.ajax.php?$urlParams",

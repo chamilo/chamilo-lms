@@ -664,7 +664,7 @@
     "Text submitted successfully": "Text submitted successfully",
     "Information": "\u041f\u0440\u0435\u0433\u043b\u0435\u0434",
     "You are adding calendar events for attendance": "You are adding calendar events for attendance",
-    "Add attendance calendar": "Add attendance calendar",
+    "Add attendance date": "Add attendance date",
     "Back to attendance sheet": "Back to attendance sheet",
     "Add calendar event": "Add calendar event",
     "Clear all": "Clear all",
@@ -957,5 +957,7 @@
     "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.": "Upload optional header and email logos. The SVG format is preferred. PNG is used as fallback.",
     "Updated": "\u0414\u0430\u0442\u0430 \u043d\u0430 \u043f\u0440\u043e\u043c\u044f\u043d\u0430",
     "Sessions catalogue": "Sessions catalogue",
-    "Videoconference": "\u0412\u0438\u0434\u0435\u043e-\u043a\u043e\u043d\u0444\u0435\u0440\u0435\u043d\u0446\u0438\u044f"
+    "Videoconference": "\u0412\u0438\u0434\u0435\u043e-\u043a\u043e\u043d\u0444\u0435\u0440\u0435\u043d\u0446\u0438\u044f",
+    "Course settings": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+    "Course maintenance": "Course maintenance"
 }

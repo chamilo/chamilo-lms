@@ -30023,3 +30023,6 @@ msgstr "Geburtsdatum"
 
 msgid "Are you sure to delete the friendship?"
 msgstr "Möchten Sie die Freundschaft wirklich löschen?"
+
+msgid "Show free users (not enrolled)"
+msgstr "Freie Nutzer anzeigen (nicht eingeschrieben)"

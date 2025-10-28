@@ -512,6 +512,8 @@ import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceS
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
+import { storeToRefs } from "pinia"
+import { useCidReqStore } from "../../store/cidReq"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -523,6 +525,8 @@ const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const dialogUserId = ref(null)
 const dialogDateId = ref(null)
+const cidReqStore = useCidReqStore()
+const { course } = storeToRefs(cidReqStore)
 
 const enableSignature = computed(
   () => platformConfigStore.getSetting("attendance.enable_sign_attendance_sheet") === "true",
@@ -575,6 +579,7 @@ const redirectToCalendarList = () => {
 const redirectToAttendanceList = () => {
   router.push({
     name: "AttendanceList",
+    params: { node: String(course.value?.resourceNode?.id) },
     query: { sid, cid, gid },
   })
 }

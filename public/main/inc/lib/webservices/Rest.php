@@ -1317,7 +1317,7 @@ class Rest extends WebService
         }
 
         // First check wether the login already exists.
-        if (!UserManager::is_username_available($loginName)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($loginName)) {
             throw new Exception(get_lang('This login is not available'));
         }
 

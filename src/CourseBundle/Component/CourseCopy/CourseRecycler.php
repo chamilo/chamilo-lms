@@ -108,8 +108,22 @@ final class CourseRecycler
         bool $autoClean = false,
         bool $scormCleanup = false
     ): void {
+        $repo = $this->em->getRepository($entityClass);
+        $hasHardDelete = method_exists($repo, 'hardDelete');
+
         if ($isFull) {
-            $this->deleteAllOfTypeForCourse($entityClass);
+            $resources = $this->fetchResourcesForCourse($entityClass, null);
+            if ($resources) {
+                $this->hardDeleteMany($entityClass, $resources);
+
+                // Physical delete fallback for documents if repo lacks hardDelete()
+                if ($deleteFiles && !$hasHardDelete && CDocument::class === $entityClass) {
+                    foreach ($resources as $res) {
+                        $this->physicallyDeleteDocumentFiles($res);
+                    }
+                }
+            }
+
             if ($autoClean) {
                 $this->autoCleanIfSupported($entityClass);
             }
@@ -129,7 +143,16 @@ final class CourseRecycler
             return;
         }
 
-        $this->deleteSelectedOfTypeForCourse($entityClass, $ids);
+        $resources = $this->fetchResourcesForCourse($entityClass, $ids);
+        if ($resources) {
+            $this->hardDeleteMany($entityClass, $resources);
+
+            if ($deleteFiles && !$hasHardDelete && CDocument::class === $entityClass) {
+                foreach ($resources as $res) {
+                    $this->physicallyDeleteDocumentFiles($res);
+                }
+            }
+        }
 
         if ($autoClean) {
             $this->autoCleanIfSupported($entityClass);
@@ -196,7 +219,16 @@ final class CourseRecycler
         if (method_exists($repo, 'getResourcesByCourseIgnoreVisibility')) {
             $qb = $repo->getResourcesByCourseIgnoreVisibility($this->courseRef());
             if ($ids && \count($ids) > 0) {
-                $qb->andWhere('resource.iid IN (:ids)')->setParameter('ids', $ids);
+                // Try iid first; if the entity has no iid, fall back to id
+                $meta = $this->em->getClassMetadata($entityClass);
+                $hasIid = $meta->hasField('iid');
+
+                if ($hasIid) {
+                    $qb->andWhere('resource.iid IN (:ids)');
+                } else {
+                    $qb->andWhere('resource.id IN (:ids)');
+                }
+                $qb->setParameter('ids', $ids);
             }
 
             return $qb->getQuery()->getResult();
@@ -213,7 +245,9 @@ final class CourseRecycler
         ;
 
         if ($ids && \count($ids) > 0) {
-            $qb->andWhere('resource.iid IN (:ids)')->setParameter('ids', $ids);
+            $meta = $this->em->getClassMetadata($entityClass);
+            $field = $meta->hasField('iid') ? 'resource.iid' : 'resource.id';
+            $qb->andWhere("$field IN (:ids)")->setParameter('ids', $ids);
         }
 
         return $qb->getQuery()->getResult();
@@ -269,9 +303,11 @@ final class CourseRecycler
             }
         }
 
-        if ($usedFallback) {
-            $this->em->flush();
-        }
+        // Always flush once at the end of the batch to materialize changes
+        $this->em->flush();
+
+        // Optional: clear EM to reduce memory in huge batches
+        // $this->em->clear();
     }
 
     /**
@@ -385,6 +421,28 @@ final class CourseRecycler
         if ($changed) {
             // Materialize unlink before any deletion happens
             $this->em->flush();
+        }
+    }
+
+    /** @param CDocument $doc */
+    private function physicallyDeleteDocumentFiles(AbstractResource $doc): void
+    {
+        // This generic example traverses node->resourceFiles and removes them from disk.
+        $node = $doc->getResourceNode();
+        if (!method_exists($node, 'getResourceFiles')) {
+            return;
+        }
+
+        foreach ($node->getResourceFiles() as $rf) {
+            // Example: if you have an absolute path getter or storage key
+            if (method_exists($rf, 'getAbsolutePath')) {
+                $path = (string) $rf->getAbsolutePath();
+                if ($path && file_exists($path)) {
+                    @unlink($path);
+                }
+            }
+            // If you use a storage service, call it here instead of unlink()
+            // $this->storage->delete($rf->getStorageKey());
         }
     }
 

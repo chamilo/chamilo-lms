@@ -676,6 +676,7 @@ class CourseMaintenanceController extends AbstractController
             ['value' => 'glossary', 'label' => 'Glossary'],
             ['value' => 'learnpaths', 'label' => 'Paths learning'],
             ['value' => 'tool_intro', 'label' => 'Course Introduction'],
+            ['value' => 'course_description', 'label' => 'Course descriptions'],
         ];
 
         $defaults['tools'] = array_column($tools, 'value');
@@ -709,6 +710,7 @@ class CourseMaintenanceController extends AbstractController
                 'learnpaths', 'learnpath_category',
                 'works', 'glossary',
                 'tool_intro',
+                'course_descriptions',
             ];
 
             // Use client tools if provided; otherwise our Moodle-safe defaults
@@ -774,14 +776,14 @@ class CourseMaintenanceController extends AbstractController
     {
         $this->setDebugFromRequest($req);
 
-        $p = json_decode($req->getContent() ?: '{}', true);
-        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');
-        $scope = (string) ($p['scope'] ?? 'full');
-        $adminId = (int) ($p['adminId'] ?? 0);
-        $adminLogin = trim((string) ($p['adminLogin'] ?? ''));
-        $adminEmail = trim((string) ($p['adminEmail'] ?? ''));
-        $selected = (array) ($p['resources'] ?? []);
-        $toolsInput = (array) ($p['tools'] ?? []);
+        $p = json_decode($req->getContent() ?: '{}', true) ?: [];
+        $moodleVersion = (string) ($p['moodleVersion'] ?? '4');  // "3" | "4"
+        $scope         = (string) ($p['scope'] ?? 'full');       // "full" | "selected"
+        $adminId       = (int) ($p['adminId'] ?? 0);
+        $adminLogin    = trim((string) ($p['adminLogin'] ?? ''));
+        $adminEmail    = trim((string) ($p['adminEmail'] ?? ''));
+        $selected      = is_array($p['resources'] ?? null) ? (array) $p['resources'] : [];
+        $toolsInput    = is_array($p['tools'] ?? null) ? (array) $p['tools'] : [];
 
         if (!\in_array($moodleVersion, ['3', '4'], true)) {
             return $this->json(['error' => 'Unsupported Moodle version'], 400);
@@ -790,7 +792,15 @@ class CourseMaintenanceController extends AbstractController
             return $this->json(['error' => 'No resources selected'], 400);
         }
 
-        // Normalize tools from client (adds implied deps)
+        $defaultTools = [
+            'documents', 'links', 'forums',
+            'quizzes', 'quiz_questions',
+            'surveys', 'survey_questions',
+            'learnpaths', 'learnpath_category',
+            'works', 'glossary',
+            'course_descriptions',
+        ];
+
         $tools = $this->normalizeSelectedTools($toolsInput);
 
         // If scope=selected, merge inferred tools from selection
@@ -799,64 +809,86 @@ class CourseMaintenanceController extends AbstractController
             $tools = $this->normalizeSelectedTools(array_merge($tools, $inferred));
         }
 
+        // Remove unsupported tools
         $tools = array_values(array_unique(array_diff($tools, ['gradebook'])));
-        if (!in_array('tool_intro', $tools, true)) {
-            $tools[] = 'tool_intro';
+        $clientSentNoTools = empty($toolsInput);
+        $useDefault = ($scope === 'full' && $clientSentNoTools);
+        $toolsToBuild = $useDefault ? $defaultTools : $tools;
+
+        // Ensure "tool_intro" is present (append only if missing)
+        if (!in_array('tool_intro', $toolsToBuild, true)) {
+            $toolsToBuild[] = 'tool_intro';
         }
 
-        if ($adminId <= 0 || '' === $adminLogin || '' === $adminEmail) {
-            $adm = $users->getDefaultAdminForExport();
-            $adminId = $adminId > 0 ? $adminId : (int) ($adm['id'] ?? 1);
-            $adminLogin = '' !== $adminLogin ? $adminLogin : (string) ($adm['username'] ?? 'admin');
-            $adminEmail = '' !== $adminEmail ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
+        // Final dedupe/normalize
+        $toolsToBuild = array_values(array_unique($toolsToBuild));
+
+        $this->logDebug('[moodleExportExecute] course tools to build (final)', $toolsToBuild);
+
+        if ($adminId <= 0 || $adminLogin === '' || $adminEmail === '') {
+            $adm        = $users->getDefaultAdminForExport();
+            $adminId    = $adminId > 0 ? $adminId : (int) ($adm['id'] ?? 1);
+            $adminLogin = $adminLogin !== '' ? $adminLogin : (string) ($adm['username'] ?? 'admin');
+            $adminEmail = $adminEmail !== '' ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
         }
 
-        $this->logDebug('[moodleExportExecute] tools for CourseBuilder', $tools);
+        $courseId = api_get_course_id();
+        if (empty($courseId)) {
+            return $this->json(['error' => 'No active course context'], 400);
+        }
 
-        // Build legacy Course from CURRENT course
         $cb = new CourseBuilder();
-        $cb->set_tools_to_build(!empty($tools) ? $tools : [
-            // Fallback should mirror the Moodle-safe list used in the picker
-            'documents', 'links', 'forums',
-            'quizzes', 'quiz_questions',
-            'surveys', 'survey_questions',
-            'learnpaths', 'learnpath_category',
-            'works', 'glossary',
-            'tool_intro',
-        ]);
-        $course = $cb->build(0, api_get_course_id());
+        $cb->set_tools_to_build($toolsToBuild);
+        $course = $cb->build(0, $courseId);
 
-        // IMPORTANT: when scope === 'selected', use the same robust selection filter as copy-course
         if ('selected' === $scope) {
-            // This method trims buckets to only selected items and pulls needed deps (LP/quiz/survey)
             $course = $this->filterLegacyCourseBySelection($course, $selected);
-            // Safety guard: fail if nothing remains after filtering
             if (empty($course->resources) || !\is_array($course->resources)) {
                 return $this->json(['error' => 'Selection produced no resources to export'], 400);
             }
         }
 
         try {
-            // Pass selection flag to exporter so it does NOT re-hydrate from a complete snapshot.
-            $selectionMode = ('selected' === $scope);
+            // === Export to Moodle MBZ ===
+            $selectionMode = ($scope === 'selected');
             $exporter = new MoodleExport($course, $selectionMode);
             $exporter->setAdminUserData($adminId, $adminLogin, $adminEmail);
 
-            $courseId = api_get_course_id();
-            $exportDir = 'moodle_export_'.date('Ymd_His');
-            $versionNum = ('3' === $moodleVersion) ? 3 : 4;
+            $exportDir  = 'moodle_export_' . date('Ymd_His');
+            $versionNum = ($moodleVersion === '3') ? 3 : 4;
+
+            $this->logDebug('[moodleExportExecute] starting exporter', [
+                'courseId'    => $courseId,
+                'exportDir'   => $exportDir,
+                'versionNum'  => $versionNum,
+                'selection'   => $selectionMode,
+                'scope'       => $scope,
+            ]);
 
             $mbzPath = $exporter->export($courseId, $exportDir, $versionNum);
 
+            if (!\is_string($mbzPath) || $mbzPath === '' || !is_file($mbzPath)) {
+                return $this->json(['error' => 'Moodle export failed: artifact not found'], 500);
+            }
+
+            // Build download response
             $resp = new BinaryFileResponse($mbzPath);
             $resp->setContentDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 basename($mbzPath)
             );
+            $resp->headers->set('X-Moodle-Version', (string) $versionNum);
+            $resp->headers->set('X-Export-Scope', $scope);
+            $resp->headers->set('X-Selection-Mode', $selectionMode ? '1' : '0');
 
             return $resp;
-        } catch (Throwable $e) {
-            return $this->json(['error' => 'Moodle export failed: '.$e->getMessage()], 500);
+        } catch (\Throwable $e) {
+            $this->logDebug('[moodleExportExecute] exception', [
+                'message' => $e->getMessage(),
+                'code'    => (int) $e->getCode(),
+            ]);
+
+            return $this->json(['error' => 'Moodle export failed: ' . $e->getMessage()], 500);
         }
     }
 
@@ -3145,7 +3177,7 @@ class CourseMaintenanceController extends AbstractController
             'survey_questions' => RESOURCE_SURVEYQUESTION,
             'announcements' => RESOURCE_ANNOUNCEMENT,
             'events' => RESOURCE_EVENT,
-            'course_descriptions' => RESOURCE_COURSEDESCRIPTION,
+            'course_description' => RESOURCE_COURSEDESCRIPTION,
             'glossary' => RESOURCE_GLOSSARY,
             'wiki' => RESOURCE_WIKI,
             'thematic' => RESOURCE_THEMATIC,
@@ -3608,6 +3640,7 @@ class CourseMaintenanceController extends AbstractController
         if ($has('work'))     { $want[] = 'works'; }
         if ($has('glossary')) { $want[] = 'glossary'; }
         if ($has('tool_intro')) { $want[] = 'tool_intro'; }
+        if ($has('course_descriptions') || $has('course_description')) { $tools[] = 'course_descriptions'; }
 
         // Dedup
         return array_values(array_unique(array_filter($want)));

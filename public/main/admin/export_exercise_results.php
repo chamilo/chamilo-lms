@@ -26,7 +26,7 @@ $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : n
 $user = api_get_user_entity(api_get_user_id());
 $sessionRepository = Container::getSessionRepository();
 $courseRepository = Container::getCourseRepository();
-$cQuizRepository = Container::getCQuizRepository();
+$cQuizRepository = Container::getQuizRepository();
 
 // Load sessions using repository
 $sessionSelectList = [0 => get_lang('Select')];

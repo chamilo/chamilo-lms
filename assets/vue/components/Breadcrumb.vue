@@ -6,7 +6,7 @@
     <Breadcrumb :model="itemList">
       <template #item="{ item, props }">
         <BaseAppLink
-          v-if="item.route || item.url"
+          v-if="(item.route || item.url) && !item.noLink"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
@@ -14,7 +14,11 @@
         >
           {{ item.label }}
         </BaseAppLink>
-        <span v-else>{{ item.label }}</span>
+        <span
+          v-else
+          class="app-breadcrumb__nolink"
+          >{{ item.label }}</span
+        >
       </template>
 
       <template #separator> /</template>
@@ -69,6 +73,12 @@ const formatToolName = (name) => {
     .replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
+const linkDisabled = (routeName) => {
+  // find matched record for current route and check meta flag
+  const m = route.matched.find((r) => r.name === routeName)
+  return m?.meta?.breadcrumbLink === false
+}
+
 const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName) => {
   itemList.value.push({
     label: t(formatToolName(toolName)),
@@ -95,11 +105,13 @@ const addToolWithResourceBreadcrumb = (toolName, listRouteName, detailRouteName)
 
   const currentMatched = route.matched.find((r) => r.name === route.name)
   const label = currentMatched?.meta?.breadcrumb || formatToolName(route.name)
+  const disabled = linkDisabled(route.name)
 
   if (route.name !== detailRouteName) {
     itemList.value.push({
       label: t(label),
-      route: { name: route.name, params: route.params, query: route.query },
+      route: disabled ? undefined : { name: route.name, params: route.params, query: route.query },
+      noLink: disabled,
     })
   }
 }

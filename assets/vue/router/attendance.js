@@ -37,7 +37,7 @@ export default {
       name: "AttendanceAddCalendarEvent",
       path: ":id/calendar/create",
       component: () => import("../views/attendance/AttendanceCalendarAdd.vue"),
-      meta: { breadcrumb: "Add calendar" },
+      meta: { breadcrumb: "Add calendar", breadcrumbLink: false },
     },
     {
       name: "ExportToPdf",

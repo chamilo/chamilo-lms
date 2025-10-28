@@ -971,6 +971,7 @@ img.course-tool__icon {
   .form-horizontal .control-label{ text-align:left; }
   textarea.form-control{ min-height:140px; }
 }
+.app-breadcrumb__nolink {font-weight: normal !important;cursor: default !important;text-decoration: none;font-size: 11px;line-height: 17px;}
 
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";

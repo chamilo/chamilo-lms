@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Service\StandardizationService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Polyfill\Intl\Normalizer\Normalizer;
 
-
 /**
  * Class UserGroup.
  *

@@ -517,6 +517,65 @@ class CourseRestorer
             error_log('[RESTORE:HTMLURL] '.$msg.(empty($ctx) ? '' : ' '.json_encode($ctx)));
         };
 
+        // Helper: returns the logical path from source CDocument (starts with "/")
+        $getLogicalPathFromSource = function ($sourceId) use ($docRepo): string {
+            $doc = $docRepo->find((int) $sourceId);
+            if ($doc && method_exists($doc, 'getPath')) {
+                $p = (string) $doc->getPath();
+                return $p !== '' && $p[0] === '/' ? $p : '/'.$p;
+            }
+            return '';
+        };
+
+        // Reserved top-level containers that must not leak into destination when copying
+        $reservedTopFolders = ['certificates', 'learnpaths'];
+
+        // Normalize any incoming "rel" to avoid internal reserved prefixes leaking into the destination tree.
+        $normalizeRel = function (string $rel) use ($copyMode): string {
+            // Always ensure a single leading slash
+            $rel = '/'.ltrim($rel, '/');
+
+            // Collapse any repeated /document/ prefixes (e.g., /document/document/…)
+            while (preg_match('#^/document/#i', $rel)) {
+                $rel = preg_replace('#^/document/#i', '/', $rel, 1);
+            }
+
+            // Flatten "/certificates/{portal}/{course}/..." → "/..."
+            if (preg_match('#^/certificates/[^/]+/[^/]+(?:/(.*))?$#i', $rel, $m)) {
+                $rest = $m[1] ?? '';
+                return $rest === '' ? '/' : '/'.ltrim($rest, '/');
+            }
+            // Fallback: strip generic "certificates/" container if it still shows up
+            if (preg_match('#^/certificates/(.*)$#i', $rel, $m)) {
+                return '/'.ltrim($m[1], '/');
+            }
+
+            // Flatten "/{host}/{course}/..." → "/..." only in COPY mode
+            if ($copyMode && preg_match('#^/([^/]+)/([^/]+)(?:/(.*))?$#', $rel, $m)) {
+                $host   = $m[1];
+                $course = $m[2];
+                $rest   = $m[3] ?? '';
+
+                $hostLooksLikeHostname = ($host === 'localhost') || str_contains($host, '.');
+                $courseLooksLikeCode   = (bool) preg_match('/^[A-Za-z0-9_\-]{3,}$/', $course);
+
+                if ($hostLooksLikeHostname && $courseLooksLikeCode) {
+                    return $rest === '' ? '/' : '/'.ltrim($rest, '/');
+                }
+            }
+
+            // Optionally flatten learnpath containers only in COPY mode
+            if ($copyMode && preg_match('#^/(?:learnpaths?|lp)/[^/]+/(.*)$#i', $rel, $m)) {
+                return '/'.ltrim($m[1], '/');
+            }
+            if ($copyMode && preg_match('#^/(?:learnpaths?|lp)/(.*)$#i', $rel, $m)) {
+                return '/'.ltrim($m[1], '/');
+            }
+
+            // Nothing to normalize
+            return $rel;
+        };
+
         // Ensure a folder chain exists under Documents (skipping "document" as root)
         $ensureFolder = function (string $relPath) use ($docRepo, $courseEntity, $courseInfo, $session_id, $DBG) {
             $rel = '/'.ltrim($relPath, '/');
@@ -614,9 +673,32 @@ class CourseRestorer
                 continue;
             }
 
-            // Strip leading "document/"
-            $rel = '/'.ltrim(substr($item->path, 8), '/');
+            // Build destination folder path:
+            // - In copy mode prefer the logical path from the source document (stable),
+            //   otherwise strip leading "document/" from archive path.
+            if ($copyMode && !empty($item->source_id)) {
+                $rel = $getLogicalPathFromSource($item->source_id);
+                if ($rel === '') {
+                    $rel = '/'.ltrim(substr($item->path, 8), '/');
+                }
+            } else {
+                // Strip leading "document/"
+                $rel = '/'.ltrim(substr($item->path, 8), '/');
+            }
+
+            $origRelX = $rel;
+            $rel = $normalizeRel($rel);
+            if ($rel !== $origRelX) {
+                $DBG('normalizeRel:folder', ['from' => $origRelX, 'to' => $rel]);
+            }
+
             if ($rel === '/') {
+                continue;
+            }
+
+            // Avoid creating internal system folders at root in copy mode
+            $firstSeg = explode('/', trim($rel, '/'))[0] ?? '';
+            if ($copyMode && in_array($firstSeg, $reservedTopFolders, true)) {
                 continue;
             }
 
@@ -781,10 +863,35 @@ class CourseRestorer
                 }
             }
 
-            $isHtml    = $isHtmlFile($srcPath, $rawTitle);
-            $rel       = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
+            $isHtml = $isHtmlFile($srcPath, $rawTitle);
+
+            // Build destination file path:
+            // - In copy mode base on the logical source path
+            // - Otherwise, strip "document/" from archive path
+            if ($copyMode && !empty($item->source_id)) {
+                $rel = $getLogicalPathFromSource($item->source_id);
+                if ($rel === '') {
+                    $rel = '/'.ltrim(substr($item->path, 8), '/'); // fallback
+                }
+            } else {
+                $rel = '/'.ltrim(substr($item->path, 8), '/'); // remove "document" prefix
+            }
+
+            $origRelF = $rel;
+            $rel = $normalizeRel($rel); // <- critical: flatten internal containers in copy mode
+            if ($rel !== $origRelF) {
+                $DBG('normalizeRel:file', ['from' => $origRelF, 'to' => $rel]);
+            }
+
+            // If it still comes from a reserved top-level folder, flatten to the basename (safety)
+            $firstSeg = explode('/', trim($rel, '/'))[0] ?? '';
+            if ($copyMode && in_array($firstSeg, $reservedTopFolders, true)) {
+                $rel = '/'.basename($rel);
+            }
+
             $parentRel = rtrim(\dirname($rel), '/');
 
+            // Avoid re-copying already mapped non-HTML assets (images, binaries) if we already created them
             if (!empty($item->destination_id) && !$isHtml) {
                 $maybeExisting = $docRepo->find((int) $item->destination_id);
                 if ($maybeExisting) {
@@ -5528,9 +5635,9 @@ class CourseRestorer
         if (!empty($context)) {
             try {
                 $ctx = ' '.json_encode(
-                    $context,
-                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
-                );
+                        $context,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PARTIAL_OUTPUT_ON_ERROR
+                    );
             } catch (Throwable $e) {
                 $ctx = ' [context_json_failed: '.$e->getMessage().']';
             }

@@ -25,62 +25,128 @@ class GlossaryExport extends ActivityExport
      */
     public function export($activityId, $exportDir, $moduleId, $sectionId): void
     {
-        // Prepare destination directory for the activity
         $glossaryDir = $this->prepareActivityDirectory($exportDir, 'glossary', (int) $moduleId);
 
-        // Collect data
-        $glossaryData = $this->getData((int) $activityId, (int) $sectionId);
+        $glossaryData = $this->getData((int) $activityId, (int) $sectionId, (int) $moduleId);
 
-        // Generate XML files for the glossary
         $this->createGlossaryXml($glossaryData, $glossaryDir);
         $this->createModuleXml($glossaryData, $glossaryDir);
         $this->createGradesXml($glossaryData, $glossaryDir);
         $this->createGradeHistoryXml($glossaryData, $glossaryDir);
-        $this->createInforefXml($glossaryData, $glossaryDir); // relies on 'users' and 'files' keys
+        $this->createInforefXml($glossaryData, $glossaryDir);
         $this->createRolesXml($glossaryData, $glossaryDir);
         $this->createCalendarXml($glossaryData, $glossaryDir);
         $this->createCommentsXml($glossaryData, $glossaryDir);
         $this->createCompetenciesXml($glossaryData, $glossaryDir);
         $this->createFiltersXml($glossaryData, $glossaryDir);
+
+        MoodleExport::flagActivityUserinfo('glossary', (int) $moduleId, true);
     }
 
     /**
-     * Gather all terms from the course and group them under a single glossary activity.
+     * Gather all terms and build a single glossary activity dataset.
      */
-    public function getData(int $glossaryId, int $sectionId): array
+    public function getData(int $glossaryId, int $sectionId, ?int $moduleId = null): array
     {
-        $adminData = MoodleExport::getAdminUserData();
-        $adminId = (int) ($adminData['id'] ?? 0);
+        if ($moduleId === null) {
+            $moduleId = $glossaryId;
+        }
 
-        $entries = [];
-        if (!empty($this->course->resources['glossary'])) {
-            foreach ($this->course->resources['glossary'] as $g) {
+        $adminData = MoodleExport::getAdminUserData();
+        $adminId   = (int) ($adminData['id'] ?? 0);
+
+        $res  = \is_array($this->course->resources ?? null) ? $this->course->resources : [];
+        $bags = [];
+        if (\defined('RESOURCE_GLOSSARY') && !empty($res[RESOURCE_GLOSSARY]) && \is_array($res[RESOURCE_GLOSSARY])) {
+            $bags[] = $res[RESOURCE_GLOSSARY];
+        }
+        foreach (['glossary', 'glossary_definition', 'glossary_terms'] as $k) {
+            if (!empty($res[$k]) && \is_array($res[$k])) {
+                $bags[] = $res[$k];
+            }
+        }
+
+        $entries   = [];
+        $seen      = [];
+        $nextId    = 1;
+        $userIds   = [];
+
+        $norm = static function (string $s): string {
+            $s = trim($s);
+            $s = mb_strtolower($s, 'UTF-8');
+            return $s;
+        };
+
+        foreach ($bags as $bag) {
+            foreach ($bag as $g) {
+                $o = (\is_object($g) && isset($g->obj) && \is_object($g->obj)) ? $g->obj : $g;
+                if (!\is_object($o)) {
+                    continue;
+                }
+
+                $concept = '';
+                foreach (['name', 'term', 'title'] as $k) {
+                    if (!empty($o->{$k}) && \is_string($o->{$k})) {
+                        $concept = trim((string) $o->{$k});
+                        break;
+                    }
+                }
+                if ($concept === '') {
+                    continue;
+                }
+
+                $key = $norm($concept);
+                if (isset($seen[$key])) {
+                    continue;
+                }
+                $seen[$key] = true;
+
+                $definition = '';
+                foreach (['description','definition','comment','text'] as $k) {
+                    if (isset($o->{$k}) && \is_string($o->{$k})) {
+                        $definition = (string) $o->{$k};
+                        break;
+                    }
+                }
+
+                $aliases = [];
+                $lc = mb_strtolower($concept, 'UTF-8');
+                if ($lc !== $concept) {
+                    $aliases[] = $lc;
+                }
+
                 $entries[] = [
-                    'id' => (int) ($g->glossary_id ?? 0),
-                    'userid' => $adminId,
-                    'concept' => (string) ($g->name ?? ''),
-                    'definition' => (string) ($g->description ?? ''),
-                    'timecreated' => time(),
+                    'id'           => $nextId++,
+                    'userid'       => $adminId,
+                    'concept'      => $concept,
+                    'definition'   => $definition,
+                    'timecreated'  => time(),
                     'timemodified' => time(),
+                    'aliases'      => $aliases,
                 ];
             }
         }
 
+        if ($adminId > 0) {
+            $userIds[$adminId] = true;
+        }
+
         return [
-            'id' => $glossaryId,
-            'moduleid' => $glossaryId,
-            'modulename' => 'glossary',
-            'contextid' => (int) ($this->course->info['real_id'] ?? 0),
-            'name' => get_lang('Glossary'),
-            'description' => '',
-            'timecreated' => time(),
-            'timemodified' => time(),
-            'sectionid' => $sectionId,
-            'sectionnumber' => 0,
-            'userid' => $adminId,
-            'entries' => $entries,
-            'users' => [$adminId],
-            'files' => [], // no file refs for glossary entries (plain text)
+            'id'               => $glossaryId,
+            'moduleid'         => (int) $moduleId,
+            'modulename'       => 'glossary',
+            'contextid'        => (int) ($this->course->info['real_id'] ?? 0),
+            'name'             => get_lang('Glossary'),
+            'description'      => '',
+            'timecreated'      => time(),
+            'timemodified'     => time(),
+            'sectionid'        => $sectionId,
+            'sectionnumber'    => 0,
+            'userid'           => $adminId,
+            'entries'          => $entries,
+            'users'            => array_map('intval', array_keys($userIds)),
+            'files'            => [],
+            'include_userinfo' => true,
         ];
     }
 
@@ -89,11 +155,19 @@ class GlossaryExport extends ActivityExport
      */
     private function createGlossaryXml(array $glossaryData, string $glossaryDir): void
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $esc = static function (?string $html): string {
+            return htmlspecialchars((string) $html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        };
+
+        $introHtml = $glossaryData['description'] !== ''
+            ? $glossaryData['description']
+            : '<p>'.get_lang('Glossary').'</p>';
+
+        $xml  = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
         $xml .= '<activity id="'.$glossaryData['id'].'" moduleid="'.$glossaryData['moduleid'].'" modulename="'.$glossaryData['modulename'].'" contextid="'.$glossaryData['contextid'].'">'.PHP_EOL;
         $xml .= '  <glossary id="'.$glossaryData['id'].'">'.PHP_EOL;
-        $xml .= '    <name>'.htmlspecialchars((string) $glossaryData['name']).'</name>'.PHP_EOL;
-        $xml .= '    <intro></intro>'.PHP_EOL;
+        $xml .= '    <name>'.$esc((string) $glossaryData['name']).'</name>'.PHP_EOL;
+        $xml .= '    <intro>'.$esc($introHtml).'</intro>'.PHP_EOL;
         $xml .= '    <introformat>1</introformat>'.PHP_EOL;
         $xml .= '    <allowduplicatedentries>0</allowduplicatedentries>'.PHP_EOL;
         $xml .= '    <displayformat>dictionary</displayformat>'.PHP_EOL;
@@ -123,8 +197,8 @@ class GlossaryExport extends ActivityExport
         foreach ($glossaryData['entries'] as $entry) {
             $xml .= '      <entry id="'.$entry['id'].'">'.PHP_EOL;
             $xml .= '        <userid>'.$entry['userid'].'</userid>'.PHP_EOL;
-            $xml .= '        <concept>'.htmlspecialchars((string) $entry['concept']).'</concept>'.PHP_EOL;
-            $xml .= '        <definition><![CDATA['.$entry['definition'].']]></definition>'.PHP_EOL;
+            $xml .= '        <concept>'.$esc((string) $entry['concept']).'</concept>'.PHP_EOL;
+            $xml .= '        <definition>'.$esc((string) $entry['definition']).'</definition>'.PHP_EOL;
             $xml .= '        <definitionformat>1</definitionformat>'.PHP_EOL;
             $xml .= '        <definitiontrust>0</definitiontrust>'.PHP_EOL;
             $xml .= '        <attachment></attachment>'.PHP_EOL;
@@ -132,12 +206,22 @@ class GlossaryExport extends ActivityExport
             $xml .= '        <timemodified>'.$entry['timemodified'].'</timemodified>'.PHP_EOL;
             $xml .= '        <teacherentry>1</teacherentry>'.PHP_EOL;
             $xml .= '        <sourceglossaryid>0</sourceglossaryid>'.PHP_EOL;
-            $xml .= '        <usedynalink>0</usedynalink>'.PHP_EOL;
+            $xml .= '        <usedynalink>1</usedynalink>'.PHP_EOL;
             $xml .= '        <casesensitive>0</casesensitive>'.PHP_EOL;
             $xml .= '        <fullmatch>0</fullmatch>'.PHP_EOL;
             $xml .= '        <approved>1</approved>'.PHP_EOL;
-            $xml .= '        <ratings>'.PHP_EOL;
-            $xml .= '        </ratings>'.PHP_EOL;
+            $xml .= '        <aliases>'.PHP_EOL;
+            $aliasId = 1;
+            if (!empty($entry['aliases']) && \is_array($entry['aliases'])) {
+                foreach ($entry['aliases'] as $a) {
+                    $xml .= '          <alias id="'.$aliasId.'">'.PHP_EOL;
+                    $xml .= '            <alias_text>'.$esc((string) $a).'</alias_text>'.PHP_EOL;
+                    $xml .= '          </alias>'.PHP_EOL;
+                    $aliasId++;
+                }
+            }
+            $xml .= '        </aliases>'.PHP_EOL;
+            $xml .= '        <ratings></ratings>'.PHP_EOL;
             $xml .= '      </entry>'.PHP_EOL;
         }
         $xml .= '    </entries>'.PHP_EOL;

@@ -2592,15 +2592,15 @@ switch ($action) {
                         ],
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Remove')),
-                            'url' => 'class.php?action=remove_class_from_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&id_session=' . api_get_session_id(),
-                            'onclick' => "if (!confirm('". get_lang('Are you sure you want to remove the class') . "')) return false;"
+                            'url' => 'class.php?action=remove_class_from_course&id='.$group['id'].'&'.api_get_cidreq().'&id_session='.api_get_session_id(),
+                            'onclick' => "if (!confirm('".get_lang('Are you sure you want to remove the class')."')) return false;"
                         ],
                     ];
                 } else {
                     $actions = [
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Add')),
-                            'url' => 'class.php?action=add_class_to_course&id=' . $group['id'] . '&' . api_get_cidreq() . '&type=not_registered',
+                            'url' => 'class.php?action=add_class_to_course&id='.$group['id'].'&'.api_get_cidreq().'&type=not_registered',
                         ]
                     ];
                 }
@@ -2622,8 +2622,8 @@ switch ($action) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
                         $group['actions'] .= Display::url(
                                 Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Statistics')),
-                                $urlUserGroup . '&id=' . $group['id']
-                            ) . '&nbsp;';
+                                $urlUserGroup.'&id='.$group['id']
+                            ).'&nbsp;';
                     }
 
                     for ($i = 0; $i < count($actions); $i++) {

@@ -198,7 +198,7 @@
             });
         {% endif %}
 
-        {% if is_culqi_payment %}
+        {% if is_culqi_payment|default(false)  %}
             var price = {{ price }} * 100;
 
             Culqi.codigoComercio = '{{ culqi_params.commerce_code }}';

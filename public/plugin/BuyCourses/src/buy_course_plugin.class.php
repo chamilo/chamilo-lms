@@ -999,6 +999,7 @@ class BuyCoursesPlugin extends Plugin
             'tax_amount' => $taxAmount,
             'status' => self::SALE_STATUS_PENDING,
             'payment_type' => (int) $paymentType,
+            'invoice' => 0, //default value if no invoice
         ];
 
         return Database::insert(self::TABLE_SALE, $values);

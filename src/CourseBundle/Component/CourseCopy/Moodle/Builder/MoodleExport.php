@@ -12,6 +12,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\AssignExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\FeedbackExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ForumExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\GlossaryExport;
+use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\LabelExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\PageExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\QuizExport;
 use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Activities\ResourceExport;
@@ -44,6 +45,8 @@ class MoodleExport
      * @var bool selection flag (true when exporting only selected items)
      */
     private bool $selectionMode = false;
+
+    protected static array $activityUserinfo = [];
 
     /**
      * Constructor to initialize the course object.
@@ -100,8 +103,6 @@ class MoodleExport
         $this->createMoodleBackupXml($tempDir, $version);
         @error_log('[MoodleExport::export] moodle_backup.xml generated');
 
-        // 2) <<< INSERT HERE >>> Enqueue URL activities before collecting all activities
-        //    We build URL activities from the "link" bucket and push them into the pipeline.
         //    This must happen BEFORE calling getActivities() so they are included.
         if (method_exists($this, 'enqueueUrlActivities')) {
             @error_log('[MoodleExport::export] Enqueuing URL activities …');
@@ -111,16 +112,16 @@ class MoodleExport
             @error_log('[MoodleExport::export][WARN] enqueueUrlActivities() not found; skipping URL activities');
         }
 
-        // 3) Gather activities (now includes URLs)
+        // Gather activities (now includes URLs)
         $activities = $this->getActivities();
         @error_log('[MoodleExport::export] Activities count='.count($activities));
 
-        // 4) Export course structure (sections + activities metadata)
+        // Export course structure (sections + activities metadata)
         $courseExport = new CourseExport($this->course, $activities);
         $courseExport->exportCourse($tempDir);
         @error_log('[MoodleExport::export] course/ exported');
 
-        // 5) Page export (collect extra files from HTML pages)
+        // Page export (collect extra files from HTML pages)
         $pageExport = new PageExport($this->course);
         $pageFiles = [];
         $pageData = $pageExport->getData(0, 1);
@@ -129,7 +130,7 @@ class MoodleExport
         }
         @error_log('[MoodleExport::export] pageFiles from PageExport='.count($pageFiles));
 
-        // 6) Files export (documents, attachments, + pages’ files)
+        // Files export (documents, attachments, + pages’ files)
         $fileExport = new FileExport($this->course);
         $filesData = $fileExport->getFilesData();
         @error_log('[MoodleExport::export] getFilesData='.count($filesData['files'] ?? []));
@@ -137,19 +138,21 @@ class MoodleExport
         @error_log('[MoodleExport::export] merged files='.count($filesData['files'] ?? []));
         $fileExport->exportFiles($filesData, $tempDir);
 
-        // 7) Sections export (topics/weeks descriptors)
+        // Sections export (topics/weeks descriptors)
         $this->exportSections($tempDir);
         @error_log('[MoodleExport::export] sections/ exported');
 
-        // 8) Root XMLs (course/activities indexes)
+        $this->exportLabelActivities($activities, $tempDir);
+
+        // Root XMLs (course/activities indexes)
         $this->exportRootXmlFiles($tempDir);
         @error_log('[MoodleExport::export] root XMLs exported');
 
-        // 9) Create .mbz archive
+        // Create .mbz archive
         $exportedFile = $this->createMbzFile($tempDir);
         @error_log('[MoodleExport::export] mbz created at '.$exportedFile);
 
-        // 10) Cleanup temp dir
+        // Cleanup temp dir
         $this->cleanupTempDir($tempDir);
         @error_log('[MoodleExport::export] tempDir removed '.$tempDir);
 
@@ -263,6 +266,11 @@ class MoodleExport
     public static function getAdminUserData(): array
     {
         return self::$adminUserData;
+    }
+
+    public static function flagActivityUserinfo(string $modname, int $moduleId, bool $hasUserinfo): void
+    {
+        self::$activityUserinfo[$modname][$moduleId] = $hasUserinfo;
     }
 
     /**
@@ -437,15 +445,50 @@ class MoodleExport
             }
         }
 
+        // Append only "label" activities discovered by getActivities(), with dedupe
+        foreach ($this->getActivities() as $a) {
+            $modname  = (string) ($a['modulename'] ?? '');
+            if ($modname !== 'label') {
+                continue; // keep minimal: only labels are missing in backup XML
+            }
+
+            $moduleid = (int) ($a['moduleid'] ?? 0);
+            if ($moduleid <= 0) {
+                continue;
+            }
+
+            $key = $modname.':'.$moduleid;
+            if (isset($seenActs[$key])) {
+                continue; // already present via sections, skip to avoid duplicates
+            }
+            $seenActs[$key] = true;
+
+            // Ensure we propagate title and section for the backup XML
+            $activitiesFlat[] = [
+                'moduleid'  => $moduleid,
+                'sectionid' => (int) ($a['sectionid'] ?? 0),
+                'modulename'=> 'label',
+                'title'     => (string) ($a['title'] ?? ''),
+            ];
+        }
+
         if (!empty($activitiesFlat)) {
             $xmlContent .= '      <activities>'.PHP_EOL;
             foreach ($activitiesFlat as $activity) {
+                $modname  = (string) $activity['modulename'];
+                $moduleid = (int)    $activity['moduleid'];
+                $sectionid= (int)    $activity['sectionid'];
+                $title    = (string) $activity['title'];
+
+                $hasUserinfo = self::$activityUserinfo[$modname][$moduleid] ?? false;
+
                 $xmlContent .= '        <activity>'.PHP_EOL;
-                $xmlContent .= '          <moduleid>'.$activity['moduleid'].'</moduleid>'.PHP_EOL;
-                $xmlContent .= '          <sectionid>'.$activity['sectionid'].'</sectionid>'.PHP_EOL;
-                $xmlContent .= '          <modulename>'.htmlspecialchars((string) $activity['modulename']).'</modulename>'.PHP_EOL;
-                $xmlContent .= '          <title>'.htmlspecialchars((string) $activity['title']).'</title>'.PHP_EOL;
-                $xmlContent .= '          <directory>activities/'.$activity['modulename'].'_'.$activity['moduleid'].'</directory>'.PHP_EOL;
+                $xmlContent .= '          <moduleid>'.$moduleid.'</moduleid>'.PHP_EOL;
+                $xmlContent .= '          <sectionid>'.$sectionid.'</sectionid>'.PHP_EOL;
+                $xmlContent .= '          <modulename>'.htmlspecialchars($modname).'</modulename>'.PHP_EOL;
+                $xmlContent .= '          <title>'.htmlspecialchars($title).'</title>'.PHP_EOL;
+                $xmlContent .= '          <directory>activities/'.$modname.'_'.$moduleid.'</directory>'.PHP_EOL;
+                $xmlContent .= '          <userinfo>'.($hasUserinfo ? '1' : '0').'</userinfo>'.PHP_EOL;
                 $xmlContent .= '        </activity>'.PHP_EOL;
             }
             $xmlContent .= '      </activities>'.PHP_EOL;
@@ -530,7 +573,6 @@ class MoodleExport
         return $sections;
     }
 
-    // src/.../MoodleExport.php
     private function getActivities(): array
     {
         @error_log('[MoodleExport::getActivities] Start');
@@ -658,6 +700,13 @@ class MoodleExport
                     $moduleName = 'feedback';
                     $id = (int) $resource->source_id;
                     $title = (string) ($resource->params['title'] ?? '');
+                }
+                // Course descriptions
+                elseif (RESOURCE_COURSEDESCRIPTION === $resourceType && ($resource->source_id ?? 0) > 0) {
+                    $exportClass = LabelExport::class;
+                    $moduleName  = 'label';
+                    $id          = (int) $resource->source_id;
+                    $title       = (string) ($resource->title ?? '');
                 }
 
                 // Emit activity if resolved
@@ -853,6 +902,32 @@ class MoodleExport
         rmdir($dir);
     }
 
+    /**
+     * Export Label activities into activities/label_{id}/label.xml
+     * Keeps getActivities() side-effect free.
+     */
+    private function exportLabelActivities(array $activities, string $exportDir): void
+    {
+        foreach ($activities as $a) {
+            if (($a['modulename'] ?? '') !== 'label') {
+                continue;
+            }
+            try {
+                $label     = new LabelExport($this->course);
+                $activityId= (int) $a['id'];
+                $moduleId  = (int) $a['moduleid'];
+                $sectionId = (int) $a['sectionid'];
+
+                // Correct argument order: (activityId, exportDir, moduleId, sectionId)
+                $label->export($activityId, $exportDir, $moduleId, $sectionId);
+
+                @error_log('[MoodleExport::exportLabelActivities] exported label moduleid='.$moduleId.' sectionid='.$sectionId);
+            } catch (\Throwable $e) {
+                @error_log('[MoodleExport::exportLabelActivities][ERROR] '.$e->getMessage());
+            }
+        }
+    }
+
     private function exportBadgesXml(string $exportDir): void
     {
         $xmlContent = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
@@ -1042,11 +1117,12 @@ class MoodleExport
                 'name' => $activity['modulename'].'_'.$activity['moduleid'].'_included',
                 'value' => '1',
             ];
+            $value = (self::$activityUserinfo[$activity['modulename']][$activity['moduleid']] ?? false) ? '1' : '0';
             $settings[] = [
                 'level' => 'activity',
                 'activity' => $activity['modulename'].'_'.$activity['moduleid'],
                 'name' => $activity['modulename'].'_'.$activity['moduleid'].'_userinfo',
-                'value' => '1',
+                'value' => $value,
             ];
         }
 

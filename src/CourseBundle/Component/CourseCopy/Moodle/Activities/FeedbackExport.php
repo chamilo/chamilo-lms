@@ -57,44 +57,111 @@ class FeedbackExport extends ActivityExport
      */
     public function getData(int $surveyId, int $sectionId): array
     {
-        // TODO: Replace this with your own provider if different:
-        // e.g. $adminId = $this->adminProvider->getAdminUserId();
         $adminData = MoodleExport::getAdminUserData();
         $adminId = (int) $adminData['id'];
 
         $survey = $this->course->resources['survey'][$surveyId] ?? null;
 
         $questions = [];
-        foreach ($this->course->resources['survey_question'] ?? [] as $question) {
-            if ((int) ($question->survey_id ?? 0) === $surveyId) {
-                $questions[] = [
-                    'id' => (int) $question->id,
-                    'text' => (string) $question->survey_question,
-                    'type' => (string) $question->survey_question_type,
-                    'options' => array_map(
-                        static fn ($answer) => $answer['option_text'],
-                        (array) ($question->answers ?? [])
-                    ),
-                    'position' => (int) ($question->sort ?? 0),
-                    'label' => '', // Keep empty unless you map labels explicitly
-                ];
+        foreach ($this->course->resources['survey_question'] ?? [] as $q) {
+            if ((int) ($q->survey_id ?? $q->obj->survey_id ?? 0) !== $surveyId) {
+                continue;
             }
+
+            $qo = (isset($q->obj) && is_object($q->obj)) ? $q->obj : $q;
+
+            $rawType = (string)($qo->type ?? $qo->survey_question_type ?? '');
+            $normalizedType = $this->normalizeChamiloType($rawType);
+
+            $options = $this->normalizeOptions($qo, $normalizedType);
+
+            $text = (string)($qo->survey_question ?? $q->survey_question ?? 'Question');
+            $text = trim($text);
+
+            $questions[] = [
+                'id'       => (int) ($qo->id ?? $q->id ?? 0),
+                'text'     => $text,
+                'type'     => $normalizedType,
+                'options'  => $options,
+                'position' => (int) ($qo->sort ?? $q->sort ?? 0),
+                'label'    => '',
+            ];
         }
 
         return [
-            'id' => $surveyId,
-            'moduleid' => $surveyId,
-            'modulename' => 'feedback',
-            'contextid' => (int) $this->course->info['real_id'],
-            'sectionid' => $sectionId,
+            'id'            => $surveyId,
+            'moduleid'      => $surveyId,
+            'modulename'    => 'feedback',
+            'type'          => 'mod',
+            'contextid'     => (int) $this->course->info['real_id'],
+            'sectionid'     => $sectionId,
             'sectionnumber' => 0,
-            'name' => (string) ($survey->title ?? ('Survey '.$surveyId)),
-            'intro' => (string) ($survey->intro ?? ''),
-            'timemodified' => time(),
-            'questions' => $questions,
-            'users' => [$adminId],
-            'files' => [],
+            'name'          => (string) ($survey->title ?? ('Survey '.$surveyId)),
+            'intro'         => (string) ($survey->intro ?? ''),
+            'timemodified'  => time(),
+            'questions'     => $questions,
+            'users'         => [$adminId],
+            'files'         => [],
         ];
+    }
+
+    /** Converts types used multiple times in Chamilo to the 6–7 we export to Moodle. */
+    private function normalizeChamiloType(string $t): string
+    {
+        $t = strtolower(trim($t));
+        return match ($t) {
+            'yes_no', 'yesno'                         => 'yesno',
+            'multiple_single', 'single', 'radio',
+            'multiplechoice'                          => 'multiplechoice',
+            'multiple_multiple', 'multiple', 'checks',
+            'multipleresponse'                        => 'multipleresponse',
+            'multiple_dropdown', 'dropdown', 'select' => 'dropdown',
+            'multiplechoiceother'                     => 'multiplechoiceother',
+            'open_short', 'short', 'textfield'        => 'textfield',
+            'open_long', 'open', 'textarea', 'comment'=> 'open',
+            'pagebreak'                               => 'pagebreak',
+            'numeric', 'number', 'score'              => 'numeric',
+            'percentage'                              => 'percentage',
+            default                                   => 'open',
+        };
+    }
+
+    /** Extract options without breaking if the shape changes (array of objects, string “A|B”, etc.) */
+    private function normalizeOptions(object $qo, string $normalizedType): array
+    {
+        if ($normalizedType === 'yesno') {
+            if (!empty($qo->answers)) {
+                $out = [];
+                foreach ($qo->answers as $a) {
+                    $txt = is_array($a) ? ($a['option_text'] ?? '') : (is_object($a) ? ($a->option_text ?? '') : (string)$a);
+                    $txt = trim((string)$txt);
+                    if ($txt !== '') { $out[] = $txt; }
+                }
+                if ($out) { return $out; }
+            }
+            return ['Yes','No'];
+        }
+
+        if (!empty($qo->answers) && is_iterable($qo->answers)) {
+            $out = [];
+            foreach ($qo->answers as $a) {
+                $txt = is_array($a) ? ($a['option_text'] ?? '') : (is_object($a) ? ($a->option_text ?? '') : (string)$a);
+                $txt = trim((string)$txt);
+                if ($txt !== '') { $out[] = $txt; }
+            }
+            if ($out) { return $out; }
+        }
+
+        if (!empty($qo->options) && is_string($qo->options)) {
+            $out = array_values(array_filter(array_map('trim', explode('|', $qo->options)), 'strlen'));
+            if ($out) { return $out; }
+        }
+
+        if ($normalizedType === 'percentage') {
+            return range(1, 100);
+        }
+
+        return [];
     }
 
     /**
@@ -133,24 +200,24 @@ class FeedbackExport extends ActivityExport
         $this->createXmlFile('feedback', $xml, $feedbackDir);
     }
 
-    /**
-     * Render a single question in Moodle Feedback XML format.
-     */
-    private function createQuestionXml(array $question): string
+    private function createQuestionXml(array $q): string
     {
-        $name = htmlspecialchars(strip_tags((string) ($question['text'] ?? '')), ENT_XML1 | ENT_QUOTES, 'UTF-8');
-        $label = htmlspecialchars(strip_tags((string) ($question['label'] ?? '')), ENT_XML1 | ENT_QUOTES, 'UTF-8');
-        $presentation = $this->getPresentation($question);
-        $hasValue = (($question['type'] ?? '') === 'pagebreak') ? '0' : '1';
-        $pos = (int) ($question['position'] ?? 0);
-        $id = (int) ($question['id'] ?? 0);
-        $typ = $this->mapQuestionType((string) ($question['type'] ?? ''));
+        $name  = htmlspecialchars(strip_tags((string) ($q['text'] ?? '')), ENT_XML1 | ENT_QUOTES, 'UTF-8');
+        $label = htmlspecialchars(strip_tags((string) ($q['label'] ?? '')), ENT_XML1 | ENT_QUOTES, 'UTF-8');
 
-        $xml = '      <item id="'.$id.'">'.PHP_EOL;
+        $typ  = $this->mapQuestionType((string) ($q['type'] ?? ''));
+        $pres = $this->getPresentation($q);
+
+        $hasValue = in_array($typ, ['multichoice','textarea','textfield','numeric'], true) ? '1' : '0';
+
+        $pos = (int) ($q['position'] ?? 0);
+        $id  = (int) ($q['id'] ?? 0);
+
+        $xml  = '      <item id="'.$id.'">'.PHP_EOL;
         $xml .= '        <template>0</template>'.PHP_EOL;
         $xml .= '        <name>'.$name.'</name>'.PHP_EOL;
         $xml .= '        <label>'.$label.'</label>'.PHP_EOL;
-        $xml .= '        <presentation>'.$presentation.'</presentation>'.PHP_EOL;
+        $xml .= '        <presentation>'.$pres.'</presentation>'.PHP_EOL;
         $xml .= '        <typ>'.$typ.'</typ>'.PHP_EOL;
         $xml .= '        <hasvalue>'.$hasValue.'</hasvalue>'.PHP_EOL;
         $xml .= '        <position>'.$pos.'</position>'.PHP_EOL;
@@ -163,42 +230,37 @@ class FeedbackExport extends ActivityExport
         return $xml;
     }
 
-    /**
-     * Encode presentation string depending on question type.
-     */
-    private function getPresentation(array $question): string
+    private function getPresentation(array $q): string
     {
-        $type = (string) ($question['type'] ?? '');
-        $opts = array_map('strip_tags', (array) ($question['options'] ?? []));
-        $opts = array_map(
-            static fn ($o) => htmlspecialchars((string) $o, ENT_XML1 | ENT_QUOTES, 'UTF-8'),
-            $opts
-        );
+        $type = (string)($q['type'] ?? '');
+        $opts = array_map(static fn($o) => htmlspecialchars((string)trim($o), ENT_XML1 | ENT_QUOTES, 'UTF-8'), (array)($q['options'] ?? []));
+        $joined = implode('|', $opts);
 
-        // Moodle feedback encodes the widget type as a single char:
-        // r = radio, c = checkbox, d = dropdown, textareas use "<cols>|<rows>"
         return match ($type) {
-            'yesno', 'multiplechoice', 'multiplechoiceother' => 'r&gt;&gt;&gt;&gt;&gt;'.implode(PHP_EOL.'|', $opts),
-            'multipleresponse' => 'c&gt;&gt;&gt;&gt;&gt;'.implode(PHP_EOL.'|', $opts),
-            'dropdown' => 'd&gt;&gt;&gt;&gt;&gt;'.implode(PHP_EOL.'|', $opts),
-            'open' => '30|5', // textarea: cols|rows
-            default => '',
+            'yesno', 'multiplechoice'                 => 'r&gt;&gt;&gt;&gt;&gt;'.$joined,
+            'multiplechoiceother'                     => 'r&gt;&gt;&gt;&gt;&gt;'.$joined,
+            'multipleresponse'                        => 'c&gt;&gt;&gt;&gt;&gt;'.$joined,
+            'dropdown'                                => 'd&gt;&gt;&gt;&gt;&gt;'.$joined,
+            'percentage'                              => 'r&gt;&gt;&gt;&gt;&gt;'.$joined,
+            'textfield'                               => '30',
+            'open'                                    => '30|5',
+            'numeric'                                 => '',
+            default                                   => '',
         };
     }
 
-    /**
-     * Map Chamilo survey question types to Moodle feedback types.
-     */
-    private function mapQuestionType(string $chamiloType): string
+    private function mapQuestionType(string $chType): string
     {
-        return [
-            'yesno' => 'multichoice',
-            'multiplechoice' => 'multichoice',
-            'multipleresponse' => 'multichoice',
-            'dropdown' => 'multichoice',
-            'multiplechoiceother' => 'multichoice',
-            'open' => 'textarea',
-            'pagebreak' => 'pagebreak',
-        ][$chamiloType] ?? 'unknown';
+        return match ($chType) {
+            'yesno', 'multiplechoice', 'multiplechoiceother', 'percentage' => 'multichoice',
+            'multipleresponse'                                             => 'multichoice',
+            'dropdown'                                                     => 'multichoice',
+            'textfield'                                                    => 'textfield',
+            'open', 'comment'                                              => 'textarea',
+            'numeric', 'score'                                             => 'numeric',
+            'pagebreak'                                                    => 'pagebreak',
+            'label'                                                        => 'label',
+            default                                                        => 'textarea',
+        };
     }
 }

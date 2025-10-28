@@ -6,7 +6,8 @@
     <Breadcrumb :model="itemList">
       <template #item="{ item, props }">
         <BaseAppLink
-          v-if="(item.route || item.url) && item !== itemList[itemList.length - 1]"          :to="item.route"
+          v-if="(item.route || item.url) && item !== itemList[itemList.length - 1]"
+          :to="item.route"
           :url="item.url"
           v-bind="props.action"
           @click="handleBreadcrumbClick(item)"

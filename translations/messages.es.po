@@ -2072,7 +2072,7 @@ msgid "Tests"
 msgstr "Ejercicios"
 
 msgid "Courses"
-msgstr "Lecciones"
+msgstr "Cursos"
 
 msgid "Copy course"
 msgstr "Copiar el curso"

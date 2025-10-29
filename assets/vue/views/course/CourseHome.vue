@@ -85,28 +85,44 @@
           v-if="isAllowedToEdit && documentAutoLaunch === 1"
           class="text-sm text-gray-600"
         >
-          {{ t("The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.") }}
+          {{
+            t(
+              "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.") }}
+          {{
+            t(
+              "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.") }}
+          {{
+            t(
+              "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.") }}
+          {{
+            t(
+              "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
+            )
+          }}
         </p>
 
         <div class="grow-0">
@@ -334,7 +350,6 @@ courseService
     })
   })
   .catch((error) => console.error(error))
-
 
 const courseTMenu = ref(null)
 

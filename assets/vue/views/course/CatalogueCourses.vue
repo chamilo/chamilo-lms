@@ -25,10 +25,10 @@
           v-if="allSortOptions.length"
           v-model="sortField"
           :options="allSortOptions"
-          optionLabel="label"
-          optionValue="value"
           :placeholder="$t('Sort by')"
           class="w-64"
+          optionLabel="label"
+          optionValue="value"
         />
         <div class="relative">
           <i class="pi pi-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -42,21 +42,30 @@
     </div>
 
     <!-- Advanced search form -->
-    <div v-if="showAdvancedSearch" class="p-4 border border-gray-300 rounded bg-white mb-6">
+    <div
+      v-if="showAdvancedSearch"
+      class="p-4 border border-gray-300 rounded bg-white mb-6"
+    >
       <AdvancedCourseFilters
         :key="advancedFormKey"
-        :fields="extraFields"
         :allowTitle="courseCatalogueSettings.filters?.by_title ?? true"
+        :fields="extraFields"
         @apply="onAdvancedApply"
         @clear="onAdvancedClear"
       />
     </div>
 
-    <div v-if="status" class="text-center text-gray-500 py-6">
+    <div
+      v-if="status"
+      class="text-center text-gray-500 py-6"
+    >
       {{ $t("Loading courses. Please wait.") }}
     </div>
 
-    <div v-else-if="!filteredCourses.length" class="text-center text-gray-500 py-6">
+    <div
+      v-else-if="!filteredCourses.length"
+      class="text-center text-gray-500 py-6"
+    >
       {{ $t("No course available") }}
     </div>
 
@@ -64,16 +73,19 @@
       <CatalogueCourseCard
         v-for="course in visibleCourses"
         :key="course.id"
+        :card-extra-fields="cardExtraFields"
         :course="course"
         :current-user-id="currentUserId"
         :show-title="showCourseTitle"
-        :card-extra-fields="cardExtraFields"
         @rate="onRatingChange"
         @subscribed="onUserSubscribed"
       />
     </div>
 
-    <div v-if="loadingMore" class="text-center text-gray-400 py-4">
+    <div
+      v-if="loadingMore"
+      class="text-center text-gray-400 py-4"
+    >
       {{ $t("Loading more courses...") }}
     </div>
   </div>
@@ -121,7 +133,8 @@ const isPrivilegedUser =
 const allowCatalogueAccess = computed(() => {
   if (isAnonymous) return platformConfigStore.getSetting("catalog.course_catalog_published") !== "false"
   if (isPrivilegedUser) return true
-  if (securityStore.isStudent) return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
+  if (securityStore.isStudent)
+    return platformConfigStore.getSetting("catalog.allow_students_to_browse_courses") !== "false"
   return false
 })
 
@@ -166,13 +179,13 @@ const load = async () => {
   try {
     courses.value = await courseService.loadCourseCatalogue()
 
-    const ids = courses.value.map(c => c.id).join(',')
+    const ids = courses.value.map((c) => c.id).join(",")
     if (ids) {
       const res = await fetch(`/catalogue/course-extra-field-values?ids=${ids}`)
       const extraByCourse = await res.json()
-      courses.value = courses.value.map(c => ({
+      courses.value = courses.value.map((c) => ({
         ...c,
-        extra_fields: extraByCourse[c.id] || {}
+        extra_fields: extraByCourse[c.id] || {},
       }))
     }
 
@@ -252,9 +265,7 @@ function splitCandidates(str) {
 
 function optionLabelBy({ field, idOrValue }) {
   if (!field?.options?.length) return null
-  const found = field.options.find(
-    (o) => String(o.id) === String(idOrValue) || String(o.value) === String(idOrValue),
-  )
+  const found = field.options.find((o) => String(o.id) === String(idOrValue) || String(o.value) === String(idOrValue))
   return found?.label ?? null
 }
 
@@ -280,8 +291,7 @@ function matchesExtraField(course, field, payload) {
     courseTokens = splitCandidates(courseVal)
   }
 
-  const tokensContain = (needle) =>
-    courseTokens.some((tok) => tok.includes(normalizeString(needle)))
+  const tokensContain = (needle) => courseTokens.some((tok) => tok.includes(normalizeString(needle)))
 
   const vt = Number(field.value_type)
 
@@ -386,19 +396,18 @@ function applyAdvancedSearch() {
       normalizeString(course.title).includes(keyword) ||
       normalizeString(course.description).includes(keyword)
 
-    const matchesTitle =
-      !adv.title || normalizeString(course.title).includes(normalizeString(adv.title))
+    const matchesTitle = !adv.title || normalizeString(course.title).includes(normalizeString(adv.title))
 
     const advHasExtra = Object.keys(adv).some((k) => k.startsWith("extra_"))
     const matchesExtras = !advHasExtra
       ? true
       : extraFields.value.every((field) => {
-        const present =
-          adv.hasOwnProperty(`extra_${field.variable}`) ||
-          adv.hasOwnProperty(`extra_${field.variable}_second`) ||
-          adv.hasOwnProperty(`extra_${field.variable}_third`)
-        return present ? matchesExtraField(course, field, adv) : true
-      })
+          const present =
+            adv.hasOwnProperty(`extra_${field.variable}`) ||
+            adv.hasOwnProperty(`extra_${field.variable}_second`) ||
+            adv.hasOwnProperty(`extra_${field.variable}_third`)
+          return present ? matchesExtraField(course, field, adv) : true
+        })
 
     return matchesGlobal && matchesTitle && matchesExtras
   })
@@ -476,10 +485,13 @@ function handleScroll() {
   }
 }
 
-watch(() => filters.value.global.value, () => {
-  visibleCount.value = rowsPerScroll
-  applyAdvancedSearch()
-})
+watch(
+  () => filters.value.global.value,
+  () => {
+    visibleCount.value = rowsPerScroll
+    applyAdvancedSearch()
+  },
+)
 
 watch(sortField, () => {
   visibleCount.value = rowsPerScroll

@@ -2,7 +2,6 @@
   <Toolbar
     :handle-back="handleBack"
     :handle-reset="resetForm"
-    :handle-submit="onSendFormData"
   />
 
   <div class="documents-layout">
@@ -17,6 +16,7 @@
         ref="createForm"
         :errors="errors"
         :values="item"
+        @submit="onSendFormData"
       />
       <Panel
         v-if="$route.query.filetype === 'certificate'"

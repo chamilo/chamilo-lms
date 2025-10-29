@@ -263,6 +263,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  document.body.classList.add("cursor-wait")
+
   const securityStore = useSecurityStore()
 
   if (!securityStore.isAuthenticated) {
@@ -320,6 +322,10 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  document.body.classList.remove("cursor-wait")
 })
 
 router.beforeResolve(async (to) => {

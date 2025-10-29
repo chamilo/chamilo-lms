@@ -10,10 +10,12 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Ldap\Security\LdapUser;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 
 final readonly class UserAuthSourceListener
@@ -26,6 +28,15 @@ final readonly class UserAuthSourceListener
     public function __invoke(CheckPassportEvent $event): void
     {
         $passport = $event->getPassport();
+
+        if ($passport instanceof SelfValidatingPassport) {
+            if (LoginTokenAuthenticator::SOURCE === $passport->getAttribute('source')) {
+                // Passport created by the LoginTokenAuthenticator, we can skip the auth_source verification
+
+                return;
+            }
+        }
+
         $user = $passport->getUser();
 
         if ($user instanceof LdapUser) {

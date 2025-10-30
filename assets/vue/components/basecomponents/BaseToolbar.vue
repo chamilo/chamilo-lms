@@ -45,3 +45,25 @@ onMounted(() => {
   hasEndSlot.value = !!slots.end
 })
 </script>
+<style scoped>
+/* Ensure 8px spacing between items in PrimeVue Toolbar groups */
+/* PrimeVue ≥9 (group-* names) */
+:deep(.p-toolbar-group-start),
+:deep(.p-toolbar-group-center),
+:deep(.p-toolbar-group-end) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* 8px */
+}
+
+/* PrimeVue 8.x fallback (start/end names) */
+:deep(.p-toolbar-start),
+:deep(.p-toolbar-center),
+:deep(.p-toolbar-end) {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+</style>

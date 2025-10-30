@@ -131,7 +131,7 @@
                   :value="1"
                   v-model.number="sameFileNameOption"
                 />
-                <span class="text-sm text-gray-90">{{ t("Skip") }}</span>
+                <span class="text-sm text-gray-90">{{ t("Skip same file name") }}</span>
               </label>
               <label class="flex items-center gap-2">
                 <input
@@ -139,7 +139,7 @@
                   :value="2"
                   v-model.number="sameFileNameOption"
                 />
-                <span class="text-sm text-gray-90">{{ t("Rename") }}</span>
+                <span class="text-sm text-gray-90">{{ t("Rename file (eg file.pdf becomes file_1.pdf)") }}</span>
               </label>
               <label class="flex items-center gap-2">
                 <input
@@ -147,7 +147,7 @@
                   :value="3"
                   v-model.number="sameFileNameOption"
                 />
-                <span class="text-sm text-gray-90">{{ t("Overwrite") }}</span>
+                <span class="text-sm text-gray-90">{{ t("Overwrite file") }}</span>
               </label>
             </div>
           </div>
@@ -394,7 +394,7 @@ async function doRestore() {
       resources: selections.value,
     }
     const res = await svc.restoreBackup(node.value, backupId.value, payload)
-    notice.value = res.message || t("Import finished.")
+    notice.value = res.message || t("Import finished")
     step.value = 4
     if (res.redirectUrl) pushWithQuery(res.redirectUrl)
   } catch (e) {

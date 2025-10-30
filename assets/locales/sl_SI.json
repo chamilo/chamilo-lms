@@ -1138,5 +1138,14 @@
     "Import finished": "Uvoz kon\u010dan",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Uvozi celoten arhiv",
-    "Let me select learning objects": "Dovoli mi izbrati posamezne komponente te\u010daja"
+    "Let me select learning objects": "Dovoli mi izbrati posamezne komponente te\u010daja",
+    "Select items": "Select items",
+    "Recycle course": "Recikliraj te\u010daj",
+    "Skip same file name": "Izpusti datoteko z enakim imenom",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Preimenuj datoteko z enakim imenom (npr. datoteka.pdf postane datoteka_1.pdf)",
+    "Overwrite file": "Prepi\u0161i obstoje\u010do datoteko",
+    "Selected items": "Selected items",
+    "IMS Common Cartridge v1.3": "IMS Common Cartridge v1.3",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

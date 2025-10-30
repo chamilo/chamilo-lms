@@ -861,5 +861,13 @@
     "Import finished": "Importas pabaigtas",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importuoti piln\u0105 archyv\u0105",
-    "Let me select learning objects": "Leisti parinkti kurso komponentus"
+    "Let me select learning objects": "Leisti parinkti kurso komponentus",
+    "Select items": "Select items",
+    "Recycle course": "I\u0161trinti kurs\u0105",
+    "Skip same file name": "Per\u0161okti",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Pervadinti fail\u0105 (pvz.: file.pdf taps file_1.pdf)",
+    "Overwrite file": "Perra\u0161yti fail\u0105",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

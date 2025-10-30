@@ -1091,5 +1091,13 @@
     "Import finished": "Importaci\u00f3 finalitzada",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importar la c\u00f2pia de seguretat completa",
-    "Let me select learning objects": "Seleccionar els components del curs"
+    "Let me select learning objects": "Seleccionar els components del curs",
+    "Select items": "Select items",
+    "Recycle course": "Reciclar curs",
+    "Skip same file name": "Saltar els fitxers",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Canviar el nom dels fitxers (p.e.: fitxer .pdf esdev\u00e9 fitxer_1.pdf)",
+    "Overwrite file": "Sobreescriure els fitxers",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

@@ -847,5 +847,13 @@
     "Import finished": "Uvoz je zavr\u0161en",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Uvezi kompletan backup",
-    "Let me select learning objects": "Dopusti da ja odaberem komponente kursa"
+    "Let me select learning objects": "Dopusti da ja odaberem komponente kursa",
+    "Select items": "Select items",
+    "Recycle course": "Reciklirani kurs",
+    "Skip same file name": "Presko\u010di isto ime fajla",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Preimenuj fajl (eg file.pdf postaje file_1.pdf)",
+    "Overwrite file": "Pi\u0161i preko postoje\u0107eg fajla",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

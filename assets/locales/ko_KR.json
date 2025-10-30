@@ -786,5 +786,13 @@
     "Import finished": "\ubd88\ub7ec\uc624\uae30\uac00 \uc885\ub8cc\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "\uc804\uccb4 \ubc31\uc5c5 \ubd88\ub7ec\uc624\uae30",
-    "Let me select learning objects": "\uacfc\uc815 \ucef4\ud3ec\ub10c\ud2b8\ub97c \uc120\ud0dd\ud560 \uc218 \uc788\ub3c4\ub85d \ud574\uc8fc\uc2ed\uc2dc\uc694"
+    "Let me select learning objects": "\uacfc\uc815 \ucef4\ud3ec\ub10c\ud2b8\ub97c \uc120\ud0dd\ud560 \uc218 \uc788\ub3c4\ub85d \ud574\uc8fc\uc2ed\uc2dc\uc694",
+    "Select items": "Select items",
+    "Recycle course": "\uacfc\uc815 \uc7ac\uc0ac\uc6a9",
+    "Skip same file name": "\ubd88\ub7ec\uc624\uae30 \ucde8\uc18c",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "\ud30c\uc77c\uba85 \uc7ac\uc791\uc131 (eg file.pdf \uc778 \uacbd\uc6b0 file_1.pdf\ub85c)",
+    "Overwrite file": "\ub36e\uc5b4\uc4f0\uae30",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

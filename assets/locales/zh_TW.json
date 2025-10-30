@@ -862,5 +862,13 @@
     "Import finished": "\u532f\u5165\u5b8c\u6210",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "\u532f\u5165\u5b8c\u5168\u5099\u4efd",
-    "Let me select learning objects": "\u9078\u64c7\u8ab2\u7a0b\u7d44\u4ef6"
+    "Let me select learning objects": "\u9078\u64c7\u8ab2\u7a0b\u7d44\u4ef6",
+    "Select items": "Select items",
+    "Recycle course": "\u5faa\u74b0\u5229\u7528\u8ab2\u7a0b",
+    "Skip same file name": "\u8df3\u904e\u540c\u540d\u6a94\u6848",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "\u91cd\u547d\u540d\u6a94\u6848\uff08\u5982\ufe30file.pdf \u91cd\u547d\u540d\u6210file_1.dbf\uff09",
+    "Overwrite file": "\u8986\u84cb\u6a94\u6848",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

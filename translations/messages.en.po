@@ -31105,3 +31105,18 @@ msgstr "Error updating third party. Please verify the data."
 
 msgid "Please choose a .imscc or .zip file."
 msgstr "Please choose a .imscc or .zip file."
+
+msgid "Select items"
+msgstr "Select items"
+
+msgid "Import options"
+msgstr "Import options"
+
+msgid "Selected items"
+msgstr "Selected items"
+
+msgid "Scope"
+msgstr "Scope"
+
+msgid "Select source"
+msgstr "Select source"

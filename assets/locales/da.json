@@ -844,5 +844,13 @@
     "Import finished": "Importering fuldf\u00f8rt",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importer fuld backup",
-    "Let me select learning objects": "Lad mig v\u00e6lge kursuskomponenterne"
+    "Let me select learning objects": "Lad mig v\u00e6lge kursuskomponenterne",
+    "Select items": "Select items",
+    "Recycle course": "Smid kurset v\u00e6k",
+    "Skip same file name": "Spring over filer med samme navn",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Omd\u00f8b fil (eks. fil.pdf bliver til fil_1.pdf)",
+    "Overwrite file": "Overskriv fil",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

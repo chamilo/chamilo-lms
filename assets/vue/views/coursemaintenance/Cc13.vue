@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-6">
     <section class="rounded-lg border border-gray-200 p-4">
-      <h3 class="mb-3 text-sm font-semibold text-gray-800">{{ t("IMS Common Cartridge 1.3") }}</h3>
+      <h3 class="mb-3 text-sm font-semibold text-gray-800">{{ t("IMS Common Cartridge v1.3") }}</h3>
 
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Export -->

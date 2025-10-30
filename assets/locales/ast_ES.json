@@ -965,5 +965,13 @@
     "Import finished": "Importaci\u00f3n acabada",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importar una copia de segurid\u00e1 entera",
-    "Let me select learning objects": "Escoyer los componentes del cursu"
+    "Let me select learning objects": "Escoyer los componentes del cursu",
+    "Select items": "Select items",
+    "Recycle course": "Reciclar cursu",
+    "Skip same file name": "Saltar los ficheros col mesmu nome",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Cambiar el nome al ficheru (por ex. archivu.pdf cambia a archivu_1.pdf)",
+    "Overwrite file": "Escribir enriba'l ficheru",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

@@ -8,7 +8,7 @@
       <Line />
       <Step :index="3" :current="step" :label="t('Select items')" />
       <Line />
-      <Step :index="4" :current="step" :label="t('Apply copy')" />
+      <Step :index="4" :current="step" :label="t('Copy course')" />
     </div>
 
     <CMAlert v-if="error" type="error" :text="error" />
@@ -79,15 +79,15 @@
             <div class="space-y-2">
               <label class="flex items-center gap-2">
                 <input type="radio" :value="1" v-model.number="sameFileNameOption" />
-                <span class="text-sm text-gray-90">{{ t('Skip') }}</span>
+                <span class="text-sm text-gray-90">{{ t('Skip same file name') }}</span>
               </label>
               <label class="flex items-center gap-2">
                 <input type="radio" :value="2" v-model.number="sameFileNameOption" />
-                <span class="text-sm text-gray-90">{{ t('Rename') }}</span>
+                <span class="text-sm text-gray-90">{{ t('Rename file (eg file.pdf becomes file_1.pdf)') }}</span>
               </label>
               <label class="flex items-center gap-2">
                 <input type="radio" :value="3" v-model.number="sameFileNameOption" />
-                <span class="text-sm text-gray-90">{{ t('Overwrite') }}</span>
+                <span class="text-sm text-gray-90">{{ t('Overwrite file') }}</span>
               </label>
             </div>
           </div>

@@ -821,5 +821,13 @@
     "Import finished": "Import selesai",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Import full backup",
-    "Let me select learning objects": "Biarkan saya memilih komponen mata kuliah"
+    "Let me select learning objects": "Biarkan saya memilih komponen mata kuliah",
+    "Select items": "Select items",
+    "Recycle course": "Daur ulang mata kuliah",
+    "Skip same file name": "Lompati file dengan nama sama",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Ganti nama file (misal  file.pdf menjadi file_1.pdf)",
+    "Overwrite file": "Overwrite file",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

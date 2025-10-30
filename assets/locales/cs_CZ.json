@@ -781,5 +781,13 @@
     "Import finished": "Import dokon\u010den",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importuj kompletn\u00ed z\u00e1lohu",
-    "Let me select learning objects": "Dovolte mi zvolit \u010d\u00e1sti kurzu"
+    "Let me select learning objects": "Dovolte mi zvolit \u010d\u00e1sti kurzu",
+    "Select items": "Select items",
+    "Recycle course": "Recyklovat kurz",
+    "Skip same file name": "P\u0159esko\u010dit soubory se stejn\u00fdm jm\u00e9nem",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "P\u0159ejmenovat soubor (nap\u0159. Soubor.pdf se st\u00e1va Soubor_1.pdf)",
+    "Overwrite file": "P\u0159epsat soubor",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

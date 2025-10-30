@@ -1089,5 +1089,13 @@
     "Import finished": "Import ukon\u010den\u00fd",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importova\u0165 kompletn\u00fa z\u00e1lohu",
-    "Let me select learning objects": "Kop\u00edrova\u0165 len vybrat\u00e9 \u010dasti"
+    "Let me select learning objects": "Kop\u00edrova\u0165 len vybrat\u00e9 \u010dasti",
+    "Select items": "Select items",
+    "Recycle course": "Recyklova\u0165 kurz",
+    "Skip same file name": "Presko\u010di\u0165",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Premenova\u0165 (napr. subor.pdf sa premenuje na subor_1.pdf)",
+    "Overwrite file": "Prep\u00edsa\u0165 s\u00fabor",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

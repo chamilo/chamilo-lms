@@ -795,5 +795,12 @@
     "Error updating third party. Please verify the data.": "Error updating third party. Please verify the data.",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "I-import ang buong backup",
-    "Let me select learning objects": "Hayaan akong pumili ng mga bagay na mapag-aaralan"
+    "Let me select learning objects": "Hayaan akong pumili ng mga bagay na mapag-aaralan",
+    "Select items": "Select items",
+    "Skip same file name": "Laktawan ang parehong pangalan ng file",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "I-rename ang file (hal. file.pdf ay magiging file_1.pdf)",
+    "Overwrite file": "Patungan ang file",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

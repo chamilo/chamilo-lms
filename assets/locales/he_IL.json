@@ -1130,5 +1130,14 @@
     "Import finished": "\u05d4\u05d9\u05d1\u05d5\u05d0 \u05d4\u05e1\u05ea\u05d9\u05d9\u05dd",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "\u05d9\u05d9\u05d1\u05d0 \u05d2\u05d9\u05d1\u05d5\u05d9 \u05de\u05dc\u05d0",
-    "Let me select learning objects": "\u05ea\u05df \u05dc\u05d9 \u05dc\u05d1\u05d7\u05d5\u05e8 \u05d0\u05d5\u05d1\u05d9\u05d9\u05e7\u05d8\u05d9 \u05dc\u05de\u05d9\u05d3\u05d4"
+    "Let me select learning objects": "\u05ea\u05df \u05dc\u05d9 \u05dc\u05d1\u05d7\u05d5\u05e8 \u05d0\u05d5\u05d1\u05d9\u05d9\u05e7\u05d8\u05d9 \u05dc\u05de\u05d9\u05d3\u05d4",
+    "Select items": "Select items",
+    "Recycle course": "\u05de\u05d7\u05d6\u05e8 \u05e7\u05d5\u05e8\u05e1",
+    "Skip same file name": "\u05d3\u05dc\u05d2 \u05e2\u05dc \u05d0\u05d5\u05ea\u05d5 \u05e9\u05dd \u05e7\u05d5\u05d1\u05e5",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "\u05e9\u05e0\u05d4 \u05d0\u05ea \u05e9\u05dd \u05d4\u05e7\u05d5\u05d1\u05e5 (\u05dc\u05de\u05e9\u05dc file.pdf \u05d4\u05d5\u05e4\u05da \u05dc-file_1.pdf)",
+    "Overwrite file": "\u05d4\u05d7\u05dc\u05e4\u05ea \u05e7\u05d5\u05d1\u05e5",
+    "Selected items": "Selected items",
+    "IMS Common Cartridge v1.3": "IMS Common Cartridge v1.3",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

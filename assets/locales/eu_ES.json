@@ -1053,5 +1053,13 @@
     "Import finished": "Inportazioa amaitu da",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Inportatu babeskopia osoa",
-    "Let me select learning objects": "Utzi niri ikaskuntza objektuak aukeratzen"
+    "Let me select learning objects": "Utzi niri ikaskuntza objektuak aukeratzen",
+    "Select items": "Select items",
+    "Recycle course": "Birziklatu ikastaroa",
+    "Skip same file name": "Jauzi izen berbera duten fitxategiak",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Berrizendatu fitxategia (esaterako, artxiboa.pdf honako hau bihurtuko da: artxiboa_1.pdf)",
+    "Overwrite file": "Gainidatzi fitxategia",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

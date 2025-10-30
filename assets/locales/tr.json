@@ -873,5 +873,13 @@
     "Import finished": "Dosya g\u00f6nderme tamamland\u0131",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Tam Yedek dosyas\u0131n\u0131 sisteme yolla",
-    "Let me select learning objects": "Ders elemanlar\u0131n\u0131 ben se\u00e7eyim"
+    "Let me select learning objects": "Ders elemanlar\u0131n\u0131 ben se\u00e7eyim",
+    "Select items": "Select items",
+    "Recycle course": "Dersi tekrar kullan\u0131l\u0131r hale getir",
+    "Skip same file name": "Ayn\u0131 dosya ismini atla",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Dosyay\u0131 yeniden adland\u0131r (\u00f6r: \u00f6nce deneme.pdf sonra deneme_1.pdf)",
+    "Overwrite file": "Dosya \u00fczerine yaz",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

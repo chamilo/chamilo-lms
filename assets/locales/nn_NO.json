@@ -737,5 +737,9 @@
     "Error updating third party. Please verify the data.": "Error updating third party. Please verify the data.",
     "Import finished": "Import fullf\u00f8rt",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
-    "Import full backup": "Importer full sikkerhetskopi"
+    "Import full backup": "Importer full sikkerhetskopi",
+    "Select items": "Select items",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

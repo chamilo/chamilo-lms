@@ -1151,5 +1151,14 @@
     "Import finished": "Importaci\u00f3n finalizada",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importar una copia de seguridad completa",
-    "Let me select learning objects": "Seleccionar los componentes del curso"
+    "Let me select learning objects": "Seleccionar los componentes del curso",
+    "Select items": "Select items",
+    "Recycle course": "Reciclar curso",
+    "Skip same file name": "Saltar los ficheros con el mismo nombre",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Renombrar el fichero (ej. archivo.pdf se convierte en  archivo_1.pdf)",
+    "Overwrite file": "Sobreescribir el fichero",
+    "Selected items": "Selected items",
+    "IMS Common Cartridge v1.3": "IMS Common Cartridge v1.3",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

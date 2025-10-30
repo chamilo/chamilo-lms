@@ -6,7 +6,7 @@
       <Line />
       <Step :index="2" :current="step" :label="t('Select items')" />
       <Line />
-      <Step :index="3" :current="step" :label="t('Apply recycle')" />
+      <Step :index="3" :current="step" :label="t('Recycle course')" />
     </div>
 
     <CMAlert v-if="error" type="error" :text="error" />

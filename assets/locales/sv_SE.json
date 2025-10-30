@@ -898,5 +898,13 @@
     "Import finished": "Import avslutad",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importera full s\u00e4kerhetskopia",
-    "Let me select learning objects": "L\u00e5t mig v\u00e4lja kursdelar"
+    "Let me select learning objects": "L\u00e5t mig v\u00e4lja kursdelar",
+    "Select items": "Select items",
+    "Recycle course": "\u00c5teranv\u00e4nd kurs",
+    "Skip same file name": "Hoppa \u00f6ver filer med samma namn",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "D\u00f6p om fil (ex.fil.pdf till fil_1.pdf)",
+    "Overwrite file": "Skriv \u00f6ver fil",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

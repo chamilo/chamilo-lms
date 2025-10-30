@@ -1151,5 +1151,14 @@
     "Import finished": "Het importeren van het back-upbestand is voltooid.",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importeer alle cursusonderdelen van het back-upbestand.",
-    "Let me select learning objects": "Laat mij de cursusonderdelen selecteren."
+    "Let me select learning objects": "Laat mij de cursusonderdelen selecteren.",
+    "Select items": "Select items",
+    "Recycle course": "Recycleer cursus",
+    "Skip same file name": "Bestanden overslaan",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Bestanden hernoemen (bv. bestand.pdf wordt bestand_1.pdf)",
+    "Overwrite file": "Bestanden overschrijven",
+    "Selected items": "Selected items",
+    "IMS Common Cartridge v1.3": "IMS Common Cartridge v1.3",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

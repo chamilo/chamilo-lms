@@ -1103,5 +1103,13 @@
     "Import finished": "Importazione conclusa",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importa l'intero backup",
-    "Let me select learning objects": "Fammi selezionare le parti del corso"
+    "Let me select learning objects": "Fammi selezionare le parti del corso",
+    "Select items": "Select items",
+    "Recycle course": "Riazzera il corso",
+    "Skip same file name": "Ignora i file con lo stesso nome",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Rinomina i file con lo stesso nome",
+    "Overwrite file": "Sovrascrivi i file con lo stesso nome",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

@@ -1032,5 +1032,13 @@
     "Import finished": "Import\u0113\u0161ana pabeigta",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Import\u0113t visu rezerves kopijas saturu",
-    "Let me select learning objects": "\u013baujiet man izv\u0113l\u0113ties kursa pamatda\u013cas"
+    "Let me select learning objects": "\u013baujiet man izv\u0113l\u0113ties kursa pamatda\u013cas",
+    "Select items": "Select items",
+    "Recycle course": "P\u0101rstr\u0101d\u0101t kursu",
+    "Skip same file name": "Izlaist vien\u0101d\u0101 nosaukuma failus",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "P\u0101rsaukt failu (t.i. <i>fails.pdf</i> k\u013c\u016bst par <i>fails_1.pdf</i>)",
+    "Overwrite file": "P\u0101rrakst\u012bt failu",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

@@ -1068,5 +1068,13 @@
     "Import finished": "Importa\u00e7\u00e3o conclu\u00edda",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importar backup/c\u00f3pia de seguran\u00e7a completa",
-    "Let me select learning objects": "Permitir-me seleccionar os objectos de aprendizagem"
+    "Let me select learning objects": "Permitir-me seleccionar os objectos de aprendizagem",
+    "Select items": "Select items",
+    "Recycle course": "Reciclar curso",
+    "Skip same file name": "Salta ficheiro com o mesmo nome",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Renomear ficheiros com o mesmo nome (ex. file.pdf ficar\u00e1 file_1.pdf)",
+    "Overwrite file": "Substituir ficheiro",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

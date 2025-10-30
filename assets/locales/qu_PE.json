@@ -938,5 +938,13 @@
     "Import finished": "Apachiyqa tukurun\u00f1a",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Apachiy hunt'a kikinchay waqaychasqata",
-    "Let me select learning objects": "Ajllay yachachinaqpa imaymana purinanpaq"
+    "Let me select learning objects": "Ajllay yachachinaqpa imaymana purinanpaq",
+    "Select items": "Select items",
+    "Recycle course": "Waqaychay yachachinata",
+    "Skip same file name": "Saltar los ficheros con el mismo nombre",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Sutichayay wayaqata (qawariy khipu.pdf sutichayaykunqa kayman khipu_1.pdf)",
+    "Overwrite file": "Qelqapay",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

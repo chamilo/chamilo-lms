@@ -708,5 +708,9 @@
     "Manage backups, restore, copy, recycle and delete course data.": "Manage backups, restore, copy, recycle and delete course data.",
     "%d comment(s)": "{0} comment(s)",
     "Error updating third party. Please verify the data.": "Error updating third party. Please verify the data.",
-    "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file."
+    "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
+    "Select items": "Select items",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

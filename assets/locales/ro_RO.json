@@ -1071,5 +1071,13 @@
     "Import finished": "Importare terminata",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importa copia de rezerva totala",
-    "Let me select learning objects": "Selecta\u021bi componentele ale cursului"
+    "Let me select learning objects": "Selecta\u021bi componentele ale cursului",
+    "Select items": "Select items",
+    "Recycle course": "Reciclati cursul",
+    "Skip same file name": "Treci peste fi\u0219ierele cu acela\u0219i nume",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Redenumi\u021bi fi\u0219ierul (expemplu fi\u0219ieru.pdf devine fi\u0219ier _1.pdf)",
+    "Overwrite file": "Suprascrie fi\u0219ierul",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

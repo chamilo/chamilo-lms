@@ -31067,3 +31067,18 @@ msgstr ""
 
 msgid "Please choose a .imscc or .zip file."
 msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "Import options"
+msgstr ""
+
+msgid "Selected items"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Select source"
+msgstr ""

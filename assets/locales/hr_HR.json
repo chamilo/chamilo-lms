@@ -892,5 +892,13 @@
     "Import finished": "Prijenos zavr\u0161en",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Prijenos cjelovita pri\u010duvnoga primjerka",
-    "Let me select learning objects": "Omogu\u0107i odabir komponenata kolegija"
+    "Let me select learning objects": "Omogu\u0107i odabir komponenata kolegija",
+    "Select items": "Select items",
+    "Recycle course": "Recikliraj kolegij",
+    "Skip same file name": "Zanemari datoteke istoga imena",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Preimenuj datoteku (npr. datoteka.pdf postaje datoteka_1.pdf)",
+    "Overwrite file": "Pi\u0161i preko postoje\u0107e datoteke",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

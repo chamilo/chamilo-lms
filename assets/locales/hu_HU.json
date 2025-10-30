@@ -918,5 +918,13 @@
     "Import finished": "Import\u00e1l\u00e1s befejezve",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Teljes biztons\u00e1gi ment\u00e9s import\u00e1l\u00e1sa",
-    "Let me select learning objects": "Engedje a rendszer, hogy \u00e9n v\u00e1lasszam ki a kurzus \u00f6sszetev\u0151it."
+    "Let me select learning objects": "Engedje a rendszer, hogy \u00e9n v\u00e1lasszam ki a kurzus \u00f6sszetev\u0151it.",
+    "Select items": "Select items",
+    "Recycle course": "Kurzus \u00fajrahasznos\u00edt\u00e1sa",
+    "Skip same file name": "Megegyez\u0151 nev\u0171 f\u00e1jl kihagy\u00e1sa",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "F\u00e1jl \u00e1tnevez\u00e9se (pl. fajl.pdf -> fajl_1.pdf)",
+    "Overwrite file": "F\u00e1jl fel\u00fcl\u00edr\u00e1sa",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

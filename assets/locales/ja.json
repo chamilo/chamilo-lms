@@ -812,5 +812,12 @@
     "Error updating third party. Please verify the data.": "Error updating third party. Please verify the data.",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "\u5b8c\u5168\u306a\u30d0\u30c3\u30af\u30a2\u30c3\u30d7\u3092\u30a4\u30f3\u30dd\u30fc\u30c8\u3059\u308b",
-    "Let me select learning objects": "\u5b66\u7fd2\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u3092\u9078\u629e\u3059\u308b"
+    "Let me select learning objects": "\u5b66\u7fd2\u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u3092\u9078\u629e\u3059\u308b",
+    "Select items": "Select items",
+    "Skip same file name": "\u540c\u3058\u30d5\u30a1\u30a4\u30eb\u540d\u3092\u30b9\u30ad\u30c3\u30d7\u3059\u308b",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "\u30d5\u30a1\u30a4\u30eb\u306e\u540d\u524d\u3092\u5909\u66f4\u3059\u308b (\u305f\u3068\u3048\u3070 file.pdf \u3092 file_1.pdf \u306b\u3057\u307e\u3059)",
+    "Overwrite file": "\u30d5\u30a1\u30a4\u30eb\u3092\u4e0a\u66f8\u304d\u3059\u308b",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

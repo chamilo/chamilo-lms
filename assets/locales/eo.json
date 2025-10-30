@@ -818,5 +818,13 @@
     "Import finished": "La importado de la resta\u016drkopio fini\u011dis.",
     "Please choose a .imscc or .zip file.": "Please choose a .imscc or .zip file.",
     "Import full backup": "Importu \u0109iujn kurserojn de la resta\u016drkopio.",
-    "Let me select learning objects": "Lasi min elekti la kurserojn."
+    "Let me select learning objects": "Lasi min elekti la kurserojn.",
+    "Select items": "Select items",
+    "Recycle course": "Reuzi kurson",
+    "Skip same file name": "Transsalti dosierojn",
+    "Rename file (eg file.pdf becomes file_1.pdf)": "Renomi dosierojn (ekz. dosiero.pdf i\u011du dosiero_1.pdf)",
+    "Overwrite file": "Anstata\u016digi dosierojn",
+    "Selected items": "Selected items",
+    "Scope": "Scope",
+    "Select source": "Select source"
 }

@@ -30872,3 +30872,57 @@ msgstr ""
 
 msgid "Show free users (not enrolled)"
 msgstr ""
+
+msgid "At least one URL has no admin assigned"
+msgstr ""
+
+msgid "All URLs have at least one admin assigned"
+msgstr ""
+
+msgid "E-mail settings need to be configured"
+msgstr ""
+
+msgid "E-mail settings are OK"
+msgstr ""
+
+msgid "General course resources"
+msgstr ""
+
+msgid "Error closing zip file"
+msgstr ""
+
+msgid "Error adding file to zip"
+msgstr ""
+
+msgid "Error creating zip file"
+msgstr ""
+
+msgid "Error creating %s"
+msgstr ""
+
+msgid "Access teacher page"
+msgstr ""
+
+msgid "To begin, edit this page and remove this text"
+msgstr ""
+
+msgid "The new page has been created."
+msgstr ""
+
+msgid "The page already exists."
+msgstr ""
+
+msgid "You are not viewing the most recent version"
+msgstr ""
+
+msgid "Are you sure you want to unsubscribe this user?"
+msgstr ""
+
+msgid "The test contains page-break questions, which will only take effect if the test is set to 'All questions on one page'."
+msgstr ""
+
+msgid "%s items deleted (%d skipped)"
+msgstr "%s items deleted (%d skipped)"
+
+msgid "Selecting an option will add it to the Responses table below."
+msgstr ""

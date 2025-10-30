@@ -227,9 +227,17 @@ sudo chown -R www-data:www-data var/ .env</pre>
         Open http://localhost/ in your browser. If the WampServer welcome screen with server configuration info appears, it means WampServer is working.<br>
         Click on the WampServer icon in your status bar and go to PHP -&gt; Extensions. Make sure all the following extensions are enabled: php_curl, php_gd, php_intl, php_mbstring, php_mysqli, php_soap, php_xml, php_zip<br>
         Edit C:\wamp64\bin\php\php8.3\php.ini, locate ";extension=sodium" and remove the ";" from the beginning of the line.<br>
-        Also, update the "memory_limit" setting from "128M" to "2048M".<br>
+        Also, update the "memory_limit" setting from "128M" to "2048M" and a few other settings as shown below.<br>
 <pre>
-    memory_limit = 2048M
+    display_errors = Off
+    memory_limit = 128M
+    session.cookie_httponly = 1
+    upload_max_filesize = 100M
+    post_max_size = 100M
+    short_open_tag = Off
+    opcache.enable = 1
+    opcache.memory_consumption = 128
+    opcache.max_accelerated_files = 10000
     #...
     extension=sodium
 </pre>

@@ -906,5 +906,8 @@
     "Overwrite file": "Skriv \u00f6ver fil",
     "Selected items": "Selected items",
     "Scope": "Scope",
-    "Select source": "Select source"
+    "Select source": "Select source",
+    "No date": "No date",
+    "Download as ZIP": "Download as ZIP",
+    "Delete this folder? All files inside will be permanently deleted.": "Delete this folder? All files inside will be permanently deleted."
 }

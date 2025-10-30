@@ -1027,5 +1027,8 @@
     "Overwrite file": "\u0391\u03bd\u03c4\u03b9\u03ba\u03b1\u03c4\u03ac\u03c3\u03c4\u03b1\u03c3\u03b7 \u03b1\u03c1\u03c7\u03b5\u03af\u03bf\u03c5",
     "Selected items": "Selected items",
     "Scope": "Scope",
-    "Select source": "Select source"
+    "Select source": "Select source",
+    "No date": "No date",
+    "Download as ZIP": "Download as ZIP",
+    "Delete this folder? All files inside will be permanently deleted.": "Delete this folder? All files inside will be permanently deleted."
 }

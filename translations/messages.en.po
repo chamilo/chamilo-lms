@@ -31120,3 +31120,12 @@ msgstr "Scope"
 
 msgid "Select source"
 msgstr "Select source"
+
+msgid "No date"
+msgstr "No date"
+
+msgid "Download as ZIP"
+msgstr "Download as ZIP"
+
+msgid "Delete this folder? All files inside will be permanently deleted."
+msgstr "Delete this folder? All files inside will be permanently deleted."

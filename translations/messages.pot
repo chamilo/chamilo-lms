@@ -31082,3 +31082,12 @@ msgstr ""
 
 msgid "Select source"
 msgstr ""
+
+msgid "No date"
+msgstr ""
+
+msgid "Download as ZIP"
+msgstr ""
+
+msgid "Delete this folder? All files inside will be permanently deleted."
+msgstr ""

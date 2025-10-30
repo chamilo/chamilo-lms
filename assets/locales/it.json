@@ -1111,5 +1111,8 @@
     "Overwrite file": "Sovrascrivi i file con lo stesso nome",
     "Selected items": "Selected items",
     "Scope": "Scope",
-    "Select source": "Select source"
+    "Select source": "Select source",
+    "No date": "No date",
+    "Download as ZIP": "Download as ZIP",
+    "Delete this folder? All files inside will be permanently deleted.": "Delete this folder? All files inside will be permanently deleted."
 }

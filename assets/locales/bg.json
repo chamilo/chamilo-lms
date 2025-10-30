@@ -990,5 +990,8 @@
     "Overwrite file": "\u041f\u0440\u0435\u0437\u0430\u043f\u0438\u0448\u0438 \u0444\u0430\u0439\u043b\u0430",
     "Selected items": "Selected items",
     "Scope": "Scope",
-    "Select source": "Select source"
+    "Select source": "Select source",
+    "No date": "No date",
+    "Download as ZIP": "Download as ZIP",
+    "Delete this folder? All files inside will be permanently deleted.": "Delete this folder? All files inside will be permanently deleted."
 }

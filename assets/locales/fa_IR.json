@@ -998,5 +998,8 @@
     "Overwrite file": "\u062c\u0627\u06cc\u06af\u0632\u06cc\u0646\u06cc \u0641\u0627\u06cc\u0644\u0647\u0627\u06cc \u0642\u062f\u06cc\u0645\u06cc \u0628\u0627 \u0641\u0627\u06cc\u0644\u0647\u0627\u06cc \u062c\u062f\u06cc\u062f\u061f",
     "Selected items": "Selected items",
     "Scope": "Scope",
-    "Select source": "Select source"
+    "Select source": "Select source",
+    "No date": "No date",
+    "Download as ZIP": "Download as ZIP",
+    "Delete this folder? All files inside will be permanently deleted.": "Delete this folder? All files inside will be permanently deleted."
 }

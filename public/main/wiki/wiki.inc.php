@@ -1065,7 +1065,7 @@ final class WikiManager
 
             $exists = (bool) $qbExists->getQuery()->getOneOrNullResult();
             if ($exists) {
-                return get_lang('The page already exists');
+                return get_lang('The page already exists.');
             }
         }
 

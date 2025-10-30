@@ -54,7 +54,7 @@
             value="selected"
             v-model="scope"
           />
-          <span class="text-sm text-gray-90">{{ t("Let me select items") }}</span>
+          <span class="text-sm text-gray-90">{{ t("Let me select learning objects") }}</span>
         </label>
 
         <CMAlert

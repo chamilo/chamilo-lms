@@ -43,14 +43,14 @@ class PortfolioNotifier
             );
 
             $messageContent = sprintf(
-                get_lang('CoursePortfolioAlertNewCommentContent'),
+                get_lang("There is a new comment in the post <i>%s</i> from the <i>%s</i> course portfolio. To view it <a href='%s'>go here</a>."),
                 $item->getTitle(),
                 $courseTitle,
                 $commentUrl
             );
         } else {
             $messageContent = sprintf(
-                get_lang('PortfolioAlertNewCommentContent'),
+                get_lang("There is a new comment in the post <i>%s</i>. To view it <a href='%s'>go here</a>."),
                 $item->getTitle(),
                 $commentUrl
             );

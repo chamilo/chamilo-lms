@@ -30961,3 +30961,147 @@ msgstr "%s items deleted (%d skipped)"
 
 msgid "Selecting an option will add it to the Responses table below."
 msgstr "Selecting an option will add it to the Responses table below."
+
+msgid "PDF path unavailable"
+msgstr "PDF path unavailable"
+
+msgid "Global weighting mode"
+msgstr "Global weighting mode"
+
+msgid "Per-answer weighting mode"
+msgstr "Per-answer weighting mode"
+
+msgid "External career ID"
+msgstr "External career ID"
+
+msgid "External calendar event ID"
+msgstr "External calendar event ID"
+
+msgid "Export failed: %s"
+msgstr "Export failed: %s"
+
+msgid "Export all test results"
+msgstr "Export all test results"
+
+msgid "Error loading tests"
+msgstr "Error loading tests"
+
+msgid "No test found"
+msgstr "No test found"
+
+msgid "Error loading courses"
+msgstr "Error loading courses"
+
+msgid "First select a session"
+msgstr "First select a session"
+
+msgid "Error loading sessions"
+msgstr "Error loading sessions"
+
+msgid "Survey not found"
+msgstr "Survey not found"
+
+msgid "There is a new comment in the post <i>%s</i>. To view it <a href='%s'>go here</a>."
+msgstr "There is a new comment in the post <i>%s</i>. To view it <a href='%s'>go here</a>."
+
+msgid "View in alphabetical order"
+msgstr "View in alphabetical order"
+
+msgid "View in chronological order"
+msgstr "View in chronological order"
+
+msgid "Qualify"
+msgstr "Qualify"
+
+msgid "Comment from %s"
+msgstr "Comment from %s"
+
+msgid "Remove as template"
+msgstr "Remove as template"
+
+msgid "Translate category"
+msgstr "Translate category"
+
+msgid "No notes yet"
+msgstr "No notes yet"
+
+msgid "Create your first note to get started."
+msgstr "Create your first note to get started."
+
+msgid "F d, Y"
+msgstr "F d, Y"
+
+msgid "Could not load support info at this time."
+msgstr "Could not load support info at this time."
+
+msgid "Could not load latest news at this time."
+msgstr "Could not load latest news at this time."
+
+msgid "Internal error."
+msgstr "Internal error."
+
+msgid "Message update"
+msgstr "Message update"
+
+msgid "Open file"
+msgstr "Open file"
+
+msgid "Item details"
+msgstr "Item details"
+
+msgid "Uploading... please keep this tab open."
+msgstr "Uploading... please keep this tab open."
+
+msgid "Recipients"
+msgstr "Recipients"
+
+msgid "Sharing"
+msgstr "Sharing"
+
+msgid "Enter a value here"
+msgstr "Enter a value here"
+
+msgid "Write a title..."
+msgstr "Write a title..."
+
+msgid "Use the editor toolbar to format your content."
+msgstr "Use the editor toolbar to format your content."
+
+msgid "Drag & drop files here or click to select"
+msgstr "Drag & drop files here or click to select"
+
+msgid "Edit post"
+msgstr "Edit post"
+
+msgid "New post"
+msgstr "New post"
+
+msgid "Failed to create the post. Please try again."
+msgstr "Failed to create the post. Please try again."
+
+msgid "Press Ctrl+Enter to send"
+msgstr "Press Ctrl+Enter to send"
+
+msgid "Add comment"
+msgstr "Add comment"
+
+msgid "Write your comment here..."
+msgstr "Write your comment here..."
+
+msgid "%d selected"
+msgstr "%d selected"
+
+msgid "Search by title or path..."
+msgstr "Search by title or path..."
+
+msgid "Manage backups, restore, copy, recycle and delete course data."
+msgstr "Manage backups, restore, copy, recycle and delete course data."
+
+msgid "%d comment(s)"
+msgstr "%d comment(s)"
+
+msgid "Error updating third party. Please verify the data."
+msgstr "Error updating third party. Please verify the data."
+
+msgid "Please choose a .imscc or .zip file."
+msgstr "Please choose a .imscc or .zip file."

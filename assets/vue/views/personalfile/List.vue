@@ -128,7 +128,7 @@
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="detailsDialogVisible" :header="selectedItem.title || $t('Item Details')" :modal="true" :style="{ width: '50%' }">
+  <Dialog v-model:visible="detailsDialogVisible" :header="selectedItem.title || $t('Item details')" :modal="true" :style="{ width: '50%' }">
     <div v-if="Object.keys(selectedItem).length > 0">
       <p><strong>{{ $t('Title') }}:</strong> {{ selectedItem.resourceNode.title }}</p>
       <p><strong>{{ $t('Modified') }}:</strong> {{ relativeDatetime(selectedItem.resourceNode.updatedAt) }}</p>

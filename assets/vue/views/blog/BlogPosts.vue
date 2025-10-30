@@ -22,7 +22,7 @@
           <BaseInputText
             v-model="q"
             id="blog-q"
-            :placeholder="t('Search…')"
+            :placeholder="t('Search')"
             class="w-full"
             label=""
           />
@@ -118,7 +118,7 @@
       <div class="rounded-lg border bg-white shadow-sm">
         <div class="p-3 border-b flex items-center justify-between">
           <div class="text-sm text-gray-600">
-            <template v-if="loading">{{ t('Loading…') }}</template>
+            <template v-if="loading">{{ t('Loading...') }}</template>
             <template v-else>
               <span v-if="viewMode==='posts'">
                 {{ t("Showing {n} posts", { n: total }) }}
@@ -184,7 +184,7 @@
                   <div class="text-sm mt-2 text-gray-700">{{ row.excerpt }}</div>
                 </div>
                 <div class="text-xs text-gray-500 text-right">
-                  <div>{{ row.comments }} {{ t("comments") }}</div>
+                  <div>{{ t("{0} comments", [row.comments]) }}</div>
                   <div class="mt-1 flex items-center gap-1 justify-end">
                     <i class="mdi mdi-star text-amber-500"></i>
                     <span>{{ (ratings[row.id]?.average ?? 0).toFixed(1) }}</span>

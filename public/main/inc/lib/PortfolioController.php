@@ -197,7 +197,7 @@ class PortfolioController
             }
             // Delete action
             $url = $this->baseUrl.'action=delete_category&id='.$category->getId();
-            $links .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), $url, ['onclick' => 'javascript:if(!confirm(\''.get_lang('Are you sure to delete?').'\')) return false;']);
+            $links .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), $url, ['onclick' => 'javascript:if(!confirm(\''.get_lang('Are you sure to delete').'?\')) return false;']);
 
             $table->setCellContents($row, $column++, $links);
             $row++;
@@ -263,7 +263,7 @@ class PortfolioController
             'parent_id',
             get_lang('Parent category')
         );
-        $parentSelect->addOption(get_lang('Level0'), 0);
+        $parentSelect->addOption(sprintf(get_lang('Level %s'), '0'), 0);
         $categories = $this->getCategoriesForIndex(0);
 
         foreach ($categories as $category) {
@@ -581,7 +581,7 @@ class PortfolioController
 
                 $messageSubject = sprintf(get_lang('[Portfolio] New post in course %s'), $messageCourseTitle);
                 $messageContent = sprintf(
-                    get_lang('There is a new post by %s in the portfolio of course %s. To view it <a href="%s">go here</a>.'),
+                    get_lang("There is a new post by %s in the portfolio of course %s. To view it <a href='%s'>go here</a>."),
                     $this->owner->getFullName(),
                     $messageCourseTitle,
                     $this->baseUrl.http_build_query(['action' => 'view', 'id' => $portfolio->getId()])
@@ -1238,7 +1238,7 @@ class PortfolioController
                         $commentActions[] = Display::url(
                             Display::return_icon(
                                 $comment->isTemplate() ? 'wizard.png' : 'wizard_na.png',
-                                $comment->isTemplate() ? get_lang('Remove as a template') : get_lang('Add as a template')
+                                $comment->isTemplate() ? get_lang('Remove as template') : get_lang('Add as a template')
                             ),
                             $this->baseUrl.http_build_query(['action' => 'template_comment', 'id' => $comment->getId()])
                         );
@@ -1971,9 +1971,9 @@ class PortfolioController
         $tblItems->set_additional_parameters(['action' => 'details', 'user' => $this->owner->getId()]);
         $tblItems->set_header(0, get_lang('Title'));
         $tblItems->set_column_filter(0, $portfolioItemColumnFilter);
-        $tblItems->set_header(1, get_lang('CreationDate'), true, [], ['class' => 'text-center']);
+        $tblItems->set_header(1, get_lang('Creation date'), true, [], ['class' => 'text-center']);
         $tblItems->set_column_filter(1, $convertFormatDateColumnFilter);
-        $tblItems->set_header(2, get_lang('LastUpdate'), true, [], ['class' => 'text-center']);
+        $tblItems->set_header(2, get_lang('Last update'), true, [], ['class' => 'text-center']);
         $tblItems->set_column_filter(2, $convertFormatDateColumnFilter);
         $tblItems->set_header(3, get_lang('Category'));
         $tblItems->set_header(4, get_lang('Comments'), false, [], ['class' => 'text-right']);
@@ -2300,8 +2300,8 @@ class PortfolioController
 
         $tblItemsHeaders = [];
         $tblItemsHeaders[] = get_lang('Title');
-        $tblItemsHeaders[] = get_lang('CreationDate');
-        $tblItemsHeaders[] = get_lang('LastUpdate');
+        $tblItemsHeaders[] = get_lang('Creation date');
+        $tblItemsHeaders[] = get_lang('Last update');
         $tblItemsHeaders[] = get_lang('Category');
         $tblItemsHeaders[] = get_lang('Category');
         $tblItemsHeaders[] = get_lang('Score');
@@ -3698,7 +3698,7 @@ class PortfolioController
         if (true !== api_get_configuration_value('portfolio_order_post_by_alphabetical_order')) {
             if ($listAlphabeticalOrder) {
                 $link = Display::url(
-                    get_lang('Return to the chronological order'),
+                    get_lang('View in chronological order'),
                     $this->baseUrl
                 );
             } else {

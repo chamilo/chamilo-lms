@@ -480,7 +480,7 @@ async function doImport() {
     if (!file.value) throw new Error(t("Please choose a .imscc or .zip file."))
     loadingImport.value = true
     const res = await svc.cc13Import(node.value, file.value)
-    notice.value = res.message || t("Import completed.")
+    notice.value = res.message || t("Import finished")
   } catch (e) {
     error.value = e?.response?.data?.error || e.message || t("Failed to import.")
   } finally {

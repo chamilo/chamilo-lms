@@ -60,7 +60,7 @@
           </label>
           <label class="flex items-center gap-2">
             <input type="radio" value="select_items" v-model="copyOption" />
-            <span class="text-sm text-gray-90">{{ t('Let me select items') }}</span>
+            <span class="text-sm text-gray-90">{{ t('Let me select learning objects') }}</span>
           </label>
 
           <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">

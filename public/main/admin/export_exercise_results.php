@@ -15,7 +15,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
-$toolName = get_lang('Export all exercise results');
+$toolName = get_lang('Export all test results');
 
 // Get request parameters
 $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
@@ -46,7 +46,7 @@ try {
 }
 
 // Load courses using repository based on selected session
-$courseSelectList = [0 => get_lang('Select a session first')];
+$courseSelectList = [0 => get_lang('First select a session')];
 if (!empty($sessionId) && $sessionId > 0) {
     try {
         $sessionEntity = $sessionRepository->find($sessionId);
@@ -67,30 +67,30 @@ if (!empty($sessionId) && $sessionId > 0) {
 }
 
 // Load exercises using repository based on selected course and session
-$exerciseSelectList = [0 => get_lang('Select a course first')];
+$exerciseSelectList = [0 => get_lang('First select a course')];
 if (!empty($courseId) && $courseId > 0) {
     try {
         $courseEntity = $courseRepository->find($courseId);
         $sessionEntity = $sessionId ? $sessionRepository->find($sessionId) : null;
-        
+
         if ($courseEntity) {
             $exerciseList = $cQuizRepository->findAllByCourse($courseEntity, $sessionEntity);
             $exerciseList = $exerciseList->getQuery()->getResult();
-            
+
             if (!empty($exerciseList)) {
                 $exerciseSelectList = [0 => get_lang('Select')];
                 foreach ($exerciseList as $exercise) {
                     $exerciseSelectList[$exercise->getIid()] = $exercise->getTitle();
                 }
             } else {
-                $exerciseSelectList = [0 => get_lang('No exercises found')];
+                $exerciseSelectList = [0 => get_lang('No test found')];
             }
         } else {
             $exerciseSelectList = [0 => get_lang('Course not found')];
         }
     } catch (Exception $e) {
         error_log('Error loading exercises for course ' . $courseId . ': ' . $e->getMessage());
-        $exerciseSelectList = [0 => get_lang('Error loading exercises')];
+        $exerciseSelectList = [0 => get_lang('Error loading tests')];
     }
 }
 
@@ -110,7 +110,7 @@ $(document).ready(function() {
         placeholder: '" . addslashes(get_lang('Select')) . "',
         allowClear: true
     });
-    
+
     // Session change handler - reload page with new session
     $('#session_id').on('change', function() {
         var sessionId = $(this).val();
@@ -120,7 +120,7 @@ $(document).ready(function() {
             window.location.href = '" . api_get_self() . "';
         }
     });
-    
+
     // Course change handler - reload page with session and course
     $('#selected_course').on('change', function() {
         var courseId = $(this).val();
@@ -138,7 +138,7 @@ $(document).ready(function() {
 
 // Form creation
 $form = new FormValidator('export_all_results_form', 'POST');
-$form->addHeader(get_lang('Export all exercise results'));
+$form->addHeader(get_lang('Export all test results'));
 
 // Add form elements with Select2
 $form->addSelect(
@@ -177,7 +177,7 @@ if (empty($sessionId) || $sessionId == 0) {
 if (empty($courseId) || $courseId == 0) {
     $form->addSelect(
         'exerciseId',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $exerciseSelectList,
         [
             'id' => 'exerciseId',
@@ -188,7 +188,7 @@ if (empty($courseId) || $courseId == 0) {
 } else {
     $form->addSelect(
         'exerciseId',
-        get_lang('Exercise'),
+        get_lang('Test'),
         $exerciseSelectList,
         [
             'id' => 'exerciseId',
@@ -225,7 +225,7 @@ if ($form->validate()) {
     try {
         ExerciseLib::exportExerciseAllResultsZip($sessionId, $courseId, $exerciseId, $filterDates);
     } catch (Exception $e) {
-        Display::addFlash(Display::return_message(get_lang('Export failed') . ': ' . $e->getMessage(), 'error'));
+        Display::addFlash(Display::return_message(sprintf(get_lang('Export failed: %s'), $e->getMessage()), 'error'));
         error_log('Exercise export error: ' . $e->getMessage());
     }
 }

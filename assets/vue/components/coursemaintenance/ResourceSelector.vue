@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2 text-sm">
         <h3 class="text-sm font-semibold text-gray-90">{{ title }}</h3>
-        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50"> {{ selectedTotal }} {{ $t("selected") }} </span>
+        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50"> {{ t("{0} selected", [selectedTotal]) }} </span>
       </div>
 
       <div class="flex flex-wrap gap-2">
@@ -14,7 +14,7 @@
         >
           <input
             v-model.trim="query"
-            :placeholder="$t('Search by title or path…')"
+            :placeholder="$t('Search by title or path...')"
             class="w-64 rounded border border-gray-25 p-2 pr-8 text-sm"
             type="text"
           />
@@ -22,7 +22,7 @@
             v-if="query"
             class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-50 hover:text-gray-90"
             @click="query = ''"
-            :aria-label="$t('Clear search')"
+            :aria-label="$t('Clear')"
           >
             <i class="mdi mdi-close"></i>
           </button>
@@ -32,13 +32,13 @@
           class="btn-secondary"
           @click="expandAll(true)"
         >
-          <i class="mdi mdi-arrow-expand-vertical"></i> {{ $t("Expand all") }}
+          <i class="mdi mdi-arrow-expand-vertical"></i> {{ $t("Expand") }}
         </button>
         <button
           class="btn-secondary"
           @click="expandAll(false)"
         >
-          <i class="mdi mdi-arrow-collapse-vertical"></i> {{ $t("Collapse all") }}
+          <i class="mdi mdi-arrow-collapse-vertical"></i> {{ $t("Collapse") }}
         </button>
         <button
           class="btn-secondary"
@@ -50,7 +50,7 @@
           class="btn-secondary"
           @click="checkAll(false)"
         >
-          <i class="mdi mdi-close-thick"></i> {{ $t("Select none") }}
+          <i class="mdi mdi-close-thick"></i> {{ $t("Clear") }}
         </button>
       </div>
     </div>

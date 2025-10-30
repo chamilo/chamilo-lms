@@ -227,7 +227,7 @@ $table->set_column_filter(
         ];
 
         return Display::url(
-            Display::getMdiIcon($icon, '', null, ICON_SIZE_SMALL, get_lang('AddUsers')),
+            Display::getMdiIcon($icon, '', null, ICON_SIZE_SMALL, get_lang('Add users')),
             'ldap_users_list.php?'.http_build_query($queryParams),
             [
                 'data-title' => addslashes(api_htmlentities(get_lang("Please confirm your choice"))),

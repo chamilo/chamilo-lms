@@ -427,10 +427,10 @@ if (0 == count($certificate_list)) {
                         ['target' => '_blank', 'title' => 'Download PDF certificate']
                     );
                 } else {
-                    // Route not available: show q disabled icon with a clear tooltip
+                    // Path is not available for some reason: show a disabled icon with a clear tooltip
                     echo '<button type="button" class="btn btn-link disabled" disabled '
-                        .'title="PDF route unavailable">'
-                        .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF route unavailable'))
+                        .'title="PDF path unavailable">'
+                        .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF path unavailable'))
                         .'</button>';
                 }
             } else {

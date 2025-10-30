@@ -30926,3 +30926,144 @@ msgstr "%s items deleted (%d skipped)"
 
 msgid "Selecting an option will add it to the Responses table below."
 msgstr ""
+
+msgid "PDF path unavailable"
+msgstr ""
+
+msgid "Global weighting mode"
+msgstr ""
+
+msgid "Per-answer weighting mode"
+msgstr ""
+
+msgid "External career ID"
+msgstr ""
+
+msgid "External calendar event ID"
+msgstr ""
+
+msgid "Export failed: %s"
+msgstr ""
+
+msgid "Export all test results"
+msgstr ""
+
+msgid "Error loading tests"
+msgstr ""
+
+msgid "No test found"
+msgstr ""
+
+msgid "Error loading courses"
+msgstr ""
+
+msgid "First select a session"
+msgstr ""
+
+msgid "Error loading sessions"
+msgstr ""
+
+msgid "Survey not found"
+msgstr ""
+
+msgid "There is a new comment in the post <i>%s</i>. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "View in alphabetical order"
+msgstr ""
+
+msgid "View in chronological order"
+msgstr ""
+
+msgid "Qualify"
+msgstr ""
+
+msgid "Comment from %s"
+msgstr ""
+
+msgid "Remove as template"
+msgstr ""
+
+msgid "Translate category"
+msgstr ""
+
+msgid "No notes yet"
+msgstr ""
+
+msgid "Create your first note to get started."
+msgstr ""
+
+msgid "F d, Y"
+msgstr ""
+
+msgid "Could not load support info at this time."
+msgstr ""
+
+msgid "Could not load latest news at this time."
+msgstr ""
+
+msgid "Internal error."
+msgstr ""
+
+msgid "Message update"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "Item details"
+msgstr ""
+
+msgid "Uploading... please keep this tab open."
+msgstr ""
+
+msgid "Recipients"
+msgstr ""
+
+msgid "Enter a value here"
+msgstr ""
+
+msgid "Write a title..."
+msgstr ""
+
+msgid "Use the editor toolbar to format your content."
+msgstr ""
+
+msgid "Drag & drop files here or click to select"
+msgstr ""
+
+msgid "Edit post"
+msgstr ""
+
+msgid "New post"
+msgstr ""
+
+msgid "Failed to create the post. Please try again."
+msgstr ""
+
+msgid "Press Ctrl+Enter to send"
+msgstr ""
+
+msgid "Add comment"
+msgstr ""
+
+msgid "Write your comment here..."
+msgstr ""
+
+msgid "%d selected"
+msgstr ""
+
+msgid "Search by title or path..."
+msgstr ""
+
+msgid "Manage backups, restore, copy, recycle and delete course data."
+msgstr ""
+
+msgid "%d comment(s)"
+msgstr ""
+
+msgid "Error updating third party. Please verify the data."
+msgstr ""
+
+msgid "Please choose a .imscc or .zip file."
+msgstr ""

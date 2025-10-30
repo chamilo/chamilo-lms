@@ -22,7 +22,7 @@
       </label>
       <label class="flex items-center gap-2">
         <input type="radio" value="select_items" v-model="recycleOption" />
-        <span class="text-sm text-gray-90">{{ t('Let me select items') }}</span>
+        <span class="text-sm text-gray-90">{{ t('Let me select learning objects') }}</span>
       </label>
 
       <div v-if="recycleOption==='full_recycle'" class="mt-2">

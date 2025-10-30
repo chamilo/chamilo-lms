@@ -387,14 +387,6 @@ class ExtraFieldFixtures extends Fixture implements FixtureGroupInterface
                 'value_type' => ExtraField::FIELD_TYPE_CHECKBOX,
             ],
             [
-                'variable' => 'language',
-                'display_text' => 'Language',
-                'item_type' => ExtraField::FORUM_CATEGORY_TYPE,
-                'value_type' => ExtraField::FIELD_TYPE_TEXT,
-                'visible_to_self' => true,
-                'changeable' => true,
-            ],
-            [
                 'variable' => 'longTermAuthenticationRequestTokenUsed',
                 'display_text' => 'Long term authentication request token used',
                 'item_type' => ExtraField::USER_FIELD_TYPE,

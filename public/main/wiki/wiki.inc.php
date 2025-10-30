@@ -339,7 +339,7 @@ final class WikiManager
         self::dbg('$last '.($last ? 'HIT iid='.$last->getIid().' ver='.$last->getVersion() : 'MISS'));
 
         // ---- Defaults (when page does not exist yet) ----
-        $content = '<div class="wiki-placeholder">'.sprintf(get_lang('To begin editing this page and remove this text'), api_get_path(WEB_IMG_PATH)).'</div>';
+        $content = '<div class="wiki-placeholder">'.sprintf(get_lang('To begin, edit this page and remove this text'), api_get_path(WEB_IMG_PATH)).'</div>';
         $title   = self::displayTitleFor($page, null);
         $pageId  = 0;
 
@@ -942,7 +942,7 @@ final class WikiManager
         } catch (\Throwable $e) {
             $conn->rollBack();
             // Short and clear message
-            return get_lang('Delete failed');
+            return get_lang('Delete error');
         }
     }
 
@@ -1236,7 +1236,7 @@ final class WikiManager
         // Notify watchers (legacy: 'P' = page change)
         self::check_emailcue($reflink, 'P', $now, $userId);
 
-        return $isNewPage ? get_lang('The new page has been created') : get_lang('Saved');
+        return $isNewPage ? get_lang('The new page has been created.') : get_lang('Saved');
     }
 
 
@@ -1612,7 +1612,7 @@ final class WikiManager
                 || api_is_allowed_in_course()
             ) {
                 $content = '<div class="text-center">'
-                    .sprintf(get_lang('To begin editing this page and remove this text'), api_get_path(WEB_IMG_PATH))
+                    .sprintf(get_lang('To begin, edit this page and remove this text'), api_get_path(WEB_IMG_PATH))
                     .'</div>';
                 $title = get_lang('Home');
             } else {
@@ -2645,7 +2645,7 @@ final class WikiManager
                     '<tr><td style="font-size:24px">'.get_lang('Learner paper').'</td></tr>'.
                     '<tr><td>'.$uPhoto.'<br />'.$uName.'</td></tr>'.
                     '</table></div>'.
-                    '[[ '.$link2teacher.' | '.get_lang('Acces to trainer page').' ]] ';
+                    '[[ '.$link2teacher.' | '.get_lang('Access teacher page').' ]] ';
 
                 $allStudentsItems[] =
                     '<li>'.

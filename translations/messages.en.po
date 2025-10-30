@@ -30907,3 +30907,57 @@ msgstr "Duplicate submission ignored"
 
 msgid "Show free users (not enrolled)"
 msgstr "Show free users (not enrolled)"
+
+msgid "At least one URL has no admin assigned"
+msgstr "At least one URL has no admin assigned"
+
+msgid "All URLs have at least one admin assigned"
+msgstr "All URLs have at least one admin assigned"
+
+msgid "E-mail settings need to be configured"
+msgstr "E-mail settings need to be configured"
+
+msgid "E-mail settings are OK"
+msgstr "E-mail settings are OK"
+
+msgid "General course resources"
+msgstr "General course resources"
+
+msgid "Error closing zip file"
+msgstr "Error closing zip file"
+
+msgid "Error adding file to zip"
+msgstr "Error adding file to zip"
+
+msgid "Error creating zip file"
+msgstr "Error creating zip file"
+
+msgid "Error creating %s"
+msgstr "Error creating %s"
+
+msgid "Access teacher page"
+msgstr "Access teacher page"
+
+msgid "To begin, edit this page and remove this text"
+msgstr "To begin, edit this page and remove this text"
+
+msgid "The new page has been created."
+msgstr "The new page has been created."
+
+msgid "The page already exists."
+msgstr "The page already exists."
+
+msgid "You are not viewing the most recent version"
+msgstr "You are not viewing the most recent version"
+
+msgid "Are you sure you want to unsubscribe this user?"
+msgstr "Are you sure you want to unsubscribe this user?"
+
+msgid "The test contains page-break questions, which will only take effect if the test is set to 'All questions on one page'."
+msgstr "The test contains page-break questions, which will only take effect if the test is set to 'All questions on one page'."
+
+msgid "%s items deleted (%d skipped)"
+msgstr "%s items deleted (%d skipped)"
+
+msgid "Selecting an option will add it to the Responses table below."
+msgstr "Selecting an option will add it to the Responses table below."

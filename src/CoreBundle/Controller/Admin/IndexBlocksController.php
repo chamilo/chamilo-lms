@@ -944,13 +944,13 @@ class IndexBlocksController extends BaseController
             $items[] = [
                 'className' => 'item-health-check-admin-urls text-success',
                 'url' => '/main/admin/access_urls.php',
-                'label' => $this->translator->trans('Admin has access to all active URLs'),
+                'label' => $this->translator->trans('All URLs have at least one admin assigned'),
             ];
         } else {
             $items[] = [
                 'className' => 'item-health-check-admin-urls text-error',
                 'url' => '/main/admin/access_url_edit_users_to_url.php',
-                'label' => $this->translator->trans('Admin does not have access to all active URLs'),
+                'label' => $this->translator->trans('At least one URL has no admin assigned'),
             ];
         }
 

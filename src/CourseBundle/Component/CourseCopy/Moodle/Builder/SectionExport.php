@@ -60,7 +60,7 @@ class SectionExport
                 'id' => 0,
                 'number' => 0,
                 'name' => get_lang('General'),
-                'summary' => get_lang('GeneralResourcesCourse'),
+                'summary' => get_lang('General course resources'),
                 'sequence' => 0,
                 'visible' => 1,
                 'timemodified' => time(),

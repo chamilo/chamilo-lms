@@ -382,7 +382,7 @@ class QuizExport extends ActivityExport
 
         $xmlFile = $destinationDir.'/quiz.xml';
         if (false === file_put_contents($xmlFile, $xmlContent)) {
-            throw new Exception(get_lang('ErrorCreatingQuizXml'));
+            throw new Exception(sprintf(get_lang('Error creating %s'), 'quiz.xml'));
         }
     }
 

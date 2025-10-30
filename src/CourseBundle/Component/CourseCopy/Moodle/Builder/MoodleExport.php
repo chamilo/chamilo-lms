@@ -88,7 +88,7 @@ class MoodleExport
         if (!is_dir($tempDir)) {
             if (!mkdir($tempDir, api_get_permissions_for_new_directories(), true)) {
                 @error_log('[MoodleExport::export] ERROR cannot create tempDir='.$tempDir);
-                throw new Exception(get_lang('ErrorCreatingDirectory'));
+                throw new Exception(get_lang('Unable to create the folder.'));
             }
             @error_log('[MoodleExport::export] Created tempDir='.$tempDir);
         }
@@ -96,7 +96,7 @@ class MoodleExport
         $courseInfo = api_get_course_info($courseId);
         if (!$courseInfo) {
             @error_log('[MoodleExport::export] ERROR CourseNotFound id='.$courseId);
-            throw new Exception(get_lang('CourseNotFound'));
+            throw new Exception(get_lang('Course not found'));
         }
 
         // 1) Create Moodle backup skeleton (backup.xml + dirs)
@@ -563,7 +563,7 @@ class MoodleExport
             'id' => 0,
             'number' => 0,
             'name' => get_lang('General'),
-            'summary' => get_lang('GeneralResourcesCourse'),
+            'summary' => get_lang('General course resources'),
             'sequence' => 0,
             'visible' => 1,
             'timemodified' => time(),
@@ -861,7 +861,7 @@ class MoodleExport
         $zipFile = $sourceDir.'.mbz';
 
         if (true !== $zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
-            throw new Exception(get_lang('ErrorCreatingZip'));
+            throw new Exception(get_lang('Error creating zip file'));
         }
 
         $files = new RecursiveIteratorIterator(
@@ -875,13 +875,13 @@ class MoodleExport
                 $relativePath = substr($filePath, \strlen($sourceDir) + 1);
 
                 if (!$zip->addFile($filePath, $relativePath)) {
-                    throw new Exception(get_lang('ErrorAddingFileToZip').": $relativePath");
+                    throw new Exception(get_lang('Error adding file to zip').": $relativePath");
                 }
             }
         }
 
         if (!$zip->close()) {
-            throw new Exception(get_lang('ErrorClosingZip'));
+            throw new Exception(get_lang('Error closing zip file'));
         }
 
         return $zipFile;

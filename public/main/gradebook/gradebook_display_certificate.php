@@ -427,7 +427,7 @@ if (0 == count($certificate_list)) {
                         ['target' => '_blank', 'title' => 'Download PDF certificate']
                     );
                 } else {
-                    // Route not available: show disabled icon with a clear tooltip
+                    // Route not available: show q disabled icon with a clear tooltip
                     echo '<button type="button" class="btn btn-link disabled" disabled '
                         .'title="PDF route unavailable">'
                         .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon text-muted', null, ICON_SIZE_SMALL, get_lang('PDF route unavailable'))

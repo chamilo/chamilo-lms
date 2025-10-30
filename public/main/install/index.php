@@ -253,7 +253,7 @@ if (!isset($_GET['running'])) {
     $allowSelfReg = 'approval';
     $allowSelfRegProf = 1; //by default, a user can register as teacher (but moderation might be in place)
     if (!empty($_GET['profile'])) {
-        $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
+        $installationProfile = htmlentities($_GET['profile']);
     }
 } else {
     foreach ($_POST as $key => $val) {
@@ -294,12 +294,12 @@ error_log("Step: $current_step");
 if (empty($installationProfile)) {
     $installationProfile = '';
     if (!empty($_POST['installationProfile'])) {
-        $installationProfile = api_htmlentities($_POST['installationProfile']);
+        $installationProfile = htmlentities($_POST['installationProfile']);
     }
 }
 
 $institutionUrlFormResult = '';
-$institutionUrlFormResult = api_htmlentities($institutionUrlForm, ENT_QUOTES);
+$institutionUrlFormResult = $institutionUrlForm;
 
 $stepData = [];
 
@@ -637,7 +637,7 @@ if (isset($_POST['step2'])) {
 } else {
     // This is the start screen.
     if (!empty($_GET['profile'])) {
-        $installationProfile = api_htmlentities($_GET['profile'], ENT_QUOTES);
+        $installationProfile = $_GET['profile'];
     }
 
     $stepData['installationProfile'] = $installationProfile;
@@ -665,36 +665,36 @@ $installerData = [
             'updateFromConfigFile' => $updateFromConfigFile,
         ]),
 
-    'updatePath' => !$badUpdatePath ? api_htmlentities($proposedUpdatePath, ENT_QUOTES) : '',
-    'urlAppendPath' => api_htmlentities($urlAppendPath, ENT_QUOTES),
-    'pathForm' => api_htmlentities($pathForm, ENT_QUOTES),
-    'urlForm' => api_htmlentities($urlForm, ENT_QUOTES),
-    'dbHostForm' => api_htmlentities($dbHostForm, ENT_QUOTES),
-    'dbPortForm' => api_htmlentities((string) $dbPortForm, ENT_QUOTES),
-    'dbUsernameForm' => api_htmlentities($dbUsernameForm, ENT_QUOTES),
-    'dbPassForm' => api_htmlentities($dbPassForm, ENT_QUOTES),
-    'dbNameForm' => api_htmlentities($dbNameForm, ENT_QUOTES),
-    'allowSelfReg' => api_htmlentities($allowSelfReg, ENT_QUOTES),
-    'allowSelfRegProf' => api_htmlentities((string) $allowSelfRegProf, ENT_QUOTES),
-    'emailForm' => api_htmlentities($emailForm, ENT_QUOTES),
-    'adminLastName' => api_htmlentities($adminLastName, ENT_QUOTES),
-    'adminFirstName' => api_htmlentities($adminFirstName, ENT_QUOTES),
-    'adminPhoneForm' => api_htmlentities($adminPhoneForm, ENT_QUOTES),
-    'loginForm' => api_htmlentities($loginForm, ENT_QUOTES),
-    'passForm' => api_htmlentities($passForm, ENT_QUOTES),
-    'languageForm' => api_htmlentities($languageForm, ENT_QUOTES),
-    'campusForm' => api_htmlentities($campusForm, ENT_QUOTES),
-    'educationForm' => api_htmlentities($educationForm, ENT_QUOTES),
-    'institutionForm' => api_htmlentities($institutionForm, ENT_QUOTES),
+    'updatePath' => !$badUpdatePath ? $proposedUpdatePath : '',
+    'urlAppendPath' => $urlAppendPath,
+    'pathForm' => $pathForm,
+    'urlForm' => $urlForm,
+    'dbHostForm' => $dbHostForm,
+    'dbPortForm' => $dbPortForm,
+    'dbUsernameForm' => $dbUsernameForm,
+    'dbPassForm' => $dbPassForm,
+    'dbNameForm' => $dbNameForm,
+    'allowSelfReg' => $allowSelfReg,
+    'allowSelfRegProf' => $allowSelfRegProf,
+    'emailForm' => $emailForm,
+    'adminLastName' => $adminLastName,
+    'adminFirstName' => $adminFirstName,
+    'adminPhoneForm' => $adminPhoneForm,
+    'loginForm' => $loginForm,
+    'passForm' => $passForm,
+    'languageForm' => $languageForm,
+    'campusForm' => $campusForm,
+    'educationForm' => $educationForm,
+    'institutionForm' => $institutionForm,
     'institutionUrlForm' => $institutionUrlFormResult,
-    'checkEmailByHashSent' => api_htmlentities((string) $checkEmailByHashSent, ENT_QUOTES),
-    'showEmailNotCheckedToStudent' => api_htmlentities((string) $showEmailNotCheckedToStudent, ENT_QUOTES),
-    'userMailCanBeEmpty' => api_htmlentities((string) $userMailCanBeEmpty, ENT_QUOTES),
-    'encryptPassForm' => api_htmlentities($encryptPassForm, ENT_QUOTES),
-    'session_lifetime' => api_htmlentities((string) $session_lifetime, ENT_QUOTES),
-    'old_version' => api_htmlentities($my_old_version, ENT_QUOTES),
-    'new_version' => api_htmlentities($new_version, ENT_QUOTES),
-    'installationProfile' => api_htmlentities($installationProfile, ENT_QUOTES),
+    'checkEmailByHashSent' => $checkEmailByHashSent,
+    'showEmailNotCheckedToStudent' => $showEmailNotCheckedToStudent,
+    'userMailCanBeEmpty' => $userMailCanBeEmpty,
+    'encryptPassForm' => $encryptPassForm,
+    'session_lifetime' => $session_lifetime,
+    'old_version' => $my_old_version,
+    'new_version' => $new_version,
+    'installationProfile' => $installationProfile,
     'currentStep' => $current_step,
     'isUpdateAvailable' => $isUpdateAvailable,
     'checkMigrationStatus' => $checkMigrationStatus,

@@ -20,12 +20,12 @@ use Chamilo\CourseBundle\Component\CourseCopy\Moodle\Builder\MoodleImport;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{BinaryFileResponse, JsonResponse, Request, ResponseHeaderBag};
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 
 use const ARRAY_FILTER_USE_BOTH;
@@ -1068,7 +1068,7 @@ class CourseMaintenanceController extends AbstractController
                 'downloadUrl' => $downloadUrl,
                 'message'     => 'Export finished.',
             ]);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             if (stripos($e->getMessage(), 'Nothing to export') !== false) {
                 return $this->json(['error' => 'Nothing to export (no compatible resources found).'], 400);
             }
@@ -3284,7 +3284,7 @@ class CourseMaintenanceController extends AbstractController
                     $this->logDebug('[loadLegacyCourseForAnyBackup] no course_info.dat, trying MoodleImport as last resort');
                     return $this->loadMoodleCourseOrFail($path);
                 }
-                throw new \RuntimeException('course_info.dat not found in backup');
+                throw new RuntimeException('course_info.dat not found in backup');
             }
 
             $raw = (string) $ci['data'];
@@ -3310,7 +3310,7 @@ class CourseMaintenanceController extends AbstractController
                     $this->logDebug('[loadLegacyCourseForAnyBackup] Chamilo fallback failed, trying MoodleImport');
                     return $this->loadMoodleCourseOrFail($path);
                 }
-                throw new \RuntimeException('Could not unserialize course (fallback)');
+                throw new RuntimeException('Could not unserialize course (fallback)');
             }
 
             if (!isset($c->resources) || !\is_array($c->resources)) { $c->resources = []; }
@@ -3326,7 +3326,7 @@ class CourseMaintenanceController extends AbstractController
             return $this->loadMoodleCourseOrFail($path);
         }
 
-        throw new \RuntimeException('Unsupported package: neither course_info.dat nor moodle_backup.xml found.');
+        throw new RuntimeException('Unsupported package: neither course_info.dat nor moodle_backup.xml found.');
     }
 
     /**
@@ -3757,18 +3757,18 @@ class CourseMaintenanceController extends AbstractController
     private function loadMoodleCourseOrFail(string $absPath): object
     {
         if (!class_exists(MoodleImport::class)) {
-            throw new \RuntimeException('MoodleImport class not available');
+            throw new RuntimeException('MoodleImport class not available');
         }
         $importer = new MoodleImport(debug: $this->debug);
 
         if (!method_exists($importer, 'buildLegacyCourseFromMoodleArchive')) {
-            throw new \RuntimeException('MoodleImport::buildLegacyCourseFromMoodleArchive() not available');
+            throw new RuntimeException('MoodleImport::buildLegacyCourseFromMoodleArchive() not available');
         }
 
         $course = $importer->buildLegacyCourseFromMoodleArchive($absPath);
 
         if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
-            throw new \RuntimeException('Moodle backup contains no importable resources');
+            throw new RuntimeException('Moodle backup contains no importable resources');
         }
 
         $course->resources['__meta'] = (array) ($course->resources['__meta'] ?? []);

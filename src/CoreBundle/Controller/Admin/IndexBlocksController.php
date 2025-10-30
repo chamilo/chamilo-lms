@@ -22,14 +22,15 @@ use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Plugin;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/index', name: 'admin_index_blocks')]
 class IndexBlocksController extends BaseController
 {

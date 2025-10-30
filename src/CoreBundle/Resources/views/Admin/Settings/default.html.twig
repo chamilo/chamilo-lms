@@ -84,9 +84,9 @@
                                                         {% endif %}
 
 
-                                                        {% if platform is defined and settings.platform.server_type is defined and settings.platform.server_type == 'test' %}
-
-                                                            <span
+                                                        {% set serverType = platform.server_type ?? (settings.platform.server_type ?? null) %}
+                                                        {% if serverType == 'test' %}
+                                                        <span
                                                                     class="ml-3 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
                                                                     title="{{ namespace ~ '.' ~ fieldName }}"
                                                                     role="img"

@@ -464,7 +464,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_learnpath_category(
+    public function build_learnpath_category(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -505,7 +505,7 @@ class CourseBuilder
      *
      * @param array<int> $idList
      */
-    private function build_learnpaths(
+    public function build_learnpaths(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -616,7 +616,7 @@ class CourseBuilder
     /**
      * Export Gradebook (categories + evaluations + links).
      */
-    private function build_gradebook(
+    public function build_gradebook(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity
@@ -729,7 +729,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_works(
+    public function build_works(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -801,7 +801,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_attendance(
+    public function build_attendance(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -867,7 +867,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_thematic(
+    public function build_thematic(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -959,7 +959,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_wiki(
+    public function build_wiki(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1017,7 +1017,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_glossary(
+    public function build_glossary(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1062,7 +1062,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_course_descriptions(
+    public function build_course_descriptions(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1108,7 +1108,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_events(
+    public function build_events(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1213,7 +1213,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_announcements(
+    public function build_announcements(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1351,7 +1351,7 @@ class CourseBuilder
      *
      * @return array<int>
      */
-    private function build_surveys(
+    public function build_surveys(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1444,7 +1444,7 @@ class CourseBuilder
      *
      * @param array<int> $questionIds
      */
-    private function build_survey_questions(
+    public function build_survey_questions(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1528,7 +1528,7 @@ class CourseBuilder
      *
      * @return array<int>
      */
-    private function build_quizzes(
+    public function build_quizzes(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1641,7 +1641,7 @@ class CourseBuilder
      *
      * @param array<int> $questionIds
      */
-    private function build_quiz_questions(
+    public function build_quiz_questions(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1764,7 +1764,7 @@ class CourseBuilder
     /**
      * Export Link category as legacy item.
      */
-    private function build_link_category(CLinkCategory $category): void
+    public function build_link_category(CLinkCategory $category): void
     {
         $id = (int) $category->getIid();
         if ($id <= 0) {
@@ -1786,7 +1786,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_links(
+    public function build_links(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -1949,7 +1949,7 @@ class CourseBuilder
      * Export Tool intro only for the course_homepage tool.
      * Prefers the session-specific intro when both (session and base) exist.
      */
-    private function build_tool_intro(
+    public function build_tool_intro(
         object $legacyCourse,
         ?CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity
@@ -2020,7 +2020,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_forum_category(
+    public function build_forum_category(
         object $legacyCourse,
         CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -2056,7 +2056,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_forums(
+    public function build_forums(
         object $legacyCourse,
         CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -2104,7 +2104,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_forum_topics(
+    public function build_forum_topics(
         object $legacyCourse,
         CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,
@@ -2147,7 +2147,7 @@ class CourseBuilder
      *
      * @param array<int> $ids
      */
-    private function build_forum_posts(
+    public function build_forum_posts(
         object $legacyCourse,
         CourseEntity $courseEntity,
         ?SessionEntity $sessionEntity,

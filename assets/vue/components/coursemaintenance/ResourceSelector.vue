@@ -4,7 +4,9 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2 text-sm">
         <h3 class="text-sm font-semibold text-gray-90">{{ title }}</h3>
-        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50"> {{ $t("Selected") }}: {{ selectedTotal }} </span>
+        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50">
+          {{ $t("{0} selected", [selectedTotal]) }}
+        </span>
       </div>
 
       <div class="flex flex-wrap gap-2">

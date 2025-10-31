@@ -14,7 +14,7 @@
         {# Session overview card #}
         <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
             <div class="flex items-center gap-2 mb-4">
-                <i class="mdi mdi-information-outline text-info text-xl" aria-hidden="true"></i>
+                <i class="mdi mdi-information-outline text-primary text-xl" aria-hidden="true"></i>
                 <h3 class="text-gray-90 text-body-1 font-semibold">{{ 'Session overview'|trans }}</h3>
             </div>
 
@@ -92,7 +92,7 @@
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
                         <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Career'|trans }}</dt>
                         <dd class="text-gray-90 text-body-2 mt-1">
-                            <a class="text-info hover:underline"
+                            <a class="text-primary hover:underline"
                                href="{{ _p.web_main }}admin/career_dashboard.php?filter={{ session.promotion.career.id }}&submit=&_qf__filter_form=">
                                 {{ session.promotion.career.title }}
                             </a>
@@ -101,7 +101,7 @@
                     <div class="p-4 rounded-xl bg-support-2 border border-gray-25">
                         <dt class="text-gray-50 text-tiny uppercase tracking-wide">{{ 'Promotion'|trans }}</dt>
                         <dd class="text-gray-90 text-body-2 mt-1">
-                            <a class="text-info hover:underline"
+                            <a class="text-primary hover:underline"
                                href="{{ _p.web_main }}admin/promotions.php?action=edit&id={{ session.promotion.id }}">
                                 {{ session.promotion.title }}
                             </a>
@@ -160,7 +160,7 @@
                 <div class="mt-6">
                     <a class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-gray-25 hover:shadow-sm hover:bg-gray-10 transition text-gray-90"
                        href="{{ _p.web_main }}session/scheduled_announcement.php?session_id={{ session.id }}">
-                        <i class="mdi mdi-bullhorn text-info" aria-hidden="true"></i>
+                        <i class="mdi mdi-bullhorn text-primary" aria-hidden="true"></i>
                         <span class="text-body-2">{{ 'Scheduled announcements'|trans }}</span>
                     </a>
                 </div>
@@ -170,7 +170,7 @@
         {# Course list #}
         <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
             <div class="flex items-center gap-2 mb-3">
-                <i class="mdi mdi-book-open-page-variant text-info text-xl" aria-hidden="true"></i>
+                <i class="mdi mdi-book-open-page-variant text-primary text-xl" aria-hidden="true"></i>
                 <span class="text-gray-90 font-semibold">{{ 'Course list'|trans }}</span>
             </div>
             <div class="overflow-x-auto">
@@ -184,7 +184,7 @@
         {% if user_list is not empty %}
             <div class="bg-white border border-gray-25 rounded-2xl shadow-sm p-6 md:p-7 mb-6 md:mb-8">
                 <div class="flex items-center gap-2 mb-3">
-                    <i class="mdi mdi-account-multiple text-info text-xl" aria-hidden="true"></i>
+                    <i class="mdi mdi-account-multiple text-primary text-xl" aria-hidden="true"></i>
                     <span class="text-gray-90 font-semibold">{{ 'User list'|trans }}</span>
                 </div>
                 <div class="overflow-x-auto">

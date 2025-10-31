@@ -68,8 +68,8 @@ $columns = [
 ];
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '180',
         'align' => 'left',
     ],
@@ -175,7 +175,7 @@ switch ($action) {
                 $res = $promotion->update($values);
                 $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
-                    echo Display::return_message(get_lang('Promotion updated successfully').': '.$values['name'], 'confirm');
+                    echo Display::return_message(get_lang('Promotion updated successfully').': '.$values['title'], 'confirm');
                 }
             }
             $promotion->display();

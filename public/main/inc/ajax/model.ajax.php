@@ -2310,13 +2310,13 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_promotions':
-        $columns = ['name', 'career', 'description', 'actions'];
+        $columns = ['title', 'career', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
 
         $result = Database::select(
-            'p.id,p.name, p.description, c.title as career, p.status',
+            'p.id,p.title, p.description, c.title as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
@@ -2324,7 +2324,7 @@ switch ($action) {
         $new_result = [];
         foreach ($result as $item) {
             if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+                $item['title'] = '<font style="color:#AAA">'.$item['title'].'</font>';
             }
             $new_result[] = $item;
         }

@@ -48,7 +48,7 @@
                   @click.prevent="onContactsClick"
                 />
               </template>
-              <p v-else class="chd-text--muted">{{ t('No contacts to show') }}</p>
+              <p v-else class="chd-text--muted">{{ t('No contacts found') }}</p>
             </div>
           </aside>
 
@@ -94,7 +94,7 @@
                 </div>
               </template>
               <div v-else class="chd-text--muted chd-center chd-py-16">
-                {{ t('Pick someone from the left to start chatting') }}
+                {{ t('Pick someone in the left box to start chatting') }}
               </div>
             </div>
 
@@ -103,7 +103,7 @@
               <textarea
                 v-model.trim="draft"
                 class="chd-input"
-                :placeholder="t('Write…')"
+                :placeholder="t('Write a message')"
                 rows="2"
                 @keydown.enter.prevent.exact="send"
                 @keydown.enter.shift.exact="newline"

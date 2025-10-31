@@ -31129,3 +31129,57 @@ msgstr "Download as ZIP"
 
 msgid "Delete this folder? All files inside will be permanently deleted."
 msgstr "Delete this folder? All files inside will be permanently deleted."
+
+msgid "Template type"
+msgstr "Template type"
+
+msgid "Edit task"
+msgstr "Edit task"
+
+msgid "Pending validation"
+msgstr "Pending validation"
+
+msgid "New project"
+msgstr "New project"
+
+msgid "Assign task"
+msgstr "Assign task"
+
+msgid "Select a task"
+msgstr "Select a task"
+
+msgid "Select a user"
+msgstr "Select a user"
+
+msgid "Target date"
+msgstr "Target date"
+
+msgid "Could not load exportable items."
+msgstr "Could not load exportable items."
+
+msgid "You can close this message to continue."
+msgstr "You can close this message to continue."
+
+msgid "Select a contact"
+msgstr "Select a contact"
+
+msgid "No messages yet"
+msgstr "No messages yet"
+
+msgid "Pick someone in the left box to start chatting"
+msgstr "Pick someone in the left box to start chatting"
+
+msgid "Enter to send · Shift+Enter for newline"
+msgstr "Enter to send · Shift+Enter for newline"
+
+msgid "Delivered"
+msgstr "Delivered"
+
+msgid "Sending"
+msgstr "Sending"
+
+msgid "Are you sure you want to clear this conversation?"
+msgstr "Are you sure you want to clear this conversation?"
+
+msgid "New messages"
+msgstr "New messages"

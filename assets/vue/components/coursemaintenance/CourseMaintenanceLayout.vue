@@ -50,7 +50,7 @@
               @click="goToTab('CMCreateBackup', $event)"
             >
               <i class="mdi mdi-content-save cm-tab__icon"></i>
-              <span>{{ t("Create backup") }}</span>
+              <span>{{ t("Create a backup") }}</span>
             </RouterLink>
           </li>
           <li>
@@ -72,7 +72,7 @@
               @click="goToTab('CMCc13', $event)"
             >
               <i class="mdi mdi-layers cm-tab__icon"></i>
-              <span>{{ t("IMS CC 1.3") }}</span>
+              <span>IMS CC 1.3</span>
             </RouterLink>
           </li>
           <li>
@@ -94,7 +94,7 @@
               @click="goToTab('CMDelete', $event)"
             >
               <i class="mdi mdi-trash-can-outline cm-tab__icon"></i>
-              <span>{{ t("Delete course") }}</span>
+              <span>{{ t("Completely delete this course") }}</span>
             </RouterLink>
           </li>
         </ul>

@@ -85,11 +85,11 @@
 
       <section class="grid grid-cols-1 gap-3">
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload header SVG') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload SVG for header') }}</label>
           <input type="file" accept=".svg,image/svg+xml" @change="onPick($event, 'headerSvg')" />
         </div>
         <div>
-          <label class="text-xs block mb-1">{{ t('Upload header PNG (≤190×60)') }}</label>
+          <label class="text-xs block mb-1">{{ t('Upload PNG for header (≤190×60)') }}</label>
           <input type="file" accept="image/png" @change="onPick($event, 'headerPng', { maxW:190, maxH:60 })" />
         </div>
       </section>

@@ -31091,3 +31091,57 @@ msgstr ""
 
 msgid "Delete this folder? All files inside will be permanently deleted."
 msgstr ""
+
+msgid "Template type"
+msgstr ""
+
+msgid "Edit task"
+msgstr ""
+
+msgid "Pending validation"
+msgstr ""
+
+msgid "New project"
+msgstr ""
+
+msgid "Assign task"
+msgstr ""
+
+msgid "Select a task"
+msgstr ""
+
+msgid "Select a user"
+msgstr ""
+
+msgid "Target date"
+msgstr ""
+
+msgid "Could not load exportable items."
+msgstr ""
+
+msgid "You can close this message to continue."
+msgstr ""
+
+msgid "Select a contact"
+msgstr ""
+
+msgid "No messages yet"
+msgstr ""
+
+msgid "Pick someone in the left box to start chatting"
+msgstr ""
+
+msgid "Enter to send · Shift+Enter for newline"
+msgstr ""
+
+msgid "Delivered"
+msgstr ""
+
+msgid "Sending"
+msgstr ""
+
+msgid "Are you sure you want to clear this conversation?"
+msgstr ""
+
+msgid "New messages"
+msgstr ""

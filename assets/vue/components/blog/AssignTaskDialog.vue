@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog v-model:isVisible="visible" :title="t('Assign Task')" header-icon="account-plus" :width="'560px'">
+  <BaseDialog v-model:isVisible="visible" :title="t('Assign task')" header-icon="account-plus" :width="'560px'">
     <div class="space-y-3">
       <BaseSelect v-model="taskId" :options="tasks" optionLabel="title" optionValue="id" :placeholder="t('Select a task')" label="" />
       <BaseSelect v-model="userId" :options="members" optionLabel="name" optionValue="id" :placeholder="t('Select a user')" label="" />

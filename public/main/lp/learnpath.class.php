@@ -5110,6 +5110,11 @@ class learnpath
             );
         }
 
+        $ext = strtolower((string) $extension);
+        if (in_array($ext, ['html','htm'], true)) {
+            $docFiletype = 'html';
+        }
+
         $document = DocumentManager::addDocument(
             $courseInfo,
             null,
@@ -5126,6 +5131,19 @@ class learnpath
             $content,
             $parentId
         );
+
+        if ($document && in_array($ext, ['html','htm'], true)) {
+            $em = Database::getManager();
+            $docRepo = Container::getDocumentRepository();
+            $docEntity = $docRepo->find($document->getIid());
+            if ($docEntity && $docEntity->hasResourceNode()) {
+                $rf = $docEntity->getResourceNode()->getResourceFiles()->first();
+                if ($rf && $rf->getMimeType() !== 'text/html') {
+                    $rf->setMimeType('text/html');
+                    $em->flush();
+                }
+            }
+        }
 
         $document_id = $document->getIid();
         if ($document_id) {

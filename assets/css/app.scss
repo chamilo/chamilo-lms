@@ -971,9 +971,19 @@ img.course-tool__icon {
   .form-horizontal .control-label{ text-align:left; }
   textarea.form-control{ min-height:140px; }
 }
-.app-breadcrumb * { all: unset; @apply text-tiny font-semibold text-gray-90; }
-.app-breadcrumb .p-breadcrumb-separator { padding-inline: .25rem !important; }
-.app-breadcrumb a { cursor: pointer; text-decoration: none; }
+.app-breadcrumb { font-size: 0.8125rem; }
+.app-breadcrumb .p-breadcrumb,
+.app-breadcrumb .p-breadcrumb-list li > a,
+.app-breadcrumb .p-breadcrumb-list li > span,
+.app-breadcrumb .p-breadcrumb .p-menuitem-text {
+  font-size: inherit !important;
+  line-height: 1.25rem;
+}
+.app-breadcrumb .p-breadcrumb-list li > a,
+.app-breadcrumb .p-breadcrumb-list li:last-child > span {
+  font-weight: 600;
+}
+.app-breadcrumb .p-breadcrumb-separator { padding-inline: .25rem; }
 
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";

@@ -1040,20 +1040,11 @@
 }
 
 #social-wall-container {
-  .tab {
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    transition: background-color 0.3s, color 0.3s;
-    cursor: pointer;
+  .tab-active:hover {
+    @apply bg-primary/90;
   }
-
-  .tab:hover {
-     background-color: #e2e8f0;
-  }
-
-  .tab-active {
-    background-color: #3b82f6;
-    color: white;
+  .tab:disabled {
+    @apply opacity-60 cursor-not-allowed;
   }
 }
 

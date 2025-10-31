@@ -4,7 +4,7 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div class="flex items-center gap-2 text-sm">
         <h3 class="text-sm font-semibold text-gray-90">{{ title }}</h3>
-        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50"> {{ t("{0} selected", [selectedTotal]) }} </span>
+        <span class="px-2 py-1 rounded-md bg-gray-15 text-gray-50"> {{ $t("Selected") }}: {{ selectedTotal }} </span>
       </div>
 
       <div class="flex flex-wrap gap-2">
@@ -389,8 +389,25 @@ export default {
               ? this.group.items
               : []
         },
-        total() {
-          return this.nodes.length
+
+        totalLeafCount() {
+          const walk = (list) =>
+            list.reduce((acc, n) => {
+              const kids = Array.isArray(n.children) ? n.children : []
+              const mine = this.isNodeCheckable(n) ? 1 : 0
+              return acc + mine + walk(kids)
+            }, 0)
+          return walk(this.nodes)
+        },
+
+        selectedLeafCount() {
+          const walk = (list) =>
+            list.reduce((acc, n) => {
+              const kids = Array.isArray(n.children) ? n.children : []
+              const mine = this.isNodeCheckable(n) && this.isChecked(n) ? 1 : 0
+              return acc + mine + walk(kids)
+            }, 0)
+          return walk(this.nodes)
         },
       },
       watch: {
@@ -420,7 +437,7 @@ export default {
                 <i :class="open ? 'mdi mdi-chevron-down' : 'mdi mdi-chevron-right'"></i>
               </button>
               <span class="font-medium text-gray-90">{{ group.title || group.type }}</span>
-              <span class="text-xs text-gray-50">· {{ countSelected(group) }} / {{ total }}</span>
+              <span class="text-xs text-gray-50">· {{ selectedLeafCount }} / {{ totalLeafCount }}</span>
             </div>
             <div class="flex gap-2">
               <button class="btn-secondary" @click="selectAll"><i class="mdi mdi-check-all"></i> Select group</button>

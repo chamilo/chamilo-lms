@@ -24,36 +24,40 @@
                 </thead>
                 <tbody>
                 {% for file in files %}
+                    {% set title        = file.title|default('N/A'|trans) %}
+                    {% set originalName = file.originalName ?? file.title ?? null %}
+                    {% set courseTitle  =
+                        (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
+                        ? (file.resourceNode.resourceLinks|first.course.title|default('N/A'|trans))
+                        : ('N/A'|trans)
+                    %}
+                    {% set username =
+                        (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
+                        ? (file.resourceNode.resourceLinks|first.user.username|default('N/A'|trans))
+                        : (file.resourceNode and file.resourceNode.creator
+                        ? (file.resourceNode.creator.username|default('N/A'|trans))
+                        : ('N/A'|trans))
+                    %}
+                    {% set fileUrl  = fileUrls[file.id]|default('') %}
+                    {% set filePath = filePaths[file.id]|default('') %}
+                    {% set resourceNodeId = file.resourceNode ? file.resourceNode.id : 'N/A' %}
+
                     <tr>
-                        <td>{{ file.title }}</td>
-                        <td>{{ file.originalName }}</td>
-                        <td>
-                            {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
-                                {{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}
-                            {% else %}
-                                {{ 'N/A'|trans }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}
-                                {{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}
-                            {% elseif file.resourceNode and file.resourceNode.creator %}
-                                {{ file.resourceNode.creator.username ?? 'N/A' }}
-                            {% else %}
-                                {{ 'N/A'|trans }}
-                            {% endif %}
-                        </td>
+                        <td>{{ title }}</td>
+                        <td>{{ originalName|default('N/A'|trans) }}</td>
+                        <td>{{ courseTitle }}</td>
+                        <td>{{ username }}</td>
                         <td>
                             <a href="#" class="open-modal"
-                               data-title="{{ file.title }}"
-                               data-mime-type="{{ file.mimeType }}"
-                               data-original-name="{{ file.originalName }}"
-                               data-size="{{ file.size }}"
-                               data-course="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.course.title ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
-                               data-user="{% if file.resourceNode and file.resourceNode.resourceLinks|length > 0 %}{{ file.resourceNode.resourceLinks|first.user.username ?? 'N/A' }}{% elseif file.resourceNode and file.resourceNode.creator %}{{ file.resourceNode.creator.username ?? 'N/A' }}{% else %}{{ 'N/A'|trans }}{% endif %}"
-                               data-file-url="{{ fileUrls[file.id] }}"
-                               data-file-path="{{ filePaths[file.id] }}"
-                               data-resource-node-id="{{ file.resourceNode ? file.resourceNode.id : 'N/A' }}"
+                               data-title="{{ title }}"
+                               data-mime-type="{{ file.mimeType|default('') }}"
+                               data-original-name="{{ originalName|default('N/A'|trans) }}"
+                               data-size="{{ file.size|default(0) }}"
+                               data-course="{{ courseTitle }}"
+                               data-user="{{ username }}"
+                               data-file-url="{{ fileUrl }}"
+                               data-file-path="{{ filePath }}"
+                               data-resource-node-id="{{ resourceNodeId }}"
                                data-resource-file-id="{{ file.id }}">
                                 {{ 'View'|trans }}
                             </a>
@@ -121,16 +125,16 @@
             var resourceNodeId = button.getAttribute('data-resource-node-id');
             var resourceFileId = button.getAttribute('data-resource-file-id');
 
-            document.getElementById('file-title').textContent = title;
-            document.getElementById('file-mime-type').textContent = mimeType;
-            document.getElementById('file-original-name').textContent = originalName;
-            document.getElementById('file-size').textContent = size + ' bytes';
-            document.getElementById('file-course').textContent = course;
-            document.getElementById('file-user').textContent = user;
-            document.getElementById('file-path').textContent = filePath;
-            document.getElementById('file-url').href = fileUrl;
-            document.getElementById('resource-node-id').textContent = resourceNodeId;
-            document.getElementById('resource-file-id').textContent = resourceFileId;
+            document.getElementById('file-title').textContent = title || '';
+            document.getElementById('file-mime-type').textContent = mimeType || '';
+            document.getElementById('file-original-name').textContent = originalName || '';
+            document.getElementById('file-size').textContent = (size || 0) + ' bytes';
+            document.getElementById('file-course').textContent = course || '';
+            document.getElementById('file-user').textContent = user || '';
+            document.getElementById('file-path').textContent = filePath || '';
+            document.getElementById('file-url').href = fileUrl || '#';
+            document.getElementById('resource-node-id').textContent = resourceNodeId || '';
+            document.getElementById('resource-file-id').textContent = resourceFileId || '';
 
             modal.style.display = "block";
           };
@@ -156,7 +160,7 @@
               copyPathButton.classList.add('mdi-content-copy');
             }, 2000);
           }, function(err) {
-            alert('Failed to copy: ', err);
+            alert('Failed to copy: ' + err);
           });
         };
       });

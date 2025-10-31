@@ -293,7 +293,7 @@ class ResourceFile implements Stringable
 
         return $this;
     }
-    public function getOriginalName(): string
+    public function getOriginalName(): ?string
     {
         return $this->originalName;
     }

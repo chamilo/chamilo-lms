@@ -589,12 +589,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $fileName = $resourceFile->getOriginalName();
         $fileSize = $resourceFile->getSize();
-        $mimeType = $resourceFile->getMimeType();
+        $mimeType = $resourceFile->getMimeType() ?: '';
         [$start, $end, $length] = $this->getRange($request, $fileSize);
         $resourceNodeRepo = $this->getResourceNodeRepository();
 
         // Convert the file name to ASCII using iconv
         $fileName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $fileName);
+
+        // MIME normalization for HTML
+        $looksLikeHtmlByExt = (bool) preg_match('/\.x?html?$/i', (string) $fileName);
+        if ($mimeType === '' || stripos($mimeType, 'html') === false) {
+            if ($looksLikeHtmlByExt) {
+                $mimeType = 'text/html; charset=UTF-8';
+            }
+        }
 
         switch ($mode) {
             case 'download':
@@ -652,7 +660,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $fileName
                     );
                     $response->headers->set('Content-Disposition', $disposition);
-                    $response->headers->set('Content-Type', 'text/html');
+                    $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
                     // @todo move into a function/class
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {

@@ -205,3 +205,20 @@
       });
     </script>
 {% endblock %}
+{% block javascripts %}
+    {% set ns = app.request.get('namespace')|default('') %}
+    {% set sectionLabel =
+        (namespace_labels is defined and namespace_labels[ns] is defined)
+        ? namespace_labels[ns]
+        : (ns == 'cas' ? 'CAS' : (ns == 'lp' ? 'Learning path'|trans : (ns|capitalize)|trans))
+    %}
+    <script>
+      window.breadcrumb = [
+        { name: "{{ 'Admin'|trans|e('js') }}",    url: "/admin" },
+        { name: "{{ 'Settings'|trans|e('js') }}", url: "/admin/settings" },
+        { name: "{{ sectionLabel|e('js') }}" }
+      ];
+    </script>
+
+    {{ parent() }}
+{% endblock %}

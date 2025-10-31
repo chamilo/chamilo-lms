@@ -31,9 +31,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 //
 // *     attributes={"security"="is_granted('ROLE_ADMIN')"},
-/**
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
@@ -138,24 +136,14 @@ class ResourceFile implements Stringable
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
 
-    /**
-     * @Vich\UploadableField(
-     *     mapping="resources",
-     *     fileNameProperty="title",
-     *     size="size",
-     *     mimeType="mimeType",
-     *     originalName="originalName",
-     *     dimensions="dimensions"
-     * )
-     */
-    //    #[Vich\UploadableField(
-    //        mapping: 'resources',
-    //        fileNameProperty: 'title',
-    //        size: 'size',
-    //        mimeType: 'mimeType',
-    //        originalName: 'originalName',
-    //        dimensions: 'dimensions'
-    //    )]
+    #[Vich\UploadableField(
+        mapping: 'resources',
+        fileNameProperty: 'title',
+        size: 'size',
+        mimeType: 'mimeType',
+        originalName: 'originalName',
+        dimensions: 'dimensions'
+    )]
     protected ?File $file = null;
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;

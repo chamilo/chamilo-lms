@@ -2291,9 +2291,9 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions'];
+        $columns = ['title', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
         $result = Database::select(
             '*',
@@ -2303,7 +2303,7 @@ switch ($action) {
         $new_result = [];
         foreach ($result as $item) {
             if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+                $item['title'] = '<font style="color:#AAA">'.$item['title'].'</font>';
             }
             $new_result[] = $item;
         }

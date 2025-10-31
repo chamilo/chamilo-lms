@@ -9,8 +9,6 @@ $this_section = SECTION_MYPROFILE;
 api_block_anonymous_users();
 SkillModel::isAllowed(api_get_user_id());
 
-//Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 $htmlHeadXtra[] = api_get_js('skills.js');

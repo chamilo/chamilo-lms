@@ -154,8 +154,6 @@ switch ($action) {
 
         break;
     case 'list':
-        $htmlHeadXtra[] = api_get_jqgrid_js();
-
         $searchForm = new FormValidator(
             'search_simple',
             'post',

@@ -26,7 +26,6 @@ if (!$object->allowed()) {
 
 $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId;
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
     'name' => get_lang('Session list'),

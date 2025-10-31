@@ -297,7 +297,6 @@ switch ($action) {
         exit;
         break;
 }
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
 Display::display_header(get_lang('Course sessions'));
 

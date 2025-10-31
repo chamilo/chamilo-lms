@@ -31,7 +31,6 @@ if (!$allowVisitors) {
 }
 
 $this_section = SECTION_COURSES;
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $course_id = isset($_GET['course_id']) ? (int) $_GET['course_id'] : null;
 Session::write('id_session', $session_id);
 

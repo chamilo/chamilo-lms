@@ -12,9 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $allowCareer = ('true' === api_get_setting('session.allow_session_admin_read_careers'));
 api_protect_admin_script($allowCareer);
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',

@@ -15,9 +15,6 @@ if ('true' != api_get_setting('gradebook_enable_grade_model')) {
     api_not_allowed(true);
 }
 
-//Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 

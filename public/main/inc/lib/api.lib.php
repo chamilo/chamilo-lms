@@ -5727,14 +5727,6 @@ function api_get_jquery_ui_css_web_path()
     return api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
 }
 
-function api_get_jqgrid_js()
-{
-    return '<link
-        href="'.api_get_path(WEB_PUBLIC_PATH).'build/legacy_free-jqgrid.css" rel="stylesheet" media="screen" type="text/css" />'
-        .PHP_EOL
-        .api_get_build_js('legacy_free-jqgrid.js');
-}
-
 /**
  * Returns the jquery library js and css headers.
  *

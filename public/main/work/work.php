@@ -28,7 +28,6 @@ $repo = Container::getStudentPublicationRepository();
 $studentPublication = empty($work_id) ? null : $repo->find($work_id);
 
 $curdirpath = '';
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
 $tool_name = get_lang('Assignments');
 

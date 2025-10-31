@@ -1170,8 +1170,6 @@ $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     }
 }';
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $griJs = Display::grid_js(
     'sessions',
     $url,

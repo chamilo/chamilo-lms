@@ -944,10 +944,11 @@ function getLastPostOfThread(int $threadId): array
 function returnVisibleInvisibleIcon(
     string $content,
     int $id,
-    int $current_visibility_status,
+    int|bool $current_visibility_status,
     array $additional_url_parameters = []
 ): string
 {
+    $current_visibility_status = (int) $current_visibility_status;
     $html = '';
 
     if (1 == $current_visibility_status) {

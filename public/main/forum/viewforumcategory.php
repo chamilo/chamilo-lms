@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -71,7 +73,6 @@ if (api_is_in_gradebook()) {
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
 
-
 // Tool introduction
 $form_count = 0;
 $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
@@ -119,7 +120,7 @@ if (!api_is_anonymous()) {
 
 /* ACTION LINKS */
 $actionLeft = null;
-//if is called from learning path
+// if is called from learning path
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
@@ -130,7 +131,6 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
 }
 
 if (api_is_allowed_to_edit(false, true)) {
-
     $url = 'index.php?'.api_get_cidreq();
     $actionLeft .= Display::url(
         Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', '', ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')),
@@ -188,8 +188,8 @@ if (is_array($forumCategories)) {
         $visibility = $forumCategory->isVisible($courseEntity);
 
         if (!empty($categoryId)) {
-            if (api_is_allowed_to_edit(false, true) &&
-                !(0 == $categorySessionId && 0 != $sessionId)
+            if (api_is_allowed_to_edit(false, true)
+                && !(0 == $categorySessionId && 0 != $sessionId)
             ) {
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit_category&content=forumcategory&id='.$categoryId
@@ -201,7 +201,7 @@ if (is_array($forumCategories)) {
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
                         get_lang('Delete forum category ?'),
-                        ENT_QUOTES
+                        \ENT_QUOTES
                     ))
                     ."')) return false;\">"
                     .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
@@ -239,7 +239,7 @@ if (is_array($forumCategories)) {
                 // Note: This can be speed up if we transform the $allCourseForums
                 // to an array that uses the forum_category as the key.
                 if (true) {
-                    //if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
+                    // if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
                     $show_forum = false;
                     // SHOULD WE SHOW THIS PARTICULAR FORUM
                     // you are teacher => show forum
@@ -312,7 +312,7 @@ if (is_array($forumCategories)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=delete_forum&content=forum&id='.$forumId
                                 ."\" onclick=\"javascript:if(!confirm('".addslashes(
-                                    api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
+                                    api_htmlentities(get_lang('Delete forum ?'), \ENT_QUOTES)
                                 )
                                 ."')) return false;\">"
                                 .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))

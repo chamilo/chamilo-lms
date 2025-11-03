@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
-
 
 /**
  * @todo fix all this qualify files avoid including files, use classes POO jmontoya
@@ -71,7 +72,7 @@ api_protect_course_script(true);
 $nameTools = get_lang('Forums');
 $this_section = SECTION_COURSES;
 $message = '';
-//are we in a lp ?
+// are we in a lp ?
 $origin = api_get_origin();
 
 $currentUserId = api_get_user_id();
@@ -84,8 +85,10 @@ $allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $repo = Container::getForumRepository();
 $repoThread = Container::getForumThreadRepository();
+
 /** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
+
 /** @var CForumThread $threadEntity */
 $threadEntity = $repoThread->find($threadId);
 
@@ -108,7 +111,7 @@ $maxQualify = showQualify('2', $userIdToQualify, $threadId);
 $score = 0;
 
 if (isset($_POST['idtextqualify'])) {
-    $score = (float) ($_POST['idtextqualify']);
+    $score = (float) $_POST['idtextqualify'];
 
     if ($score <= $maxQualify) {
         saveThreadScore(
@@ -130,6 +133,7 @@ if (isset($_POST['idtextqualify'])) {
                 'list' => 'qualify',
             ])
         );
+
         exit;
     }
 
@@ -228,15 +232,15 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $currentUrl = api_get_self().'?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
-if ('delete' === $action &&
-    isset($_GET['content']) &&
-    isset($_GET['id']) && api_is_allowed_to_edit(false, true)
+if ('delete' === $action
+    && isset($_GET['content'], $_GET['id'])
+     && api_is_allowed_to_edit(false, true)
 ) {
     deletePost($postEntity);
     api_location($currentUrl);
 }
-if (('invisible' === $action || 'visible' === $action) &&
-    isset($_GET['id']) && api_is_allowed_to_edit(false, true)
+if (('invisible' === $action || 'visible' === $action)
+    && isset($_GET['id']) && api_is_allowed_to_edit(false, true)
 ) {
     approvePost($postEntity, $action);
     api_location($currentUrl);
@@ -269,7 +273,7 @@ $result = get_statistical_information(
 );
 
 $url = api_get_path(WEB_CODE_PATH).'forum/forumqualify.php?'.
-    api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'&user='.(int) ($_GET['user']).'&user_id='.(int) ($_GET['user']);
+    api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'&user='.(int) $_GET['user'].'&user_id='.(int) $_GET['user'];
 
 $userToQualifyInfo = api_get_user_info($userIdToQualify);
 $form = new FormValidator('forum-thread-qualify', 'post', $url);
@@ -363,13 +367,13 @@ if (api_is_allowed_to_edit() && $counter > 0) {
     if (isset($_GET['type']) && 'false' === $_GET['type']) {
         $buttons = '<a
             class="btn btn--plain"
-            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) ($_GET['user']).'&user_id='.(int) ($_GET['user_id']).'&type=true&idtextqualify='.$score.'#history">'.
+            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) $_GET['user'].'&user_id='.(int) $_GET['user_id'].'&type=true&idtextqualify='.$score.'#history">'.
             get_lang('more recent').'</a> <a class="btn btn--plain disabled" >'.get_lang('older').'</a>';
     } else {
         $buttons = '<a class="btn btn--plain">'.get_lang('more recent').'</a>
                         <a
                             class="btn btn--plain"
-                            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) ($_GET['user']).'&user_id='.(int) ($_GET['user_id']).'&type=false&idtextqualify='.$score.'#history">'.
+                            href="forumqualify.php?'.api_get_cidreq().'&forum='.$forumId.'&origin='.$origin.'&thread='.$threadId.'&user='.(int) $_GET['user'].'&user_id='.(int) $_GET['user_id'].'&type=false&idtextqualify='.$score.'#history">'.
             get_lang('older').'</a>';
     }
 
@@ -397,5 +401,5 @@ if (api_is_allowed_to_edit() && $counter > 0) {
 }
 
 if ('learnpath' !== $origin) {
-    Display:: display_footer();
+    Display::display_footer();
 }

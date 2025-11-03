@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -89,12 +91,14 @@ if (!empty($forumId)) {
 }
 
 $repoThread = Container::getForumThreadRepository();
+
 /** @var CForumThread $threadEntity */
 $threadEntity = $repoThread->find($threadId);
 
 if (empty($threadEntity)) {
     $url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
     header('Location: '.$url);
+
     exit;
 }
 
@@ -162,13 +166,14 @@ switch ($my_action) {
     case 'delete_attach':
         delete_attachment($_GET['post'], $_GET['id_attach']);
         header('Location: '.$currentUrl);
+
         exit;
+
     case 'delete':
         if (
-            isset($_GET['content']) &&
-            isset($_GET['id']) &&
-            (api_is_allowed_to_edit(false, true) ||
-                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
+            isset($_GET['content'], $_GET['id'])
+            && (api_is_allowed_to_edit(false, true)
+                || ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -177,12 +182,14 @@ switch ($my_action) {
             }
         }
         header('Location: '.$currentUrl);
+
         exit;
+
     case 'invisible':
     case 'visible':
-        if (isset($_GET['id']) &&
-            (api_is_allowed_to_edit(false, true) ||
-                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
+        if (isset($_GET['id'])
+            && (api_is_allowed_to_edit(false, true)
+                || ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
             /** @var CForumPost $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
@@ -190,7 +197,9 @@ switch ($my_action) {
             Display::addFlash(Display::return_message(get_lang($message)));
         }
         header('Location: '.$currentUrl);
+
         exit;
+
     case 'move':
         if (isset($_GET['post'])) {
             $form = move_post_form();
@@ -202,24 +211,28 @@ switch ($my_action) {
                     'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
                 header('Location: '.$currentUrl);
+
                 exit;
-            } else {
-                $moveForm = $form->returnForm();
             }
+            $moveForm = $form->returnForm();
         }
 
         break;
+
     case 'report':
         $result = reportPost($postEntity, $forumEntity, $threadEntity);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
+
         exit;
+
     case 'ask_revision':
         if ('true' === api_get_setting('forum.allow_forum_post_revisions')) {
             $result = savePostRevision($postEntity);
             Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
         header('Location: '.$currentUrl);
+
         exit;
 }
 
@@ -246,8 +259,8 @@ if (!empty($groupId)) {
     if ('learnpath' != $origin) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(
-                    urlencode($my_search)
-                ),
+                urlencode($my_search)
+            ),
             'name' => $nameTools,
         ];
         $interbreadcrumb[] = [
@@ -269,10 +282,10 @@ if (!empty($groupId)) {
 }
 
 // Visibility constraints
-if (!api_is_allowed_to_create_course() &&
-    (
-        !$forumEntity->isVisible($courseEntity) ||
-        !$threadEntity->isVisible($courseEntity)
+if (!api_is_allowed_to_create_course()
+    && (
+        !$forumEntity->isVisible($courseEntity)
+        || !$threadEntity->isVisible($courseEntity)
     )
 ) {
     api_not_allowed();
@@ -293,11 +306,10 @@ if ('learnpath' != $origin) {
         .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
 }
 
-if (($current_forum_category && 0 == $current_forum_category->getLocked()) &&
-    0 == $forumEntity->getLocked() && 0 == $threadEntity->getLocked() || api_is_allowed_to_edit(false, true)
+if (($current_forum_category && 0 == $current_forum_category->getLocked())
+    && 0 == $forumEntity->getLocked() && 0 == $threadEntity->getLocked() || api_is_allowed_to_edit(false, true)
 ) {
     if ($_user['user_id'] || (1 == $forumEntity->getAllowAnonymous() && !$_user['user_id'])) {
-
         if ('learnpath' == $origin && !empty($threadId)) {
             $actions .= '<a href="'.$forumUrl.'viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'
                 .Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
@@ -308,9 +320,10 @@ if (($current_forum_category && 0 == $current_forum_category->getLocked()) &&
                 .Display::getMdiIcon('reply', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this thread')).'</a>';
         }
         if ((
-                api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach())) ||
-            (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id'])) ||
-            (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
+            api_is_allowed_to_edit(false, true) && !api_is_session_general_coach()
+        )
+            || (1 == $forumEntity->getAllowNewThreads() && isset($_user['user_id']))
+            || (1 == $forumEntity->getAllowNewThreads() && !isset($_user['user_id']) && 1 == $forumEntity->getAllowAnonymous())
         ) {
             if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
                 $actions .= '&nbsp;&nbsp;';
@@ -381,7 +394,8 @@ $opPostId = (int) $repoPost
     ->where('fp.thread = :thread')
     ->setParameter('thread', $threadId)
     ->getQuery()
-    ->getSingleScalarResult();
+    ->getSingleScalarResult()
+;
 
 $postList = [];
 foreach ($posts as $post) {
@@ -426,9 +440,9 @@ foreach ($posts as $post) {
     $editButton = '';
     $askForRevision = '';
 
-    if (($groupEntity && $tutorGroup) ||
-        (1 == $forumEntity->getAllowEdit() && $posterId == $userId) ||
-        (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach()))
+    if (($groupEntity && $tutorGroup)
+        || (1 == $forumEntity->getAllowEdit() && $posterId == $userId)
+        || (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach())
     ) {
         // pass entity to postIsEditableByStudent() (array caused fatal when calling getStatus())
         if (false == $locked && postIsEditableByStudent($forumEntity, $postEntity)) {
@@ -445,15 +459,15 @@ foreach ($posts as $post) {
         }
     }
 
-    if (($groupEntity && $tutorGroup) || (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach()))) {
+    if (($groupEntity && $tutorGroup) || (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach())) {
         if (false == $locked) {
             $deleteUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                    'forum' => $forumId,
-                    'thread' => $threadId,
-                    'action' => 'delete',
-                    'content' => 'post',
-                    'id' => $post['post_id'],
-                ]);
+                'forum' => $forumId,
+                'thread' => $threadId,
+                'action' => 'delete',
+                'content' => 'post',
+                'id' => $post['post_id'],
+            ]);
             $iconEdit .= Display::url(
                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $deleteUrl,
@@ -461,7 +475,7 @@ foreach ($posts as $post) {
                     'class' => 'inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-25 hover:bg-gray-15',
                     'title' => get_lang('Delete'),
                     'aria-label' => get_lang('Delete'),
-                    'onclick' => "if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'), ENT_QUOTES))."')) return false;",
+                    'onclick' => "if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted'), \ENT_QUOTES))."')) return false;",
                     'id' => "delete-post-{$post['post_id']}",
                 ]
             );
@@ -469,7 +483,7 @@ foreach ($posts as $post) {
     }
 
     // Visibility / Move icons
-    if (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach())) {
+    if (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach()) {
         $iconEdit .= returnVisibleInvisibleIcon(
             'post',
             $post['post_id'],
@@ -500,11 +514,11 @@ foreach ($posts as $post) {
             // Build compact "ask revision" icon linking to ?action=ask_revision
             if ('true' === api_get_setting('forum.allow_forum_post_revisions')) {
                 $askRevisionUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                        'forum' => $forumId,
-                        'thread' => $threadId,
-                        'action' => 'ask_revision',
-                        'post_id' => $post['post_id'],
-                    ]);
+                    'forum' => $forumId,
+                    'thread' => $threadId,
+                    'action' => 'ask_revision',
+                    'post_id' => $post['post_id'],
+                ]);
                 $askForRevision = Display::url(
                     Display::getMdiIcon('history', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Ask for revision')),
                     $askRevisionUrl,
@@ -566,11 +580,11 @@ foreach ($posts as $post) {
     $reportButton = '';
     if ($allowReport) {
         $reportUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                'forum'  => $forumId,
-                'thread' => $threadId,
-                'action' => 'report',
-                'post'   => $post['post_id'],
-            ]);
+            'forum' => $forumId,
+            'thread' => $threadId,
+            'action' => 'report',
+            'post' => $post['post_id'],
+        ]);
         $reportButton = Display::url(
             Display::getMdiIcon(ToolIcon::MESSAGE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Report')),
             $reportUrl,
@@ -597,23 +611,23 @@ foreach ($posts as $post) {
     $waitingValidation = '';
 
     if (!$isOp) {
-        if (($current_forum_category && 0 == $current_forum_category->getLocked()) &&
-            0 == $forumEntity->getLocked() && 0 == $threadEntity->getLocked() || api_is_allowed_to_edit(false, true)
+        if (($current_forum_category && 0 == $current_forum_category->getLocked())
+            && 0 == $forumEntity->getLocked() && 0 == $threadEntity->getLocked() || api_is_allowed_to_edit(false, true)
         ) {
             if ($userId || (1 == $forumEntity->getAllowAnonymous() && !$userId)) {
                 if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                     $replyUrl = 'reply.php?'.api_get_cidreq().'&'.http_build_query([
-                            'forum' => $forumId,
-                            'thread' => $threadId,
-                            'post' => $post['post_id'],
-                            'action' => 'replymessage',
-                        ]);
+                        'forum' => $forumId,
+                        'thread' => $threadId,
+                        'post' => $post['post_id'],
+                        'action' => 'replymessage',
+                    ]);
                     $quoteUrl = 'reply.php?'.api_get_cidreq().'&'.http_build_query([
-                            'forum' => $forumId,
-                            'thread' => $threadId,
-                            'post' => $post['post_id'],
-                            'action' => 'quote',
-                        ]);
+                        'forum' => $forumId,
+                        'thread' => $threadId,
+                        'post' => $post['post_id'],
+                        'action' => 'quote',
+                    ]);
 
                     // students only get reply/quote on validated posts
                     if ($forumEntity->isModerated() && !api_is_allowed_to_edit(false, true)) {
@@ -695,16 +709,17 @@ foreach ($posts as $post) {
     $attachments = $postEntity->getAttachments();
     if ($attachments) {
         $repoAttach = Container::getForumAttachmentRepository();
+
         /** @var CForumAttachment $attachment */
         foreach ($attachments as $attachment) {
             $post['post_attachments'] .= Display::getMdiIcon('paperclip', 'ch-tool-icon', '', ICON_SIZE_SMALL);
             $url = $repoAttach->getResourceFileDownloadUrl($attachment).'?'.api_get_cidreq();
             $post['post_attachments'] .= Display::url($attachment->getFilename(), $url);
             $post['post_attachments'] .= '<span class="forum_attach_comment">'.$attachment->getComment().'</span>';
-            if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId) ||
-                (api_is_allowed_to_edit(false, true) && !(api_is_session_general_coach()))
+            if ((1 == $forumEntity->getAllowEdit() && $post['user_id'] == $userId)
+                || (api_is_allowed_to_edit(false, true) && !api_is_session_general_coach())
             ) {
-                $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='.$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id'].'" onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\')) return false;">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a><br />';
+                $post['post_attachments'] .= '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete_attach&id_attach='.$attachment->getIid().'&forum='.$forumId.'&thread='.$threadId.'&post='.$post['post_id'].'" onclick="if(!confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES)).'\')) return false;">'.Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a><br />';
             }
         }
     }
@@ -717,7 +732,7 @@ foreach ($posts as $post) {
         $buttonQuote,
         $waitingValidation,
     ], static function ($html) {
-        return !empty($html) && trim($html) !== '';
+        return !empty($html) && '' !== trim($html);
     });
 
     // Compose bottom button row
@@ -735,16 +750,16 @@ $template->assign('posts', $postList);
 
 $formToString = '';
 $showForm = true;
-if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && 0 == !$current_forum_category->isVisible($courseEntity)) || !$forumEntity->isVisible($courseEntity))
+if (!api_is_allowed_to_edit(false, true)
+    && (($current_forum_category && 0 == !$current_forum_category->isVisible($courseEntity)) || !$forumEntity->isVisible($courseEntity))
 ) {
     $showForm = false;
 }
 
-if (!api_is_allowed_to_edit(false, true) &&
-    (
-        ($current_forum_category && 0 != $current_forum_category->getLocked()) ||
-            0 != $forumEntity->getLocked() || 0 != $threadEntity->getLocked()
+if (!api_is_allowed_to_edit(false, true)
+    && (
+        ($current_forum_category && 0 != $current_forum_category->getLocked())
+            || 0 != $forumEntity->getLocked() || 0 != $threadEntity->getLocked()
     )
 ) {
     $showForm = false;

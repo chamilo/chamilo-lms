@@ -5259,7 +5259,7 @@ function api_get_access_url_from_user($user_id)
     return $list;
 }
 
-/** 
+/**
  * Checks whether the current admin user in in all access urls.
  *
  * @return bool
@@ -7092,6 +7092,7 @@ function api_mail_html(
     $additionalParameters = [],
     string $sendErrorTo = null
 ) {
+    /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);
 
     return $mailHelper->send(

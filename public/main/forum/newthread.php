@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -21,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CForum;
  * - quoting a message.
  *
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @Copyright Ghent University
  * @Copyright Patrick Cool
  */
@@ -121,26 +124,26 @@ if (api_is_in_gradebook()) {
 /* Is the user allowed here? */
 // The user is not allowed here if:
 // 1. the forumcategory or forum is invisible (visibility==0) and the user is not a course manager
-if (!api_is_allowed_to_create_course() && //is a student
-    (
-        ($current_forum_category && false == $current_forum_category->isVisible($courseEntity)) ||
-        false == $current_forum_category->isVisible($courseEntity)
+if (!api_is_allowed_to_create_course() // is a student
+    && (
+        ($current_forum_category && false == $current_forum_category->isVisible($courseEntity))
+        || false == $current_forum_category->isVisible($courseEntity)
     ) && !api_get_session_id()
 ) {
     api_not_allowed(true);
 }
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category->isVisible($courseEntity) &&
-        0 != $current_forum_category->getLocked()) || 0 != $forumEntity->getLocked())
+if (!api_is_allowed_to_edit(false, true)
+    && (($current_forum_category->isVisible($courseEntity)
+        && 0 != $current_forum_category->getLocked()) || 0 != $forumEntity->getLocked())
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    1 != $forumEntity->getAllowNewThreads()
+if (!api_is_allowed_to_edit(false, true)
+    && 1 != $forumEntity->getAllowNewThreads()
 ) {
     api_not_allowed();
 }
@@ -178,11 +181,11 @@ if (!empty($groupId)) {
         'name' => get_lang('Group area').' '.$groupProperties['name'],
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.(int) $_GET['forum'],
         'name' => $forumEntity->getTitle(),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) ($_GET['forum']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.(int) $_GET['forum'],
         'name' => get_lang('Create thread'),
     ];
 } else {
@@ -222,8 +225,8 @@ $form = newThread(
 
 Display::display_header();
 
-//$actions  '<span style="float:right;">'.search_link().'</span>';
-$actions = '<a href="viewforum.php?forum='.(int) ($_GET['forum']).'&'.$cidreq.'">'.
+// $actions  '<span style="float:right;">'.search_link().'</span>';
+$actions = '<a href="viewforum.php?forum='.(int) $_GET['forum'].'&'.$cidreq.'">'.
     Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to forum')).'</a>';
 echo Display::toolbarAction('toolbar', [$actions]);
 

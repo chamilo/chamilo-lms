@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -106,23 +108,23 @@ if (!empty($groupId)) {
     );
 
     // Course
-    if (!api_is_allowed_to_create_course() && //is a student
-        (
-            ($category && false == $category->isVisible($courseEntity)) ||
-            !$category->isVisible($courseEntity)
-        ) &&
-        !$sessionId
+    if (!api_is_allowed_to_create_course() // is a student
+        && (
+            ($category && false == $category->isVisible($courseEntity))
+            || !$category->isVisible($courseEntity)
+        )
+        && !$sessionId
     ) {
-      //  api_not_allowed(true);
+        //  api_not_allowed(true);
     }
 } else {
     // Course
-    if (!api_is_allowed_to_create_course() && //is a student
-        (
-            ($category && false == $category->isVisible($courseEntity)) ||
-            !$category->isVisible($courseEntity)
-        ) &&
-        !$sessionId
+    if (!api_is_allowed_to_create_course() // is a student
+        && (
+            ($category && false == $category->isVisible($courseEntity))
+            || !$category->isVisible($courseEntity)
+        )
+        && !$sessionId
     ) {
         api_not_allowed(true);
     }
@@ -179,10 +181,9 @@ if (!empty($groupId)) {
 
 $qualificationBlock = '';
 // Student list
-if ('liststd' === $my_action &&
-    isset($_GET['content']) &&
-    isset($_GET['id']) &&
-    (api_is_allowed_to_edit(null, true) || $is_group_tutor)
+if ('liststd' === $my_action
+    && isset($_GET['content'], $_GET['id'])
+    && (api_is_allowed_to_edit(null, true) || $is_group_tutor)
 ) {
     $active = null;
     $listType = $_GET['list'] ?? null;
@@ -194,12 +195,14 @@ if ('liststd' === $my_action &&
             $active = 2;
 
             break;
+
         case 'notqualify':
             $student_list = get_thread_users_not_qualify($_GET['id']);
             $nrorow3 = -2;
             $active = 3;
 
             break;
+
         default:
             $student_list = get_thread_users_details($_GET['id']);
             $nrorow3 = Database::num_rows($student_list);
@@ -213,7 +216,7 @@ if ('liststd' === $my_action &&
     if ($nrorow3 > 0 || -2 == $nrorow3) {
         $url = api_get_cidreq().'&forum='.$forumId.'&action='
             .Security::remove_XSS($_GET['action']).'&content='
-            .Security::remove_XSS($_GET['content'], STUDENT).'&id='.(int) ($_GET['id']);
+            .Security::remove_XSS($_GET['content'], STUDENT).'&id='.(int) $_GET['id'];
         $tabs = [
             [
                 'content' => get_lang('All learners'),
@@ -267,7 +270,7 @@ if ('liststd' === $my_action &&
                     $qualificationBlock .= '<td>
                         <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq()
                         .'&forum='.$forumId.'&thread='
-                        .(int) ($_GET['id']).'&user='.$row_student_list['id']
+                        .(int) $_GET['id'].'&user='.$row_student_list['id']
                         .'&user_id='.$row_student_list['id'].'&idtextqualify='
                         .$current_qualify_thread.'">'
                         .$icon.'</a>
@@ -308,9 +311,9 @@ if ('learnpath' !== $origin) {
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-if (api_is_allowed_to_edit(false, true) ||
-    (1 == $forumEntity->getAllowNewThreads() && api_get_user_id()) ||
-    (1 == $forumEntity->getAllowNewThreads() && !api_get_user_id() && 1 == $forumEntity->getAllowAnonymous())
+if (api_is_allowed_to_edit(false, true)
+    || (1 == $forumEntity->getAllowNewThreads() && api_get_user_id())
+    || (1 == $forumEntity->getAllowNewThreads() && !api_get_user_id() && 1 == $forumEntity->getAllowAnonymous())
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
@@ -360,8 +363,8 @@ if (is_array($threads)) {
     foreach ($threads as $thread) {
         $threadId = $thread->getIid();
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
-        if (api_is_allowed_to_edit(false, true) ||
-            !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity))
+        if (api_is_allowed_to_edit(false, true)
+            || !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity))
         ) {
             $title = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
@@ -380,7 +383,7 @@ if (is_array($threads)) {
                     'span',
                     $completeName,
                     [
-                        'title' => api_htmlentities($poster_username, ENT_QUOTES),
+                        'title' => api_htmlentities($poster_username, \ENT_QUOTES),
                     ]
                 );
             }
@@ -408,7 +411,7 @@ if (is_array($threads)) {
                 $lastPostContent .= '<p>'.Security::remove_XSS(cut($thread->getThreadLastPost()->getPostText(), 140)).'</p>';
             }
 
-            //$html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
+            // $html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
             $waitingModeration = '';
             if (1 == $forumEntity->isModerated() && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -446,8 +449,7 @@ if (is_array($threads)) {
             $iconsEdit = '';
             if ('learnpath' !== $origin) {
                 if (api_is_allowed_to_edit(false, true)
-                    &&
-                    !(api_is_session_general_coach() && $forumSessionId != $sessionId)
+                    && !(api_is_session_general_coach() && $forumSessionId != $sessionId)
                 ) {
                     $iconsEdit .= '<a href="'.$forumUrl.'editthread.php?'.api_get_cidreq()
                         .'&forum='.$forumId.'&thread='
@@ -459,7 +461,7 @@ if (is_array($threads)) {
                     } else {
                         $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
-                            .addslashes(api_htmlentities(get_lang('Delete complete thread?'), ENT_QUOTES))
+                            .addslashes(api_htmlentities(get_lang('Delete complete thread?'), \ENT_QUOTES))
                             ."')) return false;\">"
                             .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
@@ -491,7 +493,7 @@ if (is_array($threads)) {
             $disable = true;
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
-                )
+            )
             ) {
                 if (in_array($threadId, $_SESSION['forum_notification']['thread'])) {
                     $disable = false;
@@ -499,7 +501,7 @@ if (is_array($threads)) {
             }
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=notify&content=thread&id={$threadId}".'">'.
-                    Display::getMdiIcon('email-alert', ($disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
+                    Display::getMdiIcon('email-alert', $disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {

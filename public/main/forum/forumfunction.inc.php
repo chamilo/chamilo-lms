@@ -2253,16 +2253,16 @@ function render_thread_preview_html(
     ob_start(); ?>
     <div class="mt-6 w-full">
         <div
-            class="forum-preview <?= $heightClass ?> overflow-y-auto border border-gray-25 rounded-xl p-3 bg-white"
+            class="forum-preview <?php echo $heightClass ?> overflow-y-auto border border-gray-25 rounded-xl p-3 bg-white"
             role="region"
-            aria-label="<?= get_lang('Discussion thread'); ?>"
+            aria-label="<?php echo get_lang('Discussion thread'); ?>"
         >
             <div class="sticky top-0 z-10 bg-white pb-2 text-gray-90 font-bold shadow-[0_1px_0_0_#e4e9ed]">
-                <?= get_lang('Discussion thread'); ?>
+                <?php echo get_lang('Discussion thread'); ?>
             </div>
 
             <?php if (empty($rows)): ?>
-                <div class="text-gray-50 text-body-2 mt-2"><?= get_lang('No posts yet'); ?></div>
+                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No posts yet'); ?></div>
             <?php else: foreach ($rows as $row):
                 $postId  = (int) $row['iid'];
                 $isFocus = $highlightPostId && $postId === (int) $highlightPostId;
@@ -2275,18 +2275,18 @@ function render_thread_preview_html(
 
                 $userTitle = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
                 ?>
-                <article id="post-<?= $postId ?>"
-                         class="mb-2 border border-gray-25 rounded-lg p-3 <?= $isFocus ? 'bg-gray-15 ring-1 ring-primary' : 'bg-white' ?>">
-                    <div class="text-caption text-gray-50" title="<?= $userTitle ?>">
-                        <?= Security::remove_XSS($displayName) ?> • <?= api_convert_and_format_date($row['post_date']) ?>
+                <article id="post-<?php echo $postId ?>"
+                         class="mb-2 border border-gray-25 rounded-lg p-3 <?php echo $isFocus ? 'bg-gray-15 ring-1 ring-primary' : 'bg-white' ?>">
+                    <div class="text-caption text-gray-50" title="<?php echo $userTitle ?>">
+                        <?php echo Security::remove_XSS($displayName) ?> • <?php echo api_convert_and_format_date($row['post_date']) ?>
                     </div>
 
                     <div class="font-bold mt-1 mb-1 text-gray-90">
-                        <?= Security::remove_XSS($row['post_title']) ?>
+                        <?php echo Security::remove_XSS($row['post_title']) ?>
                     </div>
 
                     <div class="text-body-2 leading-4">
-                        <?= Security::remove_XSS($row['post_text'], STUDENT) ?>
+                        <?php echo Security::remove_XSS($row['post_text'], STUDENT) ?>
                     </div>
                 </article>
             <?php endforeach; endif; ?>
@@ -2294,9 +2294,9 @@ function render_thread_preview_html(
 
         <div class="mt-2">
             <a class="text-body-2 underline text-primary"
-               href="<?= api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq()
+               href="<?php echo api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq()
                . '&forum='.(int)$forumId.'&thread='.(int)$threadId ?>">
-                <?= get_lang('View full thread') ?>
+                <?php echo get_lang('View full thread') ?>
             </a>
         </div>
     </div>

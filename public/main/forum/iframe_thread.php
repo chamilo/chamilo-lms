@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -56,9 +58,10 @@ $sessionEntity = api_get_session_entity($sid);
 /* Is the user allowed here? */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
-if (!api_is_allowed_to_create_course() &&
-    (false == $forumEntity->isVisible($courseEntity) ||
-        false == $threadEntity->isVisible($courseEntity)
+if (!api_is_allowed_to_create_course()
+    && (
+        false == $forumEntity->isVisible($courseEntity)
+        || false == $threadEntity->isVisible($courseEntity)
     )
 ) {
     api_not_allowed(false);
@@ -82,7 +85,7 @@ $content = '<table width="100%" height="100%" cellspacing="5" border="0">';
 while ($row = Database::fetch_array($result)) {
     $content .= '<tr>';
     $content .= '<td rowspan="2" class="forum_message_left">';
-    $username = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
+    $username = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), \ENT_QUOTES);
     if ('0' == $row['id']) {
         $name = $row['poster_name'];
     } else {

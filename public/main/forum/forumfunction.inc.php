@@ -1276,18 +1276,25 @@ function getPosts(
 {
     $em = Database::getManager();
 
+    $orderDirection = strtoupper($orderDirection);
+    if (!in_array($orderDirection, ['ASC', 'DESC'], true)) {
+        $orderDirection = 'ASC';
+    }
+
+    // Build visibility criteria based on permissions
     if (api_is_allowed_to_edit(false, true)) {
+        // Entity maps 'visible' as boolean; keeping legacy behavior as requested.
         $visibleCriteria = Criteria::expr()->neq('visible', 2);
     } else {
         $visibleCriteria = Criteria::expr()->eq('visible', 1);
     }
 
+    $threadRef = $em->getReference(CForumThread::class, $threadId);
+
     $criteria = Criteria::create();
     $criteria
-        ->where(Criteria::expr()->eq('thread', $threadId))
-        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
-        ->andWhere($visibleCriteria)
-    ;
+        ->where(Criteria::expr()->eq('thread', $threadRef))
+        ->andWhere($visibleCriteria);
 
     $groupId = api_get_group_id();
     $filterModerated = true;
@@ -1306,7 +1313,9 @@ function getPosts(
     }
 
     if ($recursive) {
-        $criteria->andWhere(Criteria::expr()->eq('postParent', $postId));
+        // Compare association with entity reference when filtering by parent
+        $parentRef = $postId ? $em->getReference(CForumPost::class, $postId) : null;
+        $criteria->andWhere(Criteria::expr()->eq('postParent', $parentRef));
     }
 
     $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
@@ -1314,16 +1323,23 @@ function getPosts(
         ->addCriteria($criteria)
         ->addOrderBy('p.iid', $orderDirection);
 
+    // Apply moderation filter if forum is moderated and user is not editor
     if ($filterModerated && 1 == $forum->isModerated()) {
         if (!api_is_allowed_to_edit(false, true)) {
             $userId = api_get_user_id();
+
+            // instead of a non-existent scalar field like p.posterId
             $qb->andWhere(
-                'p.status = 1 OR
-                    (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
-                    (p.status = ".CForumPost::STATUS_REJECTED." AND p.posterId = $userId) OR
-                    (p.status IS NULL AND p.posterId = $userId)
-                    "
-            );
+                '(p.status = :st_valid)
+                 OR (p.status IN (:st_own) AND IDENTITY(p.user) = :uid)
+                 OR (p.status IS NULL AND IDENTITY(p.user) = :uid)'
+            )
+                ->setParameter('st_valid', CForumPost::STATUS_VALIDATED)
+                ->setParameter('st_own', [
+                    CForumPost::STATUS_WAITING_MODERATION,
+                    CForumPost::STATUS_REJECTED,
+                ])
+                ->setParameter('uid', $userId);
         }
     }
 
@@ -1340,8 +1356,6 @@ function getPosts(
             'post_text' => $post->getPostText(),
             'thread_id' => $post->getThread() ? $post->getThread()->getIid() : 0,
             'forum_id' => $post->getForum()->getIid(),
-            //'poster_id' => $post->getPosterId(),
-            //'poster_name' => $post->getPosterName(),
             'post_date' => $post->getPostDate(),
             'post_notification' => $post->getPostNotification(),
             'post_parent_id' => $post->getPostParent() ? $post->getPostParent()->getIid() : 0,
@@ -1351,6 +1365,7 @@ function getPosts(
             'entity' => $post,
         ];
 
+        // Fill user info if available
         $user = $post->getUser();
         if ($user) {
             $postInfo['user_id'] = $user->getId();
@@ -1366,6 +1381,8 @@ function getPosts(
         if (!$recursive) {
             continue;
         }
+
+        // Recursive fetch of children when requested
         $list = array_merge(
             $list,
             getPosts(
@@ -2005,17 +2022,6 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
         );
     }
 
-    $iframe = null;
-    if ($showPreview) {
-        if ('newthread' !== $action && !empty($threadId)) {
-            $iframe = '<iframe style="border: 1px solid black"
-            src="'.api_get_path(WEB_CODE_PATH).'forum/iframe_thread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'#'.$postId.'" width="100%"></iframe>';
-        }
-        if (!empty($iframe)) {
-            $form->addElement('label', get_lang('Thread'), $iframe);
-        }
-    }
-
     if (in_array($action, ['quote', 'replymessage'])) {
         $form->addFile('user_upload[]', get_lang('Attachment'));
         $form->addButton(
@@ -2110,6 +2116,11 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
         );
     }
 
+    if ($showPreview && 'newthread' !== $action && !empty($threadId)) {
+        $previewHtml = render_thread_preview_html((int) $forumId, (int) $threadId, (int) $postId, 20);
+        $form->addElement('html', '<div class="mt-4">'.$previewHtml.'</div>');
+    }
+
     // Validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
@@ -2200,6 +2211,102 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
 
         return $form;
     }
+}
+
+/**
+ * Build a lightweight Tailwind-based preview for a thread (no iframe).
+ * Security: keep XSS protection as in the original iframe.
+ */
+function render_thread_preview_html(
+    int $forumId,
+    int $threadId,
+    int $highlightPostId = 0,
+    int $limit = 20,
+    string $heightClass = 'h-72'
+): string {
+    $tablePosts = Database::get_course_table(TABLE_FORUM_POST); // c_forum_post
+    $tableUsers = Database::get_main_table(TABLE_MAIN_USER);    // user
+
+    $sql = "SELECT
+                p.iid,
+                p.post_date,
+                p.title      AS post_title,
+                p.post_text,
+                u.id         AS user_id,
+                u.username,
+                u.firstname,
+                u.lastname
+            FROM $tablePosts p
+            INNER JOIN $tableUsers u ON u.id = p.poster_id
+            WHERE p.thread_id = ".(int)$threadId."
+              AND p.visible = 1
+              AND (p.status IS NULL OR p.status = ".(int) CForumPost::STATUS_VALIDATED.")
+            ORDER BY p.post_date ASC
+            LIMIT ".(int)$limit;
+
+    $res  = Database::query($sql);
+    $rows = [];
+    while ($r = Database::fetch_array($res)) {
+        $rows[] = $r;
+    }
+
+    ob_start(); ?>
+    <div class="mt-6 w-full">
+        <div
+            class="forum-preview <?php echo $heightClass ?> overflow-y-auto border border-gray-25 rounded-xl p-3 bg-white"
+            role="region"
+            aria-label="<?php echo get_lang('Discussion thread'); ?>"
+        >
+            <div class="sticky top-0 z-10 bg-white pb-2 text-gray-90 font-bold shadow-[0_1px_0_0_#e4e9ed]">
+                <?php echo get_lang('Discussion thread'); ?>
+            </div>
+
+            <?php if (empty($rows)): ?>
+                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No posts yet'); ?></div>
+            <?php else: foreach ($rows as $row):
+                $postId  = (int) $row['iid'];
+                $isFocus = $highlightPostId && $postId === (int) $highlightPostId;
+
+                // Compute display name (fallback to username)
+                $isAnon      = ((int)$row['user_id'] === (int)\Chamilo\CoreBundle\Entity\User::ANONYMOUS);
+                $displayName = $isAnon
+                    ? get_lang('Anonymous')
+                    : (api_get_person_name($row['firstname'], $row['lastname']) ?: $row['username']);
+
+                $userTitle = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
+                ?>
+                <article id="post-<?php echo $postId ?>"
+                         class="mb-2 border border-gray-25 rounded-lg p-3 <?php echo $isFocus ? 'bg-gray-15 ring-1 ring-primary' : 'bg-white' ?>">
+                    <div class="text-caption text-gray-50" title="<?php echo $userTitle ?>">
+                        <?php echo Security::remove_XSS($displayName) ?> • <?php echo api_convert_and_format_date($row['post_date']) ?>
+                    </div>
+
+                    <div class="font-bold mt-1 mb-1 text-gray-90">
+                        <?php echo Security::remove_XSS($row['post_title']) ?>
+                    </div>
+
+                    <div class="text-body-2 leading-4">
+                        <?php echo Security::remove_XSS($row['post_text'], STUDENT) ?>
+                    </div>
+                </article>
+            <?php endforeach; endif; ?>
+        </div>
+
+        <div class="mt-2">
+            <a class="text-body-2 underline text-primary"
+               href="<?php echo api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq()
+               . '&forum='.(int)$forumId.'&thread='.(int)$threadId ?>">
+                <?php echo get_lang('View full thread') ?>
+            </a>
+        </div>
+    </div>
+    <?php
+    if ($highlightPostId) {
+        // Try to bring the highlighted post into view.
+        echo '<script>try{document.getElementById("post-'.$highlightPostId.'")?.scrollIntoView({behavior:"instant",block:"start"});}catch(e){}</script>';
+    }
+
+    return (string) ob_get_clean();
 }
 
 function newThread(CForum $forum, $form_values = '', $showPreview = true)
@@ -5167,28 +5274,75 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
  *
  * @return bool
  */
-function postIsEditableByStudent($forum, $post)
+/**
+ * Student editability guard that accepts either an entity or the array shape used in views.
+ *
+ * @param CForum              $forum
+ * @param CForumPost|array    $post
+ */
+function postIsEditableByStudent(CForum $forum, $post): bool
 {
+    // Normalize $post to an entity
+    /** @var CForumPost|null $entity */
+    $entity = null;
+
+    if ($post instanceof CForumPost) {
+        $entity = $post;
+    } elseif (is_array($post)) {
+        // Prefer the embedded entity from getPosts()
+        if (isset($post['entity']) && $post['entity'] instanceof CForumPost) {
+            $entity = $post['entity'];
+        } else {
+            // Fallback: fetch by id if present in the array
+            $postId = $post['post_id'] ?? $post['iid'] ?? null;
+            if ($postId) {
+                $em = Database::getManager();
+                $entity = $em->getRepository(CForumPost::class)->find($postId);
+            }
+        }
+    }
+
+    // If we still don't have a valid entity, be conservative: deny student edit
+    if (!$entity instanceof CForumPost) {
+        return false;
+    }
+
+    // Admins/teachers can always edit
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
 
-    if (1 == $forum->isModerated()) {
-        if (null === $post->getStatus()) {
-            return true;
-        } else {
-            return in_array(
-                $post->getStatus(),
-                [
-                    CForumPost::STATUS_WAITING_MODERATION,
-                    CForumPost::STATUS_REJECTED,
-                ]
-            );
-        }
+    $isModerated = (bool) $forum->isModerated();
+    $userId      = (int) api_get_user_id();
+    $ownerId     = $entity->getUser() ? (int) $entity->getUser()->getId() : 0;
+    $isOwner     = ($ownerId === $userId);
+    $status      = $entity->getStatus();
+
+    // Unmoderated forum: student can edit only own posts
+    if (!$isModerated) {
+        return $isOwner;
     }
 
-    return true;
+    // editable by owner when status is NULL or WAITING or REJECTED.
+    if ($isOwner) {
+        if ($status === null) {
+            return true;
+        }
+
+        return in_array(
+            $status,
+            [
+                CForumPost::STATUS_WAITING_MODERATION,
+                CForumPost::STATUS_REJECTED,
+            ],
+            true
+        );
+    }
+
+    // Not owner and not a teacher/admin
+    return false;
 }
+
 
 /**
  * @return bool

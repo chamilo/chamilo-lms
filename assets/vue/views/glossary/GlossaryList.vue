@@ -1,37 +1,42 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && canEditGlossary">
-      <BaseButton
-        :label="t('Add new glossary term')"
-        icon="plus"
-        type="black"
-        @click="addNewTerm"
+    <BaseToolbar v-if="securityStore.isAuthenticated">
+      <template v-if="canEditGlossary">
+        <BaseButton
+          :label="t('Add new glossary term')"
+          icon="plus"
+          type="black"
+          @click="addNewTerm"
+        />
+        <BaseButton
+          :label="t('Import glossary')"
+          icon="import"
+          type="black"
+          @click="importGlossary"
+        />
+        <BaseButton
+          :label="t('Export glossary')"
+          icon="file-export"
+          type="black"
+          @click="exportGlossary"
+        />
+        <BaseButton
+          :icon="view === 'table' ? 'list' : 'table'"
+          :label="view === 'table' ? t('List view') : t('Table view')"
+          type="black"
+          @click="changeView(view)"
+        />
+        <BaseButton
+          :label="t('Export to documents')"
+          icon="export"
+          type="black"
+          @click="exportToDocuments"
+        />
+      </template>
+      <StudentViewButton
+        v-if="course"
+        @change="onStudentViewChange"
       />
-      <BaseButton
-        :label="t('Import glossary')"
-        icon="import"
-        type="black"
-        @click="importGlossary"
-      />
-      <BaseButton
-        :label="t('Export glossary')"
-        icon="file-export"
-        type="black"
-        @click="exportGlossary"
-      />
-      <BaseButton
-        :icon="view === 'table' ? 'list' : 'table'"
-        :label="view === 'table' ? t('List view') : t('Table view')"
-        type="black"
-        @click="changeView(view)"
-      />
-      <BaseButton
-        :label="t('Export to documents')"
-        icon="export"
-        type="black"
-        @click="exportToDocuments"
-      />
-      <StudentViewButton />
     </BaseToolbar>
 
     <BaseInputText
@@ -121,6 +126,8 @@ import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useCidReqStore } from "../../store/cidReq"
+import { storeToRefs } from "pinia"
 
 const route = useRoute()
 const router = useRouter()
@@ -128,6 +135,10 @@ const securityStore = useSecurityStore()
 const notifications = useNotification()
 
 const { t } = useI18n()
+
+const cidReqStore = useCidReqStore()
+
+const { course } = storeToRefs(cidReqStore)
 
 const isLoading = ref(true)
 const isSearchLoading = ref(false)
@@ -168,9 +179,13 @@ const canEditGlossary = computed(() => {
 
 onMounted(async () => {
   isLoading.value = true
-  fetchGlossaries()
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  await fetchGlossaries()
+  await onStudentViewChange()
 })
+
+async function onStudentViewChange() {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+}
 
 const debouncedSearch = debounce(() => {
   searchBoxTouched.value = true

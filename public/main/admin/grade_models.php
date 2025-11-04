@@ -68,7 +68,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('Name'),
+    get_lang('Title'),
     get_lang('Description'),
     get_lang('Detail'),
 ];
@@ -76,8 +76,8 @@ $columns = [
 //Column config
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '80',
         'align' => 'left',
     ],

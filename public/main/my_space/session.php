@@ -476,14 +476,14 @@ $orderUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=order';
             for (key in added_cols) {
                 grid.hideCol(key);
             }
-            grid.showCol('name');
+            grid.showCol('title');
             grid.showCol('display_start_date');
             grid.showCol('display_end_date');
             grid.showCol('course_title');
         }
 
         function show_cols(grid, added_cols) {
-            grid.showCol('name').trigger('reloadGrid');
+            grid.showCol('title').trigger('reloadGrid');
             for (key in added_cols) {
                 grid.showCol(key);
             }

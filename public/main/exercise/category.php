@@ -33,15 +33,15 @@ $token = Security::get_token();
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('Name'),
+    get_lang('Title'),
     get_lang('Actions'),
 ];
 
 // Column config
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '340px',
         'align' => 'left',
     ],

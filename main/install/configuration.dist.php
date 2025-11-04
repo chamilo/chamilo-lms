@@ -1959,6 +1959,11 @@ $_configuration['auth_password_links'] = [
 // Enable improved tracking section in main/mySpace/myStudents.php
 //$_configuration['improve_tracking_in_mystudent_php'] = false;
 
+// Allow teachers to access all course/session tracking in main/mySpace/myStudents.php
+// When enabled, teachers can view tracking for all courses and sessions
+// of a student even if they are not the course admin or session coach
+//$_configuration['teacher_access_all_tracking'] = false;
+
 // Add teachers column in course list.
 // $_configuration['add_teachers_in_course_list'] = false;
 

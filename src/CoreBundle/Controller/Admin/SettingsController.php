@@ -106,8 +106,16 @@ class SettingsController extends BaseController
                         $templateMapByCategory[$category][$var] = $templateMap[$var];
                     }
                 }
-                $settings = $manager->load($category);
+
+                // Convert category to schema alias and validate it BEFORE loading/creating the form
                 $schemaAlias = $manager->convertNameSpaceToService($category);
+
+                // skip unknown/legacy categories (e.g., "tools")
+                if (!isset($schemas[$schemaAlias])) {
+                    continue;
+                }
+
+                $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
                 foreach (array_keys($settings->getParameters()) as $name) {
@@ -147,6 +155,17 @@ class SettingsController extends BaseController
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
 
         $keyword = (string) $request->query->get('keyword', '');
+
+        // Validate schema BEFORE load/create to avoid NonExistingServiceException
+        $schemas = $manager->getSchemas();
+        if (!isset($schemas[$schemaAlias])) {
+            $this->addFlash('warning', sprintf('Unknown settings category "%s". Showing Platform settings.', $namespace));
+
+            return $this->redirectToRoute('chamilo_platform_settings', [
+                'namespace' => 'platform',
+            ]);
+        }
+
         $settings = $manager->load($namespace);
 
         $form = $this->getSettingsFormFactory()->create(
@@ -193,7 +212,6 @@ class SettingsController extends BaseController
             ]);
         }
 
-        $schemas = $manager->getSchemas();
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
         $templateMap = [];

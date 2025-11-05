@@ -5460,7 +5460,7 @@ EOT;
 
                 // Category report
                 $category_was_added_for_this_test = false;
-                if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                if (!empty($objQuestionTmp->category)) {
                     if (!isset($category_list[$objQuestionTmp->category]['score'])) {
                         $category_list[$objQuestionTmp->category]['score'] = 0;
                     }
@@ -5498,7 +5498,7 @@ EOT;
                     $category_list[$objQuestionTmp->category]['total_questions']++;
                     $category_was_added_for_this_test = true;
                 }
-                if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                if (!empty($objQuestionTmp->category_list)) {
                     foreach ($objQuestionTmp->category_list as $category_id) {
                         $category_list[$category_id]['score'] += $my_total_score;
                         $category_list[$category_id]['total'] += $my_total_weight;
@@ -5507,7 +5507,7 @@ EOT;
                 }
 
                 // No category for this question!
-                if ($category_was_added_for_this_test == false) {
+                if (!$category_was_added_for_this_test) {
                     if (!isset($category_list['none']['score'])) {
                         $category_list['none']['score'] = 0;
                     }

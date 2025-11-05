@@ -4516,7 +4516,7 @@ class Exercise
                         if (!$switchableAnswerSet) {
                             // not switchable answer, must be in the same place than teacher order
                             for ($i = 0; $i < count($listCorrectAnswers['words']); $i++) {
-                                $studentAnswer = isset($choice[$i]) ? $choice[$i] : '';
+                                $studentAnswer = $choice[$i] ?? '';
                                 $correctAnswer = $listCorrectAnswers['words'][$i];
 
                                 if ($debug) {
@@ -4594,7 +4594,7 @@ class Exercise
 
                                 $found = false;
                                 for ($j = 0; $j < count($listTeacherAnswerTemp); $j++) {
-                                    $correctAnswer = isset($listTeacherAnswerTemp[$j]) ? $listTeacherAnswerTemp[$j] : '';
+                                    $correctAnswer = $listTeacherAnswerTemp[$j] ?? '';
                                     if (is_array($listTeacherAnswerTemp)) {
                                         $correctAnswer = implode('||', $listTeacherAnswerTemp);
                                     }

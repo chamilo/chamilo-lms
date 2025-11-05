@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
@@ -14,18 +16,26 @@ $plugin = BuyCoursesPlugin::create();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $transferEnable = $plugin->get('transfer_enable');
+$tpvRedsysEnable = $plugin->get('tpv_redsys_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $culqiEnable = $plugin->get('culqi_enable');
+$stripeEnable = 'true' === $plugin->get('stripe_enable');
+$cecabankEnable = 'true' === $plugin->get('cecabank_enable');
 
 if (isset($_GET['action'], $_GET['id'])) {
     if ('delete_taccount' == $_GET['action']) {
-        $plugin->deleteTransferAccount($_GET['id']);
+        try {
+            $plugin->deleteTransferAccount($_GET['id']);
 
-        Display::addFlash(
-            Display::return_message(get_lang('The learning object has been removed'), 'success')
-        );
+            $message = Display::return_message(get_lang('Deleted'), 'success');
+        } catch (Exception $e) {
+            $message = Display::return_message($e->getMessage(), 'error');
+        }
+
+        Display::addFlash($message);
 
         header('Location: '.api_get_self());
+
         exit;
     }
 }
@@ -35,15 +45,23 @@ $globalSettingForm = new FormValidator('currency');
 if ($globalSettingForm->validate()) {
     $globalSettingFormValues = $globalSettingForm->getSubmitValues();
 
-    $plugin->saveCurrency($globalSettingFormValues['currency']);
-    unset($globalSettingFormValues['currency']);
-    $plugin->saveGlobalParameters($globalSettingFormValues);
+    try {
+        $plugin->saveCurrency($globalSettingFormValues['currency']);
 
-    Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
-    );
+        unset($globalSettingFormValues['currency']);
+        $plugin->saveGlobalParameters($globalSettingFormValues);
+
+        Display::addFlash(
+            Display::return_message(get_lang('Saved'), 'success')
+        );
+    } catch (Exception $e) {
+        Display::addFlash(
+            Display::return_message(get_lang($e->getMessage()), 'error')
+        );
+    }
 
     header('Location:'.api_get_self());
+
     exit;
 }
 
@@ -175,13 +193,18 @@ $paypalForm = new FormValidator('paypal');
 if ($paypalForm->validate()) {
     $paypalFormValues = $paypalForm->getSubmitValues();
 
-    $plugin->savePaypalParams($paypalFormValues);
+    try {
+        $plugin->savePaypalParams($paypalFormValues);
 
-    Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
-    );
+        $message = Display::return_message(get_lang('Saved'), 'success');
+    } catch (Exception $e) {
+        $message = Display::return_message($e->getMessage(), 'error');
+    }
+
+    Display::addFlash($message);
 
     header('Location:'.api_get_self());
+
     exit;
 }
 
@@ -207,6 +230,75 @@ $paypalForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
 $paypalForm->addButtonSave(get_lang('Save'));
 $paypalForm->setDefaults($plugin->getPaypalParams());
 
+// TPV Redsys
+$htmlTpvRedsys = Display::return_message($plugin->get_lang('NotFindRedsysFile'), 'warning', false);
+if (file_exists(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/resources/apiRedsys.php')) {
+    $tpvRedsysForm = new FormValidator('tpv_redsys');
+    $tpvRedsysForm->addHtml(
+        Display::return_message($plugin->get_lang('InfoTpvRedsysApiCredentials'), 'info', false)
+    );
+
+    if ($tpvRedsysForm->validate()) {
+        $tpvRedsysFormValues = $tpvRedsysForm->getSubmitValues();
+
+        try {
+            $plugin->saveTpvRedsysParams($tpvRedsysFormValues);
+
+            $message = Display::return_message(get_lang('Saved'), 'success');
+        } catch (Exception $e) {
+            $message = Display::return_message($e->getMessage(), 'error');
+        }
+
+        Display::addFlash($message);
+
+        header('Location:'.api_get_self());
+
+        exit;
+    }
+
+    $tpvRedsysForm->addText(
+        'merchantcode',
+        [$plugin->get_lang('DS_MERCHANT_MERCHANTCODE'), 'DS_MERCHANT_MERCHANTCODE'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'terminal',
+        [$plugin->get_lang('DS_MERCHANT_TERMINAL'), 'DS_MERCHANT_TERMINAL'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'currency',
+        [$plugin->get_lang('DS_MERCHANT_CURRENCY'), 'DS_MERCHANT_CURRENCY'],
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'kc',
+        $plugin->get_lang('kc'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'url_redsys',
+        $plugin->get_lang('url_redsys'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addText(
+        'url_redsys_sandbox',
+        $plugin->get_lang('url_redsys_sandbox'),
+        false,
+        ['cols-size' => [3, 8, 1]]
+    );
+    $tpvRedsysForm->addCheckBox('sandbox', null, $plugin->get_lang('Sandbox'));
+    $tpvRedsysForm->addButtonSave(get_lang('Save'));
+    $tpvRedsysForm->setDefaults($plugin->getTpvRedsysParams());
+
+    $htmlTpvRedsys = $tpvRedsysForm->returnForm();
+}
+
 // Platform Commissions
 
 $commissionForm = new FormValidator('commissions');
@@ -221,6 +313,7 @@ if ($commissionForm->validate()) {
     );
 
     header('Location:'.api_get_self());
+
     exit;
 }
 
@@ -239,13 +332,18 @@ $transferForm = new FormValidator('transfer_account');
 if ($transferForm->validate()) {
     $transferFormValues = $transferForm->getSubmitValues();
 
-    $plugin->saveTransferAccount($transferFormValues);
+    try {
+        $plugin->saveTransferAccount($transferFormValues);
 
-    Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
-    );
+        $message = Display::return_message(get_lang('Saved'), 'success');
+    } catch (\Doctrine\DBAL\Exception $e) {
+        $message = Display::return_message($e->getMessage(), 'error');
+    }
+
+    Display::addFlash($message);
 
     header('Location:'.api_get_self());
+
     exit;
 }
 
@@ -271,6 +369,35 @@ $transferForm->addButtonCreate(get_lang('Add'));
 
 $transferAccounts = $plugin->getTransferAccounts();
 
+$transferInfoForm = new FormValidator('transfer_info');
+
+if ($transferInfoForm->validate()) {
+    $transferInfoFormValues = $transferInfoForm->getSubmitValues();
+
+    try {
+        $plugin->saveTransferInfoEmail($transferInfoFormValues);
+
+        $message = Display::return_message(get_lang('Saved'), 'success');
+    } catch (Exception $e) {
+        $message = Display::return_message($e->getMessage(), 'error');
+    }
+
+    Display::addFlash($message);
+
+    header('Location:'.api_get_self());
+
+    exit;
+}
+$transferInfoForm->addHtmlEditor(
+    'tinfo_email_extra',
+    $plugin->get_lang('InfoEmailExtra'),
+    false,
+    false,
+    ['ToolbarSet' => 'Minimal']
+);
+$transferInfoForm->addButtonCreate(get_lang('Save'));
+$transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
+
 // Culqi main configuration
 
 $culqiForm = new FormValidator('culqi_config');
@@ -285,6 +412,7 @@ if ($culqiForm->validate()) {
     );
 
     header('Location:'.api_get_self());
+
     exit;
 }
 
@@ -304,11 +432,125 @@ $culqiForm->addCheckBox('integration', null, $plugin->get_lang('Sandbox'));
 $culqiForm->addButtonSave(get_lang('Save'));
 $culqiForm->setDefaults($plugin->getCulqiParams());
 
+// Stripe main configuration
+
+$stripeForm = new FormValidator('stripe_config');
+
+if ($stripeForm->validate()) {
+    $stripeFormValues = $stripeForm->getSubmitValues();
+
+    try {
+        $plugin->saveStripeParameters($stripeFormValues);
+
+        $message = Display::return_message(get_lang('Saved'), 'success');
+    } catch (Exception $e) {
+        $message = Display::return_message($e->getMessage(), 'error');
+    }
+
+    Display::addFlash($message);
+
+    header('Location:'.api_get_self());
+
+    exit;
+}
+
+$stripeForm->addText(
+    'account_id',
+    $plugin->get_lang('StripeAccountId'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addText(
+    'secret_key',
+    $plugin->get_lang('StripeSecret'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addText(
+    'endpoint_secret',
+    $plugin->get_lang('StripeEndpointSecret'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$stripeForm->addButtonSave(get_lang('Save'));
+$stripeForm->setDefaults($plugin->getStripeParams());
+
+// Cecabank main configuration
+
+$cecabankForm = new FormValidator('cecabank_config');
+
+if ($cecabankForm->validate()) {
+    $cecabankFormValues = $cecabankForm->getSubmitValues();
+
+    $plugin->saveCecabankParameters($cecabankFormValues);
+
+    Display::addFlash(
+        Display::return_message(get_lang('Saved'), 'success')
+    );
+
+    header('Location:'.api_get_self());
+
+    exit;
+}
+
+$cecabankForm->addText(
+    'crypto_key',
+    $plugin->get_lang('CecaSecret'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'url',
+    $plugin->get_lang('CecaUrl'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'merchant_id',
+    $plugin->get_lang('CecaMerchanId'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'acquirer_bin',
+    $plugin->get_lang('CecaAcquirerId'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'terminal_id',
+    $plugin->get_lang('CecaTerminalId'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'cypher',
+    $plugin->get_lang('CecaCypher'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'exponent',
+    $plugin->get_lang('CecaExponent'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addText(
+    'supported_payment',
+    $plugin->get_lang('CecaSupportedPayment'),
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$cecabankForm->addButtonSave(get_lang('Save'));
+$cecabankForm->setDefaults($plugin->getCecabankParams());
+
 // breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
     'name' => $plugin->get_lang('plugin_title'),
 ];
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $templateName = $plugin->get_lang('PaymentsConfiguration');
 $tpl = new Template($templateName);
@@ -317,12 +559,19 @@ $tpl->assign('global_config_form', $globalSettingForm->returnForm());
 $tpl->assign('paypal_form', $paypalForm->returnForm());
 $tpl->assign('commission_form', $commissionForm->returnForm());
 $tpl->assign('transfer_form', $transferForm->returnForm());
+$tpl->assign('transfer_info_form', $transferInfoForm->returnForm());
 $tpl->assign('culqi_form', $culqiForm->returnForm());
 $tpl->assign('transfer_accounts', $transferAccounts);
 $tpl->assign('paypal_enable', $paypalEnable);
 $tpl->assign('commissions_enable', $commissionsEnable);
 $tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('culqi_enable', $culqiEnable);
+$tpl->assign('tpv_redsys_enable', $tpvRedsysEnable);
+$tpl->assign('tpv_redsys_form', $htmlTpvRedsys);
+$tpl->assign('stripe_enable', $stripeEnable);
+$tpl->assign('stripe_form', $stripeForm->returnForm());
+$tpl->assign('cecabank_enable', $cecabankEnable);
+$tpl->assign('cecabank_form', $cecabankForm->returnForm());
 
 $content = $tpl->fetch('BuyCourses/view/paymentsetup.tpl');
 

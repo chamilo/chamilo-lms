@@ -1,3 +1,45 @@
+v7.4 - 2022-04-28
+====
+Add subscriptions support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/BuyCourses/update.php in your browser) to update the database structure by adding the plugin_buycourses_subscription, plugin_buycourses_subscription_rel_sale, plugin_buycourses_subscription_period and plugin_buycourses_coupon_rel_subscription_sale.
+
+v7.3 - 2022-04-28
+====
+Add Cecabank payments support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/BuyCourses/update.php in your browser) to update the structure of the tables in the database.
+
+v7.2 - 2021-11-22
+====
+Add Stripe payments support.
+
+If the plugin has already been installed, the update.php script must be executed (load plugin/BuyCourses/update.php in your browser) to update the structure of the tables in the database.
+
+v7.1 - 2021-10-26
+====
+Fix install issue with DB field type.
+
+v7.0 - 2021-08-12
+====
+Added support for discount coupons.
+Added a better table view for the sales report.
+Multiple fixes to navigation-related issues.
+
+WARNING: Updating this plugin (or Chamilo) without going through the specific update procedure for this plugin will break your sales pages.
+
+The file [your-host]/plugin/BuyCourses/update.php *MUST* be executed to update the structure of the tables
+in the database.
+
+v6.0 - 2020-11-29
+====
+Added support for purchase instructions e-mail customization (although this
+does not support multiple languages at the moment).
+This requires changes to the DB tables:
+```sql
+ALTER TABLE plugin_buycourses_global_config ADD COLUMN info_email_extra TEXT;
+```
+
 v5.0 - 2019-02-06
 ====
 
@@ -11,12 +53,12 @@ The file update.php must be executed to update the structure of the tables
 v4.0 - 2017-04-25
 ====
 
-This version includes the Culqi payment gateway and introduces an additional
-option to show the Buy Courses tab to anonymous users.
+This version includes the Culqi payment gateway v1.0 (now expired) and introduces
+an additional option to show the Buy Courses tab to anonymous users.
 
 To enable these features, if you have already installed this plugin on your
-portal prior to this version, you will need to add the corresponding configuration
-to your access_url_rel_plugin table. No documentation is available at this time on
+portal prior to this version, you will need to add the corresponding settings
+to your settings_current table. No documentation is available at this time on
 how to do that, so please check up the code. Sorry about that.
 
 

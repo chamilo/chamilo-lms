@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
@@ -12,6 +14,7 @@ $serviceId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 if (!$serviceId) {
     header('Location: list.php');
+
     exit;
 }
 
@@ -21,7 +24,7 @@ $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = $user->getFullNameWithUsername();
+        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
     }
 }
 
@@ -29,23 +32,28 @@ api_protect_admin_script(true);
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
-//view
+// view
+// breadcrumbs
 $interbreadcrumb[] = [
-    'url' => 'list.php',
-    'name' => $plugin->get_lang('Configuration'),
+    'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
+    'name' => $plugin->get_lang('plugin_title'),
+];
+$interbreadcrumb[] = [
+    'url' => 'list_service.php',
+    'name' => $plugin->get_lang('Services'),
 ];
 
 $globalSettingsParams = $plugin->getGlobalParameters();
 $service = $plugin->getService($serviceId);
 
 $formDefaultValues = [
-    'name' => $service['title'],
+    'name' => $service['name'],
     'description' => $service['description'],
     'price' => $service['price'],
     'tax_perc' => $service['tax_perc'],
     'duration_days' => $service['duration_days'],
-    'owner_id' => intval($service['owner_id']),
-    'applies_to' => intval($service['applies_to']),
+    'owner_id' => (int) $service['owner_id'],
+    'applies_to' => (int) $service['applies_to'],
     'visibility' => (1 == $service['visibility']) ? true : false,
     'image' => is_file(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$serviceId.'.png')
             ? api_get_path(WEB_PLUGIN_PATH).'BuyCourses/uploads/services/images/simg-'.$serviceId.'.png'
@@ -107,7 +115,7 @@ $form->addElement(
     'radio',
     'applies_to',
     null,
-    get_lang('Certificate of completion'),
+    get_lang('TemplateTitleCertificate'),
     4
 );
 $form->addSelect(
@@ -118,10 +126,10 @@ $form->addSelect(
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
-    '' != $formDefaultValues['image'] ? get_lang('Update Image') : get_lang('Add image'),
+    '' != $formDefaultValues['image'] ? get_lang('UpdateImage') : get_lang('AddImage'),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
-$form->addText('video_url', get_lang('Video URL'), false);
+$form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addHidden('id', $serviceId);
 $form->addButtonSave(get_lang('Edit'));
@@ -142,7 +150,8 @@ if ($form->validate()) {
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-    header('Location: list.php');
+    header('Location: list_service.php');
+
     exit;
 }
 

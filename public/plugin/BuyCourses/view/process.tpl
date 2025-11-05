@@ -1,6 +1,14 @@
 {% autoescape false %}
 <div class="actions">
-    <a href="{{ url('index') }}main/auth/courses.php" title="{{ "Back"|get_lang }}">
+    {% if item_type == 1 %}
+        {% set back_url = url('index') ~ 'plugin/BuyCourses/src/course_catalog.php' %}
+    {% elseif item_type == 2 %}
+        {% set back_url = url('index') ~ 'plugin/BuyCourses/src/session_catalog.php' %}
+    {% else %}
+        {% set back_url = url('index') ~ 'plugin/BuyCourses/src/service_catalog.php' %}
+    {% endif %}
+
+    <a href="{{ back_url }}" title="{{ "Back"|get_lang }}">
         <img src="{{ "back.png"|icon(32) }}" width="32" height="32" alt="{{ "Back"|get_lang }}"
              title="{{ "Back"|get_lang }}"/>
     </a>
@@ -17,7 +25,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <a class="ajax" data-title="{{ course.title }}"
-                                   href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
+                                   href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
                                     <img alt="{{ course.title }}" class="img-rounded img-responsive"
                                          src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                                 </a>
@@ -34,12 +42,24 @@
                                     {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }} :
                                     {{ course.item.total_price_formatted }}
                                 </div>
+                                {% if course.item.has_coupon %}
+                                    <div class="price-details-tax">
+                                        {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}:
+                                        {{ course.item.discount_amount_formatted }}
+                                    </div>
+                                {% endif %}
+                                <div class="coupon-question">
+                                    {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </div>
+                                <div class="coupon">
+                                    {{ form_coupon }}
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="buy-item">
                                     <h3 class="title">
                                         <a class="ajax" data-title="{{ course.title }}"
-                                           href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
+                                           href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
                                             {{ course.title }}
                                         </a>
                                     </h3>
@@ -55,7 +75,7 @@
                                                 {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin') }} :
                                                 {% for teacher in course.teachers %}
                                                     <em class="fa fa-user" aria-hidden="true"></em>
-                                                    <a href="{{ url('index') }}main/social/profile.php?u={{ teacher.id }}"
+                                                    <a href="{{ url('index') ~ 'main/social/profile.php?u=' ~ teacher.id }}"
                                                        class="teacher-item"> {{ teacher.name }}</a>,
                                                 {% endfor %}
                                             </p>
@@ -82,6 +102,18 @@
                                     {{ 'Total'|get_plugin_lang('BuyCoursesPlugin') }} :
                                     {{ session.item.total_price_formatted }}
                                 </div>
+                                {% if session.item.has_coupon %}
+                                    <div class="price-details-tax">
+                                        {{ 'DiscountAmount'|get_plugin_lang('BuyCoursesPlugin') }}:
+                                        {{ session.item.discount_amount_formatted }}
+                                    </div>
+                                {% endif %}
+                                <div class="coupon-question">
+                                    {{ 'DoYouHaveACoupon'|get_plugin_lang('BuyCoursesPlugin') }}
+                                </div>
+                                <div class="coupon">
+                                    {{ form_coupon }}
+                                </div>
                             </div>
                             <div class="col-md-9">
                                 <div class="buy-item">
@@ -106,7 +138,7 @@
 
                                                     {% for coach in course.coaches %}
                                                         <em class="fa fa-user" aria-hidden="true"></em>
-                                                        <a href="{{ url('index') }}main/social/profile.php?u={{ coach.id }}"
+                                                        <a href="{{ url('index') ~ 'main/social/profile.php?u=' ~ coach.id }}"
                                                            class="teacher-item">{{ coach.name }}</a>,
                                                     {% endfor %}
                                                 </p>

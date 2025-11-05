@@ -788,7 +788,7 @@ class ExtraField extends Model
             if (!empty($showOnlyTheseFields)) {
                 $setData = [];
                 foreach ($showOnlyTheseFields as $variable) {
-                    $extraName = 'extra_' . $variable;
+                    $extraName = 'extra_'.$variable;
                     if (array_key_exists($extraName, $extraData)) {
                         $setData[$extraName] = $extraData[$extraName];
                     }
@@ -862,49 +862,6 @@ class ExtraField extends Model
         }
 
         return $extra;
-    }
-
-    /**
-     * Add the “unique per URL” validation rule for the extra‑field.
-     *
-     * @param  &$form
-     * @param string    $fieldVar       The extra‐field variable name (without “extra_”)
-     * @param string    $uniqueField    Configured unique field var
-     * @param int|null  $currentUserId  Null for creation, or the existing user ID when editing
-     */
-    protected function applyExtraFieldUniquenessRule(&$form, string $fieldVar, string $uniqueField, ?int $currentUserId): void
-    {
-        // Only apply if this is the configured unique field
-        if ($fieldVar !== $uniqueField) {
-            return;
-        }
-
-        $elementName = 'extra_' . $fieldVar;
-        $message     = sprintf(
-            get_lang('A user with the same %s already exists in this portal'),
-            $fieldVar
-        );
-
-        if ($currentUserId === null) {
-            // Creation: forbid any existing match
-            $form->addRule(
-                $elementName,
-                $message,
-                'callback',
-                ['UserManager', 'isExtraFieldValueUniquePerUrl']
-            );
-        } else {
-            // Editing: allow if the only match is this same user
-            $form->addRule(
-                $elementName,
-                $message,
-                'callback',
-                function(string $value) use ($currentUserId) {
-                    $existingId = UserManager::isExtraFieldValueUniquePerUrl($value, true);
-                    return $existingId === null || $existingId == $currentUserId;
-                }
-            );
-        }
     }
 
     /**
@@ -3345,6 +3302,50 @@ JAVASCRIPT;
         }
 
         return null;
+    }
+
+    /**
+     * Add the “unique per URL” validation rule for the extra‑field.
+     *
+     * @param          &$form
+     * @param string   $fieldVar      The extra‐field variable name (without “extra_”)
+     * @param string   $uniqueField   Configured unique field var
+     * @param int|null $currentUserId Null for creation, or the existing user ID when editing
+     */
+    protected function applyExtraFieldUniquenessRule(&$form, string $fieldVar, string $uniqueField, ?int $currentUserId): void
+    {
+        // Only apply if this is the configured unique field
+        if ($fieldVar !== $uniqueField) {
+            return;
+        }
+
+        $elementName = 'extra_'.$fieldVar;
+        $message = sprintf(
+            get_lang('A user with the same %s already exists in this portal'),
+            $fieldVar
+        );
+
+        if ($currentUserId === null) {
+            // Creation: forbid any existing match
+            $form->addRule(
+                $elementName,
+                $message,
+                'callback',
+                ['UserManager', 'isExtraFieldValueUniquePerUrl']
+            );
+        } else {
+            // Editing: allow if the only match is this same user
+            $form->addRule(
+                $elementName,
+                $message,
+                'callback',
+                function (string $value) use ($currentUserId) {
+                    $existingId = UserManager::isExtraFieldValueUniquePerUrl($value, true);
+
+                    return $existingId === null || $existingId == $currentUserId;
+                }
+            );
+        }
     }
 
     /**

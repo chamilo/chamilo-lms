@@ -4309,10 +4309,7 @@ class PortfolioController
     }
 
     /**
-     * @param string $htmlContent
      * @param array $imagePaths Relative paths found in $htmlContent
-     *
-     * @return string
      */
     private function fixMediaSourcesToHtml(string $htmlContent, array &$imagePaths): string
     {
@@ -4343,7 +4340,7 @@ class PortfolioController
 
         $paths = [
             '/app/upload/' => $sysPath,
-            '/courses/' => $sysPath.'/app'
+            '/courses/' => $sysPath.'/app',
         ];
 
         foreach ($elements as $element) {

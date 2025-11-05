@@ -147,8 +147,8 @@ function normalizeName($name)
 function removeAccents($str)
 {
     $str = str_replace(
-        ['à', 'á', 'â', 'ã', 'ä', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý',"'"],
-        ['a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y',''],
+        ['à', 'á', 'â', 'ã', 'ä', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', "'"],
+        ['a', 'a', 'a', 'a', 'a', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'A', 'A', 'A', 'A', 'A', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'N', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', ''],
         $str
     );
 
@@ -186,7 +186,7 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedL
             if ($letterCount > strlen($lastPartLetters) - 1) {
                 break; // No more letters available. Will append a number below
             }
-            $login = $baseLogin . substr($lastPartLetters, 1, $letterCount);
+            $login = $baseLogin.substr($lastPartLetters, 1, $letterCount);
         }
     }
 
@@ -194,7 +194,7 @@ function generateProposedLogin($xlsxLastname, $xlsxFirstname, $isActive, &$usedL
     $suffix = 1;
     $originalLogin = $login;
     while (isset($usedLogins['logins'][$login]) && $usedLogins['logins'][$login]['active']) {
-        $login = $originalLogin . $suffix;
+        $login = $originalLogin.$suffix;
         $suffix++;
     }
 
@@ -236,7 +236,7 @@ function createMissingFieldFile($filename, $rows, $columns)
 }
 
 /**
- * Generate a tentative e-mail address from firstname and lastname
+ * Generate a tentative e-mail address from firstname and lastname.
  */
 function generateMailFromFirstAndLastNames(string $firstname, string $lastname, string $domain): string
 {
@@ -244,6 +244,7 @@ function generateMailFromFirstAndLastNames(string $firstname, string $lastname, 
     $emailLastname = !empty($emailLastnameParts[0]) ? strtolower($emailLastnameParts[0]) : '';
     $emailFirstnameParts = preg_split('/[\s-]+/', trim(removeAccents($firstname)), -1, PREG_SPLIT_NO_EMPTY);
     $emailFirstname = !empty($emailFirstnameParts[0]) ? strtolower($emailFirstnameParts[0]) : '';
+
     return "$emailLastname.$emailFirstname@$domain";
 }
 
@@ -363,7 +364,7 @@ while ($dbUser = $stmt->fetch()) {
             'Username' => $dbUser['username'],
             'User ID' => $dbUser['id'],
             'E-mail' => $dbUser['email'],
-            'Active' => $dbUser['active']?'Yes':'No',
+            'Active' => $dbUser['active'] ? 'Yes' : 'No',
         ];
     }
 }
@@ -408,8 +409,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
     $xlsxUserData['username'] = generateProposedLogin($xlsxUserData['lastname'], $xlsxUserData['firstname'], $isActive, $usedLogins);
     $dbUsername = Database::escape_string($xlsxUserData['username']);
 
-    if (!empty($xlsxUserData['official_code']) && !empty($generatedEmails[$xlsxUserData['official_code']]))
-    {
+    if (!empty($xlsxUserData['official_code']) && !empty($generatedEmails[$xlsxUserData['official_code']])) {
         $emailSource = 'E-mail generated during import';
         $xlsxUserData['email'] = $generatedEmails[$xlsxUserData['official_code']];
     } elseif (!empty($rowData['emailSource'])) {
@@ -553,7 +553,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                             'E-mail' => $xlsxUserData['email'],
                             'E-mail source' => $emailSource,
                             'External User ID' => $xlsxMatricule,
-                            'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                            'Updated Fields' => implode(', ', array_map(function ($update) { return trim(explode(':', $update)[0]); }, $updates)),
                         ];
                     } else {
                         echo "  Error: Could not update user (username: $dbUsername)\n";
@@ -595,7 +595,7 @@ foreach ($xlsxRows as $rowIndex => $rowData) {
                     'E-mail' => $xlsxUserData['email'],
                     'E-mail source' => $emailSource,
                     'External User ID' => $xlsxMatricule,
-                    'Updated Fields' => implode(', ', array_map(function($update) { return trim(explode(':', $update)[0]); }, $updates)),
+                    'Updated Fields' => implode(', ', array_map(function ($update) { return trim(explode(':', $update)[0]); }, $updates)),
                 ];
             }
         } else {

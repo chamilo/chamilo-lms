@@ -183,7 +183,7 @@ $courseListToShow = Display::page_subheader(get_lang('CourseList').$url);
 $courseListToShow .= '<table id="session-list-course" class="table table-hover table-striped data_table">
 <thead>+<tr>';
 if ($theoreticalTimeEnabled) {
-    $courseListToShow .=   '<th></th>
+    $courseListToShow .= '<th></th>
       <th width="30%">'.get_lang('CourseTitle').'</th>
       <th width="20%">'.get_lang('TheoreticalTime').'</th>
       <th width="15%">'.get_lang('CourseCoach').'</th>
@@ -191,7 +191,7 @@ if ($theoreticalTimeEnabled) {
       <th width="25%">'.get_lang('Actions').'</th>
     </tr></thead><tbody id="sortable-course-list">';
 } else {
-    $courseListToShow .=   '<th></th>
+    $courseListToShow .= '<th></th>
       <th width="35%">'.get_lang('CourseTitle').'</th>
       <th width="30%">'.get_lang('CourseCoach').'</th>
       <th width="10%">'.get_lang('UsersNumber').'</th>
@@ -258,11 +258,11 @@ if ($session->getNbrCourses() === 0) {
 
         $courseUrl = api_get_course_url($course->getCode(), $sessionId);
         $courseBaseUrl = api_get_course_url($course->getCode());
- 
+
         if ($theoreticalTimeEnabled) {
-            $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time',$course->getCode());
-            if (is_numeric($theoreticalTime) && (float)$theoreticalTime != 0) {
-                $totalTheoreticalTime += (float)$theoreticalTime;
+            $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time', $course->getCode());
+            if (is_numeric($theoreticalTime) && (float) $theoreticalTime != 0) {
+                $totalTheoreticalTime += (float) $theoreticalTime;
                 $hours = floor($theoreticalTime / 60);
                 $minutes = $theoreticalTime % 60;
                 $theoreticalTimeDisplay = sprintf('%02d:%02d', $hours, $minutes);
@@ -466,7 +466,7 @@ if (!empty($userList)) {
         $editUrl = null;
 
         if (isset($sessionInfo['duration']) && !empty($sessionInfo['duration'])) {
-            $editUrl = $codePath . 'session/session_user_edit.php?session_id=' . $sessionId . '&user_id=' . $userId;
+            $editUrl = $codePath.'session/session_user_edit.php?session_id='.$sessionId.'&user_id='.$userId;
             $editUrl = Display::url(
                 Display::return_icon('agenda.png', get_lang('SessionDurationEdit')),
                 $editUrl

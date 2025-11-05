@@ -283,8 +283,7 @@ class SectionExport
                         $activityClass = $activityClassMap['page'];
                         $exportInstance = new $activityClass($this->course);
                         $activityData = $exportInstance->getData($item['path'], $sectionId);
-                    }
-                    elseif ($sectionId > 0 && $documentType && isset($activityClassMap[$documentType])) {
+                    } elseif ($sectionId > 0 && $documentType && isset($activityClassMap[$documentType])) {
                         $activityClass = $activityClassMap[$documentType];
                         $exportInstance = new $activityClass($this->course);
                         $activityData = $exportInstance->getData($item['path'], $sectionId);

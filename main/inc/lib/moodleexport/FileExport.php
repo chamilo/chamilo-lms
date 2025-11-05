@@ -100,6 +100,17 @@ class FileExport
     }
 
     /**
+     * Get MIME type based on the file extension.
+     */
+    public function getMimeType($filePath): string
+    {
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $mimeTypes = $this->getMimeTypes();
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
+    }
+
+    /**
      * Create a placeholder index.html file to prevent an empty directory.
      */
     private function createPlaceholderFile(string $filesDir): void
@@ -299,17 +310,6 @@ class FileExport
         $path = preg_replace('/\/+/', '/', $path);
 
         return rtrim($path, '/').'/';
-    }
-
-    /**
-     * Get MIME type based on the file extension.
-     */
-    public function getMimeType($filePath): string
-    {
-        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
-        $mimeTypes = $this->getMimeTypes();
-
-        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
 
     /**

@@ -73,7 +73,7 @@ class PageExport extends ActivityExport
                                     'filearea' => 'content',
                                     'itemid' => 1,
                                     'filepath' => '/Documents/',
-                                    'documentpath' => 'document' . $document['path'],
+                                    'documentpath' => 'document'.$document['path'],
                                     'filename' => basename($document['path']),
                                     'userid' => $adminId,
                                     'filesize' => $document['size'],
@@ -165,7 +165,8 @@ class PageExport extends ActivityExport
 
                 if (preg_match('#/courses/[^/]+/document/(.+)$#', $src, $parts)) {
                     $filename = basename($parts[1]);
-                    return str_replace($src, '@@PLUGINFILE@@/Documents/' . $filename, $match[0]);
+
+                    return str_replace($src, '@@PLUGINFILE@@/Documents/'.$filename, $match[0]);
                 }
 
                 return $match[0];

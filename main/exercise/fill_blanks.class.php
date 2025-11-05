@@ -1257,8 +1257,6 @@ class FillBlanks extends Question
      * @param int    $feedbackType
      * @param bool   $resultsDisabled
      * @param bool   $showTotalScoreAndUserChoices
-     *
-     * @return string
      */
     public static function getHtmlAnswer(
         $answer,
@@ -1268,8 +1266,7 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false,
         $exercise
-    ): string
-    {
+    ): string {
         $hideExpectedAnswer = false;
         $hideUserSelection = false;
         if (!$exercise->showExpectedChoiceColumn()) {
@@ -1411,8 +1408,6 @@ class FillBlanks extends Question
      * Check if a answer is correct by its text.
      *
      * @param string $answerText
-     *
-     * @return bool
      */
     public static function isCorrect($answerText): bool
     {
@@ -1433,8 +1428,6 @@ class FillBlanks extends Question
      * Clear the answer entered by student.
      *
      * @param string $answer
-     *
-     * @return string
      */
     public static function clearStudentAnswer($answer): string
     {

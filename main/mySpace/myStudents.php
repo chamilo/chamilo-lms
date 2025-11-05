@@ -171,7 +171,7 @@ switch ($action) {
             );
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        $redirectUrl = api_get_self().'?' . http_build_query([
+        $redirectUrl = api_get_self().'?'.http_build_query([
             'student' => $student_id,
             'origin' => $origin,
             'details' => $details,
@@ -203,7 +203,7 @@ switch ($action) {
             );
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
-        $redirectUrl = api_get_self().'?' . http_build_query([
+        $redirectUrl = api_get_self().'?'.http_build_query([
             'student' => $student_id,
             'origin' => $origin,
             'details' => $details,
@@ -253,7 +253,7 @@ switch ($action) {
         } else {
             Display::addFlash(Display::return_message(get_lang('NoItemSelected'), 'warning'));
         }
-        $redirectUrl = api_get_self().'?' . http_build_query([
+        $redirectUrl = api_get_self().'?'.http_build_query([
             'student' => $student_id,
             'origin' => $origin,
             'details' => $details,
@@ -1393,7 +1393,7 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
     $detailsUrl = api_get_path(WEB_CODE_PATH)
         .'mySpace/time_report_last_week.php?student='.$student_id
         .'&start='.$startWeek.'&end='.$endWeek;
-    $timeContent  = '<div class="text-center">';
+    $timeContent = '<div class="text-center">';
     $timeContent .= Display::return_icon('clock.png', get_lang('TimeSpentLastWeek'), [], ICON_SIZE_MEDIUM);
     $timeContent .= '<div>'.$timeSpentLastWeek.'</div>';
     $timeContent .= '<div>&nbsp;</div>';
@@ -1412,7 +1412,7 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
     $timeContent .= '</div>';
     $timePanel = Display::panel($timeContent, get_lang('TimeSpentInCoursesLastWeek'));
 
-    $avgProgressContent  = '<div class="text-center">';
+    $avgProgressContent = '<div class="text-center">';
     $avgProgressContent .= '<div id="avg-sessions-progress" class="easypiechart" data-percent="'.$avgSessionsProgress.'">';
     $avgProgressContent .= '<span class="percent">'.$avgSessionsProgress.'%</span>';
     $avgProgressContent .= '</div>';
@@ -1438,7 +1438,7 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
         true
     );
 
-    $sessionProgressHtml  = '<div class="row session-progress-section" style="display:flex;flex-wrap:wrap;align-items:stretch;">';
+    $sessionProgressHtml = '<div class="row session-progress-section" style="display:flex;flex-wrap:wrap;align-items:stretch;">';
     $sessionProgressHtml .= '<div class="col-md-6 text-center" style="display:flex;"><div style="flex:1;">'.$avgProgressPanel.'</div></div>';
     $sessionProgressHtml .= '<div class="col-md-6" style="display:flex;"><div style="flex:1;">'.$timePanel.'</div></div>';
     $sessionProgressHtml .= '</div>';
@@ -1465,7 +1465,7 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
         $label = date('Y', $weekStart).' - '.date('W', $weekStart);
         $weekData[] = [
             'label' => $label,
-            'time'  => api_time_to_hms($weekSeconds),
+            'time' => api_time_to_hms($weekSeconds),
         ];
     }
 
@@ -1474,11 +1474,11 @@ if (api_get_configuration_value('improve_tracking_in_mystudent_php')) {
     $weeksPerTable = (int) ceil($weeksToShow / $tablesCount);
     $index = 0;
     for ($table = 0; $table < $tablesCount; $table++) {
-        $tableHtml  = '<table class="table table-bordered table-condensed">';
+        $tableHtml = '<table class="table table-bordered table-condensed">';
         $tableHtml .= '<thead><tr><th>'.get_lang('Week').'</th><th>'.get_lang('LatencyTimeSpent').'</th></tr></thead><tbody>';
         for ($j = 0; $j < $weeksPerTable && $index < count($weekData); $j++, $index++) {
             $label = Security::remove_XSS($weekData[$index]['label']);
-            $time  = $weekData[$index]['time'];
+            $time = $weekData[$index]['time'];
             $tableHtml .= '<tr><th class="text-center">'.$label.'</th><td class="text-right">'.$time.'</td></tr>';
         }
         $tableHtml .= '</tbody></table>';
@@ -1613,13 +1613,19 @@ if (empty($details)) {
         $hasBulk = ($subscriptionColumnEnabled && !empty($sId) && $canManageSubscriptions);
         $columnsCount = 0;
         // Checkbox bulk column
-        if ($hasBulk) { $columnsCount += 1; }
+        if ($hasBulk) {
+            $columnsCount++;
+        }
         // Base columns
         $columnsCount += 4; // Course, Time, Progress, Score
         // Theoretical time
-        if ($theoreticalTimeEnabled) { $columnsCount += 1; }
+        if ($theoreticalTimeEnabled) {
+            $columnsCount++;
+        }
         // Subscription icon column (single action)
-        if ($subscriptionColumnEnabled && !empty($sId) && $canManageSubscriptions) { $columnsCount += 1; }
+        if ($subscriptionColumnEnabled && !empty($sId) && $canManageSubscriptions) {
+            $columnsCount++;
+        }
         // Attendances, Evaluations, Details
         $columnsCount += 3;
 
@@ -1652,7 +1658,7 @@ if (empty($details)) {
         echo '</thead>';
         echo '<tbody>';
 
-        if($theoreticalTimeEnabled) {
+        if ($theoreticalTimeEnabled) {
             $csvRow = [
                 '',
                 get_lang('Course'),
@@ -1722,7 +1728,7 @@ if (empty($details)) {
                 $subscriptionIcon = '';
                 $subscriptionCsv = '';
                 if ($subscriptionColumnEnabled && !empty($sId) && $canManageSubscriptions) {
-                    $subscribeUrl = api_get_self().'?' . http_build_query([
+                    $subscribeUrl = api_get_self().'?'.http_build_query([
                         'action' => 'subscribe_course',
                         'id_session' => $sId,
                         'student' => $student_id,
@@ -1730,7 +1736,7 @@ if (empty($details)) {
                         'origin' => $origin,
                         'details' => $details,
                     ]);
-                    $unsubscribeUrl = api_get_self().'?' . http_build_query([
+                    $unsubscribeUrl = api_get_self().'?'.http_build_query([
                         'action' => 'unsubscribe_course',
                         'id_session' => $sId,
                         'student' => $student_id,
@@ -1744,11 +1750,11 @@ if (empty($details)) {
                     );
                     $subscriptionCsv = '+';
                 }
-                if($theoreticalTimeEnabled) {
+                if ($theoreticalTimeEnabled) {
                     $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time', $courseCodeItem);
-                    if (is_numeric($theoreticalTime) && (float)$theoreticalTime != 0) {
+                    if (is_numeric($theoreticalTime) && (float) $theoreticalTime != 0) {
                         if ($isSubscribed) {
-                            $totalTheoreticalTime += (float)$theoreticalTime;
+                            $totalTheoreticalTime += (float) $theoreticalTime;
                         }
                         $hours = floor($theoreticalTime / 60);
                         $minutes = $theoreticalTime % 60;
@@ -1822,8 +1828,8 @@ if (empty($details)) {
 
                     if (!empty($scoretotal) && !empty($scoretotal[1])) {
                         $scoretotal_display =
-                            round($scoretotal[0], 1).'/' .
-                            round($scoretotal[1], 1) .
+                            round($scoretotal[0], 1).'/'.
+                            round($scoretotal[1], 1).
                             ' ('.round(($scoretotal[0] / $scoretotal[1]) * 100, 2).' %)';
 
                         $gradeBookTotal[0] += $scoretotal[0];
@@ -1854,7 +1860,7 @@ if (empty($details)) {
                     $score = empty($scoreVal) ? '0%' : $scoreVal.'%';
                 }
 
-                    if($theoreticalTimeEnabled) {
+                if ($theoreticalTimeEnabled) {
                     $csvRow = [
                         $session_name,
                         $courseInfoItem['title'],
@@ -1893,8 +1899,7 @@ if (empty($details)) {
                         .' class="bulk-course-checkbox bulk-course-checkbox-s'.$sId.'" />'
                         .'</td>';
                 }
-                echo
-                    '<td>',
+                echo '<td>',
                         '<a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
                             $courseInfoItem['title'].
                         '</a>',
@@ -1902,7 +1907,7 @@ if (empty($details)) {
                     '<td>'.$time_spent_on_course.'</td>',
                     '<td>'.$progress.'</td>',
                     '<td>'.$score.'</td>';
-                if($theoreticalTimeEnabled) {
+                if ($theoreticalTimeEnabled) {
                     echo '<td>'.$theoreticalTimeDisplay.'</td>';
                 }
                 if ($subscriptionColumnEnabled && !empty($sId) && $canManageSubscriptions) {
@@ -1935,28 +1940,28 @@ if (empty($details)) {
             $totalEvaluations = $scoreDisplay->display_score($gradeBookTotal);
             $totalTimeFormatted = api_time_to_hms($totalCourseTime);
             echo '<tr>';
-                if ($hasBulk) {
-                    echo '<th></th>';
-                }
+            if ($hasBulk) {
+                echo '<th></th>';
+            }
             echo '<th>'.get_lang('Total').'</th>
                 <th>'.$totalTimeFormatted.'</th>
                 <th>'.$totalProgressFormatted.'</th>
                 <th>'.$totalScoreFormatted.'</th>';
-                if($theoreticalTimeEnabled) {
-                    $totalHours = floor($totalTheoreticalTime / 60);
-                    $totalMinutes = $totalTheoreticalTime % 60;
-                    $totalTheoreticalTimeDisplay = sprintf('%02d:%02d', $totalHours, $totalMinutes);
-                    echo '<td>'.$totalTheoreticalTimeDisplay.'</td>';
-                }
-                if (!empty($sId)) {
-                    echo '<th></th>';
-                }
-                echo '<th>'.$totalAttendanceFormatted.'</th>',
+            if ($theoreticalTimeEnabled) {
+                $totalHours = floor($totalTheoreticalTime / 60);
+                $totalMinutes = $totalTheoreticalTime % 60;
+                $totalTheoreticalTimeDisplay = sprintf('%02d:%02d', $totalHours, $totalMinutes);
+                echo '<td>'.$totalTheoreticalTimeDisplay.'</td>';
+            }
+            if (!empty($sId)) {
+                echo '<th></th>';
+            }
+            echo '<th>'.$totalAttendanceFormatted.'</th>',
                 '<th>'.$totalEvaluations.'</th>',
                 '<th></th>',
             '</tr>';
 
-            if($theoreticalTimeEnabled) {
+            if ($theoreticalTimeEnabled) {
                 $csvRow = [
                     get_lang('Total'),
                     '',

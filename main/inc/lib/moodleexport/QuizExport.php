@@ -178,7 +178,7 @@ class QuizExport extends ActivityExport
                     'id' => $questionData->source_id,
                     'questiontext' => $questionData->question,
                     'qtype' => $this->mapQuestionType($questionData->quiz_type),
-                    'questioncategoryid' =>  $categoryId,
+                    'questioncategoryid' => $categoryId,
                     'answers' => $this->getAnswersForQuestion($questionData->source_id),
                     'maxmark' => $questionData->ponderation ?? 1,
                 ];

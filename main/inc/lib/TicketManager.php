@@ -242,7 +242,7 @@ class TicketManager
         return Database::store_result($result);
     }
 
-        /**
+    /**
      * Returns the list of category IDs assigned to a user.
      *
      * @param int $userId
@@ -844,7 +844,7 @@ class TicketManager
         $sql_get_message_ids = "SELECT id FROM $table_ticket_message WHERE ticket_id = $ticketId";
         $sql_delete_attachments = "DELETE FROM $table_ticket_message_attachments WHERE message_id IN ($sql_get_message_ids)";
         Database::query($sql_delete_attachments);
-        
+
         $sql_assigned_log = "DELETE FROM $table_ticket_assigned_log WHERE ticket_id = $ticketId";
         Database::query($sql_assigned_log);
 
@@ -854,7 +854,7 @@ class TicketManager
         $sql_get_category = "SELECT category_id FROM $table_support_tickets WHERE id = $ticketId";
         $res = Database::query($sql_get_category);
         if ($row = Database::fetch_array($res)) {
-            $category_id = (int)$row['category_id'];
+            $category_id = (int) $row['category_id'];
             $table_ticket_category = Database::get_main_table('ticket_category');
             $sql_update_category = "UPDATE $table_ticket_category SET total_tickets = total_tickets - 1 WHERE id = $category_id AND total_tickets > 0";
             Database::query($sql_update_category);
@@ -958,7 +958,7 @@ class TicketManager
 
         // Check if a role was set to the project
         if ($userIsAllowInProject == false) {
-                        $categoryList = self::getCategoryIdsByUser($userId, $projectId);
+            $categoryList = self::getCategoryIdsByUser($userId, $projectId);
             $categoryCondition = '';
             if (!empty($categoryList)) {
                 $categoryIds = implode(',', array_map('intval', $categoryList));
@@ -967,7 +967,6 @@ class TicketManager
 
             $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId".$categoryCondition.")";
         }
-
 
         // Search simple
         if (isset($_GET['submit_simple']) && $_GET['keyword'] != '') {
@@ -1111,7 +1110,7 @@ class TicketManager
             if ($isAdmin) {
                 $project_id = isset($row['project_id']) ? $row['project_id'] : (isset($_GET['project_id']) ? $_GET['project_id'] : 0);
                 $delete_link = '<a href="tickets.php?action=delete&ticket_id='.$row['ticket_id'].'&project_id='.$project_id.'" onclick="return confirm(\''.htmlentities(get_lang('AreYouSureYouWantToDeleteThisTicket')).'\')">'
-                . Display::return_icon('delete.png', get_lang('Delete')) .
+                .Display::return_icon('delete.png', get_lang('Delete')).
                 '</a>';
                 $ticket[] = $delete_link;
             }
@@ -1229,6 +1228,7 @@ class TicketManager
 
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj ? (int) $obj->total : 0;
     }
 

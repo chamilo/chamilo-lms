@@ -4374,6 +4374,457 @@ class MySpace
         return get_lang('NoEntity');
     }
 
+    /** Return all user extra fields as variable => human label. */
+    public static function duGetUserExtraFields(): array
+    {
+        $ef = new ExtraField('user');
+        $list = $ef->get_all();
+        $out = [];
+        if (!empty($list)) {
+            foreach ($list as $row) {
+                $out[$row['variable']] = $row['display_text'].' ('.$row['variable'].')';
+            }
+            ksort($out);
+        }
+
+        return $out;
+    }
+
+    /** Return user extra field info by variable name. */
+    public static function duGetUserExtraFieldByVariable(string $var)
+    {
+        $ef = new ExtraField('user');
+
+        return $ef->get_handler_field_info_by_field_variable($var);
+    }
+
+    /** Table exists? (current DB) */
+    public static function duTableExists(string $table): bool
+    {
+        $table = Database::escape_string($table);
+        $res = Database::query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '$table' LIMIT 1");
+
+        return $res && Database::num_rows($res) > 0;
+    }
+
+    /** Column exists in table? */
+    public static function duColumnExists(string $table, string $column): bool
+    {
+        $table = Database::escape_string($table);
+        $column = Database::escape_string($column);
+        $res = Database::query("
+        SELECT 1
+          FROM information_schema.columns
+         WHERE table_schema = DATABASE()
+           AND table_name = '$table'
+           AND column_name = '$column'
+         LIMIT 1
+    ");
+
+        return $res && Database::num_rows($res) > 0;
+    }
+
+    /**
+     * Safe UPDATE (with pre-dedup when composite UNIQUE/PK exists).
+     *
+     * @param array $uniqueOn Columns (excluding user_id) that are part of a UNIQUE/PK and may collide when moving.
+     */
+    public static function duSafeUpdateUserRef(string $table, string $column, int $fromUserId, int $toUserId, array $uniqueOn = []): int
+    {
+        if (!self::duTableExists($table) || !self::duColumnExists($table, $column)) {
+            return 0;
+        }
+
+        // Pre-deduplicate if composite key exists
+        if (!empty($uniqueOn)) {
+            $onParts = [];
+            foreach ($uniqueOn as $c) {
+                if (!self::duColumnExists($table, $c)) {
+                    // if any listed unique column does not exist, skip dedup and proceed to UPDATE
+                    $onParts = [];
+                    break;
+                }
+                $onParts[] = "a.`$c` = b.`$c`";
+            }
+            if (!empty($onParts)) {
+                $onSql = implode(' AND ', $onParts);
+                $sqlDel = "
+            DELETE a
+              FROM `$table` a
+              JOIN `$table` b
+                ON $onSql
+               AND b.`$column` = $toUserId
+             WHERE a.`$column` = $fromUserId
+        ";
+                $resDel = Database::query($sqlDel);
+                // If you need to log deletes: $delRows = Database::affected_rows($resDel);
+            }
+        }
+
+        // Move references (UPDATE IGNORE avoids duplicates)
+        $sqlUpd = "UPDATE IGNORE `$table` SET `$column` = $toUserId WHERE `$column` = $fromUserId";
+        $resUpd = Database::query($sqlUpd);
+
+        return Database::affected_rows($resUpd);
+    }
+
+    /**
+     * Safe UPDATE for tables with two user columns (e.g. user_rel_user).
+     * Allows independent dedup per column.
+     *
+     * @return array [updatedColA, updatedColB]
+     */
+    public static function duSafeUpdateUserRefDual(
+        string $table,
+        string $colA,
+        string $colB,
+        int $fromUserId,
+        int $toUserId,
+        array $uniqueOnA = [],
+        array $uniqueOnB = []
+    ): array {
+        $totA = 0;
+        $totB = 0;
+        if (!self::duTableExists($table)) {
+            return [$totA, $totB];
+        }
+        if (self::duColumnExists($table, $colA)) {
+            // Dedup for colA → toUserId
+            if (!empty($uniqueOnA)) {
+                $onParts = [];
+                foreach ($uniqueOnA as $c) {
+                    if (!self::duColumnExists($table, $c)) {
+                        $onParts = [];
+                        break;
+                    }
+                    $onParts[] = "a.`$c` = b.`$c`";
+                }
+                if (!empty($onParts)) {
+                    $onSql = implode(' AND ', $onParts);
+                    $sqlDelA = "
+                    DELETE a
+                      FROM `$table` a
+                      JOIN `$table` b
+                        ON $onSql
+                       AND b.`$colA` = $toUserId
+                     WHERE a.`$colA` = $fromUserId
+                ";
+                    Database::query($sqlDelA);
+                }
+            }
+            $res = Database::query("UPDATE IGNORE `$table` SET `$colA` = $toUserId WHERE `$colA` = $fromUserId");
+            $totA = Database::affected_rows($res);
+        }
+        if (self::duColumnExists($table, $colB)) {
+            if (!empty($uniqueOnB)) {
+                $onParts = [];
+                foreach ($uniqueOnB as $c) {
+                    if (!self::duColumnExists($table, $c)) {
+                        $onParts = [];
+                        break;
+                    }
+                    $onParts[] = "a.`$c` = b.`$c`";
+                }
+                if (!empty($onParts)) {
+                    $onSql = implode(' AND ', $onParts);
+                    $sqlDelB = "
+                    DELETE a
+                      FROM `$table` a
+                      JOIN `$table` b
+                        ON $onSql
+                       AND b.`$colB` = $toUserId
+                     WHERE a.`$colB` = $fromUserId
+                ";
+                    Database::query($sqlDelB);
+                }
+            }
+            $res1 = Database::query("UPDATE IGNORE `$table` SET `$colB` = $toUserId WHERE `$colB` = $fromUserId");
+            $totB = Database::affected_rows($res1);
+        }
+
+        return [$totA, $totB];
+    }
+
+    /** REPLACE(search, replace) in a text column (with LIKE filter). */
+    public static function duReplaceInColumn(string $table, string $column, string $search, string $replace): int
+    {
+        if (!self::duTableExists($table) || !self::duColumnExists($table, $column)) {
+            return 0;
+        }
+        $search = Database::escape_string($search);
+        $replace = Database::escape_string($replace);
+
+        $sql = "UPDATE `$table`
+           SET `$column` = REPLACE(`$column`, '$search', '$replace')
+         WHERE `$column` LIKE '%$search%'";
+        $res = Database::query($sql);
+
+        return Database::affected_rows($res);
+    }
+
+    /** Duplicated values for a given extra-field on the current portal. */
+    public static function duGetDuplicateValues(int $fieldId, int $urlId): array
+    {
+        $tblVals = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblRel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $sql = "SELECT v.value AS the_value, COUNT(DISTINCT u.id) AS qty
+        FROM $tblVals v
+        JOIN $tblUser u ON u.id = v.item_id
+        JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
+        WHERE v.field_id = $fieldId AND v.value <> ''
+        GROUP BY v.value
+        HAVING COUNT(DISTINCT u.id) > 1
+        ORDER BY qty DESC, the_value ASC";
+        $res = Database::query($sql);
+
+        return Database::store_result($res, 'ASSOC');
+    }
+
+    /** Users having exactly a value for the given extra-field (filtered by portal). */
+    public static function duGetUsersByFieldValue(int $fieldId, int $urlId, string $value): array
+    {
+        $tblVals = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblRel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $valueSql = "'".Database::escape_string($value)."'";
+
+        $sql = "SELECT DISTINCT u.id AS user_id, u.username, u.firstname, u.lastname, u.email, u.registration_date
+        FROM $tblUser u
+        JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
+        JOIN $tblVals v ON v.item_id = u.id AND v.field_id = $fieldId
+        WHERE v.value = $valueSql
+        ORDER BY u.id ASC";
+        $res = Database::query($sql);
+
+        return Database::store_result($res, 'ASSOC');
+    }
+
+    /** Deactivate (active=0) or delete user with API if available. */
+    public static function duDisableOrDeleteUser(int $userId, string $mode): bool
+    {
+        $mode = $mode === 'delete' ? 'delete' : 'deactivate';
+
+        if ($mode === 'delete' && class_exists('UserManager') && method_exists('UserManager', 'delete_user')) {
+            return UserManager::delete_user($userId);
+        }
+
+        // Deactivate
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = "UPDATE $tblUser SET active = 0 WHERE user_id = $userId";
+
+        return (bool) Database::query($sql);
+    }
+
+    /**
+     * Move ALL references from $fromUserId → $toUserId, including special cases.
+     * Returns a log like "table.col (n)" for UI display.
+     */
+    public static function duUpdateAllUserRefsList(int $fromUserId, int $toUserId): array
+    {
+        $log = [];
+
+        // Tables with composite UNIQUE/PK (pre-dedup)
+        $composite = [
+            // table, column, uniqueOn (exclude the user column)
+            ['access_url_rel_user',         'user_id', ['access_url_id']],
+            ['fos_user_user_group',         'user_id', ['group_id']],
+            ['user_rel_tag',                'user_id', ['tag_id']],
+            ['user_rel_course_vote',        'user_id', ['c_id']],
+            ['session_rel_user',            'user_id', ['session_id']],
+            ['session_rel_course_rel_user', 'user_id', ['session_id', 'c_id']],
+        ];
+        foreach ($composite as [$t,$col,$uniqueOn]) {
+            $n = self::duSafeUpdateUserRef($t, $col, $fromUserId, $toUserId, $uniqueOn);
+            if ($n) {
+                $log[] = "$t.$col ($n)";
+            }
+        }
+
+        // Simple tables (no composite unique with user_id)
+        $simple = [
+            ['admin', 'user_id'],
+            ['agenda_event_invitation', 'creator_id'],
+            ['agenda_event_invitee', 'user_id'],
+            ['class_user', 'user_id'],
+            ['course_rel_user', 'user_id'],
+            ['course_rel_user_catalogue', 'user_id'],
+            ['course_request', 'user_id'],
+            ['c_attendance_result', 'user_id'],
+            ['c_attendance_sheet', 'user_id'],
+            ['c_attendance_sheet_log', 'lastedit_user_id'],
+            ['c_blog_comment', 'author_id'],
+            ['c_blog_post', 'author_id'],
+            ['c_blog_rating', 'user_id'],
+            ['c_blog_rel_user', 'user_id'],
+            ['c_blog_task_rel_user', 'user_id'],
+            ['c_chat_connected', 'user_id'],
+            ['c_dropbox_category', 'user_id'],
+            ['c_dropbox_feedback', 'author_user_id'],
+            ['c_dropbox_person', 'user_id'],
+            ['c_dropbox_post', 'dest_user_id'],
+            ['c_forum_mailcue', 'user_id'],
+            ['c_forum_notification', 'user_id'],
+            ['c_forum_post', 'poster_id'],
+            ['c_forum_thread', 'thread_poster_id'],
+            ['c_forum_thread_qualify', 'user_id'],
+            ['c_forum_thread_qualify', 'qualify_user_id'],
+            ['c_forum_thread_qualify_log', 'user_id'],
+            ['c_forum_thread_qualify_log', 'qualify_user_id'],
+            ['c_group_rel_tutor', 'user_id'],
+            ['c_group_rel_user', 'user_id'],
+            ['c_item_property', 'to_user_id'],
+            ['c_item_property', 'insert_user_id'],
+            ['c_item_property', 'lastedit_user_id'],
+            ['c_lp_category_user', 'user_id'],
+            ['c_lp_view', 'user_id'],
+            ['c_notebook', 'user_id'],
+            ['c_online_connected', 'user_id'],
+            ['c_permission_user', 'user_id'],
+            ['c_role_user', 'user_id'],
+            ['c_student_publication', 'user_id'],
+            ['c_student_publication_comment', 'user_id'],
+            ['c_student_publication_rel_user', 'user_id'],
+            ['c_survey', 'author'],
+            ['c_survey_answer', 'user'],
+            ['c_survey_invitation', 'user'],
+            ['c_userinfo_content', 'user_id'],
+            ['c_wiki', 'user_id'],
+            ['c_wiki_mailcue', 'user_id'],
+            ['chat', 'from_user'],
+            ['chat', 'to_user'],
+            ['chat_video', 'from_user'],
+            ['chat_video', 'to_user'],
+            ['extra_field_saved_search', 'user_id'],
+            ['gradebook_category', 'user_id'],
+            ['gradebook_certificate', 'user_id'],
+            ['gradebook_evaluation', 'user_id'],
+            ['gradebook_link', 'user_id'],
+            ['gradebook_linkeval_log', 'user_id_log'],
+            ['gradebook_result', 'user_id'],
+            ['gradebook_result_log', 'user_id'],
+            ['gradebook_score_log', 'user_id'],
+            ['justification_document_rel_users', 'user_id'],
+            ['message', 'user_receiver_id'],
+            ['message', 'user_sender_id'],
+            ['notification', 'dest_user_id'],
+            ['personal_agenda', 'user'],
+            ['plugin_bbb_meeting', 'user_id'],
+            ['plugin_bbb_room', 'participant_id'],
+            ['plugin_buycourses_item_rel_beneficiary', 'user_id'],
+            ['plugin_buycourses_paypal_payouts', 'user_id'],
+            ['plugin_buycourses_sale', 'user_id'],
+            ['plugin_buycourses_subscription_rel_sale', 'user_id'],
+            ['plugin_card_game', 'user_id'],
+            ['plugin_h5p', 'user_id'],
+            ['plugin_h5p_import_results', 'user_id'],
+            ['plugin_lti_provider_result', 'user_id'],
+            ['portfolio', 'user_id'],
+            ['portfolio_category', 'user_id'],
+            ['portfolio_comment', 'author_id'],
+            ['sequence_value', 'user_id'],
+            ['shared_survey', 'author'],
+            ['skill_rel_user', 'argumentation_author_id'],
+            ['skill_rel_user', 'assigned_by'],
+            ['skill_rel_user', 'user_id'],
+            ['skill_rel_user_comment', 'feedback_giver_id'],
+            ['templates', 'user_id'],
+            ['ticket_assigned_log', 'user_id'],
+            ['ticket_assigned_log', 'sys_insert_user_id'],
+            ['ticket_category', 'sys_insert_user_id'],
+            ['ticket_category', 'sys_lastedit_user_id'],
+            ['ticket_category_rel_user', 'user_id'],
+            ['ticket_message', 'sys_insert_user_id'],
+            ['ticket_message', 'sys_lastedit_user_id'],
+            ['ticket_message_attachments', 'sys_lastedit_user_id'],
+            ['ticket_message_attachments', 'sys_insert_user_id'],
+            ['ticket_priority', 'sys_lastedit_user_id'],
+            ['ticket_priority', 'sys_insert_user_id'],
+            ['ticket_project', 'sys_lastedit_user_id'],
+            ['ticket_project', 'sys_insert_user_id'],
+            ['ticket_ticket', 'sys_lastedit_user_id'],
+            ['ticket_ticket', 'sys_insert_user_id'],
+            ['track_e_access', 'access_user_id'],
+            ['track_e_attempt', 'user_id'],
+            ['track_e_attempt_recording', 'author'],
+            ['track_e_course_access', 'user_id'],
+            ['track_e_downloads', 'down_user_id'],
+            ['track_e_exercises', 'exe_user_id'],
+            ['track_e_hotpotatoes', 'exe_user_id'],
+            ['track_e_hotspot', 'hotspot_user_id'],
+            ['track_e_item_property', 'lastedit_user_id'],
+            ['track_e_lastaccess', 'access_user_id'],
+            ['track_e_links', 'links_user_id'],
+            ['track_e_login', 'login_user_id'],
+            ['track_e_online', 'login_user_id'],
+            ['track_e_uploads', 'upload_user_id'],
+            ['track_stored_values', 'user_id'],
+            ['track_stored_values_stack', 'user_id'],
+            ['user', 'creator_id'],
+            ['usergroup_rel_user', 'user_id'],
+            ['user_api_key', 'user_id'],
+            ['user_course_category', 'user_id'],
+            ['user_rel_event_type', 'user_id'],
+            ['xapi_internal_log', 'user_id'],
+        ];
+        foreach ($simple as [$t,$col]) {
+            $n = self::duSafeUpdateUserRef($t, $col, $fromUserId, $toUserId);
+            if ($n) {
+                $log[] = "$t.$col ($n)";
+            }
+        }
+
+        // user_rel_user (two user columns)
+        if (self::duTableExists('user_rel_user')) {
+            // Dedup by user_id
+            $sqlDel1 = "
+                DELETE a FROM user_rel_user a
+                JOIN user_rel_user b
+                  ON a.friend_user_id = b.friend_user_id
+                 AND b.user_id = $toUserId
+               WHERE a.user_id = $fromUserId
+            ";
+            Database::query($sqlDel1);
+
+            $resUp1 = Database::query("UPDATE IGNORE user_rel_user SET user_id = $toUserId WHERE user_id = $fromUserId");
+            $n1 = Database::affected_rows($resUp1);
+
+            // Dedup by friend_user_id
+            $sqlDel2 = "
+                DELETE a FROM user_rel_user a
+                JOIN user_rel_user b
+                  ON a.user_id = b.user_id
+                 AND b.friend_user_id = $toUserId
+               WHERE a.friend_user_id = $fromUserId
+            ";
+            Database::query($sqlDel2);
+
+            $resUp2 = Database::query("UPDATE IGNORE user_rel_user SET friend_user_id = $toUserId WHERE friend_user_id = $fromUserId");
+            $n2 = Database::affected_rows($resUp2);
+
+            if ($n1) {
+                $log[] = "user_rel_user.user_id ($n1)";
+            }
+            if ($n2) {
+                $log[] = "user_rel_user.friend_user_id ($n2)";
+            }
+        }
+
+        // Special cases
+        $nDef = self::duUpdateTrackEDefault($fromUserId, $toUserId);
+        if ($nDef) {
+            $log[] = "track_e_default (default_user_id/default_value) ($nDef)";
+        }
+
+        $nEf = self::duUpdateExtraFieldValuesUserType($fromUserId, $toUserId); // idem
+        if ($nEf) {
+            $log[] = "extra_field_values.item_id (user-type) ($nEf)";
+        }
+
+        return $log;
+    }
+
     /**
      * Gets a list of users who were enrolled in the lessons.
      * It is necessary that in the extra field, a company is defined.
@@ -4547,251 +4998,27 @@ class MySpace
         return $sql;
     }
 
-    /** Return all user extra fields as variable => human label. */
-    public static function duGetUserExtraFields(): array
-    {
-        $ef = new ExtraField('user');
-        $list = $ef->get_all();
-        $out = [];
-        if (!empty($list)) {
-            foreach ($list as $row) {
-                $out[$row['variable']] = $row['display_text'].' ('.$row['variable'].')';
-            }
-            ksort($out);
-        }
-        return $out;
-    }
-
-    /** Return user extra field info by variable name. */
-    public static function duGetUserExtraFieldByVariable(string $var)
-    {
-        $ef = new ExtraField('user');
-        return $ef->get_handler_field_info_by_field_variable($var);
-    }
-
-    /** Table exists? (current DB) */
-    public static function duTableExists(string $table): bool
-    {
-        $table = Database::escape_string($table);
-        $res = Database::query("SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = '$table' LIMIT 1");
-        return $res && Database::num_rows($res) > 0;
-    }
-
-    /** Column exists in table? */
-    public static function duColumnExists(string $table, string $column): bool
-    {
-        $table = Database::escape_string($table);
-        $column = Database::escape_string($column);
-        $res = Database::query("
-        SELECT 1
-          FROM information_schema.columns
-         WHERE table_schema = DATABASE()
-           AND table_name = '$table'
-           AND column_name = '$column'
-         LIMIT 1
-    ");
-        return $res && Database::num_rows($res) > 0;
-    }
-
-    /**
-     * Safe UPDATE (with pre-dedup when composite UNIQUE/PK exists).
-     * @param array $uniqueOn Columns (excluding user_id) that are part of a UNIQUE/PK and may collide when moving.
-     */
-    public static function duSafeUpdateUserRef(string $table, string $column, int $fromUserId, int $toUserId, array $uniqueOn = []): int
-    {
-        if (!self::duTableExists($table) || !self::duColumnExists($table, $column)) {
-            return 0;
-        }
-
-        // Pre-deduplicate if composite key exists
-        if (!empty($uniqueOn)) {
-            $onParts = [];
-            foreach ($uniqueOn as $c) {
-                if (!self::duColumnExists($table, $c)) {
-                    // if any listed unique column does not exist, skip dedup and proceed to UPDATE
-                    $onParts = [];
-                    break;
-                }
-                $onParts[] = "a.`$c` = b.`$c`";
-            }
-            if (!empty($onParts)) {
-                $onSql = implode(' AND ', $onParts);
-                $sqlDel = "
-            DELETE a
-              FROM `$table` a
-              JOIN `$table` b
-                ON $onSql
-               AND b.`$column` = $toUserId
-             WHERE a.`$column` = $fromUserId
-        ";
-                $resDel = Database::query($sqlDel);
-                // If you need to log deletes: $delRows = Database::affected_rows($resDel);
-            }
-        }
-
-        // Move references (UPDATE IGNORE avoids duplicates)
-        $sqlUpd = "UPDATE IGNORE `$table` SET `$column` = $toUserId WHERE `$column` = $fromUserId";
-        $resUpd = Database::query($sqlUpd);
-
-        return Database::affected_rows($resUpd);
-    }
-
-    /**
-     * Safe UPDATE for tables with two user columns (e.g. user_rel_user).
-     * Allows independent dedup per column.
-     * @return array [updatedColA, updatedColB]
-     */
-    public static function duSafeUpdateUserRefDual(
-        string $table,
-        string $colA,
-        string $colB,
-        int $fromUserId,
-        int $toUserId,
-        array $uniqueOnA = [],
-        array $uniqueOnB = []
-    ): array {
-        $totA = 0; $totB = 0;
-        if (!self::duTableExists($table)) {
-            return [$totA, $totB];
-        }
-        if (self::duColumnExists($table, $colA)) {
-            // Dedup for colA → toUserId
-            if (!empty($uniqueOnA)) {
-                $onParts = [];
-                foreach ($uniqueOnA as $c) {
-                    if (!self::duColumnExists($table, $c)) { $onParts = []; break; }
-                    $onParts[] = "a.`$c` = b.`$c`";
-                }
-                if (!empty($onParts)) {
-                    $onSql = implode(' AND ', $onParts);
-                    $sqlDelA = "
-                    DELETE a
-                      FROM `$table` a
-                      JOIN `$table` b
-                        ON $onSql
-                       AND b.`$colA` = $toUserId
-                     WHERE a.`$colA` = $fromUserId
-                ";
-                    Database::query($sqlDelA);
-                }
-            }
-            $res = Database::query("UPDATE IGNORE `$table` SET `$colA` = $toUserId WHERE `$colA` = $fromUserId");
-            $totA = Database::affected_rows($res);
-        }
-        if (self::duColumnExists($table, $colB)) {
-            if (!empty($uniqueOnB)) {
-                $onParts = [];
-                foreach ($uniqueOnB as $c) {
-                    if (!self::duColumnExists($table, $c)) { $onParts = []; break; }
-                    $onParts[] = "a.`$c` = b.`$c`";
-                }
-                if (!empty($onParts)) {
-                    $onSql = implode(' AND ', $onParts);
-                    $sqlDelB = "
-                    DELETE a
-                      FROM `$table` a
-                      JOIN `$table` b
-                        ON $onSql
-                       AND b.`$colB` = $toUserId
-                     WHERE a.`$colB` = $fromUserId
-                ";
-                    Database::query($sqlDelB);
-                }
-            }
-            $res1 = Database::query("UPDATE IGNORE `$table` SET `$colB` = $toUserId WHERE `$colB` = $fromUserId");
-            $totB = Database::affected_rows($res1);
-        }
-        return [$totA, $totB];
-    }
-
-    /** REPLACE(search, replace) in a text column (with LIKE filter). */
-    public static function duReplaceInColumn(string $table, string $column, string $search, string $replace): int
-    {
-        if (!self::duTableExists($table) || !self::duColumnExists($table, $column)) {
-            return 0;
-        }
-        $search  = Database::escape_string($search);
-        $replace = Database::escape_string($replace);
-
-        $sql = "UPDATE `$table`
-           SET `$column` = REPLACE(`$column`, '$search', '$replace')
-         WHERE `$column` LIKE '%$search%'";
-        $res = Database::query($sql);
-
-        return Database::affected_rows($res);
-    }
-
-    /** Duplicated values for a given extra-field on the current portal. */
-    public static function duGetDuplicateValues(int $fieldId, int $urlId): array
-    {
-        $tblVals = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblRel  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-        $sql = "SELECT v.value AS the_value, COUNT(DISTINCT u.id) AS qty
-        FROM $tblVals v
-        JOIN $tblUser u ON u.id = v.item_id
-        JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
-        WHERE v.field_id = $fieldId AND v.value <> ''
-        GROUP BY v.value
-        HAVING COUNT(DISTINCT u.id) > 1
-        ORDER BY qty DESC, the_value ASC";
-        $res = Database::query($sql);
-        return Database::store_result($res, 'ASSOC');
-    }
-
-    /** Users having exactly a value for the given extra-field (filtered by portal). */
-    public static function duGetUsersByFieldValue(int $fieldId, int $urlId, string $value): array
-    {
-        $tblVals = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblRel  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $valueSql = "'".Database::escape_string($value)."'";
-
-        $sql = "SELECT DISTINCT u.id AS user_id, u.username, u.firstname, u.lastname, u.email, u.registration_date
-        FROM $tblUser u
-        JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
-        JOIN $tblVals v ON v.item_id = u.id AND v.field_id = $fieldId
-        WHERE v.value = $valueSql
-        ORDER BY u.id ASC";
-        $res = Database::query($sql);
-        return Database::store_result($res, 'ASSOC');
-    }
-
-    /** Deactivate (active=0) or delete user with API if available. */
-    public static function duDisableOrDeleteUser(int $userId, string $mode): bool
-    {
-        $mode = $mode === 'delete' ? 'delete' : 'deactivate';
-
-        if ($mode === 'delete' && class_exists('UserManager') && method_exists('UserManager', 'delete_user')) {
-            return UserManager::delete_user($userId);
-        }
-
-        // Deactivate
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "UPDATE $tblUser SET active = 0 WHERE user_id = $userId";
-        return (bool) Database::query($sql);
-    }
-
     /** track_e_default: default_value text with user_id in various formats and numeric default_user_id. */
     private static function duUpdateTrackEDefault(int $fromUserId, int $toUserId): int
     {
-        if (!self::duTableExists('track_e_default')) { return 0; }
+        if (!self::duTableExists('track_e_default')) {
+            return 0;
+        }
         $moved = 0;
 
         // default_user_id (if present)
-        if (self::duColumnExists('track_e_default','default_user_id')) {
+        if (self::duColumnExists('track_e_default', 'default_user_id')) {
             $result1 = Database::query("UPDATE IGNORE track_e_default SET default_user_id = $toUserId WHERE default_user_id = $fromUserId");
             $moved += Database::affected_rows($result1);
         }
 
         // Events where default_value == user id as plain text
         $eventsDirect = [
-            'user_created','exe_result_deleted','session_add_user_course','session_add_user',
-            'user_updated','user_deleted','exe_attempt_deleted','user_disable','user_password_updated',
-            'user_enable','session_delete_user','session_delete_user_course','exe_incomplete_results_deleted'
+            'user_created', 'exe_result_deleted', 'session_add_user_course', 'session_add_user',
+            'user_updated', 'user_deleted', 'exe_attempt_deleted', 'user_disable', 'user_password_updated',
+            'user_enable', 'session_delete_user', 'session_delete_user_course', 'exe_incomplete_results_deleted',
         ];
-        if (self::duColumnExists('track_e_default','event_type') && self::duColumnExists('track_e_default','default_value')) {
+        if (self::duColumnExists('track_e_default', 'event_type') && self::duColumnExists('track_e_default', 'default_value')) {
             $in = "'".implode("','", array_map('Database::escape_string', $eventsDirect))."'";
             $sql = "
             UPDATE track_e_default
@@ -4804,17 +5031,17 @@ class MySpace
         }
 
         // user_subscribed / user_unsubscribed with default_value_type='user_object'
-        if (self::duColumnExists('track_e_default','default_value_type') && self::duColumnExists('track_e_default','event_type')) {
-            foreach (['user_subscribed','user_unsubscribed'] as $evt) {
+        if (self::duColumnExists('track_e_default', 'default_value_type') && self::duColumnExists('track_e_default', 'event_type')) {
+            foreach (['user_subscribed', 'user_unsubscribed'] as $evt) {
                 // Replace twice the ID and also the profile.php?u=FROM
                 $moved += self::duReplaceInColumn('track_e_default', 'default_value', "profile.php?u=".$fromUserId, "profile.php?u=".$toUserId);
-                $moved += self::duReplaceInColumn('track_e_default', 'default_value', (string)$fromUserId, (string)$toUserId);
+                $moved += self::duReplaceInColumn('track_e_default', 'default_value', (string) $fromUserId, (string) $toUserId);
                 // NOTE: REPLACE already uses LIKE; we do not narrow with WHERE to keep cross-install compatibility.
             }
         }
 
         // soc_gr_u_unsubs / soc_gr_u_subs: "gid: GGG - uid: XXX"
-        foreach (['soc_gr_u_unsubs','soc_gr_u_subs'] as $evt) {
+        foreach (['soc_gr_u_unsubs', 'soc_gr_u_subs'] as $evt) {
             $moved += self::duReplaceInColumn('track_e_default', 'default_value', "uid: ".$fromUserId, "uid: ".$toUserId);
         }
 
@@ -4846,202 +5073,7 @@ class MySpace
          WHERE v.item_id = $fromUserId
     ";
         $result = Database::query($sqlUpd);
+
         return Database::affected_rows($result);
-    }
-
-    /**
-     * Move ALL references from $fromUserId → $toUserId, including special cases.
-     * Returns a log like "table.col (n)" for UI display.
-     */
-    public static function duUpdateAllUserRefsList(int $fromUserId, int $toUserId): array
-    {
-        $log = [];
-
-        // Tables with composite UNIQUE/PK (pre-dedup)
-        $composite = [
-            // table, column, uniqueOn (exclude the user column)
-            ['access_url_rel_user',         'user_id', ['access_url_id']],
-            ['fos_user_user_group',         'user_id', ['group_id']],
-            ['user_rel_tag',                'user_id', ['tag_id']],
-            ['user_rel_course_vote',        'user_id', ['c_id']],
-            ['session_rel_user',            'user_id', ['session_id']],
-            ['session_rel_course_rel_user', 'user_id', ['session_id','c_id']],
-        ];
-        foreach ($composite as [$t,$col,$uniqueOn]) {
-            $n = self::duSafeUpdateUserRef($t, $col, $fromUserId, $toUserId, $uniqueOn);
-            if ($n) { $log[] = "$t.$col ($n)"; }
-        }
-
-        // Simple tables (no composite unique with user_id)
-        $simple = [
-            ['admin','user_id'],
-            ['agenda_event_invitation','creator_id'],
-            ['agenda_event_invitee','user_id'],
-            ['class_user','user_id'],
-            ['course_rel_user','user_id'],
-            ['course_rel_user_catalogue','user_id'],
-            ['course_request','user_id'],
-            ['c_attendance_result','user_id'],
-            ['c_attendance_sheet','user_id'],
-            ['c_attendance_sheet_log','lastedit_user_id'],
-            ['c_blog_comment','author_id'],
-            ['c_blog_post','author_id'],
-            ['c_blog_rating','user_id'],
-            ['c_blog_rel_user','user_id'],
-            ['c_blog_task_rel_user','user_id'],
-            ['c_chat_connected','user_id'],
-            ['c_dropbox_category','user_id'],
-            ['c_dropbox_feedback','author_user_id'],
-            ['c_dropbox_person','user_id'],
-            ['c_dropbox_post','dest_user_id'],
-            ['c_forum_mailcue','user_id'],
-            ['c_forum_notification','user_id'],
-            ['c_forum_post','poster_id'],
-            ['c_forum_thread','thread_poster_id'],
-            ['c_forum_thread_qualify','user_id'],
-            ['c_forum_thread_qualify','qualify_user_id'],
-            ['c_forum_thread_qualify_log','user_id'],
-            ['c_forum_thread_qualify_log','qualify_user_id'],
-            ['c_group_rel_tutor','user_id'],
-            ['c_group_rel_user','user_id'],
-            ['c_item_property','to_user_id'],
-            ['c_item_property','insert_user_id'],
-            ['c_item_property','lastedit_user_id'],
-            ['c_lp_category_user','user_id'],
-            ['c_lp_view','user_id'],
-            ['c_notebook','user_id'],
-            ['c_online_connected','user_id'],
-            ['c_permission_user','user_id'],
-            ['c_role_user','user_id'],
-            ['c_student_publication','user_id'],
-            ['c_student_publication_comment','user_id'],
-            ['c_student_publication_rel_user','user_id'],
-            ['c_survey','author'],
-            ['c_survey_answer','user'],
-            ['c_survey_invitation','user'],
-            ['c_userinfo_content','user_id'],
-            ['c_wiki','user_id'],
-            ['c_wiki_mailcue','user_id'],
-            ['chat','from_user'],
-            ['chat','to_user'],
-            ['chat_video','from_user'],
-            ['chat_video','to_user'],
-            ['extra_field_saved_search','user_id'],
-            ['gradebook_category','user_id'],
-            ['gradebook_certificate','user_id'],
-            ['gradebook_evaluation','user_id'],
-            ['gradebook_link','user_id'],
-            ['gradebook_linkeval_log','user_id_log'],
-            ['gradebook_result','user_id'],
-            ['gradebook_result_log','user_id'],
-            ['gradebook_score_log','user_id'],
-            ['justification_document_rel_users','user_id'],
-            ['message','user_receiver_id'],
-            ['message','user_sender_id'],
-            ['notification','dest_user_id'],
-            ['personal_agenda','user'],
-            ['plugin_bbb_meeting','user_id'],
-            ['plugin_bbb_room','participant_id'],
-            ['plugin_buycourses_item_rel_beneficiary','user_id'],
-            ['plugin_buycourses_paypal_payouts','user_id'],
-            ['plugin_buycourses_sale','user_id'],
-            ['plugin_buycourses_subscription_rel_sale','user_id'],
-            ['plugin_card_game','user_id'],
-            ['plugin_h5p','user_id'],
-            ['plugin_h5p_import_results','user_id'],
-            ['plugin_lti_provider_result','user_id'],
-            ['portfolio','user_id'],
-            ['portfolio_category','user_id'],
-            ['portfolio_comment','author_id'],
-            ['sequence_value','user_id'],
-            ['shared_survey','author'],
-            ['skill_rel_user','argumentation_author_id'],
-            ['skill_rel_user','assigned_by'],
-            ['skill_rel_user','user_id'],
-            ['skill_rel_user_comment','feedback_giver_id'],
-            ['templates','user_id'],
-            ['ticket_assigned_log','user_id'],
-            ['ticket_assigned_log','sys_insert_user_id'],
-            ['ticket_category','sys_insert_user_id'],
-            ['ticket_category','sys_lastedit_user_id'],
-            ['ticket_category_rel_user','user_id'],
-            ['ticket_message','sys_insert_user_id'],
-            ['ticket_message','sys_lastedit_user_id'],
-            ['ticket_message_attachments','sys_lastedit_user_id'],
-            ['ticket_message_attachments','sys_insert_user_id'],
-            ['ticket_priority','sys_lastedit_user_id'],
-            ['ticket_priority','sys_insert_user_id'],
-            ['ticket_project','sys_lastedit_user_id'],
-            ['ticket_project','sys_insert_user_id'],
-            ['ticket_ticket','sys_lastedit_user_id'],
-            ['ticket_ticket','sys_insert_user_id'],
-            ['track_e_access','access_user_id'],
-            ['track_e_attempt','user_id'],
-            ['track_e_attempt_recording','author'],
-            ['track_e_course_access','user_id'],
-            ['track_e_downloads','down_user_id'],
-            ['track_e_exercises','exe_user_id'],
-            ['track_e_hotpotatoes','exe_user_id'],
-            ['track_e_hotspot','hotspot_user_id'],
-            ['track_e_item_property','lastedit_user_id'],
-            ['track_e_lastaccess','access_user_id'],
-            ['track_e_links','links_user_id'],
-            ['track_e_login','login_user_id'],
-            ['track_e_online','login_user_id'],
-            ['track_e_uploads','upload_user_id'],
-            ['track_stored_values','user_id'],
-            ['track_stored_values_stack','user_id'],
-            ['user','creator_id'],
-            ['usergroup_rel_user','user_id'],
-            ['user_api_key','user_id'],
-            ['user_course_category','user_id'],
-            ['user_rel_event_type','user_id'],
-            ['xapi_internal_log','user_id'],
-        ];
-        foreach ($simple as [$t,$col]) {
-            $n = self::duSafeUpdateUserRef($t, $col, $fromUserId, $toUserId);
-            if ($n) { $log[] = "$t.$col ($n)"; }
-        }
-
-        // user_rel_user (two user columns)
-        if (self::duTableExists('user_rel_user')) {
-            // Dedup by user_id
-            $sqlDel1 = "
-                DELETE a FROM user_rel_user a
-                JOIN user_rel_user b
-                  ON a.friend_user_id = b.friend_user_id
-                 AND b.user_id = $toUserId
-               WHERE a.user_id = $fromUserId
-            ";
-            Database::query($sqlDel1);
-
-            $resUp1 = Database::query("UPDATE IGNORE user_rel_user SET user_id = $toUserId WHERE user_id = $fromUserId");
-            $n1 = Database::affected_rows($resUp1);
-
-            // Dedup by friend_user_id
-            $sqlDel2 = "
-                DELETE a FROM user_rel_user a
-                JOIN user_rel_user b
-                  ON a.user_id = b.user_id
-                 AND b.friend_user_id = $toUserId
-               WHERE a.friend_user_id = $fromUserId
-            ";
-            Database::query($sqlDel2);
-
-            $resUp2 = Database::query("UPDATE IGNORE user_rel_user SET friend_user_id = $toUserId WHERE friend_user_id = $fromUserId");
-            $n2 = Database::affected_rows($resUp2);
-
-            if ($n1) { $log[] = "user_rel_user.user_id ($n1)"; }
-            if ($n2) { $log[] = "user_rel_user.friend_user_id ($n2)"; }
-        }
-
-        // Special cases
-        $nDef = self::duUpdateTrackEDefault($fromUserId, $toUserId);
-        if ($nDef) { $log[] = "track_e_default (default_user_id/default_value) ($nDef)"; }
-
-        $nEf = self::duUpdateExtraFieldValuesUserType($fromUserId, $toUserId); // idem
-        if ($nEf) { $log[] = "extra_field_values.item_id (user-type) ($nEf)"; }
-
-        return $log;
     }
 }

@@ -1128,8 +1128,9 @@ class Plugin
 
         return $tool;
     }
+
     /**
-     * Get whether the course tool should be visible by default or not
+     * Get whether the course tool should be visible by default or not.
      */
     protected function getCourseToolDefaultVisibility(): bool
     {
@@ -1137,8 +1138,8 @@ class Plugin
     }
 
     /**
-     * Set whether the tool created in the course must be visible or not
-     * @param bool $visibility
+     * Set whether the tool created in the course must be visible or not.
+     *
      * @return void
      */
     protected function setCourseToolDefaultVisibility(bool $visibility)

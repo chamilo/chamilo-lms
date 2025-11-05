@@ -4399,8 +4399,10 @@ class Rest extends WebService
      * - course_field_value: Value of the course extra field (e.g., '1').
      *
      * @param array $params Associative array of POST parameters.
-     * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
+     *
      * @throws Exception
+     *
+     * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
      */
     public function subscribeCourseToSessionFromExtraField($params)
     {
@@ -4410,7 +4412,7 @@ class Rest extends WebService
             if (empty($params[$key])) {
                 return [
                     'error' => true,
-                    'message' => 'Missing required parameter: ' . $key
+                    'message' => 'Missing required parameter: '.$key,
                 ];
             }
         }
@@ -4432,7 +4434,7 @@ class Rest extends WebService
         if (empty($sessionIdList)) {
             return [
                 'error' => true,
-                'message' => 'No session found with extra field value "' . $sessionFieldValue . '".'
+                'message' => 'No session found with extra field value "'.$sessionFieldValue.'".',
             ];
         }
         $sessionId = (int) $sessionIdList[0]['item_id']; // Assume single match
@@ -4449,7 +4451,7 @@ class Rest extends WebService
         if (empty($courseIdList)) {
             return [
                 'error' => true,
-                'message' => 'No course found with extra field value "' . $courseFieldValue . '".'
+                'message' => 'No course found with extra field value "'.$courseFieldValue.'".',
             ];
         }
         $cId = (int) $courseIdList[0]['item_id']; // Assume single match
@@ -4464,13 +4466,13 @@ class Rest extends WebService
                     'status' => true,
                     'message' => 'Course subscribed to session',
                     'id_session' => $sessionId,
-                    'c_id' => $cId
-                ]
+                    'c_id' => $cId,
+                ],
             ];
         } else {
             return [
                 'error' => true,
-                'message' => 'Failed to subscribe course to session.'
+                'message' => 'Failed to subscribe course to session.',
             ];
         }
     }
@@ -4490,6 +4492,7 @@ class Rest extends WebService
      * - user_field_value: Value of the user extra field (e.g., '1').
      *
      * @param array $params Associative array of POST parameters.
+     *
      * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
      */
     public function subscribeUserToSessionFromExtraField($params)
@@ -4500,7 +4503,7 @@ class Rest extends WebService
             if (empty($params[$key])) {
                 return [
                     'error' => true,
-                    'message' => 'Missing required parameter: ' . $key
+                    'message' => 'Missing required parameter: '.$key,
                 ];
             }
         }
@@ -4522,7 +4525,7 @@ class Rest extends WebService
         if (empty($sessionIdList)) {
             return [
                 'error' => true,
-                'message' => 'No session found with extra field value "' . $sessionFieldValue . '".'
+                'message' => 'No session found with extra field value "'.$sessionFieldValue.'".',
             ];
         }
         $sessionId = (int) $sessionIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
@@ -4539,7 +4542,7 @@ class Rest extends WebService
         if (empty($userIdList)) {
             return [
                 'error' => true,
-                'message' => 'No user found with extra field value "' . $userFieldValue . '".'
+                'message' => 'No user found with extra field value "'.$userFieldValue.'".',
             ];
         }
         $userId = (int) $userIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
@@ -4554,16 +4557,17 @@ class Rest extends WebService
                     'status' => true,
                     'message' => 'User subscribed to session',
                     'id_session' => $sessionId,
-                    'user_id' => $userId
-                ]
+                    'user_id' => $userId,
+                ],
             ];
         } else {
             return [
                 'error' => true,
-                'message' => 'Failed to subscribe user to session.'
+                'message' => 'Failed to subscribe user to session.',
             ];
         }
     }
+
     /**
      * Update a specific session, identified via extra field value.
      *
@@ -4577,6 +4581,7 @@ class Rest extends WebService
      * - Optional update fields: name, coach_username, access_start_date, access_end_date, etc.
      *
      * @param array $params Associative array of POST parameters.
+     *
      * @return array Response in format: ['error' => bool, 'data' => array] on success, or ['error' => true, 'message' => string] on failure.
      */
     public function updateSessionFromExtraField($params)
@@ -4587,7 +4592,7 @@ class Rest extends WebService
             if (empty($params[$key])) {
                 return [
                     'error' => true,
-                    'message' => 'Missing required parameter: ' . $key
+                    'message' => 'Missing required parameter: '.$key,
                 ];
             }
         }
@@ -4607,7 +4612,7 @@ class Rest extends WebService
         if (empty($sessionIdList)) {
             return [
                 'error' => true,
-                'message' => 'No session found with extra field value "' . $fieldValue . '".'
+                'message' => 'No session found with extra field value "'.$fieldValue.'".',
             ];
         }
         $sessionId = (int) $sessionIdList[0]['item_id']; // Extract item_id from sub-array, assume single match
@@ -4630,6 +4635,7 @@ class Rest extends WebService
 
         return $result;
     }
+
     /**
      * Generate an API key for webservices access for the given user ID.
      */

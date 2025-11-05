@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @author  Toon Keppens
  */
 $modifyAnswers = (int) $_GET['hotspotadmin'];
-if (!is_object($objQuestion) || empty($objQuestion->iid) || (int)$objQuestion->iid !== $modifyAnswers) {
+if (!is_object($objQuestion) || empty($objQuestion->iid) || (int) $objQuestion->iid !== $modifyAnswers) {
     $objQuestion = Question::read($modifyAnswers);
     if (!$objQuestion) {
         api_not_allowed();
@@ -334,9 +334,9 @@ if ($submitAnswers || $buttonBack) {
             );
             $objAnswer->save();
 
-            $objQuestion->iid = (int)$modifyAnswers;
+            $objQuestion->iid = (int) $modifyAnswers;
             $objQuestion->course = api_get_course_info();
-            $objQuestion->updateWeighting((float)$questionWeighting);
+            $objQuestion->updateWeighting((float) $questionWeighting);
 
             $objQuestion->save($objExercise);
 

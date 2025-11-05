@@ -3443,9 +3443,9 @@ class CourseManager
     /**
      * Lists details of the course description.
      *
-     * @param array<int, CCourseDescription> $descriptions        The course description
-     * @param string $charset The encoding
-     * @param bool $action_show If true is displayed if false is hidden
+     * @param array<int, CCourseDescription> $descriptions The course description
+     * @param string                         $charset      The encoding
+     * @param bool                           $action_show  If true is displayed if false is hidden
      *
      * @return string The course description in html
      */

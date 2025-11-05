@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $cidReset = true;
-require_once __DIR__ . '/../inc/global.inc.php';
+require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 if (!api_is_platform_admin()) {
@@ -10,13 +10,13 @@ if (!api_is_platform_admin()) {
 }
 
 $extraFields = MySpace::duGetUserExtraFields();
-$defaultVar  = array_key_exists('dni', $extraFields) ? 'dni'
+$defaultVar = array_key_exists('dni', $extraFields) ? 'dni'
     : (array_key_exists('document', $extraFields) ? 'document' : (array_key_first($extraFields) ?: ''));
 
 $selectedVar = isset($_REQUEST['field_var']) ? Security::remove_XSS($_REQUEST['field_var']) : $defaultVar;
-$actionMode  = (isset($_REQUEST['unify_mode']) && $_REQUEST['unify_mode'] === 'delete') ? 'delete' : 'deactivate';
-$doSearch    = isset($_REQUEST['do_search']) ? 1 : 0;
-$doUnify     = isset($_POST['do_unify']) ? 1 : 0;
+$actionMode = (isset($_REQUEST['unify_mode']) && $_REQUEST['unify_mode'] === 'delete') ? 'delete' : 'deactivate';
+$doSearch = isset($_REQUEST['do_search']) ? 1 : 0;
+$doUnify = isset($_POST['do_unify']) ? 1 : 0;
 
 $self = api_get_self();
 
@@ -24,36 +24,39 @@ if ($doUnify) {
     // CSRF
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && !Security::check_token()) {
         $q = http_build_query([
-            'field_var'  => $_POST['field_var'] ?? $selectedVar,
+            'field_var' => $_POST['field_var'] ?? $selectedVar,
             'unify_mode' => $_POST['unify_mode'] ?? $actionMode,
-            'do_search'  => 1,
-            'flash'      => 'csrf',
+            'do_search' => 1,
+            'flash' => 'csrf',
         ]);
         header("Location: {$self}?{$q}");
         exit;
     }
 
-    $fieldVar     = Security::remove_XSS($_POST['field_var'] ?? '');
-    $fieldInfo    = MySpace::duGetUserExtraFieldByVariable($fieldVar);
-    $fieldId      = (int) ($fieldInfo['id'] ?? 0);
-    $fieldValue   = Security::remove_XSS($_POST['field_value'] ?? '');
-    $finalUserId  = (int) ($_POST['final_user_id'] ?? 0);
-    $unifyMode    = ($_POST['unify_mode'] ?? 'deactivate') === 'delete' ? 'delete' : 'deactivate';
-    $urlId        = (int) api_get_current_access_url_id();
+    $fieldVar = Security::remove_XSS($_POST['field_var'] ?? '');
+    $fieldInfo = MySpace::duGetUserExtraFieldByVariable($fieldVar);
+    $fieldId = (int) ($fieldInfo['id'] ?? 0);
+    $fieldValue = Security::remove_XSS($_POST['field_value'] ?? '');
+    $finalUserId = (int) ($_POST['final_user_id'] ?? 0);
+    $unifyMode = ($_POST['unify_mode'] ?? 'deactivate') === 'delete' ? 'delete' : 'deactivate';
+    $urlId = (int) api_get_current_access_url_id();
 
     if ($fieldId && $finalUserId && $fieldValue !== '') {
         $finalUserIsInGroup = false;
         $usersInGroup = MySpace::duGetUsersByFieldValue($fieldId, $urlId, $fieldValue);
         foreach ($usersInGroup as $uu) {
-            if ((int)$uu['user_id'] === $finalUserId) { $finalUserIsInGroup = true; break; }
+            if ((int) $uu['user_id'] === $finalUserId) {
+                $finalUserIsInGroup = true;
+                break;
+            }
         }
 
         if (!$finalUserIsInGroup) {
             $q = http_build_query([
-                'field_var'  => $fieldVar,
+                'field_var' => $fieldVar,
                 'unify_mode' => $unifyMode,
-                'do_search'  => 1,
-                'flash'      => 'na',
+                'do_search' => 1,
+                'flash' => 'na',
             ]);
             header("Location: {$self}?{$q}");
             exit;
@@ -63,8 +66,10 @@ if ($doUnify) {
         $ok = true;
 
         foreach ($usersInGroup as $u) {
-            $uid = (int)$u['user_id'];
-            if ($uid === $finalUserId) { continue; }
+            $uid = (int) $u['user_id'];
+            if ($uid === $finalUserId) {
+                continue;
+            }
 
             MySpace::duUpdateAllUserRefsList($uid, $finalUserId);
 
@@ -75,32 +80,32 @@ if ($doUnify) {
             Database::query('COMMIT');
             Security::clear_token();
             $q = http_build_query([
-                'field_var'  => $fieldVar,
+                'field_var' => $fieldVar,
                 'unify_mode' => $unifyMode,
-                'do_search'  => 1,
-                'flash'      => 'ok',
-                'fv'         => $fieldVar.'='.$fieldValue,
+                'do_search' => 1,
+                'flash' => 'ok',
+                'fv' => $fieldVar.'='.$fieldValue,
             ]);
             header("Location: {$self}?{$q}");
             exit;
         } else {
             Database::query('ROLLBACK');
             $q = http_build_query([
-                'field_var'  => $fieldVar,
+                'field_var' => $fieldVar,
                 'unify_mode' => $unifyMode,
-                'do_search'  => 1,
-                'flash'      => 'err',
-                'em'         => get_lang('OperationFailedRollback'),
+                'do_search' => 1,
+                'flash' => 'err',
+                'em' => get_lang('OperationFailedRollback'),
             ]);
             header("Location: {$self}?{$q}");
             exit;
         }
     } else {
         $q = http_build_query([
-            'field_var'  => $selectedVar,
+            'field_var' => $selectedVar,
             'unify_mode' => $actionMode,
-            'do_search'  => 1,
-            'flash'      => 'na',
+            'do_search' => 1,
+            'flash' => 'na',
         ]);
         header("Location: {$self}?{$q}");
         exit;
@@ -151,10 +156,10 @@ echo '      <div class="form-group">';
 echo '        <label class="col-sm-3 control-label">'.get_lang('WhatToDoWithUnifiedUsers').'</label>';
 echo '        <div class="col-sm-6">';
 echo '          <div class="radio"><label>';
-echo '            <input type="radio" name="unify_mode" value="deactivate" '.($actionMode==='deactivate'?'checked':'').'> '.get_lang('Deactivate');
+echo '            <input type="radio" name="unify_mode" value="deactivate" '.($actionMode === 'deactivate' ? 'checked' : '').'> '.get_lang('Deactivate');
 echo '          </label></div>';
 echo '          <div class="radio"><label>';
-echo '            <input type="radio" name="unify_mode" value="delete" '.($actionMode==='delete'?'checked':'').'> '.get_lang('Delete');
+echo '            <input type="radio" name="unify_mode" value="delete" '.($actionMode === 'delete' ? 'checked' : '').'> '.get_lang('Delete');
 echo '          </label></div>';
 echo '        </div>';
 echo '      </div>';
@@ -162,7 +167,7 @@ echo '      </div>';
 echo '      <div class="form-group">';
 echo '        <div class="col-sm-offset-3 col-sm-6">';
 echo '          <button type="submit" name="do_search" value="1" class="btn btn-primary">';
-echo            Display::return_icon('search.gif', get_lang('Search'), '').' '.get_lang('Search');
+echo Display::return_icon('search.gif', get_lang('Search'), '').' '.get_lang('Search');
 echo '          </button>';
 echo '        </div>';
 echo '      </div>';
@@ -179,9 +184,9 @@ if ($doSearch) {
         exit;
     }
 
-    $fieldId = (int)$fieldInfo['id'];
-    $urlId   = (int) api_get_current_access_url_id();
-    $dups    = MySpace::duGetDuplicateValues($fieldId, $urlId);
+    $fieldId = (int) $fieldInfo['id'];
+    $urlId = (int) api_get_current_access_url_id();
+    $dups = MySpace::duGetDuplicateValues($fieldId, $urlId);
 
     echo "<div class='panel panel-default'>";
     echo "  <div class='panel-heading'><strong>".get_lang('SearchResultsFor').": </strong><code>".htmlspecialchars($selectedVar)."</code></div>";
@@ -215,7 +220,7 @@ if ($doSearch) {
             echo "</tr></thead><tbody>";
 
             foreach ($users as $u) {
-                $uid = (int)$u['user_id'];
+                $uid = (int) $u['user_id'];
                 echo "<tr>";
                 echo "  <td>".htmlspecialchars($value)."</td>";
                 echo "  <td>".htmlspecialchars($u['username'])."</td>";
@@ -230,7 +235,7 @@ if ($doSearch) {
                     " data-finalid='".$uid."'".
                     " data-fieldvar='".htmlspecialchars($selectedVar, ENT_QUOTES)."'".
                     " data-fieldvalue='".htmlspecialchars($value, ENT_QUOTES)."'".
-                    " data-count='".(count($users)-1)."'".
+                    " data-count='".(count($users) - 1)."'".
                     " data-actionmode='".htmlspecialchars($actionMode, ENT_QUOTES)."'".
                     ">".
                     Display::return_icon('save.png', get_lang('Unify'), '').' '.get_lang('Unify').

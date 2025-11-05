@@ -1242,7 +1242,7 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $courseId      = api_get_course_int_id();
+        $courseId = api_get_course_int_id();
         $tableCategory = Database::get_course_table(TABLE_LP_CATEGORY);
 
         $catOrder = isset($_POST['order']) ? (array) $_POST['order'] : [];
@@ -1271,7 +1271,7 @@ switch ($action) {
         }
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        $tableLp  = Database::get_course_table(TABLE_LP_MAIN);
+        $tableLp = Database::get_course_table(TABLE_LP_MAIN);
 
         $lists = isset($_POST['lists']) ? (array) $_POST['lists'] : [];
 

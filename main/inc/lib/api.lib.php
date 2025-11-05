@@ -10706,8 +10706,7 @@ function api_encrypt_hash($data, $secret)
  * you are looking for this.
  * The replacement can replace bits in larger strings, requiring the search string to be very specific to avoid
  * excess replacements.
- * @param string $search
- * @param string $replace
+ *
  * @return array The number of changes executed in each table
  */
 function api_replace_terms_in_content(string $search, string $replace): array

@@ -236,7 +236,7 @@ switch ($action) {
                 'uploaded' => 0,
                 'error' => [
                     'message' => $e->getMessage(),
-                ]
+                ],
             ]);
 
             exit;

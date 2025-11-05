@@ -4527,13 +4527,13 @@ class Exercise
                                 // This value is the user input, not escaped while correct answer is escaped by ckeditor
                                 // Works with cyrillic alphabet and when using ">" chars see #7718 #7610 #7618
                                 // ENT_QUOTES is used in order to transform ' to &#039;
-                                if (!$from_database) {
+                                //if (!$from_database) {
                                     $studentAnswer = FillBlanks::clearStudentAnswer($studentAnswer);
                                     if ($debug) {
                                         error_log('Student answer cleaned:');
                                         error_log($studentAnswer);
                                     }
-                                }
+                                //}
 
                                 $isAnswerCorrect = 0;
                                 if (FillBlanks::isStudentAnswerGood($studentAnswer, $correctAnswer, $from_database)) {

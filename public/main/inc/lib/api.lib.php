@@ -1541,7 +1541,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])->getAuthSourcesAuthentications();
+        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])
+            ->getAuthSourcesAuthentications(
+                Container::getAccessUrlUtil()->getCurrent()
+            )
+        ;
         $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
@@ -1665,7 +1669,9 @@ function api_get_user_info_from_entity(
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
     $result['active'] = $user->isActive();
-    $result['auth_sources'] = $user->getAuthSourcesAuthentications();
+    $result['auth_sources'] = $user->getAuthSourcesAuthentications(
+        Container::getAccessUrlUtil()->getCurrent()
+    );
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
     $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');

@@ -6,13 +6,17 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use ApiPlatform\Api\IriConverterInterface;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -171,5 +175,76 @@ class AccessUrlController extends AbstractController
         $text = vsprintf($this->translator->trans($message), $params);
 
         return \sprintf('<i class="mdi mdi-%s text-base me-1"></i> %s', $icon, $text);
+    }
+
+    #[Route('/auth-sources/list', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function authSourcesList(
+        Request $request,
+        AuthenticationConfigHelper $authConfigHelper,
+        IriConverterInterface $iriConverter,
+    ): JsonResponse {
+        $accessUrlIri = $request->query->get('access_url', '');
+
+        if (!$accessUrlIri) {
+            throw $this->createNotFoundException('Access URL not found');
+        }
+
+        try {
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $iriConverter->getResourceFromIri($accessUrlIri);
+        } catch (Exception) {
+            throw $this->createNotFoundException('Access URL not found');
+        }
+
+        $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
+
+        return new JsonResponse($authSources);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Route('/auth-sources/assign', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function authSourcesAssign(
+        Request $request,
+        AuthenticationConfigHelper $authConfigHelper,
+        IriConverterInterface $iriConverter,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $data = json_decode($request->getContent(), true);
+
+        if (empty($data['users']) || empty($data['access_url'] || empty($data['auth_source']))) {
+            throw new Exception('Missing required parameters');
+        }
+
+        try {
+            /** @var AccessUrl $accessUrl */
+            $accessUrl = $iriConverter->getResourceFromIri($data['access_url']);
+        } catch (Exception) {
+            throw $this->createNotFoundException('Access URL not found');
+        }
+
+        $authSources = $authConfigHelper->getAuthSourceAuthentications($accessUrl);
+
+        if (!in_array($data['auth_source'], $authSources)) {
+            throw new Exception('User authentication method not allowed');
+        }
+
+        foreach ($data['users'] as $userIri) {
+            try {
+                /** @var User $user */
+                $user = $iriConverter->getResourceFromIri($userIri);
+            } catch (Exception) {
+                continue;
+            }
+
+            $user->addAuthSourceByAuthentication($data['auth_source'], $accessUrl);
+        }
+
+        $entityManager->flush();
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 }

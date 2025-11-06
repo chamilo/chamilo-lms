@@ -35,12 +35,21 @@ $interbreadcrumb[] = [
 
 $repo = Container::getSysAnnouncementRepository();
 
-$visibleList = api_get_user_roles();
+$roleOptions = api_get_roles();
 
-if (!array_key_exists('ROLE_ANONYMOUS', $visibleList)) {
-// Prefix to make it appear at the top; adapt the label if needed
-   $visibleList = array_merge(['ROLE_ANONYMOUS' => get_lang('Anonymous')], $visibleList);
+if (!isset($roleOptions['ROLE_ANONYMOUS'])) {
+    $roleOptions = ['ROLE_ANONYMOUS' => get_lang('Anonymous')] + $roleOptions;
+} else {
+    $roleOptions['ROLE_ANONYMOUS'] = get_lang('Anonymous');
+    $roleOptions = ['ROLE_ANONYMOUS' => $roleOptions['ROLE_ANONYMOUS']] + array_diff_key($roleOptions, ['ROLE_ANONYMOUS' => true]);
 }
+
+$optionKeyByCanon = [];
+foreach ($roleOptions as $optKey => $label) {
+    $optionKeyByCanon[api_normalize_role_code((string) $optKey)] = $optKey;
+}
+
+$visibleList = $roleOptions;
 
 $tool_name = null;
 if (empty($_GET['lang'])) {
@@ -158,7 +167,14 @@ switch ($action) {
         $values['range'] = substr(api_get_local_time($announcement->getDateStart()), 0, 16).' / '.
             substr(api_get_local_time($announcement->getDateEnd()), 0, 16);
 
-        $values['roles'] = $announcement->getRoles();
+        $userCanonRoles = array_map('api_normalize_role_code', (array) $announcement->getRoles());
+        $selectedOptionKeys = [];
+        foreach ($userCanonRoles as $canon) {
+            if (isset($optionKeyByCanon[$canon])) {
+                $selectedOptionKeys[] = $optionKeyByCanon[$canon];
+            }
+        }
+        $values['roles'] = array_values(array_unique($selectedOptionKeys));
 
         if ($allowCareers) {
             $values['career_id'] = $announcement->getCareer() ? $announcement->getCareer()->getId() : 0;
@@ -250,43 +266,21 @@ if ($action_todo) {
         $form->addHtml('</div>');
     }
 
-    // Add Announcement picture (new feature, correct paths and lang vars)
-    try {
-        /*$form->addFile(
-            'picture',
-            [
-                get_lang('Add a picture'),
-                get_lang('The image must have a maximum dimension of 950 x 712 pixels'),
-            ],
-            ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '4/3']
-        );
+    $form->addElement(
+        'select',
+        'roles',
+        get_lang('Roles'),
+        $roleOptions,
+        [
+            'multiple' => 'multiple',
+            'size' => 8,
+        ]
+    );
+    $form->addRule('roles', get_lang('Required field'), 'required');
 
-        $allowed_picture_types = api_get_supported_image_extensions(false);
-
-        $form->addRule(
-            'picture',
-            get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
-            'filetype',
-            $allowed_picture_types
-        );
-
-        $image = '';
-        // Display announcements picture
-        $store_path = api_get_path(SYS_UPLOAD_PATH).'announcements'; // course path
-        if (file_exists($store_path.'/announcement_'.$announcement->id.'.png')) {
-            $announcementsPath = api_get_path(WEB_UPLOAD_PATH).'announcements'; // announcement web path
-            $announcementsImage = $announcementsPath.'/announcement_'.$announcement->id.'_100x100.png?'.rand(1, 1000); // redimensioned image 85x85
-            $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label>
-                    <div class="col-md-8"><img class="img-thumbnail" src="'.$announcementsImage.'" /></div></div>';
-
-            $form->addHtml($image);
-            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
-        }*/
-    } catch (Exception $e) {
-        error_log($e);
+    if (!empty($values['roles'])) {
+        $form->getElement('roles')->setSelected($values['roles']);
     }
-
-    $form->addSelect('roles', get_lang('Visible'), $visibleList, ['multiple' => 'multiple']);
 
     $form->addElement('hidden', 'id');
     $userGroup = new UserGroupModel();
@@ -325,6 +319,12 @@ if ($action_todo) {
             $values['lang'] = null;
         }
 
+        $rolesNormalized = array_values(
+            array_unique(
+                array_map('api_normalize_role_code', (array) ($values['roles'] ?? []))
+            )
+        );
+
         $sendMail = $values['send_mail'] ?? null;
 
         switch ($values['action']) {
@@ -334,11 +334,11 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $values['roles'] ?? [],
+                    $rolesNormalized,
                     $values['lang'],
                     $sendMail,
-                    empty($values['add_to_calendar']) ? false : true,
-                    empty($values['send_email_test']) ? false : true
+                    !empty($values['add_to_calendar']),
+                    !empty($values['send_email_test'])
                 );
 
                 if (false !== $announcement_id) {
@@ -379,7 +379,7 @@ if ($action_todo) {
                     $values['content'],
                     $values['range_start'],
                     $values['range_end'],
-                    $values['roles'] ?? [],
+                    $rolesNormalized,
                     $values['lang'],
                     $sendMail,
                     $sendMailTest
@@ -436,17 +436,20 @@ if ($show_announcement_list) {
         $row = [];
         $row[] = $announcement->getId();
         if ($announcement->isVisible()) {
-            $row[] =Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is available'));
+            $row[] = Display::getMdiIcon(StateIcon::COMPLETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is available'));
         } else {
-            $row[] =Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is not available'));
+            $row[] = Display::getMdiIcon(StateIcon::WARNING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('The announcement is not available'));
         }
         $row[] = $announcement->getTitle();
         $row[] = api_convert_and_format_date($announcement->getDateStart());
         $row[] = api_convert_and_format_date($announcement->getDateEnd());
-        $announcementRoles = $announcement->getRoles(); // tableau d'identifiants
+
+        $announcementRoles = (array) $announcement->getRoles();
         $displayRoles = [];
         foreach ($announcementRoles as $r) {
-            $displayRoles[] = $visibleList[$r] ?? $r;
+            $canon = api_normalize_role_code((string) $r);
+            $key = $optionKeyByCanon[$canon] ?? null;
+            $displayRoles[] = $key ? ($roleOptions[$key] ?? (string) $r) : (string) $r;
         }
         $row[] = implode(', ', $displayRoles);
 

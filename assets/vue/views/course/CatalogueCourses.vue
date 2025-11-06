@@ -110,6 +110,7 @@ import AdvancedCourseFilters from "../../components/course/AdvancedCourseFilters
 const { t } = useI18n()
 const sortField = ref("title")
 
+const natural = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
 const router = useRouter()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
@@ -451,13 +452,23 @@ const visibleCoursesBase = computed(() => {
         valB = b.extra_fields?.[field] ?? ""
       }
 
-      if (typeof valA === "string") valA = valA.toLowerCase()
-      if (typeof valB === "string") valB = valB.toLowerCase()
+      // Natural compare for strings; numeric compare otherwise
+      const cmp =
+        typeof valA === "string" || typeof valB === "string"
+          ? natural.compare(String(valA), String(valB))
+          : valA < valB
+            ? -1
+            : valA > valB
+              ? 1
+              : 0
 
-      if (valA < valB) return -1 * order
-      if (valA > valB) return 1 * order
-      return 0
+      return (
+        cmp *
+        (typeof order === "number" ? (order >= 0 ? 1 : -1) : String(order).toLowerCase().startsWith("desc") ? -1 : 1)
+      )
     })
+  } else {
+    list = list.slice().sort((a, b) => natural.compare(String(a.title ?? ""), String(b.title ?? "")))
   }
 
   return list

@@ -2538,12 +2538,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function addAuthSourceByAuthentication(string $authentication, AccessUrl $url): static
     {
-        $authSource = (new UserAuthSource())
-            ->setAuthentication($authentication)
-            ->setUrl($url)
-        ;
+        $authSource = $this->getAuthSourceByAuthentication($authentication, $url);
 
-        $this->addAuthSource($authSource);
+        if (!$authSource) {
+            $authSource = (new UserAuthSource())
+                ->setAuthentication($authentication)
+                ->setUrl($url)
+            ;
+
+            $this->addAuthSource($authSource);
+        }
 
         return $this;
     }
@@ -2556,10 +2560,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         );
     }
 
-    public function getAuthSourceByAuthentication(string $authentication): UserAuthSource
+    public function getAuthSourceByAuthentication(string $authentication, AccessUrl $accessUrl): ?UserAuthSource
     {
         return $this->authSources->findFirst(
-            fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+            fn (int $index, UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+                && $authSource->getUrl()->getId() === $accessUrl->getId()
         );
     }
 

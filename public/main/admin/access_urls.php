@@ -171,6 +171,10 @@ if (api_get_multiple_access_url()) {
         Display::getMdiIcon('file-tree-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage course categories')),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
     );
+    $actions .= Display::url(
+        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign auth sources to users')),
+        "/access-url/auth-sources"
+    );
 }
 
 // 6) If still localhost, show the tooltip inline next to the button

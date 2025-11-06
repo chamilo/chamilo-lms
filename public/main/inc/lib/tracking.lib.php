@@ -6982,7 +6982,7 @@ class Tracking
                 $progress = self::get_avg_student_progress($userId, $courseCode, [], $sessionId);
 
                 $result[] = [
-                    'module' => $courseInfo['name'],
+                    'module' => $courseInfo['title'],
                     'progress' => $progress,
                     'qualification' => $totalProgress,
                     'activeTime' => $totalTime,

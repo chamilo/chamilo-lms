@@ -99,7 +99,94 @@ while ($row = Database::fetch_array($result)) {
     $content .= '<td class="forum_message_post_text">'.Security::remove_XSS($row['post_text'], STUDENT).'</td>';
     $content .= '</tr>';
 }
-$content .= '</table>';
+$content .= '</table>' ;
+
+
+$css = '<style>
+/* global reset to start at the very top */html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+}
+
+/* hide the topbar and sidebar only inside the iframe */
+.app-topbar,
+.app-sidebar,
+#app .app-topbar,
+#app aside.app-sidebar {
+  display: none !important;
+}
+
+/* hide the breadcrumb */
+.app-breadcrumb,
+.p-breadcrumb,
+.p-breadcrumb-list,
+.p-breadcrumb-item,
+.p-breadcrumb-item-link {
+  display: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* hide possible Chamilo logo and avatars */
+img[alt*="Chamilo"],
+.branding,
+.forum-branding,
+.header-branding,
+.ch-logo,
+.user-avatar,
+.avatar {
+  display: none !important;
+}
+
+/* remove margins/padding on containers to stick to the top */
+#app,
+#app .app-main,
+#app .app-main > .container,
+.forum-thread,
+.discussion,
+#content {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  max-width: 100% !important;
+  text-align: left !important;
+}
+
+/* titles: remove top margin */
+h1, h2, h3,
+.page-title,
+.forum-title,
+.forum-thread-title {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+  padding-top: 0 !important;
+}
+
+/* force no table spacing (override cellspacing) */
+table, table[width="100%"], .forum-thread table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* clean remaining space on specific elements */
+body,
+.forum-thread,
+.discussion,
+.forum_message_post_title,
+.forum_message_left {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+</style>';
+
+
+$content = $css . $content;
+
 
 $template->assign('content', $content);
 $template->display_no_layout_template();

@@ -13,7 +13,11 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CChatConnected;
 use Chamilo\CourseBundle\Entity\CChatConversation;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\LockMode;
 use Michelf\MarkdownExtra;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -127,7 +131,7 @@ class CourseChatUtils
         $node = new ResourceNode();
         $node->setTitle($fileTitle);
         $node->setSlug($slug);
-        $node->setResourceType($parentNode->getResourceType());
+        $node->setResourceType($this->repository->getResourceType());
         $node->setCreator(api_get_user_entity(api_get_user_id()));
         $node->setParent($parentNode);
 
@@ -142,8 +146,8 @@ class CourseChatUtils
         $this->repository->addFile($conversation, $uploaded);
 
         // publish
-        $course  = api_get_course_entity();
-        $session = api_get_session_entity();
+        $course  = api_get_course_entity($this->courseId);
+        $session = api_get_session_entity($this->sessionId);
         $group   = api_get_group_entity();
         $conversation->setParent($course);
         $conversation->addCourseLink($course, $session, $group);
@@ -184,27 +188,138 @@ class CourseChatUtils
         return $message;
     }
 
+    private function mirrorDailyCopyToDocuments(string $fileTitle, string $html): void
+    {
+        try {
+            $em = Database::getManager();
+            /** @var CDocumentRepository $docRepo */
+            $docRepo = $em->getRepository(CDocument::class);
+
+            $course  = api_get_course_entity($this->courseId);
+            $session = api_get_session_entity($this->sessionId) ?: null;
+
+            $top = $docRepo->ensureChatSystemFolder($course, $session);
+
+            /** @var ResourceNodeRepository $nodeRepo */
+            $nodeRepo = $em->getRepository(ResourceNode::class);
+
+            $em->beginTransaction();
+            try {
+                try {
+                    $em->getConnection()->executeStatement(
+                        'SELECT id FROM resource_node WHERE id = ? FOR UPDATE',
+                        [$top->getId()]
+                    );
+                } catch (\Throwable $e) {
+                    error_log('[CourseChat] mirror FOR UPDATE skipped: '.$e->getMessage());
+                }
+
+                $fileNode = $docRepo->findChildDocumentFileByTitle($top, $fileTitle);
+
+                if ($fileNode) {
+                    /** @var ResourceFile|null $rf */
+                    $rf = $em->getRepository(ResourceFile::class)->findOneBy(
+                        ['resourceNode' => $fileNode, 'originalName' => $fileTitle],
+                        ['id' => 'DESC']
+                    );
+                    if (!$rf) {
+                        $rf = $em->getRepository(ResourceFile::class)->findOneBy(
+                            ['resourceNode' => $fileNode],
+                            ['id' => 'DESC']
+                        );
+                    }
+
+                    if ($rf) {
+                        $fs = $nodeRepo->getFileSystem();
+                        $fname = $nodeRepo->getFilename($rf);
+                        if ($fs->fileExists($fname)) { $fs->delete($fname); }
+                        $fs->write($fname, $html);
+                        if (method_exists($rf, 'setSize')) { $rf->setSize(strlen($html)); $em->persist($rf); }
+                        $em->flush();
+                    } else {
+                        $h = tmpfile(); fwrite($h, $html);
+                        $meta = stream_get_meta_data($h);
+                        $uploaded = new UploadedFile($meta['uri'], $fileTitle, 'text/html', null, true);
+
+                        $docRepo->createFileInFolder(
+                            $course, $top, $uploaded, 'Daily chat copy',
+                            ResourceLink::VISIBILITY_PUBLISHED, $session
+                        );
+                        $em->flush();
+                    }
+
+                } else {
+                    $h = tmpfile(); fwrite($h, $html);
+                    $meta = stream_get_meta_data($h);
+                    $uploaded = new UploadedFile($meta['uri'], $fileTitle, 'text/html', null, true);
+
+                    $docRepo->createFileInFolder(
+                        $course, $top, $uploaded, 'Daily chat copy',
+                        ResourceLink::VISIBILITY_PUBLISHED, $session
+                    );
+                    $em->flush();
+                }
+
+                $em->commit();
+            } catch (UniqueConstraintViolationException $e) {
+                $em->rollback();
+                $fileNode = $docRepo->findChildDocumentFileByTitle($top, $fileTitle);
+                if ($fileNode) {
+                    /** @var ResourceFile|null $rf */
+                    $rf = $em->getRepository(ResourceFile::class)->findOneBy(
+                        ['resourceNode' => $fileNode, 'originalName' => $fileTitle],
+                        ['id' => 'DESC']
+                    ) ?: $em->getRepository(ResourceFile::class)->findOneBy(
+                        ['resourceNode' => $fileNode],
+                        ['id' => 'DESC']
+                    );
+
+                    if ($rf) {
+                        $fs = $nodeRepo->getFileSystem();
+                        $fname = $nodeRepo->getFilename($rf);
+                        if ($fs->fileExists($fname)) { $fs->delete($fname); }
+                        $fs->write($fname, $html);
+                        if (method_exists($rf, 'setSize')) { $rf->setSize(strlen($html)); $em->persist($rf); }
+                        $em->flush();
+                        return;
+                    }
+                }
+                throw $e;
+            } catch (\Throwable $e) {
+                $em->rollback();
+                throw $e;
+            }
+
+        } catch (\Throwable $e) {
+            $this->dbg('mirrorDailyCopy.error', ['err' => $e->getMessage()]);
+        }
+    }
+
     /**
-     * Return the latest node (by id DESC) matching title or slug under the same parent.
-     * Read-only; does not create.
+     * Return the latest *chat* node for today (by createdAt DESC, id DESC).
+     * It filters by the chat resourceType to avoid collisions with Document nodes.
      */
     private function findExistingNode(string $fileTitle, string $slug, ResourceNode $parentNode): ?ResourceNode
     {
         $em = \Database::getManager();
-        $nodeRepo = $em->getRepository(ResourceNode::class);
+        $rt = $this->repository->getResourceType();
 
-        // latest by exact title
-        $node = $nodeRepo->findOneBy(
-            ['title' => $fileTitle, 'parent' => $parentNode],
-            ['id' => 'DESC']
-        );
-        if ($node) { return $node; }
+        $qb = $em->createQueryBuilder();
+        $qb->select('n')
+            ->from(ResourceNode::class, 'n')
+            ->where('n.parent = :parent')
+            ->andWhere('n.resourceType = :rt')
+            ->andWhere('(n.title = :title OR n.slug = :slug)')
+            ->setParameter('parent', $parentNode)
+            ->setParameter('rt', $rt)
+            ->setParameter('title', $fileTitle)
+            ->setParameter('slug',  $slug)
+            ->orderBy('n.createdAt', 'DESC')
+            ->addOrderBy('n.id', 'DESC')
+            ->setMaxResults(1);
 
-        // latest by exact slug
-        return $nodeRepo->findOneBy(
-            ['slug' => $slug, 'parent' => $parentNode],
-            ['id' => 'DESC']
-        );
+        /** @var ResourceNode|null $node */
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     /**
@@ -215,97 +330,106 @@ class CourseChatUtils
         $this->dbg('saveMessage.in', ['friendId' => (int)$friendId, 'rawLen' => strlen((string)$message)]);
         if (!is_string($message) || trim($message) === '') { return false; }
 
-        // names (one file per day/scope)
         [$fileTitle, $slug] = $this->buildNames((int)$friendId);
 
-        $em = Database::getManager();
+        $em = \Database::getManager();
         /** @var ResourceNodeRepository $nodeRepo */
         $nodeRepo = $em->getRepository(ResourceNode::class);
-        $convRepo = $em->getRepository(CChatConversation::class);
-        $rfRepo   = $em->getRepository(ResourceFile::class);
 
-        // parent (chat root)
+        // Parent = chat root node (CChatConversation) provided by controller
         $parent = $nodeRepo->find($this->resourceNode->getId());
         if (!$parent) { $this->dbg('saveMessage.error.noParent'); return false; }
 
-        // serialize writers for the same daily file (parent+slug)
+        // Best-effort file lock by day
         $lockPath = sys_get_temp_dir().'/ch_chat_lock_'.$parent->getId().'_'.$slug.'.lock';
-        $lockH = @fopen($lockPath, 'c');
-        if ($lockH) { @flock($lockH, LOCK_EX); }
+        $lockH = @fopen($lockPath, 'c'); if ($lockH) { @flock($lockH, LOCK_EX); }
 
         try {
-            // latest node for this day/scope (title OR slug)
-            $qb = $em->createQueryBuilder();
-            $qb->select('n')
-                ->from(ResourceNode::class, 'n')
-                ->where('n.parent = :parent AND (n.title = :title OR n.slug = :slug)')
-                ->setParameter('parent', $parent)
-                ->setParameter('title', $fileTitle)
-                ->setParameter('slug',  $slug)
-                ->orderBy('n.createdAt', 'DESC')
-                ->addOrderBy('n.id', 'DESC')
-                ->setMaxResults(1);
-            /** @var ResourceNode|null $node */
-            $node = $qb->getQuery()->getOneOrNullResult();
+            $em->beginTransaction();
+            try {
+                $em->lock($parent, LockMode::PESSIMISTIC_WRITE);
 
-            // create node + conversation once
-            if (!$node) {
-                $conversation = new CChatConversation();
-                (method_exists($conversation, 'setTitle')
-                    ? $conversation->setTitle($fileTitle)
-                    : $conversation->setResourceName($fileTitle));
-                $conversation->setParentResourceNode($parent->getId());
+                $node = $this->findExistingNode($fileTitle, $slug, $parent);
 
-                $node = new ResourceNode();
-                $node->setTitle($fileTitle);
-                $node->setSlug($slug);
-                $node->setResourceType($parent->getResourceType());
-                $node->setCreator(api_get_user_entity(api_get_user_id()));
-                $node->setParent($parent);
+                if (!$node) {
+                    // Create conversation + node (same as before)
+                    $conversation = new CChatConversation();
+                    (method_exists($conversation, 'setTitle')
+                        ? $conversation->setTitle($fileTitle)
+                        : $conversation->setResourceName($fileTitle));
+                    $conversation->setParentResourceNode($parent->getId());
 
-                if (method_exists($conversation, 'setResourceNode')) {
-                    $conversation->setResourceNode($node);
+                    $node = new ResourceNode();
+                    $node->setTitle($fileTitle);
+                    $node->setSlug($slug);
+                    $node->setResourceType($this->repository->getResourceType());
+                    $node->setCreator(api_get_user_entity(api_get_user_id()));
+                    $node->setParent($parent);
+
+                    if (method_exists($conversation, 'setResourceNode')) {
+                        $conversation->setResourceNode($node);
+                    }
+
+                    $em->persist($node);
+                    $em->persist($conversation);
+
+                    $course  = api_get_course_entity($this->courseId);
+                    $session = api_get_session_entity($this->sessionId);
+                    $group   = api_get_group_entity();
+                    $conversation->setParent($course);
+                    $conversation->addCourseLink($course, $session, $group);
+
+                    $em->flush();
                 }
 
-                $em->persist($node);
-                $em->persist($conversation);
-
-                $course  = api_get_course_entity();
-                $session = api_get_session_entity();
-                $group   = api_get_group_entity();
-                $conversation->setParent($course);
-                $conversation->addCourseLink(
-                    $course, $session, $group
-                );
-
-                $em->flush();
+                $em->commit();
+            } catch (UniqueConstraintViolationException $e) {
+                $em->rollback();
+                $node = $this->findExistingNode($fileTitle, $slug, $parent);
+                if (!$node) { throw $e; }
+            } catch (\Throwable $e) {
+                $em->rollback();
+                throw $e;
             }
 
-            // ensure conversation exists for node
-            $conversation = $convRepo->findOneBy(['resourceNode' => $node]);
+            // Ensure conversation still exists (as you already did)
+            $conversation = $em->getRepository(CChatConversation::class)
+                ->findOneBy(['resourceNode' => $node]);
             if (!$conversation) {
-                $conversation = new CChatConversation();
-                (method_exists($conversation, 'setTitle')
-                    ? $conversation->setTitle($fileTitle)
-                    : $conversation->setResourceName($fileTitle));
-                $conversation->setParentResourceNode($parent->getId());
-                if (method_exists($conversation, 'setResourceNode')) {
-                    $conversation->setResourceNode($node);
+                $em->beginTransaction();
+                try {
+                    $em->lock($parent, LockMode::PESSIMISTIC_WRITE);
+
+                    $conversation = new CChatConversation();
+                    (method_exists($conversation, 'setTitle')
+                        ? $conversation->setTitle($fileTitle)
+                        : $conversation->setResourceName($fileTitle));
+                    $conversation->setParentResourceNode($parent->getId());
+                    if (method_exists($conversation, 'setResourceNode')) {
+                        $conversation->setResourceNode($node);
+                    }
+                    $em->persist($conversation);
+
+                    $course  = api_get_course_entity($this->courseId);
+                    $session = api_get_session_entity($this->sessionId);
+                    $group   = api_get_group_entity();
+                    $conversation->setParent($course);
+                    $conversation->addCourseLink($course, $session, $group);
+
+                    $em->flush();
+                    $em->commit();
+                } catch (UniqueConstraintViolationException $e) {
+                    $em->rollback();
+                    $conversation = $em->getRepository(CChatConversation::class)
+                        ->findOneBy(['resourceNode' => $node]);
+                    if (!$conversation) { throw $e; }
+                } catch (\Throwable $e) {
+                    $em->rollback();
+                    throw $e;
                 }
-                $em->persist($conversation);
-
-                $course  = api_get_course_entity();
-                $session = api_get_session_entity();
-                $group   = api_get_group_entity();
-                $conversation->setParent($course);
-                $conversation->addCourseLink(
-                    $course, $session, $group
-                );
-
-                $em->flush();
             }
 
-            // build message bubble
+            // Bubble HTML (unchanged)
             $user      = api_get_user_entity($this->userId);
             $isMaster  = api_is_course_admin();
             $timeNow   = date('d/m/y H:i:s');
@@ -322,9 +446,9 @@ class CourseChatUtils
                 .'</div><div class="chat-message-block-content">'.$htmlMsg.'</div><div class="message-date">'
                 .$timeNow.'</div></div></div>';
 
-            // always target latest ResourceFile for today (by id desc)
-            $rfQb = $em->createQueryBuilder();
-            $rf   = $rfQb->select('rf')
+            // Locate ResourceFile (same logic as before)
+            $rf = $em->createQueryBuilder()
+                ->select('rf')
                 ->from(ResourceFile::class, 'rf')
                 ->where('rf.resourceNode = :node AND rf.originalName = :name')
                 ->setParameter('node', $node)
@@ -334,7 +458,18 @@ class CourseChatUtils
                 ->getQuery()
                 ->getOneOrNullResult();
 
-            // read current content and append
+            if (!$rf) {
+                $rf = $em->createQueryBuilder()
+                    ->select('rf')
+                    ->from(ResourceFile::class, 'rf')
+                    ->where('rf.resourceNode = :node')
+                    ->setParameter('node', $node)
+                    ->orderBy('rf.id', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+            }
+
             $existing = '';
             if ($rf) {
                 try { $existing = $nodeRepo->getResourceNodeFileContent($node, $rf) ?? ''; }
@@ -342,19 +477,16 @@ class CourseChatUtils
             }
             $newContent = $existing.$bubble;
 
-            // write back (reuse same physical path)
             if ($rf) {
-                $fs       = $nodeRepo->getFileSystem();
-                $fileName = $nodeRepo->getFilename($rf);
-                if ($fs->fileExists($fileName)) { $fs->delete($fileName); }
-                $fs->write($fileName, $newContent);
+                $fs = $nodeRepo->getFileSystem();
+                $fname = $nodeRepo->getFilename($rf);
+                if ($fs->fileExists($fname)) { $fs->delete($fname); }
+                $fs->write($fname, $newContent);
                 if (method_exists($rf, 'setSize')) { $rf->setSize(strlen($newContent)); $em->persist($rf); }
                 $em->flush();
             } else {
-                // first write of the day → create the ResourceFile with the whole content
                 if (method_exists($this->repository, 'addFileFromString')) {
                     $this->repository->addFileFromString($conversation, $fileTitle, 'text/html', $newContent, true);
-                    $em->flush();
                 } else {
                     $h = tmpfile(); fwrite($h, $newContent);
                     $meta = stream_get_meta_data($h);
@@ -362,9 +494,12 @@ class CourseChatUtils
                         $meta['uri'], $fileTitle, 'text/html', null, true
                     );
                     $this->repository->addFile($conversation, $uploaded);
-                    $em->flush();
                 }
+                $em->flush();
             }
+
+            // Mirror in Documents (unchanged call; see method below updated with lock)
+            $this->mirrorDailyCopyToDocuments($fileTitle, $newContent);
 
             $this->dbg('saveMessage.append.ok', ['nodeId' => $node->getId(), 'bytes' => strlen($newContent)]);
             return true;

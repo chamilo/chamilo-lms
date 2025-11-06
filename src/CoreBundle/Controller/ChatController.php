@@ -11,7 +11,9 @@ use Chamilo\CoreBundle\Traits\CourseControllerTrait;
 use Chamilo\CoreBundle\Traits\ResourceControllerTrait;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Entity\CChatConversation;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CChatConversationRepository;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chat;
 use CourseChatUtils;
 use Doctrine\Persistence\ManagerRegistry;
@@ -32,7 +34,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     use ResourceControllerTrait;
 
     #[Route(path: '/resources/chat/', name: 'chamilo_core_chat_home', options: ['expose' => true])]
-    public function index(Request $request): Response
+    public function index(Request $request, ManagerRegistry $doctrine): Response
     {
         Event::event_access_tool(TOOL_CHAT);
         Event::registerLog([
@@ -41,17 +43,22 @@ class ChatController extends AbstractResourceController implements CourseControl
             'action_details' => 'start-chat',
         ]);
 
-        $parentNode = $this->getParentResourceNode($request);
+        $course  = api_get_course_entity();
+        $session = api_get_session_entity() ?: null;
+
+        /** @var CDocumentRepository $docsRepo */
+        $docsRepo = $doctrine->getRepository(CDocument::class);
+        $docsRepo->ensureChatSystemFolder($course, $session);
 
         return $this->render('@ChamiloCore/Chat/chat.html.twig', [
-            'restrict_to_coach' => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
-            'user' => api_get_user_info(),
-            'emoji_smile' => '<span>&#128522;</span>',
-            'course_url_params' => api_get_cidreq(),
-            'course' => api_get_course_entity(),
-            'session_id' => api_get_session_id(),
-            'group_id' => api_get_group_id(),
-            'chat_parent_node_id' => $parentNode?->getId() ?? 0,
+            'restrict_to_coach'   => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
+            'user'                => api_get_user_info(),
+            'emoji_smile'         => '<span>&#128522;</span>',
+            'course_url_params'   => api_get_cidreq(),
+            'course'              => $course,
+            'session_id'          => api_get_session_id(),
+            'group_id'            => api_get_group_id(),
+            'chat_parent_node_id' => $course->getResourceNode()->getId(),
         ]);
     }
 
@@ -67,48 +74,35 @@ class ChatController extends AbstractResourceController implements CourseControl
         };
 
         if (!api_protect_course_script()) {
-            $log('protect.failed');
-
             return new JsonResponse(['status' => false, 'error' => 'forbidden'], 403);
         }
 
-        $courseId = api_get_course_int_id();
-        $userId = api_get_user_id();
+        $courseId  = api_get_course_int_id();
+        $userId    = api_get_user_id();
         $sessionId = api_get_session_id();
-        $groupId = api_get_group_id();
+        $groupId   = api_get_group_id();
 
-        $log('request.start', [
-            'cid' => $courseId,
-            'uid' => $userId,
-            'sid' => $sessionId,
-            'gid' => $groupId,
-            'query' => $request->query->all(),
-            'post' => $request->request->all(),
-        ]);
+        $course  = \api_get_course_entity();
+        $session = \api_get_session_entity() ?: null;
 
-        $parentResourceNode = $this->getParentResourceNode($request);
-        $log('parent.node', ['id' => $parentResourceNode?->getId()]);
+        /** @var CChatConversationRepository $convRepo */
+        $convRepo = $doctrine->getRepository(CChatConversation::class);
+        /** @var CDocumentRepository $docsRepo */
+        $docsRepo = $doctrine->getRepository(CDocument::class);
 
-        if (!$parentResourceNode) {
-            return new JsonResponse(['status' => false, 'error' => 'parent_node_not_found'], 404);
-        }
+        $docsRepo->ensureChatSystemFolder($course, $session);
+        $docRoot = $docsRepo->ensureChatSystemFolderUnderCourseRoot($course, $session);
 
-        /** @var CChatConversationRepository $conversationRepository */
-        $conversationRepository = $doctrine->getRepository(CChatConversation::class);
-
-        // Helper: single-file-per-day behavior, append in chronological order
         $chat = new CourseChatUtils(
             $courseId,
             $userId,
             $sessionId,
             $groupId,
-            $parentResourceNode,
-            $conversationRepository
+            $docRoot,
+            $convRepo
         );
 
         $action = (string) $request->get('action', 'track');
-        $log('action', ['name' => $action]);
-
         $json = ['status' => false];
 
         try {
@@ -120,8 +114,6 @@ class ChatController extends AbstractResourceController implements CourseControl
                         'action_details' => 'exit-chat',
                     ]);
                     $json = ['status' => true];
-                    $log('logout.ok');
-
                     break;
 
                 case 'track':
@@ -142,58 +134,31 @@ class ChatController extends AbstractResourceController implements CourseControl
                             'currentFriend' => $friend,
                         ],
                     ];
-                    $log('track.ok', [
-                        'friend' => $friend,
-                        'usersOnline' => $newUsersOnline,
-                        'listChanged' => ($newUsersOnline !== $oldUsersOnline),
-                    ]);
-
                     break;
 
                 case 'preview':
                     $msg = (string) $request->get('message', '');
-                    $json = [
-                        'status' => true,
-                        'data' => ['message' => CourseChatUtils::prepareMessage($msg)],
-                    ];
-                    $log('preview.ok', ['len' => \strlen($msg)]);
-
+                    $json = ['status' => true, 'data' => ['message' => \CourseChatUtils::prepareMessage($msg)]];
                     break;
 
                 case 'reset':
                     $friend = (int) $request->get('friend', 0);
-                    $json = [
-                        'status' => true,
-                        'data' => $chat->readMessages(true, $friend),
-                    ];
-                    $log('reset.ok', ['friend' => $friend]);
-
+                    $json = ['status' => true, 'data' => $chat->readMessages(true, $friend)];
                     break;
 
                 case 'write':
                     $friend = (int) $request->get('friend', 0);
                     $msg = (string) $request->get('message', '');
                     $ok = $chat->saveMessage($msg, $friend);
-
-                    $json = [
-                        'status' => $ok,
-                        'data' => ['writed' => $ok],
-                    ];
-                    $log('write.done', ['friend' => $friend, 'len' => \strlen($msg), 'ok' => $ok]);
-
+                    $json = ['status' => $ok, 'data' => ['writed' => $ok]];
                     break;
 
                 default:
-                    $log('action.unknown', ['name' => $action]);
                     $json = ['status' => false, 'error' => 'unknown_action'];
-
                     break;
             }
-        } catch (Throwable $e) {
-            $log('error', ['action' => $action, 'err' => $e->getMessage()]);
+        } catch (\Throwable $e) {
             $json = ['status' => false, 'error' => $e->getMessage()];
-        } finally {
-            $log('response', ['status' => $json['status'] ?? null]);
         }
 
         return new JsonResponse($json);

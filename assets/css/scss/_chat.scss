@@ -143,6 +143,131 @@
   .chd-bubble__ack{font-variant-numeric:tabular-nums}
 }
 
+.course-tool-chat {
+  /* ---------- Buttons ---------- */
+  .btn{
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #E5E7EB;
+    background:#fff;
+    color:#374151;
+    cursor: pointer;
+    transition: background .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .btn:hover{ background:#F9FAFB; }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .btn-primary{ background:#4F46E5; border-color:#4F46E5; color:#fff; box-shadow: 0 2px 6px rgba(79,70,229,.25); }
+  .btn-primary:hover{ background:#4338CA; }
+  .btn-secondary{ color:#374151; }
+  .btn-tertiary{ background:#fff; color:#4B5563; }
+  .btn-danger-outline{ border-color:#EF4444; color:#B91C1C; background:#fff; }
+  .btn-danger-outline:hover{ background:#FEE2E2; }
+
+  /* ---------- Textarea feel ---------- */
+  .chat-writer{
+    line-height: 1.35;
+    white-space: pre-wrap;
+    word-break: break-word;
+    tab-size: 2;
+    letter-spacing: normal;
+    resize: vertical;
+  }
+
+  /* ---------- Chat history container ---------- */
+  .chat-history{
+    background:#FAFAFA;
+    border:1px solid #F3F4F6;
+    border-radius: 16px;
+    padding: 12px;
+    min-height: 220px;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+
+  /* ---------- Bubbles (match backend HTML structure) ---------- */
+  .message-teacher,
+  .message-student{
+    display:flex;
+    align-items:flex-end;
+    gap:10px;
+    margin:10px 0;
+  }
+  .message-teacher{ justify-content:flex-end; }
+  .message-student{ justify-content:flex-start; }
+
+  .message-teacher .content-message,
+  .message-student .content-message{
+    max-width: 72%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+
+  .message-teacher .content-message{
+    background:#4F46E5; color:#fff;
+    border-top-right-radius: 4px;
+  }
+  .message-student .content-message{
+    background:#F3F4F6; color:#111827;
+    border-top-left-radius: 4px;
+  }
+
+  .chat-image{
+    width: 36px; height: 36px; border-radius: 9999px; object-fit: cover;
+    border: 1px solid #E5E7EB;
+  }
+  .chat-message-block-name{
+    font-weight: 600; font-size: 0.85rem; margin-bottom: 2px;
+    color: currentColor;
+  }
+  .chat-message-block-content p{ margin: 0; }
+  .chat-message-block-content p + p{ margin-top: .25rem; }
+  .chat-message-block-content h1,
+  .chat-message-block-content h2,
+  .chat-message-block-content h3,
+  .chat-message-block-content h4,
+  .chat-message-block-content h5,
+  .chat-message-block-content h6{ margin: .25rem 0; font-size: 1em; }
+  .chat-message-block-content ul,
+  .chat-message-block-content ol{ margin: .25rem 0; padding-left: 1.25rem; }
+  .chat-message-block-content blockquote{ margin: .25rem 0; padding-left: .75rem; border-left: 3px solid #E5E7EB; color:#6B7280; }
+
+  .message-date{
+    font-size: .7rem; opacity:.8; margin-top: 6px; text-align: right;
+    color: #E0E7FF; /* light for teacher bubble */
+  }
+  .message-student .message-date{ color:#6B7280; text-align:left; }
+
+  /* Emoji popover */
+  #emoji-popover.emoji-popover{
+    position: fixed;
+    z-index: 50;
+    width: max-content;
+    max-width: calc(100vw - 24px);
+    max-height: 18rem;
+    overflow: auto;
+    padding: 8px;
+    border: 1px solid #E5E7EB;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,.08), 0 2px 8px rgba(0,0,0,.06);
+  }
+  #emoji-popover .emoji-btn{
+    width: 2.4rem; height: 2.4rem; font-size: 1.25rem; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px; border: none; background: transparent; cursor: pointer;
+  }
+  #emoji-popover .emoji-btn:hover{ background:#F3F4F6; }
+  #emoji-popover .emoji-btn:focus{ outline:2px solid rgba(79,70,229,.6); outline-offset:2px; }
+
+  /* Emoji-friendly font stack */
+  #chat-writer, .chat-history, #emoji-popover{
+    font-family: Arial,sans-serif, "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue";
+  }
+}
+
 @media (max-width: 720px) {
   .chd .chd-dock { width: 100%; right: 0; left: 0; bottom: 0; border-radius: 10px; }
   .chd .chd-body { grid-template-columns: 1fr; }

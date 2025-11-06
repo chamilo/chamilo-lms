@@ -277,40 +277,44 @@ final class CDocumentRepository extends ResourceRepository
         int $visibility = ResourceLink::VISIBILITY_DRAFT,
         ?Session $session = null
     ): ResourceNode {
-        // Return if a child with this title already exists under the parent
-        if ($child = $this->findChildNodeByTitle($parent, $folderTitle)) {
-            return $child;
+        try {
+            if ($child = $this->findChildNodeByTitle($parent, $folderTitle)) {
+                return $child;
+            }
+
+            /** @var User|null $user */
+            $user = api_get_user_entity();
+            $creatorId = $user?->getId();
+
+            $doc = new CDocument();
+            $doc->setTitle($folderTitle);
+            $doc->setFiletype('folder');
+            $doc->setParentResourceNode($parent->getId());
+
+            $link = [
+                'cid'        => $course->getId(),
+                'visibility' => $visibility,
+            ];
+            if ($session && method_exists($session, 'getId')) {
+                $link['sid'] = $session->getId();
+            }
+            $doc->setResourceLinkArray([$link]);
+
+            if ($user) {
+                $doc->setCreator($user);
+            }
+
+            $em = $this->em();
+            $em->persist($doc);
+            $em->flush();
+
+            $node   = $doc->getResourceNode();
+
+            return $node;
+        } catch (\Throwable $e) {
+            error_log('[CDocumentRepo.ensureFolder] ERROR '.$e->getMessage());
+            throw $e;
         }
-
-        /** @var User|null $user */
-        $user = api_get_user_entity();
-
-        $doc = new CDocument();
-        $doc->setTitle($folderTitle);
-        $doc->setFiletype('folder');
-
-        // IMPORTANT: attach to the given parent, not to the course root
-        $doc->setParentResourceNode($parent->getId());
-
-        // Link to course (and optional session)
-        $link = [
-            'cid' => $course->getId(),
-            'visibility' => $visibility,
-        ];
-        if ($session && method_exists($session, 'getId')) {
-            $link['sid'] = $session->getId();
-        }
-        $doc->setResourceLinkArray([$link]);
-
-        if ($user) {
-            $doc->setCreator($user);
-        }
-
-        $em = $this->em();
-        $em->persist($doc);
-        $em->flush();
-
-        return $doc->getResourceNode();
     }
 
     /**
@@ -468,7 +472,7 @@ final class CDocumentRepository extends ResourceRepository
                     if ($rn) {
                         $file = $rn->getFirstResourceFile();
 
-/** @var ResourceFile|null $file */
+                        /** @var ResourceFile|null $file */
                         if ($file) {
                             $storedRel = (string) $rnRepo->getFilename($file);
                             if ('' !== $storedRel) {
@@ -499,6 +503,102 @@ final class CDocumentRepository extends ResourceRepository
         return $out;
     }
 
+    public function ensureChatSystemFolder(Course $course, ?Session $session = null): ResourceNode
+    {
+        return $this->ensureChatSystemFolderUnderCourseRoot($course, $session);
+    }
+
+    public function findChildDocumentFolderByTitle(ResourceNode $parent, string $title): ?ResourceNode
+    {
+        $em    = $this->em();
+        $docRt = $this->getResourceType();
+        $qb = $em->createQueryBuilder()
+            ->select('rn')
+            ->from(ResourceNode::class, 'rn')
+            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
+            ->setParameters([
+                'parent' => $parent,
+                'title'  => $title,
+                'rt'     => $docRt,
+                'ft'     => 'folder',
+            ])
+            ->setMaxResults(1);
+
+        /** @var ResourceNode|null $node */
+        $node = $qb->getQuery()->getOneOrNullResult();
+
+        return $node;
+    }
+
+    public function ensureChatSystemFolderUnderCourseRoot(Course $course, ?Session $session = null): ResourceNode
+    {
+        $em = $this->em();
+        try {
+            $courseRoot = $course->getResourceNode();
+            if (!$courseRoot) {
+                error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR: Course has no ResourceNode root.');
+                throw new \RuntimeException('Course has no ResourceNode root.');
+            }
+            if ($child = $this->findChildDocumentFolderByTitle($courseRoot, 'chat_conversations')) {
+                return $child;
+            }
+
+            if ($docsRoot = $this->getCourseDocumentsRootNode($course)) {
+                if ($legacy = $this->findChildDocumentFolderByTitle($docsRoot, 'chat_conversations')) {
+                    $legacy->setParent($courseRoot);
+                    $em->persist($legacy);
+                    $em->flush();
+
+                    $rnRepo = Container::$container->get(ResourceNodeRepository::class);
+                    if (method_exists($rnRepo, 'rebuildPaths')) {
+                        $rnRepo->rebuildPaths($courseRoot);
+                    }
+                    return $legacy;
+                }
+            }
+
+            $node = $this->ensureFolder(
+                $course,
+                $courseRoot,
+                'chat_conversations',
+                ResourceLink::VISIBILITY_DRAFT,
+                $session
+            );
+
+            return $node;
+
+        } catch (\Throwable $e) {
+            error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR '.$e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function findChildDocumentFileByTitle(ResourceNode $parent, string $title): ?ResourceNode
+    {
+        $em    = $this->em();
+        $docRt = $this->getResourceType();
+
+        $qb = $em->createQueryBuilder()
+            ->select('rn')
+            ->from(ResourceNode::class, 'rn')
+            ->innerJoin(CDocument::class, 'd', 'WITH', 'd.resourceNode = rn')
+            ->where('rn.parent = :parent')
+            ->andWhere('rn.title = :title')
+            ->andWhere('rn.resourceType = :rt')
+            ->andWhere('d.filetype = :ft')
+            ->setParameters([
+                'parent' => $parent,
+                'title'  => $title,
+                'rt'     => $docRt,
+                'ft'     => 'file',
+            ])
+            ->setMaxResults(1);
+
+        /** @var ResourceNode|null $node */
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     /**
      * Return absolute filesystem path for a file CDocument if resolvable; null otherwise.
      */
@@ -513,7 +613,7 @@ final class CDocumentRepository extends ResourceRepository
         $rnRepo = Container::$container->get(ResourceNodeRepository::class);
         $file = $rn->getFirstResourceFile();
 
-/** @var ResourceFile|null $file */
+        /** @var ResourceFile|null $file */
         if (!$file) {
             return null;
         }

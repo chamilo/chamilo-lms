@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpView;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -39,5 +40,21 @@ class CourseRelUserRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Count distinct courses where the given user is a teacher (status == TEACHER).
+     */
+    public function countTaughtCoursesForUser(User $user): int
+    {
+        return (int) $this->createQueryBuilder('cru')
+            ->select('COUNT(DISTINCT c.id)')
+            ->innerJoin('cru.course', 'c')
+            ->andWhere('cru.user = :user')
+            ->andWhere('cru.status = :teacher')
+            ->setParameter('user', $user)
+            ->setParameter('teacher', CourseRelUser::TEACHER)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

@@ -2718,54 +2718,96 @@ function api_get_session_condition(
  */
 function api_get_setting($variable, $isArray = false, $key = null)
 {
+    // Settings retrieval is centralized in SettingsManager.
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
         return '';
     }
+
     $variable = trim($variable);
-    // Normalize setting name: keep full name for lookup, extract short name for switch matching
-    $full   = $variable;
-    $short  = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
+
+    // Keep full name for lookup; extract short name for switch matching.
+    $full  = $variable;
+    $short = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
 
     switch ($short) {
-        case 'server_type':
+        case 'server_type': {
+            // Typed value; default to 'prod' if empty.
             $settingValue = $settingsManager->getSetting($full, true);
             return $settingValue ?: 'prod';
+        }
+
         case 'openid_authentication':
         case 'service_ppt2lp':
-        case 'formLogin_hide_unhide_label':
+        case 'formLogin_hide_unhide_label': {
+            // These behave as disabled.
             return false;
-        case 'tool_visible_by_default_at_creation':
+        }
+
+        case 'tool_visible_by_default_at_creation': {
+            // Original semantics: return an array map of "<tool>" => "true"
             $values = $settingsManager->getSetting($full);
             $newResult = [];
-            foreach ($values as $parameter) {
-                $newResult[$parameter] = 'true';
+            if (is_array($values)) {
+                foreach ($values as $parameter) {
+                    $newResult[$parameter] = 'true';
+                }
             }
-
             return $newResult;
+        }
 
-        default:
+        default: {
+            // Get typed value when possible
             $settingValue = $settingsManager->getSetting($full, true);
-            if (is_string($settingValue) && $isArray && $settingValue !== '') {
-                // Check if the value is a valid JSON string
-                $decodedValue = json_decode($settingValue, true);
 
-                // If it's a valid JSON string and the result is an array, return it
-                if (is_array($decodedValue)) {
-                    return $decodedValue;
+            // If caller expects an array, try to coerce common encodings.
+            if ($isArray) {
+                // Already an array? Return it (optionally narrowed by key).
+                if (is_array($settingValue)) {
+                    return ($key !== null && array_key_exists($key, $settingValue))
+                        ? $settingValue[$key]
+                        : $settingValue;
                 }
-                $value = eval('return ' . rtrim($settingValue, ';') . ';');
-                if (is_array($value)) {
-                    return $value;
+
+                if (is_string($settingValue) && $settingValue !== '') {
+                    // JSON
+                    $decoded = json_decode($settingValue, true);
+                    if (is_array($decoded)) {
+                        return ($key !== null && array_key_exists($key, $decoded)) ? $decoded[$key] : $decoded;
+                    }
+
+                    // PHP serialize()
+                    $unser = @unserialize($settingValue, ['allowed_classes' => false]);
+                    if (is_array($unser)) {
+                        return ($key !== null && array_key_exists($key, $unser)) ? $unser[$key] : $unser;
+                    }
+
+                    // CSV (simple comma-separated list)
+                    if (strpos($settingValue, ',') !== false) {
+                        $parts = array_values(array_filter(array_map('trim', explode(',', $settingValue)), 'strlen'));
+                        // For CSV, $key act as numeric index if provided
+                        return ($key !== null && array_key_exists($key, $parts)) ? $parts[$key] : $parts;
+                    }
+
+                    // strings starting with "array(" (old PHP config style)
+                    $trim = ltrim($settingValue);
+                    if (str_starts_with($trim, 'array(')) {
+                        $legacy = @eval('return ' . $trim . ';');
+                        if (is_array($legacy)) {
+                            return ($key !== null && array_key_exists($key, $legacy)) ? $legacy[$key] : $legacy;
+                        }
+                    }
                 }
             }
 
-            // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
-            if ($key !== null && isset($settingValue[$variable][$key])) {
-                return $settingValue[$variable][$key];
+            // If not forcing array: allow key access when the typed value is an array
+            if ($key !== null && is_array($settingValue) && array_key_exists($key, $settingValue)) {
+                return $settingValue[$key];
             }
 
+            // Return the typed (or raw) value as provided by SettingsManager
             return $settingValue;
+        }
     }
 }
 
@@ -5265,7 +5307,7 @@ function api_get_access_url_from_user($user_id)
     return $list;
 }
 
-/** 
+/**
  * Checks whether the current admin user in in all access urls.
  *
  * @return bool

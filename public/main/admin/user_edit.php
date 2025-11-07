@@ -2,11 +2,13 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use ChamiloSession as Session;
 
 $cidReset = true;
@@ -487,11 +489,15 @@ if ($form->validate()) {
         $incompatible = false;
         $conflicts = [];
         $oldStatus = (int) $userObj->getStatus();
+        $em = Database::getManager();
 
         if ($oldStatus !== $newStatus) {
             $isNowStudent = ($newStatus === STUDENT);
             if ($isNowStudent) {
-                $courseTeacherCount = $userObj->getCourses()->count();
+
+                /** @var CourseRelUserRepository $cruRepo */
+                $cruRepo = $em->getRepository(CourseRelUser::class);
+                $courseTeacherCount = $cruRepo->countTaughtCoursesForUser($userObj);
                 $coachSessions = $userObj->getSessionsAsGeneralCoach();
                 $adminSessions = $userObj->getSessionsAsAdmin();
 

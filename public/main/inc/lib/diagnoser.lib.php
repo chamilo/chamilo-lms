@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -7,11 +9,9 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 
 /**
- * Class Diagnoser
  * Generates diagnostic information about the system.
  *
  * Notes:
- * - Code comments are in English (as requested).
  * - Adjusted to current path constants provided by the platform.
  * - Database section is DBAL-3 friendly (no getHost()).
  * - Courses space section prefers DB sum (resource_file) with safe fallbacks.
@@ -23,47 +23,45 @@ class Diagnoser
     public const STATUS_ERROR = 3;
     public const STATUS_INFORMATION = 4;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Render diagnostics UI with Tailwind (no Bootstrap).
      * Drop-in replacement for show_html().
      */
-    public function show_html()
+    public function show_html(): void
     {
         // Section registry (label + short info)
         $sections = [
             'chamilo' => [
                 'label' => 'Chamilo',
-                'info'  => 'State of Chamilo requirements',
-                'icon'  => 'mdi-cog-outline',
+                'info' => 'State of Chamilo requirements',
+                'icon' => 'mdi-cog-outline',
             ],
             'php' => [
                 'label' => 'PHP',
-                'info'  => 'State of PHP settings on the server',
-                'icon'  => 'mdi-language-php',
+                'info' => 'State of PHP settings on the server',
+                'icon' => 'mdi-language-php',
             ],
             'database' => [
                 'label' => 'Database',
-                'info'  => 'Database server configuration and metadata',
-                'icon'  => 'mdi-database',
+                'info' => 'Database server configuration and metadata',
+                'icon' => 'mdi-database',
             ],
             'webserver' => [
                 'label' => get_lang('Web server'),
-                'info'  => 'Information about your webserver configuration',
-                'icon'  => 'mdi-server',
+                'info' => 'Information about your webserver configuration',
+                'icon' => 'mdi-server',
             ],
             'paths' => [
                 'label' => 'Paths',
-                'info'  => 'api_get_path() constants resolved on this portal',
-                'icon'  => 'mdi-folder-outline',
+                'info' => 'api_get_path() constants resolved on this portal',
+                'icon' => 'mdi-folder-outline',
             ],
             'courses_space' => [
                 'label' => 'Courses space',
-                'info'  => 'Disk usage per course vs disk quota',
-                'icon'  => 'mdi-folder-cog-outline',
+                'info' => 'Disk usage per course vs disk quota',
+                'icon' => 'mdi-folder-cog-outline',
             ],
         ];
 
@@ -86,13 +84,13 @@ class Diagnoser
 
         // Fetch data
         $method = 'get_'.$current.'_data';
-        $data   = call_user_func([$this, $method]);
+        $data = call_user_func([$this, $method]);
 
         // Render per-section
         if ('paths' === $current) {
             // $data = ['headers' => [...], 'data' => [CONST => value, ...]]
             $headers = $data['headers'] ?? ['Path', 'constant'];
-            $rows    = [];
+            $rows = [];
             foreach (($data['data'] ?? []) as $const => $value) {
                 $rows[] = [$value, $const];
             }
@@ -155,10 +153,10 @@ class Diagnoser
         $html = '<div class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">';
         foreach ($sections as $key => $meta) {
             $active = $key === $current;
-            $ring   = $active ? 'ring-2 ring-primary/80 bg-primary/5' : 'ring-1 ring-gray-200 hover:ring-gray-300';
-            $txt    = $active ? 'text-primary' : 'text-gray-700 group-hover:text-gray-900';
-            $badge  = $active ? '<span class="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">Active</span>' : '';
-            $url    = 'system_status.php?section='.$key;
+            $ring = $active ? 'ring-2 ring-primary/80 bg-primary/5' : 'ring-1 ring-gray-200 hover:ring-gray-300';
+            $txt = $active ? 'text-primary' : 'text-gray-700 group-hover:text-gray-900';
+            $badge = $active ? '<span class="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">Active</span>' : '';
+            $url = 'system_status.php?section='.$key;
 
             $html .= '
   <a href="'.$url.'" class="group block rounded-2xl bg-white p-4 shadow-sm hover:shadow-md transition '.$ring.'">
@@ -185,7 +183,7 @@ class Diagnoser
      * Tailwind table renderer.
      * - sticky header
      * - subtle row separators
-     * - optional dense mode
+     * - optional dense mode.
      */
     private function tw_table(array $headers, array $rows, bool $dense = true): string
     {
@@ -231,7 +229,7 @@ class Diagnoser
      */
     private function e(string $v): string
     {
-        return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($v, \ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -283,7 +281,7 @@ class Diagnoser
         foreach ($constNames as $name) {
             if (defined($name)) {
                 $value = api_get_path(constant($name));
-                if ($value !== false && $value !== null && $value !== '') {
+                if (false !== $value && null !== $value && '' !== $value) {
                     // Map CONSTANT => resolved value
                     $list[$name] = $value;
                 }
@@ -362,13 +360,13 @@ class Diagnoser
             } else {
                 $dir = api_get_path(SYS_PATH);
                 $du = exec('du -sh '.escapeshellarg($dir), $err);
-                if (strpos($du, "\t") !== false) {
+                if (str_contains($du, "\t")) {
                     list($size, $none) = explode("\t", $du, 2);
                     unset($none);
                 }
 
                 $limit = get_hosting_limit($access_url_id, 'disk_space');
-                if ($limit === null) {
+                if (null === $limit) {
                     $limit = 0;
                 }
 
@@ -426,14 +424,14 @@ class Diagnoser
     {
         $array = [];
 
-        $version = phpversion();
+        $version = \PHP_VERSION;
         $status = $version > REQUIRED_PHP_VERSION ? self::STATUS_OK : self::STATUS_ERROR;
         $array[] = $this->build_setting(
             $status,
             '[PHP]',
             'phpversion()',
             'https://php.net/manual/en/function.phpversion.php',
-            phpversion(),
+            \PHP_VERSION,
             '>= '.REQUIRED_PHP_VERSION,
             null,
             get_lang('PHP version')
@@ -759,7 +757,7 @@ class Diagnoser
         // Prefer platform name (mysql, postgresql, sqlite, …)
         try {
             $driver = $connection->getDatabasePlatform()->getName();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $driver = (method_exists($connection, 'getDriver') && method_exists($connection->getDriver(), 'getName'))
                 ? $connection->getDriver()->getName()
                 : 'unknown';
@@ -773,7 +771,7 @@ class Diagnoser
 
         try {
             $db = $connection->getDatabase();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $db = $primary['dbname'] ?? ($primary['path'] ?? 'unknown');
         }
 
@@ -799,7 +797,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["SERVER_NAME"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["SERVER_NAME"] ?? '',
+            $_SERVER['SERVER_NAME'] ?? '',
             null,
             null,
             get_lang('Server name (as used in your request)')
@@ -809,7 +807,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["SERVER_ADDR"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["SERVER_ADDR"] ?? '',
+            $_SERVER['SERVER_ADDR'] ?? '',
             null,
             null,
             get_lang('Server address')
@@ -819,7 +817,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["SERVER_PORT"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["SERVER_PORT"] ?? '',
+            $_SERVER['SERVER_PORT'] ?? '',
             null,
             null,
             get_lang('Server port')
@@ -829,7 +827,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["SERVER_SOFTWARE"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["SERVER_SOFTWARE"] ?? '',
+            $_SERVER['SERVER_SOFTWARE'] ?? '',
             null,
             null,
             get_lang('Software running as a web server')
@@ -839,7 +837,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["REMOTE_ADDR"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["REMOTE_ADDR"] ?? '',
+            $_SERVER['REMOTE_ADDR'] ?? '',
             null,
             null,
             get_lang('Remote address (your address as received by the server)')
@@ -849,7 +847,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["HTTP_USER_AGENT"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["HTTP_USER_AGENT"] ?? '',
+            $_SERVER['HTTP_USER_AGENT'] ?? '',
             null,
             null,
             get_lang('Your user agent as received by the server')
@@ -859,7 +857,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["SERVER_PROTOCOL"]',
             'http://be.php.net/reserved.variables.server',
-            $_SERVER["SERVER_PROTOCOL"] ?? '',
+            $_SERVER['SERVER_PROTOCOL'] ?? '',
             null,
             null,
             get_lang('Protocol used by this server')
@@ -879,7 +877,7 @@ class Diagnoser
             '[SERVER]',
             '$_SERVER["HTTP_X_FORWARDED_FOR"]',
             'http://be.php.net/reserved.variables.server',
-            (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : ''),
+            !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : '',
             null,
             null,
             get_lang('If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case).')
@@ -891,7 +889,7 @@ class Diagnoser
     /**
      * Return "Courses space" rows using DB sums (no filesystem scan).
      * Columns (legacy order):
-     * [ homeLink, code, usedMB, quotaMB, editLink, last_visit, absPathHint ]
+     * [ homeLink, code, usedMB, quotaMB, editLink, last_visit, absPathHint ].
      *
      * v2 notes:
      * - There is no per-course public folder anymore.
@@ -904,11 +902,11 @@ class Diagnoser
     {
         $rows = [];
 
-        $em   = Database::getManager();
+        $em = Database::getManager();
         $conn = $em->getConnection();
 
         // Aggregate used bytes from ResourceFile (no FS scan).
-        $sql = <<<SQL
+        $sql = <<<'SQL'
         SELECT
             c.id,
             c.code,
@@ -945,7 +943,7 @@ class Diagnoser
 
         foreach ($data as $row) {
             // Used bytes -> MB, min 1MB if > 0 to keep legacy semantics
-            $bytes  = (int) ($row['used_bytes'] ?? 0);
+            $bytes = (int) ($row['used_bytes'] ?? 0);
             $usedMb = $bytes > 0 ? max(1, (int) ceil($bytes / (1024 * 1024))) : 0;
 
             // Quota: per-course override if set (>0) else platform default (MB)
@@ -977,14 +975,14 @@ class Diagnoser
      *  1) SettingsManager (v2)
      *  2) api_get_setting() (legacy)
      *  3) DB table settings (direct)
-     *  4) DocumentManager::get_course_quota() fallback
+     *  4) DocumentManager::get_course_quota() fallback.
      */
     private function resolveDefaultCourseQuotaMb(): int
     {
         // 1) v2 SettingsManager (if available)
         try {
             if (class_exists('Container') && method_exists('Container', 'getSettingsManager')) {
-                $sm = \Container::getSettingsManager();
+                $sm = Container::getSettingsManager();
                 if ($sm) {
                     $candidates = [
                         'course.course_quota',                 // expected v2 key
@@ -994,7 +992,7 @@ class Diagnoser
                     ];
                     foreach ($candidates as $key) {
                         $raw = (string) $sm->getSetting($key);
-                        if ($raw !== '' && $raw !== '0' && $raw !== null) {
+                        if ('' !== $raw && '0' !== $raw && null !== $raw) {
                             $mb = $this->parseQuotaRawToMb($raw);
                             if ($mb >= 0) {
                                 return $mb;
@@ -1003,7 +1001,7 @@ class Diagnoser
                     }
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Ignore and continue with other strategies
         }
 
@@ -1016,7 +1014,7 @@ class Diagnoser
         ];
         foreach ($candidates as $key) {
             $raw = api_get_setting($key);
-            if ($raw !== false && $raw !== null && $raw !== '') {
+            if (false !== $raw && null !== $raw && '' !== $raw) {
                 $mb = $this->parseQuotaRawToMb((string) $raw);
                 if ($mb >= 0) {
                     return $mb;
@@ -1026,7 +1024,7 @@ class Diagnoser
 
         // 3) Direct DB read from settings (works on most v1/v2 installs)
         try {
-            $em   = Database::getManager();
+            $em = Database::getManager();
             $conn = $em->getConnection();
 
             foreach ($candidates as $key) {
@@ -1034,21 +1032,21 @@ class Diagnoser
                     'SELECT value FROM settings WHERE variable = ? LIMIT 1',
                     [$key]
                 );
-                if ($val !== false && $val !== null && $val !== '') {
+                if (false !== $val && null !== $val && '' !== $val) {
                     $mb = $this->parseQuotaRawToMb((string) $val);
                     if ($mb >= 0) {
                         return $mb;
                     }
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Ignore and continue
         }
 
         // 4) Last resort: ask DocumentManager (may return platform default)
         try {
             if (class_exists('DocumentManager') && method_exists('DocumentManager', 'get_course_quota')) {
-                $v = \DocumentManager::get_course_quota(); // usually returns MB
+                $v = DocumentManager::get_course_quota(); // usually returns MB
                 if (is_numeric($v)) {
                     $mb = $this->parseQuotaRawToMb((string) $v);
                     if ($mb >= 0) {
@@ -1056,7 +1054,7 @@ class Diagnoser
                     }
                 }
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Ignore
         }
 
@@ -1071,7 +1069,7 @@ class Diagnoser
      *  - "1G", "1GB", "1 g"  -> 1024 MB
      *  - "200M", "200MB"     -> 200 MB
      *  - large integers      -> assumed BYTES, converted to MB
-     *  - strings with noise  -> extracts digits & unit heuristically
+     *  - strings with noise  -> extracts digits & unit heuristically.
      */
     private function parseQuotaRawToMb(string $raw): int
     {
@@ -1080,20 +1078,23 @@ class Diagnoser
         // Pure integer?
         if (preg_match('/^\d+$/', $s)) {
             $num = (int) $s;
+
             // Heuristic: if looks like bytes (>= 1MB in bytes), convert to MB.
             return ($num >= 1048576) ? (int) ceil($num / 1048576) : $num;
         }
 
         // <number><unit> where unit is m/mb or g/gb
         if (preg_match('/^\s*(\d+)\s*([mg])(?:b)?\s*$/i', $s, $m)) {
-            $num  = (int) $m[1];
+            $num = (int) $m[1];
             $unit = strtolower($m[2]);
-            return $unit === 'g' ? $num * 1024 : $num;
+
+            return 'g' === $unit ? $num * 1024 : $num;
         }
 
         // Extract digits for numbers hidden inside strings (e.g. "500 MB", "524288000 bytes", etc.)
         if (preg_match('/(\d+)/', $s, $m)) {
             $num = (int) $m[1];
+
             return ($num >= 1048576) ? (int) ceil($num / 1048576) : $num;
         }
 
@@ -1106,7 +1107,7 @@ class Diagnoser
      */
     public function get_courses_space_count(): int
     {
-        $em   = Database::getManager();
+        $em = Database::getManager();
         $conn = $em->getConnection();
 
         $sql = 'SELECT COUNT(*) AS cnt FROM course';
@@ -1114,18 +1115,17 @@ class Diagnoser
         return (int) $conn->executeQuery($sql)->fetchOne();
     }
 
-
     /**
      * Helper to normalize a diagnostic row.
      *
-     * @param int    $status
-     * @param string $section
-     * @param string $title
-     * @param string $url
-     * @param mixed  $current_value
-     * @param mixed  $expected_value
+     * @param int         $status
+     * @param string      $section
+     * @param string      $title
+     * @param string      $url
+     * @param mixed       $current_value
+     * @param mixed       $expected_value
      * @param string|null $formatter
-     * @param string $comment
+     * @param string      $comment
      *
      * @return array
      */
@@ -1142,16 +1142,23 @@ class Diagnoser
         switch ($status) {
             case self::STATUS_OK:
                 $img = StateIcon::COMPLETE;
+
                 break;
+
             case self::STATUS_WARNING:
                 $img = StateIcon::WARNING;
+
                 break;
+
             case self::STATUS_ERROR:
                 $img = StateIcon::ERROR;
+
                 break;
+
             case self::STATUS_INFORMATION:
             default:
                 $img = ActionIcon::INFORMATION;
+
                 break;
         }
 
@@ -1193,15 +1200,21 @@ class Diagnoser
     public function format_yes_no_optional($value)
     {
         $return = '';
+
         switch ($value) {
             case 0:
                 $return = get_lang('No');
+
                 break;
+
             case 1:
                 $return = get_lang('Yes');
+
                 break;
+
             case 2:
                 $return = get_lang('Optional');
+
                 break;
         }
 
@@ -1225,11 +1238,12 @@ class Diagnoser
      */
     public function format_on_off($value)
     {
-        $value = intval($value);
+        $value = (int) $value;
         if ($value > 1) {
             // Greater than 1 values are shown "as-is", they may be interpreted as "On" later.
             return $value;
         }
+
         // 'On'/'Off' as in php.ini; not translated.
         return $value ? 'On' : 'Off';
     }

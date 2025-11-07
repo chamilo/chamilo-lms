@@ -467,7 +467,7 @@ function display_requirements(
     $timezone = checkPhpSettingExists('date.timezone');
 
     $phpVersion = phpversion();
-    $isVersionPassed = version_compare($phpVersion, REQUIRED_PHP_VERSION, '<=') <= 1;
+    $isVersionPassed = version_compare($phpVersion, REQUIRED_PHP_VERSION, '>=');
 
     $extensions = [];
     $extensions[] = [
@@ -1800,17 +1800,55 @@ function checkCanCreateFile(string $file): bool
  */
 function isUpdateAvailable(): bool
 {
-    $dotenv = new Dotenv();
     $envFile = api_get_path(SYMFONY_SYS_PATH) . '.env';
-    $dotenv->loadEnv($envFile);
+    if (!file_exists($envFile)) {
+        return false; // No .env -> fresh install
+    }
 
-    // Check if APP_INSTALLED is set and equals '1'
-    if (isset($_ENV['APP_INSTALLED']) && $_ENV['APP_INSTALLED'] === '1') {
+    $dotenv = new Dotenv();
+    try {
+        $dotenv->loadEnv($envFile);
+    } catch (\Throwable $e) {
+        // If .env cannot be parsed, play safe: no update banner
+        return false;
+    }
+
+    // Must be an installed platform
+    if (($_ENV['APP_INSTALLED'] ?? '') !== '1') {
+        return false;
+    }
+
+    // Compare DB version vs installer version
+    $versionInfo = require __DIR__.'/version.php';
+    $installerVersion = $versionInfo['new_version'] ?? null;
+
+    if (!$installerVersion) {
+        // If we cannot know installer version, do not show update banner
+        return false;
+    }
+
+    $dbVersion = null;
+    try {
+        connectToDatabase(
+            $_ENV['DATABASE_HOST'] ?? 'localhost',
+            $_ENV['DATABASE_USER'] ?? '',
+            $_ENV['DATABASE_PASSWORD'] ?? '',
+            $_ENV['DATABASE_NAME'] ?? '',
+            (int) ($_ENV['DATABASE_PORT'] ?? 3306)
+        );
+        $dbVersion = get_config_param_from_db('chamilo_database_version');
+    } catch (\Throwable $e) {
+        // If DB is unreachable but platform is marked installed, allow upgrade path
+        // so the UI can guide the admin.
         return true;
     }
 
-    // If APP_INSTALLED is not found or not set to '1', assume the application is not installed
-    return false;
+    if (empty($dbVersion)) {
+        // No version recorded -> offer upgrade path to normalize state
+        return true;
+    }
+
+    return version_compare($dbVersion, $installerVersion, '<');
 }
 
 /**

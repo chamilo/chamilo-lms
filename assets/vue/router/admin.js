@@ -43,7 +43,7 @@ export default {
     {
       name: "TermsConditionsView",
       path: "terms-conditions/view",
-      meta: { requiresAdmin: true, showBreadcrumb: true, },
+      meta: { showBreadcrumb: true, },
       component: () => import("../views/terms/Terms.vue"),
     },
   ],

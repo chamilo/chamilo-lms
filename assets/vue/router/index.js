@@ -264,8 +264,13 @@ const router = createRouter({
   ],
 })
 
+let navWaitTimer
 router.beforeEach(async (to, from, next) => {
   document.body.classList.add("cursor-wait")
+  if (navWaitTimer) clearTimeout(navWaitTimer)
+  navWaitTimer = window.setTimeout(() => {
+    document.body.classList.remove("cursor-wait")
+  }, 4000)
 
   const securityStore = useSecurityStore()
 
@@ -307,26 +312,48 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!securityStore.isLoading) {
+  try {
+    if (!securityStore.user && !securityStore.isLoading) {
       await securityStore.checkSession()
     }
 
-    if (securityStore.isAuthenticated) {
-      next()
-    } else {
+    const needsAuth = to.matched.some(r => r.meta?.requiresAuth)
+    if (needsAuth && !securityStore.isAuthenticated) {
       sessionStorage.clear()
-      next({
-        path: "/login",
-        query: { redirect: to.fullPath },
-      })
+      return next({ path: "/login", query: { redirect: to.fullPath } })
     }
-  } else {
-    next()
+
+    const wantsAdmin = to.matched.some(r => r.meta?.requiresAdmin === true)
+    const wantsSessionAdmin = to.matched.some(r => r.meta?.requiresSessionAdmin === true)
+
+    let allowed = true
+    if (wantsAdmin && wantsSessionAdmin) {
+      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+    } else if (wantsAdmin) {
+      allowed = !!securityStore.isAdmin
+    } else if (wantsSessionAdmin) {
+      allowed = !!securityStore.isSessionAdmin
+    }
+
+    if (!allowed) {
+      return next({ name: "Home", replace: true })
+    }
+
+    return next()
+  } catch (err) {
+    console.error("[RouterGuard] Unhandled error:", err)
+    return next({ name: "Home", replace: true })
   }
 })
 
 router.afterEach(() => {
+  if (navWaitTimer) clearTimeout(navWaitTimer)
+  document.body.classList.remove("cursor-wait")
+})
+
+router.onError((err) => {
+  console.error("[Router] onError:", err)
+  if (navWaitTimer) clearTimeout(navWaitTimer)
   document.body.classList.remove("cursor-wait")
 })
 

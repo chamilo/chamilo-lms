@@ -56,14 +56,6 @@ class ImsLtiPlugin extends Plugin
     }
 
     /**
-     * Get the plugin directory name.
-     */
-    public function get_name(): string
-    {
-        return 'ImsLti';
-    }
-
-    /**
      * Install the plugin. Setup the database.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException

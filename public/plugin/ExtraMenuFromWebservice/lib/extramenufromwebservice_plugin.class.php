@@ -184,9 +184,4 @@ class ExtraMenuFromWebservicePlugin extends Plugin
 
         return $importsArray;
     }
-
-    public function get_name()
-    {
-        return 'ExtraMenuFromWebservice';
-    }
 }

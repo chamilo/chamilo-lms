@@ -338,9 +338,4 @@ class CustomCertificatePlugin extends Plugin
 
         return $resultArray;
     }
-
-    public function get_name()
-    {
-        return 'CustomCertificate';
-    }
 }

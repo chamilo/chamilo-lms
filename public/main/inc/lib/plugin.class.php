@@ -106,7 +106,7 @@ class Plugin
         $result['comment'] = $this->get_comment();
         $result['version'] = $this->get_version();
         $result['author'] = $this->get_author();
-        $result['plugin_class'] = get_class($this);
+        $result['plugin_class'] = static::class;
         $result['is_course_plugin'] = $this->isCoursePlugin;
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
@@ -130,26 +130,10 @@ class Plugin
 
     /**
      * Returns the "system" name of the plugin in lowercase letters.
-     *
-     * @return string
      */
-    public function get_name()
+    public function get_name(): string
     {
-        $result = get_class($this);
-        $result = str_replace('Plugin', '', $result);
-        $result = strtolower($result);
-
-        return $result;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCamelCaseName()
-    {
-        $result = get_class($this);
-
-        return str_replace('Plugin', '', $result);
+        return str_replace('Plugin', '', static::class);
     }
 
     /**
@@ -254,7 +238,7 @@ class Plugin
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
                 if ("show_main_menu_tab" === $name) {
-                    $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
+                    $pluginName = $this->get_name();
                     $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
                     $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
                     $help = sprintf($help, $pluginUrl);
@@ -354,7 +338,7 @@ class Plugin
     {
         if ('tool_enable' === $name) {
             $isEnabled = Container::getPluginHelper()
-                ->isPluginEnabled($this->getCamelCaseName());
+                ->isPluginEnabled($this->get_name());
 
             return $isEnabled ? 'true' : 'false';
         }
@@ -841,7 +825,7 @@ class Plugin
      */
     public function manageTab($showTab, $filePath = 'index.php')
     {
-        $langString = str_replace('Plugin', '', get_class($this));
+        $langString = $this->get_name();
         $pluginUrl = 'plugin/'.$langString.'/'.$filePath;
 
         if ('true' === $showTab) {

@@ -202,9 +202,4 @@ class CourseHomeNotifyPlugin extends Plugin
             ],
         ];
     }
-
-    public function get_name()
-    {
-        return 'CourseHomeNotify';
-    }
 }

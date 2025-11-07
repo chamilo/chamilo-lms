@@ -109,16 +109,6 @@ class ExerciseSignaturePlugin extends Plugin
     }
 
     /**
-     * Get the plugin Name.
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return 'ExerciseSignature';
-    }
-
-    /**
      * Creates this plugin's related tables in the internal database.
      * Installs course fields in all courses.
      */

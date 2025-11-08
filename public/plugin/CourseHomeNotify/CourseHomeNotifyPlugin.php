@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\CourseHomeNotify\Entity\Notification;
 use Chamilo\PluginBundle\CourseHomeNotify\Entity\NotificationRelUser;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -17,9 +18,7 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     protected function __construct()
     {
-        $settings = [
-            self::SETTING_ENABLED => 'boolean',
-        ];
+        $settings = [];
 
         parent::__construct('0.1', 'Angel Fernando Quiroz Campos', $settings);
 
@@ -40,7 +39,7 @@ class CourseHomeNotifyPlugin extends Plugin
 
     /**
      * Install process.
-     * Create table in database. And setup Doctirne entity.
+     * Create table in database. And setup Doctrine entity.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException
      * @throws \Doctrine\DBAL\Exception
@@ -167,7 +166,7 @@ class CourseHomeNotifyPlugin extends Plugin
         $modal .= "<script>
             $(document).ready(function () {
                 \$('#course-home-notify-modal').modal(".json_encode($modalConfig).");
-                
+
                 \$('#course-home-notify-link').on('click', function () {
                     $('#course-home-notify-modal').modal('hide');
                 });
@@ -182,7 +181,7 @@ class CourseHomeNotifyPlugin extends Plugin
      */
     private function setCourseSettings()
     {
-        if ('true' !== $this->get(self::SETTING_ENABLED)) {
+        if (!Container::getPluginHelper()->isPluginEnabled($this->get_name())) {
             return;
         }
 

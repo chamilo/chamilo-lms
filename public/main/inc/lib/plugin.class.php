@@ -204,11 +204,14 @@ class Plugin
     {
         $result = new FormValidator($this->get_name());
 
+        $fields = $this->fields;
+        unset($fields['tool_enable']);
+
         $defaults = [];
         $checkboxGroup = [];
         $checkboxCollection = [];
 
-        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
+        if ($checkboxNames = array_keys($fields, 'checkbox')) {
             $pluginInfoCollection = api_get_settings('Plugins');
             foreach ($pluginInfoCollection as $pluginInfo) {
                 if (false !== array_search($pluginInfo['title'], $checkboxNames)) {
@@ -217,7 +220,7 @@ class Plugin
             }
         }
 
-        foreach ($this->fields as $name => $type) {
+        foreach ($fields as $name => $type) {
             $options = null;
             if (is_array($type) && isset($type['type']) && 'select' === $type['type']) {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
@@ -871,16 +874,16 @@ class Plugin
         $settings = $this->get_settings();
 
         if (empty($settings)) {
+            // plugin not installed or no configuration for current URL
+            if ($checkEnabled) {
+                return Container::getPluginHelper()->isPluginEnabled($this->get_name());
+            }
             return false;
         }
 
         if ($checkEnabled) {
-            if (
-                isset($settings['tool_enable']) &&
-                strtolower($settings['tool_enable']) === 'false'
-            ) {
-                return false;
-            }
+            // Source of truth in C2 is access_url_rel_plugin.active
+            return Container::getPluginHelper()->isPluginEnabled($this->get_name());
         }
 
         return true;

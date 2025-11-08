@@ -2831,7 +2831,7 @@ function api_get_setting_in_list($variable, $option)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
-    $helper = \Chamilo\CoreBundle\Framework\Container::getPluginHelper();
+    $helper = Container::getPluginHelper();
 
     // Preserve legacy expectation for tool_enable as string 'true'/'false'
     if ($variable === 'tool_enable') {

@@ -1590,11 +1590,10 @@ class Agenda
                     $sessionFilterActive = true;
                 }
 
+                // Include personal + platform events only when no session filter is active.
+                // When a session is selected, only session/course events will be shown.
                 if ($sessionFilterActive == false) {
-                    // Getting personal events
                     $this->getPersonalEvents($start, $end);
-
-                    // Getting platform/admin events
                     $this->getPlatformEvents($start, $end);
                 }
 

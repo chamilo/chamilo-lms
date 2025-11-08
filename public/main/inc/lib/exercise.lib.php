@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -6494,10 +6496,39 @@ EOT;
         array $filterDates = [],
         string $mainPath    = ''
     ) {
-        // Retrieve all attempt records for this exercise
-        $exerciseObj = new Exercise($courseId);
-        $results     = $exerciseObj->getExerciseAndResult($courseId, $sessionId, $exerciseId);
-        if (empty($results)) {
+        $em = Container::getEntityManager();
+
+        /** @var CourseEntity|null $course */
+        $course = $em->getRepository(CourseEntity::class)->find($courseId);
+        /** @var CQuiz|null $quiz */
+        $quiz   = $em->getRepository(CQuiz::class)->findOneBy(['iid' => $exerciseId]);
+        $session = null;
+
+        if (!$course) {
+            Display::addFlash(Display::return_message(get_lang('Course not found'), 'warning', false));
+            return false;
+        }
+        if (!$quiz) {
+            Display::addFlash(Display::return_message(get_lang('Test not found'), 'warning', false));
+            return false;
+        }
+        if ($sessionId > 0) {
+            $session = $em->getRepository(SessionEntity::class)->find($sessionId);
+            if (!$session) {
+                Display::addFlash(Display::return_message(get_lang('Session not found'), 'warning', false));
+                return false;
+            }
+        }
+
+        // Fetch exe_ids with Doctrine, accepting NULL/0 session when $sessionId == 0
+        $exeIds = self::findAttemptExeIdsForExport($course, $quiz, $session, $filterDates);
+
+        // Optional: hard fallback with native SQL to catch legacy session_id=0 rows if needed
+        if (empty($exeIds) && $sessionId === 0) {
+            $exeIds = self::findAttemptExeIdsFallbackSql($courseId, $exerciseId, $filterDates);
+        }
+
+        if (empty($exeIds)) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('No result found for export in this test.'),
@@ -6509,7 +6540,7 @@ EOT;
         }
 
         // Prepare a temporary folder for the PDFs
-        $exportName       = 'S' . $sessionId . '-C' . $courseId . '-T' . $exerciseId;
+        $exportName       = 'S' . (int)($sessionId) . '-C' . (int)($courseId) . '-T' . (int)($exerciseId);
         $baseDir          = api_get_path(SYS_ARCHIVE_PATH);
         $exportFolderPath = $baseDir . 'pdfexport-' . $exportName;
         if (is_dir($exportFolderPath)) {
@@ -6518,12 +6549,11 @@ EOT;
         mkdir($exportFolderPath, 0755, true);
 
         // Generate a PDF for each attempt
-        foreach ($results as $row) {
-            $exeId = (int) $row['exe_id'];
+        foreach ($exeIds as $exeId) {
             self::saveFileExerciseResultPdfDirect(
-                $exeId,
-                $courseId,
-                $sessionId,
+                (int)$exeId,
+                (int)$courseId,
+                (int)$sessionId,
                 $exportFolderPath
             );
         }
@@ -6551,28 +6581,109 @@ EOT;
         // Send the ZIP file to the browser or move it to mainPath
         if (!empty($mainPath)) {
             @rename($zipFilePath, $mainPath . '/pdfexport-' . $exportName . '.zip');
-        } else {
-            // close session and clear output buffers
-            session_write_close();
-            while (ob_get_level()) {
-                @ob_end_clean();
-            }
-
-            // send download headers
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="pdfexport-' . $exportName . '.zip"');
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($zipFilePath));
-
-            // output the file and remove it
-            readfile($zipFilePath);
-            @unlink($zipFilePath);
-            exit;
+            return true;
         }
+
+        session_write_close();
+        while (ob_get_level()) {
+            @ob_end_clean();
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="pdfexport-' . $exportName . '.zip"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($zipFilePath));
+
+        readfile($zipFilePath);
+        @unlink($zipFilePath);
+        exit;
+    }
+
+    /**
+     * Return exe_ids for export using Doctrine (handles NULL/0 sessions safely).
+     */
+    private static function findAttemptExeIdsForExport(
+        CourseEntity $course,
+        CQuiz $quiz,
+        ?SessionEntity $session,
+        array $filterDates
+    ): array {
+        $em = Container::getEntityManager();
+
+        $qb = $em->createQueryBuilder()
+            ->select('te.exeId AS exeId')
+            ->from(TrackEExercise::class, 'te')
+            ->where('te.course = :course')
+            ->andWhere('te.quiz = :quiz')
+            ->setParameter('course', $course)
+            ->setParameter('quiz', $quiz);
+
+        // Session filter:
+        if ($session) {
+            $qb->andWhere('te.session = :session')->setParameter('session', $session);
+        } else {
+            // Accept both NULL and legacy "0" values
+            // IDENTITY() extracts the FK raw value to match 0 if present
+            $qb->andWhere('(te.session IS NULL OR IDENTITY(te.session) = 0)');
+        }
+
+        // Date filters on exeDate
+        if (!empty($filterDates['start_date'])) {
+            $qb->andWhere('te.exeDate >= :start')
+                ->setParameter('start', new DateTime($filterDates['start_date']));
+        }
+        if (!empty($filterDates['end_date'])) {
+            $qb->andWhere('te.exeDate <= :end')
+                ->setParameter('end', new DateTime($filterDates['end_date']));
+        }
+
+        $qb->orderBy('te.exeDate', 'DESC')->setMaxResults(5000);
+
+        $rows = $qb->getQuery()->getScalarResult();
+        $exeIds = array_map(static fn($r) => (int)$r['exeId'], $rows);
+
+
+        return array_values(array_unique($exeIds));
+    }
+
+    /**
+     * Fallback with native SQL for very legacy rows (session_id=0 and column names).
+     */
+    private static function findAttemptExeIdsFallbackSql(
+        int $courseId,
+        int $quizIid,
+        array $filterDates
+    ): array {
+        $conn = Container::getEntityManager()->getConnection();
+
+        $sql = 'SELECT te.exe_id
+            FROM track_e_exercises te
+            WHERE te.c_id = :cid
+              AND te.exe_exo_id = :iid
+              AND (te.session_id IS NULL OR te.session_id = 0)';
+
+        $params = ['cid' => $courseId, 'iid' => $quizIid];
+        $types  = [];
+
+        if (!empty($filterDates['start_date'])) {
+            $sql .= ' AND te.exe_date >= :start';
+            $params['start'] = $filterDates['start_date'];
+        }
+        if (!empty($filterDates['end_date'])) {
+            $sql .= ' AND te.exe_date <= :end';
+            $params['end'] = $filterDates['end_date'];
+        }
+
+        $sql .= ' ORDER BY te.exe_date DESC LIMIT 5000';
+
+        $rows = $conn->fetchAllAssociative($sql, $params, $types);
+        $exeIds = array_map(static fn($r) => (int)$r['exe_id'], $rows);
+
+        return $exeIds;
     }
 
     /**

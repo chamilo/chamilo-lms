@@ -168,7 +168,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalHome(): Response
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return $this->redirectToRoute('homepage');
         }
 
@@ -179,7 +179,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalStart(): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
@@ -204,7 +204,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalContacts(): Response
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new Response('', 403);
         }
 
@@ -215,35 +215,73 @@ class ChatController extends AbstractResourceController implements CourseControl
     }
 
     #[Route(path: '/account/chat/api/heartbeat', name: 'chamilo_core_chat_api_heartbeat', options: ['expose' => true], methods: ['GET'])]
-    public function globalHeartbeat(): JsonResponse
+    public function globalHeartbeat(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $chat = new Chat();
+        $mode    = (string) $req->query->get('mode', 'min');
+        $sinceId = (int) $req->query->get('since_id', 0);
+        $peerId  = (int) $req->query->get('peer_id', 0);
 
+        $chat = new \Chat();
+
+        // NEW: ultra-tiny per-peer check (constant-time)
+        if ($mode === 'tiny' && $peerId > 0) {
+            $data = $chat->heartbeatTiny(api_get_user_id(), $peerId, $sinceId);
+            // Force ultra-small JSON and no-store
+            $resp = new JsonResponse($data);
+            $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            return $resp;
+        }
+
+        if ($mode === 'min') {
+            $data = $chat->heartbeatMin(api_get_user_id(), $sinceId);
+            $resp = new JsonResponse($data);
+            $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+            return $resp;
+        }
+
+        // Fallback (rare): full heartbeat (legacy)
         ob_start();
         $ret = $chat->heartbeat();
         $echoed = ob_get_clean();
+        if ($echoed !== '') return JsonResponse::fromJsonString($echoed);
+        if (is_string($ret)) return JsonResponse::fromJsonString($ret);
+        return new JsonResponse(is_array($ret) ? $ret : []);
+    }
 
-        if ('' !== $echoed) {
-            return JsonResponse::fromJsonString($echoed);
+    #[Route(
+        path: '/account/chat/api/history_since',
+        name: 'chamilo_core_chat_api_history_since',
+        options: ['expose' => true],
+        methods: ['GET']
+    )]
+    public function globalHistorySince(Request $req): JsonResponse
+    {
+        api_block_anonymous_users();
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
+            return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        if (\is_string($ret)) {
-            return JsonResponse::fromJsonString($ret);
-        }
+        $peerId  = (int) $req->query->get('user_id', 0);
+        $sinceId = (int) $req->query->get('since_id', 0);
+        if ($peerId <= 0) return new JsonResponse([]);
 
-        return new JsonResponse($ret ?? []);
+        $chat  = new \Chat();
+        $items = $chat->getIncomingSince($peerId, api_get_user_id(), $sinceId);
+        $resp  = new JsonResponse($items);
+        $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        return $resp;
     }
 
     #[Route(path: '/account/chat/api/send', name: 'chamilo_core_chat_api_send', options: ['expose' => true], methods: ['POST'])]
     public function globalSend(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
@@ -256,6 +294,10 @@ class ChatController extends AbstractResourceController implements CourseControl
         $echoed = ob_get_clean();
 
         if ('' !== $echoed) {
+            $trim = trim($echoed);
+            if (ctype_digit($trim)) {
+                return new JsonResponse(['id' => (int) $trim]);
+            }
             return JsonResponse::fromJsonString($echoed);
         }
 
@@ -270,7 +312,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalStatus(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
@@ -286,7 +328,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalHistory(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
@@ -313,7 +355,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalPreview(Request $req): Response
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new Response('', 403);
         }
 
@@ -326,7 +368,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalPresence(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
@@ -367,7 +409,7 @@ class ChatController extends AbstractResourceController implements CourseControl
     public function globalAck(Request $req): JsonResponse
     {
         api_block_anonymous_users();
-        if ('true' !== api_get_setting('allow_global_chat')) {
+        if ('true' !== api_get_setting('chat.allow_global_chat')) {
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 

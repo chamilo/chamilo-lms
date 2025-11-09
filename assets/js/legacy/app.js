@@ -431,6 +431,248 @@ $(document).scroll(function () {
   }
 })
 
+// focus first meaningful field + Enter=submit (any form, any container)
+;(function () {
+  // Avoid double-install
+  if (window.__A11Y_INSTALLED__) {
+    return
+  }
+  window.__A11Y_INSTALLED__ = true
+
+  const NS = "[A11Y]"
+  const boundForms = new WeakSet()
+  const TEXT_TYPES = new Set([
+    "text",
+    "email",
+    "password",
+    "search",
+    "url",
+    "tel",
+    "number",
+    "date",
+    "datetime-local",
+    "month",
+    "time",
+    "week",
+    "color",
+  ])
+
+  const isVisible = (el) => {
+    if (!el) return false
+    const s = getComputedStyle(el)
+    if (s.visibility === "hidden" || s.display === "none") return false
+    const r = el.getBoundingClientRect()
+    return r.width > 0 && r.height > 0
+  }
+
+  const inViewport = (el) => {
+    if (!el) return false
+    const r = el.getBoundingClientRect()
+    const h = window.innerHeight || document.documentElement.clientHeight
+    return r.top < h && r.bottom > 0
+  }
+
+  function listFocusable(root) {
+    const nodes = Array.from(
+      root.querySelectorAll(
+        [
+          'input:not([type="hidden"]):not([disabled])',
+          "textarea:not([disabled])",
+          "select:not([disabled])",
+          '[contenteditable="true"]',
+        ].join(","),
+      ),
+    )
+    return nodes.filter((el) => {
+      if (!isVisible(el)) return false
+      if (el.tagName === "INPUT") {
+        const type = (el.getAttribute("type") || "text").toLowerCase()
+        if (!TEXT_TYPES.has(type)) return false
+        if (el.readOnly) return false
+      }
+      return true
+    })
+  }
+
+  function pickFocusTarget(form) {
+    // explicit markers
+    const explicit = form.querySelector("[autofocus], [data-autofocus]")
+    if (explicit && isVisible(explicit)) return explicit
+
+    // 'title' or 'name'
+    const all = listFocusable(form)
+    const match = all.find((el) => {
+      const id = (el.id || "").toLowerCase()
+      const name = (el.name || "").toLowerCase()
+      return id.includes("title") || name.includes("title") || id === "name" || name === "name"
+    })
+    return match || all[0] || null
+  }
+
+  function focusWithRetries(el, attempt = 0) {
+    if (!el || !isVisible(el)) {
+      if (attempt === 0) console.log(NS, "No visible element to focus.")
+      return
+    }
+
+    // If Select2 hid the <select>, focus the visible selection
+    if (el.classList.contains("select2-hidden-accessible")) {
+      const s2 = el.nextElementSibling && el.nextElementSibling.querySelector(".select2-selection")
+      if (s2) el = s2
+    }
+
+    el.focus({ preventScroll: false })
+    const ok = document.activeElement === el
+    console.log(NS, `Focus attempt #${attempt + 1}:`, ok ? "OK" : "retry")
+    if (!ok && attempt < 8) setTimeout(() => focusWithRetries(el, attempt + 1), 60)
+  }
+
+  // Wait until element (or an ancestor) becomes visible
+  function waitVisible(el, cb, opts = { timeout: 12000, poll: 120 }) {
+    let done = false
+    const t0 = Date.now()
+
+    const stop = () => {
+      done = true
+      try {
+        mo.disconnect()
+      } catch {}
+      clearInterval(iv)
+    }
+
+    const tryCall = () => {
+      if (done) return
+      if (isVisible(el)) {
+        stop()
+        cb()
+      } else if (Date.now() - t0 > opts.timeout) {
+        stop()
+        console.warn(NS, "Timeout waiting for form visibility.")
+      }
+    }
+
+    // Observe style/class/DOM changes anywhere (subtree)
+    const mo = new MutationObserver(tryCall)
+    try {
+      mo.observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ["style", "class", "hidden", "open"],
+      })
+    } catch {}
+    const iv = setInterval(tryCall, opts.poll)
+    tryCall()
+  }
+
+  // ---------- core ----------
+  function bindEnterAndMaybeFocus(form) {
+    if (!form || boundForms.has(form)) return
+    boundForms.add(form)
+    form.dataset.a11yBound = "1"
+
+    // Enter = submit (capture on the form)
+    const onKey = (e) => {
+      if (e.key !== "Enter" || e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return
+      const t = e.target
+      if (!t) return
+      // Exceptions
+      if (t.tagName === "TEXTAREA" || t.isContentEditable) return
+      if (t.closest('[data-enter="ignore"], [data-no-enter-submit]')) return
+      if (t.type === "submit" || t.type === "button") return
+      if (t.type === "checkbox" || t.type === "radio" || t.type === "file" || t.type === "range" || t.type === "color")
+        return
+      if (t.tagName === "SELECT" && t.multiple) return
+      if (t.closest("form") !== form) return
+
+      e.preventDefault()
+      if (typeof form.requestSubmit === "function") {
+        form.requestSubmit()
+      } else {
+        const btn = form.querySelector('button[type="submit"], input[type="submit"]')
+        btn ? btn.click() : form.submit()
+      }
+    }
+    form.addEventListener("keydown", onKey, true)
+
+    // Focus only once per form unless you remove dataset flag
+    if (form.dataset.noAutofocus === "1") {
+      return
+    }
+
+    const doFocus = () => {
+      if (form.dataset.a11yFocusedOnce === "1") return
+      // Prefer a form that is in/near viewport if many exist
+      if (!inViewport(form) && document.querySelector("form[data-a11yFocusedOnce='1']")) {
+        // another form already took focus earlier
+        return
+      }
+      const target = pickFocusTarget(form)
+      requestAnimationFrame(() => setTimeout(() => focusWithRetries(target), 0))
+      form.dataset.a11yFocusedOnce = "1"
+    }
+
+    if (isVisible(form)) {
+      doFocus()
+    } else {
+      waitVisible(form, () => {
+        doFocus()
+      })
+    }
+  }
+
+  function scanAllForms() {
+    const forms = Array.from(document.getElementsByTagName("form"))
+    if (!forms.length) {
+      return
+    }
+    const vis = forms.filter(isVisible).length
+    forms.forEach(bindEnterAndMaybeFocus)
+  }
+
+  // global observer: new forms added dynamically
+  const globalObserver = new MutationObserver((muts) => {
+    let touched = false
+    for (const m of muts) {
+      if (m.type === "childList") {
+        if (m.addedNodes && m.addedNodes.length) {
+          m.addedNodes.forEach((n) => {
+            if (n.nodeType === 1 && (n.tagName === "FORM" || n.querySelector?.("form"))) {
+              touched = true
+            }
+          })
+        }
+      }
+    }
+    if (touched) {
+      scanAllForms()
+    }
+  })
+
+  try {
+    globalObserver.observe(document.documentElement, { childList: true, subtree: true })
+  } catch (_) {}
+
+  // Expose for manual trigger (debug)
+  window.A11Y = {
+    scanNow: scanAllForms,
+    _debug: { isVisible, pickFocusTarget },
+  }
+
+  // Auto-run (no manual activation needed)
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(scanAllForms, 0)
+  } else {
+    document.addEventListener("DOMContentLoaded", scanAllForms)
+  }
+  window.addEventListener("load", scanAllForms)
+
+  // Focus inside Bootstrap modals
+  document.addEventListener("shown.bs.modal", (e) => {
+    scanAllForms()
+  })
+})()
+
 function get_url_params(q, attribute) {
   var hash
   if (q != undefined) {

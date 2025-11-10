@@ -4338,6 +4338,11 @@ function api_get_item_visibility(
         $groupCondition = " AND to_group_id = '$group_id' ";
     }
 
+    $lpVisibilityCondition = '';
+    if ($tool === 'learnpath') {
+        $lpVisibilityCondition = " AND lastedit_type in ('LearnpathInvisible','LearnpathVisible') ";
+    }
+
     $sql = "SELECT visibility
             FROM $TABLE_ITEMPROPERTY
             WHERE
@@ -4345,7 +4350,7 @@ function api_get_item_visibility(
                 tool = '$tool' AND
                 ref = $id AND
                 (session_id = $session OR session_id = 0 OR session_id IS NULL)
-                $userCondition $typeCondition $groupCondition
+                $userCondition $typeCondition $groupCondition $lpVisibilityCondition
             ORDER BY session_id DESC, lastedit_date DESC
             LIMIT 1";
 

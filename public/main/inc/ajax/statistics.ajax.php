@@ -65,7 +65,7 @@ switch ($action) {
     case 'get_user_session':
         $list = [];
 
-        $urlList = UrlManager::get_url_data("url $order");
+        $urlList = UrlManager::get_url_data($order);
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session=';
 
         $start = isset($_GET['start']) ? Database::escape_string(api_get_utc_datetime($_GET['start'])) : api_get_utc_datetime();

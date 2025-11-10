@@ -35,16 +35,22 @@
 
       <div
         v-if="'new' === installerData.installType"
-        class="formgroup-inline"
+        class="formgroup-inline items-center gap-2"
       >
         <div
           v-t="'Administrator password'"
           class="field text-body-2 font-semibold"
         />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.passForm"
-        />
+        <div class="field text-body-2 flex items-center">
+          <span v-if="!showAdminPass">********</span>
+          <span v-else>{{ installerData.stepData.passForm }}</span>
+          <Button
+            icon="mdi mdi-eye"
+            class="p-button-text ml-2"
+            @click="toggleAdminPass"
+            :aria-label="showAdminPass ? t('Hide password') : t('Show password')"
+          />
+        </div>
         <div
           v-t="'You may want to change this'"
           class="field text-body-2 text-error"
@@ -395,6 +401,11 @@ const currentMigration = ref("")
 const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
 const errorMessage = ref("")
+
+const showAdminPass = ref(false)
+const toggleAdminPass = () => {
+  showAdminPass.value = !showAdminPass.value
+}
 
 function btnStep6OnClick() {
   loading.value = true

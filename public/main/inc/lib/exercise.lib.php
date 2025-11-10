@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -2960,71 +2962,51 @@ HOTSPOT;
             $weight = $result['weight'];
         }
 
-        $percentage = (100 * $score) / (0 != $weight ? $weight : 1);
+        // Keep a raw numeric percentage for model mapping BEFORE string formatting
+        $percentageRaw = (100 * (float) $score) / ((0 != (float) $weight) ? (float) $weight : 1);
+
         // Formats values
-        $percentage = float_format($percentage, 1);
-        $score = float_format($score, 1);
-        $weight = float_format($weight, 1);
+        $percentage = float_format($percentageRaw, 1);
+        $score      = float_format($score, 1);
+        $weight     = float_format($weight, 1);
 
         if ($roundValues) {
-            $whole = floor($percentage); // 1
-            $fraction = $percentage - $whole; // .25
+            $whole = floor($percentage);
+            $fraction = $percentage - $whole;
+            $percentage = ($fraction >= 0.5) ? ceil($percentage) : round($percentage);
 
-            // Formats values
-            if ($fraction >= 0.5) {
-                $percentage = ceil($percentage);
-            } else {
-                $percentage = round($percentage);
-            }
+            $whole = floor($score);
+            $fraction = $score - $whole;
+            $score = ($fraction >= 0.5) ? ceil($score) : round($score);
 
-            $whole = floor($score); // 1
-            $fraction = $score - $whole; // .25
-            if ($fraction >= 0.5) {
-                $score = ceil($score);
-            } else {
-                $score = round($score);
-            }
+            $whole = floor($weight);
+            $fraction = $weight - $whole;
+            $weight = ($fraction >= 0.5) ? ceil($weight) : round($weight);
+        } else {
+            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
+            $score      = float_format($score, 1, $decimalSeparator, $thousandSeparator);
+            $weight     = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+        }
 
-            $whole = floor($weight); // 1
-            $fraction = $weight - $whole; // .25
-            if ($fraction >= 0.5) {
-                $weight = ceil($weight);
-            } else {
+        // Build base HTML (percentage or score/weight)
+        if ($show_percentage) {
+            $percentageSign = $hidePercentageSign ? '' : ' %';
+            $html = $show_only_percentage
+                ? ($percentage . $percentageSign)
+                : ($percentage . $percentageSign . ' (' . $score . ' / ' . $weight . ')');
+        } else {
+            if ($removeEmptyDecimals && ScoreDisplay::hasEmptyDecimals($weight)) {
                 $weight = round($weight);
             }
-        } else {
-            // Formats values
-            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-            $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
-            $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+            $html = $score . ' / ' . $weight;
         }
 
-        if ($show_percentage) {
-            $percentageSign = ' %';
-            if ($hidePercentageSign) {
-                $percentageSign = '';
-            }
-            $html = $percentage."$percentageSign ($score / $weight)";
-            if ($show_only_percentage) {
-                $html = $percentage.$percentageSign;
-            }
-        } else {
-            if ($removeEmptyDecimals) {
-                if (ScoreDisplay::hasEmptyDecimals($weight)) {
-                    $weight = round($weight);
-                }
-            }
-            $html = $score.' / '.$weight;
+        $bucket = self::convertScoreToModel($percentageRaw);
+        if ($bucket !== null) {
+            $html = self::getModelStyle($bucket, $percentageRaw);
         }
 
-        // Over write score
-        $scoreBasedInModel = self::convertScoreToModel($percentage);
-        if (!empty($scoreBasedInModel)) {
-            $html = $scoreBasedInModel;
-        }
-
-        // Ignore other formats and use the configuration['exercise_score_format'] value
-        // But also keep the round values settings.
+        // If the platform forces a format, it overrides everything (including the model badge)
         $format = (int) api_get_setting('exercise.exercise_score_format');
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
@@ -3039,9 +3021,64 @@ HOTSPOT;
      *
      * @return string
      */
-    public static function getModelStyle($model, $percentage)
+    public static function getModelStyle($bucket, $percentage)
     {
-        return '<span class="'.$model['css_class'].' p-2">'.$model['name'].'</span>';
+        $rawClass = (string) ($bucket['css_class'] ?? '');
+        $twClass  = self::mapScoreCssClass($rawClass);
+
+        // Accept both 'name' and 'variable'
+        $key   = isset($bucket['name']) ? 'name' : (isset($bucket['variable']) ? 'variable' : null);
+        $raw   = $key ? (string) $bucket[$key] : '';
+        $label = $raw !== '' ? get_lang($raw) : '';
+        $show  = (int) ($bucket['display_score_name'] ?? 0) === 1;
+
+        $base = 'inline-block px-2 py-1 rounded';
+
+        if ($show && $label !== '') {
+            return '<span class="' . htmlspecialchars($base . ' ' . $twClass) . '">' .
+                htmlspecialchars($label) . '</span>';
+        }
+
+        return '<span class="' . htmlspecialchars($base . ' ' . $twClass) . '" ' .
+            'title="' . htmlspecialchars($label) . '" aria-label="' . htmlspecialchars($label) . '">' .
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+            '</span>';
+    }
+
+    /**
+     * Map legacy css_class (e.g., "btn-danger") to Tailwind utility classes
+     * defined in Chamilo 2's theme (danger/success/warning/info).
+     * If a Tailwind class list is already provided, pass-through.
+     */
+    private static function mapScoreCssClass(string $cssClass): string
+    {
+        $cssClass = trim($cssClass);
+
+        // Legacy → Tailwind mapping
+        $map = [
+            'btn-success' => 'bg-success text-success-button-text',
+            'btn-warning' => 'bg-warning text-warning-button-text',
+            'btn-danger'  => 'bg-danger text-danger-button-text',
+            'btn-info'    => 'bg-info text-info-button-text',
+
+            // Also accept short tokens if someone uses "success" directly
+            'success' => 'bg-success text-success-button-text',
+            'warning' => 'bg-warning text-warning-button-text',
+            'danger'  => 'bg-danger text-danger-button-text',
+            'info'    => 'bg-info text-info-button-text',
+        ];
+
+        if (isset($map[$cssClass])) {
+            return $map[$cssClass];
+        }
+
+        // If it already looks like Tailwind utility classes, keep as-is
+        if (strpos($cssClass, ' ') !== false || preg_match('/[a-z]+-[a-z0-9\-]+/i', $cssClass)) {
+            return $cssClass;
+        }
+
+        // Neutral fallback
+        return 'bg-gray-20 text-gray-90';
     }
 
     /**
@@ -3049,53 +3086,68 @@ HOTSPOT;
      *
      * @return string
      */
-    public static function convertScoreToModel($percentage)
+    public static function convertScoreToModel($percentage): ?array
     {
         $model = self::getCourseScoreModel();
-        if (!empty($model)) {
-            $scoreWithGrade = [];
-            foreach ($model['score_list'] as $item) {
-                if ($percentage >= $item['min'] && $percentage <= $item['max']) {
-                    $scoreWithGrade = $item;
-                    break;
-                }
-            }
+        if (empty($model) || empty($model['score_list'])) {
+            return null;
+        }
 
-            if (!empty($scoreWithGrade)) {
-                return self::getModelStyle($scoreWithGrade, $percentage);
+        foreach ($model['score_list'] as $bucket) {
+            $min = (float) ($bucket['min'] ?? 0);
+            $max = (float) ($bucket['max'] ?? 0);
+
+            if ($percentage >= $min && $percentage <= $max) {
+                // Propagate the model flag to the bucket
+                $bucket['display_score_name'] = (int) ($model['display_score_name'] ?? 0);
+                // Precompute label for convenience (optional)
+                $bucket['label'] = self::scoreLabel($bucket);
+                return $bucket;
             }
         }
 
-        return '';
+        return null;
+    }
+
+    private static function scoreLabel(array $row): string
+    {
+        $key = isset($row['name']) ? 'name' : (isset($row['variable']) ? 'variable' : null);
+        if (!$key) {
+            return '';
+        }
+        $value = (string) $row[$key];
+        return get_lang($value);
     }
 
     /**
      * @return array
      */
-    public static function getCourseScoreModel()
+    public static function getCourseScoreModel(): array
     {
         $modelList = self::getScoreModels();
-
-        if (empty($modelList)) {
+        if (empty($modelList) || empty($modelList['models'])) {
             return [];
         }
 
-        $courseInfo = api_get_course_info();
-        if (!empty($courseInfo)) {
-            $scoreModelId = api_get_course_setting('score_model_id');
-            if (-1 != $scoreModelId) {
-                $modelIdList = array_column($modelList['models'], 'id');
-                if (in_array($scoreModelId, $modelIdList)) {
-                    foreach ($modelList['models'] as $item) {
-                        if ($item['id'] == $scoreModelId) {
-                            return $item;
-                        }
-                    }
+        // Read the configured model id from course settings
+        $scoreModelId = (int) api_get_course_setting('score_model_id');
+
+        // first available model
+        $selected = $modelList['models'][0];
+
+        if ($scoreModelId !== -1) {
+            foreach ($modelList['models'] as $m) {
+                if ((int) ($m['id'] ?? 0) === $scoreModelId) {
+                    $selected = $m;
+                    break;
                 }
             }
         }
 
-        return [];
+        // do NOT show name unless explicitly enabled
+        $selected['display_score_name'] = (int) ($selected['display_score_name'] ?? 0);
+
+        return $selected;
     }
 
     /**
@@ -6494,10 +6546,39 @@ EOT;
         array $filterDates = [],
         string $mainPath    = ''
     ) {
-        // Retrieve all attempt records for this exercise
-        $exerciseObj = new Exercise($courseId);
-        $results     = $exerciseObj->getExerciseAndResult($courseId, $sessionId, $exerciseId);
-        if (empty($results)) {
+        $em = Container::getEntityManager();
+
+        /** @var CourseEntity|null $course */
+        $course = $em->getRepository(CourseEntity::class)->find($courseId);
+        /** @var CQuiz|null $quiz */
+        $quiz   = $em->getRepository(CQuiz::class)->findOneBy(['iid' => $exerciseId]);
+        $session = null;
+
+        if (!$course) {
+            Display::addFlash(Display::return_message(get_lang('Course not found'), 'warning', false));
+            return false;
+        }
+        if (!$quiz) {
+            Display::addFlash(Display::return_message(get_lang('Test not found'), 'warning', false));
+            return false;
+        }
+        if ($sessionId > 0) {
+            $session = $em->getRepository(SessionEntity::class)->find($sessionId);
+            if (!$session) {
+                Display::addFlash(Display::return_message(get_lang('Session not found'), 'warning', false));
+                return false;
+            }
+        }
+
+        // Fetch exe_ids with Doctrine, accepting NULL/0 session when $sessionId == 0
+        $exeIds = self::findAttemptExeIdsForExport($course, $quiz, $session, $filterDates);
+
+        // Optional: hard fallback with native SQL to catch legacy session_id=0 rows if needed
+        if (empty($exeIds) && $sessionId === 0) {
+            $exeIds = self::findAttemptExeIdsFallbackSql($courseId, $exerciseId, $filterDates);
+        }
+
+        if (empty($exeIds)) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('No result found for export in this test.'),
@@ -6509,7 +6590,7 @@ EOT;
         }
 
         // Prepare a temporary folder for the PDFs
-        $exportName       = 'S' . $sessionId . '-C' . $courseId . '-T' . $exerciseId;
+        $exportName       = 'S' . (int)($sessionId) . '-C' . (int)($courseId) . '-T' . (int)($exerciseId);
         $baseDir          = api_get_path(SYS_ARCHIVE_PATH);
         $exportFolderPath = $baseDir . 'pdfexport-' . $exportName;
         if (is_dir($exportFolderPath)) {
@@ -6518,12 +6599,11 @@ EOT;
         mkdir($exportFolderPath, 0755, true);
 
         // Generate a PDF for each attempt
-        foreach ($results as $row) {
-            $exeId = (int) $row['exe_id'];
+        foreach ($exeIds as $exeId) {
             self::saveFileExerciseResultPdfDirect(
-                $exeId,
-                $courseId,
-                $sessionId,
+                (int)$exeId,
+                (int)$courseId,
+                (int)$sessionId,
                 $exportFolderPath
             );
         }
@@ -6551,28 +6631,109 @@ EOT;
         // Send the ZIP file to the browser or move it to mainPath
         if (!empty($mainPath)) {
             @rename($zipFilePath, $mainPath . '/pdfexport-' . $exportName . '.zip');
-        } else {
-            // close session and clear output buffers
-            session_write_close();
-            while (ob_get_level()) {
-                @ob_end_clean();
-            }
-
-            // send download headers
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/zip');
-            header('Content-Disposition: attachment; filename="pdfexport-' . $exportName . '.zip"');
-            header('Content-Transfer-Encoding: binary');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($zipFilePath));
-
-            // output the file and remove it
-            readfile($zipFilePath);
-            @unlink($zipFilePath);
-            exit;
+            return true;
         }
+
+        session_write_close();
+        while (ob_get_level()) {
+            @ob_end_clean();
+        }
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="pdfexport-' . $exportName . '.zip"');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($zipFilePath));
+
+        readfile($zipFilePath);
+        @unlink($zipFilePath);
+        exit;
+    }
+
+    /**
+     * Return exe_ids for export using Doctrine (handles NULL/0 sessions safely).
+     */
+    private static function findAttemptExeIdsForExport(
+        CourseEntity $course,
+        CQuiz $quiz,
+        ?SessionEntity $session,
+        array $filterDates
+    ): array {
+        $em = Container::getEntityManager();
+
+        $qb = $em->createQueryBuilder()
+            ->select('te.exeId AS exeId')
+            ->from(TrackEExercise::class, 'te')
+            ->where('te.course = :course')
+            ->andWhere('te.quiz = :quiz')
+            ->setParameter('course', $course)
+            ->setParameter('quiz', $quiz);
+
+        // Session filter:
+        if ($session) {
+            $qb->andWhere('te.session = :session')->setParameter('session', $session);
+        } else {
+            // Accept both NULL and legacy "0" values
+            // IDENTITY() extracts the FK raw value to match 0 if present
+            $qb->andWhere('(te.session IS NULL OR IDENTITY(te.session) = 0)');
+        }
+
+        // Date filters on exeDate
+        if (!empty($filterDates['start_date'])) {
+            $qb->andWhere('te.exeDate >= :start')
+                ->setParameter('start', new DateTime($filterDates['start_date']));
+        }
+        if (!empty($filterDates['end_date'])) {
+            $qb->andWhere('te.exeDate <= :end')
+                ->setParameter('end', new DateTime($filterDates['end_date']));
+        }
+
+        $qb->orderBy('te.exeDate', 'DESC')->setMaxResults(5000);
+
+        $rows = $qb->getQuery()->getScalarResult();
+        $exeIds = array_map(static fn($r) => (int)$r['exeId'], $rows);
+
+
+        return array_values(array_unique($exeIds));
+    }
+
+    /**
+     * Fallback with native SQL for very legacy rows (session_id=0 and column names).
+     */
+    private static function findAttemptExeIdsFallbackSql(
+        int $courseId,
+        int $quizIid,
+        array $filterDates
+    ): array {
+        $conn = Container::getEntityManager()->getConnection();
+
+        $sql = 'SELECT te.exe_id
+            FROM track_e_exercises te
+            WHERE te.c_id = :cid
+              AND te.exe_exo_id = :iid
+              AND (te.session_id IS NULL OR te.session_id = 0)';
+
+        $params = ['cid' => $courseId, 'iid' => $quizIid];
+        $types  = [];
+
+        if (!empty($filterDates['start_date'])) {
+            $sql .= ' AND te.exe_date >= :start';
+            $params['start'] = $filterDates['start_date'];
+        }
+        if (!empty($filterDates['end_date'])) {
+            $sql .= ' AND te.exe_date <= :end';
+            $params['end'] = $filterDates['end_date'];
+        }
+
+        $sql .= ' ORDER BY te.exe_date DESC LIMIT 5000';
+
+        $rows = $conn->fetchAllAssociative($sql, $params, $types);
+        $exeIds = array_map(static fn($r) => (int)$r['exe_id'], $rows);
+
+        return $exeIds;
     }
 
     /**

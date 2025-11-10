@@ -894,25 +894,53 @@ class IndexBlocksController extends BaseController
         $plugins = $this->pluginRepository->getInstalledPlugins();
 
         foreach ($plugins as $plugin) {
+            // getPluginInfo() might fail to build the plugin object; never assume 'obj' exists
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
 
-            /** @var Plugin $objPlugin */
-            $objPlugin = $pluginInfo['obj'];
+            // Normalize/fallbacks
+            if (!\is_array($pluginInfo)) {
+                // Defensive: unexpected structure → skip
+                error_log(sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+                continue;
+            }
+
+            /** @var Plugin|null $objPlugin */
+            $objPlugin = $pluginInfo['obj'] ?? null;
+
+            if (!$objPlugin instanceof Plugin) {
+                // Defensive: plugin could not be instantiated (e.g. throws in constructor)
+                error_log(sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+                continue;
+            }
+
+            // Per-URL configuration
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
-            $configuration = $pluginInUrl->getConfiguration();
+            $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            if (!$configuration) {
+            if (!$configuration || !isset($configuration['regions'])) {
                 continue;
             }
 
-            if (!\in_array('menu_administrator', $configuration['regions'] ?? [])) {
+            // Only show plugins that declare the admin menu region
+            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
                 continue;
             }
+
+            // Build admin URL defensively (some plugins may throw when building URLs)
+            try {
+                $adminUrl = $objPlugin->getAdminUrl();
+            } catch (\Throwable $e) {
+                error_log(sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+                continue;
+            }
+
+            // Label fallback to DB title if pluginInfo misses 'title'
+            $label = (string) ($pluginInfo['title'] ?? $plugin->getTitle());
 
             $items[] = [
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
-                'url' => $objPlugin->getAdminUrl(),
-                'label' => $pluginInfo['title'],
+                'url'   => $adminUrl,
+                'label' => $label,
             ];
         }
 

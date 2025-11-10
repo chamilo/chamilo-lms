@@ -901,7 +901,7 @@ class IndexBlocksController extends BaseController
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
             $configuration = $pluginInUrl->getConfiguration();
 
-            if ($accessUrl->getId() !== $pluginInUrl->getUrl()?->getId()) {
+            if (!$configuration) {
                 continue;
             }
 

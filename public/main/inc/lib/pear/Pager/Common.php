@@ -517,8 +517,14 @@ class Pager_Common
         'currentPage',
     );
 
+    private string $_url;
+
     // }}}
     // {{{ build()
+    /**
+     * @var array|mixed
+     */
+    private array $_pageData = [];
 
     /**
      * Generate or refresh the links and paged data after a call to setOptions()

@@ -799,76 +799,95 @@ class CourseManager
         $status = STUDENT,
         $sessionId = 0,
         $userCourseCategoryId = 0,
-        $checkTeacherPermission = true
+        $checkTeacherPermission = true,
+        array $opts = []
     ) {
-        $userId = (int) $userId;
-        $status = (int) $status;
+        $wantResult = !empty($opts['result']);                 // false => return bool (legacy)
+        $emitFlash  = !array_key_exists('flash',  $opts) ? true : (bool)$opts['flash'];   // default: true
+        $sendEmails = !array_key_exists('emails', $opts) ? true : (bool)$opts['emails'];  // default: true
 
-        if (empty($userId) || empty($courseId)) {
-            return false;
+        // Small helper to output consistently
+        $out = static function (bool $ok, string $code, string $msg, string $flashType = 'normal') use ($wantResult, $emitFlash) {
+            // Show flash only when enabled (avoid CLI noise or JSON UIs)
+            if ($emitFlash) {
+                Display::addFlash(Display::return_message($msg, $flashType));
+            }
+            return $wantResult ? ['ok' => $ok, 'code' => $code, 'message' => $msg] : $ok;
+        };
+
+        $userId   = (int) $userId;
+        $courseId = (int) $courseId;
+        $status   = (int) $status;
+
+        if ($userId <= 0 || $courseId <= 0) {
+            return $out(false, 'INVALID_ARGS', get_lang('Invalid parameters'), 'warning');
         }
 
         $course = api_get_course_entity($courseId);
-
-        if (null === $course) {
-            Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));
-
-            return false;
+        if (!$course) {
+            return $out(false, 'COURSE_NOT_FOUND', get_lang("This course doesn't exist"), 'warning');
         }
 
         $user = api_get_user_entity($userId);
-
-        if (null === $user) {
-            Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist'), 'warning'));
-
-            return false;
+        if (!$user) {
+            return $out(false, 'USER_NOT_FOUND', get_lang("This user doesn't exist"), 'warning');
         }
 
         $courseCode = $course->getCode();
         $userCourseCategoryId = (int) $userCourseCategoryId;
-        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-        $status = STUDENT === $status || COURSEMANAGER === $status ? $status : STUDENT;
+        $sessionId = $sessionId ? (int) $sessionId : (int) api_get_session_id();
+        $status = (STUDENT === $status || COURSEMANAGER === $status) ? $status : STUDENT;
 
-        if (!empty($sessionId)) {
-            SessionManager::subscribe_users_to_session_course(
-                [$userId],
-                $sessionId,
-                $courseCode
+        if ($sessionId > 0) {
+            SessionManager::subscribe_users_to_session_course([$userId], $sessionId, $courseCode);
+            $msg = sprintf(
+                get_lang('User %s has been registered to course %s'),
+                UserManager::formatUserFullName($user, true),
+                $course->getTitle()
             );
+            return $out(true, 'SESSION_SUBSCRIBED_OK', $msg, 'normal');
+        }
 
-            return true;
-        } else {
-            // Check whether the user has not been already subscribed to the course.
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE
-                        user_id = $userId AND
-                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        c_id = $courseId
-                    ";
-            if (Database::num_rows(Database::query($sql)) > 0) {
-                Display::addFlash(Display::return_message(get_lang('Already registered in course'), 'warning'));
+        // Already subscribed?
+        $sql = "SELECT 1
+            FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+            WHERE user_id = $userId
+              AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+              AND c_id = $courseId";
+        if (Database::num_rows(Database::query($sql)) > 0) {
+            return $out(false, 'ALREADY_SUBSCRIBED', get_lang('Already registered in course'), 'warning');
+        }
 
-                return false;
+        // Check course allows subscription (non-admin teachers)
+        if ($checkTeacherPermission && !api_is_course_admin()) {
+            if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
+                return $out(false, 'SUBSCRIPTION_FORBIDDEN', get_lang('Subscription not allowed'), 'warning');
             }
+        }
 
-            if ($checkTeacherPermission && !api_is_course_admin()) {
-                // Check in advance whether subscription is allowed or not for this course.
-                if (SUBSCRIBE_NOT_ALLOWED === (int) $course->getSubscribe()) {
-                    Display::addFlash(Display::return_message(get_lang('Subscription not allowed'), 'warning'));
-
-                    return false;
-                }
+        // Global limit (includes teachers) - platform.hosting_limit_users_per_course
+        $globalLimit = (int) api_get_setting('platform.hosting_limit_users_per_course'); // 0 => disabled
+        if ($globalLimit > 0) {
+            $sqlCount = "SELECT COUNT(*) AS total
+                     FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                     WHERE c_id = $courseId
+                       AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+            $res = Database::query($sqlCount);
+            $row = Database::fetch_array($res, 'ASSOC');
+            $current = (int) ($row['total'] ?? 0);
+            if ($current >= $globalLimit) {
+                return $out(false, 'GLOBAL_LIMIT_REACHED', get_lang('The maximum number of users for this course has been reached.'), 'warning');
             }
+        }
 
-            if (STUDENT === $status) {
-                // Check if max students per course extra field is set
-                $extraFieldValue = new ExtraFieldValue('course');
-                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-                    $courseId,
-                    'max_subscribed_students'
-                );
-                if (!empty($value) && isset($value['value']) && '' !== $value['value']) {
-                    $maxStudents = (int) $value['value'];
+        // Per-course student limit (only if NO global limit)
+        if ($status === STUDENT && $globalLimit <= 0) {
+            $efv = new ExtraFieldValue('course');
+            $val = $efv->get_values_by_handler_and_field_variable($courseId, 'max_subscribed_students');
+            if (!empty($val) && isset($val['value']) && $val['value'] !== '') {
+                $maxStudents = (int) $val['value'];
+                if ($maxStudents > 0) {
+                    // With $count=true returns number of students
                     $count = self::get_user_list_from_course_code(
                         $courseCode,
                         0,
@@ -878,89 +897,58 @@ class CourseManager
                         true,
                         false
                     );
-
                     if ($count >= $maxStudents) {
-                        Display::addFlash(
-                            Display::return_message(
-                                get_lang(
-                                    'The maximum number of student has already been reached, it is not possible to subscribe more student.'
-                                ),
-                                'warning'
-                            )
+                        return $out(
+                            false,
+                            'COURSE_LIMIT_REACHED',
+                            get_lang('The maximum number of student has already been reached, it is not possible to subscribe more student.'),
+                            'warning'
                         );
-
-                        return false;
                     }
                 }
             }
+        }
 
-            $maxSort = api_max_sort_value(0, $userId) + 1;
+        // Insert subscription
+        $maxSort = api_max_sort_value(0, $userId) + 1;
+        $insertId = self::insertUserInCourse(
+            $user,
+            $course,
+            ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
+        );
 
-            $insertId = self::insertUserInCourse(
-                $user,
-                $course,
-                ['status' => $status, 'sort' => $maxSort, 'user_course_cat' => $userCourseCategoryId]
-            );
+        if (!$insertId) {
+            return $out(false, 'INSERT_FAILED', get_lang('Unexpected error while subscribing the user'), 'warning');
+        }
 
-            if ($insertId) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf(
-                            get_lang('User %s has been registered to course %s'),
-                            UserManager::formatUserFullName($user, true),
-                            $course->getTitle()
-                        )
-                    )
+        // Success + optional emails
+        $okMsg = sprintf(
+            get_lang('User %s has been registered to course %s'),
+            UserManager::formatUserFullName($user, true),
+            $course->getTitle()
+        );
+
+        if ($sendEmails) {
+            $sendToStudent = (int) api_get_course_setting('email_alert_student_on_manual_subscription', $course);
+            if (1 === $sendToStudent) {
+                $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
+                $message = sprintf(
+                    get_lang('Hello %s, you have been enrolled in the course %s.'),
+                    UserManager::formatUserFullName($user, true),
+                    $course->getTitle()
                 );
-
-                $sendToStudent = (int) api_get_course_setting('email_alert_student_on_manual_subscription', $course);
-                if (1 === $sendToStudent) {
-                    $subject = get_lang('You have been enrolled in the course').' '.$course->getTitle();
-                    $message = sprintf(
-                        get_lang('Hello %s, you have been enrolled in the course %s.'),
-                        UserManager::formatUserFullName($user, true),
-                        $course->getTitle()
-                    );
-
-                    MessageManager::send_message_simple(
-                        $userId,
-                        $subject,
-                        $message,
-                        api_get_user_id(),
-                        false,
-                        true
-                    );
-                }
-
-                $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
-
-                if (1 === $send) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseId,
-                        false
-                    );
-                } elseif (2 === $send) {
-                    self::email_to_tutor(
-                        $userId,
-                        $courseId,
-                        true
-                    );
-                }
-
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course);
-                if (1 === $subscribe) {
-                    /*$forums = get_forums(0,  true, $sessionId);
-                    foreach ($forums as $forum) {
-                        set_notification('forum', $forum->getIid(), false, $userInfo, $courseInfo);
-                    }*/
-                }
-
-                return true;
+                MessageManager::send_message_simple($userId, $subject, $message, api_get_user_id(), false, true);
             }
 
-            return false;
+            $send = (int) api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course);
+            if (1 === $send) {
+                self::email_to_tutor($userId, $courseId, false);
+            } elseif (2 === $send) {
+                self::email_to_tutor($userId, $courseId, true);
+            }
         }
+
+        return $out(true, 'COURSE_SUBSCRIBED_OK', $okMsg, 'normal');
     }
 
     /**

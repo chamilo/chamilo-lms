@@ -57,4 +57,69 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * Count all subscriptions (any status) for the given course ID.
+     * Optionally exclude a specific relationType (e.g., RRHH).
+     *
+     * @param int        $courseId
+     * @param int|null   $excludeRelationType If provided, rows with this relationType are excluded
+     */
+    public function countAllByCourseId(int $courseId, ?int $excludeRelationType = null): int
+    {
+        $qb = $this->createQueryBuilder('cru')
+            ->select('COUNT(cru.id)')
+            ->innerJoin('cru.course', 'c')
+            ->andWhere('c.id = :cid')
+            ->setParameter('cid', $courseId);
+
+        if (null !== $excludeRelationType) {
+            $qb->andWhere('cru.relationType <> :rt')
+                ->setParameter('rt', $excludeRelationType);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Compute a capacity snapshot for UI (limit/used/left/is_full).
+     * This only considers the global hosting limit and an optional per-course limit
+     * already computed by caller. A limit of 0 means "no limit".
+     *
+     * @param int        $courseId
+     * @param int|null   $perCourseLimit  Optional course-level limit (e.g., extra field). If provided, the effective
+     *                                    limit will be min(global, per-course). If null, only global limit is used.
+     *
+     * @return array{limit:int, used:int, left:int|null, is_full:bool}
+     */
+    public function getCapacitySnapshot(int $courseId, ?int $perCourseLimit = null): array
+    {
+        // Read global limit (0 means unlimited)
+        $global = (int) api_get_setting('hosting_limit_users_per_course');
+
+        // Effective limit resolution rule:
+        // - if per-course limit is provided and > 0, use min(global, per-course) when global > 0, else per-course
+        // - else use global as-is (0 => unlimited)
+        $limit = 0;
+        if ($perCourseLimit && $perCourseLimit > 0) {
+            $limit = $global > 0 ? min($global, $perCourseLimit) : $perCourseLimit;
+        } else {
+            $limit = $global;
+        }
+
+        if ($limit <= 0) {
+            return ['limit' => 0, 'used' => 0, 'left' => null, 'is_full' => false];
+        }
+
+        // Exclude RRHH relation type if available (keeps legacy behavior)
+        $exclude = \defined('COURSE_RELATION_TYPE_RRHH') ? COURSE_RELATION_TYPE_RRHH : null;
+        $used = $this->countAllByCourseId($courseId, $exclude);
+
+        return [
+            'limit'   => $limit,
+            'used'    => $used,
+            'left'    => max(0, $limit - $used),
+            'is_full' => $used >= $limit,
+        ];
+    }
 }

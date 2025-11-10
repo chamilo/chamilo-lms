@@ -377,6 +377,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups(['course:read'])]
     public bool $subscribed = false;
 
+    #[Groups(['course:read'])]
+    public ?int $nb_students = null;
+
+    #[Groups(['course:read'])]
+    public ?int $max_students = null;
+
+    #[Groups(['course:read'])]
+    public bool $is_full = false;
+
     #[SerializedName('allowSelfSignup')]
     #[Groups(['course:read','session:read'])]
     public function getAllowSelfSignup(): bool

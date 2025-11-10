@@ -2962,71 +2962,51 @@ HOTSPOT;
             $weight = $result['weight'];
         }
 
-        $percentage = (100 * $score) / (0 != $weight ? $weight : 1);
+        // Keep a raw numeric percentage for model mapping BEFORE string formatting
+        $percentageRaw = (100 * (float) $score) / ((0 != (float) $weight) ? (float) $weight : 1);
+
         // Formats values
-        $percentage = float_format($percentage, 1);
-        $score = float_format($score, 1);
-        $weight = float_format($weight, 1);
+        $percentage = float_format($percentageRaw, 1);
+        $score      = float_format($score, 1);
+        $weight     = float_format($weight, 1);
 
         if ($roundValues) {
-            $whole = floor($percentage); // 1
-            $fraction = $percentage - $whole; // .25
+            $whole = floor($percentage);
+            $fraction = $percentage - $whole;
+            $percentage = ($fraction >= 0.5) ? ceil($percentage) : round($percentage);
 
-            // Formats values
-            if ($fraction >= 0.5) {
-                $percentage = ceil($percentage);
-            } else {
-                $percentage = round($percentage);
-            }
+            $whole = floor($score);
+            $fraction = $score - $whole;
+            $score = ($fraction >= 0.5) ? ceil($score) : round($score);
 
-            $whole = floor($score); // 1
-            $fraction = $score - $whole; // .25
-            if ($fraction >= 0.5) {
-                $score = ceil($score);
-            } else {
-                $score = round($score);
-            }
+            $whole = floor($weight);
+            $fraction = $weight - $whole;
+            $weight = ($fraction >= 0.5) ? ceil($weight) : round($weight);
+        } else {
+            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
+            $score      = float_format($score, 1, $decimalSeparator, $thousandSeparator);
+            $weight     = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+        }
 
-            $whole = floor($weight); // 1
-            $fraction = $weight - $whole; // .25
-            if ($fraction >= 0.5) {
-                $weight = ceil($weight);
-            } else {
+        // Build base HTML (percentage or score/weight)
+        if ($show_percentage) {
+            $percentageSign = $hidePercentageSign ? '' : ' %';
+            $html = $show_only_percentage
+                ? ($percentage . $percentageSign)
+                : ($percentage . $percentageSign . ' (' . $score . ' / ' . $weight . ')');
+        } else {
+            if ($removeEmptyDecimals && ScoreDisplay::hasEmptyDecimals($weight)) {
                 $weight = round($weight);
             }
-        } else {
-            // Formats values
-            $percentage = float_format($percentage, 1, $decimalSeparator, $thousandSeparator);
-            $score = float_format($score, 1, $decimalSeparator, $thousandSeparator);
-            $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
+            $html = $score . ' / ' . $weight;
         }
 
-        if ($show_percentage) {
-            $percentageSign = ' %';
-            if ($hidePercentageSign) {
-                $percentageSign = '';
-            }
-            $html = $percentage."$percentageSign ($score / $weight)";
-            if ($show_only_percentage) {
-                $html = $percentage.$percentageSign;
-            }
-        } else {
-            if ($removeEmptyDecimals) {
-                if (ScoreDisplay::hasEmptyDecimals($weight)) {
-                    $weight = round($weight);
-                }
-            }
-            $html = $score.' / '.$weight;
+        $bucket = self::convertScoreToModel($percentageRaw);
+        if ($bucket !== null) {
+            $html = self::getModelStyle($bucket, $percentageRaw);
         }
 
-        // Over write score
-        $scoreBasedInModel = self::convertScoreToModel($percentage);
-        if (!empty($scoreBasedInModel)) {
-            $html = $scoreBasedInModel;
-        }
-
-        // Ignore other formats and use the configuration['exercise_score_format'] value
-        // But also keep the round values settings.
+        // If the platform forces a format, it overrides everything (including the model badge)
         $format = (int) api_get_setting('exercise.exercise_score_format');
         if (!empty($format)) {
             $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
@@ -3041,9 +3021,64 @@ HOTSPOT;
      *
      * @return string
      */
-    public static function getModelStyle($model, $percentage)
+    public static function getModelStyle($bucket, $percentage)
     {
-        return '<span class="'.$model['css_class'].' p-2">'.$model['name'].'</span>';
+        $rawClass = (string) ($bucket['css_class'] ?? '');
+        $twClass  = self::mapScoreCssClass($rawClass);
+
+        // Accept both 'name' and 'variable'
+        $key   = isset($bucket['name']) ? 'name' : (isset($bucket['variable']) ? 'variable' : null);
+        $raw   = $key ? (string) $bucket[$key] : '';
+        $label = $raw !== '' ? get_lang($raw) : '';
+        $show  = (int) ($bucket['display_score_name'] ?? 0) === 1;
+
+        $base = 'inline-block px-2 py-1 rounded';
+
+        if ($show && $label !== '') {
+            return '<span class="' . htmlspecialchars($base . ' ' . $twClass) . '">' .
+                htmlspecialchars($label) . '</span>';
+        }
+
+        return '<span class="' . htmlspecialchars($base . ' ' . $twClass) . '" ' .
+            'title="' . htmlspecialchars($label) . '" aria-label="' . htmlspecialchars($label) . '">' .
+            '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
+            '</span>';
+    }
+
+    /**
+     * Map legacy css_class (e.g., "btn-danger") to Tailwind utility classes
+     * defined in Chamilo 2's theme (danger/success/warning/info).
+     * If a Tailwind class list is already provided, pass-through.
+     */
+    private static function mapScoreCssClass(string $cssClass): string
+    {
+        $cssClass = trim($cssClass);
+
+        // Legacy → Tailwind mapping
+        $map = [
+            'btn-success' => 'bg-success text-success-button-text',
+            'btn-warning' => 'bg-warning text-warning-button-text',
+            'btn-danger'  => 'bg-danger text-danger-button-text',
+            'btn-info'    => 'bg-info text-info-button-text',
+
+            // Also accept short tokens if someone uses "success" directly
+            'success' => 'bg-success text-success-button-text',
+            'warning' => 'bg-warning text-warning-button-text',
+            'danger'  => 'bg-danger text-danger-button-text',
+            'info'    => 'bg-info text-info-button-text',
+        ];
+
+        if (isset($map[$cssClass])) {
+            return $map[$cssClass];
+        }
+
+        // If it already looks like Tailwind utility classes, keep as-is
+        if (strpos($cssClass, ' ') !== false || preg_match('/[a-z]+-[a-z0-9\-]+/i', $cssClass)) {
+            return $cssClass;
+        }
+
+        // Neutral fallback
+        return 'bg-gray-20 text-gray-90';
     }
 
     /**
@@ -3051,53 +3086,68 @@ HOTSPOT;
      *
      * @return string
      */
-    public static function convertScoreToModel($percentage)
+    public static function convertScoreToModel($percentage): ?array
     {
         $model = self::getCourseScoreModel();
-        if (!empty($model)) {
-            $scoreWithGrade = [];
-            foreach ($model['score_list'] as $item) {
-                if ($percentage >= $item['min'] && $percentage <= $item['max']) {
-                    $scoreWithGrade = $item;
-                    break;
-                }
-            }
+        if (empty($model) || empty($model['score_list'])) {
+            return null;
+        }
 
-            if (!empty($scoreWithGrade)) {
-                return self::getModelStyle($scoreWithGrade, $percentage);
+        foreach ($model['score_list'] as $bucket) {
+            $min = (float) ($bucket['min'] ?? 0);
+            $max = (float) ($bucket['max'] ?? 0);
+
+            if ($percentage >= $min && $percentage <= $max) {
+                // Propagate the model flag to the bucket
+                $bucket['display_score_name'] = (int) ($model['display_score_name'] ?? 0);
+                // Precompute label for convenience (optional)
+                $bucket['label'] = self::scoreLabel($bucket);
+                return $bucket;
             }
         }
 
-        return '';
+        return null;
+    }
+
+    private static function scoreLabel(array $row): string
+    {
+        $key = isset($row['name']) ? 'name' : (isset($row['variable']) ? 'variable' : null);
+        if (!$key) {
+            return '';
+        }
+        $value = (string) $row[$key];
+        return get_lang($value);
     }
 
     /**
      * @return array
      */
-    public static function getCourseScoreModel()
+    public static function getCourseScoreModel(): array
     {
         $modelList = self::getScoreModels();
-
-        if (empty($modelList)) {
+        if (empty($modelList) || empty($modelList['models'])) {
             return [];
         }
 
-        $courseInfo = api_get_course_info();
-        if (!empty($courseInfo)) {
-            $scoreModelId = api_get_course_setting('score_model_id');
-            if (-1 != $scoreModelId) {
-                $modelIdList = array_column($modelList['models'], 'id');
-                if (in_array($scoreModelId, $modelIdList)) {
-                    foreach ($modelList['models'] as $item) {
-                        if ($item['id'] == $scoreModelId) {
-                            return $item;
-                        }
-                    }
+        // Read the configured model id from course settings
+        $scoreModelId = (int) api_get_course_setting('score_model_id');
+
+        // first available model
+        $selected = $modelList['models'][0];
+
+        if ($scoreModelId !== -1) {
+            foreach ($modelList['models'] as $m) {
+                if ((int) ($m['id'] ?? 0) === $scoreModelId) {
+                    $selected = $m;
+                    break;
                 }
             }
         }
 
-        return [];
+        // do NOT show name unless explicitly enabled
+        $selected['display_score_name'] = (int) ($selected['display_score_name'] ?? 0);
+
+        return $selected;
     }
 
     /**

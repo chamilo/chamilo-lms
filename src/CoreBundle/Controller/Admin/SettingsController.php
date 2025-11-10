@@ -290,33 +290,52 @@ class SettingsController extends BaseController
 
     private function computeOrderedNamespacesByTranslatedLabel(array $schemas, Request $request): array
     {
+        // Extract raw namespaces from schema service ids
         $namespaces = array_map(
             static fn ($k) => str_replace('chamilo_core.settings.', '', $k),
             array_keys($schemas)
         );
 
+        $transform = [
+            'announcement' => 'Announcements',
+            'attendance'   => 'Attendances',
+            'cas'          => 'CAS',
+            'certificate'  => 'Certificates',
+            'course'       => 'Courses',
+            'document'     => 'Documents',
+            'exercise'     => 'Tests',
+            'forum'        => 'Forums',
+            'group'        => 'Groups',
+            'language'     => 'Internationalization',
+            'lp'           => 'Learning paths',
+            'mail'         => 'E-mail',
+            'message'      => 'Messages',
+            'profile'      => 'User profiles',
+            'session'      => 'Sessions',
+            'skill'        => 'Skills',
+            'social'       => 'Social network',
+            'survey'       => 'Surveys',
+            'work'         => 'Assignments',
+            'ticket'       => 'Support tickets',
+            'tracking'     => 'Reporting',
+            'webservice'   => 'Webservices',
+            'catalog'      => 'Catalogue',
+            'catalogue'    => 'Catalogue',
+            'ai_helpers'   => 'AI helpers',
+        ];
+
+        // Build label map (translated). For keys not in $transform, use Title Case of ns.
         $labelMap = [];
         foreach ($namespaces as $ns) {
-            if ('cas' === $ns) {
-                $labelMap[$ns] = 'CAS';
-
-                continue;
+            if (isset($transform[$ns])) {
+                $labelMap[$ns] = $this->translator->trans($transform[$ns]);
+            } else {
+                $key = ucfirst(str_replace('_', ' ', $ns));
+                $labelMap[$ns] = $this->translator->trans($key);
             }
-            if ('lp' === $ns) {
-                $labelMap[$ns] = $this->translator->trans('Learning path');
-
-                continue;
-            }
-            if ('ai_helpers' === $ns) {
-                $labelMap[$ns] = $this->translator->trans('AI helpers');
-
-                continue;
-            }
-
-            $key = ucfirst(str_replace('_', ' ', $ns));
-            $labelMap[$ns] = $this->translator->trans($key);
         }
 
+        // Sort by translated label (locale-aware)
         $collator = class_exists(Collator::class) ? new Collator($request->getLocale()) : null;
         usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
             return $collator
@@ -324,6 +343,7 @@ class SettingsController extends BaseController
                 : strcasecmp($labelMap[$a], $labelMap[$b]);
         });
 
+        // Optional: keep AI helpers near the top (second position)
         $idx = array_search('ai_helpers', $namespaces, true);
         if (false !== $idx) {
             array_splice($namespaces, $idx, 1);

@@ -159,24 +159,6 @@ class UrlManager
      *
      * @author Julio Montoya
      *
-     * @throws Exception
-     */
-    public static function get_url_data(string $order = 'ASC'): array
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-
-        return Database::select(
-            ['id', 'url', 'description', 'active', 'tms'],
-            $table,
-            ['order' => "url $order"]
-        );
-    }
-
-    /**
-     * Gets the id, url, description, and active status of ALL URLs.
-     *
-     * @author Julio Montoya
-     *
      * @param int $urlId
      *
      * @return array

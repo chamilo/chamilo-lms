@@ -65,7 +65,7 @@ switch ($action) {
     case 'get_user_session':
         $list = [];
 
-        $urlList = UrlManager::get_url_data($order);
+        $urlList = Container::getAccessUrlRepository()->findAll($order);
         $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session=';
 
         $start = isset($_GET['start']) ? Database::escape_string(api_get_utc_datetime($_GET['start'])) : api_get_utc_datetime();
@@ -82,12 +82,11 @@ switch ($action) {
 
         $courseListInfo = [];
         foreach ($urlList as $url) {
-            $urlId = $url['id'];
-            $sessionList = SessionManager::get_sessions_list([], [], null, null, $urlId);
+            $sessionList = SessionManager::get_sessions_list([], [], null, null, $url->getId());
             foreach ($sessionList as $session) {
                 $sessionId = $session['id'];
                 $row = [];
-                $row['url'] = $url['url'];
+                $row['url'] = $url->getUrl();
                 $row['session'] = Display::url(
                     $session['name'],
                     $sessionUrl.$sessionId
@@ -118,7 +117,7 @@ switch ($action) {
                             INNER JOIN $urlTable au
                             ON (su.user_id = au.user_id)
                             WHERE
-                                access_url_id = $urlId AND
+                                access_url_id = ".$url->getId()." AND
                                 su.relation_type = ".Session::STUDENT." AND
                                 su.registered_at >= '$start' AND
                                 su.registered_at <= '$end' AND

@@ -4340,7 +4340,7 @@ function api_get_item_visibility(
 
     $lpVisibilityCondition = '';
     if ($tool === 'learnpath') {
-        $lpVisibilityCondition = " AND lastedit_type in ('LearnpathInvisible','LearnpathVisible') ";
+        $lpVisibilityCondition = " AND lastedit_type != 'LearnpathSubscription' ";
     }
 
     $sql = "SELECT visibility

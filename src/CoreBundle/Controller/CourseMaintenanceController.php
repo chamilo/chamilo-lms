@@ -172,195 +172,250 @@ class CourseMaintenanceController extends AbstractController
         EntityManagerInterface $em
     ): JsonResponse {
         $this->setDebugFromRequest($req);
-        $this->logDebug('[importRestore] begin', ['node' => $node, 'backupId' => $backupId]);
+
+        error_log('COURSE_DEBUG: [importRestore] begin -> ' . json_encode([
+                'node'     => $node,
+                'backupId' => $backupId,
+            ], JSON_UNESCAPED_SLASHES));
 
         try {
-            $payload = json_decode($req->getContent() ?: '{}', true);
-            // Keep mode consistent with GET /import/{backupId}/resources
-            $mode = strtolower((string) ($payload['mode'] ?? 'auto'));
+            // Disable profiler & SQL logger for performance
+            if ($this->container->has('profiler')) {
+                $profiler = $this->container->get('profiler');
+                if ($profiler instanceof \Symfony\Component\HttpKernel\Profiler\Profiler) {
+                    $profiler->disable();
+                }
+            }
+            if ($this->container->has('doctrine')) {
+                $emDoctrine = $this->container->get('doctrine')->getManager();
+                if ($emDoctrine && $emDoctrine->getConnection()) {
+                    $emDoctrine->getConnection()->getConfiguration()->setSQLLogger(null);
+                }
+            }
 
-            $importOption = (string) ($payload['importOption'] ?? 'full_backup');
-            $sameFileNameOption = (int) ($payload['sameFileNameOption'] ?? 2);
+            // Parse payload
+            $payload = json_decode($req->getContent() ?: '{}', true) ?: [];
+            $mode               = strtolower((string) ($payload['mode'] ?? 'auto'));         // 'auto' | 'dat' | 'moodle'
+            $importOption       = (string)  ($payload['importOption'] ?? 'full_backup');      // 'full_backup' | 'select_items'
+            $sameFileNameOption = (int)     ($payload['sameFileNameOption'] ?? 2);            // 0 skip | 1 overwrite | 2 rename
+            $selectedResources  = (array)   ($payload['resources'] ?? []);                    // map type -> [ids]
+            $selectedTypes      = array_map('strval', (array) ($payload['selectedTypes'] ?? []));
 
-            /** @var array<string,array> $selectedResources */
-            $selectedResources = (array) ($payload['resources'] ?? []);
+            error_log('COURSE_DEBUG: [importRestore] input -> ' . json_encode([
+                    'mode'               => $mode,
+                    'importOption'       => $importOption,
+                    'sameFileNameOption' => $sameFileNameOption,
+                    'selectedTypes.count'=> count($selectedTypes),
+                    'hasResourcesMap'    => !empty($selectedResources),
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 
-            /** @var string[] $selectedTypes */
-            $selectedTypes = array_map('strval', (array) ($payload['selectedTypes'] ?? []));
-
-            $this->logDebug('[importRestore] input', [
-                'importOption' => $importOption,
-                'sameFileNameOption' => $sameFileNameOption,
-                'selectedTypes' => $selectedTypes,
-                'hasResourcesMap' => !empty($selectedResources),
-                'mode' => $mode,
-            ]);
-
-            // Load with same mode to avoid switching source on POST
+            // Load snapshot (keep same source mode as GET /resources)
             $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
-            if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
+            if (!\is_object($course) || !\is_array($course->resources ?? null)) {
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
 
-            $resourcesAll = $course->resources;
-            $this->logDebug('[importRestore] BEFORE filter keys', array_keys($resourcesAll));
+            // Quick counts for logging
+            $counts = [];
+            foreach ((array) $course->resources as $k => $bag) {
+                if ($k === '__meta') { continue; }
+                $counts[$k] = \is_array($bag) ? \count($bag) : 0;
+            }
+            error_log('COURSE_DEBUG: [importRestore] snapshot.counts -> ' . json_encode($counts, JSON_UNESCAPED_SLASHES));
 
-            // Always hydrate LP dependencies (even in full_backup).
-            $this->hydrateLpDependenciesFromSnapshot($course, $resourcesAll);
-            $this->logDebug('[importRestore] AFTER hydrate keys', array_keys((array) $course->resources));
+            // Detect source (Moodle vs non-Moodle)
+            $importSource = strtolower((string) ($course->resources['__meta']['import_source'] ?? $mode));
+            $isMoodle     = ($importSource === 'moodle');
+            error_log('COURSE_DEBUG: [importRestore] detected import source -> ' . json_encode([
+                    'import_source' => $importSource,
+                    'isMoodle'      => $isMoodle,
+                ], JSON_UNESCAPED_SLASHES));
 
-            // Detect source BEFORE any filtering (meta may be dropped by filters)
-            $importSource = $this->getImportSource($course);
-            $isMoodle = ('moodle' === $importSource);
-            $this->logDebug('[importRestore] detected import source', ['import_source' => $importSource, 'isMoodle' => $isMoodle]);
-
-            if ('select_items' === $importOption) {
-                if (empty($selectedResources) && !empty($selectedTypes)) {
-                    $selectedResources = $this->buildSelectionFromTypes($course, $selectedTypes);
-                }
-
-                $hasAny = false;
-                foreach ($selectedResources as $ids) {
-                    if (\is_array($ids) && !empty($ids)) {
-                        $hasAny = true;
-                        break;
-                    }
-                }
-                if (!$hasAny) {
+            // Build requested buckets list
+            if ($importOption === 'select_items') {
+                if (!empty($selectedResources)) {
+                    $requested = array_keys(array_filter(
+                        $selectedResources,
+                        static fn ($ids) => \is_array($ids) && !empty($ids)
+                    ));
+                } elseif (!empty($selectedTypes)) {
+                    $requested = $selectedTypes;
+                } else {
                     return $this->json(['error' => 'No resources selected'], 400);
                 }
-
-                $course = $this->filterLegacyCourseBySelection($course, $selectedResources);
-                if (empty($course->resources) || 0 === \count((array) $course->resources)) {
-                    return $this->json(['error' => 'Selection produced no resources to restore'], 400);
-                }
+            } else {
+                // full_backup => take all snapshot keys (except __meta)
+                $requested = array_keys(array_filter(
+                    (array) $course->resources,
+                    static fn ($k) => $k !== '__meta',
+                    ARRAY_FILTER_USE_KEY
+                ));
             }
+            // Normalize for case
+            $requested = array_values(array_unique(array_map(static fn ($k) => strtolower((string) $k), $requested)));
+            error_log('COURSE_DEBUG: [importRestore] requested -> ' . json_encode($requested, JSON_UNESCAPED_SLASHES));
 
-            $this->logDebug('[importRestore] AFTER filter keys', array_keys((array) $course->resources));
-
-            // NON-MOODLE
+            // Non-Moodle path (use CourseRestorer directly)
             if (!$isMoodle) {
-                $this->logDebug('[importRestore] non-Moodle backup -> using CourseRestorer');
-                // Trace around normalization to detect bucket drops
-                $this->logDebug('[importRestore] BEFORE normalize', array_keys((array) $course->resources));
+                error_log('COURSE_DEBUG: [importRestore] non-Moodle path -> CourseRestorer');
 
-                $this->normalizeBucketsForRestorer($course);
-                $this->logDebug('[importRestore] AFTER  normalize', array_keys((array) $course->resources));
+                if ($importOption === 'select_items') {
+                    $filtered = clone $course;
+                    $filtered->resources = ['__meta' => $course->resources['__meta'] ?? []];
+                    foreach ($requested as $rk) {
+                        if (isset($course->resources[$rk])) {
+                            $filtered->resources[$rk] = $course->resources[$rk];
+                        }
+                    }
+                    $course = $filtered;
+                }
 
                 $restorer = new CourseRestorer($course);
-                $restorer->set_file_option($this->mapSameNameOption($sameFileNameOption));
-                if (method_exists($restorer, 'setResourcesAllSnapshot')) {
-                    $restorer->setResourcesAllSnapshot($resourcesAll);
-                }
+                // Restorer understands 0/1/2 for (skip/overwrite/rename)
+                $restorer->set_file_option($sameFileNameOption);
                 if (method_exists($restorer, 'setDebug')) {
-                    $restorer->setDebug($this->debug);
+                    $restorer->setDebug($this->debug ?? false);
                 }
+
+                $t0 = microtime(true);
                 $restorer->restore();
+                $ms = (int) round((microtime(true) - $t0) * 1000);
 
                 CourseArchiver::cleanBackupDir();
 
-                $courseId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
-                $redirectUrl = \sprintf('/course/%d/home?sid=0&gid=0', $courseId);
+                $dstId = (int) ($restorer->destination_course_info['real_id'] ?? 0);
+                error_log('COURSE_DEBUG: [importRestore] non-Moodle DONE ms=' . $ms . ' dstId=' . $dstId);
 
                 return $this->json([
-                    'ok' => true,
-                    'message' => 'Import finished',
-                    'redirectUrl' => $redirectUrl,
+                    'ok'          => true,
+                    'message'     => 'Import finished',
+                    'redirectUrl' => sprintf('/course/%d/home?sid=0&gid=0', $dstId ?: (int) (api_get_course_info()['real_id'] ?? 0)),
                 ]);
             }
 
-            // MOODLE
-            $this->logDebug('[importRestore] Moodle backup -> using MoodleImport.*');
+            // Moodle path (documents via MoodleImport, rest via CourseRestorer)
+            $cacheDir   = (string) $this->getParameter('kernel.cache_dir');
+            $backupPath = rtrim($cacheDir, '/').'/course_backups/'.$backupId;
 
-            $backupPath = $this->resolveBackupPath($backupId);
-            $ci = api_get_course_info();
-            $cid = (int) ($ci['real_id'] ?? 0);
-            $sid = 0;
+            $stats = $this->restoreMoodle(
+                $backupPath,
+                $course,
+                $requested,
+                $sameFileNameOption,
+                $em
+            );
 
-            $presentBuckets = array_map('strtolower', array_keys((array) $course->resources));
-            $present = static fn (string $k): bool => \in_array(strtolower($k), $presentBuckets, true);
+            return $this->json([
+                'ok'          => true,
+                'message'     => 'Moodle import finished',
+                'stats'       => $stats,
+                'redirectUrl' => sprintf('/course/%d/home?sid=0&gid=0', (int) (api_get_course_info()['real_id'] ?? 0)),
+            ]);
 
-            $wantedGroups = [];
-            $mark = static function (array &$dst, bool $cond, string $key): void { if ($cond) { $dst[$key] = true; } };
+        } catch (\Throwable $e) {
+            error_log('COURSE_DEBUG: [importRestore] ERROR -> ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+            return $this->json([
+                'error'   => 'Restore failed: ' . $e->getMessage(),
+                'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
+            ], 500);
+        } finally {
+            // Defensive cleanup
+            try { CourseArchiver::cleanBackupDir(); } catch (\Throwable) {}
+        }
+    }
 
-            if ('full_backup' === $importOption) {
-                // Be tolerant with plural 'documents'
-                $mark($wantedGroups, $present('link') || $present('link_category'), 'links');
-                $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
-                $mark($wantedGroups, $present('document') || $present('documents'), 'documents');
-                $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
-                $mark($wantedGroups, $present('scorm'), 'scorm');
-            } else {
-                $mark($wantedGroups, $present('link'), 'links');
-                $mark($wantedGroups, $present('forum') || $present('forum_category'), 'forums');
-                $mark($wantedGroups, $present('document') || $present('documents'), 'documents');
-                $mark($wantedGroups, $present('quiz') || $present('exercise'), 'quizzes');
-                $mark($wantedGroups, $present('scorm'), 'scorm');
-            }
+    /**
+     * Single helper for Moodle branch:
+     * - Restore documents from MBZ (needs ZIP path and MoodleImport).
+     * - Restore remaining buckets using CourseRestorer over the filtered snapshot.
+     */
+    private function restoreMoodle(
+        string $backupPath,
+        object $course,
+        array $requested,
+        int $sameFileNameOption,
+        EntityManagerInterface $em
+    ): array {
+        $stats = [];
+        $ci  = api_get_course_info();
+        $cid = (int) ($ci['real_id'] ?? 0);
+        $sid = 0;
 
-            if (empty($wantedGroups)) {
-                CourseArchiver::cleanBackupDir();
+        // 1) Documents (if requested)
+        $wantsDocs = \in_array('document', $requested, true) || \in_array('documents', $requested, true);
+        if ($wantsDocs) {
+            $tag = substr(dechex(random_int(0, 0xFFFFFF)), 0, 6);
+            error_log(sprintf('MBZ[%s] RESTORE_DOCS: begin path=%s', $tag, $backupPath));
 
-                return $this->json([
-                    'ok' => true,
-                    'message' => 'Nothing to import for Moodle (no supported resource groups present)',
-                    'stats' => new stdClass(),
-                ]);
-            }
+            $importer = new MoodleImport(debug: $this->debug ?? false);
 
-            $importer = new MoodleImport(debug: $this->debug);
-            $stats = [];
+            $courseForDocs = clone $course;
+            $courseForDocs->resources = [
+                '__meta'   => $course->resources['__meta'] ?? [],
+                'document' => $course->resources['document'] ?? [],
+            ];
 
-            // LINKS
-            if (!empty($wantedGroups['links']) && method_exists($importer, 'restoreLinks')) {
-                $stats['links'] = $importer->restoreLinks($backupPath, $em, $cid, $sid, $course);
-            }
-
-            // FORUMS
-            if (!empty($wantedGroups['forums']) && method_exists($importer, 'restoreForums')) {
-                $stats['forums'] = $importer->restoreForums($backupPath, $em, $cid, $sid, $course);
-            }
-
-            // DOCUMENTS
-            if (!empty($wantedGroups['documents']) && method_exists($importer, 'restoreDocuments')) {
-                $stats['documents'] = $importer->restoreDocuments(
+            $t0 = microtime(true);
+            if (method_exists($importer, 'restoreDocuments')) {
+                $res = $importer->restoreDocuments(
                     $backupPath,
                     $em,
                     $cid,
                     $sid,
-                    $sameFileNameOption,
-                    $course
+                    (int) $sameFileNameOption,
+                    $courseForDocs
                 );
+                $stats['documents'] = $res ?? ['imported' => 0];
+            } else {
+                error_log('MBZ['.$tag.'] RESTORE_DOCS: restoreDocuments() not found on importer');
+                $stats['documents'] = ['imported' => 0, 'notes' => ['restoreDocuments() missing']];
             }
-
-            // QUIZZES
-            if (!empty($wantedGroups['quizzes']) && method_exists($importer, 'restoreQuizzes')) {
-                $stats['quizzes'] = $importer->restoreQuizzes($backupPath, $em, $cid, $sid);
-            }
-
-            // SCORM
-            if (!empty($wantedGroups['scorm']) && method_exists($importer, 'restoreScorm')) {
-                $stats['scorm'] = $importer->restoreScorm($backupPath, $em, $cid, $sid);
-            }
-
-            CourseArchiver::cleanBackupDir();
-
-            return $this->json([
-                'ok' => true,
-                'message' => 'Moodle import finished',
-                'stats' => $stats,
-            ]);
-        } catch (Throwable $e) {
-            $this->logDebug('[importRestore] exception', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile().':'.$e->getLine(),
-            ]);
-
-            return $this->json([
-                'error' => 'Restore failed: '.$e->getMessage(),
-                'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,
-            ], 500);
+            $ms = (int) round((microtime(true) - $t0) * 1000);
+            error_log(sprintf('MBZ[%s] RESTORE_DOCS: end ms=%d', $tag, $ms));
         }
+
+        // 2) Remaining buckets via CourseRestorer (links, forums, announcements, attendance, etc.)
+        $restRequested = array_values(array_filter($requested, static function ($k) {
+            $k = strtolower((string) $k);
+            return $k !== 'document' && $k !== 'documents';
+        }));
+        if (empty($restRequested)) {
+            return $stats;
+        }
+
+        $filtered = clone $course;
+        $filtered->resources = ['__meta' => $course->resources['__meta'] ?? []];
+        foreach ($restRequested as $rk) {
+            if (isset($course->resources[$rk])) {
+                $filtered->resources[$rk] = $course->resources[$rk];
+            }
+        }
+        // Simple dependency example: include Link_Category when links are requested
+        if (\in_array('link', $restRequested, true) || \in_array('links', $restRequested, true)) {
+            if (isset($course->resources['Link_Category'])) {
+                $filtered->resources['Link_Category'] = $course->resources['Link_Category'];
+            }
+        }
+
+        error_log('COURSE_DEBUG: [restoreMoodle] restorer.keys -> ' . json_encode(array_keys((array) $filtered->resources), JSON_UNESCAPED_SLASHES));
+
+        $restorer = new CourseRestorer($filtered);
+        $restorer->set_file_option($sameFileNameOption);
+        if (method_exists($restorer, 'setDebug')) {
+            $restorer->setDebug($this->debug ?? false);
+        }
+
+        $t1 = microtime(true);
+        $restorer->restore();
+        $ms = (int) round((microtime(true) - $t1) * 1000);
+        error_log('COURSE_DEBUG: [restoreMoodle] restorer DONE ms=' . $ms);
+
+        $stats['restored_tools'] = array_values(array_filter(
+            array_keys((array) $filtered->resources),
+            static fn($k) => $k !== '__meta'
+        ));
+
+        return $stats;
     }
 
     #[Route('/copy/options', name: 'copy_options', methods: ['GET'])]
@@ -410,7 +465,7 @@ class CourseMaintenanceController extends AbstractController
             'assets',
             'surveys',
             'survey_questions',
-            'announcements',
+            'announcement',
             'events',
             'course_descriptions',
             'glossary',
@@ -463,7 +518,7 @@ class CourseMaintenanceController extends AbstractController
                 'assets',
                 'surveys',
                 'survey_questions',
-                'announcements',
+                'announcement',
                 'events',
                 'course_descriptions',
                 'glossary',
@@ -533,7 +588,7 @@ class CourseMaintenanceController extends AbstractController
         $cb = new CourseBuilder();
         $cb->set_tools_to_build([
             'documents', 'forums', 'tool_intro', 'links', 'quizzes', 'quiz_questions', 'assets', 'surveys',
-            'survey_questions', 'announcements', 'events', 'course_descriptions', 'glossary', 'wiki',
+            'survey_questions', 'announcement', 'events', 'course_descriptions', 'glossary', 'wiki',
             'thematic', 'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths',
         ]);
         $course = $cb->build(0, api_get_course_id());
@@ -677,6 +732,12 @@ class CourseMaintenanceController extends AbstractController
             ['value' => 'learnpaths', 'label' => 'Paths learning'],
             ['value' => 'tool_intro', 'label' => 'Course Introduction'],
             ['value' => 'course_description', 'label' => 'Course descriptions'],
+            ['value' => 'attendance', 'label' => 'Attendance'],
+            ['value' => 'announcement', 'label' => 'Announcements'],
+            ['value' => 'events', 'label' => 'Calendar events'],
+            ['value' => 'wiki', 'label' => 'Wiki'],
+            ['value' => 'thematic', 'label' => 'Thematic'],
+            ['value' => 'gradebook', 'label' => 'Gradebook'],
         ];
 
         $defaults['tools'] = array_column($tools, 'value');
@@ -711,6 +772,12 @@ class CourseMaintenanceController extends AbstractController
                 'works', 'glossary',
                 'tool_intro',
                 'course_descriptions',
+                'attendance',
+                'announcement',
+                'events',
+                'wiki',
+                'thematic',
+                'gradebook',
             ];
 
             // Use client tools if provided; otherwise our Moodle-safe defaults
@@ -719,7 +786,7 @@ class CourseMaintenanceController extends AbstractController
             // Policy for this endpoint:
             //  - Never show gradebook
             //  - Always include tool_intro in the picker (harmless if empty)
-            $tools = array_values(array_diff($tools, ['gradebook']));
+            //$tools = array_values(array_diff($tools, ['gradebook']));
             if (!in_array('tool_intro', $tools, true)) {
                 $tools[] = 'tool_intro';
             }
@@ -799,6 +866,12 @@ class CourseMaintenanceController extends AbstractController
             'learnpaths', 'learnpath_category',
             'works', 'glossary',
             'course_descriptions',
+            'attendance',
+            'announcement',
+            'events',
+            'wiki',
+            'thematic',
+            'gradebook',
         ];
 
         $tools = $this->normalizeSelectedTools($toolsInput);
@@ -810,7 +883,6 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Remove unsupported tools
-        $tools = array_values(array_unique(array_diff($tools, ['gradebook'])));
         $clientSentNoTools = empty($toolsInput);
         $useDefault = ($scope === 'full' && $clientSentNoTools);
         $toolsToBuild = $useDefault ? $defaultTools : $tools;
@@ -903,7 +975,7 @@ class CourseMaintenanceController extends AbstractController
         // Single list of supported tool buckets (must match CourseBuilder/exporters)
         $all = [
             'documents','links','quizzes','quiz_questions','surveys','survey_questions',
-            'announcements','events','course_descriptions','glossary','wiki','thematic',
+            'announcement','events','course_descriptions','glossary','wiki','thematic',
             'attendance','works','gradebook','learnpath_category','learnpaths','tool_intro','forums',
         ];
 
@@ -1094,7 +1166,6 @@ class CourseMaintenanceController extends AbstractController
         // Stream file to the browser
         $resp = new BinaryFileResponse($abs);
         $resp->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $file);
-        // A sensible CC mime; many LMS aceptan zip también
         $resp->headers->set('Content-Type', 'application/vnd.ims.ccv1p3+imscc');
 
         return $resp;
@@ -1195,7 +1266,7 @@ class CourseMaintenanceController extends AbstractController
             // Detect & decode content
             $probe = $this->decodeCourseInfo($raw);
 
-            // Build a tiny scan snapshot (only keys, no grafo)
+            // Build a tiny scan snapshot
             $scan = [
                 'has_graph'      => false,
                 'resources_keys' => [],
@@ -1554,131 +1625,6 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Copies the dependencies (document, link, quiz, etc.) to $course->resources
-     * that reference the selected LearnPaths, taking the items from the full snapshot.
-     *
-     * It doesn't break anything if something is missing or comes in a different format: it's defensive.
-     */
-    private function hydrateLpDependenciesFromSnapshot(object $course, array $snapshot): void
-    {
-        if (empty($course->resources['learnpath']) || !\is_array($course->resources['learnpath'])) {
-            return;
-        }
-
-        $depTypes = [
-            'document', 'link', 'quiz', 'work', 'survey',
-            'Forum_Category', 'forum', 'thread', 'post',
-            'Exercise_Question', 'survey_question', 'Link_Category',
-        ];
-
-        $need = [];
-        $addNeed = function (string $type, $id) use (&$need): void {
-            $t = (string) $type;
-            $i = is_numeric($id) ? (int) $id : (string) $id;
-            if ('' === $i || 0 === $i) {
-                return;
-            }
-            $need[$t] ??= [];
-            $need[$t][$i] = true;
-        };
-
-        foreach ($course->resources['learnpath'] as $lpId => $lpWrap) {
-            $lp = \is_object($lpWrap) && isset($lpWrap->obj) ? $lpWrap->obj : $lpWrap;
-
-            if (\is_object($lpWrap) && !empty($lpWrap->linked_resources) && \is_array($lpWrap->linked_resources)) {
-                foreach ($lpWrap->linked_resources as $t => $ids) {
-                    if (!\is_array($ids)) {
-                        continue;
-                    }
-                    foreach ($ids as $rid) {
-                        $addNeed($t, $rid);
-                    }
-                }
-            }
-
-            $items = [];
-            if (\is_object($lp) && !empty($lp->items) && \is_array($lp->items)) {
-                $items = $lp->items;
-            } elseif (\is_object($lpWrap) && !empty($lpWrap->items) && \is_array($lpWrap->items)) {
-                $items = $lpWrap->items;
-            }
-
-            foreach ($items as $it) {
-                $ito = \is_object($it) ? $it : (object) $it;
-
-                if (!empty($ito->linked_resources) && \is_array($ito->linked_resources)) {
-                    foreach ($ito->linked_resources as $t => $ids) {
-                        if (!\is_array($ids)) {
-                            continue;
-                        }
-                        foreach ($ids as $rid) {
-                            $addNeed($t, $rid);
-                        }
-                    }
-                }
-
-                foreach (['document_id' => 'document', 'doc_id' => 'document', 'resource_id' => null, 'link_id' => 'link', 'quiz_id' => 'quiz', 'work_id' => 'work'] as $field => $typeGuess) {
-                    if (isset($ito->{$field}) && '' !== $ito->{$field} && null !== $ito->{$field}) {
-                        $rid = is_numeric($ito->{$field}) ? (int) $ito->{$field} : (string) $ito->{$field};
-                        $t = $typeGuess ?: (string) ($ito->type ?? '');
-                        if ('' !== $t) {
-                            $addNeed($t, $rid);
-                        }
-                    }
-                }
-
-                if (!empty($ito->type) && isset($ito->ref)) {
-                    $addNeed((string) $ito->type, $ito->ref);
-                }
-            }
-        }
-
-        if (empty($need)) {
-            $core = ['document', 'link', 'quiz', 'work', 'survey', 'Forum_Category', 'forum', 'thread', 'post', 'Exercise_Question', 'survey_question', 'Link_Category'];
-            foreach ($core as $k) {
-                if (!empty($snapshot[$k]) && \is_array($snapshot[$k])) {
-                    $course->resources[$k] ??= [];
-                    if (0 === \count($course->resources[$k])) {
-                        $course->resources[$k] = $snapshot[$k];
-                    }
-                }
-            }
-            $this->logDebug('[LP-deps] fallback filled from snapshot', [
-                'bags' => array_keys(array_filter($course->resources, fn ($v, $k) => \in_array($k, $core, true) && \is_array($v) && \count($v) > 0, ARRAY_FILTER_USE_BOTH)),
-            ]);
-
-            return;
-        }
-
-        foreach ($need as $type => $idMap) {
-            if (empty($snapshot[$type]) || !\is_array($snapshot[$type])) {
-                continue;
-            }
-
-            $course->resources[$type] ??= [];
-
-            foreach (array_keys($idMap) as $rid) {
-                $src = $snapshot[$type][$rid]
-                    ?? $snapshot[$type][(string) $rid]
-                    ?? null;
-
-                if (!$src) {
-                    continue;
-                }
-
-                if (!isset($course->resources[$type][$rid]) && !isset($course->resources[$type][(string) $rid])) {
-                    $course->resources[$type][$rid] = $src;
-                }
-            }
-        }
-
-        $this->logDebug('[LP-deps] hydrated', [
-            'types' => array_keys($need),
-            'counts' => array_map(fn ($t) => isset($course->resources[$t]) && \is_array($course->resources[$t]) ? \count($course->resources[$t]) : 0, array_keys($need)),
-        ]);
-    }
-
-    /**
      * Build a Vue-friendly tree from legacy Course.
      */
     private function buildResourceTreeForVue(object $course): array
@@ -1701,6 +1647,7 @@ class CourseMaintenanceController extends AbstractController
 
         $tree = [];
 
+        // Documents block
         if (!empty($resources['document']) && \is_array($resources['document'])) {
             $docs = $resources['document'];
 
@@ -1921,7 +1868,7 @@ class CourseMaintenanceController extends AbstractController
         // Preferred order
         $preferredOrder = [
             'announcement', 'document', 'course_description', 'learnpath', 'quiz', 'forum', 'glossary', 'link',
-            'survey', 'thematic', 'work', 'attendance', 'wiki', 'calendar_event', 'tool_intro', 'gradebook',
+            'survey', 'thematic', 'work', 'attendance', 'wiki', 'calendar_event', 'events', 'tool_intro', 'gradebook',
         ];
         usort($tree, static function ($a, $b) use ($preferredOrder) {
             $ia = array_search($a['type'], $preferredOrder, true);
@@ -2164,39 +2111,66 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Normalize a raw type to a lowercase key.
+     * Canonicalizes a resource/bucket key used anywhere in the flow (UI type, snapshot key, etc.)
+     * Keep this small and stable; only map well-known aliases to the canonical snapshot keys we expect.
      */
-    private function normalizeTypeKey(int|string $raw): string
+    private function normalizeTypeKey(string $key): string
     {
-        if (\is_int($raw)) {
-            return (string) $raw;
+        $k = strtolower(trim($key));
+
+        // Documents
+        if (in_array($k, ['document','documents'], true)) {
+            return 'document';
         }
 
-        $s = strtolower(str_replace(['\\', ' '], ['/', '_'], (string) $raw));
+        // Links
+        if (in_array($k, ['link','links'], true)) {
+            return 'link';
+        }
+        if (in_array($k, ['link_category','linkcategory','link_categories'], true)) {
+            return 'link_category';
+        }
 
-        $map = [
-            'forum_category' => 'forum_category',
-            'forumtopic' => 'forum_topic',
-            'forum_topic' => 'forum_topic',
-            'forum_post' => 'forum_post',
-            'thread' => 'forum_topic',
-            'post' => 'forum_post',
-            'exercise_question' => 'exercise_question',
-            'surveyquestion' => 'survey_question',
-            'surveyinvitation' => 'survey_invitation',
-            'survey' => 'survey',
-            'link_category' => 'link_category',
-            'coursecopylearnpath' => 'learnpath',
-            'coursecopytestcategory' => 'test_category',
-            'coursedescription' => 'course_description',
-            'session_course' => 'session_course',
-            'gradebookbackup' => 'gradebook',
-            'scormdocument' => 'scorm',
-            'tool/introduction' => 'tool_intro',
-            'tool_introduction' => 'tool_intro',
-        ];
+        // Forums
+        if ($k === 'forum_category' || $k === 'forumcategory') {
+            return 'Forum_Category';
+        }
+        if ($k === 'forums') {
+            return 'forum';
+        }
 
-        return $map[$s] ?? $s;
+        // Announcements / News
+        if (in_array($k, ['announcement','announcements','news'], true)) {
+            return 'announcement';
+        }
+
+        // Attendance
+        if (in_array($k, ['attendance','attendances'], true)) {
+            return 'attendance';
+        }
+
+        // Course descriptions
+        if (in_array($k, ['course_description','course_descriptions','description','descriptions'], true)) {
+            return 'course_descriptions';
+        }
+
+        // Events / Calendar
+        if (in_array($k, ['event','events','calendar','calendar_event','calendar_events'], true)) {
+            return 'events';
+        }
+
+        // Learnpaths
+        if ($k === 'learnpaths') {
+            return 'learnpath';
+        }
+
+        // Quizzes
+        if (in_array($k, ['quiz','quizzes'], true)) {
+            return 'quiz';
+        }
+
+        // Default: return as-is
+        return $k;
     }
 
     /**
@@ -2230,11 +2204,12 @@ class CourseMaintenanceController extends AbstractController
     private function getDefaultTypeTitles(): array
     {
         return [
-            'announcement' => 'Announcements',
+            'announcement' => 'announcement',
             'document' => 'Documents',
             'glossary' => 'Glossaries',
             'calendar_event' => 'Calendar events',
             'event' => 'Calendar events',
+            'events' => 'Calendar events',
             'link' => 'Links',
             'course_description' => 'Course descriptions',
             'learnpath' => 'Parcours',
@@ -2263,6 +2238,11 @@ class CourseMaintenanceController extends AbstractController
      */
     private function isSelectableItem(string $type, object $obj): bool
     {
+        if ($type === 'announcement') {
+            // Require at least a non-empty title
+            return isset($obj->title) && trim((string)$obj->title) !== '';
+        }
+
         if ('document' === $type) {
             return true;
         }
@@ -2275,6 +2255,10 @@ class CourseMaintenanceController extends AbstractController
      */
     private function resolveItemLabel(string $type, object $obj, int $fallbackId): string
     {
+        if ($type === 'announcement') {
+            return (string)($obj->title ?? ("Announcement #".$obj->iid));
+        }
+
         $entity = $this->objectEntity($obj);
 
         foreach (['title', 'name', 'subject', 'question', 'display', 'code', 'description'] as $k) {
@@ -2286,31 +2270,30 @@ class CourseMaintenanceController extends AbstractController
         if (isset($obj->params) && \is_array($obj->params)) {
             foreach (['title', 'name', 'subject', 'display', 'description'] as $k) {
                 if (!empty($obj->params[$k]) && \is_string($obj->params[$k])) {
-                    return (string) $obj->params[$k];
+                    return $obj->params[$k];
                 }
             }
         }
 
         switch ($type) {
+            case 'events':
+                $title = trim((string)($entity->title ?? $entity->name ?? $entity->subject ?? ''));
+                if ($title !== '') { return $title; }
+
+                return '#'.$fallbackId;
             case 'document':
-                // 1) ruta cruda tal como viene del backup/DB
                 $raw = (string) ($entity->path ?? $obj->path ?? '');
                 if ('' !== $raw) {
-                    // 2) normalizar a ruta relativa y quitar prefijo "document/" si viniera en el path del backup
                     $rel = ltrim($raw, '/');
                     $rel = preg_replace('~^document/?~', '', $rel);
-
-                    // 3) carpeta ⇒ que termine con "/"
                     $fileType = (string) ($entity->file_type ?? $obj->file_type ?? '');
                     if ('folder' === $fileType) {
                         $rel = rtrim($rel, '/').'/';
                     }
 
-                    // 4) si la ruta quedó vacía, usa basename como último recurso
                     return '' !== $rel ? $rel : basename($raw);
                 }
 
-                // fallback: título o nombre de archivo
                 if (!empty($obj->title)) {
                     return (string) $obj->title;
                 }
@@ -2484,14 +2467,17 @@ class CourseMaintenanceController extends AbstractController
                     : [];
 
                 break;
+            case 'events':
+                $entity = $this->objectEntity($obj);
+                $extra['start']    = (string)($entity->start ?? $entity->start_date ?? $entity->timestart ?? '');
+                $extra['end']      = (string)($entity->end ?? $entity->end_date ?? $entity->timeend ?? '');
+                $extra['all_day']  = (string)($entity->all_day ?? $entity->allday ?? '');
+                $extra['location'] = (string)($entity->location ?? '');
+                break;
         }
 
         return array_filter($extra, static fn ($v) => !('' === $v || null === $v || [] === $v));
     }
-
-    // --------------------------------------------------------------------------------
-    // Selection filtering (used by partial restore)
-    // --------------------------------------------------------------------------------
 
     /**
      * Get first existing key from candidates.
@@ -3175,7 +3161,7 @@ class CourseMaintenanceController extends AbstractController
             'surveys' => RESOURCE_SURVEY,
             'survey' => RESOURCE_SURVEY,
             'survey_questions' => RESOURCE_SURVEYQUESTION,
-            'announcements' => RESOURCE_ANNOUNCEMENT,
+            'announcement' => RESOURCE_ANNOUNCEMENT,
             'events' => RESOURCE_EVENT,
             'course_description' => RESOURCE_COURSEDESCRIPTION,
             'glossary' => RESOURCE_GLOSSARY,
@@ -3640,6 +3626,13 @@ class CourseMaintenanceController extends AbstractController
         if ($has('work'))     { $want[] = 'works'; }
         if ($has('glossary')) { $want[] = 'glossary'; }
         if ($has('tool_intro')) { $want[] = 'tool_intro'; }
+        if ($has('attendance')) { $want[] = 'attendance'; }
+        if ($has('announcement')) { $want[] = 'announcement'; }
+        if ($has('calendar_event')) { $want[] = 'events'; }
+        if ($has('wiki')) { $want[] = 'wiki'; }
+        if ($has('thematic')) { $want[] = 'thematic'; }
+        if ($has('gradebook')) { $want[] = 'gradebook'; }
+
         if ($has('course_descriptions') || $has('course_description')) { $tools[] = 'course_descriptions'; }
 
         // Dedup
@@ -3778,31 +3771,108 @@ class CourseMaintenanceController extends AbstractController
     }
 
     /**
-     * Recursively sanitize an unserialized PHP graph:
-     * - Objects are cast to arrays, keys like "\0Class\0prop" become "prop"
-     * - Returns arrays/stdClass with only public-like keys
+     * Clone a course snapshot keeping only the allowed buckets (preserving original-case keys).
+     * This is a shallow clone of the course object with a filtered 'resources' array.
      */
-    private function sanitizePhpGraph(mixed $value): mixed
+    private function cloneCourseWithBuckets(object $course, array $allowed): object
     {
-        if (\is_array($value)) {
-            $out = [];
-            foreach ($value as $k => $v) {
-                $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
-                $out[$ck] = $this->sanitizePhpGraph($v);
-            }
-            return $out;
+        $clone = clone $course;
+
+        if (!isset($course->resources) || !\is_array($course->resources)) {
+            $clone->resources = [];
+            return $clone;
         }
 
-        if (\is_object($value)) {
-            $arr = (array) $value;
-            $clean = [];
-            foreach ($arr as $k => $v) {
-                $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
-                $clean[$ck] = $this->sanitizePhpGraph($v);
-            }
-            return (object) $clean;
+        // Build a lookup based on the original-case keys present in $allowed
+        $allowedLookup = array_flip($allowed);
+
+        // Intersect by original-case keys
+        $clone->resources = array_intersect_key($course->resources, $allowedLookup);
+
+        return $clone;
+    }
+
+    /**
+     * Generic runner for a bucket group: checks if it was requested, extracts present snapshot keys,
+     * appends legacy constant keys (if defined), and delegates to MoodleImport::restoreSelectedBuckets().
+     *
+     * Returns:
+     *   - array stats when executed,
+     *   - ['imported'=>0,'notes'=>['No ... buckets']] when requested but none present,
+     *   - null when not requested at all.
+     */
+    private function runBucketRestore(
+        MoodleImport           $importer,
+        array                  $requestedNormalized,
+        array                  $requestAliases,
+        array                  $snapshotAliases,
+        array                  $legacyConstNames,
+        object                 $course,
+        string                 $backupPath,
+        EntityManagerInterface $em,
+        int                    $cid,
+        int                    $sid,
+        int                    $sameFileNameOption,
+        string $statKey
+    ): ?array {
+        // Normalize request aliases and check if intersect
+        $norm = static fn(string $k): string => strtolower((string) $k);
+        $reqSet = array_map($norm, $requestAliases);
+
+        if (count(array_intersect($requestedNormalized, $reqSet)) === 0) {
+            // Not requested -> skip quietly
+            return null;
         }
 
-        return $value;
+        // Gather snapshot-present keys
+        $resources = (array) ($course->resources ?? []);
+        $present = array_keys($resources);
+        $presentNorm = array_map($norm, $present);
+
+        $snapWanted = array_map($norm, $snapshotAliases);
+        $allowed = [];
+        foreach ($present as $idx => $origKey) {
+            if (in_array($presentNorm[$idx], $snapWanted, true)) {
+                $allowed[] = $origKey; // keep original key casing as in snapshot
+            }
+        }
+
+        // Add legacy constant-based keys if defined
+        foreach ($legacyConstNames as $c) {
+            if (\defined($c)) {
+                $allowed[] = (string) \constant($c);
+            }
+        }
+
+        // Deduplicate + sanitize
+        $allowed = array_values(array_unique(array_filter($allowed, static fn($v) => \is_string($v) && $v !== '')));
+
+        // Quick clone of the course with only these buckets
+        $courseForThis = $this->cloneCourseWithBuckets($course, $allowed);
+
+        if (empty((array) ($courseForThis->resources ?? []))) {
+            $this->logDebug("[runBucketRestore] {$statKey} skipped (no matching buckets present)", [
+                'requested' => $requestAliases,
+                'snapshot_aliases' => $snapshotAliases,
+                'legacy' => $legacyConstNames,
+                'available' => array_keys((array) $course->resources),
+            ]);
+            return ['imported' => 0, 'notes' => ["No {$statKey} buckets"]];
+        }
+
+        if (\method_exists($importer, 'attachContext')) {
+            // Optional internal context
+            $importer->attachContext($backupPath, $em, $cid, $sid, $sameFileNameOption);
+        }
+
+        // Delegate with stable signature
+        return $importer->restoreSelectedBuckets(
+            $backupPath,
+            $em,
+            $cid,
+            $sid,
+            $allowed,
+            $courseForThis
+        );
     }
 }

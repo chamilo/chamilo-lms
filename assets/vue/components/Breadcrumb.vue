@@ -12,9 +12,12 @@
           v-bind="props.action"
           @click="handleBreadcrumbClick(item)"
         >
-          {{ item.label }}
+          {{ stripHtml(item.label) }}
         </BaseAppLink>
-        <span v-else>{{ item.label }}</span>
+        <span
+          v-else
+          v-text="stripHtml(item.label)"
+        ></span>
       </template>
 
       <template #separator> /</template>
@@ -421,5 +424,10 @@ function handleBreadcrumbClick(item) {
   if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
     window.location.href = router.resolve(item.route).href
   }
+}
+
+function stripHtml(value) {
+  if (!value || typeof value !== "string") return ""
+  return value.replace(/<[^>]*>?/gm, "").trim()
 }
 </script>

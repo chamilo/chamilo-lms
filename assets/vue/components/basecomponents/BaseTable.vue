@@ -129,7 +129,7 @@ if (rows.value == null) {
   rows.value = initialRows()
 }
 
-defineEmits(["page", "sort"])
+defineEmits(["filter", "page", "sort"])
 
 const slots = useSlots()
 
@@ -165,6 +165,7 @@ defineExpose({
     responsive-layout="scroll"
     size="small"
     striped-rows
+    @filter="$emit('filter', $event)"
     @page="$emit('page', $event)"
     @sort="$emit('sort', $event)"
   >

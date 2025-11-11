@@ -13,7 +13,6 @@
     :total-items="totalItems"
     :values="itemsShared"
     data-key="iid"
-    filter-as-menu
     @page="onPage"
     @sort="sortingChanged"
   >

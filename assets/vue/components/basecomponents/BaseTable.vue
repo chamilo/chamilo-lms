@@ -44,7 +44,7 @@ const props = defineProps({
     required: false,
     default: null,
   },
-  filterAsMenu: {
+  showFilterRow: {
     type: Boolean,
     required: false,
     default: false,
@@ -150,7 +150,7 @@ defineExpose({
     v-model:sort-field="sortField"
     v-model:sort-order="sortOrder"
     :data-key="dataKey"
-    :filter-display="filterAsMenu ? 'menu' : null"
+    :filter-display="showFilterRow ? 'row' : undefined"
     :global-filter-fields="globalFilterFields"
     :lazy="lazy"
     :loading="isLoading"

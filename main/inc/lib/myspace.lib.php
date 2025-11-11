@@ -4746,6 +4746,7 @@ class MySpace
             ['ticket_ticket', 'sys_lastedit_user_id'],
             ['ticket_ticket', 'sys_insert_user_id'],
             ['track_e_access', 'access_user_id'],
+            ['track_e_access_complete', 'user_id'],
             ['track_e_attempt', 'user_id'],
             ['track_e_attempt_recording', 'author'],
             ['track_e_course_access', 'user_id'],

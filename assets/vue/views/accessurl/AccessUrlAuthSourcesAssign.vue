@@ -14,6 +14,7 @@ import { findAll as listAccessUrl } from "../../services/accessurlService"
 import userService from "../../services/userService"
 import { useNotification } from "../../composables/notification"
 import debounce from "lodash/debounce"
+import BaseAvatarList from "../../components/basecomponents/BaseAvatarList.vue"
 
 const { t } = useI18n()
 const router = useRouter()
@@ -153,8 +154,8 @@ const debouncedSearch = debounce((rows, sortField, sortOrder, filters) => {
     </template>
   </BaseToolbar>
 
-  <div class="grid grid-flow-row-dense md:grid-cols-3 gap-4">
-    <div class="md:col-span-2">
+  <div class="grid grid-flow-row-dense md:grid-cols-5 gap-4">
+    <div class="md:col-span-3">
       <BaseTable
         v-model:filters="filters"
         v-model:selected-items="selectedUsers"
@@ -217,7 +218,7 @@ const debouncedSearch = debounce((rows, sortField, sortOrder, filters) => {
       </BaseTable>
     </div>
 
-    <div>
+    <div class="md:col-span-2">
       <BaseSelect
         id="access_url"
         v-model="accessUrl"
@@ -236,6 +237,13 @@ const debouncedSearch = debounce((rows, sortField, sortOrder, filters) => {
         :label="t('Auth source')"
         :options="authSourceList"
       />
+
+      <div class="field">
+        <BaseAvatarList
+          :count-several="selectedUsers.length"
+          :users="selectedUsers"
+        />
+      </div>
 
       <BaseButton
         :disabled="!accessUrl || !authSource || 0 === selectedUsers.length || isLoadingAssign"

@@ -2523,9 +2523,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getAuthSourcesAuthentications(?AccessUrl $url = null): array
     {
-        $authSources = $url ? $this->getAuthSourcesByUrl($url) : $this->getAuthSources();
+        $authSources = $this->getAuthSourcesByUrl($url);
 
-        return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
+        if ($authSources->count() <= 0) {
+            return [];
+        }
+
+        return $authSources->map(fn(UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
     }
 
     public function addAuthSource(UserAuthSource $authSource): static

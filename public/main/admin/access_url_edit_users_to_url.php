@@ -86,7 +86,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             header('Location: access_url_edit_users_to_url.php');
             exit;
         } elseif (is_array($UserList)) {
-            $result = UrlManager::update_urls_rel_user($UserList, $access_url_id);
+            $result = UrlManager::update_urls_rel_user($UserList, $access_url_id, true);
             $url_info = UrlManager::get_url_data_from_id($access_url_id);
             if (!empty($result)) {
                 $message .= 'URL: '.$url_info['url'].'<br />';

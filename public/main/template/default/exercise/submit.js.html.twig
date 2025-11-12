@@ -1,5 +1,4 @@
 <script>
-
   var DraggableAnswer = {
     gallery: null,
     trash: null,
@@ -90,21 +89,26 @@
     initialized: false,
     instances: {},
     init: function (questionId) {
-      var instance = jsPlumb.getInstance();
+      // Create (or reuse) one jsPlumb instance per question
+      var instance = MatchingDraggable.instances[questionId] || jsPlumb.getInstance();
       MatchingDraggable.instances[questionId] = instance;
 
-      var windowQuestionSelector = '.window' + questionId + '_question',
-        countConnections = $(windowQuestionSelector).length,
-        colorArray = [],
-        colorArrayDestination = [];
+      // Bind to the actual question container for correct offsets
+      var container =
+        document.getElementById('question_div_' + questionId) ||
+        document.querySelector('.main-question') ||
+        document.body;
+      instance.setContainer(container);
 
-      if (countConnections > 0) {
-        colorArray = $.xcolor.analogous("#da0", countConnections);
-        colorArrayDestination = $.xcolor.analogous("#51a351", countConnections);
-      } else {
-        colorArray = $.xcolor.analogous("#da0", 10);
-        colorArrayDestination = $.xcolor.analogous("#51a351", 10);
-      }
+      // Safety: remove previous endpoints if re-init happens
+      try { instance.deleteEveryEndpoint(); } catch (e) {}
+
+      var windowQuestionSelector = '.window' + questionId + '_question';
+      var windowAnswerSelector   = '.window' + questionId + '_answer';
+
+      var countConnections = $(windowQuestionSelector).length;
+      var colorArray            = $.xcolor.analogous("#da0",     countConnections > 0 ? countConnections : 10);
+      var colorArrayDestination = $.xcolor.analogous("#51a351",  countConnections > 0 ? countConnections : 10);
 
       var scope = questionId + "_scope";
 
@@ -114,105 +118,92 @@
         activeClass: 'dragActive'
       };
 
+      var originalColors = {};
+
       var destinationEndPoint = {
-        endpoint: ["Dot", {radius: 15}],
-        paintStyle: {fill: MatchingDraggable.colorDestination},
+        endpoint: ["Dot", { radius: 15 }],
+        paintStyle: { fill: MatchingDraggable.colorDestination },
         isSource: false,
-        connectorStyle: {stroke: MatchingDraggable.colorDestination, strokeWidth: 8},
-        connector: [
-          MatchingDraggable.connectorType,
-          {curviness: MatchingDraggable.curviness}
-        ],
+        connectorStyle: { stroke: MatchingDraggable.colorDestination, strokeWidth: 8 },
+        connector: [ MatchingDraggable.connectorType, { curviness: MatchingDraggable.curviness } ],
         maxConnections: 1000,
         isTarget: true,
         dropOptions: exampleDropOptions,
         scope: scope,
         beforeDrop: function (params) {
+          // Reset color and ensure 1 connection per source
           instance.selectEndpoints().each(function (endpoint) {
             var sourceId = endpoint.elementId;
             if (originalColors[sourceId]) {
-              endpoint.setPaintStyle({fill: originalColors[sourceId]});
+              endpoint.setPaintStyle({ fill: originalColors[sourceId] });
             }
           });
-          instance.select({source: params.sourceId}).each(function (connection) {
+          instance.select({ source: params.sourceId }).each(function (connection) {
             instance.detach(connection);
           });
 
+          // Reflect selection in hidden <select>
           var selectId = params.sourceId + "_select";
-          var value = params.targetId.split("_")[2];
+          var value = parseInt(params.targetId.split("_")[2], 10);
 
           $("#" + selectId + " option")
-            .removeAttr('selected')
-            .filter(function (index) {
-              return index === parseInt(value);
-            })
-            .attr("selected", true);
+            .prop('selected', false)
+            .filter(function (index) { return index === value; })
+            .prop("selected", true);
 
           return true;
         }
       };
 
-      var originalColors = {};
-
+      // Sources (left column)
       $(windowQuestionSelector).each(function (index) {
-        var windowId = $(this).attr("id");
+        var windowId = this.id;
+        if (!windowId) return;
+
         var color = colorArray[index].getHex();
+        originalColors[windowId] = color;
 
         var sourceEndPoint = {
-          endpoint: [
-            "Dot",
-            {radius: 15}
-          ],
-          paintStyle: {
-            fill: color
-          },
+          endpoint: [ "Dot", { radius: 15 } ],
+          paintStyle: { fill: color },
           isSource: true,
-          connectorStyle: {
-            stroke: "#8a8888",
-            strokeWidth: 8
-          },
-          connector: [
-            MatchingDraggable.connectorType,
-            {curviness: MatchingDraggable.curviness}
-          ],
+          connectorStyle: { stroke: "#8a8888", strokeWidth: 8 },
+          connector: [ MatchingDraggable.connectorType, { curviness: MatchingDraggable.curviness } ],
           maxConnections: 1,
           isTarget: false,
           dropOptions: exampleDropOptions,
           scope: scope
         };
 
-        instance.addEndpoint(
-          windowId,
-          {
-            anchor: ['RightMiddle', 'RightMiddle', 'RightMiddle', 'RightMiddle']
-          },
-          sourceEndPoint
-        );
-
-        originalColors[windowId] = color;
+        instance.addEndpoint(windowId, { anchor: "RightMiddle" }, sourceEndPoint);
       });
 
-      $(windowQuestionSelector).each(function (index) {
-        var windowDestinationId = $(this).attr("id");
-        destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
-
-        instance.addEndpoint(
-          windowDestinationId + "_answer",
-          {
-            anchors: ['LeftMiddle', 'LeftMiddle', 'LeftMiddle', 'LeftMiddle']
-          },
-          destinationEndPoint
-        );
-      });
+      // Targets (right column) with guards to avoid orphan endpoints at (0,0)
+      if ($(windowAnswerSelector).length) {
+        // Preferred: explicit answer boxes exist
+        $(windowAnswerSelector).each(function (index) {
+          var targetId = this.id;
+          if (!targetId) return;
+          destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
+          instance.addEndpoint(targetId, { anchor: "LeftMiddle" }, destinationEndPoint);
+        });
+      } else {
+        // Fallback: derive id from source id + "_answer" ONLY if the node exists
+        $(windowQuestionSelector).each(function (index) {
+          var derivedId = this.id + "_answer";
+          if (!document.getElementById(derivedId)) return;
+          destinationEndPoint.paintStyle.fill = colorArrayDestination[index].getHex();
+          instance.addEndpoint(derivedId, { anchor: "LeftMiddle" }, destinationEndPoint);
+        });
+      }
 
       MatchingDraggable.attachBehaviour();
     },
     attachBehaviour: function () {
       if (!MatchingDraggable.initialized) {
         MatchingDraggable.initialized = true;
-        setTimeout(function () {
-          repaintAllJsPlumbInstances();
-        }, 500);
+        setTimeout(function () { repaintAllJsPlumbInstances(); }, 300);
+        $(window).on('resize orientationchange scroll', repaintAllJsPlumbInstances);
       }
     }
   };
@@ -267,5 +258,92 @@
       $(".exercise-draggable-answer"),
       $(".droppable")
     );
+
+    // Auto-detect matching questions and init jsPlumb per question (early init)
+    (function autoInitMatching() {
+      // We infer question ids from classes like 'window{qid}_question'
+      var qids = {};
+      $('[class]').each(function () {
+        var classes = (this.className || '').toString().split(/\s+/);
+        classes.forEach(function (c) {
+          var m = c.match(/^window(\d+)_question$/);
+          if (m) { qids[m[1]] = true; }
+        });
+      });
+      Object.keys(qids).forEach(function (qid) {
+        MatchingDraggable.init(qid);
+      });
+    })();
+  });
+
+  /* -----------------------------
+   * Robust layout-aware initializer
+   * -----------------------------
+   * Purpose: avoid "first render bad / second good" by waiting until boxes have real sizes.
+   * Triggers: jsPlumb.ready, window.load, BFCache pageshow.
+   * Also cleans up instances on pagehide.
+   */
+  function initMatchingWithRetry(maxTries = 12, delay = 80) {
+    let tries = 0;
+
+    function ready() {
+      // Detect question ids from classes .window{qid}_question
+      const qids = new Set();
+      document.querySelectorAll('[class]').forEach(el => {
+        (el.className || '').toString().split(/\s+/).forEach(c => {
+          const m = /^window(\d+)_question$/.exec(c);
+          if (m) qids.add(m[1]);
+        });
+      });
+
+      if (qids.size === 0) {
+        // Nothing yet: retry soon
+        return (++tries < maxTries) ? void setTimeout(ready, delay) : void 0;
+      }
+
+      // Ensure all relevant boxes have non-zero size
+      const boxes = [];
+      qids.forEach(qid => {
+        document.querySelectorAll('.window' + qid + '_question').forEach(el => boxes.push(el));
+        document.querySelectorAll('.window' + qid + '_answer').forEach(el => boxes.push(el));
+        // Fallback targets derived from source ids
+        document.querySelectorAll('.window' + qid + '_question').forEach(src => {
+          const fb = document.getElementById(src.id + '_answer');
+          if (fb) boxes.push(fb);
+        });
+      });
+
+      const sized = boxes.length > 0 && boxes.every(el => el && el.offsetWidth > 0 && el.offsetHeight > 0);
+      if (!sized) {
+        return (++tries < maxTries) ? void setTimeout(ready, delay) : void 0;
+      }
+
+      // Layout is stable: init per question
+      qids.forEach(qid => {
+        try { MatchingDraggable.init(qid); } catch (e) {}
+      });
+
+      // Final repaint in next tick (fonts/scroll may settle)
+      setTimeout(repaintAllJsPlumbInstances, 0);
+    }
+
+    ready();
+  }
+
+  // Launch the robust initializer at safe moments
+  jsPlumb.ready(function () { initMatchingWithRetry(); });
+  $(window).on('load', function () { initMatchingWithRetry(); });
+  window.addEventListener('pageshow', function () { initMatchingWithRetry(); });
+
+  // Clean-up when leaving the page (helps with BFCache and re-entries)
+  window.addEventListener('pagehide', function () {
+    try {
+      Object.values(MatchingDraggable.instances || {}).forEach(i => {
+        if (i && i.reset) i.reset();
+        else if (i && i.deleteEveryEndpoint) i.deleteEveryEndpoint();
+      });
+      MatchingDraggable.instances = {};
+      MatchingDraggable.initialized = false;
+    } catch (e) {}
   });
 </script>

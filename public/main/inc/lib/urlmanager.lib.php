@@ -159,33 +159,6 @@ class UrlManager
      *
      * @author Julio Montoya
      *
-     * @param string $orderBy
-     *
-     * @return array
-     * */
-    public static function get_url_data($orderBy = '')
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $orderBy = empty($orderBy) ? ' id ' : Database::escape_string($orderBy);
-
-        $sql = "SELECT id, url, description, active, tms
-                FROM $table
-                ORDER BY $orderBy";
-
-        $res = Database::query($sql);
-        $urls = [];
-        while ($url = Database::fetch_array($res)) {
-            $urls[] = $url;
-        }
-
-        return $urls;
-    }
-
-    /**
-     * Gets the id, url, description, and active status of ALL URLs.
-     *
-     * @author Julio Montoya
-     *
      * @param int $urlId
      *
      * @return array

@@ -31,9 +31,4 @@ class CleanDeletedFilesPlugin extends Plugin
 
         return $result ? $result : $result = new self();
     }
-
-    public function get_name()
-    {
-        return 'CleanDeletedFiles';
-    }
 }

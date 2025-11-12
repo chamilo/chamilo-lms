@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -58,7 +59,7 @@ foreach ($userGroups as $item) {
 }
 
 $noUserGroupList = $userGroup->getUserGroupNotInList(array_keys($userGroupList), $access_url_id);
-$url_list        = UrlManager::get_url_data();
+$urlList = Container::getAccessUrlRepository()->findAll();
 
 $totalGroups         = count($userGroupList) + count($noUserGroupList);
 $totalAssignedGroups = count($userGroupList);
@@ -111,10 +112,10 @@ Display::page_subheader2($tool_name);
             class="w-1/2 rounded-md border border-gray-300 bg-white p-2 shadow-sm focus:border-primary focus:ring-primary"
         >
             <option value="0"><?php echo get_lang('Select URL'); ?></option>
-            <?php foreach ($url_list as $url_obj): ?>
-                <?php if ($url_obj['active'] == 1): ?>
-                    <option value="<?php echo $url_obj['id']; ?>" <?php if ($url_obj['id'] == $access_url_id) echo 'selected'; ?>>
-                        <?php echo $url_obj['url']; ?>
+            <?php foreach ($urlList as $url): ?>
+                <?php if (1 == $url->getActive()): ?>
+                    <option value="<?php echo $url->getId(); ?>" <?php if ($url->getId() == $access_url_id) echo 'selected'; ?>>
+                        <?php echo $url->getUrl(); ?>
                     </option>
                 <?php endif; ?>
             <?php endforeach; ?>

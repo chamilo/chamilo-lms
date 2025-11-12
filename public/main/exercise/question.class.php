@@ -45,53 +45,53 @@ abstract class Question
     public $code;
     public static $questionTypes = [
         // — Single-choice
-        UNIQUE_ANSWER                => ['unique_answer.class.php', 'UniqueAnswer'],
-        UNIQUE_ANSWER_IMAGE          => ['UniqueAnswerImage.php', 'UniqueAnswerImage'],
-        UNIQUE_ANSWER_NO_OPTION      => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
+        UNIQUE_ANSWER                => ['unique_answer.class.php', 'UniqueAnswer', 'Unique answer'],
+        UNIQUE_ANSWER_IMAGE          => ['UniqueAnswerImage.php', 'UniqueAnswerImage', 'Unique answer (image)'],
+        UNIQUE_ANSWER_NO_OPTION      => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption', 'Unique answer (no options)'],
 
         // — Multiple-choice (all variants together)
-        MULTIPLE_ANSWER              => ['multiple_answer.class.php', 'MultipleAnswer'],
-        GLOBAL_MULTIPLE_ANSWER       => ['global_multiple_answer.class.php', 'GlobalMultipleAnswer'],
-        MULTIPLE_ANSWER_DROPDOWN     => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown'],
-        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination'],
-        MULTIPLE_ANSWER_COMBINATION  => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
-        MULTIPLE_ANSWER_TRUE_FALSE   => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
+        MULTIPLE_ANSWER              => ['multiple_answer.class.php', 'MultipleAnswer', 'Multiple answer'],
+        GLOBAL_MULTIPLE_ANSWER       => ['global_multiple_answer.class.php', 'GlobalMultipleAnswer', 'Global multiple answer'],
+        MULTIPLE_ANSWER_DROPDOWN     => ['MultipleAnswerDropdown.php', 'MultipleAnswerDropdown', 'Multiple answer (dropdown)'],
+        MULTIPLE_ANSWER_DROPDOWN_COMBINATION => ['MultipleAnswerDropdownCombination.php', 'MultipleAnswerDropdownCombination', 'Multiple answer (dropdown combination)'],
+        MULTIPLE_ANSWER_COMBINATION  => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination', 'Multiple answer (combination)'],
+        MULTIPLE_ANSWER_TRUE_FALSE   => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse', 'True/False multiple answer'],
         MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => [
-            'multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'
+            'multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse', 'True/False combination multiple answer'
         ],
         MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => [
-            'MultipleAnswerTrueFalseDegreeCertainty.php', 'MultipleAnswerTrueFalseDegreeCertainty'
+            'MultipleAnswerTrueFalseDegreeCertainty.php', 'MultipleAnswerTrueFalseDegreeCertainty', 'True/False with degree of certainty'
         ],
 
         // — Matching / draggable
-        MATCHING                     => ['matching.class.php', 'Matching'],
-        MATCHING_COMBINATION         => ['MatchingCombination.php', 'MatchingCombination'],
-        DRAGGABLE                    => ['Draggable.php', 'Draggable'],
-        MATCHING_DRAGGABLE           => ['MatchingDraggable.php', 'MatchingDraggable'],
-        MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination'],
+        MATCHING                     => ['matching.class.php', 'Matching', 'Matching'],
+        MATCHING_COMBINATION         => ['MatchingCombination.php', 'MatchingCombination', 'Matching (combination)'],
+        DRAGGABLE                    => ['Draggable.php', 'Draggable', 'Draggable'],
+        MATCHING_DRAGGABLE           => ['MatchingDraggable.php', 'MatchingDraggable', 'Matching (draggable)'],
+        MATCHING_DRAGGABLE_COMBINATION => ['MatchingDraggableCombination.php', 'MatchingDraggableCombination', 'Matching (draggable combination)'],
 
         // — Fill-in-the-blanks / calculated
-        FILL_IN_BLANKS               => ['fill_blanks.class.php', 'FillBlanks'],
-        FILL_IN_BLANKS_COMBINATION   => ['FillBlanksCombination.php', 'FillBlanksCombination'],
-        CALCULATED_ANSWER            => ['calculated_answer.class.php', 'CalculatedAnswer'],
+        FILL_IN_BLANKS               => ['fill_blanks.class.php', 'FillBlanks', 'Fill in the blanks'],
+        FILL_IN_BLANKS_COMBINATION   => ['FillBlanksCombination.php', 'FillBlanksCombination', 'Fill in the blanks (combination)'],
+        CALCULATED_ANSWER            => ['calculated_answer.class.php', 'CalculatedAnswer', 'Calculated answer'],
 
         // — Open answers / expression
-        FREE_ANSWER                  => ['freeanswer.class.php', 'FreeAnswer'],
-        ORAL_EXPRESSION              => ['oral_expression.class.php', 'OralExpression'],
+        FREE_ANSWER                  => ['freeanswer.class.php', 'FreeAnswer', 'Free answer'],
+        ORAL_EXPRESSION              => ['oral_expression.class.php', 'OralExpression', 'Oral expression'],
 
         // — Hotspot
-        HOT_SPOT                     => ['hotspot.class.php', 'HotSpot'],
-        HOT_SPOT_COMBINATION         => ['HotSpotCombination.php', 'HotSpotCombination'],
-        HOT_SPOT_DELINEATION         => ['HotSpotDelineation.php', 'HotSpotDelineation'],
+        HOT_SPOT                     => ['hotspot.class.php', 'HotSpot', 'Hotspot'],
+        HOT_SPOT_COMBINATION         => ['HotSpotCombination.php', 'HotSpotCombination', 'Hotspot (combination)'],
+        HOT_SPOT_DELINEATION         => ['HotSpotDelineation.php', 'HotSpotDelineation', 'Hotspot delineation'],
 
         // — Media / annotation
-        MEDIA_QUESTION               => ['MediaQuestion.php', 'MediaQuestion'],
-        ANNOTATION                   => ['Annotation.php', 'Annotation'],
+        MEDIA_QUESTION               => ['MediaQuestion.php', 'MediaQuestion', 'Media question'],
+        ANNOTATION                   => ['Annotation.php', 'Annotation', 'Annotation'],
 
         // — Special
-        READING_COMPREHENSION        => ['ReadingComprehension.php', 'ReadingComprehension'],
-        PAGE_BREAK                   => ['PageBreakQuestion.php', 'PageBreakQuestion'],
-        UPLOAD_ANSWER => ['UploadAnswer.php', 'UploadAnswer'],
+        READING_COMPREHENSION        => ['ReadingComprehension.php', 'ReadingComprehension', 'Reading comprehension'],
+        PAGE_BREAK                   => ['PageBreakQuestion.php', 'PageBreakQuestion', 'Page break'],
+        UPLOAD_ANSWER                => ['UploadAnswer.php', 'UploadAnswer', 'Upload answer'],
     ];
 
     /**
@@ -1120,11 +1120,21 @@ abstract class Question
     /**
      * @return string
      */
-    public function get_question_type_name()
+    public function get_question_type_name(): string
     {
-        $key = self::$questionTypes[$this->type];
+        $label = trim((string) $this->explanationLangVar);
+        if ($label !== '') {
+            return get_lang($label);
+        }
 
-        return get_lang($key[1]);
+        $def = self::$questionTypes[$this->type] ?? null;
+        $className = is_array($def) ? ($def[1] ?? '') : '';
+        if ($className !== '') {
+            $human = preg_replace('/(?<!^)(?=[A-Z])/', ' ', $className) ?: $className;
+            return get_lang(trim($human));
+        }
+
+        return '';
     }
 
     /**

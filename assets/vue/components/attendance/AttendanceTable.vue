@@ -6,7 +6,7 @@
     data-key="id"
     @page="onPageChange"
   >
-    <!-- Column for Name -->
+    <!-- Name -->
     <Column
       field="title"
       header="Name"
@@ -33,7 +33,7 @@
       </template>
     </Column>
 
-    <!-- Column for Description -->
+    <!-- Description -->
     <Column
       field="description"
       header="Description"
@@ -44,20 +44,20 @@
       </template>
     </Column>
 
-    <!-- Column for # attended -->
+    <!-- # attended -->
     <Column
       field="doneCalendars"
       header="# attended"
       sortable
     >
       <template #body="slotProps">
-        <center>{{ slotProps.data.doneCalendars ?? 0 }}</center>
+        <div class="text-center">{{ slotProps.data.doneCalendars ?? 0 }}</div>
       </template>
     </Column>
 
-    <!-- Column for Detail -->
+    <!-- Detail -->
     <Column
-      v-if="isAdminOrTeacher"
+      v-if="showActions"
       header="Detail"
     >
       <template #body="slotProps">
@@ -96,25 +96,17 @@ const route = useRoute()
 const securityStore = useSecurityStore()
 
 const props = defineProps({
-  attendances: {
-    type: Array,
-    required: true,
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  totalRecords: {
-    type: Number,
-    default: 0,
-  },
+  attendances: { type: Array, required: true },
+  loading: { type: Boolean, default: false },
+  totalRecords: { type: Number, default: 0 },
+  readonly: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(["edit", "view", "delete", "pageChange"])
 
-// Roles
 const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
-computed(() => securityStore.isStudent)
+const showActions = computed(() => !props.readonly && isAdminOrTeacher.value)
+
 const onEdit = (attendance) => emit("edit", attendance)
 const onView = (attendance) => emit("view", attendance)
 const onDelete = (attendance) => emit("delete", attendance)
@@ -127,12 +119,7 @@ const getVisibilityIcon = (attendance) => {
 
 const getVisibilityClass = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-
-  if (isAdminOrTeacher.value) {
-    return visibility === 2 ? "p-button-success" : "p-button-secondary opacity-50"
-  }
-
-  return visibility === 2 ? "p-button-success" : "p-button-warning"
+  return visibility === 2 ? "p-button-success" : "p-button-secondary opacity-50"
 }
 
 const getVisibilityTooltip = (attendance) => {

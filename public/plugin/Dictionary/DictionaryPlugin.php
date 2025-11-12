@@ -53,9 +53,4 @@ class DictionaryPlugin extends Plugin
         $sql = 'DROP TABLE IF EXISTS plugin_dictionary';
         Database::query($sql);
     }
-
-    public function get_name()
-    {
-        return 'Dictionary';
-    }
 }

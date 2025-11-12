@@ -52,16 +52,15 @@ class IndexController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $studentView = $request->getSession()->get('studentview');
+        // Default to teacher view when not set, then flip to student view on first click.
+        // This ensures the *first* click really enters Student View.
+        $current = (string) $request->getSession()->get('studentview', 'teacherview');
 
-        if (empty($studentView) || 'studentview' === $studentView) {
-            $content = 'teacherview';
-        } else {
-            $content = 'studentview';
-        }
+        $next = ($current === 'studentview') ? 'teacherview' : 'studentview';
 
-        $request->getSession()->set('studentview', $content);
+        $request->getSession()->set('studentview', $next);
 
-        return new Response($content);
+        // Keep plain text response to avoid breaking existing callers.
+        return new Response($next);
     }
 }

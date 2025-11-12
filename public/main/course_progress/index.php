@@ -63,6 +63,19 @@ $thematicId = isset($_REQUEST['thematic_id']) ? (int) $_REQUEST['thematic_id'] :
 $thematicAdvanceId = isset($_REQUEST['thematic_advance_id']) ? (int) $_REQUEST['thematic_advance_id'] : null;
 $url = api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance&'.api_get_cidreq();
 
+
+$studentViewKey = 'student_view_course_' . $courseId;
+if (isset($_GET['switch_student_view'])) {
+    $want = $_GET['switch_student_view'] === '1' ? 1 : 0;
+    Session::write($studentViewKey, $want);
+    header('Location: ' . $currentUrl);
+    exit;
+}
+
+$forcedStudentView = isset($_GET['isStudentView']) && $_GET['isStudentView'] === 'true';
+$isStudentView = $forcedStudentView ? true : (bool) (Session::read($studentViewKey) ?? false);
+$readOnly = !$isTeacher || $isStudentView;
+
 $htmlHeadXtra[] = '<script>
 $(function() {
     if ($("#div_result").html() !== undefined && $("#div_result").html().length == 0) {
@@ -199,6 +212,11 @@ $tpl = new Template(get_lang('Thematic control'));
 switch ($action) {
     case 'thematic_add':
     case 'thematic_edit':
+        // Block edition when in student view
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         if (empty($thematicId)) {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('New thematic section')];
         } else {
@@ -251,10 +269,7 @@ switch ($action) {
 
             if (!empty($thematicEntity)) {
                 if (api_get_session_id()) {
-                    /*if ($thematic['session_id'] != api_get_session_id()) {
-                        $show_form = false;
-                        echo Display::return_message(get_lang("Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser's \"Back\" button or follow the link below to return to the previous page."), 'error', false);
-                    }*/
+                    /* if ($thematic['session_id'] != api_get_session_id()) { ... } */
                 }
                 // set default values
                 $default['title'] = $thematicEntity->getTitle();
@@ -266,12 +281,18 @@ switch ($action) {
         break;
     case 'thematic_copy':
         // Copy a thematic to a session
+        if ($readOnly) {
+            api_not_allowed();
+        }
         $thematicManager->copy($thematicId);
 
         header('Location: '.$currentUrl);
         exit;
         break;
     case 'thematic_delete_select':
+        if ($readOnly) {
+            api_not_allowed();
+        }
         if ('POST' === $requestMethod && api_is_allowed_to_edit(null, true)) {
             $thematicManager->delete($_POST['id']);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -281,6 +302,9 @@ switch ($action) {
         exit;
         break;
     case 'thematic_delete':
+        if ($readOnly) {
+            api_not_allowed();
+        }
         // Delete a thematic
         if (!empty($thematicId) && api_is_allowed_to_edit(null, true)) {
             $thematicManager->delete($thematicId);
@@ -290,6 +314,10 @@ switch ($action) {
         exit;
         break;
     case 'thematic_import':
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         $csv_import_array = Import::csv_reader($_FILES['file']['tmp_name'], false);
 
         if (isset($_POST['replace']) && $_POST['replace']) {
@@ -336,6 +364,10 @@ switch ($action) {
 
         break;
     case 'thematic_import_select':
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         $actionLeft = '<a href="index.php?'.api_get_cidreq().'">';
         $actionLeft .= Display::getMdiIcon(
             ActionIcon::BACK,
@@ -359,7 +391,7 @@ switch ($action) {
         $content = $form->returnForm();
         break;
     case 'moveup':
-        if (!api_is_allowed_to_edit(null, true)) {
+        if ($readOnly || !api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
         $thematicManager->moveThematic('up', $thematicId, $course, $session);
@@ -368,7 +400,7 @@ switch ($action) {
         exit;
         break;
     case 'movedown':
-        if (!api_is_allowed_to_edit(null, true)) {
+        if ($readOnly || !api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
         $thematicManager->moveThematic('down', $thematicId, $course, $session);
@@ -377,6 +409,9 @@ switch ($action) {
         exit;
         break;
     case 'thematic_export':
+        if ($readOnly) {
+            api_not_allowed();
+        }
         $list = $thematicManager->getThematicList($course, $session);
         $csv = [];
         $csv[] = ['type', 'data1', 'data2', 'data3'];
@@ -414,6 +449,10 @@ switch ($action) {
         break;
     case 'export_documents':
     case 'thematic_export_pdf':
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         $pdfOrientation = api_get_setting('document.thematic_pdf_orientation');
         $view = new Template('', false, false, false, true, false, false);
         $list = $thematicManager->getThematicList($course, $session);
@@ -455,6 +494,10 @@ switch ($action) {
         break;
     case 'export_single_thematic':
     case 'export_single_documents':
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         $view = new Template('', false, false, false, true, false, false);
         $view->assign('thematic', $thematicEntity);
         $template = $view->get_template('course_progress/pdf_single_thematic.tpl');
@@ -498,21 +541,25 @@ switch ($action) {
         );
         break;
     case 'thematic_details':
-        $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
-        $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
-            Display::getMdiIcon('file-delimited', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import course progress')).'</a>';
-        $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
-            Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export course progress')).'</a>';
-        $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
-            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
+        // Left toolbar actions (hidden in student view)
+        if (!$readOnly) {
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
+                Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
+                Display::getMdiIcon('file-delimited', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Import course progress')).'</a>';
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
+                Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export course progress')).'</a>';
+            $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
+                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')).'</a>';
+        }
         /*$actionLeft .= Display::url(
             Display::getMdiIcon('export_to_documents', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export latest version of this page to Documents')),
             api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
         );*/
         $total_average_of_advances = null;
         $tpl->assign('token', $url_token);
-        $tpl->assign('is_allowed_to_edit', $isTeacher);
+        $tpl->assign('is_allowed_to_edit', !$readOnly);
+        $tpl->assign('student_view_active', $isStudentView);
         $toolbar = null;
         $last_done_thematic_advance = null;
         if ($thematicEntity) {
@@ -526,18 +573,12 @@ switch ($action) {
             $total_average_of_advances = $thematicManager->get_total_average_of_thematic_advances($course, $session);
         }
 
-        // Second column
-        //$thematic_plan_data = $thematicManager->get_thematic_plan_data();
-
-        // Third column
-        //$thematic_advance_data = $thematicManager->get_thematic_advance_list(null, true);
-
         if (!empty($message) && !empty($total_average_of_advances)) {
             $tpl->assign('message', $message);
         }
         $tpl->assign('score_progress', $total_average_of_advances);
 
-        if (isset($last_id) && $last_id) {
+        if (!$readOnly && isset($last_id) && $last_id) {
             $link_to_thematic_plan = '<a
                 href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.
                 Display::getMdiIcon('progress-check', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Thematic plan')).'</a>';
@@ -573,17 +614,11 @@ switch ($action) {
             /** @var CThematic $thematic */
             foreach ($thematic_data as $thematic) {
                 $id = $thematic->getIid();
-                $session_star = '';
-                if (api_is_allowed_to_edit(null, true)) {
-                    /*if (api_get_session_id() == $thematic->getSessionId()) {
-                        $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
-                    }*/
-                }
 
                 //@todo add a validation in order to load or not course thematics in the session thematic
                 $toolbarThematic = '';
-                if (api_is_allowed_to_edit(null, true)) {
-                    // Thematic title
+                if (!$readOnly && api_is_allowed_to_edit(null, true)) {
+                    // Thematic title actions (copy/move/export/edit/delete)
                     $toolbarThematic = Display::url(
                         Display::getMdiIcon('disc', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Copy')),
                         'index.php?'.api_get_cidreq().'&action=thematic_copy&thematic_id='.$id.$params.$url_token,
@@ -596,44 +631,32 @@ switch ($action) {
                         $toolbarThematic .= $moveButtons;
                     }
 
-                    if (true) {
-                        //if (api_get_session_id() == $thematic->getSessionId()) {
-                        $toolbarThematic .= Display::url(
-                            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
-                            api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
-                                [
-                                    'action' => 'export_single_thematic',
-                                    'thematic_id' => $id,
-                                ]
-                            ),
-                            ['class' => 'btn btn--default']
-                        );
-                        /*$toolbarThematic .= Display::url(
-                            Display::getMdiIcon(ActionIcon::EXPORT_DOC, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export latest version of this page to Documents')),
-                            api_get_self().'?'.api_get_cidreq().$url_token.'&'.http_build_query(
-                                ['action' => 'export_single_documents', 'thematic_id' => $id]
-                            ),
-                            ['class' => 'btn btn--default']
-                        );*/
-                        $toolbarThematic .= '<a
+                    $toolbarThematic .= Display::url(
+                        Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
+                        api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query(
+                            [
+                                'action' => 'export_single_thematic',
+                                'thematic_id' => $id,
+                            ]
+                        ),
+                        ['class' => 'btn btn--default']
+                    );
+                    $toolbarThematic .= '<a
                             class="btn btn--default"
                             href="index.php?'.api_get_cidreq().'&action=thematic_edit&thematic_id='.$id.$params.$url_token.'">'
-                            .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
-                        $toolbarThematic .= '<a
+                        .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')).'</a>';
+                    $toolbarThematic .= '<a
                             class="btn btn--default"
-                            onclick="javascript:if(!confirm(\''
-                            .get_lang('Are you sure you want to delete')
-                            .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
-                            .$id.$params.$url_token.'">'
-                            .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
-                    }
+                            onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
+                            href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='.$id.$params.$url_token.'">'
+                        .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
                 }
                 $extra[$thematic->getIid()]['toolbar'] = $toolbarThematic;
                 $extra[$thematic->getIid()]['last_done'] = $last_done_thematic_advance;
                 $listThematic[] = $thematic;
             }
         } else {
-            if (api_is_allowed_to_edit(null, true)) {
+            if (!$readOnly && api_is_allowed_to_edit(null, true)) {
                 $noData = Display::noDataView(
                     get_lang('Course program'),
                     Display::getMdiIcon(ToolIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_BIG),
@@ -651,8 +674,10 @@ switch ($action) {
         break;
     case 'thematic_list':
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
-        $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
+        if (!$readOnly) {
+            $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
+                Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
+        }
 
         $table = new SortableTable(
             'thematic_list',
@@ -664,7 +689,7 @@ switch ($action) {
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false, ['style' => 'width:20px;']);
         $table->set_header(1, get_lang('Title'), false);
-        if (api_is_allowed_to_edit(null, true)) {
+        if (!$readOnly && api_is_allowed_to_edit(null, true)) {
             $table->set_header(
                 2,
                 get_lang('Detail'),
@@ -677,6 +702,10 @@ switch ($action) {
         break;
     case 'thematic_plan_add':
     case 'thematic_plan_edit':
+        if ($readOnly) {
+            api_not_allowed();
+        }
+
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematicId,
             'name' => get_lang('Thematic plan').' ('.$cleanThematicTitle.')',
@@ -723,10 +752,6 @@ switch ($action) {
         } else {
             $header_form = $default_thematic_plan_title[$description_type];
         }
-        /*if (!$error) {
-            $token = md5(uniqid(rand(), true));
-            Session::write('thematic_plan_token', $token);
-        }*/
 
         // display form
         $form = new FormValidator(
@@ -777,20 +802,10 @@ switch ($action) {
             Display::addFlash(Display::return_message($message, 'normal', false));
         }
 
-        // error messages
-        /*if ($error) {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('The form contains incorrect or incomplete data. Please check your input.'),
-                    'error',
-                    false
-                )
-            );
-        }*/
         $content = $form->returnForm();
         break;
     case 'thematic_plan_delete':
-        if (!api_is_allowed_to_edit(null, true)) {
+        if ($readOnly || !api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
         if (api_is_allowed_to_edit(null, true)) {
@@ -810,8 +825,7 @@ switch ($action) {
                 'name' => get_lang('Thematic plan').' ('.$cleanThematicTitle.') ',
             ];
         }
-        /*$actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-            Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';*/
+
         $htmlHeadXtra[] = "
                 <script>
                     $(function () {
@@ -830,22 +844,9 @@ switch ($action) {
         $thematic_plan_data = $thematicEntity->getPlans();
         $description_type = isset($_GET['description_type']) ? (int) $_GET['description_type'] : null;
 
-        if (!empty($thematicId) && !empty($description_type)) {
-            //$thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId, $description_type);
-        } elseif (!empty($thematicId) && 'thematic_plan_list' === $action) {
-            //$thematic_plan_data = $thematicManager->get_thematic_plan_data($thematicId);
-        }
-
         $default_thematic_plan_title = $thematicManager->get_default_thematic_plan_title();
         $default_thematic_plan_icon = $thematicManager->get_default_thematic_plan_icon();
-        //$next_description_type = $thematicManager->get_next_description_type($thematicId);
         $default_thematic_plan_question = $thematicManager->get_default_question();
-        //$thematic_data = $thematicManager->get_thematic_list($thematicId);
-        //$tpl->assign('title_thematic', $thematic_data['title']);
-        //$tpl->assign('content_thematic', $thematic_data['content']);
-        //$tpl->assign('form_thematic', $formLayout);
-        //$thematicLayout = $tpl->get_template('course_progress/thematic_plan.tpl');
-        //$content = $tpl->fetch($thematicLayout);
 
         // actions menu
         $new_thematic_plan_data = [];
@@ -888,7 +889,13 @@ switch ($action) {
                 '#',
                 'times',
                 'danger',
-                ['role' => 'button', 'data-id' => $id, 'class' => 'btn-delete']
+                [
+                    'role'   => 'button',
+                    'data-id'=> (string) $id,
+                    'class'  => 'btn-delete',
+                    'title'  => get_lang('Delete'),
+                    'aria-label' => get_lang('Delete'),
+                ]
             );
 
             $form->addHidden('description_type['.$id.']', $id);
@@ -905,12 +912,14 @@ switch ($action) {
                 ]
             );
 
-            if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
+            if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list ?? [])) {
                 /** @var CThematicPlan $thematic_plan */
-                $thematic_plan = $new_thematic_plan_data[$id];
+                $thematic_plan = $new_thematic_plan_data[$id] ?? null;
                 // set default values
-                $default['title['.$id.']'] = $thematic_plan->getTitle();
-                $default['description['.$id.']'] = $thematic_plan->getDescription();
+                if ($thematic_plan) {
+                    $default['title['.$id.']'] = $thematic_plan->getTitle();
+                    $default['description['.$id.']'] = $thematic_plan->getDescription();
+                }
                 $thematic_plan = null;
             } else {
                 $thematic_plan = null;
@@ -921,16 +930,6 @@ switch ($action) {
         }
         $form->addGroup(
             [
-                /*$form->addButton(
-                    'add_item',
-                    get_lang('Save and add new item'),
-                    'plus',
-                    'info',
-                    'default',
-                    null,
-                    [],
-                    true
-                ),*/
                 $form->addButtonSave(get_lang('Save'), 'submit', true),
             ]
         );
@@ -940,6 +939,9 @@ switch ($action) {
         break;
     case 'thematic_advance_add':
     case 'thematic_advance_edit':
+        if ($readOnly) {
+            api_not_allowed();
+        }
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
@@ -972,7 +974,6 @@ switch ($action) {
             api_get_self().'?'.api_get_cidreq()
         );
         $form->addHeader($header);
-        //$form->addElement('hidden', 'thematic_advance_token',$token);
         $form->addHidden('action', $action);
 
         if ($advance) {
@@ -1121,13 +1122,10 @@ switch ($action) {
 
             if ($advance->getAttendance()) {
                 $default['start_date_type'] = 1;
-                //$default['custom_start_date'] = null;
-                //if ($advance->getStartDate()) {
                 if (!empty($thematic_advance_data['start_date'])) {
                     $default['start_date_by_attendance'] = api_get_local_time($advance->getStartDate());
                 }
                 $default['attendance_select'] = $advance->getAttendance()->getIid();
-            //}
             } else {
                 $default['custom_start_date'] = date(
                     'Y-m-d H:i:s',
@@ -1194,7 +1192,7 @@ switch ($action) {
 
         break;
     case 'thematic_advance_delete':
-        if (!api_is_allowed_to_edit(null, true)) {
+        if ($readOnly || !api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
         }
 
@@ -1215,10 +1213,10 @@ switch ($action) {
 
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')'];
 
-        // thematic advance list
+        // thematic advance list toolbar (local)
         $actions = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to')).'</a>';
-        if (api_is_allowed_to_edit(false, true)) {
+        if (!$readOnly && api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematicId.'"> '.
                 Display::getMdiIcon('progress-clock', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic advance')).'</a>';
         }
@@ -1231,13 +1229,12 @@ switch ($action) {
         );
 
         $table->setDataFunctionParams(['thematic_id' => $thematicEntity->getIid()]);
-        //$table->set_additional_parameters($parameters);
         $table->set_header(0, '', false, ['style' => 'width:20px;']);
         $table->set_header(1, get_lang('Start Date'), false);
         $table->set_header(2, get_lang('Duration in hours'), false, ['style' => 'width:80px;']);
         $table->set_header(3, get_lang('Content'), false);
 
-        if (api_is_allowed_to_edit(null, true)) {
+        if (!$readOnly && api_is_allowed_to_edit(null, true)) {
             $table->set_header(
                 4,
                 get_lang('Detail'),
@@ -1246,14 +1243,25 @@ switch ($action) {
             );
         }
         $content .= $table->return_table();
-        /*
-        $tpl->assign('content', $content);
-        $thematicLayout = $tpl->get_template('course_progress/thematic_advance.html.twig');
-        $content = $tpl->fetch($thematicLayout);*/
         break;
 }
 
-$toolbar = Display::toolbarAction('thematic-bar', [$actionLeft]);
+$toggleUrl = api_get_self() . '?' . api_get_cidreq() . '&switch_student_view=' . ($isStudentView ? '0' : '1');
+$toggleLabel = $isStudentView ? get_lang('Switch to teacher view') : get_lang('Switch to student view');
+$toggleIcon  = $isStudentView ? 'account-tie' : 'account-school';
+
+$studentViewBtn = '';
+if (api_is_allowed_to_edit(null, true)) {
+    $studentViewBtn = Display::toolbarButton(
+        $toggleLabel,
+        $toggleUrl,
+        $toggleIcon,
+        'default',
+        []
+    );
+}
+
+$toolbar = Display::toolbarAction('thematic-bar', [$actionLeft, $studentViewBtn]);
 $tpl->assign('content', $content);
 $tpl->assign('actions', $toolbar);
 $tpl->display_one_col_template();

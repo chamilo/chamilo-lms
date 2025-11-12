@@ -12,15 +12,25 @@ $type = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : 0;
 
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self().'?'.api_get_cidreq().'&answerType='.$type.'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.api_get_cidreq()
+        .'&exerciseId='.$exerciseId
+        .'&answerType='.$type
+        .'&modifyQuestion='.$modifyQuestion
+        .'&editQuestion='.$objQuestion->id
+        .'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
-    $action = api_get_self().'?'.api_get_cidreq().'&answerType='.$type.'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
+    $action = api_get_self().'?'.api_get_cidreq()
+        .'&exerciseId='.$exerciseId
+        .'&answerType='.$type
+        .'&modifyQuestion='.$modifyQuestion
+        .'&newQuestion='.$newQuestion;
 }
 
 if (is_object($objQuestion)) {
     // FORM CREATION
     $form = new FormValidator('question_admin_form', 'post', $action);
+    $form->addHidden('exerciseId', (int)$exerciseId);
 
     $class = 'btn btn--plain';
     if (isset($_GET['editQuestion'])) {

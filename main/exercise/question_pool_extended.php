@@ -5,15 +5,17 @@
 use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use ChamiloSession as Session;
 use Knp\Component\Pager\Paginator;
+use Twig\Cache\NullCache;
 
 /**
- * Question Pool
- * This script allows administrators to manage questions and add them into their exercises.
+ * Extended Question Pool
+ * This script adds some extra features to the original question pool.
  * One question can be in several exercises.
  *
  * @author Olivier Brouckaert
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
+ * @author Modify by Nosolored 2025-10-20 (extended features)
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -25,9 +27,9 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
 $extended = api_get_plugin_setting('extendedquestionpool', 'enable_plugin');
 
-if ($extended == 'true') {
+if ($extended != 'true') {
     $query = $_SERVER['QUERY_STRING'] ?? '';
-    $urlDest = 'question_pool_extended.php';
+    $urlDest = 'question_pool.php';
 
     if (!empty($query)) {
         $urlDest .= '?' . $query;
@@ -35,6 +37,9 @@ if ($extended == 'true') {
     header('Location: ' . $urlDest);
     exit;
 }
+require_once api_get_path(SYS_PLUGIN_PATH).'extendedquestionpool/src/extendedquestionpool_plugin.class.php';
+require_once api_get_path(SYS_PLUGIN_PATH).'extendedquestionpool/src/extendedquestionpool.lib.php';
+$extendedQuestionPoolPlugin = ExtendedQuestionPoolPlugin::create();
 
 $delete = isset($_GET['delete']) ? (int) $_GET['delete'] : null;
 $recup = isset($_GET['recup']) ? (int) $_GET['recup'] : null;
@@ -107,7 +112,10 @@ if ($is_allowedToEdit) {
             $objExercise->read($fromExercise);
             Session::write('objExercise', $objExercise);
         }
-        $displayMessage = get_lang('ItemAdded');
+                    
+        $nQuestions = $objExercise->getQuestionCount();
+        $displayMessage = get_lang('ItemAdded').' ('.$nQuestions.' '.get_lang('Questions').')';
+        
     }
 
     // Deletes a question from the database and all exercises
@@ -147,7 +155,9 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
-        Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'success'));
+        $nQuestions = $objExercise->getQuestionCount();
+        //Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('ItemAdded').' ('.$nQuestions.' '.get_lang('Questions').')', 'success'));
     } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
         foreach ($list_recup as $course_id => $question_data) {
@@ -188,6 +198,8 @@ if ($is_allowedToEdit) {
             }
         }
         Session::write('objExercise', $objExercise);
+        $nQuestions = $objExercise->getQuestionCount();
+        Display::addFlash(Display::return_message(get_lang('Done').' ('.$nQuestions.' '.get_lang('Questions').')', 'success'));
     }
 }
 
@@ -218,8 +230,8 @@ $htmlHeadXtra[] = "
         $('#exercise_id_changed').val('1');
     }
 
-    function confirm_your_choice() {
-        return confirm('$confirmYourChoice');
+    function confirm_your_choice(confirmMessage) {
+        return confirm(confirmMessage);
     }
 </script>";
 
@@ -241,6 +253,40 @@ $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
 
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
+        case 'score':
+            if (!empty($_REQUEST['questions'])) {
+                $txtError = '';
+                $questions = $_REQUEST['questions'];
+                $correctScore = api_get_plugin_setting('extendedquestionpool', 'correct_score');
+                $errorScore = api_get_plugin_setting('extendedquestionpool', 'error_score');
+                if (!is_numeric($correctScore) || $correctScore<=0) {
+                    Display::addFlash(Display::return_message('Debe definir correctamente las puntuaciones en la configuración del plugin', 'error'));
+                } elseif (!empty($errorScore) && !is_numeric($errorScore)) {
+                    Display::addFlash(Display::return_message('Debe definir correctamente las puntuaciones en la configuración del plugin', 'error'));
+                } elseif (count($questions) > 0) {
+                    foreach ($questions as $questionId) {
+                        $objQuestionTmp = Question::read($questionId);
+                        if ($objQuestionTmp) {
+                            if ($objQuestionTmp->selectType()==UNIQUE_ANSWER) {
+                                $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+                                $query1 = "UPDATE $table SET ponderation = $correctScore
+                                    WHERE question_id=$questionId AND correct = 1";
+                                $query2 = "UPDATE $table SET ponderation = $errorScore
+                                    WHERE question_id=$questionId AND correct = 0";
+                                $tableQ = Database::get_course_table(TABLE_QUIZ_QUESTION);
+                                $query3 = "UPDATE $tableQ SET ponderation = $correctScore
+                                    WHERE iid=$questionId";
+                                Database::query($query1);
+                                Database::query($query2);
+                                Database::query($query3);
+                            }
+                        }
+                    }
+                }
+                header('Location: '.$url);
+                exit;
+            }
+            break;
         case 'reuse':
             if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
                 $questions = $_REQUEST['questions'];
@@ -260,8 +306,10 @@ if (isset($_REQUEST['action'])) {
                         }
                     }
                 }
-
-                Display::addFlash(Display::return_message(get_lang('Added')));
+                
+                $nQuestions = $objExercise->getQuestionCount();
+                Display::addFlash(Display::return_message(get_lang('Added').' ('.$nQuestions.' '.get_lang('Questions').')', 'success'));
+                
                 header('Location: '.$url);
                 exit;
             }
@@ -523,15 +571,8 @@ $form->addHidden('course_id_changed', '0');
 $form->addHidden('exercise_id_changed', '0');
 
 $extraField = new ExtraField('question');
-$extendedExtraFields = array(
-            "additional_question_category",
-            "question_data1",
-            "question_data2",
-            "question_data3",
-            "question_extra_info"
-        );
-$jsForExtraFields = $extraField->addElements($form, 0, $extendedExtraFields, true);
 
+$jsForExtraFields = $extraField->addElements($form, 0, [], true);
 
 $form->addButtonFilter(get_lang('Filter'), 'name');
 
@@ -543,7 +584,7 @@ echo '<script>$(function () {
 ?>
 <div class="clear"></div>
 <?php
-
+$formValues = $form->validate() ? $form->exportValues() : [];
 /**
  * @return array
  */
@@ -610,33 +651,29 @@ function getExtraFieldConditions(array $formValues, $queryType = 'from')
         'where' => $where,
     ];
 }
-
-function getQuestions(
-    $getCount,
-    $start,
-    $length,
-    $exerciseId,
-    $courseCategoryId,
-    $selected_course,
-    $session_id,
-    $exerciseLevel,
-    $answerType,
-    $questionId,
-    $description,
-    $fromExercise = 0,
-    $formValues = []
-) {
-    $start = (int) $start;
-    $length = (int) $length;
-    $exerciseId = (int) $exerciseId;
-    $courseCategoryId = (int) $courseCategoryId;
-    $selected_course = (int) $selected_course;
-    $session_id = (int) $session_id;
-    $exerciseLevel = (int) $exerciseLevel;
-    $answerType = (int) $answerType;
-    $questionId = (int) $questionId;
-    $fromExercise = (int) $fromExercise;
-    $description = Database::escape_string($description);
+/**
+ * get question list for sortable table
+ */
+function getQuestions($from, $number_of_items, $column, $direction, $getCount = false) {
+    $start = (int) $from;
+    $length = (int) $number_of_items;
+    if (empty($length)) {
+        $length = 20;
+    }
+    global $exerciseId,
+            $courseCategoryId,
+            $selected_course,
+            $session_id,
+            $exerciseLevel,
+            $answerType,
+            $questionId,
+            $description,
+            $fromExercise,
+            $formValues,
+            $objExercise,
+            $actionIcon1,
+            $actionIcon2,
+            $questionTagA;
 
     $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -688,7 +725,7 @@ function getQuestions(
                     qu.level,
                     qt.exercice_id exerciseId';
         if ($getCount) {
-            $select = 'count(qu.iid) as count';
+            //$select = 'count(qu.iid) as count';
         }
         $sql = "SELECT $select
                 FROM
@@ -704,7 +741,7 @@ function getQuestions(
                     $currentExerciseCondition
                     {$efConditions['where']}
                 ORDER BY BINARY qu.question ASC
-                 ";
+                ";
     } elseif ($exerciseId == -1) {
         $efConditions = getExtraFieldConditions($formValues, 'join');
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -712,7 +749,7 @@ function getQuestions(
         $from = '';
         if (isset($courseCategoryId) && $courseCategoryId > 0) {
             $from = " INNER JOIN $TBL_COURSE_REL_CATEGORY crc
-                      ON crc.question_id = ex.iid ";
+                    ON crc.question_id = ex.iid ";
             $level_where .= " AND
                     crc.c_id = $selected_course AND
                     crc.category_id = $courseCategoryId";
@@ -734,11 +771,7 @@ function getQuestions(
         }
 
         $select = ' qu.*, r.exercice_id exerciseId  ';
-        if ($getCount) {
-            $select = 'count(qu.iid) as count';
-        }
 
-        // @todo fix this query with the new id field
         $sql = " (
                     SELECT $select
                     FROM $TBL_QUESTIONS qu
@@ -785,10 +818,7 @@ function getQuestions(
                             $answer_where
                             {$efConditions['where']}
                     )
-                 ";
-        if ($getCount) {
-            $sql = "SELECT SUM(count) count FROM ($sql) as total";
-        }
+                ";
     } else {
         $efConditions = getExtraFieldConditions($formValues, 'from');
         // All tests for selected course
@@ -823,9 +853,6 @@ function getQuestions(
         $sessionCondition = api_get_session_condition($session_id, true, 'ex.session_id');
 
         $select = 'qu.iid, question, qu.type, level, ex.session_id, qt.exercice_id exerciseId  ';
-        if ($getCount) {
-            $select = 'count(qu.iid) as count';
-        }
 
         // All tests for the course selected, not in session
         $sql = "SELECT DISTINCT
@@ -852,16 +879,11 @@ function getQuestions(
 
     if ($getCount) {
         $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
-        if ($row) {
-            return (int) $row['count'];
-        }
-
-        return 0;
+        return Database::num_rows($result);
     }
-
-    $sql .= " LIMIT $start, $length";
+    //$sql .= " LIMIT $start, $length";
     $result = Database::query($sql);
+
     $mainQuestionList = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         if ($exerciseId == -1 && isQuestionInActiveQuiz($row['iid'])) {
@@ -871,26 +893,118 @@ function getQuestions(
         $mainQuestionList[] = $row;
     }
 
-    return $mainQuestionList;
+    $QList = [];
+    foreach ($mainQuestionList as $question) {
+        $row = [];
+        // This function checks if the question can be read
+        $question_type = get_question_type_for_question($selected_course, $question['iid']);
+
+        if (empty($question_type)) {
+            continue;
+        }
+        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
+        if (!$objExercise->hasQuestion($question['iid'])) {
+            $row[0] = Display::input(
+                'checkbox',
+                'questions[]',
+                $question['iid'],
+                ['class' => 'question_checkbox']
+            );
+        } else {
+            $row[1] = '';
+        }
+        $row[1] = $question['iid'];
+
+        $row[2] = getLinkForQuestion(
+            $questionTagA,
+            $fromExercise,
+            $question['iid'],
+            $question['type'],
+            $question['question'],
+            $sessionId,
+            $question['exerciseId']
+        );
+    
+        $row[3] = $question_type;
+        $row[4] = TestCategory::getCategoryNameForQuestion($question['iid'], $selected_course);
+        $row[5] = $question['level'];
+
+        $row[6] = getQuestionOcurrences($question['iid']);
+        $row[7] = getQuestionFailures($question['iid']);
+        $row[8] = getQuestionSuccesses($question['iid']);
+
+        $row[9] = get_action_icon_for_question(
+            $actionIcon1,
+            $fromExercise,
+            $question['iid'],
+            $question['type'],
+            $question['question'],
+            $selected_course,
+            $courseCategoryId,
+            $exerciseLevel,
+            $answerType,
+            $session_id,
+            $question['exerciseId'],
+            $objExercise
+        ).'&nbsp;'.
+        get_action_icon_for_question(
+            $actionIcon2,
+            $fromExercise,
+            $question['iid'],
+            $question['type'],
+            $question['question'],
+            $selected_course,
+            $courseCategoryId,
+            $exerciseLevel,
+            $answerType,
+            $session_id,
+            $question['exerciseId'],
+            $objExercise
+        );
+        $QList[] = $row;
+    }
+    if(!empty($column)) {
+        $asc = $direction =='ASC' ? 1 : 0;
+        $QList = sortByCol($QList, $column, $asc);
+    }
+    $x = 0;
+    if (!empty($length)) {
+        $questionList = [];
+        $end = $start+$length;
+        foreach($QList as $question) {
+            if ($x>=$start && $x<$end) {
+                $questionList[] = $question;
+            }
+            $x++;
+        }
+        return $questionList;
+    }
+    return $QList;
+
+}
+/**
+ * get number total of questions
+ */
+function getNbrQuestions() {
+    $res = getQuestions(
+            0,
+            0,
+            0,
+            null,
+            true
+        );
+    return $res;
 }
 
-$formValues = $form->validate() ? $form->exportValues() : [];
 
 $nbrQuestions = getQuestions(
-    true,
-    null,
-    null,
-    $exerciseId,
-    $courseCategoryId,
-    $selected_course,
-    $session_id,
-    $exerciseLevel,
-    $answerType,
-    $questionId,
-    $description,
-    $fromExercise,
-    $formValues
-);
+        0,
+        0,
+        0,
+        null,
+        true
+    );  
+
 
 $length = api_get_configuration_value('question_pagination_length');
 if (empty($length)) {
@@ -921,22 +1035,6 @@ $pagination->renderer = function ($data) use ($url) {
 
     return $render;
 };
-
-$mainQuestionList = getQuestions(
-    false,
-    $start,
-    $length,
-    $exerciseId,
-    $courseCategoryId,
-    $selected_course,
-    $session_id,
-    $exerciseLevel,
-    $answerType,
-    $questionId,
-    $description,
-    $fromExercise,
-    $formValues
-);
 
 // build the line of the array to display questions
 // Actions are different if you launch the question_pool page
@@ -989,83 +1087,10 @@ if ($fromExercise <= 0) {
     }
 }
 
-$data = [];
-if (is_array($mainQuestionList)) {
-    foreach ($mainQuestionList as $question) {
-        $row = [];
-        // This function checks if the question can be read
-        $question_type = get_question_type_for_question($selected_course, $question['iid']);
 
-        if (empty($question_type)) {
-            continue;
-        }
-        $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        if (!$objExercise->hasQuestion($question['iid'])) {
-            $row[] = Display::input(
-                'checkbox',
-                'questions[]',
-                $question['iid'],
-                ['class' => 'question_checkbox']
-            );
-        } else {
-            $row[] = '';
-        }
+$headers = [];  
 
-        $row[] = getLinkForQuestion(
-            $questionTagA,
-            $fromExercise,
-            $question['iid'],
-            $question['type'],
-            $question['question'],
-            $sessionId,
-            $question['exerciseId']
-        );
-
-        $row[] = $question_type;
-        $row[] = TestCategory::getCategoryNameForQuestion($question['iid'], $selected_course);
-        $row[] = $question['level'];
-        $row[] = get_action_icon_for_question(
-            $actionIcon1,
-            $fromExercise,
-            $question['iid'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        ).'&nbsp;'.
-        get_action_icon_for_question(
-            $actionIcon2,
-            $fromExercise,
-            $question['iid'],
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        );
-        $data[] = $row;
-    }
-}
-
-$headers = [
-    '',
-    get_lang('QuestionUpperCaseFirstLetter'),
-    get_lang('Type'),
-    get_lang('QuestionCategory'),
-    get_lang('Difficulty'),
-    $actionLabel,
-];
-
-echo $pagination;
+//echo $pagination;
 
 $tableId = 'question_pool_id';
 echo '<form id="'.$tableId.'" method="get" action="'.$url.'">';
@@ -1075,30 +1100,38 @@ echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">'
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
 
-$table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
+//$parameters = [];
+/*$vals = getQuestionsList(0,20,2, 'ASC');
+echo '<pre>';
+echo var_dump($vals);
+echo '</pre>';
+echo '<pre>';
+echo var_dump(getNbrQuestions());
+echo '</pre>';*/
+
+$table = new SortableTable(
+            'question-list',
+            'getNbrQuestions',
+            'getQuestions',
+            2,
+            20,
+            'ASC'
+        );
+//$table->set_additional_parameters($parameters);
 $row = 0;
 $column = 0;
-foreach ($headers as $header) {
-    $table->setHeaderContents($row, $column, $header);
-    $column++;
-}
+$table->set_header(0, '', false, 'width="8px"');
+$table->set_header(1, 'Id', true, 'width="60px"');
+$table->set_header(2, get_lang('QuestionUpperCaseFirstLetter'), true, null, ['class' => 'title']);
+$table->set_header(3, get_lang('Type'), false);
+$table->set_header(4, get_lang('QuestionCategory'), true);
+$table->set_header(5, get_lang('Difficulty'), true);
+$table->set_header(6, get_plugin_lang('Occurrences', ExtendedQuestionPoolPlugin::class), true);
+$table->set_header(7, get_plugin_lang('Failures', ExtendedQuestionPoolPlugin::class), true);
+$table->set_header(8, get_plugin_lang('Successes', ExtendedQuestionPoolPlugin::class), true);
+$table->set_header(9, $actionLabel, false, 'width="70px"');
 
-$row = 1;
-foreach ($data as $rows) {
-    $column = 0;
-    foreach ($rows as $value) {
-        $table->setCellContents($row, $column, $value);
-        $table->updateCellAttributes(
-            $row,
-            $column,
-            $value
-        );
-        $column++;
-    }
-    $row++;
-}
-
-$table->display();
+echo $table->return_table();
 
 echo '</form>';
 
@@ -1125,7 +1158,10 @@ $html .= '<div class="btn-group">
 $actionLabel = get_lang('ReUseACopyInCurrentTest');
 $actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];
 if ($selected_course == api_get_course_int_id()) {
-    $actions = ['reuse' => get_lang('ReuseQuestion')];
+    $actions = [
+        'reuse' => get_lang('ReuseQuestion'),
+        'score' => get_plugin_lang('setDefaultScore', ExtendedQuestionPoolPlugin::class)
+    ];
 }
 
 foreach ($actions as $action => &$label) {
@@ -1136,7 +1172,7 @@ foreach ($actions as $action => &$label) {
                 onclick="javascript:action_click(this, \''.$tableId.'\');">'.
                 $label.'
             </a>
-          </li>';
+        </li>';
 }
 $html .= '</ul>';
 $html .= '</div>'; //btn-group
@@ -1207,11 +1243,12 @@ function getLinkForQuestion(
         $questionId = (int) $questionId;
         $questionType = (int) $questionType;
         $fromExercise = (int) $fromExercise;
-
+        $qOptions = getQuestionAnswers($questionId);
         $result = Display::url(
             $questionName.$sessionIcon,
             'admin.php?'.api_get_cidreq().
-            "&exerciseId=$exerciseId&editQuestion=$questionId&type=$questionType&fromExercise=$fromExercise"
+            "&exerciseId=$exerciseId&editQuestion=$questionId&type=$questionType&fromExercise=$fromExercise",
+            ['title' => $qOptions]
         );
     }
 
@@ -1231,7 +1268,7 @@ function getLinkForQuestion(
     in_answerType = the code of the type of the question chosen in the FILTERING MENU
     in_session_id = the id of the session_id chosen in the FILTERING MENU
     in_exercise_id = the id of the exercise chosen in the FILTERING MENU
- */
+*/
 function get_action_icon_for_question(
     $in_action,
     $from_exercise,
@@ -1259,7 +1296,7 @@ function get_action_icon_for_question(
                 $res = Display::return_icon('delete_na.png', get_lang('ThisQuestionExistsInAnotherExercisesWarning'));
             } else {
                 $res = "<a href='".api_get_self()."?".
-                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice(\'Por favor, confirme la eliminación\')'>";
                 $res .= Display::return_icon('delete.png', get_lang('Delete'));
                 $res .= "</a>";
             }

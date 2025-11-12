@@ -203,16 +203,18 @@ $htmlHeadXtra[] = "
 
       function toggleDropdown(event) {
         event.preventDefault();
-        var isDisplayed = dropdownMenu.style.display === 'block';
-        dropdownMenu.style.display = isDisplayed ? 'none' : 'block';
+        var isDisplayed = dropdownMenu && dropdownMenu.style.display === 'block';
+        if (dropdownMenu) dropdownMenu.style.display = isDisplayed ? 'none' : 'block';
       }
 
-      actionButton.addEventListener('click', toggleDropdown);
-      document.addEventListener('click', function(event) {
-        if (!dropdownMenu.contains(event.target) && !actionButton.contains(event.target)) {
-          dropdownMenu.style.display = 'none';
-        }
-      });
+      if (actionButton) {
+        actionButton.addEventListener('click', toggleDropdown);
+        document.addEventListener('click', function(event) {
+          if (dropdownMenu && !dropdownMenu.contains(event.target) && !actionButton.contains(event.target)) {
+            dropdownMenu.style.display = 'none';
+          }
+        });
+      }
     });
 
     function submit_form(obj) {
@@ -233,20 +235,20 @@ $htmlHeadXtra[] = "
 </script>";
 
 $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
-    [
-        'fromExercise' => $fromExercise,
-        'session_id' => $session_id,
-        'selected_course' => $selected_course,
-        'courseCategoryId' => $courseCategoryId,
-        'exerciseId' => $exerciseId,
-        'exerciseLevel' => $exerciseLevel,
-        'answerType' => $answerType,
-        'question_id' => $questionId,
-        'description' => Security::remove_XSS($description),
-        'course_id_changed' => $course_id_changed,
-        'exercise_id_changed' => $exercise_id_changed,
-    ]
-);
+        [
+            'fromExercise' => $fromExercise,
+            'session_id' => $session_id,
+            'selected_course' => $selected_course,
+            'courseCategoryId' => $courseCategoryId,
+            'exerciseId' => $exerciseId,
+            'exerciseLevel' => $exerciseLevel,
+            'answerType' => $answerType,
+            'question_id' => $questionId,
+            'description' => Security::remove_XSS($description),
+            'course_id_changed' => $course_id_changed,
+            'exercise_id_changed' => $exercise_id_changed,
+        ]
+    );
 
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
@@ -497,9 +499,9 @@ $form
     ->setSelected($exerciseLevel);
 $form
     ->addSelect(
-    'answerType',
+        'answerType',
         get_lang('Answer type'),
-    $new_question_list,
+        $new_question_list,
         ['onchange' => 'submit_form(this);', 'id' => 'answerType']
     )
     ->setSelected($answerType);
@@ -819,29 +821,19 @@ $pagination->renderer = function ($data) use ($url) {
 */
 
 if ($fromExercise <= 0) {
-    // NOT IN A TEST - NOT IN THE COURSE
-    $actionLabel = get_lang('Re-use in current test');
-    $actionIcon1 = get_lang('Must be in a test');
-    $actionIcon2 = '';
-    // We are not in this course, to messy if we link to the question in another course
-    $questionTagA = 0;
-    if ($selected_course == api_get_course_int_id()) {
-        // NOT IN A TEST - IN THE COURSE
-        $actionLabel = get_lang('Edit');
-        $actionIcon1 = 'edit';
-        $actionIcon2 = 'delete';
-        // We are in the course, question title can be a link to the question edit page
-        $questionTagA = 1;
-    }
+    // OUTSIDE a test → show edit/delete column
+    $actionLabel = get_lang('Actions');
+    $actionIcon1 = 'edit';
+    $actionIcon2 = 'delete';
+    $questionTagA = 1;
 } else {
-    // IN A TEST - NOT IN THE COURSE
+    // INSIDE a test → show reuse options
     $actionLabel = get_lang('Re-use a copy inside the current test');
     $actionIcon1 = 'clone';
     $actionIcon2 = 'add';
     $questionTagA = 0;
 
     if ($selected_course == api_get_course_int_id()) {
-        // IN A TEST - IN THE COURSE
         $actionLabel = get_lang('Re-use in current test');
         $actionIcon1 = 'add';
         $actionIcon2 = '';
@@ -861,7 +853,8 @@ if (is_array($mainQuestionList)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        if (!$objExercise->hasQuestion($question['iid'])) {
+
+        if ($fromExercise > 0 && !$objExercise->hasQuestion($question['iid'])) {
             $row[] = Display::input(
                 'checkbox',
                 'questions[]',
@@ -885,34 +878,37 @@ if (is_array($mainQuestionList)) {
         $row[] = $question_type;
         $row[] = TestCategory::getCategoryNameForQuestion($questionId, $selected_course);
         $row[] = $question['level'];
-        $row[] = get_action_icon_for_question(
-            $actionIcon1,
-            $fromExercise,
+
+        $row[] =
+            get_action_icon_for_question(
+                $actionIcon1,
+                $fromExercise,
                 $questionId,
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        ).'&nbsp;'.
-        get_action_icon_for_question(
-            $actionIcon2,
-            $fromExercise,
-            $questionId,
-            $question['type'],
-            $question['question'],
-            $selected_course,
-            $courseCategoryId,
-            $exerciseLevel,
-            $answerType,
-            $session_id,
-            $question['exerciseId'],
-            $objExercise
-        );
+                $question['type'],
+                $question['question'],
+                $selected_course,
+                $courseCategoryId,
+                $exerciseLevel,
+                $answerType,
+                $session_id,
+                $question['exerciseId'],
+                $objExercise
+            ).'&nbsp;'.
+            get_action_icon_for_question(
+                $actionIcon2,
+                $fromExercise,
+                $questionId,
+                $question['type'],
+                $question['question'],
+                $selected_course,
+                $courseCategoryId,
+                $exerciseLevel,
+                $answerType,
+                $session_id,
+                $question['exerciseId'],
+                $objExercise
+            );
+
         $data[] = $row;
     }
 }
@@ -998,6 +994,7 @@ foreach ($data as $rowData) {
 $table->display();
 echo '</form>';
 
+// --- Bulk actions toolbar (only when we are inside a test) ------------------
 $html = '<div class="btn-toolbar question-pool-table-actions">';
 $html .= '<div class="btn-group">';
 $html .= '<a
@@ -1011,28 +1008,31 @@ $html .= '<a
             onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">
             '.get_lang('Unselect all').'</a> ';
 $html .= '</div>';
-$html .= '<div class="btn-group">
-            <button class="btn btn--plain action-button">' .get_lang('Actions').'</button>
-            <ul class="dropdown-menu" id="action-dropdown" style="display: none;">';
 
-$actionLabel = get_lang('Re-use a copy inside the current test');
-$actions = ['clone' => get_lang('Re-use a copy inside the current test')];
-if ($selected_course == api_get_course_int_id()) {
-    $actions = ['reuse' => get_lang('Re-use in current test')];
+if ($fromExercise > 0) {
+    $html .= '<div class="btn-group">
+                <button class="btn btn--plain action-button">' .get_lang('Actions').'</button>
+                <ul class="dropdown-menu" id="action-dropdown" style="display: none;">';
+
+    $actions = ['clone' => get_lang('Re-use a copy inside the current test')];
+    if ($selected_course == api_get_course_int_id()) {
+        $actions = ['reuse' => get_lang('Re-use in current test')];
+    }
+
+    foreach ($actions as $action => $label) {
+        $html .= '<li>
+                <a
+                    data-action ="'.$action.'"
+                    href="#"
+                    onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+            $label.'
+                    </a>
+                  </li>';
+    }
+    $html .= '</ul>';
+    $html .= '</div>'; //btn-group
 }
 
-foreach ($actions as $action => $label) {
-    $html .= '<li>
-            <a
-                data-action ="'.$action.'"
-                href="#"
-                onclick="javascript:action_click(this, \''.$tableId.'\');">'.
-                    $label.'
-                </a>
-              </li>';
-}
-$html .= '</ul>';
-$html .= '</div>'; //btn-group
 $html .= '</div>'; //toolbar
 
 echo $html;
@@ -1172,7 +1172,7 @@ function get_action_icon_for_question(
             break;
         case 'add':
             $res = '-';
-            if (!$myObjEx->hasQuestion($in_questionid)) {
+            if ($from_exercise > 0 && !$myObjEx->hasQuestion($in_questionid)) {
                 $res = "<a href='".api_get_self().'?'.
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Use this question in the test as a link (not a copy)'));
@@ -1190,8 +1190,8 @@ function get_action_icon_for_question(
 
             break;
         default:
-            $res = $in_action;
-
+            // When no action is expected, return empty string to keep layout clean
+            $res = '';
             break;
     }
 
@@ -1199,9 +1199,7 @@ function get_action_icon_for_question(
 }
 
 /**
- * @param int $questionId
- *
- * @return bool
+ * Checks whether a question is used by any quiz.
  */
 function isQuestionInActiveQuiz($questionId)
 {
@@ -1209,24 +1207,18 @@ function isQuestionInActiveQuiz($questionId)
     $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
     $questionId = (int) $questionId;
-
     if (empty($questionId)) {
         return false;
     }
 
-    $result = Database::fetch_assoc(
-        Database::query(
-            "SELECT COUNT(qq.question_id) count
-                    FROM $tblQuizRelQuestion qq
-                    INNER JOIN $tblQuiz q
-                    ON qq.quiz_id = q.iid
-                    WHERE
-                        q.active = 1 AND
-                        qq.question_id = $questionId"
-        )
-    );
+    $sql = "SELECT COUNT(qq.question_id) AS count
+            FROM $tblQuizRelQuestion qq
+            INNER JOIN $tblQuiz q ON q.iid = qq.quiz_id
+            WHERE qq.question_id = $questionId";
 
-    return $result['count'] > 0;
+    $row = Database::fetch_assoc(Database::query($sql));
+
+    return !empty($row) && (int)$row['count'] > 0;
 }
 
 /**

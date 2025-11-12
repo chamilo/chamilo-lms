@@ -62,25 +62,28 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+if (0 === $exerciseId && isset($_POST['exerciseId'])) {
+    $exerciseId = (int) $_POST['exerciseId'];
+}
 $newQuestion = $_GET['newQuestion'] ?? 0;
-$modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
-$editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
+$modifyAnswers = $_GET['modifyAnswers'] ?? 0;
+$editQuestion = $_GET['editQuestion'] ?? 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
-$modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
-$deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-$cloneQuestion = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+$modifyQuestion = $_GET['modifyQuestion'] ?? 0;
+$deleteQuestion = $_GET['deleteQuestion'] ?? 0;
+$cloneQuestion = $_REQUEST['clone_question'] ?? 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
 if (empty($modifyExercise)) {
-    $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
+    $modifyExercise = $_GET['modifyExercise'] ?? null;
 }
 
-$fromExercise = isset($fromExercise) ? $fromExercise : null;
-$cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
-$cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
-$modifyIn = isset($modifyIn) ? $modifyIn : null;
-$cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
+$fromExercise = $fromExercise ?? null;
+$cancelExercise = $cancelExercise ?? null;
+$cancelAnswers = $cancelAnswers ?? null;
+$modifyIn = $modifyIn ?? null;
+$cancelQuestion = $cancelQuestion ?? null;
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */

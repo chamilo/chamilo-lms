@@ -1,48 +1,50 @@
 <script setup>
-import { ref } from "vue"
+import { reactive, ref, watch } from "vue"
 import { FilterMatchMode } from "@primevue/core/api"
 import debounce from "lodash/debounce"
 import userService from "../../services/userService"
 import { useNotification } from "../../composables/notification"
 import InputText from "primevue/inputtext"
+import BaseButton from "./BaseButton.vue"
 import BaseTable from "./BaseTable.vue"
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n()
 const { showErrorNotification } = useNotification()
 
-const currentPage = ref(0)
-const filters = ref({
-  username: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+const tableState = reactive({
+  filters: {},
+  rows: 20,
+  sortField: null,
+  sortOrder: null,
+  currentPage: 0,
 })
+const totalRecords = ref(0)
 const isLoadingUserList = ref(true)
 const userList = ref([])
-const userListTotal = ref(0)
 const selectedUsers = ref([])
 
-async function listUsers(rows, sortField, sortOrder, filters) {
+async function listUsers() {
   let searchParams = {
-    page: currentPage.value + 1,
-    itemsPerPage: rows,
+    page: tableState.currentPage + 1,
+    itemsPerPage: tableState.rows,
   }
 
-  if (sortField) {
-    searchParams.order = { [sortField]: sortOrder === -1 ? "desc" : "asc" }
+  if (tableState.sortField) {
+    searchParams.order = { [tableState.sortField]: tableState.sortOrder === -1 ? "desc" : "asc" }
   }
 
-  if (filters) {
-    if (filters.username && filters.username.value) {
-      searchParams.username = filters.username.value
+  if (tableState.filters) {
+    if (tableState.filters.username && tableState.filters.username.value) {
+      searchParams.username = tableState.filters.username.value
     }
 
-    if (filters.firstname && filters.firstname.value) {
-      searchParams.firstname = filters.firstname.value
+    if (tableState.filters.firstname && tableState.filters.firstname.value) {
+      searchParams.firstname = tableState.filters.firstname.value
     }
 
-    if (filters.lastname && filters.lastname.value) {
-      searchParams.lastname = filters.lastname.value
+    if (tableState.filters.lastname && tableState.filters.lastname.value) {
+      searchParams.lastname = tableState.filters.lastname.value
     }
   }
 
@@ -51,7 +53,7 @@ async function listUsers(rows, sortField, sortOrder, filters) {
 
     const { totalItems, items } = await userService.findAll(searchParams)
 
-    userListTotal.value = totalItems
+    totalRecords.value = totalItems
     userList.value = items
   } catch (error) {
     showErrorNotification(error)
@@ -60,39 +62,59 @@ async function listUsers(rows, sortField, sortOrder, filters) {
   }
 }
 
-const debouncedSearch = debounce((rows, sortField, sortOrder, filters) => {
-  listUsers(rows, sortField, sortOrder, filters)
+const debouncedSearch = debounce(() => {
+  listUsers()
 }, 300)
 
 async function onPage({ page, rows, sortField, sortOrder, filters }) {
-  currentPage.value = page
-
-  debouncedSearch(rows, sortField, sortOrder, filters)
+  tableState.currentPage = page
+  tableState.rows = rows
+  tableState.sortField = sortField
+  tableState.sortOrder = sortOrder
+  tableState.filters = filters
 }
 
 async function onSort({ rows, sortField, sortOrder, filters }) {
-  currentPage.value = 0
-
-  debouncedSearch(rows, sortField, sortOrder, filters)
+  tableState.rows = rows
+  tableState.sortField = sortField
+  tableState.sortOrder = sortOrder
+  tableState.filters = filters
+  tableState.currentPage = 0
 }
 
 async function onFilter({ rows, sortField, sortOrder, filters }) {
-  currentPage.value = 0
-
-  debouncedSearch(rows, sortField, sortOrder, filters)
+  tableState.rows = rows
+  tableState.sortField = sortField
+  tableState.sortOrder = sortOrder
+  tableState.currentPage = 0
+  tableState.filters = filters
 }
 
-listUsers(20).then(() => {})
+function clearFilters() {
+  tableState.filters = {
+    username: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    firstname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    lastname: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  }
+}
+
+clearFilters()
+
+listUsers()
+
+watch(tableState, () => {
+  debouncedSearch()
+})
 
 defineExpose({ selectedUsers })
 </script>
 
 <template>
   <BaseTable
-    v-model:filters="filters"
+    v-model:filters="tableState.filters"
     v-model:selected-items="selectedUsers"
     :is-loading="isLoadingUserList"
-    :total-items="userListTotal"
+    :total-items="totalRecords"
     :values="userList"
     data-key="@id"
     lazy
@@ -101,6 +123,22 @@ defineExpose({ selectedUsers })
     @page="onPage"
     @sort="onSort"
   >
+    <template #header>
+      <div class="flex justify-between items-center gap-4">
+        <span
+          v-t="'User list'"
+          class="mr-auto"
+        />
+        <BaseButton
+          :label="t('Clear filters')"
+          icon="clear-all"
+          size="small"
+          type="plain"
+          @click="clearFilters"
+        />
+      </div>
+    </template>
+
     <Column selectionMode="multiple" />
 
     <Column
@@ -113,6 +151,7 @@ defineExpose({ selectedUsers })
       <template #filter="{ filterModel, filterCallback }">
         <InputText
           v-model="filterModel.value"
+          size="small"
           type="text"
           @input="filterCallback()"
         />
@@ -128,6 +167,7 @@ defineExpose({ selectedUsers })
       <template #filter="{ filterModel, filterCallback }">
         <InputText
           v-model="filterModel.value"
+          size="small"
           type="text"
           @input="filterCallback()"
         />
@@ -142,6 +182,7 @@ defineExpose({ selectedUsers })
       <template #filter="{ filterModel, filterCallback }">
         <InputText
           v-model="filterModel.value"
+          size="small"
           type="text"
           @input="filterCallback()"
         />

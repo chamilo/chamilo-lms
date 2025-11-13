@@ -1314,11 +1314,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
-    public function findByAuthsource(string $authentication): void
+    /**
+     * @return array<int, User>
+     */
+    public function findByAuthsource(string $authentication): array
     {
         $qb = $this->getOrCreateQueryBuilder(null, 'u');
 
-        $qb
+        return $qb
             ->innerJoin('u.authSources', 'as')
             ->where(
                 $qb->expr()->eq('as.authentication', ':authentication')

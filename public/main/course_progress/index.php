@@ -206,7 +206,11 @@ $cleanThematicTitle = null !== $thematicEntity ? strip_tags($thematicEntity->get
 // get default thematic plan title
 $default_thematic_plan_title = $thematicManager->get_default_thematic_plan_title();
 
-$tpl = new Template(get_lang('Thematic control'));
+$tpl = new Template('');
+$interbreadcrumb[] = [
+    'url' => 'index.php?'.api_get_cidreq().'&action=thematic_details',
+    'name' => get_lang('Thematic control')
+];
 
 // Dispatch actions to controller
 switch ($action) {
@@ -225,8 +229,8 @@ switch ($action) {
         if ('POST' === $requestMethod && '' !== trim($_POST['title']) &&
             api_is_allowed_to_edit(null, true)
         ) {
-            $title = trim($_POST['title']);
-            $content = trim($_POST['content']);
+            $title = trim($_POST['title'] ?? '');
+            $content = trim($_POST['content'] ?? '');
             $thematicManager->thematicSave($thematicId, $title, $content, $course, $session);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
 
@@ -673,7 +677,6 @@ switch ($action) {
         $content = $tpl->fetch($thematicLayout);
         break;
     case 'thematic_list':
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic control')];
         if (!$readOnly) {
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
                 Display::getMdiIcon('progress-star', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('New thematic section')).'</a>';
@@ -821,8 +824,8 @@ switch ($action) {
     case 'thematic_plan_list':
         if (!empty($thematicEntity)) {
             $interbreadcrumb[] = [
-                'url' => '#',
-                'name' => get_lang('Thematic plan').' ('.$cleanThematicTitle.') ',
+                'url'  => '#',
+                'name' => get_lang('Thematic plan').' ('.$cleanThematicTitle.')',
             ];
         }
 
@@ -1210,8 +1213,10 @@ switch ($action) {
         }
         break;
     case 'thematic_advance_list':
-
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')'];
+        $interbreadcrumb[] = [
+            'url'  => '#',
+            'name' => get_lang('Thematic advance').' ('.$cleanThematicTitle.')',
+        ];
 
         // thematic advance list toolbar (local)
         $actions = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.

@@ -229,7 +229,7 @@ class Tracking
                     ICON_SIZE_SMALL,
                     get_lang('Hide all attempts')
                 ),
-                api_get_self().'?action=stats'.$url_suffix
+                api_get_self().'?'.api_get_cidreq().'&action=stats'.$url_suffix
             );
             $extend_all = 1;
         } else {
@@ -241,7 +241,7 @@ class Tracking
                     ICON_SIZE_SMALL,
                     get_lang('Show all attempts')
                 ),
-                api_get_self().'?action=stats&extend_all=1'.$url_suffix
+                api_get_self().'?'.api_get_cidreq().'&action=stats&extend_all=1'.$url_suffix
             );
         }
 

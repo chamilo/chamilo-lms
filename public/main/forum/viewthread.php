@@ -70,8 +70,10 @@ $(function () {
     });
 });
 </script>';
-$nameTools = get_lang('Forum');
-$forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
+
+// Root labels used in breadcrumbs (consistent naming)
+$forumsRootLabel = get_lang('Forums');
+$forumUrl        = api_get_path(WEB_CODE_PATH).'forum/';
 
 // Context
 $origin = api_get_origin();
@@ -84,35 +86,27 @@ $postId = isset($_GET['post_id']) ? $_GET['post_id'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
-$forumEntity = null;
-if (!empty($forumId)) {
-    /** @var CForum $forumEntity */
-    $forumEntity = $repo->find($forumId);
-}
+/** @var CForum|null $forumEntity */
+$forumEntity = !empty($forumId) ? $repo->find($forumId) : null;
 
 $repoThread = Container::getForumThreadRepository();
-
-/** @var CForumThread $threadEntity */
+/** @var CForumThread|null $threadEntity */
 $threadEntity = $repoThread->find($threadId);
 
 if (empty($threadEntity)) {
     $url = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
     header('Location: '.$url);
-
     exit;
 }
 
 $repoPost = Container::getForumPostRepository();
-$postEntity = null;
-if (!empty($postId)) {
-    /** @var CForumPost $postEntity */
-    $postEntity = $repoPost->find($postId);
-}
+/** @var CForumPost|null $postEntity */
+$postEntity = !empty($postId) ? $repoPost->find($postId) : null;
 
-$courseEntity = api_get_course_entity(api_get_course_int_id());
+$courseEntity  = api_get_course_entity(api_get_course_int_id());
 $sessionEntity = api_get_session_entity(api_get_session_id());
 
-$current_forum_category = $forumEntity->getForumCategory();
+$current_forum_category = $forumEntity ? $forumEntity->getForumCategory() : null;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -121,11 +115,8 @@ if (api_is_in_gradebook()) {
     ];
 }
 
-$groupId = api_get_group_id();
-$groupEntity = null;
-if (!empty($groupId)) {
-    $groupEntity = api_get_group_entity($groupId);
-}
+$groupId     = api_get_group_id();
+$groupEntity = !empty($groupId) ? api_get_group_entity($groupId) : null;
 
 $sessionId = api_get_session_id();
 
@@ -149,13 +140,13 @@ $(function() {
 
 $my_action = $_GET['action'] ?? '';
 
-// Log
+// Log (kept)
 $logInfo = [
-    'tool' => TOOL_FORUM,
-    'tool_id' => $forumId,
-    'tool_id_detail' => $threadId,
-    'action' => !empty($my_action) ? $my_action : 'view-thread',
-    'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
+    'tool'            => TOOL_FORUM,
+    'tool_id'         => $forumId,
+    'tool_id_detail'  => $threadId,
+    'action'          => !empty($my_action) ? $my_action : 'view-thread',
+    'action_details'  => isset($_GET['content']) ? $_GET['content'] : '',
 ];
 Event::registerLog($logInfo);
 
@@ -166,38 +157,36 @@ switch ($my_action) {
     case 'delete_attach':
         delete_attachment($_GET['post'], $_GET['id_attach']);
         header('Location: '.$currentUrl);
-
         exit;
 
     case 'delete':
         if (
-            isset($_GET['content'], $_GET['id'])
-            && (api_is_allowed_to_edit(false, true)
-                || ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
+            isset($_GET['content'], $_GET['id']) &&
+            (api_is_allowed_to_edit(false, true) ||
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
-            /** @var CForumPost $postEntity */
+            /** @var CForumPost|null $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
             if (null !== $postEntity) {
                 deletePost($postEntity);
             }
         }
         header('Location: '.$currentUrl);
-
         exit;
 
     case 'invisible':
     case 'visible':
-        if (isset($_GET['id'])
-            && (api_is_allowed_to_edit(false, true)
-                || ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
+        if (
+            isset($_GET['id']) &&
+            (api_is_allowed_to_edit(false, true) ||
+                ($groupEntity && GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)))
         ) {
-            /** @var CForumPost $postEntity */
+            /** @var CForumPost|null $postEntity */
             $postEntity = $repoPost->find($_GET['id']);
             $message = approvePost($postEntity, $_GET['action']);
             Display::addFlash(Display::return_message(get_lang($message)));
         }
         header('Location: '.$currentUrl);
-
         exit;
 
     case 'move':
@@ -211,7 +200,6 @@ switch ($my_action) {
                     'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId;
 
                 header('Location: '.$currentUrl);
-
                 exit;
             }
             $moveForm = $form->returnForm();
@@ -223,7 +211,6 @@ switch ($my_action) {
         $result = reportPost($postEntity, $forumEntity, $threadEntity);
         Display::addFlash(Display::return_message(get_lang('Reported')));
         header('Location: '.$currentUrl);
-
         exit;
 
     case 'ask_revision':
@@ -232,53 +219,57 @@ switch ($my_action) {
             Display::addFlash(Display::return_message(get_lang('Saved.')));
         }
         header('Location: '.$currentUrl);
-
         exit;
 }
 
 // Breadcrumbs
+$my_search = isset($_GET['search']) ? $_GET['search'] : '';
+
 if (!empty($groupId)) {
+    // Group breadcrumbs
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
+        'url'  => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('Group area').' '.$groupEntity->getTitle(),
+        'url'  => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('Group area').' '.($groupEntity ? $groupEntity->getTitle() : ''),
     ];
+    // Link back to the forum (threads list)
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
-        'name' => Security::remove_XSS($forumEntity->getTitle()),
+        'url'  => $forumUrl.'viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.Security::remove_XSS(urlencode($my_search)),
+        'name' => $forumEntity ? Security::remove_XSS($forumEntity->getTitle()) : get_lang('Forum'),
     ];
+    // Current thread (not linked)
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?forum='.$forumId.'&'.api_get_cidreq().'&thread='.$threadId,
+        'url'  => '#',
         'name' => Security::remove_XSS($threadEntity->getTitle()),
     ];
 } else {
-    $my_search = isset($_GET['search']) ? $_GET['search'] : '';
-    if ('learnpath' != $origin) {
+    // Forums index
+    $interbreadcrumb[] = [
+        'url'  => $forumUrl.'index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(urlencode($my_search)),
+        'name' => $forumsRootLabel,
+    ];
+    // Category (if available)
+    if ($current_forum_category && $current_forum_category->getIid()) {
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&search='.Security::remove_XSS(
-                urlencode($my_search)
-            ),
-            'name' => $nameTools,
-        ];
-        $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).
-                'forum/index.php?forumcategory='.$current_forum_category->getIid().'&search='.Security::remove_XSS(
-                    urlencode($my_search)
-                ),
+            'url'  => $forumUrl.'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$current_forum_category->getIid(),
             'name' => Security::remove_XSS($current_forum_category->getTitle()),
         ];
+    }
+    // Forum (threads list)
+    if ($forumEntity) {
         $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.Security::remove_XSS(urlencode($my_search)),
+            'url'  => $forumUrl.'viewforum.php?'.api_get_cidreq().'&forum='.$forumId.'&search='.Security::remove_XSS(urlencode($my_search)),
             'name' => Security::remove_XSS($forumEntity->getTitle()),
         ];
-        $interbreadcrumb[] = [
-            'url' => '#',
-            'name' => Security::remove_XSS($threadEntity->getTitle()),
-        ];
     }
+    // Current thread (not linked)
+    $interbreadcrumb[] = [
+        'url'  => '#',
+        'name' => Security::remove_XSS($threadEntity->getTitle()),
+    ];
 }
 
 // Visibility constraints
@@ -506,19 +497,19 @@ foreach ($posts as $post) {
     }
 
     $postIsARevision = false;
-    $flagRevision = '';
+    $flagRevision    = '';
 
     if ($posterId == $userId) {
         $revision = getPostRevision($post['post_id']);
         if (empty($revision)) {
-            // Build compact "ask revision" icon linking to ?action=ask_revision
+            // Compact "ask revision" icon linking to ?action=ask_revision
             if ('true' === api_get_setting('forum.allow_forum_post_revisions')) {
                 $askRevisionUrl = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
-                    'forum' => $forumId,
-                    'thread' => $threadId,
-                    'action' => 'ask_revision',
-                    'post_id' => $post['post_id'],
-                ]);
+                        'forum' => $forumId,
+                        'thread' => $threadId,
+                        'action' => 'ask_revision',
+                        'post_id' => $post['post_id'],
+                    ]);
                 $askForRevision = Display::url(
                     Display::getMdiIcon('history', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Ask for revision')),
                     $askRevisionUrl,
@@ -531,10 +522,10 @@ foreach ($posts as $post) {
             }
         } else {
             $postIsARevision = true;
-            $languageId = api_get_language_id(strtolower($revision));
+            $languageId   = api_get_language_id(strtolower($revision));
             $languageInfo = api_get_language_info($languageId);
             if ($languageInfo) {
-                $languages = api_get_language_list_for_flag();
+                $languages   = api_get_language_list_for_flag();
                 $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
             }
         }
@@ -545,10 +536,10 @@ foreach ($posts as $post) {
             $revision = getPostRevision($post['post_id']);
             if (!empty($revision)) {
                 $postIsARevision = true;
-                $languageId = api_get_language_id(strtolower($revision));
+                $languageId   = api_get_language_id(strtolower($revision));
                 $languageInfo = api_get_language_info($languageId);
                 if ($languageInfo) {
-                    $languages = api_get_language_list_for_flag();
+                    $languages   = api_get_language_list_for_flag();
                     $flagRevision = '<span class="flag-icon flag-icon-'.$languages[$languageInfo['english_name']].'"></span> ';
                 }
             }

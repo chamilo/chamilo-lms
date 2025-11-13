@@ -985,6 +985,41 @@ img.course-tool__icon {
 }
 .app-breadcrumb .p-breadcrumb-separator { padding-inline: .25rem; }
 
+@layer base {
+  .form-control:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 0 !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
+    border-radius: .5rem;
+    transition: box-shadow .12s ease, border-color .12s ease;
+  }
+  input[type="checkbox"]:focus,
+  input[type="radio"]:focus {
+    outline: 3px solid #1d4ed8 !important;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
+    border-radius: 4px;
+  }
+}
+@layer components {
+  .form-group:focus-within,
+  .field:focus-within,
+  fieldset:focus-within {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+  .select2-container--default .select2-selection:focus,
+  .select2-container--default.select2-container--focus .select2-selection {
+    outline: 0 !important;
+    border-color: #1d4ed8 !important;
+    box-shadow: 0 0 0 2px rgba(29, 78, 216, .35) !important;
+    border-radius: .5rem !important;
+  }
+}
+
 @import "~@fancyapps/fancybox/dist/jquery.fancybox.css";
 @import "~timepicker/jquery.timepicker.min.css";
 @import "~qtip2/dist/jquery.qtip.min.css";

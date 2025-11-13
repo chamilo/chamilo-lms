@@ -29,10 +29,9 @@ class DropboxLink extends EvalLink
         // with the same title as the evaluation name
 
         $eval = $this->get_evaluation();
-        $sql = 'SELECT filename FROM '.$this->get_dropbox_table().' 
-                WHERE 
-                    c_id = '.$this->course_id.' AND 
-                    uploader_id = '.intval($stud_id)." AND 
+        $sql = 'SELECT filename FROM '.$this->get_dropbox_table().'
+                WHERE
+                    uploader_id = '.intval($stud_id)." AND
                     title = '".Database::escape_string($eval->get_name())."'";
 
         $result = Database::query($sql);

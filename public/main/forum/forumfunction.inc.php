@@ -1544,7 +1544,7 @@ function get_thread_users_qualify(int $thread_id)
  *
  * @version oct 2008, dokeos 1.8
  */
-function get_thread_users_not_qualify($thread_id)
+function get_thread_users_not_qualify(int $thread_id)
 {
     $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);

@@ -378,10 +378,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     public bool $subscribed = false;
 
     #[SerializedName('allowSelfSignup')]
-    #[Groups(['course:read','session:read'])]
+    #[Groups(['course:read', 'session:read'])]
     public function getAllowSelfSignup(): bool
     {
-        return $this->visibility !== self::REGISTERED;
+        return self::REGISTERED !== $this->visibility;
     }
 
     public function __construct()

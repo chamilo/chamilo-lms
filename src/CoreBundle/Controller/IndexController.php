@@ -56,7 +56,7 @@ class IndexController extends BaseController
         // This ensures the *first* click really enters Student View.
         $current = (string) $request->getSession()->get('studentview', 'teacherview');
 
-        $next = ($current === 'studentview') ? 'teacherview' : 'studentview';
+        $next = ('studentview' === $current) ? 'teacherview' : 'studentview';
 
         $request->getSession()->set('studentview', $next);
 

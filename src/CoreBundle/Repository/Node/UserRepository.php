@@ -28,7 +28,6 @@ use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;

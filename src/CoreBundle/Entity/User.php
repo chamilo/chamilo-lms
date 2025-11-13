@@ -2529,7 +2529,7 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
             return [];
         }
 
-        return $authSources->map(fn(UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
+        return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
     }
 
     public function addAuthSource(UserAuthSource $authSource): static

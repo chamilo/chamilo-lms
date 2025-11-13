@@ -159,7 +159,7 @@ class SettingsController extends BaseController
         // Validate schema BEFORE load/create to avoid NonExistingServiceException
         $schemas = $manager->getSchemas();
         if (!isset($schemas[$schemaAlias])) {
-            $this->addFlash('warning', sprintf('Unknown settings category "%s". Showing Platform settings.', $namespace));
+            $this->addFlash('warning', \sprintf('Unknown settings category "%s". Showing Platform settings.', $namespace));
 
             return $this->redirectToRoute('chamilo_platform_settings', [
                 'namespace' => 'platform',
@@ -298,30 +298,30 @@ class SettingsController extends BaseController
 
         $transform = [
             'announcement' => 'Announcements',
-            'attendance'   => 'Attendances',
-            'cas'          => 'CAS',
-            'certificate'  => 'Certificates',
-            'course'       => 'Courses',
-            'document'     => 'Documents',
-            'exercise'     => 'Tests',
-            'forum'        => 'Forums',
-            'group'        => 'Groups',
-            'language'     => 'Internationalization',
-            'lp'           => 'Learning paths',
-            'mail'         => 'E-mail',
-            'message'      => 'Messages',
-            'profile'      => 'User profiles',
-            'session'      => 'Sessions',
-            'skill'        => 'Skills',
-            'social'       => 'Social network',
-            'survey'       => 'Surveys',
-            'work'         => 'Assignments',
-            'ticket'       => 'Support tickets',
-            'tracking'     => 'Reporting',
-            'webservice'   => 'Webservices',
-            'catalog'      => 'Catalogue',
-            'catalogue'    => 'Catalogue',
-            'ai_helpers'   => 'AI helpers',
+            'attendance' => 'Attendances',
+            'cas' => 'CAS',
+            'certificate' => 'Certificates',
+            'course' => 'Courses',
+            'document' => 'Documents',
+            'exercise' => 'Tests',
+            'forum' => 'Forums',
+            'group' => 'Groups',
+            'language' => 'Internationalization',
+            'lp' => 'Learning paths',
+            'mail' => 'E-mail',
+            'message' => 'Messages',
+            'profile' => 'User profiles',
+            'session' => 'Sessions',
+            'skill' => 'Skills',
+            'social' => 'Social network',
+            'survey' => 'Surveys',
+            'work' => 'Assignments',
+            'ticket' => 'Support tickets',
+            'tracking' => 'Reporting',
+            'webservice' => 'Webservices',
+            'catalog' => 'Catalogue',
+            'catalogue' => 'Catalogue',
+            'ai_helpers' => 'AI helpers',
         ];
 
         // Build label map (translated). For keys not in $transform, use Title Case of ns.

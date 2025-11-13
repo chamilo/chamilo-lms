@@ -43,7 +43,7 @@ class ChatController extends AbstractResourceController implements CourseControl
             'action_details' => 'start-chat',
         ]);
 
-        $course  = api_get_course_entity();
+        $course = api_get_course_entity();
         $session = api_get_session_entity() ?: null;
 
         /** @var CDocumentRepository $docsRepo */
@@ -51,13 +51,13 @@ class ChatController extends AbstractResourceController implements CourseControl
         $docsRepo->ensureChatSystemFolder($course, $session);
 
         return $this->render('@ChamiloCore/Chat/chat.html.twig', [
-            'restrict_to_coach'   => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
-            'user'                => api_get_user_info(),
-            'emoji_smile'         => '<span>&#128522;</span>',
-            'course_url_params'   => api_get_cidreq(),
-            'course'              => $course,
-            'session_id'          => api_get_session_id(),
-            'group_id'            => api_get_group_id(),
+            'restrict_to_coach' => ('true' === api_get_setting('chat.course_chat_restrict_to_coach')),
+            'user' => api_get_user_info(),
+            'emoji_smile' => '<span>&#128522;</span>',
+            'course_url_params' => api_get_cidreq(),
+            'course' => $course,
+            'session_id' => api_get_session_id(),
+            'group_id' => api_get_group_id(),
             'chat_parent_node_id' => $course->getResourceNode()->getId(),
         ]);
     }
@@ -77,16 +77,17 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['status' => false, 'error' => 'forbidden'], 403);
         }
 
-        $courseId  = api_get_course_int_id();
-        $userId    = api_get_user_id();
+        $courseId = api_get_course_int_id();
+        $userId = api_get_user_id();
         $sessionId = api_get_session_id();
-        $groupId   = api_get_group_id();
+        $groupId = api_get_group_id();
 
-        $course  = \api_get_course_entity();
-        $session = \api_get_session_entity() ?: null;
+        $course = api_get_course_entity();
+        $session = api_get_session_entity() ?: null;
 
         /** @var CChatConversationRepository $convRepo */
         $convRepo = $doctrine->getRepository(CChatConversation::class);
+
         /** @var CDocumentRepository $docsRepo */
         $docsRepo = $doctrine->getRepository(CDocument::class);
 
@@ -114,6 +115,7 @@ class ChatController extends AbstractResourceController implements CourseControl
                         'action_details' => 'exit-chat',
                     ]);
                     $json = ['status' => true];
+
                     break;
 
                 case 'track':
@@ -134,16 +136,19 @@ class ChatController extends AbstractResourceController implements CourseControl
                             'currentFriend' => $friend,
                         ],
                     ];
+
                     break;
 
                 case 'preview':
                     $msg = (string) $request->get('message', '');
-                    $json = ['status' => true, 'data' => ['message' => \CourseChatUtils::prepareMessage($msg)]];
+                    $json = ['status' => true, 'data' => ['message' => CourseChatUtils::prepareMessage($msg)]];
+
                     break;
 
                 case 'reset':
                     $friend = (int) $request->get('friend', 0);
                     $json = ['status' => true, 'data' => $chat->readMessages(true, $friend)];
+
                     break;
 
                 case 'write':
@@ -151,13 +156,15 @@ class ChatController extends AbstractResourceController implements CourseControl
                     $msg = (string) $request->get('message', '');
                     $ok = $chat->saveMessage($msg, $friend);
                     $json = ['status' => $ok, 'data' => ['writed' => $ok]];
+
                     break;
 
                 default:
                     $json = ['status' => false, 'error' => 'unknown_action'];
+
                     break;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $json = ['status' => false, 'error' => $e->getMessage()];
         }
 
@@ -222,25 +229,27 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $mode    = (string) $req->query->get('mode', 'min');
+        $mode = (string) $req->query->get('mode', 'min');
         $sinceId = (int) $req->query->get('since_id', 0);
-        $peerId  = (int) $req->query->get('peer_id', 0);
+        $peerId = (int) $req->query->get('peer_id', 0);
 
-        $chat = new \Chat();
+        $chat = new Chat();
 
         // NEW: ultra-tiny per-peer check (constant-time)
-        if ($mode === 'tiny' && $peerId > 0) {
+        if ('tiny' === $mode && $peerId > 0) {
             $data = $chat->heartbeatTiny(api_get_user_id(), $peerId, $sinceId);
             // Force ultra-small JSON and no-store
             $resp = new JsonResponse($data);
             $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
             return $resp;
         }
 
-        if ($mode === 'min') {
+        if ('min' === $mode) {
             $data = $chat->heartbeatMin(api_get_user_id(), $sinceId);
             $resp = new JsonResponse($data);
             $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
             return $resp;
         }
 
@@ -248,9 +257,14 @@ class ChatController extends AbstractResourceController implements CourseControl
         ob_start();
         $ret = $chat->heartbeat();
         $echoed = ob_get_clean();
-        if ($echoed !== '') return JsonResponse::fromJsonString($echoed);
-        if (is_string($ret)) return JsonResponse::fromJsonString($ret);
-        return new JsonResponse(is_array($ret) ? $ret : []);
+        if ('' !== $echoed) {
+            return JsonResponse::fromJsonString($echoed);
+        }
+        if (\is_string($ret)) {
+            return JsonResponse::fromJsonString($ret);
+        }
+
+        return new JsonResponse(\is_array($ret) ? $ret : []);
     }
 
     #[Route(
@@ -266,14 +280,17 @@ class ChatController extends AbstractResourceController implements CourseControl
             return new JsonResponse(['error' => 'disabled'], 403);
         }
 
-        $peerId  = (int) $req->query->get('user_id', 0);
+        $peerId = (int) $req->query->get('user_id', 0);
         $sinceId = (int) $req->query->get('since_id', 0);
-        if ($peerId <= 0) return new JsonResponse([]);
+        if ($peerId <= 0) {
+            return new JsonResponse([]);
+        }
 
-        $chat  = new \Chat();
+        $chat = new Chat();
         $items = $chat->getIncomingSince($peerId, api_get_user_id(), $sinceId);
-        $resp  = new JsonResponse($items);
+        $resp = new JsonResponse($items);
         $resp->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
         return $resp;
     }
 
@@ -298,6 +315,7 @@ class ChatController extends AbstractResourceController implements CourseControl
             if (ctype_digit($trim)) {
                 return new JsonResponse(['id' => (int) $trim]);
             }
+
             return JsonResponse::fromJsonString($echoed);
         }
 

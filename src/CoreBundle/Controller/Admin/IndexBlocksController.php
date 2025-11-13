@@ -29,6 +29,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/index', name: 'admin_index_blocks')]
@@ -900,7 +901,8 @@ class IndexBlocksController extends BaseController
             // Normalize/fallbacks
             if (!\is_array($pluginInfo)) {
                 // Defensive: unexpected structure → skip
-                error_log(sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+
                 continue;
             }
 
@@ -909,7 +911,8 @@ class IndexBlocksController extends BaseController
 
             if (!$objPlugin instanceof Plugin) {
                 // Defensive: plugin could not be instantiated (e.g. throws in constructor)
-                error_log(sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+
                 continue;
             }
 
@@ -929,8 +932,9 @@ class IndexBlocksController extends BaseController
             // Build admin URL defensively (some plugins may throw when building URLs)
             try {
                 $adminUrl = $objPlugin->getAdminUrl();
-            } catch (\Throwable $e) {
-                error_log(sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+            } catch (Throwable $e) {
+                error_log(\sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+
                 continue;
             }
 
@@ -939,7 +943,7 @@ class IndexBlocksController extends BaseController
 
             $items[] = [
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
-                'url'   => $adminUrl,
+                'url' => $adminUrl,
                 'label' => $label,
             ];
         }

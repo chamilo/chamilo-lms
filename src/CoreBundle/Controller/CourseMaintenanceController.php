@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use __PHP_Incomplete_Class;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
@@ -27,8 +28,12 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
+use UnserializeApi;
+use ZipArchive;
 
 use const ARRAY_FILTER_USE_BOTH;
+use const DIRECTORY_SEPARATOR;
+use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
@@ -138,7 +143,7 @@ class CourseMaintenanceController extends AbstractController
         $this->setDebugFromRequest($req);
         $mode = strtolower((string) $req->query->get('mode', 'auto')); // 'auto' | 'dat' | 'moodle'
 
-        $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
+        $course = $this->loadLegacyCourseForAnyBackup($backupId, 'dat' === $mode ? 'chamilo' : $mode);
 
         $this->logDebug('[importResources] course loaded', [
             'has_resources' => \is_array($course->resources ?? null),
@@ -153,9 +158,9 @@ class CourseMaintenanceController extends AbstractController
         }
 
         return $this->json([
-            'tree'     => $tree,
+            'tree' => $tree,
             'warnings' => $warnings,
-            'meta'     => ['import_source' => $course->resources['__meta']['import_source'] ?? null],
+            'meta' => ['import_source' => $course->resources['__meta']['import_source'] ?? null],
         ]);
     }
 
@@ -197,7 +202,7 @@ class CourseMaintenanceController extends AbstractController
             ]);
 
             // Load with same mode to avoid switching source on POST
-            $course = $this->loadLegacyCourseForAnyBackup($backupId, $mode === 'dat' ? 'chamilo' : $mode);
+            $course = $this->loadLegacyCourseForAnyBackup($backupId, 'dat' === $mode ? 'chamilo' : $mode);
             if (!\is_object($course) || empty($course->resources) || !\is_array($course->resources)) {
                 return $this->json(['error' => 'Backup has no resources'], 400);
             }
@@ -223,6 +228,7 @@ class CourseMaintenanceController extends AbstractController
                 foreach ($selectedResources as $ids) {
                     if (\is_array($ids) && !empty($ids)) {
                         $hasAny = true;
+
                         break;
                     }
                 }
@@ -720,7 +726,7 @@ class CourseMaintenanceController extends AbstractController
             //  - Never show gradebook
             //  - Always include tool_intro in the picker (harmless if empty)
             $tools = array_values(array_diff($tools, ['gradebook']));
-            if (!in_array('tool_intro', $tools, true)) {
+            if (!\in_array('tool_intro', $tools, true)) {
                 $tools[] = 'tool_intro';
             }
 
@@ -743,9 +749,9 @@ class CourseMaintenanceController extends AbstractController
                     '[moodleExportResources] tree summary',
                     array_map(
                         fn ($g) => [
-                            'type'     => $g['type'] ?? '',
-                            'title'    => $g['title'] ?? '',
-                            'items'    => isset($g['items']) ? \count((array) $g['items']) : null,
+                            'type' => $g['type'] ?? '',
+                            'title' => $g['title'] ?? '',
+                            'items' => isset($g['items']) ? \count((array) $g['items']) : null,
                             'children' => isset($g['children']) ? \count((array) $g['children']) : null,
                         ],
                         $tree
@@ -754,36 +760,36 @@ class CourseMaintenanceController extends AbstractController
             }
 
             return $this->json([
-                'tree'     => $tree,
+                'tree' => $tree,
                 'warnings' => $warnings,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Defensive error path
             $this->logDebug('[moodleExportResources] exception', [
                 'message' => $e->getMessage(),
-                'file'    => $e->getFile().':'.$e->getLine(),
+                'file' => $e->getFile().':'.$e->getLine(),
             ]);
 
             return $this->json([
-                'error'   => 'Failed to build resource tree for Moodle export.',
+                'error' => 'Failed to build resource tree for Moodle export.',
                 'details' => $e->getMessage(),
             ], 500);
         }
     }
 
     #[Route('/moodle/export/execute', name: 'moodle_export_execute', methods: ['POST'])]
-    public function moodleExportExecute(int $node, Request $req, UserRepository $users): JsonResponse|BinaryFileResponse
+    public function moodleExportExecute(int $node, Request $req, UserRepository $users): BinaryFileResponse|JsonResponse
     {
         $this->setDebugFromRequest($req);
 
         $p = json_decode($req->getContent() ?: '{}', true) ?: [];
         $moodleVersion = (string) ($p['moodleVersion'] ?? '4');  // "3" | "4"
-        $scope         = (string) ($p['scope'] ?? 'full');       // "full" | "selected"
-        $adminId       = (int) ($p['adminId'] ?? 0);
-        $adminLogin    = trim((string) ($p['adminLogin'] ?? ''));
-        $adminEmail    = trim((string) ($p['adminEmail'] ?? ''));
-        $selected      = is_array($p['resources'] ?? null) ? (array) $p['resources'] : [];
-        $toolsInput    = is_array($p['tools'] ?? null) ? (array) $p['tools'] : [];
+        $scope = (string) ($p['scope'] ?? 'full');       // "full" | "selected"
+        $adminId = (int) ($p['adminId'] ?? 0);
+        $adminLogin = trim((string) ($p['adminLogin'] ?? ''));
+        $adminEmail = trim((string) ($p['adminEmail'] ?? ''));
+        $selected = \is_array($p['resources'] ?? null) ? (array) $p['resources'] : [];
+        $toolsInput = \is_array($p['tools'] ?? null) ? (array) $p['tools'] : [];
 
         if (!\in_array($moodleVersion, ['3', '4'], true)) {
             return $this->json(['error' => 'Unsupported Moodle version'], 400);
@@ -812,11 +818,11 @@ class CourseMaintenanceController extends AbstractController
         // Remove unsupported tools
         $tools = array_values(array_unique(array_diff($tools, ['gradebook'])));
         $clientSentNoTools = empty($toolsInput);
-        $useDefault = ($scope === 'full' && $clientSentNoTools);
+        $useDefault = ('full' === $scope && $clientSentNoTools);
         $toolsToBuild = $useDefault ? $defaultTools : $tools;
 
         // Ensure "tool_intro" is present (append only if missing)
-        if (!in_array('tool_intro', $toolsToBuild, true)) {
+        if (!\in_array('tool_intro', $toolsToBuild, true)) {
             $toolsToBuild[] = 'tool_intro';
         }
 
@@ -825,11 +831,11 @@ class CourseMaintenanceController extends AbstractController
 
         $this->logDebug('[moodleExportExecute] course tools to build (final)', $toolsToBuild);
 
-        if ($adminId <= 0 || $adminLogin === '' || $adminEmail === '') {
-            $adm        = $users->getDefaultAdminForExport();
-            $adminId    = $adminId > 0 ? $adminId : (int) ($adm['id'] ?? 1);
-            $adminLogin = $adminLogin !== '' ? $adminLogin : (string) ($adm['username'] ?? 'admin');
-            $adminEmail = $adminEmail !== '' ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
+        if ($adminId <= 0 || '' === $adminLogin || '' === $adminEmail) {
+            $adm = $users->getDefaultAdminForExport();
+            $adminId = $adminId > 0 ? $adminId : (int) ($adm['id'] ?? 1);
+            $adminLogin = '' !== $adminLogin ? $adminLogin : (string) ($adm['username'] ?? 'admin');
+            $adminEmail = '' !== $adminEmail ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
         }
 
         $courseId = api_get_course_id();
@@ -850,24 +856,24 @@ class CourseMaintenanceController extends AbstractController
 
         try {
             // === Export to Moodle MBZ ===
-            $selectionMode = ($scope === 'selected');
+            $selectionMode = ('selected' === $scope);
             $exporter = new MoodleExport($course, $selectionMode);
             $exporter->setAdminUserData($adminId, $adminLogin, $adminEmail);
 
-            $exportDir  = 'moodle_export_' . date('Ymd_His');
-            $versionNum = ($moodleVersion === '3') ? 3 : 4;
+            $exportDir = 'moodle_export_'.date('Ymd_His');
+            $versionNum = ('3' === $moodleVersion) ? 3 : 4;
 
             $this->logDebug('[moodleExportExecute] starting exporter', [
-                'courseId'    => $courseId,
-                'exportDir'   => $exportDir,
-                'versionNum'  => $versionNum,
-                'selection'   => $selectionMode,
-                'scope'       => $scope,
+                'courseId' => $courseId,
+                'exportDir' => $exportDir,
+                'versionNum' => $versionNum,
+                'selection' => $selectionMode,
+                'scope' => $scope,
             ]);
 
             $mbzPath = $exporter->export($courseId, $exportDir, $versionNum);
 
-            if (!\is_string($mbzPath) || $mbzPath === '' || !is_file($mbzPath)) {
+            if (!\is_string($mbzPath) || '' === $mbzPath || !is_file($mbzPath)) {
                 return $this->json(['error' => 'Moodle export failed: artifact not found'], 500);
             }
 
@@ -882,13 +888,13 @@ class CourseMaintenanceController extends AbstractController
             $resp->headers->set('X-Selection-Mode', $selectionMode ? '1' : '0');
 
             return $resp;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logDebug('[moodleExportExecute] exception', [
                 'message' => $e->getMessage(),
-                'code'    => (int) $e->getCode(),
+                'code' => (int) $e->getCode(),
             ]);
 
-            return $this->json(['error' => 'Moodle export failed: ' . $e->getMessage()], 500);
+            return $this->json(['error' => 'Moodle export failed: '.$e->getMessage()], 500);
         }
     }
 
@@ -896,25 +902,26 @@ class CourseMaintenanceController extends AbstractController
      * Normalize tool list to supported ones and add implied dependencies.
      *
      * @param array<int,string>|null $tools
+     *
      * @return string[]
      */
     private function normalizeSelectedTools(?array $tools): array
     {
         // Single list of supported tool buckets (must match CourseBuilder/exporters)
         $all = [
-            'documents','links','quizzes','quiz_questions','surveys','survey_questions',
-            'announcements','events','course_descriptions','glossary','wiki','thematic',
-            'attendance','works','gradebook','learnpath_category','learnpaths','tool_intro','forums',
+            'documents', 'links', 'quizzes', 'quiz_questions', 'surveys', 'survey_questions',
+            'announcements', 'events', 'course_descriptions', 'glossary', 'wiki', 'thematic',
+            'attendance', 'works', 'gradebook', 'learnpath_category', 'learnpaths', 'tool_intro', 'forums',
         ];
 
         // Implied dependencies
         $deps = [
-            'quizzes'    => ['quiz_questions'],
-            'surveys'    => ['survey_questions'],
+            'quizzes' => ['quiz_questions'],
+            'surveys' => ['survey_questions'],
             'learnpaths' => ['learnpath_category'],
         ];
 
-        $sel = is_array($tools) ? array_values(array_intersect($tools, $all)) : [];
+        $sel = \is_array($tools) ? array_values(array_intersect($tools, $all)) : [];
 
         foreach ($sel as $t) {
             foreach ($deps[$t] ?? [] as $d) {
@@ -953,17 +960,21 @@ class CourseMaintenanceController extends AbstractController
         $course = $cb->build(0, api_get_course_id());
 
         $treeAll = $this->buildResourceTreeForVue($course);
-        $tree    = Cc13Capabilities::filterTree($treeAll);
+        $tree = Cc13Capabilities::filterTree($treeAll);
 
         // Count exportables using "items"
         $exportableCount = 0;
         foreach ($tree as $group) {
-            if (empty($group['items']) || !\is_array($group['items'])) { continue; }
+            if (empty($group['items']) || !\is_array($group['items'])) {
+                continue;
+            }
 
             if (($group['type'] ?? '') === 'forum') {
                 foreach ($group['items'] as $cat) {
                     foreach (($cat['items'] ?? []) as $forumNode) {
-                        if (($forumNode['type'] ?? '') === 'forum') { $exportableCount++; }
+                        if (($forumNode['type'] ?? '') === 'forum') {
+                            $exportableCount++;
+                        }
                     }
                 }
             } else {
@@ -972,37 +983,37 @@ class CourseMaintenanceController extends AbstractController
         }
 
         $warnings = [];
-        if ($exportableCount === 0) {
+        if (0 === $exportableCount) {
             $warnings[] = 'This course has no CC 1.3 exportable resources (documents, links or forums).';
         }
 
         return $this->json([
             'supportedTypes' => Cc13Capabilities::exportableTypes(), // ['document','link','forum']
-            'tree'           => $tree,
-            'preview'        => ['counts' => ['total' => $exportableCount]],
-            'warnings'       => $warnings,
+            'tree' => $tree,
+            'preview' => ['counts' => ['total' => $exportableCount]],
+            'warnings' => $warnings,
         ]);
     }
 
     #[Route('/cc13/export/execute', name: 'cc13_export_execute', methods: ['POST'])]
     public function cc13ExportExecute(int $node, Request $req): JsonResponse
     {
-        $payload  = json_decode((string) $req->getContent(), true) ?: [];
+        $payload = json_decode((string) $req->getContent(), true) ?: [];
         // If the client sent "resources", treat as selected even if scope says "full".
-        $scope    = (string) ($payload['scope'] ?? (!empty($payload['resources']) ? 'selected' : 'full'));
-        $selected = (array)  ($payload['resources'] ?? []);
+        $scope = (string) ($payload['scope'] ?? (!empty($payload['resources']) ? 'selected' : 'full'));
+        $selected = (array) ($payload['resources'] ?? []);
 
         // Normalize selection structure (documents/links/forums/…)
         $normSel = Cc13Capabilities::filterSelection($selected);
 
         // Builder setup
         $tools = ['documents', 'links', 'forums'];
-        $cb    = new CourseBuilder();
+        $cb = new CourseBuilder();
 
         $selectionMode = false;
 
         try {
-            if ($scope === 'selected') {
+            if ('selected' === $scope) {
                 // Build a full snapshot first to expand any category-only selections.
                 $cbFull = new CourseBuilder();
                 $cbFull->set_tools_to_build($tools);
@@ -1012,9 +1023,15 @@ class CourseMaintenanceController extends AbstractController
 
                 // Build per-tool ID map for CourseBuilder
                 $map = [];
-                if (!empty($expanded['documents'])) { $map['documents'] = array_map('intval', array_keys($expanded['documents'])); }
-                if (!empty($expanded['links']))     { $map['links']     = array_map('intval', array_keys($expanded['links'])); }
-                if (!empty($expanded['forums']))    { $map['forums']    = array_map('intval', array_keys($expanded['forums'])); }
+                if (!empty($expanded['documents'])) {
+                    $map['documents'] = array_map('intval', array_keys($expanded['documents']));
+                }
+                if (!empty($expanded['links'])) {
+                    $map['links'] = array_map('intval', array_keys($expanded['links']));
+                }
+                if (!empty($expanded['forums'])) {
+                    $map['forums'] = array_map('intval', array_keys($expanded['forums']));
+                }
 
                 if (empty($map)) {
                     return $this->json(['error' => 'Please select at least one resource.'], 400);
@@ -1034,15 +1051,15 @@ class CourseMaintenanceController extends AbstractController
                 // Convert to the expected structure for filterCourseResources()
                 $safeSelected = [
                     'documents' => array_fill_keys(array_map('intval', array_keys($normSel['documents'] ?? [])), true),
-                    'links'     => array_fill_keys(array_map('intval', array_keys($normSel['links'] ?? [])), true),
-                    'forums'    => array_fill_keys(array_map('intval', array_keys($normSel['forums'] ?? [])), true),
+                    'links' => array_fill_keys(array_map('intval', array_keys($normSel['links'] ?? [])), true),
+                    'forums' => array_fill_keys(array_map('intval', array_keys($normSel['forums'] ?? [])), true),
                 ];
                 // Also include expansions from categories
                 $fullSnapshot = isset($courseFull) ? $courseFull : $course;
-                $expandedAll  = $this->expandCc13SelectionFromCategories($fullSnapshot, $normSel);
-                foreach (['documents','links','forums'] as $k) {
+                $expandedAll = $this->expandCc13SelectionFromCategories($fullSnapshot, $normSel);
+                foreach (['documents', 'links', 'forums'] as $k) {
                     foreach (array_keys($expandedAll[$k] ?? []) as $idStr) {
-                        $safeSelected[$k][(int)$idStr] = true;
+                        $safeSelected[$k][(int) $idStr] = true;
                     }
                 }
 
@@ -1052,26 +1069,27 @@ class CourseMaintenanceController extends AbstractController
                 }
             }
 
-            $exporter  = new Cc13Export($course, $selectionMode, /*debug*/ false);
+            $exporter = new Cc13Export($course, $selectionMode, /* debug */ false);
             $imsccPath = $exporter->export(api_get_course_id());
-            $fileName  = basename($imsccPath);
+            $fileName = basename($imsccPath);
 
             $downloadUrl = $this->generateUrl(
-                    'cm_cc13_export_download',
-                    ['node' => $node],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                ).'?file='.rawurlencode($fileName);
+                'cm_cc13_export_download',
+                ['node' => $node],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ).'?file='.rawurlencode($fileName);
 
             return $this->json([
-                'ok'          => true,
-                'file'        => $fileName,
+                'ok' => true,
+                'file' => $fileName,
                 'downloadUrl' => $downloadUrl,
-                'message'     => 'Export finished.',
+                'message' => 'Export finished.',
             ]);
         } catch (RuntimeException $e) {
-            if (stripos($e->getMessage(), 'Nothing to export') !== false) {
+            if (false !== stripos($e->getMessage(), 'Nothing to export')) {
                 return $this->json(['error' => 'Nothing to export (no compatible resources found).'], 400);
             }
+
             return $this->json(['error' => 'CC 1.3 export failed: '.$e->getMessage()], 500);
         }
     }
@@ -1082,11 +1100,11 @@ class CourseMaintenanceController extends AbstractController
         // Validate the filename we will serve
         $file = basename((string) $req->query->get('file', ''));
         // Example pattern: ABC123_cc13_20251017_195455.imscc
-        if ($file === '' || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
+        if ('' === $file || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
             return $this->json(['error' => 'Invalid file'], 400);
         }
 
-        $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file;
+        $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;
         if (!is_file($abs)) {
             return $this->json(['error' => 'File not found'], 404);
         }
@@ -1112,21 +1130,21 @@ class CourseMaintenanceController extends AbstractController
             }
 
             $ext = strtolower(pathinfo($file->getClientOriginalName() ?? '', PATHINFO_EXTENSION));
-            if (!in_array($ext, ['imscc', 'zip'], true)) {
+            if (!\in_array($ext, ['imscc', 'zip'], true)) {
                 return $this->json(['error' => 'Unsupported file type. Please upload .imscc or .zip'], 415);
             }
 
             // Move to a temp file
             $tmpZip = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.
                 'cc13_'.date('Ymd_His').'_'.bin2hex(random_bytes(3)).'.'.$ext;
-            $file->move(dirname($tmpZip), basename($tmpZip));
+            $file->move(\dirname($tmpZip), basename($tmpZip));
 
             // Extract
             $extractDir = Imscc13Import::unzip($tmpZip);
 
             // Detect and validate format
             $format = Imscc13Import::detectFormat($extractDir);
-            if ($format !== Imscc13Import::FORMAT_IMSCC13) {
+            if (Imscc13Import::FORMAT_IMSCC13 !== $format) {
                 Imscc13Import::rrmdir($extractDir);
                 @unlink($tmpZip);
 
@@ -1145,7 +1163,7 @@ class CourseMaintenanceController extends AbstractController
                 'ok' => true,
                 'message' => 'CC 1.3 import completed successfully.',
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
                 'error' => 'CC 1.3 import failed: '.$e->getMessage(),
             ], 500);
@@ -1178,28 +1196,28 @@ class CourseMaintenanceController extends AbstractController
                 return $this->json([
                     'meta' => [
                         'backupId' => $backupId,
-                        'path'     => $path,
+                        'path' => $path,
                     ],
                     'zip' => [
-                        'error'           => $ci['error'] ?? 'unknown error',
+                        'error' => $ci['error'] ?? 'unknown error',
                         'zip_list_sample' => $ci['zip_list_sample'] ?? [],
-                        'num_files'       => $ci['num_files'] ?? null,
+                        'num_files' => $ci['num_files'] ?? null,
                     ],
                 ], 200);
             }
 
-            $raw  = (string) $ci['data'];
-            $size = (int) ($ci['size'] ?? strlen($raw));
-            $md5  = md5($raw);
+            $raw = (string) $ci['data'];
+            $size = (int) ($ci['size'] ?? \strlen($raw));
+            $md5 = md5($raw);
 
             // Detect & decode content
             $probe = $this->decodeCourseInfo($raw);
 
             // Build a tiny scan snapshot (only keys, no grafo)
             $scan = [
-                'has_graph'      => false,
+                'has_graph' => false,
                 'resources_keys' => [],
-                'note'           => 'No graph parsed',
+                'note' => 'No graph parsed',
             ];
 
             if (!empty($probe['is_serialized']) && isset($probe['value']) && \is_object($probe['value'])) {
@@ -1225,29 +1243,29 @@ class CourseMaintenanceController extends AbstractController
             $out = [
                 'meta' => [
                     'backupId' => $backupId,
-                    'path'     => $path,
-                    'node'     => $node,
+                    'path' => $path,
+                    'node' => $node,
                 ],
                 'zip' => [
-                    'name'  => $ci['name'] ?? null,
+                    'name' => $ci['name'] ?? null,
                     'index' => $ci['index'] ?? null,
                 ],
                 'course_info_dat' => [
                     'size_bytes' => $size,
-                    'md5'        => $md5,
+                    'md5' => $md5,
                 ],
                 'probe' => $probeOut,
-                'scan'  => $scan,
+                'scan' => $scan,
             ];
 
             $this->logDebug('[importDiagnose] done', [
-                'encoding'       => $probeOut['encoding'] ?? null,
-                'has_graph'      => $scan['has_graph'],
+                'encoding' => $probeOut['encoding'] ?? null,
+                'has_graph' => $scan['has_graph'],
                 'resources_keys' => $scan['resources_keys'],
             ]);
 
             return $this->json($out);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logDebug('[importDiagnose] exception', ['message' => $e->getMessage()]);
 
             return $this->json([
@@ -1265,43 +1283,50 @@ class CourseMaintenanceController extends AbstractController
     private function decodeCourseInfo(string $raw): array
     {
         $r = [
-            'encoding'      => 'raw',
-            'decoded_len'   => strlen($raw),
-            'magic_hex'     => bin2hex(substr($raw, 0, 8)),
-            'magic_ascii'   => preg_replace('/[^\x20-\x7E]/', '.', substr($raw, 0, 16)),
-            'steps'         => [],
-            'decoded'       => null,
+            'encoding' => 'raw',
+            'decoded_len' => \strlen($raw),
+            'magic_hex' => bin2hex(substr($raw, 0, 8)),
+            'magic_ascii' => preg_replace('/[^\x20-\x7E]/', '.', substr($raw, 0, 16)),
+            'steps' => [],
+            'decoded' => null,
             'is_serialized' => false,
-            'is_json'       => false,
-            'json_preview'  => null,
+            'is_json' => false,
+            'json_preview' => null,
         ];
 
         $isJson = static function (string $s): bool {
             $t = ltrim($s);
-            return $t !== '' && ($t[0] === '{' || $t[0] === '[');
+
+            return '' !== $t && ('{' === $t[0] || '[' === $t[0]);
         };
 
         // Centralized tolerant unserialize with typed-props preprocessing
         $tryUnserializeTolerant = function (string $s, string $label) use (&$r) {
-            $ok = false; $val = null; $err = null; $relaxed = false;
+            $ok = false;
+            $val = null;
+            $err = null;
+            $relaxed = false;
 
             // Ensure legacy aliases and coerce numeric strings before unserialize
             try {
                 CourseArchiver::ensureLegacyAliases();
-            } catch (\Throwable) { /* ignore */ }
+            } catch (Throwable) { /* ignore */
+            }
 
             try {
                 $s = CourseArchiver::preprocessSerializedPayloadForTypedProps($s);
-            } catch (\Throwable) { /* ignore */ }
+            } catch (Throwable) { /* ignore */
+            }
 
             // Strict mode
-            set_error_handler(static function(){});
+            set_error_handler(static function (): void {});
+
             try {
                 $val = @unserialize($s, ['allowed_classes' => true]);
-                $ok  = ($val !== false) || (trim($s) === 'b:0;');
-            } catch (\Throwable $e) {
+                $ok = (false !== $val) || ('b:0;' === trim($s));
+            } catch (Throwable $e) {
                 $err = $e->getMessage();
-                $ok  = false;
+                $ok = false;
             } finally {
                 restore_error_handler();
             }
@@ -1310,16 +1335,17 @@ class CourseMaintenanceController extends AbstractController
             // Relaxed fallback (no class instantiation) + deincomplete to stdClass
             if (!$ok) {
                 $err2 = null;
-                set_error_handler(static function(){});
+                set_error_handler(static function (): void {});
+
                 try {
                     $tmp = @unserialize($s, ['allowed_classes' => false]);
-                    if ($tmp !== false || trim($s) === 'b:0;') {
+                    if (false !== $tmp || 'b:0;' === trim($s)) {
                         $val = $this->deincomplete($tmp);
-                        $ok  = true;
+                        $ok = true;
                         $relaxed = true;
                         $err = null;
                     }
-                } catch (\Throwable $e2) {
+                } catch (Throwable $e2) {
                     $err2 = $e2->getMessage();
                 } finally {
                     restore_error_handler();
@@ -1331,15 +1357,17 @@ class CourseMaintenanceController extends AbstractController
                 $r['is_serialized'] = true;
                 $r['decoded'] = null; // keep payload minimal
                 $r['used_relaxed'] = $relaxed;
+
                 return $val;
             }
+
             return null;
         };
 
         // 0) JSON as-is?
         if ($isJson($raw)) {
             $r['encoding'] = 'json';
-            $r['is_json']  = true;
+            $r['is_json'] = true;
             $r['json_preview'] = json_decode($raw, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
 
             return $r;
@@ -1348,22 +1376,25 @@ class CourseMaintenanceController extends AbstractController
         // Direct PHP serialize (strict then relaxed, after preprocessing)
         if (($u = $tryUnserializeTolerant($raw, 'raw')) !== null) {
             $r['encoding'] = 'php-serialize';
+
             return $r + ['value' => $u];
         }
 
         // GZIP
-        if (strncmp($raw, "\x1F\x8B", 2) === 0) {
+        if (0 === strncmp($raw, "\x1F\x8B", 2)) {
             $dec = @gzdecode($raw);
-            $r['steps'][] = ['action' => 'gzdecode', 'ok' => $dec !== false];
-            if ($dec !== false) {
+            $r['steps'][] = ['action' => 'gzdecode', 'ok' => false !== $dec];
+            if (false !== $dec) {
                 if ($isJson($dec)) {
                     $r['encoding'] = 'gzip+json';
-                    $r['is_json']  = true;
+                    $r['is_json'] = true;
                     $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+
                     return $r;
                 }
                 if (($u = $tryUnserializeTolerant($dec, 'gzip')) !== null) {
                     $r['encoding'] = 'gzip+php-serialize';
+
                     return $r + ['value' => $u];
                 }
             }
@@ -1371,32 +1402,36 @@ class CourseMaintenanceController extends AbstractController
 
         // ZLIB/DEFLATE
         $z2 = substr($raw, 0, 2);
-        if ($z2 === "\x78\x9C" || $z2 === "\x78\xDA") {
+        if ("\x78\x9C" === $z2 || "\x78\xDA" === $z2) {
             $dec = @gzuncompress($raw);
-            $r['steps'][] = ['action' => 'gzuncompress', 'ok' => $dec !== false];
-            if ($dec !== false) {
+            $r['steps'][] = ['action' => 'gzuncompress', 'ok' => false !== $dec];
+            if (false !== $dec) {
                 if ($isJson($dec)) {
                     $r['encoding'] = 'zlib+json';
-                    $r['is_json']  = true;
+                    $r['is_json'] = true;
                     $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+
                     return $r;
                 }
                 if (($u = $tryUnserializeTolerant($dec, 'zlib')) !== null) {
                     $r['encoding'] = 'zlib+php-serialize';
+
                     return $r + ['value' => $u];
                 }
             }
             $dec2 = @gzinflate($raw);
-            $r['steps'][] = ['action' => 'gzinflate', 'ok' => $dec2 !== false];
-            if ($dec2 !== false) {
+            $r['steps'][] = ['action' => 'gzinflate', 'ok' => false !== $dec2];
+            if (false !== $dec2) {
                 if ($isJson($dec2)) {
                     $r['encoding'] = 'deflate+json';
-                    $r['is_json']  = true;
+                    $r['is_json'] = true;
                     $r['json_preview'] = json_decode($dec2, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+
                     return $r;
                 }
                 if (($u = $tryUnserializeTolerant($dec2, 'deflate')) !== null) {
                     $r['encoding'] = 'deflate+php-serialize';
+
                     return $r + ['value' => $u];
                 }
             }
@@ -1405,24 +1440,27 @@ class CourseMaintenanceController extends AbstractController
         // BASE64 (e.g. "Tzo0ODoi..." -> base64('O:48:"Chamilo...'))
         if (preg_match('~^[A-Za-z0-9+/=\r\n]+$~', $raw)) {
             $dec = base64_decode($raw, true);
-            $r['steps'][] = ['action' => 'base64_decode', 'ok' => $dec !== false];
-            if ($dec !== false) {
+            $r['steps'][] = ['action' => 'base64_decode', 'ok' => false !== $dec];
+            if (false !== $dec) {
                 if ($isJson($dec)) {
                     $r['encoding'] = 'base64(json)';
-                    $r['is_json']  = true;
+                    $r['is_json'] = true;
                     $r['json_preview'] = json_decode($dec, true, 512, JSON_PARTIAL_OUTPUT_ON_ERROR);
+
                     return $r;
                 }
                 if (($u = $tryUnserializeTolerant($dec, 'base64')) !== null) {
                     $r['encoding'] = 'base64(php-serialize)';
+
                     return $r + ['value' => $u];
                 }
                 // base64 + gzip nested
-                if (strncmp($dec, "\x1F\x8B", 2) === 0) {
+                if (0 === strncmp($dec, "\x1F\x8B", 2)) {
                     $dec2 = @gzdecode($dec);
-                    $r['steps'][] = ['action' => 'base64+gzdecode', 'ok' => $dec2 !== false];
-                    if ($dec2 !== false && ($u = $tryUnserializeTolerant($dec2, 'base64+gzip')) !== null) {
+                    $r['steps'][] = ['action' => 'base64+gzdecode', 'ok' => false !== $dec2];
+                    if (false !== $dec2 && ($u = $tryUnserializeTolerant($dec2, 'base64+gzip')) !== null) {
                         $r['encoding'] = 'base64(gzip+php-serialize)';
+
                         return $r + ['value' => $u];
                     }
                 }
@@ -1430,7 +1468,7 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Nested ZIP?
-        if (strncmp($raw, "PK\x03\x04", 4) === 0) {
+        if (0 === strncmp($raw, "PK\x03\x04", 4)) {
             $r['encoding'] = 'nested-zip';
         }
 
@@ -1443,25 +1481,29 @@ class CourseMaintenanceController extends AbstractController
      */
     private function deincomplete(mixed $v): mixed
     {
-        if ($v instanceof \__PHP_Incomplete_Class) {
-            $o = new \stdClass();
+        if ($v instanceof __PHP_Incomplete_Class) {
+            $o = new stdClass();
             foreach (get_object_vars($v) as $k => $vv) {
                 $o->{$k} = $this->deincomplete($vv);
             }
+
             return $o;
         }
-        if (is_array($v)) {
+        if (\is_array($v)) {
             foreach ($v as $k => $vv) {
                 $v[$k] = $this->deincomplete($vv);
             }
+
             return $v;
         }
-        if (is_object($v)) {
+        if (\is_object($v)) {
             foreach (get_object_vars($v) as $k => $vv) {
                 $v->{$k} = $this->deincomplete($vv);
             }
+
             return $v;
         }
+
         return $v;
     }
 
@@ -1477,7 +1519,7 @@ class CourseMaintenanceController extends AbstractController
             'backup/course_info.dat',
         ];
 
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         if (true !== ($err = $zip->open($zipPath))) {
             return ['ok' => false, 'error' => 'Failed to open ZIP (ZipArchive::open error '.$err.')'];
         }
@@ -1488,35 +1530,41 @@ class CourseMaintenanceController extends AbstractController
 
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $st = $zip->statIndex($i);
-            if (!$st || !isset($st['name'])) { continue; }
+            if (!$st || !isset($st['name'])) {
+                continue;
+            }
             $name = (string) $st['name'];
             $base = strtolower(basename($name));
-            if ($base === 'course_info.dat') {
+            if ('course_info.dat' === $base) {
                 $foundIdx = $i;
                 $foundName = $name;
+
                 break;
             }
         }
 
         // Try specific candidate paths if direct scan failed
-        if ($foundIdx === null) {
+        if (null === $foundIdx) {
             foreach ($candidates as $cand) {
-                $idx = $zip->locateName($cand, \ZipArchive::FL_NOCASE);
-                if ($idx !== false) {
+                $idx = $zip->locateName($cand, ZipArchive::FL_NOCASE);
+                if (false !== $idx) {
                     $foundIdx = $idx;
                     $foundName = $zip->getNameIndex($idx);
+
                     break;
                 }
             }
         }
 
-        if ($foundIdx === null) {
+        if (null === $foundIdx) {
             // Build a short listing for debugging
             $list = [];
             $limit = min($zip->numFiles, 200);
             for ($i = 0; $i < $limit; $i++) {
                 $n = $zip->getNameIndex($i);
-                if ($n !== false) { $list[] = $n; }
+                if (false !== $n) {
+                    $list[] = $n;
+                }
             }
             $zip->close();
 
@@ -1530,9 +1578,10 @@ class CourseMaintenanceController extends AbstractController
 
         $stat = $zip->statIndex($foundIdx);
         $size = (int) ($stat['size'] ?? 0);
-        $fp   = $zip->getStream($foundName);
+        $fp = $zip->getStream($foundName);
         if (!$fp) {
             $zip->close();
+
             return ['ok' => false, 'error' => 'Failed to open stream for course_info.dat (getStream)'];
         }
 
@@ -1540,16 +1589,16 @@ class CourseMaintenanceController extends AbstractController
         fclose($fp);
         $zip->close();
 
-        if (!is_string($data)) {
+        if (!\is_string($data)) {
             return ['ok' => false, 'error' => 'Failed to read course_info.dat contents'];
         }
 
         return [
-            'ok'        => true,
-            'name'      => $foundName,
-            'index'     => $foundIdx,
-            'size'      => $size,
-            'data'      => $data,
+            'ok' => true,
+            'name' => $foundName,
+            'index' => $foundIdx,
+            'size' => $size,
+            'data' => $data,
         ];
     }
 
@@ -1710,7 +1759,7 @@ class CourseMaintenanceController extends AbstractController
                 $parts = array_values(array_filter(explode('/', $p), 'strlen'));
 
                 // host
-                if (!empty($parts) && ($parts[0] === 'localhost' || str_contains($parts[0], '.'))) {
+                if (!empty($parts) && ('localhost' === $parts[0] || str_contains($parts[0], '.'))) {
                     array_shift($parts);
                 }
                 // course-code
@@ -1719,23 +1768,28 @@ class CourseMaintenanceController extends AbstractController
                 }
 
                 $clean = implode('/', $parts);
-                if ($clean === '' && $filetype !== 'folder') {
+                if ('' === $clean && 'folder' !== $filetype) {
                     $clean = $title;
                 }
-                if ($filetype === 'folder') {
+                if ('folder' === $filetype) {
                     $clean = rtrim($clean, '/').'/';
                 }
+
                 return $clean;
             };
 
             $folderIdByPath = [];
             foreach ($docs as $obj) {
-                if (!\is_object($obj)) { continue; }
-                $ft = (string)($obj->filetype ?? $obj->file_type ?? '');
-                if ($ft !== 'folder') { continue; }
-                $rel = $normalize((string)$obj->path, (string)$obj->title, $ft);
+                if (!\is_object($obj)) {
+                    continue;
+                }
+                $ft = (string) ($obj->filetype ?? $obj->file_type ?? '');
+                if ('folder' !== $ft) {
+                    continue;
+                }
+                $rel = $normalize((string) $obj->path, (string) $obj->title, $ft);
                 $key = rtrim($rel, '/');
-                if ($key !== '') {
+                if ('' !== $key) {
                     $folderIdByPath[strtolower($key)] = (int) $obj->source_id;
                 }
             }
@@ -1743,45 +1797,50 @@ class CourseMaintenanceController extends AbstractController
             $docRoot = [];
             $findChild = static function (array &$children, string $label): ?int {
                 foreach ($children as $i => $n) {
-                    if ((string)($n['label'] ?? '') === $label) { return $i; }
+                    if ((string) ($n['label'] ?? '') === $label) {
+                        return $i;
+                    }
                 }
+
                 return null;
             };
 
             foreach ($docs as $obj) {
-                if (!\is_object($obj)) { continue; }
+                if (!\is_object($obj)) {
+                    continue;
+                }
 
-                $title    = (string) $obj->title;
+                $title = (string) $obj->title;
                 $filetype = (string) ($obj->filetype ?? $obj->file_type ?? '');
-                $rel      = $normalize((string) $obj->path, $title, $filetype);
-                $parts    = array_values(array_filter(explode('/', trim($rel, '/')), 'strlen'));
+                $rel = $normalize((string) $obj->path, $title, $filetype);
+                $parts = array_values(array_filter(explode('/', trim($rel, '/')), 'strlen'));
 
-                $cursor =& $docRoot;
+                $cursor = &$docRoot;
                 $soFar = '';
                 $total = \count($parts);
 
                 for ($i = 0; $i < $total; $i++) {
-                    $seg      = $parts[$i];
-                    $isLast   = ($i === $total - 1);
-                    $isFolder = (!$isLast) || ($filetype === 'folder');
+                    $seg = $parts[$i];
+                    $isLast = ($i === $total - 1);
+                    $isFolder = (!$isLast) || ('folder' === $filetype);
 
                     $soFar = ltrim($soFar.'/'.$seg, '/');
-                    $label = $seg . ($isFolder ? '/' : '');
+                    $label = $seg.($isFolder ? '/' : '');
 
                     $idx = $findChild($cursor, $label);
-                    if ($idx === null) {
+                    if (null === $idx) {
                         if ($isFolder) {
                             $folderId = $folderIdByPath[strtolower($soFar)] ?? null;
                             $node = [
-                                'id'         => $folderId ?? ('dir:'.$soFar),
-                                'label'      => $label,
+                                'id' => $folderId ?? ('dir:'.$soFar),
+                                'label' => $label,
                                 'selectable' => true,
-                                'children'   => [],
+                                'children' => [],
                             ];
                         } else {
                             $node = [
-                                'id'         => (int) $obj->source_id,
-                                'label'      => $label,
+                                'id' => (int) $obj->source_id,
+                                'label' => $label,
                                 'selectable' => true,
                             ];
                         }
@@ -1793,14 +1852,14 @@ class CourseMaintenanceController extends AbstractController
                         if (!isset($cursor[$idx]['children']) || !\is_array($cursor[$idx]['children'])) {
                             $cursor[$idx]['children'] = [];
                         }
-                        $cursor =& $cursor[$idx]['children'];
+                        $cursor = &$cursor[$idx]['children'];
                     }
                 }
             }
 
             $sortTree = null;
-            $sortTree = function (array &$nodes) use (&$sortTree) {
-                usort($nodes, static fn($a, $b) => strcasecmp((string)$a['label'], (string)$b['label']));
+            $sortTree = function (array &$nodes) use (&$sortTree): void {
+                usort($nodes, static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
                 foreach ($nodes as &$n) {
                     if (isset($n['children']) && \is_array($n['children'])) {
                         $sortTree($n['children']);
@@ -1810,8 +1869,8 @@ class CourseMaintenanceController extends AbstractController
             $sortTree($docRoot);
 
             $tree[] = [
-                'type'     => 'document',
-                'title'    => $legacyTitles['document'] ?? ($fallbackTitles['document'] ?? 'Documents'),
+                'type' => 'document',
+                'title' => $legacyTitles['document'] ?? ($fallbackTitles['document'] ?? 'Documents'),
                 'children' => $docRoot,
             ];
 
@@ -1876,6 +1935,7 @@ class CourseMaintenanceController extends AbstractController
                     'selectable' => true,
                 ];
                 $tree[] = $group;
+
                 continue;
             }
 
@@ -1949,7 +2009,6 @@ class CourseMaintenanceController extends AbstractController
         return $tree;
     }
 
-
     /**
      * Build forum tree (Category → Forum → Topic) for the UI.
      * Uses only "items" (no "children") and sets UI hints (has_children, item_count).
@@ -1961,37 +2020,54 @@ class CourseMaintenanceController extends AbstractController
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
 
         // Buckets (defensive: accept legacy casings / aliases)
-        $catRaw   = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
-        $forumRaw = $res['forum']          ?? $res['Forum']          ?? [];
-        $topicRaw = $res['forum_topic']    ?? $res['ForumTopic']     ?? ($res['thread'] ?? []);
-        $postRaw  = $res['forum_post']     ?? $res['Forum_Post']     ?? ($res['post'] ?? []);
+        $catRaw = $res['forum_category'] ?? $res['Forum_Category'] ?? [];
+        $forumRaw = $res['forum'] ?? $res['Forum'] ?? [];
+        $topicRaw = $res['forum_topic'] ?? $res['ForumTopic'] ?? ($res['thread'] ?? []);
+        $postRaw = $res['forum_post'] ?? $res['Forum_Post'] ?? ($res['post'] ?? []);
 
         $this->logDebug('[buildForumTreeForVue] raw counts', [
             'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
-            'forums'     => \is_array($forumRaw) ? \count($forumRaw) : 0,
-            'topics'     => \is_array($topicRaw) ? \count($topicRaw) : 0,
-            'posts'      => \is_array($postRaw) ? \count($postRaw) : 0,
+            'forums' => \is_array($forumRaw) ? \count($forumRaw) : 0,
+            'topics' => \is_array($topicRaw) ? \count($topicRaw) : 0,
+            'posts' => \is_array($postRaw) ? \count($postRaw) : 0,
         ]);
 
         // Quick classifiers (defensive)
         $isForum = function (object $o): bool {
             $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
-            if (isset($e->forum_title) && \is_string($e->forum_title)) { return true; }
-            if (isset($e->default_view) || isset($e->allow_anonymous)) { return true; }
-            if ((isset($e->forum_category) || isset($e->forum_category_id) || isset($e->category_id)) && !isset($e->forum_id)) { return true; }
+            if (isset($e->forum_title) && \is_string($e->forum_title)) {
+                return true;
+            }
+            if (isset($e->default_view) || isset($e->allow_anonymous)) {
+                return true;
+            }
+            if ((isset($e->forum_category) || isset($e->forum_category_id) || isset($e->category_id)) && !isset($e->forum_id)) {
+                return true;
+            }
+
             return false;
         };
         $isTopic = function (object $o): bool {
             $e = (isset($o->obj) && \is_object($o->obj)) ? $o->obj : $o;
-            if (isset($e->forum_id) && (isset($e->thread_title) || isset($e->thread_date) || isset($e->poster_name))) { return true; }
-            if (isset($e->forum_id) && !isset($e->forum_title)) { return true; }
+            if (isset($e->forum_id) && (isset($e->thread_title) || isset($e->thread_date) || isset($e->poster_name))) {
+                return true;
+            }
+            if (isset($e->forum_id) && !isset($e->forum_title)) {
+                return true;
+            }
+
             return false;
         };
         $getForumCategoryId = function (object $forum): int {
             $e = (isset($forum->obj) && \is_object($forum->obj)) ? $forum->obj : $forum;
             $cid = (int) ($e->forum_category ?? 0);
-            if ($cid <= 0) { $cid = (int) ($e->forum_category_id ?? 0); }
-            if ($cid <= 0) { $cid = (int) ($e->category_id ?? 0); }
+            if ($cid <= 0) {
+                $cid = (int) ($e->forum_category_id ?? 0);
+            }
+            if ($cid <= 0) {
+                $cid = (int) ($e->category_id ?? 0);
+            }
+
             return $cid;
         };
 
@@ -1999,32 +2075,34 @@ class CourseMaintenanceController extends AbstractController
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
             $label = $this->resolveItemLabel('forum_category', $this->objectEntity($obj), $id);
             $cats[$id] = [
-                'id'         => $id,
-                'type'       => 'forum_category',
-                'label'      => ($label !== '' ? $label : 'Category #'.$id).'/',
+                'id' => $id,
+                'type' => 'forum_category',
+                'label' => ('' !== $label ? $label : 'Category #'.$id).'/',
                 'selectable' => true,
-                'items'      => [],
+                'items' => [],
                 'has_children' => false,
-                'item_count'   => 0,
-                'extra'      => ['filetype' => 'folder'],
+                'item_count' => 0,
+                'extra' => ['filetype' => 'folder'],
             ];
         }
         // Virtual "Uncategorized"
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id'           => $uncatKey,
-                'type'         => 'forum_category',
-                'label'        => 'Uncategorized/',
-                'selectable'   => true,
-                'items'        => [],
-                '_virtual'     => true,
+                'id' => $uncatKey,
+                'type' => 'forum_category',
+                'label' => 'Uncategorized/',
+                'selectable' => true,
+                'items' => [],
+                '_virtual' => true,
                 'has_children' => false,
-                'item_count'   => 0,
-                'extra'        => ['filetype' => 'folder'],
+                'item_count' => 0,
+                'extra' => ['filetype' => 'folder'],
             ];
         }
 
@@ -2032,9 +2110,12 @@ class CourseMaintenanceController extends AbstractController
         $forums = [];
         foreach ($forumRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
             if (!$isForum($obj)) {
                 $this->logDebug('[buildForumTreeForVue] skipped non-forum in forum bucket', ['id' => $id]);
+
                 continue;
             }
             $forums[$id] = $this->objectEntity($obj);
@@ -2045,61 +2126,82 @@ class CourseMaintenanceController extends AbstractController
         $postCountByTopic = [];
         foreach ($topicRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
-            if ($isForum($obj) && !$isTopic($obj)) {
-                $this->logDebug('[buildForumTreeForVue] WARNING: forum object found in topic bucket; skipping', ['id' => $id]);
+            if ($id <= 0 || !\is_object($obj)) {
                 continue;
             }
-            if (!$isTopic($obj)) { continue; }
+            if ($isForum($obj) && !$isTopic($obj)) {
+                $this->logDebug('[buildForumTreeForVue] WARNING: forum object found in topic bucket; skipping', ['id' => $id]);
+
+                continue;
+            }
+            if (!$isTopic($obj)) {
+                continue;
+            }
             $topics[$id] = $this->objectEntity($obj);
         }
         foreach ($postRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
             $e = $this->objectEntity($obj);
             $tid = (int) ($e->thread_id ?? 0);
-            if ($tid > 0) { $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1; }
+            if ($tid > 0) {
+                $postCountByTopic[$tid] = ($postCountByTopic[$tid] ?? 0) + 1;
+            }
         }
 
         // Attach topics to forums and forums to categories
         foreach ($forums as $fid => $f) {
             $catId = $getForumCategoryId($f);
-            if (!isset($cats[$catId])) { $catId = $uncatKey; }
+            if (!isset($cats[$catId])) {
+                $catId = $uncatKey;
+            }
 
             $forumNode = [
-                'id'         => $fid,
-                'type'       => 'forum',
-                'label'      => $this->resolveItemLabel('forum', $f, $fid),
-                'extra'      => $this->buildExtra('forum', $f) ?: new \stdClass(),
+                'id' => $fid,
+                'type' => 'forum',
+                'label' => $this->resolveItemLabel('forum', $f, $fid),
+                'extra' => $this->buildExtra('forum', $f) ?: new stdClass(),
                 'selectable' => true,
-                'items'      => [],
+                'items' => [],
                 // UI hints
                 'has_children' => false,
-                'item_count'   => 0,
-                'ui_depth'     => 2,
+                'item_count' => 0,
+                'ui_depth' => 2,
             ];
 
             foreach ($topics as $tid => $t) {
-                if ((int) ($t->forum_id ?? 0) !== $fid) { continue; }
+                if ((int) ($t->forum_id ?? 0) !== $fid) {
+                    continue;
+                }
 
-                $author  = (string) ($t->thread_poster_name ?? $t->poster_name ?? '');
-                $date    = (string) ($t->thread_date ?? '');
-                $nPosts  = (int) ($postCountByTopic[$tid] ?? 0);
+                $author = (string) ($t->thread_poster_name ?? $t->poster_name ?? '');
+                $date = (string) ($t->thread_date ?? '');
+                $nPosts = (int) ($postCountByTopic[$tid] ?? 0);
 
                 $topicLabel = $this->resolveItemLabel('forum_topic', $t, $tid);
                 $meta = [];
-                if ($author !== '') { $meta[] = $author; }
-                if ($date   !== '') { $meta[] = $date; }
-                if ($meta) { $topicLabel .= ' ('.implode(', ', $meta).')'; }
-                if ($nPosts > 0) { $topicLabel .= ' — '.$nPosts.' post'.(1 === $nPosts ? '' : 's'); }
+                if ('' !== $author) {
+                    $meta[] = $author;
+                }
+                if ('' !== $date) {
+                    $meta[] = $date;
+                }
+                if ($meta) {
+                    $topicLabel .= ' ('.implode(', ', $meta).')';
+                }
+                if ($nPosts > 0) {
+                    $topicLabel .= ' — '.$nPosts.' post'.(1 === $nPosts ? '' : 's');
+                }
 
                 $forumNode['items'][] = [
-                    'id'         => $tid,
-                    'type'       => 'forum_topic',
-                    'label'      => $topicLabel,
-                    'extra'      => new \stdClass(),
+                    'id' => $tid,
+                    'type' => 'forum_topic',
+                    'label' => $topicLabel,
+                    'extra' => new stdClass(),
                     'selectable' => true,
-                    'ui_depth'   => 3,
+                    'ui_depth' => 3,
                     'item_count' => 0,
                 ];
             }
@@ -2107,7 +2209,7 @@ class CourseMaintenanceController extends AbstractController
             if (!empty($forumNode['items'])) {
                 usort($forumNode['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
                 $forumNode['has_children'] = true;
-                $forumNode['item_count']   = \count($forumNode['items']);
+                $forumNode['item_count'] = \count($forumNode['items']);
             }
 
             $cats[$catId]['items'][] = $forumNode;
@@ -2115,7 +2217,10 @@ class CourseMaintenanceController extends AbstractController
 
         // Remove empty virtual category; sort forums inside each category
         $catNodes = array_values(array_filter($cats, static function ($c) {
-            if (!empty($c['_virtual']) && empty($c['items'])) { return false; }
+            if (!empty($c['_virtual']) && empty($c['items'])) {
+                return false;
+            }
+
             return true;
         }));
 
@@ -2124,7 +2229,9 @@ class CourseMaintenanceController extends AbstractController
             if (!empty($cat['items'])) {
                 $lift = [];
                 foreach ($cat['items'] as &$forumNode) {
-                    if (($forumNode['type'] ?? '') !== 'forum' || empty($forumNode['items'])) { continue; }
+                    if (($forumNode['type'] ?? '') !== 'forum' || empty($forumNode['items'])) {
+                        continue;
+                    }
                     $keep = [];
                     foreach ($forumNode['items'] as $child) {
                         if (($child['type'] ?? '') === 'forum') {
@@ -2132,32 +2239,34 @@ class CourseMaintenanceController extends AbstractController
                             $this->logDebug('[buildForumTreeForVue] flatten: lifted nested forum', [
                                 'parent_forum_id' => $forumNode['id'] ?? null,
                                 'lifted_forum_id' => $child['id'] ?? null,
-                                'cat_id'          => $cat['id'] ?? null,
+                                'cat_id' => $cat['id'] ?? null,
                             ]);
                         } else {
                             $keep[] = $child;
                         }
                     }
-                    $forumNode['items']        = $keep;
+                    $forumNode['items'] = $keep;
                     $forumNode['has_children'] = !empty($keep);
-                    $forumNode['item_count']   = \count($keep);
+                    $forumNode['item_count'] = \count($keep);
                 }
                 unset($forumNode);
 
-                foreach ($lift as $n) { $cat['items'][] = $n; }
+                foreach ($lift as $n) {
+                    $cat['items'][] = $n;
+                }
                 usort($cat['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
             }
 
             // UI hints for category
             $cat['has_children'] = !empty($cat['items']);
-            $cat['item_count']   = \count($cat['items'] ?? []);
+            $cat['item_count'] = \count($cat['items'] ?? []);
         }
         unset($cat);
 
         $this->logDebug('[buildForumTreeForVue] end', ['categories' => \count($catNodes)]);
 
         return [
-            'type'  => 'forum',
+            'type' => 'forum',
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
@@ -2544,9 +2653,9 @@ class CourseMaintenanceController extends AbstractController
             $selForums = array_fill_keys(array_map('strval', array_keys($selected['forum'])), true);
             if (!empty($selForums)) {
                 // tolerant lookups
-                $forums  = $this->findBucket($orig, 'forum');
+                $forums = $this->findBucket($orig, 'forum');
                 $threads = $this->findBucket($orig, 'forum_topic');
-                $posts   = $this->findBucket($orig, 'forum_post');
+                $posts = $this->findBucket($orig, 'forum_post');
 
                 $catsToKeep = [];
 
@@ -2583,17 +2692,17 @@ class CourseMaintenanceController extends AbstractController
                         continue;
                     }
                     $bucket = $this->findBucket($orig, (string) $type);
-                    $key    = $this->findBucketKey($orig, (string) $type);
-                    if ($key !== null && !empty($bucket)) {
+                    $key = $this->findBucketKey($orig, (string) $type);
+                    if (null !== $key && !empty($bucket)) {
                         $idsMap = array_fill_keys(array_map('strval', array_keys($ids)), true);
                         $out[$key] = $this->intersectBucketByIds($bucket, $idsMap);
                     }
                 }
 
-                $forumCat     = $this->findBucket($orig, 'forum_category');
-                $forumBucket  = $this->findBucket($orig, 'forum');
+                $forumCat = $this->findBucket($orig, 'forum_category');
+                $forumBucket = $this->findBucket($orig, 'forum');
                 $threadBucket = $this->findBucket($orig, 'forum_topic');
-                $postBucket   = $this->findBucket($orig, 'forum_post');
+                $postBucket = $this->findBucket($orig, 'forum_post');
 
                 if (!empty($forumCat) && !empty($catsToKeep)) {
                     $out[$this->findBucketKey($orig, 'forum_category') ?? 'Forum_Category'] =
@@ -2634,9 +2743,9 @@ class CourseMaintenanceController extends AbstractController
                     'kept_types' => array_keys($course->resources),
                     'forum_counts' => [
                         'Forum_Category' => \is_array($course->resources['Forum_Category'] ?? null) ? \count($course->resources['Forum_Category']) : 0,
-                        'forum'          => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
-                        'thread'         => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
-                        'post'           => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
+                        'forum' => \is_array($course->resources['forum'] ?? null) ? \count($course->resources['forum']) : 0,
+                        'thread' => \is_array($course->resources['thread'] ?? null) ? \count($course->resources['thread']) : 0,
+                        'post' => \is_array($course->resources['post'] ?? null) ? \count($course->resources['post']) : 0,
                     ],
                 ]);
 
@@ -2651,7 +2760,7 @@ class CourseMaintenanceController extends AbstractController
                 continue;
             }
             $legacyKey = $this->findBucketKey($orig, (string) $type);
-            if ($legacyKey === null) {
+            if (null === $legacyKey) {
                 continue;
             }
             $bucket = $orig[$legacyKey] ?? [];
@@ -2680,9 +2789,9 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Quizzes -> questions (+ images)
-        $quizKey = $this->firstExistingKey($orig, ['quiz','Quiz']);
+        $quizKey = $this->firstExistingKey($orig, ['quiz', 'Quiz']);
         if ($quizKey && !empty($keep[$quizKey])) {
-            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question','exercise_question', \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '']);
+            $questionKey = $this->firstExistingKey($orig, ['Exercise_Question', 'exercise_question', \defined('RESOURCE_QUIZQUESTION') ? RESOURCE_QUIZQUESTION : '']);
             if ($questionKey) {
                 $qids = [];
                 foreach ($keep[$quizKey] as $qid => $qwrap) {
@@ -2699,7 +2808,7 @@ class CourseMaintenanceController extends AbstractController
                     if (!empty($selQ)) {
                         $keep[$questionKey] = $selQ;
 
-                        $docKey = $this->firstExistingKey($orig, ['document','Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
+                        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
                         if ($docKey) {
                             $docBucket = $getBucket($orig, $docKey);
                             $imageQuizBucket = (isset($docBucket['image_quiz']) && \is_array($docBucket['image_quiz'])) ? $docBucket['image_quiz'] : [];
@@ -2726,13 +2835,13 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Surveys -> questions (+ invitations)
-        $surveyKey = $this->firstExistingKey($orig, ['survey','Survey']);
+        $surveyKey = $this->firstExistingKey($orig, ['survey', 'Survey']);
         if ($surveyKey && !empty($keep[$surveyKey])) {
-            $surveyQuestionKey   = $this->firstExistingKey($orig, ['Survey_Question','survey_question', \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '']);
-            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation','survey_invitation', \defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '']);
+            $surveyQuestionKey = $this->firstExistingKey($orig, ['Survey_Question', 'survey_question', \defined('RESOURCE_SURVEYQUESTION') ? RESOURCE_SURVEYQUESTION : '']);
+            $surveyInvitationKey = $this->firstExistingKey($orig, ['Survey_Invitation', 'survey_invitation', \defined('RESOURCE_SURVEYINVITATION') ? RESOURCE_SURVEYINVITATION : '']);
 
             if ($surveyQuestionKey) {
-                $neededQids   = [];
+                $neededQids = [];
                 $selSurveyIds = array_map('strval', array_keys($keep[$surveyKey]));
 
                 foreach ($keep[$surveyKey] as $sid => $sWrap) {
@@ -2780,7 +2889,7 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Documents: add parent folders for selected files
-        $docKey = $this->firstExistingKey($orig, ['document','Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
+        $docKey = $this->firstExistingKey($orig, ['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : '']);
         if ($docKey && !empty($keep[$docKey])) {
             $docBucket = $getBucket($orig, $docKey);
 
@@ -2788,30 +2897,42 @@ class CourseMaintenanceController extends AbstractController
             foreach ($docBucket as $fid => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
-                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && substr((string) $e->path, -1) === '/');
-                if (!$isFolder) { continue; }
+                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && '/' === substr((string) $e->path, -1));
+                if (!$isFolder) {
+                    continue;
+                }
 
                 $p = (string) ($e->path ?? '');
-                if ('' === $p) { continue; }
+                if ('' === $p) {
+                    continue;
+                }
 
                 $frel = '/'.ltrim(substr($p, 8), '/');
                 $frel = rtrim($frel, '/').'/';
-                if ('//' !== $frel) { $foldersByRel[$frel] = $fid; }
+                if ('//' !== $frel) {
+                    $foldersByRel[$frel] = $fid;
+                }
             }
 
             $needFolderIds = [];
             foreach ($keep[$docKey] as $id => $res) {
                 $e = (isset($res->obj) && \is_object($res->obj)) ? $res->obj : $res;
                 $ftRaw = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
-                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && substr((string) $e->path, -1) === '/');
-                if ($isFolder) { continue; }
+                $isFolder = ('folder' === $ftRaw) || (isset($e->path) && '/' === substr((string) $e->path, -1));
+                if ($isFolder) {
+                    continue;
+                }
 
                 $p = (string) ($e->path ?? '');
-                if ('' === $p) { continue; }
+                if ('' === $p) {
+                    continue;
+                }
 
                 $rel = '/'.ltrim(substr($p, 8), '/');
                 $dir = rtrim(\dirname($rel), '/');
-                if ('' === $dir) { continue; }
+                if ('' === $dir) {
+                    continue;
+                }
 
                 $acc = '';
                 foreach (array_filter(explode('/', $dir)) as $seg) {
@@ -2829,16 +2950,18 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // Links -> pull categories used by the selected links
-        $lnkKey = $this->firstExistingKey($orig, ['link','Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']);
+        $lnkKey = $this->firstExistingKey($orig, ['link', 'Link', \defined('RESOURCE_LINK') ? RESOURCE_LINK : '']);
         if ($lnkKey && !empty($keep[$lnkKey])) {
             $catIdsUsed = [];
             foreach ($keep[$lnkKey] as $lid => $lWrap) {
                 $L = (isset($lWrap->obj) && \is_object($lWrap->obj)) ? $lWrap->obj : $lWrap;
                 $cid = (int) ($L->category_id ?? 0);
-                if ($cid > 0) { $catIdsUsed[(string) $cid] = true; }
+                if ($cid > 0) {
+                    $catIdsUsed[(string) $cid] = true;
+                }
             }
 
-            $catKey = $this->firstExistingKey($orig, ['link_category','Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']);
+            $catKey = $this->firstExistingKey($orig, ['link_category', 'Link_Category', \defined('RESOURCE_LINKCATEGORY') ? (string) RESOURCE_LINKCATEGORY : '']);
             if ($catKey && !empty($catIdsUsed)) {
                 $catBucket = $getBucket($orig, $catKey);
                 if (!empty($catBucket)) {
@@ -2854,8 +2977,8 @@ class CourseMaintenanceController extends AbstractController
 
         $this->logDebug('[filterSelection] non-forum flow end', [
             'selected_types' => array_keys($selected),
-            'orig_types'     => array_keys($orig),
-            'kept_types'     => array_keys($course->resources ?? []),
+            'orig_types' => array_keys($orig),
+            'kept_types' => array_keys($course->resources ?? []),
         ]);
 
         return $course;
@@ -3063,29 +3186,31 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[buildLinkTreeForVue] start');
 
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
-        $catRaw  = $res['link_category'] ?? $res['Link_Category'] ?? [];
-        $linkRaw = $res['link']          ?? $res['Link']          ?? [];
+        $catRaw = $res['link_category'] ?? $res['Link_Category'] ?? [];
+        $linkRaw = $res['link'] ?? $res['Link'] ?? [];
 
         $this->logDebug('[buildLinkTreeForVue] raw counts', [
             'categories' => \is_array($catRaw) ? \count($catRaw) : 0,
-            'links'      => \is_array($linkRaw) ? \count($linkRaw) : 0,
+            'links' => \is_array($linkRaw) ? \count($linkRaw) : 0,
         ]);
 
         $cats = [];
         foreach ($catRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
             $e = $this->objectEntity($obj);
             $label = $this->resolveItemLabel('link_category', $e, $id);
             $cats[$id] = [
-                'id'           => $id,
-                'type'         => 'link_category',
-                'label'        => (($label !== '' ? $label : ('Category #'.$id)).'/'),
-                'selectable'   => true,
-                'items'        => [],
+                'id' => $id,
+                'type' => 'link_category',
+                'label' => (('' !== $label ? $label : ('Category #'.$id)).'/'),
+                'selectable' => true,
+                'items' => [],
                 'has_children' => false,
-                'item_count'   => 0,
-                'extra'        => ['filetype' => 'folder'],
+                'item_count' => 0,
+                'extra' => ['filetype' => 'folder'],
             ];
         }
 
@@ -3093,32 +3218,36 @@ class CourseMaintenanceController extends AbstractController
         $uncatKey = -9999;
         if (!isset($cats[$uncatKey])) {
             $cats[$uncatKey] = [
-                'id'           => $uncatKey,
-                'type'         => 'link_category',
-                'label'        => 'Uncategorized/',
-                'selectable'   => true,
-                'items'        => [],
-                '_virtual'     => true,
+                'id' => $uncatKey,
+                'type' => 'link_category',
+                'label' => 'Uncategorized/',
+                'selectable' => true,
+                'items' => [],
+                '_virtual' => true,
                 'has_children' => false,
-                'item_count'   => 0,
-                'extra'        => ['filetype' => 'folder'],
+                'item_count' => 0,
+                'extra' => ['filetype' => 'folder'],
             ];
         }
 
         // Assign links to categories
         foreach ($linkRaw as $id => $obj) {
             $id = (int) $id;
-            if ($id <= 0 || !\is_object($obj)) { continue; }
+            if ($id <= 0 || !\is_object($obj)) {
+                continue;
+            }
             $e = $this->objectEntity($obj);
 
             $cid = (int) ($e->category_id ?? 0);
-            if (!isset($cats[$cid])) { $cid = $uncatKey; }
+            if (!isset($cats[$cid])) {
+                $cid = $uncatKey;
+            }
 
             $cats[$cid]['items'][] = [
-                'id'         => $id,
-                'type'       => 'link',
-                'label'      => $this->resolveItemLabel('link', $e, $id),
-                'extra'      => $this->buildExtra('link', $e) ?: new \stdClass(),
+                'id' => $id,
+                'type' => 'link',
+                'label' => $this->resolveItemLabel('link', $e, $id),
+                'extra' => $this->buildExtra('link', $e) ?: new stdClass(),
                 'selectable' => true,
                 'item_count' => 0,
             ];
@@ -3126,7 +3255,10 @@ class CourseMaintenanceController extends AbstractController
 
         // Drop empty virtual category, sort, and finalize UI hints
         $catNodes = array_values(array_filter($cats, static function ($c) {
-            if (!empty($c['_virtual']) && empty($c['items'])) { return false; }
+            if (!empty($c['_virtual']) && empty($c['items'])) {
+                return false;
+            }
+
             return true;
         }));
 
@@ -3135,7 +3267,7 @@ class CourseMaintenanceController extends AbstractController
                 usort($c['items'], static fn ($a, $b) => strcasecmp((string) $a['label'], (string) $b['label']));
             }
             $c['has_children'] = !empty($c['items']);
-            $c['item_count']   = \count($c['items'] ?? []);
+            $c['item_count'] = \count($c['items'] ?? []);
         }
         unset($c);
 
@@ -3144,7 +3276,7 @@ class CourseMaintenanceController extends AbstractController
         $this->logDebug('[buildLinkTreeForVue] end', ['categories' => \count($catNodes)]);
 
         return [
-            'type'  => 'link',
+            'type' => 'link',
             'title' => $groupTitle,
             'items' => $catNodes,
         ];
@@ -3224,11 +3356,11 @@ class CourseMaintenanceController extends AbstractController
         $baseReal = realpath($base) ?: $base;
 
         $file = basename($backupId);
-        $path = $baseReal . DIRECTORY_SEPARATOR . $file;
+        $path = $baseReal.DIRECTORY_SEPARATOR.$file;
 
         $real = realpath($path);
 
-        if ($real !== false && strncmp($real, $baseReal, strlen($baseReal)) === 0) {
+        if (false !== $real && 0 === strncmp($real, $baseReal, \strlen($baseReal))) {
             return $real;
         }
 
@@ -3257,7 +3389,7 @@ class CourseMaintenanceController extends AbstractController
             $looksMoodle = true;
             $preferChamilo = false;
         } else {
-            $looksMoodle   = $this->isMoodleByExt($path) || $this->zipHasMoodleBackupXml($path);
+            $looksMoodle = $this->isMoodleByExt($path) || $this->zipHasMoodleBackupXml($path);
             $preferChamilo = $this->zipHasCourseInfoDat($path);
         }
 
@@ -3268,12 +3400,15 @@ class CourseMaintenanceController extends AbstractController
                 $course = CourseArchiver::readCourse($backupId, false);
                 if (\is_object($course)) {
                     // … (resto igual)
-                    if (!isset($course->resources) || !\is_array($course->resources)) { $course->resources = []; }
+                    if (!isset($course->resources) || !\is_array($course->resources)) {
+                        $course->resources = [];
+                    }
                     $course->resources['__meta'] = (array) ($course->resources['__meta'] ?? []);
                     $course->resources['__meta']['import_source'] = 'chamilo';
+
                     return $course;
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $this->logDebug('[loadLegacyCourseForAnyBackup] readCourse() failed', ['error' => $e->getMessage()]);
             }
 
@@ -3282,22 +3417,27 @@ class CourseMaintenanceController extends AbstractController
             if (empty($ci['ok'])) {
                 if ($looksMoodle) {
                     $this->logDebug('[loadLegacyCourseForAnyBackup] no course_info.dat, trying MoodleImport as last resort');
+
                     return $this->loadMoodleCourseOrFail($path);
                 }
+
                 throw new RuntimeException('course_info.dat not found in backup');
             }
 
             $raw = (string) $ci['data'];
             $payload = base64_decode($raw, true);
-            if ($payload === false) { $payload = $raw; }
+            if (false === $payload) {
+                $payload = $raw;
+            }
 
             $payload = CourseArchiver::preprocessSerializedPayloadForTypedProps($payload);
             CourseArchiver::ensureLegacyAliases();
 
-            set_error_handler(static function () {});
+            set_error_handler(static function (): void {});
+
             try {
-                if (class_exists(\UnserializeApi::class)) {
-                    $c = \UnserializeApi::unserialize('course', $payload);
+                if (class_exists(UnserializeApi::class)) {
+                    $c = UnserializeApi::unserialize('course', $payload);
                 } else {
                     $c = @unserialize($payload, ['allowed_classes' => true]);
                 }
@@ -3308,12 +3448,16 @@ class CourseMaintenanceController extends AbstractController
             if (!\is_object($c ?? null)) {
                 if ($looksMoodle) {
                     $this->logDebug('[loadLegacyCourseForAnyBackup] Chamilo fallback failed, trying MoodleImport');
+
                     return $this->loadMoodleCourseOrFail($path);
                 }
+
                 throw new RuntimeException('Could not unserialize course (fallback)');
             }
 
-            if (!isset($c->resources) || !\is_array($c->resources)) { $c->resources = []; }
+            if (!isset($c->resources) || !\is_array($c->resources)) {
+                $c->resources = [];
+            }
             $c->resources['__meta'] = (array) ($c->resources['__meta'] ?? []);
             $c->resources['__meta']['import_source'] = 'chamilo';
 
@@ -3323,6 +3467,7 @@ class CourseMaintenanceController extends AbstractController
         // Moodle path
         if ($looksMoodle) {
             $this->logDebug('[loadLegacyCourseForAnyBackup] using MoodleImport');
+
             return $this->loadMoodleCourseOrFail($path);
         }
 
@@ -3361,50 +3506,51 @@ class CourseMaintenanceController extends AbstractController
                     $dst[$id] = $obj;
                 }
             }
+
             return $dst;
         };
 
         // safe alias map (input -> canonical). Extend only if needed.
         $aliases = [
             // documents
-            'documents'          => 'document',
-            'Document'           => 'document',
-            'document '          => 'document',
+            'documents' => 'document',
+            'Document' => 'document',
+            'document ' => 'document',
 
             // tool intro
-            'tool introduction'    => 'tool_intro',
-            'tool_introduction'    => 'tool_intro',
-            'tool/introduction'    => 'tool_intro',
-            'tool intro'           => 'tool_intro',
-            'Tool introduction'    => 'tool_intro',
+            'tool introduction' => 'tool_intro',
+            'tool_introduction' => 'tool_intro',
+            'tool/introduction' => 'tool_intro',
+            'tool intro' => 'tool_intro',
+            'Tool introduction' => 'tool_intro',
 
             // forums
-            'forums'             => 'forum',
-            'Forum'              => 'forum',
-            'Forum_Category'     => 'forum_category',
-            'forumcategory'      => 'forum_category',
-            'thread'             => 'forum_topic',
-            'Thread'             => 'forum_topic',
-            'forumtopic'         => 'forum_topic',
-            'post'               => 'forum_post',
-            'Post'               => 'forum_post',
-            'forumpost'          => 'forum_post',
+            'forums' => 'forum',
+            'Forum' => 'forum',
+            'Forum_Category' => 'forum_category',
+            'forumcategory' => 'forum_category',
+            'thread' => 'forum_topic',
+            'Thread' => 'forum_topic',
+            'forumtopic' => 'forum_topic',
+            'post' => 'forum_post',
+            'Post' => 'forum_post',
+            'forumpost' => 'forum_post',
 
             // links
-            'links'              => 'link',
-            'link category'      => 'link_category',
+            'links' => 'link',
+            'link category' => 'link_category',
 
             // quiz + questions
-            'Exercise_Question'  => 'exercise_question',
-            'exercisequestion'   => 'exercise_question',
+            'Exercise_Question' => 'exercise_question',
+            'exercisequestion' => 'exercise_question',
 
             // surveys
-            'surveys'            => 'survey',
-            'surveyquestion'     => 'survey_question',
+            'surveys' => 'survey',
+            'surveyquestion' => 'survey_question',
 
             // announcements
-            'announcements'      => 'announcement',
-            'Announcements'      => 'announcement',
+            'announcements' => 'announcement',
+            'Announcements' => 'announcement',
         ];
 
         // Normalize keys (case/spacing) and apply alias merges
@@ -3452,10 +3598,13 @@ class CourseMaintenanceController extends AbstractController
             'work',
         ];
         $w = [];
-        foreach ($order as $i => $key) { $w[$key] = $i; }
+        foreach ($order as $i => $key) {
+            $w[$key] = $i;
+        }
         uksort($out, static function ($a, $b) use ($w) {
             $wa = $w[$a] ?? 9999;
             $wb = $w[$b] ?? 9999;
+
             return $wa <=> $wb ?: strcasecmp((string) $a, (string) $b);
         });
 
@@ -3504,6 +3653,7 @@ class CourseMaintenanceController extends AbstractController
         foreach (['document', 'Document', \defined('RESOURCE_DOCUMENT') ? RESOURCE_DOCUMENT : ''] as $cand) {
             if ($cand && isset($res[$cand]) && \is_array($res[$cand]) && !empty($res[$cand])) {
                 $docKey = $cand;
+
                 break;
             }
         }
@@ -3524,13 +3674,13 @@ class CourseMaintenanceController extends AbstractController
             $rel = ltrim(preg_replace('~^/?document/?~', '', $rawPath), '/');
 
             $fileType = strtolower((string) ($e->file_type ?? $e->filetype ?? ''));
-            $isDir = ($fileType === 'folder') || (substr($rawPath, -1) === '/');
+            $isDir = ('folder' === $fileType) || ('/' === substr($rawPath, -1));
 
             $title = (string) ($e->title ?? $wrap->name ?? basename($rel));
             $ims['resources']['webcontent'][] = [
                 'id' => (int) $iid,
                 'cc_type' => 'webcontent',
-                'title' => $title !== '' ? $title : basename($rel),
+                'title' => '' !== $title ? $title : basename($rel),
                 'rel' => $rel,
                 'is_dir' => $isDir,
                 'would_be_manifest_entry' => !$isDir,
@@ -3555,8 +3705,8 @@ class CourseMaintenanceController extends AbstractController
     {
         $out = [
             'documents' => (array) ($normSel['documents'] ?? []),
-            'links'     => (array) ($normSel['links']     ?? []),
-            'forums'    => (array) ($normSel['forums']    ?? []),
+            'links' => (array) ($normSel['links'] ?? []),
+            'forums' => (array) ($normSel['forums'] ?? []),
         ];
 
         $res = \is_array($course->resources ?? null) ? $course->resources : [];
@@ -3564,24 +3714,32 @@ class CourseMaintenanceController extends AbstractController
         // Link categories → link IDs
         if (!empty($normSel['link_category']) && \is_array($res['link'] ?? $res['Link'] ?? null)) {
             $selCats = array_fill_keys(array_map('strval', array_keys($normSel['link_category'])), true);
-            $links   = $res['link'] ?? $res['Link'];
+            $links = $res['link'] ?? $res['Link'];
             foreach ($links as $lid => $wrap) {
-                if (!\is_object($wrap)) { continue; }
+                if (!\is_object($wrap)) {
+                    continue;
+                }
                 $e = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
                 $cid = (string) (int) ($e->category_id ?? 0);
-                if (isset($selCats[$cid])) { $out['links'][(string)$lid] = true; }
+                if (isset($selCats[$cid])) {
+                    $out['links'][(string) $lid] = true;
+                }
             }
         }
 
         // Forum categories → forum IDs
         if (!empty($normSel['forum_category']) && \is_array($res['forum'] ?? $res['Forum'] ?? null)) {
             $selCats = array_fill_keys(array_map('strval', array_keys($normSel['forum_category'])), true);
-            $forums  = $res['forum'] ?? $res['Forum'];
+            $forums = $res['forum'] ?? $res['Forum'];
             foreach ($forums as $fid => $wrap) {
-                if (!\is_object($wrap)) { continue; }
+                if (!\is_object($wrap)) {
+                    continue;
+                }
                 $e = (isset($wrap->obj) && \is_object($wrap->obj)) ? $wrap->obj : $wrap;
                 $cid = (string) (int) ($e->forum_category ?? $e->forum_category_id ?? $e->category_id ?? 0);
-                if (isset($selCats[$cid])) { $out['forums'][(string)$fid] = true; }
+                if (isset($selCats[$cid])) {
+                    $out['forums'][(string) $fid] = true;
+                }
             }
         }
 
@@ -3594,12 +3752,12 @@ class CourseMaintenanceController extends AbstractController
      * Expected selection items like: { "type": "document"|"quiz"|"survey"|... , "id": <int> }
      *
      * @param array<int,array<string,mixed>> $selected
+     *
      * @return string[]
      */
     private function inferToolsFromSelection(array $selected): array
     {
-        $has = static fn(string $k): bool =>
-            !empty($selected[$k]) && \is_array($selected[$k]) && \count($selected[$k]) > 0;
+        $has = static fn (string $k): bool => !empty($selected[$k]) && \is_array($selected[$k]) && \count($selected[$k]) > 0;
 
         $want = [];
 
@@ -3637,10 +3795,18 @@ class CourseMaintenanceController extends AbstractController
         }
 
         // others
-        if ($has('work'))     { $want[] = 'works'; }
-        if ($has('glossary')) { $want[] = 'glossary'; }
-        if ($has('tool_intro')) { $want[] = 'tool_intro'; }
-        if ($has('course_descriptions') || $has('course_description')) { $tools[] = 'course_descriptions'; }
+        if ($has('work')) {
+            $want[] = 'works';
+        }
+        if ($has('glossary')) {
+            $want[] = 'glossary';
+        }
+        if ($has('tool_intro')) {
+            $want[] = 'tool_intro';
+        }
+        if ($has('course_descriptions') || $has('course_description')) {
+            $tools[] = 'course_descriptions';
+        }
 
         // Dedup
         return array_values(array_unique(array_filter($want)));
@@ -3651,12 +3817,13 @@ class CourseMaintenanceController extends AbstractController
         $out = [];
         foreach ($bucket as $id => $obj) {
             $ent = (isset($obj->obj) && \is_object($obj->obj)) ? $obj->obj : $obj;
-            $k1  = (string) $id;
-            $k2  = (string) ($ent->source_id ?? $obj->source_id ?? '');
-            if (isset($idsMap[$k1]) || ($k2 !== '' && isset($idsMap[$k2]))) {
+            $k1 = (string) $id;
+            $k2 = (string) ($ent->source_id ?? $obj->source_id ?? '');
+            if (isset($idsMap[$k1]) || ('' !== $k2 && isset($idsMap[$k2]))) {
                 $out[$id] = $obj;
             }
         }
+
         return $out;
     }
 
@@ -3665,88 +3832,104 @@ class CourseMaintenanceController extends AbstractController
         $t = $this->normalizeTypeKey($type);
 
         // Constants (string values) if defined
-        $RD  = \defined('RESOURCE_DOCUMENT')       ? (string) RESOURCE_DOCUMENT       : '';
-        $RL  = \defined('RESOURCE_LINK')           ? (string) RESOURCE_LINK           : '';
-        $RF  = \defined('RESOURCE_FORUM')          ? (string) RESOURCE_FORUM          : '';
-        $RFT = \defined('RESOURCE_FORUMTOPIC')     ? (string) RESOURCE_FORUMTOPIC     : '';
-        $RFP = \defined('RESOURCE_FORUMPOST')      ? (string) RESOURCE_FORUMPOST      : '';
-        $RQ  = \defined('RESOURCE_QUIZ')           ? (string) RESOURCE_QUIZ           : '';
-        $RQQ = \defined('RESOURCE_QUIZQUESTION')   ? (string) RESOURCE_QUIZQUESTION   : '';
-        $RS  = \defined('RESOURCE_SURVEY')         ? (string) RESOURCE_SURVEY         : '';
+        $RD = \defined('RESOURCE_DOCUMENT') ? (string) RESOURCE_DOCUMENT : '';
+        $RL = \defined('RESOURCE_LINK') ? (string) RESOURCE_LINK : '';
+        $RF = \defined('RESOURCE_FORUM') ? (string) RESOURCE_FORUM : '';
+        $RFT = \defined('RESOURCE_FORUMTOPIC') ? (string) RESOURCE_FORUMTOPIC : '';
+        $RFP = \defined('RESOURCE_FORUMPOST') ? (string) RESOURCE_FORUMPOST : '';
+        $RQ = \defined('RESOURCE_QUIZ') ? (string) RESOURCE_QUIZ : '';
+        $RQQ = \defined('RESOURCE_QUIZQUESTION') ? (string) RESOURCE_QUIZQUESTION : '';
+        $RS = \defined('RESOURCE_SURVEY') ? (string) RESOURCE_SURVEY : '';
         $RSQ = \defined('RESOURCE_SURVEYQUESTION') ? (string) RESOURCE_SURVEYQUESTION : '';
 
         $map = [
-            'document'         => ['document', 'Document', $RD],
-            'link'             => ['link', 'Link', $RL],
-            'link_category'    => ['link_category', 'Link_Category'],
-            'forum'            => ['forum', 'Forum', $RF],
-            'forum_category'   => ['forum_category', 'Forum_Category'],
-            'forum_topic'      => ['forum_topic', 'thread', $RFT],
-            'forum_post'       => ['forum_post', 'post', $RFP],
-            'quiz'             => ['quiz', 'Quiz', $RQ],
-            'exercise_question'=> ['Exercise_Question', 'exercise_question', $RQQ],
-            'survey'           => ['survey', 'Survey', $RS],
-            'survey_question'  => ['Survey_Question', 'survey_question', $RSQ],
-            'tool_intro'       => ['tool_intro', 'Tool introduction'],
+            'document' => ['document', 'Document', $RD],
+            'link' => ['link', 'Link', $RL],
+            'link_category' => ['link_category', 'Link_Category'],
+            'forum' => ['forum', 'Forum', $RF],
+            'forum_category' => ['forum_category', 'Forum_Category'],
+            'forum_topic' => ['forum_topic', 'thread', $RFT],
+            'forum_post' => ['forum_post', 'post', $RFP],
+            'quiz' => ['quiz', 'Quiz', $RQ],
+            'exercise_question' => ['Exercise_Question', 'exercise_question', $RQQ],
+            'survey' => ['survey', 'Survey', $RS],
+            'survey_question' => ['Survey_Question', 'survey_question', $RSQ],
+            'tool_intro' => ['tool_intro', 'Tool introduction'],
         ];
 
         $c = $map[$t] ?? [$t, ucfirst($t)];
-        return array_values(array_filter($c, static fn($x) => $x !== ''));
+
+        return array_values(array_filter($c, static fn ($x) => '' !== $x));
     }
 
     private function findBucketKey(array $res, string $type): ?string
     {
         $key = $this->firstExistingKey($res, $this->bucketKeyCandidates($type));
-        return $key !== null ? (string) $key : null;
+
+        return null !== $key ? (string) $key : null;
     }
 
     private function findBucket(array $res, string $type): array
     {
         $k = $this->findBucketKey($res, $type);
-        return ($k !== null && isset($res[$k]) && \is_array($res[$k])) ? $res[$k] : [];
+
+        return (null !== $k && isset($res[$k]) && \is_array($res[$k])) ? $res[$k] : [];
     }
 
-    /** True if file extension suggests a Moodle backup. */
+    /**
+     * True if file extension suggests a Moodle backup.
+     */
     private function isMoodleByExt(string $path): bool
     {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        return in_array($ext, ['mbz','tgz','gz'], true);
+
+        return \in_array($ext, ['mbz', 'tgz', 'gz'], true);
     }
 
-    /** Quick ZIP probe for 'moodle_backup.xml'. Safe no-op for non-zip files. */
+    /**
+     * Quick ZIP probe for 'moodle_backup.xml'. Safe no-op for non-zip files.
+     */
     private function zipHasMoodleBackupXml(string $path): bool
     {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
         // Many .mbz are plain ZIPs; try to open if extension is zip/mbz
-        if (!in_array($ext, ['zip','mbz'], true)) {
+        if (!\in_array($ext, ['zip', 'mbz'], true)) {
             return false;
         }
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         if (true !== ($err = $zip->open($path))) {
             return false;
         }
-        $idx = $zip->locateName('moodle_backup.xml', \ZipArchive::FL_NOCASE);
+        $idx = $zip->locateName('moodle_backup.xml', ZipArchive::FL_NOCASE);
         $zip->close();
-        return ($idx !== false);
+
+        return false !== $idx;
     }
 
-    /** Quick ZIP probe for 'course_info.dat'. Safe no-op for non-zip files. */
+    /**
+     * Quick ZIP probe for 'course_info.dat'. Safe no-op for non-zip files.
+     */
     private function zipHasCourseInfoDat(string $path): bool
     {
         $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        if (!in_array($ext, ['zip','mbz'], true)) {
+        if (!\in_array($ext, ['zip', 'mbz'], true)) {
             return false;
         }
-        $zip = new \ZipArchive();
+        $zip = new ZipArchive();
         if (true !== ($err = $zip->open($path))) {
             return false;
         }
         // common locations
-        foreach (['course_info.dat','course/course_info.dat','backup/course_info.dat'] as $cand) {
-            $idx = $zip->locateName($cand, \ZipArchive::FL_NOCASE);
-            if ($idx !== false) { $zip->close(); return true; }
+        foreach (['course_info.dat', 'course/course_info.dat', 'backup/course_info.dat'] as $cand) {
+            $idx = $zip->locateName($cand, ZipArchive::FL_NOCASE);
+            if (false !== $idx) {
+                $zip->close();
+
+                return true;
+            }
         }
         $zip->close();
+
         return false;
     }
 
@@ -3790,6 +3973,7 @@ class CourseMaintenanceController extends AbstractController
                 $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
                 $out[$ck] = $this->sanitizePhpGraph($v);
             }
+
             return $out;
         }
 
@@ -3800,6 +3984,7 @@ class CourseMaintenanceController extends AbstractController
                 $ck = \is_string($k) ? (string) preg_replace('/^\0.*\0/', '', $k) : $k;
                 $clean[$ck] = $this->sanitizePhpGraph($v);
             }
+
             return (object) $clean;
         }
 

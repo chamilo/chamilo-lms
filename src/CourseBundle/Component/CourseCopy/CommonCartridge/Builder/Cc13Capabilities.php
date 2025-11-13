@@ -46,6 +46,8 @@ final class Cc13Capabilities
     /**
      * Normalize the selection object coming from the UI.
      * Returns: ['documents'=>[id=>true], 'links'=>[id=>true], 'forums'=>[id=>true], 'link_category'=>..., 'forum_category'=>...].
+     *
+     * @return array<string, array<string, bool>>
      */
     public static function filterSelection(array $sel): array
     {

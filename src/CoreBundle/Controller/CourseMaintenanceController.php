@@ -3700,6 +3700,8 @@ class CourseMaintenanceController extends AbstractController
     /**
      * Expand category selections (link/forum) to their item IDs using a full course snapshot.
      * Returns ['documents'=>[id=>true], 'links'=>[id=>true], 'forums'=>[id=>true]] merged with $normSel.
+     *
+     * @return array<string, array<string, bool>
      */
     private function expandCc13SelectionFromCategories(object $course, array $normSel): array
     {

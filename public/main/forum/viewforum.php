@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
 api_protect_course_script(true);
-$nameTools = get_lang('Forums');
+$nameTools = get_lang('Threads');
 $origin = api_get_origin();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
@@ -166,17 +166,16 @@ if (!empty($groupId)) {
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'index.php?'.api_get_cidreq(),
-        'name' => get_lang('Forum Categories'),
+        'url'  => $forumUrl.'index.php?'.api_get_cidreq(),
+        'name' => get_lang('Forums'),
     ];
-    $interbreadcrumb[] = [
-        'url' => $forumUrl.'index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
-        'name' => prepare4display($category->getTitle()),
-    ];
-    $interbreadcrumb[] = [
-        'url' => '#',
-        'name' => Security::remove_XSS($forumEntity->getTitle()),
-    ];
+
+    if ($category && $category->getIid()) {
+        $interbreadcrumb[] = [
+            'url'  => $forumUrl.'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$category->getIid(),
+            'name' => Security::remove_XSS($category->getTitle()),
+        ];
+    }
 }
 
 $qualificationBlock = '';
@@ -525,7 +524,8 @@ if (is_array($threads)) {
 }
 
 $isTeacher = api_is_allowed_to_edit(false, true);
-$tpl = new Template(get_lang('Forum'), true, true, 'learnpath' === $origin);
+$pageTitle = Security::remove_XSS($forumEntity->getTitle());
+$tpl = new Template($pageTitle, true, true, 'learnpath' === $origin);
 
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 

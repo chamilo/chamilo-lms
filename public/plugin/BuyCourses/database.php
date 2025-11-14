@@ -88,7 +88,7 @@ if (false === $sm->tablesExist(BuyCoursesPlugin::TABLE_CURRENCY)) {
     $currencyTable->addColumn(
         'iso_code',
         Types::STRING,
-        ['length' => 3]
+        ['length' => 4]
     );
     $currencyTable->addColumn('status', Types::BOOLEAN);
     $currencyTable->addUniqueIndex(['country_code']);
@@ -666,8 +666,13 @@ Database::insert(
 Database::insert(
     $tpvRedsysTable,
     [
+        'merchantcode' => '',
+        'terminal' => '',
+        'currency' => '',
+        'kc' => '',
         'url_redsys' => 'https://sis.redsys.es/sis/realizarPago',
         'url_redsys_sandbox' => 'https://sis-t.redsys.es:25443/sis/realizarPago',
+        'sandbox' => 1,
     ]
 );
 
@@ -677,13 +682,6 @@ Database::insert(
         'commerce_code' => '',
         'api_key' => '',
         'integration' => 1,
-    ]
-);
-
-Database::insert(
-    $globalTable,
-    [
-        'terms_and_conditions' => '',
     ]
 );
 

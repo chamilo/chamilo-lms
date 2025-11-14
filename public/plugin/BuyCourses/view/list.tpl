@@ -60,7 +60,8 @@
                                 <img src="{{ 'bullet_grey.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}"
                                      title="{{ 'CourseVisibilityHidden'|get_lang }}">
                             {% endif %}
-                            <a href="{{ _p.web_course ~ item.path ~ item.code~ '/index.php' }}">
+
+                            <a href="{{ url('chamilo_core_course_home', { cid: item.id }) }}">
                                 {{ item.title }}
                             </a>
                             <span class="label label-info">{{ item.code }}</span>
@@ -76,11 +77,15 @@
                             {% endif %}
                         </td>
                         <td width="200" class="text-right">
-                            {{ item.buyCourseData.price_formatted }}
+                            {% if item.buyCourseData %}
+                                {{ item.buyCourseData.price_formatted }}
+                            {% endif %}
                         </td>
                         {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
                             <td class="text-center">
-                                {{ item.buyCourseData.tax_perc_show }} %
+                                {% if item.buyCourseData %}
+                                    {{ item.buyCourseData.tax_perc_show }} %
+                                {% endif %}
                             </td>
                         {% endif %}
                         <td class="text-right">

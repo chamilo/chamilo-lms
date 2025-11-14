@@ -5,7 +5,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Process payments for the Buy Courses plugin.
@@ -89,7 +89,7 @@ if ($typeUser) {
         /** @var User $user */
         foreach ($users as $user) {
             if ((int) $userInfo['user_id'] !== (int) $user->getId()) {
-                $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
+                $selectOptions[$user->getId()] = $user->getFullNameWithUsername();
             }
         }
     }

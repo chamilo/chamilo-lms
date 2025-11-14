@@ -34,7 +34,7 @@ $first = $pageSize * ($currentPage - 1);
 
 $services = $plugin->getServices($first, $pageSize);
 $totalItems = $plugin->getServices(0, 1000000000, 'count');
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
@@ -55,7 +55,11 @@ $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
+$tpl->assign('courses', []);
+$tpl->assign('sessions', []);
 $tpl->assign('services', $services);
+$tpl->assign('course_pagination', $pagination);
+$tpl->assign('session_pagination', $pagination);
 $tpl->assign('service_pagination', $pagination);
 
 if ($taxEnable) {

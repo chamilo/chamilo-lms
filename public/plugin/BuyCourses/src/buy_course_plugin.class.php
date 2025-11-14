@@ -2543,7 +2543,7 @@ class BuyCoursesPlugin extends Plugin
 
         $item = $this->getItemByProduct($course->getId(), self::PRODUCT_TYPE_COURSE);
 
-        if (false !== $item) {
+        if ($item) {
             $courseItem['item_id'] = $item['id'];
             $courseItem['visible'] = true;
             $courseItem['currency'] = $item['iso_code'];

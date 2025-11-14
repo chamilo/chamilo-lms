@@ -294,8 +294,8 @@ $form->freeze(['product_type', 'name']);
 
 if ($form->validate()) {
     $formValues = $form->exportValues();
-    $id = $formValues['id'];
-    $type = $formValues['type'];
+    $id = (int) $formValues['id'];
+    $type = (int) $formValues['type'];
 
     $productItem = $plugin->getItemByProduct($id, $type);
     if (isset($formValues['visible'])) {

@@ -37,7 +37,7 @@ $courses = new Paginator($query, $fetchJoinCollection = true);
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
-    if (false !== $item) {
+    if ($item) {
         $course->buyCourseData = $item;
     }
 }
@@ -68,7 +68,13 @@ $tpl = new Template($templateName);
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('courses', $courses);
+$tpl->assign('showing_sessions', false);
+$tpl->assign('showing_services', false);
+$tpl->assign('sessions', []);
+$tpl->assign('services', []);
 $tpl->assign('course_pagination', $pagination);
+$tpl->assign('session_pagination', $type);
+$tpl->assign('service_pagination', $type);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);

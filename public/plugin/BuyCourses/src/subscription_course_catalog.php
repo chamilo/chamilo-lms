@@ -40,7 +40,7 @@ $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
 $courseList = $plugin->getCatalogSubscriptionCourseList($first, $pageSize, $nameFilter);
 $totalItems = $plugin->getCatalogSubscriptionCourseList($first, $pageSize, $nameFilter, 'count');
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
@@ -66,6 +66,7 @@ $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resource
 $templateName = $plugin->get_lang('SubscriptionListOnSale');
 $tpl = new Template($templateName);
 $tpl->assign('search_filter_form', $form->returnForm());
+$tpl->assign('showing_sessions', false);
 $tpl->assign('showing_courses', true);
 $tpl->assign('courses', $courseList);
 $tpl->assign('sessions_are_included', $includeSessions);

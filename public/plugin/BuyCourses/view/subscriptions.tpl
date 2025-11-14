@@ -48,7 +48,7 @@
                                 <img src="{{ 'bullet_grey.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}"
                                      title="{{ 'CourseVisibilityHidden'|get_lang }}">
                             {% endif %}
-                            <a href="{{ _p.web_course ~ item.path ~ item.code~ '/index.php' }}">
+                            <a href="{{ url('chamilo_core_course_home', { cid: item.id }) }}">
                                 {{ item.title }}
                             </a>
                             <span class="label label-info">{{ item.code }}</span>

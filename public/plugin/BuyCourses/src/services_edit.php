@@ -6,6 +6,10 @@ declare(strict_types=1);
 /**
  * Create new Services for the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -20,11 +24,12 @@ if (!$serviceId) {
 
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
-$users = UserManager::getRepository()->findAll();
+/** @var array<int, User> $users */
+$users = Container::getUserRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
+        $userOptions[$user->getId()] = $user->getFullNameWithUsername();
     }
 }
 

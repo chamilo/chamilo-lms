@@ -56,13 +56,13 @@ $sessions = new Paginator($query, $fetchJoinCollection = true);
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
     $session->buyCourseData = [];
-    if (false !== $item) {
+    if ($item) {
         $session->buyCourseData = $item;
     }
 }
 
 $totalItems = count($sessions);
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(
     api_get_self(),
@@ -72,8 +72,12 @@ $pagination = BuyCoursesPlugin::returnPagination(
     ['type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION]
 );
 
+$tpl->assign('courses', []);
 $tpl->assign('sessions', $sessions);
+$tpl->assign('services', []);
 $tpl->assign('session_pagination', $pagination);
+$tpl->assign('course_pagination', $pagination);
+$tpl->assign('service_pagination', $pagination);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

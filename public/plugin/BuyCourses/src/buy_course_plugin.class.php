@@ -3689,6 +3689,7 @@ class BuyCoursesPlugin extends Plugin
         $sqlParams = [
             'terms_and_conditions' => $params['terms_and_conditions'],
             'sale_email' => $params['sale_email'],
+            'info_email_extra' => '',
         ];
 
         if ('true' === $this->get('tax_enable')) {
@@ -3702,14 +3703,13 @@ class BuyCoursesPlugin extends Plugin
             $sqlParams['seller_id'] = $params['seller_id'];
             $sqlParams['seller_address'] = $params['seller_address'];
             $sqlParams['seller_email'] = $params['seller_email'];
-            $sqlParams['next_number_invoice'] = $params['next_number_invoice'];
+            $sqlParams['next_number_invoice'] = (int) $params['next_number_invoice'];
             $sqlParams['invoice_series'] = $params['invoice_series'];
         }
 
-        return Database::update(
+        return Database::insert(
             Database::get_main_table(self::TABLE_GLOBAL_CONFIG),
             $sqlParams,
-            ['id = ?' => 1]
         );
     }
 

@@ -110,7 +110,7 @@ class Plugin
         $result['is_course_plugin'] = $this->isCoursePlugin;
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
-        $result['entity'] = $pluginRepo->findOneByTitle($this->get_title());
+        $result['entity'] = $pluginRepo->findOneByTitle($this->get_name());
 
         if ($form = $this->getSettingsForm()) {
             $result['settings_form'] = $form;

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 /**
  * PayPal Express Checkout Module.
@@ -7,19 +10,20 @@
  * Init.
  */
 require_once 'paypalfunctions.php';
+
 /**
  * The paymentAmount is the total value of
  * the shopping cart, that was set
  * earlier in a session variable
  * by the shopping cart page.
  */
-$paymentAmount = $_SESSION["Payment_Amount"];
+$paymentAmount = $_SESSION['Payment_Amount'];
 
 /**
  * The currencyCodeType and paymentType
  * are set to the selections made on the Integration Assistant.
  */
-$paymentType = "Sale";
+$paymentType = 'Sale';
 
 /**
  * Calls the SetExpressCheckout API call
@@ -27,19 +31,19 @@ $paymentType = "Sale";
  * it is included at the top of this file.
  */
 $resArray = CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL);
-$ack = strtoupper($resArray["ACK"]);
-if ("SUCCESS" == $ack || "SUCCESSWITHWARNING" == $ack) {
-    RedirectToPayPal($resArray["TOKEN"]);
+$ack = strtoupper($resArray['ACK']);
+if ('SUCCESS' == $ack || 'SUCCESSWITHWARNING' == $ack) {
+    RedirectToPayPal($resArray['TOKEN']);
 } else {
-    //Display a user friendly Error on the page using any of the following error information returned by PayPal
-    $ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
-    $ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
-    $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
-    $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
+    // Display a user friendly Error on the page using any of the following error information returned by PayPal
+    $ErrorCode = urldecode($resArray['L_ERRORCODE0']);
+    $ErrorShortMsg = urldecode($resArray['L_SHORTMESSAGE0']);
+    $ErrorLongMsg = urldecode($resArray['L_LONGMESSAGE0']);
+    $ErrorSeverityCode = urldecode($resArray['L_SEVERITYCODE0']);
 
-    echo "SetExpressCheckout API call failed. ";
-    echo "Detailed Error Message: ".$ErrorLongMsg;
-    echo "Short Error Message: ".$ErrorShortMsg;
-    echo "Error Code: ".$ErrorCode;
-    echo "Error Severity Code: ".$ErrorSeverityCode;
+    echo 'SetExpressCheckout API call failed. ';
+    echo 'Detailed Error Message: '.$ErrorLongMsg;
+    echo 'Short Error Message: '.$ErrorShortMsg;
+    echo 'Error Code: '.$ErrorCode;
+    echo 'Error Severity Code: '.$ErrorSeverityCode;
 }

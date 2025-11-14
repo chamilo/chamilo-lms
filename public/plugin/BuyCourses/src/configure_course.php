@@ -1,10 +1,10 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
-/**
+/*
  * Configuration script for the Buy Courses plugin.
- *
- * @package chamilo.plugin.buycourses
  */
 
 use Chamilo\CoreBundle\Entity\Course;
@@ -102,10 +102,6 @@ if ($editingCourse) {
             'tax_perc' => $courseItem['tax_perc'],
             'beneficiaries' => $defaultBeneficiaries,
         ];
-
-        if ('true' == $commissionsEnable) {
-            $formDefaults['commissions'] = $commissions;
-        }
     } else {
         $formDefaults = [
             'product_type' => get_lang('Course'),
@@ -117,10 +113,9 @@ if ($editingCourse) {
             'tax_perc' => 0,
             'beneficiaries' => [],
         ];
-
-        if ('true' == $commissionsEnable) {
-            $formDefaults['commissions'] = $commissions;
-        }
+    }
+    if ('true' == $commissionsEnable) {
+        $formDefaults['commissions'] = $commissions;
     }
 } elseif ($editingSession) {
     if (!$includeSession) {
@@ -276,10 +271,10 @@ if ('true' === $commissionsEnable) {
             </label>
             <div class="col-sm-8">
                 '.Display::return_message(
-                    sprintf($plugin->get_lang('TheActualPlatformCommissionIsX'), $platformCommission['commission'].'%'),
-                    'info',
-                    false
-                ).'
+            sprintf($plugin->get_lang('TheActualPlatformCommissionIsX'), $platformCommission['commission'].'%'),
+            'info',
+            false
+        ).'
                 <div id="panelSliders"></div>
             </div>
         </div>'
@@ -308,7 +303,7 @@ if ($form->validate()) {
         if (!empty($productItem)) {
             $plugin->updateItem(
                 [
-                    'price' => floatval($formValues['price']),
+                    'price' => (float) $formValues['price'],
                     'tax_perc' => $taxPerc,
                 ],
                 $id,
@@ -319,7 +314,7 @@ if ($form->validate()) {
                 'currency_id' => (int) $currency['id'],
                 'product_type' => $type,
                 'product_id' => $id,
-                'price' => floatval($_POST['price']),
+                'price' => (float) $_POST['price'],
                 'tax_perc' => $taxPerc,
             ]);
             $productItem['id'] = $itemId;
@@ -328,7 +323,7 @@ if ($form->validate()) {
         $plugin->deleteItemBeneficiaries($productItem['id']);
 
         if (isset($formValues['beneficiaries'])) {
-            if ($commissionsEnable === 'true') {
+            if ('true' === $commissionsEnable) {
                 $usersId = $formValues['beneficiaries'];
                 $commissions = explode(',', $formValues['commissions']);
                 $commissions = (count($usersId) != count($commissions))
@@ -348,10 +343,11 @@ if ($form->validate()) {
 
     $url = 'list.php';
 
-    if ($type == 2) {
+    if (2 == $type) {
         $url = 'list_session.php';
     }
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/'.$url);
+
     exit;
 }
 
@@ -362,6 +358,7 @@ $interbreadcrumb[] = [
     'url' => 'paymentsetup.php',
     'name' => get_lang('Configuration'),
 ];
+
 switch ($type) {
     case 2:
         $interbreadcrumb[] = [
@@ -369,7 +366,9 @@ switch ($type) {
             'name' => $plugin->get_lang('Sessions'),
         ];
         $templateName = $plugin->get_lang('Sessions');
+
         break;
+
     default:
         $interbreadcrumb[] = [
             'url' => 'list.php',

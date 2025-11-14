@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
@@ -19,7 +21,6 @@ $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if (isset($_GET['order'])) {
     $sale = $plugin->getSale($_GET['order']);
-
     if (empty($sale)) {
         api_not_allowed(true);
     }
@@ -38,7 +39,9 @@ if (isset($_GET['order'])) {
                 'status' => BuyCoursesPlugin::SALE_STATUS_COMPLETED,
                 'sale' => $sale['id'],
             ]);
+
             break;
+
         case 'cancel':
             $plugin->cancelSale($sale['id']);
 
@@ -53,10 +56,12 @@ if (isset($_GET['order'])) {
                 'status' => BuyCoursesPlugin::SALE_STATUS_CANCELED,
                 'sale' => $sale['id'],
             ]);
+
             break;
     }
 
     header("Location: $urlToRedirect");
+
     exit;
 }
 
@@ -66,7 +71,7 @@ $paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
-$selectedSale = isset($_GET['sale']) ? intval($_GET['sale']) : 0;
+$selectedSale = isset($_GET['sale']) ? (int) ($_GET['sale']) : 0;
 $dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0, 0, 0));
 $dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23, 59, 59));
 $searchTerm = '';
@@ -105,13 +110,13 @@ $form->addHtml('<div id="report-by-status" '.('0' !== $selectedFilterType ? 'sty
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-user" '.('1' !== $selectedFilterType ? 'style="display:none"' : '').'>');
-$form->addText('user', get_lang('Username'), false);
+$form->addText('user', get_lang('UserName'), false);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-date" '.('2' !== $selectedFilterType ? 'style="display:none"' : '').'>');
 $form->addDateRangePicker('date', get_lang('Date'), false);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-email" '.('3' !== $selectedFilterType ? 'style="display:none"' : '').'>');
-$form->addText('email', get_lang('E-mail'), false);
+$form->addText('email', get_lang('Email'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([
@@ -125,15 +130,22 @@ $form->setDefaults([
 switch ($selectedFilterType) {
     case '0':
         $sales = $plugin->getSaleListByStatus($selectedStatus);
+
         break;
+
     case '1':
         $sales = $plugin->getSaleListByUser($searchTerm);
+
         break;
+
     case '2':
         $sales = $plugin->getSaleListByDate($dateStart, $dateEnd);
+
         break;
+
     case '3':
         $sales = $plugin->getSaleListByEmail($email);
+
         break;
 }
 
@@ -143,17 +155,26 @@ foreach ($sales as &$sale) {
     $sale['complete_user_name'] = api_get_person_name($sale['firstname'], $sale['lastname']);
     $sale['num_invoice'] = $plugin->getNumInvoice($sale['id'], 0);
     $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['price'], $sale['iso_code']);
+    if (isset($sale['discount_amount']) && 0 != $sale['discount_amount']) {
+        $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
+        $sale['coupon_code'] = $plugin->getSaleCouponCode($sale['id']);
+    }
 }
 
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
+
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = BuyCoursesPlugin::getSalesReportScript($sales, $invoicingEnable);
+
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::getMdiIcon('file-excel-outline').
-    get_lang('Generate report'),
+    Display::returnFontAwesomeIcon('file-excel-o').
+    get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php',
-    ['class' => 'btn btn--primary']
+    ['class' => 'btn btn-primary']
 );
 
 if ('true' === $paypalEnable && 'true' === $commissionsEnable) {
@@ -198,7 +219,6 @@ $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
 $template->assign('invoicing_enable', $invoicingEnable);
-$template->assign('showing_services', false);
 
 $content = $template->fetch('BuyCourses/view/sales_report.tpl');
 

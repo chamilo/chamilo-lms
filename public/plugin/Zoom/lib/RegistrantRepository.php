@@ -4,7 +4,7 @@
 
 namespace Chamilo\PluginBundle\Zoom;
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityRepository;

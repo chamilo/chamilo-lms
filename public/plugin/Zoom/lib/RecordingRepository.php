@@ -5,7 +5,7 @@
 namespace Chamilo\PluginBundle\Zoom;
 
 use Chamilo\ClassificationBundle\Entity\Collection;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;

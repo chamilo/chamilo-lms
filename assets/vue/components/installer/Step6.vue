@@ -226,7 +226,7 @@
         />
         <div
           class="field text-body-2"
-          v-text="installerData.stepData.dbNameForm"
+          v-text="sanitizedDbName"
         />
       </div>
 
@@ -379,7 +379,7 @@
 </template>
 
 <script setup>
-import { inject, ref } from "vue"
+import { inject, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
@@ -391,6 +391,19 @@ import SectionHeader from "../layout/SectionHeader.vue"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+// Compute the sanitized database name as it will be created on the server.
+const sanitizedDbName = computed(() => {
+  const raw = installerData.value?.stepData?.dbNameForm || ""
+
+  // For updates we trust the existing database name as-is.
+  if (installerData.value.installType === "update" || installerData.value.isUpdateAvailable) {
+    return raw
+  }
+
+  // Same rule as backend: only letters, digits and underscore are kept.
+  return raw.replace(/[^a-zA-Z0-9_]/g, "")
+})
 
 const loading = ref(false)
 const isButtonDisabled = ref(installerData.value.isUpdateAvailable)
@@ -423,7 +436,7 @@ function btnStep6OnClick() {
 }
 
 function startMigration(updatePath) {
-  var xhr = new XMLHttpRequest()
+  const xhr = new XMLHttpRequest()
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status !== 200) {
       loading.value = false
@@ -442,7 +455,7 @@ function startMigration(updatePath) {
 
 function pollMigrationStatus() {
   setTimeout(() => {
-    var xhr = new XMLHttpRequest()
+    const xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText)

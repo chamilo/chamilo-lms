@@ -78,9 +78,7 @@ switch ($action) {
         $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 
-        if (0 != api_get_session_id() && !api_is_allowed_to_session_edit(false, true)) {
-            api_not_allowed();
-        }
+
         $form = new FormValidator(
             'usergroup',
             'post',

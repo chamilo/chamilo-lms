@@ -582,6 +582,55 @@ class AttendanceController extends AbstractController
         ]);
     }
 
+    #[Route('/{attendanceId}/date/{calendarId}/sheet', name: 'attendance_date_sheet', methods: ['GET'])]
+    public function getDateSheet(
+        int $attendanceId,
+        int $calendarId,
+        Request $request,
+        UserRepository $userRepository,
+        CAttendanceCalendarRepository $calendarRepo,
+        CAttendanceSheetRepository $sheetRepo
+    ): JsonResponse {
+        $cid = (int) $request->query->get('cid', 0);
+        $sid = $request->query->get('sid') ? (int) $request->query->get('sid') : null;
+        $gid = $request->query->get('gid') ? (int) $request->query->get('gid') : null;
+
+        $calendar = $calendarRepo->find($calendarId);
+        if (!$calendar || $calendar->getAttendance()?->getIid() !== $attendanceId) {
+            return $this->json(['error' => 'Calendar not found'], 404);
+        }
+
+        $users = $userRepository->findUsersByContext($cid, $sid, $gid);
+        $presence = [];
+        $comments = [];
+        $signatures = [];
+
+        foreach ($users as $u) {
+            $sheet = $sheetRepo->findOneBy(['user' => $u, 'attendanceCalendar' => $calendar]);
+            $k = $u->getId().'-'.$calendarId;
+            if ($sheet) {
+                $presence[$k] = $sheet->getPresence();
+                $signatures[$k] = $sheet->getSignature();
+            }
+        }
+
+        $formatted = array_map(fn($u) => [
+            'id' => $u->getId(),
+            'firstName' => $u->getFirstname(),
+            'lastName'  => $u->getLastname(),
+            'photo'     => $userRepository->getUserPicture($u->getId()),
+        ], $users);
+
+        return $this->json([
+            'dateLabel'  => $calendar->getDateTime()->format('M d, Y - h:i A'),
+            'isLocked'   => (bool) $calendar->getDoneAttendance() === true,
+            'users'      => $formatted,
+            'presence'   => $presence,
+            'comments'   => $comments,
+            'signatures' => $signatures,
+        ]);
+    }
+
     private function updateAttendanceResults(CAttendance $attendance): void
     {
         $sheets = $attendance->getCalendars()->map(fn ($calendar) => $calendar->getSheets())->toArray();

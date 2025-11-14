@@ -784,7 +784,7 @@ const initializeColumnLocks = (dates) => {
     filteredAttendanceSheets.value.forEach((user) => {
       const key = `${user.id}-${date.id}`
       if (attendanceData.value[key] === undefined) {
-        attendanceData.value[key] = 1
+        attendanceData.value[key] = null
       }
     })
   })
@@ -974,7 +974,25 @@ const closeSignatureDialog = () => {
 }
 
 const viewForTablet = (dateId) => {
-  console.log(`View for tablet clicked for date ID: ${dateId}`)
+  if (!router.hasRoute("AttendanceSheetTablet")) {
+    console.error("[Attendance] Missing route: AttendanceSheetTablet")
+    alert("Tablet route is not registered. Check router config.")
+    return
+  }
+
+  const isLockedForDate = isColumnLocked(dateId)
+
+  router.push({
+    name: "AttendanceSheetTablet",
+    params: { node: route.params.node, id: route.params.id, calendarId: dateId },
+    query: {
+      cid,
+      sid,
+      gid,
+      readonly: route.query.readonly ?? "0",
+      locked: isLockedForDate ? "1" : "0",
+    },
+  })
 }
 
 const exportToPdf = async () => {

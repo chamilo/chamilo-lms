@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -37,7 +38,7 @@ $editingCourse = BuyCoursesPlugin::PRODUCT_TYPE_COURSE === $type;
 $editingSession = BuyCoursesPlugin::PRODUCT_TYPE_SESSION === $type;
 
 $entityManager = Database::getManager();
-$userRepo = UserManager::getRepository();
+$userRepo = Container::getUserRepository();
 $currency = $plugin->getSelectedCurrency();
 
 if (empty($currency)) {

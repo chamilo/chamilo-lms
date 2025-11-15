@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Base class for Web Services.
@@ -28,8 +29,7 @@ class WebService
      */
     protected function __construct($username, $apiKey)
     {
-        /** @var User user */
-        $this->user = UserManager::getRepository()->findUserByUsername($username);
+        $this->user = Container::getUserRepository()->findByUsername($username);
         $this->apiKey = $apiKey;
     }
 
@@ -54,7 +54,7 @@ class WebService
      */
     public static function findUserApiKey($username, $serviceName)
     {
-        $user = UserManager::getRepository()->findUserByUsername($username);
+        $user = Container::getUserRepository()->findByUsername($username);
         if ($user) {
             $apiKeys = UserManager::get_api_keys($user->getId(), $serviceName);
 
@@ -86,7 +86,7 @@ class WebService
             return false;
         }
 
-        $user = UserManager::getRepository()->findUserByUsername($username);
+        $user = Container::getUserRepository()->findByUsername($username);
 
         if (!$user) {
             return false;

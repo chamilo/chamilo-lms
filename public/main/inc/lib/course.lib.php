@@ -527,7 +527,7 @@ class CourseManager
                 return false;
             }
             /** @var Chamilo\CoreBundle\Entity\User $user */
-            foreach (UserManager::getRepository()->matching(
+            foreach (Container::getUserRepository()->matching(
                 Criteria::create()->where(Criteria::expr()->in('id', $userList))
             ) as $user) {
                 foreach ($user->getCurrentlyAccessibleSessions() as $session) {

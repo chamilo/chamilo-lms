@@ -1967,7 +1967,7 @@ class Rest extends WebService
         }
 
         // save modifications
-        UserManager::getRepository()->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
 
         // tell the world we just updated this user
         $eventDispatcher->dispatch(

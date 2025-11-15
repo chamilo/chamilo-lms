@@ -31,7 +31,6 @@ $includeSession = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 
 $entityManager = Database::getManager();
-$userRepo = UserManager::getRepository();
 $currency = $plugin->getSelectedCurrency();
 
 if (empty($currency)) {

@@ -41,7 +41,73 @@ class SettingsController extends BaseController
     }
 
     /**
-     * Edit configuration with given namespace.
+     * Toggle access_url_changeable for a given setting variable.
+     * Only platform admins on the main URL (ID = 1) are allowed to change it,
+     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings/toggle_changeable', name: 'settings_toggle_changeable', methods: ['POST'])]
+    public function toggleChangeable(Request $request, AccessUrlHelper $accessUrlHelper): JsonResponse
+    {
+        // Security: only admins.
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return $this->json([
+                'error' => 'Only platform admins can modify this flag.',
+            ], 403);
+        }
+
+        $currentUrl = $accessUrlHelper->getCurrent();
+        $currentUrlId = $currentUrl->getId();
+
+        // Only main URL (ID = 1) can toggle the flag.
+        if (1 !== $currentUrlId) {
+            return $this->json([
+                'error' => 'Only the main URL (ID 1) can toggle this setting.',
+            ], 403);
+        }
+
+        $payload = json_decode($request->getContent(), true);
+
+        if (!\is_array($payload) || !isset($payload['variable'], $payload['status'])) {
+            return $this->json([
+                'error' => 'Invalid payload.',
+            ], 400);
+        }
+
+        $variable = (string) $payload['variable'];
+        $status = (int) $payload['status'];
+
+        $repo = $this->entityManager->getRepository(SettingsCurrent::class);
+
+        // We search by variable + current main AccessUrl entity.
+        $setting = $repo->findOneBy([
+            'variable' => $variable,
+            'url' => $currentUrl,
+        ]);
+
+        if (!$setting) {
+            return $this->json([
+                'error' => 'Setting not found.',
+            ], 404);
+        }
+
+        try {
+            $setting->setAccessUrlChangeable($status);
+            $this->entityManager->flush();
+
+            return $this->json([
+                'result' => 1,
+                'status' => $status,
+            ]);
+        } catch (\Throwable $e) {
+            return $this->json([
+                'error' => 'Unable to update setting.',
+                'details' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Edit configuration with given namespace (search page).
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/search_settings', name: 'chamilo_platform_settings_search')]
@@ -69,6 +135,35 @@ class SettingsController extends BaseController
         $schemas = $manager->getSchemas();
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
+        // Template map for current URL (existing behavior – JSON helper)
+        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
+        $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
+
+        foreach ($settingsWithTemplate as $s) {
+            if ($s->getValueTemplate()) {
+                $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
+            }
+        }
+
+        // MultiURL changeable flags: read from main URL (ID = 1) only
+        $changeableMap = [];
+        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
+            ->join('sc.url', 'u')
+            ->andWhere('u.id = :mainId')
+            ->setParameter('mainId', 1)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($mainUrlRows as $row) {
+            if ($row instanceof SettingsCurrent) {
+                $changeableMap[$row->getVariable()] = $row->getAccessUrlChangeable();
+            }
+        }
+
+        $currentUrlId = $url->getId();
+        // Only platform admins on the main URL can toggle the MultiURL flag.
+        $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
+
         if ('' === $keyword) {
             return $this->render('@ChamiloCore/Admin/Settings/search.html.twig', [
                 'keyword' => $keyword,
@@ -80,15 +175,10 @@ class SettingsController extends BaseController
                 'template_map_by_category' => $templateMapByCategory,
                 'ordered_namespaces' => $ordered,
                 'namespace_labels' => $labelMap,
+                'changeable_map' => $changeableMap,
+                'current_url_id' => $currentUrlId,
+                'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
             ]);
-        }
-
-        $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
-        $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
-        foreach ($settingsWithTemplate as $s) {
-            if ($s->getValueTemplate()) {
-                $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
-            }
         }
 
         $settingsFromKeyword = $manager->getParametersFromKeywordOrderedByCategory($keyword);
@@ -110,7 +200,7 @@ class SettingsController extends BaseController
                 // Convert category to schema alias and validate it BEFORE loading/creating the form
                 $schemaAlias = $manager->convertNameSpaceToService($category);
 
-                // skip unknown/legacy categories (e.g., "tools")
+                // Skip unknown/legacy categories (e.g., "tools")
                 if (!isset($schemas[$schemaAlias])) {
                     continue;
                 }
@@ -139,11 +229,14 @@ class SettingsController extends BaseController
             'template_map_by_category' => $templateMapByCategory,
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
+            'changeable_map' => $changeableMap,
+            'current_url_id' => $currentUrlId,
+            'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
         ]);
     }
 
     /**
-     * Edit configuration with given namespace.
+     * Edit configuration with given namespace (main settings page).
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
@@ -217,6 +310,7 @@ class SettingsController extends BaseController
         $templateMap = [];
         $settingsRepo = $this->entityManager->getRepository(SettingsCurrent::class);
 
+        // Template map for current URL (existing behavior – JSON helper)
         $settingsWithTemplate = $settingsRepo->findBy(['url' => $url]);
 
         foreach ($settingsWithTemplate as $s) {
@@ -224,9 +318,29 @@ class SettingsController extends BaseController
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
             }
         }
+
+        // MultiURL changeable flags: read from main URL (ID = 1) only
+        $changeableMap = [];
+        $mainUrlRows = $settingsRepo->createQueryBuilder('sc')
+            ->join('sc.url', 'u')
+            ->andWhere('u.id = :mainId')
+            ->setParameter('mainId', 1)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($mainUrlRows as $row) {
+            if ($row instanceof SettingsCurrent) {
+                $changeableMap[$row->getVariable()] = $row->getAccessUrlChangeable();
+            }
+        }
+
         $platform = [
             'server_type' => (string) $manager->getSetting('platform.server_type', true),
         ];
+
+        $currentUrlId = $url->getId();
+        // Only platform admins on the main URL can toggle the MultiURL flag.
+        $canToggleMultiUrlSetting = $this->isGranted('ROLE_ADMIN') && 1 === $currentUrlId;
 
         return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
             'schemas' => $schemas,
@@ -238,6 +352,9 @@ class SettingsController extends BaseController
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
             'platform' => $platform,
+            'changeable_map' => $changeableMap,
+            'current_url_id' => $currentUrlId,
+            'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
         ]);
     }
 

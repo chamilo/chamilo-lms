@@ -72,9 +72,7 @@ class ExerciseLink extends AbstractLink
                   FROM $exerciseTable e
                   INNER JOIN $lpItemTable i
                   ON (e.iid = i.path)
-				  WHERE
-				    active = 0 AND
-				    item_type = 'quiz'
+				  WHERE item_type = 'quiz'
 				  ";
         $resultLp = Database::query($sqlLp);
         $exerciseInLP = Database::store_result($resultLp);

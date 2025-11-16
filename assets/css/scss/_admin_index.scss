@@ -1,13 +1,20 @@
 .admin-index {
-  @apply gap-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3;
-  //@apply gap-4 lg:columns-2 xl:columns-3 space-y-4;
+  @apply grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-start;
+
+  &__block-container {
+    @apply h-full;
+  }
 
   &__block {
-    @apply flex flex-col p-4 gap-4 rounded-lg shadow-lg border border-solid border-gray-25 break-inside-avoid-column;
+    @apply flex flex-col h-full p-4 gap-4 rounded-lg shadow-md border border-solid border-gray-25 bg-white;
+  }
+
+  &__block-container--full {
+    @apply col-span-1 md:col-span-2 xl:col-span-3;
   }
 
   .p-menu {
-    @apply border-none border-0 m-0 p-0 w-full;
+    @apply border-none m-0 p-0 w-full;
   }
 }
 

@@ -3,19 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Installation guide for Chamilo 2</title>
-    <link rel="stylesheet" href="../build/legacy_app.css" />
-    <link rel="stylesheet" href="../build/app.css" />
-    <link rel="stylesheet" href="../build/vue.css" />
-    <style>
-        body {width:90%; margin-left: 5%; margin-right: 5%;}
-        h1 {font-size: xxx-large; margin-top: 1em; margin-bottom: 1em;}
-        h2 {font-size: xx-large; margin-top: 1em; margin-bottom: 1em;}
-        h3 {margin-top: 1em; margin-bottom: 1em;}
-        p {margin-bottom: 0.5em; margin-top: 0.5em;}
-        ul {list-style-type: circle; margin-left: 1em; margin-top: 0.5em; margin-bottom: 0.8em;}
-        table {margin: 1em;}
-        pre {border: 1px solid #333; background-color: #bbb; padding: 0.8em; margin: 0.5em;}
-    </style>
+    <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
 <h1>Chamilo 2 installation guide</h1>
@@ -23,7 +11,9 @@
       This is the official Chamilo installation guide for version 2+.
   </p>
   <h2>Requirements</h2>
-This version of Chamilo requires the following software stack.
+  <a id="requirements" class="anchor"></a>
+
+  This version of Chamilo requires the following software stack.
   It might be installed in other contexts as PHP is very portable, but the following has been thoroughly tested for production environments.
   <ul>
       <li>Apache 2.4+ (with mod-rewrite enabled)</li>
@@ -55,18 +45,26 @@ This version of Chamilo requires the following software stack.
       <li>xapian (optional)</li>
   </ul>
   <h2>Web-panel installation</h2>
+  <a id="web-install" class="anchor"></a>
     <h3>Database</h3>
+    <a id="web-install-db" class="anchor"></a>
+
       Make sure you have a database available with full permissions.<br>
       Do not share that database with another application as Chamilo might need to create
       a table that has the same name as a table in the other application.
+
     <h3>Virtual host</h3>
+    <a id="web-install-vhost" class="anchor"></a>
       Define a new virtual host/subdomain name you will use for Chamilo (Chamilo 2 does *not* work as a sub-folder of an existing website, you need a subdomain like "elearning.yourdomain.com").<br>
       Upload and/or unzip your Chamilo files inside your web folder (usually inside a folder called "public_html/").<br>
       Configure a virtual host pointing at the "public" directory inside your Chamilo directory. For example, this could be "/home/elearning.yourdomain.com/public_html/chamilo2/public/".<br>
+
     <h3>Files permissions</h3>
+    <a id="web-install-permissions" class="anchor"></a>
       Make sure the following files and folders are writeable by the web server. Set permissions to 0770 for example:
       <ul>
         <li>var/</li>
+        <li>config/</li>
         <li>.env</li>
       </ul>
       The .env is the *file* where Chamilo will write the data collected during the installation.<br>
@@ -77,6 +75,8 @@ This version of Chamilo requires the following software stack.
       don't forget to write down the permissions it had initially, and return it to its original
       permissions when the installation is over.
     <h3>PHP settings</h3>
+    <a id="web-install-php" class="anchor"></a>
+
       Some PHP settings are recommended, but the default values should be enough to get you started.<br>
       If you prefer to set them previously, here are the settings to change:
       <ul>
@@ -90,14 +90,18 @@ This version of Chamilo requires the following software stack.
         <li><a href="https://www.php.net/manual/en/ini.core.php#ini.memory-limit">memory_limit</a> >128M</li>
       </ul>
     <h3>Installation wizard</h3>
+    <a id="web-install-wizard" class="anchor"></a>
       You are ready to go. Open your browser on your subdomain (elearning.yourdomain.com in the example above), keep your database credentials at hand, and let the Chamilo installer guide you.
 
     <h3>Sessions and Redis</h3>
+    <a id="web-install-sessions" class="anchor"></a>
       In this beta version, there are known issues with sessions not getting updated fast enough, which can be solved (temporarily) by using a Redis server. Check the command line instructions for more about this. This is a temporary situation that we expect to fix before the stable release.
 
   <h2>Command line installation</h2>
+  <a id="cli-install" class="anchor"></a>
 
-  <h3>Software stack</h3>
+    <h3>Software stack</h3>
+    <a id="cli-install-stack" class="anchor"></a>
 
 <p>Assuming you are using a dedicated Ubuntu 24.04 LTS, these commands should help you have the software stack installed in a breeze. Otherwise, please review the requirements above and make sure they are met before moving on to the next section.</p>
 <pre>
@@ -120,7 +124,8 @@ mysql_secure_installation
 # give a MariaDB root password twice and answer the default "Y" to anything else. The root password is *not* the one you gave above here.
 </pre>
 
-  <h3>Database</h3>
+    <h3>Database</h3>
+    <a id="cli-install-db" class="anchor"></a>
 
 <p>You will need a database user with privilege to fully use (and optionally create) a database.<br>
 Although progress has been made to support multiple database management systems, Chamilo
@@ -138,7 +143,8 @@ where:
     <li>[db-host] is the name of the database server (use <em>localhost</em> when using the same machine for web server and database server - if you use a hosted service, your hosting provider will usually give you this name somewhere)</li>
     <li>[db-password] is the password this user will use to connect to this database on this host. Use common sense to not make it too easy to guess (use special characters, lowercase and uppercase, numbers, and a length of *at least* 8 characters)</li>
 </ul>
-  <h3>Web server</h3>
+    <h3>Web server</h3>
+    <a id="cli-install-httpd" class="anchor"></a>
 Chamilo 2+ only requires a working web server setup to work. You can run it on localhost with the default installation of any web server, provided you configure your DocumentRoot as the path pointing to Chamilo's <em>public/</em> subfolder.<br>
 Here is an example Apache vhost configuration file for an installation on the http://my.chamilo.local/ URL (replace all values between brackets, including the brackets, to your custom values).<br>
 It includes PHP settings which will only affect this vhost. If you prefer to set those PHP settings in php.ini, you are welcome to do so.<br>
@@ -174,45 +180,78 @@ After setting up this virtual host, don't forget to enable it (example here on D
 a2ensite [my.chamilo.local]
 systemctl restart apache2</pre>
     <h3>Files permissions</h3>
+    <a id="cli-install-permissions" class="anchor"></a>
     Make sure the following files and folders are writeable by the web server. Set permissions to 0770 for example:
     <ul>
         <li>var/</li>
+        <li>config/</li>
         <li>.env</li>
     </ul>
     Assuming your web server user is <em>www-data</em>, you can do that quickly with the following from inside the Chamilo root directory (already done in first example commands list for Ubuntu):
     <pre>
 sudo touch .env
-sudo chown -R www-data:www-data var/ .env</pre>
+sudo chown -R www-data:www-data var/ config/ .env</pre>
+
+    Both .env and config/ should be changed back to less permissive permissions after the installation is over.
+
     <h3>PHP settings</h3>
+    <a id="cli-install-php" class="anchor"></a>
     Some PHP settings are recommended, but the default values should be enough to get you started.<br>
     See vhost config's "php_value" section above for details.
 
-  <h3>Installation wizard</h3>
-  You should now be able to direct your browser to your URL (e.g. <em>[http://my.chamilo.local]</em>).<br>
-  Chamilo will pick it up from there and offer the installation wizard to help guide you through the rest of the process.
-
-  <h2>Web panel upgrade from 1.11.*</h2>
+    <h3>Installation wizard</h3>
+    <a id="cli-install-wizard" class="anchor"></a>
+    You should now be able to direct your browser to your URL (e.g. <em>[http://my.chamilo.local]</em>).<br>
+    Chamilo will pick it up from there and offer the installation wizard to help guide you through the rest of the process.
 
   <h2>Command line upgrade from 1.11.*</h2>
+  <a id="cli-upgrade" class="anchor"></a>
+
     <h3>Database</h3>
+    <a id="cli-upgrade-db" class="anchor"></a>
     Before you start, it is *critical* to delete the <em>version</em> table from your Chamilo 1.11.* database.
     Failure to do this will make the command line upgrade fail immediately after starting.
     The <em>version</em> table is not necessary for Chamilo 1.11.* to work, so don't leave it there.
 
     <h3>Files</h3>
+    <a id="cli-upgrade-files" class="anchor"></a>
       The files from Chamilo 1.11.* will be used as source but they will be copied and rearranged
       in the new Chamilo 2 installation, so you will have to indicate a source for the files to the (web or CLI) installer.<br>
       Note the extra pages created in 1.11.x and stored under app/home/ are *not* migrated. They will need to be created again in Chamilo 2 using the "pages" feature.
 
     <h3>PHP settings</h3>
+    <a id="cli-upgrade-php" class="anchor"></a>
       Make sure no setting is in the way of a command line upgrade.
       Limits such as memory_limit or max_execution_time should be
       vastly increased for the time of the upgrade.
 
+    <h3>E-mail settings</h3>
+    <a id="cli-upgrade-email" class="anchor"></a>
+      In Chamilo 1.11.*, the e-mail settings were stored in the app/config/mail.conf.php file.<br>
+      This is *NOT* the case in Chamilo 2. Instead, the e-mail settings can be configured directly from the
+      web panel (Administration &gt; Settings &gt; E-mail).<br>
+      Those settings are *NOT* automatically migrated to the new format, so you will have to do it manually in the new, DSN, format. See settings page in your admin panel for more details.
+
     <h3>Execution</h3>
+    <a id="cli-upgrade-exec" class="anchor"></a>
       // To be completed
 
+  <h2>Web panel upgrade from 1.11.*</h2>
+  <a id="web-upgrade" class="anchor"></a>
+
+    <h3>Database, Host, Permissions, Files and PHP settings</h3>
+    <a id="web-upgrade-all" class="anchor"></a>
+    For all requirements previous to the installation wizard, see the command line upgrade instructions above.
+    Note the installation folder for Chamilo 2 will be different from the installation folder from Chamilo 1, as explained in the "Files" section above.
+
+    <h3>Installation wizard</h3>
+    <a id="web-upgrade-wizard" class="anchor"></a>
+    On step 2 of the installation wizard, make sure you select "Upgrade from a previous version of Chamilo" and click "Continue".<br>
+    Follow the wizard to complete the upgrade.<br>
+    Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.
+
   <h2>Installing on Windows</h2>
+  <a id="windows-install" class="anchor"></a>
     <h3>Introduction</h3>
     Although Chamilo does work on Windows, it is not officially supported due to the fact that
     we have limited testing capabilities for this operating system. The following instructions have been
@@ -220,8 +259,10 @@ sudo chown -R www-data:www-data var/ .env</pre>
     We do not recommend using Windows for production environments.
 
     <h3>Installation for validation or production</h3>
+    <a id="windows-install-env" class="anchor"></a>
 
       <h4>WampServer</h4>
+      <a id="windows-install-wamp" class="anchor"></a>
         <a href="https://www.wampserver.com/">Download</a> and install WampServer (accept default options if in doubt).<br>
         Restart WampServer to make these changes effective.<br>
         Open http://localhost/ in your browser. If the WampServer welcome screen with server configuration info appears, it means WampServer is working.<br>
@@ -249,6 +290,7 @@ sudo chown -R www-data:www-data var/ .env</pre>
         We do not take responsibility about software from other sources. Do your own research.
 
       <h4>Database</h4>
+      <a id="windows-install-db" class="anchor"></a>
         Click on the WampServer icon in the status bar (bottom right) and select PhpMyAdmin.<br>
         Choose the MariaDB service and connect to the root user. Enter the root password you set during WampServer installation (probably still empty).<br></br>
         In the "Databases" tab, prepare a new database with the name "chamilo2".<br></br>
@@ -259,6 +301,7 @@ sudo chown -R www-data:www-data var/ .env</pre>
         Click "Create".<br>
 
       <h4>Chamilo</h4>
+      <a id="windows-install-files" class="anchor"></a>
         Download the latest install-ready package available for version 2
         from <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>.<br>
         Unzip the package in C:\wamp64\www\chamilo2.<br>
@@ -266,6 +309,7 @@ sudo chown -R www-data:www-data var/ .env</pre>
         If this is not a stable version package, edit the ".env.dist" file and set APP_ENV to "prod".<br>
 
       <h4>Apache</h4>
+      <a id="windows-install-apache" class="anchor"></a>
         Open the Apache configuration file at C:\wamp64\bin\apache\apache2.4.*\conf\extra\httpd-vhosts.conf.<br>
         Modify the contents of the file to something like this:<br>
 <pre>
@@ -281,6 +325,7 @@ sudo chown -R www-data:www-data var/ .env</pre>
 </pre>
 
       <h4>Installation wizard</h4>
+      <a id="windows-install-wizard" class="anchor"></a>
         Open your browser on <a href="http://chamilo.local/">http://chamilo2.local</a>. The installation wizard should appear.<br>
         Follow the instructions to complete the installation.<br>
 
@@ -290,14 +335,17 @@ sudo chown -R www-data:www-data var/ .env</pre>
 
 
     <h3>Installation for developers</h3>
+    <a id="windows-install-dev" class="anchor"></a>
       If you want to *develop* Chamilo, you will need still need to install
       WampServer as detailed above, but you will also need a few additional
       components to be able to prepare the package from Git.
 
       <h4>WampServer</h4>
+      <a id="windows-install-dev-wamp" class="anchor"></a>
         See above.
 
       <h4>Composer</h4>
+      <a id="windows-install-dev-composer" class="anchor"></a>
         <a href="https://getcomposer.org/download/">Download</a> and install
         Composer (accept default options if in doubt).<br>
         If the installation is correct, you should be able to run
@@ -305,6 +353,7 @@ sudo chown -R www-data:www-data var/ .env</pre>
         version of Composer appear (probably 2.x).
 
       <h4>Node.js</h4>
+      <a id="windows-install-dev-nodejs" class="anchor"></a>
         To install Node.js, you can use the official installer from
         <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a>
         using the .msi package.<br>
@@ -318,9 +367,11 @@ sudo chown -R www-data:www-data var/ .env</pre>
         run "corepack prepare yarn@stable --activate".<br>
 
       <h4>Database</h4>
+      <a id="windows-install-dev-db" class="anchor"></a>
         See above.
 
       <h4>Chamilo</h4>
+      <a id="windows-install-dev-chamilo" class="anchor"></a>
         In a PowerShell or CMD:<br>
 <pre>
     cd C:\wamp64\www
@@ -335,15 +386,18 @@ sudo chown -R www-data:www-data var/ .env</pre>
         (C:\wamp64\www\chamilo2\.env).<br>
 
       <h4>Apache</h4>
+      <a id="windows-install-dev-apache" class="anchor"></a>
         See above.
 
       <h4>Installation wizard</h4>
+      <a id="windows-install-dev-wizard" class="anchor"></a>
         Open your browser on <a href="http://chamilo.local/">http://chamilo2.local</a>. The installation wizard should appear.<br>
         Follow the instructions to complete the installation.<br>
 
         Note that it is difficult to change URLs later, so if you plan to publish this service online, make sure you have properly configured your domain name first.
 
     <h3>Redis</h3>
+    <a id="windows-install-redis" class="anchor"></a>
       For better performance in the highly dynamic interfaces of Chamilo, you might
       want to install the PHP Redis extension from the official PHP website, for example (adapt PHP and Redis version numbers)
       https://downloads.php.net/~windows/pecl/releases/redis/6.*.*/php_redis-6.*.*-8.3-ts-vs16-x64.zip
@@ -380,12 +434,13 @@ sudo chown -R www-data:www-data var/ .env</pre>
       Restart the WampServer and you should be able to access Chamilo.
 
   <h2>Help available</h2>
+  <a id="install-help-channels" class="anchor"></a>
   If you are struggling with this guide, don't hesitate to ask for help on
   <a href="https://github.com/chamilo/chamilo-lms/discussions">our community forum.</a><br>
   If you have reasons to seek professional assistance and warranties, please
   contact <a href="https://chamilo.org/providers">one of our official providers</a>. They contribute heavily to the project and will be able to help you out quickly and efficiently, for configurations from 10 to 1M users.<br>
   <hr />
-  Last updated: 2024-07-18
+  Last updated: 2025-11-16
   <a href="http://validator.w3.org/check?uri=referer"><img src="//www.w3.org/Icons/valid-xhtml10-blue" alt="Valid XHTML 1.0 Transitional" style="margin: 1em; float: right;" height="31" width="88" /></a>
   <a href="http://jigsaw.w3.org/css-validator/">
       <img src="//jigsaw.w3.org/css-validator/images/vcss-blue" style="margin: 1em; float: right;" alt="Valid CSS" />

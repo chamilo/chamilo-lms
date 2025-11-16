@@ -2,7 +2,7 @@
   <PrimeChart
     :data="data"
     :options="{}"
-    class="w-full md:w-30rem"
+    class="w-full md:w-30rem flex justify-center"
     type="pie"
   />
 </template>

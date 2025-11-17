@@ -66,7 +66,7 @@ $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
 $serviceList = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter);
 $totalItems = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter, 'count');
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 $pagination = BuyCoursesPlugin::returnPagination(api_get_self(), $currentPage, $pagesCount, $totalItems);
 
 // View
@@ -89,11 +89,16 @@ if (api_is_platform_admin()) {
 $templateName = $plugin->get_lang('ListOfServicesOnSale');
 $tpl = new Template($templateName);
 $tpl->assign('search_filter_form', $form->returnForm());
+$tpl->assign('showing_courses', false);
+$tpl->assign('showing_sessions', false);
 $tpl->assign('showing_services', true);
 $tpl->assign('services', $serviceList);
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('pagination', $pagination);
+
+$tpl->assign('coursesExist', false);
+$tpl->assign('sessionExist', false);
 
 $content = $tpl->fetch('BuyCourses/view/catalog.tpl');
 

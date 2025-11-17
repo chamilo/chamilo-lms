@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -15,6 +17,7 @@ use ChamiloSession as Session;
  *
  * This script is loaded inside the global modal to show immediate feedback
  * (score, expected answers and navigation links) for a single question.
+ *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -83,6 +86,8 @@ $logPrefix = '[exercise_submit_modal] ';
  *
  * - For arrays: at least one element.
  * - For scalars: '' and null are considered empty. "0" is a valid answer.
+ *
+ * @param mixed $value
  */
 function chExerciseHasAnswer($value): bool
 {
@@ -90,7 +95,7 @@ function chExerciseHasAnswer($value): bool
         return count($value) > 0;
     }
 
-    return $value !== null && $value !== '';
+    return null !== $value && '' !== $value;
 }
 
 /**
@@ -100,6 +105,8 @@ function chExerciseHasAnswer($value): bool
  * - id => id  (e.g. [69432 => '69432'])
  * - 0..N-1 => id (e.g. [0 => '69432', 1 => '69433'])
  * - scalar '69432'
+ *
+ * @param mixed $value
  */
 function chExerciseExtractAnswerIds($value): array
 {
@@ -114,6 +121,7 @@ function chExerciseExtractAnswerIds($value): array
     foreach ($keys as $k) {
         if (!is_numeric($k)) {
             $allNumericKeys = false;
+
             break;
         }
     }
@@ -122,6 +130,7 @@ function chExerciseExtractAnswerIds($value): array
     foreach ($vals as $v) {
         if (!is_numeric($v)) {
             $allNumericVals = false;
+
             break;
         }
     }
@@ -157,21 +166,9 @@ function chExerciseExtractAnswerIds($value): array
     }
 
     $ids = array_map('intval', $ids);
-    $ids = array_values(array_unique($ids));
 
-    return $ids;
+    return array_values(array_unique($ids));
 }
-
-// Log initial context.
-error_log(
-    $logPrefix.'Init: exerciseId='.$exerciseId
-    .', exeId='.$exeId
-    .', feedbackType='.$feedbackType
-    .', isAdaptive='.($isAdaptative ? '1' : '0')
-    .', questionNum='.$questionNum
-    .', questionId='.var_export($questionId, true)
-    .', questionList='.json_encode($questionList)
-);
 
 if (!$questionId) {
     exit;
@@ -180,11 +177,12 @@ if (!$questionId) {
 // Try to read answer/hotspot from GET first.
 $choiceValue = $_GET['choice'][$questionId] ?? ($_GET['choice'] ?? '');
 $hotSpot = $_GET['hotspot'][$questionId] ?? ($_GET['hotspot'] ?? '');
-$tryAgain = ((int) ($_GET['tryagain'] ?? 0) === 1);
+$tryAgain = (1 === (int) ($_GET['tryagain'] ?? 0));
 $loaded = (int) ($_GET['loaded'] ?? 0);
 
 // Question entity.
 $repo = Container::getQuestionRepository();
+
 /** @var CQuizQuestion|null $question */
 $question = $repo->find($questionId);
 
@@ -194,13 +192,15 @@ if (null === $question) {
 
 // Relationship to get adaptive destinations.
 $entityManager = Database::getManager();
+
 /** @var CQuizRelQuestion|null $rel */
 $rel = $entityManager
     ->getRepository(CQuizRelQuestion::class)
     ->findOneBy([
         'quiz' => $exerciseId,
         'question' => $questionId,
-    ]);
+    ])
+;
 
 $destinationArray = [];
 if ($rel && $rel->getDestination()) {
@@ -223,10 +223,9 @@ $allowTryAgain = $tryAgain && !empty($failure) && in_array('repeat', $failure, t
 // If student clicked "Try again", clear previous answer for this question.
 if ($allowTryAgain && is_array($exerciseResult)) {
     unset($exerciseResult[$questionId]);
-    error_log($logPrefix.'Cleared previous result for questionId='.$questionId);
 }
 
-/**
+/*
  * If we still have no choice/hotspot, we need to fetch the answer from the
  * main exercise form (frm_exercise) in the parent page.
  *
@@ -236,22 +235,23 @@ if ($allowTryAgain && is_array($exerciseResult)) {
  * parameters. That third GET will finally compute the feedback.
  */
 if (
-    !chExerciseHasAnswer($choiceValue) &&
-    !chExerciseHasAnswer($hotSpot) &&
-    !isset($_GET['loaded'])
+    !chExerciseHasAnswer($choiceValue)
+    && !chExerciseHasAnswer($hotSpot)
+    && !isset($_GET['loaded'])
 ) {
     $params = $_REQUEST;
     $params['loaded'] = 1;
     $redirectUrl = $_SERVER['PHP_SELF'].'?'.http_build_query($params);
 
     header("Location: $redirectUrl");
+
     exit;
 }
 
 if (
-    !chExerciseHasAnswer($choiceValue) &&
-    !chExerciseHasAnswer($hotSpot) &&
-    isset($_GET['loaded'])
+    !chExerciseHasAnswer($choiceValue)
+    && !chExerciseHasAnswer($hotSpot)
+    && isset($_GET['loaded'])
 ) {
     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq()
         .'&loaded=1&exerciseId='.$exerciseId
@@ -348,10 +348,11 @@ if (
         });
     });
     </script>";
+
     exit;
 }
 
-/**
+/*
  * Merge the current choice into exerciseResult, keeping all previous answers.
  * At this point $allowTryAgain might have removed the previous entry for this
  * question id, so we will store the fresh, normalized value.
@@ -401,7 +402,7 @@ $result = $objExercise->manage_answer(
     $choiceValue,
     'exercise_result',
     [],
-    (EXERCISE_FEEDBACK_TYPE_POPUP === $feedbackType),
+    EXERCISE_FEEDBACK_TYPE_POPUP === $feedbackType,
     false,
     $showResult,
     null,
@@ -447,10 +448,10 @@ if ($isAdaptative && !empty($destinationArray) && isset($destinationArray[$route
         $firstDest = (int) $firstDest;
     }
 
-    if ($firstDest === 'repeat') {
+    if ('repeat' === $firstDest) {
         // Repeat the same question.
         $destinationId = $questionId;
-    } elseif ($firstDest === -1) {
+    } elseif (-1 === $firstDest) {
         // End of activity.
         $destinationId = -1;
     } elseif (is_int($firstDest)) {
@@ -534,7 +535,7 @@ $indexForLog = null;
 // Small JS helper that navigates explicitly, without relying on SendEx().
 echo '<script>
 var chExerciseBaseUrl = "'.addslashes($exerciseBaseUrl).'";
-var chExerciseResultUrl = "'.addslashes($exerciseResultUrl). '";
+var chExerciseResultUrl = "'.addslashes($exerciseResultUrl).'";
 
 /**
  * Navigate to the given question index (0-based) or to the result page.
@@ -586,11 +587,11 @@ if ($destinationId === $questionId) {
     $navBranch = 'repeatQuestion';
 
     $links .= Display::getMdiIcon(
-            ActionIcon::REFRESH,
-            'ch-tool-icon',
-            'padding-left:0px;padding-right:5px;',
-            ICON_SIZE_SMALL
-        )
+        ActionIcon::REFRESH,
+        'ch-tool-icon',
+        'padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
+    )
         .'<a onclick="return chExerciseSendEx('.$index.', true);" href="#">'
         .get_lang('Try again').'</a><br /><br />';
 } elseif (-1 === $destinationId) {
@@ -598,11 +599,11 @@ if ($destinationId === $questionId) {
     $navBranch = 'endActivity';
 
     $links .= Display::getMdiIcon(
-            StateIcon::COMPLETE,
-            'ch-tool-icon',
-            'padding-left:0px;padding-right:5px;',
-            ICON_SIZE_SMALL
-        )
+        StateIcon::COMPLETE,
+        'ch-tool-icon',
+        'padding-left:0px;padding-right:5px;',
+        ICON_SIZE_SMALL
+    )
         .'<a onclick="return chExerciseSendEx(-1, false);" href="#">'
         .get_lang('End of activity').'</a><br /><br />';
 } elseif (is_int($destinationId) && in_array($destinationId, $questionList, true)) {
@@ -631,29 +632,6 @@ if ($destinationId === $questionId) {
     );
     $fullUrl = api_get_path(WEB_PATH).ltrim($destinationId, '/');
     $links .= '<a href="'.$fullUrl.'">'.get_lang('Go to resource').'</a>&nbsp;'.$icon;
-}
-
-error_log(
-    $logPrefix.'Navigation: navBranch='.$navBranch
-    .', indexForLog='.var_export($indexForLog, true)
-    .', linksEmpty='.((trim(strip_tags($links)) === '') ? '1' : '0')
-);
-
-// Final safety logs if modal content/links are empty.
-if (trim(strip_tags($contents)) === '') {
-    error_log(
-        $logPrefix.'Final contents is empty for questionId='.$questionId
-        .', answerType='.$answerType
-        .', feedbackType='.$feedbackType
-        .', isAdaptive='.($isAdaptative ? '1' : '0')
-    );
-}
-
-if (trim(strip_tags($links)) === '') {
-    error_log(
-        $logPrefix.'Final links is empty for questionId='.$questionId
-        .', destinationId='.var_export($destinationId, true)
-    );
 }
 
 // Body + navigation block.

@@ -601,7 +601,11 @@ class CourseMaintenanceController extends AbstractController
     public function deleteCourse(int $node, Request $req): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_TEACHER') && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')) {
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && !$this->isGranted('ROLE_TEACHER')
+            && !$this->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+        ) {
             return $this->json(['error' => 'You are not allowed to delete this course'], 403);
         }
 
@@ -613,6 +617,11 @@ class CourseMaintenanceController extends AbstractController
                 return $this->json(['error' => 'Missing confirmation value'], 400);
             }
 
+            // Optional flag: also delete orphan documents that belong only to this course
+            // Accepts 1/0, true/false, "1"/"0"
+            $deleteDocsRaw = $payload['delete_docs'] ?? 0;
+            $deleteDocs = filter_var($deleteDocsRaw, \FILTER_VALIDATE_BOOL);
+
             // Current course
             $courseInfo = api_get_course_info();
             if (empty($courseInfo)) {
@@ -620,8 +629,8 @@ class CourseMaintenanceController extends AbstractController
             }
 
             $officialCode = (string) ($courseInfo['official_code'] ?? '');
-            $runtimeCode = (string) api_get_course_id();                 // often equals official code
-            $sysCode = (string) ($courseInfo['sysCode'] ?? '');       // used by legacy delete
+            $runtimeCode = (string) api_get_course_id(); // often equals official code
+            $sysCode = (string) ($courseInfo['sysCode'] ?? ''); // used by legacy delete
 
             if ('' === $sysCode) {
                 return $this->json(['error' => 'Invalid course system code'], 400);
@@ -634,20 +643,19 @@ class CourseMaintenanceController extends AbstractController
             }
 
             // Legacy delete (removes course data + unregisters members in this course)
-            // Throws on failure or returns void
-            CourseManager::delete_course($sysCode);
+            // Now with optional orphan-docs deletion flag.
+            CourseManager::delete_course($sysCode, $deleteDocs);
 
             // Best-effort cleanup of legacy course session flags
             try {
                 $ses = $req->getSession();
                 $ses?->remove('_cid');
                 $ses?->remove('_real_cid');
-            } catch (Throwable) {
+            } catch (\Throwable $e) {
                 // swallow — not critical
             }
 
             // Decide where to send the user afterwards
-            // You can use '/index.php' or a landing page
             $redirectUrl = '/index.php';
 
             return $this->json([
@@ -655,7 +663,7 @@ class CourseMaintenanceController extends AbstractController
                 'message' => 'Course deleted successfully',
                 'redirectUrl' => $redirectUrl,
             ]);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $this->json([
                 'error' => 'Failed to delete course: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,

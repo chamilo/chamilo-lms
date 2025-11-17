@@ -4,6 +4,66 @@
     <div class="files-info-page">
         <h1>{{ 'File Information'|trans }}</h1>
 
+        {# Local styles for table layout #}
+        <style>
+            .files-info-page .table-wrapper {
+                width: 100%;
+                overflow-x: auto; /* Allow horizontal scroll if really needed */
+            }
+
+            .files-info-page .files-info-table {
+                width: 100%;
+                table-layout: fixed; /* Keep column widths stable */
+            }
+
+            .files-info-page .files-info-table th,
+            .files-info-page .files-info-table td {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis; /* Truncate long text with ellipsis */
+            }
+
+            .files-info-page th.col-title,
+            .files-info-page td.col-title {
+                width: 30%;
+            }
+
+            .files-info-page th.col-original,
+            .files-info-page td.col-original {
+                width: 30%;
+            }
+
+            .files-info-page th.col-course,
+            .files-info-page td.col-course {
+                width: 15%;
+            }
+
+            .files-info-page th.col-user,
+            .files-info-page td.col-user {
+                width: 10%;
+            }
+
+            .files-info-page th.col-links,
+            .files-info-page td.col-links {
+                width: 5%;
+                text-align: center;
+            }
+
+            .files-info-page th.col-actions,
+            .files-info-page td.col-actions {
+                width: 10%;
+                text-align: center;
+            }
+
+            .files-info-page .action-icon {
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.25rem 0.5rem;
+            }
+        </style>
+
         <form method="get" action="{{ path('admin_files_info') }}" style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
             <input type="text" name="search" value="{{ search }}" placeholder="{{ 'Search...'|trans }}" class="form-control" style="margin-right: 10px;">
             <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
@@ -12,60 +72,76 @@
         {% if files is empty %}
             <p>{{ 'No results found.'|trans }}</p>
         {% else %}
-            <table class="data_table">
-                <thead>
-                <tr>
-                    <th>{{ 'Title'|trans }}</th>
-                    <th>{{ 'Original Name'|trans }}</th>
-                    <th>{{ 'Course'|trans }}</th>
-                    <th>{{ 'User'|trans }}</th>
-                    <th>{{ 'Actions'|trans }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for file in files %}
-                    {% set title        = file.title|default('N/A'|trans) %}
-                    {% set originalName = file.originalName ?? file.title ?? null %}
-                    {% set courseTitle  =
-                        (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
-                        ? (file.resourceNode.resourceLinks|first.course.title|default('N/A'|trans))
-                        : ('N/A'|trans)
-                    %}
-                    {% set username =
-                        (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
-                        ? (file.resourceNode.resourceLinks|first.user.username|default('N/A'|trans))
-                        : (file.resourceNode and file.resourceNode.creator
-                        ? (file.resourceNode.creator.username|default('N/A'|trans))
-                        : ('N/A'|trans))
-                    %}
-                    {% set fileUrl  = fileUrls[file.id]|default('') %}
-                    {% set filePath = filePaths[file.id]|default('') %}
-                    {% set resourceNodeId = file.resourceNode ? file.resourceNode.id : 'N/A' %}
-
+            <div class="table-wrapper">
+                <table class="data_table files-info-table">
+                    <thead>
                     <tr>
-                        <td>{{ title }}</td>
-                        <td>{{ originalName|default('N/A'|trans) }}</td>
-                        <td>{{ courseTitle }}</td>
-                        <td>{{ username }}</td>
-                        <td>
-                            <a href="#" class="open-modal"
-                               data-title="{{ title }}"
-                               data-mime-type="{{ file.mimeType|default('') }}"
-                               data-original-name="{{ originalName|default('N/A'|trans) }}"
-                               data-size="{{ file.size|default(0) }}"
-                               data-course="{{ courseTitle }}"
-                               data-user="{{ username }}"
-                               data-file-url="{{ fileUrl }}"
-                               data-file-path="{{ filePath }}"
-                               data-resource-node-id="{{ resourceNodeId }}"
-                               data-resource-file-id="{{ file.id }}">
-                                {{ 'View'|trans }}
-                            </a>
-                        </td>
+                        <th class="col-title">{{ 'Title'|trans }}</th>
+                        <th class="col-original">{{ 'Original Name'|trans }}</th>
+                        <th class="col-course">{{ 'Course'|trans }}</th>
+                        <th class="col-user">{{ 'User'|trans }}</th>
+                        <th class="col-links">{{ 'Links'|trans }}</th>
+                        <th class="col-actions">{{ 'Actions'|trans }}</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for file in files %}
+                        {% set title        = file.title|default('N/A'|trans) %}
+                        {% set originalName = file.originalName ?? file.title ?? null %}
+                        {% set courseTitle  =
+                            (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
+                            ? (file.resourceNode.resourceLinks|first.course.title|default('N/A'|trans))
+                            : ('N/A'|trans)
+                        %}
+                        {% set username =
+                            (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
+                            ? (file.resourceNode.resourceLinks|first.user.username|default('N/A'|trans))
+                            : (file.resourceNode and file.resourceNode.creator
+                            ? (file.resourceNode.creator.username|default('N/A'|trans))
+                            : ('N/A'|trans))
+                        %}
+                        {% set fileUrl        = fileUrls[file.id]|default('') %}
+                        {% set filePath       = filePaths[file.id]|default('') %}
+                        {% set resourceNodeId = file.resourceNode ? file.resourceNode.id : 'N/A' %}
+                        {% set links          = linksCount[file.id]|default(0) %}
+                        {% set isOrphan       = orphanFlags[file.id]|default(false) %}
+
+                        <tr>
+                            <td class="col-title">{{ title }}</td>
+                            <td class="col-original">{{ originalName|default('N/A'|trans) }}</td>
+                            <td class="col-course">{{ courseTitle }}</td>
+                            <td class="col-user">{{ username }}</td>
+                            <td class="col-links">
+                                {{ links }}
+                                {% if isOrphan %}
+                                    <span class="badge badge-warning" style="margin-left: 5px;">
+                                        {{ 'Orphan'|trans }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="col-actions">
+                                <a href="#"
+                                   class="open-modal action-icon"
+                                   title="{{ 'View file information'|trans }}"
+                                   data-title="{{ title }}"
+                                   data-mime-type="{{ file.mimeType|default('') }}"
+                                   data-original-name="{{ originalName|default('N/A'|trans) }}"
+                                   data-size="{{ file.size|default(0) }}"
+                                   data-course="{{ courseTitle }}"
+                                   data-user="{{ username }}"
+                                   data-file-url="{{ fileUrl }}"
+                                   data-file-path="{{ filePath }}"
+                                   data-resource-node-id="{{ resourceNodeId }}"
+                                   data-resource-file-id="{{ file.id }}"
+                                   data-is-orphan="{{ isOrphan ? '1' : '0' }}">
+                                    <span class="mdi mdi-eye-outline" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
             <div class="pagination">
                 {% if currentPage > 1 %}
@@ -99,8 +175,61 @@
                 <p class="mb-3"><strong>{{ 'User:'|trans }}</strong> <span id="file-user"></span></p>
                 <p class="mb-3"><strong>{{ 'Resource Node ID:'|trans }}</strong> <span id="resource-node-id"></span></p>
                 <p class="mb-3"><strong>{{ 'Resource File ID:'|trans }}</strong> <span id="resource-file-id"></span></p>
-                <p class="mb-3"><strong>{{ 'File Path:'|trans }}</strong> <span id="file-path"></span>&nbsp;&nbsp;&nbsp;<button id="copy-path" class="mdi mdi-content-copy"></button></p>
-                <p class="mb-3"><strong>{{ 'File Link:'|trans }}</strong> <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a></p>
+                <p class="mb-3">
+                    <strong>{{ 'File Path:'|trans }}</strong>
+                    <span id="file-path"></span>&nbsp;&nbsp;&nbsp;
+                    <button id="copy-path" class="mdi mdi-content-copy"></button>
+                </p>
+                <p class="mb-3">
+                    <strong>{{ 'File Link:'|trans }}</strong>
+                    <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a>
+                </p>
+
+                {# Orphan-only actions: attach to course or delete definitively #}
+                <div id="orphan-actions" style="display: none; margin-top: 20px;">
+                    <hr>
+                    <h3>{{ 'Orphan document actions'|trans }}</h3>
+                    <p class="mb-3">
+                        {{ 'This file is not linked to any course or session. You can attach it to a course (hidden in the documents root) or delete it definitively.'|trans }}
+                    </p>
+
+                    <form id="attach-form"
+                          method="post"
+                          action="{{ path('admin_files_info_attach') }}"
+                          class="mb-3">
+                        <input type="hidden" name="_token" value="{{ csrf_token('attach_orphan_file') }}">
+                        <input type="hidden" name="resource_file_id" id="attach-resource-file-id" value="">
+                        <input type="hidden" name="page" value="{{ currentPage }}">
+                        <input type="hidden" name="search" value="{{ search }}">
+
+                        <label for="course-code-input" class="form-label">
+                            {{ 'Course code'|trans }}
+                        </label>
+                        <input type="text"
+                               id="course-code-input"
+                               name="course_code"
+                               class="form-control"
+                               placeholder="{{ 'Enter course code...'|trans }}">
+
+                        <button type="submit" class="btn btn--primary mt-2">
+                            {{ 'Attach to course (hidden)'|trans }}
+                        </button>
+                    </form>
+
+                    <form id="delete-form"
+                          method="post"
+                          action="{{ path('admin_files_info_delete') }}"
+                          onsubmit="return confirm('{{ 'Are you sure you want to delete this file definitively?'|trans }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_orphan_file') }}">
+                        <input type="hidden" name="resource_file_id" id="delete-resource-file-id" value="">
+                        <input type="hidden" name="page" value="{{ currentPage }}">
+                        <input type="hidden" name="search" value="{{ search }}">
+
+                        <button type="submit" class="btn btn--danger">
+                            {{ 'Delete definitively'|trans }}
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -110,6 +239,11 @@
         var modal = document.getElementById("fileInfoModal");
         var span = document.getElementsByClassName("close-button")[0];
         var copyPathButton = document.getElementById('copy-path');
+
+        // Orphan-specific elements
+        var orphanActions = document.getElementById('orphan-actions');
+        var attachIdInput = document.getElementById('attach-resource-file-id');
+        var deleteIdInput = document.getElementById('delete-resource-file-id');
 
         document.querySelectorAll('.open-modal').forEach(function(button) {
           button.onclick = function(event) {
@@ -124,7 +258,9 @@
             var fileUrl = button.getAttribute('data-file-url');
             var resourceNodeId = button.getAttribute('data-resource-node-id');
             var resourceFileId = button.getAttribute('data-resource-file-id');
+            var isOrphan = button.getAttribute('data-is-orphan') === '1';
 
+            // Populate modal static info
             document.getElementById('file-title').textContent = title || '';
             document.getElementById('file-mime-type').textContent = mimeType || '';
             document.getElementById('file-original-name').textContent = originalName || '';
@@ -135,6 +271,17 @@
             document.getElementById('file-url').href = fileUrl || '#';
             document.getElementById('resource-node-id').textContent = resourceNodeId || '';
             document.getElementById('resource-file-id').textContent = resourceFileId || '';
+
+            // Toggle orphan actions and set hidden ids
+            if (orphanActions) {
+              orphanActions.style.display = isOrphan ? 'block' : 'none';
+            }
+            if (attachIdInput) {
+              attachIdInput.value = resourceFileId || '';
+            }
+            if (deleteIdInput) {
+              deleteIdInput.value = resourceFileId || '';
+            }
 
             modal.style.display = "block";
           };

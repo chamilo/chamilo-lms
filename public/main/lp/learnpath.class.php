@@ -5728,7 +5728,27 @@ class learnpath
 
         $form->addButtonSave(get_lang('Save'), 'submit_button');
 
-        return $form->returnForm();
+        $script = '<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var form = document.getElementById("form") || document.forms["form"];
+    if (!form) return;
+    form.addEventListener("submit", function (e) {
+        var btn = form.querySelector("button[name=submit_button], input[name=submit_button]");
+        if (!btn) return;
+        // async disable to avoid interfering with possible sync handlers triggered on submit
+        setTimeout(function () {
+            try {
+                btn.disabled = true;
+                if (btn.classList) btn.classList.add("disabled");
+            } catch (err) {
+                // silent
+            }
+        }, 0);
+    }, { once: true }); // once: true to disable only on the first submit
+});
+</script>';
+
+        return $form->returnForm() . $script;
     }
 
     /**

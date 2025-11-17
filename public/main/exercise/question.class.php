@@ -95,6 +95,27 @@ abstract class Question
     ];
 
     /**
+     * Question types that support adaptive scenario.
+     */
+    protected static $adaptiveScenarioTypes = [
+        UNIQUE_ANSWER,
+        MULTIPLE_ANSWER,
+        MULTIPLE_ANSWER_COMBINATION,
+        MULTIPLE_ANSWER_TRUE_FALSE,
+        MATCHING,
+        MATCHING_COMBINATION,
+        DRAGGABLE,
+        MATCHING_DRAGGABLE,
+        MATCHING_DRAGGABLE_COMBINATION,
+        HOT_SPOT_DELINEATION,
+        FILL_IN_BLANKS,
+        FILL_IN_BLANKS_COMBINATION,
+        CALCULATED_ANSWER,
+        ANNOTATION,
+        // Do NOT include FREE_ANSWER, ORAL_EXPRESSION, UPLOAD_ANSWER, MEDIA_QUESTION, PAGE_BREAK, etc.
+    ];
+
+    /**
      * constructor of the class.
      *
      * @author Olivier Brouckaert
@@ -1216,35 +1237,35 @@ abstract class Question
             }
             echo $includeFile;
             echo '<script>
-            $(function() {
-                $(".create_img_link").click(function(e){
-                    e.preventDefault();
-                    e.stopPropagation();
-                    var imageZoom = $("input[name=\'imageZoom\']").val();
-                    var imageWidth = $("input[name=\'imageWidth\']").val();
-                    CKEDITOR.instances.questionDescription.insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="\'+imageWidth+\'px" />\');
-                });
-
-                $("input[name=\'imageZoom\']").on("click", function(){
-                    var elf = $("#elfinder").elfinder({
-                        url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
-                        getFileCallback: function(file) {
-                            var filePath = file; //file contains the relative url.
-                            var imgPath = "<img src = \'"+filePath+"\'/>";
-                            $("input[name=\'imageZoom\']").val(filePath.url);
-                            $("#elfinder").remove(); //close the window after image is selected
-                        },
-                        startPathHash: "l2_Lw", // Sets the course driver as default
-                        resizable: false,
-                        lang: "'.$language.'"
-                    }).elfinder("instance");
-                });
+        $(function() {
+            $(".create_img_link").click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                var imageZoom = $("input[name=\'imageZoom\']").val();
+                var imageWidth = $("input[name=\'imageWidth\']").val();
+                CKEDITOR.instances.questionDescription.insertHtml(\'<img id="zoom_picture" class="zoom_picture" src="\'+imageZoom+\'" data-zoom-image="\'+imageZoom+\'" width="\'+imageWidth+\'px" />\');
             });
-            </script>';
+
+            $("input[name=\'imageZoom\']").on("click", function(){
+                var elf = $("#elfinder").elfinder({
+                    url : "'.api_get_path(WEB_LIBRARY_PATH).'elfinder/connectorAction.php?'.api_get_cidreq().'",
+                    getFileCallback: function(file) {
+                        var filePath = file; //file contains the relative url.
+                        var imgPath = "<img src = \'"+filePath+"\'/>";
+                        $("input[name=\'imageZoom\']").val(filePath.url);
+                        $("#elfinder").remove(); //close the window after image is selected
+                    },
+                    startPathHash: "l2_Lw", // Sets the course driver as default
+                    resizable: false,
+                    lang: "'.$language.'"
+                }).elfinder("instance");
+            });
+        });
+        </script>';
             echo '<div id="elfinder"></div>';
         }
 
-        // question name
+        // Question name
         if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
@@ -1260,14 +1281,14 @@ abstract class Question
 
         $form->addRule('questionName', get_lang('Please type the question'), 'required');
 
-        // default content
+        // Default content
         $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
-        // Question type
+        // Question type (answer type)
         $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
         $form->addHidden('answerType', $answerType);
 
-        // html editor
+        // HTML editor for description
         $editorConfig = [
             'ToolbarSet' => 'TestQuestionDescription',
             'Height' => '150',
@@ -1322,7 +1343,6 @@ abstract class Question
                 $form->addCheckBox('mandatory', get_lang('Mandatory?'));
             }
 
-            //global $text;
             $text = get_lang('Save the question');
             switch ($this->type) {
                 case UNIQUE_ANSWER:
@@ -1370,6 +1390,7 @@ abstract class Question
 
         $form->addElement('html', '</div>');
 
+        // Sample default questions when creating from templates
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
                 case 1:
@@ -1399,6 +1420,33 @@ abstract class Question
             }
         }
 
+        // -------------------------------------------------------------------------
+        // Adaptive scenario (success/failure) — centralised for supported types
+        // -------------------------------------------------------------------------
+        $scenarioEnabled    = ('true' === api_get_setting('enable_quiz_scenario'));
+        $hasExercise        = ($exercise instanceof Exercise);
+        $isAdaptiveFeedback = $hasExercise &&
+            EXERCISE_FEEDBACK_TYPE_DIRECT === $exercise->getFeedbackType();
+        $supportsScenario   = in_array(
+            (int) $this->type,
+            static::$adaptiveScenarioTypes,
+            true
+        );
+
+        if ($scenarioEnabled && $isAdaptiveFeedback && $supportsScenario && $hasExercise) {
+            // Build the question list once per exercise to feed the scenario selector
+            $exercise->setQuestionList(true);
+            $questionList = $exercise->getQuestionList();
+
+            if (is_array($questionList) && !empty($questionList)) {
+                $this->addAdaptiveScenarioFields($form, $questionList);
+                // Pre-fill selector defaults when editing an existing question in this exercise.
+                if (!empty($this->id)) {
+                    $this->loadAdaptiveScenarioDefaults($form, $exercise);
+                }
+            }
+        }
+
         if (null !== $exercise) {
             if ($exercise->questionFeedbackEnabled && $this->showFeedback($exercise)) {
                 $form->addTextarea('feedback', get_lang('Feedback if not correct'));
@@ -1408,7 +1456,7 @@ abstract class Question
         $extraField = new ExtraField('question');
         $extraField->addElements($form, $this->iid);
 
-        // default values
+        // Default values
         $defaults = [
             'questionName'        => $this->question,
             'questionDescription' => $this->description,
@@ -1419,7 +1467,7 @@ abstract class Question
             'parent_id'           => $this->parent_id,
         ];
 
-        // Came from he question pool
+        // Came from the question pool
         if (isset($_GET['fromExercise'])) {
             $form->setDefaults($defaults);
         }
@@ -1500,10 +1548,27 @@ abstract class Question
 
         switch ($feedbackType) {
             case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                // Keep original behavior: base types for adaptative tests.
                 $questionTypeList = [
                     UNIQUE_ANSWER        => self::$questionTypes[UNIQUE_ANSWER],
                     HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
                 ];
+
+                // Add all other non-open question types.
+                $allTypes = self::getQuestionTypeList();
+
+                // The task explicitly mentions NOT including free-answer questions.
+                // So we only exclude FREE_ANSWER here.
+                if (isset($allTypes[FREE_ANSWER])) {
+                    unset($allTypes[FREE_ANSWER]);
+                }
+
+                // Append remaining types, without overriding the original ones.
+                foreach ($allTypes as $typeId => $def) {
+                    if (!isset($questionTypeList[$typeId])) {
+                        $questionTypeList[$typeId] = $def;
+                    }
+                }
 
                 break;
             case EXERCISE_FEEDBACK_TYPE_POPUP:
@@ -2164,5 +2229,244 @@ abstract class Question
         );
 
         return (int) $result['c'];
+    }
+
+    /**
+     * Add adaptive scenario selector fields (success/failure) to the question form.
+     *
+     * @param FormValidator $form
+     * @param array         $questionList List of question IDs from the exercise.
+     */
+    protected function addAdaptiveScenarioFields(FormValidator $form, array $questionList): void
+    {
+        // Section header
+        $form->addHtml('<h4 class="m-4">'.get_lang('Adaptive behavior (success/failure)').'</h4>');
+
+        // Options for redirection behavior
+        $questionListOptions = [
+            ''      => get_lang('Select destination'),
+            'repeat'=> get_lang('Repeat question'),
+            '-1'    => get_lang('End of test'),
+            'url'   => get_lang('Other (custom URL)'),
+        ];
+
+        // Append available questions to the dropdown
+        foreach ($questionList as $index => $qid) {
+            if (!is_numeric($qid)) {
+                continue;
+            }
+
+            $q = self::read((int) $qid);
+            if (!$q) {
+                continue;
+            }
+
+            $questionListOptions[(string) $qid] = 'Q'.$index.': '.strip_tags($q->selectTitle());
+        }
+
+        // Success selector and optional URL field
+        $form->addSelect(
+            'scenario_success_selector',
+            get_lang('On success'),
+            $questionListOptions,
+            ['id' => 'scenario_success_selector']
+        );
+        $form->addText(
+            'scenario_success_url',
+            get_lang('Custom URL'),
+            false,
+            [
+                'class'       => 'form-control mb-5',
+                'id'          => 'scenario_success_url',
+                'placeholder' => '/main/lp/134',
+            ]
+        );
+
+        // Failure selector and optional URL field
+        $form->addSelect(
+            'scenario_failure_selector',
+            get_lang('On failure'),
+            $questionListOptions,
+            ['id' => 'scenario_failure_selector']
+        );
+        $form->addText(
+            'scenario_failure_url',
+            get_lang('Custom URL'),
+            false,
+            [
+                'class'       => 'form-control mb-5',
+                'id'          => 'scenario_failure_url',
+                'placeholder' => '/main/lp/134',
+            ]
+        );
+
+        // JavaScript to toggle custom URL fields when 'url' is selected
+        $form->addHtml('
+            <script>
+                function toggleScenarioUrlFields() {
+                    var successSelector = document.getElementById("scenario_success_selector");
+                    var successUrlRow = document.getElementById("scenario_success_url").parentNode.parentNode;
+
+                    var failureSelector = document.getElementById("scenario_failure_selector");
+                    var failureUrlRow = document.getElementById("scenario_failure_url").parentNode.parentNode;
+
+                    if (successSelector && successSelector.value === "url") {
+                        successUrlRow.style.display = "table-row";
+                    } else {
+                        successUrlRow.style.display = "none";
+                    }
+
+                    if (failureSelector && failureSelector.value === "url") {
+                        failureUrlRow.style.display = "table-row";
+                    } else {
+                        failureUrlRow.style.display = "none";
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", toggleScenarioUrlFields);
+                document.getElementById("scenario_success_selector")
+                    .addEventListener("change", toggleScenarioUrlFields);
+                document.getElementById("scenario_failure_selector")
+                    .addEventListener("change", toggleScenarioUrlFields);
+            </script>
+        ');
+    }
+
+    /**
+     * Persist adaptive scenario (success/failure) configuration for this question.
+     *
+     * This stores the "destination" JSON in TABLE_QUIZ_TEST_QUESTION for the
+     * current (question, exercise) pair. It is intended to be called from
+     * processAnswersCreation() implementations.
+     *
+     * @param FormValidator $form
+     * @param Exercise      $exercise
+     */
+    public function saveAdaptiveScenario(FormValidator $form, Exercise $exercise): void
+    {
+        // Global feature flag disabled → nothing to do.
+        if ('true' !== api_get_setting('enable_quiz_scenario')) {
+            return;
+        }
+
+        // We only support adaptive scenarios when feedback is "direct".
+        if (EXERCISE_FEEDBACK_TYPE_DIRECT !== $exercise->getFeedbackType()) {
+            return;
+        }
+
+        // This question type is not listed as "scenario capable".
+        if (!$this->supportsAdaptiveScenario()) {
+            return;
+        }
+
+        $successSelector = trim((string) $form->getSubmitValue('scenario_success_selector'));
+        $successUrl      = trim((string) $form->getSubmitValue('scenario_success_url'));
+        $failureSelector = trim((string) $form->getSubmitValue('scenario_failure_selector'));
+        $failureUrl      = trim((string) $form->getSubmitValue('scenario_failure_url'));
+
+        // Map "url" selector to the actual custom URL, keep other values as-is.
+        $success = ('url' === $successSelector) ? $successUrl : $successSelector;
+        $failure = ('url' === $failureSelector) ? $failureUrl : $failureSelector;
+
+        // If nothing is configured at all, avoid touching the DB.
+        if ('' === $success && '' === $failure) {
+            return;
+        }
+
+        $destination = json_encode(
+            [
+                'success' => $success ?: '',
+                'failure' => $failure ?: '',
+            ],
+            JSON_UNESCAPED_UNICODE
+        );
+
+        $table      = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $questionId = (int) $this->id;
+        $exerciseId = (int) $exercise->id; // Consistent with existing code in UniqueAnswer
+
+        if ($questionId <= 0 || $exerciseId <= 0) {
+            // The (question, exercise) relation does not exist yet.
+            return;
+        }
+
+        Database::update(
+            $table,
+            ['destination' => $destination],
+            ['question_id = ? AND quiz_id = ?' => [$questionId, $exerciseId]]
+        );
+    }
+
+    /**
+     * Pre-fill adaptive scenario fields from the stored (question, exercise) relation.
+     */
+    protected function loadAdaptiveScenarioDefaults(FormValidator $form, Exercise $exercise): void
+    {
+        if ('true' !== api_get_setting('enable_quiz_scenario')) {
+            return;
+        }
+
+        if (!$this->supportsAdaptiveScenario()) {
+            return;
+        }
+
+        if (empty($this->id) || empty($exercise->id)) {
+            return;
+        }
+
+        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
+        $row = Database::select(
+            'destination',
+            $table,
+            [
+                'where' => [
+                    'question_id = ? AND quiz_id = ?' => [
+                        (int) $this->id,
+                        (int) $exercise->id,
+                    ],
+                ],
+                'limit' => 1,
+            ],
+            'first'
+        );
+
+        if (empty($row['destination'])) {
+            return;
+        }
+
+        $json = json_decode((string) $row['destination'], true) ?: [];
+
+        $defaults = [];
+
+        if (!empty($json['success'])) {
+            if (str_starts_with($json['success'], '/')) {
+                $defaults['scenario_success_selector'] = 'url';
+                $defaults['scenario_success_url']      = $json['success'];
+            } else {
+                $defaults['scenario_success_selector'] = $json['success'];
+            }
+        }
+
+        if (!empty($json['failure'])) {
+            if (str_starts_with($json['failure'], '/')) {
+                $defaults['scenario_failure_selector'] = 'url';
+                $defaults['scenario_failure_url']      = $json['failure'];
+            } else {
+                $defaults['scenario_failure_selector'] = $json['failure'];
+            }
+        }
+
+        if (!empty($defaults)) {
+            $form->setDefaults($defaults);
+        }
+    }
+
+    /**
+     * Check if this question type supports adaptive scenarios.
+     */
+    protected function supportsAdaptiveScenario(): bool
+    {
+        return in_array((int) $this->type, static::$adaptiveScenarioTypes, true);
     }
 }

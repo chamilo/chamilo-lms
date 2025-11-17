@@ -305,8 +305,12 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function addCourseSessionGroupQueryBuilder(Course $course, ?Session $session = null, ?CGroup $group = null, ?QueryBuilder $qb = null): QueryBuilder
-    {
+    public function addCourseSessionGroupQueryBuilder(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?QueryBuilder $qb = null
+    ): QueryBuilder {
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
@@ -316,7 +320,9 @@ abstract class ResourceRepository extends ServiceEntityRepository
             true
         );
 
-        $this->addCourseQueryBuilder($course, $qb);
+        if ($course) {
+            $this->addCourseQueryBuilder($course, $qb);
+        }
 
         if (null === $session) {
             $qb->andWhere(
@@ -381,11 +387,34 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, ?Session $session = null, ?CGroup $group = null, ?ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
-    {
+    public function getResourcesByCourse(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        if ($displayOrder) {
+            $qb->orderBy('links.displayOrder', 'ASC');
+        }
+
+        return $qb;
+    }
+
+    public function getResourcesBySession(
+        ?Session $session = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
+        $qb = $this->getResources($parentNode);
+        $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
+        $this->addCourseSessionGroupQueryBuilder(null, $session, null, $qb);
 
         if ($displayOrder) {
             $qb->orderBy('links.displayOrder', 'ASC');

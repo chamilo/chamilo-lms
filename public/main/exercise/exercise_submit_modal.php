@@ -78,6 +78,101 @@ $questionId = $questionList[$questionNum] ?? null;
 
 $logPrefix = '[exercise_submit_modal] ';
 
+/**
+ * Small helper: determine if an answer container really has data.
+ *
+ * - For arrays: at least one element.
+ * - For scalars: '' and null are considered empty. "0" is a valid answer.
+ */
+function chExerciseHasAnswer($value): bool
+{
+    if (is_array($value)) {
+        return count($value) > 0;
+    }
+
+    return $value !== null && $value !== '';
+}
+
+/**
+ * Normalize a question answer container into a flat list of selected answer IDs.
+ *
+ * This tries to detect the most probable pattern:
+ * - id => id  (e.g. [69432 => '69432'])
+ * - 0..N-1 => id (e.g. [0 => '69432', 1 => '69433'])
+ * - scalar '69432'
+ */
+function chExerciseExtractAnswerIds($value): array
+{
+    if (!is_array($value)) {
+        return is_numeric($value) ? [(int) $value] : [];
+    }
+
+    $keys = array_keys($value);
+    $vals = array_values($value);
+
+    $allNumericKeys = true;
+    foreach ($keys as $k) {
+        if (!is_numeric($k)) {
+            $allNumericKeys = false;
+            break;
+        }
+    }
+
+    $allNumericVals = true;
+    foreach ($vals as $v) {
+        if (!is_numeric($v)) {
+            $allNumericVals = false;
+            break;
+        }
+    }
+
+    $sequentialKeys = $allNumericKeys && ($keys === range(0, count($keys) - 1));
+
+    $ids = [];
+
+    if ($allNumericKeys && $allNumericVals && $keys === $vals) {
+        // Pattern: id => id
+        $ids = $keys;
+    } elseif ($sequentialKeys && $allNumericVals) {
+        // Pattern: 0..N-1 => id
+        $ids = $vals;
+    } elseif ($allNumericKeys && !$allNumericVals) {
+        // Fallback: keys look like ids
+        $ids = $keys;
+    } elseif (!$allNumericKeys && $allNumericVals) {
+        // Fallback: values look like ids
+        $ids = $vals;
+    } else {
+        // Worst case: keep all numeric keys and values
+        foreach ($keys as $k) {
+            if (is_numeric($k)) {
+                $ids[] = (int) $k;
+            }
+        }
+        foreach ($vals as $v) {
+            if (is_numeric($v)) {
+                $ids[] = (int) $v;
+            }
+        }
+    }
+
+    $ids = array_map('intval', $ids);
+    $ids = array_values(array_unique($ids));
+
+    return $ids;
+}
+
+// Log initial context.
+error_log(
+    $logPrefix.'Init: exerciseId='.$exerciseId
+    .', exeId='.$exeId
+    .', feedbackType='.$feedbackType
+    .', isAdaptive='.($isAdaptative ? '1' : '0')
+    .', questionNum='.$questionNum
+    .', questionId='.var_export($questionId, true)
+    .', questionList='.json_encode($questionList)
+);
+
 if (!$questionId) {
     exit;
 }
@@ -131,11 +226,6 @@ if ($allowTryAgain && is_array($exerciseResult)) {
     error_log($logPrefix.'Cleared previous result for questionId='.$questionId);
 }
 
-// Reuse stored answer if present.
-if (empty($choiceValue) && isset($exerciseResult[$questionId])) {
-    $choiceValue = $exerciseResult[$questionId];
-}
-
 /**
  * If we still have no choice/hotspot, we need to fetch the answer from the
  * main exercise form (frm_exercise) in the parent page.
@@ -146,8 +236,8 @@ if (empty($choiceValue) && isset($exerciseResult[$questionId])) {
  * parameters. That third GET will finally compute the feedback.
  */
 if (
-    empty($choiceValue) &&
-    empty($hotSpot) &&
+    !chExerciseHasAnswer($choiceValue) &&
+    !chExerciseHasAnswer($hotSpot) &&
     !isset($_GET['loaded'])
 ) {
     $params = $_REQUEST;
@@ -159,8 +249,8 @@ if (
 }
 
 if (
-    empty($choiceValue) &&
-    empty($hotSpot) &&
+    !chExerciseHasAnswer($choiceValue) &&
+    !chExerciseHasAnswer($hotSpot) &&
     isset($_GET['loaded'])
 ) {
     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq()
@@ -183,16 +273,64 @@ if (
         }
 
         var finalUrl = '".addslashes($url)."';
-        var selected = f.querySelector('input[name=\"choice[$questionId]\"]:checked');
-        var choiceVal = selected ? selected.value : '';
-        var hotspotInput = f.querySelector('input[name^=\"hotspot[$questionId]\"]');
-        var hotspotVal = hotspotInput ? hotspotInput.value : '';
 
-        if (choiceVal) {
-            finalUrl += '&choice[$questionId]=' + encodeURIComponent(choiceVal);
+        // Collect all controls for this question using the \"choice[{$questionId}]\" prefix.
+        // This should work for:
+        // - Single choice (radio)
+        // - Multiple choice (checkboxes)
+        // - Matching (selects)
+        // - Fill in the blanks (text/textarea using choice[...] naming)
+        // - Other types reusing the same prefix
+        var controls = f.querySelectorAll(
+            'input[name^=\"choice[{$questionId}]\"],'
+          + 'select[name^=\"choice[{$questionId}]\"],'
+          + 'textarea[name^=\"choice[{$questionId}]\"]'
+        );
+
+        var hasChoice = false;
+
+        controls.forEach(function(el) {
+            var type = (el.type || '').toLowerCase();
+
+            // For checkboxes/radios we only keep checked ones.
+            if ((type === 'checkbox' || type === 'radio') && !el.checked) {
+                return;
+            }
+
+            var val = el.value;
+            if (val === undefined || val === null || val === '') {
+                return;
+            }
+
+            hasChoice = true;
+
+            // Preserve the original field name so PHP builds the same array structure.
+            finalUrl += '&' + encodeURIComponent(el.name) + '=' + encodeURIComponent(val);
+        });
+
+        // Hotspot input (if any).
+        var hotspotInput = f.querySelector('input[name^=\"hotspot[{$questionId}]\"]');
+        var hotspotVal = hotspotInput ? hotspotInput.value : '';
+        var hasHotspot = !!hotspotVal;
+
+        // avoid infinite loop when no answer is selected
+        if (!hasChoice && !hasHotspot) {
+            var \$container = \$('#global-modal .modal-body');
+            if (!\$container.length) {
+                // Fallback for legacy templates that use #global-modal-body.
+                \$container = \$('#global-modal-body');
+            }
+            if (\$container.length) {
+                \$container.html('<p>".addslashes(get_lang('Please select an answer before checking the result.'))."</p>');
+            }
+            if (window.console && console.warn) {
+                console.warn('[exercise_submit_modal] No answer/hotspot found in frm_exercise; aborting extra request.');
+            }
+            return;
         }
+
         if (hotspotVal) {
-            finalUrl += '&hotspot[$questionId]=' + encodeURIComponent(hotspotVal);
+            finalUrl += '&hotspot[{$questionId}]=' + encodeURIComponent(hotspotVal);
         }
 
         $.get(finalUrl, function(data) {
@@ -216,15 +354,11 @@ if (
 /**
  * Merge the current choice into exerciseResult, keeping all previous answers.
  * At this point $allowTryAgain might have removed the previous entry for this
- * question id, so we just store the fresh value.
+ * question id, so we will store the fresh, normalized value.
  */
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
-
-$exerciseResult[$questionId] = $choiceValue;
-
-Session::write('exerciseResult', $exerciseResult);
 
 $answerType = $question->getType();
 $showResult = $isAdaptative;
@@ -233,18 +367,30 @@ $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
 
 // Normalize choice value depending on answer type.
 if (MULTIPLE_ANSWER == $answerType && is_array($choiceValue)) {
+    // For multiple answers we expect an associative array id => id.
     $choiceValue = array_combine(array_values($choiceValue), array_values($choiceValue));
 }
 
-if (UNIQUE_ANSWER == $answerType && is_array($choiceValue) && isset($choiceValue[0])) {
-    $choiceValue = $choiceValue[0];
+if (UNIQUE_ANSWER == $answerType && is_array($choiceValue)) {
+    // For unique answer we keep a single selected id; prefer "id => id" format.
+    $ids = chExerciseExtractAnswerIds($choiceValue);
+    if (!empty($ids)) {
+        $choiceValue = $ids[0];
+    }
 }
 
 if (HOT_SPOT_DELINEATION == $answerType && is_array($hotSpot)) {
+    // For hotspot delineation we keep coordinates in a dedicated structure.
     $choiceValue = $hotSpot[1] ?? '';
     $_SESSION['exerciseResultCoordinates'][$questionId] = $choiceValue;
     $_SESSION['hotspot_coord'][$questionId][1] = $objAnswerTmp->selectHotspotCoordinates(1);
     $_SESSION['hotspot_dest'][$questionId][1] = $objAnswerTmp->selectDestination(1);
+}
+
+// Only persist if we actually have an answer for this question.
+if (chExerciseHasAnswer($choiceValue) || chExerciseHasAnswer($hotSpot)) {
+    $exerciseResult[$questionId] = $choiceValue;
+    Session::write('exerciseResult', $exerciseResult);
 }
 
 // Capture HTML output from manage_answer; we only use it for some types.
@@ -266,14 +412,34 @@ $result = $objExercise->manage_answer(
 );
 $manageAnswerHtmlContent = ob_get_clean();
 
-// Basic score flags.
+// -----------------------------------------------------------------------------
+// Decide success / failure (adaptive routing and feedback flags)
+// -----------------------------------------------------------------------------
+// We fully trust manage_answer() for the scoring logic and use the ratio
+// score/weight to decide if the question is correct or not, similar to the
+// regular exercise flow (save_exercise_by_now).
 $contents = '';
-$answerCorrect = ($result['score'] == $result['weight']);
-$partialCorrect = !$answerCorrect && !empty($result['score']);
-$destinationId = null;
+$answerCorrect = false;
+$partialCorrect = false;
+
+$score = isset($result['score']) ? (float) $result['score'] : 0.0;
+$weight = isset($result['weight']) ? (float) $result['weight'] : 0.0;
+
+if ($weight > 0.0) {
+    // Full success only when the achieved score reaches the max weight.
+    $answerCorrect = ($score >= $weight);
+    // Partial success when there is some score but not the full weight.
+    $partialCorrect = !$answerCorrect && $score > 0.0;
+} else {
+    // Zero or undefined weight: any positive score counts as correct.
+    $answerCorrect = ($score > 0.0);
+    $partialCorrect = false;
+}
+
 $routeKey = $answerCorrect ? 'success' : 'failure';
 
 // Compute destination based on adaptive routing or default sequential order.
+$destinationId = null;
 if ($isAdaptative && !empty($destinationArray) && isset($destinationArray[$routeKey])) {
     $firstDest = $destinationArray[$routeKey];
 
@@ -375,8 +541,10 @@ var chExerciseResultUrl = "'.addslashes($exerciseResultUrl). '";
  *
  * idx >= 0 → go to exercise_submit.php with num = idx + 1
  * idx  = -1 → go to exercise_result.php
+ *
+ * tryAgain = true → append tryagain=1, used when repeating the same question.
  */
-function chExerciseSendEx(idx) {
+function chExerciseSendEx(idx, tryAgain) {
     // Always navigate in the current window/frame.
     // When the exercise is launched from a learning path, exercise_submit.php
     // runs inside a frame; using window.parent here would navigate the LP
@@ -399,8 +567,13 @@ function chExerciseSendEx(idx) {
 
     // Questions are 1-based in the URL.
     var num = qIndex + 1;
+    var url = chExerciseBaseUrl + "&num=" + num;
 
-    target.location.href = chExerciseBaseUrl + "&num=" + num + "&tryagain=1";
+    if (tryAgain) {
+        url += "&tryagain=1";
+    }
+
+    target.location.href = url;
 
     return false;
 }
@@ -418,7 +591,7 @@ if ($destinationId === $questionId) {
             'padding-left:0px;padding-right:5px;',
             ICON_SIZE_SMALL
         )
-        .'<a onclick="return chExerciseSendEx('.$index.');" href="#">'
+        .'<a onclick="return chExerciseSendEx('.$index.', true);" href="#">'
         .get_lang('Try again').'</a><br /><br />';
 } elseif (-1 === $destinationId) {
     // End of activity.
@@ -430,7 +603,7 @@ if ($destinationId === $questionId) {
             'padding-left:0px;padding-right:5px;',
             ICON_SIZE_SMALL
         )
-        .'<a onclick="return chExerciseSendEx(-1);" href="#">'
+        .'<a onclick="return chExerciseSendEx(-1, false);" href="#">'
         .get_lang('End of activity').'</a><br /><br />';
 } elseif (is_int($destinationId) && in_array($destinationId, $questionList, true)) {
     // Go to another question by id.
@@ -444,7 +617,7 @@ if ($destinationId === $questionId) {
         'padding-left:0px;padding-right:5px;',
         ICON_SIZE_SMALL
     );
-    $links .= '<a onclick="return chExerciseSendEx('.$index.');" href="#">'
+    $links .= '<a onclick="return chExerciseSendEx('.$index.', false);" href="#">'
         .get_lang('Question').' '.($index + 1).'</a>&nbsp;'.$icon;
 } elseif (is_string($destinationId) && str_starts_with($destinationId, '/')) {
     // External resource.
@@ -460,7 +633,29 @@ if ($destinationId === $questionId) {
     $links .= '<a href="'.$fullUrl.'">'.get_lang('Go to resource').'</a>&nbsp;'.$icon;
 }
 
+error_log(
+    $logPrefix.'Navigation: navBranch='.$navBranch
+    .', indexForLog='.var_export($indexForLog, true)
+    .', linksEmpty='.((trim(strip_tags($links)) === '') ? '1' : '0')
+);
+
+// Final safety logs if modal content/links are empty.
+if (trim(strip_tags($contents)) === '') {
+    error_log(
+        $logPrefix.'Final contents is empty for questionId='.$questionId
+        .', answerType='.$answerType
+        .', feedbackType='.$feedbackType
+        .', isAdaptive='.($isAdaptative ? '1' : '0')
+    );
+}
+
+if (trim(strip_tags($links)) === '') {
+    error_log(
+        $logPrefix.'Final links is empty for questionId='.$questionId
+        .', destinationId='.var_export($destinationId, true)
+    );
+}
+
 // Body + navigation block.
 echo '<div>'.$contents.'</div>';
 echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
-echo '</div>';

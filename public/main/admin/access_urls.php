@@ -77,7 +77,7 @@ if ($httpRequest->query->has('action')) {
 }
 
 $parameters['sec_token'] = Security::get_token();
-
+echo '<script>window.SEC_TOKEN = ' . json_encode($parameters['sec_token']) . ';</script>';
 // Checking if the admin is registered in all sites
 $url_string = '';
 foreach ($url_list as $u) {
@@ -176,10 +176,10 @@ if (api_get_multiple_access_url()) {
 $toolbarItems = [$actions];
 if ($isLocalhost) {
     $toolbarItems[] = '<span style="
-        margin-left: 8px;
-        font-size: 0.9em;
-        color: #666;
-    ">'.$tooltip.'</span>';
+       margin-left: 8px;
+       font-size: 0.9em;
+       color: #666;
+   ">'.$tooltip.'</span>';
 }
 
 // 7) Render the toolbar
@@ -209,8 +209,19 @@ foreach ($url_list as $u) {
     );
 
     if ($u->getId() !== 1) {
-        $rowActions .= '<a href="access_urls.php?action=delete_url&url_id=' . $u->getId() . '" ' .
-            'onclick="return confirm(\'' . addslashes(get_lang('Please confirm your choice')) . '\');">' .
+        // build a link to the Vue route that will open DeleteAccessUrl.vue
+        $urlEncoded = rawurlencode($u->getUrl());
+        $secTokenEncoded = rawurlencode($parameters['sec_token']);
+        $vueHref = api_get_path(WEB_PATH) . 'resources/accessurl/' . $u->getId() . '/delete?url=' . $urlEncoded . '&sec_token=' . $secTokenEncoded;
+
+
+
+
+
+
+
+
+        $rowActions .= '<a href="' . $vueHref . '">' .
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
             '</a>';
     }

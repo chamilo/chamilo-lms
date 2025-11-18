@@ -18,7 +18,7 @@ if (empty($serviceSaleId)) {
     api_not_allowed(true);
 }
 
-$serviceSale = $plugin->getServiceSale($serviceSaleId, $coupon);
+$serviceSale = $plugin->getServiceSale($serviceSaleId);
 $userInfo = api_get_user_info($serviceSale['buyer']['id']);
 
 if (!empty($couponId)) {
@@ -145,8 +145,8 @@ switch ($serviceSale['payment_type']) {
                     'name' => $serviceSale['service']['name'],
                     'buyer' => $serviceSale['buyer']['name'],
                     'buy_date' => $serviceSale['buy_date'],
-                    'start_date' => $serviceSale['start_date'],
-                    'end_date' => $serviceSale['end_date'],
+                    'date_start' => $serviceSale['date_start'],
+                    'date_end' => $serviceSale['date_end'],
                     'currency' => $currency['iso_code'],
                     'price' => $serviceSale['price'],
                     'reference' => $serviceSale['reference'],
@@ -225,7 +225,10 @@ switch ($serviceSale['payment_type']) {
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', $serviceSale['price']);
         $template->assign('currency', $serviceSale['currency_id']);
+        $template->assign('buying_course', false);
+        $template->assign('buying_session', false);
         $template->assign('buying_service', $serviceSale);
+        $template->assign('is_bank_transfer', true);
         $template->assign('user', $userInfo);
         $template->assign('service', $serviceSale['service']);
         $template->assign('service_item', $serviceSale['item']);

@@ -433,16 +433,41 @@ $question_list = Question::getQuestionTypeList();
 $new_question_list = [];
 $new_question_list['-1'] = get_lang('All');
 if (!empty($_course)) {
-    foreach ($question_list as $key => $item) {
-        if (in_array(
-            $objExercise->getFeedbackType(),
-            [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
-        )) {
-            if (!in_array($key, [HOT_SPOT_DELINEATION, UNIQUE_ANSWER])) {
-                continue;
+    $feedbackType = $objExercise->getFeedbackType();
+
+    if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+        // Keep original base: only these two were allowed before.
+        $allowedTypes = [
+            UNIQUE_ANSWER        => true,
+            HOT_SPOT_DELINEATION => true,
+        ];
+
+        // Start from all known types.
+        $allTypes = $question_list;
+
+        // Exclude the classic open question type from the filter list.
+        if (isset($allTypes[FREE_ANSWER])) {
+            unset($allTypes[FREE_ANSWER]);
+        }
+
+        // Append remaining non-open types (do not override base ones).
+        foreach ($allTypes as $key => $item) {
+            if (!isset($allowedTypes[$key])) {
+                $allowedTypes[$key] = true;
             }
-            $new_question_list[$key] = get_lang($item[1]);
-        } else {
+        }
+
+        // Build the final select list in a stable order.
+        foreach ($allowedTypes as $key => $_) {
+            if (isset($question_list[$key])) {
+                $item = $question_list[$key];
+                $new_question_list[$key] = get_lang($item[1]);
+            }
+        }
+    } else {
+        // Default behavior for non-adaptative / other feedback types:
+        // keep all question types except HOT_SPOT_DELINEATION.
+        foreach ($question_list as $key => $item) {
             if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
@@ -1048,8 +1073,12 @@ Display::display_footer();
 function reset_menu_lvl_type()
 {
     global $exerciseLevel, $answerType;
-    $answerType = -1;
+
     $exerciseLevel = -1;
+
+    if (!isset($_REQUEST['answerType'])) {
+        $answerType = -1;
+    }
 }
 
 /**

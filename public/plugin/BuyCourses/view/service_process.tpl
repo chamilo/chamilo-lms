@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-3">
                             <a href='{{ url('index') }}service/{{ service.id }}'>
-                                <img alt="{{ service.title }}" class="img-rounded img-responsive"
+                                <img alt="{{ service.name }}" class="img-rounded img-responsive"
                                      src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                             </a>
                             {% if service.tax_enable %}
@@ -67,7 +67,7 @@
                         <div class="col-md-9">
                             <div class="buy-item">
                                 <h3 class="title">
-                                    <a href='{{ url('index') }}service/{{ service.id }}'>{{ service.title }}</a>
+                                    <a href='{{ url('index') }}service/{{ service.id }}'>{{ service.name }}</a>
                                 </h3>
                                 {% if service.description %}
                                 <div class="description">

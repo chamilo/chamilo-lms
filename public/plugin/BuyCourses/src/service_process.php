@@ -3,10 +3,9 @@
 declare(strict_types=1);
 /* For license terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLp;
 
 /**
  * Process payments for the Buy Courses plugin.
@@ -28,10 +27,9 @@ $type = (int) $_REQUEST['t'];
 if (empty($currentUserId)) {
     api_not_allowed(true);
 }
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
-    WEB_PLUGIN_PATH
-).'BuyCourses/resources/css/style.css"/>';
-$em = Database::getManager();
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'
+    .api_get_path(WEB_PLUGIN_PATH)
+    .'BuyCourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 $includeServices = $plugin->get('include_services');
 $additionalQueryString = '';
@@ -44,6 +42,8 @@ $typeCourse = BuyCoursesPlugin::SERVICE_TYPE_COURSE === $type;
 $typeSession = BuyCoursesPlugin::SERVICE_TYPE_SESSION === $type;
 $typeFinalLp = BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM === $type;
 $queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
+
+$coupon = null;
 
 if (isset($_REQUEST['c'])) {
     $couponCode = $_REQUEST['c'];
@@ -118,18 +118,16 @@ if ($typeUser) {
 
     /** @var User $user */
     $user = Container::getUserRepository()->find($currentUserId);
-    $userSubscriptions = $user->getSessionCourseSubscriptions();
+    $userSubscriptions = $user->getSessionRelCourseRelUsers();
 
-    /** @var SessionRelCourseRelUser $userSubscription */
     foreach ($userSubscriptions as $userSubscription) {
-        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getName();
+        $sessions[$userSubscription->getSession()->getId()] = $userSubscription->getSession()->getTitle();
     }
 
-    $sessionsAsGeneralCoach = $user->getSessionAsGeneralCoach();
+    $sessionsAsGeneralCoach = $user->getSessionsAsGeneralCoach();
 
-    /** @var Session $sessionAsGeneralCoach */
     foreach ($sessionsAsGeneralCoach as $sessionAsGeneralCoach) {
-        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getName();
+        $sessions[$sessionAsGeneralCoach->getId()] = $sessionAsGeneralCoach->getTitle();
     }
 
     if (!$sessions) {
@@ -142,49 +140,50 @@ if ($typeUser) {
     // We need here to check the current user courses first
     /** @var User $user */
     $user = Container::getUserRepository()->find($currentUserId);
-    $courses = $user->getCourses();
+    $lpRepo = Container::getLpRepository();
     $courseLpList = [];
     $sessionLpList = [];
     $checker = false;
-    foreach ($courses as $course) {
+    foreach ($user->getCourses() as $course) {
         // Now get all the courses lp's
-        $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $course->getCourse()->getId()]);
+        $thisLpList = $lpRepo
+            ->getResourcesByCourse($course->getCourse())
+            ->getQuery()
+            ->getResult()
+        ;
         foreach ($thisLpList as $lp) {
-            $courseLpList[$lp->getCId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
+            $courseLpList[$course->getId()] = $lp->getName().' ('.$course->getCourse()->getTitle().')';
         }
     }
 
     // Here now checking the current user sessions
-    $sessions = $user->getSessionCourseSubscriptions();
-    foreach ($sessions as $session) {
-        $thisLpList = $em
-            ->getRepository('ChamiloCourseBundle:CLp')
-            ->findBy(['sessionId' => $session->getSession()->getId()])
-        ;
+    foreach ($user->getSessionRelCourseRelUsers() as $session) {
+        $subscriptionCourse = $session->getCourse();
+        $subscriptionSession = $session->getSession();
+        /** @var array<int, CLp> $thisLpList */
+        $thisLpList = $lpRepo->getResourcesByCourse($subscriptionCourse, $subscriptionSession)->getQuery()->getResult();
 
         // Here check all the lpItems
         foreach ($thisLpList as $lp) {
-            $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
-
-            foreach ($thisLpItems as $item) {
+            foreach ($lp->getItems() as $item) {
                 // Now only we need the final item and return the current LP
                 if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
+                    $sessionLpList[$subscriptionCourse->getId()] = $lp->getTitle().' ('.$subscriptionSession->getTitle().')';
                 }
             }
         }
 
-        $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $session->getCourse()->getId()]);
+        /** @var array<int, CLp> $thisLpList */
+        $thisLpList = $lpRepo->getResourcesByCourse($subscriptionCourse)->getQuery()->getResult();
 
         // Here check all the lpItems
         foreach ($thisLpList as $lp) {
-            $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
-            foreach ($thisLpItems as $item) {
+            foreach ($lp->getItems() as $item) {
                 // Now only we need the final item and return the current LP
                 if (TOOL_LP_FINAL_ITEM == $item->getItemType()) {
                     $checker = true;
-                    $sessionLpList[$lp->getCId()] = $lp->getName().' ('.$session->getSession()->getName().')';
+                    $sessionLpList[$subscriptionCourse->getId()] = $lp->getTitle().' ('.$subscriptionSession->getTitle().')';
                 }
             }
         }
@@ -202,8 +201,8 @@ if ($typeUser) {
     $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
 }
 
-$form->addHidden('t', (int) $_GET['t']);
-$form->addHidden('i', (int) $_GET['i']);
+$form->addHidden('t', $type);
+$form->addHidden('i', $serviceId);
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
 
 if ($form->validate()) {
@@ -234,9 +233,9 @@ if ($form->validate()) {
 
     $serviceSaleId = $plugin->registerServiceSale(
         $serviceId,
-        $formValues['payment_type'],
-        $infoSelected,
-        $formValues['c']
+        (int) $formValues['payment_type'],
+        (int) $infoSelected,
+        $formValues['c'] ?? null
     );
 
     if (false !== $serviceSaleId) {
@@ -289,8 +288,8 @@ if ($formCoupon->validate()) {
     exit;
 }
 $formCoupon->addText('coupon_code', $plugin->get_lang('CouponsCode'), true);
-$formCoupon->addHidden('t', (int) $_GET['t']);
-$formCoupon->addHidden('i', (int) $_GET['i']);
+$formCoupon->addHidden('t', $type);
+$formCoupon->addHidden('i', $serviceId);
 if (null != $coupon) {
     $form->addHidden('c', (int) $coupon['id']);
 }

@@ -926,6 +926,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    /**
+     * @return Collection<int, CourseRelUser>
+     */
     public function getCourses(): Collection
     {
         return $this->courses;
@@ -1539,6 +1542,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->portals = $value;
     }
 
+    /**
+     * @return array<int, Session>
+     */
     public function getSessionsAsGeneralCoach(): array
     {
         return $this->getSessions(Session::GENERAL_COACH);

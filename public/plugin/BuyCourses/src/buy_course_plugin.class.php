@@ -2353,8 +2353,6 @@ class BuyCoursesPlugin extends Plugin
 
         $str = '';
 
-        srand(microtime() * 1000000);
-
         for ($i = 0; $i < $length; $i++) {
             $numbers = rand(0, strlen($salt) - 1);
             $str .= substr($salt, $numbers, 1);
@@ -3394,7 +3392,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['currency'] = $isoCode;
 
         $servicesSale['service']['total_price'] = $this->getPriceWithCurrencyFromIsoCode(
-            $servicesSale['price'],
+            (float) $servicesSale['price'],
             $isoCode
         );
 
@@ -3404,6 +3402,8 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
         $servicesSale['service']['visibility'] = $servicesSale['visibility'];
         $servicesSale['service']['image'] = $servicesSale['image'];
+        $servicesSale['service']['date_start'] = $servicesSale['date_start'];
+        $servicesSale['service']['date_end'] = $servicesSale['date_end'];
         $servicesSale['item'] = $this->getService($servicesSale['service_id']);
         $servicesSale['buyer']['id'] = $buyer['user_id'];
         $servicesSale['buyer']['name'] = api_get_person_name($buyer['firstname'], $buyer['lastname']);
@@ -3520,16 +3520,18 @@ class BuyCoursesPlugin extends Plugin
      * @param int $serviceId   The service ID
      * @param int $paymentType The payment type
      * @param int $infoSelect  The ID for Service Type
+     * @param int|null  $couponId
      *
-     * @return bool
+     * @return int|bool
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null)
+    public function registerServiceSale(int $serviceId, int $paymentType, int $infoSelect, ?int $couponId = null): int|bool
     {
         if (!in_array(
             $paymentType,
             [self::PAYMENT_TYPE_PAYPAL, self::PAYMENT_TYPE_TRANSFER, self::PAYMENT_TYPE_CULQI]
-        )
-        ) {
+        )) {
             return false;
         }
 
@@ -3539,6 +3541,8 @@ class BuyCoursesPlugin extends Plugin
         if (empty($service)) {
             return false;
         }
+
+        $coupon = null;
 
         if (null != $couponId) {
             $coupon = $this->getCouponService($couponId, $serviceId);
@@ -3603,6 +3607,7 @@ class BuyCoursesPlugin extends Plugin
             'payment_type' => $paymentType,
             'price_without_discount' => $priceWithoutDiscount,
             'discount_amount' => $couponDiscount,
+            'invoice' => 0,
         ];
 
         return Database::insert(self::TABLE_SERVICES_SALE, $values);

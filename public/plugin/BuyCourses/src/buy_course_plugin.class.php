@@ -3392,7 +3392,7 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['currency'] = $isoCode;
 
         $servicesSale['service']['total_price'] = $this->getPriceWithCurrencyFromIsoCode(
-            $servicesSale['price'],
+            (float) $servicesSale['price'],
             $isoCode
         );
 
@@ -3402,6 +3402,8 @@ class BuyCoursesPlugin extends Plugin
         $servicesSale['service']['owner']['name'] = api_get_person_name($owner['firstname'], $owner['lastname']);
         $servicesSale['service']['visibility'] = $servicesSale['visibility'];
         $servicesSale['service']['image'] = $servicesSale['image'];
+        $servicesSale['service']['date_start'] = $servicesSale['date_start'];
+        $servicesSale['service']['date_end'] = $servicesSale['date_end'];
         $servicesSale['item'] = $this->getService($servicesSale['service_id']);
         $servicesSale['buyer']['id'] = $buyer['user_id'];
         $servicesSale['buyer']['name'] = api_get_person_name($buyer['firstname'], $buyer['lastname']);

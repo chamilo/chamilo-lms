@@ -6,6 +6,9 @@ declare(strict_types=1);
 /**
  * List of pending payments of the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -20,11 +23,11 @@ $includeServices = $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
-$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$selectedStatus = isset($_GET['status']) ? (int) $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
-    $selectedStatus = $form->getSubmitValue('status');
+    $selectedStatus = (int) $form->getSubmitValue('status');
     if (false === $selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
@@ -37,6 +40,9 @@ $form->addButtonSearch(get_lang('Search'), 'search');
 $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
 
 foreach ($servicesSales as &$sale) {
+    $sale['total_discount'] = 0;
+    $sale['coupon_code'] = '';
+
     if (isset($sale['discount_amount']) && 0 != $sale['discount_amount']) {
         $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
@@ -54,7 +60,7 @@ $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::returnFontAwesomeIcon('file-excel-o').
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET).
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php',
     ['class' => 'btn btn-primary']

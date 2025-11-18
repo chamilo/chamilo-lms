@@ -6,6 +6,9 @@ declare(strict_types=1);
 /**
  * List of pending payments of the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -70,7 +73,7 @@ $saleStatuses = $plugin->getSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
-$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$selectedStatus = isset($_GET['status']) ? (int) $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
 $selectedSale = isset($_GET['sale']) ? (int) ($_GET['sale']) : 0;
 $dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0, 0, 0));
 $dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23, 59, 59));
@@ -81,7 +84,7 @@ $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
     $selectedFilterType = $form->getSubmitValue('filter_type');
-    $selectedStatus = $form->getSubmitValue('status');
+    $selectedStatus = (int) $form->getSubmitValue('status');
     $searchTerm = $form->getSubmitValue('user');
     $dateStart = $form->getSubmitValue('date_start');
     $dateEnd = $form->getSubmitValue('date_end');
@@ -164,14 +167,13 @@ foreach ($sales as &$sale) {
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = BuyCoursesPlugin::getSalesReportScript($sales, $invoicingEnable);
 
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::returnFontAwesomeIcon('file-excel-o').
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET).
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php',
     ['class' => 'btn btn-primary']
@@ -219,6 +221,7 @@ $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);
 $template->assign('invoicing_enable', $invoicingEnable);
+$template->assign('showing_services', false);
 
 $content = $template->fetch('BuyCourses/view/sales_report.tpl');
 

@@ -4501,8 +4501,12 @@ class learnpath
         let resources = document.getElementsByClassName("lp_resource");
         Array.prototype.forEach.call(resources, function(resource) {
             Sortable.create(resource, {
-                group: "nested",
-                put: ["nested-sortable"],
+                group: {
+                    name: "nested",
+                    pull: true,
+                    put: false
+                },
+                sort: false,
                 filter: ".disable_drag",
                 animation: 150,
                 fallbackOnBody: true,
@@ -4554,7 +4558,7 @@ class learnpath
                             );
                         }
                     });
-                },
+                }
             });
         });
     });
@@ -5421,7 +5425,7 @@ class learnpath
                 $finish,
             ],
             'resource_tab',
-            [],
+            ['class' => 'lp-resource-tabs'],
             [],
             $selected
         );
@@ -6469,7 +6473,29 @@ document.addEventListener("DOMContentLoaded", function () {
             ->setTitle('')
             ->setItemType(TOOL_DOCUMENT)
         ;
-        $new = $this->displayDocumentForm('add', $lpItem);
+
+        // Original document form (editor + fields).
+        $newForm = $this->displayDocumentForm('add', $lpItem);
+
+        // New templates panel (left side).
+        $templatesPanel = $this->renderDocumentTemplatesPanel();
+
+        if (!empty($templatesPanel)) {
+            // Two-column layout: templates on the left, form on the right.
+            $new = '
+            <div class="lp-document-create flex flex-col lg:flex-row gap-4">
+                <div class="w-full lg:w-1/3">
+                    '.$templatesPanel.'
+                </div>
+                <div class="w-full lg:w-2/3">
+                    '.$newForm.'
+                </div>
+            </div>
+        ';
+        } else {
+            // Fallback: only the form, as before.
+            $new = $newForm;
+        }
 
         $videosTree = $this->get_videos();
         $headers = [
@@ -6483,9 +6509,220 @@ document.addEventListener("DOMContentLoaded", function () {
             $headers,
             [$documentTree, $videosTree, $new, $form->returnForm()],
             'subtab',
-            ['class' => 'mt-2']
+            ['class' => 'mt-3 lp-subtabs']
         );
     }
+
+    /**
+     * Render system and course templates panel for LP document editor.
+     */
+    protected function renderDocumentTemplatesPanel(): string
+    {
+        $courseId = api_get_course_int_id();
+        if (empty($courseId)) {
+            return '';
+        }
+
+        try {
+            $router = Container::getRouter();
+            $url = $router->generate('all-templates', ['courseId' => $courseId]);
+        } catch (\Throwable $e) {
+            return '';
+        }
+
+        if (empty($url)) {
+            return '';
+        }
+
+        $url = Security::remove_XSS($url);
+
+        $html  = '<div id="lp-doc-template-panel"';
+        $html .= ' class="lp-doc-template-panel mb-4 lg:mb-0 bg-support-2 border border-gray-25 rounded-lg p-3 text-body-2 text-gray-90"';
+        $html .= ' data-templates-url="'.$url.'">';
+        $html .= '<div class="flex items-center justify-between mb-3">';
+        $html .= '<span class="font-semibold">'.get_lang('Templates').'</span>';
+        $html .= '</div>';
+        $html .= '<div id="lp-doc-template-list" class="space-y-2 max-h-96 overflow-y-auto"></div>';
+        $html .= '</div>';
+
+        $html .= <<<'JS'
+        <script>
+        (function () {
+            var panel = document.getElementById('lp-doc-template-panel');
+            if (!panel) { return; }
+
+            var listEl = document.getElementById('lp-doc-template-list');
+            var url = panel.getAttribute('data-templates-url');
+            if (!url || !listEl) { return; }
+
+            function encodeContent(html) {
+                var value = html || '';
+                try {
+                    return btoa(unescape(encodeURIComponent(value)));
+                } catch (e) {
+                    return btoa(value);
+                }
+            }
+
+            function decodeContent(encoded) {
+                if (!encoded) { return ''; }
+                try {
+                    return decodeURIComponent(escape(atob(encoded)));
+                } catch (e) {
+                    return atob(encoded);
+                }
+            }
+
+            // Try to find the main HTML editor used in LP document form
+            function getCkEditorInstance() {
+                if (typeof CKEDITOR === 'undefined' || !CKEDITOR.instances) {
+                    return null;
+                }
+
+                // Prefer common field names
+                var preferred = ['content_lp', 'content', 'content[content]'];
+                for (var i = 0; i < preferred.length; i++) {
+                    var key = preferred[i];
+                    if (CKEDITOR.instances[key]) {
+                        return CKEDITOR.instances[key];
+                    }
+                }
+
+                // Fallback: first instance found
+                for (var id in CKEDITOR.instances) {
+                    if (Object.prototype.hasOwnProperty.call(CKEDITOR.instances, id)) {
+                        return CKEDITOR.instances[id];
+                    }
+                }
+
+                return null;
+            }
+
+            function applyTemplate(encoded) {
+                var content = decodeContent(encoded);
+
+                // CKEditor
+                var ck = getCkEditorInstance();
+                if (ck && ck.setData) {
+                    ck.setData(content);
+                    return;
+                }
+
+                // TinyMCE (just in case)
+                if (typeof tinyMCE !== 'undefined') {
+                    if (tinyMCE.activeEditor && tinyMCE.activeEditor.setContent) {
+                        tinyMCE.activeEditor.setContent(content);
+                        return;
+                    }
+                    if (tinyMCE.editors && tinyMCE.editors.length && tinyMCE.editors[0].setContent) {
+                        tinyMCE.editors[0].setContent(content);
+                        return;
+                    }
+                }
+
+                // FCKeditor fallback
+                if (typeof FCKeditorAPI !== 'undefined' && FCKeditorAPI.GetInstance) {
+                    var fckNames = ['content_lp', 'content'];
+                    for (var i = 0; i < fckNames.length; i++) {
+                        var inst = FCKeditorAPI.GetInstance(fckNames[i]);
+                        if (inst && inst.SetHTML) {
+                            inst.SetHTML(content);
+                            return;
+                        }
+                    }
+                }
+
+                // Plain textarea fallback
+                var txt =
+                    document.getElementById('content_lp') ||
+                    document.getElementById('content') ||
+                    document.querySelector('textarea[name="content_lp"], textarea[name="content"]');
+
+                if (txt) {
+                    txt.value = content;
+                } else {
+                    console.warn(
+                        'LP document templates: no editor instance or textarea found to apply template content.'
+                    );
+                }
+            }
+
+            function findTemplateButton(target) {
+                while (target && target !== panel) {
+                    if (target.classList && target.classList.contains('lp-template-pill')) {
+                        return target;
+                    }
+                    target = target.parentNode;
+                }
+                return null;
+            }
+
+            fetch(url, { credentials: 'same-origin' })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    if (!Array.isArray(data)) {
+                        return;
+                    }
+
+                    if (data.length === 0) {
+                        listEl.classList.add('text-gray-50', 'text-xs');
+                        listEl.textContent = 'No templates found';
+                        return;
+                    }
+
+                    data.forEach(function (tpl) {
+                        // Try different property names for content
+                        var rawContent = tpl.content || tpl.contentFile || tpl.html || '';
+                        var encoded = encodeContent(rawContent);
+
+                        var btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className =
+                            'lp-template-pill w-full text-left px-3 py-2 mb-2 rounded-lg border border-gray-25 ' +
+                            'bg-white text-xs text-gray-90 hover:border-primary hover:bg-support-1 hover:text-primary ' +
+                            'transition flex flex-col';
+                        btn.setAttribute('data-template', encoded);
+
+                        if (tpl.image) {
+                            var img = document.createElement('img');
+                            img.src = tpl.image;
+                            img.alt = tpl.title || '';
+                            img.className = 'mb-2 rounded border border-gray-25 max-h-20 w-full object-cover';
+                            btn.appendChild(img);
+                        }
+
+                        var span = document.createElement('span');
+                        span.className = 'truncate';
+                        span.textContent = tpl.title || '';
+                        btn.appendChild(span);
+
+                        listEl.appendChild(btn);
+                    });
+                })
+                .catch(function (error) {
+                    console.error('Unable to load document templates for LP editor', error);
+                });
+
+            panel.addEventListener('click', function (event) {
+                var button = findTemplateButton(event.target);
+                if (!button) {
+                    return;
+                }
+                var encoded = button.getAttribute('data-template');
+                if (!encoded) {
+                    return;
+                }
+                applyTemplate(encoded);
+            });
+        })();
+        </script>
+        JS;
+
+        return $html;
+    }
+
 
     public function get_videos()
     {
@@ -6524,28 +6761,12 @@ document.addEventListener("DOMContentLoaded", function () {
         $session_id = api_get_session_id();
         $setting = 'true' === api_get_setting('lp.show_invisible_exercise_in_lp_toc');
 
-        //$activeCondition = ' active <> -1 ';
         $active = 2;
         if ($setting) {
             $active = 1;
-            //$activeCondition = ' active = 1 ';
         }
-
-        $categoryCondition = '';
-
         $keyword = $_REQUEST['keyword'] ?? null;
         $categoryId = $_REQUEST['category_id'] ?? null;
-        /*if (api_get_configuration_value('allow_exercise_categories') && !empty($categoryId)) {
-            $categoryCondition = " AND exercise_category_id = $categoryId ";
-        }
-
-        $keywordCondition = '';
-
-        if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND title LIKE '%$keyword%' ";
-        }
-        */
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($session_id);
 
@@ -6553,53 +6774,8 @@ document.addEventListener("DOMContentLoaded", function () {
         /** @var CQuiz[] $exercises */
         $exercises = $qb->getQuery()->getResult();
 
-        /*$sql_quiz = "SELECT * FROM $tbl_quiz
-                     WHERE
-                            c_id = $course_id AND
-                            $activeCondition
-                            $condition_session
-                            $categoryCondition
-                            $keywordCondition
-                     ORDER BY title ASC";
-        $res_quiz = Database::query($sql_quiz);*/
-
-        $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
-
-        // Create a search-box
-        /*$form = new FormValidator('search_simple', 'get', $currentUrl);
-        $form->addHidden('action', 'add_item');
-        $form->addHidden('type', 'step');
-        $form->addHidden('lp_id', $this->lp_id);
-        $form->addHidden('lp_build_selected', '2');
-
-        $form->addCourseHiddenParams();
-        $form->addText(
-            'keyword',
-            get_lang('Search'),
-            false,
-            [
-                'aria-label' => get_lang('Search'),
-            ]
-        );
-
-        if (api_get_configuration_value('allow_exercise_categories')) {
-            $manager = new ExerciseCategoryManager();
-            $options = $manager->getCategoriesForSelect(api_get_course_int_id());
-            if (!empty($options)) {
-                $form->addSelect(
-                    'category_id',
-                    get_lang('Category'),
-                    $options,
-                    ['placeholder' => get_lang('Please select an option')]
-                );
-            }
-        }
-
-        $form->addButtonSearch(get_lang('Search'));
-        $return = $form->returnForm();*/
-
-        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
-        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
+        $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
+        $return .= '<li class="list-group-item lp_resource_element border-gray-25 disable_drag">';
         $return .= Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('New test'));
         $return .= '<a
             href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
@@ -6621,17 +6797,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 ['target' => '_blank']
             );
             $return .= '<li
-                class="list-group-item lp_resource_element"
+                class="list-group-item lp_resource_element border-gray-25"
                 id="'.$exerciseId.'"
                 data-id="'.$exerciseId.'"
                 title="'.$title.'">';
             $return .= Display::url($moveIcon, '#', ['class' => 'moved']);
             $return .= $quizIcon;
             $sessionStar = '';
-            /*$sessionStar = api_get_session_image(
-                $row_quiz['session_id'],
-                $userInfo['status']
-            );*/
             $return .= Display::url(
                 Security::remove_XSS(cut($title, 80)).$link.$sessionStar,
                 api_get_self().'?'.
@@ -6700,7 +6872,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </script>
 
         <ul class="mt-2 bg-white list-group lp_resource">
-            <li class="list-group-item lp_resource_element disable_drag ">
+            <li class="list-group-item lp_resource_element border-gray-25 disable_drag ">
                 '.Display::getMdiIcon(ObjectIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL).'
                 <a
                 href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'"
@@ -6722,7 +6894,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 if ($link->isVisible($course, $session)) {
-                    //$sessionStar = api_get_session_image($linkSessionId, $userInfo['status']);
                     $sessionStar = '';
                     $url = $selfUrl.'?'.$courseIdReq.'&action=add_item&type='.TOOL_LINK.'&file='.$key.'&lp_id='.$this->lp_id;
                     $link = Display::url(
@@ -6737,7 +6908,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
                     $linkNodes .=
                         "<li
-                            class='list-group-item lp_resource_element'
+                            class='list-group-item border-gray-25 lp_resource_element'
                             id= $id
                             data-id= $id
                             >
@@ -6749,7 +6920,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
             $linksHtmlCode .=
-                '<li class="list-group-item disable_drag">
+                '<li class="list-group-item border-gray-25 disable_drag">
                     <a style="cursor:hand" onclick="javascript: toggle_tool(\''.TOOL_LINK.'\','.$categoryId.')" >
                         <img src="'.Display::returnIconPath('add.png').'" id="'.TOOL_LINK.'_'.$categoryId.'_opener"
                         align="absbottom" />
@@ -6759,7 +6930,6 @@ document.addEventListener("DOMContentLoaded", function () {
             '.
                 $linkNodes.
             '';
-            //<div style="display:none" id="'.TOOL_LINK.'_'.$categoryId.'_content">'.
         }
         $linksHtmlCode .= '</ul>';
 
@@ -6773,8 +6943,8 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function get_student_publications()
     {
-        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
-        $return .= '<li class="list-group-item lp_resource_element">';
+        $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
+        $return .= '<li class="list-group-item border-gray-25 lp_resource_element">';
         $works = getWorkListTeacher(0, 100, null, null, null);
         if (!empty($works)) {
             $icon = Display::getMdiIcon('inbox-full', 'ch-tool-icon',null, 16, get_lang('Assignments'));
@@ -6787,7 +6957,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 $return .= '<li
-                    class="list-group-item lp_resource_element"
+                    class="list-group-item border-gray-25 lp_resource_element"
                     id="'.$workId.'"
                     data-id="'.$workId.'"
                     >';
@@ -6855,10 +7025,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
 
         // First add link
-        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
+        $return .= '<li class="list-group-item border-gray-25 lp_resource_element disable_drag">';
         $return .= Display::getMdiIcon('comment-quote	', 'ch-tool-icon', null, 32, get_lang('Create a new forum'));
         $return .= Display::url(
             get_lang('Create a new forum'),
@@ -6896,7 +7066,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
             $return .= '<li
-                    class="list-group-item lp_resource_element"
+                    class="list-group-item border-gray-25 lp_resource_element"
                     id="'.$forumId.'"
                     data-id="'.$forumId.'"
                     >';
@@ -6939,7 +7109,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
                     $return .= '<li
-                        class="list-group-item lp_resource_element"
+                        class="list-group-item border-gray-25 lp_resource_element"
                       id="'.$threadId.'"
                         data-id="'.$threadId.'"
                     >';
@@ -6972,10 +7142,10 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function getSurveys()
     {
-        $return = '<ul class="mt-2 bg-white list-group lp_resource">';
+        $return = '<ul class="mt-2 bg-white list-group list-group-flush border border-gray-25 rounded lp_resource">';
 
         // First add link
-        $return .= '<li class="list-group-item lp_resource_element disable_drag">';
+        $return .= '<li class="list-group-item border-gray-25 lp_resource_element disable_drag">';
         $return .= Display::getMdiIcon('clipboard-question-outline', 'ch-tool-icon', null, 32, get_lang('Create survey'));
         $return .= Display::url(
             get_lang('Create survey'),
@@ -6993,7 +7163,7 @@ document.addEventListener("DOMContentLoaded", function () {
         foreach ($surveys as $survey) {
             if (!empty($survey['iid'])) {
                 $surveyTitle = strip_tags($survey['title']);
-                $return .= '<li class="list-group-item lp_resource_element" id="'.$survey['iid'].'" data-id="'.$survey['iid'].'">';
+                $return .= '<li class="list-group-item border-gray-25 lp_resource_element" id="'.$survey['iid'].'" data-id="'.$survey['iid'].'">';
                 $return .= '<a class="moved" href="#">';
                 $return .= $moveIcon;
                 $return .= ' </a>';

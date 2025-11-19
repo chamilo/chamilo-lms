@@ -461,7 +461,8 @@ if (!empty($_course)) {
         foreach ($allowedTypes as $key => $_) {
             if (isset($question_list[$key])) {
                 $item = $question_list[$key];
-                $new_question_list[$key] = get_lang($item[1]);
+                $labelKey = $item[2] ?? $item[1];
+                $new_question_list[$key] = get_lang($labelKey);
             }
         }
     } else {
@@ -471,7 +472,8 @@ if (!empty($_course)) {
             if (HOT_SPOT_DELINEATION == $key) {
                 continue;
             }
-            $new_question_list[$key] = get_lang($item[1]);
+            $labelKey = $item[2] ?? $item[1];
+            $new_question_list[$key] = get_lang($labelKey);
         }
     }
 }

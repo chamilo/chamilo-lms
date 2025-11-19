@@ -63,11 +63,32 @@ $levels = [
 // Answer type
 $answerType = isset($_REQUEST['answer_type']) ? (int) $_REQUEST['answer_type'] : null;
 $questionList = Question::getQuestionTypeList();
-$questionTypesList = [];
-$questionTypesList['-1'] = get_lang('All');
+$questionTypesList = ['-1' => get_lang('All')];
 
 foreach ($questionList as $key => $item) {
-    $questionTypesList[$key] = get_lang($item[1]);
+    // Try to use the Question instance naming logic
+    $instance = Question::getInstance($key);
+    if ($instance instanceof Question) {
+        $label = $instance->get_question_type_name();
+    } else {
+        // Fallback: best-effort human-readable label
+        if (is_array($item)) {
+            $raw = $item[2] ?? $item[1] ?? reset($item);
+        } else {
+            $raw = (string) $item;
+        }
+
+        // Try to translate; if not translated, keep a nicer label
+        $translated = get_lang($raw);
+        if ($translated !== $raw) {
+            $label = $translated;
+        } else {
+            // Turn "UniqueAnswer" into "Unique Answer"
+            $label = preg_replace('/(?<!^)(?=[A-Z])/', ' ', $raw) ?: $raw;
+        }
+    }
+
+    $questionTypesList[$key] = $label;
 }
 
 $form = new FormValidator('admin_questions', 'get');
@@ -262,16 +283,16 @@ if ($formSent) {
                 $exercise->read($exerciseId);
                 $exerciseData .= $exercise->title.'&nbsp;';
                 $exerciseData .= Display::url(
-                    Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
-                    $urlExercise.api_get_cidreq_params($courseInfo['id'], $exercise->sessionId).'&'.http_build_query(
-                        [
-                            'exerciseId' => $exerciseId,
-                            'type' => $question->getType(),
-                            'editQuestion' => $question->getIid(),
-                        ]
-                    ),
-                    ['target' => '_blank']
-                ).'<br />';
+                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
+                        $urlExercise.api_get_cidreq_params($courseInfo['id'], $exercise->sessionId).'&'.http_build_query(
+                            [
+                                'exerciseId' => $exerciseId,
+                                'type' => $question->getType(),
+                                'editQuestion' => $question->getIid(),
+                            ]
+                        ),
+                        ['target' => '_blank']
+                    ).'<br />';
             }
             $question->questionData .= '<br />'.$exerciseData;
         } else {
@@ -308,13 +329,13 @@ if ($formSent) {
             );
         }
         $question->questionData .= '<div class="float-right">'.Display::url(
-            get_lang('Delete'),
-            $deleteUrl,
-            [
-                'class' => 'btn btn--danger',
-                'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
-            ]
-        ).'</div>';
+                get_lang('Delete'),
+                $deleteUrl,
+                [
+                    'class' => 'btn btn--danger',
+                    'onclick' => 'javascript: if(!confirm(\''.$warningText.'\')) return false',
+                ]
+            ).'</div>';
         ob_end_clean();
     }
 }

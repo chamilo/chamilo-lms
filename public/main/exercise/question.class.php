@@ -1143,16 +1143,21 @@ abstract class Question
      */
     public function get_question_type_name(): string
     {
-        $label = trim((string) $this->explanationLangVar);
-        if ($label !== '') {
-            return get_lang($label);
+        $labelKey = trim((string) $this->explanationLangVar);
+        if ($labelKey !== '') {
+            $translated = get_lang($labelKey);
+            if ($translated !== $labelKey) {
+                return $translated;
+            }
         }
 
         $def = self::$questionTypes[$this->type] ?? null;
         $className = is_array($def) ? ($def[1] ?? '') : '';
         if ($className !== '') {
             $human = preg_replace('/(?<!^)(?=[A-Z])/', ' ', $className) ?: $className;
-            return get_lang(trim($human));
+            $translated = get_lang($human);
+
+            return $translated !== $human ? $translated : $human;
         }
 
         return '';

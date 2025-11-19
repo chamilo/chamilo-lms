@@ -42,7 +42,7 @@ class CatalogueController extends AbstractController
     ) {}
 
     #[Route('/courses-list', name: 'chamilo_core_catalogue_courses_list', methods: ['GET'])]
-    public function listCourses(): JsonResponse
+    public function listCourses(SettingsManager $settingsManager): JsonResponse
     {
         $user = $this->userHelper->getCurrent();
         $accessUrl = $this->accessUrlHelper->getCurrent();
@@ -72,13 +72,23 @@ class CatalogueController extends AbstractController
             $courses = array_values($visibleCourses);
         }
 
-        $data = array_map(function (Course $course) {
+        // Retrieve global user-per-course limit
+        $maxUsersPerCourse = (int) $settingsManager->getSetting('platform.hosting_limit_users_per_course', true);
+
+        // --- [B] Map data for response ---
+        $data = array_map(function (Course $course) use ($maxUsersPerCourse) {
+            // Count *all* users (students + teachers + tutors + HR)
+            $nbUsers = $course->getUsers()->count();
+
             return [
                 'id' => $course->getId(),
                 'code' => $course->getCode(),
                 'title' => $course->getTitle(),
                 'description' => $course->getDescription(),
                 'visibility' => $course->getVisibility(),
+                'nb_users' => $nbUsers,
+                'max_users' => $maxUsersPerCourse,
+                'is_full' => $maxUsersPerCourse > 0 && $nbUsers >= $maxUsersPerCourse,
             ];
         }, $courses);
 

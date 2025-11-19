@@ -85,7 +85,6 @@ $image = '<div class="rowimage">
     </div>
 </div>';
 
-
 // Course settings panel (top section of the page)
 $courseSettingsPanel = [];
 
@@ -133,30 +132,42 @@ $extra = $extra_field->addElements(
     $showOnlyTheseFields
 );
 
-$extraReady = isset($extra['jquery_ready_content']) ? $extra['jquery_ready_content'] : '';
+if (!empty($extra['jquery_ready_content'])) {
+    $htmlHeadXtra[] = $extra['jquery_ready_content'];
+}
 
-// JS: hide legacy header, open first panel, init extra-fields and picture preview
 $htmlHeadXtra[] = '
+<style>
+.display-panel-collapse__header {
+    width: 100%;
+}
+
+.display-panel-collapse__header a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: .5rem;
+}
+
+.display-panel-collapse__header a .mdi {
+    line-height: 1;
+}
+</style>
 <script>
 window.addEventListener("load", function () {
-    // Init course extra-fields widgets (tags, etc.)
-    '.$extraReady.'
-
     var form = document.getElementById("update_course");
     if (!form) {
-        console.log("[COURSE SETTINGS] No form with id update_course found");
         return;
     }
 
-    // First new collapsible panel: <div class=\"display-panel-collapse field\">
     var firstPanel = form.querySelector(".display-panel-collapse.field");
-    console.log("[COURSE SETTINGS] First panel found:", !!firstPanel);
-
     if (!firstPanel) {
         return;
     }
 
-    // Hide legacy blocks before the first new panel
+    // Preview image element
+    var picturePreview = document.getElementById("course-picture-preview");
+
     var node = firstPanel.previousElementSibling;
     var hiddenCount = 0;
 
@@ -178,28 +189,51 @@ window.addEventListener("load", function () {
         header.classList.remove("mdi-chevron-down");
         header.classList.add("mdi-chevron-up");
         body.classList.add("active");
-        console.log("[COURSE SETTINGS] First panel forced open");
     } else {
         console.log("[COURSE SETTINGS] Header/body not found inside firstPanel");
     }
 
-    // --- Live preview for course picture ---
-    var pictureInput   = document.getElementById("picture");
-    var picturePreview = document.getElementById("course-picture-preview");
+    // Ensure previously saved picture is visible
+    if (picturePreview && picturePreview.getAttribute("src")) {
+        picturePreview.style.display = "block";
+    }
 
-    if (pictureInput && picturePreview) {
-        pictureInput.addEventListener("change", function (event) {
-            var file = event.target.files && event.target.files[0];
-            if (!file || !file.type || !file.type.match(/^image\\//)) {
+    // Live preview for course picture
+    if (form && picturePreview) {
+        form.addEventListener("change", function (event) {
+            var input = event.target;
+            if (!input || input.tagName !== "INPUT" || input.type !== "file") {
+                return;
+            }
+
+            var inputName = input.getAttribute("name") || "";
+            if (inputName.indexOf("picture") === -1) {
+                return;
+            }
+
+            var file = input.files && input.files[0];
+
+            if (!file) {
+                picturePreview.removeAttribute("src");
+                picturePreview.style.display = "none";
+                return;
+            }
+
+            // Only handle image files
+            if (!file.type || !file.type.match(/^image\\//)) {
                 return;
             }
 
             var reader = new FileReader();
             reader.onload = function (e) {
                 picturePreview.src = e.target.result;
+                picturePreview.style.display = "block";
+                picturePreview.removeAttribute("hidden");
             };
             reader.readAsDataURL(file);
         });
+    } else {
+        console.log("[COURSE SETTINGS] Form or preview not found, live preview disabled");
     }
 });
 </script>';
@@ -215,17 +249,11 @@ foreach ($showOnlyTheseFields as $fieldName) {
 // Course picture (upload + preview + delete)
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
-// Current picture preview (if any)
-if (!empty($image)) {
-    // Use addElement("html", ...) so the element belongs to the form
-    $picturePreviewElement = $form->addElement(
-        'html',
-        $image
-    );
-    $courseSettingsPanel[] = $picturePreviewElement;
+$acceptPictureTypes = '';
+if (!empty($allowed_picture_types) && is_array($allowed_picture_types)) {
+    $acceptPictureTypes = '.'.implode(',.', $allowed_picture_types);
 }
 
-// File input for new picture
 $pictureElement = $form->addFile(
     'picture',
     get_lang('Add a picture'),
@@ -233,9 +261,18 @@ $pictureElement = $form->addFile(
         'id' => 'picture',
         'class' => 'picture-form',
         'crop_image' => true,
+        'accept' => !empty($acceptPictureTypes) ? $acceptPictureTypes : 'image/*',
     ]
 );
 $courseSettingsPanel[] = $pictureElement;
+
+if (!empty($image)) {
+    $picturePreviewElement = $form->createElement(
+        'html',
+        $image
+    );
+    $courseSettingsPanel[] = $picturePreviewElement;
+}
 
 // Validation rules for picture type
 $form->addRule(
@@ -1147,14 +1184,17 @@ if ($form->validate()) {
             ? $updateValues['course_registration_password']
             : $courseEntity->getRegistrationCode();
 
+    $visibility = $updateValues['visibility'] ?? $courseEntity->getVisibility();
+    $deletePicture = !empty($updateValues['delete_picture'] ?? null);
+
     $request = Container::getRequest();
-    /** @var UploadedFile $uploadFile */
+    /** @var UploadedFile|null $uploadFile */
     $uploadFile = $request->files->get('picture');
 
     // Handle course picture upload / update
     if (null !== $uploadFile) {
-        $hasIllustration = $illustrationRepo->hasIllustration($courseEntity);
-        if ($hasIllustration) {
+        // Replace existing illustration with the new one
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
             $illustrationRepo->deleteIllustration($courseEntity);
         }
 
@@ -1179,13 +1219,14 @@ if ($form->validate()) {
                 $uploadFile->getFilename()
             );
         }
+
+        $deletePicture = false;
     }
 
-    $visibility = $updateValues['visibility'] ?? '';
-    $deletePicture = $updateValues['delete_picture'] ?? '';
-
     if ($deletePicture) {
-        $illustrationRepo->deleteIllustration($courseEntity);
+        if ($illustrationRepo->hasIllustration($courseEntity)) {
+            $illustrationRepo->deleteIllustration($courseEntity);
+        }
     }
 
     $access_url_id = api_get_current_access_url_id();

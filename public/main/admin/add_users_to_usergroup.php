@@ -125,14 +125,23 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if (1 == $form_sent) {
         // Added a parameter to send emails when registering a user
-        $usergroup->subscribe_users_to_usergroup(
+        $result = $usergroup->subscribe_users_to_usergroup(
             $id,
             $elements_posted,
             true,
             $relation
         );
-        $_SESSION['usergroup_flash_message'] = get_lang('Update successful');
-        $_SESSION['usergroup_flash_type'] = 'success';
+
+        if ($result) {
+            // Success: users were subscribed to usergroup (and related courses/sessions)
+            $_SESSION['usergroup_flash_message'] = get_lang('Update successful');
+            $_SESSION['usergroup_flash_type'] = 'success';
+        } else {
+            // Global hosting limit reached: full operation cancelled.
+            $_SESSION['usergroup_flash_message'] = CourseManager::getGlobalLimitCancelMessage();
+            $_SESSION['usergroup_flash_type'] = 'warning';
+        }
+
         header('Location: usergroups.php');
         exit;
     }

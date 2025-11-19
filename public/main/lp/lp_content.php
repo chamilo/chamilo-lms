@@ -29,6 +29,10 @@ $learnPath = Session::read('oLP');
 $learnPath->error = '';
 $lpType = $learnPath->get_type();
 $lpItemId = $learnPath->get_current_item_id();
+$lpId = $learnPath->get_id();
+
+// Base URL for blank page including lp context (useful for access checks / voter).
+$blankBaseUrl = 'blank.php?'.api_get_cidreq().'&lp_id='.$lpId.'&item_id='.$lpItemId;
 
 /**
  * Get a link to the corresponding document.
@@ -50,7 +54,8 @@ foreach ($list as $toc) {
 }
 
 if ($dir) {
-    $src = 'blank.php';
+    // Use blank page but keep lp context in query string.
+    $src = $blankBaseUrl;
 } else {
     switch ($lpType) {
         case CLp::LP_TYPE:
@@ -59,14 +64,16 @@ if ($dir) {
             if (true === $prerequisiteCheck) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 if (empty($src)) {
-                    $src = 'blank.php?'.api_get_cidreq().'&error=document_protected';
+                    // Document is protected or not reachable -> send to blank with lp context.
+                    $src = $blankBaseUrl.'&error=document_protected';
                     break;
                 }
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
                 break;
             }
-            $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
+            // Prerequisites not met -> blank with lp context and message.
+            $src = $blankBaseUrl.'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             break;
         case CLp::SCORM_TYPE:
             $learnPath->stop_previous_item();
@@ -76,7 +83,8 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
-                $src = 'blank.php?'.api_get_cidreq().'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
+                // Prerequisites not met -> blank with lp context and message.
+                $src = $blankBaseUrl.'&error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);
             }
             break;
         case CLp::AICC_TYPE:
@@ -87,10 +95,21 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
             } else {
-                $src = 'blank.php';
+                // Fallback to blank with lp context (no specific error used here).
+                $src = $blankBaseUrl;
             }
             break;
     }
+}
+
+// -------------------------------------------------------------------------
+// Ensure lp context is present in the final URL (useful for voters / checks)
+// This will affect normal document URLs like /r/document/files/.../view?cid=...&sid=...
+// but will not duplicate the parameters for blank.php where they are already set.
+// -------------------------------------------------------------------------
+if (!empty($src) && false === strpos($src, 'lp_id=')) {
+    $separator = false === strpos($src, '?') ? '?' : '&';
+    $src .= $separator.'lp_id='.$lpId.'&item_id='.$lpItemId;
 }
 
 if ($debug > 0) {

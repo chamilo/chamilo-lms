@@ -4,7 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class ImsLti.

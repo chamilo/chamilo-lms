@@ -121,7 +121,6 @@
         "phpoffice/phpspreadsheet": "~1.16",
         "phpoffice/phpword": "~0.18",
         "sabre/vobject": "~4.2",
-        "sensio/framework-extra-bundle": "~6.1",
         "simpod/doctrine-utcdatetime": "^0.1.2",
         "sonata-project/exporter": "^2.2",
         "spomky-labs/otphp": "^10.0",
@@ -173,7 +172,7 @@
         "twig/inky-extra": "^3.3",
         "twig/intl-extra": "^3.0",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^1.18.0",
+        "vich/uploader-bundle": "^2.8",
         "webit/eval-math": "^1.0",
         "webonyx/graphql-php": "^14.8"
     },

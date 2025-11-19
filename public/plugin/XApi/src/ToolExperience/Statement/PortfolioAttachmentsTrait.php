@@ -9,7 +9,7 @@ namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\PortfolioAttachment;
 use Chamilo\CoreBundle\Entity\PortfolioComment as PortfolioCommentEntity;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Database;
 use UserManager;
 use Xabbuh\XApi\Model\Attachment;

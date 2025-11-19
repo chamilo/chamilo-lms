@@ -369,17 +369,15 @@ if (isset($_POST['action']) && Security::check_token('get')) {
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-        api_location(api_get_self());
     }
 }
 
 if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
     $courseId = (int) $_GET['toggle_catalogue'];
-    $accessUrlId = api_get_current_access_url_id();
     $em = Database::getManager();
     $repo = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
     $course = api_get_course_entity($courseId);
-    $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
     if ($course && $accessUrl) {
         $record = $repo->findOneBy([
@@ -403,8 +401,6 @@ if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
 
         $em->flush();
     }
-
-    api_location(api_get_self());
 }
 $content = '';
 $message = '';
@@ -468,8 +464,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-
-        api_location(api_get_self());
     }
 
     if (isset($_GET['new_course_id'])) {

@@ -1,6 +1,8 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
-/**
+/*
  * Configuration script for the Buy Courses plugin.
  */
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -37,7 +39,9 @@ $interbreadcrumb[] = [
     'name' => $plugin->get_lang('plugin_title'),
 ];
 
-$templateName = $plugin->get_lang('AvailableCourses');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
+
+$templateName = $plugin->get_lang('Sessions');
 
 $tpl = new Template($templateName);
 
@@ -48,27 +52,32 @@ $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
 
 $query = CoursesAndSessionsCatalog::browseSessions(null, ['start' => $first, 'length' => $pageSize], true);
-$sessions = new Paginator($query, true);
+$sessions = new Paginator($query, $fetchJoinCollection = true);
 foreach ($sessions as $session) {
     $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
     $session->buyCourseData = [];
-    if (!empty($item)) {
+    if ($item) {
         $session->buyCourseData = $item;
     }
 }
 
 $totalItems = count($sessions);
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?type='.BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = BuyCoursesPlugin::returnPagination(
+    api_get_self(),
+    $currentPage,
+    $pagesCount,
+    $totalItems,
+    ['type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION]
+);
 
 $tpl->assign('courses', []);
-$tpl->assign('services', []);
 $tpl->assign('sessions', $sessions);
+$tpl->assign('services', []);
 $tpl->assign('session_pagination', $pagination);
-$tpl->assign('course_pagination', '');
-$tpl->assign('service_pagination', '');
+$tpl->assign('course_pagination', $pagination);
+$tpl->assign('service_pagination', $pagination);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

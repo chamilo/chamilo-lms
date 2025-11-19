@@ -176,9 +176,4 @@ class RedirectionPlugin extends Plugin
             }
         }
     }
-
-    public function get_name()
-    {
-        return 'Redirection';
-    }
 }

@@ -3,9 +3,13 @@ import { computed, onMounted, ref, watch } from "vue"
 import DatePicker from "primevue/datepicker"
 import FloatLabel from "primevue/floatlabel"
 import Message from "primevue/message"
+import { usePlatformConfig } from "../../store/platformConfig"
 import { calendarLocales } from "../../utils/calendarLocales"
 import { useLocale } from "../../composables/locale"
 import { usePrimeVue } from "primevue/config"
+
+const platformConfigStore = usePlatformConfig()
+const timepicketIncrement = Number(platformConfigStore.getSetting("platform.timepicker_increment"))
 
 const modelValue = defineModel({
   type: [Date, Array, String, undefined, null],
@@ -94,6 +98,7 @@ onMounted(() => {
         :manual-input="type !== 'range'"
         :selection-mode="type"
         :show-time="showTime"
+        :step-minute="timepicketIncrement"
         fluid
         icon-display="input"
         show-icon

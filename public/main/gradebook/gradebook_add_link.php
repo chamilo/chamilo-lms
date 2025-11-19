@@ -17,6 +17,7 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $session_id = api_get_session_id();
+$courseRealId = (int) $course_info['real_id'];
 $typeSelected = isset($_GET['typeselected']) ? (int) $_GET['typeselected'] : null;
 
 if (0 == $session_id) {
@@ -100,9 +101,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             (isset($addvalues['select_link']) && "" != $addvalues['select_link'])
         ) {
             $sql1 = 'SELECT title from '.$tbl_forum_thread.'
-					 WHERE
-					    c_id = '.$course_info['real_id'].' AND
-					    iid  = '.$addvalues['select_link'];
+					 WHERE iid  = '.$addvalues['select_link'];
             $res1 = Database::query($sql1);
             $rowtit = Database::fetch_row($res1);
             $course_id = api_get_course_id();
@@ -119,9 +118,7 @@ if (isset($typeSelected) && '0' != $typeSelected) {
                             thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
                             thread_weight= "'.api_float_val($addvalues['weight']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
-						WHERE
-						    iid ='.$addvalues['select_link'].' AND
-						    c_id = '.$course_info['real_id'].' ';
+						WHERE iid ='.$addvalues['select_link'];
                 Database::query($sql);
             }
         }
@@ -171,7 +168,7 @@ $(function() {
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();
             $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=get_gradebook_weight",
+                url: "'.api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?'.api_get_cidreq().'&a=get_gradebook_weight",
                 data: "cat_id="+cat_id,
                 success: function(return_value) {
                     if (return_value != 0 ) {

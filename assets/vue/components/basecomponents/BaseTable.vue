@@ -44,7 +44,7 @@ const props = defineProps({
     required: false,
     default: null,
   },
-  filterAsMenu: {
+  showFilterRow: {
     type: Boolean,
     required: false,
     default: false,
@@ -129,7 +129,7 @@ if (rows.value == null) {
   rows.value = initialRows()
 }
 
-defineEmits(["page", "sort"])
+defineEmits(["filter", "page", "sort"])
 
 const slots = useSlots()
 
@@ -150,7 +150,7 @@ defineExpose({
     v-model:sort-field="sortField"
     v-model:sort-order="sortOrder"
     :data-key="dataKey"
-    :filter-display="filterAsMenu ? 'menu' : null"
+    :filter-display="showFilterRow ? 'row' : undefined"
     :global-filter-fields="globalFilterFields"
     :lazy="lazy"
     :loading="isLoading"
@@ -165,6 +165,7 @@ defineExpose({
     responsive-layout="scroll"
     size="small"
     striped-rows
+    @filter="$emit('filter', $event)"
     @page="$emit('page', $event)"
     @sort="$emit('sort', $event)"
   >

@@ -11,9 +11,11 @@
 
     <!-- Repeat Date -->
     <BaseCheckbox
+      id="repeat"
       v-model="formData.repeatDate"
       :label="t('Repeat date')"
       @change="toggleRepeatOptions"
+      name="repeat"
     />
 
     <div v-if="formData.repeatDate">
@@ -30,9 +32,8 @@
         <BaseInputNumber
           v-model="formData.repeatDays"
           :label="t('Number of days')"
-          type="number"
           min="1"
-          required
+          id="xdays_number"
         />
       </div>
 
@@ -47,11 +48,10 @@
     </div>
 
     <BaseInputNumber
+      id="end_date_time"
       v-model="formData.duration"
       :label="t('Duration (minutes)')"
-      type="number"
       min="1"
-      required
     />
 
     <!-- Group -->

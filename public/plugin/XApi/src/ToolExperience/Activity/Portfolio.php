@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Xabbuh\XApi\Model\Activity;
 use Xabbuh\XApi\Model\Definition;
 use Xabbuh\XApi\Model\IRI;

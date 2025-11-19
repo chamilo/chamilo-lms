@@ -106,6 +106,13 @@
           for="dbNameForm"
         />
       </div>
+      <small v-if="'update' !== installerData.installType">
+        {{
+          t(
+            "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.",
+          )
+        }}
+      </small>
     </div>
 
     <div
@@ -128,7 +135,7 @@
       v-if="installerData.stepData.dbExists"
       :closable="false"
       severity="warn"
-      style="margin-bottom: 8px;"
+      style="margin-bottom: 8px"
     >
       <span v-html="t('A database with the same name already exists. It will be deleted.')" />
     </Message>
@@ -230,8 +237,10 @@ const { t } = useI18n()
 
 const installerData = inject("installerData")
 
-// Database Name fix replace weird chars
-if ("update" !== installerData.value.installType) {
-  installerData.value.dbNameForm = installerData.value.dbNameForm.replace(/[-*$ .]/g, "")
+// Normalize database name on the client so it matches backend sanitization.
+// We only allow letters, digits and underscore. Other characters are stripped.
+if (installerData.value.installType !== "update") {
+  const rawName = installerData.value.stepData?.dbNameForm || ""
+  installerData.value.stepData.dbNameForm = rawName.replace(/[^a-zA-Z0-9_]/g, "")
 }
 </script>

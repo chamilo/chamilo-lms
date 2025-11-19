@@ -241,7 +241,7 @@ echo Display::page_header(get_lang('Question').': '.$objQuestion->selectTitle())
             <button type="submit" name="submitAnswers" value="submitAnswers"
                     class="inline-flex items-center gap-2 rounded-md bg-primary text-white hover:bg-primary/90 px-4 py-2 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary">
                 <i class="fa fa-save" aria-hidden="true"></i>
-                <span><?php echo get_lang('Add question to exercise'); ?></span>
+                <span><?php echo get_lang('Add question to test'); ?></span>
             </button>
         </div>
     </form>

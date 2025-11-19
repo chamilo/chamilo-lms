@@ -1040,20 +1040,11 @@
 }
 
 #social-wall-container {
-  .tab {
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    transition: background-color 0.3s, color 0.3s;
-    cursor: pointer;
+  .tab-active:hover {
+    @apply bg-primary/90;
   }
-
-  .tab:hover {
-     background-color: #e2e8f0;
-  }
-
-  .tab-active {
-    background-color: #3b82f6;
-    color: white;
+  .tab:disabled {
+    @apply opacity-60 cursor-not-allowed;
   }
 }
 
@@ -1093,5 +1084,107 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
+  }
+}
+/* ===== Primary-aware "active" styles (Social) ===== */
+/* Primary-aware "active" styles — scoped to Social UI containers only */
+.social-groups,
+.social-group-show,
+.social-search,
+.friends-invitations,
+.social-group-messages,
+#social-wall-container,
+#social-group-container,
+.my-groups-card,
+.my-friends-card,
+.user-rel-user-search,
+.invite-friends {
+  /* Brand tokens (scoped to each container) */
+  --ui-primary: rgb(var(--color-primary-base)); /* main brand color */
+  --ui-on-primary: rgb(var(--color-primary-button-text, 255 255 255)); /* readable text on primary */
+
+  /* Pills / side menu / generic active patterns */
+  .menu-item.active,
+  .active {
+    background-color: var(--ui-primary) !important;
+    color: var(--ui-on-primary) !important;
+  }
+
+  .menu-item.active i,
+  .menu-item.active .badge,
+  .nav li.active a {
+    color: var(--ui-on-primary) !important;
+  }
+
+  .badge {
+    background-color: var(--ui-primary) !important;
+    color: var(--ui-on-primary) !important;
+  }
+
+  .menu-item:focus-visible,
+  .tab:focus-visible,
+  .nav-link:focus-visible {
+    outline: 2px solid var(--ui-primary);
+    outline-offset: 2px;
+  }
+
+  .menu-item.active:hover {
+    background-color: rgb(var(--color-primary-base) / 0.92);
+  }
+
+  /* Bootstrap-like pills */
+  .nav-pills .nav-link.active {
+    background-color: var(--ui-primary) !important;
+    border-color: var(--ui-primary) !important;
+    color: var(--ui-on-primary) !important;
+  }
+
+  /* Simple tab headers */
+  .tab-active {
+    background: transparent !important;
+    border-bottom: 2px solid var(--ui-primary) !important;
+    color: var(--ui-primary) !important;
+    font-weight: 700;
+  }
+
+  .tab:hover {
+    border-bottom-color: rgb(var(--color-primary-base) / 0.65);
+  }
+
+  .tab-active:hover {
+    background-color: rgb(var(--color-primary-base) / 0.90);
+  }
+
+  .tab:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+
+  /* PrimeVue tabview */
+  .p-tabview-nav .p-tabview-selected {
+    background: transparent !important;
+    border-bottom: 3px solid var(--ui-primary) !important;
+  }
+  .p-tabview-nav .p-tabview-selected a,
+  .p-tabview-nav .p-tabview-selected .tab-header {
+    color: var(--ui-primary) !important;
+    font-weight: 700;
+  }
+
+  /* Legacy .tabs list variant */
+  .tabs li.active {
+    border-top-color: var(--ui-primary) !important;
+    background-color: #f8f9fa; /* keep strip readable */
+    color: var(--ui-primary) !important;
+  }
+
+  /* Utilities (optional) */
+  .is-active-bg-primary {
+    background-color: var(--ui-primary) !important;
+    color: var(--ui-on-primary) !important;
+  }
+  .is-active-text-primary {
+    color: var(--ui-primary) !important;
+    border-color: var(--ui-primary) !important;
   }
 }

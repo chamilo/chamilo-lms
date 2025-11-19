@@ -62,13 +62,13 @@
                                                 </div>
                                             {% elseif course.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="ajax btn btn-info btn-block btn-sm" title=""
+                                                    <a class="ajax btn btn--info btn-block btn--sm" title=""
                                                        href="{{ course_description_url }}"
                                                        data-title="{{ course.title }}">
                                                         <em class="fa fa-file-text"></em> {{ 'SeeDescription'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
-                                                    <a class="btn btn-success btn-block btn-sm" title=""
-                                                       href="{{ url('index') ~ 'plugin/BuyCourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode() }}">
+                                                    <a class="btn btn--success btn-block btn--sm" title=""
+                                                       href="{{ url('index') ~ 'plugin/BuyCourses/src/process.php?' ~ {'i': course.id, 't': 1}|url_encode }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -87,13 +87,13 @@
                                     <article class="items-course">
                                         <div class="items-course-image">
                                             <figure  class="img-responsive">
-                                                <img alt="{{ session.name }}" class="img-responsive"
+                                                <img alt="{{ session.title }}" class="img-responsive"
                                                      src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                                             </figure>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
-                                                <a href="{{ '/session/' ~ session.id ~ '/about/' }}">{{ session.name }}</a>
+                                                <a href="{{ url('index') ~ 'session/' ~ session.id ~ '/about/' }}">{{ session.title }}</a>
                                             </h4>
                                             {% if 'show_session_coach'|api_get_setting == 'true' %}
                                                 <p><em class="fa fa-user fa-fw"></em> {{ session.coach }}</p>
@@ -107,34 +107,34 @@
                                                 {% endif %}
                                             </p>
                                             <p class="text-right">
-                                            <span class="label label-primary">
-                                                {{ session.item.total_price_formatted }}
-                                            </span>
+                                                <span class="label label-primary">
+                                                    {{ session.item.total_price_formatted }}
+                                                </span>
                                             </p>
                                             <!--
-                                        <ul class="list-unstyled">
-                                            {% for course in session.courses %}
-                                                <li>
-                                                    <em class="fa fa-book fa-fw"></em> {{ course.title }}
-                                                    {% if course.coaches|length %}
-                                                        <ul>
-                                                            {% for coach in course.coaches %}
-                                                                <li>{{ coach }}</li>
-                                                            {% endfor %}
-                                                        </ul>
-                                                    {% endif %}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                        -->
+                                            <ul class="list-unstyled">
+                                                {% for course in session.courses %}
+                                                    <li>
+                                                        <em class="fa fa-book fa-fw"></em> {{ course.title }}
+                                                        {% if course.coaches|length %}
+                                                            <ul>
+                                                                {% for coach in course.coaches %}
+                                                                    <li>{{ coach }}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                            -->
                                             {% if session.enrolled == "YES" %}
                                                 <div class="alert alert-success">
                                                     <em class="fa fa-check-square-o fa-fw"></em> {{ 'TheUserIsAlreadyRegisteredInTheSession'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </div>
                                             {% elseif session.enrolled == "NO" %}
                                                 <div class="toolbar">
-                                                    <a class="btn btn-success btn-block btn-sm"
-                                                       href="{{ url('index') ~ '/plugin/BuyCourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode() }}">
+                                                    <a class="btn btn--success btn-block btn--sm"
+                                                       href="{{ url('index') ~ 'plugin/BuyCourses/src/process.php?' ~ {'i': session.id, 't': 2}|url_encode }}">
                                                         <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                     </a>
                                                 </div>
@@ -163,7 +163,7 @@
                                         <div class="items-course-info">
                                             <h4 class="title">
                                                 <a title="{{ service.name }}"
-                                                   href="{{ url('index') }}service/{{ service.id }}">
+                                                   href="{{ url('index') ~ 'service/' ~ service.id }}">
                                                     {{ service.name }}
                                                 </a>
                                             </h4>
@@ -196,17 +196,17 @@
                                                 <li><em class="fa fa-user"></em> {{ service.owner_name }}</li>
                                             </ul>
                                             <p class="text-right">
-                                            <span class="label label-primary">
-                                                 {{ service.total_price_formatted }}
-                                            </span>
+                                                <span class="label label-primary">
+                                                     {{ service.total_price_formatted }}
+                                                </span>
                                             </p>
                                             <div class="toolbar">
-                                                <a class="btn btn-info btn-block btn-sm" title=""
-                                                   href="{{ url('index') }}service/{{ service.id }}">
+                                                <a class="btn btn--info btn-block btn--sm" title=""
+                                                   href="{{ url('index') ~ 'service/' ~ service.id }}">
                                                     <em class="fa fa-info-circle"></em> {{ 'ServiceInformation'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
-                                                <a class="btn btn-success btn-block btn-sm" title=""
-                                                   href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode() }}">
+                                                <a class="btn btn--success btn-block btn--sm" title=""
+                                                   href="{{ url('index') ~ 'plugin/BuyCourses/src/service_process.php?' ~ {'i': service.id, 't': service.applies_to}|url_encode }}">
                                                     <em class="fa fa-shopping-cart"></em> {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                                 </a>
                                             </div>

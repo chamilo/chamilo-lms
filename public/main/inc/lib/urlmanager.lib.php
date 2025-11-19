@@ -159,33 +159,6 @@ class UrlManager
      *
      * @author Julio Montoya
      *
-     * @param string $orderBy
-     *
-     * @return array
-     * */
-    public static function get_url_data($orderBy = '')
-    {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $orderBy = empty($orderBy) ? ' id ' : Database::escape_string($orderBy);
-
-        $sql = "SELECT id, url, description, active, tms
-                FROM $table
-                ORDER BY $orderBy";
-
-        $res = Database::query($sql);
-        $urls = [];
-        while ($url = Database::fetch_array($res)) {
-            $urls[] = $url;
-        }
-
-        return $urls;
-    }
-
-    /**
-     * Gets the id, url, description, and active status of ALL URLs.
-     *
-     * @author Julio Montoya
-     *
      * @param int $urlId
      *
      * @return array
@@ -517,33 +490,32 @@ class UrlManager
      * @param  array of url_ids
      *
      * @return array
-     * */
-    public static function add_users_to_urls($user_list, $url_list)
+     *
+     * @throws Exception
+     */
+    public static function add_users_to_urls($user_list, $url_list): array
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $result_array = [];
 
         if (is_array($user_list) && is_array($url_list)) {
             foreach ($url_list as $urlId) {
                 foreach ($user_list as $user_id) {
-                    $count = self::relation_url_user_exist($user_id, $urlId);
-                    if (0 == $count) {
-                        $sql = "INSERT INTO $table
-                                SET
-                                    user_id = ".intval($user_id).",
-                                    access_url_id = ".intval($urlId);
-                        $result = Database::query($sql);
-                        if ($result) {
-                            $result_array[$urlId][$user_id] = 1;
-                        } else {
-                            $result_array[$urlId][$user_id] = 0;
-                        }
+                    $result = self::add_user_to_url($user_id, $urlId, true);
+
+                    if ($result) {
+                        $result_array[$urlId][$user_id] = 1;
+                    } else {
+                        $result_array[$urlId][$user_id] = 0;
                     }
                 }
             }
+
+            Database::getManager()->flush();
+
+            return $result_array;
         }
 
-        return $result_array;
+        return [];
     }
 
     public static function remove_users_from_urls(array $userIds, array $urlIds): void
@@ -810,8 +782,10 @@ class UrlManager
      * @param int $urlId
      *
      * @return bool true if success
-     * */
-    public static function add_user_to_url($user_id, $urlId = 1)
+     *
+     * @throws Exception
+     */
+    public static function add_user_to_url($user_id, $urlId = 1, bool $addAuthSource = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         if (empty($urlId)) {
@@ -823,6 +797,27 @@ class UrlManager
             $sql = "INSERT INTO $table (user_id, access_url_id)
                     VALUES ('".intval($user_id)."', '".intval($urlId)."') ";
             $result = Database::query($sql);
+        }
+
+        if ($addAuthSource && $result) {
+            /** @var AccessUrl|null $accessUrl */
+            $accessUrl = Container::getAccessUrlRepository()->find($urlId);
+            $user = api_get_user_entity($user_id);
+
+            $authSources = $user->getAuthSourcesByUrl($accessUrl);
+
+            if ($authSources->count() <= 0) {
+                $firstAuthSource = $user->getAuthSources()->first();
+
+                if ($firstAuthSource) {
+                    $user->addAuthSourceByAuthentication(
+                        $firstAuthSource->getAuthentication(),
+                        $accessUrl
+                    );
+
+                    Database::getManager()->flush();
+                }
+            }
         }
 
         return $result;
@@ -1026,7 +1021,7 @@ class UrlManager
      *
      * @return bool|array
      */
-    public static function update_urls_rel_user($user_list, $urlId)
+    public static function update_urls_rel_user($user_list, $urlId, bool $updateAuthSource = false)
     {
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = (int) $urlId;
@@ -1046,7 +1041,7 @@ class UrlManager
         $users_added = [];
         foreach ($user_list as $user_id_to_add) {
             if (!in_array($user_id_to_add, $existing_users)) {
-                $result = self::add_user_to_url($user_id_to_add, $urlId);
+                $result = self::add_user_to_url($user_id_to_add, $urlId, $updateAuthSource);
                 if ($result) {
                     $users_added[] = $user_id_to_add;
                 }

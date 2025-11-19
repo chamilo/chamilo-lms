@@ -8,7 +8,7 @@
     <div class="grid gap-4">
       <BaseInputText id="p-title" :label="t('Title')" v-model="title"
                      :form-submitted="submitted" :is-invalid="!title" />
-      <BaseInputText id="p-sub" :label="t('Subtitle')" v-model="subtitle" />
+      <BaseInputText id="p-sub" :label="t('subtitle')" v-model="subtitle" />
     </div>
     <template #footer>
       <BaseButton type="black" icon="close" :label="t('Cancel')" @click="close" />

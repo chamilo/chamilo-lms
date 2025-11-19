@@ -94,12 +94,6 @@ class ResourceNodeVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        // Make sure there is a user object (i.e. that the user is logged in)
-        // Update. No, anons can enter a node depending in the visibility.
-        // $user = $token->getUser();
-        /*if (!$user instanceof UserInterface) {
-            return false;
-        }*/
         /** @var ResourceNode $resourceNode */
         $resourceNode = $subject;
         $resourceTypeName = $resourceNode->getResourceType()->getTitle();
@@ -212,20 +206,34 @@ class ResourceNodeVoter extends Voter
         // Checking links connected to this resource.
         $request = $this->requestStack->getCurrentRequest();
 
-        $courseId = (int) $request->get('cid');
-        $sessionId = (int) $request->get('sid');
-        $groupId = (int) $request->get('gid');
+        $courseId = 0;
+        $sessionId = 0;
+        $groupId = 0;
+        $isFromLearningPath = false;
 
-        // Try Session values.
-        if (empty($courseId) && $request->hasSession()) {
-            $courseId = (int) $request->getSession()->get('cid');
-            $sessionId = (int) $request->getSession()->get('sid');
-            $groupId = (int) $request->getSession()->get('gid');
+        if (null !== $request) {
+            $courseId = (int) $request->get('cid');
+            $sessionId = (int) $request->get('sid');
+            $groupId = (int) $request->get('gid');
 
-            if (0 === $courseId) {
-                $courseId = (int) ChamiloSession::read('cid');
-                $sessionId = (int) ChamiloSession::read('sid');
-                $groupId = (int) ChamiloSession::read('gid');
+            // Detect learning path context from request parameters.
+            $lpId = $request->query->getInt('lp_id', 0);
+            $lpItemId = $request->query->getInt('lp_item_id', 0);
+            $origin = (string) $request->query->get('origin', '');
+
+            $isFromLearningPath = $lpId > 0 || $lpItemId > 0 || 'learnpath' === $origin;
+
+            // Try Session values.
+            if (empty($courseId) && $request->hasSession()) {
+                $courseId = (int) $request->getSession()->get('cid');
+                $sessionId = (int) $request->getSession()->get('sid');
+                $groupId = (int) $request->getSession()->get('gid');
+
+                if (0 === $courseId) {
+                    $courseId = (int) ChamiloSession::read('cid');
+                    $sessionId = (int) ChamiloSession::read('sid');
+                    $groupId = (int) ChamiloSession::read('gid');
+                }
             }
         }
 
@@ -348,10 +356,6 @@ class ResourceNodeVoter extends Voter
             $rights = $rightsFromResourceLink;
         }
 
-        // Taken the rights from context (request + user roles).
-        // $rights = $link->getResourceNode()->getTool()->getToolResourceRight();
-        // $rights = $link->getResourceNode()->getResourceType()->getTool()->getToolResourceRight();
-
         // By default, the rights are:
         // Teachers: CRUD.
         // Students: Only read.
@@ -370,8 +374,11 @@ class ResourceNodeVoter extends Voter
             }
 
             // If student.
+            // Normal case: resource must be published.
+            // Exception: when the resource is being opened from a learning path item,
+            // allow VIEW even if the underlying ResourceLink visibility is hidden in the tool.
             if ($this->security->isGranted(self::ROLE_CURRENT_COURSE_STUDENT)
-                && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                && (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility() || $isFromLearningPath)
             ) {
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
@@ -489,20 +496,6 @@ class ResourceNodeVoter extends Voter
             $acl->allow($right->getRole(), null, (string) $right->getMask());
         }
 
-        // Role and permissions settings
-        // Student can just view (read)
-        // $acl->allow($student, null, self::getReaderMask());
-
-        // Teacher can view/edit
-        /*$acl->allow(
-            $teacher,
-            null,
-            [
-                self::getReaderMask(),
-                self::getEditorMask(),
-            ]
-        );*/
-
         // Anons can see.
         if ($allowAnonsToView) {
             $acl->allow($anon, null, (string) self::getReaderMask());
@@ -512,7 +505,7 @@ class ResourceNodeVoter extends Voter
             return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
         }
 
-        $roles = $user->getRoles();
+        $roles = $user instanceof UserInterface ? $user->getRoles() : [];
 
         foreach ($roles as $role) {
             if ($acl->isAllowed($role, $linkId, $askedMask)) {

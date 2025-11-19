@@ -60,7 +60,8 @@
                                 <img src="{{ 'bullet_grey.png'|icon() }}" alt="{{ 'CourseVisibilityHidden'|get_lang }}"
                                      title="{{ 'CourseVisibilityHidden'|get_lang }}">
                             {% endif %}
-                            <a href="{{ url('chamilo_core_course_home', { cid: item.id } ) }}">
+
+                            <a href="{{ url('chamilo_core_course_home', { cid: item.id }) }}">
                                 {{ item.title }}
                             </a>
                             <span class="label label-info">{{ item.code }}</span>
@@ -88,8 +89,8 @@
                             </td>
                         {% endif %}
                         <td class="text-right">
-                            <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type':product_type_course}|url_encode() }}"
-                               class="btn btn--info btn-sm">
+                            <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type':product_type_course}|url_encode }}"
+                               class="btn btn--info btn--sm">
                                 <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
                             </a>
                         </td>
@@ -138,20 +139,16 @@
                                 {% endif %}
                             </td>
                             <td class="text-right" width="200">
-                                {% if item.buyCourseData %}
-                                    {{ item.buyCourseData.price_formatted }}
-                                {% endif %}
+                                {{ item.buyCourseData.price_formatted }}
                             </td>
                             {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
                                 <td class="text-center">
-                                    {% if item.buyCourseData %}
-                                        {{ item.buyCourseData.tax_perc_show }} %
-                                    {% endif %}
+                                    {{ item.buyCourseData.tax_perc_show }} %
                                 </td>
                             {% endif %}
                             <td class="text-right">
-                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode() }}"
-                                   class="btn btn--info btn-sm">
+                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/configure_course.php?' ~ {'id': item.id, 'type': product_type_session}|url_encode }}"
+                                   class="btn btn--info btn--sm">
                                     <em class="fa fa-wrench fa-fw"></em>
                                     {{ 'Configure'|get_lang }}
                                 </a>
@@ -165,13 +162,13 @@
         </div>
     {% endif %}
     {% if services_are_included %}
+        <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}" class="btn btn--primary">
+            <em class="fa fa-cart-plus fa-fw"></em> {{ 'NewService'| get_plugin_lang('BuyCoursesPlugin') }}
+        </a>
         <div role="tabpanel" class="tab-pane {{ services ? 'fade in active' : '' }} " id="services">
             <div class="table-responsive">
-                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}" class="btn btn--primary">
-                    <em class="fa fa-cart-plus fa-fw"></em> {{ 'NewService'| get_plugin_lang('BuyCoursesPlugin') }}
-                </a>
-                <br>
-                <br>
+                </br>
+                </br>
                 <table id="services_table" class="table">
                     <thead>
                     <tr>
@@ -191,7 +188,7 @@
                     {% for item in services %}
                         <tr data-item="{{ item.id }}" data-type="service">
                             <td>
-                                {{ item.title }}
+                                {{ item.name }}
                             </td>
                             <td>
                                 {{ item.description }}
@@ -226,8 +223,8 @@
                                 </td>
                             {% endif %}
                             <td class="text-right">
-                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode() }}"
-                                   class="btn btn--info btn-sm">
+                                <a href="{{ url('index') ~ 'plugin/BuyCourses/src/services_edit.php?' ~ {'id': item.id}|url_encode }}"
+                                   class="btn btn--info btn--sm">
                                     <em class="fa fa-wrench fa-fw"></em> {{ 'Edit'|get_lang }}
                                 </a>
                             </td>

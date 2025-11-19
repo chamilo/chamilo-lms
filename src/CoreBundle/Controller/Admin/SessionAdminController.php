@@ -26,15 +26,16 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use const PATHINFO_FILENAME;
 
-#[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/sessionadmin')]
 class SessionAdminController extends BaseController
 {

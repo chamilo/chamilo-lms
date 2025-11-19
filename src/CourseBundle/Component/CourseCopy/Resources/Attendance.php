@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -23,13 +25,13 @@ class Attendance extends Resource
         $this->params = $params;
     }
 
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->params['name'];
     }
 
-    public function add_attendance_calendar($data)
+    public function add_attendance_calendar($data): void
     {
         $this->attendance_calendar[] = $data;
     }

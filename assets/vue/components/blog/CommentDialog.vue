@@ -54,10 +54,10 @@ const text = ref(props.initialText)
 watch(() => props.initialText, (v) => { text.value = v || "" })
 
 // Compute fallbacks to keep previous UX intact
-const dialogTitleComputed = computed(() => props.dialogTitle || t("Add Comment"))
+const dialogTitleComputed = computed(() => props.dialogTitle || t("Add comment"))
 const confirmLabelComputed = computed(() => props.confirmLabel || t("Send"))
 const headerIconComputed = computed(() => props.headerIcon || "comment")
-const placeholderComputed = computed(() => props.placeholder || t("Write a comment…"))
+const placeholderComputed = computed(() => props.placeholder || t("Write your comment here..."))
 const confirmIconComputed = computed(() => (props.confirmLabel ? "check" : "send"))
 
 function close(){ visible.value=false; emit("close") }

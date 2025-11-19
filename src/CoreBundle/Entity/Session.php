@@ -1174,6 +1174,8 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
 
     /**
      * Get user from course by status.
+     *
+     * @return Collection<int, SessionRelCourseRelUser>
      */
     public function getSessionRelCourseRelUsersByStatus(Course $course, int $status): Collection
     {

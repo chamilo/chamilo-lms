@@ -72,7 +72,7 @@ class Test2pdfPlugin extends Plugin
         $this->manageTab(false);
     }
 
-    public function get_name()
+    public function get_name(): string
     {
         return 'Test2Pdf';
     }

@@ -131,7 +131,7 @@ if ($objExercise->selectType() === ONE_PER_PAGE
     && $objExercise->hasQuestionWithType(PAGE_BREAK)
 ) {
     echo Display::return_message(
-        get_lang('This exercise contains page-break questions, which will only take effect if the exercise is set to “All questions on one page".'),
+        get_lang("The test contains page-break questions, which will only take effect if the test is set to 'All questions on one page'."),
         'warning'
     );
 }

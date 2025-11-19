@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 

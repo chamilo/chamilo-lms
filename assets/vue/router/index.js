@@ -16,6 +16,7 @@ import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
 import fileManagerRoutes from "./filemanager"
 import skillRoutes from "./skill"
+import accessUrlRoutes from "./accessurl"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
@@ -259,10 +260,13 @@ const router = createRouter({
     publicPageRoutes,
     skillRoutes,
     sessionAdminRoutes,
+    accessUrlRoutes,
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
+  document.body.classList.add("cursor-wait")
+
   const securityStore = useSecurityStore()
 
   if (!securityStore.isAuthenticated) {
@@ -320,6 +324,10 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  document.body.classList.remove("cursor-wait")
 })
 
 router.beforeResolve(async (to) => {

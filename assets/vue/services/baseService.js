@@ -33,7 +33,7 @@ export default {
     }
 
     return {
-      totalItems: data.totalItems,
+      totalItems: data["hydra:totalItems"] || data.totalItems,
       items: data["hydra:member"],
       nextPageParams,
     }

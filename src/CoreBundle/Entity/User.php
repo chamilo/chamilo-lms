@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
@@ -126,7 +127,8 @@ use UserManager;
             description: 'AccessUrl identifier',
         ),
     ],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['user:read']],
+    denormalizationContext: ['groups' => ['user:write']],
     input: CreateUserOnAccessUrlInput::class,
     output: User::class,
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
@@ -146,6 +148,7 @@ use UserManager;
 )]
 #[ApiFilter(PartialSearchOrFilter::class, properties: ['username', 'firstname', 'lastname'])]
 #[ApiFilter(filterClass: BooleanFilter::class, properties: ['isActive'])]
+#[ApiFilter(filterClass: OrderFilter::class, properties: ['username', 'firstname', 'lastname'])]
 class User implements UserInterface, EquatableInterface, ResourceInterface, ResourceIllustrationInterface, PasswordAuthenticatedUserInterface, LegacyPasswordAuthenticatedUserInterface, ExtraFieldItemInterface, Stringable
 {
     use TimestampableEntity;
@@ -923,6 +926,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         return $this;
     }
 
+    /**
+     * @return Collection<int, CourseRelUser>
+     */
     public function getCourses(): Collection
     {
         return $this->courses;
@@ -1536,6 +1542,9 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         $this->portals = $value;
     }
 
+    /**
+     * @return array<int, Session>
+     */
     public function getSessionsAsGeneralCoach(): array
     {
         return $this->getSessions(Session::GENERAL_COACH);
@@ -2520,7 +2529,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
      */
     public function getAuthSourcesAuthentications(?AccessUrl $url = null): array
     {
-        $authSources = $url ? $this->getAuthSourcesByUrl($url) : $this->getAuthSources();
+        $authSources = $this->getAuthSourcesByUrl($url);
+
+        if ($authSources->count() <= 0) {
+            return [];
+        }
 
         return $authSources->map(fn (UserAuthSource $authSource) => $authSource->getAuthentication())->toArray();
     }
@@ -2537,12 +2550,16 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function addAuthSourceByAuthentication(string $authentication, AccessUrl $url): static
     {
-        $authSource = (new UserAuthSource())
-            ->setAuthentication($authentication)
-            ->setUrl($url)
-        ;
+        $authSource = $this->getAuthSourceByAuthentication($authentication, $url);
 
-        $this->addAuthSource($authSource);
+        if (!$authSource) {
+            $authSource = (new UserAuthSource())
+                ->setAuthentication($authentication)
+                ->setUrl($url)
+            ;
+
+            $this->addAuthSource($authSource);
+        }
 
         return $this;
     }
@@ -2555,10 +2572,11 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
         );
     }
 
-    public function getAuthSourceByAuthentication(string $authentication): UserAuthSource
+    public function getAuthSourceByAuthentication(string $authentication, AccessUrl $accessUrl): ?UserAuthSource
     {
         return $this->authSources->findFirst(
-            fn (UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+            fn (int $index, UserAuthSource $authSource) => $authSource->getAuthentication() === $authentication
+                && $authSource->getUrl()->getId() === $accessUrl->getId()
         );
     }
 

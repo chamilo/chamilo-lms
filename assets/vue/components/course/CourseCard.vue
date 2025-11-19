@@ -13,8 +13,8 @@
         <BaseAppLink
           v-else
           :to="{ name: 'CourseHome', params: { id: course._id }, query: { sid: sessionId } }"
-          class="absolute inset-0 block"
           aria-label="Open course"
+          class="absolute inset-0 block"
         >
           <img
             :alt="course.title || 'Course illustration'"
@@ -54,11 +54,11 @@
 
         <BaseButton
           v-if="isLocked && hasRequirements"
+          class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
           icon="shield-check"
-          type="black"
           onlyIcon
           size="large"
-          class="!bg-support-1 !text-support-3 !rounded-md !shadow-sm hover:!bg-support-2"
+          type="black"
           @click="openRequirementsModal"
         />
       </div>
@@ -77,9 +77,9 @@
   <CatalogueRequirementModal
     v-model="showDependenciesModal"
     :course-id="course.id"
-    :session-id="sessionId"
-    :requirements="requirementList"
     :graph-image="graphImage"
+    :requirements="requirementList"
+    :session-id="sessionId"
   />
 </template>
 
@@ -139,9 +139,7 @@ const daysRemainingText = computed(() => {
   return t("Expired")
 })
 
-const showCourseDuration = computed(
-  () => platformConfigStore.getSetting("course.show_course_duration") === "true",
-)
+const showCourseDuration = computed(() => platformConfigStore.getSetting("course.show_course_duration") === "true")
 
 const teachers = computed(() => {
   if (props.session?.courseCoachesSubscriptions) {
@@ -183,12 +181,13 @@ const { hasRequirements, requirementList, graphImage, fetchStatus } = useCourseR
 
 const isLocked = computed(() => props.disabled || internalLocked.value)
 
-const imageUrl = computed(() =>
-  props.course?.illustrationUrl ||
-  props.course?.image?.url ||
-  props.course?.pictureUrl ||
-  props.course?.thumbnail ||
-  "/img/session_default.svg",
+const imageUrl = computed(
+  () =>
+    props.course?.illustrationUrl ||
+    props.course?.image?.url ||
+    props.course?.pictureUrl ||
+    props.course?.thumbnail ||
+    "/img/session_default.svg",
 )
 
 onMounted(() => {

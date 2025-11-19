@@ -23,14 +23,4 @@
  * @licence http://www.gnu.org/licenses/gpl.txt
  */
 
-//the plugin title
-$plugin_info['title'] = 'PENS';
-//the comments that go with the plugin
-$plugin_info['comment'] = 'PENS implementation for Chamilo';
-//the locations where this plugin can be shown
-$plugin_info['location'] = [];
-//the plugin version
-$plugin_info['version'] = '1.1';
-//the plugin author
-$plugin_info['author'] = 'Guillaume Viguier-Just, Yannick Warnier';
 $plugin_info = PENSPlugin::create()->get_info();

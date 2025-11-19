@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -12,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
 api_protect_course_script(true);
-$nameTools = get_lang('Forums');
+$nameTools = get_lang('Threads');
 $origin = api_get_origin();
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
@@ -67,6 +69,7 @@ $(function () {
 </script>';
 
 $viewForumUrl = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId;
+$threadIdParam = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $message = handleForum($viewForumUrl);
 $userId = api_get_user_id();
 $sessionId = api_get_session_id();
@@ -106,23 +109,23 @@ if (!empty($groupId)) {
     );
 
     // Course
-    if (!api_is_allowed_to_create_course() && //is a student
-        (
-            ($category && false == $category->isVisible($courseEntity)) ||
-            !$category->isVisible($courseEntity)
-        ) &&
-        !$sessionId
+    if (!api_is_allowed_to_create_course() // is a student
+        && (
+            ($category && false == $category->isVisible($courseEntity))
+            || !$category->isVisible($courseEntity)
+        )
+        && !$sessionId
     ) {
-      //  api_not_allowed(true);
+        //  api_not_allowed(true);
     }
 } else {
     // Course
-    if (!api_is_allowed_to_create_course() && //is a student
-        (
-            ($category && false == $category->isVisible($courseEntity)) ||
-            !$category->isVisible($courseEntity)
-        ) &&
-        !$sessionId
+    if (!api_is_allowed_to_create_course() // is a student
+        && (
+            ($category && false == $category->isVisible($courseEntity))
+            || !$category->isVisible($courseEntity)
+        )
+        && !$sessionId
     ) {
         api_not_allowed(true);
     }
@@ -164,129 +167,132 @@ if (!empty($groupId)) {
     ];
 } else {
     $interbreadcrumb[] = [
-        'url' => $forumUrl.'index.php?'.api_get_cidreq(),
-        'name' => get_lang('Forum Categories'),
+        'url'  => $forumUrl.'index.php?'.api_get_cidreq(),
+        'name' => get_lang('Forums'),
     ];
-    $interbreadcrumb[] = [
-        'url' => $forumUrl.'index.php?forumcategory='.$category->getIid().'&'.api_get_cidreq(),
-        'name' => prepare4display($category->getTitle()),
-    ];
-    $interbreadcrumb[] = [
-        'url' => '#',
-        'name' => Security::remove_XSS($forumEntity->getTitle()),
-    ];
+
+    if ($category && $category->getIid()) {
+        $interbreadcrumb[] = [
+            'url'  => $forumUrl.'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$category->getIid(),
+            'name' => Security::remove_XSS($category->getTitle()),
+        ];
+    }
 }
 
 $qualificationBlock = '';
 // Student list
-if ('liststd' === $my_action &&
-    isset($_GET['content']) &&
-    isset($_GET['id']) &&
-    (api_is_allowed_to_edit(null, true) || $is_group_tutor)
+if ('liststd' === $my_action
+    && isset($_GET['content'], $_GET['id'])
+    && (api_is_allowed_to_edit(null, true) || $is_group_tutor)
 ) {
-    $active = null;
-    $listType = $_GET['list'] ?? null;
-
-    switch ($listType) {
-        case 'qualify':
-            $student_list = get_thread_users_qualify($_GET['id']);
-            $nrorow3 = -2;
-            $active = 2;
-
-            break;
-        case 'notqualify':
-            $student_list = get_thread_users_not_qualify($_GET['id']);
-            $nrorow3 = -2;
-            $active = 3;
-
-            break;
-        default:
-            $student_list = get_thread_users_details($_GET['id']);
-            $nrorow3 = Database::num_rows($student_list);
-            $active = 1;
-
-            break;
-    }
-
-    $qualificationBlock .= Display::page_subheader(get_lang('Users list of the thread').': '.get_name_thread_by_id($_GET['id']));
-
-    if ($nrorow3 > 0 || -2 == $nrorow3) {
-        $url = api_get_cidreq().'&forum='.$forumId.'&action='
-            .Security::remove_XSS($_GET['action']).'&content='
-            .Security::remove_XSS($_GET['content'], STUDENT).'&id='.(int) ($_GET['id']);
-        $tabs = [
-            [
-                'content' => get_lang('All learners'),
-                'url' => $forumUrl.'viewforum.php?'.$url.'&list=all',
-            ],
-            [
-                'content' => get_lang('Qualified learners'),
-                'url' => $forumUrl.'viewforum.php?'.$url.'&list=qualify',
-            ],
-            [
-                'content' => get_lang('Unqualified learners'),
-                'url' => $forumUrl.'viewforum.php?'.$url.'&list=notqualify',
-            ],
-        ];
-        $qualificationBlock .= Display::tabsOnlyLink($tabs, $active);
-
-        $qualificationBlock .= '<center><br /><table class="data_table" style="width:50%">';
-        // The column headers (TODO: Make this sortable).
-        $qualificationBlock .= '<tr >';
-        $qualificationBlock .= '<th height="24">'.get_lang('First names and last names').'</th>';
-
-        if ('qualify' === $listType) {
-            $qualificationBlock .= '<th>'.get_lang('Score').'</th>';
-        }
-        if (api_is_allowed_to_edit(null, true)) {
-            $qualificationBlock .= '<th>'.get_lang('Grade activity').'</th>';
-        }
-        $qualificationBlock .= '</tr>';
-        $max_qualify = showQualify('2', $userId, $_GET['id']);
-        $counter = 0;
-        $icon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity'));
-        if (Database::num_rows($student_list) > 0) {
-            while ($row_student_list = Database::fetch_array($student_list)) {
-                $userInfo = api_get_user_info($row_student_list['id']);
-                $class_stdlist = 'row_even';
-                if (0 == $counter % 2) {
-                    $class_stdlist = 'row_odd';
-                }
-                $qualificationBlock .= '<tr class="'.$class_stdlist.'"><td>';
-                $qualificationBlock .= UserManager::getUserProfileLink($userInfo);
-                $qualificationBlock .= '</td>';
-                if ('qualify' === $listType) {
-                    $qualificationBlock .= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
-                }
-                if (api_is_allowed_to_edit(null, true)) {
-                    $current_qualify_thread = showQualify(
-                        '1',
-                        $row_student_list['id'],
-                        $_GET['id']
-                    );
-                    $qualificationBlock .= '<td>
-                        <a href="'.$forumUrl.'forumqualify.php?'.api_get_cidreq()
-                        .'&forum='.$forumId.'&thread='
-                        .(int) ($_GET['id']).'&user='.$row_student_list['id']
-                        .'&user_id='.$row_student_list['id'].'&idtextqualify='
-                        .$current_qualify_thread.'">'
-                        .$icon.'</a>
-                        </td></tr>';
-                }
-                $counter++;
-            }
-        } else {
-            if ('qualify' === $listType) {
-                $qualificationBlock .= '<tr><td colspan="2">'.get_lang('There are no qualified learners').'</td></tr>';
-            } else {
-                $qualificationBlock .= '<tr><td colspan="2">'.get_lang('There are no unqualified learners').'</td></tr>';
-            }
-        }
-
-        $qualificationBlock .= '</table></center>';
-        $qualificationBlock .= '<br />';
+    if ($threadIdParam <= 0) {
+        $qualificationBlock = Display::return_message(get_lang('Invalid thread'), 'warning');
     } else {
-        $qualificationBlock .= Display::return_message(get_lang('There are no participants'), 'warning');
+        $active   = null;
+        $listType = isset($_GET['list']) ? (string) $_GET['list'] : null;
+
+        switch ($listType) {
+            case 'qualify':
+                $student_list = get_thread_users_qualify($threadIdParam);
+                $nrorow3 = -2;
+                $active  = 2;
+                break;
+
+            case 'notqualify':
+                $student_list = get_thread_users_not_qualify($threadIdParam);
+                $nrorow3 = -2;
+                $active  = 3;
+                break;
+
+            default:
+                $student_list = get_thread_users_details($threadIdParam);
+                $nrorow3 = Database::num_rows($student_list);
+                $active  = 1;
+                break;
+        }
+
+        $qualificationBlock .= Display::page_subheader(
+            get_lang('Users list of the thread').': '.get_name_thread_by_id($threadIdParam)
+        );
+
+        if ($nrorow3 > 0 || -2 == $nrorow3) {
+            $url = api_get_cidreq() . '&forum=' . $forumId . '&action='
+                . Security::remove_XSS($_GET['action']) . '&content='
+                . Security::remove_XSS($_GET['content'], STUDENT) . '&id=' . (int) $_GET['id'];
+            $tabs = [
+                [
+                    'content' => get_lang('All learners'),
+                    'url' => $forumUrl . 'viewforum.php?' . $url . '&list=all',
+                ],
+                [
+                    'content' => get_lang('Qualified learners'),
+                    'url' => $forumUrl . 'viewforum.php?' . $url . '&list=qualify',
+                ],
+                [
+                    'content' => get_lang('Unqualified learners'),
+                    'url' => $forumUrl . 'viewforum.php?' . $url . '&list=notqualify',
+                ],
+            ];
+            $qualificationBlock .= Display::tabsOnlyLink($tabs, $active);
+
+            $qualificationBlock .= '<center><br /><table class="data_table" style="width:50%">';
+            // The column headers (TODO: Make this sortable).
+            $qualificationBlock .= '<tr >';
+            $qualificationBlock .= '<th height="24">' . get_lang('First names and last names') . '</th>';
+
+            if ('qualify' === $listType) {
+                $qualificationBlock .= '<th>' . get_lang('Score') . '</th>';
+            }
+            if (api_is_allowed_to_edit(null, true)) {
+                $qualificationBlock .= '<th>' . get_lang('Grade activity') . '</th>';
+            }
+            $qualificationBlock .= '</tr>';
+            $max_qualify = showQualify('2', $userId, $_GET['id']);
+            $counter = 0;
+            $icon = Display::getMdiIcon(ActionIcon::GRADE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Grade activity'));
+            if (Database::num_rows($student_list) > 0) {
+                while ($row_student_list = Database::fetch_array($student_list)) {
+                    $userInfo = api_get_user_info($row_student_list['id']);
+                    $class_stdlist = 'row_even';
+                    if (0 == $counter % 2) {
+                        $class_stdlist = 'row_odd';
+                    }
+                    $qualificationBlock .= '<tr class="' . $class_stdlist . '"><td>';
+                    $qualificationBlock .= UserManager::getUserProfileLink($userInfo);
+                    $qualificationBlock .= '</td>';
+                    if ('qualify' === $listType) {
+                        $qualificationBlock .= '<td>' . $row_student_list['qualify'] . '/' . $max_qualify . '</td>';
+                    }
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $current_qualify_thread = showQualify(
+                            '1',
+                            $row_student_list['id'],
+                            $_GET['id']
+                        );
+                        $qualificationBlock .= '<td>
+                        <a href="' . $forumUrl . 'forumqualify.php?' . api_get_cidreq()
+                            . '&forum=' . $forumId . '&thread='
+                            . (int) $_GET['id'] . '&user=' . $row_student_list['id']
+                            . '&user_id=' . $row_student_list['id'] . '&idtextqualify='
+                            . $current_qualify_thread . '">'
+                            . $icon . '</a>
+                        </td></tr>';
+                    }
+                    $counter++;
+                }
+            } else {
+                if ('qualify' === $listType) {
+                    $qualificationBlock .= '<tr><td colspan="2">' . get_lang('There are no qualified learners') . '</td></tr>';
+                } else {
+                    $qualificationBlock .= '<tr><td colspan="2">' . get_lang('There are no unqualified learners') . '</td></tr>';
+                }
+            }
+
+            $qualificationBlock .= '</table></center>';
+            $qualificationBlock .= '<br />';
+        } else {
+            $qualificationBlock .= Display::return_message(get_lang('There are no participants'), 'warning');
+        }
     }
 }
 
@@ -308,9 +314,9 @@ if ('learnpath' !== $origin) {
 // 1. the course admin is here
 // 2. the course member is here and new threads are allowed
 // 3. a visitor is here and new threads AND allowed AND  anonymous posts are allowed
-if (api_is_allowed_to_edit(false, true) ||
-    (1 == $forumEntity->getAllowNewThreads() && api_get_user_id()) ||
-    (1 == $forumEntity->getAllowNewThreads() && !api_get_user_id() && 1 == $forumEntity->getAllowAnonymous())
+if (api_is_allowed_to_edit(false, true)
+    || (1 == $forumEntity->getAllowNewThreads() && api_get_user_id())
+    || (1 == $forumEntity->getAllowNewThreads() && !api_get_user_id() && 1 == $forumEntity->getAllowAnonymous())
 ) {
     if (1 != $forumEntity->getLocked() && 1 != $forumEntity->getLocked()) {
         if (!api_is_anonymous() && !api_is_invitee()) {
@@ -360,8 +366,8 @@ if (is_array($threads)) {
     foreach ($threads as $thread) {
         $threadId = $thread->getIid();
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
-        if (api_is_allowed_to_edit(false, true) ||
-            !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity))
+        if (api_is_allowed_to_edit(false, true)
+            || !('0' == $thread->getThreadReplies() && '0' == $thread->isVisible($courseEntity))
         ) {
             $title = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId
                 ."&thread={$threadId}&search="
@@ -380,7 +386,7 @@ if (is_array($threads)) {
                     'span',
                     $completeName,
                     [
-                        'title' => api_htmlentities($poster_username, ENT_QUOTES),
+                        'title' => api_htmlentities($poster_username, \ENT_QUOTES),
                     ]
                 );
             }
@@ -408,7 +414,7 @@ if (is_array($threads)) {
                 $lastPostContent .= '<p>'.Security::remove_XSS(cut($thread->getThreadLastPost()->getPostText(), 140)).'</p>';
             }
 
-            //$html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
+            // $html .= '<p>'.Display::dateToStringAgoAndLongDate($thread->getThreadDate()).'</p>';
             $waitingModeration = '';
             if (1 == $forumEntity->isModerated() && api_is_allowed_to_edit(false, true)) {
                 $waitingCount = getCountPostsWithStatus(
@@ -446,8 +452,7 @@ if (is_array($threads)) {
             $iconsEdit = '';
             if ('learnpath' !== $origin) {
                 if (api_is_allowed_to_edit(false, true)
-                    &&
-                    !(api_is_session_general_coach() && $forumSessionId != $sessionId)
+                    && !(api_is_session_general_coach() && $forumSessionId != $sessionId)
                 ) {
                     $iconsEdit .= '<a href="'.$forumUrl.'editthread.php?'.api_get_cidreq()
                         .'&forum='.$forumId.'&thread='
@@ -459,7 +464,7 @@ if (is_array($threads)) {
                     } else {
                         $iconsEdit .= '<a href="'.$url.'&forum='.$forumId.'&action=delete_thread&content=thread&id='
                             .$thread->getIid()."\" onclick=\"javascript:if(!confirm('"
-                            .addslashes(api_htmlentities(get_lang('Delete complete thread?'), ENT_QUOTES))
+                            .addslashes(api_htmlentities(get_lang('Delete complete thread?'), \ENT_QUOTES))
                             ."')) return false;\">"
                             .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                     }
@@ -491,7 +496,7 @@ if (is_array($threads)) {
             $disable = true;
             if (is_array(
                 isset($_SESSION['forum_notification']['thread']) ? $_SESSION['forum_notification']['thread'] : null
-                )
+            )
             ) {
                 if (in_array($threadId, $_SESSION['forum_notification']['thread'])) {
                     $disable = false;
@@ -499,7 +504,7 @@ if (is_array($threads)) {
             }
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                 $iconsEdit .= '<a href="'.$viewForumUrl.'&forum='.$forumId."&action=notify&content=thread&id={$threadId}".'">'.
-                    Display::getMdiIcon('email-alert', ($disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon'), '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
+                    Display::getMdiIcon('email-alert', $disable ? 'ch-tool-icon-disabled' : 'ch-tool-icon', '', ICON_SIZE_SMALL, get_lang('Notify me')).'</a>';
             }
 
             if (api_is_allowed_to_edit(null, true) && 'learnpath' != $origin) {
@@ -523,7 +528,8 @@ if (is_array($threads)) {
 }
 
 $isTeacher = api_is_allowed_to_edit(false, true);
-$tpl = new Template(get_lang('Forum'), true, true, 'learnpath' === $origin);
+$pageTitle = Security::remove_XSS($forumEntity->getTitle());
+$tpl = new Template($pageTitle, true, true, 'learnpath' === $origin);
 
 $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 

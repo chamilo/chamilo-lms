@@ -108,11 +108,6 @@ class Tour extends Plugin
         return json_decode($jsonContent, true);
     }
 
-    public function get_name()
-    {
-        return 'Tour';
-    }
-
     /**
      * Create the database tables for the plugin.
      */

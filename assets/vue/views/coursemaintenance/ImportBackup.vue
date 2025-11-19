@@ -2,124 +2,181 @@
   <div class="space-y-6 cm-import-backup">
     <!-- Stepper -->
     <div class="flex items-center gap-3">
-      <Step :index="1" :current="step" :label="t('Select source')" />
+      <Step
+        :index="1"
+        :current="step"
+        :label="t('Select source')"
+      />
       <Line />
-      <Step :index="2" :current="step" :label="t('Options')" />
+      <Step
+        :index="2"
+        :current="step"
+        :label="t('Options')"
+      />
       <Line />
-      <Step :index="3" :current="step" :label="t('Select items')" />
+      <Step
+        :index="3"
+        :current="step"
+        :label="t('Select items')"
+      />
       <Line />
-      <Step :index="4" :current="step" :label="t('Restore')" />
+      <Step
+        :index="4"
+        :current="step"
+        :label="t('Restore')"
+      />
     </div>
 
-    <CMAlert v-if="error" type="error" :text="error" />
-    <CMAlert v-if="notice" type="success" :text="notice" />
+    <CMAlert
+      v-if="error"
+      type="error"
+      :text="error"
+    />
+    <CMAlert
+      v-if="notice"
+      type="success"
+      :text="notice"
+    />
 
     <!-- STEP 1: Source -->
-    <section v-if="step===1" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <section
+      v-if="step === 1"
+      class="grid grid-cols-1 gap-4 lg:grid-cols-2"
+    >
       <div class="rounded-lg border border-gray-25 p-4">
         <h3 class="mb-3 text-sm font-semibold text-gray-90">{{ t("Source") }}</h3>
 
         <div class="space-y-3">
-          <!-- Local ZIP -->
+          <!-- Local archive -->
           <label class="flex items-center gap-2">
-            <input type="radio" class="peer" value="local" v-model="backupType" />
-            <span class="text-sm text-gray-90">{{ t("Local file (.zip)") }}</span>
+            <input
+              type="radio"
+              class="peer"
+              value="local"
+              v-model="backupType"
+            />
+            <span class="text-sm text-gray-90">{{ t("Local file (.zip, .mbz, .tgz, .gz)") }}</span>
           </label>
           <input
-            v-if="backupType==='local'"
+            v-if="backupType === 'local'"
             type="file"
-            accept=".zip"
+            accept=".zip,.mbz,.tgz,.gz"
             @change="onLocalFile"
             class="w-full rounded border border-gray-25 p-2 text-sm"
           />
+          <div
+            v-if="backupType === 'local' && localFile"
+            class="mt-1 text-tiny text-gray-50"
+          >
+            {{ localFile.name }}
+          </div>
 
-          <!-- Server ZIP -->
+          <!-- Server archive -->
           <label class="mt-4 flex items-center gap-2">
-            <input type="radio" class="peer" value="server" v-model="backupType" />
+            <input
+              type="radio"
+              class="peer"
+              value="server"
+              v-model="backupType"
+            />
             <span class="text-sm text-gray-90">{{ t("Server file") }}</span>
           </label>
           <select
-            v-if="backupType==='server'"
+            v-if="backupType === 'server'"
             v-model="serverFilename"
             class="w-full rounded border border-gray-25 p-2 text-sm"
           >
             <option value="">{{ t("Select a backup") }}</option>
-            <option v-for="b in backups" :key="b.file" :value="b.file">{{ b.label }}</option>
+            <option
+              v-for="b in backups"
+              :key="b.file"
+              :value="b.file"
+            >
+              {{ b.label }}
+            </option>
           </select>
-
-          <!-- Moodle MBZ -->
-          <label class="mt-4 flex items-center gap-2">
-            <input type="radio" class="peer" value="moodle" v-model="backupType" />
-            <span class="text-sm text-gray-90">{{ t("Moodle file (.mbz)") }}</span>
-          </label>
-          <input
-            v-if="backupType==='moodle'"
-            type="file"
-            accept=".mbz"
-            @change="onMoodleFile"
-            class="w-full rounded border border-gray-25 p-2 text-sm"
-          />
-
-          <p v-if="backupType==='moodle'" class="mt-2 text-xs text-gray-50">
-            {{ t("Moodle import runs immediately and does not support selecting individual items.") }}
-          </p>
         </div>
       </div>
 
-      <!-- Import options (hidden for Moodle) -->
+      <!-- Import options -->
       <div class="rounded-lg border border-gray-25 p-4">
         <h3 class="mb-3 text-sm font-semibold text-gray-90">{{ t("Import options") }}</h3>
 
-        <template v-if="backupType!=='moodle'">
-          <div class="space-y-3">
-            <label class="flex items-center gap-2">
-              <input type="radio" value="full_backup" v-model="importOption" />
-              <span class="text-sm text-gray-90">{{ t("Full backup") }}</span>
-            </label>
-            <label class="flex items-center gap-2">
-              <input type="radio" value="select_items" v-model="importOption" />
-              <span class="text-sm text-gray-90">{{ t("Let me select items") }}</span>
-            </label>
+        <div class="space-y-3">
+          <label class="flex items-center gap-2">
+            <input
+              type="radio"
+              value="full_backup"
+              v-model="importOption"
+            />
+            <span class="text-sm text-gray-90">{{ t("Import full backup") }}</span>
+          </label>
+          <label class="flex items-center gap-2">
+            <input
+              type="radio"
+              value="select_items"
+              v-model="importOption"
+            />
+            <span class="text-sm text-gray-90">{{ t("Let me select learning objects") }}</span>
+          </label>
 
-            <div class="mt-4">
-              <p class="mb-2 text-sm font-medium text-gray-90">{{ t("When a file with the same name exists") }}</p>
-              <div class="space-y-2">
-                <label class="flex items-center gap-2">
-                  <input type="radio" :value="1" v-model.number="sameFileNameOption" />
-                  <span class="text-sm text-gray-90">{{ t("Skip") }}</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="radio" :value="2" v-model.number="sameFileNameOption" />
-                  <span class="text-sm text-gray-90">{{ t("Rename") }}</span>
-                </label>
-                <label class="flex items-center gap-2">
-                  <input type="radio" :value="3" v-model.number="sameFileNameOption" />
-                  <span class="text-sm text-gray-90">{{ t("Overwrite") }}</span>
-                </label>
-              </div>
+          <div class="mt-4">
+            <p class="mb-2 text-sm font-medium text-gray-90">
+              {{ t("When a file with the same name exists") }}
+            </p>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  :value="1"
+                  v-model.number="sameFileNameOption"
+                />
+                <span class="text-sm text-gray-90">{{ t("Skip same file name") }}</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  :value="2"
+                  v-model.number="sameFileNameOption"
+                />
+                <span class="text-sm text-gray-90">{{ t("Rename file (eg file.pdf becomes file_1.pdf)") }}</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input
+                  type="radio"
+                  :value="3"
+                  v-model.number="sameFileNameOption"
+                />
+                <span class="text-sm text-gray-90">{{ t("Overwrite file") }}</span>
+              </label>
             </div>
           </div>
-        </template>
-
-        <template v-else>
-          <div class="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-            {{ t("Options are not applicable for Moodle imports.") }}
-          </div>
-        </template>
+        </div>
       </div>
 
       <div class="col-span-full flex justify-end gap-3">
-        <button class="btn-secondary" @click="resetAll" :disabled="loading">
+        <button
+          class="btn-secondary"
+          @click="resetAll"
+          :disabled="loading"
+        >
           <i class="mdi mdi-refresh"></i> {{ t("Reset") }}
         </button>
-        <button class="btn-primary" @click="nextFromStep1" :disabled="loading">
+        <button
+          class="btn-primary"
+          @click="nextFromStep1"
+          :disabled="loading || !canContinueFromStep1"
+        >
           <i class="mdi mdi-arrow-right"></i> {{ t("Continue") }}
         </button>
       </div>
     </section>
 
     <!-- STEP 2: Review -->
-    <section v-if="step===2" class="space-y-4">
+    <section
+      v-if="step === 2"
+      class="space-y-4"
+    >
       <CMInfo :title="t('Ready to import')">
         <template #body>
           <p class="text-sm text-gray-50">
@@ -128,18 +185,34 @@
         </template>
       </CMInfo>
       <div class="flex justify-between">
-        <button class="btn-secondary" @click="step=1" :disabled="loading">
+        <button
+          class="btn-secondary"
+          @click="step = 1"
+          :disabled="loading"
+        >
           <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
         </button>
-        <button class="btn-primary" @click="doRestore" :disabled="loading">
+        <button
+          class="btn-primary"
+          @click="doRestore"
+          :disabled="loading"
+        >
           <i class="mdi mdi-database-import-outline"></i> {{ t("Start import") }}
         </button>
       </div>
     </section>
 
-    <!-- STEP 3: Tree selection (shared component) -->
-    <section v-if="step===3" class="space-y-4">
-      <CMAlert v-for="n in notices" :key="n" type="warning" :text="n" />
+    <!-- STEP 3: Tree selection -->
+    <section
+      v-if="step === 3"
+      class="space-y-4"
+    >
+      <CMAlert
+        v-for="n in notices"
+        :key="n"
+        type="warning"
+        :text="n"
+      />
 
       <ResourceSelector
         :groups="tree"
@@ -149,17 +222,25 @@
       />
 
       <div class="flex justify-between">
-        <button class="btn-secondary" @click="step=1" :disabled="loading">
+        <button
+          class="btn-secondary"
+          @click="step = 1"
+          :disabled="loading"
+        >
           <i class="mdi mdi-arrow-left"></i> {{ t("Back") }}
         </button>
-        <button class="btn-primary" @click="doRestore" :disabled="loading">
+        <button
+          class="btn-primary"
+          @click="doRestore"
+          :disabled="loading"
+        >
           <i class="mdi mdi-database-import-outline"></i> {{ t("Import selected") }}
         </button>
       </div>
     </section>
 
     <!-- STEP 4: Done -->
-    <section v-if="step===4">
+    <section v-if="step === 4">
       <CMInfo :title="t('Import completed')" />
     </section>
 
@@ -168,7 +249,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted, watch, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import svc from "../../services/courseMaintenance"
@@ -188,20 +269,36 @@ const notice = ref("")
 const backups = ref([])
 const backupType = ref("local")
 const localFile = ref(null)
-const moodleFile = ref(null)
 const serverFilename = ref("")
 
 const importOption = ref("full_backup")
 const sameFileNameOption = ref(2) // rename
 
 const backupId = ref("")
-const tree = ref([])         // groups as returned by backend
+const tree = ref([]) // groups as returned by backend
 const notices = ref([])
-const selections = ref({})   // { [type]: { [id]: 1 } } passed by v-model to ResourceSelector
+const selections = ref({}) // { [type]: { [id]: 1 } }
+
+const canContinueFromStep1 = computed(() => {
+  if (backupType.value === "local") return !!localFile.value
+  if (backupType.value === "server") return !!serverFilename.value
+  return false
+})
+
+watch(backupType, (v) => {
+  if (v === "local") serverFilename.value = ""
+  else localFile.value = null
+})
 
 /* Lifecycle */
 onMounted(bootstrap)
-watch(() => route.params.node, (v) => { node.value = Number(v || 0); bootstrap() })
+watch(
+  () => route.params.node,
+  (v) => {
+    node.value = Number(v || 0)
+    bootstrap()
+  },
+)
 
 async function bootstrap() {
   error.value = ""
@@ -210,12 +307,11 @@ async function bootstrap() {
     const data = await svc.getOptions(node.value)
     backups.value = (data.backups || []).map((b) => ({
       file: b.file,
-      label: b.label || ((b.course_code || '') + ' (' + (b.date || '') + ')'),
+      label: b.label || (b.course_code || "") + " (" + (b.date || "") + ")",
     }))
     importOption.value = data?.defaults?.importOption || "full_backup"
-    sameFileNameOption.value = typeof data?.defaults?.sameFileNameOption !== "undefined"
-      ? data.defaults.sameFileNameOption
-      : 2
+    sameFileNameOption.value =
+      typeof data?.defaults?.sameFileNameOption !== "undefined" ? data.defaults.sameFileNameOption : 2
   } catch (e) {
     error.value = e?.response?.data?.error || t("Could not load options.")
   } finally {
@@ -224,13 +320,13 @@ async function bootstrap() {
 }
 
 /* Handlers */
-function onLocalFile(e) { localFile.value = e?.target?.files?.[0] || null }
-function onMoodleFile(e) { moodleFile.value = e?.target?.files?.[0] || null }
+function onLocalFile(e) {
+  localFile.value = e?.target?.files?.[0] || null
+}
 
 function resetAll() {
   backupType.value = "local"
   localFile.value = null
-  moodleFile.value = null
   serverFilename.value = ""
   importOption.value = "full_backup"
   sameFileNameOption.value = 2
@@ -250,7 +346,7 @@ function pushWithQuery(targetPathOrName) {
       router.push({ path: `/${targetPathOrName}`, query: route.query })
     }
   } else {
-    router.push({ ...targetPathOrName, query: { ...route.query, ...(targetPathOrName.query||{}) } })
+    router.push({ ...targetPathOrName, query: { ...route.query, ...(targetPathOrName.query || {}) } })
   }
 }
 
@@ -259,20 +355,10 @@ async function nextFromStep1() {
   try {
     loading.value = true
 
-    // Moodle: upload + import immediately
-    if (backupType.value === "moodle") {
-      if (!moodleFile.value) throw new Error(t("Please select a Moodle .mbz file."))
-      const res = await svc.importFromMoodle(node.value, moodleFile.value)
-      notice.value = res.message || t("Moodle import finished.")
-      if (res.redirectUrl) pushWithQuery(res.redirectUrl)
-      step.value = 4
-      return
-    }
-
-    // Standard ZIP flows (local/server)
+    // Standard archive flows (local/server): .zip/.mbz/.tgz/.gz
     let res
     if (backupType.value === "local") {
-      if (!localFile.value) throw new Error(t("Please select a .zip file."))
+      if (!localFile.value) throw new Error(t("Please select a backup file (.zip, .mbz, .tgz, .gz)."))
       res = await svc.uploadFile(node.value, localFile.value)
     } else {
       if (!serverFilename.value) throw new Error(t("Please choose a server backup."))
@@ -283,9 +369,9 @@ async function nextFromStep1() {
     if (importOption.value === "select_items") {
       const data = await svc.fetchResources(node.value, backupId.value)
       const groups = Array.isArray(data.tree) ? data.tree : []
-      // ResourceSelector normalizes the structure internally
       tree.value = groups
-      notices.value = data.notices || []
+      // accept either .notices or .warnings (backend sends 'warnings')
+      notices.value = data.notices || data.warnings || []
       step.value = 3
     } else {
       step.value = 2
@@ -308,9 +394,8 @@ async function doRestore() {
       resources: selections.value,
     }
     const res = await svc.restoreBackup(node.value, backupId.value, payload)
-    notice.value = res.message || t("Import finished.")
+    notice.value = res.message || t("Import finished")
     step.value = 4
-
     if (res.redirectUrl) pushWithQuery(res.redirectUrl)
   } catch (e) {
     error.value = e?.response?.data?.error || t("Failed to import backup.")
@@ -328,12 +413,24 @@ export default {
       name: "Step",
       props: { index: Number, current: Number, label: String },
       computed: {
-        state() { if (this.index < this.current) return "done"; if (this.index === this.current) return "active"; return "todo" },
-        ringClass() {
-          return { done: "bg-support-1 border-gray-25 text-gray-90", active: "bg-gray-10 border-gray-25 text-gray-90", todo: "bg-gray-10 border-gray-25 text-gray-50" }[this.state]
+        state() {
+          if (this.index < this.current) return "done"
+          if (this.index === this.current) return "active"
+          return "todo"
         },
-        textClass() { return { done: "text-gray-90", active: "text-gray-90", todo: "text-gray-50" }[this.state] },
-        icon() { return this.state === "done" ? "✓" : (this.state === "active" ? "•" : "○") },
+        ringClass() {
+          return {
+            done: "bg-support-1 border-gray-25 text-gray-90",
+            active: "bg-gray-10 border-gray-25 text-gray-90",
+            todo: "bg-gray-10 border-gray-25 text-gray-50",
+          }[this.state]
+        },
+        textClass() {
+          return { done: "text-gray-90", active: "text-gray-90", todo: "text-gray-50" }[this.state]
+        },
+        icon() {
+          return this.state === "done" ? "✓" : this.state === "active" ? "•" : "○"
+        },
       },
       template: `
         <div class="flex items-center gap-2" :class="textClass">
@@ -359,12 +456,14 @@ export default {
       props: { type: { type: String, default: "info" }, text: String },
       computed: {
         tone() {
-          return {
-            info: "bg-support-2 text-info border-gray-25",
-            success: "bg-support-2 text-success border-gray-25",
-            warning: "bg-support-6 text-warning border-gray-25",
-            error: "bg-support-6 text-danger border-gray-25",
-          }[this.type] || "bg-gray-10 text-gray-90 border-gray-25"
+          return (
+            {
+              info: "bg-support-2 text-info border-gray-25",
+              success: "bg-support-2 text-success border-gray-25",
+              warning: "bg-support-6 text-warning border-gray-25",
+              error: "bg-support-6 text-danger border-gray-25",
+            }[this.type] || "bg-gray-10 text-gray-90 border-gray-25"
+          )
         },
       },
       template: `<div class="rounded-md border px-3 py-2 text-sm" :class="tone">{{ text }}</div>`,

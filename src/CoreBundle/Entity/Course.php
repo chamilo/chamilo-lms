@@ -377,6 +377,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups(['course:read'])]
     public bool $subscribed = false;
 
+    #[SerializedName('allowSelfSignup')]
+    #[Groups(['course:read', 'session:read'])]
+    public function getAllowSelfSignup(): bool
+    {
+        return self::REGISTERED !== $this->visibility;
+    }
+
     public function __construct()
     {
         $this->visibility = self::OPEN_PLATFORM;
@@ -591,6 +598,9 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $matching->count() > 0;
     }
 
+    /**
+     * @return Collection<int, CourseRelUser>
+     */
     #[SerializedName('teachers')]
     #[Groups(['course:read'])]
     public function getTeachersSubscriptions(): Collection

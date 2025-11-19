@@ -6,7 +6,7 @@
       <Line />
       <Step :index="2" :current="step" :label="t('Select items')" />
       <Line />
-      <Step :index="3" :current="step" :label="t('Apply recycle')" />
+      <Step :index="3" :current="step" :label="t('Recycle course')" />
     </div>
 
     <CMAlert v-if="error" type="error" :text="error" />
@@ -22,7 +22,7 @@
       </label>
       <label class="flex items-center gap-2">
         <input type="radio" value="select_items" v-model="recycleOption" />
-        <span class="text-sm text-gray-90">{{ t('Let me select items') }}</span>
+        <span class="text-sm text-gray-90">{{ t('Let me select learning objects') }}</span>
       </label>
 
       <div v-if="recycleOption==='full_recycle'" class="mt-2">

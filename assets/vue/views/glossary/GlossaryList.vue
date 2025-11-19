@@ -1,37 +1,46 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && canEditGlossary">
-      <BaseButton
-        :label="t('Add new glossary term')"
-        icon="plus"
-        type="black"
-        @click="addNewTerm"
-      />
-      <BaseButton
-        :label="t('Import glossary')"
-        icon="import"
-        type="black"
-        @click="importGlossary"
-      />
-      <BaseButton
-        :label="t('Export glossary')"
-        icon="file-export"
-        type="black"
-        @click="exportGlossary"
-      />
-      <BaseButton
-        :icon="view === 'table' ? 'list' : 'table'"
-        :label="view === 'table' ? t('List view') : t('Table view')"
-        type="black"
-        @click="changeView(view)"
-      />
-      <BaseButton
-        :label="t('Export to documents')"
-        icon="export"
-        type="black"
-        @click="exportToDocuments"
-      />
-      <StudentViewButton />
+    <SectionHeader :title="t('Glossary')">
+      <template #end>
+        <StudentViewButton
+          v-if="securityStore.isAuthenticated"
+          @change="onStudentViewChange"
+        />
+      </template>
+    </SectionHeader>
+    <BaseToolbar v-if="securityStore.isAuthenticated">
+      <template v-if="canEditGlossary">
+        <BaseButton
+          :label="t('Add new glossary term')"
+          icon="plus"
+          type="black"
+          @click="addNewTerm"
+        />
+        <BaseButton
+          :label="t('Import glossary')"
+          icon="import"
+          type="black"
+          @click="importGlossary"
+        />
+        <BaseButton
+          :label="t('Export glossary')"
+          icon="file-export"
+          type="black"
+          @click="exportGlossary"
+        />
+        <BaseButton
+          :icon="view === 'table' ? 'list' : 'table'"
+          :label="view === 'table' ? t('List view') : t('Table view')"
+          type="black"
+          @click="changeView(view)"
+        />
+        <BaseButton
+          :label="t('Export to documents')"
+          icon="export"
+          type="black"
+          @click="exportToDocuments"
+        />
+      </template>
     </BaseToolbar>
 
     <BaseInputText
@@ -64,6 +73,7 @@
         summary="Add your first term glossary to this course"
       >
         <BaseButton
+          v-if="canEditGlossary"
           :label="t('Add new glossary term')"
           class="mt-4"
           icon="plus"
@@ -104,7 +114,7 @@
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
@@ -115,19 +125,28 @@ import { useCidReq } from "../../composables/cidReq"
 import glossaryService from "../../services/glossaryService"
 import { useNotification } from "../../composables/notification"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
-import StudentViewButton from "../../components/StudentViewButton.vue"
 import { debounce } from "lodash"
 import BaseCard from "../../components/basecomponents/BaseCard.vue"
 import Skeleton from "primevue/skeleton"
 import { useSecurityStore } from "../../store/securityStore"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { useCidReqStore } from "../../store/cidReq"
+import { storeToRefs } from "pinia"
+import { usePlatformConfig } from "../../store/platformConfig"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
 const notifications = useNotification()
+const platform = usePlatformConfig()
 
 const { t } = useI18n()
+
+const cidReqStore = useCidReqStore()
+
+const { course } = storeToRefs(cidReqStore)
 
 const isLoading = ref(true)
 const isSearchLoading = ref(false)
@@ -162,15 +181,31 @@ const termToDeleteString = computed(() => {
 const isAllowedToEdit = ref(false)
 
 const canEditGlossary = computed(() => {
-  const sid = route.query.sid
-  return isAllowedToEdit.value || (isCurrentTeacher.value && !sid)
+  const inSession = !!route.query.sid
+  const basePermission = isAllowedToEdit.value || (securityStore.isCurrentTeacher && !inSession)
+  return basePermission && !platform.isStudentViewActive
 })
+
+const isAdminOrTeacher = computed(() => securityStore.isAdmin || securityStore.isTeacher)
 
 onMounted(async () => {
   isLoading.value = true
-  fetchGlossaries()
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  await fetchGlossaries()
+  await onStudentViewChange()
 })
+
+watch(
+  () => platform.isStudentViewActive,
+  async () => {
+    await onStudentViewChange()
+    await fetchGlossaries()
+    await onStudentViewChange()
+  },
+)
+
+async function onStudentViewChange() {
+  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+}
 
 const debouncedSearch = debounce(() => {
   searchBoxTouched.value = true
@@ -179,6 +214,7 @@ const debouncedSearch = debounce(() => {
 }, 500)
 
 function addNewTerm() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "CreateTerm",
     query: route.query,
@@ -186,6 +222,7 @@ function addNewTerm() {
 }
 
 function editTerm(term) {
+  if (!canEditGlossary.value) return
   router.push({
     name: "UpdateTerm",
     params: { id: term.iid },
@@ -194,11 +231,13 @@ function editTerm(term) {
 }
 
 async function confirmDeleteTerm(term) {
+  if (!canEditGlossary.value) return
   termToDelete.value = term
   isDeleteItemDialogVisible.value = true
 }
 
 async function deleteTerm() {
+  if (!canEditGlossary.value) return
   try {
     await glossaryService.deleteTerm(termToDelete.value.iid)
     notifications.showSuccessNotification(t("Term removed"))
@@ -212,6 +251,7 @@ async function deleteTerm() {
 }
 
 function importGlossary() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "ImportGlossary",
     query: route.query,
@@ -219,6 +259,7 @@ function importGlossary() {
 }
 
 function exportGlossary() {
+  if (!canEditGlossary.value) return
   router.push({
     name: "ExportGlossary",
     query: route.query,
@@ -226,11 +267,11 @@ function exportGlossary() {
 }
 
 function changeView(newView) {
-  // Handle changing the view (e.g., table view)
   view.value = newView === "table" ? "list" : "table"
 }
 
 async function exportToDocuments() {
+  if (!canEditGlossary.value) return
   const postData = {
     parentResourceNodeId: parentResourceNodeId.value,
     resourceLinkList: resourceLinkList.value,

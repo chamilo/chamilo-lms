@@ -6,6 +6,8 @@
  * a CSV file.
  */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Validates the imported data.
  */
@@ -41,7 +43,7 @@ function validate_data($users_courses)
 
         // 3. Check whether username exists.
         if (isset($user_course['UserName']) && 0 != strlen($user_course['UserName'])) {
-            if (UserManager::is_username_available($user_course['UserName'])) {
+            if (Container::getUserRepository()->isUsernameAvailable($user_course['UserName'])) {
                 $user_course['error'] = get_lang('Unknown user');
                 $errors[] = $user_course;
             }

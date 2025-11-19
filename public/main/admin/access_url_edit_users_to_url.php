@@ -86,7 +86,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             header('Location: access_url_edit_users_to_url.php');
             exit;
         } elseif (is_array($UserList)) {
-            $result = UrlManager::update_urls_rel_user($UserList, $access_url_id);
+            $result = UrlManager::update_urls_rel_user($UserList, $access_url_id, true);
             $url_info = UrlManager::get_url_data_from_id($access_url_id);
             if (!empty($result)) {
                 $message .= 'URL: '.$url_info['url'].'<br />';
@@ -172,7 +172,7 @@ if ($ajax_search) {
         $sessionUsersList[$user['user_id']] = $user;
     }
 } else {
-    $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+    $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
     $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
     foreach ($Users as $user) {
@@ -194,12 +194,12 @@ if ($ajax_search) {
     }
 }
 $total_users = count($nosessionUsersList) + count($sessionUsersList);
-$url_list = UrlManager::get_url_data();
+$urlList = Container::getAccessUrlRepository()->findAll();
 
 $url_selected = '';
-foreach ($url_list as $url_obj) {
-    if ($url_obj['id'] == $access_url_id) {
-        $url_selected = $url_obj['url'];
+foreach ($urlList as $url) {
+    if ($url->getId() == $access_url_id) {
+        $url_selected = $url->getUrl();
         break;
     }
 }
@@ -244,13 +244,13 @@ foreach ($url_list as $url_obj) {
                 class="w-1/2 rounded-md border border-gray-300 bg-white p-2 shadow-sm focus:border-primary focus:ring-primary"
             >
                 <option value="0"><?php echo get_lang('Select URL'); ?></option>
-                <?php foreach ($url_list as $url_obj): ?>
+                <?php foreach ($urlList as $url): ?>
                     <?php
-                    $selected = (!empty($access_url_id) && $url_obj['id'] == $access_url_id) ? 'selected' : '';
-                    if ($url_obj['active'] == 1):
+                    $selected = (!empty($access_url_id) && $url->getId() == $access_url_id) ? 'selected' : '';
+                    if (1 == $url->getActive()):
                         ?>
-                        <option value="<?php echo $url_obj['id']; ?>" <?php echo $selected; ?>>
-                            <?php echo $url_obj['url']; ?>
+                        <option value="<?php echo $url->getId(); ?>" <?php echo $selected; ?>>
+                            <?php echo $url->getUrl(); ?>
                         </option>
                     <?php endif; ?>
                 <?php endforeach; ?>

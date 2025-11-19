@@ -33,7 +33,7 @@ const { t } = useI18n()
 function statusLabel(s) {
   switch (Number(s)) {
     case 1: return t("In progress")
-    case 2: return t("Waiting for testing")
+    case 2: return t("Pending validation")
     case 3: return t("Done")
     default: return t("Open")
   }

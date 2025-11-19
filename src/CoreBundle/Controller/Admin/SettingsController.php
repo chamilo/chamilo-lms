@@ -106,8 +106,16 @@ class SettingsController extends BaseController
                         $templateMapByCategory[$category][$var] = $templateMap[$var];
                     }
                 }
-                $settings = $manager->load($category);
+
+                // Convert category to schema alias and validate it BEFORE loading/creating the form
                 $schemaAlias = $manager->convertNameSpaceToService($category);
+
+                // skip unknown/legacy categories (e.g., "tools")
+                if (!isset($schemas[$schemaAlias])) {
+                    continue;
+                }
+
+                $settings = $manager->load($category);
                 $form = $this->getSettingsFormFactory()->create($schemaAlias);
 
                 foreach (array_keys($settings->getParameters()) as $name) {
@@ -147,6 +155,17 @@ class SettingsController extends BaseController
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
 
         $keyword = (string) $request->query->get('keyword', '');
+
+        // Validate schema BEFORE load/create to avoid NonExistingServiceException
+        $schemas = $manager->getSchemas();
+        if (!isset($schemas[$schemaAlias])) {
+            $this->addFlash('warning', \sprintf('Unknown settings category "%s". Showing Platform settings.', $namespace));
+
+            return $this->redirectToRoute('chamilo_platform_settings', [
+                'namespace' => 'platform',
+            ]);
+        }
+
         $settings = $manager->load($namespace);
 
         $form = $this->getSettingsFormFactory()->create(
@@ -193,7 +212,6 @@ class SettingsController extends BaseController
             ]);
         }
 
-        $schemas = $manager->getSchemas();
         [$ordered, $labelMap] = $this->computeOrderedNamespacesByTranslatedLabel($schemas, $request);
 
         $templateMap = [];
@@ -206,6 +224,9 @@ class SettingsController extends BaseController
                 $templateMap[$s->getVariable()] = $s->getValueTemplate()->getId();
             }
         }
+        $platform = [
+            'server_type' => (string) $manager->getSetting('platform.server_type', true),
+        ];
 
         return $this->render('@ChamiloCore/Admin/Settings/default.html.twig', [
             'schemas' => $schemas,
@@ -216,6 +237,7 @@ class SettingsController extends BaseController
             'template_map' => $templateMap,
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
+            'platform' => $platform,
         ]);
     }
 
@@ -268,33 +290,52 @@ class SettingsController extends BaseController
 
     private function computeOrderedNamespacesByTranslatedLabel(array $schemas, Request $request): array
     {
+        // Extract raw namespaces from schema service ids
         $namespaces = array_map(
             static fn ($k) => str_replace('chamilo_core.settings.', '', $k),
             array_keys($schemas)
         );
 
+        $transform = [
+            'announcement' => 'Announcements',
+            'attendance' => 'Attendances',
+            'cas' => 'CAS',
+            'certificate' => 'Certificates',
+            'course' => 'Courses',
+            'document' => 'Documents',
+            'exercise' => 'Tests',
+            'forum' => 'Forums',
+            'group' => 'Groups',
+            'language' => 'Internationalization',
+            'lp' => 'Learning paths',
+            'mail' => 'E-mail',
+            'message' => 'Messages',
+            'profile' => 'User profiles',
+            'session' => 'Sessions',
+            'skill' => 'Skills',
+            'social' => 'Social network',
+            'survey' => 'Surveys',
+            'work' => 'Assignments',
+            'ticket' => 'Support tickets',
+            'tracking' => 'Reporting',
+            'webservice' => 'Webservices',
+            'catalog' => 'Catalogue',
+            'catalogue' => 'Catalogue',
+            'ai_helpers' => 'AI helpers',
+        ];
+
+        // Build label map (translated). For keys not in $transform, use Title Case of ns.
         $labelMap = [];
         foreach ($namespaces as $ns) {
-            if ('cas' === $ns) {
-                $labelMap[$ns] = 'CAS';
-
-                continue;
+            if (isset($transform[$ns])) {
+                $labelMap[$ns] = $this->translator->trans($transform[$ns]);
+            } else {
+                $key = ucfirst(str_replace('_', ' ', $ns));
+                $labelMap[$ns] = $this->translator->trans($key);
             }
-            if ('lp' === $ns) {
-                $labelMap[$ns] = $this->translator->trans('Learning path');
-
-                continue;
-            }
-            if ('ai_helpers' === $ns) {
-                $labelMap[$ns] = $this->translator->trans('AI helpers');
-
-                continue;
-            }
-
-            $key = ucfirst(str_replace('_', ' ', $ns));
-            $labelMap[$ns] = $this->translator->trans($key);
         }
 
+        // Sort by translated label (locale-aware)
         $collator = class_exists(Collator::class) ? new Collator($request->getLocale()) : null;
         usort($namespaces, function ($a, $b) use ($labelMap, $collator) {
             return $collator
@@ -302,6 +343,7 @@ class SettingsController extends BaseController
                 : strcasecmp($labelMap[$a], $labelMap[$b]);
         });
 
+        // Optional: keep AI helpers near the top (second position)
         $idx = array_search('ai_helpers', $namespaces, true);
         if (false !== $idx) {
             array_splice($namespaces, $idx, 1);

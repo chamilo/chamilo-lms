@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -24,7 +26,7 @@ class Thematic extends Resource
         $this->params = $params;
     }
 
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->params['title'];
@@ -33,7 +35,7 @@ class Thematic extends Resource
     /**
      * @param array $data
      */
-    public function addThematicAdvance($data)
+    public function addThematicAdvance($data): void
     {
         $this->thematic_advance_list[] = $data;
     }
@@ -41,7 +43,7 @@ class Thematic extends Resource
     /**
      * @param array $data
      */
-    public function addThematicPlan($data)
+    public function addThematicPlan($data): void
     {
         $this->thematic_plan_list[] = $data;
     }

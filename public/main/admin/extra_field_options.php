@@ -12,9 +12,6 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 
 api_protect_admin_script();
 
-//Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 

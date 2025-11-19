@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -263,7 +264,9 @@ class Login
                 'loginName' => $userEntity->getUsername(),
                 'password' => $userEntity->getPassword(),
                 'email' => $userEntity->getEmail(),
-                'auth_sources' => $userEntity->getAuthSourcesAuthentications(),
+                'auth_sources' => $userEntity->getAuthSourcesAuthentications(
+                    Container::getAccessUrlUtil()->getCurrent()
+                ),
             ];
 
             if ($userEntity->hasAuthSourceByAuthentication(UserAuthSource::CAS)) {
@@ -334,7 +337,9 @@ class Login
                     $_user['picture_uri'] = $userEntity->getPictureUri();
                     $_user['user_id'] = $userEntity->getId();
                     $_user['language'] = $userEntity->getLocale();
-                    $_user['auth_sources'] = $userEntity->getAuthSourcesAuthentications();
+                    $_user['auth_sources'] = $userEntity->getAuthSourcesAuthentications(
+                        Container::getAccessUrlUtil()->getCurrent()
+                    );
                     $_user['theme'] = $userEntity->getTheme();
                     $_user['status'] = $userEntity->getStatus();
 
@@ -409,7 +414,9 @@ class Login
                 'phone' => $user->getPhone(),
                 'picture_uri' => $user->getPictureUri(),
                 'creator_id' => $user->getCreator()?->getId(),
-                'auth_sources' => $user->getAuthSourcesAuthentications(),
+                'auth_sources' => $user->getAuthSourcesAuthentications(
+                    Container::getAccessUrlUtil()->getCurrent()
+                ),
             ];
         }
 

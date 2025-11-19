@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 // resetting the course id
 $cidReset = true;
@@ -173,7 +174,7 @@ if ($ajax_search) {
         }
     }
 }
-$url_list = UrlManager::get_url_data();
+$urlList = Container::getAccessUrlRepository()->findAll();
 ?>
     <div class="flex space-x-2 border-gray-300 pb-2 mb-4">
         <a href="<?php echo api_get_self(); ?>?add_type=unique&access_url_id=<?php echo $access_url_id; ?>"
@@ -199,17 +200,17 @@ $url_list = UrlManager::get_url_data();
         <option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
         <?php
         $url_selected = '';
-        foreach ($url_list as $url_obj) {
+        foreach ($urlList as $url) {
             $checked = '';
             if (!empty($access_url_id)) {
-                if ($url_obj[0] == $access_url_id) {
+                if ($url->getId() == $access_url_id) {
                     $checked = 'selected=true';
-                    $url_selected = $url_obj[1];
+                    $url_selected = $url->getUrl();
                 }
             }
-            if (1 == $url_obj['active']) {
+            if (1 == $url->getActive()) {
                 ?>
-                <option <?php echo $checked; ?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
+                <option <?php echo $checked; ?> value="<?php echo $url->getId(); ?>"> <?php echo $url->getUrl(); ?></option>
             <?php
             }
         }

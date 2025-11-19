@@ -28,16 +28,6 @@ class GoogleMapsPlugin extends Plugin
     }
 
     /**
-     * Get the plugin Name.
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return 'GoogleMaps';
-    }
-
-    /**
      * Instance the plugin.
      *
      * @staticvar null $result

@@ -100,8 +100,6 @@ switch ($action) {
         break;
 }
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_learning_path_calendars';
 $columns = [
     get_lang('Title'),

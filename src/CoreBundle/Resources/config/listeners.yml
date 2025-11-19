@@ -130,3 +130,8 @@ services:
         tags:
             - name: kernel.event_listener
               event: Symfony\Component\Security\Http\Event\CheckPassportEvent
+
+    Chamilo\CoreBundle\EventListener\UserAccessUrlListener:
+        tags:
+            - name: kernel.event_listener
+              event: Symfony\Component\Security\Http\Event\CheckPassportEvent

@@ -6,15 +6,18 @@
     <Breadcrumb :model="itemList">
       <template #item="{ item, props }">
         <BaseAppLink
-          v-if="item.route || item.url"
+          v-if="(item.route || item.url) && item !== itemList[itemList.length - 1]"
           :to="item.route"
           :url="item.url"
           v-bind="props.action"
           @click="handleBreadcrumbClick(item)"
         >
-          {{ item.label }}
+          {{ stripHtml(item.label) }}
         </BaseAppLink>
-        <span v-else>{{ item.label }}</span>
+        <span
+          v-else
+          v-text="stripHtml(item.label)"
+        ></span>
       </template>
 
       <template #separator> /</template>
@@ -28,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch, watchEffect } from "vue"
+import { computed, ref, watch, watchEffect, onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import Breadcrumb from "primevue/breadcrumb"
@@ -36,12 +39,12 @@ import { useCidReqStore } from "../store/cidReq"
 import { storeToRefs } from "pinia"
 import { useStore } from "vuex"
 
-const legacyItems = ref(window.breadcrumb)
+const legacyItems = ref([])
 
 const cidReqStore = useCidReqStore()
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const { t, te } = useI18n()
 
 const { course, session } = storeToRefs(cidReqStore)
 const store = useStore()
@@ -60,6 +63,13 @@ const specialRouteNames = [
 ]
 
 const itemList = ref([])
+
+onMounted(() => {
+  const wb = (window && window.breadcrumb) || []
+  if (Array.isArray(wb) && wb.length > 0) {
+    legacyItems.value = wb
+  }
+})
 
 const formatToolName = (name) => {
   if (!name) return ""
@@ -189,6 +199,35 @@ function addDocumentBreadcrumb() {
   }
 }
 
+/**
+ * Resolve translated label for /admin/settings/:namespace
+ */
+function resolveSettingsSectionLabel(nsRaw) {
+  const ns = String(nsRaw || "").trim()
+  // Safer because it's already translated server-side.
+  try {
+    const current = document.querySelector(".list-group a.bg-gray-25")
+    const domText = current?.textContent?.trim()
+    if (domText) {
+      return domText
+    }
+  } catch (e) {}
+
+  // i18n candidates
+  const candidates = [
+    `settings_section.${ns}`,
+    `settings_section.${ns.replace(/-/g, "_")}`,
+    ns,
+    ns.replace(/[-_]/g, " "),
+  ]
+  for (const key of candidates) {
+    const has = typeof te === "function" && te(key)
+    if (has) return t(key)
+  }
+
+  return ns.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 // Watch route changes to dynamically rebuild the breadcrumb trail
 watchEffect(() => {
   if ("/" === route.fullPath) return
@@ -220,10 +259,10 @@ watchEffect(() => {
     const mainUrl = window.location.href
     const mainPath = mainUrl.indexOf("main/")
     legacyItems.value.forEach((item) => {
-      let newUrl = item.url.toString()
+      let newUrl = (item.url || "").toString()
       if (newUrl.indexOf("main/") > 0) newUrl = "/" + newUrl.substring(mainPath)
       if (newUrl === "/") newUrl = "#"
-      itemList.value.push({ label: item.name, url: newUrl })
+      itemList.value.push({ label: item.name, url: newUrl || undefined })
     })
     legacyItems.value = []
   } else if (course.value && route.name !== "CourseHome") {
@@ -268,7 +307,7 @@ watchEffect(() => {
     if (mainToolName === "ccalendarevent") {
       const cid = Number(route.query?.cid || 0)
       const gid = Number(route.query?.gid || 0)
-      toolLabel = gid > 0 ? "Group agenda" : (cid > 0 ? "Agenda" : "Personal agenda")
+      toolLabel = gid > 0 ? "Group agenda" : cid > 0 ? "Agenda" : "Personal agenda"
     }
     itemList.value.push({
       label: t(toolLabel),
@@ -300,10 +339,24 @@ watchResourceNodeLoader()
 function cleanIdParam(id) {
   if (!id) return undefined
   const match = id.toString().match(/(\d+)$/)
-  return match ? match[1] : id
+  return match ? id.toString().match(/(\d+)$/)[1] : id
 }
 
 function buildManualBreadcrumbIfNeeded() {
+  // If server already injected legacy breadcrumbs, use them.
+  if (Array.isArray(legacyItems.value) && legacyItems.value.length > 0) {
+    const mainUrl = window.location.href
+    const mainPath = mainUrl.indexOf("main/")
+    legacyItems.value.forEach((item) => {
+      let newUrl = (item.url || "").toString()
+      if (newUrl.indexOf("main/") > 0) newUrl = "/" + newUrl.substring(mainPath)
+      if (newUrl === "/") newUrl = "#"
+      itemList.value.push({ label: item.name, url: newUrl || undefined })
+    })
+    legacyItems.value = []
+    return true
+  }
+
   const whitelist = ["admin"]
   const overrides = {
     admin: "AdminIndex",
@@ -314,6 +367,24 @@ function buildManualBreadcrumbIfNeeded() {
 
   if (!whitelist.includes(baseSegment)) {
     return false
+  }
+
+  // /admin/settings/<namespace>
+  const isAdminSettings = pathSegments[1] === "settings"
+  if (isAdminSettings) {
+    const ns = pathSegments[2] || route.params?.namespace || route.query?.namespace || ""
+    const adminLabel = t("Admin")
+    itemList.value.push({
+      label: adminLabel,
+      route: { name: overrides.admin, params: route.params, query: route.query },
+    })
+    itemList.value.push({
+      label: t("Settings"),
+      route: { path: "/admin/settings" },
+    })
+    const section = resolveSettingsSectionLabel(ns)
+    itemList.value.push({ label: section })
+    return true
   }
 
   const fullPath = "/" + pathSegments.join("/")
@@ -353,5 +424,10 @@ function handleBreadcrumbClick(item) {
   if (itemSegment === currentSegment && allowedSegments.includes(itemSegment)) {
     window.location.href = router.resolve(item.route).href
   }
+}
+
+function stripHtml(value) {
+  if (!value || typeof value !== "string") return ""
+  return value.replace(/<[^>]*>?/gm, "").trim()
 }
 </script>

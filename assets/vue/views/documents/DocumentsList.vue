@@ -109,7 +109,6 @@
     :total-items="totalItems"
     :values="items"
     data-key="iid"
-    filter-as-menu
     lazy
     @page="onPage"
     @sort="sortingChanged"
@@ -576,7 +575,7 @@ const isCertificateMode = computed(() => {
 
 const defaultCertificateId = ref(null)
 
-const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
+const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher && !platformConfigStore.isStudentViewActive)
 
 function resolveDefaultRows(total = 0) {
   const raw = platformConfigStore.getSetting("display.table_default_row", 10)
@@ -944,7 +943,7 @@ function showSlideShowWithFirstImage() {
   let item = items.value.find((i) => isImage(i))
   if (!item) return
   document.querySelector(`a[href='${item.contentUrl}']`)?.click()
-  document.querySelector('button.fancybox-button--play')?.click()
+  document.querySelector("button.fancybox-button--play")?.click()
 }
 
 function showUsageDialog() {

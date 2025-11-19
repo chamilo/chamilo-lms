@@ -7,10 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class IndexController extends BaseController
 {
@@ -35,6 +35,7 @@ class IndexController extends BaseController
     #[Route('/admin-dashboard/{vueRouting}', name: 'admin_dashboard_vue_entry', requirements: ['vueRouting' => '.+'])]
     #[Route('/p/{slug}', name: 'public_page')]
     #[Route('/skill/wheel', name: 'skill_wheel')]
+    #[Route('/access-url/auth-sources', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('@ChamiloCore/Layout/no_layout.html.twig', ['content' => '']);
@@ -44,23 +45,22 @@ class IndexController extends BaseController
      * Toggle the student view action.
      */
     #[Route('/toggle_student_view', methods: ['GET'])]
-    #[Security("is_granted('ROLE_TEACHER')")]
+    #[IsGranted('ROLE_TEACHER')]
     public function toggleStudentView(Request $request, SettingsManager $settingsManager): Response
     {
         if ('true' !== $settingsManager->getSetting('course.student_view_enabled')) {
             throw $this->createAccessDeniedException();
         }
 
-        $studentView = $request->getSession()->get('studentview');
+        // Default to teacher view when not set, then flip to student view on first click.
+        // This ensures the *first* click really enters Student View.
+        $current = (string) $request->getSession()->get('studentview', 'teacherview');
 
-        if (empty($studentView) || 'studentview' === $studentView) {
-            $content = 'teacherview';
-        } else {
-            $content = 'studentview';
-        }
+        $next = ('studentview' === $current) ? 'teacherview' : 'studentview';
 
-        $request->getSession()->set('studentview', $content);
+        $request->getSession()->set('studentview', $next);
 
-        return new Response($content);
+        // Keep plain text response to avoid breaking existing callers.
+        return new Response($next);
     }
 }

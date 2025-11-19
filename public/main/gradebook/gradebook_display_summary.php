@@ -167,7 +167,7 @@ switch ($action) {
         if ($commentInfo) {
             $comment = $commentInfo['comment'];
         }
-        $ajaxPath = api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?a=add_gradebook_comment';
+        $ajaxPath = api_get_path(WEB_AJAX_PATH).'gradebook.ajax.php?'.api_get_cidreq().'&a=add_gradebook_comment';
         $save = Display::return_message(get_lang('Saved.'));
         echo '<script>
             $(function() {

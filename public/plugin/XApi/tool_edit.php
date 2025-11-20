@@ -5,6 +5,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -12,7 +13,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
-$request = HttpRequest::createFromGlobals();
+$request = Container::getRequest();
 
 $em = Database::getManager();
 

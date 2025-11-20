@@ -4,8 +4,8 @@
 
 use Chamilo\CoreBundle\Entity\Sequence;
 use Chamilo\CoreBundle\Entity\SequenceResource;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
 
@@ -15,7 +15,7 @@ api_protect_global_admin_script();
 
 Session::erase('sr_vertex');
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];

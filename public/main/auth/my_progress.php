@@ -5,7 +5,7 @@
  * Reporting page on the user's own progress.
  */
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -16,7 +16,7 @@ if (('true' === api_get_setting('tracking.block_my_progress_page'))) {
     api_not_allowed(true);
 }
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Progress');

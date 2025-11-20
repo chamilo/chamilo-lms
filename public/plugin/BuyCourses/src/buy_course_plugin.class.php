@@ -15,7 +15,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\Intl\Currencies;
 
 /**
@@ -4915,7 +4914,7 @@ class BuyCoursesPlugin extends Plugin
         int $totalItems,
         array $extraQueryParams = []
     ) {
-        $queryParams = HttpRequest::createFromGlobals()->query->all();
+        $queryParams = Container::getRequest()->query->all();
 
         unset($queryParams['page']);
 

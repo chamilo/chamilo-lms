@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -19,7 +18,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_global_admin_script();
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 $urlRepo = Container::getAccessUrlRepository();
 $urlHelper = Container::getAccessUrlUtil();
 

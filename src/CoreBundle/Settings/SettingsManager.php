@@ -288,20 +288,24 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
+
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
 
         $settings->setParameters($parameters);
         $category = $this->convertServiceToNameSpace($settings->getSchemaAlias());
-        $persistedParameters = $this->repository->findBy([
+
+        // Restrict lookup to current URL so we do not override settings from other URLs.
+        $criteria = [
             'category' => $category,
-        ]);
+        ];
+
+        if (null !== $this->url) {
+            $criteria['url'] = $this->url;
+        }
+
+        $persistedParameters = $this->repository->findBy($criteria);
 
         $persistedParametersMap = [];
 
@@ -314,22 +318,18 @@ class SettingsManager implements SettingsManagerInterface
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 
         foreach ($parameters as $name => $value) {
+            // MultiURL: respect access_url_changeable defined on main URL.
+            if (!$this->isSettingChangeableForCurrentUrl($simpleCategoryName, $name)) {
+                continue;
+            }
+
             if (isset($persistedParametersMap[$name])) {
                 $parameter = $persistedParametersMap[$name];
                 $parameter->setSelectedValue($value);
                 $parameter->setCategory($simpleCategoryName);
                 $this->manager->persist($parameter);
             } else {
-                $parameter = (new SettingsCurrent())
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
-                ;
-
+                $parameter = $this->createSettingForCurrentUrl($simpleCategoryName, $name, $value);
                 $this->manager->persist($parameter);
             }
         }
@@ -352,18 +352,21 @@ class SettingsManager implements SettingsManagerInterface
         $raw = $settings->getParameters();
         $raw = $this->normalizeNullsBeforeResolve($raw, $settingsBuilder);
         $parameters = $settingsBuilder->resolve($raw);
-        // Transform value. Example array to string using transformer. Example:
-        // 1. Setting "tool_visible_by_default_at_creation" it's a multiple select
-        // 2. Is defined as an array in class DocumentSettingsSchema
-        // 3. Add transformer for that variable "ArrayToIdentifierTransformer"
-        // 4. Here we recover the transformer and convert the array to string
+
         foreach ($parameters as $parameter => $value) {
             $parameters[$parameter] = $this->transformToString($value);
         }
         $settings->setParameters($parameters);
-        $persistedParameters = $this->repository->findBy([
+        $criteria = [
             'category' => $this->convertServiceToNameSpace($settings->getSchemaAlias()),
-        ]);
+        ];
+
+        // Limit to current URL so we do not write across all URLs.
+        if (null !== $this->url) {
+            $criteria['url'] = $this->url;
+        }
+
+        $persistedParameters = $this->repository->findBy($criteria);
         $persistedParametersMap = [];
         foreach ($persistedParameters as $parameter) {
             $persistedParametersMap[$parameter->getVariable()] = $parameter;
@@ -373,20 +376,16 @@ class SettingsManager implements SettingsManagerInterface
         $simpleCategoryName = str_replace('chamilo_core.settings.', '', $namespace);
 
         foreach ($parameters as $name => $value) {
+            // MultiURL: respect access_url_changeable defined on main URL.
+            if (!$this->isSettingChangeableForCurrentUrl($simpleCategoryName, $name)) {
+                continue;
+            }
+
             if (isset($persistedParametersMap[$name])) {
                 $parameter = $persistedParametersMap[$name];
                 $parameter->setSelectedValue($value);
             } else {
-                $parameter = (new SettingsCurrent())
-                    ->setVariable($name)
-                    ->setCategory($simpleCategoryName)
-                    ->setTitle($name)
-                    ->setSelectedValue($value)
-                    ->setUrl($url)
-                    ->setAccessUrlChangeable(1)
-                    ->setAccessUrlLocked(1)
-                ;
-
+                $parameter = $this->createSettingForCurrentUrl($simpleCategoryName, $name, $value);
                 $this->manager->persist($parameter);
             }
         }
@@ -399,11 +398,18 @@ class SettingsManager implements SettingsManagerInterface
      */
     public function getParametersFromKeywordOrderedByCategory($keyword): array
     {
-        $query = $this->repository->createQueryBuilder('s')
+        $qb = $this->repository->createQueryBuilder('s')
             ->where('s.variable LIKE :keyword OR s.title LIKE :keyword')
-            ->setParameter('keyword', "%{$keyword}%")
-        ;
-        $parametersFromDb = $query->getQuery()->getResult();
+            ->setParameter('keyword', "%{$keyword}%");
+
+        // Restrict search to current URL when available.
+        if (null !== $this->url) {
+            $qb
+                ->andWhere('s.url = :url')
+                ->setParameter('url', $this->url);
+        }
+
+        $parametersFromDb = $qb->getQuery()->getResult();
         $parameters = [];
 
         foreach ($parametersFromDb as $parameter) {
@@ -443,13 +449,24 @@ class SettingsManager implements SettingsManagerInterface
             $criteria = [
                 'category' => $namespace,
             ];
+
+            if (null !== $this->url) {
+                $criteria['url'] = $this->url;
+            }
+
             $parametersFromDb = $this->repository->findBy($criteria);
         } else {
-            $query = $this->repository->createQueryBuilder('s')
+            $qb = $this->repository->createQueryBuilder('s')
                 ->where('s.variable LIKE :keyword')
-                ->setParameter('keyword', "%{$keyword}%")
-            ;
-            $parametersFromDb = $query->getQuery()->getResult();
+                ->setParameter('keyword', "%{$keyword}%");
+
+            if (null !== $this->url) {
+                $qb
+                    ->andWhere('s.url = :url')
+                    ->setParameter('url', $this->url);
+            }
+
+            $parametersFromDb = $qb->getQuery()->getResult();
         }
 
         if ($returnObjects) {
@@ -503,7 +520,15 @@ class SettingsManager implements SettingsManagerInterface
     private function getParameters($namespace)
     {
         $parameters = [];
-        $category = $this->repository->findBy(['category' => $namespace]);
+
+        $criteria = ['category' => $namespace];
+
+        // MultiURL: only parameters for current URL (if set).
+        if (null !== $this->url) {
+            $criteria['url'] = $this->url;
+        }
+
+        $category = $this->repository->findBy($criteria);
 
         /** @var SettingsCurrent $parameter */
         foreach ($category as $parameter) {
@@ -516,7 +541,13 @@ class SettingsManager implements SettingsManagerInterface
     private function getAllParametersByCategory()
     {
         $parameters = [];
-        $all = $this->repository->findAll();
+
+        // MultiURL: either all parameters (single URL mode) or only for current URL.
+        if (null !== $this->url) {
+            $all = $this->repository->findBy(['url' => $this->url]);
+        } else {
+            $all = $this->repository->findAll();
+        }
 
         /** @var SettingsCurrent $parameter */
         foreach ($all as $parameter) {
@@ -524,6 +555,123 @@ class SettingsManager implements SettingsManagerInterface
         }
 
         return $parameters;
+    }
+
+    /**
+     * Check if a setting is changeable for the current URL, using the
+     * access_url_changeable flag from the main URL (ID = 1).
+     */
+    private function isSettingChangeableForCurrentUrl(string $category, string $variable): bool
+    {
+        // No URL bound: behave as legacy single-URL platform.
+        if (null === $this->url) {
+            return true;
+        }
+
+        // Main URL can always edit settings. UI already restricts who can see/edit fields.
+        if (1 === $this->url->getId()) {
+            return true;
+        }
+
+        // Try to load main (canonical) URL.
+        $mainUrl = $this->manager->getRepository(AccessUrl::class)->find(1);
+        if (null === $mainUrl) {
+            // If main URL is missing, fallback to permissive behaviour.
+            return true;
+        }
+
+        /** @var SettingsCurrent|null $mainSetting */
+        $mainSetting = $this->repository->findOneBy([
+            'category' => $category,
+            'variable' => $variable,
+            'url' => $mainUrl,
+        ]);
+
+        if (null === $mainSetting) {
+            // If there is no canonical row, do not block changes.
+            return true;
+        }
+
+        // When access_url_changeable is false/0 on main URL,
+        // secondary URLs must not override the value.
+        return (bool) $mainSetting->getAccessUrlChangeable();
+    }
+
+    private function createSettingForCurrentUrl(string $category, string $variable, string $value): SettingsCurrent
+    {
+        $url = $this->getUrl();
+
+        // Try to reuse metadata from main URL (ID = 1) as canonical definition.
+        $mainUrl = $this->manager->getRepository(AccessUrl::class)->find(1);
+
+        $reference = null;
+
+        if (null !== $mainUrl) {
+            $reference = $this->repository->findOneBy([
+                'category' => $category,
+                'variable' => $variable,
+                'url' => $mainUrl,
+            ]);
+        }
+
+        if (!$reference instanceof SettingsCurrent) {
+            // Fallback: any existing row for this category + variable (legacy / no-URL case).
+            $reference = $this->repository->findOneBy([
+                'category' => $category,
+                'variable' => $variable,
+            ]);
+        }
+
+        $setting = (new SettingsCurrent())
+            ->setVariable($variable)
+            ->setCategory($category)
+            ->setSelectedValue($value)
+            ->setUrl($url)
+        ;
+
+        if ($reference instanceof SettingsCurrent) {
+            // Copy descriptive metadata so the new URL row behaves like the canonical one.
+            $setting->setTitle($reference->getTitle());
+
+            // These fields may or may not exist in the entity in Chamilo 2,
+            // so we check for method existence to stay safe.
+            if (method_exists($setting, 'setType') && method_exists($reference, 'getType')) {
+                $setting->setType($reference->getType());
+            }
+
+            if (method_exists($setting, 'setComment') && method_exists($reference, 'getComment')) {
+                $setting->setComment($reference->getComment());
+            }
+
+            if (method_exists($setting, 'setScope') && method_exists($reference, 'getScope')) {
+                $setting->setScope($reference->getScope());
+            }
+
+            if (method_exists($setting, 'setSubkey') && method_exists($reference, 'getSubkey')) {
+                $setting->setSubkey($reference->getSubkey());
+            }
+
+            if (method_exists($setting, 'setSubkeytext') && method_exists($reference, 'getSubkeytext')) {
+                $setting->setSubkeytext($reference->getSubkeytext());
+            }
+
+            // Copy flags and template; the "changeable" flag is still interpreted from main URL.
+            $setting->setAccessUrlChangeable($reference->getAccessUrlChangeable());
+            $setting->setAccessUrlLocked($reference->getAccessUrlLocked());
+
+            if (method_exists($setting, 'setValueTemplate') && method_exists($reference, 'getValueTemplate')) {
+                $setting->setValueTemplate($reference->getValueTemplate());
+            }
+        } else {
+            // Fallback: minimal metadata if no canonical definition was found.
+            $setting
+                ->setTitle($variable)
+                ->setAccessUrlChangeable(1)
+                ->setAccessUrlLocked(1)
+            ;
+        }
+
+        return $setting;
     }
 
     /*private function transformParameters(SettingsBuilder $settingsBuilder, array $parameters)

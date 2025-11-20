@@ -567,10 +567,19 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log(
-            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
-            $_SESSION['expired_time'][$current_expired_time_key]
-        );
+        if (isset($_SESSION['expired_time'])) {
+            if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s')
+                );
+            } else {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]
+                );
+            }
+        }
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -626,7 +635,11 @@ if ($time_control) {
             }
         }
     } else {
-        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        } else {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
+        }
     }
 }
 

@@ -27,7 +27,7 @@ class SettingsCurrentRepositoryTest extends AbstractApiTest
             ->setVariable('test')
             ->setUrl($this->getAccessUrl())
             ->setCategory('cat')
-            ->setAccessUrlLocked(1)
+            ->setAccessUrlLocked(0)
             ->setAccessUrlChangeable(1)
             ->setSubkey('sub')
             ->setType('type')

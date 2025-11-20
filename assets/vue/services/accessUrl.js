@@ -13,8 +13,7 @@ export default {
     }
     return resp.json()
   },
-
-
+  
   async deleteAccessUrl(id, confirmValue, secToken = "") {
     const params = new URLSearchParams({
       action: "delete_url",
@@ -23,22 +22,18 @@ export default {
     })
     if (secToken) params.append("sec_token", secToken)
 
-
     const url = `/main/admin/access_urls.php?${params.toString()}`
-
-
+    
     const resp = await fetch(url, {
       method: "GET",
       credentials: "same-origin",
       headers: { Accept: "application/json" },
     })
 
-
     if (!resp.ok) {
       const txt = await resp.text()
       throw new Error(txt || "Delete failed")
     }
-
 
     const contentType = resp.headers.get("content-type") || ""
     if (contentType.includes("application/json")) {

@@ -192,18 +192,58 @@ $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
 $htmlHeadXtra[] = <<<'JS'
-    <script>
-    $(function() {
-        $('#reply-add-attachment').on('click', function(e) {
-            e.preventDefault();
-            var newInputFile = $('<input>', {
-                type: 'file',
-                name: 'user_upload[]'
-            });
-            $('[name="user_upload[]"]').parent().append(newInputFile);
-        })
+<script>
+jQuery(function ($) {
+    // Enhance attachment inputs layout (stack vertically)
+    $('input[type="file"][name="user_upload[]"]').each(function () {
+        var $input = $(this);
+        $input.addClass('ch-attachment-input');
     });
-    </script>
+
+    // Enhance "Annexe" / add attachment trigger
+    var $addAttachment = $('#reply-add-attachment');
+    if ($addAttachment.length) {
+        // Force link/button-like style while keeping existing semantics
+        $addAttachment.addClass('ch-attachment-add');
+        $addAttachment.attr('role', 'button');
+        $addAttachment.attr('tabindex', '0');
+
+        // Add icon only if none is present
+        if (!$addAttachment.find('.mdi, .fa').length) {
+            $addAttachment.prepend('<span class="mdi mdi-paperclip" aria-hidden="true"></span> ');
+        }
+
+        var addAttachmentInput = function () {
+            var $lastInput = $('input[type="file"][name="user_upload[]"]').last();
+            if (!$lastInput.length) {
+                return;
+            }
+
+            var $container = $lastInput.parent();
+            var $newInput = $('<input>', {
+                type: 'file',
+                name: 'user_upload[]',
+                class: 'ch-attachment-input'
+            });
+
+            $container.append($newInput);
+        };
+
+        // Click and keyboard activation
+        $addAttachment.on('click', function (e) {
+            e.preventDefault();
+            addAttachmentInput();
+        });
+
+        $addAttachment.on('keypress', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                addAttachmentInput();
+            }
+        });
+    }
+});
+</script>
 JS;
 
 /* Is the user allowed here? */
@@ -269,7 +309,6 @@ if ('learnpath' !== $origin) {
 }
 
 /* Display Forum Category and the Forum information */
-/* New display forum div */
 /* New display forum div */
 echo '<div class="forum_title">';
 echo '<h1>';

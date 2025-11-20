@@ -330,7 +330,7 @@ if (isset($rows)) {
         echo '</td>';
 
         // The post title
-        echo "<td class=\"$titleclass\">".prepare4display($row['post_title']).'</td>';
+        echo "<td class=\"$titleclass\">".prepare4display($row['title']).'</td>';
         echo '</tr>';
 
         // The post message

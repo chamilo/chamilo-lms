@@ -308,7 +308,7 @@ if (($current_forum_category && 0 == $current_forum_category->getLocked())
 
         if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
             $actions .= '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'&action=replythread">'
-                .Display::getMdiIcon('reply', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this thread')).'</a>';
+                .Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Reply to this thread')).'</a>';
         }
         if ((
             api_is_allowed_to_edit(false, true) && !api_is_session_general_coach()
@@ -630,7 +630,7 @@ foreach ($posts as $post) {
 
                     if (!empty($replyUrl)) {
                         $buttonReply = Display::url(
-                            Display::getMdiIcon('reply', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reply to this message')),
+                            Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reply to this message')),
                             $replyUrl,
                             [
                                 'class' => 'inline-flex items-center justify-center w-9 h-9 rounded-lg border border-gray-25 hover:bg-gray-15',
@@ -684,7 +684,7 @@ foreach ($posts as $post) {
         'AW:',
         'Aw:',
     ];
-    $replace = '<span>'.Display::getMdiIcon('reply', 'ch-tool-icon', '', ICON_SIZE_SMALL).'</span>';
+    $replace = '<span>'.Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', '', ICON_SIZE_SMALL).'</span>';
     $post['post_title'] = str_replace($search, $replace, Security::remove_XSS($post['post_title']));
 
     // Title

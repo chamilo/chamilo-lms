@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\GetCourseStatsAction;
 use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
@@ -44,28 +46,28 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'metric' => 'course-avg-score|course-avg-progress',
             ],
             controller: GetCourseStatsAction::class,
-            openapiContext: [
-                'summary' => 'Course-wide statistics, switched by {metric}',
-                'parameters' => [
-                    [
-                        'name' => 'metric',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
+            openapi: new Operation(
+                summary: 'Course-wide statistics, switched by {metric}',
+                parameters: [
+                    new Parameter(
+                        name: 'metric',
+                        in: 'path',
+                        description: 'Metric selector',
+                        required: true,
+                        schema: [
                             'type' => 'string',
                             'enum' => ['course-avg-score', 'course-avg-progress'],
                         ],
-                        'description' => 'Metric selector',
-                    ],
-                    [
-                        'name' => 'sessionId',
-                        'in' => 'query',
-                        'required' => false,
-                        'schema' => ['type' => 'integer'],
-                        'description' => 'Optional Session ID',
-                    ],
+                    ),
+                    new Parameter(
+                        name: 'sessionId',
+                        in: 'query',
+                        description: 'Optional Session ID',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ],
+            ),
             read: false,
             deserialize: false,
         ),

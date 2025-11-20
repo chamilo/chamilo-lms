@@ -15,6 +15,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use Chamilo\CoreBundle\Controller\Api\CheckCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\CLinkDetailsController;
 use Chamilo\CoreBundle\Controller\Api\CLinkImageController;
@@ -61,10 +64,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             controller: CreateCLinkAction::class,
-            openapiContext: [
-                'summary' => 'Create a new link resource',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Create a new link resource',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -91,9 +94,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'required' => ['url', 'title'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'link:write']],
             deserialize: false
@@ -101,10 +104,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/links/{iid}/upload-image',
             controller: CLinkImageController::class,
-            openapiContext: [
-                'summary' => 'Upload a custom image for a link',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Upload a custom image for a link',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -117,9 +120,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'required' => ['customImage'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
@@ -127,51 +130,47 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/links/{iid}/details',
             controller: CLinkDetailsController::class,
-            openapiContext: [
-                'summary' => 'Gets the details of a link, including whether it is on the homepage',
-            ],
+            openapi: new Operation(
+                summary: 'Gets the details of a link, including whether it is on the homepage',
+            ),
             security: "is_granted('VIEW', object.resourceNode)"
         ),
         new Get(
             uriTemplate: '/links/{iid}/check',
             controller: CheckCLinkAction::class,
-            openapiContext: [
-                'summary' => 'Check if a link URL is valid',
-            ],
+            openapi: new Operation(
+                summary: 'Check if a link URL is valid',
+            ),
             security: "is_granted('VIEW', object.resourceNode)"
         ),
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new GetCollection(
             controller: GetLinksCollectionController::class,
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                    [
-                        'name' => 'cid',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Course id',
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id',
-                        'schema' => [
-                            'type' => 'integer',
-                        ],
-                    ],
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Resource node Parent',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course id',
+                        required: true,
+                        schema: ['type' => 'integer',],
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session id',
+                        required: false,
+                        schema: ['type' => 'integer',],
+                    ),
                 ],
-            ]
+            )
         ),
     ],
     normalizationContext: [

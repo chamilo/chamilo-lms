@@ -18,6 +18,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\CreateUserOnAccessUrlAction;
 use Chamilo\CoreBundle\Controller\Api\GetStatsAction;
 use Chamilo\CoreBundle\Controller\Api\UserSkillsController;
@@ -53,9 +55,9 @@ use UserManager;
     types: ['http://schema.org/Person'],
     operations: [
         new Get(
-            openapiContext: [
-                'description' => 'Get details of one specific user, including name, e-mail and role.',
-            ],
+            openapi: new Operation(
+                summary: 'Get details of one specific user, including name, e-mail and role.'
+            ),
             security: "is_granted('VIEW', object)",
         ),
         new Get(
@@ -66,35 +68,35 @@ use UserManager;
                 'metric' => 'avg-lp-progress|certificates|gradebook-global',
             ],
             controller: GetStatsAction::class,
-            openapiContext: [
-                'summary' => 'User-course statistics, switch by {metric}',
-                'parameters' => [
-                    [
-                        'name' => 'courseId',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => ['type' => 'integer'],
-                        'description' => 'Course ID',
-                    ],
-                    [
-                        'name' => 'metric',
-                        'in' => 'path',
-                        'required' => true,
-                        'schema' => [
+            openapi: new Operation(
+                summary: 'User-course statistics, switch by {metric}',
+                parameters: [
+                    new Parameter(
+                        name: 'courseId',
+                        in: 'path',
+                        description: 'Course ID',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'metric',
+                        in: 'path',
+                        description: 'Metric selector',
+                        required: true,
+                        schema: [
                             'type' => 'string',
                             'enum' => ['avg-lp-progress', 'certificates', 'gradebook-global'],
                         ],
-                        'description' => 'Metric selector',
-                    ],
-                    [
-                        'name' => 'sessionId',
-                        'in' => 'query',
-                        'required' => false,
-                        'schema' => ['type' => 'integer'],
-                        'description' => 'Optional Session ID',
-                    ],
+                    ),
+                    new Parameter(
+                        name: 'sessionId',
+                        in: 'query',
+                        description: 'Optional Session ID',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ],
+            ),
             security: "is_granted('ROLE_USER')",
             output: false,
             read: false,

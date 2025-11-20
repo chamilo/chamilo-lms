@@ -10,6 +10,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use Chamilo\CoreBundle\Controller\Api\CreateSocialPostAttachmentAction;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use DateTime;
@@ -23,9 +25,9 @@ use Stringable;
         new GetCollection(),
         new Post(
             controller: CreateSocialPostAttachmentAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -40,9 +42,9 @@ use Stringable;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             validationContext: [
                 'groups' => [

@@ -11,6 +11,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
@@ -28,25 +30,25 @@ use Symfony\Component\Validator\Constraints as Assert;
     shortName: 'LearningPathCategories',
     operations: [
         new GetCollection(
-            openapiContext: [
-                'summary' => 'List LP categories by course (resourceNode.parent) or sid',
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Parent ResourceNode (course node id)',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id (SidFilter si aplica)',
-                        'schema' => ['type' => 'integer'],
-                    ],
+            openapi: new Operation(
+                summary: 'List LP categories by course (resourceNode.parent) or sid',
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Parent ResourceNode (course node id)',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session id (SidFilter si aplica)',
+                        required: false,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ],
+            ),
         ),
         new Get(security: "is_granted('ROLE_USER')"),
     ],

@@ -13,6 +13,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use Chamilo\CoreBundle\Controller\AddVariantResourceFileAction;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
@@ -38,10 +40,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Get(),
         new Post(
             controller: CreateResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Create a new resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Create a new resource file',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -53,9 +55,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             validationContext: [
                 'groups' => ['Default', 'media_object_create', 'document:write'],
@@ -65,10 +67,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Post(
             uriTemplate: '/resource_files/add_variant',
             controller: AddVariantResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Add a variant to an existing resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Add a variant to an existing resource file',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -86,9 +88,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             deserialize: false,
             name: 'add_variant'

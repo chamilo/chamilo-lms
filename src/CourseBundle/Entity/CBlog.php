@@ -16,6 +16,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use Chamilo\CoreBundle\Controller\Api\CreateCBlogAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityBlog;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -37,10 +39,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(),
         new Post(
             controller: CreateCBlogAction::class,
-            openapiContext: [
-                'summary' => 'Create a new blog project',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Create a new blog project',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -59,9 +61,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'required' => ['title'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'blog:write']],
             deserialize: false

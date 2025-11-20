@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     new Parameter(
                         name: 'sid',
                         in: 'query',
-                        description: 'Session id (SidFilter si aplica)',
+                        description: 'Session id (SidFilter)',
                         required: false,
                         schema: ['type' => 'integer'],
                     ),

@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course learning paths (LPs).
  */
 #[ApiResource(
-    shortName: 'LearningPaths',
+    shortName: 'LearningPath',
     operations: [
         new GetCollection(
             openapi: new Operation(

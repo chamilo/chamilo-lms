@@ -38,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLinkCategory.
  */
 #[ApiResource(
-    shortName: 'LinkCategories',
+    shortName: 'LinkCategory',
     operations: [
         new Put(
             controller: UpdateCLinkCategoryAction::class,

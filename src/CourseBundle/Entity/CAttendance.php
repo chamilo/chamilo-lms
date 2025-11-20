@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'Attendances',
+    shortName: 'Attendance',
     operations: [
         new Put(
             uriTemplate: '/attendances/{iid}/toggle_visibility',

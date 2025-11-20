@@ -26,7 +26,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'Groups',
+    shortName: 'Group',
     operations: [
         new GetCollection(
             uriTemplate: '/groups',

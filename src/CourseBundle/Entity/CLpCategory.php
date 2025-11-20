@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'LearningPathCategories',
+    shortName: 'LearningPathCategory',
     operations: [
         new GetCollection(
             openapi: new Operation(

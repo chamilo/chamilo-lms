@@ -44,7 +44,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'Documents',
+    shortName: 'Document',
     operations: [
         new Put(
             controller: UpdateDocumentFileAction::class,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 
 /**
@@ -18,8 +19,10 @@ if (api_is_anonymous()) {
 }
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
+
 $culqiEnable = $plugin->get('culqi_enable');
-$action = isset($_GET['a']) ? $_GET['a'] : null;
+$action = $httpRequest->query->get('a');
 
 $em = Database::getManager();
 
@@ -29,7 +32,7 @@ switch ($action) {
             break;
         }
 
-        $userId = isset($_POST['id']) ? (int) $_POST['id'] : '';
+        $userId = $httpRequest->request->getInt('id');
         $isUserHavePaypalAccount = $plugin->verifyPaypalAccountByBeneficiary($userId);
         if ($isUserHavePaypalAccount) {
             echo '';
@@ -44,7 +47,7 @@ switch ($action) {
             break;
         }
 
-        $saleId = isset($_POST['id']) ? (int) $_POST['id'] : '';
+        $saleId = $httpRequest->request->getInt('id');
         $sale = $plugin->getSale($saleId);
         $productType = 1 == $sale['product_type'] ? get_lang('Course') : get_lang('Session');
         $paymentType = 1 == $sale['payment_type'] ? 'Paypal' : $plugin->get_lang('BankTransfer');
@@ -151,7 +154,7 @@ switch ($action) {
         $totalAccounts = 0;
         $totalPayout = 0;
 
-        $payouts = isset($_POST['payouts']) ? $_POST['payouts'] : '';
+        $payouts = $httpRequest->request->all('payouts');
 
         if (!$payouts) {
             echo Display::return_message(
@@ -164,7 +167,7 @@ switch ($action) {
         }
 
         foreach ($payouts as $index => $id) {
-            $allPays[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, $id);
+            $allPays[] = $plugin->getPayouts(BuyCoursesPlugin::PAYOUT_STATUS_PENDING, (int) $id);
         }
 
         foreach ($allPays as $payout) {
@@ -208,7 +211,7 @@ switch ($action) {
         $totalAccounts = 0;
         $totalPayout = 0;
 
-        $payouts = isset($_POST['payouts']) ? $_POST['payouts'] : '';
+        $payouts = $httpRequest->request->all('payouts');
 
         if (!$payouts) {
             echo Display::return_message(
@@ -223,7 +226,7 @@ switch ($action) {
         foreach ($payouts as $index => $id) {
             $allPayouts[] = $plugin->getPayouts(
                 BuyCoursesPlugin::PAYOUT_STATUS_PENDING,
-                $id
+                (int) $id
             );
         }
 
@@ -263,7 +266,7 @@ switch ($action) {
         }
 
         // $payoutId only gets used in setStatusPayout(), where it is filtered
-        $payoutId = isset($_POST['id']) ? $_POST['id'] : '';
+        $payoutId = $httpRequest->request->getInt('id');
         $plugin->setStatusPayouts(
             $payoutId,
             BuyCoursesPlugin::PAYOUT_STATUS_CANCELED
@@ -278,8 +281,14 @@ switch ($action) {
             break;
         }
 
-        $tokenId = $_REQUEST['token_id'];
-        $saleId = $_REQUEST['sale_id'];
+        $tokenId = $httpRequest->query->get(
+            'token_id',
+            $httpRequest->request->get('token_id')
+        );
+        $saleId = $httpRequest->query->get(
+            'sale_id',
+            $httpRequest->request->get('sale_id')
+        );
 
         if (!$tokenId || !$saleId) {
             break;
@@ -368,8 +377,14 @@ switch ($action) {
             break;
         }
 
-        $tokenId = $_REQUEST['token_id'];
-        $serviceSaleId = $_REQUEST['service_sale_id'];
+        $tokenId = $httpRequest->query->get(
+            'token_id',
+            $httpRequest->request->get('token_id')
+        );
+        $serviceSaleId = $httpRequest->query->get(
+            'service_sale_id',
+            $httpRequest->request->get('service_sale_id')
+        );
 
         if (!$tokenId || !$serviceSaleId) {
             break;
@@ -460,7 +475,7 @@ switch ($action) {
         break;
 
     case 'service_sale_info':
-        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $id = $httpRequest->request->getInt('id');
         $serviceSale = $plugin->getServiceSale($id);
         $isAdmin = api_is_platform_admin();
         if (!$serviceSale) {
@@ -569,7 +584,7 @@ switch ($action) {
         break;
 
     case 'service_sale_confirm':
-        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $id = $httpRequest->request->getInt('id');
         $serviceSale = $plugin->getServiceSale($id);
         $response = $plugin->completeServiceSale($id);
         $html = "<div class='text-center'>";
@@ -595,7 +610,7 @@ switch ($action) {
         break;
 
     case 'service_sale_cancel':
-        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $id = $httpRequest->request->getInt('id');
         $response = $plugin->cancelServiceSale($id);
         $html = '';
         $html .= "<div class='text-center'>";

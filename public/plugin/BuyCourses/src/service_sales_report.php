@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,6 +17,7 @@ require_once '../config.php';
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
@@ -23,12 +25,12 @@ $includeServices = $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
-$selectedStatus = isset($_GET['status']) ? (int) $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$selectedStatus = $httpRequest->query->getInt('status', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
     $selectedStatus = (int) $form->getSubmitValue('status');
-    if (false === $selectedStatus) {
+    if (!$selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 }

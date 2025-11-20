@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 
@@ -16,21 +17,22 @@ require_once '../config.php';
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
-if (isset($_GET['order'])) {
-    $sale = $plugin->getSale($_GET['order']);
+if ($orderId = $httpRequest->query->getInt('order')) {
+    $sale = $plugin->getSale($orderId);
     if (empty($sale)) {
         api_not_allowed(true);
     }
 
     $urlToRedirect = api_get_self().'?';
 
-    switch ($_GET['action']) {
+    switch ($httpRequest->query->get('action')) {
         case 'confirm':
             $plugin->completeSale($sale['id']);
             $plugin->storePayouts($sale['id']);
@@ -73,10 +75,10 @@ $saleStatuses = $plugin->getSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
 
 $selectedFilterType = '0';
-$selectedStatus = isset($_GET['status']) ? (int) $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
-$selectedSale = isset($_GET['sale']) ? (int) ($_GET['sale']) : 0;
-$dateStart = isset($_GET['date_start']) ? $_GET['date_start'] : date('Y-m-d H:i', mktime(0, 0, 0));
-$dateEnd = isset($_GET['date_end']) ? $_GET['date_end'] : date('Y-m-d H:i', mktime(23, 59, 59));
+$selectedStatus = $httpRequest->query->getInt('status', BuyCoursesPlugin::SALE_STATUS_PENDING);
+$selectedSale = $httpRequest->query->getInt('sale');
+$dateStart = $httpRequest->query->get('date_start', date('Y-m-d H:i', mktime(0, 0, 0)));
+$dateEnd = $httpRequest->query->get('date_end', date('Y-m-d H:i', mktime(23, 59, 59)));
 $searchTerm = '';
 $email = '';
 
@@ -90,7 +92,7 @@ if ($form->validate()) {
     $dateEnd = $form->getSubmitValue('date_end');
     $email = $form->getSubmitValue('email');
 
-    if (false === $selectedStatus) {
+    if (!$selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 

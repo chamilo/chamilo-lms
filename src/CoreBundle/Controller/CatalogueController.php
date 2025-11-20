@@ -38,8 +38,32 @@ class CatalogueController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly CourseRepository $courseRepository,
-        private readonly SessionRepository $sessionRepository
+        private readonly TrackingStatsHelper $trackingStatsHelper,
+        private readonly SessionRepository $sessionRepository,
+        private readonly UserRelCourseVoteHelper $userRelCourseVoteHelper
     ) {}
+
+    #[Route('/api/courses/{id}/rating', name: 'api_course_rating', methods: ['GET'])]
+    public function courseRating(Course $course, Request $request): JsonResponse
+    {
+        $sessionId = $request->query->getInt('session', 0);
+        $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
+        $res = $this->userRelCourseVoteHelper->getCourseRating($course, $session);
+
+        return $this->json([
+            'average' => $res['avg'],
+            'count' => $res['count'],
+        ]);
+    }
+    #[Route('/api/courses/{id}/visits', name: 'api_course_visits', methods: ['GET'])]
+    public function courseVisits(Course $course, Request $request): JsonResponse
+    {
+        $sessionId = $request->query->getInt('session', 0);
+        $session = $sessionId > 0 ? $this->sessionRepository->find($sessionId) : null;
+        $count = $this->trackingStatsHelper->getCourseVisits($course, $session);
+
+        return $this->json(['visits' => $count]);
+    }
 
     #[Route('/courses-list', name: 'chamilo_core_catalogue_courses_list', methods: ['GET'])]
     public function listCourses(): JsonResponse
@@ -532,6 +556,11 @@ class CatalogueController extends AbstractController
 
         if (!$user || !$course) {
             return $this->json(['error' => 'Course or user not found'], 400);
+        }
+
+        $isPrivileged = $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_TEACHER') || $this->isGranted('ROLE_SESSION_ADMIN');
+        if (!$course->getAllowSelfSignup() && !$isPrivileged) {
+            return $this->json(['error' => 'Self sign up not allowed for this course'], 403);
         }
 
         $useAutoSession = 'true' === $settings->getSetting('catalog.course_subscription_in_user_s_session', true);

@@ -159,6 +159,8 @@
         </div>
       </div>
 
+      <CourseThematicProgress />
+
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
           <CourseIntroduction
@@ -276,6 +278,7 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
+import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()

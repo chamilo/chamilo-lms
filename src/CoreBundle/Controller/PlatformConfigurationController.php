@@ -223,6 +223,7 @@ class PlatformConfigurationController extends AbstractController
             'enable_lp_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_lp_auto_launch'),
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
             'learning_path_generator' => $courseSettingsManager->getCourseSettingValue('learning_path_generator'),
+            'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
         ];
 
         return new JsonResponse(['settings' => $settings]);

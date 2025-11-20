@@ -776,6 +776,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_question_edit_open_advanced_params_by_default'] = false;
 // Define how many seconds an AJAX request should be started to avoid loss of connection.
 //$_configuration['quiz_keep_alive_ping_interval'] = 0;
+// Add the official code of the user in the pdf export of the results.
+//$_configuration['quiz_result_pdf_export_include_official_code_in_file_name'] = false;
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.

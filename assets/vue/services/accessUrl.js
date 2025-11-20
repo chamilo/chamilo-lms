@@ -39,8 +39,7 @@ export default {
     if (contentType.includes("application/json")) {
       return resp.json()
     }
-
-
+    
     return { message: await resp.text(), redirectUrl: "/main/admin/access_urls.php" }
   },
 }

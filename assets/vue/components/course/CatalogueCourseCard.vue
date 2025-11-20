@@ -3,23 +3,23 @@
     class="course-card relative hover:shadow-lg transition duration-300 rounded-2xl overflow-hidden border border-gray-300 bg-white flex flex-col"
   >
     <div
-      v-if="course.categories?.length"
+      v-if="localCourse.categories?.length"
       class="absolute top-2 left-2 flex flex-wrap gap-1 z-30"
     >
-      <span
-        v-for="cat in course.categories"
-        :key="cat.id"
-        class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
-      >
-        {{ cat.title }}
-      </span>
+     <span
+       v-for="cat in localCourse.categories"
+       :key="cat.id"
+       class="bg-support-5 text-white text-xs font-bold px-2 py-0.5 rounded"
+     >
+       {{ cat.title }}
+     </span>
     </div>
     <span
-      v-if="course.courseLanguage"
+      v-if="localCourse.courseLanguage"
       class="absolute top-0 right-0 bg-support-4 text-white text-xs px-2 py-0.5 font-semibold rounded-bl-lg z-20"
     >
-      {{ getOriginalLanguageName(course.courseLanguage) }}
-    </span>
+     {{ getOriginalLanguageName(localCourse.courseLanguage) }}
+   </span>
 
     <Button
       v-if="allowDescription && showInfoPopup"
@@ -35,15 +35,15 @@
       :to="imageLink"
     >
       <img
-        :src="course.illustrationUrl"
-        :alt="course.title"
+        :src="localCourse.illustrationUrl"
+        :alt="localCourse.title"
         class="w-full object-cover"
       />
     </router-link>
     <img
       v-else
-      :src="course.illustrationUrl"
-      :alt="course.title"
+      :src="localCourse.illustrationUrl"
+      :alt="localCourse.title"
       class="w-full object-cover"
     />
     <div class="p-4 flex flex-col flex-grow gap-2">
@@ -52,62 +52,65 @@
         :to="titleLink"
         class="text-xl font-semibold"
       >
-        {{ course.title }}
+        {{ localCourse.title }}
       </router-link>
       <h3
         v-else-if="showTitle"
         class="text-xl font-semibold"
       >
-        {{ course.title }}
+        {{ localCourse.title }}
       </h3>
       <div
-        v-if="course.duration"
+        v-if="localCourse.duration"
         class="text-sm text-gray-700"
       >
         <strong>{{ $t("Duration") }}:</strong> {{ durationInHours }}
       </div>
 
       <div
-        v-if="course.dependencies?.length"
+        v-if="localCourse.dependencies?.length"
         class="text-sm text-gray-700"
       >
         <strong>{{ $t("Dependencies") }}:</strong>
-        {{ course.dependencies.map((dep) => dep.title).join(", ") }}
+        {{ localCourse.dependencies.map((dep) => dep.title).join(", ") }}
       </div>
 
       <div
-        v-if="course.price !== undefined"
+        v-if="localCourse.price !== undefined"
         class="text-sm text-gray-700"
       >
         <strong>{{ $t("Price") }}:</strong>
-        {{ course.price > 0 ? "S/. " + course.price.toFixed(2) : $t("Free") }}
+        {{ localCourse.price > 0 ? "S/. " + localCourse.price.toFixed(2) : $t("Free") }}
       </div>
       <div
-        v-if="course.teachers?.length"
+        v-if="localCourse.teachers?.length"
         class="text-sm text-gray-700"
       >
         <strong>{{ $t("Teachers") }}:</strong>
-        {{ course.teachers.map((t) => t.user.fullName).join(", ") }}
+        {{ localCourse.teachers.map((t) => t.user.fullName).join(", ") }}
       </div>
-      <Rating
-        v-if="props.currentUserId"
-        :model-value="course.userVote?.vote || 0"
-        :stars="5"
-        :cancel="false"
-        @change="emitRating"
-        class="mt-2"
-      />
+      <div class="mt-2 flex items-center">
+        <Rating
+          v-if="props.currentUserId"
+          :key="`rating-${localCourse.id}-${ratingResetKey}`"
+          :modelValue="displayRatingAvg"
+          :stars="5"
+          :cancel="true"
+          class="mt-2"
+          @update:modelValue="onUserRate"
+        />
+      </div>
       <div
         class="text-xs text-gray-600 mt-1"
-        v-if="course.popularity || course.userVote?.vote"
+        v-if="localCourse.popularity || localVote"
       >
-        {{ course.popularity || 0 }} Vote<span v-if="course.popularity !== 1">s</span>
+        {{ localCourse.popularity || 0 }} Vote<span v-if="localCourse.popularity !== 1">s</span>
         |
-        {{ course.nbVisits || 0 }} Visite<span v-if="course.nbVisits !== 1">s</span>
-        <span v-if="course.userVote?.vote">
-          |
-          {{ $t("Your vote") }} [{{ course.userVote.vote }}]
-        </span>
+        {{ localCourse.nbVisits || 0 }} Visite<span v-if="localCourse.nbVisits !== 1">s</span>
+        <span v-if="localVote">
+         |
+         {{ $t("Your vote") }} [{{ localVote }}]
+       </span>
       </div>
 
       <div
@@ -116,13 +119,13 @@
         class="text-sm text-gray-700"
       >
         <strong>{{ field.display_text }}:</strong>
-        {{ course.extra_fields?.[field.variable] ?? "-" }}
+        {{ localCourse.extra_fields?.[field.variable] ?? "-" }}
       </div>
 
       <div class="mt-auto pt-2">
         <router-link
-          v-if="course.subscribed"
-          :to="{ name: 'CourseHome', params: { id: course.id } }"
+          v-if="localCourse.subscribed"
+          :to="{ name: 'CourseHome', params: { id: localCourse.id } }"
         >
           <Button
             :label="$t('Go to the course')"
@@ -140,7 +143,7 @@
         />
 
         <Button
-          v-else-if="course.subscribe && props.currentUserId"
+          v-else-if="localCourse.subscribe && props.currentUserId && allowSelfSignup"
           :label="$t('Subscribe')"
           icon="pi pi-sign-in"
           class="w-full"
@@ -148,7 +151,7 @@
         />
 
         <Button
-          v-else-if="course.visibility === 2 && !course.subscribe && props.currentUserId"
+          v-else-if="props.currentUserId && !allowSelfSignup"
           :label="$t('Subscription not allowed')"
           icon="pi pi-ban"
           disabled
@@ -156,7 +159,7 @@
         />
 
         <Button
-          v-else-if="course.visibility === 1"
+          v-else-if="localCourse.visibility === 1"
           :label="$t('Private course')"
           icon="pi pi-lock"
           disabled
@@ -175,19 +178,14 @@
   </div>
   <CatalogueRequirementModal
     v-model="showDependenciesModal"
-    :course-id="course.id"
-    :session-id="course.sessionId || 0"
+    :course-id="localCourse.id"
+    :session-id="localCourse.sessionId || 0"
     :requirements="requirementList"
     :graph-image="graphImage"
   />
-  <Dialog
-    v-model:visible="showDescriptionDialog"
-    :header="course.title"
-    modal
-    class="w-96"
-  >
+  <Dialog v-model:visible="showDescriptionDialog" :header="localCourse.title" modal class="w-96">
     <p class="text-sm text-gray-700 whitespace-pre-line">
-      {{ course.description || $t("No description available") }}
+      {{ localCourse.description || $t("No description available") }}
     </p>
   </Dialog>
 </template>
@@ -195,7 +193,7 @@
 import Rating from "primevue/rating"
 import Button from "primevue/button"
 import Dialog from "primevue/dialog"
-import { computed, ref, onMounted } from "vue"
+import { computed, ref, onMounted, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
@@ -227,19 +225,130 @@ const platformConfigStore = usePlatformConfig()
 
 const showDescriptionDialog = ref(false)
 const showDependenciesModal = ref(false)
+const ratingResetKey = ref(0)
+
+
+// local copy for display / optimistic updates
+const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
+// local reference for the vote
+const localVote = ref(props.course?.userVote?.vote || 0)
+// ensure numeric placeholders
+localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
+
+// --- fetch rating ---
+// adjust fetchRating to tolerate multiple formats returned by the API
+const fetchRating = async () => {
+  if (!localCourse.value?.id) return
+  try {
+    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ''
+    const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/rating${sessionQuery}`, {
+      headers: { Accept: 'application/json' },
+      credentials: 'same-origin',
+    })
+    if (!res.ok) return
+    const data = await res.json()
+    // robust fallback: average, avg, ratingAvg, etc.
+    localCourse.value.ratingAvg = Number(data.average ?? data.avg ?? data.ratingAvg ?? 0)
+  } catch (e) {
+    console.error('fetchRating error', e)
+  }
+}
+
+// call on mount
+onMounted(() => {
+  fetchRating()
+})
+
+// watcher on localVote: apply update + emit but do not alter the local average
+watch(
+  localVote,
+  (newVote, oldVote) => {
+    if (newVote === oldVote) return
+
+
+    const prevVote = props.course?.userVote?.vote ?? oldVote ?? 0
+
+
+    if ((localCourse.value.popularity === undefined) && props.course?.popularity !== undefined) {
+      localCourse.value.popularity = props.course.popularity
+    }
+
+
+    if (prevVote === 0 && newVote > 0) {
+      localCourse.value.popularity = (localCourse.value.popularity || 0) + 1
+    } else if (prevVote > 0 && newVote === 0) {
+      localCourse.value.popularity = Math.max((localCourse.value.popularity || 1) - 1, 0)
+    }
+
+
+    localCourse.value.userVote = { vote: newVote }
+
+
+    // Emit to the parent to persist (the parent must call the API)
+    emit("rate", { value: newVote, course: props.course })
+  },
+  { immediate: false },
+)
+
+const allowSelfSignup = computed(() => {
+  if (localCourse.value?.allow_self_signup !== undefined) return Boolean(localCourse.value.allow_self_signup)
+  if (localCourse.value?.allowSelfSignup !== undefined) return Boolean(localCourse.value.allowSelfSignup)
+  return localCourse.value?.visibility === 0
+})
+localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
+
+// fetch visits
+const fetchVisits = async () => {
+  if (!localCourse.value?.id) return
+  try {
+    const sessionQuery = localCourse.value?.sessionId ? `?session=${localCourse.value.sessionId}` : ''
+    const res = await fetch(`/catalogue/api/courses/${localCourse.value.id}/visits${sessionQuery}`, {
+      headers: { 'Accept': 'application/json' },
+      credentials: 'same-origin',
+    })
+    if (!res.ok) return
+    const data = await res.json()
+    localCourse.value.nbVisits = Number(data.visits ?? 0)
+  } catch (e) {
+    console.error('fetchVisits error', e)
+  }
+}
+
+onMounted(fetchVisits)
+
+
 
 const allowDescription = computed(
   () => platformConfigStore.getSetting("catalog.show_courses_descriptions_in_catalog") !== "false",
 )
 
 const durationInHours = computed(() => {
-  if (!props.course.duration) return "-"
-  const duration = props.course.duration / 3600
-  return props.course.durationExtra ? `${duration.toFixed(2)}+ h` : `${duration.toFixed(2)} h`
+  if (!localCourse.value.duration) return "-"
+  const duration = localCourse.value.duration / 3600
+  return localCourse.value.durationExtra ? `${duration.toFixed(2)}+ h` : `${duration.toFixed(2)} h`
 })
 
-const emitRating = (event) => {
-  emit("rate", { value: event.value, course: props.course })
+
+// the display computed to prioritize the local value (optimistic/fetch)
+const displayRatingAvg = computed(() => {
+  return Number(
+    localCourse.value?.ratingAvg ??
+    props.course?.average ??
+    props.course?.avg ??
+    props.course?.avgRating ??
+    localCourse.value?.avg ??
+    0
+  )
+})
+
+// computed used by the Rating component: shows the user's vote if available, otherwise the average
+const onUserRate = (val) => {
+  // updates localVote -> watcher handles popularity + emit("rate")
+  localVote.value = Number(val || 0)
+  // force the remount of the Rating component to return to displaying the average
+  setTimeout(() => {
+    ratingResetKey.value++
+  }, 0)
 }
 
 const subscribing = ref(false)
@@ -313,7 +422,7 @@ const imageLink = computed(() => {
         : null
 
   if (routeName && routeExists(routeName)) {
-    return { name: routeName, params: { id: props.course.id } }
+    return { name: routeName, params: { id: localCourse.value.id } }
   }
 
   return null
@@ -323,7 +432,7 @@ const titleLink = computed(() => {
   const routeName = linkSettings.value.title_url === "course_home" ? "CourseHome" : null
 
   if (routeName && routeExists(routeName)) {
-    return { name: routeName, params: { id: props.course.id } }
+    return { name: routeName, params: { id: localCourse.value.id } }
   }
 
   return null
@@ -336,8 +445,8 @@ const showInfoPopup = computed(() => {
 })
 
 const { isLocked, hasRequirements, requirementList, graphImage, fetchStatus } = useCourseRequirementStatus(
-  props.course.id,
-  props.course.sessionId || 0,
+  () => localCourse.value.id,
+  () => localCourse.value.sessionId || 0,
 )
 
 onMounted(() => {

@@ -176,10 +176,10 @@ if (api_get_multiple_access_url()) {
 $toolbarItems = [$actions];
 if ($isLocalhost) {
     $toolbarItems[] = '<span style="
-       margin-left: 8px;
-       font-size: 0.9em;
-       color: #666;
-   ">'.$tooltip.'</span>';
+        margin-left: 8px;
+        font-size: 0.9em;
+        color: #666;
+    ">'.$tooltip.'</span>';
 }
 
 // 7) Render the toolbar
@@ -213,14 +213,6 @@ foreach ($url_list as $u) {
         $urlEncoded = rawurlencode($u->getUrl());
         $secTokenEncoded = rawurlencode($parameters['sec_token']);
         $vueHref = api_get_path(WEB_PATH) . 'resources/accessurl/' . $u->getId() . '/delete?url=' . $urlEncoded . '&sec_token=' . $secTokenEncoded;
-
-
-
-
-
-
-
-
         $rowActions .= '<a href="' . $vueHref . '">' .
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')) .
             '</a>';

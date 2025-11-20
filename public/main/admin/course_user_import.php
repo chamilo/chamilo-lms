@@ -66,11 +66,14 @@ function validate_data($users_courses)
  */
 function save_data($users_courses)
 {
+    global $globalLimitUserCoursePairs;
+
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $csv_data = [];
     $inserted_in_course = [];
     $courseListCache = [];
     $courseListById = [];
+
     foreach ($users_courses as $user_course) {
         if (!in_array($user_course['CourseCode'], array_keys($courseListCache))) {
             $courseInfo = api_get_course_info($user_course['CourseCode']);
@@ -80,6 +83,12 @@ function save_data($users_courses)
         } else {
             $courseInfo = $courseListCache[$user_course['CourseCode']];
         }
+
+        if (empty($courseInfo) || empty($courseInfo['real_id'])) {
+            // Skip invalid course info.
+            continue;
+        }
+
         $courseListById[$courseInfo['real_id']] = $courseInfo;
         $csv_data[$user_course['UserName']][$courseInfo['real_id']] = $user_course['Status'];
     }
@@ -91,6 +100,7 @@ function save_data($users_courses)
         }
 
         $user_id = $userInfo['user_id'];
+
         $sql = "SELECT * FROM $course_user_table cu
                 WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH.' ';
         $res = Database::query($sql);
@@ -104,7 +114,23 @@ function save_data($users_courses)
 
         if (isset($_POST['subscribe']) && $_POST['subscribe']) {
             foreach ($to_subscribe as $courseId) {
+                if (!isset($courseListById[$courseId])) {
+                    // Safety check in case of inconsistent data.
+                    continue;
+                }
+
                 $courseInfo = $courseListById[$courseId];
+
+                // Check global hosting limit for this user/course pair.
+                if (CourseManager::wouldOperationExceedGlobalLimit((int) $courseId, [$user_id])) {
+                    // Collect pair for later reporting in a single batch message.
+                    $pairLabel = $username.' / '.$courseInfo['title'];
+                    $globalLimitUserCoursePairs[] = $pairLabel;
+
+                    // Do not subscribe this user to this course; continue with next course.
+                    continue;
+                }
+
                 $result = CourseManager::subscribeUser(
                     $user_id,
                     $courseId,
@@ -123,6 +149,11 @@ function save_data($users_courses)
                 } else {
                     $courseInfo = api_get_course_info_by_id($courseId);
                 }
+
+                if (empty($courseInfo) || empty($courseInfo['code'])) {
+                    continue;
+                }
+
                 $courseCode = $courseInfo['code'];
                 CourseManager::unsubscribe_user($user_id, $courseCode);
             }
@@ -159,6 +190,7 @@ $tool_name = get_lang('Add users to course').' CSV';
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
+$globalLimitUserCoursePairs = [];
 
 // Creating the form.
 $form = new FormValidator('course_user_import');
@@ -181,6 +213,16 @@ if ($form->validate()) {
         $errors = validate_data($users_courses);
         if (0 == count($errors)) {
             $inserted_in_course = save_data($users_courses);
+
+            // Show global hosting limit warning if some subscriptions were blocked.
+            if (!empty($globalLimitUserCoursePairs)) {
+                $limitMessage = CourseManager::getGlobalLimitPartialImportMessage($globalLimitUserCoursePairs);
+                Display::addFlash(
+                    Display::return_message($limitMessage, 'warning', false)
+                );
+                // Reset for safety in case of reuse within the same request.
+                $globalLimitUserCoursePairs = [];
+            }
 
             if (!empty($inserted_in_course)) {
                 $warn = get_lang('File imported');

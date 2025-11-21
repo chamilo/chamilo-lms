@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Export;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Imscc13Import;
+use Chamilo\CourseBundle\Component\CourseCopy\Course;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRecycler;
@@ -1022,6 +1023,9 @@ class CourseMaintenanceController extends AbstractController
         $selectionMode = false;
 
         try {
+            /** @var Course|null $courseFull */
+            $courseFull = null;
+
             if ('selected' === $scope) {
                 // Build a full snapshot first to expand any category-only selections.
                 $cbFull = new CourseBuilder();
@@ -1064,10 +1068,14 @@ class CourseMaintenanceController extends AbstractController
                     'forums' => array_fill_keys(array_map('intval', array_keys($normSel['forums'] ?? [])), true),
                 ];
                 // Also include expansions from categories
-                $fullSnapshot = isset($courseFull) ? $courseFull : $course;
+                $fullSnapshot = $courseFull ?: $course;
                 $expandedAll = $this->expandCc13SelectionFromCategories($fullSnapshot, $normSel);
                 foreach (['documents', 'links', 'forums'] as $k) {
-                    foreach (array_keys($expandedAll[$k] ?? []) as $idStr) {
+                    if (!isset($expandedAll[$k])) {
+                        continue;
+                    }
+
+                    foreach (array_keys($expandedAll[$k]) as $idStr) {
                         $safeSelected[$k][(int) $idStr] = true;
                     }
                 }

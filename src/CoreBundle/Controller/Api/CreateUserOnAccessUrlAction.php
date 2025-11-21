@@ -43,19 +43,31 @@ readonly class CreateUserOnAccessUrlAction
     {
         $this->validator->validate($data);
 
+        $locale = $data->getLocale();
+        if (empty($locale)) {
+            $locale = (string) ($this->settingsManager->getSetting('language.platform_language', true) ?: 'en');
+        }
+
+        $timezone = $data->getTimezone();
+        if (empty($timezone)) {
+            $timezone = (string) ($this->settingsManager->getSetting('platform.timezone', true) ?: 'Europe/Paris');
+        }
+
+        $status = $data->getStatus() ?? 5;
+
         $user = new User();
         $user
             ->setUsername($data->getUsername())
             ->setFirstname($data->getFirstname())
             ->setLastname($data->getLastname())
             ->setEmail($data->getEmail())
-            ->setLocale($data->getLocale() ?? 'en')
-            ->setTimezone($data->getTimezone() ?? 'Europe/Paris')
-            ->setStatus($data->getStatus() ?? 5)
+            ->setLocale($locale)
+            ->setTimezone($timezone)
+            ->setStatus($status)
             ->setActive(User::ACTIVE)
             ->setPlainPassword($data->getPassword())
             ->addAuthSourceByAuthentication(UserAuthSource::PLATFORM, $url)
-            ->setRoleFromStatus($data->getStatus() ?? 5)
+            ->setRoleFromStatus($status)
         ;
 
         $this->userRepository->updateUser($user);

@@ -1,4 +1,13 @@
 <template>
+  <SectionHeader :title="t('Assignment')">
+    <template #end>
+      <StudentViewButton
+        v-if="securityStore.isAuthenticated"
+        @change="onStudentViewChange"
+      />
+    </template>
+  </SectionHeader>
+
   <div>
     <div
       v-if="!assignment"
@@ -55,7 +64,7 @@
           </div>
         </template>
 
-        <template v-else-if="isEditor && !isStudentView">
+        <template v-else-if="isTeacherUI">
           <BaseIcon
             icon="file-add"
             size="big"
@@ -167,6 +176,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import axios from "axios"
 import { ENTRYPOINT } from "../../config/entrypoint"
@@ -174,6 +184,8 @@ import { useNotification } from "../../composables/notification"
 
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
 
@@ -182,13 +194,22 @@ const { cid, sid, gid } = useCidReq()
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
+const platformConfigStore = usePlatformConfig()
 const notification = useNotification()
 
 const assignmentId = parseInt(route.params.id, 10)
 const fromLearnpath = route.query.origin === "learnpath"
-const isEditor = securityStore.isCourseAdmin || securityStore.isTeacher
-const isStudentView = route.query.isStudentView === "true"
-const forceStudentView = !isEditor || isStudentView
+
+const isTeacherUser = computed(
+  () =>
+    securityStore.isCourseAdmin || securityStore.isTeacher || securityStore.isAdmin || securityStore.isCurrentTeacher,
+)
+const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
+const forceStudentView = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
+
+function onStudentViewChange() {
+}
+
 const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
@@ -200,7 +221,7 @@ function fromApiLocal(str) {
 }
 
 const expiresOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.expiresOn))
-const endsOnDate    = computed(() => fromApiLocal(assignment.value?.assignment?.endsOn))
+const endsOnDate = computed(() => fromApiLocal(assignment.value?.assignment?.endsOn))
 const isAfterEndDate = computed(() => (endsOnDate.value ? new Date() > endsOnDate.value : false))
 const isAfterDeadline = isAfterEndDate
 
@@ -219,7 +240,7 @@ async function loadAddedDocuments() {
     })
     addedDocuments.value = resp.data["hydra:member"]
   } catch (e) {
-    console.error(e)
+    console.warn("[AssignmentDetail] Failed to load added documents", e)
   }
 }
 
@@ -264,14 +285,17 @@ function uploadMyAssignment(flags) {
 }
 
 function addDocument() {
+  if (!isTeacherUI.value) return
   router.push({ name: "AssignmentAddDocument", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
 
 function addUsers() {
+  if (!isTeacherUI.value) return
   router.push({ name: "AssignmentAddUser", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
 
 function editAssignment() {
+  if (!isTeacherUI.value) return
   router.push({
     name: "AssignmentsUpdate",
     params: { id: assignment.value["@id"] },
@@ -280,10 +304,12 @@ function editAssignment() {
 }
 
 function showUnsubmittedUsers() {
+  if (!isTeacherUI.value) return
   router.push({ name: "AssignmentMissing", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
 
 async function exportPdf() {
+  if (!isTeacherUI.value) return
   try {
     const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId, cid, sid, gid)
     const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }))
@@ -299,6 +325,7 @@ async function exportPdf() {
 }
 
 async function downloadAssignments() {
+  if (!isTeacherUI.value) return
   try {
     const blob = await cStudentPublicationService.downloadAssignments(assignmentId)
     const url = window.URL.createObjectURL(new Blob([blob]))
@@ -314,12 +341,13 @@ async function downloadAssignments() {
 }
 
 async function uploadCorrections() {
+  if (!isTeacherUI.value) return
   const input = document.createElement("input")
   input.type = "file"
   input.accept = ".zip"
 
   input.addEventListener("change", async () => {
-    const file = input.files[0]
+    const file = input.files?.[0]
     if (!file) return
 
     try {
@@ -337,6 +365,7 @@ async function uploadCorrections() {
 }
 
 async function deleteAllCorrections() {
+  if (!isTeacherUI.value) return
   if (!confirm(t("Are you sure you want to delete all corrections?"))) return
 
   try {

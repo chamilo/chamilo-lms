@@ -514,16 +514,18 @@ if (isset($_POST['step2'])) {
             $dbPortForm
         );
         $manager = Database::getManager();
-        $dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 
-        // Drop and create the database anyways
+        // Sanitize database name: only letters, numbers and underscore
+        $dbNameForm = preg_replace('/[^a-zA-Z0-9_]/', '', $dbNameForm);
+
+        // Drop and create the database anyway
         error_log("Drop database $dbNameForm");
         $schemaManager = $manager->getConnection()->createSchemaManager();
 
         try {
             $schemaManager->dropDatabase($dbNameForm);
         } catch (\Doctrine\DBAL\Exception $e) {
-            error_log("Database ".$dbNameForm." does not exists");
+            error_log("Database ".$dbNameForm." does not exist");
         }
 
         $schemaManager->createDatabase($dbNameForm);

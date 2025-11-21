@@ -57,8 +57,8 @@ class Notification extends Model
 
     /* message, invitation, group messages */
     public $type;
-    public $adminName;
-    public $adminEmail;
+    public string $adminName = '';
+    public string $adminEmail = '';
     public $titlePrefix;
 
     public function __construct()

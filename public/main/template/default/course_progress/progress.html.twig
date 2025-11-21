@@ -1,5 +1,4 @@
 {% autoescape false %}
-    {# ---------- JS helpers from legacy ---------- #}
     <script>
       function datetime_by_attendance(attendance_id, thematic_advance_id) {
         $.ajax({
@@ -44,7 +43,7 @@
       }
     </script>
     {% if data is not empty %}
-        {% set tutor = is_granted('ROLE_TEACHER') %}
+        {% set tutor = (is_allowed_to_edit is defined and is_allowed_to_edit) and (student_view_active is defined and not student_view_active) %}
 
         <div id="course-progress" class="w-full px-4 sm:px-6 lg:px-8">
             {# Header: progress #}

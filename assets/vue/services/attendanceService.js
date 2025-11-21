@@ -269,4 +269,11 @@ export default {
       throw error
     }
   },
+
+  getDateSheet: async (attendanceId, calendarId, { cid, sid, gid }) => {
+    const res = await axios.get(`/attendance/${attendanceId}/date/${calendarId}/sheet`, {
+      params: { cid, sid, gid },
+    })
+    return res.data
+  },
 }

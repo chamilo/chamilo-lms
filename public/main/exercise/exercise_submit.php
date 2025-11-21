@@ -567,10 +567,19 @@ if ($time_control) {
     if ($debug) {
         error_log('7.1. Time control is enabled');
         error_log('7.2. $current_expired_time_key  '.$current_expired_time_key);
-        error_log(
-            '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
-            $_SESSION['expired_time'][$current_expired_time_key]
-        );
+        if (isset($_SESSION['expired_time'])) {
+            if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s')
+                );
+            } else {
+                error_log(
+                    '7.3. $_SESSION[expired_time][$current_expired_time_key] '.
+                    $_SESSION['expired_time'][$current_expired_time_key]
+                );
+            }
+        }
     }
 
     if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
@@ -626,7 +635,11 @@ if ($time_control) {
             }
         }
     } else {
-        $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        if ($_SESSION['expired_time'][$current_expired_time_key] instanceof DateTimeInterface) {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key]->format('Y-m-d H:i:s');
+        } else {
+            $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
+        }
     }
 }
 
@@ -737,25 +750,25 @@ if (ALL_ON_ONE_PAGE === $objExercise->type || $forceGrouped) {
     });
 
     if ($hasMediaWithChildren) {
-        $groups  = [];
-        $seen    = [];
+        $pages = [];
+        $groupIndexByParent = [];
         foreach ($flat as $qid) {
             $q = Question::read($qid);
-            if ($q->parent_id > 0) {
-                $pid = $q->parent_id;
-                $groups[$pid]['questions'][] = $qid;
-                $seen[$qid] = true;
+            if ($q && $q->parent_id > 0) {
+                $pid = (int) $q->parent_id;
+                if (!array_key_exists($pid, $groupIndexByParent)) {
+                    $groupIndexByParent[$pid] = count($pages);
+                    $pages[] = ['parent' => $pid, 'questions' => []];
+                }
+                $pages[$groupIndexByParent[$pid]]['questions'][] = $qid;
+            } else {
+                $pages[] = ['parent' => null, 'questions' => [$qid]];
             }
         }
-        foreach ($flat as $qid) {
-            if (!isset($seen[$qid])) {
-                $groups[$qid]['questions'] = [$qid];
-            }
-        }
-        $pages = array_values($groups);
-        $totalPages = count($pages);
-        $page       = min(max(1, $page), $totalPages);
-        $questionList  = $pages[$page - 1]['questions'];
+
+        $totalPages   = count($pages);
+        $page         = min(max(1, $page), $totalPages);
+        $questionList = $pages[$page - 1]['questions'];
         $currentBreakId = null;
     } else {
         $pages    = [[]];
@@ -773,6 +786,16 @@ if (ALL_ON_ONE_PAGE === $objExercise->type || $forceGrouped) {
         $page          = min(max(1, $page), $totalPages);
         $questionList  = $pages[$page - 1];
         $currentBreakId = ($page > 1 ? $breakIds[$page - 1] : null);
+    }
+
+    $questionNumberOffset = 0;
+    if (isset($pages) && is_array($pages) && isset($page)) {
+        for ($p = 0; $p < max(0, $page - 1); $p++) {
+            $chunk = $pages[$p];
+            $questionNumberOffset += (is_array($chunk) && array_key_exists('questions', $chunk))
+                ? count($chunk['questions'])
+                : (is_array($chunk) ? count($chunk) : 0);
+        }
     }
 }
 
@@ -1852,7 +1875,7 @@ echo '<form id="exercise_form" method="post" action="'
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id.'" />';
 
 // Show list of questions
-$i = 1;
+$i = 1 + (isset($questionNumberOffset) ? (int) $questionNumberOffset : 0);
 $attempt_list = [];
 if (isset($exe_id)) {
     $attempt_list = Event::getAllExerciseEventByExeId($exe_id);

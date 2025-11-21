@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * User Panel.
  */
@@ -45,6 +48,10 @@ $toolbar = Display::toolbarButton(
     'primary',
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
+
+$webPluginPath = api_get_path(WEB_PLUGIN_PATH);
+$htmlHeadXtra[] = api_get_css($webPluginPath.'BuyCourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_js_simple($webPluginPath.'BuyCourses/resources/js/modals.js');
 
 $templateName = $plugin->get_lang('TabsDashboard');
 $tpl = new Template($templateName);

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 
 declare(strict_types=1);
@@ -12,7 +13,9 @@ final class Version20251022005000 extends AbstractMigrationChamilo
 {
     private const DEBUG = true;
 
-    /** @var array<string,true> */
+    /**
+     * @var array<string,true>
+     */
     private array $globalNeeded = [];
 
     public function getDescription(): string
@@ -36,15 +39,16 @@ final class Version20251022005000 extends AbstractMigrationChamilo
 
         if (empty($rows)) {
             $this->dbg('[MIG][templates] No legacy paths found. Nothing to do.');
+
             return;
         }
 
         $updated = 0;
 
         foreach ($rows as $r) {
-            $id      = (int)$r['id'];
-            $title   = (string)$r['title'];
-            $content = (string)$r['content'];
+            $id = (int) $r['id'];
+            $title = (string) $r['title'];
+            $content = (string) $r['content'];
 
             $newContent = $this->rewriteLegacyPathsToPublic($content, $title, $id);
 
@@ -54,7 +58,7 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             if ($newContent !== $content) {
                 $conn->update('system_template', ['content' => $newContent], ['id' => $id]);
                 $updated++;
-                $this->dbg(sprintf('[MIG][templates] Updated template id=%d title="%s".', $id, $title));
+                $this->dbg(\sprintf('[MIG][templates] Updated template id=%d title="%s".', $id, $title));
             }
         }
 
@@ -62,9 +66,9 @@ final class Version20251022005000 extends AbstractMigrationChamilo
         $publicBase = $this->resolvePublicBaseDir();
         foreach (array_keys($this->globalNeeded) as $relPath) {
             $status = $this->fileStatus($publicBase, $relPath);
-            $this->dbg(sprintf('[MIG][templates:images] %s  %s', $status, $relPath));
+            $this->dbg(\sprintf('[MIG][templates:images] %s  %s', $status, $relPath));
         }
-        $this->dbg(sprintf('[MIG][templates] DONE. Updated %d template(s).', $updated));
+        $this->dbg(\sprintf('[MIG][templates] DONE. Updated %d template(s).', $updated));
     }
 
     /**
@@ -81,7 +85,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c1
-        ); $countAll += (int)$c1;
+        );
+        $countAll += (int) $c1;
 
         $html = preg_replace(
             '#(\bsrc=\s*[\'"])\{IMG_DIR\}#i',
@@ -89,7 +94,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c1b
-        ); $countAll += (int)$c1b;
+        );
+        $countAll += (int) $c1b;
 
         // {REL_PATH}main/img/... -> /img/...
         $html = preg_replace(
@@ -98,7 +104,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c2
-        ); $countAll += (int)$c2;
+        );
+        $countAll += (int) $c2;
 
         $html = preg_replace(
             '#(\bsrc=\s*[\'"])\{REL_PATH\}main/img/#i',
@@ -106,7 +113,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c2b
-        ); $countAll += (int)$c2b;
+        );
+        $countAll += (int) $c2b;
 
         // Raw /main/img/... -> /img/...
         $html = preg_replace(
@@ -115,7 +123,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c3
-        ); $countAll += (int)$c3;
+        );
+        $countAll += (int) $c3;
 
         $html = preg_replace(
             '#(\bsrc=\s*[\'"])/main/img/#i',
@@ -123,7 +132,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c3b
-        ); $countAll += (int)$c3b;
+        );
+        $countAll += (int) $c3b;
 
         // {COURSE_DIR}images/... -> /img/...
         $html = preg_replace(
@@ -132,7 +142,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c4
-        ); $countAll += (int)$c4;
+        );
+        $countAll += (int) $c4;
 
         $html = preg_replace(
             '#(\bsrc=\s*[\'"])\{COURSE_DIR\}images/#i',
@@ -140,7 +151,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c4b
-        ); $countAll += (int)$c4b;
+        );
+        $countAll += (int) $c4b;
 
         // /img/certificates/... -> /img/...
         $html = preg_replace(
@@ -149,7 +161,8 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c5
-        ); $countAll += (int)$c5;
+        );
+        $countAll += (int) $c5;
 
         $html = preg_replace(
             '#(\bsrc=\s*[\'"])/img/certificates/#i',
@@ -157,12 +170,14 @@ final class Version20251022005000 extends AbstractMigrationChamilo
             $html,
             -1,
             $c5b
-        ); $countAll += (int)$c5b;
+        );
+        $countAll += (int) $c5b;
 
-        $html = preg_replace('#/img//+#', '/img/', $html, -1, $c6); $countAll += (int)$c6;
+        $html = preg_replace('#/img//+#', '/img/', $html, -1, $c6);
+        $countAll += (int) $c6;
 
         if ($countAll > 0) {
-            $this->dbg(sprintf(
+            $this->dbg(\sprintf(
                 '[MIG][templates] id=%d title="%s" rewrites=%d',
                 $id,
                 $title,
@@ -202,24 +217,23 @@ final class Version20251022005000 extends AbstractMigrationChamilo
     /**
      * Records (and accumulates) the list of images and checks for existence under public/.
      *
-     * @param int      $id
-     * @param string   $title
      * @param string[] $paths
      */
     private function logNeededImages(int $id, string $title, array $paths): void
     {
         if (empty($paths)) {
-            $this->dbg(sprintf('[MIG][templates:images] id=%d title="%s" no image refs.', $id, $title));
+            $this->dbg(\sprintf('[MIG][templates:images] id=%d title="%s" no image refs.', $id, $title));
+
             return;
         }
 
         $publicBase = $this->resolvePublicBaseDir();
-        $this->dbg(sprintf('[MIG][templates:images] id=%d title="%s" refs=%d', $id, $title, count($paths)));
+        $this->dbg(\sprintf('[MIG][templates:images] id=%d title="%s" refs=%d', $id, $title, \count($paths)));
 
         foreach ($paths as $rel) {
             $this->globalNeeded[$rel] = true;
             $status = $this->fileStatus($publicBase, $rel);
-            $this->dbg(sprintf('  %s  %s', $status, $rel));
+            $this->dbg(\sprintf('  %s  %s', $status, $rel));
         }
     }
 
@@ -228,7 +242,7 @@ final class Version20251022005000 extends AbstractMigrationChamilo
      */
     private function resolvePublicBaseDir(): ?string
     {
-        $cwdPublic = getcwd() ? rtrim((string)getcwd(), '/').'/public' : null;
+        $cwdPublic = getcwd() ? rtrim((string) getcwd(), '/').'/public' : null;
         if ($cwdPublic && is_dir($cwdPublic)) {
             return $cwdPublic;
         }
@@ -246,6 +260,7 @@ final class Version20251022005000 extends AbstractMigrationChamilo
         }
 
         $this->dbg('[MIG][templates:images] WARN: could not resolve public/ base dir.');
+
         return null;
     }
 
@@ -261,6 +276,7 @@ final class Version20251022005000 extends AbstractMigrationChamilo
         if (is_file($abs)) {
             return '[OK  ]';
         }
+
         return '[MISS]';
     }
 

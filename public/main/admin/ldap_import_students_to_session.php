@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\LdapAuthenticatorHelper;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
-use Symfony\Component\HttpFoundation\Request;
 
 // resetting the course id
 $cidReset = true;
@@ -21,7 +20,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script();
 
-$httpRequest = Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $annee_base = date('Y');
 

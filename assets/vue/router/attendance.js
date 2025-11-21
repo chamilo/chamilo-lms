@@ -44,5 +44,11 @@ export default {
       path: ":id?/export/pdf",
       component: () => import("../views/attendance/AttendanceExport.vue"),
     },
+    {
+      name: "AttendanceSheetTablet",
+      path: ":id/sheet/:calendarId/tablet",
+      component: () => import("../views/attendance/AttendanceSheetTablet.vue"),
+      meta: { breadcrumb: "Tablet view" },
+    },
   ],
 }

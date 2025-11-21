@@ -31,10 +31,10 @@ cd /tmp && wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_li
     - user_id = 1 (this one is set when you install Chamilo, but just in case...)
 
 - Edit the tests/behat/behat.yml file and update the base_url param with your own Chamilo local URL.
-- The main platform language and the admin user's language must be English (platformLanguage = english and admin user profile)
-- Social network tool must be available (allow_social_tool = true)
-- Student can register to the system (allow_registration = yes)
-- Teacher can register to the system (allow_registration_as_teacher = yes)
+- The main platform language and the admin user's language must be English (`platform_language = 'en_US'` in the `settings` table and admin user profile)
+- Social network tool must be available (`allow_social_tool = 'true'` in the `settings` table)
+- Student can register to the system (`allow_registration = 'true'` in the `settings` table)
+- Teacher can register to the system (`allow_registration_as_teacher = 'true'` in the `settings` table)
 
 ### Run tests
 

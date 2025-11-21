@@ -4713,227 +4713,275 @@ EOT;
         $countPendingQuestions = 0;
         $result = [];
         $panelsByParent = [];
-        // Loop over all question to show results for each of them, one by one
+        $finalOrder = [];
         if (!empty($question_list)) {
-            foreach ($question_list as $questionId) {
-                // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId, $objExercise->course);
-                // This variable came from exercise_submit_modal.php
-                ob_start();
-                $choice = null;
-                $delineationChoice = null;
-                if ($loadChoiceFromSession) {
-                    $choice = isset($exerciseResult[$questionId]) ? $exerciseResult[$questionId] : null;
-                    $delineationChoice = isset($delineationResults[$questionId]) ? $delineationResults[$questionId] : null;
+            $parentMap = [];
+            $mediaChildren = []; // pid => ['first_idx'=>int, 'children'=>int[]]
+            foreach ($question_list as $idx => $qid) {
+                $q = Question::read($qid, $objExercise->course);
+                $pid = (int) ($q->parent_id ?: 0);
+                $parentMap[$qid] = $pid;
+                if ($pid > 0) {
+                    if (!isset($mediaChildren[$pid])) {
+                        $mediaChildren[$pid] = ['first_idx' => $idx, 'children' => []];
+                    }
+                    $mediaChildren[$pid]['children'][] = $qid;
                 }
-
-                // We're inside *one* question. Go through each possible answer for this question
-                $result = $objExercise->manage_answer(
-                    $exeId,
-                    $questionId,
-                    $choice,
-                    'exercise_result',
-                    $exerciseResultCoordinates,
-                    $save_user_result,
-                    $fromDatabase,
-                    $show_results,
-                    $objExercise->selectPropagateNeg(),
-                    $delineationChoice,
-                    $showTotalScoreAndUserChoicesInLastAttempt
-                );
-
-                if (empty($result)) {
-                    continue;
-                }
-
-                $total_score += $result['score'];
-                $total_weight += $result['weight'];
-
-                $question_list_answers[] = [
-                    'question' => $result['open_question'],
-                    'answer' => $result['open_answer'],
-                    'answer_type' => $result['answer_type'],
-                    'generated_oral_file' => $result['generated_oral_file'],
-                ];
-
-                $my_total_score = $result['score'];
-                $my_total_weight = $result['weight'];
-                $scorePassed = self::scorePassed($my_total_score, $my_total_weight);
-
-                // Category report
-                $category_was_added_for_this_test = false;
-                if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
-                    if (!isset($category_list[$objQuestionTmp->category]['score'])) {
-                        $category_list[$objQuestionTmp->category]['score'] = 0;
-                    }
-                    if (!isset($category_list[$objQuestionTmp->category]['total'])) {
-                        $category_list[$objQuestionTmp->category]['total'] = 0;
-                    }
-                    if (!isset($category_list[$objQuestionTmp->category]['total_questions'])) {
-                        $category_list[$objQuestionTmp->category]['total_questions'] = 0;
-                    }
-                    if (!isset($category_list[$objQuestionTmp->category]['passed'])) {
-                        $category_list[$objQuestionTmp->category]['passed'] = 0;
-                    }
-                    if (!isset($category_list[$objQuestionTmp->category]['wrong'])) {
-                        $category_list[$objQuestionTmp->category]['wrong'] = 0;
-                    }
-                    if (!isset($category_list[$objQuestionTmp->category]['no_answer'])) {
-                        $category_list[$objQuestionTmp->category]['no_answer'] = 0;
-                    }
-
-                    $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
-                    $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
-                    if ($scorePassed) {
-                        // Only count passed if score is not empty
-                        if (!empty($my_total_score)) {
-                            $category_list[$objQuestionTmp->category]['passed']++;
-                        }
-                    } else {
-                        if ($result['user_answered']) {
-                            $category_list[$objQuestionTmp->category]['wrong']++;
-                        } else {
-                            $category_list[$objQuestionTmp->category]['no_answer']++;
-                        }
-                    }
-
-                    $category_list[$objQuestionTmp->category]['total_questions']++;
-                    $category_was_added_for_this_test = true;
-                }
-                if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
-                    foreach ($objQuestionTmp->category_list as $category_id) {
-                        $category_list[$category_id]['score'] += $my_total_score;
-                        $category_list[$category_id]['total'] += $my_total_weight;
-                        $category_was_added_for_this_test = true;
-                    }
-                }
-
-                // No category for this question!
-                if (false == $category_was_added_for_this_test) {
-                    if (!isset($category_list['none']['score'])) {
-                        $category_list['none']['score'] = 0;
-                    }
-                    if (!isset($category_list['none']['total'])) {
-                        $category_list['none']['total'] = 0;
-                    }
-
-                    $category_list['none']['score'] += $my_total_score;
-                    $category_list['none']['total'] += $my_total_weight;
-                }
-
-                if (0 == $objExercise->selectPropagateNeg() && $my_total_score < 0) {
-                    $my_total_score = 0;
-                }
-
-                $comnt = null;
-                if ($show_results) {
-                    $comnt = Event::get_comments($exeId, $questionId);
-                    $teacherAudio = self::getOralFeedbackAudio(
-                        $exeId,
-                        $questionId
-                    );
-
-                    if (!empty($comnt) || $teacherAudio) {
-                        echo '<b>'.get_lang('Feedback').'</b>';
-                    }
-
-                    if (!empty($comnt)) {
-                        echo self::getFeedbackText($comnt);
-                    }
-
-                    if ($teacherAudio) {
-                        echo $teacherAudio;
-                    }
-                }
-
-                $calculatedScore = [
-                    'result' => self::show_score(
-                        $my_total_score,
-                        $my_total_weight,
-                        false
-                    ),
-                    'pass' => $scorePassed,
-                    'score' => $my_total_score,
-                    'weight' => $my_total_weight,
-                    'comments' => $comnt,
-                    'user_answered' => $result['user_answered'],
-                ];
-
-                $score = [];
-                if ($show_results) {
-                    $score = $calculatedScore;
-                }
-                if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION, UPLOAD_ANSWER])) {
-                    $reviewScore = [
-                        'score' => $my_total_score,
-                        'comments' => Event::get_comments($exeId, $questionId),
-                    ];
-                    $check = $objQuestionTmp->isQuestionWaitingReview($reviewScore);
-                    if (false === $check) {
-                        $countPendingQuestions++;
-                    }
-                }
-
-                $contents = ob_get_clean();
-                $questionContent = '';
-                if ($show_results) {
-                    $questionContent = '<div class="question-answer-result">';
-                    if (false === $showQuestionScore) {
-                        $score = [];
-                    }
-
-                    // Shows question title an description
-                    $questionContent .= $objQuestionTmp->return_header(
-                        $objExercise,
-                        $counter,
-                        $score
-                    );
-                }
-                $counter++;
-                $questionContent .= $contents;
-                if ($show_results) {
-                    $questionContent .= '</div>';
-                }
-
-                $calculatedScore['question_content'] = $questionContent;
-                $attemptResult[] = $calculatedScore;
-                $parentId = intval($objQuestionTmp->parent_id ?: 0);
-                $panelsByParent[$parentId][] = Display::panel($questionContent);
             }
 
-            foreach ($panelsByParent as $pid => $panels) {
-                if ($pid !== 0) {
-                    $mediaQ = Question::read($pid, $objExercise->course);
-                    echo '<div class="media-group">';
-                    echo '<div class="media-content">';
-                    ob_start();
-                    $objExercise->manage_answer(
-                        $exeId,
-                        $pid,
-                        null,
-                        'exercise_show',
-                        [],
-                        false,
-                        true,
-                        $show_results,
-                        $objExercise->selectPropagateNeg()
-                    );
-                    echo ob_get_clean();
-                    echo '</div>';
-                    if (!empty($mediaQ->description)) {
-                        echo '<div class="media-description">'
-                            . $mediaQ->description
-                            . '</div>';
+            // build finalOrder, emitting each media group once.
+            $groupEmitted = [];
+            foreach ($question_list as $idx => $qid) {
+                $pid = $parentMap[$qid] ?? 0;
+                if ($pid === 0) {
+                    $finalOrder[] = ['type' => 'single', 'qid' => $qid];
+                } else {
+                    if (empty($groupEmitted[$pid])) {
+                        $groupEmitted[$pid] = true;
+                        $finalOrder[] = [
+                            'type'     => 'group',
+                            'parent'   => $pid,
+                            'children' => $mediaChildren[$pid]['children'] ?? [$qid],
+                        ];
                     }
-                    echo '<div class="media-children">';
+                    // If already emitted, skip the child here (it will be in the group).
+                }
+            }
+        }
+
+        $orderedOutputHtml = '';
+        $renderSingle = function (int $questionId) use (
+            &$objExercise,
+            $exeId,
+            $loadChoiceFromSession,
+            &$exerciseResult,
+            &$delineationResults,
+            &$exerciseResultCoordinates,
+            &$save_user_result,
+            &$fromDatabase,
+            &$show_results,
+            &$total_score,
+            &$total_weight,
+            &$question_list_answers,
+            &$showQuestionScore,
+            &$counter,
+            &$attemptResult,
+            &$category_list
+        ) {
+            // Start buffering rendering for this question
+            ob_start();
+
+            // Load choices from session if needed
+            $choice = null;
+            $delineationChoice = null;
+            if ($loadChoiceFromSession) {
+                $choice = $exerciseResult[$questionId] ?? null;
+                $delineationChoice = $delineationResults[$questionId] ?? null;
+            }
+
+            // Compute result for the given question
+            $result = $objExercise->manage_answer(
+                $exeId,
+                $questionId,
+                $choice,
+                'exercise_result',
+                $exerciseResultCoordinates,
+                $save_user_result,
+                $fromDatabase,
+                $show_results,
+                $objExercise->selectPropagateNeg(),
+                $delineationChoice,
+                true // keep user choices in last attempt when applicable
+            );
+
+            if (empty($result)) {
+                ob_end_clean();
+                return [null, null]; // nothing to add
+            }
+
+            $total_score  += $result['score'];
+            $total_weight += $result['weight'];
+
+            $question_list_answers[] = [
+                'question'            => $result['open_question'],
+                'answer'              => $result['open_answer'],
+                'answer_type'         => $result['answer_type'],
+                'generated_oral_file' => $result['generated_oral_file'],
+            ];
+
+            $my_total_score  = $result['score'];
+            $my_total_weight = $result['weight'];
+            $scorePassed     = self::scorePassed($my_total_score, $my_total_weight);
+
+            // Category aggregation
+            $objQuestionTmp = Question::read($questionId, $objExercise->course);
+            $category_was_added_for_this_test = false;
+            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                $cid = $objQuestionTmp->category;
+                $category_list[$cid]['score']           = ($category_list[$cid]['score'] ?? 0) + $my_total_score;
+                $category_list[$cid]['total']           = ($category_list[$cid]['total'] ?? 0) + $my_total_weight;
+                $category_list[$cid]['total_questions'] = ($category_list[$cid]['total_questions'] ?? 0) + 1;
+                if ($scorePassed) {
+                    if (!empty($my_total_score)) {
+                        $category_list[$cid]['passed'] = ($category_list[$cid]['passed'] ?? 0) + 1;
+                    }
+                } else {
+                    if ($result['user_answered']) {
+                        $category_list[$cid]['wrong'] = ($category_list[$cid]['wrong'] ?? 0) + 1;
+                    } else {
+                        $category_list[$cid]['no_answer'] = ($category_list[$cid]['no_answer'] ?? 0) + 1;
+                    }
+                }
+                $category_was_added_for_this_test = true;
+            }
+            if (!empty($objQuestionTmp->category_list)) {
+                foreach ($objQuestionTmp->category_list as $cid) {
+                    $category_list[$cid]['score'] = ($category_list[$cid]['score'] ?? 0) + $my_total_score;
+                    $category_list[$cid]['total'] = ($category_list[$cid]['total'] ?? 0) + $my_total_weight;
+                    $category_was_added_for_this_test = true;
+                }
+            }
+            if (!$category_was_added_for_this_test) {
+                $category_list['none']['score'] = ($category_list['none']['score'] ?? 0) + $my_total_score;
+                $category_list['none']['total'] = ($category_list['none']['total'] ?? 0) + $my_total_weight;
+            }
+
+            if (0 == $objExercise->selectPropagateNeg() && $my_total_score < 0) {
+                $my_total_score = 0;
+            }
+
+            $comnt = null;
+            if ($show_results) {
+                $comnt = Event::get_comments($exeId, $questionId);
+                $teacherAudio = self::getOralFeedbackAudio($exeId, $questionId);
+
+                if (!empty($comnt) || $teacherAudio) {
+                    echo '<b>'.get_lang('Feedback').'</b>';
+                }
+                if (!empty($comnt)) {
+                    echo self::getFeedbackText($comnt);
+                }
+                if ($teacherAudio) {
+                    echo $teacherAudio;
+                }
+            }
+
+            $calculatedScore = [
+                'result'        => self::show_score($my_total_score, $my_total_weight, false),
+                'pass'          => $scorePassed,
+                'score'         => $my_total_score,
+                'weight'        => $my_total_weight,
+                'comments'      => $comnt,
+                'user_answered' => $result['user_answered'],
+            ];
+
+            $scoreCol = $show_results ? $calculatedScore : [];
+
+            $contents = ob_get_clean();
+            $questionContent = '';
+            if ($show_results) {
+                $questionContent = '<div class="question-answer-result">';
+                if (false === $showQuestionScore) {
+                    $scoreCol = [];
                 }
 
+                // Numbered header (media parents are not rendered here)
+                $questionContent .= $objQuestionTmp->return_header(
+                    $objExercise,
+                    $counter,
+                    $scoreCol
+                );
+            }
+            // Count only real questions
+            $counter++;
+            $questionContent .= $contents;
+            if ($show_results) {
+                $questionContent .= '</div>';
+            }
+
+            $calculatedScore['question_content'] = $questionContent;
+            $attemptResult[] = $calculatedScore;
+
+            return [$questionContent, $result];
+        };
+
+        // Render entries
+        if (!empty($finalOrder)) {
+            foreach ($finalOrder as $entry) {
+                if ($entry['type'] === 'single') {
+                    [$html, $resultLast] = $renderSingle((int)$entry['qid']);
+                    if ($html) {
+                        $panelsByParent[0][] = Display::panel($html);
+                        if ($show_results) {
+                            $orderedOutputHtml .= Display::panel($html);
+                        }
+                        if ($resultLast) {
+                            $result = $resultLast; // keep last result for later checks (like chart)
+                        }
+                    }
+                } else {
+                    $pid = (int)$entry['parent'];
+                    $children = (array)$entry['children'];
+
+                    if ($show_results) {
+                        // Open media wrapper
+                        $orderedOutputHtml .= '<div class="media-group">';
+
+                        // Render media stem (no numbering)
+                        $orderedOutputHtml .= '<div class="media-content">';
+                        ob_start();
+                        $objExercise->manage_answer(
+                            $exeId,
+                            $pid,
+                            null,
+                            'exercise_show',
+                            [],
+                            false,
+                            true,
+                            $show_results,
+                            $objExercise->selectPropagateNeg()
+                        );
+                        $orderedOutputHtml .= ob_get_clean();
+                        $orderedOutputHtml .= '</div>';
+
+                        $mediaQ = Question::read($pid, $objExercise->course);
+                        if (!empty($mediaQ->description)) {
+                            $orderedOutputHtml .= '<div class="media-description">'.$mediaQ->description.'</div>';
+                        }
+
+                        $orderedOutputHtml .= '<div class="media-children">';
+                    }
+
+                    // Render all children contiguously
+                    foreach ($children as $cid) {
+                        [$html, $resultLast] = $renderSingle((int)$cid);
+                        if ($html) {
+                            $panelsByParent[$pid][] = Display::panel($html);
+                            if ($show_results) {
+                                $orderedOutputHtml .= Display::panel($html);
+                            }
+                            if ($resultLast) {
+                                $result = $resultLast;
+                            }
+                        }
+                    }
+
+                    if ($show_results) {
+                        // Close media wrapper
+                        $orderedOutputHtml .= '</div></div>';
+                    }
+                }
+            }
+        }
+
+        // Print output
+        if ($show_results) {
+            echo $orderedOutputHtml;
+        } else {
+            // Fallback (no wrappers when results are not shown)
+            foreach ($panelsByParent as $pid => $panels) {
                 foreach ($panels as $panelHtml) {
                     echo $panelHtml;
-                }
-
-                if ($pid !== 0) {
-                    echo '</div></div>';
                 }
             }
         }
@@ -4950,11 +4998,11 @@ EOT;
         $totalScoreText = null;
         $certificateBlock = '';
         if (($show_results || $show_only_score) && $showTotalScore) {
-            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $result['answer_type']) {
+            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == ($result['answer_type'] ?? null)) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('Your results').'</h1><br />';
             }
             $totalScoreText .= '<div class="question_row_score">';
-            if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $result['answer_type']) {
+            if (!empty($result) && MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == ($result['answer_type'] ?? null)) {
                 $totalScoreText .= self::getQuestionDiagnosisRibbon(
                     $objExercise,
                     $total_score,
@@ -4994,7 +5042,7 @@ EOT;
             }
         }
 
-        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == $result['answer_type']) {
+        if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY == ($result['answer_type'] ?? null)) {
             $chartMultiAnswer = MultipleAnswerTrueFalseDegreeCertainty::displayStudentsChartResults(
                 $exeId,
                 $objExercise

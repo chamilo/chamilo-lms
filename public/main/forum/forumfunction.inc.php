@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -1412,51 +1413,82 @@ function getPosts(
  *
  * @version October 2008, dokeos 1.8
  */
-function get_thread_users_details(int $thread_id)
+function get_thread_users_details(int $threadId)
 {
     $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_users = Database::get_main_table(TABLE_MAIN_USER);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $course_id = api_get_course_int_id();
+    $courseId = (int) api_get_course_int_id();
+    $threadId = (int) $threadId;
+    $sessionId = (int) api_get_session_id();
 
-    $is_western_name_order = api_is_western_name_order();
-    if ($is_western_name_order) {
-        $orderby = 'ORDER BY user.firstname, user.lastname ';
+    $isWesternNameOrder = api_is_western_name_order();
+    $orderBy = $isWesternNameOrder
+        ? 'ORDER BY user.firstname, user.lastname'
+        : 'ORDER BY user.lastname, user.firstname';
+
+    if ($sessionId > 0) {
+        // We are inside a session: use session_rel_course_rel_user
+        $session = api_get_session_entity();
+        $coachIds = [];
+
+        if ($session instanceof SessionEntity) {
+            // Collect general coaches and session admins to exclude them
+            $generalCoachesId = $session
+                ->getGeneralCoaches()
+                ->map(fn (User $coach) => $coach->getId())
+                ->getValues();
+
+            $sessionAdminsId = $session
+                ->getSessionAdmins()
+                ->map(fn (User $admin) => $admin->getId())
+                ->getValues();
+
+            $coachIds = array_unique(array_merge($generalCoachesId, $sessionAdminsId));
+        }
+
+        $avoidClause = '';
+        if (!empty($coachIds)) {
+            // Avoid empty NOT IN () clause
+            $ids = implode(',', array_map('intval', $coachIds));
+            $avoidClause = "AND session_rel.user_id NOT IN ($ids)";
+        }
+
+        $sql = "
+            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
+            FROM $t_posts p
+            INNER JOIN $t_users user
+                ON p.poster_id = user.id
+            INNER JOIN $t_session_rel_user session_rel
+                ON session_rel.user_id = user.id
+            WHERE
+                p.thread_id = $threadId
+                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
+                AND session_rel.c_id = $courseId
+                AND session_rel.session_id = $sessionId
+                AND session_rel.status = ".SessionEntity::STUDENT."
+                $avoidClause
+            $orderBy
+        ";
     } else {
-        $orderby = 'ORDER BY user.lastname, user.firstname';
-    }
-
-    $session = api_get_session_entity();
-
-    if ($session) {
-        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
-        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
-        //not showing coaches
-        $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
-                FROM $t_posts p, $t_users user, $t_session_rel_user session_rel_user_rel_course
-                WHERE
-                    p.poster_id = user.id AND
-                    user.id = session_rel_user_rel_course.user_id AND
-                    session_rel_user_rel_course.status = ".SessionEntity::STUDENT." AND
-                    session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
-                    p.thread_id = $thread_id AND
-                    session_id = ".api_get_session_id()." AND
-                    p.c_id = $course_id AND
-                    session_rel_user_rel_course.c_id = $course_id $orderby ";
-    } else {
-        $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
-                FROM $t_posts p, $t_users user, $t_course_user course_user
-                WHERE
-                    p.poster_id = user.id
-                    AND user.id = course_user.user_id
-                    AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    AND p.thread_id = $thread_id
-                    AND course_user.status != '1' AND
-                    course_user.c_id = $course_id $orderby";
+        // No session: use course_rel_user
+        $sql = "
+            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
+            FROM $t_posts p
+            INNER JOIN $t_users user
+                ON p.poster_id = user.id
+            INNER JOIN $t_course_user course_user
+                ON course_user.user_id = user.id
+            WHERE
+                p.thread_id = $threadId
+                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
+                AND course_user.c_id = $courseId
+                AND course_user.status = ".CourseRelUser::STUDENT."
+                AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+            $orderBy
+        ";
     }
 
     return Database::query($sql);
@@ -1506,8 +1538,7 @@ function get_thread_users_qualify(int $thread_id)
                     AND post.thread_id = $thread_id
                     AND scu.session_id = $sessionId
                     AND scu.c_id = $course_id AND
-                    qualify.c_id = $course_id AND
-                    post.c_id = $course_id
+                    qualify.c_id = $course_id
                 $orderby ";
     } else {
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
@@ -1525,7 +1556,6 @@ function get_thread_users_qualify(int $thread_id)
                      AND course_user.status not in('1')
                      AND course_user.c_id = $course_id
                      AND qualify.c_id = $course_id
-                     AND post.c_id = $course_id
                  $orderby ";
     }
 
@@ -1544,7 +1574,7 @@ function get_thread_users_qualify(int $thread_id)
  *
  * @version oct 2008, dokeos 1.8
  */
-function get_thread_users_not_qualify($thread_id)
+function get_thread_users_not_qualify(int $thread_id)
 {
     $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
@@ -1591,7 +1621,7 @@ function get_thread_users_not_qualify($thread_id)
                     AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND post.thread_id = ".(int) $thread_id.'
                     AND session_id = '.api_get_session_id()."
-                    AND session_rel_user_rel_course.c_id = $course_id AND post.c_id = $course_id $orderby ";
+                    AND session_rel_user_rel_course.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post, $t_users user,$t_course_user course_user
@@ -1601,7 +1631,7 @@ function get_thread_users_not_qualify($thread_id)
                 AND course_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                 AND post.thread_id = '.(int) $thread_id."
                 AND course_user.status not in('1')
-                AND course_user.c_id = $course_id AND post.c_id = $course_id  $orderby";
+                AND course_user.c_id = $course_id $orderby";
     }
 
     return Database::query($sql);
@@ -2608,8 +2638,8 @@ function saveThreadScore(
         $row = Database::fetch_array($result);
 
         if (0 == $row[0]) {
-            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
+            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time)
+                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."')";
             Database::query($sql);
 
             return 'insert';
@@ -2679,7 +2709,7 @@ function showQualify($option, $user_id, $thread_id)
             break;
         case 2:
             $sql = "SELECT thread_qualify_max FROM $table_threads
-                    WHERE c_id = $course_id AND iid=".$thread_id;
+                    WHERE iid=".$thread_id;
 
             break;
     }
@@ -2787,8 +2817,8 @@ function saveThreadScoreHistory(
         $row = Database::fetch_array($rs);
 
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time,session_id)
-                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."','".$row[1]."','')";
+        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time)
+                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."')";
         Database::query($sql);
     }
 }
@@ -2819,7 +2849,6 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
             WHERE
                 c_id = $course_id AND
                 thread_id = $threadId AND
-                session_id = $sessionId AND
                 qualify_user_id = $currentUserId AND
                 user_id = $userId
             ";
@@ -3800,12 +3829,12 @@ function store_move_thread($values)
 
     // Change the thread table: Setting the forum_id to the new forum.
     $sql = "UPDATE $table_threads SET forum_id = $forumId
-            WHERE c_id = $courseId AND iid = $threadId";
+            WHERE iid = $threadId";
     Database::query($sql);
 
     // Changing all the posts of the thread: setting the forum_id to the new forum.
     $sql = "UPDATE $table_posts SET forum_id = $forumId
-            WHERE c_id = $courseId AND thread_id= $threadId";
+            WHERE thread_id= $threadId";
     Database::query($sql);
 
     // Fix group id, if forum is moved to a different group
@@ -4531,9 +4560,7 @@ function count_number_of_post_in_thread($thread_id)
         return 0;
     }
     $sql = "SELECT count(*) count FROM $table_posts
-            WHERE
-                c_id = $course_id AND
-                thread_id='".(int) $thread_id."' ";
+            WHERE thread_id='".(int) $thread_id."' ";
     $result = Database::query($sql);
 
     $count = 0;
@@ -4622,9 +4649,7 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     $sql = "SELECT *, user.id as user_id FROM $table_posts posts
             LEFT JOIN $table_users user
             ON posts.poster_id = user.id
-            WHERE
-                posts.c_id = $course_id AND
-                posts.thread_id='$thread_id' AND
+            WHERE posts.thread_id='$thread_id' AND
                 posts.poster_id='$user_id'
             ORDER BY posts.iid ASC";
 
@@ -4633,12 +4658,10 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     while ($row = Database::fetch_array($result)) {
         $row['status'] = '1';
         $post_list[] = $row;
-        $sql = "SELECT * FROM $table_posts posts
+        $sql = "SELECT *, users.id as user_id FROM $table_posts posts
                 LEFT JOIN $table_users users
                 ON (posts.poster_id=users.id)
-                WHERE
-                    posts.c_id = $course_id AND
-                    posts.thread_id='$thread_id'
+                WHERE posts.thread_id='$thread_id'
                     AND posts.post_parent_id='".$row['iid']."'
                 ORDER BY posts.iid ASC";
         $result2 = Database::query($sql);
@@ -4772,9 +4795,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN $table_users users
                 ON posts.poster_id=users.id
-            WHERE
-                posts.c_id = $courseId AND
-                posts.thread_id='".Database::escape_string($thread_id)."' AND
+            WHERE posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
             ORDER BY posts.post_id DESC LIMIT $limit ";
     $result = Database::query($sql);

@@ -13,14 +13,13 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_global_admin_script();
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $translator = Container::$container->get('translator');;
 

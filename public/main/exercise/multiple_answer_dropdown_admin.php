@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Chamilo\CoreBundle\Framework\Container;
 
 $questionId = (int) ($_GET['mad_admin'] ?? 0);
 if (!$questionId) {
@@ -55,7 +55,7 @@ if (empty($options)) {
 }
 
 // Handle POST
-$httpRequest   = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 $submitAnswers = $httpRequest->request->has('submitAnswers');
 
 if ($submitAnswers) {

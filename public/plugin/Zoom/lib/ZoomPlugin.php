@@ -20,7 +20,7 @@ use Chamilo\PluginBundle\Zoom\Recording;
 use Chamilo\PluginBundle\Zoom\RecordingRepository;
 use Chamilo\PluginBundle\Zoom\Registrant;
 use Chamilo\PluginBundle\Zoom\RegistrantRepository;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Tools\SchemaTool;

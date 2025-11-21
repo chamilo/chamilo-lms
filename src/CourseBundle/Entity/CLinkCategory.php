@@ -16,6 +16,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
@@ -35,7 +39,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * CLinkCategory.
  */
 #[ApiResource(
-    shortName: 'LinkCategories',
+    shortName: 'LinkCategory',
     operations: [
         new Put(
             controller: UpdateCLinkCategoryAction::class,
@@ -55,9 +59,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateCLinkCategoryAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -81,43 +85,45 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 'required' => ['category_title'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'link_category:write']],
             deserialize: false
         ),
         new GetCollection(
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer'],
-                    ],
-                    [
-                        'name' => 'cid',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Course id',
-                        'schema' => [
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Resource node Parent',
+                        required: true,
+                        schema: [
                             'type' => 'integer',
                         ],
-                    ],
-                    [
-                        'name' => 'sid',
-                        'in' => 'query',
-                        'required' => false,
-                        'description' => 'Session id',
-                        'schema' => [
+                    ),
+                    new Parameter(
+                        name: 'cid',
+                        in: 'query',
+                        description: 'Course id',
+                        required: true,
+                        schema: [
                             'type' => 'integer',
                         ],
-                    ],
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        description: 'Session id',
+                        required: false,
+                        schema: [
+                            'type' => 'integer',
+                        ],
+                    ),
                 ],
-            ]
+            )
         ),
     ],
     normalizationContext: [

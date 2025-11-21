@@ -55,6 +55,7 @@ class CourseRelUserRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->setParameter('teacher', CourseRelUser::TEACHER)
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult()
+        ;
     }
 }

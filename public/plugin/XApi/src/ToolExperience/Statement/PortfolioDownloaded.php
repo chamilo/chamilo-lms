@@ -7,7 +7,7 @@ namespace Chamilo\PluginBundle\XApi\ToolExperience\Statement;
 use Chamilo\PluginBundle\XApi\ToolExperience\Activity\Portfolio as PortfolioActivity;
 use Chamilo\PluginBundle\XApi\ToolExperience\Actor\User as UserActor;
 use Chamilo\PluginBundle\XApi\ToolExperience\Verb\Downloaded;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Xabbuh\XApi\Model\Statement;
 
 class PortfolioDownloaded extends BaseStatement

@@ -1,8 +1,12 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
-/**
+/*
  * Configuration script for the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 $cidReset = true;
@@ -10,6 +14,8 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
+
 $includeSession = 'true' === $plugin->get('include_sessions');
 $includeServices = 'true' === $plugin->get('include_services');
 $taxEnable = 'true' === $plugin->get('tax_enable');
@@ -24,23 +30,23 @@ Display::addFlash(
 );
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$type = isset($_GET['type']) ? (int) $_GET['type'] : BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$type = $httpRequest->query->getInt('type', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+$currentPage = $httpRequest->query->getInt('page', 1);
 $first = $pageSize * ($currentPage - 1);
 
-$qb = $plugin->getCourseList($first, $pageSize);
+$qb = $plugin->getCourses($first, $pageSize);
 $query = $qb->getQuery();
-$courses = new Paginator($query, true);
+$courses = new Paginator($query, $fetchJoinCollection = true);
 foreach ($courses as $course) {
     $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
     $course->buyCourseData = [];
-    if (!empty($item)) {
+    if ($item) {
         $course->buyCourseData = $item;
     }
 }
 
 $totalItems = count($courses);
-$pagesCount = ceil($totalItems / $pageSize);
+$pagesCount = (int) ceil($totalItems / $pageSize);
 
 $pagination = BuyCoursesPlugin::returnPagination(
     api_get_self(),
@@ -58,16 +64,20 @@ $interbreadcrumb[] = [
 
 $templateName = $plugin->get_lang('AvailableCourses');
 
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
+
 $tpl = new Template($templateName);
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 $tpl->assign('courses', $courses);
+$tpl->assign('showing_sessions', false);
+$tpl->assign('showing_services', false);
 $tpl->assign('sessions', []);
 $tpl->assign('services', []);
-$tpl->assign('session_pagination', '');
-$tpl->assign('service_pagination', '');
 $tpl->assign('course_pagination', $pagination);
+$tpl->assign('session_pagination', $type);
+$tpl->assign('service_pagination', $type);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);

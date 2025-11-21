@@ -371,7 +371,7 @@ class FillBlanks extends Question
         );
         $form->addHtmlEditor(
             'answer',
-            Display::return_icon('fill_field.png'),
+            '',
             true,
             false,
             ['ToolbarSet' => 'TestQuestionDescription'],

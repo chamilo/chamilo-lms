@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Controller\Api\LpReorderController;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Asset;
@@ -36,17 +38,32 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Course learning paths (LPs).
  */
 #[ApiResource(
-    shortName: 'LearningPaths',
+    shortName: 'LearningPath',
     operations: [
         new GetCollection(
-            openapiContext: [
-                'summary' => 'List learning paths filtered by resourceNode.parent (course) and sid',
-                'parameters' => [
-                    ['name' => 'resourceNode.parent', 'in' => 'query', 'required' => true, 'schema' => ['type' => 'integer']],
-                    ['name' => 'sid', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'integer']],
-                    ['name' => 'title', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string']],
+            openapi: new Operation(
+                summary: 'List learning paths filtered by resourceNode.parent (course) and sid',
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        required: true,
+                        schema: ['type' => 'integer']
+                    ),
+                    new Parameter(
+                        name: 'sid',
+                        in: 'query',
+                        required: false,
+                        schema: ['type' => 'integer']
+                    ),
+                    new Parameter(
+                        name: 'title',
+                        in: 'query',
+                        required: false,
+                        schema: ['type' => 'string']
+                    ),
                 ],
-            ],
+            ),
             name: 'get_lp_collection_with_progress',
             provider: LpCollectionStateProvider::class,
         ),

@@ -122,6 +122,7 @@ class Gradebook extends Model
                 $params = [];
                 $params['gradebook_id'] = $gradebook_id;
                 $params['skill_id'] = $skill_id;
+                $params['type'] = "";
                 if (!$skill_gradebook->existsGradeBookSkill($gradebook_id, $skill_id)) {
                     $skill_gradebook->save($params);
                 }

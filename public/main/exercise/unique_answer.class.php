@@ -209,10 +209,6 @@ class UniqueAnswer extends Question
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
 
-            if (api_get_setting('enable_quiz_scenario') === 'true' && $obj_ex->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $this->addAdaptiveScenarioFields($form, $question_list);
-            }
-
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
@@ -283,97 +279,6 @@ class UniqueAnswer extends Question
         $form->setConstants(['nb_answers' => $nb_answers]);
     }
 
-    /**
-     * Add adaptive scenario selector fields (success/failure) to the question form.
-     */
-    private function addAdaptiveScenarioFields(FormValidator $form, array $questionList)
-    {
-        // Section header
-        $form->addHtml('<h4 class="m-4">'.get_lang('Adaptive behavior (success/failure)').'</h4>');
-
-        // Options for redirection behavior
-        $questionListOptions = [
-            '' => get_lang('Select destination'),
-            'repeat' => get_lang('Repeat question'),
-            '-1' => get_lang('End of test'),
-            'url' => get_lang('Other (custom URL)'),
-        ];
-
-        // Append available questions to the dropdown
-        foreach ($questionList as $index => $qid) {
-            if (!is_numeric($qid)) {
-                continue;
-            }
-            $q = Question::read($qid);
-            $questionListOptions[(string) $qid] = "Q$index: " . strip_tags($q->selectTitle());
-        }
-
-        // Success selector and optional URL field
-        $form->addSelect(
-            'scenario_success_selector',
-            get_lang('On success'),
-            $questionListOptions,
-            ['id' => 'scenario_success_selector']
-        );
-        $form->addText(
-            'scenario_success_url',
-            get_lang('Custom URL'),
-            false,
-            [
-                'class' => 'form-control mb-5',
-                'id' => 'scenario_success_url',
-                'placeholder' => '/main/lp/134',
-            ]
-        );
-
-        // Failure selector and optional URL field
-        $form->addSelect(
-            'scenario_failure_selector',
-            get_lang('On failure'),
-            $questionListOptions,
-            ['id' => 'scenario_failure_selector']
-        );
-        $form->addText(
-            'scenario_failure_url',
-            get_lang('Custom URL'),
-            false,
-            [
-                'class' => 'form-control mb-5',
-                'id' => 'scenario_failure_url',
-                'placeholder' => '/main/lp/134',
-            ]
-        );
-
-        // JavaScript to toggle custom URL fields when 'url' is selected
-        $form->addHtml('
-        <script>
-            function toggleScenarioUrlFields() {
-                const successSelector = document.getElementById("scenario_success_selector");
-                const successUrlRow = document.getElementById("scenario_success_url").parentNode.parentNode;
-
-                const failureSelector = document.getElementById("scenario_failure_selector");
-                const failureUrlRow = document.getElementById("scenario_failure_url").parentNode.parentNode;
-
-                if (successSelector && successSelector.value === "url") {
-                    successUrlRow.style.display = "table-row";
-                } else {
-                    successUrlRow.style.display = "none";
-                }
-
-                if (failureSelector && failureSelector.value === "url") {
-                    failureUrlRow.style.display = "table-row";
-                } else {
-                    failureUrlRow.style.display = "none";
-                }
-            }
-
-            document.addEventListener("DOMContentLoaded", toggleScenarioUrlFields);
-            document.getElementById("scenario_success_selector").addEventListener("change", toggleScenarioUrlFields);
-            document.getElementById("scenario_failure_selector").addEventListener("change", toggleScenarioUrlFields);
-        </script>
-    ');
-    }
-
     public function setDirectOptions($i, FormValidator $form, $renderer, $select_lp_id, $select_question)
     {
         $editor_config = [
@@ -393,16 +298,17 @@ class UniqueAnswer extends Question
 
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
-        $correct = $form->getSubmitValue('correct');
-        $objAnswer = new Answer($this->id);
-        $nb_answers = $form->getSubmitValue('nb_answers');
+        $questionWeighting = 0;
+        $nbrGoodAnswers    = 0;
+        $correct           = $form->getSubmitValue('correct');
+        $objAnswer         = new Answer($this->id);
+        $nb_answers        = (int) $form->getSubmitValue('nb_answers');
 
         for ($i = 1; $i <= $nb_answers; $i++) {
-            $answer = trim($form->getSubmitValue('answer['.$i.']'));
-            $comment = trim($form->getSubmitValue('comment['.$i.']'));
+            $answer    = trim($form->getSubmitValue('answer['.$i.']'));
+            $comment   = trim($form->getSubmitValue('comment['.$i.']'));
             $weighting = trim($form->getSubmitValue('weighting['.$i.']'));
-            $goodAnswer = $correct == $i;
+            $goodAnswer = ($correct == $i);
 
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
@@ -423,35 +329,9 @@ class UniqueAnswer extends Question
 
         $objAnswer->save();
 
+        // Update question total weighting and persist changes.
         $this->updateWeighting($questionWeighting);
         $this->save($exercise);
-
-        $scenarioEnabled = api_get_setting('enable_quiz_scenario') === 'true';
-        $isAdaptative = $exercise && $exercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT;
-        if ($scenarioEnabled && $isAdaptative) {
-            $successSelector = trim($form->getSubmitValue('scenario_success_selector'));
-            $successUrl = trim($form->getSubmitValue('scenario_success_url'));
-            $failureSelector = trim($form->getSubmitValue('scenario_failure_selector'));
-            $failureUrl = trim($form->getSubmitValue('scenario_failure_url'));
-
-            $success = $successSelector === 'url' ? $successUrl : $successSelector;
-            $failure = $failureSelector === 'url' ? $failureUrl : $failureSelector;
-
-            $destination = json_encode([
-                'success' => $success ?: '',
-                'failure' => $failure ?: '',
-            ]);
-
-            $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $questionId = $this->id;
-            $exerciseId = $exercise->id;
-
-            Database::update(
-                $table,
-                ['destination' => $destination],
-                ['question_id = ? AND quiz_id = ?' => [$questionId, $exerciseId]]
-            );
-        }
     }
 
     public function return_header(Exercise $exercise, $counter = null, $score = [])

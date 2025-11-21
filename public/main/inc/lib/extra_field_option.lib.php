@@ -26,8 +26,9 @@ class ExtraFieldOption extends Model
     public $extraField;
     public $fieldId;
 
-    /** @var ExtraFieldOptionsRepository */
-    public $repo;
+    public ExtraFieldOptionsRepository $repo;
+    private string $type;
+    private string $tableExtraField;
 
     /**
      * Gets the table for the type of object for which we are using an extra field.

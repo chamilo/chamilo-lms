@@ -7140,6 +7140,7 @@ function api_mail_html(
     $additionalParameters = [],
     string $sendErrorTo = null
 ) {
+    /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);
 
     return $mailHelper->send(

@@ -290,7 +290,7 @@ if ($form->validate()) {
 
         foreach ($users as $userId) {
             $categoryUser = new CLpCategoryRelUser();
-            $user = UserManager::getRepository()->find($userId);
+            $user = Container::getUserRepository()->find($userId);
             if ($user) {
                 $categoryUser->setUser($user);
                 $category->addUser($categoryUser);

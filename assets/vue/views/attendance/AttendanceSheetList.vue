@@ -1,4 +1,13 @@
 <template>
+  <SectionHeader :title="t('Attendance')">
+    <template #end>
+      <StudentViewButton
+        v-if="securityStore.isAuthenticated"
+        @change="onStudentViewChange"
+      />
+    </template>
+  </SectionHeader>
+
   <div class="attendance-page p-4">
     <!-- Toolbar -->
     <BaseToolbar class="flex justify-between items-center mb-4">
@@ -10,7 +19,7 @@
           @click="redirectToAttendanceList"
           :title="t('Go back')"
         />
-        <template v-if="canEdit">
+        <template v-if="isTeacherUI">
           <BaseButton
             icon="calendar-plus"
             size="normal"
@@ -41,7 +50,7 @@
       <template #end>
         <div class="flex items-center gap-4">
           <select
-            v-if="!isStudent"
+            v-if="isTeacherUI"
             v-model="selectedFilter"
             @change="filterAttendanceSheets"
             class="p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary w-64"
@@ -72,9 +81,9 @@
       <span class="ml-4 text-lg text-primary">{{ t("Loading attendance data...") }}</span>
     </div>
 
-    <!-- Attendance Table -->
+    <!-- Student UI -->
     <div v-else>
-      <div v-if="!canEdit && isStudent">
+      <div v-if="isStudentUI">
         <h2 class="text-xl font-semibold mb-4">{{ t("Report of attendance sheets") }}</h2>
 
         <div
@@ -137,6 +146,8 @@
           </div>
         </div>
       </div>
+
+      <!-- Teacher UI -->
       <div v-else>
         <div
           v-if="!isTodayScheduled"
@@ -161,6 +172,7 @@
 
         <!-- Attendance Sheet Table -->
         <div class="relative flex">
+          <!-- Fixed user column -->
           <div
             class="overflow-hidden flex-shrink-0"
             style="width: 520px"
@@ -201,15 +213,13 @@
                   >
                     {{ user.firstName }}
                   </td>
-                  <td class="p-3 border border-gray-25 text-center">
-                    {{ user.notAttended }}
-                  </td>
+                  <td class="p-3 border border-gray-25 text-center">{{ user.notAttended }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- Scrollable Dates -->
+          <!-- Scrollable dates -->
           <div class="overflow-x-auto flex-1">
             <table class="w-full border-collapse">
               <thead>
@@ -224,7 +234,11 @@
                           icon="calendar"
                           class="text-warning"
                         />
-                        <span>{{ t("There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.") }}</span>
+                        <span>{{
+                          t(
+                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.",
+                          )
+                        }}</span>
                         <BaseButton
                           icon="calendar-plus"
                           type="info"
@@ -242,10 +256,19 @@
                       :class="{ 'bg-gray-200 cursor-not-allowed': isColumnLocked(date.id) }"
                     >
                       <div class="flex flex-col items-center">
-                        <span class="font-bold">{{ date.label }}</span>
+                        <span class="font-bold">
+                          {{ date.label }}
+                        </span>
+                        <span
+                          v-if="date.duration !== undefined && date.duration !== null"
+                          class="text-xs text-gray-600 mt-1"
+                        >
+                          {{ date.duration }} {{ t("min") }}
+                        </span>
+
                         <div
                           class="flex gap-2 mt-1"
-                          v-if="!isStudent"
+                          v-if="isTeacherUI"
                         >
                           <BaseIcon
                             icon="view-table"
@@ -422,11 +445,11 @@
           v-model="currentComment"
           class="w-full h-32 border border-gray-300 rounded"
           placeholder="Write your comment..."
-          :readonly="isStudent && !canEdit"
+          :readonly="isStudentUI && !canEdit"
         />
         <template #footer>
           <BaseButton
-            v-if="!isStudent || canEdit"
+            v-if="isTeacherUI && canEdit"
             :label="t('Save')"
             icon="save"
             type="success"
@@ -452,7 +475,7 @@
             class="border border-gray-300 rounded w-full h-full"
           ></canvas>
           <button
-            v-if="!isStudent || canEdit"
+            v-if="isTeacherUI && canEdit"
             @click="clearSignature"
             class="mt-2 text-primary"
           >
@@ -461,7 +484,7 @@
         </div>
         <template #footer>
           <BaseButton
-            v-if="!isStudent || canEdit"
+            v-if="isTeacherUI && canEdit"
             :label="t('Save')"
             icon="save"
             type="success"
@@ -500,7 +523,7 @@
   </div>
 </template>
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SignaturePad from "signature_pad"
@@ -508,6 +531,8 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
@@ -523,8 +548,24 @@ const isLoading = ref(true)
 const attendanceTitle = ref("")
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
-const dialogUserId = ref(null)
-const dialogDateId = ref(null)
+
+const isTeacherUser = computed(
+  () => securityStore.isAdmin || securityStore.isTeacher || securityStore.isCourseAdmin || securityStore.isHRM,
+)
+const isTeacherUI = computed(() => isTeacherUser.value && !platformConfigStore.isStudentViewActive)
+const isStudentUI = computed(() => !isTeacherUser.value || platformConfigStore.isStudentViewActive)
+
+function onStudentViewChange() {
+  if (isStudentUI.value) {
+    fetchStudentAttendanceData(route.params.id)
+  } else {
+    fetchFullAttendanceData(route.params.id)
+  }
+}
+
+const isAdmin = computed(() => securityStore.isAdmin)
+const currentUserId = computed(() => securityStore.user?.id)
+
 const cidReqStore = useCidReqStore()
 const { course } = storeToRefs(cidReqStore)
 
@@ -537,28 +578,16 @@ const allowMultilevelGrading = computed(
 )
 const canEdit = computed(() => {
   const readonly = route.query.readonly === "1"
-  return !readonly && (securityStore.isAdmin || securityStore.isTeacher || securityStore.isHRM)
+  return !readonly && isTeacherUI.value
 })
-const isStudent = computed(() => securityStore.isStudent)
-const isAdmin = computed(() => securityStore.isAdmin)
-
-const currentUserId = computed(() => securityStore.user?.id)
 
 const signedCount = computed(
   () => filteredDates.value.filter((d) => attendanceData.value[`${currentUserId.value}-${d.id}`] === 1).length,
 )
-
 const totalCount = computed(() => filteredDates.value.length)
 
-const todayDate = new Date().toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "short",
-  day: "2-digit",
-})
-
-const isTodayScheduled = computed(() => {
-  return attendanceDates.value.some((date) => date.label.includes(todayDate))
-})
+const todayDate = new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })
+const isTodayScheduled = computed(() => attendanceDates.value.some((date) => date.label.includes(todayDate)))
 
 const attendanceDates = ref([])
 const attendanceSheetUsers = ref([])
@@ -569,6 +598,7 @@ const showQrDialog = ref(false)
 const qrImageUrl = ref("")
 
 const redirectToCalendarList = () => {
+  if (!isTeacherUI.value) return
   router.push({
     name: "AttendanceCalendarList",
     params: { node: route.params.node, id: route.params.id },
@@ -585,7 +615,7 @@ const redirectToAttendanceList = () => {
 }
 
 const filteredAttendanceSheets = computed(() => {
-  if (isStudent.value) {
+  if (isStudentUI.value) {
     const currentUser = securityStore.user
     return attendanceSheetUsers.value.filter((user) => user.id === currentUser?.id)
   }
@@ -593,6 +623,7 @@ const filteredAttendanceSheets = computed(() => {
 })
 
 const isSaving = ref(false)
+const attendanceData = ref({})
 const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
@@ -622,14 +653,15 @@ const saveAttendanceSheet = async () => {
 
   isSaving.value = true
   try {
-    const response = await attendanceService.saveAttendanceSheet({
+    await attendanceService.saveAttendanceSheet({
       courseId: parseInt(cid),
       sessionId: sid ? parseInt(sid) : null,
       groupId: gid ? parseInt(gid) : null,
       attendanceData: preparedData,
     })
 
-    console.log("Attendance data saved:", response)
+    // Refresh "Not attended" column after saving
+    await fetchAttendanceSheetUsers(route.params.id)
     alert(t("Attendance saved successfully"))
   } catch (error) {
     console.error("Error saving attendance data:", error)
@@ -643,17 +675,11 @@ const showCommentDialog = ref(false)
 const showSignatureDialog = ref(false)
 const currentComment = ref("")
 const signaturePad = ref(null)
-const attendanceData = ref({})
 
 const fetchAttendanceSheetUsers = async (attendanceId) => {
   isLoading.value = true
   try {
-    const params = {
-      courseId: cid,
-      sessionId: sid || null,
-      groupId: gid || null,
-    }
-
+    const params = { courseId: cid, sessionId: sid || null, groupId: gid || null }
     const users = await attendanceService.getAttendanceSheetUsers(attendanceId, params)
 
     attendanceSheetUsers.value = users.map((user) => ({
@@ -680,6 +706,21 @@ const fetchFullAttendanceData = async (attendanceId) => {
     signatures.value = data.signatureData || {}
   } catch (error) {
     console.error("Failed to fetch attendance data:", error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const fetchStudentAttendanceData = async (attendanceId) => {
+  isLoading.value = true
+  try {
+    const data = await attendanceService.getStudentAttendanceData(attendanceId)
+    attendanceDates.value = data.attendanceDates
+    attendanceData.value = data.attendanceData
+    comments.value = data.commentData || {}
+    signatures.value = data.signatureData || {}
+  } catch (error) {
+    console.error("Failed to fetch student attendance data:", error)
   } finally {
     isLoading.value = false
   }
@@ -745,12 +786,7 @@ const filterAttendanceSheets = () => {
   }
 }
 
-const contextMenu = ref({
-  show: false,
-  userId: null,
-  dateId: null,
-})
-
+const contextMenu = ref({ show: false, userId: null, dateId: null })
 const columnLocks = ref({})
 const isColumnLocked = (dateId) => !!columnLocks.value[dateId]
 const initializeColumnLocks = (dates) => {
@@ -760,7 +796,7 @@ const initializeColumnLocks = (dates) => {
     filteredAttendanceSheets.value.forEach((user) => {
       const key = `${user.id}-${date.id}`
       if (attendanceData.value[key] === undefined) {
-        attendanceData.value[key] = 1
+        attendanceData.value[key] = null
       }
     })
   })
@@ -768,36 +804,30 @@ const initializeColumnLocks = (dates) => {
 
 const isToggling = ref(false)
 const toggleLock = (dateId) => {
+  if (!isTeacherUI.value) return
   if (isToggling.value) return
-
   isToggling.value = true
-  columnLocks.value = {
-    ...columnLocks.value,
-    [dateId]: !columnLocks.value[dateId],
-  }
-
+  columnLocks.value = { ...columnLocks.value, [dateId]: !columnLocks.value[dateId] }
   setTimeout(() => {
     isToggling.value = false
   }, 100)
 }
 
 onMounted(async () => {
-  if (isStudent.value) {
-    const data = await attendanceService.getStudentAttendanceData(route.params.id)
-    attendanceDates.value = data.attendanceDates
-    attendanceData.value = data.attendanceData
-    comments.value = data.commentData || {}
-    signatures.value = data.signatureData || {}
+  await fetchAttendanceTitle()
+
+  // Fetch data based on UI mode
+  if (isStudentUI.value) {
+    await fetchStudentAttendanceData(route.params.id)
   } else {
     await fetchFullAttendanceData(route.params.id)
   }
 
   await fetchAttendanceSheetUsers(route.params.id)
-  await fetchAttendanceTitle()
   initializeColumnLocks(attendanceDates.value)
   updateAvailableFilters()
 
-  if (!isStudent.value) {
+  if (isTeacherUI.value) {
     selectedFilter.value = "today"
     filterAttendanceSheets()
   } else {
@@ -809,7 +839,19 @@ onMounted(async () => {
   }
 })
 
-initializeColumnLocks(attendanceDates.value)
+// Recompute when the global Student View toggle changes
+watch(
+  () => platformConfigStore.isStudentViewActive,
+  async () => {
+    if (isStudentUI.value) {
+      await fetchStudentAttendanceData(route.params.id)
+    } else {
+      await fetchFullAttendanceData(route.params.id)
+    }
+    updateAvailableFilters()
+    filterAttendanceSheets()
+  },
+)
 
 const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, state) => {
   acc[state.id] = state
@@ -841,6 +883,7 @@ const getStateClass = (stateId) => {
 }
 
 const toggleAttendanceState = (userId, dateId) => {
+  if (!canEdit.value) return
   if (!allowMultilevelGrading.value) {
     attendanceData.value[`${userId}-${dateId}`] = attendanceData.value[`${userId}-${dateId}`] === 1 ? 0 : 1
   } else {
@@ -850,12 +893,14 @@ const toggleAttendanceState = (userId, dateId) => {
 }
 
 const setAllAttendance = (dateId, stateId) => {
+  if (!canEdit.value) return
   filteredAttendanceSheets.value.forEach((user) => {
     attendanceData.value[`${user.id}-${dateId}`] = stateId
   })
 }
 
 const openMenu = (userId, dateId) => {
+  if (!canEdit.value) return
   if (allowMultilevelGrading.value) {
     contextMenu.value = { show: true, userId, dateId }
   } else {
@@ -868,6 +913,7 @@ const closeMenu = () => {
 }
 
 const selectState = (userId, dateId, stateId) => {
+  if (!canEdit.value) return
   if (stateId === null) {
     delete attendanceData.value[`${userId}-${dateId}`]
   } else {
@@ -910,17 +956,17 @@ const openSignatureDialog = (userId, dateId) => {
 }
 
 const saveComment = () => {
+  if (!canEdit.value) return
   const key = `${dialogUserId.value}-${dialogDateId.value}`
   comments.value[key] = currentComment.value
-  console.log(`Saved comment for ${key}:`, currentComment.value)
   closeCommentDialog()
 }
 
 const saveSignature = () => {
+  if (!canEdit.value) return
   if (signaturePad.value) {
     const key = `${dialogUserId.value}-${dialogDateId.value}`
     signatures.value[key] = signaturePad.value.toDataURL()
-    console.log(`Saved signature for ${key}`)
   }
   closeSignatureDialog()
 }
@@ -940,10 +986,30 @@ const closeSignatureDialog = () => {
 }
 
 const viewForTablet = (dateId) => {
-  console.log(`View for tablet clicked for date ID: ${dateId}`)
+  if (!router.hasRoute("AttendanceSheetTablet")) {
+    console.error("[Attendance] Missing route: AttendanceSheetTablet")
+    alert("Tablet route is not registered. Check router config.")
+    return
+  }
+
+  const isLockedForDate = isColumnLocked(dateId)
+
+  router.push({
+    name: "AttendanceSheetTablet",
+    params: { node: route.params.node, id: route.params.id, calendarId: dateId },
+    query: {
+      cid,
+      sid,
+      gid,
+      readonly: route.query.readonly ?? "0",
+      locked: isLockedForDate ? "1" : "0",
+      gradingMode: allowMultilevelGrading.value ? "multi" : "binary",
+    },
+  })
 }
 
 const exportToPdf = async () => {
+  if (!isTeacherUI.value) return
   try {
     const blob = await attendanceService.exportAttendanceToPdf(route.params.id, {
       cid,
@@ -963,6 +1029,7 @@ const exportToPdf = async () => {
 }
 
 const exportToXls = async () => {
+  if (!isTeacherUI.value) return
   try {
     const blob = await attendanceService.exportAttendanceToXls(route.params.id, {
       cid,
@@ -981,6 +1048,7 @@ const exportToXls = async () => {
   }
 }
 const generateQrCode = async () => {
+  if (!isTeacherUI.value) return
   try {
     const response = await attendanceService.generateQrCode(route.params.id, {
       cid,
@@ -995,4 +1063,8 @@ const generateQrCode = async () => {
     console.error(error)
   }
 }
+
+// Dialog & context refs
+const dialogUserId = ref(null)
+const dialogDateId = ref(null)
 </script>

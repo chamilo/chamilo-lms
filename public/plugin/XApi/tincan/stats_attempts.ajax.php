@@ -5,6 +5,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Xabbuh\XApi\Common\Exception\NotFoundException;
 use Xabbuh\XApi\Common\Exception\XApiException;
@@ -16,7 +17,7 @@ use Xabbuh\XApi\Model\State;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$request = HttpRequest::createFromGlobals();
+$request = Container::getRequest();
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\PluginBundle\XApi\Lrs\Util;
 
 use Chamilo\CoreBundle\Entity\XApiInternalLog;
+use Chamilo\CoreBundle\Framework\Container;
 use Database;
 use UserManager;
 use Xabbuh\XApi\Model\Activity;
@@ -98,7 +99,7 @@ class InternalLogUtil
             return null;
         }
 
-        $userRepo = UserManager::getRepository();
+        $userRepo = Container::getUserRepository();
 
         $user = null;
 

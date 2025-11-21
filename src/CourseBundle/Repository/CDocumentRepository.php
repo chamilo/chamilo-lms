@@ -23,6 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
 
 final class CDocumentRepository extends ResourceRepository
 {
@@ -292,7 +293,7 @@ final class CDocumentRepository extends ResourceRepository
             $doc->setParentResourceNode($parent->getId());
 
             $link = [
-                'cid'        => $course->getId(),
+                'cid' => $course->getId(),
                 'visibility' => $visibility,
             ];
             if ($session && method_exists($session, 'getId')) {
@@ -308,11 +309,10 @@ final class CDocumentRepository extends ResourceRepository
             $em->persist($doc);
             $em->flush();
 
-            $node   = $doc->getResourceNode();
-
-            return $node;
-        } catch (\Throwable $e) {
+            return $doc->getResourceNode();
+        } catch (Throwable $e) {
             error_log('[CDocumentRepo.ensureFolder] ERROR '.$e->getMessage());
+
             throw $e;
         }
     }
@@ -510,7 +510,7 @@ final class CDocumentRepository extends ResourceRepository
 
     public function findChildDocumentFolderByTitle(ResourceNode $parent, string $title): ?ResourceNode
     {
-        $em    = $this->em();
+        $em = $this->em();
         $docRt = $this->getResourceType();
         $qb = $em->createQueryBuilder()
             ->select('rn')
@@ -519,26 +519,27 @@ final class CDocumentRepository extends ResourceRepository
             ->where('rn.parent = :parent AND rn.title = :title AND rn.resourceType = :rt AND d.filetype = :ft')
             ->setParameters([
                 'parent' => $parent,
-                'title'  => $title,
-                'rt'     => $docRt,
-                'ft'     => 'folder',
+                'title' => $title,
+                'rt' => $docRt,
+                'ft' => 'folder',
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         /** @var ResourceNode|null $node */
-        $node = $qb->getQuery()->getOneOrNullResult();
-
-        return $node;
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function ensureChatSystemFolderUnderCourseRoot(Course $course, ?Session $session = null): ResourceNode
     {
         $em = $this->em();
+
         try {
             $courseRoot = $course->getResourceNode();
             if (!$courseRoot) {
                 error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR: Course has no ResourceNode root.');
-                throw new \RuntimeException('Course has no ResourceNode root.');
+
+                throw new RuntimeException('Course has no ResourceNode root.');
             }
             if ($child = $this->findChildDocumentFolderByTitle($courseRoot, 'chat_conversations')) {
                 return $child;
@@ -554,29 +555,28 @@ final class CDocumentRepository extends ResourceRepository
                     if (method_exists($rnRepo, 'rebuildPaths')) {
                         $rnRepo->rebuildPaths($courseRoot);
                     }
+
                     return $legacy;
                 }
             }
 
-            $node = $this->ensureFolder(
+            return $this->ensureFolder(
                 $course,
                 $courseRoot,
                 'chat_conversations',
                 ResourceLink::VISIBILITY_DRAFT,
                 $session
             );
-
-            return $node;
-
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[CDocumentRepo.ensureChatSystemFolderUnderCourseRoot] ERROR '.$e->getMessage());
+
             throw $e;
         }
     }
 
     public function findChildDocumentFileByTitle(ResourceNode $parent, string $title): ?ResourceNode
     {
-        $em    = $this->em();
+        $em = $this->em();
         $docRt = $this->getResourceType();
 
         $qb = $em->createQueryBuilder()
@@ -589,11 +589,12 @@ final class CDocumentRepository extends ResourceRepository
             ->andWhere('d.filetype = :ft')
             ->setParameters([
                 'parent' => $parent,
-                'title'  => $title,
-                'rt'     => $docRt,
-                'ft'     => 'file',
+                'title' => $title,
+                'rt' => $docRt,
+                'ft' => 'file',
             ])
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         /** @var ResourceNode|null $node */
         return $qb->getQuery()->getOneOrNullResult();

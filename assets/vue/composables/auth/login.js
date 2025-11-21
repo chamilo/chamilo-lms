@@ -40,6 +40,45 @@ function applyUserLocale(data) {
   }
 }
 
+// Normalize and sanitize redirect URL so that:
+// - It stays on the same origin
+// - It preserves path + query + hash
+// - It returns a relative URL ("/path?query#hash") or null if invalid/unsafe
+function normalizeRedirectUrl(rawRedirect) {
+  if (!rawRedirect) {
+    return null
+  }
+
+  try {
+    const currentOrigin = window.location.origin
+
+    // root-relative path ("/resources/pages/edit?id=...")
+    if (rawRedirect.startsWith("/")) {
+      const url = new URL(rawRedirect, currentOrigin)
+      return url.pathname + url.search + url.hash
+    }
+
+    // absolute URL - validate protocol first
+    if (!isValidHttpUrl(rawRedirect)) {
+      return null
+    }
+
+    const url = new URL(rawRedirect)
+
+    // Prevent open redirects: only allow same-origin URLs
+    if (url.origin !== currentOrigin) {
+      console.warn("[login] Blocked redirect to different origin:", url.origin)
+      return null
+    }
+
+    // Strip origin, keep path + query + hash
+    return url.pathname + url.search + url.hash
+  } catch (e) {
+    console.warn("[login] Invalid redirect param:", rawRedirect, e)
+    return null
+  }
+}
+
 export function useLogin() {
   const route = useRoute()
   const router = useRouter()
@@ -103,13 +142,16 @@ export function useLogin() {
       // External redirect param (apply locale before navigating)
       if (route.query.redirect) {
         applyUserLocale(responseData)
-        const redirectParam = route.query.redirect.toString()
-        if (isValidHttpUrl(redirectParam)) {
-          window.location.href = redirectParam
-        } else {
-          await router.replace({ path: redirectParam })
+
+        const rawRedirect = route.query.redirect.toString()
+        const safeRedirect = normalizeRedirectUrl(rawRedirect)
+
+        if (safeRedirect) {
+          // Keep query params (e.g. "?id=/api/pages/6") intact on same origin
+          // Full reload here is intentional so the full app shell is rebuilt.
+          window.location.href = safeRedirect
+          return { success: true }
         }
-        return { success: true }
       }
 
       // Fallback backend redirect (apply locale before navigating)
@@ -129,8 +171,13 @@ export function useLogin() {
 
       // Redirect again if redirect param still exists (after login)
       if (route.query.redirect) {
-        await router.replace({ path: route.query.redirect.toString() })
-        return { success: true }
+        const rawRedirectAfter = route.query.redirect.toString()
+        const safeRedirectAfter = normalizeRedirectUrl(rawRedirectAfter)
+
+        if (safeRedirectAfter) {
+          await router.replace(safeRedirectAfter)
+          return { success: true }
+        }
       }
 
       // Default platform redirect after login
@@ -193,9 +240,11 @@ export function useLogin() {
       return
     }
 
-    const redirectParam = route.query.redirect?.toString()
-    if (redirectParam) {
-      await router.push({ path: redirectParam })
+    const rawRedirect = route.query.redirect?.toString()
+    const safeRedirect = rawRedirect ? normalizeRedirectUrl(rawRedirect) : null
+
+    if (safeRedirect) {
+      await router.push(safeRedirect)
     } else {
       await router.replace({ name: "Home" })
     }

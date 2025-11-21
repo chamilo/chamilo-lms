@@ -598,7 +598,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // MIME normalization for HTML
         $looksLikeHtmlByExt = (bool) preg_match('/\.x?html?$/i', (string) $fileName);
-        if ($mimeType === '' || stripos($mimeType, 'html') === false) {
+        if ('' === $mimeType || false === stripos($mimeType, 'html')) {
             if ($looksLikeHtmlByExt) {
                 $mimeType = 'text/html; charset=UTF-8';
             }

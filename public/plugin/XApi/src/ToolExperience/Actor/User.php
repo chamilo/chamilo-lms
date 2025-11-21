@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Actor;
 
-use Chamilo\UserBundle\Entity\User as UserEntity;
+use Chamilo\CoreBundle\Entity\User as UserEntity;
 use Xabbuh\XApi\Model\Agent;
 use Xabbuh\XApi\Model\InverseFunctionalIdentifier;
 use Xabbuh\XApi\Model\IRI;

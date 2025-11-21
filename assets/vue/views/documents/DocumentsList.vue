@@ -175,6 +175,7 @@
             @click="openMoveDialog(slotProps.data)"
           />
           <BaseButton
+            v-if="canEdit(slotProps.data)"
             :disabled="!(slotProps.data.filetype === 'file' || slotProps.data.filetype === 'video')"
             :title="getReplaceButtonTitle(slotProps.data)"
             icon="file-swap"
@@ -975,6 +976,10 @@ function openMoveDialog(document) {
 }
 
 function openReplaceDialog(document) {
+  if (!canEdit(document)) {
+    return
+  }
+
   documentToReplace.value = document
   isReplaceDialogVisible.value = true
 }

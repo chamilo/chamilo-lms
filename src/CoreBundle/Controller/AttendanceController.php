@@ -57,6 +57,25 @@ class AttendanceController extends AbstractController
 
         $data = $this->attendanceCalendarRepository->findAttendanceWithData($attendanceId);
 
+        if (isset($data['attendanceDates']) && \is_array($data['attendanceDates'])) {
+            foreach ($data['attendanceDates'] as &$date) {
+                if (!isset($date['id'])) {
+                    continue;
+                }
+
+                $calendar = $this->attendanceCalendarRepository->find((int) $date['id']);
+                if (!$calendar instanceof CAttendanceCalendar) {
+                    continue;
+                }
+
+                $duration = $calendar->getDuration();
+                if (null !== $duration) {
+                    $date['duration'] = $duration;
+                }
+            }
+            unset($date);
+        }
+
         return $this->json($data, 200);
     }
 
@@ -82,7 +101,7 @@ class AttendanceController extends AbstractController
 
         $users = $userRepository->findUsersByContext($courseId, $sessionId, $groupId);
 
-        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars) {
+        $formattedUsers = array_map(function ($user) use ($userRepository, $sheetRepository, $calendars, $totalCalendars) {
             $absences = 0;
 
             foreach ($calendars as $calendar) {
@@ -95,12 +114,13 @@ class AttendanceController extends AbstractController
                     continue;
                 }
 
-                if (1 !== $sheet->getPresence()) {
+                // Only count full absences, same logic as in PDF/XLS export
+                if (CAttendanceSheet::ABSENT === $sheet->getPresence()) {
                     $absences++;
                 }
             }
 
-            $percentage = \count($calendars) > 0 ? round(($absences * 100) / \count($calendars)) : 0;
+            $percentage = $totalCalendars > 0 ? \round(($absences * 100) / $totalCalendars) : 0;
 
             return [
                 'id' => $user->getId(),
@@ -109,7 +129,7 @@ class AttendanceController extends AbstractController
                 'email' => $user->getEmail(),
                 'username' => $user->getUsername(),
                 'photo' => $userRepository->getUserPicture($user->getId()),
-                'notAttended' => "$absences/".\count($calendars)." ({$percentage}%)",
+                'notAttended' => $absences.'/'.$totalCalendars." ({$percentage}%)",
             ];
         }, $users);
 
@@ -549,6 +569,7 @@ class AttendanceController extends AbstractController
                 'presence' => $sheet ? $sheet->getPresence() : null,
                 'sheetId' => $sheet?->getIid(),
                 'signature' => $sheet?->getSignature(),
+                'duration' => $calendar->getDuration(),
             ];
         })->toArray();
 
@@ -571,11 +592,15 @@ class AttendanceController extends AbstractController
         }
 
         return $this->json([
-            'attendanceDates' => array_map(fn ($d) => [
-                'id' => $d['id'],
-                'label' => $d['label'],
-                'done' => $d['done'],
-            ], $dates),
+            'attendanceDates' => array_map(
+                static fn ($d) => [
+                    'id' => $d['id'],
+                    'label' => $d['label'],
+                    'done' => $d['done'],
+                    'duration' => $d['duration'],
+                ],
+                $dates
+            ),
             'attendanceData' => $attendanceData,
             'commentData' => $commentData,
             'signatureData' => $signatureData,
@@ -614,7 +639,7 @@ class AttendanceController extends AbstractController
             }
         }
 
-        $formatted = array_map(fn($u) => [
+        $formatted = array_map(static fn ($u) => [
             'id' => $u->getId(),
             'firstName' => $u->getFirstname(),
             'lastName'  => $u->getLastname(),

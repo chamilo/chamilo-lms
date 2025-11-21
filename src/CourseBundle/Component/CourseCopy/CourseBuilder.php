@@ -310,14 +310,6 @@ class CourseBuilder
     }
 
     /**
-     * Get legacy Course container.
-     */
-    public function get_course(): Course
-    {
-        return $this->course;
-    }
-
-    /**
      * Build the course (documents already repo-based; other tools preserved).
      *
      * @param array<int|string>   $parseOnlyToolList
@@ -1629,14 +1621,6 @@ class CourseBuilder
     }
 
     /**
-     * Safe count helper for mixed values.
-     */
-    private function safeCount(mixed $v): int
-    {
-        return (\is_array($v) || $v instanceof Countable) ? \count($v) : 0;
-    }
-
-    /**
      * Export Quiz Questions (answers and options promoted).
      *
      * @param array<int> $questionIds
@@ -1759,6 +1743,14 @@ class CourseBuilder
                 ' answers='.\count($legacyCourse->resources[RESOURCE_QUIZQUESTION][$qid]->answers ?? [])
             );
         }
+    }
+
+    /**
+     * Safe count helper for mixed values.
+     */
+    private function safeCount(mixed $v): int
+    {
+        return (\is_array($v) || $v instanceof Countable) ? \count($v) : 0;
     }
 
     /**

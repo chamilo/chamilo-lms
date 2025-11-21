@@ -20,6 +20,8 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CoreBundle\Helpers\TrackingStatsHelper;
+use Chamilo\CoreBundle\Helpers\UserRelCourseVoteHelper;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ExtraField;
@@ -556,11 +558,6 @@ class CatalogueController extends AbstractController
 
         if (!$user || !$course) {
             return $this->json(['error' => 'Course or user not found'], 400);
-        }
-
-        $isPrivileged = $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_TEACHER') || $this->isGranted('ROLE_SESSION_ADMIN');
-        if (!$course->getAllowSelfSignup() && !$isPrivileged) {
-            return $this->json(['error' => 'Self sign up not allowed for this course'], 403);
         }
 
         $useAutoSession = 'true' === $settings->getSetting('catalog.course_subscription_in_user_s_session', true);

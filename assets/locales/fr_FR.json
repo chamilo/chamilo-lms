@@ -642,6 +642,7 @@
     "Unmark favorite": "Unmark favorite",
     "Mark favorite": "Mark favorite",
     "Register student": "Inscrire un apprenant",
+    "Register Student": "Inscrire des apprenants",
     "Duration": "Dur\u00e9e",
     "Dependencies": "D\u00e9pendances",
     "Price": "Prix",
@@ -1187,5 +1188,14 @@
     "Delivered": "Delivered",
     "Sending": "Sending",
     "Are you sure you want to clear this conversation?": "Are you sure you want to clear this conversation?",
+    "You are registered on %s": "Vous \u00eates inscrit sur {0}",
+    "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s": "Bonjour {0},<br><br>Vous \u00eates inscrit sur {1}.<br>Vous pouvez vous connecter avec votre compte en allant <a href=\"{2}\">ici</a>.<br><br>Vos informations de login sont :<br>Login : <strong>{3}</strong><br>Mot de passe : <strong>{4}</strong><br><br>Cordialement,<br>{5}",
+    "You have been enrolled in a new course": "Vous avez \u00e9t\u00e9 inscrit \u00e0 un nouveau cours",
+    "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo": "Bonjour {0},<br><br>Vous \u00eates inscrit \u00e0 une nouvelle session : <strong>{1}</strong>.<br>Vous pouvez acc\u00e9der \u00e0 votre cours en allant <a href=\"{2}\">ici</a>.<br><br>Vos sessions en cours sont :<br><ul>{3}</ul><br>Cordialement,<br>Chamilo",
+    "Admin Favorites Courses": "Cours pr\u00e9f\u00e9r\u00e9s",
+    "Admin Completed Courses": "Cours finis",
+    "Admin Incomplete Courses": "Cours non termin\u00e9s",
+    "Admin Restart Courses": "Cours \u00e0 recommencer",
+    "Admin Dashboard": "Panneau de contr\u00f4le",
     "New messages": "New messages"
 }

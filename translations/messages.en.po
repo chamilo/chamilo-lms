@@ -31183,3 +31183,30 @@ msgstr "Are you sure you want to clear this conversation?"
 
 msgid "New messages"
 msgstr "New messages"
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+
+msgid "You are registered on %s"
+msgstr "You are registered on %s"
+
+msgid "You have been enrolled in a new course"
+msgstr "You have been enrolled in a new course"
+
+msgid "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo"
+msgstr "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo"
+
+msgid "Admin Favorites Courses"
+msgstr "Admin Favorites Courses"
+
+msgid "Admin Completed Courses"
+msgstr "Admin Completed Courses"
+
+msgid "Admin Incomplete Courses"
+msgstr "Admin Incomplete Courses"
+
+msgid "Admin Restart Courses"
+msgstr "Admin Restart Courses"
+
+msgid "Admin Dashboard"
+msgstr "Admin Dashboard"

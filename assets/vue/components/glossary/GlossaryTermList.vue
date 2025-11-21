@@ -19,7 +19,7 @@
                 title="Session Item"
               />
             </div>
-            <div v-if="securityStore.isAuthenticated && canEdit(term)">
+            <div v-if="securityStore.isAuthenticated && props.canEditGlossary && canEdit(term)">
               <BaseButton
                 :label="t('Edit')"
                 class="mr-2"
@@ -74,7 +74,7 @@ const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 const isAllowedToEdit = ref(false)
 const { cid, sid, gid } = useCidReq()
 
-defineProps({
+const props = defineProps({
   glossaries: {
     type: Array,
     required: true,
@@ -86,6 +86,10 @@ defineProps({
   isLoading: {
     type: Boolean,
     required: true,
+  },
+  canEditGlossary: {
+    type: Boolean,
+    default: true,
   },
 })
 

@@ -19,7 +19,10 @@
       </template>
     </Column>
 
-    <Column :header="t('Actions')">
+    <Column
+      v-if="props.canEditGlossary"
+      :header="t('Actions')"
+    >
       <template #body="{ data }">
         <BaseButton
           :label="t('Edit')"
@@ -51,7 +54,7 @@ import DOMPurify from "dompurify"
 
 const { t } = useI18n()
 
-defineProps({
+const props = defineProps({
   glossaries: {
     type: Array,
     required: true,
@@ -59,6 +62,10 @@ defineProps({
   searchTerm: {
     type: String,
     required: true,
+  },
+  canEditGlossary: {
+    type: Boolean,
+    default: true,
   },
 })
 

@@ -309,38 +309,60 @@ const lpAutoLaunch = ref(0)
 const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
 
-courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-  tools.value = cTools.map((element) => {
-    if (routerTools.includes(element.title)) {
-      element.to = element.url
+/**
+ * Load tools for the course, split admin tools into the cog menu
+ * and keep the rest in the main tools grid.
+ * This function is reused on initial load and when toggling student view.
+ */
+async function loadCourseTools(showSkeleton = true) {
+  if (showSkeleton) {
+    isCourseLoading.value = true
+  }
+
+  try {
+    const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
+
+    const normalizedTools = cTools.map((rawTool) => {
+      const tool = { ...rawTool }
+
+      if (routerTools.includes(tool.title)) {
+        tool.to = tool.url
+      }
+
+      // Convenience flag for UI states (e.g. customize mode)
+      tool.isEnabled = tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+
+      return tool
+    })
+
+    const adminMenuItems = []
+    const regularTools = []
+
+    normalizedTools.forEach((tool) => {
+      if (tool.tool?.category === "admin") {
+        adminMenuItems.push({
+          label: t(tool.tool.titleToShow),
+          url: tool.url,
+        })
+      } else {
+        regularTools.push(tool)
+      }
+    })
+
+    tools.value = regularTools
+    courseItems.value = adminMenuItems
+  } catch (error) {
+    console.error("[CourseHome] Failed to load course tools", error)
+    tools.value = []
+    courseItems.value = []
+  } finally {
+    if (showSkeleton) {
+      isCourseLoading.value = false
     }
+  }
+}
 
-    return element
-  })
-
-  const noAdminToolsIndex = []
-
-  courseItems.value = tools.value
-    .filter((element, index) => {
-      if ("admin" === element.tool.category) {
-        noAdminToolsIndex.push(index)
-
-        return true
-      }
-
-      return false
-    })
-    .map((adminTool) => {
-      return {
-        label: t(adminTool.tool.titleToShow),
-        url: adminTool.url,
-      }
-    })
-
-  noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
-
-  isCourseLoading.value = false
-})
+loadCourseTools(true)
 
 courseService
   .loadTools(course.value.id, session.value?.id)
@@ -408,7 +430,7 @@ watch(isSorting, (isSortingEnabled) => {
     return
   }
   if (sortable === null) {
-    let el = document.getElementById("course-tools")
+    const el = document.getElementById("course-tools")
     sortable = Sortable.create(el, {
       ghostClass: "invisible",
       chosenClass: "cursor-move",
@@ -462,12 +484,7 @@ onMounted(async () => {
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
 
-  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-    tools.value = cTools.map((element) => ({
-      ...element,
-      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
-    }))
-  })
+  await loadCourseTools(false)
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

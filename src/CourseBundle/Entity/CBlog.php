@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateCBlogAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityBlog;
 use Chamilo\CoreBundle\Entity\AbstractResource;
@@ -42,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Create a new blog project',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',

@@ -120,7 +120,7 @@ class AttendanceController extends AbstractController
                 }
             }
 
-            $percentage = $totalCalendars > 0 ? \round(($absences * 100) / $totalCalendars) : 0;
+            $percentage = $totalCalendars > 0 ? round(($absences * 100) / $totalCalendars) : 0;
 
             return [
                 'id' => $user->getId(),
@@ -642,16 +642,16 @@ class AttendanceController extends AbstractController
         $formatted = array_map(static fn ($u) => [
             'id' => $u->getId(),
             'firstName' => $u->getFirstname(),
-            'lastName'  => $u->getLastname(),
-            'photo'     => $userRepository->getUserPicture($u->getId()),
+            'lastName' => $u->getLastname(),
+            'photo' => $userRepository->getUserPicture($u->getId()),
         ], $users);
 
         return $this->json([
-            'dateLabel'  => $calendar->getDateTime()->format('M d, Y - h:i A'),
-            'isLocked'   => (bool) $calendar->getDoneAttendance() === true,
-            'users'      => $formatted,
-            'presence'   => $presence,
-            'comments'   => $comments,
+            'dateLabel' => $calendar->getDateTime()->format('M d, Y - h:i A'),
+            'isLocked' => true === (bool) $calendar->getDoneAttendance(),
+            'users' => $formatted,
+            'presence' => $presence,
+            'comments' => $comments,
             'signatures' => $signatures,
         ]);
     }

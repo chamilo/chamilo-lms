@@ -50,6 +50,7 @@ use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\CourseBundle\Settings\SettingsFormFactory;
 use CourseManager;
 use Database;
+use DateTimeInterface;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -416,7 +417,7 @@ class CourseController extends ToolBaseController
             $thematic = $advance->getThematic();
 
             $startDate = $advance->getStartDate();
-            $formattedDate = $startDate instanceof \DateTimeInterface
+            $formattedDate = $startDate instanceof DateTimeInterface
                 ? (string) $dateFormatter->format($startDate)
                 : '';
 
@@ -445,7 +446,7 @@ class CourseController extends ToolBaseController
         if ($currentUser) {
             $name = method_exists($currentUser, 'getCompleteName')
                 ? $currentUser->getCompleteName()
-                : trim(sprintf('%s %s', $currentUser->getFirstname(), $currentUser->getLastname()));
+                : trim(\sprintf('%s %s', $currentUser->getFirstname(), $currentUser->getLastname()));
 
             $userPayload = [
                 'name' => $name,

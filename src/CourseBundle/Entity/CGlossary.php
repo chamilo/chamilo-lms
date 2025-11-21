@@ -20,6 +20,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\OpenApi\Model\Response;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateCGlossaryAction;
 use Chamilo\CoreBundle\Controller\Api\ExportCGlossaryAction;
 use Chamilo\CoreBundle\Controller\Api\ExportGlossaryToDocumentsAction;
@@ -56,7 +57,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: CreateCGlossaryAction::class,
             openapi: new Operation(
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -134,7 +135,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Import a glossary',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',

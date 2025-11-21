@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateSocialPostAttachmentAction;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use DateTime;
@@ -27,7 +28,7 @@ use Stringable;
             controller: CreateSocialPostAttachmentAction::class,
             openapi: new Operation(
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',

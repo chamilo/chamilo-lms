@@ -169,7 +169,7 @@ class AdminController extends BaseController
         /** @var Course|null $course */
         $course = $courseRepository->findOneBy(['code' => $courseCode]);
         if (!$course) {
-            $this->addFlash('error', sprintf('Course with code "%s" was not found.', $courseCode));
+            $this->addFlash('error', \sprintf('Course with code "%s" was not found.', $courseCode));
 
             return $this->redirectToRoute('admin_files_info', [
                 'page' => $page,
@@ -205,7 +205,7 @@ class AdminController extends BaseController
 
         $this->addFlash(
             'success',
-            sprintf(
+            \sprintf(
                 'File "%s" has been attached to course "%s" (hidden in the documents root).',
                 (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
                 (string) $course->getTitle()

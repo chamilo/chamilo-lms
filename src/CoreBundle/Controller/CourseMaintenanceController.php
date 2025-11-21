@@ -33,6 +33,7 @@ use ZipArchive;
 
 use const ARRAY_FILTER_USE_BOTH;
 use const DIRECTORY_SEPARATOR;
+use const FILTER_VALIDATE_BOOL;
 use const JSON_PARTIAL_OUTPUT_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
@@ -620,7 +621,7 @@ class CourseMaintenanceController extends AbstractController
             // Optional flag: also delete orphan documents that belong only to this course
             // Accepts 1/0, true/false, "1"/"0"
             $deleteDocsRaw = $payload['delete_docs'] ?? 0;
-            $deleteDocs = filter_var($deleteDocsRaw, \FILTER_VALIDATE_BOOL);
+            $deleteDocs = filter_var($deleteDocsRaw, FILTER_VALIDATE_BOOL);
 
             // Current course
             $courseInfo = api_get_course_info();
@@ -651,7 +652,7 @@ class CourseMaintenanceController extends AbstractController
                 $ses = $req->getSession();
                 $ses?->remove('_cid');
                 $ses?->remove('_real_cid');
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // swallow — not critical
             }
 
@@ -663,7 +664,7 @@ class CourseMaintenanceController extends AbstractController
                 'message' => 'Course deleted successfully',
                 'redirectUrl' => $redirectUrl,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
                 'error' => 'Failed to delete course: '.$e->getMessage(),
                 'details' => method_exists($e, 'getTraceAsString') ? $e->getTraceAsString() : null,

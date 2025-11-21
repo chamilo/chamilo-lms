@@ -20,6 +20,7 @@ use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
@@ -78,7 +79,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Replace a document file, maintaining the same IDs.',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -113,7 +114,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: CreateDocumentFileAction::class,
             openapi: new Operation(
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -163,7 +164,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -185,7 +186,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 parameters: [
                     new Parameter(
                         name: 'resourceNode.parent',
-                        in:'query',
+                        in: 'query',
                         description: 'Resource node Parent',
                         required: true,
                         schema: ['type' => 'integer'],

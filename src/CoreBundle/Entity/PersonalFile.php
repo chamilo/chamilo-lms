@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreatePersonalFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdatePersonalFileAction;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
@@ -41,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: CreatePersonalFileAction::class,
             openapi: new Operation(
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',

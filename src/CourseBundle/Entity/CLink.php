@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CheckCLinkAction;
 use Chamilo\CoreBundle\Controller\Api\CLinkDetailsController;
 use Chamilo\CoreBundle\Controller\Api\CLinkImageController;
@@ -67,7 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Create a new link resource',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -107,7 +108,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Upload a custom image for a link',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -160,14 +161,14 @@ use Symfony\Component\Validator\Constraints as Assert;
                         in: 'query',
                         description: 'Course id',
                         required: true,
-                        schema: ['type' => 'integer',],
+                        schema: ['type' => 'integer'],
                     ),
                     new Parameter(
                         name: 'sid',
                         in: 'query',
                         description: 'Session id',
                         required: false,
-                        schema: ['type' => 'integer',],
+                        schema: ['type' => 'integer'],
                     ),
                 ],
             )

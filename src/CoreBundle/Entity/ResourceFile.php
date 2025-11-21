@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\AddVariantResourceFileAction;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -43,7 +44,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             openapi: new Operation(
                 summary: 'Create a new resource file',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -70,7 +71,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             openapi: new Operation(
                 summary: 'Add a variant to an existing resource file',
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',

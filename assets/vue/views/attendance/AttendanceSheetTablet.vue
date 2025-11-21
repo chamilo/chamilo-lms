@@ -239,7 +239,20 @@ const canEdit = computed(() => isTeacherUser.value && !isStudentView.value && ro
 
 const enableSignature = computed(() => platformConfig.getSetting("attendance.enable_sign_attendance_sheet") === "true")
 const allowComments = computed(() => platformConfig.getSetting("attendance.attendance_allow_comments") === "true")
-const allowMultilevelGrading = computed(() => platformConfig.getSetting("attendance.multilevel_grading") === "true")
+
+// Make sure tablet view uses same grading mode as parent view
+const allowMultilevelGrading = computed(() => {
+  const mode = route.query.gradingMode
+  if (mode === "multi") {
+    return true
+  }
+  if (mode === "binary") {
+    return false
+  }
+
+  // Fallback to global setting if no explicit mode is provided
+  return platformConfig.getSetting("attendance.multilevel_grading") === "true"
+})
 
 // ------------------------------- Data models --------------------------------
 const attendanceTitle = ref("")
@@ -272,14 +285,24 @@ const filteredUsers = computed(() => {
 })
 
 // ----------------------------- State helpers --------------------------------
-const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, s) => ((acc[s.id] = s), acc), {})
+const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, s) => {
+  acc[s.id] = s
+  return acc
+}, {})
+
 const getStateLabel = (id) => {
-  if (!allowMultilevelGrading.value) return id === 1 ? t("Present") : t("Absent")
+  if (!allowMultilevelGrading.value) {
+    return id === 1 ? t("Present") : t("Absent")
+  }
+
   return ATTENDANCE_STATES_BY_ID[id]?.label ?? t("Unknown")
 }
+
 const getStateClass = (id) => {
-  if (!allowMultilevelGrading.value)
+  if (!allowMultilevelGrading.value) {
     return id === 1 ? "bg-[rgb(var(--color-success-base))]" : "bg-[rgb(var(--color-danger-base))]"
+  }
+
   return (
     {
       0: "bg-[rgb(var(--color-danger-base))]",
@@ -290,8 +313,10 @@ const getStateClass = (id) => {
     }[id] || "bg-gray-30"
   )
 }
+
 const key = (uid) => `${uid}-${calendarId.value}`
 const value = (uid) => data.value[key(uid)]
+
 const toggle = (uid) => {
   if (!canEdit.value || isLocked.value) return
 
@@ -305,6 +330,7 @@ const toggle = (uid) => {
 
   data.value[key(uid)] = current === 1 ? 0 : 1
 }
+
 const cycle = (uid) => {
   if (!canEdit.value || isLocked.value) return
   const total = Object.keys(ATTENDANCE_STATES).length
@@ -322,6 +348,7 @@ const openComment = (uid) => {
   currentComment.value = comments.value[key(uid)] || ""
   showCommentDialog.value = true
 }
+
 const saveComment = () => {
   if (!canEdit.value || isLocked.value) return
   comments.value[key(dialogUserId.value)] = currentComment.value
@@ -330,6 +357,7 @@ const saveComment = () => {
 
 const showSignatureDialog = ref(false)
 const signaturePad = ref(null)
+
 const openSignature = (uid) => {
   dialogUserId.value = uid
   showSignatureDialog.value = true
@@ -343,14 +371,24 @@ const openSignature = (uid) => {
     if (imgSrc) {
       const img = new Image()
       img.src = imgSrc
-      img.onload = () => canvas.getContext("2d").drawImage(img, 0, 0)
+      img.onload = () => {
+        canvas.getContext("2d").drawImage(img, 0, 0)
+      }
     }
   })
 }
-const clearSignature = () => signaturePad.value?.clear()
+
+const clearSignature = () => {
+  if (signaturePad.value) {
+    signaturePad.value.clear()
+  }
+}
+
 const saveSignature = () => {
   if (!canEdit.value || isLocked.value) return
-  if (signaturePad.value) signatures.value[key(dialogUserId.value)] = signaturePad.value.toDataURL()
+  if (signaturePad.value) {
+    signatures.value[key(dialogUserId.value)] = signaturePad.value.toDataURL()
+  }
   showSignatureDialog.value = false
 }
 

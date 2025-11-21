@@ -234,6 +234,10 @@ const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
 const localVote = ref(props.course?.userVote?.vote || 0)
 // ensure numeric placeholders
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
+// ensure popularity / nbVisits are numbers
+localCourse.value.popularity = Number(localCourse.value.popularity ?? props.course?.popularity ?? 0)
+localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
+
 
 // --- fetch rating ---
 // adjust fetchRating to tolerate multiple formats returned by the API
@@ -265,24 +269,22 @@ watch(
   (newVote, oldVote) => {
     if (newVote === oldVote) return
 
+    // use the previous local value first (oldVote), fallback to props (may be undefined/stale)
+    const prevVote = oldVote ?? props.course?.userVote?.vote ?? 0
 
-    const prevVote = props.course?.userVote?.vote ?? oldVote ?? 0
-
-
-    if ((localCourse.value.popularity === undefined) && props.course?.popularity !== undefined) {
-      localCourse.value.popularity = props.course.popularity
+    // ensure popularity numeric
+    if (localCourse.value.popularity === undefined || localCourse.value.popularity === null) {
+      localCourse.value.popularity = Number(props.course?.popularity ?? 0)
     }
 
-
+    // only change popularity when crossing from 0 -> >0 or >0 -> 0
     if (prevVote === 0 && newVote > 0) {
       localCourse.value.popularity = (localCourse.value.popularity || 0) + 1
     } else if (prevVote > 0 && newVote === 0) {
       localCourse.value.popularity = Math.max((localCourse.value.popularity || 1) - 1, 0)
     }
 
-
     localCourse.value.userVote = { vote: newVote }
-
 
     // Emit to the parent to persist (the parent must call the API)
     emit("rate", { value: newVote, course: props.course })
@@ -295,8 +297,6 @@ const allowSelfSignup = computed(() => {
   if (localCourse.value?.allowSelfSignup !== undefined) return Boolean(localCourse.value.allowSelfSignup)
   return localCourse.value?.visibility === 0
 })
-localCourse.value.nbVisits = Number(localCourse.value.nbVisits ?? 0)
-
 // fetch visits
 const fetchVisits = async () => {
   if (!localCourse.value?.id) return

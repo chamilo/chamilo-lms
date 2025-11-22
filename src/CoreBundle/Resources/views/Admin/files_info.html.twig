@@ -4,57 +4,48 @@
     <div class="files-info-page">
         <h1>{{ 'File Information'|trans }}</h1>
 
-        {# Local styles for table layout #}
+        {# Local styles for table layout and some small tweaks #}
         <style>
             .files-info-page .table-wrapper {
                 width: 100%;
-                overflow-x: auto; /* Allow horizontal scroll if really needed */
+                overflow-x: auto;
             }
-
             .files-info-page .files-info-table {
                 width: 100%;
-                table-layout: fixed; /* Keep column widths stable */
+                table-layout: fixed;
             }
-
             .files-info-page .files-info-table th,
             .files-info-page .files-info-table td {
                 white-space: nowrap;
                 overflow: hidden;
-                text-overflow: ellipsis; /* Truncate long text with ellipsis */
+                text-overflow: ellipsis;
             }
-
             .files-info-page th.col-title,
             .files-info-page td.col-title {
                 width: 30%;
             }
-
             .files-info-page th.col-original,
             .files-info-page td.col-original {
                 width: 30%;
             }
-
             .files-info-page th.col-course,
             .files-info-page td.col-course {
                 width: 15%;
             }
-
             .files-info-page th.col-user,
             .files-info-page td.col-user {
                 width: 10%;
             }
-
             .files-info-page th.col-links,
             .files-info-page td.col-links {
                 width: 5%;
                 text-align: center;
             }
-
             .files-info-page th.col-actions,
             .files-info-page td.col-actions {
                 width: 10%;
                 text-align: center;
             }
-
             .files-info-page .action-icon {
                 text-decoration: none;
                 display: inline-flex;
@@ -62,10 +53,38 @@
                 justify-content: center;
                 padding: 0.25rem 0.5rem;
             }
+            .files-info-page #fileInfoModal .modal-content {
+                max-width: 1100px;
+                width: 95%;
+                margin: 0 auto;
+            }
+            .files-info-page .course-select-wrapper {
+                margin-top: 0.25rem;
+                width: 100%;
+            }
+            .files-info-page .course-search-input {
+                margin-bottom: 0.5rem;
+            }
+            .files-info-page .course-select {
+                width: 100%;
+                min-height: 140px;
+                max-height: 220px;
+                overflow-y: auto;
+                font-size: 0.9rem;
+            }
+            .files-info-page .course-select option {
+                white-space: normal;
+                padding: 2px 4px;
+            }
         </style>
 
-        <form method="get" action="{{ path('admin_files_info') }}" style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-            <input type="text" name="search" value="{{ search }}" placeholder="{{ 'Search...'|trans }}" class="form-control" style="margin-right: 10px;">
+        <form method="get" action="{{ path('admin_files_info') }}"
+              class="flex justify-end mb-5">
+            <input type="text"
+                   name="search"
+                   value="{{ search }}"
+                   placeholder="{{ 'Search...'|trans }}"
+                   class="form-control max-w-xs mr-2">
             <button type="submit" class="btn btn--primary">{{ 'Search'|trans }}</button>
         </form>
 
@@ -88,11 +107,22 @@
                     {% for file in files %}
                         {% set title        = file.title|default('N/A'|trans) %}
                         {% set originalName = file.originalName ?? file.title ?? null %}
-                        {% set courseTitle  =
-                            (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
-                            ? (file.resourceNode.resourceLinks|first.course.title|default('N/A'|trans))
-                            : ('N/A'|trans)
-                        %}
+                        {% set courses      = coursesByFile[file.id]|default([]) %}
+
+                        {% if courses is not empty %}
+                            {% set courseTitle = '' %}
+                            {% for c in courses %}
+                                {% set label = '[' ~ (c.code ?? '') ~ '] ' ~ (c.title|default('N/A'|trans)) %}
+                                {% if loop.first %}
+                                    {% set courseTitle = label %}
+                                {% else %}
+                                    {% set courseTitle = courseTitle ~ ', ' ~ label %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% set courseTitle = 'N/A'|trans %}
+                        {% endif %}
+
                         {% set username =
                             (file.resourceNode and file.resourceNode.resourceLinks|length > 0)
                             ? (file.resourceNode.resourceLinks|first.user.username|default('N/A'|trans))
@@ -114,7 +144,7 @@
                             <td class="col-links">
                                 {{ links }}
                                 {% if isOrphan %}
-                                    <span class="badge badge-warning" style="margin-left: 5px;">
+                                    <span class="ml-1 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800">
                                         {{ 'Orphan'|trans }}
                                     </span>
                                 {% endif %}
@@ -127,7 +157,8 @@
                                    data-mime-type="{{ file.mimeType|default('') }}"
                                    data-original-name="{{ originalName|default('N/A'|trans) }}"
                                    data-size="{{ file.size|default(0) }}"
-                                   data-course="{{ courseTitle }}"
+                                   data-course="{{ courseTitle|e('html_attr') }}"
+                                   data-courses-json="{{ courses|json_encode|e('html_attr') }}"
                                    data-user="{{ username }}"
                                    data-file-url="{{ fileUrl }}"
                                    data-file-path="{{ filePath }}"
@@ -171,7 +202,20 @@
                 <p class="mb-3"><strong>{{ 'MIME Type:'|trans }}</strong> <span id="file-mime-type"></span></p>
                 <p class="mb-3"><strong>{{ 'Original Name:'|trans }}</strong> <span id="file-original-name"></span></p>
                 <p class="mb-3"><strong>{{ 'Size:'|trans }}</strong> <span id="file-size"></span></p>
-                <p class="mb-3"><strong>{{ 'Course:'|trans }}</strong> <span id="file-course"></span></p>
+
+                <p class="mb-3 flex items-start gap-2">
+                    <strong class="mt-0.5">{{ 'Course(s):'|trans }}</strong>
+                    <span id="file-course-tags"
+                          class="inline-flex flex-wrap gap-2 ml-1 text-sm"></span>
+                    <button
+                            type="button"
+                            id="add-course-btn"
+                            class="mdi mdi-plus-circle-outline ml-1 text-lg leading-none cursor-pointer"
+                            style="border: none; background: transparent;"
+                            title="{{ 'Attach this file to another course'|trans }}"
+                    ></button>
+                </p>
+
                 <p class="mb-3"><strong>{{ 'User:'|trans }}</strong> <span id="file-user"></span></p>
                 <p class="mb-3"><strong>{{ 'Resource Node ID:'|trans }}</strong> <span id="resource-node-id"></span></p>
                 <p class="mb-3"><strong>{{ 'Resource File ID:'|trans }}</strong> <span id="resource-file-id"></span></p>
@@ -185,12 +229,12 @@
                     <a href="#" id="file-url" target="_blank">{{ 'Open File'|trans }}</a>
                 </p>
 
-                {# Orphan-only actions: attach to course or delete definitively #}
-                <div id="orphan-actions" style="display: none; margin-top: 20px;">
+                {# Actions: attach to course(s) + delete only if orphan #}
+                <div id="orphan-actions">
                     <hr>
-                    <h3>{{ 'Orphan document actions'|trans }}</h3>
+                    <h3>{{ 'File actions'|trans }}</h3>
                     <p class="mb-3">
-                        {{ 'This file is not linked to any course or session. You can attach it to a course (hidden in the documents root) or delete it definitively.'|trans }}
+                        {{ 'You can attach this file to one or more courses (hidden in the documents root). If the file is not used anymore and becomes orphan, you can also delete it definitively.'|trans }}
                     </p>
 
                     <form id="attach-form"
@@ -202,33 +246,85 @@
                         <input type="hidden" name="page" value="{{ currentPage }}">
                         <input type="hidden" name="search" value="{{ search }}">
 
-                        <label for="course-code-input" class="form-label">
-                            {{ 'Course code'|trans }}
+                        <label for="course-code-input" class="form-label block mb-1">
+                            {{ 'Course(s)'|trans }}
                         </label>
-                        <input type="text"
-                               id="course-code-input"
-                               name="course_code"
-                               class="form-control"
-                               placeholder="{{ 'Enter course code...'|trans }}">
 
-                        <button type="submit" class="btn btn--primary mt-2">
-                            {{ 'Attach to course (hidden)'|trans }}
+                        <div class="course-select-wrapper">
+                            <input
+                                    type="text"
+                                    id="course-search-input"
+                                    class="course-search-input w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                                    placeholder="{{ 'Filter courses...'|trans }}"
+                            >
+
+                            <select id="course-code-input"
+                                    name="course_codes[]"
+                                    class="course-select border border-gray-300 rounded-md bg-white px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                                    multiple
+                                    size="4">
+                                {% for course in courseOptions %}
+                                    <option value="{{ course.code|e('html_attr') }}">
+                                        [{{ course.code }}] {{ course.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <small class="block mt-1 text-xs text-gray-500">
+                                {{ 'You can select one or more courses (use Ctrl/Cmd + click).'|trans }}
+                            </small>
+                        </div>
+
+                        <div class="form-check mt-2">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="create-documents-checkbox"
+                                   name="create_documents"
+                                   value="1"
+                                   checked="checked">
+                            <label class="form-check-label" for="create-documents-checkbox">
+                                {{ 'Also create a visible document in the Documents tool for each selected course.'|trans }}
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary mt-3">
+                            {{ 'Attach to selected course(s) (hidden)'|trans }}
                         </button>
                     </form>
 
-                    <form id="delete-form"
+                    <p class="mb-2">
+                        <small class="text-xs text-gray-500">
+                            {{ 'To detach this file from a specific course, click the "×" icon on the corresponding course tag above.'|trans }}
+                        </small>
+                    </p>
+
+                    <form id="detach-form"
                           method="post"
-                          action="{{ path('admin_files_info_delete') }}"
-                          onsubmit="return confirm('{{ 'Are you sure you want to delete this file definitively?'|trans }}');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_orphan_file') }}">
-                        <input type="hidden" name="resource_file_id" id="delete-resource-file-id" value="">
+                          action="{{ path('admin_files_info_detach') }}"
+                          style="display:none;"
+                          onsubmit="return confirm('{{ 'Are you sure you want to detach this file from the selected course?'|trans|e('js') }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('detach_file_from_course') }}">
+                        <input type="hidden" name="resource_file_id" id="detach-resource-file-id" value="">
+                        <input type="hidden" name="course_id" id="detach-course-id" value="">
                         <input type="hidden" name="page" value="{{ currentPage }}">
                         <input type="hidden" name="search" value="{{ search }}">
-
-                        <button type="submit" class="btn btn--danger">
-                            {{ 'Delete definitively'|trans }}
-                        </button>
                     </form>
+
+                    <div id="delete-form-wrapper" class="mt-3">
+                        <form id="delete-form"
+                              method="post"
+                              action="{{ path('admin_files_info_delete') }}"
+                              onsubmit="return confirm('{{ 'Are you sure you want to delete this file definitively?'|trans }}');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_orphan_file') }}">
+                            <input type="hidden" name="resource_file_id" id="delete-resource-file-id" value="">
+                            <input type="hidden" name="page" value="{{ currentPage }}">
+                            <input type="hidden" name="search" value="{{ search }}">
+
+                            <button type="submit" class="btn btn--danger">
+                                {{ 'Delete definitively'|trans }}
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -240,10 +336,66 @@
         var span = document.getElementsByClassName("close-button")[0];
         var copyPathButton = document.getElementById('copy-path');
 
-        // Orphan-specific elements
         var orphanActions = document.getElementById('orphan-actions');
+        var deleteWrapper = document.getElementById('delete-form-wrapper');
         var attachIdInput = document.getElementById('attach-resource-file-id');
         var deleteIdInput = document.getElementById('delete-resource-file-id');
+        var addCourseBtn = document.getElementById('add-course-btn');
+
+        var courseTagsContainer = document.getElementById('file-course-tags');
+        var detachForm = document.getElementById('detach-form');
+        var detachFileIdInput = document.getElementById('detach-resource-file-id');
+        var detachCourseIdInput = document.getElementById('detach-course-id');
+
+        function renderCourseTags(courses, resourceFileId) {
+          if (!courseTagsContainer) {
+            return;
+          }
+
+          courseTagsContainer.innerHTML = "";
+
+          if (!courses || courses.length === 0) {
+            var emptySpan = document.createElement("span");
+            emptySpan.textContent = "N/A";
+            emptySpan.className = "text-sm text-gray-500";
+            courseTagsContainer.appendChild(emptySpan);
+            return;
+          }
+
+          courses.forEach(function(c) {
+            var pill = document.createElement("span");
+            pill.className =
+              "inline-flex items-center rounded-full bg-slate-100 text-slate-800 " +
+              "text-xs font-medium px-2 py-1 mr-1 mb-1 border border-slate-200";
+
+            var label = document.createElement("span");
+            label.textContent = "[" + (c.code || "") + "] " + (c.title || "");
+            pill.appendChild(label);
+
+            if (detachForm && detachFileIdInput && detachCourseIdInput) {
+              var removeBtn = document.createElement("button");
+              removeBtn.type = "button";
+              removeBtn.className =
+                "ml-1 text-xs leading-none text-slate-500 hover:text-red-600 focus:outline-none";
+              removeBtn.innerHTML = "&times;";
+              removeBtn.title = "{{ 'Detach from this course'|trans|e('js') }}";
+
+              removeBtn.addEventListener("click", function() {
+                if (!window.confirm("{{ 'Are you sure you want to detach this file from the selected course?'|trans|e('js') }}")) {
+                  return;
+                }
+
+                detachFileIdInput.value = resourceFileId || "";
+                detachCourseIdInput.value = c.id || "";
+                detachForm.submit();
+              });
+
+              pill.appendChild(removeBtn);
+            }
+
+            courseTagsContainer.appendChild(pill);
+          });
+        }
 
         document.querySelectorAll('.open-modal').forEach(function(button) {
           button.onclick = function(event) {
@@ -252,7 +404,8 @@
             var mimeType = button.getAttribute('data-mime-type');
             var originalName = button.getAttribute('data-original-name');
             var size = button.getAttribute('data-size');
-            var course = button.getAttribute('data-course');
+            var courseLabel = button.getAttribute('data-course') || "";
+            var coursesJson = button.getAttribute('data-courses-json') || "[]";
             var user = button.getAttribute('data-user');
             var filePath = button.getAttribute('data-file-path');
             var fileUrl = button.getAttribute('data-file-url');
@@ -260,21 +413,35 @@
             var resourceFileId = button.getAttribute('data-resource-file-id');
             var isOrphan = button.getAttribute('data-is-orphan') === '1';
 
-            // Populate modal static info
+            var coursesData = [];
+            try {
+              coursesData = JSON.parse(coursesJson);
+            } catch (e) {
+              coursesData = [];
+            }
+
             document.getElementById('file-title').textContent = title || '';
             document.getElementById('file-mime-type').textContent = mimeType || '';
             document.getElementById('file-original-name').textContent = originalName || '';
             document.getElementById('file-size').textContent = (size || 0) + ' bytes';
-            document.getElementById('file-course').textContent = course || '';
             document.getElementById('file-user').textContent = user || '';
             document.getElementById('file-path').textContent = filePath || '';
             document.getElementById('file-url').href = fileUrl || '#';
             document.getElementById('resource-node-id').textContent = resourceNodeId || '';
             document.getElementById('resource-file-id').textContent = resourceFileId || '';
 
-            // Toggle orphan actions and set hidden ids
+            if (coursesData && coursesData.length > 0) {
+              renderCourseTags(coursesData, resourceFileId);
+            } else if (courseTagsContainer) {
+              // Fallback to flat label (or N/A) if JSON is empty
+              courseTagsContainer.textContent = courseLabel || "N/A";
+            }
+
             if (orphanActions) {
-              orphanActions.style.display = isOrphan ? 'block' : 'none';
+              orphanActions.style.display = 'block';
+            }
+            if (deleteWrapper) {
+              deleteWrapper.style.display = isOrphan ? 'block' : 'none';
             }
             if (attachIdInput) {
               attachIdInput.value = resourceFileId || '';
@@ -282,34 +449,67 @@
             if (deleteIdInput) {
               deleteIdInput.value = resourceFileId || '';
             }
+            if (detachFileIdInput) {
+              detachFileIdInput.value = resourceFileId || '';
+            }
 
             modal.style.display = "block";
           };
         });
+
+        if (addCourseBtn) {
+          addCourseBtn.onclick = function() {
+            if (orphanActions) {
+              orphanActions.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            var courseSelect = document.getElementById('course-code-input');
+            if (courseSelect) {
+              courseSelect.focus();
+            }
+          };
+        }
 
         span.onclick = function() {
           modal.style.display = "none";
         };
 
         window.onclick = function(event) {
-          if (event.target == modal) {
+          if (event.target === modal) {
             modal.style.display = "none";
           }
         };
 
-        copyPathButton.onclick = function() {
-          var filePath = document.getElementById('file-path').textContent;
-          navigator.clipboard.writeText(filePath).then(function() {
-            copyPathButton.classList.remove('mdi-content-copy');
-            copyPathButton.classList.add('mdi-check');
-            setTimeout(function() {
-              copyPathButton.classList.remove('mdi-check');
-              copyPathButton.classList.add('mdi-content-copy');
-            }, 2000);
-          }, function(err) {
-            alert('Failed to copy: ' + err);
+        if (copyPathButton) {
+          copyPathButton.onclick = function() {
+            var filePath = document.getElementById('file-path').textContent;
+            navigator.clipboard.writeText(filePath).then(function() {
+              copyPathButton.classList.remove('mdi-content-copy');
+              copyPathButton.classList.add('mdi-check');
+              setTimeout(function() {
+                copyPathButton.classList.remove('mdi-check');
+                copyPathButton.classList.add('mdi-content-copy');
+              }, 2000);
+            }, function(err) {
+              alert('Failed to copy: ' + err);
+            });
+          };
+        }
+
+        // Filter options inside the multi-select when typing
+        var courseSearchInput = document.getElementById('course-search-input');
+        var courseSelect = document.getElementById('course-code-input');
+
+        if (courseSearchInput && courseSelect) {
+          courseSearchInput.addEventListener('input', function() {
+            var filter = courseSearchInput.value.toLowerCase();
+
+            Array.prototype.forEach.call(courseSelect.options, function(option) {
+              var text = option.textContent.toLowerCase();
+              var match = text.indexOf(filter) !== -1;
+              option.style.display = match ? '' : 'none';
+            });
           });
-        };
+        }
       });
     </script>
 {% endblock %}

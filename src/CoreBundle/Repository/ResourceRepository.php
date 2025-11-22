@@ -305,6 +305,32 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    public function addSessionNullQueryBuilder(QueryBuilder $qb): QueryBuilder
+    {
+        return $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('links.session'),
+                $qb->expr()->eq('links.session', 0)
+            )
+        );
+    }
+
+    public function addSessionAndBaseContentQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session OR links.session IS NULL')
+            ->setParameter('session', $session)
+        ;
+    }
+
+    public function addSessionOnlyQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session')
+            ->setParameter('session', $session)
+        ;
+    }
+
     public function addCourseSessionGroupQueryBuilder(
         ?Course $course = null,
         ?Session $session = null,
@@ -325,20 +351,13 @@ abstract class ResourceRepository extends ServiceEntityRepository
         }
 
         if (null === $session) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->isNull('links.session'),
-                    $qb->expr()->eq('links.session', 0)
-                )
-            );
+            $this->addSessionNullQueryBuilder($qb);
         } elseif ($loadBaseSessionContent) {
             // Load course base content.
-            $qb->andWhere('links.session = :session OR links.session IS NULL');
-            $qb->setParameter('session', $session);
+            $this->addSessionAndBaseContentQueryBuilder($session, $qb);
         } else {
             // Load only session resources.
-            $qb->andWhere('links.session = :session');
-            $qb->setParameter('session', $session);
+            $this->addSessionOnlyQueryBuilder($session, $qb);
         }
 
         if (null === $group) {

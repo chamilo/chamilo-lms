@@ -108,15 +108,15 @@ if (isset($typeSelected) && '0' != $typeSelected) {
             $sql_l = 'SELECT count(*) FROM '.$tbl_link.'
                       WHERE
                             ref_id='.$addvalues['select_link'].' AND
-                            course_code="'.$course_id.'" AND
+                            c_id="'.$course_id.'" AND
                             type = 5;';
             $res_l = Database::query($sql_l);
             $row = Database::fetch_row($res_l);
             if (0 == $row[0]) {
                 $link->add();
                 $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                            thread_qualify_max= "'.api_float_val($addvalues['weight']).'",
-                            thread_weight= "'.api_float_val($addvalues['weight']).'",
+                            thread_qualify_max= "'.api_float_val($addvalues['weight_mask']).'",
+                            thread_weight= "'.api_float_val($addvalues['weight_mask']).'",
                             thread_title_qualify = "'.$rowtit[0].'"
 						WHERE iid ='.$addvalues['select_link'];
                 Database::query($sql);

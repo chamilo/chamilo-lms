@@ -2588,6 +2588,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 // Display the Portal News link in the admin page to session admin users
 //$_configuration['session_admin_access_system_announcement'] = false;
 
+// Display Statistics link in the admin page to session admin users
+//$_configuration['session_admin_access_global_statistics'] = false;
+
 // File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
 //$_configuration['file_upload_size_limit_for_teacher'] = 0;
 

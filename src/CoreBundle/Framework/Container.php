@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
@@ -699,5 +700,13 @@ class Container
     {
         /** @var EventDispatcherInterface $dispatcher */
         return self::$container->get('event_dispatcher');
+    }
+
+    public static function getPortfolioRepository(): PortfolioRepository
+    {
+        /** @var PortfolioRepository $repo */
+        $repo = self::$container->get(PortfolioRepository::class);
+
+        return $repo;
     }
 }

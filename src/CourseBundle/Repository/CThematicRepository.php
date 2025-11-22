@@ -38,7 +38,7 @@ final class CThematicRepository extends ResourceRepository
     }
 
     /**
-     * Return the last done advance for the given course/session
+     * Return the last done advance for the given course/session.
      */
     public function findLastDoneAdvanceForCourse(Course $course, ?Session $session = null): ?CThematicAdvance
     {
@@ -62,15 +62,14 @@ final class CThematicRepository extends ResourceRepository
         // Sort by start date ASC and return the last one
         usort(
             $candidates,
-            static fn (CThematicAdvance $a, CThematicAdvance $b) =>
-                $a->getStartDate() <=> $b->getStartDate()
+            static fn (CThematicAdvance $a, CThematicAdvance $b) => $a->getStartDate() <=> $b->getStartDate()
         );
 
         return end($candidates) ?: null;
     }
 
     /**
-     * Return the first $limit advances not done for the given course/session
+     * Return the first $limit advances not done for the given course/session.
      *
      * @return CThematicAdvance[]
      */
@@ -98,15 +97,14 @@ final class CThematicRepository extends ResourceRepository
 
         usort(
             $pending,
-            static fn (CThematicAdvance $a, CThematicAdvance $b) =>
-                $a->getStartDate() <=> $b->getStartDate()
+            static fn (CThematicAdvance $a, CThematicAdvance $b) => $a->getStartDate() <=> $b->getStartDate()
         );
 
-        return array_slice($pending, 0, $limit);
+        return \array_slice($pending, 0, $limit);
     }
 
     /**
-     * Compute the global average of thematic advances for the given course/session
+     * Compute the global average of thematic advances for the given course/session.
      */
     public function calculateTotalAverageForCourse(Course $course, ?Session $session = null): float
     {
@@ -140,6 +138,6 @@ final class CThematicRepository extends ResourceRepository
             return 0.0;
         }
 
-        return round(array_sum($averages) / count($thematics));
+        return round(array_sum($averages) / \count($thematics));
     }
 }

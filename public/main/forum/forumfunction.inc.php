@@ -4658,7 +4658,7 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     while ($row = Database::fetch_array($result)) {
         $row['status'] = '1';
         $post_list[] = $row;
-        $sql = "SELECT * FROM $table_posts posts
+        $sql = "SELECT *, users.id as user_id FROM $table_posts posts
                 LEFT JOIN $table_users users
                 ON (posts.poster_id=users.id)
                 WHERE posts.thread_id='$thread_id'

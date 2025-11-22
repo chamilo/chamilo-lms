@@ -19,6 +19,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateCLinkCategoryAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityLinkCategory;
@@ -60,7 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: CreateCLinkCategoryAction::class,
             openapi: new Operation(
                 requestBody: new RequestBody(
-                    content: new \ArrayObject([
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',

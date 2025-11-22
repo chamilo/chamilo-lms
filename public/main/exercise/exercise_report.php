@@ -21,7 +21,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_asset('js-cookie/src/js.cookie.js');
-$htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
 $isBossOfStudent = false;

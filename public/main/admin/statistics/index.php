@@ -321,10 +321,6 @@ in_array(
     }
 }
 
-if ('user_session' === $report) {
-    $htmlHeadXtra[] = api_get_jqgrid_js();
-}
-
 if (isset($_GET['export'])) {
     ob_start();
 }

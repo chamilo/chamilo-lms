@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\Admin;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
@@ -27,7 +28,6 @@ use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Datetime;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
@@ -40,6 +40,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 use const MB_CASE_LOWER;
 
@@ -59,6 +60,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         private readonly QueryCacheHelper $queryCacheHelper
     ) {
         parent::__construct($registry, User::class);
+    }
+
+    public function isUsernameAvailable(string $username): bool
+    {
+        return 0 === $this->count(['username' => $username]);
     }
 
     public function loadUserByIdentifier(string $identifier): ?User
@@ -318,9 +324,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'message_tag', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'notification', 'field' => 'dest_user_id', 'action' => 'delete'],
             ['table' => 'page_category', 'field' => 'creator_id', 'action' => 'update'],
-            ['table' => 'portfolio', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'portfolio_category', 'field' => 'user_id', 'action' => 'update'],
-            ['table' => 'portfolio_comment', 'field' => 'author_id', 'action' => 'update'],
             ['table' => 'resource_comment', 'field' => 'author_id', 'action' => 'update'],
             ['table' => 'sequence_value', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'session_rel_course_rel_user', 'field' => 'user_id', 'action' => 'delete'],
@@ -542,9 +546,9 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
     /**
      * Get the coaches for a course within a session.
      *
-     * @return Collection|array
+     * @return array<int, User>
      */
-    public function getCoachesForSessionCourse(Session $session, Course $course)
+    public function getCoachesForSessionCourse(Session $session, Course $course): array
     {
         $qb = $this->createQueryBuilder('u');
 
@@ -1310,11 +1314,14 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         ;
     }
 
+    /**
+     * @return array<int, User>
+     */
     public function findByAuthsource(string $authentication): array
     {
         $qb = $this->getOrCreateQueryBuilder(null, 'u');
 
-        $qb
+        return $qb
             ->innerJoin('u.authSources', 'as')
             ->where(
                 $qb->expr()->eq('as.authentication', ':authentication')
@@ -1340,5 +1347,81 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                 'ids' => $ids,
             ])
         ;
+    }
+
+    public function findOnePlatformAdmin(?int $accessUrlId = null): ?User
+    {
+        $qb = $this->createQueryBuilder('u');
+        $this->addActiveAndNotAnonUserQueryBuilder($qb);
+
+        if (null === $accessUrlId) {
+            $accessUrlId = api_get_multiple_access_url() ? api_get_current_access_url_id() : 0;
+        }
+        $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
+
+        $qb->andWhere($qb->expr()->orX(
+            $qb->expr()->like('u.roles', ':super'),
+            $qb->expr()->like('u.roles', ':admin')
+        ))
+            ->setParameter('super', '%ROLE_SUPER_ADMIN%')
+            ->setParameter('admin', '%ROLE_ADMIN%')
+            ->orderBy('u.id', 'ASC')
+            ->setMaxResults(1)
+        ;
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Returns the "package" {id, username, email} to autocomplete the export.
+     * Try: Admin::class -> roles -> current user -> fallback "1/admin/admin@example.com".
+     */
+    public function getDefaultAdminForExport(): array
+    {
+        $em = $this->getEntityManager();
+
+        try {
+            $adminEntity = $em->getRepository(Admin::class)
+                ->createQueryBuilder('a')
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult()
+            ;
+
+            if ($adminEntity && $adminEntity->getUser()) {
+                $u = $adminEntity->getUser();
+
+                return [
+                    'id' => (string) $u->getId(),
+                    'username' => (string) $u->getUsername(),
+                    'email' => (string) ($u->getEmail() ?? ''),
+                ];
+            }
+        } catch (Throwable $e) {
+        }
+
+        $u = $this->findOnePlatformAdmin();
+        if ($u instanceof User) {
+            return [
+                'id' => (string) $u->getId(),
+                'username' => (string) $u->getUsername(),
+                'email' => (string) ($u->getEmail() ?? ''),
+            ];
+        }
+
+        $me = api_get_user_info();
+        if (!empty($me['id'])) {
+            return [
+                'id' => (string) $me['id'],
+                'username' => (string) ($me['username'] ?? ''),
+                'email' => (string) ($me['email'] ?? ''),
+            ];
+        }
+
+        return [
+            'id' => '1',
+            'username' => 'admin',
+            'email' => 'admin@example.com',
+        ];
     }
 }

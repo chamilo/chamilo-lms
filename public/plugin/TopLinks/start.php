@@ -2,6 +2,7 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -11,7 +12,7 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 
 $plugin = TopLinksPlugin::create();
-$httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $em = Database::getManager();
 

@@ -363,6 +363,7 @@ class SettingsValueTemplateFixtures extends Fixture implements FixtureGroupInter
                             [
                                 'id' => 1,
                                 'variable' => 'ThisIsMyModel',
+                                'display_score_name' => 0,
                                 'score_list' => [
                                     [
                                         'variable' => 'VeryBad',

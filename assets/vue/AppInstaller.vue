@@ -24,7 +24,11 @@
         id="note"
         class="text-center"
       >
-        <BaseAppLink url="../../documentation/installation_guide.html">
+        <BaseAppLink
+          url="../../documentation/installation_guide.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <BaseButton
             type="primary"
             icon="courses"

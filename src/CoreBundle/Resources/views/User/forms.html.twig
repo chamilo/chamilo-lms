@@ -11,97 +11,81 @@
 {% endblock textarea_widget %}
 
 {% block form_widget_simple %}
-    {% apply spaceless %}
-        {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
-        {% set type = type|default('text') %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {% set type = type|default('text') %}
 
-        {% if 'file' == type %}
-            <span class="btn--primary btn-lg file-overlay"><i
-                        class="icon-folder-open"></i> {{ 'sylius.form.choose_file'|trans }}</span>
-        {% endif %}
-        {{ parent() }}
-    {% endapply %}
+    {%- if 'file' == type -%}
+        <span class="btn--primary btn-lg file-overlay"><i
+                    class="icon-folder-open"></i> {{ 'sylius.form.choose_file'|trans }}</span>
+    {%- endif -%}
+    {{ parent() }}
 {% endblock form_widget_simple %}
 
 {% block form_label %}
-    {% apply spaceless %}
-        {% set label_attr = label_attr|merge({'class': label_attr.class|default('col-lg-2') ~ ' control-label'}) %}
-        {{ parent() }}
-    {% endapply %}
+    {% set label_attr = label_attr|merge({'class': label_attr.class|default('col-lg-2') ~ ' control-label'}) %}
+    {{ parent() }}
 {% endblock form_label %}
 
 {% block money_widget %}
-    {% apply spaceless %}
-        <div class="input-group">
-            <span class="input-group-addon">{{ money_pattern|replace({'{{ widget }}': ''}) }}</span>
-            {{ block('form_widget_simple') }}
-        </div>
-    {% endapply %}
+    <div class="input-group">
+        <span class="input-group-addon">{{ money_pattern|replace({'{{ widget }}': ''}) }}</span>
+        {{ block('form_widget_simple') }}
+    </div>
 {% endblock money_widget %}
 
 {% block percent_widget %}
-    {% apply spaceless %}
-        <div class="input-group">
-            <span class="input-group-addon">%</span>
-            {{ block('form_widget_simple') }}
-        </div>
-    {% endapply %}
+    <div class="input-group">
+        <span class="input-group-addon">%</span>
+        {{ block('form_widget_simple') }}
+    </div>
 {% endblock percent_widget %}
 
 {% block datetime_widget %}
-    {% apply spaceless %}
-        {% if widget == 'single_text' %}
-            {{ block('form_widget_simple') }}
-        {% else %}
-            <div class="form-group">
-                {{ form_widget(form.date) }}
-                {{ form_widget(form.time) }}
-            </div>
-        {% endif %}
-    {% endapply %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        <div class="form-group">
+            {{ form_widget(form.date) }}
+            {{ form_widget(form.time) }}
+        </div>
+    {% endif %}
 {% endblock datetime_widget %}
 
 {% block date_widget %}
-    {% apply spaceless %}
-        {% if widget == 'single_text' %}
-            {{ block('form_widget_simple') }}
-        {% else %}
-            {{ '{{ year }} / {{ month }} / {{ day }}'|replace({
-                '{{ year }}':  form_widget(form.year, {'attr': {'style': 'display: inline; width: 100px;'}}),
-                '{{ month }}': form_widget(form.month, {'attr': {'style': 'display: inline; width: 100px;'}}),
-                '{{ day }}':   form_widget(form.day, {'attr': {'style': 'display: inline; width: 100px;'}}),
-            })|raw }}
-        {% endif %}
-    {% endapply %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {{ '{{ year }} / {{ month }} / {{ day }}'|replace({
+            '{{ year }}':  form_widget(form.year, {'attr': {'style': 'display: inline; width: 100px;'}}),
+            '{{ month }}': form_widget(form.month, {'attr': {'style': 'display: inline; width: 100px;'}}),
+            '{{ day }}':   form_widget(form.day, {'attr': {'style': 'display: inline; width: 100px;'}}),
+        })|raw }}
+    {% endif %}
 {% endblock date_widget %}
 
 {% block time_widget %}
-    {% apply spaceless %}
-        {% if widget == 'single_text' %}
-            {{ block('form_widget_simple') }}
-        {% else %}
-            {% set vars = widget == 'text' ? { 'attr': { 'size': 1, 'style': 'width: 60px; display: inline;' }} : {} %}
-            &nbsp;{{ form_widget(form.hour, vars) }}{% if with_minutes %}:{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %} {{ form_widget(form.second, vars) }}{% endif %}
-        {% endif %}
-    {% endapply %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {% set vars = widget == 'text' ? { 'attr': { 'size': 1, 'style': 'width: 60px; display: inline;' }} : {} %}
+        &nbsp;{{ form_widget(form.hour, vars) }}{% if with_minutes %}:{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %} {{ form_widget(form.second, vars) }}{% endif %}
+    {% endif %}
 {% endblock time_widget %}
 
 {% block form_row %}
-    {% apply spaceless %}
-        <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
-            {{ form_label(form) }}
-            <div class="col-lg-10">
-                {{ form_widget(form) }}
-                {% for error in errors %}
-                    <span class="help-block form-error">
-                {{ error.messagePluralization is null
-                ? error.messageTemplate|trans(error.messageParameters, 'validators')
-                : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators') }}
-            </span>
-                {% endfor %}
-            </div>
+    <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
+        {{ form_label(form) }}
+        <div class="col-lg-10">
+            {{ form_widget(form) }}
+            {% for error in errors %}
+                <span class="help-block form-error">
+            {{ error.messagePluralization is null
+            ? error.messageTemplate|trans(error.messageParameters, 'validators')
+            : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators') }}
+        </span>
+            {% endfor %}
         </div>
-    {% endapply %}
+    </div>
 {% endblock form_row %}
 
 {% block sonata_media_type_widget %}

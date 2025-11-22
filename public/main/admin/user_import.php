@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -65,7 +66,7 @@ function validate_data($users, $checkUniqueEmail = false)
             }
             $usernames[$username] = 1;
             // 2.3. Check whether username is already occupied.
-            if (!UserManager::is_username_available($username)) {
+            if (!Container::getUserRepository()->isUsernameAvailable($username)) {
                 $user['message'] .= Display::return_message(get_lang('This login is not available'), 'warning');
                 $user['has_error'] = true;
             }

@@ -19,10 +19,7 @@ class PENSPlugin extends Plugin
      */
     public function __construct()
     {
-        $parameters = [
-        ];
-
-        parent::__construct($this->get_version(), $this->get_author(), $parameters);
+        parent::__construct('1.1', 'Guillaume Viguier-Just, Yannick Warnier');
 
         $this->errorMessages = [];
     }
@@ -113,17 +110,6 @@ class PENSPlugin extends Plugin
     }
 
     /**
-     * Copied and fixed from plugin.class.php
-     * Returns the "system" name of the plugin in lowercase letters.
-     *
-     * @return string
-     */
-    public function get_name()
-    {
-        return 'PENS';
-    }
-
-    /**
      * Get author(s).
      *
      * @return string
@@ -150,12 +136,9 @@ class PENSPlugin extends Plugin
      */
     public function get_info()
     {
-        $result = [];
-        $result['title'] = $this->get_name();
+        $result = parent::get_info();
+        $result['title'] = 'PENS';
         $result['comment'] = 'Provides support for the PENS course exchange standard. Read the readme.txt file in the plugin/Pens/ folder for a complete installation.';
-        $result['version'] = $this->get_version();
-        $result['author'] = $this->get_author();
-        $result['plugin_class'] = get_class($this);
         $result['is_course_plugin'] = false;
         $result['is_mail_plugin'] = false;
 

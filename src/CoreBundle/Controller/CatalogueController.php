@@ -560,6 +560,11 @@ class CatalogueController extends AbstractController
             return $this->json(['error' => 'Course or user not found'], 400);
         }
 
+        $isPrivileged = $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_SESSION_ADMIN');
+        if (!$course->getAllowSelfSignup() && !$isPrivileged) {
+            return $this->json(['error' => 'Self sign up not allowed for this course'], 403);
+        }
+
         $useAutoSession = 'true' === $settings->getSetting('catalog.course_subscription_in_user_s_session', true);
 
         if ($useAutoSession) {

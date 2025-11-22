@@ -153,11 +153,11 @@ foreach ($accessUrls as $accessUrl) {
                 } elseif ($name !== 'admin') {
                     try {
                         $userField->getter = new ReflectionMethod(
-                            '\Chamilo\UserBundle\Entity\User',
+                            User::class,
                             'get' . str_replace('_', '', ucfirst($name))
                         );
                         $userField->setter = new ReflectionMethod(
-                            '\Chamilo\UserBundle\Entity\User',
+                            User::class,
                             'set' . str_replace('_', '', ucfirst($name))
                         );
                     } catch (ReflectionException $exception) {

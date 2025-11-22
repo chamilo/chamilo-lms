@@ -113,7 +113,7 @@ $links = Database::store_result($result, 'ASSOC');
 foreach ($links as &$row) {
     $item_weight = $row['weight'];
     $sql = 'SELECT * FROM '.GradebookUtils::get_table_type_course($row['type']).'
-            WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
+            WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id'];
 
     $result = Database::query($sql);
     $resource_name = Database::fetch_array($result);

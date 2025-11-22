@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 // Build the form
@@ -11,7 +13,7 @@ $form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $user = UserManager::getRepository()->findUserByUsername($values['user']);
+    $user = Container::getUserRepository()->findByUsername($values['user']);
     if ($user) {
         UserManager::sendUserConfirmationMail($user);
     } else {

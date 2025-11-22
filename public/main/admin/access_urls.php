@@ -13,14 +13,13 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_global_admin_script();
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $translator = Container::$container->get('translator');;
 
@@ -79,13 +78,14 @@ if ($httpRequest->query->has('action')) {
 $parameters['sec_token'] = Security::get_token();
 
 // Checking if the admin is registered in all sites
-$url_string = '';
-foreach ($url_list as $u) {
-    if (!in_array($u->getId(), $my_user_url_list)) {
-        $url_string .= $u->getUrl() . '<br />';
+if (!api_is_admin_in_all_active_urls()) {
+    // Get the list of unregistered urls
+    $url_string = '';
+    foreach ($url_list as $u) {
+        if (!in_array($u->getId(), $my_user_url_list)) {
+            $url_string .= $u->getUrl() . '<br />';
+        }
     }
-}
-if (!empty($url_string)) {
     echo Display::return_message(
         get_lang('Admin user should be registered here') . '<br />' . $url_string,
         'warning',
@@ -169,6 +169,10 @@ if (api_get_multiple_access_url()) {
     $actions .= Display::url(
         Display::getMdiIcon('file-tree-outline', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage course categories')),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
+    );
+    $actions .= Display::url(
+        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign auth sources to users')),
+        "/access-url/auth-sources"
     );
 }
 

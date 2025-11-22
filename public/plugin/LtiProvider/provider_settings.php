@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +15,7 @@ api_block_anonymous_users(false);
 $plugin = LtiProviderPlugin::create();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'LtiProvider/';
 
-$request = Request::createFromGlobals();
+$request = Container::getRequest();
 $response = new Response();
 
 $em = Database::getManager();

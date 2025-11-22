@@ -121,7 +121,7 @@ class Career extends Model
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
         $form->addHeader($header);
         $form->addHidden('id', $id);
-        $form->addText('name', get_lang('Name'), true, ['size' => '70']);
+        $form->addText('title', get_lang('Title'), true, ['size' => '70']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -160,7 +160,7 @@ class Career extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('Required field'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -240,7 +240,7 @@ class Career extends Model
     {
         $career = new CareerEntity();
         $career
-            ->setTitle($params['name'])
+            ->setTitle($params['title'])
             ->setStatus((int) $params['status'])
             ->setDescription($params['description']);
 

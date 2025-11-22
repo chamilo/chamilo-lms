@@ -1,9 +1,15 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
  * Create new Services for the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
@@ -11,7 +17,8 @@ require_once '../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
 $em = Database::getManager();
-$users = UserManager::getRepository()->findAll();
+/** @var array<int, User> $users */
+$users = Container::getUserRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
@@ -24,10 +31,14 @@ api_protect_admin_script(true);
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
-//view
+// view
 $interbreadcrumb[] = [
-    'url' => 'list.php',
-    'name' => $plugin->get_lang('Configuration'),
+    'url' => api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php',
+    'name' => $plugin->get_lang('plugin_title'),
+];
+$interbreadcrumb[] = [
+    'url' => 'list_service.php',
+    'name' => $plugin->get_lang('Services'),
 ];
 
 $globalSettingsParams = $plugin->getGlobalParameters();
@@ -104,12 +115,12 @@ $form->addSelect(
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
-    (get_lang(
+    get_lang(
         'AddImage'
-    )),
+    ),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
-$form->addText('video_url', get_lang('Video URL'), false);
+$form->addText('video_url', get_lang('VideoUrl'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);
@@ -123,7 +134,8 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ServiceAdded'), 'success')
     );
 
-    header('Location: list.php');
+    header('Location: list_service.php');
+
     exit;
 }
 

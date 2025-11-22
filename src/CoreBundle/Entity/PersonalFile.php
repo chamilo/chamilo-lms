@@ -15,7 +15,10 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreatePersonalFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdatePersonalFileAction;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
@@ -37,9 +40,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreatePersonalFileAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -63,9 +66,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_USER')",
             validationContext: [
                 'groups' => ['Default', 'media_object_create', 'personal_file:write'],

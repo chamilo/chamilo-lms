@@ -19,9 +19,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ORM\Table(name: 'asset')]
 #[ORM\Entity]
 class Asset implements Stringable
@@ -54,24 +52,14 @@ class Asset implements Stringable
     #[ORM\Column(type: 'string', length: 255)]
     protected ?string $category = null;
 
-    /**
-     * @Vich\UploadableField(
-     *     mapping="assets",
-     *     fileNameProperty="title",
-     *     size="size",
-     *     mimeType="mimeType",
-     *     originalName="originalName",
-     *     dimensions="dimensions"
-     * )
-     */
-    //    #[Vich\UploadableField(
-    //        mapping: 'assets',
-    //        fileNameProperty: 'title',
-    //        size: 'size',
-    //        mimeType: 'mimeType',
-    //        originalName: 'originalName',
-    //        dimensions: 'dimensions'
-    //    )]
+    #[Vich\UploadableField(
+        mapping: 'assets',
+        fileNameProperty: 'title',
+        size: 'size',
+        mimeType: 'mimeType',
+        originalName: 'originalName',
+        dimensions: 'dimensions'
+    )]
     #[Assert\NotNull]
     protected File $file;
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
@@ -26,10 +28,13 @@ switch ($sale['product_type']) {
     case BuyCoursesPlugin::PRODUCT_TYPE_COURSE:
         $buyingCourse = true;
         $course = $plugin->getCourseInfo($sale['product_id']);
+
         break;
+
     case BuyCoursesPlugin::PRODUCT_TYPE_SESSION:
         $buyingSession = true;
         $session = $plugin->getSessionInfo($sale['product_id']);
+
         break;
 }
 
@@ -39,7 +44,7 @@ $paypalUsername = $paypalParams['username'];
 $paypalPassword = $paypalParams['password'];
 $paypalSignature = $paypalParams['signature'];
 
-require_once "paypalfunctions.php";
+require_once 'paypalfunctions.php';
 
 $form = new FormValidator(
     'success',
@@ -58,6 +63,7 @@ if ($form->validate()) {
         $plugin->cancelSale($sale['id']);
         unset($_SESSION['bc_sale_id']);
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
+
         exit;
     }
 
@@ -65,13 +71,14 @@ if ($form->validate()) {
 
     if ('Success' !== $confirmPayments['ACK']) {
         $erroMessage = vsprintf(
-            get_lang('An error occurred.'),
+            $plugin->get_lang('ErrorOccurred'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
         );
         Display::addFlash(
             Display::return_message($erroMessage, 'error', false)
         );
         header('Location: ../index.php');
+
         exit;
     }
 
@@ -86,51 +93,77 @@ if ($form->validate()) {
                     $plugin->getSubscriptionSuccessMessage($sale)
                 );
                 $plugin->storePayouts($sale['id']);
+
                 break;
             }
 
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
             );
+
             break;
+
         case 'Pending':
-            switch ($confirmPayments["PAYMENTINFO_0_PENDINGREASON"]) {
+            switch ($confirmPayments['PAYMENTINFO_0_PENDINGREASON']) {
                 case 'address':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAddress');
+
                     break;
+
                 case 'authorization':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByAuthorization');
+
                     break;
+
                 case 'echeck':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByEcheck');
+
                     break;
+
                 case 'intl':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByIntl');
+
                     break;
+
                 case 'multicurrency':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByMulticurrency');
+
                     break;
+
                 case 'order':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOrder');
+
                     break;
+
                 case 'paymentreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByPaymentReview');
+
                     break;
+
                 case 'regulatoryreview':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByRegulatoryReview');
+
                     break;
+
                 case 'unilateral':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUnilateral');
+
                     break;
+
                 case 'upgrade':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByUpgrade');
+
                     break;
+
                 case 'verify':
                     $purchaseStatus = $plugin->get_lang('PendingReasonByVerify');
+
                     break;
+
                 case 'other':
                 default:
                     $purchaseStatus = $plugin->get_lang('PendingReasonByOther');
+
                     break;
             }
 
@@ -141,16 +174,20 @@ if ($form->validate()) {
                     false
                 )
             );
+
             break;
+
         default:
             Display::addFlash(
                 Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
             );
+
             break;
     }
 
     unset($_SESSION['bc_sale_id']);
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+
     exit;
 }
 
@@ -171,10 +208,11 @@ if ('Success' !== $shippingDetails['ACK']) {
         Display::return_message($erroMessage, 'error', false)
     );
     header('Location: ../index.php');
+
     exit;
 }
 
-$interbreadcrumb[] = ["url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale')];
+$interbreadcrumb[] = ['url' => 'course_catalog.php', 'name' => $plugin->get_lang('CourseListOnSale')];
 
 $templateName = $plugin->get_lang('PaymentMethods');
 $tpl = new Template($templateName);

@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\PortfolioCategory;
 use Chamilo\CoreBundle\Entity\PortfolioComment;
 use Chamilo\CoreBundle\Entity\Tag;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 // Make sure we void the course context if we are in the social network section
 if (empty($_GET['cid'])) {
@@ -22,7 +21,7 @@ if (api_get_course_entity()) {
     api_protect_course_script(true);
 }
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 $action = $httpRequest->query->get('action', 'list');
 
 // It validates the management of categories will be only for admins

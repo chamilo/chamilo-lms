@@ -20,7 +20,6 @@ if (isset($_POST['display']) && null == $display) {
     $display = Security::remove_XSS($_POST['display']);
 }
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script
 src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>
 <script>

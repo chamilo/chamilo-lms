@@ -171,6 +171,7 @@ class PermissionFixtures extends Fixture implements FixtureGroupInterface, Depen
     public static function getRoles(): array
     {
         return [
+            'ROLE_ANONYMOUS' => 'ANO',
             'ROLE_INVITEE' => 'INV',
             'ROLE_STUDENT' => 'STU',
             'ROLE_TEACHER' => 'TEA',

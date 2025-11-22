@@ -308,9 +308,4 @@ class H5pImportPlugin extends Plugin
             $fs->remove($courseInfo['course_sys_path'].'/h5p');
         }
     }
-
-    public function get_name()
-    {
-        return 'H5pImport';
-    }
 }

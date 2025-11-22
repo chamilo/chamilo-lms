@@ -1,7 +1,7 @@
 {% autoescape false %}
 <div id="service" class="service">
     <div class="page-header">
-        <h2>{{ service.title }}</h2>
+        <h2>{{ service.name }}</h2>
     </div>
     <section id="service-info">
         <div class="panel panel-default">

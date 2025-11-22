@@ -48,26 +48,26 @@ class ImportCGlossaryAction
         }
 
         $data = [];
+        // include the first row (except if obviously column titles)
         if ('csv' === $fileType) {
             if (($handle = fopen($file->getPathname(), 'r')) !== false) {
-                $header = fgetcsv($handle, 0, ';');
-                while (($row = fgetcsv($handle, 0, ';')) !== false) {
+                while (($row = fgetcsv($handle, 0, ',')) !== false) {
                     $term = isset($row[0]) ? trim($row[0]) : '';
                     $definition = isset($row[1]) ? trim($row[1]) : '';
+                    if (('term' === $term || 'term' === substr($term, 3)) && 'definition' === $definition) {
+                        // Ignore the first row if it is the standard first row from glossary's CSV export.
+                        // Include the case where the 3-characters UTF-8 BOM precedes 'term'
+                        continue;
+                    }
                     $data[$term] = $definition;
                 }
                 fclose($handle);
             }
         } elseif ('xls' === $fileType) {
+            // include first row
             $spreadsheet = IOFactory::load($file->getPathname());
             $sheet = $spreadsheet->getActiveSheet();
-            $firstRow = true;
             foreach ($sheet->getRowIterator() as $row) {
-                if ($firstRow) {
-                    $firstRow = false;
-
-                    continue;
-                }
                 $cellIterator = $row->getCellIterator();
                 $cellIterator->setIterateOnlyExistingCells(false);
                 $rowData = [];
@@ -76,6 +76,10 @@ class ImportCGlossaryAction
                 }
                 $term = isset($rowData[0]) ? utf8_decode(trim($rowData[0])) : '';
                 $definition = isset($rowData[1]) ? utf8_decode(trim($rowData[1])) : '';
+                if ('term' === $term && 'definition' === $definition) {
+                    // Ignore the first row if it is the standard first row from glossary's XLS export
+                    continue;
+                }
                 $data[$term] = $definition;
             }
         } else {
@@ -104,8 +108,8 @@ class ImportCGlossaryAction
             foreach ($data as $termToUpdate => $descriptionToUpdate) {
                 // Check if the term already exists
                 $qb = $repo->getResourcesByCourse($course, $session)
-                    ->andWhere('resource.name = :name')
-                    ->setParameter('name', $termToUpdate)
+                    ->andWhere('resource.title = :title')
+                    ->setParameter('title', $termToUpdate)
                 ;
 
                 /** @var CGlossary $existingGlossaryTerm */
@@ -120,8 +124,8 @@ class ImportCGlossaryAction
 
         foreach ($data as $term => $description) {
             $qb = $repo->getResourcesByCourse($course, $session)
-                ->andWhere('resource.name = :name')
-                ->setParameter('name', $term)
+                ->andWhere('resource.title = :title')
+                ->setParameter('title', $term)
             ;
 
             /** @var CGlossary $existingNewGlossaryTerm */

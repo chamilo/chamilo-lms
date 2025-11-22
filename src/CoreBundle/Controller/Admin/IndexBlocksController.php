@@ -15,25 +15,29 @@ use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\AdminBlockDisplayedEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\PageCategoryRepository;
 use Chamilo\CoreBundle\Repository\PageRepository;
 use Chamilo\CoreBundle\Repository\PluginRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Plugin;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
-#[Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')")]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
 #[Route('/admin/index', name: 'admin_index_blocks')]
 class IndexBlocksController extends BaseController
 {
     private bool $isAdmin = false;
     private bool $isSessionAdmin = false;
-    private array $extAuthSource = [];
+    private bool $isLdapActive;
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -44,11 +48,10 @@ class IndexBlocksController extends BaseController
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly PluginRepository $pluginRepository,
         private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly AccessUrlRepository $accessUrlRepository,
+        AuthenticationConfigHelper $authConfigHelper,
     ) {
-        $this->extAuthSource = [
-            'extldap' => [],
-            'ldap' => [],
-        ];
+        $this->isLdapActive = $authConfigHelper->getLdapConfig()['enabled'];
     }
 
     public function __invoke(): JsonResponse
@@ -146,6 +149,13 @@ class IndexBlocksController extends BaseController
                 'editable' => false,
                 'items' => $this->getItemsPlugins(),
             ];
+
+            /* Health check */
+            $json['health_check'] = [
+                'id' => 'block-admin-health-check',
+                'editable' => false,
+                'items' => $this->getItemsHealthCheck(),
+            ];
         }
 
         /* Sessions */
@@ -213,7 +223,7 @@ class IndexBlocksController extends BaseController
                 'label' => $this->translator->trans('Anonymise users list'),
             ];
 
-            if (\count($this->extAuthSource['extldap']) > 0) {
+            if ($this->isLdapActive) {
                 $items[] = [
                     'class' => 'item-user-ldap-list',
                     'url' => '/main/admin/ldap_users_list.php',
@@ -385,7 +395,7 @@ class IndexBlocksController extends BaseController
             ];
         }
 
-        if (\count($this->extAuthSource['ldap']) > 0) {
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-course-subscription-ldap',
                 'url' => '/main/admin/ldap_import_students.php',
@@ -814,13 +824,15 @@ class IndexBlocksController extends BaseController
             'url' => '/main/session/session_import_drh.php',
             'label' => $this->translator->trans('Import list of HR directors into sessions'),
         ];
-        if (\count($this->extAuthSource['ldap']) > 0) {
+
+        if ($this->isLdapActive) {
             $items[] = [
                 'class' => 'item-session-subscription-ldap-import',
                 'url' => '/main/admin/ldap_import_students_to_session.php',
                 'label' => $this->translator->trans('Import LDAP users into a session'),
             ];
         }
+
         $items[] = [
             'class' => 'item-session-export',
             'url' => '/main/session/session_export.php',
@@ -883,25 +895,95 @@ class IndexBlocksController extends BaseController
         $plugins = $this->pluginRepository->getInstalledPlugins();
 
         foreach ($plugins as $plugin) {
+            // getPluginInfo() might fail to build the plugin object; never assume 'obj' exists
             $pluginInfo = $appPlugin->getPluginInfo($plugin->getTitle());
 
-            /** @var Plugin $objPlugin */
-            $objPlugin = $pluginInfo['obj'];
+            // Normalize/fallbacks
+            if (!\is_array($pluginInfo)) {
+                // Defensive: unexpected structure → skip
+                error_log(\sprintf('[admin:index] Plugin "%s" has no pluginInfo array, skipping.', $plugin->getTitle()));
+
+                continue;
+            }
+
+            /** @var Plugin|null $objPlugin */
+            $objPlugin = $pluginInfo['obj'] ?? null;
+
+            if (!$objPlugin instanceof Plugin) {
+                // Defensive: plugin could not be instantiated (e.g. throws in constructor)
+                error_log(\sprintf('[admin:index] Plugin "%s" has no valid "obj" (instance of Plugin), skipping.', $plugin->getTitle()));
+
+                continue;
+            }
+
+            // Per-URL configuration
             $pluginInUrl = $plugin->getOrCreatePluginConfiguration($accessUrl);
-            $configuration = $pluginInUrl->getConfiguration();
+            $configuration = $pluginInUrl->getConfiguration() ?: [];
 
-            if ($accessUrl->getId() !== $pluginInUrl->getUrl()?->getId()) {
+            if (!$configuration || !isset($configuration['regions'])) {
                 continue;
             }
 
-            if (!\in_array('menu_administrator', $configuration['regions'] ?? [])) {
+            // Only show plugins that declare the admin menu region
+            if (!\in_array('menu_administrator', $configuration['regions'], true)) {
                 continue;
             }
+
+            // Build admin URL defensively (some plugins may throw when building URLs)
+            try {
+                $adminUrl = $objPlugin->getAdminUrl();
+            } catch (Throwable $e) {
+                error_log(\sprintf('[admin:index] Plugin "%s" getAdminUrl() failed: %s', $plugin->getTitle(), $e->getMessage()));
+
+                continue;
+            }
+
+            // Label fallback to DB title if pluginInfo misses 'title'
+            $label = (string) ($pluginInfo['title'] ?? $plugin->getTitle());
 
             $items[] = [
                 'class' => 'item-plugin-'.strtolower($plugin->getTitle()),
-                'url' => $objPlugin->getAdminUrl(),
-                'label' => $pluginInfo['title'],
+                'url' => $adminUrl,
+                'label' => $label,
+            ];
+        }
+
+        return $items;
+    }
+
+    private function getItemsHealthCheck(): array
+    {
+        $items = [];
+
+        // Check if dsn or email is defined :
+        $mailDsn = $this->settingsManager->getSetting('mail.mailer_dsn', true);
+        $mailSender = $this->settingsManager->getSetting('mail.mailer_from_email', true);
+        if ((empty($mailDsn) || 'null://null' == $mailDsn) && empty($mailSender)) {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-error',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings need to be configured'),
+            ];
+        } else {
+            $items[] = [
+                'className' => 'item-health-check-mail-settings text-success',
+                'url' => '/admin/settings/mail',
+                'label' => $this->translator->trans('E-mail settings are OK'),
+            ];
+        }
+
+        // Check if the admin user has access to all URLs
+        if (api_is_admin_in_all_active_urls()) {
+            $items[] = [
+                'className' => 'item-health-check-admin-urls text-success',
+                'url' => '/main/admin/access_urls.php',
+                'label' => $this->translator->trans('All URLs have at least one admin assigned'),
+            ];
+        } else {
+            $items[] = [
+                'className' => 'item-health-check-admin-urls text-error',
+                'url' => '/main/admin/access_url_edit_users_to_url.php',
+                'label' => $this->translator->trans('At least one URL has no admin assigned'),
             ];
         }
 

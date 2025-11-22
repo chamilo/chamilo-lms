@@ -33,27 +33,27 @@ const isStudentView = computed({
     try {
       const resp = await permissionService.toogleStudentView()
       const mode = (typeof resp === "string" ? resp : resp?.data || "").toString().toLowerCase()
-      const desired = mode.includes("student")
+      const desired = mode === "studentview"
 
-      platformConfigStore.studentView = desired
+      platformConfigStore.setStudentViewEnabled(desired)
       emit("change", desired)
     } catch (e) {
       console.warn("[SVB] toggle failed", e)
-      const desired = !platformConfigStore.isStudentViewActive
-      platformConfigStore.studentView = desired
-      emit("change", desired)
+      platformConfigStore.setStudentViewEnabled(!platformConfigStore.isStudentViewActive)
+      emit("change", platformConfigStore.isStudentViewActive)
     }
   },
   get() {
-    return platformConfigStore.isStudentViewActive
+    return !!platformConfigStore.isStudentViewActive
   },
 })
 
-const showButton = computed(() =>
-  securityStore.isAuthenticated &&
-  cidReqStore.course &&
-  (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
-  platformConfigStore.getSetting("course.student_view_enabled") === "true"
+const showButton = computed(
+  () =>
+    securityStore.isAuthenticated &&
+    cidReqStore.course &&
+    (securityStore.isCourseAdmin || securityStore.isAdmin || isCoach.value) &&
+    platformConfigStore.getSetting("course.student_view_enabled") === "true",
 )
 
 const windowSize = ref(window.innerWidth)

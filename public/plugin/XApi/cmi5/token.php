@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$request = HttpRequest::createFromGlobals();
+$request = Container::getRequest();
 
 $response = new JsonResponse([], Response::HTTP_METHOD_NOT_ALLOWED);
 

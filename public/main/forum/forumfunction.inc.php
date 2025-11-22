@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
@@ -944,10 +945,11 @@ function getLastPostOfThread(int $threadId): array
 function returnVisibleInvisibleIcon(
     string $content,
     int $id,
-    int $current_visibility_status,
+    int|bool $current_visibility_status,
     array $additional_url_parameters = []
 ): string
 {
+    $current_visibility_status = (int) $current_visibility_status;
     $html = '';
 
     if (1 == $current_visibility_status) {
@@ -1276,18 +1278,25 @@ function getPosts(
 {
     $em = Database::getManager();
 
+    $orderDirection = strtoupper($orderDirection);
+    if (!in_array($orderDirection, ['ASC', 'DESC'], true)) {
+        $orderDirection = 'ASC';
+    }
+
+    // Build visibility criteria based on permissions
     if (api_is_allowed_to_edit(false, true)) {
+        // Entity maps 'visible' as boolean; keeping legacy behavior as requested.
         $visibleCriteria = Criteria::expr()->neq('visible', 2);
     } else {
         $visibleCriteria = Criteria::expr()->eq('visible', 1);
     }
 
+    $threadRef = $em->getReference(CForumThread::class, $threadId);
+
     $criteria = Criteria::create();
     $criteria
-        ->where(Criteria::expr()->eq('thread', $threadId))
-        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
-        ->andWhere($visibleCriteria)
-    ;
+        ->where(Criteria::expr()->eq('thread', $threadRef))
+        ->andWhere($visibleCriteria);
 
     $groupId = api_get_group_id();
     $filterModerated = true;
@@ -1306,7 +1315,9 @@ function getPosts(
     }
 
     if ($recursive) {
-        $criteria->andWhere(Criteria::expr()->eq('postParent', $postId));
+        // Compare association with entity reference when filtering by parent
+        $parentRef = $postId ? $em->getReference(CForumPost::class, $postId) : null;
+        $criteria->andWhere(Criteria::expr()->eq('postParent', $parentRef));
     }
 
     $qb = $em->getRepository(CForumPost::class)->createQueryBuilder('p');
@@ -1314,16 +1325,23 @@ function getPosts(
         ->addCriteria($criteria)
         ->addOrderBy('p.iid', $orderDirection);
 
+    // Apply moderation filter if forum is moderated and user is not editor
     if ($filterModerated && 1 == $forum->isModerated()) {
         if (!api_is_allowed_to_edit(false, true)) {
             $userId = api_get_user_id();
+
+            // instead of a non-existent scalar field like p.posterId
             $qb->andWhere(
-                'p.status = 1 OR
-                    (p.status = '.CForumPost::STATUS_WAITING_MODERATION." AND p.posterId = $userId) OR
-                    (p.status = ".CForumPost::STATUS_REJECTED." AND p.posterId = $userId) OR
-                    (p.status IS NULL AND p.posterId = $userId)
-                    "
-            );
+                '(p.status = :st_valid)
+                 OR (p.status IN (:st_own) AND IDENTITY(p.user) = :uid)
+                 OR (p.status IS NULL AND IDENTITY(p.user) = :uid)'
+            )
+                ->setParameter('st_valid', CForumPost::STATUS_VALIDATED)
+                ->setParameter('st_own', [
+                    CForumPost::STATUS_WAITING_MODERATION,
+                    CForumPost::STATUS_REJECTED,
+                ])
+                ->setParameter('uid', $userId);
         }
     }
 
@@ -1340,8 +1358,6 @@ function getPosts(
             'post_text' => $post->getPostText(),
             'thread_id' => $post->getThread() ? $post->getThread()->getIid() : 0,
             'forum_id' => $post->getForum()->getIid(),
-            //'poster_id' => $post->getPosterId(),
-            //'poster_name' => $post->getPosterName(),
             'post_date' => $post->getPostDate(),
             'post_notification' => $post->getPostNotification(),
             'post_parent_id' => $post->getPostParent() ? $post->getPostParent()->getIid() : 0,
@@ -1351,6 +1367,7 @@ function getPosts(
             'entity' => $post,
         ];
 
+        // Fill user info if available
         $user = $post->getUser();
         if ($user) {
             $postInfo['user_id'] = $user->getId();
@@ -1366,6 +1383,8 @@ function getPosts(
         if (!$recursive) {
             continue;
         }
+
+        // Recursive fetch of children when requested
         $list = array_merge(
             $list,
             getPosts(
@@ -1394,51 +1413,82 @@ function getPosts(
  *
  * @version October 2008, dokeos 1.8
  */
-function get_thread_users_details(int $thread_id)
+function get_thread_users_details(int $threadId)
 {
     $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_users = Database::get_main_table(TABLE_MAIN_USER);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $course_id = api_get_course_int_id();
+    $courseId = (int) api_get_course_int_id();
+    $threadId = (int) $threadId;
+    $sessionId = (int) api_get_session_id();
 
-    $is_western_name_order = api_is_western_name_order();
-    if ($is_western_name_order) {
-        $orderby = 'ORDER BY user.firstname, user.lastname ';
+    $isWesternNameOrder = api_is_western_name_order();
+    $orderBy = $isWesternNameOrder
+        ? 'ORDER BY user.firstname, user.lastname'
+        : 'ORDER BY user.lastname, user.firstname';
+
+    if ($sessionId > 0) {
+        // We are inside a session: use session_rel_course_rel_user
+        $session = api_get_session_entity();
+        $coachIds = [];
+
+        if ($session instanceof SessionEntity) {
+            // Collect general coaches and session admins to exclude them
+            $generalCoachesId = $session
+                ->getGeneralCoaches()
+                ->map(fn (User $coach) => $coach->getId())
+                ->getValues();
+
+            $sessionAdminsId = $session
+                ->getSessionAdmins()
+                ->map(fn (User $admin) => $admin->getId())
+                ->getValues();
+
+            $coachIds = array_unique(array_merge($generalCoachesId, $sessionAdminsId));
+        }
+
+        $avoidClause = '';
+        if (!empty($coachIds)) {
+            // Avoid empty NOT IN () clause
+            $ids = implode(',', array_map('intval', $coachIds));
+            $avoidClause = "AND session_rel.user_id NOT IN ($ids)";
+        }
+
+        $sql = "
+            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
+            FROM $t_posts p
+            INNER JOIN $t_users user
+                ON p.poster_id = user.id
+            INNER JOIN $t_session_rel_user session_rel
+                ON session_rel.user_id = user.id
+            WHERE
+                p.thread_id = $threadId
+                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
+                AND session_rel.c_id = $courseId
+                AND session_rel.session_id = $sessionId
+                AND session_rel.status = ".SessionEntity::STUDENT."
+                $avoidClause
+            $orderBy
+        ";
     } else {
-        $orderby = 'ORDER BY user.lastname, user.firstname';
-    }
-
-    $session = api_get_session_entity();
-
-    if ($session) {
-        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
-        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
-        //not showing coaches
-        $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
-                FROM $t_posts p, $t_users user, $t_session_rel_user session_rel_user_rel_course
-                WHERE
-                    p.poster_id = user.id AND
-                    user.id = session_rel_user_rel_course.user_id AND
-                    session_rel_user_rel_course.status = ".SessionEntity::STUDENT." AND
-                    session_rel_user_rel_course.user_id NOT IN ($user_to_avoid) AND
-                    p.thread_id = $thread_id AND
-                    session_id = ".api_get_session_id()." AND
-                    p.c_id = $course_id AND
-                    session_rel_user_rel_course.c_id = $course_id $orderby ";
-    } else {
-        $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, thread_id
-                FROM $t_posts p, $t_users user, $t_course_user course_user
-                WHERE
-                    p.poster_id = user.id
-                    AND user.id = course_user.user_id
-                    AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    AND p.thread_id = $thread_id
-                    AND course_user.status != '1' AND
-                    course_user.c_id = $course_id $orderby";
+        // No session: use course_rel_user
+        $sql = "
+            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
+            FROM $t_posts p
+            INNER JOIN $t_users user
+                ON p.poster_id = user.id
+            INNER JOIN $t_course_user course_user
+                ON course_user.user_id = user.id
+            WHERE
+                p.thread_id = $threadId
+                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
+                AND course_user.c_id = $courseId
+                AND course_user.status = ".CourseRelUser::STUDENT."
+                AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+            $orderBy
+        ";
     }
 
     return Database::query($sql);
@@ -1488,8 +1538,7 @@ function get_thread_users_qualify(int $thread_id)
                     AND post.thread_id = $thread_id
                     AND scu.session_id = $sessionId
                     AND scu.c_id = $course_id AND
-                    qualify.c_id = $course_id AND
-                    post.c_id = $course_id
+                    qualify.c_id = $course_id
                 $orderby ";
     } else {
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
@@ -1507,7 +1556,6 @@ function get_thread_users_qualify(int $thread_id)
                      AND course_user.status not in('1')
                      AND course_user.c_id = $course_id
                      AND qualify.c_id = $course_id
-                     AND post.c_id = $course_id
                  $orderby ";
     }
 
@@ -1526,7 +1574,7 @@ function get_thread_users_qualify(int $thread_id)
  *
  * @version oct 2008, dokeos 1.8
  */
-function get_thread_users_not_qualify($thread_id)
+function get_thread_users_not_qualify(int $thread_id)
 {
     $t_posts = Database::get_course_table(TABLE_FORUM_POST);
     $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
@@ -1573,7 +1621,7 @@ function get_thread_users_not_qualify($thread_id)
                     AND session_rel_user_rel_course.user_id NOT IN ($user_to_avoid)
                     AND post.thread_id = ".(int) $thread_id.'
                     AND session_id = '.api_get_session_id()."
-                    AND session_rel_user_rel_course.c_id = $course_id AND post.c_id = $course_id $orderby ";
+                    AND session_rel_user_rel_course.c_id = $course_id $orderby ";
     } else {
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post, $t_users user,$t_course_user course_user
@@ -1583,7 +1631,7 @@ function get_thread_users_not_qualify($thread_id)
                 AND course_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                 AND post.thread_id = '.(int) $thread_id."
                 AND course_user.status not in('1')
-                AND course_user.c_id = $course_id AND post.c_id = $course_id  $orderby";
+                AND course_user.c_id = $course_id $orderby";
     }
 
     return Database::query($sql);
@@ -2005,17 +2053,6 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
         );
     }
 
-    $iframe = null;
-    if ($showPreview) {
-        if ('newthread' !== $action && !empty($threadId)) {
-            $iframe = '<iframe style="border: 1px solid black"
-            src="'.api_get_path(WEB_CODE_PATH).'forum/iframe_thread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'#'.$postId.'" width="100%"></iframe>';
-        }
-        if (!empty($iframe)) {
-            $form->addElement('label', get_lang('Thread'), $iframe);
-        }
-    }
-
     if (in_array($action, ['quote', 'replymessage'])) {
         $form->addFile('user_upload[]', get_lang('Attachment'));
         $form->addButton(
@@ -2110,6 +2147,11 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
         );
     }
 
+    if ($showPreview && 'newthread' !== $action && !empty($threadId)) {
+        $previewHtml = render_thread_preview_html((int) $forumId, (int) $threadId, (int) $postId, 20);
+        $form->addElement('html', '<div class="mt-4">'.$previewHtml.'</div>');
+    }
+
     // Validation or display
     if ($form->validate()) {
         $check = Security::check_token('post');
@@ -2200,6 +2242,102 @@ function show_add_post_form(CForum $forum, CForumThread $thread, CForumPost $pos
 
         return $form;
     }
+}
+
+/**
+ * Build a lightweight Tailwind-based preview for a thread (no iframe).
+ * Security: keep XSS protection as in the original iframe.
+ */
+function render_thread_preview_html(
+    int $forumId,
+    int $threadId,
+    int $highlightPostId = 0,
+    int $limit = 20,
+    string $heightClass = 'h-72'
+): string {
+    $tablePosts = Database::get_course_table(TABLE_FORUM_POST); // c_forum_post
+    $tableUsers = Database::get_main_table(TABLE_MAIN_USER);    // user
+
+    $sql = "SELECT
+                p.iid,
+                p.post_date,
+                p.title      AS post_title,
+                p.post_text,
+                u.id         AS user_id,
+                u.username,
+                u.firstname,
+                u.lastname
+            FROM $tablePosts p
+            INNER JOIN $tableUsers u ON u.id = p.poster_id
+            WHERE p.thread_id = ".(int)$threadId."
+              AND p.visible = 1
+              AND (p.status IS NULL OR p.status = ".(int) CForumPost::STATUS_VALIDATED.")
+            ORDER BY p.post_date ASC
+            LIMIT ".(int)$limit;
+
+    $res  = Database::query($sql);
+    $rows = [];
+    while ($r = Database::fetch_array($res)) {
+        $rows[] = $r;
+    }
+
+    ob_start(); ?>
+    <div class="mt-6 w-full">
+        <div
+            class="forum-preview <?php echo $heightClass ?> overflow-y-auto border border-gray-25 rounded-xl p-3 bg-white"
+            role="region"
+            aria-label="<?php echo get_lang('Discussion thread'); ?>"
+        >
+            <div class="sticky top-0 z-10 bg-white pb-2 text-gray-90 font-bold shadow-[0_1px_0_0_#e4e9ed]">
+                <?php echo get_lang('Discussion thread'); ?>
+            </div>
+
+            <?php if (empty($rows)): ?>
+                <div class="text-gray-50 text-body-2 mt-2"><?php echo get_lang('No posts yet'); ?></div>
+            <?php else: foreach ($rows as $row):
+                $postId  = (int) $row['iid'];
+                $isFocus = $highlightPostId && $postId === (int) $highlightPostId;
+
+                // Compute display name (fallback to username)
+                $isAnon      = ((int)$row['user_id'] === (int)\Chamilo\CoreBundle\Entity\User::ANONYMOUS);
+                $displayName = $isAnon
+                    ? get_lang('Anonymous')
+                    : (api_get_person_name($row['firstname'], $row['lastname']) ?: $row['username']);
+
+                $userTitle = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
+                ?>
+                <article id="post-<?php echo $postId ?>"
+                         class="mb-2 border border-gray-25 rounded-lg p-3 <?php echo $isFocus ? 'bg-gray-15 ring-1 ring-primary' : 'bg-white' ?>">
+                    <div class="text-caption text-gray-50" title="<?php echo $userTitle ?>">
+                        <?php echo Security::remove_XSS($displayName) ?> • <?php echo api_convert_and_format_date($row['post_date']) ?>
+                    </div>
+
+                    <div class="font-bold mt-1 mb-1 text-gray-90">
+                        <?php echo Security::remove_XSS($row['post_title']) ?>
+                    </div>
+
+                    <div class="text-body-2 leading-4">
+                        <?php echo Security::remove_XSS($row['post_text'], STUDENT) ?>
+                    </div>
+                </article>
+            <?php endforeach; endif; ?>
+        </div>
+
+        <div class="mt-2">
+            <a class="text-body-2 underline text-primary"
+               href="<?php echo api_get_path(WEB_CODE_PATH) . 'forum/viewthread.php?' . api_get_cidreq()
+               . '&forum='.(int)$forumId.'&thread='.(int)$threadId ?>">
+                <?php echo get_lang('View full thread') ?>
+            </a>
+        </div>
+    </div>
+    <?php
+    if ($highlightPostId) {
+        // Try to bring the highlighted post into view.
+        echo '<script>try{document.getElementById("post-'.$highlightPostId.'")?.scrollIntoView({behavior:"instant",block:"start"});}catch(e){}</script>';
+    }
+
+    return (string) ob_get_clean();
 }
 
 function newThread(CForum $forum, $form_values = '', $showPreview = true)
@@ -2500,8 +2638,8 @@ function saveThreadScore(
         $row = Database::fetch_array($result);
 
         if (0 == $row[0]) {
-            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time,session_id)
-                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."','".$session_id."')";
+            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time)
+                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."')";
             Database::query($sql);
 
             return 'insert';
@@ -2571,7 +2709,7 @@ function showQualify($option, $user_id, $thread_id)
             break;
         case 2:
             $sql = "SELECT thread_qualify_max FROM $table_threads
-                    WHERE c_id = $course_id AND iid=".$thread_id;
+                    WHERE iid=".$thread_id;
 
             break;
     }
@@ -2679,8 +2817,8 @@ function saveThreadScoreHistory(
         $row = Database::fetch_array($rs);
 
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time,session_id)
-                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."','".$row[1]."','')";
+        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time)
+                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."')";
         Database::query($sql);
     }
 }
@@ -2711,7 +2849,6 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
             WHERE
                 c_id = $course_id AND
                 thread_id = $threadId AND
-                session_id = $sessionId AND
                 qualify_user_id = $currentUserId AND
                 user_id = $userId
             ";
@@ -3692,12 +3829,12 @@ function store_move_thread($values)
 
     // Change the thread table: Setting the forum_id to the new forum.
     $sql = "UPDATE $table_threads SET forum_id = $forumId
-            WHERE c_id = $courseId AND iid = $threadId";
+            WHERE iid = $threadId";
     Database::query($sql);
 
     // Changing all the posts of the thread: setting the forum_id to the new forum.
     $sql = "UPDATE $table_posts SET forum_id = $forumId
-            WHERE c_id = $courseId AND thread_id= $threadId";
+            WHERE thread_id= $threadId";
     Database::query($sql);
 
     // Fix group id, if forum is moved to a different group
@@ -4423,9 +4560,7 @@ function count_number_of_post_in_thread($thread_id)
         return 0;
     }
     $sql = "SELECT count(*) count FROM $table_posts
-            WHERE
-                c_id = $course_id AND
-                thread_id='".(int) $thread_id."' ";
+            WHERE thread_id='".(int) $thread_id."' ";
     $result = Database::query($sql);
 
     $count = 0;
@@ -4514,9 +4649,7 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     $sql = "SELECT *, user.id as user_id FROM $table_posts posts
             LEFT JOIN $table_users user
             ON posts.poster_id = user.id
-            WHERE
-                posts.c_id = $course_id AND
-                posts.thread_id='$thread_id' AND
+            WHERE posts.thread_id='$thread_id' AND
                 posts.poster_id='$user_id'
             ORDER BY posts.iid ASC";
 
@@ -4525,12 +4658,10 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     while ($row = Database::fetch_array($result)) {
         $row['status'] = '1';
         $post_list[] = $row;
-        $sql = "SELECT * FROM $table_posts posts
+        $sql = "SELECT *, users.id as user_id FROM $table_posts posts
                 LEFT JOIN $table_users users
                 ON (posts.poster_id=users.id)
-                WHERE
-                    posts.c_id = $course_id AND
-                    posts.thread_id='$thread_id'
+                WHERE posts.thread_id='$thread_id'
                     AND posts.post_parent_id='".$row['iid']."'
                 ORDER BY posts.iid ASC";
         $result2 = Database::query($sql);
@@ -4664,9 +4795,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
     $sql = "SELECT * FROM $table_posts posts
             LEFT JOIN $table_users users
                 ON posts.poster_id=users.id
-            WHERE
-                posts.c_id = $courseId AND
-                posts.thread_id='".Database::escape_string($thread_id)."' AND
+            WHERE posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
             ORDER BY posts.post_id DESC LIMIT $limit ";
     $result = Database::query($sql);
@@ -5167,28 +5296,75 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
  *
  * @return bool
  */
-function postIsEditableByStudent($forum, $post)
+/**
+ * Student editability guard that accepts either an entity or the array shape used in views.
+ *
+ * @param CForum              $forum
+ * @param CForumPost|array    $post
+ */
+function postIsEditableByStudent(CForum $forum, $post): bool
 {
+    // Normalize $post to an entity
+    /** @var CForumPost|null $entity */
+    $entity = null;
+
+    if ($post instanceof CForumPost) {
+        $entity = $post;
+    } elseif (is_array($post)) {
+        // Prefer the embedded entity from getPosts()
+        if (isset($post['entity']) && $post['entity'] instanceof CForumPost) {
+            $entity = $post['entity'];
+        } else {
+            // Fallback: fetch by id if present in the array
+            $postId = $post['post_id'] ?? $post['iid'] ?? null;
+            if ($postId) {
+                $em = Database::getManager();
+                $entity = $em->getRepository(CForumPost::class)->find($postId);
+            }
+        }
+    }
+
+    // If we still don't have a valid entity, be conservative: deny student edit
+    if (!$entity instanceof CForumPost) {
+        return false;
+    }
+
+    // Admins/teachers can always edit
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
 
-    if (1 == $forum->isModerated()) {
-        if (null === $post->getStatus()) {
-            return true;
-        } else {
-            return in_array(
-                $post->getStatus(),
-                [
-                    CForumPost::STATUS_WAITING_MODERATION,
-                    CForumPost::STATUS_REJECTED,
-                ]
-            );
-        }
+    $isModerated = (bool) $forum->isModerated();
+    $userId      = (int) api_get_user_id();
+    $ownerId     = $entity->getUser() ? (int) $entity->getUser()->getId() : 0;
+    $isOwner     = ($ownerId === $userId);
+    $status      = $entity->getStatus();
+
+    // Unmoderated forum: student can edit only own posts
+    if (!$isModerated) {
+        return $isOwner;
     }
 
-    return true;
+    // editable by owner when status is NULL or WAITING or REJECTED.
+    if ($isOwner) {
+        if ($status === null) {
+            return true;
+        }
+
+        return in_array(
+            $status,
+            [
+                CForumPost::STATUS_WAITING_MODERATION,
+                CForumPost::STATUS_REJECTED,
+            ],
+            true
+        );
+    }
+
+    // Not owner and not a teacher/admin
+    return false;
 }
+
 
 /**
  * @return bool

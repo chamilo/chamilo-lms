@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -23,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  * - quoting a message.
  *
  * @Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ *
  * @Copyright Ghent University
  * @Copyright Patrick Cool
  */
@@ -107,16 +110,19 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $userId = api_get_user_id();
 
 $repo = Container::getForumRepository();
+
 /** @var CForum $forum */
 $forum = $repo->find($forumId);
 
 $repoThread = Container::getForumThreadRepository();
+
 /** @var CForumThread $thread */
 $thread = $repoThread->find($_GET['thread']);
 
 $category = $forum->getForumCategory();
 
 $postRepo = Container::getForumPostRepository();
+
 /** @var CForumPost $post */
 $post = $postRepo->find($_GET['post']);
 
@@ -176,7 +182,7 @@ if ('group' === $origin && $group_id) {
         'name' => prepare4display($forum->getTitle()),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) ($_GET['thread']),
+        'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.(int) $_GET['thread'],
         'name' => prepare4display($thread->getTitle()),
     ];
     $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
@@ -185,19 +191,59 @@ if ('group' === $origin && $group_id) {
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
-$htmlHeadXtra[] = <<<JS
-    <script>
-    $(function() {
-        $('#reply-add-attachment').on('click', function(e) {
-            e.preventDefault();
-            var newInputFile = $('<input>', {
-                type: 'file',
-                name: 'user_upload[]'
-            });
-            $('[name="user_upload[]"]').parent().append(newInputFile);
-        })
+$htmlHeadXtra[] = <<<'JS'
+<script>
+jQuery(function ($) {
+    // Enhance attachment inputs layout (stack vertically)
+    $('input[type="file"][name="user_upload[]"]').each(function () {
+        var $input = $(this);
+        $input.addClass('ch-attachment-input');
     });
-    </script>
+
+    // Enhance "Annexe" / add attachment trigger
+    var $addAttachment = $('#reply-add-attachment');
+    if ($addAttachment.length) {
+        // Force link/button-like style while keeping existing semantics
+        $addAttachment.addClass('ch-attachment-add');
+        $addAttachment.attr('role', 'button');
+        $addAttachment.attr('tabindex', '0');
+
+        // Add icon only if none is present
+        if (!$addAttachment.find('.mdi, .fa').length) {
+            $addAttachment.prepend('<span class="mdi mdi-paperclip" aria-hidden="true"></span> ');
+        }
+
+        var addAttachmentInput = function () {
+            var $lastInput = $('input[type="file"][name="user_upload[]"]').last();
+            if (!$lastInput.length) {
+                return;
+            }
+
+            var $container = $lastInput.parent();
+            var $newInput = $('<input>', {
+                type: 'file',
+                name: 'user_upload[]',
+                class: 'ch-attachment-input'
+            });
+
+            $container.append($newInput);
+        };
+
+        // Click and keyboard activation
+        $addAttachment.on('click', function (e) {
+            e.preventDefault();
+            addAttachmentInput();
+        });
+
+        $addAttachment.on('keypress', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                addAttachmentInput();
+            }
+        });
+    }
+});
+</script>
 JS;
 
 /* Is the user allowed here? */
@@ -209,20 +255,20 @@ JS;
 // 4. if editing of replies is not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
-if (!api_is_allowed_to_create_course() &&
-    (
-        (false === $categoryIsVisible) ||
-        false === $forumIsVisible
+if (!api_is_allowed_to_create_course()
+    && (
+        (false === $categoryIsVisible)
+        || false === $forumIsVisible
     ) && (!api_is_course_admin())
 ) {
     api_not_allowed(true);
 }
 
-if (!api_is_allowed_to_edit(null, true) &&
-    (
-        ($category->getLocked()) ||
-        0 != $forum->getLocked() ||
-        0 != $thread->getLocked()
+if (!api_is_allowed_to_edit(null, true)
+    && (
+        $category->getLocked()
+        || 0 != $forum->getLocked()
+        || 0 != $thread->getLocked()
     )
 ) {
     api_not_allowed(true);
@@ -234,9 +280,9 @@ if (!$userId && 0 == $forum->getAllowAnonymous()) {
 
 $group_id = api_get_group_id();
 
-if (!api_is_allowed_to_edit(null, true) &&
-    0 == $forum->getAllowEdit() &&
-    !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)
+if (!api_is_allowed_to_edit(null, true)
+    && 0 == $forum->getAllowEdit()
+    && !GroupManager::isTutorOfGroup(api_get_user_id(), $groupEntity)
 ) {
     api_not_allowed(true);
 }
@@ -246,7 +292,7 @@ Display::display_header();
 // Action links
 if ('learnpath' !== $origin) {
     $actions = '';
-    //$actions .= '<span style="float:right;">'.search_link().'</span>';
+    // $actions .= '<span style="float:right;">'.search_link().'</span>';
     if ('group' === $origin) {
         $actions .= '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Groups')).
@@ -263,8 +309,7 @@ if ('learnpath' !== $origin) {
 }
 
 /* Display Forum Category and the Forum information */
-/*New display forum div*/
-/*New display forum div*/
+/* New display forum div */
 echo '<div class="forum_title">';
 echo '<h1>';
 echo Display::url(

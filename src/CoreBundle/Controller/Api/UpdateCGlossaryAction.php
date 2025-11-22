@@ -23,7 +23,7 @@ class UpdateCGlossaryAction extends BaseResourceFileAction
         $description = $data['description'];
         $parentResourceNodeId = $data['parentResourceNodeId'];
         $resourceLinkList = json_decode($data['resourceLinkList'], true);
-        $sid = isset($data['sid']) ? (int) $data['sid'] : null;
+        $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
         $cid = (int) $data['cid'];
 
         $course = null;

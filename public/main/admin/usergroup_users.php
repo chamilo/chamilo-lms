@@ -25,8 +25,6 @@ if ($allowEdit && 'true' === api_get_plugin_setting('learning_calendar', 'enable
     $calendarPlugin = LearningCalendarPlugin::create();
 }
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 $calendarId = isset($_REQUEST['calendar_id']) ? (int) $_REQUEST['calendar_id'] : 0;

@@ -106,11 +106,11 @@ class Plugin
         $result['comment'] = $this->get_comment();
         $result['version'] = $this->get_version();
         $result['author'] = $this->get_author();
-        $result['plugin_class'] = get_class($this);
+        $result['plugin_class'] = static::class;
         $result['is_course_plugin'] = $this->isCoursePlugin;
         $result['is_admin_plugin'] = $this->isAdminPlugin;
         $result['is_mail_plugin'] = $this->isMailPlugin;
-        $result['entity'] = $pluginRepo->findOneByTitle($this->get_title());
+        $result['entity'] = $pluginRepo->findOneByTitle($this->get_name());
 
         if ($form = $this->getSettingsForm()) {
             $result['settings_form'] = $form;
@@ -130,26 +130,10 @@ class Plugin
 
     /**
      * Returns the "system" name of the plugin in lowercase letters.
-     *
-     * @return string
      */
-    public function get_name()
+    public function get_name(): string
     {
-        $result = get_class($this);
-        $result = str_replace('Plugin', '', $result);
-        $result = strtolower($result);
-
-        return $result;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCamelCaseName()
-    {
-        $result = get_class($this);
-
-        return str_replace('Plugin', '', $result);
+        return str_replace('Plugin', '', static::class);
     }
 
     /**
@@ -220,11 +204,14 @@ class Plugin
     {
         $result = new FormValidator($this->get_name());
 
+        $fields = $this->fields;
+        unset($fields['tool_enable']);
+
         $defaults = [];
         $checkboxGroup = [];
         $checkboxCollection = [];
 
-        if ($checkboxNames = array_keys($this->fields, 'checkbox')) {
+        if ($checkboxNames = array_keys($fields, 'checkbox')) {
             $pluginInfoCollection = api_get_settings('Plugins');
             foreach ($pluginInfoCollection as $pluginInfo) {
                 if (false !== array_search($pluginInfo['title'], $checkboxNames)) {
@@ -233,7 +220,7 @@ class Plugin
             }
         }
 
-        foreach ($this->fields as $name => $type) {
+        foreach ($fields as $name => $type) {
             $options = null;
             if (is_array($type) && isset($type['type']) && 'select' === $type['type']) {
                 $attributes = isset($type['attributes']) ? $type['attributes'] : [];
@@ -254,7 +241,7 @@ class Plugin
             if ($this->get_lang_plugin_exists($name.'_help')) {
                 $help = $this->get_lang($name.'_help');
                 if ("show_main_menu_tab" === $name) {
-                    $pluginName = strtolower(str_replace('Plugin', '', get_class($this)));
+                    $pluginName = $this->get_name();
                     $pluginUrl = api_get_path(WEB_PATH)."plugin/$pluginName/index.php";
                     $pluginUrl = "<a href=$pluginUrl>$pluginUrl</a>";
                     $help = sprintf($help, $pluginUrl);
@@ -354,7 +341,7 @@ class Plugin
     {
         if ('tool_enable' === $name) {
             $isEnabled = Container::getPluginHelper()
-                ->isPluginEnabled($this->getCamelCaseName());
+                ->isPluginEnabled($this->get_name());
 
             return $isEnabled ? 'true' : 'false';
         }
@@ -841,7 +828,7 @@ class Plugin
      */
     public function manageTab($showTab, $filePath = 'index.php')
     {
-        $langString = str_replace('Plugin', '', get_class($this));
+        $langString = $this->get_name();
         $pluginUrl = 'plugin/'.$langString.'/'.$filePath;
 
         if ('true' === $showTab) {
@@ -887,16 +874,16 @@ class Plugin
         $settings = $this->get_settings();
 
         if (empty($settings)) {
+            // plugin not installed or no configuration for current URL
+            if ($checkEnabled) {
+                return Container::getPluginHelper()->isPluginEnabled($this->get_name());
+            }
             return false;
         }
 
         if ($checkEnabled) {
-            if (
-                isset($settings['tool_enable']) &&
-                strtolower($settings['tool_enable']) === 'false'
-            ) {
-                return false;
-            }
+            // Source of truth in C2 is access_url_rel_plugin.active
+            return Container::getPluginHelper()->isPluginEnabled($this->get_name());
         }
 
         return true;

@@ -12,9 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $allowCareer = ('true' === api_get_setting('session.allow_session_admin_read_careers'));
 api_protect_admin_script($allowCareer);
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
@@ -50,8 +47,8 @@ $columns = [get_lang('Name'), get_lang('Description'), get_lang('Detail')];
 // Column config
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '200',
         'align' => 'left',
     ],
@@ -166,7 +163,7 @@ switch ($action) {
                 if ($values['status'] && !$old_status) {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
+                            sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['title']),
                             'confirmation',
                             false
                         )
@@ -174,7 +171,7 @@ switch ($action) {
                 } elseif (!$values['status'] && $old_status) {
                     Display::addFlash(
                         Display::return_message(
-                            sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
+                            sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['title']),
                             'confirmation',
                             false
                         )

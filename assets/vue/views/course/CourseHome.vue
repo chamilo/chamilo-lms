@@ -85,28 +85,44 @@
           v-if="isAllowedToEdit && documentAutoLaunch === 1"
           class="text-sm text-gray-600"
         >
-          {{ t("The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.") }}
+          {{
+            t(
+              "The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (exerciseAutoLaunch === 1 || exerciseAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.") }}
+          {{
+            t(
+              "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (lpAutoLaunch === 1 || lpAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.") }}
+          {{
+            t(
+              "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.",
+            )
+          }}
         </p>
 
         <p
           v-if="isAllowedToEdit && (forumAutoLaunch === 1 || forumAutoLaunch === 2)"
           class="text-sm text-gray-600"
         >
-          {{ t("The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.") }}
+          {{
+            t(
+              "The forum's auto-launch setting is on. Students will be redirected to the forum tool when entering this course.",
+            )
+          }}
         </p>
 
         <div class="grow-0">
@@ -142,6 +158,8 @@
           />
         </div>
       </div>
+
+      <CourseThematicProgress />
 
       <div class="flex flex-col lg:flex-row gap-6">
         <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
@@ -260,6 +278,7 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
+import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 
 const { t } = useI18n()
 const cidReqStore = useCidReqStore()
@@ -290,38 +309,60 @@ const lpAutoLaunch = ref(0)
 const forumAutoLaunch = ref(0)
 const courseSettingsStore = useCourseSettings()
 
-courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-  tools.value = cTools.map((element) => {
-    if (routerTools.includes(element.title)) {
-      element.to = element.url
+/**
+ * Load tools for the course, split admin tools into the cog menu
+ * and keep the rest in the main tools grid.
+ * This function is reused on initial load and when toggling student view.
+ */
+async function loadCourseTools(showSkeleton = true) {
+  if (showSkeleton) {
+    isCourseLoading.value = true
+  }
+
+  try {
+    const cTools = await courseService.loadCTools(course.value.id, session.value?.id)
+
+    const normalizedTools = cTools.map((rawTool) => {
+      const tool = { ...rawTool }
+
+      if (routerTools.includes(tool.title)) {
+        tool.to = tool.url
+      }
+
+      // Convenience flag for UI states (e.g. customize mode)
+      tool.isEnabled = tool.resourceNode?.resourceLinks?.[0]?.visibility === 2
+
+      return tool
+    })
+
+    const adminMenuItems = []
+    const regularTools = []
+
+    normalizedTools.forEach((tool) => {
+      if (tool.tool?.category === "admin") {
+        adminMenuItems.push({
+          label: t(tool.tool.titleToShow),
+          url: tool.url,
+        })
+      } else {
+        regularTools.push(tool)
+      }
+    })
+
+    tools.value = regularTools
+    courseItems.value = adminMenuItems
+  } catch (error) {
+    console.error("[CourseHome] Failed to load course tools", error)
+    tools.value = []
+    courseItems.value = []
+  } finally {
+    if (showSkeleton) {
+      isCourseLoading.value = false
     }
+  }
+}
 
-    return element
-  })
-
-  const noAdminToolsIndex = []
-
-  courseItems.value = tools.value
-    .filter((element, index) => {
-      if ("admin" === element.tool.category) {
-        noAdminToolsIndex.push(index)
-
-        return true
-      }
-
-      return false
-    })
-    .map((adminTool) => {
-      return {
-        label: t(adminTool.tool.titleToShow),
-        url: adminTool.url,
-      }
-    })
-
-  noAdminToolsIndex.reverse().forEach((element) => tools.value.splice(element, 1))
-
-  isCourseLoading.value = false
-})
+loadCourseTools(true)
 
 courseService
   .loadTools(course.value.id, session.value?.id)
@@ -334,7 +375,6 @@ courseService
     })
   })
   .catch((error) => console.error(error))
-
 
 const courseTMenu = ref(null)
 
@@ -390,7 +430,7 @@ watch(isSorting, (isSortingEnabled) => {
     return
   }
   if (sortable === null) {
-    let el = document.getElementById("course-tools")
+    const el = document.getElementById("course-tools")
     sortable = Sortable.create(el, {
       ghostClass: "invisible",
       chosenClass: "cursor-move",
@@ -444,12 +484,7 @@ onMounted(async () => {
 const onStudentViewChanged = async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit()
 
-  courseService.loadCTools(course.value.id, session.value?.id).then((cTools) => {
-    tools.value = cTools.map((element) => ({
-      ...element,
-      isEnabled: element.resourceNode?.resourceLinks[0]?.visibility === 2,
-    }))
-  })
+  await loadCourseTools(false)
 }
 
 const allowEditToolVisibilityInSession = computed(() => {

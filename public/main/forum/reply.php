@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -87,6 +89,7 @@ $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 $threadId = isset($_GET['thread']) ? (int) $_GET['thread'] : 0;
 
 $repo = Container::getForumRepository();
+
 /** @var CForum $forum */
 $forum = $repo->find($forumId);
 
@@ -112,20 +115,20 @@ $current_forum_category = $forum->getForumCategory();
 // 3. if anonymous posts are not allowed
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
-if (!api_is_allowed_to_create_course() &&
-    (($current_forum_category && !$current_forum_category->isVisible($courseEntity)) ||
-        !$forum->isVisible($courseEntity)) && !api_get_session_id()
+if (!api_is_allowed_to_create_course()
+    && (($current_forum_category && !$current_forum_category->isVisible($courseEntity))
+        || !$forum->isVisible($courseEntity)) && !api_get_session_id()
 ) {
     api_not_allowed(true);
 }
-if (!api_is_allowed_to_edit(false, true) &&
-    (($current_forum_category && 0 != $current_forum_category->getLocked()) ||
-        0 != $forum->getLocked() || 0 != $threadEntity->getLocked())
+if (!api_is_allowed_to_edit(false, true)
+    && (($current_forum_category && 0 != $current_forum_category->getLocked())
+        || 0 != $forum->getLocked() || 0 != $threadEntity->getLocked())
 ) {
     api_not_allowed(true);
 }
-if (!$_user['user_id'] &&
-    0 == $forum->getAllowAnonymous()) {
+if (!$_user['user_id']
+    && 0 == $forum->getAllowAnonymous()) {
     api_not_allowed(true);
 }
 
@@ -193,7 +196,7 @@ if (!empty($groupId)) {
 }
 
 /* Header */
-$htmlHeadXtra[] = <<<JS
+$htmlHeadXtra[] = <<<'JS'
     <script>
     $(function() {
         $('#reply-add-attachment').on('click', function(e) {
@@ -238,14 +241,14 @@ $form = show_add_post_form(
 Display::display_header();
 
 if ('learnpath' !== $origin) {
-    //$actionsLeft = '<span style="float:right;">'.search_link().'</span>';
+    // $actionsLeft = '<span style="float:right;">'.search_link().'</span>';
     $actionsLeft = '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
     $actionsLeft .= Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to thread')).'</a>';
 
     echo Display::toolbarAction('toolbar', [$actionsLeft]);
 }
-/*New display forum div*/
-echo '<div class="forum_title">';
+/* New display forum div */
+echo '<div class="forum_title mb-8">';
 echo '<h1>';
 echo Display::url(
     prepare4display($forum->getTitle()),

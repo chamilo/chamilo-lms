@@ -21,7 +21,6 @@ $interbreadcrumb[] = ['url' => api_is_student_boss() ? '#' : 'index.php', 'name'
 
 $tool_name = get_lang('Report');
 $this_section = SECTION_TRACKING;
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : -1;
 
 // jqgrid will use this URL to do the selects

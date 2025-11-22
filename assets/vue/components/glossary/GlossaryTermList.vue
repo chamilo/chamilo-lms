@@ -19,7 +19,7 @@
                 title="Session Item"
               />
             </div>
-            <div v-if="securityStore.isAuthenticated && canEdit(term)">
+            <div v-if="securityStore.isAuthenticated && props.canEditGlossary && canEdit(term)">
               <BaseButton
                 :label="t('Edit')"
                 class="mr-2"
@@ -42,9 +42,10 @@
 
         <hr class="-mx-4 -mt-2 mb-4" />
 
-        <div>
-          {{ term.description }}
-        </div>
+        <div
+          class="prose max-w-none"
+          v-html="sanitize(term.description)"
+        ></div>
       </BaseCard>
     </li>
     <li v-if="!isLoading && glossaries.length === 0">
@@ -63,6 +64,7 @@ import { useRoute } from "vue-router"
 import { computed, onMounted, ref } from "vue"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
 import { useCidReq } from "../../composables/cidReq"
+import DOMPurify from "dompurify"
 
 const { t } = useI18n()
 const securityStore = useSecurityStore()
@@ -72,7 +74,7 @@ const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
 const isAllowedToEdit = ref(false)
 const { cid, sid, gid } = useCidReq()
 
-defineProps({
+const props = defineProps({
   glossaries: {
     type: Array,
     required: true,
@@ -85,6 +87,10 @@ defineProps({
     type: Boolean,
     required: true,
   },
+  canEditGlossary: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(["edit", "delete"])
@@ -96,6 +102,8 @@ const canEdit = (item) => {
 
   return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
 }
+
+const sanitize = (html) => DOMPurify.sanitize(html ?? "", { ADD_ATTR: ["target", "rel"] })
 
 onMounted(async () => {
   isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)

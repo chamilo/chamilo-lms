@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -31,13 +33,13 @@ class ScormDocument extends Resource
     /**
      * Show this document.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         $path = preg_replace('@^scorm/@', '', $this->path);
         echo $path;
         if (!empty($this->title)) {
-            if (false === strpos($path, $this->title)) {
+            if (!str_contains($path, $this->title)) {
                 echo ' - '.$this->title;
             }
         }

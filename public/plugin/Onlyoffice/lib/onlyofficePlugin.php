@@ -23,11 +23,6 @@
 class OnlyofficePlugin extends Plugin
 {
     /**
-     * OnlyofficePlugin name.
-     */
-    private string $pluginName = 'Onlyoffice';
-
-    /**
      * OnlyofficePlugin constructor.
      */
     protected function __construct()
@@ -72,17 +67,10 @@ class OnlyofficePlugin extends Plugin
 
     /**
      * Get link to plugin settings.
-     *
-     * @return string
      */
-    public function getConfigLink()
+    public function getConfigLink(): string
     {
-        return api_get_path(WEB_PATH).'main/admin/configure_plugin.php?name='.$this->pluginName;
-    }
-
-    public function get_name()
-    {
-        return $this->pluginName;
+        return api_get_path(WEB_PATH).'main/admin/configure_plugin.php?name='.$this->get_name();
     }
 
     public static function isExtensionAllowed(string $extension): bool

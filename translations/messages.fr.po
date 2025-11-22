@@ -1475,10 +1475,10 @@ msgid "Month view"
 msgstr "Vue par mois"
 
 msgid "Weekly"
-msgstr "Vue par semaine"
+msgstr "Hebdomadaire"
 
 msgid "Daily"
-msgstr "Vue par jour"
+msgstr "Quotidien"
 
 msgid "Add event to the agenda"
 msgstr "Ajouter un événement perso"
@@ -25544,7 +25544,7 @@ msgstr ""
 "et suivez les instructions."
 
 msgid "Bi-weekly"
-msgstr "Bi-semanal"
+msgstr "Bi-hebdomadaire"
 
 msgid "Every x days"
 msgstr "Tous les x jours"
@@ -30460,3 +30460,36 @@ msgstr "Cache les paramètres avancés"
 
 msgid "Course created successfully"
 msgstr "Cours créé"
+
+msgid "Show free users (not enrolled)"
+msgstr "Afficher les utilisateurs libres (non inscrits)"
+
+msgid "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s"
+msgstr "Bonjour %s,<br><br>Vous êtes inscrit sur %s.<br>Vous pouvez vous connecter avec votre compte en allant <a href=\"%s\">ici</a>.<br><br>Vos informations de login sont :<br>Login : <strong>%s</strong><br>Mot de passe : <strong>%s</strong><br><br>Cordialement,<br>%s"
+
+msgid "Register Student"
+msgstr "Inscrire des apprenants"
+
+msgid "You are registered on %s"
+msgstr "Vous êtes inscrit sur %s"
+
+msgid "You have been enrolled in a new course"
+msgstr "Vous avez été inscrit à un nouveau cours"
+
+msgid "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo"
+msgstr "Bonjour %s,<br><br>Vous êtes inscrit à une nouvelle session : <strong>%s</strong>.<br>Vous pouvez accéder à votre cours en allant <a href=\"%s\">ici</a>.<br><br>Vos sessions en cours sont :<br><ul>%s</ul><br>Cordialement,<br>Chamilo"
+
+msgid "Admin Favorites Courses"
+msgstr "Cours préférés"
+
+msgid "Admin Completed Courses"
+msgstr "Cours finis"
+
+msgid "Admin Incomplete Courses"
+msgstr "Cours non terminés"
+
+msgid "Admin Restart Courses"
+msgstr "Cours à recommencer"
+
+msgid "Admin Dashboard"
+msgstr "Panneau de contrôle"

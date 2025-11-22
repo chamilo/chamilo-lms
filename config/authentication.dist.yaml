@@ -75,7 +75,7 @@ parameters:
                 connection_string: 'ldap://localhost:389'
                 protocol_version: 3
                 referrals: false
-                dn_string: '{username}'
+                dn_string: '{user_identifier}'
                 query_string: null
                 base_dn: 'DC=cblue,DC=be'
                 search_dn: 'CN=admin,dc=cblue,dc=be'

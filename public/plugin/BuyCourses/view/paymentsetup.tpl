@@ -1,6 +1,4 @@
 {% autoescape false %}
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ 'GlobalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
@@ -36,6 +34,21 @@
                 </div>
                 <div class="col-md-7">
                     {{ paypal_form }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if tpv_redsys_enable == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'TpvRedsysConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ tpv_redsys_form }}
                 </div>
             </div>
         </div>
@@ -84,12 +97,12 @@
                             <tbody>
                             {% for account in transfer_accounts %}
                                 <tr>
-                                    <td>{{ account.title }}</td>
+                                    <td>{{ account.name }}</td>
                                     <td>{{ account.account }}</td>
                                     <td>{{ account.swift }}</td>
                                     <td>
                                         <a href="{{ app.request.requestUri ~ '?' ~ {'action':'delete_taccount', 'id': account.id}|url_encode() }}"
-                                           class="btn btn--danger btn-sm">
+                                           class="btn btn--danger btn--sm">
                                             <em class="fa fa-remove"></em> {{ 'Delete'|get_lang }}
                                         </a>
                                     </td>
@@ -98,6 +111,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="col-md-12">
+                    {{ transfer_info_form }}
                 </div>
             </div>
         </div>
@@ -116,6 +132,39 @@
                 </div>
                 <div class="col-md-7">
                     {{ culqi_form }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if stripe_enable == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'StripeConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <p>{{ 'InfoStripeCredentials'|get_plugin_lang('BuyCoursesPlugin') }}</p>
+                </div>
+                <div class="col-md-7">
+                    {{ stripe_form }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if cecabank_enable == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ 'CecabankConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    {{ cecabank_form }}
                 </div>
             </div>
         </div>

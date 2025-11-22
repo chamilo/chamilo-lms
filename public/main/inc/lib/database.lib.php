@@ -2,14 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 
-use Doctrine\Common\Annotations\PsrCachedReader;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class Database
 {
@@ -35,33 +35,17 @@ class Database
 
         $params['charset'] = 'utf8';
 
-        // standard annotation reader
-        $annotationReader = new Doctrine\Common\Annotations\AnnotationReader();
-        $cachedAnnotationReader = new PsrCachedReader(
-            $annotationReader,
-            new ArrayAdapter()
-        );
-
         $evm = new EventManager();
         $timestampableListener = new Gedmo\Timestampable\TimestampableListener();
-        $timestampableListener->setAnnotationReader($cachedAnnotationReader);
         $evm->addEventSubscriber($timestampableListener);
-
-        $driverChain = new \Doctrine\Persistence\Mapping\Driver\MappingDriverChain();
-        // load superclass metadata mapping only, into driver chain
-        // also registers Gedmo annotations.NOTE: you can personalize it
-        Gedmo\DoctrineExtensions::registerAbstractMappingIntoDriverChainORM(
-            $driverChain, // our metadata driver chain, to hook into
-            $cachedAnnotationReader // our cached annotation reader
-        );
-
-        $entityManager = EntityManager::create($params, $config, $evm);
 
         if (false === Type::hasType('uuid')) {
             Type::addType('uuid', UuidType::class);
         }
 
-        $connection = $entityManager->getConnection();
+        $connection = DriverManager::getConnection($params, $config, $evm);
+
+        $entityManager = new EntityManager($connection, $config, $evm);
 
         self::setConnection($connection);
         self::setManager($entityManager);
@@ -611,12 +595,11 @@ class Database
 
         $proxyDir = $path.'var/cache/';
 
-        return \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+        return ORMSetup::createAttributeMetadataConfiguration(
             $paths,
-            true, // Forces doctrine to use ArrayCache instead of apc/xcache/memcache/redis
+            true,
             $proxyDir,
-            $cache,
-            false // related to annotations @Entity
+            $cache
         );
     }
 

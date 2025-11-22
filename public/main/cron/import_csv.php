@@ -492,7 +492,7 @@ class ImportCsv
             [
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['calendar_event'],
-                'display_text' => 'External calendar event id',
+                'display_text' => 'External calendar event ID',
             ]
         );
 
@@ -502,7 +502,7 @@ class ImportCsv
                 'visible_to_self' => 1,
                 'value_type' => ExtraField::FIELD_TYPE_TEXT,
                 'variable' => $this->extraFieldIdNameList['career'],
-                'display_text' => 'External career id',
+                'display_text' => 'External career ID',
             ]
         );
 
@@ -520,7 +520,7 @@ class ImportCsv
                 'visible_to_self' => 1,
                 'value_type' => ExtraField::FIELD_TYPE_TEXTAREA,
                 'variable' => $this->extraFieldIdNameList['career_urls'],
-                'display_text' => 'Career urls',
+                'display_text' => 'Career URLs',
             ]
         );
     }

@@ -339,7 +339,7 @@ final class WikiManager
         self::dbg('$last '.($last ? 'HIT iid='.$last->getIid().' ver='.$last->getVersion() : 'MISS'));
 
         // ---- Defaults (when page does not exist yet) ----
-        $content = '<div class="wiki-placeholder">'.sprintf(get_lang('DefaultContent'), api_get_path(WEB_IMG_PATH)).'</div>';
+        $content = '<div class="wiki-placeholder">'.sprintf(get_lang('To begin, edit this page and remove this text'), api_get_path(WEB_IMG_PATH)).'</div>';
         $title   = self::displayTitleFor($page, null);
         $pageId  = 0;
 
@@ -428,12 +428,12 @@ final class WikiManager
 
             // Informative task block (non-blocking)
             if ($conf->getTask()) {
-                $msgTask  = '<b>'.get_lang('DescriptionOfTheTask').'</b><p>'.$conf->getTask().'</p><hr>';
-                $msgTask .= '<p>'.get_lang('StartDate').': '.($conf->getStartdateAssig() ? api_get_local_time($conf->getStartdateAssig()) : get_lang('No')).'</p>';
-                $msgTask .= '<p>'.get_lang('EndDate').': '.($conf->getEnddateAssig() ? api_get_local_time($conf->getEnddateAssig()) : get_lang('No'));
-                $msgTask .= ' ('.get_lang('AllowLaterSends').') '.(((int)$conf->getDelayedsubmit() === 0) ? get_lang('No') : get_lang('Yes')).'</p>';
-                $msgTask .= '<p>'.get_lang('OtherSettings').': '.get_lang('NMaxVersion').': '.((int)$conf->getMaxVersion() ?: get_lang('No'));
-                $msgTask .= ' '.get_lang('NMaxWords').': '.((int)$conf->getMaxText() ?: get_lang('No')).'</p>';
+                $msgTask  = '<b>'.get_lang('Description of the assignment').'</b><p>'.$conf->getTask().'</p><hr>';
+                $msgTask .= '<p>'.get_lang('Start date').': '.($conf->getStartdateAssig() ? api_get_local_time($conf->getStartdateAssig()) : get_lang('No')).'</p>';
+                $msgTask .= '<p>'.get_lang('End date').': '.($conf->getEnddateAssig() ? api_get_local_time($conf->getEnddateAssig()) : get_lang('No'));
+                $msgTask .= ' ('.get_lang('Allow delayed sending').') '.(((int)$conf->getDelayedsubmit() === 0) ? get_lang('No') : get_lang('Yes')).'</p>';
+                $msgTask .= '<p>'.get_lang('Other requirements').': '.get_lang('Maximum number of versions').': '.((int)$conf->getMaxVersion() ?: get_lang('No'));
+                $msgTask .= ' '.get_lang('Maximum number of words').': '.((int)$conf->getMaxText() ?: get_lang('No')).'</p>';
                 Display::addFlash(Display::return_message($msgTask));
             }
         }
@@ -471,11 +471,11 @@ final class WikiManager
                     $rest = max(0, $timeoutSec - $elapsed);
                     $info = api_get_user_info($lockBy);
                     if ($info) {
-                        $msg = get_lang('ThisPageisBeginEditedBy').PHP_EOL
+                        $msg = get_lang('At this time, this page is being edited by').PHP_EOL
                             .UserManager::getUserProfileLink($info).PHP_EOL
-                            .get_lang('ThisPageisBeginEditedTryLater').PHP_EOL
+                            .get_lang('Please try again later. If the user who is currently editing the page does not save it, this page will be available to you around').PHP_EOL
                             .date('i', $rest).PHP_EOL
-                            .get_lang('MinMinutes');
+                            .get_lang('minutes');
                         Display::addFlash(Display::return_message($msg, 'normal', false));
                     } else {
                         Display::addFlash(Display::return_message('This page is currently being edited by another user.', 'normal', false));
@@ -487,7 +487,7 @@ final class WikiManager
 
             // If no lock, set it now (best-effort)
             if ($lockBy === 0) {
-                Display::addFlash(Display::return_message(get_lang('WarningMaxEditingTime')));
+                Display::addFlash(Display::return_message(get_lang('You have 20 minutes to edit this page. After this time, if you have not saved the page, another user will be able to edit it, and you might lose your changes')));
                 $last->setIsEditing($userId);
                 $last->setTimeEdit(new \DateTime('now', new \DateTimeZone('UTC')));
                 $em->flush();
@@ -538,14 +538,14 @@ final class WikiManager
             $values = $form->exportValues();
 
             if (empty($values['title'])) {
-                Display::addFlash(Display::return_message(get_lang('NoWikiPageTitle'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('Your changes have been saved. You still have to give a name to the page'), 'error'));
             } elseif (!self::double_post($values['wpost_id'])) {
                 // ignore duplicate post
             } elseif (!empty($values['version'])
                 && (int)Session::read('_version') !== 0
                 && (int)$values['version'] !== (int)Session::read('_version')
             ) {
-                Display::addFlash(Display::return_message(get_lang('EditedByAnotherUser'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('Your changes will not be saved because another user has modified and saved the page while you were editing it yourself'), 'error'));
             } else {
                 $returnMessage = self::saveWiki($values);
                 Display::addFlash(Display::return_message($returnMessage, 'confirmation'));
@@ -632,39 +632,39 @@ final class WikiManager
         if ((api_is_allowed_to_edit(false, true) || api_is_platform_admin())
             && isset($row['reflink']) && $row['reflink'] !== 'index'
         ) {
-            $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
+            $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
             $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
             // Task description
             $form->addHtmlEditor(
                 'task',
-                get_lang('DescriptionOfTheTask'),
+                get_lang('Description of the assignment'),
                 false,
                 false,
                 ['ToolbarSet' => 'wiki_task', 'Width' => '100%', 'Height' => '200']
             );
 
             // Feedbacks + progress goals
-            $form->addElement('label', null, get_lang('AddFeedback'));
+            $form->addElement('label', null, get_lang('Add guidance messages associated with the progress on the page'));
 
-            $form->addElement('textarea', 'feedback1', get_lang('Feedback1'));
-            $form->addElement('select', 'fprogress1', get_lang('FProgress'), $progressValues, []);
+            $form->addElement('textarea', 'feedback1', get_lang('First message'));
+            $form->addElement('select', 'fprogress1', get_lang('Progress'), $progressValues, []);
 
-            $form->addElement('textarea', 'feedback2', get_lang('Feedback2'));
-            $form->addElement('select', 'fprogress2', get_lang('FProgress'), $progressValues, []);
+            $form->addElement('textarea', 'feedback2', get_lang('Second message'));
+            $form->addElement('select', 'fprogress2', get_lang('Progress'), $progressValues, []);
 
-            $form->addElement('textarea', 'feedback3', get_lang('Feedback3'));
-            $form->addElement('select', 'fprogress3', get_lang('FProgress'), $progressValues, []);
+            $form->addElement('textarea', 'feedback3', get_lang('Third message'));
+            $form->addElement('select', 'fprogress3', get_lang('Progress'), $progressValues, []);
 
             // Dates (toggles)
-            $form->addElement('checkbox', 'initstartdate', null, get_lang('StartDate'), ['id' => 'start_date_toggle']);
+            $form->addElement('checkbox', 'initstartdate', null, get_lang('Start date'), ['id' => 'start_date_toggle']);
             $row['initstartdate'] = empty($row['startdate_assig']) ? null : 1;
             $style = empty($row['startdate_assig']) ? 'display:none' : 'display:block';
             $form->addElement('html', '<div id="start_date" style="'.$style.'">');
             $form->addDatePicker('startdate_assig', '');
             $form->addElement('html', '</div>');
 
-            $form->addElement('checkbox', 'initenddate', null, get_lang('EndDate'), ['id' => 'end_date_toggle']);
+            $form->addElement('checkbox', 'initenddate', null, get_lang('End date'), ['id' => 'end_date_toggle']);
             $row['initenddate'] = empty($row['enddate_assig']) ? null : 1;
             $style = empty($row['enddate_assig']) ? 'display:none' : 'display:block';
             $form->addElement('html', '<div id="end_date" style="'.$style.'">');
@@ -672,10 +672,10 @@ final class WikiManager
             $form->addElement('html', '</div>');
 
             // Limits & flags
-            $form->addElement('checkbox', 'delayedsubmit', null, get_lang('AllowLaterSends'));
-            $form->addElement('text', 'max_text', get_lang('NMaxWords'));
-            $form->addElement('text', 'max_version', get_lang('NMaxVersion'));
-            $form->addElement('checkbox', 'assignment', null, get_lang('CreateAssignmentPage'));
+            $form->addElement('checkbox', 'delayedsubmit', null, get_lang('Allow delayed sending'));
+            $form->addElement('text', 'max_text', get_lang('Maximum number of words'));
+            $form->addElement('text', 'max_version', get_lang('Maximum number of versions'));
+            $form->addElement('checkbox', 'assignment', null, get_lang('This will create a special wiki page in which the teacher can describe the task and which will be automatically linked to the wiki pages where learners perform the task. Both the teacher\'s and the learners\' pages are created automatically. In these tasks, learners can only edit and view theirs pages, but this can be changed easily if you need to.'));
 
             $form->addElement('html', '</div>');
         }
@@ -760,7 +760,7 @@ final class WikiManager
 
         if (api_is_allowed_to_session_edit(false, true) && api_is_allowed_to_edit()) {
             $left .= Display::url(
-                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddNew')),
+                Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add new page')),
                 $ctx['baseUrl'].'&action=addnew'
             );
         }
@@ -774,7 +774,7 @@ final class WikiManager
             $addNewStatus = (int) self::check_addnewpagelock();
             if ($addNewStatus === 0) {
                 $left .= Display::url(
-                    Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddOptionProtected')),
+                    Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('The Add option has been protected. Trainers only can add pages to this Wiki. But learners and group members can still edit them')),
                     $ctx['baseUrl'].'&'.http_build_query([
                         'action'     => 'showpage',
                         'title'      => api_htmlentities('index'),
@@ -783,7 +783,7 @@ final class WikiManager
                 );
             } else {
                 $left .= Display::url(
-                    Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('AddOptionUnprotected')),
+                    Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('The add option has been enabled for all course users and group members')),
                     $ctx['baseUrl'].'&'.http_build_query([
                         'action'     => 'showpage',
                         'title'      => api_htmlentities('index'),
@@ -809,12 +809,12 @@ final class WikiManager
         );
 
         $left .= Display::url(
-            Display::getMdiIcon(ActionIcon::HISTORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Recent changes')),
+            Display::getMdiIcon(ActionIcon::HISTORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Latest changes')),
             $ctx['baseUrl'].'&action=recentchanges'
         );
 
         $frm = new FormValidator('wiki_search', 'get', $ctx['baseUrl'], '', [], FormValidator::LAYOUT_INLINE);
-        $frm->addText('search_term', get_lang('SearchTerm'), false);
+        $frm->addText('search_term', get_lang('Search term'), false);
         $frm->addHidden('cid',     $ctx['courseId']);
         $frm->addHidden('sid', $ctx['sessionId']);
         $frm->addHidden('gid',     $ctx['groupId']);
@@ -877,7 +877,7 @@ final class WikiManager
         );
 
         if ($pre === 0) {
-            return get_lang('WikiDeleted').' (0 rows in this context)';
+            return get_lang('Your Wiki has been deleted').' (0 rows in this context)';
         }
 
         $conn->beginTransaction();
@@ -938,11 +938,11 @@ final class WikiManager
 
             $conn->commit();
 
-            return get_lang('WikiDeleted')." (versions=$deletedWiki, comments=$deletedDiscuss, conf=$deletedConf, catRel=$deletedRelCat, watchers=$deletedMailcue)";
+            return get_lang('Your Wiki has been deleted')." (versions=$deletedWiki, comments=$deletedDiscuss, conf=$deletedConf, catRel=$deletedRelCat, watchers=$deletedMailcue)";
         } catch (\Throwable $e) {
             $conn->rollBack();
             // Short and clear message
-            return get_lang('Delete failed');
+            return get_lang('Delete error');
         }
     }
 
@@ -981,7 +981,7 @@ final class WikiManager
         // --- sanitize + normalize ---
         $rawTitle = trim((string)($values['title'] ?? ''));
         if ($rawTitle === '') {
-            return get_lang('NoWikiPageTitle');
+            return get_lang('Your changes have been saved. You still have to give a name to the page');
         }
 
         // Prepare safe strings (emoji-safe)
@@ -1065,7 +1065,7 @@ final class WikiManager
 
             $exists = (bool) $qbExists->getQuery()->getOneOrNullResult();
             if ($exists) {
-                return get_lang('ThePageAlreadyExists');
+                return get_lang('The page already exists.');
             }
         }
 
@@ -1236,7 +1236,7 @@ final class WikiManager
         // Notify watchers (legacy: 'P' = page change)
         self::check_emailcue($reflink, 'P', $now, $userId);
 
-        return $isNewPage ? get_lang('TheNewPageHasBeenCreated') : get_lang('Saved');
+        return $isNewPage ? get_lang('The new page has been created.') : get_lang('Saved');
     }
 
 
@@ -1252,7 +1252,7 @@ final class WikiManager
     {
         $msg = self::saveWiki($values, $courseId, $sessionId, $groupId);
 
-        return $msg === get_lang('NoWikiPageTitle') ? false : $msg;
+        return $msg === get_lang('Your changes have been saved. You still have to give a name to the page') ? false : $msg;
     }
 
     /**
@@ -1284,13 +1284,13 @@ final class WikiManager
         if ($lastuser) {
             $ui = api_get_user_info((int) $lastuser);
             $emailUserAuthor = ($type === 'P' || $type === 'D')
-                ? get_lang('EditedBy').': '.($ui['complete_name'] ?? '')
-                : get_lang('AddedBy').': '.($ui['complete_name'] ?? '');
+                ? get_lang('edited by').': '.($ui['complete_name'] ?? '')
+                : get_lang('added by').': '.($ui['complete_name'] ?? '');
         } else {
             $ui = api_get_user_info(api_get_user_id());
             $emailUserAuthor = ($type === 'E')
-                ? get_lang('DeletedBy').': '.($ui['complete_name'] ?? '')
-                : get_lang('EditedBy').': '.($ui['complete_name'] ?? '');
+                ? get_lang('deleted by').': '.($ui['complete_name'] ?? '')
+                : get_lang('edited by').': '.($ui['complete_name'] ?? '');
         }
 
         $repoWiki = $em->getRepository(CWiki::class);
@@ -1313,7 +1313,7 @@ final class WikiManager
                 $pageReflink   = (string) $first->getReflink();
                 if ((int) $first->getVisibility() === 1) {
                     $allowSend = true;
-                    $emailText = get_lang('EmailWikipageModified').' <strong>'.$emailPageName.'</strong> '.get_lang('Wiki');
+                    $emailText = get_lang('It has modified the page').' <strong>'.$emailPageName.'</strong> '.get_lang('Wiki');
                     $watchKey  = 'watch:'.$pageReflink;
                 }
             }
@@ -1333,7 +1333,7 @@ final class WikiManager
                 $pageReflink   = (string) $row->getReflink();
                 if ((int) $row->getVisibilityDisc() === 1) {
                     $allowSend = true;
-                    $emailText = get_lang('EmailWikiPageDiscAdded').' <strong>'.$emailPageName.'</strong> '.get_lang('Wiki');
+                    $emailText = get_lang('New comment in the discussion of the page').' <strong>'.$emailPageName.'</strong> '.get_lang('Wiki');
                     $watchKey  = 'watchdisc:'.$pageReflink;
                 }
             }
@@ -1356,20 +1356,20 @@ final class WikiManager
                 if ((int) $row->getAssignment() === 0) {
                     $allowSend = true;
                 } elseif ((int) $row->getAssignment() === 1) {
-                    $emailAssignment = get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';
+                    $emailAssignment = get_lang('This page is an assignment proposed by a trainer').' ('.get_lang('Individual assignment mode').')';
                     $allowSend = true;
                 } elseif ((int) $row->getAssignment() === 2) {
                     $allowSend = false; // teacher-locked work page
                 }
 
-                $emailText = get_lang('EmailWikiPageAdded').' <strong>'.$emailPageName.'</strong> '.get_lang('In').' '.get_lang('Wiki');
+                $emailText = get_lang('Page was added').' <strong>'.$emailPageName.'</strong> '.get_lang('in').' '.get_lang('Wiki');
                 // If someone subscribed after creation, use the same key as page watchers
                 $watchKey  = 'watch:'.$pageReflink;
             }
         } elseif ($type === 'E') {
             // Page deleted (generic)
             $allowSend = true;
-            $emailText = get_lang('EmailWikipageDedeleted');
+            $emailText = get_lang('One page has been deleted in the Wiki');
             if ($emailDateChanges === '') {
                 $emailDateChanges = date('Y-m-d H:i:s');
             }
@@ -1432,9 +1432,9 @@ final class WikiManager
             $emailTo = $uInfo['email'];
             $from    = (string) api_get_setting('emailAdministrator');
 
-            $subject = get_lang('Email wiki changes').' - '.$courseTitle;
+            $subject = get_lang('Notify Wiki changes').' - '.$courseTitle;
 
-            $body  = get_lang('DearUser').' '.api_get_person_name($uInfo['firstname'] ?? '', $uInfo['lastname'] ?? '').',<br /><br />';
+            $body  = get_lang('Dear user').' '.api_get_person_name($uInfo['firstname'] ?? '', $uInfo['lastname'] ?? '').',<br /><br />';
             if ((int)$ctx['sessionId'] === 0) {
                 $body .= $emailText.' <strong>'.$courseName.($grpName ? ' - '.$grpName : '').'</strong><br /><br /><br />';
             } else {
@@ -1446,8 +1446,8 @@ final class WikiManager
             if ($emailAssignment) {
                 $body .= $emailAssignment.'<br /><br /><br />';
             }
-            $body .= '<span style="font-size:70%;">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br />';
-            $body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></span><br />';
+            $body .= '<span style="font-size:70%;">'.get_lang('This notification has been made in accordance with their desire to monitor changes in the Wiki. This option means you have activated the button').': <strong>'.get_lang('Notify me of changes').'</strong><br />';
+            $body .= get_lang('If you want to stop being notified of changes in the Wiki, select the tabs<strong> Recent Changes</ strong>, <strong>Current page</ strong>, <strong>Talk</ strong> as appropriate and then push the button').': <strong>'.get_lang('Do not notify me of changes').'</strong></span><br />';
 
             @api_mail_html(
                 $nameTo,
@@ -1612,11 +1612,11 @@ final class WikiManager
                 || api_is_allowed_in_course()
             ) {
                 $content = '<div class="text-center">'
-                    .sprintf(get_lang('Default content'), api_get_path(WEB_IMG_PATH))
+                    .sprintf(get_lang('To begin, edit this page and remove this text'), api_get_path(WEB_IMG_PATH))
                     .'</div>';
                 $title = get_lang('Home');
             } else {
-                Display::addFlash(Display::return_message(get_lang('Wiki stand by'), 'normal', false));
+                Display::addFlash(Display::return_message(get_lang('This Wiki is frozen so far. A trainer must start it.'), 'normal', false));
                 return null;
             }
         } else {
@@ -1637,11 +1637,11 @@ final class WikiManager
 
             if ($assign === 1) {
                 $badges .= Display::getMdiIcon(
-                    ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignment desc extra')
+                    ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('This page is an assignment proposed by a trainer')
                 );
             } elseif ($assign === 2) {
                 $badges .= Display::getMdiIcon(
-                    ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assignment work')
+                    ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learner paper')
                 );
             }
 
@@ -1652,7 +1652,7 @@ final class WikiManager
             ]);
             if ($hasTask && $hasTask->getTask()) {
                 $badges .= Display::getMdiIcon(
-                    ActionIcon::WIKI_TASK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Standard task')
+                    ActionIcon::WIKI_TASK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Standard Task')
                 );
             }
 
@@ -1699,7 +1699,7 @@ final class WikiManager
                 $lockIcon   = $isLocked ? ActionIcon::LOCK : ActionIcon::UNLOCK;
                 $actionsRight .= '<a href="'.$ctx['baseUrl'].'&action=showpage&actionpage='.$lockAction
                     .'&title='.api_htmlentities(urlencode($pageKey)).'">'
-                    .Display::getMdiIcon($lockIcon, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $isLocked ? get_lang('Locked') : get_lang('Unlocked'))
+                    .Display::getMdiIcon($lockIcon, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $isLocked ? get_lang('Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted') : get_lang('Unlocked: learners can post new messages in this forum category, forum or thread'))
                     .'</a>';
             }
 
@@ -1719,7 +1719,7 @@ final class WikiManager
                 $isWatching   = (self::check_notify_page($pageKey) == 1);
                 $notifyAction = $isWatching ? 'unlocknotify' : 'locknotify';
                 $notifyIcon   = $isWatching ? ActionIcon::SEND_SINGLE_EMAIL : ActionIcon::NOTIFY_OFF;
-                $notifyTitle  = $isWatching ? get_lang('CancelNotifyMe') : get_lang('NotifyMe');
+                $notifyTitle  = $isWatching ? get_lang('Stop notifying me') : get_lang('Notify me');
                 $actionsRight .= '<a href="'.$ctx['baseUrl'].'&action=showpage&actionpage='.$notifyAction
                     .'&title='.api_htmlentities(urlencode($pageKey)).'">'
                     .Display::getMdiIcon($notifyIcon, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, $notifyTitle)
@@ -1739,13 +1739,13 @@ final class WikiManager
             // History
             $actionsRight .= '<a href="'.$ctx['baseUrl'].'&action=history&title='
                 .api_htmlentities(urlencode($pageKey)).'" '.self::is_active_navigation_tab('history').'>'
-                .Display::getMdiIcon(ActionIcon::HISTORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Show page history'))
+                .Display::getMdiIcon(ActionIcon::HISTORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('History'))
                 .'</a>';
 
             // Links
             $actionsRight .= '<a href="'.$ctx['baseUrl'].'&action=links&title='
                 .api_htmlentities(urlencode($pageKey)).'" '.self::is_active_navigation_tab('links').'>'
-                .Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Links pages'))
+                .Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('What links here'))
                 .'</a>';
 
             // Delete
@@ -2267,7 +2267,7 @@ final class WikiManager
 
         // Required title
         $form->addElement('text', 'title', get_lang('Title'));
-        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         // Editor and advanced fields (adds a hidden wpost_id inside if your setForm doesn’t)
         self::setForm($form);
@@ -2295,7 +2295,7 @@ final class WikiManager
             $endTs   = isset($values['enddate_assig'])   ? $toTs($values['enddate_assig'])   : null;
 
             if ($startTs && $endTs && $startTs > $endTs) {
-                Display::addFlash(Display::return_message(get_lang('EndDateCannotBeBeforeStartDate'), 'error', false));
+                Display::addFlash(Display::return_message(get_lang('The end date cannot be before the start date'), 'error', false));
                 // show the form again
                 $form->display();
                 return;
@@ -2304,7 +2304,7 @@ final class WikiManager
             // Anti double-post (if wpost is missing, don’t block)
             if (isset($values['wpost_id']) && !self::double_post($values['wpost_id'])) {
                 // Duplicate: go back without saving
-                Display::addFlash(Display::return_message(get_lang('DuplicateSubmissionIgnored'), 'warning', false));
+                Display::addFlash(Display::return_message(get_lang('Duplicate submission ignored'), 'warning', false));
                 $form->display();
                 return;
             }
@@ -2318,7 +2318,7 @@ final class WikiManager
             // Save: use our robust helper
             $msg = self::save_new_wiki($values);
             if ($msg === false) {
-                Display::addFlash(Display::return_message(get_lang('NoWikiPageTitle'), 'error', false));
+                Display::addFlash(Display::return_message(get_lang('Your changes have been saved. You still have to give a name to the page'), 'error', false));
                 $form->display();
                 return;
             }
@@ -2334,7 +2334,7 @@ final class WikiManager
         }
 
         // --- Show form (GET or invalid POST) ---
-        $form->addButtonSave(get_lang('Save'), 'SaveWikiNew');
+        $form->addButtonSave(get_lang('Save'), 'Save page');
         $form->display();
     }
 
@@ -2343,7 +2343,7 @@ final class WikiManager
         $page = (string) $this->page;
 
         if (empty($_GET['title'])) {
-            Display::addFlash(Display::return_message(get_lang('Must select a page'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
@@ -2403,9 +2403,9 @@ final class WikiManager
         // Assignment icon
         $icon = null;
         if ((int)$keyAssignment === 1) {
-            $icon = Display::return_icon('wiki_assignment.png', get_lang('Assignment desc extra'), '', ICON_SIZE_SMALL);
+            $icon = Display::return_icon('wiki_assignment.png', get_lang('This page is an assignment proposed by a trainer'), '', ICON_SIZE_SMALL);
         } elseif ((int)$keyAssignment === 2) {
-            $icon = Display::return_icon('wiki_work.png', get_lang('Assignment work extra'), '', ICON_SIZE_SMALL);
+            $icon = Display::return_icon('wiki_work.png', get_lang('This page is a learner work'), '', ICON_SIZE_SMALL);
         }
 
         // View 1: pick two versions
@@ -2418,14 +2418,14 @@ final class WikiManager
             echo '<form id="differences" method="POST" action="'.$actionUrl.'">';
             echo '<ul style="list-style-type:none">';
             echo '<br />';
-            echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('Show differences').' '.get_lang('Lines diff').'</button> ';
-            echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('Show differences').' '.get_lang('Words diff').'</button>';
+            echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('Compare selected versions').' '.get_lang('line by line').'</button> ';
+            echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('Compare selected versions').' '.get_lang('word by word').'</button>';
             echo '<br /><br />';
 
             $total = count($versions);
             foreach ($versions as $i => $w) {
                 $ui = api_get_user_info((int)$w->getUserId());
-                $username = $ui ? api_htmlentities(sprintf(get_lang('LoginX'), $ui['username']), ENT_QUOTES) : get_lang('Anonymous');
+                $username = $ui ? api_htmlentities(sprintf(get_lang('Login: %s'), $ui['username']), ENT_QUOTES) : get_lang('Anonymous');
 
                 $oldStyle   = ($i === 0)         ? 'style="visibility:hidden;"' : '';
                 $newChecked = ($i === 0)         ? ' checked' : '';
@@ -2454,8 +2454,8 @@ final class WikiManager
             }
 
             echo '<br />';
-            echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('Show differences').' '.get_lang('Lines diff').'</button> ';
-            echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('Show differences').' '.get_lang('Words diff').'</button>';
+            echo '<button class="search" type="submit" name="HistoryDifferences" value="HistoryDifferences">'.get_lang('Compare selected versions').' '.get_lang('line by line').'</button> ';
+            echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('Compare selected versions').' '.get_lang('word by word').'</button>';
             echo '</ul></form>';
 
             return;
@@ -2475,23 +2475,23 @@ final class WikiManager
             include 'diff.inc.php';
 
             echo '<div id="wikititle">'.api_htmlentities((string)$versionNew->getTitle()).'
-        <font size="-2"><i>('.get_lang('Differences new').'</i>
+        <font size="-2"><i>('.get_lang('Changes in version').'</i>
         <font style="background-color:#aaaaaa">'.$versionNew->getDtime()?->format('Y-m-d H:i:s').'</font>
-        <i>'.get_lang('Differences old').'</i>
+        <i>'.get_lang('old version of').'</i>
         <font style="background-color:#aaaaaa">'.$oldTime.'</font>)
         '.get_lang('Legend').':
-        <span class="diffAdded">'.get_lang('Wiki diff added line').'</span>
-        <span class="diffDeleted">'.get_lang('Wiki diff deleted line').'</span>
-        <span class="diffMoved">'.get_lang('Wiki diff moved line').'</span></font>
+        <span class="diffAdded">'.get_lang('A line has been added').'</span>
+        <span class="diffDeleted">'.get_lang('A line has been deleted').'</span>
+        <span class="diffMoved">'.get_lang('A line has been moved').'</span></font>
     </div>';
 
             echo '<table>'.diff((string)$oldContent, (string)$versionNew->getContent(), true, 'format_table_line').'</table>';
             echo '<br /><strong>'.get_lang('Legend').'</strong><div class="diff">';
             echo '<table><tr><td></td><td>';
-            echo '<span class="diffEqual">'.get_lang('Wiki diff unchanged line').'</span><br />';
-            echo '<span class="diffAdded">'.get_lang('Wiki diff added line').'</span><br />';
-            echo '<span class="diffDeleted">'.get_lang('Wiki diff deleted line').'</span><br />';
-            echo '<span class="diffMoved">'.get_lang('Wiki diff moved line').'</span><br />';
+            echo '<span class="diffEqual">'.get_lang('Line without changes').'</span><br />';
+            echo '<span class="diffAdded">'.get_lang('A line has been added').'</span><br />';
+            echo '<span class="diffDeleted">'.get_lang('A line has been deleted').'</span><br />';
+            echo '<span class="diffMoved">'.get_lang('A line has been moved').'</span><br />';
             echo '</td></tr></table>';
         }
 
@@ -2504,8 +2504,8 @@ final class WikiManager
             echo '<style>del{background:#fcc}ins{background:#cfc}</style>'.$renderer->render($diff);
             echo '<br /><strong>'.get_lang('Legend').'</strong><div class="diff">';
             echo '<table><tr><td></td><td>';
-            echo '<span class="diffAddedTex">'.get_lang('Wiki diff added tex').'</span><br />';
-            echo '<span class="diffDeletedTex">'.get_lang('Wiki diff deleted tex').'</span><br />';
+            echo '<span class="diffAddedTex">'.get_lang('Text added').'</span><br />';
+            echo '<span class="diffDeletedTex">'.get_lang('Text deleted').'</span><br />';
             echo '</td></tr></table>';
         }
     }
@@ -2593,7 +2593,7 @@ final class WikiManager
         // Teacher data
         $teacherId  = api_get_user_id();
         $tInfo      = api_get_user_info($teacherId);
-        $tLogin     = api_htmlentities(sprintf(get_lang('LoginX'), $tInfo['username']), ENT_QUOTES);
+        $tLogin     = api_htmlentities(sprintf(get_lang('Login: %s'), $tInfo['username']), ENT_QUOTES);
         $tName      = $tInfo['complete_name'].' - '.$tLogin;
         $tPhotoUrl  = $tInfo['avatar'] ?? UserManager::getUserPicture($teacherId);
         $tPhoto     = '<img src="'.$tPhotoUrl.'" alt="'.$tName.'" width="40" height="50" align="top" title="'.$tName.'" />';
@@ -2604,7 +2604,7 @@ final class WikiManager
         $contentA =
             '<div align="center" style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
             '<table border="0">'.
-            '<tr><td style="font-size:24px">'.get_lang('Assignment desc').'</td></tr>'.
+            '<tr><td style="font-size:24px">'.get_lang('Assignment proposed by the trainer').'</td></tr>'.
             '<tr><td>'.$tPhoto.'<br />'.Display::tag(
                 'span',
                 api_get_person_name($tInfo['firstname'], $tInfo['lastname']),
@@ -2626,14 +2626,14 @@ final class WikiManager
             if ($uid === 0 || $uid === $teacherId) { continue; }
 
             $uPic   = UserManager::getUserPicture($uid);
-            $uLogin = api_htmlentities(sprintf(get_lang('LoginX'), (string)$u['username']), ENT_QUOTES);
+            $uLogin = api_htmlentities(sprintf(get_lang('Login: %s'), (string)$u['username']), ENT_QUOTES);
             $uName  = api_get_person_name((string)$u['firstname'], (string)$u['lastname']).' . '.$uLogin;
             $uPhoto = '<img src="'.$uPic.'" alt="'.$uName.'" width="40" height="50" align="bottom" title="'.$uName.'" />';
 
             $isTutor  = $groupInfo && GroupManager::is_tutor_of_group($uid, $groupInfo);
             $isMember = $groupInfo && GroupManager::is_subscribed($uid, $groupInfo);
-            $status   = ($isTutor && $isMember) ? get_lang('Group tutor and member')
-                : ($isTutor ? get_lang('GroupTutor') : ' ');
+            $status   = ($isTutor && $isMember) ? get_lang('Coach and group member')
+                : ($isTutor ? get_lang('Group tutor') : ' ');
 
             if ($assignmentType === 1) {
                 $studentValues               = $values;
@@ -2642,10 +2642,10 @@ final class WikiManager
                 $studentValues['content']    =
                     '<div align="center" style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
                     '<table border="0">'.
-                    '<tr><td style="font-size:24px">'.get_lang('Assignment work').'</td></tr>'.
+                    '<tr><td style="font-size:24px">'.get_lang('Learner paper').'</td></tr>'.
                     '<tr><td>'.$uPhoto.'<br />'.$uName.'</td></tr>'.
                     '</table></div>'.
-                    '[[ '.$link2teacher.' | '.get_lang('Assignment link to teacher page').' ]] ';
+                    '[[ '.$link2teacher.' | '.get_lang('Access teacher page').' ]] ';
 
                 $allStudentsItems[] =
                     '<li>'.
@@ -2666,13 +2666,13 @@ final class WikiManager
             if ($assignmentType === 1) {
                 $teacherValues               = $values;
                 $teacherValues['title']      = $titleOrig;
-                $teacherValues['comment']    = get_lang('Assignment desc');
+                $teacherValues['comment']    = get_lang('Assignment proposed by the trainer');
                 sort($allStudentsItems);
 
                 $teacherValues['content'] =
                     $contentA.$contentB.'<br/>'.
                     '<div align="center" style="font-size:18px;background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
-                    get_lang('AssignmentLinkstoStudentsPage').'</div><br/>'.
+                    get_lang('Access to the papers written by learners').'</div><br/>'.
                     '<div style="background-color:#F5F8FB;border:solid;border-color:#E6E6E6">'.
                     '<ol>'.implode('', $allStudentsItems).'</ol>'.
                     '</div><br/>';
@@ -2740,7 +2740,7 @@ final class WikiManager
         api_item_property_update($_course, 'wiki', $newWiki->getIid(), 'WikiAdded', api_get_user_id(), $groupInfo);
         self::check_emailcue((string)$r_reflink, 'P', $r_dtime, (int)$r_user_id);
 
-        return get_lang('Page restored');
+        return get_lang('The page has been restored. You can view it by clicking');
     }
 
     public function restorePage()
@@ -2763,7 +2763,7 @@ final class WikiManager
                 ((int)$current_row['assignment'] === 1)) &&
             (!api_is_allowed_to_edit(false, true) && (int)$ctx['groupId'] === 0)
         ) {
-            Display::addFlash(Display::return_message(get_lang('Only edit pages course manager'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('The Main Page can be edited by a teacher only'), 'normal', false));
             return false;
         }
 
@@ -2777,7 +2777,7 @@ final class WikiManager
             ) {
                 $PassEdit = true;
             } else {
-                Display::addFlash(Display::return_message(get_lang('Only edit pages group members'), 'normal', false));
+                Display::addFlash(Display::return_message(get_lang('Trainers and group members only can edit pages of the group Wiki'), 'normal', false));
                 $PassEdit = false;
             }
         } else {
@@ -2786,13 +2786,13 @@ final class WikiManager
 
         // Assignment rules
         if ((int)$current_row['assignment'] === 1) {
-            Display::addFlash(Display::return_message(get_lang('Edit assignment warning'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('You can edit this page, but the pages of learners will not be modified'), 'normal', false));
         } elseif ((int)$current_row['assignment'] === 2) {
             if ((int)$userId !== (int)($current_row['user_id'] ?? 0)) {
                 if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
                     $PassEdit = true;
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('Lock by teacher'), 'normal', false));
+                    Display::addFlash(Display::return_message(get_lang('This page is protected. Trainers only can change it'), 'normal', false));
                     $PassEdit = false;
                 }
             }
@@ -2806,7 +2806,7 @@ final class WikiManager
         if ((int)($current_row['editlock'] ?? 0) === 1 &&
             (!api_is_allowed_to_edit(false, true) || !api_is_platform_admin())
         ) {
-            Display::addFlash(Display::return_message(get_lang('Locked'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('Page protected'), 'normal', false));
             return false;
         }
 
@@ -2819,9 +2819,9 @@ final class WikiManager
             $rest    = max(0, 1200 - $elapsed); // 20 min
 
             $userinfo = api_get_user_info($isEditing);
-            $msg = get_lang('This page is begin edited by').' <a href='.$userinfo['profile_url'].'>'.
+            $msg = get_lang('At this time, this page is being edited by').' <a href='.$userinfo['profile_url'].'>'.
                 Display::tag('span', $userinfo['complete_name_with_username']).'</a> '.
-                get_lang('This page is begin edited try later').' '.date("i", $rest).' '.get_lang('Min minutes');
+                get_lang('Please try again later. If the user who is currently editing the page does not save it, this page will be available to you around').' '.date("i", $rest).' '.get_lang('minutes');
 
             Display::addFlash(Display::return_message($msg, 'normal', false));
             return false;
@@ -2870,7 +2870,7 @@ final class WikiManager
                 'mostchanged'  => get_lang('Most changed pages'),
                 'orphaned'     => get_lang('Orphaned pages'),
                 'wanted'       => get_lang('Wanted pages'),
-                'mostlinked'   => get_lang('Most linked pages'),
+                'mostlinked'   => get_lang('Pages most linked'),
                 'statistics'   => get_lang('Statistics'),
             ];
 
@@ -2917,7 +2917,7 @@ final class WikiManager
                     if ($export2doc) {
                         Display::addFlash(
                             Display::return_message(
-                                get_lang('ThePageHasBeenExportedToDocArea'),
+                                get_lang('The page has been exported to the document tool'),
                                 'confirmation',
                                 false
                             )
@@ -2986,19 +2986,19 @@ final class WikiManager
                 </ol>
               </nav>';
 
-                echo '<div class="actions">'.get_lang('Delete wiki').'</div>';
+                echo '<div class="actions">'.get_lang('Delete all').'</div>';
 
                 $canDelete     = api_is_allowed_to_edit(false, true) || api_is_platform_admin();
                 $confirmedPost = isset($_POST['confirm_delete']) && $_POST['confirm_delete'] === '1';
 
                 if (!$canDelete) {
-                    echo Display::return_message(get_lang('Only admin can delete the wiki'), 'error', false);
+                    echo Display::return_message(get_lang('Trainers only can delete the Wiki'), 'error', false);
                     break;
                 }
 
                 if (!$confirmedPost) {
                     $actionUrl = $this->url(['action' => 'deletewiki']);
-                    $msg  = '<p>'.get_lang('ConfirmDeleteWiki').'</p>';
+                    $msg  = '<p>'.get_lang('Are you sure you want to delete this Wiki?').'</p>';
                     $msg .= '<form method="post" action="'.Security::remove_XSS($actionUrl).'" style="display:inline-block;margin-right:1rem;">';
                     $msg .= '<input type="hidden" name="confirm_delete" value="1">';
                     $msg .= '<button type="submit" class="btn btn-danger">'.get_lang('Yes').'</button>';
@@ -3067,7 +3067,7 @@ final class WikiManager
 
                     if ($indexIsEmpty && (api_is_allowed_to_edit(false, true) || api_is_platform_admin() || api_is_allowed_in_course())) {
                         Display::addFlash(
-                            Display::return_message(get_lang('Go and edit main page'), 'normal', false)
+                            Display::return_message(get_lang('To start Wiki go and edit Main page'), 'normal', false)
                         );
                     }
                 } catch (\Throwable $e) {
@@ -3079,7 +3079,7 @@ final class WikiManager
                     && (!api_is_allowed_to_edit(false, true) && !api_is_platform_admin())
                 ) {
                     Display::addFlash(
-                        Display::return_message(get_lang('Add pages locked'), 'error', false)
+                        Display::return_message(get_lang('The add option has been temporarily disabled by the trainer'), 'error', false)
                     );
                     break;
                 }
@@ -3135,7 +3135,7 @@ final class WikiManager
 
         // Basic guard: this action expects a title in the request (legacy behavior)
         if (empty($_GET['title'])) {
-            Display::addFlash(Display::return_message(get_lang('Must select a page'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
@@ -3156,18 +3156,18 @@ final class WikiManager
             ->getQuery()->getOneOrNullResult();
 
         if (!$first) {
-            Display::addFlash(Display::return_message(get_lang('Must select a page'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
         $assignIcon = '';
         if ((int)$first->getAssignment() === 1) {
-            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment desc'));
+            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment proposed by the trainer'));
         } elseif ((int)$first->getAssignment() === 2) {
-            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment work'));
+            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learner paper'));
         }
 
-        echo '<div id="wikititle">'.get_lang('Links pages from').": $assignIcon ".
+        echo '<div id="wikititle">'.get_lang('Pages that link to this page').": $assignIcon ".
             Display::url(
                 api_htmlentities($first->getTitle()),
                 $ctx['baseUrl'].'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($reflink)])
@@ -3210,7 +3210,7 @@ final class WikiManager
         }
 
         if (!$items) {
-            echo self::twPanel('<em>'.get_lang('No results').'</em>', get_lang('Links pages'));
+            echo self::twPanel('<em>'.get_lang('No results found').'</em>', get_lang('What links here'));
             return;
         }
 
@@ -3224,9 +3224,9 @@ final class WikiManager
 
             $icon = '';
             if ((int)$obj->getAssignment() === 1) {
-                $icon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment desc'));
+                $icon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment proposed by the trainer'));
             } elseif ((int)$obj->getAssignment() === 2) {
-                $icon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment work'));
+                $icon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learner paper'));
             }
 
             $when = $obj->getDtime() ? api_get_local_time($obj->getDtime()) : '';
@@ -3252,7 +3252,7 @@ final class WikiManager
             '<tbody>'.$rowsHtml.'</tbody>'.
             '</table>';
 
-        echo self::twPanel($table, get_lang('LinksPages'));
+        echo self::twPanel($table, get_lang('What links here'));
     }
 
     public function showDiscuss(string $page): void
@@ -3266,7 +3266,7 @@ final class WikiManager
         }
 
         if (empty($_GET['title'])) {
-            Display::addFlash(Display::return_message(get_lang('Must select a page'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
@@ -3313,7 +3313,7 @@ final class WikiManager
             ((int)$last->getAssignment() === 2 && (int)$last->getVisibilityDisc() === 0 && api_get_user_id() === (int)$last->getUserId());
 
         if (!$canSeeDiscuss) {
-            Display::addFlash(Display::return_message(get_lang('LockByTeacher'), 'warning', false));
+            Display::addFlash(Display::return_message(get_lang('Disabled by trainer'), 'warning', false));
             return;
         }
 
@@ -3358,9 +3358,9 @@ final class WikiManager
 
         $assignIcon = '';
         if ((int)$last->getAssignment() === 1) {
-            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment desc'));
+            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment proposed by the trainer'));
         } elseif ((int)$last->getAssignment() === 2) {
-            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment work'));
+            $assignIcon = Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learner paper'));
         }
 
         echo '<div id="wikititle">'.$assignIcon.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($last->getTitle()).$metaRight.'</div>';
@@ -3438,7 +3438,7 @@ final class WikiManager
         $countScore = count($scored);
         $avg        = $countScore > 0 ? round(array_sum(array_map(static fn($r) => (int)$r->getPScore(), $scored)) / $countScore, 2) : 0.0;
 
-        echo get_lang('Num comments').': '.$countAll.' - '.get_lang('Num comments score').': '.$countScore.' - '.get_lang('Rating media').': '.$avg;
+        echo get_lang('Comments on this page').': '.$countAll.' - '.get_lang('Number of comments scored:').': '.$countScore.' - '.get_lang('The average rating for the page is').': '.$avg;
 
         // Persist average into wiki.score (fits integer nullable; we save rounded int)
         $last->setScore((int)round($avg));
@@ -3448,7 +3448,7 @@ final class WikiManager
 
         foreach ($reviews as $r) {
             $ui = api_get_user_info((int)$r->getUsercId());
-            $role = ($ui && (string)$ui['status'] === '5') ? get_lang('Student') : get_lang('Teacher');
+            $role = ($ui && (string)$ui['status'] === '5') ? get_lang('Learner') : get_lang('Teacher');
             $name = $ui ? $ui['complete_name'] : get_lang('Anonymous');
             $avatar = $ui && !empty($ui['avatar']) ? $ui['avatar'] : UserManager::getUserPicture((int)$r->getUsercId());
             $profile = $ui ? UserManager::getUserProfileLink($ui) : api_htmlentities($name);
@@ -3605,7 +3605,7 @@ final class WikiManager
 
         // Permissions
         if (!api_is_allowed_to_edit(false, true) && !api_is_platform_admin()) {
-            Display::addFlash(Display::return_message(get_lang('OnlyAdminDeletePageWiki'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('Trainers only can delete a page'), 'normal', false));
             return;
         }
 
@@ -3613,7 +3613,7 @@ final class WikiManager
         $pageRaw = $_GET['title'] ?? '';
         $page    = self::normalizeReflink($pageRaw);
         if ($page === '') {
-            Display::addFlash(Display::return_message(get_lang('MustSelectPage'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             header('Location: '.$ctx['baseUrl'].'&action=allpages');
             exit;
         }
@@ -3635,7 +3635,7 @@ final class WikiManager
         /** @var CWiki|null $first */
         $first = $qbFirst->getQuery()->getOneOrNullResult();
         if (!$first || !(int)$first->getPageId()) {
-            Display::addFlash(Display::return_message(get_lang('WikiPageNotFound'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('Not found'), 'error', false));
             header('Location: '.$ctx['baseUrl'].'&action=allpages');
             exit;
         }
@@ -3644,7 +3644,7 @@ final class WikiManager
 
         // Warn if deleting the main (index) page
         if ($page === 'index') {
-            Display::addFlash(Display::return_message(get_lang('WarningDeleteMainPage'), 'warning', false));
+            Display::addFlash(Display::return_message(get_lang('Deleting the homepage of the Wiki is not recommended because it is the main access to the wiki.<br />If, however, you need to do so, do not forget to re-create this Homepage. Until then, other users will not be able to add new pages.'), 'warning', false));
         }
 
         // Confirmation?
@@ -3658,11 +3658,11 @@ final class WikiManager
 
             if ($ok) {
                 Display::addFlash(
-                    Display::return_message(get_lang('WikiPageDeleted'), 'confirmation', false)
+                    Display::return_message(get_lang('The page and its history have been deleted.'), 'confirmation', false)
                 );
             } else {
                 Display::addFlash(
-                    Display::return_message(get_lang('DeleteFailed'), 'error', false)
+                    Display::return_message(get_lang('Deletion failed'), 'error', false)
                 );
             }
 
@@ -3743,7 +3743,7 @@ final class WikiManager
         echo '<div class="actions">'.get_lang('All pages');
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             echo ' <a href="'.$ctx['baseUrl'].'&action=deletewiki">'.
-                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete wiki')).
+                Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete all')).
                 '</a>';
         }
         echo '</div>';
@@ -3850,8 +3850,8 @@ final class WikiManager
 
         $table->set_header(0, get_lang('Type'), true, ['style' => 'width:48px;']);
         $table->set_header(1, get_lang('Title'), true);
-        $table->set_header(2, get_lang('Author').' <small>'.get_lang('Last version').'</small>');
-        $table->set_header(3, get_lang('Date').' <small>'.get_lang('Last version').'</small>');
+        $table->set_header(2, get_lang('Author').' <small>'.get_lang('Latest version').'</small>');
+        $table->set_header(3, get_lang('Date').' <small>'.get_lang('Latest version').'</small>');
 
         if (api_is_allowed_to_session_edit(false, true)) {
             $table->set_header(4, get_lang('Actions'), false, ['style' => 'width: 280px;']);
@@ -3867,7 +3867,7 @@ final class WikiManager
                     'ch-tool-icon',
                     null,
                     ICON_SIZE_SMALL,
-                    get_lang('Standard task')
+                    get_lang('Standard Task')
                 );
             }
             return $icons;
@@ -3913,7 +3913,7 @@ final class WikiManager
             $ref = (string)$value;
 
             $actions  = Display::url(
-                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('EditPage')),
+                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit')),
                 $ctx['baseUrl'].'&'.http_build_query(['action' => 'edit', 'title' => api_htmlentities($ref)])
             );
             $actions .= Display::url(
@@ -3925,7 +3925,7 @@ final class WikiManager
                 $ctx['baseUrl'].'&'.http_build_query(['action' => 'history', 'title' => api_htmlentities($ref)])
             );
             $actions .= Display::url(
-                Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('LinksPages')),
+                Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('What links here')),
                 $ctx['baseUrl'].'&'.http_build_query(['action' => 'links', 'title' => api_htmlentities($ref)])
             );
 
@@ -4026,7 +4026,7 @@ final class WikiManager
 
         $categoryIdList = array_map('intval', $categoryIdList);
 
-        echo '<legend>'.get_lang('Wiki search results').': '.Security::remove_XSS($searchTerm).'</legend>';
+        echo '<legend>'.get_lang('Wiki Search Results').': '.Security::remove_XSS($searchTerm).'</legend>';
 
         $qb = $repo->createQueryBuilder('wp');
         $qb->andWhere('wp.cId = :cid')->setParameter('cid', $ctx['courseId'])
@@ -4093,15 +4093,15 @@ final class WikiManager
         $rows = $qb->getQuery()->getResult();
 
         if (!$rows) {
-            echo get_lang('NoSearchResults');
+            echo get_lang('No search results');
             return;
         }
 
         // Icons
-        $iconEdit    = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('EditPage'));
+        $iconEdit    = Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit'));
         $iconDiscuss = Display::getMdiIcon(ActionIcon::COMMENT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Discuss'));
         $iconHistory = Display::getMdiIcon(ActionIcon::HISTORY, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('History'));
-        $iconLinks   = Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('LinksPages'));
+        $iconLinks   = Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('What links here'));
         $iconDelete  = Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete'));
 
         $data = [];
@@ -4171,8 +4171,8 @@ final class WikiManager
             $table->set_header(3, get_lang('Date'));
             $table->set_header(4, get_lang('Version'));
         } else {
-            $table->set_header(2, get_lang('Author').' <small>'.get_lang('LastVersion').'</small>');
-            $table->set_header(3, get_lang('Date').' <small>'.get_lang('LastVersion').'</small>');
+            $table->set_header(2, get_lang('Author').' <small>'.get_lang('Latest version').'</small>');
+            $table->set_header(3, get_lang('Date').' <small>'.get_lang('Latest version').'</small>');
             $table->set_header(4, get_lang('Actions'), false, ['style' => 'width:280px;']);
         }
         $table->display();
@@ -4187,20 +4187,20 @@ final class WikiManager
         $notifyBlock = '';
         if (api_is_allowed_to_session_edit(false, true)) {
             if (self::check_notify_all() === 1) {
-                $notifyBlock = Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CancelNotifyByEmail'))
-                    .' '.get_lang('Not notify changes');
+                $notifyBlock = Display::getMdiIcon(ActionIcon::INFORMATION, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Do not notify me by e-mail when this page is edited'))
+                    .' '.get_lang('Do not notify me of changes');
                 $act = 'unlocknotifyall';
             } else {
-                $notifyBlock = Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('NotifyByEmail'))
-                    .' '.get_lang('Notify changes');
+                $notifyBlock = Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Notify me by e-mail when somebody replies'))
+                    .' '.get_lang('Notify me of changes');
                 $act = 'locknotifyall';
             }
 
             echo '<div class="actions"><span style="float:right;">'.
                 '<a href="'.$url.'&action=recentchanges&actionpage='.$act.'&title='.api_htmlentities(urlencode($page)).'">'.$notifyBlock.'</a>'.
-                '</span>'.get_lang('Recent changes').'</div>';
+                '</span>'.get_lang('Latest changes').'</div>';
         } else {
-            echo '<div class="actions">'.get_lang('Recent changes').'</div>';
+            echo '<div class="actions">'.get_lang('Latest changes').'</div>';
         }
 
         $repo = self::repo();
@@ -4238,7 +4238,7 @@ final class WikiManager
             $iconTask = '';
             $conf = self::confRepo()->findOneBy(['cId' => $ctx['courseId'], 'pageId' => (int)$w->getPageId()]);
             if ($conf && $conf->getTask()) {
-                $iconTask = Display::getMdiIcon(ActionIcon::WIKI_TASK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('StandardTask'));
+                $iconTask = Display::getMdiIcon(ActionIcon::WIKI_TASK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Standard Task'));
             }
 
             $titleLink = Display::url(
@@ -4250,7 +4250,7 @@ final class WikiManager
                 ])
             );
 
-            $actionText = ((int)$w->getVersion() > 1) ? get_lang('EditedBy') : get_lang('AddedBy');
+            $actionText = ((int)$w->getVersion() > 1) ? get_lang('edited by') : get_lang('added by');
             $authorLink = self::authorLink((int)$w->getUserId(), (string)$w->getUserIp());
 
             $rows[] = [
@@ -4289,8 +4289,8 @@ final class WikiManager
     private static function assignmentIcon(int $assignment): string
     {
         return match ($assignment) {
-            1       => Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AssignmentDesc')),
-            2       => Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AssignmentWork')),
+            1       => Display::getMdiIcon(ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Assignment proposed by the trainer')),
+            2       => Display::getMdiIcon(ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Learner paper')),
             default => '',
         };
     }
@@ -4556,7 +4556,7 @@ final class WikiManager
         $ctx = self::ctx();
         $url = $ctx['baseUrl'];
 
-        echo '<div class="actions">'.get_lang('Most linked pages').'</div>';
+        echo '<div class="actions">'.get_lang('Pages most linked').'</div>';
 
         // All existing page reflinks in context
         $qbPages = self::repo()->createQueryBuilder('w')
@@ -4946,50 +4946,50 @@ final class WikiManager
 
         echo '<table class="table table-hover table-striped data_table">';
         echo '<thead><tr><th colspan="2">'.get_lang('General').'</th></tr></thead>';
-        echo '<tr><td>'.get_lang('StudentAddNewPages').'</td><td>'.$status_add_new_pag.'</td></tr>';
-        echo '<tr><td>'.get_lang('DateCreateOldestWikiPage').'</td><td>'.$first_wiki_date.'</td></tr>';
-        echo '<tr><td>'.get_lang('DateEditLatestWikiVersion').'</td><td>'.$last_wiki_date.'</td></tr>';
-        echo '<tr><td>'.get_lang('AverageScoreAllPages').'</td><td>'.$media_score.' %</td></tr>';
-        echo '<tr><td>'.get_lang('AverageMediaUserProgress').'</td><td>'.$media_progress.' %</td></tr>';
-        echo '<tr><td>'.get_lang('TotalWikiUsers').'</td><td>'.$total_users.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalIpAdress').'</td><td>'.$total_ip.'</td></tr>';
+        echo '<tr><td>'.get_lang('Learners can add new pages to the Wiki').'</td><td>'.$status_add_new_pag.'</td></tr>';
+        echo '<tr><td>'.get_lang('Creation date of the oldest Wiki page').'</td><td>'.$first_wiki_date.'</td></tr>';
+        echo '<tr><td>'.get_lang('Date of most recent edition of Wiki').'</td><td>'.$last_wiki_date.'</td></tr>';
+        echo '<tr><td>'.get_lang('Average rating of all pages').'</td><td>'.$media_score.' %</td></tr>';
+        echo '<tr><td>'.get_lang('Mean estimated progress by users on their pages').'</td><td>'.$media_progress.' %</td></tr>';
+        echo '<tr><td>'.get_lang('Total users that have participated in this Wiki').'</td><td>'.$total_users.'</td></tr>';
+        echo '<tr><td>'.get_lang('Total different IP addresses that have contributed to Wiki').'</td><td>'.$total_ip.'</td></tr>';
         echo '</table><br/>';
 
         echo '<table class="table table-hover table-striped data_table">';
-        echo '<thead><tr><th colspan="2">'.get_lang('Pages').' '.get_lang('And').' '.get_lang('Versions').'</th></tr></thead>';
-        echo '<tr><td>'.get_lang('Pages').' - '.get_lang('NumContributions').'</td><td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td></tr>';
-        echo '<tr><td>'.get_lang('EmptyPages').'</td><td>'.$total_empty_content_lv.' ('.get_lang('Versions').': '.$total_empty_content.')</td></tr>';
-        echo '<tr><td>'.get_lang('NumAccess').'</td><td>'.$total_visits_lv.' ('.get_lang('Versions').': '.$total_visits.')</td></tr>';
-        echo '<tr><td>'.get_lang('TotalPagesEditedAtThisTime').'</td><td>'.$total_editing_now.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalHiddenPages').'</td><td>'.$total_hidden.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumProtectedPages').'</td><td>'.$total_protected.'</td></tr>';
-        echo '<tr><td>'.get_lang('LockedDiscussPages').'</td><td>'.$total_lock_disc.'</td></tr>';
-        echo '<tr><td>'.get_lang('HiddenDiscussPages').'</td><td>'.$total_hidden_disc.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalComments').'</td><td>'.$total_comment_version.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalOnlyRatingByTeacher').'</td><td>'.$total_only_teachers_rating.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalRatingPeers').'</td><td>'.max(0, $total_pages - $total_only_teachers_rating).'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalTeacherAssignments').' - '.get_lang('PortfolioMode').'</td><td>'.$total_teacher_assignment.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalStudentAssignments').' - '.get_lang('PortfolioMode').'</td><td>'.$total_student_assignment.'</td></tr>';
-        echo '<tr><td>'.get_lang('TotalTask').' - '.get_lang('StandardMode').'</td><td>'.$total_task.'</td></tr>';
+        echo '<thead><tr><th colspan="2">'.get_lang('Pages').' '.get_lang('and').' '.get_lang('Versions').'</th></tr></thead>';
+        echo '<tr><td>'.get_lang('Pages').' - '.get_lang('Number of contributions').'</td><td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td></tr>';
+        echo '<tr><td>'.get_lang('Total of empty pages').'</td><td>'.$total_empty_content_lv.' ('.get_lang('Versions').': '.$total_empty_content.')</td></tr>';
+        echo '<tr><td>'.get_lang('Number of visits').'</td><td>'.$total_visits_lv.' ('.get_lang('Versions').': '.$total_visits.')</td></tr>';
+        echo '<tr><td>'.get_lang('Total pages edited at this time').'</td><td>'.$total_editing_now.'</td></tr>';
+        echo '<tr><td>'.get_lang('Total hidden pages').'</td><td>'.$total_hidden.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of protected pages').'</td><td>'.$total_protected.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of discussion pages blocked').'</td><td>'.$total_lock_disc.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of discussion pages hidden').'</td><td>'.$total_hidden_disc.'</td></tr>';
+        echo '<tr><td>'.get_lang('Total comments on various versions of the pages').'</td><td>'.$total_comment_version.'</td></tr>';
+        echo '<tr><td>'.get_lang('Total pages can only be scored by a teacher').'</td><td>'.$total_only_teachers_rating.'</td></tr>';
+        echo '<tr><td>'.get_lang('Total pages that can be scored by other learners').'</td><td>'.max(0, $total_pages - $total_only_teachers_rating).'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of assignments pages proposed by a teacher').' - '.get_lang('Portfolio mode').'</td><td>'.$total_teacher_assignment.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of individual assignments learner pages').' - '.get_lang('Portfolio mode').'</td><td>'.$total_student_assignment.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of tasks').' - '.get_lang('Standard Task mode').'</td><td>'.$total_task.'</td></tr>';
         echo '</table><br/>';
 
         echo '<table class="table table-hover table-striped data_table">';
         echo '<thead>';
-        echo '<tr><th colspan="3">'.get_lang('ContentPagesInfo').'</th></tr>';
-        echo '<tr><td></td><td>'.get_lang('InTheLastVersion').'</td><td>'.get_lang('InAllVersions').'</td></tr>';
+        echo '<tr><th colspan="3">'.get_lang('Information about the content of the pages').'</th></tr>';
+        echo '<tr><td></td><td>'.get_lang('In the last version').'</td><td>'.get_lang('In all versions').'</td></tr>';
         echo '</thead>';
-        echo '<tr><td>'.get_lang('NumWords').'</td><td>'.$total_words_lv.'</td><td>'.$total_words.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumlinksHtmlImagMedia').'</td>'.
+        echo '<tr><td>'.get_lang('Number of words').'</td><td>'.$total_words_lv.'</td><td>'.$total_words.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of external html links inserted (text, images, ...).').'</td>'.
             '<td>'.$total_links_lv.' ('.get_lang('Anchors').':'.$total_links_anchors_lv.', Mail:'.$total_links_mail_lv.', FTP:'.$total_links_ftp_lv.' IRC:'.$total_links_irc_lv.', News:'.$total_links_news_lv.')</td>'.
             '<td>'.$total_links.' ('.get_lang('Anchors').':'.$total_links_anchors.', Mail:'.$total_links_mail.', FTP:'.$total_links_ftp.' IRC:'.$total_links_irc.', News:'.$total_links_news.')</td></tr>';
-        echo '<tr><td>'.get_lang('NumWikilinks').'</td><td>'.$total_wlinks_lv.'</td><td>'.$total_wlinks.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumImages').'</td><td>'.$total_images_lv.'</td><td>'.$total_images.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumFlash').'</td><td>'.$total_flash_lv.'</td><td>'.$total_flash.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumMp3').'</td><td>'.$total_mp3_lv.'</td><td>'.$total_mp3.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumFlvVideo').'</td><td>'.$total_flv_lv.'</td><td>'.$total_flv.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumYoutubeVideo').'</td><td>'.$total_youtube_lv.'</td><td>'.$total_youtube.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumOtherAudioVideo').'</td><td>'.$total_multimedia_lv.'</td><td>'.$total_multimedia.'</td></tr>';
-        echo '<tr><td>'.get_lang('NumTables').'</td><td>'.$total_tables_lv.'</td><td>'.$total_tables.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of wiki links').'</td><td>'.$total_wlinks_lv.'</td><td>'.$total_wlinks.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of inserted images').'</td><td>'.$total_images_lv.'</td><td>'.$total_images.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of inserted flash files').'</td><td>'.$total_flash_lv.'</td><td>'.$total_flash.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of mp3 audio files inserted').'</td><td>'.$total_mp3_lv.'</td><td>'.$total_mp3.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of FLV video files inserted').'</td><td>'.$total_flv_lv.'</td><td>'.$total_flv.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of Youtube video embedded').'</td><td>'.$total_youtube_lv.'</td><td>'.$total_youtube.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of audio and video files inserted (except mp3 and flv)').'</td><td>'.$total_multimedia_lv.'</td><td>'.$total_multimedia.'</td></tr>';
+        echo '<tr><td>'.get_lang('Number of tables inserted').'</td><td>'.$total_tables_lv.'</td><td>'.$total_tables.'</td></tr>';
         echo '</table>';
 
         return true;
@@ -5072,7 +5072,7 @@ final class WikiManager
             ).
             Display::url(
                 Display::getMdiIcon(ActionIcon::LINKS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM)
-                .' '.get_lang('Most linked pages'),
+                .' '.get_lang('Pages most linked'),
                 $url.'&action=mostlinked'
             ).
 
@@ -5108,7 +5108,7 @@ final class WikiManager
         $titleInGet = $_GET['title'] ?? null;
 
         if (!$titleInGet) {
-            Display::addFlash(Display::return_message(get_lang('MustSelectPage'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
@@ -5126,14 +5126,14 @@ final class WikiManager
             ['version' => 'DESC', 'dtime' => 'DESC']
         ) ?? self::repo()->findOneBy(['cId' => $ctx['courseId'], 'reflink' => $reflink], ['version' => 'DESC']);
         if (!$target) {
-            Display::addFlash(Display::return_message(get_lang('Must select a page'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
         $assignmentIcon = self::assignmentIcon((int)$target->getAssignment());
 
         echo '<div id="wikititle">'
-            .get_lang('LinksPagesFrom').": {$assignmentIcon} "
+            .get_lang('Pages that link to this page').": {$assignmentIcon} "
             .Display::url(
                 api_htmlentities($target->getTitle()),
                 $url.'&'.http_build_query(['action' => 'showpage', 'title' => api_htmlentities($reflink)])
@@ -5222,7 +5222,7 @@ final class WikiManager
     {
         if (!api_is_platform_admin() && api_get_setting('students_export2pdf') !== 'true') {
             Display::addFlash(
-                Display::return_message(get_lang('PDFDownloadNotAllowedForStudents'), 'error', false)
+                Display::return_message(get_lang('PDF download is not allowed for students'), 'error', false)
             );
             return false;
         }
@@ -5241,7 +5241,7 @@ final class WikiManager
         }
 
         if ($titleRaw === '' && $contentRaw === '') {
-            Display::addFlash(Display::return_message(get_lang('NoSearchResults'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('No search results'), 'error', false));
             return false;
         }
 
@@ -5500,7 +5500,7 @@ final class WikiManager
             $this->url(['action' => 'category', 'id' => $category ? $category->getId() : null])
         );
 
-        $form->addHeader(get_lang('AddCategory'));
+        $form->addHeader(get_lang('Add category'));
         // attributes array MUST be provided (empty array ok)
         $form->addSelectFromCollection('parent', get_lang('Parent'), $categories, [], true, 'getNodeName');
         $form->addText('name', get_lang('Name'));
@@ -5521,9 +5521,9 @@ final class WikiManager
                     ->setSession($session);
                 $em->persist($category);
 
-                Display::addFlash(Display::return_message(get_lang('CategoryAdded'), 'success'));
+                Display::addFlash(Display::return_message(get_lang('The category has been added'), 'success'));
             } else {
-                Display::addFlash(Display::return_message(get_lang('CategoryEdited'), 'success'));
+                Display::addFlash(Display::return_message(get_lang('The forum category has been modified'), 'success'));
             }
 
             $category
@@ -5562,7 +5562,7 @@ final class WikiManager
         }
 
         if (empty($_GET['title'])) {
-            Display::addFlash(Display::return_message(get_lang('MustSelectPage'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('You must select a page first'), 'error', false));
             return;
         }
 
@@ -5671,7 +5671,7 @@ final class WikiManager
             ->getQuery()->getOneOrNullResult();
 
         if (!$last || !$first) {
-            Display::addFlash(Display::return_message(get_lang('DiscussNotAvailable'), 'normal', false));
+            Display::addFlash(Display::return_message(get_lang('Discuss not available'), 'normal', false));
             return;
         }
 
@@ -5703,11 +5703,11 @@ final class WikiManager
         $iconAssignment = null;
         if ($last->getAssignment() === 1) {
             $iconAssignment = Display::getMdiIcon(
-                ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AssignmentDescExtra')
+                ActionIcon::WIKI_ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This page is an assignment proposed by a trainer')
             );
         } elseif ($last->getAssignment() === 2) {
             $iconAssignment = Display::getMdiIcon(
-                ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('AssignmentWorkExtra')
+                ActionIcon::WIKI_WORK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('This page is a learner work')
             );
         }
 
@@ -5728,8 +5728,8 @@ final class WikiManager
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             $addOpen   = (self::check_addlock_discuss($pageKey) === 1);
             $lockIcon  = $addOpen
-                ? Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('LockDiscussExtra'))
-                : Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('UnlockDiscussExtra'));
+                ? Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Now only trainers can add comments to this discussion'))
+                : Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Now all members can add comments to this discussion'));
             $lockAction = $addOpen ? 'lockdisc' : 'unlockdisc';
             echo Display::url($lockIcon, $this->url(['action'=>'discuss','actionpage'=>$lockAction,'title'=>$pageKey]));
         }
@@ -5744,16 +5744,16 @@ final class WikiManager
         if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
             $ratingOn  = (self::check_ratinglock_discuss($pageKey) === 1);
             $starIcon  = $ratingOn
-                ? Display::getMdiIcon(ActionIcon::STAR,         'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('LockRatingDiscussExtra'))
-                : Display::getMdiIcon(ActionIcon::STAR_OUTLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('UnlockRatingDiscussExtra'));
+                ? Display::getMdiIcon(ActionIcon::STAR,         'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Now only trainers can rate this page'))
+                : Display::getMdiIcon(ActionIcon::STAR_OUTLINE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Now all members can rate this page'));
             $rateAction = $ratingOn ? 'lockrating' : 'unlockrating';
             echo Display::url($starIcon, $this->url(['action'=>'discuss','actionpage'=>$rateAction,'title'=>$pageKey]));
         }
         if ($this->mailcueLinkColumn() !== null) {
             $notifyOn   = ($this->checkNotifyDiscuss($pageKey) === 1);
             $notifyIcon = $notifyOn
-                ? Display::getMdiIcon(ActionIcon::EMAIL_ON,  'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('CancelNotifyMe'))
-                : Display::getMdiIcon(ActionIcon::EMAIL_OFF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('NotifyMe'));
+                ? Display::getMdiIcon(ActionIcon::EMAIL_ON,  'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Stop notifying me'))
+                : Display::getMdiIcon(ActionIcon::EMAIL_OFF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Notify me'));
             $notifyAction = $notifyOn ? 'unlocknotifydisc' : 'locknotifydisc';
             echo Display::url($notifyIcon, $this->url(['action'=>'discuss','actionpage'=>$notifyAction,'title'=>$pageKey]));
         }
@@ -5817,7 +5817,7 @@ final class WikiManager
 
         echo '<div class="wd-stats">';
         echo   '<span class="label label-default">'.get_lang('Comments on this page').': '.$countAll.'</span>';
-        echo   '<span class="label label-default">'.get_lang('Number of comments scored').': '.$scoredRows.'</span>';
+        echo   '<span class="label label-default">'.get_lang('Number of comments scored:').' '.$scoredRows.'</span>';
         echo   '<span class="label label-default">'.get_lang('The average rating for the page is').': '.number_format($avgNumeric, 2).' / 10</span>';
         echo '</div>';
 
@@ -5838,12 +5838,12 @@ final class WikiManager
 
         // Comments list
         if ($countAll === 0) {
-            echo '<div class="well wd-empty">'.get_lang('NoSearchResults').'</div>';
+            echo '<div class="well wd-empty">'.get_lang('No search results found').'</div>';
         } else {
             foreach ($comments as $c) {
                 $uInfo  = api_get_user_info((int)$c['userc_id']);
                 $name   = $uInfo ? $uInfo['complete_name'] : get_lang('Anonymous');
-                $status = ($uInfo && (string)$uInfo['status'] === '5') ? get_lang('Student') : get_lang('Teacher');
+                $status = ($uInfo && (string)$uInfo['status'] === '5') ? get_lang('Learner') : get_lang('Teacher');
 
                 $photo  = ($uInfo && !empty($uInfo['avatar']))
                     ? '<img class="wd-avatar" src="'.$uInfo['avatar'].'" alt="'.api_htmlentities($name).'">'
@@ -6279,7 +6279,7 @@ mpdf-->'.$contentPdf;
 
         // --- UX feedback + redirect ---
         Display::addFlash(
-            Display::return_message(get_lang('CategoryDeleted'), 'success')
+            Display::return_message(get_lang('Category deleted'), 'success')
         );
 
         header('Location: '.$this->url(['action' => 'category']));

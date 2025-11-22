@@ -99,7 +99,7 @@
               optionLabel="label"
               optionValue="value"
               multiple
-              :placeholder="t('Select recipients…')"
+              :placeholder="t('Choose recipients')"
               style="width: 100%"
               label=""
               :class="{ 'ring-1 ring-red-500 rounded-md': submitted && !hasSelectedRecipient }"
@@ -127,7 +127,7 @@
         </div>
 
         <div v-if="isUploading" class="text-xs text-gray-500 mt-2 text-right">
-          {{ t("Uploading… please keep this tab open.") }}
+          {{ t("Uploading... please keep this tab open.") }}
         </div>
       </div>
     </div>
@@ -248,7 +248,7 @@ async function submit() {
       })
     }
 
-    alert(t("File(s) uploaded successfully."))
+    alert(t("File upload succeeded!"))
     // Reset minimal state
     description.value = ""
     overwrite.value = false
@@ -260,7 +260,7 @@ async function submit() {
     router.push({ name: "DropboxListSent", params: route.params, query: route.query })
   } catch (e) {
     console.error(e)
-    alert(t("Upload failed. Please try again."))
+    alert(t("Upload failed"))
   } finally {
     isUploading.value = false
   }

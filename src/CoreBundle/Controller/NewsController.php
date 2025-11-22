@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\SysAnnouncementRepository;
@@ -32,14 +33,17 @@ class NewsController extends BaseController
     {
         $user = $this->userHelper->getCurrent();
 
-        $list = [];
-        if (null !== $user) {
-            $list = $sysAnnouncementRepository->getAnnouncements(
-                $user,
-                $this->accessUrlHelper->getCurrent(),
-                $this->getRequest()->getLocale()
-            );
+        if (null === $user) {
+            $anon = new User();
+            $anon->setRoles(['ROLE_ANONYMOUS']);
+            $user = $anon;
         }
+
+        $list = $sysAnnouncementRepository->getAnnouncements(
+            $user,
+            $this->accessUrlHelper->getCurrent(),
+            $this->getRequest()->getLocale()
+        );
 
         return new JsonResponse($list);
     }

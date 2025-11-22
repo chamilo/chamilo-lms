@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -36,17 +37,20 @@ use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
+use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
+use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\CourseBundle\Settings\SettingsFormFactory;
 use CourseManager;
 use Database;
+use DateTimeInterface;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -54,6 +58,7 @@ use Exception;
 use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
+use IntlDateFormatter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -316,6 +321,161 @@ class CourseController extends ToolBaseController
             ]
         );
     }
+
+    #[Route('/{cid}/thematic_progress.json', name: 'chamilo_core_course_thematic_progress_json', methods: ['GET'])]
+    public function thematicProgressJson(
+        Request $request,
+        CThematicRepository $thematicRepository,
+        UserHelper $userHelper,
+        CidReqHelper $cidReqHelper,
+        TranslatorInterface $translator,
+        SettingsCourseManager $courseSettingsManager
+    ): JsonResponse {
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if (0 === $this->getSessionId()) {
+            $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        }
+
+        $courseSettingsManager->setCourse($course);
+        $displayMode = (string) $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse');
+
+        if ('' === $displayMode || '0' === $displayMode || '4' === $displayMode) {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        $sessionEntity = $cidReqHelper->getSessionEntity();
+        $currentUser = $userHelper->getCurrent();
+
+        $advance1 = null;
+        $advance2 = null;
+        $subtitle1 = '';
+        $subtitle2 = '';
+
+        if ('1' === $displayMode) {
+            // Last completed topic only
+            $advance1 = $thematicRepository->findLastDoneAdvanceForCourse($course, $sessionEntity);
+            if (null !== $advance1) {
+                $subtitle1 = $translator->trans('Current topic');
+            }
+        } elseif ('2' === $displayMode) {
+            // Two next not done topics
+            $nextList = $thematicRepository->findNextNotDoneAdvancesForCourse($course, $sessionEntity, 2);
+
+            if (isset($nextList[0]) && $nextList[0] instanceof CThematicAdvance) {
+                $advance1 = $nextList[0];
+                $subtitle1 = $translator->trans('Next topic');
+            }
+
+            if (isset($nextList[1]) && $nextList[1] instanceof CThematicAdvance) {
+                $advance2 = $nextList[1];
+                $subtitle2 = $translator->trans('Next topic');
+            }
+        } elseif ('3' === $displayMode) {
+            // Current (last done) + next not done
+            $advance1 = $thematicRepository->findLastDoneAdvanceForCourse($course, $sessionEntity);
+            $nextList = $thematicRepository->findNextNotDoneAdvancesForCourse($course, $sessionEntity, 1);
+
+            if (null !== $advance1) {
+                $subtitle1 = $translator->trans('Current topic');
+            }
+
+            if (isset($nextList[0]) && $nextList[0] instanceof CThematicAdvance) {
+                $advance2 = $nextList[0];
+                $subtitle2 = $translator->trans('Next topic');
+            }
+        } else {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        if (null === $advance1 && null === $advance2) {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        $locale = $request->getLocale();
+        $timezoneId = null;
+
+        if ($currentUser && method_exists($currentUser, 'getTimezone') && $currentUser->getTimezone()) {
+            $timezoneId = $currentUser->getTimezone();
+        }
+
+        if (empty($timezoneId)) {
+            $timezoneId = date_default_timezone_get();
+        }
+
+        $dateFormatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::SHORT,
+            $timezoneId
+        );
+
+        $buildItem = function (CThematicAdvance $advance, string $type, string $label) use ($dateFormatter): array {
+            $thematic = $advance->getThematic();
+
+            $startDate = $advance->getStartDate();
+            $formattedDate = $startDate instanceof DateTimeInterface
+                ? (string) $dateFormatter->format($startDate)
+                : '';
+
+            return [
+                'type' => $type,
+                'label' => $label,
+                'title' => strip_tags($thematic->getTitle() ?? ''),
+                'startDate' => $formattedDate,
+                'content' => strip_tags($advance->getContent() ?? ''),
+                'duration' => (float) $advance->getDuration(),
+            ];
+        };
+
+        $items = [];
+
+        if (null !== $advance1) {
+            $firstType = ('1' === $displayMode || '3' === $displayMode) ? 'current' : 'next';
+            $items[] = $buildItem($advance1, $firstType, $subtitle1);
+        }
+
+        if (null !== $advance2) {
+            $items[] = $buildItem($advance2, 'next', $subtitle2);
+        }
+
+        $userPayload = null;
+        if ($currentUser) {
+            $name = method_exists($currentUser, 'getCompleteName')
+                ? $currentUser->getCompleteName()
+                : trim(\sprintf('%s %s', $currentUser->getFirstname(), $currentUser->getLastname()));
+
+            $userPayload = [
+                'name' => $name,
+                'avatar' => null,
+            ];
+        }
+
+        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
+        $thematicScore = $thematicScoreRaw.'%';
+
+        $payload = [
+            'enabled' => true,
+            'displayMode' => (int) $displayMode,
+            'title' => $translator->trans('Course thematic advance'),
+            'score' => $thematicScore,
+            'scoreRaw' => $thematicScoreRaw,
+            'user' => $userPayload,
+            'items' => $items,
+            'detailUrl' => $thematicUrl,
+            'labels' => [
+                'duration' => $translator->trans('Duration in hours'),
+                'seeDetail' => $translator->trans('See detail'),
+            ],
+        ];
+
+        return new JsonResponse($payload);
+    }
+
     #[Route('/{courseId}/next-course', name: 'chamilo_course_next_course')]
     public function getNextCourse(
         int $courseId,

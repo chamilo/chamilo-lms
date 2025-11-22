@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $token = $_GET['token'] ?? '';
@@ -43,7 +45,7 @@ if ($form->validate()) {
     $token = $values['token'];
 
     /** @var \Chamilo\CoreBundle\Entity\User $user */
-    $user = UserManager::getRepository()->findUserByConfirmationToken($token);
+    $user = Container::getUserRepository()->findUserByConfirmationToken($token);
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {
             Display::addFlash(Display::return_message(get_lang('Link expired, please try again.')), 'warning');
@@ -52,8 +54,7 @@ if ($form->validate()) {
         }
 
         $user->setPlainPassword($password);
-        $userManager = UserManager::getRepository();
-        $userManager->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
 
         $user->setConfirmationToken(null);
         $user->setPasswordRequestedAt(null);

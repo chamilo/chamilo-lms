@@ -101,4 +101,35 @@ class AccessUrlRepository extends ResourceRepository
             ->getSingleColumnResult()
         ;
     }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function isUrlActiveForUser(AccessUrl $url, User $user): bool
+    {
+        $qb = $this->getOrCreateQueryBuilder(null, 'a');
+
+        $count = $qb
+            ->select('COUNT(a.id)')
+            ->join('a.users', 'u')
+            ->where($qb->expr()->eq('a.id', ':url'))
+            ->andWhere($qb->expr()->eq('u.user', ':user'))
+            ->andWhere($qb->expr()->eq('a.active', 1))
+            ->setParameter('url', $url->getId())
+            ->setParameter('user', $user->getId())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @return array<int, AccessUrl>
+     */
+    public function findAll(string $orientation = 'ASC'): array
+    {
+        return parent::findBy([], ['url' => $orientation]);
+    }
 }

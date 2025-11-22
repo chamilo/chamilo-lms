@@ -334,7 +334,8 @@ class CForum extends AbstractResource implements ResourceInterface, ResourceShow
 
     public function isModerated(): bool
     {
-        return $this->moderated;
+        // Always return a strict bool, even if DB/entity has NULL
+        return (bool) ($this->moderated ?? false);
     }
 
     public function setModerated(bool $moderated): self

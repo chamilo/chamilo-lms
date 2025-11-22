@@ -16,13 +16,14 @@
   Matthew@example.com
   HERMAN@example.com
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 exit();
 //change filename depending on file containing mails list, with one e-mail per line.
 $list = file('input.txt');
 require_once '../../inc/global.inc.php';
 $users = Database::get_main_table(TABLE_MAIN_USER);
-$userManager = UserManager::getRepository();
-$repository = UserManager::getRepository();
 
 /**
  * E-mails list loop.
@@ -44,7 +45,7 @@ foreach ($list as $mail) {
         if ($user) {
             $user = api_get_user_entity($row['user_id']);
             $user->setPlainPassword($pass);
-            $userManager->updateUser($user, true);
+            Container::getUserRepository()->updateUser($user, true);
         } else {
             echo "[Error] Error updating password. Skipping $mail\n";
             continue;

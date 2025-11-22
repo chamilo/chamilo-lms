@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Entity\ExternalTool;
-use Symfony\Component\HttpFoundation\Request;
 
 $cidReset = true;
 
@@ -13,7 +13,7 @@ api_protect_admin_script();
 $plugin = ImsLtiPlugin::create();
 $webPluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 
-$request = Request::createFromGlobals();
+$request = Container::getRequest();
 $ltiToolId = $request->query->getInt('id');
 
 $em = Database::getManager();

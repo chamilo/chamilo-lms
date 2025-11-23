@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -107,6 +108,7 @@ class UrlManager
             AccessUrlRelSession::class,
             AccessUrlRelUserGroup::class,
             AccessUrlRelUser::class,
+            UserAuthSource::class,
         ];
 
         foreach ($relEntities as $relEntity) {

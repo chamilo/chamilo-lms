@@ -10,12 +10,18 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_protect_course_script(true);
 
 api_block_anonymous_users();
+
+$currentUserId = api_get_user_id();
+$sessionId = api_get_session_id();
+
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-    api_get_user_id(),
+    $currentUserId,
     api_get_course_info()
 );
 
-if (!$isDrhOfCourse) {
+$isDrhOfSession = $sessionId && !empty(SessionManager::getSessionFollowedByDrh($currentUserId, $sessionId));
+
+if (!$isDrhOfCourse && !$isDrhOfSession) {
     GradebookUtils::block_students();
 }
 

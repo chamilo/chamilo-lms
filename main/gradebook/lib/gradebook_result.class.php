@@ -21,11 +21,11 @@ class GradeBookResult
     /**
      * Exports the complete report as a CSV file.
      *
-     * @param string $dato Document path inside the document tool
+     * @param array $dato Document path inside the document tool
      *
      * @return bool False on error
      */
-    public function exportCompleteReportCSV($dato)
+    public function exportCompleteReportCSV(array $dato)
     {
         $filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
         $data = '';

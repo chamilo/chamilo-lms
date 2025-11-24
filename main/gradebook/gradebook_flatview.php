@@ -75,7 +75,7 @@ $simple_search_form = new UserForm(
 $values = $simple_search_form->exportValues();
 
 $keyword = '';
-if (isset($_GET['search']) && !empty($_GET['search'])) {
+if (!empty($_GET['search'])) {
     $keyword = Security::remove_XSS($_GET['search']);
 }
 if ($simple_search_form->validate() && empty($keyword)) {
@@ -90,7 +90,7 @@ if (!empty($keyword)) {
         $users = GradebookUtils::get_all_users($alleval, $alllinks);
     }
 }
-$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
+$offset = $_GET['offset'] ?? '0';
 
 $addparams = ['selectcat' => $cat[0]->get_id()];
 if (isset($_GET['search'])) {
@@ -128,7 +128,7 @@ if (isset($_GET['export_pdf']) && 'category' === $_GET['export_pdf']) {
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
     $params['export_pdf'] = true;
-    if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
+    if ($cat[0]->is_locked() || api_is_platform_admin()) {
         Display::set_header(null, false, false);
         GradebookUtils::export_pdf_flatview(
             $flatViewTable,

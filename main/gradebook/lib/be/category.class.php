@@ -128,12 +128,9 @@ class Category implements GradebookItem
         return $this->weight;
     }
 
-    /**
-     * @return bool
-     */
-    public function is_locked()
+    public function is_locked(): bool
     {
-        return isset($this->locked) && $this->locked == 1 ? true : false;
+        return isset($this->locked) && $this->locked == 1;
     }
 
     /**
@@ -429,7 +426,7 @@ class Category implements GradebookItem
      * @param bool   $order_by    Whether to show all "session"
      *                            categories (true) or hide them (false) in case there is no session id
      *
-     * @return array
+     * @return array<int, Category>
      */
     public static function load(
         $id = null,
@@ -439,7 +436,7 @@ class Category implements GradebookItem
         $visible = null,
         $session_id = null,
         $order_by = null
-    ) {
+    ): array {
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
         if (isset($id) && (int) $id === 0) {
@@ -2681,10 +2678,7 @@ class Category implements GradebookItem
         return $this->weight - $subWeight;
     }
 
-    /**
-     * @return Category
-     */
-    private static function create_root_category()
+    private static function create_root_category(): Category
     {
         $cat = new Category();
         $cat->set_id(0);
@@ -2704,9 +2698,9 @@ class Category implements GradebookItem
     /**
      * @param Doctrine\DBAL\Driver\Statement|null $result
      *
-     * @return array
+     * @return array<int, Category>
      */
-    private static function create_category_objects_from_sql_result($result)
+    private static function create_category_objects_from_sql_result($result): array
     {
         $categories = [];
         $allow = api_get_configuration_value('allow_gradebook_stats');

@@ -252,7 +252,7 @@ class PortfolioController
 
         $form = new FormValidator('add_category', 'post', "{$this->baseUrl}&action=add_category");
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -336,7 +336,7 @@ class PortfolioController
             $this->baseUrl."action=edit_category&id={$category->getId()}"
         );
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $translateUrl = $this->baseUrl.'action=translate_category&id='.$category->getId();
@@ -457,16 +457,11 @@ class PortfolioController
 
         $this->blockIsNotAllowed();
 
-        $templates = $this->em
-            ->getRepository(Portfolio::class)
-            ->findBy(
-                [
-                    'isTemplate' => true,
-                    'course' => $this->course,
-                    'session' => $this->session,
-                    'user' => $this->owner,
-                ]
-            );
+        $templates = Container::getPortfolioRepository()->findTemplates(
+            $this->owner,
+            $this->course,
+            $this->session
+        );
 
         $form = new FormValidator('add_portfolio', 'post', $this->baseUrl.'action=add_item');
         $form->addSelectFromCollection(
@@ -483,7 +478,7 @@ class PortfolioController
             'getTitle'
         );
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -711,7 +706,7 @@ class PortfolioController
 
         $form = new FormValidator('edit_portfolio', 'post', $this->baseUrl."action=edit_item&id={$item->getId()}");
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -1574,7 +1569,7 @@ class PortfolioController
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -1665,7 +1660,7 @@ class PortfolioController
 
         $form = new FormValidator('teacher_copy_portfolio', 'post', $this->baseUrl.$actionParams);
 
-        if (api_get_configuration_value('save_titles_as_html')) {
+        if ('true' === api_get_setting('editor.save_titles_as_html')) {
             $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
         } else {
             $form->addText('title', get_lang('Title'));
@@ -1846,7 +1841,7 @@ class PortfolioController
             $frmStudent->addButtonFilter(get_lang('Filter'));
         }
 
-        $itemsRepo = $this->em->getRepository(Portfolio::class);
+        $itemsRepo = Container::getPortfolioRepository();
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
 
         $getItemsTotalNumber = function () use ($itemsRepo, $isAllowedToFilterStudent, $currentUserId) {
@@ -2169,8 +2164,7 @@ class PortfolioController
             $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
         }
 
-        $items = $this->em
-            ->getRepository(Portfolio::class)
+        $items = Container::getPortfolioRepository()
             ->findItemsByUser(
                 $this->owner,
                 $this->course,
@@ -2269,7 +2263,6 @@ class PortfolioController
             }
         }
 
-        $itemsRepo = $this->em->getRepository(Portfolio::class);
         $commentsRepo = $this->em->getRepository(PortfolioComment::class);
         $attachmentsRepo = $this->em->getRepository(PortfolioAttachment::class);
 
@@ -2280,7 +2273,7 @@ class PortfolioController
             $visibility[] = Portfolio::VISIBILITY_HIDDEN_EXCEPT_TEACHER;
         }
 
-        $items = $itemsRepo->findItemsByUser(
+        $items = Container::getPortfolioRepository()->findItemsByUser(
             $this->owner,
             $this->course,
             $this->session,
@@ -3942,8 +3935,7 @@ class PortfolioController
                 $itemsCriteria['visibility'] = Portfolio::VISIBILITY_VISIBLE;
             }
 
-            $items = $this->em
-                ->getRepository(Portfolio::class)
+            $items = Container::getPortfolioRepository()
                 ->findBy($itemsCriteria, ['creationDate' => 'DESC']);
         }
 

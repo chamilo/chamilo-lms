@@ -29,7 +29,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'upload_extensions_replace_by' => 'dangerous',
                 'permissions_for_new_directories' => '0770',
                 'permissions_for_new_files' => '0660',
-                'show_glossary_in_documents' => 'none',
                 'students_download_folders' => 'true',
                 'users_copy_files' => 'true',
                 'pdf_export_watermark_enable' => 'false',
@@ -101,13 +100,6 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('permissions_for_new_directories')
             ->add('permissions_for_new_files')
-            ->add('show_glossary_in_documents', ChoiceType::class, [
-                'choices' => [
-                    'Show glossary in documents is none' => 'none',
-                    'Show glossary in documents is manual' => 'ismanual',
-                    'Show glossary in documents is automatic' => 'isautomatic',
-                ],
-            ])
             ->add('students_download_folders', YesNoType::class)
             ->add('users_copy_files', YesNoType::class)
             ->add('pdf_export_watermark_enable', YesNoType::class)

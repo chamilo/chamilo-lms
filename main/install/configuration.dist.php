@@ -1443,6 +1443,9 @@ $_configuration['profile_fields_visibility'] = [
 // Allow to session admins login as teachers
 //$_configuration['allow_session_admin_login_as_teacher'] = false;
 
+// Disallow the login-as feature to HRM users
+//$_configuration['disallow_hrm_login_as'] = false;
+
 // Allow gradebook stats
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
 /* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;

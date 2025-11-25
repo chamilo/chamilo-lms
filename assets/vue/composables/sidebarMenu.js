@@ -257,6 +257,31 @@ export function useSidebarMenu() {
       }
     }
 
+    {
+      const roles = securityStore.user?.roles || []
+      const isQuestionManager =
+        securityStore.isAdmin ||
+        roles.includes("ROLE_QUESTION_MANAGER")
+
+      if (isQuestionManager) {
+        const questionAdminItems = [
+          {
+            label: t("Questions"),
+            url: "/main/admin/questions.php",
+            icon: "mdi mdi-comment-question-outline",
+            class: "pl-4",
+          },
+        ]
+
+        items.push({
+          icon: "mdi mdi-comment-question-outline",
+          label: t("Admin.questions_admin"),
+          items: questionAdminItems,
+          expanded: isActive({ items: questionAdminItems }),
+        })
+      }
+    }
+
     if (showTabs.value.includes("session_admin") && (securityStore.isAdmin || securityStore.isSessionAdmin)) {
       const sessionAdminItems = [
         {

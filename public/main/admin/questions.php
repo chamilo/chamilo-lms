@@ -14,11 +14,19 @@ use Knp\Component\Pager\Paginator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 $cidReset = true;
-require_once __DIR__.'/../inc/global.inc.php';
+require_once __DIR__ . '/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$user = api_get_current_user();
+
+
+if (!api_is_platform_admin() && (!$user || !$user->hasRole('ROLE_QUESTION_MANAGER'))) {
+    api_not_allowed(true);
+    return false;
+}
+
+api_block_inactive_user();
 
 Session::erase('objExercise');
 Session::erase('objQuestion');
@@ -355,6 +363,13 @@ switch ($action) {
         exit;
 }
 
+global $user;
+
+$backUrl = '/main/admin/';
+if (isset($user) && method_exists($user, 'hasRole') && $user->hasRole('ROLE_QUESTION_MANAGER')) {
+    $backUrl = '/';
+}
+$escapedBackUrl = htmlspecialchars($backUrl, ENT_QUOTES, 'UTF-8');
 $actionsLeft = Display::url(
     Display::return_icon('back.png', get_lang('Administration'), [], ICON_SIZE_MEDIUM),
     Container::getRouter()->generate('admin'),

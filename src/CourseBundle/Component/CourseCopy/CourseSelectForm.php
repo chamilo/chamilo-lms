@@ -386,17 +386,6 @@ class CourseSelectForm
                             );
                         }
 
-                        if (RESOURCE_DOCUMENT == $type) {
-                            if ('none' != api_get_setting('show_glossary_in_documents')) {
-                                echo Display::return_message(
-                                    get_lang(
-                                        'ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'
-                                    ),
-                                    'warning'
-                                );
-                            }
-                        }
-
                         if (RESOURCE_QUIZ == $type) {
                             echo Display::return_message(
                                 get_lang(

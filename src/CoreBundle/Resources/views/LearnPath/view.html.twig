@@ -301,62 +301,10 @@
             //loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
-              {% if glossary_extra_tools in glossary_tool_available_list %}
-            // Loads the glossary library.
-            (function() {
-                {% if show_glossary_in_documents == 'ismanual' %}
-              $.frameReady(
-                function() {
-                  //  $("<div>I am a div courses</div>").prependTo("body");
-                },
-                "#content_id",
-                [
-                  {
-                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                      { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
-                          {{ fix_link }}
-                    ]
-                  },
-                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                ]
-              )
-                {% elseif show_glossary_in_documents == 'isautomatic' %}
-              $.frameReady(
-                function() {
-                  //  $("<div>I am a div courses</div>").prependTo("body");
-                },
-                "#content_id",
-                [
-                  {
-                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                      { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
-                          {{ fix_link }}
-                    ]
-                  },
-                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                ]
-              )
-                {% elseif fix_link != '' %}
-              $.frameReady(
-                function() {
-                  //  $("<div>I am a div courses</div>").prependTo("body");
-                },
-                "#content_id",
-                [
-                  {
-                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                          {{ fix_link }}
-                    ]
-                  },
-                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                ]
-              )
-                {% endif %}
-            })()
-              {% endif %}
+            // Glossary highlighting is now handled by api_get_glossary_auto_snippet()
+            // based on "show_glossary_in_extra_tools". Legacy per-document frameReady
+            // injection was removed from this template.
+
               {% if disable_js_in_lp_view == 0 %}
             $(function() {
               var arr = ["link", "sco"]

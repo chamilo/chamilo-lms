@@ -7538,3 +7538,38 @@ function api_email_reached_registration_limit(string $email): bool
     return $count >= $limit;
 }
 
+/**
+ * Build the HTML snippet required to bootstrap the automatic glossary tooltips.
+ */
+function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $resourceNodeParentId = null): string
+{
+    if (null === $resourceNodeParentId && $courseId) {
+        try {
+            $courseEntity = Container::getCourseRepository()->find($courseId);
+
+            if ($courseEntity && $courseEntity->getResourceNode()) {
+                $resourceNodeParentId = (int) $courseEntity->getResourceNode()->getId();
+            }
+        } catch (\Throwable $exception) {
+            error_log('[Glossary] Failed to resolve resourceNodeParentId from course: '.$exception->getMessage());
+        }
+    }
+
+    $course  = $courseId ?: 'null';
+    $session = $sessionId ?: 'null';
+    $parent  = $resourceNodeParentId ?: 'null';
+
+    return '
+        <script>
+          window.chamiloGlossaryConfig = {
+            courseId: ' . $course . ',
+            sessionId: ' . $session . ',
+            resourceNodeParentId: ' . $parent . ',
+            termsEndpoint: "/api/glossaries"
+          };
+        </script>
+        ' . api_get_build_js("glossary_auto.js") . '
+    ';
+}
+
+

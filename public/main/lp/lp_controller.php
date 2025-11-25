@@ -56,20 +56,26 @@ if (isset($_GET['isStudentView'])) {
     $qs['isStudentView'] = Security::remove_XSS($_GET['isStudentView']);
 }
 $listUrl = api_get_path(WEB_PATH).'resources/lp/'.$nodeId.'?'.http_build_query($qs);
-$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
-$showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+$glossaryExtraTools        = api_get_setting('glossary.show_glossary_in_extra_tools');
+$glossaryDocumentsMode     = api_get_setting('document.show_glossary_in_documents');
+$glossaryDocumentsEnabled  = in_array(
+    $glossaryDocumentsMode,
+    ['ismanual', 'isautomatic'],
+    true
+);
+
+$showGlossary = $glossaryDocumentsEnabled && in_array(
+        $glossaryExtraTools,
+        ['true', 'lp', 'exercise_and_lp'],
+        true
+    );
+
 if ($showGlossary) {
-    if ('ismanual' === api_get_setting('show_glossary_in_documents') ||
-        'isautomatic' === api_get_setting('show_glossary_in_documents')
-    ) {
-        $htmlHeadXtra[] = '<script>
-    <!--
-        var jQueryFrameReadyConfigPath = \''.api_get_jquery_web_path().'\';
-    -->
-    </script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"></script>';
-    }
+    $htmlHeadXtra[] = api_get_glossary_auto_snippet(
+        (int) $courseId,
+        $sessionId ?: null,
+        null
+    );
 }
 
 $ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$lpId.'&'.api_get_cidreq();

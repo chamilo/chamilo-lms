@@ -54,8 +54,11 @@ if ('learnpath' === $origin) {
     $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
 }
 if ($showGlossary) {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
-    $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
+    $htmlHeadXtra[] = api_get_glossary_auto_snippet(
+        api_get_course_int_id(),
+        api_get_session_id(),
+        null
+    );
 }
 $htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';

@@ -241,18 +241,13 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 
 if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && $threadId) {
     // Thread qualify
-    if (Gradebook::is_active()) {
-        // Loading gradebook select
-        GradebookUtils::load_gradebook_select_in_tool($form);
-        $form->addElement(
-            'checkbox',
-            'thread_qualify_gradebook',
-            '',
-            get_lang('Grade this thread')
-        );
-    } else {
-        $form->addElement('hidden', 'thread_qualify_gradebook', false);
-    }
+    GradebookUtils::load_gradebook_select_in_tool($form);
+    $form->addElement(
+        'checkbox',
+        'thread_qualify_gradebook',
+        '',
+        get_lang('Grade this thread')
+    );
 
     $form->addElement('html', '<div id="options_field" style="'.($gradeThisThread ? '' : 'display:none;').'">');
     $form->addElement('text', 'numeric_calification', get_lang('Maximum score'));

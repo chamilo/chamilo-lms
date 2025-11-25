@@ -654,6 +654,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $content = str_replace($tagsToReplace, $replacementValues, $content);
                     }
 
+                    $content = $this->injectGlossaryJs($request, $content, $resourceNode);
+
                     $response = new Response();
                     $disposition = $response->headers->makeDisposition(
                         ResponseHeaderBag::DISPOSITION_INLINE,
@@ -662,7 +664,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     $response->headers->set('Content-Disposition', $disposition);
                     $response->headers->set('Content-Type', 'text/html; charset=UTF-8');
 
-                    // @todo move into a function/class
+                    // Existing translate_html logic
                     if ('true' === $this->getSettingsManager()->getSetting('editor.translate_html')) {
                         $user = $this->userHelper->getCurrent();
                         if (null !== $user) {
@@ -705,6 +707,128 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         return $response;
     }
+
+    private function injectGlossaryJs(
+        Request $request,
+        string $content,
+        ?ResourceNode $resourceNode = null
+    ): string {
+        // First normalize broken HTML coming from templates/editors
+        $content = $this->normalizeGeneratedHtml($content);
+
+        $tool = (string) $request->attributes->get('tool');
+
+        if ('document' !== $tool) {
+            return $content;
+        }
+
+        $settingsManager = $this->getSettingsManager();
+        $glossaryDocuments = $settingsManager->getSetting('document.show_glossary_in_documents');
+
+        if ('isautomatic' !== $glossaryDocuments) {
+            return $content;
+        }
+
+        $course = $this->getCourse();
+        $session = $this->getSession();
+
+        $resourceNodeParentId = null;
+        if ($resourceNode && $resourceNode->getParent()) {
+            $resourceNodeParentId = $resourceNode->getParent()->getId();
+        }
+
+        $jsConfig = $this->renderView(
+            '@ChamiloCore/Glossary/glossary_auto.html.twig',
+            [
+                'course' => $course,
+                'session' => $session,
+                'resourceNodeParentId' => $resourceNodeParentId,
+            ]
+        );
+
+        if (false !== stripos($content, '</body>')) {
+            return str_ireplace('</body>', $jsConfig.'</body>', $content);
+        }
+
+        return $content.$jsConfig;
+    }
+
+
+    /**
+     * Normalize generated HTML documents coming from templates/editors.
+     *
+     * This method tries to fix the pattern:
+     * <head>...</head><!DOCTYPE html><html>...<head>...</head><body>...</body></html>
+     *
+     * It will:
+     * - Extract the first <head>...</head> block (if it appears before <!DOCTYPE).
+     * - Keep the proper <!DOCTYPE html><html>... document.
+     * - Inject the inner content of the first head into the main <head> of the document.
+     */
+    private function normalizeGeneratedHtml(string $content): string
+    {
+        $upper = strtoupper($content);
+
+        $firstHeadStart = stripos($upper, '<HEAD');
+        $firstHeadEnd   = stripos($upper, '</HEAD>');
+        $doctypePos     = stripos($upper, '<!DOCTYPE');
+        $htmlPos        = stripos($upper, '<HTML');
+
+        // If we do not have the pattern <head>...</head> before <!DOCTYPE html>, do nothing.
+        if (false === $firstHeadStart || false === $firstHeadEnd || false === $doctypePos) {
+            return $content;
+        }
+
+        if (!($firstHeadStart <= $firstHeadEnd && $firstHeadEnd < $doctypePos)) {
+            // The first <head> is not clearly before the <!DOCTYPE>, keep content as-is.
+            return $content;
+        }
+
+        // Extract the first <head>...</head> block (including tags).
+        $headBlockLength = $firstHeadEnd + strlen('</head>') - $firstHeadStart;
+        $headBlock       = substr($content, $firstHeadStart, $headBlockLength);
+
+        // Remove that first <head> block from the beginning part.
+        // Everything from <!DOCTYPE ...> will be treated as the "real" document.
+        $baseDoc = substr($content, $doctypePos);
+
+        // Extract only the inner content of the first head (we do not want nested <head> tags).
+        $innerHead = preg_replace('~^.*?<head[^>]*>|</head>.*$~is', '', $headBlock);
+        if (null === $innerHead) {
+            // preg_replace error or something weird, bail out and keep original content.
+            return $content;
+        }
+        $innerHead = trim($innerHead);
+
+        // If there is nothing interesting inside the first head, just return the base document.
+        if ('' === $innerHead) {
+            return $baseDoc;
+        }
+
+        // Now inject innerHead into the main <head> of the base document.
+        $upperBase = strtoupper($baseDoc);
+        $secondHeadStart = stripos($upperBase, '<HEAD');
+        if (false === $secondHeadStart) {
+            // No <head> in the base document, return base doc unchanged.
+            return $baseDoc;
+        }
+
+        $secondHeadTagEnd = strpos($baseDoc, '>', $secondHeadStart);
+        if (false === $secondHeadTagEnd) {
+            // Malformed head tag, do not touch.
+            return $baseDoc;
+        }
+
+        $insertionPos = $secondHeadTagEnd + 1;
+
+        $normalized =
+            substr($baseDoc, 0, $insertionPos)
+            .PHP_EOL.$innerHead.PHP_EOL
+            .substr($baseDoc, $insertionPos);
+
+        return $normalized;
+    }
+
 
     private function getRange(Request $request, int $fileSize): array
     {

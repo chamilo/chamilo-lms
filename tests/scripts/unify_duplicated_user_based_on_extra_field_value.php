@@ -56,10 +56,12 @@ foreach($accessURLs as $accessURL) {
                     continue;
                 }
                 if ($uid === $userIdToUnifyOn) { continue; }
-
-                echo 'Unifying user ' . $uid . ' on user ' . $userIdToUnifyOn . PHP_EOL;
+                $now = date('Y-m-d H:i:s');
+                echo $now . ' Unifying user ' . $uid . ' on user ' . $userIdToUnifyOn . PHP_EOL;
                 MySpace::duUpdateAllUserRefsList($uid, $userIdToUnifyOn);
                 MySpace::duDisableOrDeleteUser($uid, $unifyMode);
+                $now = date('Y-m-d H:i:s');
+                echo $now . ' User unified' . PHP_EOL;
             }
         }
     }

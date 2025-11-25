@@ -9,6 +9,9 @@
 exit;
 require __DIR__.'/../../main/inc/global.inc.php';
 
+// Filter to only manage those users based on their user_id :
+//$filteredUsers = [11,12,13]; // set the list of user_id
+
 // set the extra field variable to use 
 $extraFieldVariable = 'dni';
 
@@ -38,6 +41,9 @@ foreach($accessURLs as $accessURL) {
             $mostRecentRegistrationDate = 0;
             foreach ($users as $u) {
                 $uid = (int)$u['user_id'];
+		if (isset($filteredUsers) && !in_array($uid, $filteredUsers) {
+                    continue;
+                }
                 $userInfo = api_get_user_info($uid);
 		if ($userInfo['registration_date'] > $mostRecentRegistrationDate) {
                     $mostRecentRegistrationDate = $userInfo['registration_date'];
@@ -46,6 +52,9 @@ foreach($accessURLs as $accessURL) {
             }
             foreach ($users as $u) {
                 $uid = (int)$u['user_id'];
+		if (isset($filteredUsers) && !in_array($uid, $filteredUsers) {
+                    continue;
+                }
                 if ($uid === $userIdToUnifyOn) { continue; }
 
                 echo 'Unifying user ' . $uid . ' on user ' . $userIdToUnifyOn . PHP_EOL;

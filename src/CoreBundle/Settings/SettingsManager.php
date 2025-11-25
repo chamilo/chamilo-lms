@@ -939,7 +939,6 @@ class SettingsManager implements SettingsManagerInterface
             'exercise_max_score' => 'exercise',
             'exercise_min_score' => 'exercise',
             'pdf_logo_header' => 'platform',
-            'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
             'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',

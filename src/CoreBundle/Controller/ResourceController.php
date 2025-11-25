@@ -722,13 +722,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             return $content;
         }
 
-        $settingsManager = $this->getSettingsManager();
-        $glossaryDocuments = $settingsManager->getSetting('document.show_glossary_in_documents');
-
-        if ('isautomatic' !== $glossaryDocuments) {
-            return $content;
-        }
-
         $course = $this->getCourse();
         $session = $this->getSession();
 

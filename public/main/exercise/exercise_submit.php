@@ -42,16 +42,35 @@ $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
-$glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
+$glossaryExtraTools = api_get_setting('glossary.show_glossary_in_extra_tools');
 $allowTimePerQuestion = ('true' === api_get_setting('exercise.allow_time_per_question'));
 if ($allowTimePerQuestion) {
     $htmlHeadXtra[] = api_get_asset('easytimer/easytimer.min.js');
 }
 
 $showPreviousButton = true;
-$showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
-if ('learnpath' === $origin) {
-    $showGlossary = in_array($glossaryExtraTools, ['true', 'lp', 'exercise_and_lp']);
+$showGlossary = false;
+
+switch ($glossaryExtraTools) {
+    case 'exercise':
+        // Only show in standalone exercises, not when launched from LP
+        $showGlossary = ('learnpath' !== $origin);
+        break;
+
+    case 'lp':
+        // Only show when the exercise is launched from a learning path
+        $showGlossary = ('learnpath' === $origin);
+        break;
+
+    case 'exercise_and_lp':
+    case 'true':
+        // Show in both standalone exercises and LP context
+        $showGlossary = true;
+        break;
+
+    default:
+        $showGlossary = false;
+        break;
 }
 if ($showGlossary) {
     $htmlHeadXtra[] = api_get_glossary_auto_snippet(

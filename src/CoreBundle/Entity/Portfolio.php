@@ -20,8 +20,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Entity]
 class Portfolio extends AbstractResource implements ResourceInterface, Stringable
 {
-    use UserTrait;
-
     public const TYPE_ITEM = 1;
     public const TYPE_COMMENT = 2;
 

@@ -106,9 +106,9 @@ class MoodleExport
 
         foreach ($questionsData as $quiz) {
             $categoryId = $quiz['questions'][0]['questioncategoryid'] ?? '1';
-            $hash = md5($categoryId . $quiz['name']);
+            $hash = md5($categoryId.$quiz['name']);
             if (isset($categoryHashes[$hash])) {
-              continue;
+                continue;
             }
             $categoryHashes[$hash] = true;
             $xmlContent .= '  <question_category id="'.$categoryId.'">'.PHP_EOL;

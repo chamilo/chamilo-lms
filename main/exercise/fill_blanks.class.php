@@ -824,15 +824,14 @@ class FillBlanks extends Question
         $listDetails = explode(':', $listArobaseSplit[0]);
 
         // < number of item after the ::[score]:[size]:[separator_id]@ , here there are 3
+        $listWeightings = explode(',', $listDetails[0]);
         if (count($listDetails) < 3) {
-            $listWeightings = explode(',', $listDetails[0]);
             $listSizeOfInput = [];
             for ($i = 0; $i < count($listWeightings); $i++) {
                 $listSizeOfInput[] = 200;
             }
             $blankSeparatorNumber = 0; // 0 is [...]
         } else {
-            $listWeightings = explode(',', $listDetails[0]);
             $listSizeOfInput = explode(',', $listDetails[1]);
             $blankSeparatorNumber = $listDetails[2];
         }
@@ -1258,8 +1257,6 @@ class FillBlanks extends Question
      * @param int    $feedbackType
      * @param bool   $resultsDisabled
      * @param bool   $showTotalScoreAndUserChoices
-     *
-     * @return string
      */
     public static function getHtmlAnswer(
         $answer,
@@ -1269,7 +1266,7 @@ class FillBlanks extends Question
         $resultsDisabled = false,
         $showTotalScoreAndUserChoices = false,
         $exercise
-    ) {
+    ): string {
         $hideExpectedAnswer = false;
         $hideUserSelection = false;
         if (!$exercise->showExpectedChoiceColumn()) {
@@ -1411,10 +1408,8 @@ class FillBlanks extends Question
      * Check if a answer is correct by its text.
      *
      * @param string $answerText
-     *
-     * @return bool
      */
-    public static function isCorrect($answerText)
+    public static function isCorrect($answerText): bool
     {
         $answerInfo = self::getAnswerInfo($answerText, true);
         $correctAnswerList = $answerInfo['words'];
@@ -1433,10 +1428,8 @@ class FillBlanks extends Question
      * Clear the answer entered by student.
      *
      * @param string $answer
-     *
-     * @return string
      */
-    public static function clearStudentAnswer($answer)
+    public static function clearStudentAnswer($answer): string
     {
         $answer = htmlentities(api_utf8_encode($answer), ENT_QUOTES);
         $answer = str_replace('&#039;', '&#39;', $answer); // fix apostrophe

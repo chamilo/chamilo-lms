@@ -429,6 +429,7 @@ class DisplayGradebook
         }
 
         // for course admin & platform admin add item buttons are added to the header
+        $toolbarActions = [];
         $actionsLeft = '';
         $actionsRight = '';
         $my_api_cidreq = api_get_cidreq();
@@ -562,11 +563,13 @@ class DisplayGradebook
         }
 
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-            api_get_user_id(),
+            $userId,
             api_get_course_info()
         );
 
-        if ($isDrhOfCourse) {
+        $isDrhOfSession = $sessionId && !empty(SessionManager::getSessionFollowedByDrh($userId, $sessionId));
+
+        if ($isDrhOfCourse || $isDrhOfSession) {
             $actionsLeft .= '<a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'
                 .Display::return_icon(
                     'statistics.png',
@@ -578,9 +581,17 @@ class DisplayGradebook
         }
 
         if ($isCoach || api_is_allowed_to_edit(null, true)) {
-            echo $toolbar = Display::toolbarAction(
+            $toolbarActions = [$actionsLeft, $actionsRight];
+        }
+
+        if (empty($toolbarActions) && ($isDrhOfCourse || $isDrhOfSession)) {
+            $toolbarActions = [$actionsLeft];
+        }
+
+        if ($toolbarActions) {
+            echo Display::toolbarAction(
                 'gradebook-actions',
-                [$actionsLeft, $actionsRight]
+                $toolbarActions
             );
         }
 

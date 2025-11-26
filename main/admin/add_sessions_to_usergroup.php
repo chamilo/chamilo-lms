@@ -95,7 +95,7 @@ if ($usergroup->allowTeachers()) {
         $onlyThisSessionList = array_column($sessionList, 'id');
     }
 }
-$session_list = SessionManager::get_sessions_list([], ['name'], null, null, 0, $onlyThisSessionList);
+$session_list = SessionManager::get_sessions_list([], ['name'], null, null, 0, $onlyThisSessionList, true);
 $elements_not_in = $elements_in = [];
 
 if (!empty($session_list)) {

@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
 
@@ -290,15 +291,17 @@ switch ($action) {
                 echo get_lang('PrivateAccess');
                 break;
             }
-            $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-            $sql = "SELECT * FROM $table
-                    WHERE c_id = ".$course_info['real_id']." AND session_id = 0
-                    ORDER BY id";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                while ($description = Database::fetch_object($result)) {
-                    $descriptions[$description->id] = $description;
-                }
+
+            /** @var array<int, CCourseDescription> $courseDescriptions */
+            $courseDescriptions = Database::getManager()
+                ->getRepository(CCourseDescription::class)
+                ->findBy(['cId' => $course_info['real_id'], 'sessionId' => 0])
+            ;
+
+            $descriptions = [];
+
+            foreach ($courseDescriptions as $courseDescription) {
+                $descriptions[$courseDescription->getIid()] = $courseDescription;
                 // Function that displays the details of the course description in html.
                 $content = CourseManager::get_details_course_description_html(
                     $descriptions,

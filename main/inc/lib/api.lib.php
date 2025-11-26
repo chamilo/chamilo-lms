@@ -4338,6 +4338,11 @@ function api_get_item_visibility(
         $groupCondition = " AND to_group_id = '$group_id' ";
     }
 
+    $lpVisibilityCondition = '';
+    if ($tool === 'learnpath') {
+        $lpVisibilityCondition = " AND lastedit_type != 'LearnpathSubscription' ";
+    }
+
     $sql = "SELECT visibility
             FROM $TABLE_ITEMPROPERTY
             WHERE
@@ -4345,7 +4350,7 @@ function api_get_item_visibility(
                 tool = '$tool' AND
                 ref = $id AND
                 (session_id = $session OR session_id = 0 OR session_id IS NULL)
-                $userCondition $typeCondition $groupCondition
+                $userCondition $typeCondition $groupCondition $lpVisibilityCondition
             ORDER BY session_id DESC, lastedit_date DESC
             LIMIT 1";
 
@@ -8955,6 +8960,10 @@ function api_can_login_as($loginAsUserId, $userId = null)
     $userInfo = api_get_user_info($loginAsUserId);
     $isDrh = function () use ($loginAsUserId) {
         if (api_is_drh()) {
+            if (true === api_get_configuration_value('disallow_hrm_login_as')) {
+                return false;
+            }
+
             if (api_drh_can_access_all_session_content()) {
                 $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
@@ -10706,8 +10715,7 @@ function api_encrypt_hash($data, $secret)
  * you are looking for this.
  * The replacement can replace bits in larger strings, requiring the search string to be very specific to avoid
  * excess replacements.
- * @param string $search
- * @param string $replace
+ *
  * @return array The number of changes executed in each table
  */
 function api_replace_terms_in_content(string $search, string $replace): array

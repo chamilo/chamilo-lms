@@ -75,7 +75,7 @@ if (count($userAccess) == 0) {
     }
 }
 
-$header =  '<div class="row">';
+$header = '<div class="row">';
 $header .= '<div class="col-sm-5">';
 $header .= '<div class="thumbnail">';
 $header .= Display::img($userInfo['avatar'], $userInfo['complete_name'], null, false);
@@ -90,17 +90,17 @@ $userData = $userInfo['complete_name']
     .PHP_EOL
     .$user_info['official_code'];
 
-$header .= '<h3>Usuario: ' . Display::url(
+$header .= '<h3>Usuario: '.Display::url(
     $userData,
     api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user_info['user_id']
-) .'</h3>';
+).'</h3>';
 
-$header .= '<p><h3>Sesión: ' . $sessionInfo['name'] . '<h3></p>';
+$header .= '<p><h3>Sesión: '.$sessionInfo['name'].'<h3></p>';
 
 $header .= '</div>';
-$header .='</div>';
+$header .= '</div>';
 
-$header .=  '<div class="row">';
+$header .= '<div class="row">';
 $header .= '<div class="col-sm-12">';
 
 $header .= $msg;
@@ -111,7 +111,7 @@ $header .= '</div>';
 
 $form->addElement('html', $header);
 
-$formData =  '<div class="row">';
+$formData = '<div class="row">';
 $formData .= '<div class="col-sm-12">';
 
 $form->addElement('html', $formData);
@@ -133,7 +133,7 @@ if ($form->validate()) {
 
     $url = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
     $url = str_replace('&amp;', '&', $url);
-    header("Location: " . $url);
+    header("Location: ".$url);
     exit();
 }
 

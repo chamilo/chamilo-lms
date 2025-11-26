@@ -96,7 +96,7 @@ if ($httpRequest->request->has('create_course_category')
 if ($getMove = $httpRequest->query->get('move')) {
     $getCourse = Security::remove_XSS($httpRequest->query->get('course'));
     $getMove = Security::remove_XSS($getMove);
-    $getCategory = Security::remove_XSS($httpRequest->query->get('category'));;
+    $getCategory = Security::remove_XSS($httpRequest->query->get('category'));
     if (!empty($getCourse)) {
         $result = $auth->move_course($getMove, $getCourse, $getCategory);
         if ($result) {

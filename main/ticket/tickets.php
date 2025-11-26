@@ -104,7 +104,7 @@ if ($table->per_page == 0) {
 switch ($action) {
     case 'delete':
         if (isset($_GET['ticket_id'])) {
-            TicketManager::deleteTicket((int)$_GET['ticket_id']);
+            TicketManager::deleteTicket((int) $_GET['ticket_id']);
             Display::addFlash(Display::return_message(
                 sprintf(
                     get_lang('TicketDeleted'),
@@ -139,7 +139,7 @@ switch ($action) {
         $datos = $table->get_clean_html();
         $ticketTable = Database::get_main_table(TABLE_TICKET_TICKET);
         foreach ($datos as $ticket) {
-                        $ticketId = 0;
+            $ticketId = 0;
             if (preg_match('/ticket_id=(\d+)/', $ticket[0], $matches)) {
                 $ticketId = (int) $matches[1];
             }

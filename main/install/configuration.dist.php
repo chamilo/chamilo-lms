@@ -776,6 +776,8 @@ $_configuration['send_all_emails_to'] = [
 //$_configuration['quiz_question_edit_open_advanced_params_by_default'] = false;
 // Define how many seconds an AJAX request should be started to avoid loss of connection.
 //$_configuration['quiz_keep_alive_ping_interval'] = 0;
+// Add the official code of the user in the pdf export of the results.
+//$_configuration['quiz_result_pdf_export_include_official_code_in_file_name'] = false;
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
 // Allow exchange of messages from teachers/bosses about a user.
@@ -1441,6 +1443,9 @@ $_configuration['profile_fields_visibility'] = [
 // Allow to session admins login as teachers
 //$_configuration['allow_session_admin_login_as_teacher'] = false;
 
+// Disallow the login-as feature to HRM users
+//$_configuration['disallow_hrm_login_as'] = false;
+
 // Allow gradebook stats
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
 /* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;
@@ -1958,6 +1963,11 @@ $_configuration['auth_password_links'] = [
 
 // Enable improved tracking section in main/mySpace/myStudents.php
 //$_configuration['improve_tracking_in_mystudent_php'] = false;
+
+// Allow teachers to access all course/session tracking in main/mySpace/myStudents.php
+// When enabled, teachers can view tracking for all courses and sessions
+// of a student even if they are not the course admin or session coach
+//$_configuration['teacher_access_all_tracking'] = false;
 
 // Add teachers column in course list.
 // $_configuration['add_teachers_in_course_list'] = false;
@@ -2580,6 +2590,9 @@ INSERT INTO extra_field_options (field_id, option_value, display_text, priority,
 
 // Display the Portal News link in the admin page to session admin users
 //$_configuration['session_admin_access_system_announcement'] = false;
+
+// Display Statistics link in the admin page to session admin users
+//$_configuration['session_admin_access_global_statistics'] = false;
 
 // File upload size limit in MB for teachers (set to 1024 for 1GB, 5120 for 5GB, etc).
 //$_configuration['file_upload_size_limit_for_teacher'] = 0;

@@ -1111,7 +1111,7 @@ try {
             if (!empty($missing)) {
                 $result = [
                     'error' => true,
-                    'message' => 'Missing required parameters: ' . implode(', ', $missing)
+                    'message' => 'Missing required parameters: '.implode(', ', $missing),
                 ];
                 break;
             }
@@ -1147,7 +1147,7 @@ try {
                 }
             }
             if (!empty($missing)) {
-                $restResponse->setErrorMessage('Missing required parameters: ' . implode(', ', $missing));
+                $restResponse->setErrorMessage('Missing required parameters: '.implode(', ', $missing));
                 break;
             }
             $params = $_POST;
@@ -1181,7 +1181,7 @@ try {
                 }
             }
             if (!empty($missing)) {
-                $restResponse->setErrorMessage('Missing required parameters: ' . implode(', ', $missing));
+                $restResponse->setErrorMessage('Missing required parameters: '.implode(', ', $missing));
                 break;
             }
             $params = $_POST;

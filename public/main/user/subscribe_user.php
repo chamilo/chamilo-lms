@@ -61,27 +61,70 @@ $list_not_Registerister_user = '';
 if (isset($_REQUEST['Registerister'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
     if ($userInfo) {
+        // Global hosting limit applies only when NOT in a session.
+        if (empty($sessionId)) {
+            // Single registration would add exactly 1 new user.
+            $canSubscribe = can_subscribe_more_users_for_course((int) $courseInfo['real_id'], 1, true);
+            if (!$canSubscribe) {
+                // Operation cancelled: redirect back to course users list.
+                header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
+                exit;
+            }
+        }
+
         if (COURSEMANAGER === $type) {
             if (!empty($sessionId)) {
                 $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
-                SessionManager::set_coach_to_course_session(
+                $ok = SessionManager::set_coach_to_course_session(
                     $_REQUEST['user_id'],
                     $sessionId,
                     $courseInfo['real_id']
                 );
-                Display::addFlash(Display::return_message($message));
+                Display::addFlash(
+                    Display::return_message(
+                        $ok ? $message : get_lang('Unexpected error while subscribing the user'),
+                        $ok ? 'normal' : 'warning'
+                    )
+                );
             } else {
-                CourseManager::subscribeUser(
+                // Use structured result from CourseManager::subscribeUser to centralize limit checks and messages.
+                $res = CourseManager::subscribeUser(
                     $_REQUEST['user_id'],
                     $courseInfo['real_id'],
-                    COURSEMANAGER
+                    COURSEMANAGER,
+                    0,
+                    0,
+                    true,
+                    ['result' => true, 'flash' => false, 'emails' => true] // UI handles flash here
                 );
+                if (is_array($res) && isset($res['message'])) {
+                    Display::addFlash(
+                        Display::return_message(
+                            $res['message'],
+                            !empty($res['ok']) ? 'normal' : 'warning'
+                        )
+                    );
+                }
             }
         } else {
-            CourseManager::subscribeUser(
+            // Students subscription
+            $res = CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
-                $courseInfo['real_id']
+                $courseInfo['real_id'],
+                STUDENT,
+                0,
+                0,
+                true,
+                ['result' => true, 'flash' => false, 'emails' => true]
             );
+            if (is_array($res) && isset($res['message'])) {
+                Display::addFlash(
+                    Display::return_message(
+                        $res['message'],
+                        !empty($res['ok']) ? 'normal' : 'warning'
+                    )
+                );
+            }
         }
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
@@ -92,26 +135,83 @@ if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'subscribe':
             if (is_array($_POST['user'])) {
+                // Normalize user IDs list (avoid duplicates)
+                $selectedUserIds = array_unique(array_map('intval', $_POST['user']));
+
                 $isSuscribe = [];
-                foreach ($_POST['user'] as $index => $user_id) {
+                $errorMessages = [];
+                $limitReached = false;
+
+                foreach ($selectedUserIds as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
-                    if ($userInfo) {
-                        if (COURSEMANAGER === $type) {
-                            if (!empty($sessionId)) {
-                                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
-                                $result = SessionManager::set_coach_to_course_session(
-                                    $user_id,
-                                    $sessionId,
-                                    $courseInfo['real_id']
-                                );
-                                if ($result) {
-                                    $isSuscribe[] = $message;
-                                }
+                    if (!$userInfo) {
+                        continue;
+                    }
+
+                    // Global hosting limit applies only for direct course subscriptions (no session).
+                    // For bulk operations, we check the limit *per user* so that we can
+                    // subscribe as many users as possible until the limit is reached.
+                    if (empty($sessionId)) {
+                        if (!can_subscribe_more_users_for_course(
+                            (int) $courseInfo['real_id'],
+                            1,
+                            !$limitReached // emit flash only the first time we hit the limit
+                        )) {
+                            $limitReached = true;
+                            // Stop processing further users: the course is full.
+                            break;
+                        }
+                    }
+
+                    if (COURSEMANAGER === $type) {
+                        if (!empty($sessionId)) {
+                            $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
+                            $result = SessionManager::set_coach_to_course_session(
+                                $user_id,
+                                $sessionId,
+                                $courseInfo['real_id']
+                            );
+                            if ($result) {
+                                $isSuscribe[] = $message;
                             } else {
-                                CourseManager::subscribeUser($user_id, $courseInfo['real_id'], COURSEMANAGER);
+                                $errorMessages[] = $userInfo['complete_name_with_username'].': '.get_lang('Unexpected error while subscribing the user');
                             }
                         } else {
-                            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
+                            // Use structured result when subscribing a teacher directly to the course.
+                            $res = CourseManager::subscribeUser(
+                                $user_id,
+                                $courseInfo['real_id'],
+                                COURSEMANAGER,
+                                0,
+                                0,
+                                true,
+                                ['result' => true, 'flash' => false, 'emails' => true]
+                            );
+                            if (is_array($res)) {
+                                if (!empty($res['ok'])) {
+                                    $isSuscribe[] = $res['message'];
+                                } else {
+                                    $errorMessages[] = $res['message'] ?? get_lang('Unexpected error while subscribing the user');
+                                }
+                            }
+                        }
+                    } else {
+                        // Student subscription
+                        $res = CourseManager::subscribeUser(
+                            $user_id,
+                            $courseInfo['real_id'],
+                            STUDENT,
+                            0,
+                            0,
+                            true,
+                            ['result' => true, 'flash' => false, 'emails' => true]
+                        );
+                        if (is_array($res)) {
+                            if (!empty($res['ok'])) {
+                                $isSuscribe[] = $res['message'];
+                            } else {
+                                $errorMessages[] = $res['message'] ?? get_lang('Unexpected error while subscribing the user');
+                            }
                         }
                     }
                 }
@@ -121,11 +221,16 @@ if (isset($_POST['action'])) {
                         Display::addFlash(Display::return_message($info));
                     }
                 }
+
+                if (!empty($errorMessages)) {
+                    $errHtml = implode('<br>', array_map('Security::remove_XSS', $errorMessages));
+                    Display::addFlash(Display::return_message($errHtml, 'warning'));
+                }
             }
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
             exit;
-        break;
+            break;
     }
 }
 
@@ -826,8 +931,10 @@ function search_additional_profile_fields($keyword)
         $profiling_field_options_exact_values[] = $profiling_field_options;
     }
     $profiling_field_options_exact_values_sql = '';
-    foreach ($profiling_field_options_exact_values as $profilingkey => $profilingvalue) {
-        $profiling_field_options_exact_values_sql .= " OR (field_id = '".$profilingvalue['field_id']."' AND value='".$profilingvalue['option_value']."') ";
+    if (!empty($profiling_field_options_exact_values)) {
+        foreach ($profiling_field_options_exact_values as $profilingkey => $profilingvalue) {
+            $profiling_field_options_exact_values_sql .= " OR (field_id = '".$profilingvalue['field_id']."' AND value='".$profilingvalue['option_value']."') ";
+        }
     }
 
     $extraFieldType = ExtraField::USER_FIELD_TYPE;
@@ -905,4 +1012,72 @@ function display_extra_profile_fields_filter()
     $html .= '</form>';
 
     return $html;
+}
+
+/**
+ * Check global hosting_limit_users_per_course for a given course.
+ * This helper is used by manual subscription screens to cancel the
+ * operation *before* calling CourseManager::subscribeUser().
+ *
+ * It tries to reuse CourseManager helpers when available, and falls
+ * back to a direct SQL count if needed.
+ *
+ * @param int  $courseId   Internal course ID (c_id)
+ * @param int  $nbNewUsers Number of new users we want to subscribe
+ * @param bool $emitFlash  When true, shows a warning flash message if the limit would be exceeded
+ *
+ * @return bool True if the operation can continue, false if it must be cancelled
+ */
+function can_subscribe_more_users_for_course(int $courseId, int $nbNewUsers, bool $emitFlash = true): bool
+{
+    $courseId = (int) $courseId;
+    $globalLimit = 0;
+    $current = 0;
+
+    // Prefer centralized helpers on CourseManager when available.
+    if (class_exists('CourseManager')
+        && method_exists('CourseManager', 'getGlobalUsersPerCourseLimit')
+        && method_exists('CourseManager', 'countUsersForGlobalLimit')
+    ) {
+        $globalLimit = (int) CourseManager::getGlobalUsersPerCourseLimit();
+        if ($globalLimit <= 0) {
+            // Global limit disabled.
+            return true;
+        }
+
+        $current = (int) CourseManager::countUsersForGlobalLimit($courseId);
+    } else {
+        // Fallback to direct setting access and SQL counting.
+        $globalLimit = (int) api_get_setting('platform.hosting_limit_users_per_course'); // 0 => disabled
+        if ($globalLimit <= 0) {
+            return true;
+        }
+
+        $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $sql = "SELECT COUNT(*) AS total
+                FROM $tblCourseUser
+                WHERE c_id = $courseId
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res, 'ASSOC') ?: [];
+        $current = (int) ($row['total'] ?? 0);
+    }
+
+    if ($current + $nbNewUsers > $globalLimit) {
+        if ($emitFlash) {
+            $msg = sprintf(
+                get_lang(
+                    'This operation would exceed the limit of %s users per course set by the administrators. The subscription has been cancelled.'
+                ),
+                $globalLimit
+            );
+            Display::addFlash(Display::return_message($msg, 'warning'));
+        }
+
+        // Limit reached: cancel the operation.
+        return false;
+    }
+
+    // Still below the limit: allow the operation.
+    return true;
 }

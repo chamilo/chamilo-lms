@@ -481,6 +481,22 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
+// Global hosting limit: precompute a simple snapshot for UI purposes only.
+$globalLimitUsersPerCourse = 0;
+$currentUsersForGlobalLimit = 0;
+$courseIsFullForGlobalLimit = false;
+
+if ($canEdit && 0 === (int) $sessionId) {
+    // Read the global limit through CourseManager helper to keep logic centralized.
+    $globalLimitUsersPerCourse = (int) CourseManager::getGlobalUsersPerCourseLimit();
+
+    if ($globalLimitUsersPerCourse > 0) {
+        // Count current users for the limit, excluding HR relation type.
+        $currentUsersForGlobalLimit = (int) CourseManager::countUsersForGlobalLimit($courseId);
+        $courseIsFullForGlobalLimit = $currentUsersForGlobalLimit >= $globalLimitUsersPerCourse;
+    }
+}
+
 // $is_allowed_in_course is first defined in local.inc.php
 if (!api_is_allowed_in_course()) {
     api_not_allowed(true);
@@ -612,7 +628,16 @@ if ($canRead) {
 
     $actionsLeft = '';
     if ($canEdit) {
-        $actionsLeft .= $icon;
+        // When the global hosting limit is enabled and already reached (no session),
+        // we hide the "Add" icon to avoid actions that would add more users.
+        $canShowAddIcon = true;
+        if (0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
+            $canShowAddIcon = false;
+        }
+
+        if ($canShowAddIcon) {
+            $actionsLeft .= $icon;
+        }
     }
 
     if ($canRead) {
@@ -656,6 +681,18 @@ if ($canRead) {
     }
 
     echo Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
+
+    // When the course is full according to the global limit (no session),
+    // show an explicit warning so teachers understand why the Add icon is hidden.
+    if ($canEdit && 0 === (int) $sessionId && $globalLimitUsersPerCourse > 0 && $courseIsFullForGlobalLimit) {
+        $msg = sprintf(
+            get_lang(
+                'This course already reached the global limit of %d users set by the administrators. To add more users, please ask an administrator to raise this limit or use sessions.'
+            ),
+            $globalLimitUsersPerCourse
+        );
+        echo Display::return_message($msg, 'warning');
+    }
 }
 
 echo UserManager::getUserSubscriptionTab($selectedTab);
@@ -732,7 +769,7 @@ function get_number_of_users()
 
     foreach ($users as $user) {
         if ((
-            isset($_GET['keyword']) &&
+                isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $user['firstname'],
                     $user['lastname'],
@@ -870,7 +907,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
     foreach ($users as $user_id => $userData) {
         if ((
-            isset($_GET['keyword']) &&
+                isset($_GET['keyword']) &&
                 searchUserKeyword(
                     $userData['firstname'],
                     $userData['lastname'],

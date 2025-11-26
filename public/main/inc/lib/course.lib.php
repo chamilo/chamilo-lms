@@ -6814,4 +6814,136 @@ class CourseManager
         $courseFieldValue = new ExtraFieldValue('course');
         //$courseFieldValue->saveFieldValues($params);
     }
+
+    /**
+     * Global hosting limit for users per course.
+     * Returns 0 when the limit is disabled.
+     */
+    public static function getGlobalUsersPerCourseLimit(): int
+    {
+        return (int) api_get_setting('platform.hosting_limit_users_per_course');
+    }
+
+    /**
+     * Count current users in course for the global limit.
+     * Excludes HR relation type (keeps legacy behaviour).
+     */
+    public static function countUsersForGlobalLimit(int $courseId): int
+    {
+        $courseId = (int) $courseId;
+        if ($courseId <= 0) {
+            return 0;
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $sql = "SELECT COUNT(*) AS total
+                FROM $table
+                WHERE c_id = $courseId
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
+
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res, 'ASSOC') ?: [];
+
+        return (int) ($row['total'] ?? 0);
+    }
+
+    /**
+     * Check if subscribing the given users (no session) would exceed the global limit.
+     *
+     * @param int   $courseId
+     * @param int[] $userIds
+     */
+    public static function wouldOperationExceedGlobalLimit(int $courseId, array $userIds): bool
+    {
+        $limit = self::getGlobalUsersPerCourseLimit();
+        if ($limit <= 0) {
+            // No global limit configured.
+            return false;
+        }
+
+        $courseId = (int) $courseId;
+        if ($courseId <= 0 || empty($userIds)) {
+            return false;
+        }
+
+        // Keep unique, positive IDs only.
+        $userIds = array_values(array_unique(array_map('intval', $userIds)));
+        $userIds = array_filter(
+            $userIds,
+            static function (int $id): bool {
+                return $id > 0;
+            }
+        );
+
+        if (empty($userIds)) {
+            return false;
+        }
+
+        $table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $idList = implode(',', $userIds);
+
+        // How many of these users are already in the course?
+        $sql = "SELECT COUNT(DISTINCT user_id) AS already
+                FROM $table
+                WHERE c_id = $courseId
+                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+                  AND user_id IN ($idList)";
+
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res, 'ASSOC') ?: [];
+        $already = (int) ($row['already'] ?? 0);
+
+        $newCount = count($userIds) - $already;
+        if ($newCount <= 0) {
+            // Nothing new to subscribe, cannot exceed.
+            return false;
+        }
+
+        $current = self::countUsersForGlobalLimit($courseId);
+
+        return ($current + $newCount) > $limit;
+    }
+
+    /**
+     * Build message when a *manual* subscription operation must be cancelled.
+     */
+    public static function getGlobalLimitCancelMessage(): string
+    {
+        $limit = self::getGlobalUsersPerCourseLimit();
+
+        return sprintf(
+            get_lang(
+                'This operation would exceed the limit of %d users per course set by the administrators. The whole subscription operation has been cancelled.'
+            ),
+            $limit
+        );
+    }
+
+    /**
+     * Build message for *batch imports* when some subscriptions hit the limit.
+     *
+     * @param string[] $pairs List of "username / Course title" strings.
+     */
+    public static function getGlobalLimitPartialImportMessage(array $pairs): string
+    {
+        $limit = self::getGlobalUsersPerCourseLimit();
+
+        $safePairs = array_map(
+            static function (string $pair): string {
+                return Security::remove_XSS($pair);
+            },
+            $pairs
+        );
+
+        $list = implode(', ', $safePairs);
+
+        return sprintf(
+            get_lang(
+                'Some or all the subscriptions could not be executed because they reached the limit of %d users per course set by the administrators. Please make sure that limit is raised and try executing this operation again. Users/Courses affected: %s'
+            ),
+            $limit,
+            $list
+        );
+    }
 }

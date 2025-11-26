@@ -362,8 +362,6 @@ switch ($action) {
         exit;
 }
 
-global $user;
-
 $backUrl = Container::getRouter()->generate('admin');
 if ($user->hasRole('ROLE_QUESTION_MANAGER')) {
     $backUrl = Container::getRouter()->generate('index');

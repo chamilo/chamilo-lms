@@ -275,17 +275,8 @@
                             </small>
                         </div>
 
-                        <div class="form-check mt-2">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="create-documents-checkbox"
-                                   name="create_documents"
-                                   value="1"
-                                   checked="checked">
-                            <label class="form-check-label" for="create-documents-checkbox">
-                                {{ 'Also create a visible document in the Documents tool for each selected course.'|trans }}
-                            </label>
-                        </div>
+                        {# Always create a visible document in the Documents tool (no user option needed) #}
+                        <input type="hidden" name="create_documents" value="1">
 
                         <button type="submit" class="btn btn--primary mt-3">
                             {{ 'Attach to selected course(s) (hidden)'|trans }}
@@ -347,6 +338,52 @@
         var detachFileIdInput = document.getElementById('detach-resource-file-id');
         var detachCourseIdInput = document.getElementById('detach-course-id');
 
+        // Base URL for the course Documents tool (e.g. /resources/document/)
+        var documentsBaseUrl = "{{ app.request.basePath|e('js') }}/resources/document/";
+
+        /**
+         * Build the URL to the Documents tool of a given course.
+         * Expects a course object with:
+         *  - id or courseId          => course identifier (cid)
+         *  - resourceNodeId          => resource node id of the course root
+         */
+        function buildCourseDocumentsUrl(courseData) {
+          if (!courseData) {
+            return null;
+          }
+
+          var courseId =
+            courseData.id ||
+            courseData.courseId ||
+            null;
+
+          var courseNodeId =
+            courseData.resourceNodeId ||
+            courseData.resource_node_id ||
+            courseData.nodeId ||
+            null;
+
+          if (!courseId || !courseNodeId) {
+            // If we miss any piece of data, we keep the tag non-clickable.
+            return null;
+          }
+
+          return (
+            documentsBaseUrl +
+            encodeURIComponent(courseNodeId) +
+            "/?cid=" +
+            encodeURIComponent(courseId) +
+            "&gid=0"
+          );
+        }
+
+        /**
+         * Render course tags for the current file.
+         * Each tag:
+         *  - Shows course code and title
+         *  - Is clickable (opens Documents tool) when we have enough data
+         *  - Keeps the "×" button to detach the file from the course
+         */
         function renderCourseTags(courses, resourceFileId) {
           if (!courseTagsContainer) {
             return;
@@ -368,9 +405,23 @@
               "inline-flex items-center rounded-full bg-slate-100 text-slate-800 " +
               "text-xs font-medium px-2 py-1 mr-1 mb-1 border border-slate-200";
 
-            var label = document.createElement("span");
-            label.textContent = "[" + (c.code || "") + "] " + (c.title || "");
-            pill.appendChild(label);
+            var labelText = "[" + (c.code || "") + "] " + (c.title || "");
+            var courseUrl = buildCourseDocumentsUrl(c);
+
+            if (courseUrl) {
+              // Clickable link to the course Documents tool.
+              var link = document.createElement("a");
+              link.href = courseUrl;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.textContent = labelText;
+              link.className = "hover:underline";
+              pill.appendChild(link);
+            } else {
+              var label = document.createElement("span");
+              label.textContent = labelText;
+              pill.appendChild(label);
+            }
 
             if (detachForm && detachFileIdInput && detachCourseIdInput) {
               var removeBtn = document.createElement("button");

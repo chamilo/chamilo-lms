@@ -3900,9 +3900,9 @@ class PortfolioController
 
                 $queryBuilder->andWhere(
                     $queryBuilder->expr()->orX(
-                        'links.user = :current_user',
+                        'node.creator = :current_user',
                         $queryBuilder->expr()->andX(
-                            'links.user != :current_user',
+                            'node.creator != :current_user',
                             $queryBuilder->expr()->in('resource.visibility', $visibilityCriteria)
                         )
                     )

@@ -84,12 +84,14 @@ class AdminController extends BaseController
         $linksCount = [];
         $coursesByFile = [];
 
+        /** @var ResourceFile $file */
         foreach ($files as $file) {
             $resourceNode = $file->getResourceNode();
             $count = 0;
             $coursesForThisFile = [];
 
             if ($resourceNode) {
+                // Public URL to open/download this file
                 $fileUrls[$file->getId()] = $this->resourceNodeRepository->getResourceFileUrl($resourceNode);
 
                 // Count how many ResourceLinks still point to this node and collect courses.
@@ -104,12 +106,18 @@ class AdminController extends BaseController
                         }
 
                         $courseId = $course->getId();
+
+                        // Root resource node of the course (used to build Documents URL in the template JS)
+                        $courseResourceNode = $course->getResourceNode();
+                        $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
+
                         // Avoid duplicates for the same course.
                         if (!isset($coursesForThisFile[$courseId])) {
                             $coursesForThisFile[$courseId] = [
-                                'id' => $courseId,
-                                'code' => $course->getCode(),
-                                'title' => $course->getTitle(),
+                                'id'             => $courseId,
+                                'code'           => $course->getCode(),
+                                'title'          => $course->getTitle(),
+                                'resourceNodeId' => $courseResourceNodeId,
                             ];
                         }
                     }
@@ -118,6 +126,7 @@ class AdminController extends BaseController
                 $fileUrls[$file->getId()] = null;
             }
 
+            // Physical path on disk (used only for display/copy)
             $filePaths[$file->getId()] = '/upload/resource'.$this->resourceNodeRepository->getFilename($file);
 
             $linksCount[$file->getId()] = $count;
@@ -131,22 +140,26 @@ class AdminController extends BaseController
 
         /** @var Course $course */
         foreach ($allCourses as $course) {
+            $courseResourceNode = $course->getResourceNode();
+            $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
+
             $courseOptions[] = [
-                'id' => $course->getId(),
-                'code' => $course->getCode(),
-                'title' => $course->getTitle(),
+                'id'             => $course->getId(),
+                'code'           => $course->getCode(),
+                'title'          => $course->getTitle(),
+                'resourceNodeId' => $courseResourceNodeId,
             ];
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [
-            'files' => $files,
-            'fileUrls' => $fileUrls,
-            'filePaths' => $filePaths,
-            'totalPages' => $totalPages,
-            'currentPage' => $page,
-            'search' => $search,
-            'orphanFlags' => $orphanFlags,
-            'linksCount' => $linksCount,
+            'files'         => $files,
+            'fileUrls'      => $fileUrls,
+            'filePaths'     => $filePaths,
+            'totalPages'    => $totalPages,
+            'currentPage'   => $page,
+            'search'        => $search,
+            'orphanFlags'   => $orphanFlags,
+            'linksCount'    => $linksCount,
             'coursesByFile' => $coursesByFile,
             'courseOptions' => $courseOptions,
         ]);
@@ -178,7 +191,7 @@ class AdminController extends BaseController
             ]);
         }
 
-
+        // Collect course codes from multi-select.
         $courseCodes = [];
         $multi = $request->request->all('course_codes');
         if (\is_array($multi)) {
@@ -190,6 +203,7 @@ class AdminController extends BaseController
             }
         }
 
+        // Fallback to single value if any.
         if (0 === \count($courseCodes)) {
             $single = $request->request->get('course_code');
             $single = null === $single ? '' : trim((string) $single);
@@ -231,7 +245,7 @@ class AdminController extends BaseController
             ]);
         }
 
-        // also create visible documents in the Documents tool.
+        // Hidden field in the template: always "1" now.
         $createDocuments = (bool) $request->request->get('create_documents', false);
 
         // Map existing links by course id to avoid duplicates.
@@ -286,7 +300,7 @@ class AdminController extends BaseController
             $existingByCourseId[$courseId] = true;
             $attachedTitles[] = (string) $course->getTitle();
 
-            // Optional feature: also create a visible document entry for this course.
+            // Also create a visible document entry for this course (Documents tool).
             if ($createDocuments) {
                 $this->createVisibleDocumentFromResourceFile($resourceFile, $course, $em);
             }
@@ -714,8 +728,8 @@ class AdminController extends BaseController
         $parentResource = $course;
         $parentNode = $parentResource->getResourceNode();
 
-        $title = $resourceFile->getTitle()
-            ?? $resourceFile->getOriginalName()
+        $title = $resourceFile->getOriginalName()
+            ?? $resourceFile->getTitle()
             ?? (string) $resourceFile->getId();
 
         $existingDocument = $documentRepo->findCourseResourceByTitle(
@@ -727,6 +741,7 @@ class AdminController extends BaseController
         );
 
         if (null !== $existingDocument) {
+            // Document already exists for this title in this course context.
             return;
         }
 
@@ -743,14 +758,18 @@ class AdminController extends BaseController
         $em->persist($document);
         $em->flush();
 
+        // Physical file path in var/upload/resource (hashed filename)
         $relativePath = $this->resourceNodeRepository->getFilename($resourceFile);
         $storageRoot = $this->getParameter('kernel.project_dir').'/var/upload/resource';
         $absolutePath = $storageRoot.$relativePath;
 
         if (!is_file($absolutePath)) {
+            // If the physical file is missing, we cannot create the document content.
             return;
         }
 
+        // This will copy the file into the course documents structure,
+        // using $title as the base name (Document repository handles dedup and hashing).
         $documentRepo->addFileFromPath($document, $title, $absolutePath);
     }
 

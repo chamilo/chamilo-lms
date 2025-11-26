@@ -101,10 +101,7 @@ class FolderExport extends ActivityExport
         if ($folderId === ActivityExport::DOCS_MODULE_ID) {
             foreach ($this->course->resources[RESOURCE_DOCUMENT] as $doc) {
                 if ($doc->file_type === 'file') {
-                    $ext = strtolower(pathinfo($doc->path, PATHINFO_EXTENSION));
-                    if (!in_array($ext, ['html', 'htm'], true)) {
-                        $files[] = ['id' => (int) $doc->source_id];
-                    }
+                    $files[] = ['id' => (int) $doc->source_id];
                 }
             }
         }

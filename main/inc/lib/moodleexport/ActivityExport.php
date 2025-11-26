@@ -28,15 +28,44 @@ abstract class ActivityExport
     abstract public function export($activityId, $exportDir, $moduleId, $sectionId);
 
     /**
-     * Get the section ID for a given activity ID.
+     * Get the section ID (learnpath source_id) for a given activity.
      */
     public function getSectionIdForActivity(int $activityId, string $itemType): int
     {
+        if (empty($this->course->resources[RESOURCE_LEARNPATH])) {
+            return 0;
+        }
+
         foreach ($this->course->resources[RESOURCE_LEARNPATH] as $learnpath) {
+            if (empty($learnpath->items)) {
+                continue;
+            }
+
             foreach ($learnpath->items as $item) {
-                $item['item_type'] = $item['item_type'] === 'student_publication' ? 'work' : $item['item_type'];
-                if ($item['item_type'] == $itemType && $item['path'] == $activityId) {
-                    return $learnpath->source_id;
+                $normalizedType = $item['item_type'] === 'student_publication'
+                    ? 'work'
+                    : $item['item_type'];
+
+                if ($normalizedType !== $itemType) {
+                    continue;
+                }
+
+                // Classic case: LP stores the numeric id in "path"
+                if (ctype_digit((string) $item['path']) && (int) $item['path'] === $activityId) {
+                    return (int) $learnpath->source_id;
+                }
+
+                // Fallback for documents when LP stores the path instead of the id
+                if ($itemType === RESOURCE_DOCUMENT) {
+                    $doc = \DocumentManager::get_document_data_by_id($activityId, $this->course->code);
+                    if (!empty($doc['path'])) {
+                        $p = (string) $doc['path'];
+                        foreach ([$p, 'document/'.$p, '/'.$p] as $candidate) {
+                            if ((string) $item['path'] === $candidate) {
+                                return (int) $learnpath->source_id;
+                            }
+                        }
+                    }
                 }
             }
         }

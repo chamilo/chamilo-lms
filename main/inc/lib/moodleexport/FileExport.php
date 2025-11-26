@@ -197,37 +197,28 @@ class FileExport
      */
     private function processDocument(array $filesData, object $document): array
     {
-        if (
-            $document->file_type === 'file' &&
-            isset($this->course->used_page_doc_ids) &&
-            in_array($document->source_id, $this->course->used_page_doc_ids)
-        ) {
+        // Only real files are exported; folders are represented implicitly by "filepath"
+        if ($document->file_type !== 'file') {
             return $filesData;
         }
 
-        if (
-            $document->file_type === 'file' &&
-            pathinfo($document->path, PATHINFO_EXTENSION) === 'html' &&
-            substr_count($document->path, '/') === 1
-        ) {
-            return $filesData;
-        }
+        // Base file data (contenthash, size, title, etc.)
+        $fileData = $this->getFileData($document);
 
-        if ($document->file_type === 'file') {
-            $extension = pathinfo($document->path, PATHINFO_EXTENSION);
-            if (!in_array(strtolower($extension), ['html', 'htm'])) {
-                $fileData = $this->getFileData($document);
-                $fileData['filepath'] = '/Documents/';
-                $fileData['contextid'] = 0;
-                $fileData['component'] = 'mod_folder';
-                $filesData['files'][] = $fileData;
-            }
-        } elseif ($document->file_type === 'folder') {
-            $folderFiles = \DocumentManager::getAllDocumentsByParentId($this->course->info, $document->source_id);
-            foreach ($folderFiles as $file) {
-                $filesData['files'][] = $this->getFolderFileData($file, (int) $document->source_id, '/Documents/'.dirname($file['path']).'/');
-            }
-        }
+        // Rebuild the relative filepath so Moodle can recreate the Documents tree
+        $relDir = dirname($document->path);
+        $filepath = $this->ensureTrailingSlash(
+            $relDir === '.' ? '/' : '/'.$relDir.'/'
+        );
+
+        // Attach this file to the global "Documents" folder activity
+        $fileData['filepath'] = $filepath;
+        $fileData['contextid'] = ActivityExport::DOCS_MODULE_ID;
+        $fileData['component'] = 'mod_folder';
+        $fileData['filearea'] = 'content';
+        $fileData['itemid'] = ActivityExport::DOCS_MODULE_ID;
+
+        $filesData['files'][] = $fileData;
 
         return $filesData;
     }

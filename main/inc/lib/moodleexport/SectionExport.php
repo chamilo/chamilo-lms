@@ -113,15 +113,23 @@ class SectionExport
 
         $activities = $this->getActivitiesForSection($generalLearnpath, true);
 
-        $ya = array_column($activities, 'modulename');
-        if (!in_array('folder', $ya, true)) {
-            $activities[] = [
-                'id' => ActivityExport::DOCS_MODULE_ID,
-                'moduleid' => ActivityExport::DOCS_MODULE_ID,
-                'modulename' => 'folder',
-                'name' => 'Documents',
-                'sectionid' => 0,
-            ];
+        // Ensure we always have one "Documents" folder activity at the top of the general section.
+        $hasFolder = false;
+        foreach ($activities as $activity) {
+            if ($activity['modulename'] === 'folder') {
+                $hasFolder = true;
+                break;
+            }
+        }
+
+        if (!$hasFolder) {
+            array_unshift($activities, [
+                'id'        => ActivityExport::DOCS_MODULE_ID,
+                'moduleid'  => ActivityExport::DOCS_MODULE_ID,
+                'type'      => 'folder',
+                'modulename'=> 'folder',
+                'name'      => 'Documents',
+            ]);
         }
 
         return $activities;
@@ -159,14 +167,32 @@ class SectionExport
     }
 
     /**
-     * Get the activities for a specific section.
+     * Get the activities for a specific section (learnpath).
+     *
+     * Items are sorted using c_lp_item.display_order so that the order
+     * in Moodle matches the order defined in the Chamilo LP.
      */
     public function getActivitiesForSection(object $learnpath, bool $isGeneral = false): array
     {
         $activities = [];
-        $sectionId = $isGeneral ? 0 : $learnpath->source_id;
+        $sectionId = $isGeneral ? 0 : (int) $learnpath->source_id;
 
-        foreach ($learnpath->items as $item) {
+        $items = $learnpath->items ?? [];
+
+        // Ensure items follow the same order as in Chamilo (c_lp_item.display_order).
+        usort($items, static function (array $a, array $b): int {
+            $aOrder = $a['display_order'] ?? 0;
+            $bOrder = $b['display_order'] ?? 0;
+
+            if ($aOrder === $bOrder) {
+                // Fallback to id to keep a deterministic order.
+                return (int) ($a['id'] ?? 0) <=> (int) ($b['id'] ?? 0);
+            }
+
+            return $aOrder <=> $bOrder;
+        });
+
+        foreach ($items as $item) {
             $this->addActivityToList($item, $sectionId, $activities);
         }
 
@@ -226,7 +252,7 @@ class SectionExport
      */
     private function addActivityToList(array $item, int $sectionId, array &$activities): void
     {
-        static $documentsFolderAdded = false;
+        /*static $documentsFolderAdded = false;
         if (!$documentsFolderAdded && $sectionId === 0) {
             $activities[] = [
                 'id' => 0,
@@ -236,7 +262,7 @@ class SectionExport
                 'name' => 'Documents',
             ];
             $documentsFolderAdded = true;
-        }
+        }*/
 
         $activityData = null;
         $activityClassMap = [

@@ -8,6 +8,8 @@ $course_plugin = 'customcertificate';
 require_once __DIR__.'/../config.php';
 
 api_block_anonymous_users();
+
+/** @var CustomCertificatePlugin $plugin */
 $plugin = CustomCertificatePlugin::create();
 $enable = $plugin->get('enable_plugin_customcertificate') === 'true';
 $tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -27,18 +29,63 @@ if (!$enable) {
 $currentLocalTime = api_get_local_time();
 $accessUrlId = api_get_current_access_url_id();
 
-$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
-$dateBegin = isset($_GET['date_begin']) ? strtotime($_GET['date_begin']) : null;
-$dateEnd = isset($_GET['date_end']) ? strtotime($_GET['date_end'].' 23:59:59') : null;
+/*
+ * Support single or multiple session_id parameters:
+ * - session_id=3
+ * - session_id[0]=3&session_id[1]=5
+ */
+$sessionIds = [];
+if (isset($_GET['session_id'])) {
+    if (is_array($_GET['session_id'])) {
+        foreach ($_GET['session_id'] as $rawId) {
+            $id = (int) $rawId;
+            if ($id > 0) {
+                $sessionIds[] = $id;
+            }
+        }
+    } else {
+        $id = (int) $_GET['session_id'];
+        if ($id > 0) {
+            $sessionIds[] = $id;
+        }
+    }
+}
 
-if (api_is_multiple_url_enabled()) {
-    if ($accessUrlId != -1) {
+// Remove duplicates just in case.
+$sessionIds = array_values(array_unique($sessionIds));
+
+if (empty($sessionIds)) {
+    // No session selected: nothing to export.
+    Display::display_header($plugin->get_lang('PrintCertificate'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    Display::display_footer();
+    exit;
+}
+
+// Date filters (same logic as session_filter.php)
+$dateBeginRaw = isset($_GET['date_begin']) ? $_GET['date_begin'] : null;
+$dateEndRaw = isset($_GET['date_end']) ? $_GET['date_end'] : null;
+
+$dateBegin = !empty($dateBeginRaw) ? strtotime($dateBeginRaw) : null;
+$dateEnd = !empty($dateEndRaw) ? strtotime($dateEndRaw.' 23:59:59') : null;
+
+$filterDate = 0;
+if (!empty($dateBegin)) {
+    $filterDate += DATE_BEGIN_FILTER;
+}
+if (!empty($dateEnd)) {
+    $filterDate += DATE_END_FILTER;
+}
+
+// Multi-URL protection: every session must belong to the current URL.
+if (api_is_multiple_url_enabled() && $accessUrlId != -1) {
+    foreach ($sessionIds as $sessionId) {
         $result = Database::select(
             '*',
-            "$tblSessionRelAccessUrl",
+            $tblSessionRelAccessUrl,
             [
                 'where' => [
-                    "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId],
+                    'access_url_id = ? AND session_id = ?' => [$accessUrlId, $sessionId],
                 ],
             ]
         );
@@ -52,51 +99,42 @@ if (api_is_multiple_url_enabled()) {
 $exportAllInOne = isset($_GET['export_pdf']) ? (int) $_GET['export_pdf'] : false;
 $exportZip = isset($_GET['export_zip']) ? (int) $_GET['export_zip'] : false;
 
-$filterDate = 0;
-if (!empty($dateBegin)) {
-    $filterDate += DATE_BEGIN_FILTER;
-}
-if (!empty($dateEnd)) {
-    $filterDate += DATE_END_FILTER;
-}
-
+// Build extra fields filter (same approach as session_filter.php).
 $filterCheckList = [];
 $extraField = new ExtraField('user');
 $extraFieldsAll = $extraField->get_all(['filter = ?' => 1], 'option_order');
 foreach ($extraFieldsAll as $field) {
-    if (!empty($_GET['extra_'.$field['variable']])) {
+    $paramName = 'extra_'.$field['variable'];
+    if (!empty($_GET[$paramName])) {
         $filterCheckList[$field['id']] = $field;
     }
 }
 
-$result = Database::select(
-    'c.id, c.code',
-    "$tblCourse c INNER JOIN  $tblSessionRelCourse r ON c.id = r.c_id",
-    [
-        'where' => [
-            "r.session_id = ? " => [$sessionId],
-        ],
-    ]
-);
+// Collect all certificates from all selected sessions and their courses (same logic as session_filter.php).
+$certificateList = [];
 
-foreach ($result as $value) {
-    $courseId = $value['id'];
-    $courseCode = $value['code'];
-
-    $cats = Category::load(
-        null,
-        null,
-        $courseCode,
-        null,
-        null,
-        $sessionId,
-        'ORDER BY id'
+foreach ($sessionIds as $sessionId) {
+    $courseResult = Database::select(
+        'c.id, c.code',
+        "$tblCourse c INNER JOIN  $tblSessionRelCourse r ON c.id = r.c_id",
+        [
+            'where' => [
+                'r.session_id = ? ' => [$sessionId],
+            ],
+        ]
     );
 
-    if (empty($cats)) {
-        // first time
+    if (empty($courseResult)) {
+        continue;
+    }
+
+    foreach ($courseResult as $value) {
+        $courseId = (int) $value['id'];
+        $courseCode = $value['code'];
+
+        // Load gradebook categories for this course + session.
         $cats = Category::load(
-            0,
+            null,
             null,
             $courseCode,
             null,
@@ -104,40 +142,72 @@ foreach ($result as $value) {
             $sessionId,
             'ORDER BY id'
         );
-    }
 
-    $selectCat = (int) $cats[0]->get_id();
-    $certificateList = [];
-    $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        if (empty($cats)) {
+            // First time, try with default category id = 0 (same as session_filter.php).
+            $cats = Category::load(
+                0,
+                null,
+                $courseCode,
+                null,
+                null,
+                $sessionId,
+                'ORDER BY id'
+            );
+        }
 
-    foreach ($certificateListAux as $value) {
-        $created_at = strtotime(api_get_local_time($value['created_at']));
-        $value['category_id'] = $selectCat;
-        $value['c_id'] = $courseId;
-        $value['course_code'] = $courseCode;
-        switch ($filterDate) {
-            case NO_DATE_FILTER:
-                $certificateList[] = $value;
-                break;
-            case DATE_BEGIN_FILTER:
-                if ($created_at >= $dateBegin) {
-                    $certificateList[] = $value;
-                }
-                break;
-            case DATE_END_FILTER:
-                if ($created_at <= $dateEnd) {
-                    $certificateList[] = $value;
-                }
-                break;
-            case ALL_DATE_FILTER:
-                if ($created_at >= $dateBegin && $created_at <= $dateEnd) {
-                    $certificateList[] = $value;
-                }
-                break;
+        if (empty($cats)) {
+            // No gradebook category for this course/session.
+            continue;
+        }
+
+        $selectCat = (int) $cats[0]->get_id();
+        if ($selectCat <= 0) {
+            continue;
+        }
+
+        // Get all certificates for this category.
+        $certificateListAux = GradebookUtils::get_list_users_certificates($selectCat);
+        if (empty($certificateListAux)) {
+            continue;
+        }
+
+        foreach ($certificateListAux as $certRow) {
+            $createdAt = strtotime(api_get_local_time($certRow['created_at']));
+
+            // Base row with extra metadata.
+            $row = $certRow;
+            $row['category_id'] = $selectCat;
+            $row['c_id'] = $courseId;
+            $row['course_code'] = $courseCode;
+            $row['session_id'] = $sessionId;
+
+            // Apply date filter (same logic as session_filter.php).
+            $include = false;
+            switch ($filterDate) {
+                case NO_DATE_FILTER:
+                    $include = true;
+                    break;
+                case DATE_BEGIN_FILTER:
+                    $include = $createdAt >= $dateBegin;
+                    break;
+                case DATE_END_FILTER:
+                    $include = $createdAt <= $dateEnd;
+                    break;
+                case ALL_DATE_FILTER:
+                    $include = $createdAt >= $dateBegin && $createdAt <= $dateEnd;
+                    break;
+            }
+
+            if ($include) {
+                $certificateList[] = $row;
+            }
         }
     }
+}
 
-    // Filter extra field
+// Apply extra fields filtering to the global certificate list (same idea as session_filter.php).
+if (!empty($filterCheckList) && !empty($certificateList)) {
     foreach ($certificateList as $key => $value) {
         foreach ($filterCheckList as $fieldId => $field) {
             $extraFieldValue = new ExtraFieldValue('user');
@@ -151,42 +221,73 @@ foreach ($result as $value) {
                 break;
             }
 
+            $paramName = 'extra_'.$field['variable'];
+
             switch ($field['field_type']) {
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_ALPHANUMERIC:
-                    $pos = stripos($extraFieldValueData['value'], $_GET['extra_'.$field['variable']]);
-                    if ($pos === false) {
-                        unset($certificateList[$key]);
+                    $filterValue = isset($_GET[$paramName]) ? (string) $_GET[$paramName] : '';
+                    if ($filterValue !== '') {
+                        $pos = stripos($extraFieldValueData['value'], $filterValue);
+                        if ($pos === false) {
+                            unset($certificateList[$key]);
+                        }
                     }
                     break;
                 case ExtraField::FIELD_TYPE_RADIO:
-                    $valueRadio = $_GET['extra_'.$field['variable']]['extra_'.$field['variable']];
-                    if ($extraFieldValueData['value'] != $valueRadio) {
+                    $filterValue = '';
+                    if (isset($_GET[$paramName][$paramName])) {
+                        $filterValue = $_GET[$paramName][$paramName];
+                    }
+                    if ($extraFieldValueData['value'] != $filterValue) {
                         unset($certificateList[$key]);
                     }
                     break;
                 case ExtraField::FIELD_TYPE_SELECT:
-                    if ($extraFieldValueData['value'] != $_GET['extra_'.$field['variable']]) {
+                    $filterValue = isset($_GET[$paramName]) ? $_GET[$paramName] : null;
+                    if ($filterValue !== null && $extraFieldValueData['value'] != $filterValue) {
                         unset($certificateList[$key]);
                     }
                     break;
+            }
+
+            // Stop checking other fields if this one already disqualified the record.
+            if (!isset($certificateList[$key])) {
+                break;
             }
         }
     }
 }
 
+// Re-index the array after unsetting elements.
+$certificateList = array_values($certificateList);
+
+// If no certificates pass the filters, show a friendly message.
+if (empty($certificateList)) {
+    Display::display_header($plugin->get_lang('PrintCertificate'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    Display::display_footer();
+    exit;
+}
+
+// Build user list + session mapping.
 $userList = [];
-foreach ($certificateList as $index => $value) {
+$sessionInfoPerSession = [];
+
+foreach ($certificateList as $value) {
     $infoUser = api_get_user_info($value['user_id']);
     $infoUser['category_id'] = $value['category_id'];
     $infoUser['c_id'] = $value['c_id'];
     $infoUser['course_code'] = $value['course_code'];
+    $infoUser['session_id'] = $value['session_id'];
     $userList[] = $infoUser;
 }
 
-$sessionInfo = [];
-if ($sessionId > 0) {
-    $sessionInfo = SessionManager::fetch($sessionId);
+// Preload session info for all involved sessions (used in dates).
+foreach ($sessionIds as $sessionId) {
+    if ($sessionId > 0) {
+        $sessionInfoPerSession[$sessionId] = SessionManager::fetch($sessionId);
+    }
 }
 
 $path = api_get_path(WEB_UPLOAD_PATH).'certificates/';
@@ -196,14 +297,17 @@ foreach ($userList as $userInfo) {
     $courseId = $userInfo['c_id'];
     $courseCode = $userInfo['course_code'];
     $studentId = $userInfo['user_id'];
+    $sessionId = !empty($userInfo['session_id']) ? (int) $userInfo['session_id'] : 0;
 
     $courseInfo = api_get_course_info($courseCode);
-    $allowCustomCertificate = api_get_course_setting('customcertificate_course_enable', $courseInfo);
-    if (!$allowCustomCertificate) {
+    $allowCustomCertificateCourse = api_get_course_setting('customcertificate_course_enable', $courseInfo);
+
+    if (!$allowCustomCertificateCourse) {
+        // Skip courses where the custom certificate plugin is not enabled at course level.
         continue;
     }
 
-    // Get info certificate
+    // Get info certificate for this course + session.
     $infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
 
     if (!is_array($infoCertificate)) {
@@ -221,8 +325,8 @@ foreach ($userList as $userInfo) {
         }
     }
 
-    $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
-    $widthCell = intval($workSpace / 6);
+    $workSpace = (int) (297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
+    $widthCell = (int) ($workSpace / 6);
 
     $htmlText = '';
     if (!$exportAllInOne) {
@@ -237,7 +341,6 @@ foreach ($userList as $userInfo) {
             href="'.api_get_path(WEB_CSS_PATH).'document.css">';
         $htmlText .= '<body>';
     }
-    $studentId = $userInfo['user_id'];
 
     if (empty($infoCertificate['background'])) {
         $htmlText .= '<div class="caraA" style="page-break-before:always; margin:0px; padding:0px;">';
@@ -262,7 +365,7 @@ foreach ($userList as $userInfo) {
     if (!empty($infoCertificate['logo_center'])) {
         $logoCenter = '
             <img
-                style="max-height: 150px; max-width: '.intval($workSpace - (2 * $widthCell)).'mm;"
+                style="max-height: 150px; max-width: '.(int) ($workSpace - (2 * $widthCell)).'mm;"
                 src="'.$path.$infoCertificate['logo_center'].'" />';
     }
 
@@ -282,11 +385,11 @@ foreach ($userList as $userInfo) {
         "
         border="0">';
     $htmlText .= '<tr>';
-    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm" class="logo">'.$logoLeft.'</td>';
-    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:center;" class="logo">';
+    $htmlText .= '<td style="width:'.(int) ($workSpace / 3).'mm" class="logo">'.$logoLeft.'</td>';
+    $htmlText .= '<td style="width:'.(int) ($workSpace / 3).'mm; text-align:center;" class="logo">';
     $htmlText .= $logoCenter;
     $htmlText .= '</td>';
-    $htmlText .= '<td style="width:'.intval($workSpace / 3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
+    $htmlText .= '<td style="width:'.(int) ($workSpace / 3).'mm; text-align:right;" class="logo">'.$logoRight.'</td>';
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 
@@ -307,15 +410,18 @@ foreach ($userList as $userInfo) {
         $myContentHtml
     );
 
+    // Use session-specific dates when available.
+    $currentSessionInfo = isset($sessionInfoPerSession[$sessionId]) ? $sessionInfoPerSession[$sessionId] : [];
+
     $startDate = '';
     $endDate = '';
     switch ($infoCertificate['date_change']) {
         case 0:
-            if (!empty($sessionInfo['access_start_date'])) {
-                $startDate = date("d/m/Y", strtotime(api_get_local_time($sessionInfo['access_start_date'])));
+            if (!empty($currentSessionInfo['access_start_date'])) {
+                $startDate = date("d/m/Y", strtotime(api_get_local_time($currentSessionInfo['access_start_date'])));
             }
-            if (!empty($sessionInfo['access_end_date'])) {
-                $endDate = date("d/m/Y", strtotime(api_get_local_time($sessionInfo['access_end_date'])));
+            if (!empty($currentSessionInfo['access_end_date'])) {
+                $endDate = date("d/m/Y", strtotime(api_get_local_time($currentSessionInfo['access_end_date'])));
             }
             break;
         case 1:
@@ -364,8 +470,8 @@ foreach ($userList as $userInfo) {
         } elseif ($infoCertificate['type_date_expediction'] == 4) {
             $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
-            if (!empty($sessionInfo)) {
-                $dateInfo = api_get_local_time($sessionInfo['access_end_date']);
+            if (!empty($currentSessionInfo)) {
+                $dateInfo = api_get_local_time($currentSessionInfo['access_end_date']);
                 $dateExpediction .= $plugin->get_lang('to').api_format_date($dateInfo, DATE_FORMAT_LONG);
             }
         }
@@ -571,12 +677,12 @@ foreach ($userList as $userInfo) {
             $htmlText .= '<table width="100%" class="contents-learnpath">';
             $htmlText .= '<tr>';
             $htmlText .= '<td>';
-            $myContentHtml = strip_tags(
+            $myContentHtmlBack = strip_tags(
                 $infoCertificate['contents'],
                 '<p><b><strong><table><tr><td><th><span><i><li><ol><ul>'.
                 '<dd><dt><dl><br><hr><img><a><div><h1><h2><h3><h4><h5><h6>'
             );
-            $htmlText .= $myContentHtml;
+            $htmlText .= $myContentHtmlBack;
             $htmlText .= '</td>';
             $htmlText .= '</tr>';
             $htmlText .= '</table>';
@@ -589,6 +695,15 @@ foreach ($userList as $userInfo) {
     }
     $fileName = 'certificate_'.$userInfo['course_code'].'_'.$userInfo['complete_name'].'_'.$currentLocalTime;
     $htmlList[$fileName] = $htmlText;
+}
+
+// If for some reason we ended up with no HTML (e.g. all courses had the plugin disabled),
+// show a message instead of a blank page.
+if (empty($htmlList)) {
+    Display::display_header($plugin->get_lang('PrintCertificate'));
+    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    Display::display_footer();
+    exit;
 }
 
 $fileList = [];

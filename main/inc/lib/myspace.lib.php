@@ -4724,6 +4724,8 @@ class MySpace
             ['portfolio_category', 'user_id'],
             ['portfolio_comment', 'author_id'],
             ['sequence_value', 'user_id'],
+            ['session', 'id_coach'],
+            ['session', 'session_admin_id'],
             ['shared_survey', 'author'],
             ['skill_rel_user', 'argumentation_author_id'],
             ['skill_rel_user', 'assigned_by'],

@@ -78,8 +78,7 @@ class TrackingStatsHelper
     public function getCourseVisits(Course $course, ?Session $session = null): int
     {
         $conn = $this->em->getConnection();
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT COUNT(course_access_id) FROM '.$table.' WHERE c_id = :cId';
+        $sql = 'SELECT COUNT(course_access_id) FROM track_e_course_access WHERE c_id = :cId';
         $params = ['cId' => $course->getId()];
         $types = ['cId' => ParameterType::INTEGER];
 

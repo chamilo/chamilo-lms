@@ -275,7 +275,7 @@ export function useSidebarMenu() {
 
         items.push({
           icon: "mdi mdi-comment-question-outline",
-          label: t("Admin.questions_admin"),
+          label: t("Question manager"),
           items: questionAdminItems,
           expanded: isActive({ items: questionAdminItems }),
         })

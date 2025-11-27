@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-6">
-    <Message severity="warn" class="inline-block max-w-max">Danger zone: deleting an access URL is permanent.</Message>
+    <Message severity="warn" class="inline-block max-w-max">{{ t("Danger zone: deleting an access URL is permanent.")}}</Message>
     <section class="p-0">
       <h3 class="mb-2 text-sm font-semibold text-rose-900">{{ t("Confirm deletion") }}</h3>
       <p class="mb-3 text-sm text-rose-800">

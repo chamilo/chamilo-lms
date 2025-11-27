@@ -17,8 +17,6 @@ if ('false' === api_get_setting('allow_user_course_subscription_by_course_admin'
 
 $tool_name = get_lang('Classes');
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $interbreadcrumb[] = [
     'url' => 'user.php?'.api_get_cidreq(),
     'name' => get_lang('Users'),

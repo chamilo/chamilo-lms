@@ -46,6 +46,7 @@ class UserGroupModel extends Model
     public $access_url_rel_user;
     public $table_course;
     public $table_user;
+    private string $usergroup_table;
 
     public function __construct()
     {
@@ -1835,7 +1836,7 @@ class UserGroupModel extends Model
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
-            true,
+            false,
             false,
             [
             'ToolbarSet' => 'Minimal',

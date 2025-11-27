@@ -7,6 +7,7 @@
  */
 
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\DomCrawler\Crawler;
 
 $cidReset = true;
@@ -42,7 +43,7 @@ function validate_data($users)
                 }
                 $usernames[$user['UserName']] = 1;
                 // 2.3. Check whether username is allready occupied.
-                if (!UserManager::is_username_available($user['NewUserName']) &&
+                if (!Container::getUserRepository()->isUsernameAvailable($user['NewUserName']) &&
                     $user['NewUserName'] != $user['UserName']
                 ) {
                     $errors[$user['UserName']][] = get_lang('This login is not available');

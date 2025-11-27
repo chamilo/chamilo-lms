@@ -38,7 +38,6 @@ $tool_name = get_lang('Assignments');
 
 $group_id = api_get_group_id();
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
 
 if (!empty($group_id)) {

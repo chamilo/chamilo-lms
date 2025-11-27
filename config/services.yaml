@@ -14,7 +14,7 @@ parameters:
     theme_fallback: '%env(THEME_FALLBACK)%'
     packager: '%env(PACKAGER)%'
     default_template: '%env(DEFAULT_TEMPLATE)%'
-    container.dumper.inline_factories: true
+    .container.dumper.inline_factories: true
     twig:
         form:
             resources:

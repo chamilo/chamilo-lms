@@ -3,22 +3,87 @@
 
 {% block content %}
     {% autoescape false %}
+
+        <style>
+            .forum-rail .row, .forum-rail .col-md-4, .forum-rail .col-md-8, .forum-rail .text-right { display: contents !important; }
+            .forum-rail a, .forum-rail .btn, .forum-rail button {
+                display:inline-flex; align-items:center; justify-content:center;
+                width:36px; height:36px; padding:0; border:1px solid #e4e9ed; border-radius:8px; background:#fff; line-height:0;
+            }
+            .forum-rail a:hover, .forum-rail .btn:hover, .forum-rail button:hover { background:#f7f8f9; }
+            .forum-rail i.mdi, .forum-rail svg { font-size:22px; line-height:1; }
+        </style>
+
         {{ header }}
 
         {% for thread in threads %}
-            {% set panel_title %}
-                <div class="text-h6 p-4 flex flex-row justify-between">
-                    {{ thread.title }}
-                </div>
 
-                <div class="text-h6 p-4 flex flex-row justify-between">
-                    {{ thread.icon_edit }}
+            {# Author + avatar (try entity->getIconStatus(), fallback to illustration filter) #}
+            {% set author = thread.entity.getUser() ?? null %}
+            {% set authorName = author
+                ? (author.getCompleteName is defined ? author.getCompleteName()
+                : (author.getUsername is defined ? author.getUsername() : ''))
+                : '' %}
+            {% set avatarUrl = author and author.getIconStatus is defined
+                ? author.getIconStatus()
+                : (author ? (author | illustration) : null) %}
+
+            <article class="rounded-xl border border-gray-25 bg-white shadow-sm p-4 md:p-5 mb-4">
+
+                {# Desktop: one flex row with 5 columns. Mobile: stacked blocks. #}
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+
+                    {# Avatar #}
+                    <div class="hidden md:flex flex-none w-14 justify-center">
+                        {% if avatarUrl %}
+                            <img src="{{ avatarUrl }}" alt="Avatar" class="w-12 h-12 rounded object-cover border" />
+                        {% else %}
+                            <div class="w-12 h-12 rounded border bg-gray-10 flex items-center justify-center text-gray-50">
+                                <i class="mdi mdi-account text-xl"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {# Title + By (takes remaining space) #}
+                    <div class="flex-1 min-w-0 text-left">
+                        <h3 class="text-lg font-bold text-gray-90 leading-6 break-words">
+                            {{ thread.title }}
+                        </h3>
+                        <div class="mt-1 text-sm text-gray-60">
+                            {{ 'By'|get_lang }} {{ authorName }}
+                        </div>
+                    </div>
+
+                    {# Replies / Views (fixed width) #}
+                    <div class="flex-none w-[176px] text-sm text-gray-70">
+                        <div class="flex items-center gap-2">
+                            <i class="mdi mdi-forum-outline text-gray-60"></i>
+                            <span class="font-medium">{{ thread.entity.threadReplies }} {{ 'Replies'|get_lang }}</span>
+                        </div>
+                        <div class="mt-1 flex items-center gap-2">
+                            <i class="mdi mdi-eye-outline text-gray-60"></i>
+                            <span class="font-medium">{{ thread.entity.threadViews }} {{ 'Views'|get_lang }}</span>
+                        </div>
+                    </div>
+
+                    {# Last activity (fixed width, truncated if long) #}
+                    <div class="flex-none w-[320px] text-sm text-gray-70 min-w-0">
+                        <div class="[&_img]:inline-block [&_img]:align-middle [&_img]:mx-1 [&_img]:w-4 [&_img]:h-4 truncate">
+                            {{ thread.last_post_by }}
+                        </div>
+                    </div>
+
+                    {# Actions — right aligned, same row (ml-auto pushes to right) #}
+                    <nav class="forum-rail flex flex-row items-center gap-2 ml-auto">
+                        {{ thread.icon_edit }}
+                    </nav>
+
                 </div>
-            {% endset %}
-            {{ display.panel(panel_title) }}
+            </article>
 
         {% endfor %}
 
         {{ qualification_block }}
+
     {% endautoescape %}
 {% endblock %}

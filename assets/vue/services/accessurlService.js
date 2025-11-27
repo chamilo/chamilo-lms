@@ -55,3 +55,9 @@ export default {
   deleteAccessUrl,
   getUrl,
 }
+
+export async function findAll() {
+  const { items } = await baseService.getCollection("/api/access_urls")
+
+  return items
+}

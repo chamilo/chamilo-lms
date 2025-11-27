@@ -6,24 +6,43 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\NotSupported;
-use Mpdf\Mpdf;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
+use Export;
+use PDF;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ExportCGlossaryAction
+use const ENT_QUOTES;
+
+readonly class ExportCGlossaryAction
 {
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em, KernelInterface $kernel, TranslatorInterface $translator): Response
-    {
+    public function __construct(
+        private TranslatorInterface $translator,
+        private SettingsManager $settingsManager,
+    ) {}
+
+    /**
+     * @throws Exception|NotSupported|ORMException|OptimisticLockException|TransactionRequiredException
+     */
+    public function __invoke(
+        Request $request,
+        CGlossaryRepository $repo,
+        EntityManager $em,
+        TranslatorInterface $translator
+    ): Response {
         $format = $request->get('format');
         $cid = $request->request->get('cid');
         $sid = $request->request->get('sid');
@@ -32,90 +51,83 @@ class ExportCGlossaryAction
             throw new BadRequestHttpException('Invalid export format');
         }
 
-        $exportPath = $kernel->getCacheDir();
         $course = null;
         $session = null;
         if (0 !== $cid) {
-            $course = $em->getRepository(Course::class)->find($cid);
+            $course = $em->find(Course::class, $cid);
         }
         if (0 !== $sid) {
-            $session = $em->getRepository(Session::class)->find($sid);
+            $session = $em->find(Session::class, $sid);
         }
 
         $qb = $repo->getResourcesByCourse($course, $session);
         $glossaryItems = $qb->getQuery()->getResult();
 
-        $exportFilePath = $this->generateExportFile($glossaryItems, $format, $exportPath, $translator);
+        $exportFilePath = $this->generateExportFile(
+            $glossaryItems,
+            $format,
+            $course,
+        );
 
-        $file = new File($exportFilePath);
-        $response = new Response($file->getContent());
-        $response->headers->set('Content-Type', $file->getMimeType());
-        $response->headers->set('Content-Disposition', 'attachment; filename="glossary.'.$format.'"');
-
-        unlink($exportFilePath);
+        $response = new BinaryFileResponse(
+            new File($exportFilePath)
+        );
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $response->getFile()->getFilename()
+        );
 
         return $response;
     }
 
-    private function generateExportFile(array $glossaryItems, string $format, string $exportPath, TranslatorInterface $translator): string
-    {
-        switch ($format) {
-            case 'csv':
-                return $this->generateCsvFile($glossaryItems, $exportPath);
-
-            case 'xls':
-                return $this->generateExcelFile($glossaryItems, $exportPath);
-
-            case 'pdf':
-                return $this->generatePdfFile($glossaryItems, $exportPath, $translator);
-
-            default:
-                throw new NotSupported('Export format not supported');
+    /**
+     * @throws NotSupported|Exception
+     */
+    private function generateExportFile(
+        array $glossaryItems,
+        string $format,
+        ?Course $course,
+    ): string {
+        if ('pdf' === $format) {
+            return $this->generatePdfFile($glossaryItems, $course);
         }
-    }
 
-    private function generateCsvFile(array $glossaryItems, string $exportPath): string
-    {
-        $csvFilePath = $exportPath.'/glossary.csv';
-        $csvContent = '';
+        $list = [];
+        $list[] = ['term', 'definition'];
 
-        /** @var CGlossary $item */
+        $allowStrip = 'true' === $this->settingsManager->getSetting('glossary.allow_remove_tags_in_glossary_export');
+
         foreach ($glossaryItems as $item) {
-            $csvContent .= $item->getTitle().','.$item->getDescription()."\n";
-        }
-        file_put_contents($csvFilePath, $csvContent);
+            $definition = $item->getDescription();
 
-        return $csvFilePath;
-    }
+            if ($allowStrip) {
+                $definition = htmlspecialchars_decode(strip_tags($definition), ENT_QUOTES);
+            }
 
-    private function generateExcelFile(array $glossaryItems, string $exportPath): string
-    {
-        $excelFilePath = $exportPath.'/glossary.xlsx';
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-
-        /** @var CGlossary $item */
-        foreach ($glossaryItems as $index => $item) {
-            $row = $index + 1;
-            $sheet->setCellValue('A'.$row, $item->getTitle());
-            $sheet->setCellValue('B'.$row, $item->getDescription());
+            $list[] = [$item->getTitle(), $definition];
         }
 
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save($excelFilePath);
-
-        return $excelFilePath;
+        return match ($format) {
+            'csv' => $this->generateCsvFile($list, $course),
+            'xls' => $this->generateExcelFile($list, $course),
+        };
     }
 
-    private function generatePdfFile(array $glossaryItems, string $exportPath, TranslatorInterface $translator): string
+    private function generateCsvFile(array $glossaryItems, Course $course): string
     {
-        $pdfFilePath = $exportPath.'/glossary.pdf';
+        return Export::arrayToCsv($glossaryItems, 'glossary_course_'.$course->getCode(), true);
+    }
 
-        $mpdf = new Mpdf();
+    private function generateExcelFile(array $glossaryItems, Course $course): string
+    {
+        return Export::arrayToXls($glossaryItems, 'glossary_course_'.$course->getCode(), true);
+    }
 
-        $html = '<h1>'.$translator->trans('Glossary').'</h1>';
+    private function generatePdfFile(array $glossaryItems, Course $course): string
+    {
+        $html = '<h1>'.$this->translator->trans('Glossary').'</h1>';
         $html .= '<table>';
-        $html .= '<tr><th>'.$translator->trans('Term').'</th><th>'.$translator->trans('Term definition').'</th></tr>';
+        $html .= '<tr><th>'.$this->translator->trans('Term').'</th><th>'.$this->translator->trans('Term definition').'</th></tr>';
 
         /** @var CGlossary $item */
         foreach ($glossaryItems as $item) {
@@ -126,10 +138,18 @@ class ExportCGlossaryAction
         }
         $html .= '</table>';
 
-        $mpdf->WriteHTML($html);
-
-        $mpdf->Output($pdfFilePath, 'F');
-
-        return $pdfFilePath;
+        return (new PDF())
+            ->content_to_pdf(
+                $html,
+                null,
+                get_lang('Glossary').'_'.$course->getCode(),
+                $course->getCode(),
+                'F',
+                false,
+                null,
+                false,
+                true
+            )
+        ;
     }
 }

@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue"
+import { computed, ref, watch, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { useVuelidate } from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -134,8 +134,42 @@ function getDefaultColorByType(type) {
   return defaultColors[type] || defaultColors.personal
 }
 
-if (!item.value.color) {
-  const type = getContextTypeFromRoute()
-  item.value.color = getDefaultColorByType(type)
+const HEX6 = /^#([0-9a-f]{6})$/i
+const HEX3 = /^#([0-9a-f]{3})$/i
+function toHex(c) {
+  if (!c) return null
+  const s = String(c).trim()
+  if (HEX6.test(s)) return s.toUpperCase()
+  const m3 = s.match(HEX3)
+  if (m3) {
+    const [r, g, b] = m3[1].toUpperCase().split("")
+    return `#${r}${r}${g}${g}${b}${b}`
+  }
+  const rgb = s.match(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i)
+  if (rgb) {
+    const r = Math.min(255, +rgb[1])
+    const g = Math.min(255, +rgb[2])
+    const b = Math.min(255, +rgb[3])
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase()
+  }
+  const names = {
+    YELLOW: "#FFFF00",
+    BLUE: "#0000FF",
+    RED: "#FF0000",
+    GREEN: "#008000",
+    STEELBLUE: "#4682B4",
+    "STEEL BLUE": "#4682B4",
+  }
+  return names[s.toUpperCase()] || null
 }
+
+onMounted(() => {
+  const normalized = toHex(item.value?.color)
+  if (normalized) {
+    item.value.color = normalized
+  } else if (!item.value?.color) {
+    const type = getContextTypeFromRoute()
+    item.value.color = getDefaultColorByType(type)
+  }
+})
 </script>

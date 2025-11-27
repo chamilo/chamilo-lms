@@ -23,9 +23,4 @@ class SearchCoursePlugin extends Plugin
 
         return $result ?: $result = new self();
     }
-
-    public function get_name()
-    {
-        return 'SearchCourse';
-    }
 }

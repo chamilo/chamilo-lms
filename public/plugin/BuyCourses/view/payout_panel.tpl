@@ -1,6 +1,4 @@
 {% autoescape false %}
-<link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
-
 <div id="buy-courses-tabs">
 
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">

@@ -34,8 +34,6 @@ if (1 == $courseInfo['show_score']) {
 
 protectWork($courseInfo, $workId);
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 if (!empty($group_id)) {
     $group_properties = api_get_group_entity($group_id);
     $show_work = false;

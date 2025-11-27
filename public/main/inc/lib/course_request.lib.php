@@ -679,7 +679,7 @@ class CourseRequestManager
 
         $email_body = get_lang('Dear', $email_language).' ';
         $email_body .= api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, $email_language).",\n\n";
-        $email_body .= sprintf(get_lang('We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information.\n\nPlease, provide brief information about the course content (description), the objectives, the learners or the users that are to be involved in the proposed course. If it is applicable, mention the name of the institution or the unit on which behalf you made the course request.', $email_language), $code)."\n";
+        $email_body .= sprintf(get_lang("We have received your request for a new course with code %s. Before we consider it for approval, we need some additional information.\n\nPlease, provide brief information about the course content (description), the objectives, the learners or the users that are to be involved in the proposed course. If it is applicable, mention the name of the institution or the unit on which behalf you made the course request.", $email_language), $code)."\n";
         $email_body .= "\n".get_lang('Formula', $email_language)."\n";
         $email_body .= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n";
         $email_body .= get_lang('Teacher', $email_language).' '.api_get_setting('siteName')."\n";

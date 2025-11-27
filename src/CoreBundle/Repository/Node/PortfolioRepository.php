@@ -41,4 +41,17 @@ class PortfolioRepository extends ResourceRepository
 
         return $this->findBy($criteria, $orderBy);
     }
+
+    public function findTemplates(User $creator, ?Course $course, ?Session $session)
+    {
+        $qb = $this->getResourcesByCourse($course, $session);
+
+        $this->addCreatorQueryBuilder($creator, $qb);
+
+        return $qb
+            ->andWhere($qb->expr()->eq('resource.isTemplate',true))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -230,7 +230,7 @@ JAVASCRIPT;
 
         $form->addText(
             'title',
-            get_lang('Name')
+            get_lang('Title')
         );
 
         $form->addHtmlEditor('description', get_lang('Description'));

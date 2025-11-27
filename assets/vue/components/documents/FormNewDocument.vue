@@ -20,6 +20,13 @@
 
     <!-- For extra content-->
     <slot></slot>
+
+    <BaseButton
+      type="primary"
+      icon="save"
+      :label="$t('Save')"
+      @click="$emit('submit')"
+    />
   </form>
 </template>
 
@@ -31,10 +38,11 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import BaseInputTextWithVuelidate from "../basecomponents/BaseInputTextWithVuelidate.vue"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
 import { useI18n } from "vue-i18n"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 export default {
   name: "DocumentsForm",
-  components: { BaseTinyEditor, BaseInputTextWithVuelidate },
+  components: { BaseButton, BaseTinyEditor, BaseInputTextWithVuelidate },
   props: {
     values: {
       type: Object,
@@ -177,5 +185,6 @@ export default {
       resourceNode: {},
     },
   },
+  emits: ["submit"],
 }
 </script>

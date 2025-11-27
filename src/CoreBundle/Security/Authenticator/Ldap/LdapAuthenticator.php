@@ -196,7 +196,7 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
         return $credentials;
     }
 
-    private function createUser(LdapUser $ldapUser): User
+    public function createUser(LdapUser $ldapUser): User
     {
         $currentAccessUrl = $this->accessUrlHelper->getCurrent();
 
@@ -255,5 +255,10 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
     public function isInteractive(): bool
     {
         return true;
+    }
+
+    public function getUserProvider(): LdapUserProvider
+    {
+        return $this->userProvider;
     }
 }

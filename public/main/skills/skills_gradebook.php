@@ -11,9 +11,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 SkillModel::isAllowed();
 
-//Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 
 // setting breadcrumbs
@@ -33,7 +30,7 @@ switch ($action) {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         $gradebook_info = $gradebook->get($id);
         $url = api_get_self().'?action='.$action.'&id='.$id;
-        $form = $gradebook->show_skill_form($id, $url, $gradebook_info['name']);
+        $form = $gradebook->show_skill_form($id, $url, $gradebook_info['title']);
         if ($form->validate()) {
             $values = $form->exportValues();
             $gradebook->updateSkillsToGradeBook($values['id'], $values['skill']);
@@ -52,7 +49,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_gradebooks';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('Name'),
+    get_lang('Title'),
     get_lang('Certificates'),
     get_lang('Skills'),
     get_lang('Detail'),
@@ -61,8 +58,8 @@ $columns = [
 //Column config
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '150',
         'align' => 'left',
     ],

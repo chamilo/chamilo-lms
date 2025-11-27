@@ -1955,31 +1955,70 @@ class Statistics
     public static function getNonRegisteredActiveUsersInCourse(int $courseId, int $sessionId = 0): array
     {
         $em = Database::getManager();
-
-        $qb = $em->createQueryBuilder();
-        $qb->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname, u.email AS email, MAX(t.accessDate) AS lastAccess')
-            ->from(TrackEAccess::class, 't')
-            ->join(User::class, 'u', 'WITH', 'u.id = t.accessUserId')
-            ->leftJoin(
-                CourseRelUser::class,
-                'cu',
-                'WITH',
-                'cu.user = u AND cu.course = :courseId'.($sessionId > 0 ? ' AND cu.session = :sessionId' : '')
-            )
-            ->where('t.cId = :courseId')
-            ->andWhere('t.accessUserId IS NOT NULL')
-            ->andWhere('cu.id IS NULL')
-            ->groupBy('u.id, u.firstname, u.lastname, u.email')
-            ->orderBy('lastAccess', 'DESC')
-            ->setParameter('courseId', $courseId);
+        $conn = $em->getConnection();
 
         if ($sessionId > 0) {
-            $qb->andWhere('t.sessionId = :sessionId')->setParameter('sessionId', $sessionId);
+            // When working inside a session
+            $sql = '
+            SELECT
+                u.id AS id,
+                u.firstname AS firstname,
+                u.lastname AS lastname,
+                u.email AS email,
+                MAX(t.access_date) AS lastAccess
+            FROM track_e_access t
+            INNER JOIN user u ON u.id = t.access_user_id
+            LEFT JOIN session_rel_course_rel_user scru
+                ON scru.user_id = u.id
+                AND scru.c_id = :courseId
+                AND scru.session_id = :sessionId
+            WHERE
+                t.c_id = :courseId
+                AND t.session_id = :sessionId
+                AND scru.id IS NULL
+            GROUP BY
+                u.id, u.firstname, u.lastname, u.email
+            ORDER BY
+                lastAccess DESC
+        ';
+        } else {
+            // When not in session (regular course access)
+            $sql = '
+            SELECT
+                u.id AS id,
+                u.firstname AS firstname,
+                u.lastname AS lastname,
+                u.email AS email,
+                MAX(t.access_date) AS lastAccess
+            FROM track_e_access t
+            INNER JOIN user u ON u.id = t.access_user_id
+            LEFT JOIN course_rel_user cu
+                ON cu.user_id = u.id
+                AND cu.c_id = :courseId
+            WHERE
+                t.c_id = :courseId
+                AND cu.id IS NULL
+            GROUP BY
+                u.id, u.firstname, u.lastname, u.email
+            ORDER BY
+                lastAccess DESC
+        ';
         }
 
-        $rows = $qb->getQuery()->getArrayResult();
+        // Execute SQL safely
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('courseId', $courseId);
+        if ($sessionId > 0) {
+            $stmt->bindValue('sessionId', $sessionId);
+        }
+
+        $rows = $stmt->executeQuery()->fetchAllAssociative();
+
+        // Format date results nicely
         foreach ($rows as &$r) {
-            $r['lastAccess'] = !empty($r['lastAccess']) ? (new \DateTime($r['lastAccess']))->format('Y-m-d H:i:s') : '';
+            $r['lastAccess'] = !empty($r['lastAccess'])
+                ? (new \DateTime($r['lastAccess']))->format('Y-m-d H:i:s')
+                : '';
         }
 
         return $rows;

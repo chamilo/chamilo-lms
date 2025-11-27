@@ -60,7 +60,7 @@ const progressTextClass = computed(() => {
 
       <div class="min-w-0 flex ml-2 md:ml-0">
         <div class="flex-1">
-          <h3 class="font-semibold text-gray-90 leading-none md:truncate text-lg md:text-xl leading-none md:leading-4">
+          <h3 class="font-semibold text-gray-90 leading-none md:truncate text-lg md:text-xl leading-none">
             <button
               class="underline-offset-2 hover:underline focus:underline text-left"
               @click="emit('open', lp)"

@@ -30,9 +30,6 @@ $interbreadcrumb[] = [
     'name' => $objExercise->selectTitle(true),
 ];
 
-//Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // The header.
 Display::display_header(get_lang('Learners who\'re taking the exercise right now'));
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
@@ -24,6 +26,7 @@ if (empty($surveyId)) {
 }
 
 $repo = Container::getSurveyRepository();
+
 /** @var CSurvey $survey */
 $survey = $repo->find($surveyId);
 if (null === $survey) {
@@ -38,58 +41,59 @@ $course_id = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 $allowRequiredSurveyQuestions = true;
 
-// Breadcrumbs
+// -----------------------------------------------------------------------------
+// Breadcrumb
+// -----------------------------------------------------------------------------
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
     'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
-    'name' => strip_tags($survey->getTitle(), '<span>'),
+    // Strip HTML from the title safely
+    'name' => Security::remove_XSS(strip_tags($survey->getTitle())),
 ];
 
-//$htmlHeadXtra[] = '<script>'.api_get_language_translate_html().'</script>';
 $htmlHeadXtra[] = ch_selectivedisplay::getJs();
 $htmlHeadXtra[] = survey_question::getJs();
-$show = 0;
 Display::display_header(get_lang('Survey preview'));
 
-// We exit here is the first or last question is a pagebreak (which causes errors)
-SurveyUtil::check_first_last_question($surveyId, false);
+// -----------------------------------------------------------------------------
+// Page header
+// -----------------------------------------------------------------------------
+echo '<div class="mx-auto mt-8 bg-white shadow rounded-2xl p-6 border border-gray-50">';
+echo '<h2 class="text-2xl font-bold text-gray-800 mb-2">'.Security::remove_XSS($survey->getTitle()).'</h2>';
 
-// Survey information
-echo '<div class="page-header"><h2>'.Security::remove_XSS($survey->getTitle()).'</h2></div>';
 if (!empty($survey->getSubtitle())) {
-    echo '<div id="survey_subtitle">'.Security::remove_XSS($survey->getSubtitle()).'</div>';
+    echo '<p class="text-gray-600 mb-4">'.Security::remove_XSS($survey->getSubtitle()).'</p>';
 }
 
-// Displaying the survey introduction
-if (!isset($_GET['show'])) {
-    if (!empty($survey->getIntro())) {
-        echo '<div class="survey_content">'.Security::remove_XSS($survey->getIntro()).'</div>';
-    }
+// Introduction
+if (!isset($_GET['show']) && !empty($survey->getIntro())) {
+    echo '<div class="prose prose-slate max-w-none mb-6">'.Security::remove_XSS($survey->getIntro()).'</div>';
 }
 
-// Displaying the survey thanks message
+// -----------------------------------------------------------------------------
+// End message if finished
+// -----------------------------------------------------------------------------
 if (isset($_POST['finish_survey'])) {
     echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
-    echo Security::remove_XSS($survey->getSurveythanks());
+    echo '<div class="prose prose-slate">'.Security::remove_XSS($survey->getSurveythanks()).'</div>';
     Display::display_footer();
+
     exit;
 }
 
+// -----------------------------------------------------------------------------
+// Build questions per page
+// -----------------------------------------------------------------------------
 $questions = [];
 $pageBreakText = [];
 if (isset($_GET['show'])) {
-    // Getting all the questions for this page and add them to a
-    // multidimensional array where the first index is the page.
-    // as long as there is no pagebreak fount we keep adding questions to the page
     $paged_questions = [];
     $counter = 0;
     $sql = "SELECT * FROM $table_survey_question
-            WHERE
-              survey_question NOT LIKE '%{{%' AND
-              survey_id = $surveyId
+            WHERE survey_question NOT LIKE '%{{%' AND survey_id = $surveyId
             ORDER BY sort ASC";
     $result = Database::query($sql);
     $questions_exists = true;
@@ -99,6 +103,7 @@ if (isset($_GET['show'])) {
                 if ('pagebreak' !== $row['type']) {
                     $paged_questions[$counter][] = $row['iid'];
                     $counter++;
+
                     continue;
                 }
             } else {
@@ -115,8 +120,7 @@ if (isset($_GET['show'])) {
     }
 
     if (array_key_exists($_GET['show'], $paged_questions)) {
-        $select = '';
-        $select = ' survey_question.parent_id, survey_question.parent_option_id, ';
+        $select = 'survey_question.parent_id, survey_question.parent_option_id,';
         $sql = "SELECT
                     survey_question.iid question_id,
                     survey_question.survey_id,
@@ -132,17 +136,14 @@ if (isset($_GET['show'])) {
                     ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                 FROM $table_survey_question survey_question
                 LEFT JOIN $table_survey_question_option survey_question_option
-                ON
-                    survey_question.iid = survey_question_option.question_id
-                WHERE
-                    survey_question.survey_id = '".$surveyId."' AND
-                    survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
-                    survey_question NOT LIKE '%{{%'
+                ON survey_question.iid = survey_question_option.question_id
+                WHERE survey_question.survey_id = '".$surveyId."'
+                    AND survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).")
+                    AND survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            // If the type is not a pagebreak we store it in the $questions array
             if ('pagebreak' !== $row['type']) {
                 $sort = $row['sort'];
                 $questions[$sort]['question_id'] = $row['question_id'];
@@ -152,8 +153,8 @@ if (isset($_GET['show'])) {
                 $questions[$sort]['type'] = $row['type'];
                 $questions[$sort]['options'][$row['question_option_id']] = Security::remove_XSS($row['option_text']);
                 $questions[$sort]['maximum_score'] = $row['max_value'];
-                $questions[$sort]['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
-                $questions[$sort]['parent_option_id'] = isset($row['parent_option_id']) ? $row['parent_option_id'] : 0;
+                $questions[$sort]['parent_id'] = $row['parent_id'] ?? 0;
+                $questions[$sort]['parent_option_id'] = $row['parent_option_id'] ?? 0;
                 $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
             }
         }
@@ -161,24 +162,16 @@ if (isset($_GET['show'])) {
 }
 
 $numberOfPages = SurveyManager::getCountPages($survey);
-// Displaying the form with the questions
-if (isset($_GET['show'])) {
-    $show = (int) $_GET['show'] + 1;
-}
+$show = isset($_GET['show']) ? (int) $_GET['show'] + 1 : 0;
 $originalShow = isset($_GET['show']) ? (int) $_GET['show'] : 0;
-
 $url = api_get_self().'?survey_id='.$surveyId.'&show='.$show.'&'.api_get_cidreq();
 
-$form = new FormValidator(
-    'question-survey',
-    'post',
-    $url,
-    null,
-    null,
-    FormValidator::LAYOUT_INLINE
-);
+$form = new FormValidator('question-survey', 'post', $url, null, null, FormValidator::LAYOUT_HORIZONTAL);
 
-if (is_array($questions) && count($questions) > 0) {
+// -----------------------------------------------------------------------------
+// Question rendering
+// -----------------------------------------------------------------------------
+if (!empty($questions)) {
     $counter = 1;
     if (!empty($originalShow)) {
         $before = 0;
@@ -190,21 +183,11 @@ if (is_array($questions) && count($questions) > 0) {
         $counter = $before + 1;
     }
 
-    $showNumber = true;
-    if (SurveyManager::hasDependency($survey)) {
-        $showNumber = false;
-    }
-
+    $showNumber = !SurveyManager::hasDependency($survey);
     $js = '';
+
     if (isset($pageBreakText[$originalShow]) && !empty(strip_tags($pageBreakText[$originalShow]))) {
-        // Only show page-break texts if there is something there, apart from
-        // HTML tags
-        $form->addHtml(
-            '<div>'.
-            Security::remove_XSS($pageBreakText[$originalShow]).
-            '</div>'
-        );
-        $form->addHtml('<br />');
+        $form->addHtml('<div class="mb-4 p-3 bg-gray-50 rounded">'.Security::remove_XSS($pageBreakText[$originalShow]).'</div>');
     }
 
     foreach ($questions as $key => &$question) {
@@ -224,59 +207,58 @@ if (is_array($questions) && count($questions) > 0) {
         }
 
         $js .= survey_question::getQuestionJs($question);
-
-        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.'">');
+        $form->addHtml('<div class="survey_question '.$ch_type.' '.$parentClass.' mb-6 p-4 bg-gray-10 rounded-lg border border-gray-50">');
         if ($showNumber && $survey->isDisplayQuestionNumber()) {
-            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+            $form->addHtml('<div class="font-semibold text-blue-700 mb-1"> '.$counter.'. </div>');
         }
-        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div>');
+        $form->addHtml('<div class="text-gray-800 mb-2">'.Security::remove_XSS($question['survey_question']).'</div>');
         $display->render($form, $question);
         $form->addHtml('</div>');
         $counter++;
     }
+
     $form->addHtml($js);
 }
-$form->addHtml('<div class="start-survey">');
 
-if ($show < $numberOfPages) {
-    if (0 == $show) {
-        $form->addButton(
-            'next_survey_page',
-            get_lang('Start the Survey'),
-            'arrow-right',
-            'success'
-        );
-    } else {
-        $form->addButton(
-            'next_survey_page',
-            get_lang('Next question'),
-            'arrow-right',
-            'success'
-        );
-    }
+// -----------------------------------------------------------------------------
+// Navigation buttons
+// -----------------------------------------------------------------------------
+$form->addHtml('<div class="flex justify-between mt-6 gap-3">');
+
+// "Previous" button
+if (
+    isset($_GET['show'])
+    && $_GET['show'] > 0
+    && 'true' === api_get_setting('survey.survey_backwards_enable')
+    && 1 === (int) $survey->getOneQuestionPerPage()
+) {
+    $prevShow = (int) $_GET['show'] - 1;
+    $prevUrl = api_get_self().'?survey_id='.$surveyId.'&show='.$prevShow.'&'.api_get_cidreq();
+
+    $form->addHtml(
+        '<a href="'.$prevUrl.'" class="btn btn--plain-outline">
+            <i class="mdi mdi-arrow-left mr-2"></i>'.get_lang('Previous question').'
+        </a>'
+    );
 }
 
-if (isset($_GET['show'])) {
-    if ($show >= $numberOfPages || 0 == count($questions)) {
-        if (false == $questions_exists) {
-            echo '<p>'.get_lang('There are not questions for this survey').'</p>';
-        }
-        $form->addButton(
-            'finish_survey',
-            get_lang('Finish survey'),
-            'arrow-right',
-            'success'
-        );
+if ($show < $numberOfPages) {
+    $label = 0 == $show ? get_lang('Start the Survey') : get_lang('Next question');
+    $form->addButton('next_survey_page', $label, 'arrow-right', 'success');
+}
+
+if (isset($_GET['show']) && ($show >= $numberOfPages || empty($questions))) {
+    if (false == $questions_exists) {
+        echo '<p class="text-gray-600">'.get_lang('There are no questions for this survey').'</p>';
     }
+    $form->addButton('finish_survey', get_lang('Finish survey'), 'check', 'success');
 }
 
 $form->addHtml('</div>');
+
+// -----------------------------------------------------------------------------
+// Render form + footer
+// -----------------------------------------------------------------------------
 $form->display();
-
-echo Display::toolbarButton(
-    get_lang('Return to Course Homepage'),
-    api_get_course_url($courseInfo['real_id']),
-    'home-outline'
-);
-
+echo '</div>'; // container
 Display::display_footer();

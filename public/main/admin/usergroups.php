@@ -15,9 +15,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $usergroup = new UserGroupModel();
 $usergroup->protectScript();
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $userGroupId = isset($_GET['id']) ? (int) $_GET['id'] : 0;

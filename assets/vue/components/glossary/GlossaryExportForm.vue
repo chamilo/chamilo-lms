@@ -1,5 +1,9 @@
 <template>
-  <form>
+  <form
+    action="/api/glossaries/export"
+    method="post"
+    @submit="submitForm"
+  >
     <BaseSelect
       id="format"
       v-model="selectedFormat"
@@ -18,9 +22,25 @@
         :label="t('Export')"
         icon="file-export"
         type="secondary"
-        @click="submitForm"
+        is-submit
       />
     </LayoutFormButtons>
+
+    <input
+      name="cid"
+      type="hidden"
+      :value="cid"
+    />
+    <input
+      name="sid"
+      type="hidden"
+      :value="sid"
+    />
+    <input
+      name="format"
+      type="hidden"
+      :value="selectedFormat"
+    />
   </form>
 </template>
 
@@ -32,7 +52,6 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import { useCidReq } from "../../composables/cidReq"
 import { useNotification } from "../../composables/notification"
-import glossaryService from "../../services/glossaryService"
 
 const { t } = useI18n()
 const { sid, cid } = useCidReq()
@@ -47,28 +66,7 @@ const formats = [
 ]
 const selectedFormat = ref("csv")
 
-const submitForm = async () => {
-  const format = selectedFormat.value
-
-  const formData = new FormData()
-  formData.append("format", format)
-  formData.append("sid", sid)
-  formData.append("cid", cid)
-
-  try {
-    const data = await glossaryService.export(formData)
-    const fileUrl = window.URL.createObjectURL(new Blob([data]))
-    const link = document.createElement("a")
-    link.href = fileUrl
-    link.setAttribute("download", `glossary.${format}`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-
-    notification.showSuccessNotification(t("Glossary exported"))
-  } catch (error) {
-    console.error("Error exporting glossary:", error)
-    notification.showErrorNotification(t("Could not export glossary"))
-  }
+const submitForm = () => {
+  notification.showSuccessNotification(t("Glossary exported"))
 }
 </script>

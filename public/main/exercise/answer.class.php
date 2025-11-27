@@ -636,7 +636,7 @@ class Answer
                 ->setComment((string) $comment)
                 ->setCorrect((int) $correct)
                 ->setPonderation($weighting)
-                ->setPosition($position)
+                ->setPosition((int) $position)
                 ->setHotspotCoordinates($hotSpotCoordinates)
                 ->setHotspotType($hotSpotType)
             ;
@@ -669,14 +669,14 @@ class Answer
         $questionType = $this->getQuestionType();
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
-            $answer = (string) $this->new_answer[$i];
+            $answer = (string) ($this->new_answer[$i] ?? '');
             $correct = isset($this->new_correct[$i]) ? (int) $this->new_correct[$i] : null;
-            $comment = isset($this->new_comment[$i]) ? $this->new_comment[$i] : null;
+            $comment = $this->new_comment[$i] ?? null;
             $weighting = isset($this->new_weighting[$i]) ? (float) $this->new_weighting[$i] : null;
-            $position = isset($this->new_position[$i]) ? $this->new_position[$i] : null;
-            $hotspot_coordinates = isset($this->new_hotspot_coordinates[$i]) ? $this->new_hotspot_coordinates[$i] : null;
-            $hotspot_type = isset($this->new_hotspot_type[$i]) ? $this->new_hotspot_type[$i] : null;
-            $iid = isset($this->iid[$i]) ? $this->iid[$i] : 0;
+            $position = isset($this->new_position[$i]) ? (int) $this->new_position[$i] : (int) $i;
+            $hotspot_coordinates = $this->new_hotspot_coordinates[$i] ?? null;
+            $hotspot_type = $this->new_hotspot_type[$i] ?? null;
+            $iid = isset($this->iid[$i]) ? (int) $this->iid[$i] : 0;
 
             if (!isset($this->position[$i])) {
                 $quizAnswer = new CQuizAnswer();
@@ -693,18 +693,22 @@ class Answer
                 $em->persist($quizAnswer);
                 $em->flush();
 
-                $iid = $quizAnswer->getIid();
+                $iid = (int) $quizAnswer->getIid();
 
                 if ($iid) {
-                    if (in_array($questionType, [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION], true)) {
-                        $answer = new self($this->questionId, $courseId, $this->exercise, false);
-                        $answer->read();
-                        $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
+                    if (in_array(
+                        $questionType,
+                        [MATCHING, MATCHING_COMBINATION, MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION],
+                        true
+                    )) {
+                        $answerObj = new self($this->questionId, $courseId, $this->exercise, false);
+                        $answerObj->read();
+                        $correctAnswerId = $answerObj->selectAnswerIdByPosition($correct);
 
                         if (in_array($questionType, [MATCHING, MATCHING_COMBINATION], true) && !$correctAnswerId) {
                             continue;
                         }
-                        $correctAnswerAutoId = $answer->selectAutoId($correct);
+                        $correctAnswerAutoId = $answerObj->selectAutoId($correct);
                         $quizAnswer->setCorrect($correctAnswerAutoId ?: 0);
                     }
 
@@ -712,9 +716,7 @@ class Answer
                     $em->flush();
                 }
             } else {
-                // https://support.chamilo.org/issues/6558
-                // function updateAnswers already escape_string, error if we do it twice.
-                // Feed function updateAnswers with none escaped strings
+                // Update existing answer (note: updateAnswers will cast position to int now)
                 $this->updateAnswers(
                     $iid,
                     $this->new_answer[$i],
@@ -731,79 +733,63 @@ class Answer
             $answerList[$i] = $iid;
         }
 
+        // Post-processing for draggable/matching types
         switch ($questionType) {
             case MATCHING_DRAGGABLE:
                 foreach ($this->new_correct as $value => $status) {
                     if (!empty($status)) {
-                        if (isset($answerList[$status])) {
-                            $correct = $answerList[$status];
-                        } else {
-                            $correct = $status;
-                        }
+                        $correct = $answerList[$status] ?? $status;
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable
-                            SET correct = '$correct'
-                            WHERE
-                                iid = $myAutoId
-                            ";
+                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
                         Database::query($sql);
                     }
                 }
-
                 break;
+
             case MATCHING_DRAGGABLE_COMBINATION:
                 foreach ($this->new_correct as $value => $status) {
                     if (!empty($status)) {
-                        $correct = isset($answerList[$status]) ? $answerList[$status] : $status;
+                        $correct = $answerList[$status] ?? $status;
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable
-                SET correct = '$correct'
-                WHERE
-                    iid = $myAutoId
-                ";
+                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
                         Database::query($sql);
                     }
                 }
                 break;
+
             case DRAGGABLE:
                 foreach ($this->new_correct as $value => $status) {
                     if (!empty($status)) {
                         $correct = $answerList[$status];
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable
-                            SET correct = '$correct'
-                            WHERE
-                                iid = $myAutoId
-                            ";
+                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
                         Database::query($sql);
                     }
                 }
-
                 break;
         }
 
+        // Delete trailing answers when we saved fewer than previously existed
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers + 1;
             while (isset($this->position[$i])) {
-                $position = $this->position[$i];
+                $toDeletePos = (int) $this->position[$i];
                 $sql = "DELETE FROM $answerTable
-                    WHERE
-                        question_id = '".$questionId."' AND
-                        position ='$position'";
+                    WHERE question_id = '".$questionId."' AND position = '$toDeletePos'";
                 Database::query($sql);
                 $i++;
             }
         }
 
-        // moves $new_* arrays
-        $this->answer = $this->new_answer;
-        $this->correct = $this->new_correct;
-        $this->comment = $this->new_comment;
-        $this->weighting = $this->new_weighting;
-        $this->position = $this->new_position;
-        $this->hotspot_coordinates = $this->new_hotspot_coordinates;
-        $this->hotspot_type = $this->new_hotspot_type;
-        $this->nbrAnswers = $this->new_nbrAnswers;
+        // Move new_* arrays into main arrays
+        $this->answer               = $this->new_answer;
+        $this->correct              = $this->new_correct;
+        $this->comment              = $this->new_comment;
+        $this->weighting            = $this->new_weighting;
+        $this->position             = $this->new_position;
+        $this->hotspot_coordinates  = $this->new_hotspot_coordinates;
+        $this->hotspot_type         = $this->new_hotspot_type;
+        $this->nbrAnswers           = $this->new_nbrAnswers;
 
         $this->cancel();
     }

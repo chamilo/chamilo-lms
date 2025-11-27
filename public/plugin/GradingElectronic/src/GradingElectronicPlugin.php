@@ -31,12 +31,6 @@ class GradingElectronicPlugin extends Plugin
 
         return $result ?: $result = new self();
     }
-
-    public function get_name()
-    {
-        return 'GradingElectronic';
-    }
-
     /**
      * Actions for install.
      */

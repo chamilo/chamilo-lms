@@ -10,7 +10,7 @@
       <BaseInputText
         v-model="title"
         :label="t('Title')"
-        :placeholder="t('Write a title…')"
+        :placeholder="t('Write a title...')"
       />
 
       <BaseTinyEditor
@@ -32,7 +32,7 @@
       >
         <p class="text-sm text-gray-600">{{ t('Drag & drop files here or click to select') }}</p>
         <input ref="fileInput" type="file" class="hidden" multiple @change="onPick" />
-        <BaseButton type="black" icon="paperclip" :label="t('Choose files')" @click="$refs.fileInput.click()" />
+        <BaseButton type="black" icon="paperclip" :label="t('Choose file')" @click="$refs.fileInput.click()" />
       </div>
 
       <ul v-if="showFilesComputed && files.length" class="text-sm list-disc pl-5">
@@ -88,7 +88,7 @@ const tinyConfig = {
 // Computed UI
 const isEdit = computed(() => props.mode === "edit")
 const dialogTitleComputed = computed(() =>
-  props.dialogTitle || (isEdit.value ? t("Edit Post") : t("New Post"))
+  props.dialogTitle || (isEdit.value ? t("Edit post") : t("New post"))
 )
 const confirmLabelComputed = computed(() =>
   props.confirmLabel || (isEdit.value ? t("Save") : t("Create"))

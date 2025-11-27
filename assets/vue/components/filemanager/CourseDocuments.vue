@@ -59,7 +59,6 @@
         :total-items="totalFiles"
         :values="files"
         data-key="iid"
-        filter-as-menu
         lazy
         @page="onFilesPage"
         @sort="sortingFilesChanged"

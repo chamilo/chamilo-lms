@@ -4,6 +4,7 @@
 
 namespace Chamilo\PluginBundle\XApi\ToolExperience\Activity;
 
+use Chamilo\CoreBundle\Entity\User;
 use Xabbuh\XApi\Model\Activity;
 
 /**
@@ -13,10 +14,7 @@ use Xabbuh\XApi\Model\Activity;
  */
 abstract class BaseActivity
 {
-    /**
-     * @var \Chamilo\UserBundle\Entity\User
-     */
-    protected $user;
+    protected User $user;
     /**
      * @var \Chamilo\CoreBundle\Entity\Course|null
      */

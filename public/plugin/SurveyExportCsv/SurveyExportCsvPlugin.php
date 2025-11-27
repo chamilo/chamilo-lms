@@ -72,11 +72,6 @@ class SurveyExportCsvPlugin extends Plugin
         );
     }
 
-    public function get_name()
-    {
-        return 'SurveyExportCsv';
-    }
-
     /**
      * Create tools for all courses.
      */

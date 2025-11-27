@@ -85,7 +85,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 }
 
 $promotion_data = $promotion->get($id);
-$session_list = SessionManager::get_sessions_list([], ['name']);
+$session_list = SessionManager::get_sessions_list([], ['title']);
 $session_not_in_promotion = $session_in_promotion = [];
 
 if (!empty($session_list)) {
@@ -93,12 +93,12 @@ if (!empty($session_list)) {
         $promotion_id = $session['promotion_id'];
         if (isset($promotion_id) && !empty($promotion_id)) {
             if ($promotion_id == $id) {
-                $session_in_promotion[$session['id']] = $session['name'];
+                $session_in_promotion[$session['id']] = $session['title'];
             } else {
-                $session_not_in_promotion[$session['id']] = $session['name'];
+                $session_not_in_promotion[$session['id']] = $session['title'];
             }
         } else {
-            $session_not_in_promotion[$session['id']] = $session['name'];
+            $session_not_in_promotion[$session['id']] = $session['title'];
         }
     }
 }
@@ -130,7 +130,7 @@ echo Display::toolbarAction(
 } ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?>>
-<?php echo '<legend>'.$tool_name.' '.$promotion_data['name'].'</legend>';
+<?php echo '<legend>'.$tool_name.' '.$promotion_data['title'].'</legend>';
 
 if ('multiple' == $add_type) {
     $extraField = new \ExtraField('session');
@@ -234,7 +234,7 @@ echo Display::input('hidden', 'add_type', null);
         'session_in_promotion_name[]',
         $session_in_promotion,
         '',
-        ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_in_promotion', 'size' => '15px'],
+        ['style' => 'width:360px', 'multiple' => 'multiple', 'id' => 'session_in_promotion', 'size' => '15'],
         false
     );
 ?>
@@ -339,7 +339,7 @@ function search_sessions($needle, $type)
         $return .= '<select id="session_not_in_promotion" name="session_not_in_promotion_name[]" multiple="multiple" size="15" style="width:360px;">';
         foreach ($session_list as $row) {
             if (!in_array($row['id'], array_keys($session_in_promotion))) {
-                $return .= '<option value="'.$row['id'].'">'.$row['name'].'</option>';
+                $return .= '<option value="'.$row['id'].'">'.$row['title'].'</option>';
             }
         }
         $return .= '</select>';

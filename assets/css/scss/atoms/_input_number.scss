@@ -1,0 +1,122 @@
+.p-inputnumber {
+  @apply inline-flex relative;
+
+  &-button {
+    @apply flex items-center justify-center grow-0 shrink-0 basis-0 cursor-pointer transition bg-transparent text-gray-90 w-8
+      disabled:cursor-auto;
+
+    &:not(:disabled) {
+      @apply hover:bg-support-1 hover:text-primary hover:border-primary
+        active:bg-support-1 active:text-primary active:border-primary;
+    }
+  }
+
+  &-stacked &-button {
+    @apply relative flex-auto border-none;
+  }
+
+  &-stacked &-button-group {
+    @apply flex flex-col absolute top-[1px] right-[1px] z-10;
+
+    height: calc(100% - 2px);
+  }
+
+  &-stacked &-increment-button {
+    @apply p-0 rounded-tr-lg;
+  }
+
+  &-stacked &-decrement-button {
+    @apply p-0 rounded-br-lg;
+  }
+
+  &-stacked &-input {
+    @apply pr-8;
+  }
+
+  &-horizontal &-button{
+    @apply border border-solid border-gray-50 basis-8
+      hover:border-solid
+      active:border-solid;
+  }
+
+  &-horizontal &-increment-button {
+    @apply order-3 rounded-r-lg right-0 border-l-0;
+  }
+
+  &-horizontal &-input {
+    @apply order-2 rounded-none;
+  }
+
+  &-horizontal &-decrement-button {
+    @apply order-1 rounded-l-lg left-0 border-r-0;
+  }
+
+  .p-floatlabel:has(&-horizontal) label {
+    @apply ml-8;
+  }
+
+  &-vertical {
+    @apply flex-col;
+  }
+
+  &-vertical &-button {
+    @apply border border-solid border-gray-50 p-0 basis-8
+      hover:border-primary
+      active:border-gray-50;
+  }
+
+  &-vertical &-increment-button {
+    @apply order-1 rounded-t-lg w-full border-b-0;
+  }
+
+  &-vertical &-input {
+    @apply order-2 rounded-none text-center;
+  }
+
+  &-vertical &-decrement-button {
+    @apply order-3 rounded-b-lg w-full border-t-0;
+  }
+
+  &-input {
+    @apply flex-auto;
+  }
+
+  &-fluid {
+    @apply w-full;
+  }
+
+  &-fluid &-input {
+    @apply w-[1%];
+  }
+
+  &-fluid.p-inputnumber-vertical &-input {
+    @apply w-full
+  }
+
+  &-clear-icon {
+    @apply absolute top-1/2 -mt-2 cursor-pointer pr-1 text-gray-90;
+  }
+
+  &:has(&-clear-icon) &-input {
+    @apply pr-8;
+  }
+
+  &-stacked &-clear-icon {
+    @apply right-8;
+  }
+}
+
+/*
+
+.p-inputnumber:has(.p-inputtext-sm) .p-inputnumber-button .p-icon {
+  font-size: dt('form.field.sm.font.size');
+  width: dt('form.field.sm.font.size');
+  height: dt('form.field.sm.font.size');
+}
+
+.p-inputnumber:has(.p-inputtext-lg) .p-inputnumber-button .p-icon {
+  font-size: dt('form.field.lg.font.size');
+  width: dt('form.field.lg.font.size');
+  height: dt('form.field.lg.font.size');
+}
+*/

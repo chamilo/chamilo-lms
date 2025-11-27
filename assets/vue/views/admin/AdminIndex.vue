@@ -14,6 +14,7 @@
     v-else
     class="admin-index"
   >
+    <!-- Main admin blocks -->
     <AdminBlock
       v-if="blockUsers"
       :id="blockUsers.id"
@@ -51,6 +52,18 @@
     />
 
     <AdminBlock
+      v-if="blockPlatform"
+      :id="blockPlatform.id"
+      v-model:extra-content="blockPlatform.extraContent"
+      :description="t('Configure your platform, view reports, publish and send announcements globally')"
+      :editable="blockPlatform.editable"
+      :items="blockPlatform.items"
+      :search-url="blockPlatform.searchUrl"
+      :title="t('Platform management')"
+      icon="admin-settings"
+    />
+
+    <AdminBlock
       v-if="blockGradebook"
       :id="blockGradebook.id"
       v-model:extra-content="blockGradebook.extraContent"
@@ -72,13 +85,36 @@
     />
 
     <AdminBlock
-      v-if="blockPrivacy"
-      :id="blockPrivacy.id"
-      v-model:extra-content="blockPrivacy.extraContent"
-      :editable="blockPrivacy.editable"
-      :items="blockPrivacy.items"
-      :title="t('Personal data protection')"
-      icon="anonymous"
+      v-if="blockSettings"
+      :id="blockSettings.id"
+      v-model:extra-content="blockSettings.extraContent"
+      :description="t('View the status of your server, perform performance tests')"
+      :editable="blockSettings.editable"
+      :items="blockSettings.items"
+      :title="t('System')"
+      icon="settings"
+    />
+
+    <AdminBlock
+      v-if="blockSecurity"
+      :id="blockSecurity.id"
+      v-model:extra-content="blockSecurity.extraContent"
+      :description="t('Security tools and reports')"
+      :editable="blockSecurity.editable"
+      :items="blockSecurity.items"
+      :title="t('Security')"
+      icon="shield-check"
+    />
+
+    <AdminBlock
+      v-if="blockChamilo"
+      :id="blockChamilo.id"
+      v-model:extra-content="blockChamilo.extraContent"
+      :description="t('Learn more about Chamilo and its use, official references links')"
+      :editable="blockChamilo.editable"
+      :items="blockChamilo.items"
+      icon="admin-settings"
+      title="Chamilo.org"
     />
 
     <AdminBlock
@@ -90,14 +126,22 @@
     />
 
     <AdminBlock
-      v-if="blockSettings"
-      :id="blockSettings.id"
-      v-model:extra-content="blockSettings.extraContent"
-      :description="t('View the status of your server, perform performance tests')"
-      :editable="blockSettings.editable"
-      :items="blockSettings.items"
-      :title="t('System')"
-      icon="settings"
+      v-if="blockPrivacy"
+      :id="blockPrivacy.id"
+      v-model:extra-content="blockPrivacy.extraContent"
+      :editable="blockPrivacy.editable"
+      :items="blockPrivacy.items"
+      :title="t('Personal data protection')"
+      icon="anonymous"
+    />
+
+    <!-- Small / secondary blocks: sent to the bottom -->
+    <AdminBlock
+      v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
+      :id="blockHealthCheck.id"
+      :items="blockHealthCheck.items"
+      :title="t('Health check')"
+      icon="multiple-marked"
     />
 
     <div
@@ -164,39 +208,6 @@
         </div>
       </div>
     </div>
-
-    <AdminBlock
-      v-if="blockPlatform"
-      :id="blockPlatform.id"
-      v-model:extra-content="blockPlatform.extraContent"
-      :description="t('Configure your platform, view reports, publish and send announcements globally')"
-      :editable="blockPlatform.editable"
-      :items="blockPlatform.items"
-      :search-url="blockPlatform.searchUrl"
-      :title="t('Platform management')"
-      icon="admin-settings"
-    />
-    <AdminBlock
-      v-if="blockSecurity"
-      :id="blockSecurity.id"
-      v-model:extra-content="blockSecurity.extraContent"
-      :description="t('Security tools and reports')"
-      :editable="blockSecurity.editable"
-      :items="blockSecurity.items"
-      :title="t('Security')"
-      icon="shield-check"
-    />
-
-    <AdminBlock
-      v-if="blockChamilo"
-      :id="blockChamilo.id"
-      v-model:extra-content="blockChamilo.extraContent"
-      :description="t('Learn more about Chamilo and its use, official references links')"
-      :editable="blockChamilo.editable"
-      :items="blockChamilo.items"
-      icon="admin-settings"
-      title="Chamilo.org"
-    />
 
     <div
       v-if="securityStore.isAdmin"
@@ -281,6 +292,7 @@ const {
   blockNewsStatusEl,
   blockSupportStatusEl,
   blockPlugins,
+  blockHealthCheck,
 } = useIndexBlocks()
 
 function checkVersionOnSubmit() {
@@ -289,5 +301,7 @@ function checkVersionOnSubmit() {
 
 const isLoadingBlocks = ref(true)
 
-loadBlocks().then(() => (isLoadingBlocks.value = false))
+loadBlocks().then(() => {
+  isLoadingBlocks.value = false
+})
 </script>

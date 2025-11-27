@@ -3,6 +3,7 @@
 /* For license terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\TopLinks\Entity\TopLink;
 use Chamilo\PluginBundle\TopLinks\Entity\TopLinkRelTool;
 use Chamilo\PluginBundle\TopLinks\Form\LinkForm as TopLinkForm;
@@ -15,7 +16,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_admin_script();
 
 $plugin = TopLinksPlugin::create();
-$httpRequest = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $pageBaseUrl = api_get_self();
 $em = Database::getManager();

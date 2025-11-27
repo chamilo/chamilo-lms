@@ -584,12 +584,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             'display' => [
                 [
                     'name' => 'show_tabs',
-                    'title' => 'Tabs in the header',
-                    'comment' => 'Check the tabs you want to see appear in the header. The unchecked tabs will appear on the right hand menu on the portal homepage and my courses page if these need to appear',
+                    'title' => 'Main menu entries',
+                    'comment' => 'Check the entrie you want to see appear in the main menu',
                 ],
                 [
                     'name' => 'show_tabs_per_role',
-                    'title' => 'Show tabs per role',
+                    'title' => 'Main menu entries per role',
                     'comment' => 'Define header tabs visibility per role.',
                 ],
                 [
@@ -765,11 +765,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'permissions_for_new_files',
                     'title' => 'Permissions for new files',
                     'comment' => 'The ability to define the permissions settings to assign to every newly-created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions. If you use Oogie, take care that the user who launch LibreOffice can write files in the course folder.',
-                ],
-                [
-                    'name' => 'show_glossary_in_documents',
-                    'title' => 'Show glossary terms in documents',
-                    'comment' => 'From here you can configure how to add links to the glossary terms from the documents',
                 ],
                 [
                     'name' => 'upload_extensions_blacklist',

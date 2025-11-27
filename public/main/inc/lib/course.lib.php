@@ -6,6 +6,8 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
@@ -527,7 +529,7 @@ class CourseManager
                 return false;
             }
             /** @var Chamilo\CoreBundle\Entity\User $user */
-            foreach (UserManager::getRepository()->matching(
+            foreach (Container::getUserRepository()->matching(
                 Criteria::create()->where(Criteria::expr()->in('id', $userList))
             ) as $user) {
                 foreach ($user->getCurrentlyAccessibleSessions() as $session) {
@@ -2437,20 +2439,18 @@ class CourseManager
     }
 
     /**
-     * Delete a course
-     * This function deletes a whole course-area from the platform. When the
-     * given course is a virtual course, the database and directory will not be
-     * deleted.
-     * When the given course is a real course, also all virtual courses refering
-     * to the given course will be deleted.
-     * Considering the fact that we remove all traces of the course in the main
-     * database, it makes sense to remove all tracking as well (if stats databases exist)
-     * so that a new course created with this code would not use the remains of an older
-     * course.
+     * Delete a course and all its related data.
      *
-     * @param string $code The code of the course to delete
+     * Optionally, also delete ResourceFile entries (and their physical files)
+     * that are only used in this course and become unused after deletion.
+     *
+     * @param string $code                    Course code
+     * @param bool   $deleteExclusiveDocuments If true, delete documents that are
+     *                                         only used in this course.
+     *
+     * @return bool
      */
-    public static function delete_course($code)
+    public static function delete_course($code, bool $deleteExclusiveDocuments = false)
     {
         $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -2497,6 +2497,13 @@ class CourseManager
             );
 
             return false;
+        }
+
+        // Collect exclusive documents before removing the course, so we still
+        // have access to the course links when evaluating exclusivity.
+        $exclusiveFiles = [];
+        if ($deleteExclusiveDocuments) {
+            $exclusiveFiles = self::getExclusiveResourceFilesForCourse($course);
         }
 
         $count = 0;
@@ -2585,7 +2592,7 @@ class CourseManager
             // Class
             $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
             $sql = "DELETE FROM $table
-                    WHERE course_id = $courseId";
+                WHERE course_id = $courseId";
             Database::query($sql);
 
             // Skills
@@ -2597,7 +2604,7 @@ class CourseManager
                 )
             );
             $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation'
-                    WHERE course_id = $courseId";
+                WHERE course_id = $courseId";
             Database::query($sql);
 
             // Should be deleted by doctrine
@@ -2605,7 +2612,7 @@ class CourseManager
             //Database::query($sql);
 
             // Deletes all groups, group-users, group-tutors information
-            // To prevent fK mix up on some tables
+            // To prevent FK mix up on some tables
             //GroupManager::deleteAllGroupsFromCourse($courseId);
 
             $appPlugin = new AppPlugin();
@@ -2616,6 +2623,12 @@ class CourseManager
 
             // Delete the course from the database
             $courseRepo->deleteCourse($course);
+
+            // Delete documents that were exclusively used by this course,
+            // if the administrator explicitly requested it.
+            if ($deleteExclusiveDocuments && !empty($exclusiveFiles)) {
+                self::deleteExclusiveResourceFiles($exclusiveFiles);
+            }
 
             // delete extra course fields
             $extraFieldValues = new ExtraFieldValue('course');
@@ -2633,6 +2646,99 @@ class CourseManager
 
             return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Return ResourceFile entities that are only used in the given course.
+     *
+     * A "course-exclusive" file is defined as:
+     *  - At least one ResourceLink exists for this course.
+     *  - No ResourceLink exists for any other course (or other context)
+     *    for the same ResourceNode.
+     *
+     * These are the files that will become completely unused once the course
+     * is deleted, and are candidates for physical deletion.
+     *
+     * @param Course $course
+     *
+     * @return ResourceFile[]
+     */
+    private static function getExclusiveResourceFilesForCourse(Course $course): array
+    {
+        $em = Database::getManager();
+
+        $dql = '
+        SELECT DISTINCT rf
+          FROM Chamilo\CoreBundle\Entity\ResourceFile rf
+          JOIN rf.resourceNode rn
+          JOIN rn.resourceLinks rl
+         WHERE rl.course = :course
+           AND NOT EXISTS (
+                SELECT 1
+                  FROM Chamilo\CoreBundle\Entity\ResourceLink rl2
+                 WHERE rl2.resourceNode = rn
+                   AND rl2.course != :course
+           )
+    ';
+
+        return $em->createQuery($dql)
+            ->setParameter('course', $course)
+            ->getResult();
+    }
+
+    /**
+     * Delete the given ResourceFile entries and their physical files
+     * under var/upload/resource.
+     *
+     * @param ResourceFile[] $files
+     */
+    private static function deleteExclusiveResourceFiles(array $files): void
+    {
+        if (empty($files)) {
+            return;
+        }
+
+        $em = Database::getManager();
+        $nodeRepo = Container::getResourceNodeRepository();
+
+        // Base directory for stored resources; we rely on getFilename($file)
+        // returning a path relative to this root (usually starting with "/").
+        $basePath = api_get_path(SYS_PATH).'var/upload/resource';
+
+        foreach ($files as $file) {
+            if (!$file instanceof ResourceFile) {
+                continue;
+            }
+
+            // Compute physical path before manipulating Doctrine state
+            $relativePath = $nodeRepo->getFilename($file);
+            $absolutePath = $basePath.$relativePath;
+
+            if (is_file($absolutePath) && is_writable($absolutePath)) {
+                @unlink($absolutePath);
+            }
+
+            // Ensure ResourceFile is managed before removal
+            if (!$em->contains($file)) {
+                $file = $em->getReference(ResourceFile::class, $file->getId());
+            }
+
+            $resourceNode = $file->getResourceNode();
+            if ($resourceNode instanceof ResourceNode) {
+                // Ensure ResourceNode is managed before removal
+                if (!$em->contains($resourceNode)) {
+                    $resourceNode = $em->getReference(ResourceNode::class, $resourceNode->getId());
+                }
+
+                $em->remove($resourceNode);
+            }
+
+            $em->remove($file);
+        }
+
+        $em->flush();
     }
 
     /**

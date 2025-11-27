@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class Link
  * A WWW-link from the Links-module in a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -16,22 +17,27 @@ class Link extends Resource
      * The title.
      */
     public $title;
+
     /**
      * The URL.
      */
     public $url;
+
     /**
      * The description.
      */
     public $description;
+
     /**
      * Id of this links category.
      */
     public $category_id;
+
     /**
      * Display link on course homepage.
      */
     public $on_homepage;
+
     /**
      * @var string The link target
      */
@@ -44,6 +50,8 @@ class Link extends Resource
      * @param string $title
      * @param string $url
      * @param string $description
+     * @param mixed  $category_id
+     * @param mixed  $on_homepage
      */
     public function __construct(
         $id,
@@ -64,7 +72,7 @@ class Link extends Resource
     /**
      * Show this resource.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->title.' ('.$this->url.')';

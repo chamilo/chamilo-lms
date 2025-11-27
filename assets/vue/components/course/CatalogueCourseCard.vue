@@ -140,7 +140,7 @@
         />
 
         <Button
-          v-else-if="course.subscribe && props.currentUserId"
+          v-else-if="course.subscribe && props.currentUserId && allowSelfSignup"
           :label="$t('Subscribe')"
           icon="pi pi-sign-in"
           class="w-full"
@@ -148,7 +148,7 @@
         />
 
         <Button
-          v-else-if="course.visibility === 2 && !course.subscribe && props.currentUserId"
+          v-else-if="props.currentUserId && !allowSelfSignup"
           :label="$t('Subscription not allowed')"
           icon="pi pi-ban"
           disabled
@@ -342,5 +342,11 @@ const { isLocked, hasRequirements, requirementList, graphImage, fetchStatus } = 
 
 onMounted(() => {
   fetchStatus()
+})
+
+const allowSelfSignup = computed(() => {
+  if (props.course?.allow_self_signup !== undefined) return Boolean(props.course.allow_self_signup)
+  if (props.course?.allowSelfSignup !== undefined) return Boolean(props.course.allowSelfSignup)
+  return props.course?.visibility === 0
 })
 </script>

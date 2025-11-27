@@ -1,0 +1,50 @@
+<?php
+
+/* Source: https://github.com/moodle/moodle/blob/MOODLE_310_STABLE/backup/cc/cc_lib/cc_converter_forum.php under GNU/GPL license */
+
+declare(strict_types=1);
+
+namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Converter;
+
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Base\CcConverters;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\CcForum;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\CcVersion13;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Interfaces\CcIItem;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Interfaces\CcIManifest;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Export\Utils\CcHelpers;
+
+class CcConverterForum extends CcConverters
+{
+    public function __construct(CcIItem &$item, CcIManifest &$manifest, $rootpath, $path)
+    {
+        $this->ccType = CcVersion13::DISCUSSIONTOPIC;
+        $this->defaultfile = 'forum.xml';
+        $this->defaultname = 'discussion.xml';
+        parent::__construct($item, $manifest, $rootpath, $path);
+    }
+
+    public function convert($outdir, $item)
+    {
+        $rt = new CcForum();
+        $title = $item['title'];
+        $rt->setTitle($title);
+        $text = $item['comment'];
+        $deps = null;
+        if (!empty($text)) {
+            $contextid = $item['source_id'];
+            $result = CcHelpers::processLinkedFiles(
+                $text,
+                $this->manifest,
+                $this->rootpath,
+                $contextid,
+                $outdir
+            );
+            $textformat = 'text/html';
+            $rt->setText($result[0], $textformat);
+            $deps = $result[1];
+        }
+        $this->store($rt, $outdir, $title, $deps);
+
+        return true;
+    }
+}

@@ -110,6 +110,7 @@ class SortableTable extends HTML_Table
     private $dataFunctionParams;
     private $defaultColumn;
     private $defaultItemsPerPage;
+    private ?string $checkbox_name;
 
     /**
      * Create a new SortableTable.

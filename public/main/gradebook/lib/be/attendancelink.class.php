@@ -53,15 +53,6 @@ class AttendanceLink extends AbstractLink
         $qb = $repo->getResourcesByCourse(api_get_course_entity($this->course_id), api_get_session_entity($sessionId));
         $qb->andWhere('resource.active = 1');
         $links = $qb->getQuery()->getResult();
-
-        /*$tbl_attendance = $this->get_attendance_table();
-        $sql = 'SELECT att.iid, att.title, att.attendance_qualify_title
-                FROM '.$tbl_attendance.' att
-                WHERE
-                    att.c_id = '.$this->course_id.' AND
-                    att.active = 1 AND
-                    att.session_id = '.$sessionId;
-        $result = Database::query($sql);*/
         $cats = [];
         /** @var CAttendance $link */
         foreach ($links as $link) {
@@ -86,9 +77,7 @@ class AttendanceLink extends AbstractLink
         $sessionId = $this->get_session_id();
 
         $sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result."
-                WHERE
-                    session_id = $sessionId AND
-                    attendance_id = ".$this->get_ref_id();
+                WHERE attendance_id = ".$this->get_ref_id();
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -109,8 +98,7 @@ class AttendanceLink extends AbstractLink
         // get attendance qualify max
         $sql = 'SELECT attendance_qualify_max
                 FROM '.$this->get_attendance_table().'
-                WHERE
-                    iid = '.$this->get_ref_id();
+                WHERE iid = '.$this->get_ref_id();
         $query = Database::query($sql);
         $attendance = Database::fetch_assoc($query);
 

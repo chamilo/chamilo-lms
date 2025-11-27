@@ -15,6 +15,7 @@
         v-t="'Read the installation guide'"
         href="/main/documentation/installation_guide.html"
         target="_blank"
+        rel="noopener noreferrer"
       />
     </i18n-t>
 
@@ -257,6 +258,7 @@
           <a
             href="/main/documentation/installation_guide.html"
             target="_blank"
+            rel="noopener noreferrer"
             v-text="t('Installation guide')"
           />
         </p>

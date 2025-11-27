@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,66 +17,82 @@ class CourseCopyLearnpath extends Resource
      * Type of learnpath (can be dokeos (1), scorm (2), aicc (3)).
      */
     public $lp_type;
+
     /**
      * The name.
      */
     public $name;
+
     /**
      * The reference.
      */
     public $ref;
+
     /**
      * The description.
      */
     public $description;
+
     /**
      * Path to the learning path files.
      */
     public $path;
+
     /**
      * Whether additional commits should be forced or not.
      */
     public $force_commit;
+
     /**
      * View mode by default ('embedded' or 'fullscreen').
      */
     public $default_view_mod;
+
     /**
      * Default character encoding.
      */
     public $default_encoding;
+
     /**
      * Display order.
      */
     public $display_order;
+
     /**
      * Content editor/publisher.
      */
     public $content_maker;
+
     /**
      * Location of the content (local or remote).
      */
     public $content_local;
+
     /**
      * License of the content.
      */
     public $content_license;
+
     /**
      * Whether to prevent reinitialisation or not.
      */
     public $prevent_reinit;
+
     /**
      * JavaScript library used.
      */
     public $js_lib;
+
     /**
      * Debug level for this lp.
      */
     public $debug;
+
     /**
      * The items.
      */
     public $items;
+
     /**
      * The learnpath visibility on the homepage.
      */
@@ -107,6 +125,14 @@ class CourseCopyLearnpath extends Resource
      * @param string $visibility
      * @param int    $categoryId
      * @param array  $items
+     * @param mixed  $author
+     * @param mixed  $use_max_score
+     * @param mixed  $autolaunch
+     * @param mixed  $created_on
+     * @param mixed  $modified_on
+     * @param mixed  $published_on
+     * @param mixed  $expired_on
+     * @param mixed  $session_id
      */
     public function __construct(
         $id,
@@ -127,7 +153,7 @@ class CourseCopyLearnpath extends Resource
         $debug,
         $visibility,
         $author,
-        //$preview_image,
+        // $preview_image,
         $use_max_score,
         $autolaunch,
         $created_on,
@@ -163,7 +189,7 @@ class CourseCopyLearnpath extends Resource
         $this->expired_on = $expired_on;
         $this->session_id = $session_id;
         $this->author = $author;
-        //$this->preview_image = $preview_image;
+        // $this->preview_image = $preview_image;
         $this->categoryId = $categoryId;
         $this->items = $items;
     }
@@ -178,12 +204,14 @@ class CourseCopyLearnpath extends Resource
 
     /**
      * Check if a given resource is used as an item in this chapter.
+     *
+     * @param mixed $resource
      */
     public function has_item($resource)
     {
         foreach ($this->items as $item) {
-            if ($item['id'] == $resource->get_id() &&
-                isset($item['type']) && $item['type'] == $resource->get_type()
+            if ($item['id'] == $resource->get_id()
+                && isset($item['type']) && $item['type'] == $resource->get_type()
             ) {
                 return true;
             }
@@ -195,7 +223,7 @@ class CourseCopyLearnpath extends Resource
     /**
      * Show this learnpath.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->name;

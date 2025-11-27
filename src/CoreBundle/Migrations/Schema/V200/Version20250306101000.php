@@ -21,12 +21,18 @@ final class Version20250306101000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        $replacements = self::pluginNameReplacements();
+
         foreach ($this->getPluginTitles() as $pluginTitle) {
             if (\is_array($pluginTitle) && isset($pluginTitle['title'])) {
                 $pluginTitle = (string) $pluginTitle['title'];
             }
 
-            $pluginId = $this->insertPlugin($pluginTitle);
+            if (!\array_key_exists($pluginTitle, $replacements)) {
+                continue;
+            }
+
+            $pluginId = $this->insertPlugin($replacements[$pluginTitle]);
 
             $settingsByUrl = $this->getPluginSettingsByUrl($pluginTitle);
 

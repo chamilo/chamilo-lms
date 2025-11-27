@@ -50,16 +50,6 @@ class UserManager
     }
 
     /**
-     * Repository is use to query the DB, selects, etc.
-     *
-     * @return UserRepository
-     */
-    public static function getRepository()
-    {
-        return Container::getUserRepository();
-    }
-
-    /**
      * Validates the password.
      */
     public static function isPasswordValid(User $user, string $plainPassword): bool
@@ -79,9 +69,8 @@ class UserManager
     public static function updatePassword($userId, $password)
     {
         $user = api_get_user_entity($userId);
-        $userManager = self::getRepository();
         $user->setPlainPassword($password);
-        $userManager->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     /**
@@ -162,7 +151,7 @@ class UserManager
         $creatorEmail = $creatorInfo['email'] ?? '';
 
         // First check if the login exists.
-        if (!self::is_username_available($loginName)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($loginName)) {
             Display::addFlash(
                 Display::return_message(get_lang('This login is already taken !'))
             );
@@ -1086,7 +1075,6 @@ class UserManager
             return false;
         }
 
-        $userManager = self::getRepository();
         $user = api_get_user_entity($user_id);
 
         if (null === $user) {
@@ -1123,7 +1111,7 @@ class UserManager
 
         // If username is different from original then check if it exists.
         if ($originalUsername !== $username) {
-            $available = self::is_username_available($username);
+            $available = Container::getUserRepository()->isUsernameAvailable($username);
             if (false === $available) {
                 return false;
             }
@@ -1163,7 +1151,7 @@ class UserManager
         }
 
         $user->setRoleFromStatus($status);
-        $userManager->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
         Event::addEvent(LOG_USER_UPDATE, LOG_USER_ID, $user_id);
 
         if (1 == $change_active) {
@@ -1342,28 +1330,6 @@ class UserManager
     }
 
     /**
-     * Check if a username is available.
-     *
-     * @param string $username the wanted username
-     *
-     * @return bool true if the wanted username is available
-     * @assert ('') === false
-     * @assert ('xyzxyzxyz') === true
-     */
-    public static function is_username_available($username)
-    {
-        if (empty($username)) {
-            return false;
-        }
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT username FROM $table_user
-                WHERE username = '".Database::escape_string($username)."'";
-        $res = Database::query($sql);
-
-        return 0 == Database::num_rows($res);
-    }
-
-    /**
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
      *
      * @param string $firstname the first name of the user
@@ -1433,10 +1399,10 @@ class UserManager
         } else {
             $username = self::create_username($firstname, $lastname);
         }
-        if (!self::is_username_available($username)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($username)) {
             $i = 2;
             $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
-            while (!self::is_username_available($temp_username)) {
+            while (!Container::getUserRepository()->isUsernameAvailable($temp_username)) {
                 $i++;
                 $temp_username = substr($username, 0, User::USERNAME_MAX_LENGTH - strlen((string) $i)).$i;
             }
@@ -5011,7 +4977,7 @@ class UserManager
         }
 
         $user->addRole('ROLE_ADMIN');
-        self::getRepository()->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
     }
 
     public static function removeUserAdmin(User $user)
@@ -5022,7 +4988,7 @@ class UserManager
             $sql = "DELETE FROM $table WHERE user_id = $userId";
             Database::query($sql);
             $user->removeRole('ROLE_ADMIN');
-            self::getRepository()->updateUser($user, true);
+            Container::getUserRepository()->updateUser($user, true);
         }
     }
 

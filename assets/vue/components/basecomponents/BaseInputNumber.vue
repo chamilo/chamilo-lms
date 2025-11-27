@@ -1,21 +1,23 @@
 <template>
   <div class="field">
-    <div class="p-float-label">
+    <FloatLabel variant="on">
       <InputNumber
-        :input-id="id"
-        :class="{ 'p-invalid': isInvalid }"
         :disabled="disabled"
+        :input-id="id"
+        :invalid="isInvalid"
         :max="max"
         :min="min"
         :model-value="modelValue"
         :step="step"
+        fluid
+        showButtons
         @update:model-value="$emit('update:modelValue', $event)"
       />
       <label
         :for="id"
         v-text="label"
       />
-    </div>
+    </FloatLabel>
     <small
       v-if="smallText"
       :class="{ 'p-error': isInvalid }"
@@ -25,6 +27,7 @@
 </template>
 
 <script setup>
+import FloatLabel from "primevue/floatlabel"
 import InputNumber from "primevue/inputnumber"
 import { computed } from "vue"
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -36,7 +38,7 @@ class Glossary extends Resource
     /**
      * Show this glossary.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->name;

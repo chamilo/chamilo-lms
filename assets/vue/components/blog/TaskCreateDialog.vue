@@ -72,7 +72,7 @@ watch(() => props.initial, (v) => {
   systemTask.value = !!v?.system
 }, { deep: true })
 
-const dialogTitleComputed = computed(() => isEdit.value ? t("Edit Task") : t("New Task"))
+const dialogTitleComputed = computed(() => isEdit.value ? t("Edit task") : t("New task"))
 const headerIconComputed = computed(() => isEdit.value ? "pencil" : "plus")
 
 function close(){ visible.value=false; emit("close") }

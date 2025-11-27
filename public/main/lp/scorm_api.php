@@ -216,7 +216,7 @@ olms.execute_stats = false;
 olms.lms_lp_item_parents = '';
 olms.lms_auto_forward_video = <?php echo (int) $oLP->auto_forward_video; ?>;
 
-var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id;
+var courseUrl = '?cid='+olms.lms_course_id+'&sid='+olms.lms_session_id+'&lp_id='+olms.lms_lp_id;
 var statsUrl = 'lp_controller.php' + courseUrl + '&action=stats';
 
 /**

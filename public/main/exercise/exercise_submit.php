@@ -431,11 +431,11 @@ if (empty($exercise_stat_info)) {
 
         $clock_expired_time = api_get_utc_datetime($expected_time, false, true);
         if ($debug) {
-            error_log('5.3. $expected_time '.$clock_expired_time);
+            error_log('5.3. $expected_time '.$clock_expired_time->format('Y-m-d H:i:s'));
         }
 
         //Sessions  that contain the expired time
-        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
+        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time->format('Y-m-d H:i:s');
         if ($debug) {
             error_log(
                 '5.4. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key]

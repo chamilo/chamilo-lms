@@ -521,23 +521,18 @@ class PortfolioController
 
         if ($form->validate()) {
             $values = $form->exportValues();
-            $currentTime = new DateTime(
-                api_get_utc_datetime(),
-                new DateTimeZone('UTC')
-            );
 
             $portfolio = new Portfolio();
             $portfolio
                 ->setTitle($values['title'])
                 ->setContent($values['content'])
-                ->setUser($this->owner)
-                ->setCourse($this->course)
-                ->setSession($this->session)
+                ->setCreator($this->owner)
+                ->setParent($this->owner)
+                ->addCourseLink($this->course, $this->session)
                 ->setCategory(
                     $this->em->find(PortfolioCategory::class, $values['category'])
                 )
-                ->setCreationDate($currentTime)
-                ->setUpdateDate($currentTime);
+            ;
 
             $this->em->persist($portfolio);
             $this->em->flush();
@@ -549,9 +544,9 @@ class PortfolioController
 
             $this->processAttachments(
                 $form,
-                $portfolio->getUser(),
+                $this->owner,
                 $portfolio->getId(),
-                PortfolioAttachment::TYPE_ITEM
+                Portfolio::TYPE_ITEM
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -561,7 +556,7 @@ class PortfolioController
 
             if (1 == api_get_course_setting('email_alert_teachers_new_post')) {
                 if ($this->session) {
-                    $messageCourseTitle = "{$this->course->getTitle()} ({$this->session->getName()})";
+                    $messageCourseTitle = "{$this->course->getTitle()} ({$this->session->getTitle()})";
 
                     $teachers = SessionManager::getCoachesByCourseSession(
                         $this->session->getId(),
@@ -825,7 +820,7 @@ class PortfolioController
                 $form,
                 $item->getUser(),
                 $item->getId(),
-                PortfolioAttachment::TYPE_ITEM
+                Portfolio::TYPE_ITEM
             );
 
             Display::addFlash(
@@ -2149,7 +2144,7 @@ class PortfolioController
             $pdfContent .= '<p>'.get_lang('Course').': ';
 
             if ($this->session) {
-                $pdfContent .= $this->session->getName().' ('.$this->course->getTitle().')';
+                $pdfContent .= $this->session->getTitle().' ('.$this->course->getTitle().')';
             } else {
                 $pdfContent .= $this->course->getTitle();
             }
@@ -2376,7 +2371,7 @@ class PortfolioController
                 $item->getComments()->count(),
                 $item->getScore(),
                 $itemCourse->getTitle(),
-                $itemSession ? $itemSession->getName() : null,
+                $itemSession ? $itemSession->getTitle() : null,
             ];
         }
 
@@ -2638,11 +2633,11 @@ class PortfolioController
 
         $originOwnerId = 0;
 
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
             $item = $em->find(Portfolio::class, $attachment->getOrigin());
 
             $originOwnerId = $item->getUser()->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
 
             $originOwnerId = $comment->getAuthor()->getId();
@@ -2692,11 +2687,11 @@ class PortfolioController
         $originOwnerId = 0;
         $itemId = 0;
 
-        if (PortfolioAttachment::TYPE_ITEM === $attachment->getOriginType()) {
+        if (Portfolio::TYPE_ITEM === $attachment->getOriginType()) {
             $item = $em->find(Portfolio::class, $attachment->getOrigin());
             $originOwnerId = $item->getUser()->getId();
             $itemId = $item->getId();
-        } elseif (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType()) {
+        } elseif (Portfolio::TYPE_COMMENT === $attachment->getOriginType()) {
             $comment = $em->find(PortfolioComment::class, $attachment->getOrigin());
             $originOwnerId = $comment->getAuthor()->getId();
             $itemId = $comment->getItem()->getId();
@@ -2724,7 +2719,7 @@ class PortfolioController
 
             $url = $this->baseUrl.http_build_query(['action' => 'view', 'id' => $itemId]);
 
-            if (PortfolioAttachment::TYPE_COMMENT === $attachment->getOriginType() && isset($comment)) {
+            if (Portfolio::TYPE_COMMENT === $attachment->getOriginType() && isset($comment)) {
                 $url .= '#comment-'.$comment->getId();
             }
 
@@ -3046,7 +3041,7 @@ class PortfolioController
                 $form,
                 $comment->getAuthor(),
                 $comment->getId(),
-                PortfolioAttachment::TYPE_COMMENT
+                Portfolio::TYPE_COMMENT
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -3900,9 +3895,9 @@ class PortfolioController
 
                 $queryBuilder->andWhere(
                     $queryBuilder->expr()->orX(
-                        'links.user = :current_user',
+                        'node.creator = :current_user',
                         $queryBuilder->expr()->andX(
-                            'links.user != :current_user',
+                            'node.creator != :current_user',
                             $queryBuilder->expr()->in('resource.visibility', $visibilityCriteria)
                         )
                     )
@@ -4018,7 +4013,7 @@ class PortfolioController
                 $form,
                 $comment->getAuthor(),
                 $comment->getId(),
-                PortfolioAttachment::TYPE_COMMENT
+                Portfolio::TYPE_COMMENT
             );
 
             Container::getEventDispatcher()->dispatch(
@@ -4191,7 +4186,7 @@ class PortfolioController
             $metadata = '<ul class="list-unstyled text-muted">';
 
             if ($itemSession) {
-                $metadata .= '<li>'.get_lang('Course').': '.$itemSession->getName().' ('
+                $metadata .= '<li>'.get_lang('Course').': '.$itemSession->getTitle().' ('
                     .$itemCourse->getTitle().') </li>';
             } elseif ($itemCourse) {
                 $metadata .= '<li>'.get_lang('Course').': '.$itemCourse->getTitle().'</li>';

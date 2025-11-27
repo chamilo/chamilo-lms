@@ -18,7 +18,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+$user = api_get_current_user();
+
+if (!api_is_platform_admin() && (!$user || !$user->hasRole('ROLE_QUESTION_MANAGER'))) {
+    api_not_allowed(true);
+    return false;
+}
+
+api_block_inactive_user();
 
 Session::erase('objExercise');
 Session::erase('objQuestion');
@@ -376,9 +383,14 @@ switch ($action) {
         exit;
 }
 
+$backUrl = Container::getRouter()->generate('admin');
+if ($user->hasRole('ROLE_QUESTION_MANAGER')) {
+    $backUrl = Container::getRouter()->generate('index');
+}
+
 $actionsLeft = Display::url(
     Display::return_icon('back.png', get_lang('Administration'), [], ICON_SIZE_MEDIUM),
-    Container::getRouter()->generate('admin'),
+    $backUrl,
 );
 
 $exportUrl = '/main/admin/questions.php?'.http_build_query(['action' => 'export_pdf', ...$params]);

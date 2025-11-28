@@ -71,8 +71,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             read: false,
             deserialize: false,
         ),
-        new Post(security: "is_granted('ROLE_USER')"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new GetCollection(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         new GetCollection(
             uriTemplate: '/public_courses',
             normalizationContext: ['groups' => ['course:read']],

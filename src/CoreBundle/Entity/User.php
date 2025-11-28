@@ -104,7 +104,7 @@ use UserManager;
         ),
         new Put(security: "is_granted('EDIT', object)"),
         new Delete(security: "is_granted('DELETE', object)"),
-        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Post(security: "is_granted('ROLE_ADMIN')"),
         new GetCollection(
             uriTemplate: '/users/{id}/skills',

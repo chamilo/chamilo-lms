@@ -587,6 +587,9 @@ class SkillModel extends Model
                         'acquired_skill_at' => api_get_utc_datetime(),
                         'course_id' => (int) $courseId,
                         'session_id' => $sessionId ? (int) $sessionId : null,
+                        'validation_status'     => 0,
+                        'argumentation'         => '',
+                        'argumentation_author_id' => 0,
                     ];
                     $skill_rel_user->save($params);
                 }
@@ -1352,37 +1355,36 @@ class SkillModel extends Model
      *
      * @return bool Whether the user has the skill return true. Otherwise return false
      */
-    public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
+    public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0): bool
     {
+        $userId = (int) $userId;
+        $skillId = (int) $skillId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
-        $whereConditions = [
-            'user_id = ? ' => (int) $userId,
-            'AND skill_id = ? ' => (int) $skillId,
-        ];
+        // Base query: user + skill
+        $sql = "SELECT COUNT(1) AS qty
+            FROM {$this->table_skill_rel_user}
+            WHERE user_id = $userId
+              AND skill_id = $skillId";
 
+        // If course is provided, filter by course and session
         if ($courseId > 0) {
-            $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ? '] = $sessionId ? $sessionId : null;
-        }
+            $sql .= " AND course_id = $courseId";
 
-        $result = Database::select(
-            'COUNT(1) AS qty',
-            $this->table_skill_rel_user,
-            [
-                'where' => $whereConditions,
-            ],
-            'first'
-        );
-
-        if (false != $result) {
-            if ($result['qty'] > 0) {
-                return true;
+            if ($sessionId > 0) {
+                // Skill linked to a specific session
+                $sql .= " AND session_id = $sessionId";
+            } else {
+                // Course-level skill, no session (NULL)
+                $sql .= " AND session_id IS NULL";
             }
         }
 
-        return false;
+        $result = Database::query($sql);
+        $row = Database::fetch_assoc($result);
+
+        return !empty($row) && (int) $row['qty'] > 0;
     }
 
     /**

@@ -71,6 +71,8 @@ $currentItemStatus  = $currentItem ? $currentItem->get_status() : 'not attempted
 $lpItemRepo   = Container::getLpItemRepository();
 $isFinalThere = false;
 $isFinalDone  = false;
+$finalItem    = null;
+
 try {
     $finalItem = $lpItemRepo->findOneBy(['lp' => $lpEntity, 'itemType' => TOOL_LP_FINAL_ITEM]);
     if ($finalItem) {
@@ -109,19 +111,80 @@ if (!$accessGranted) {
     $courseEntity  = api_get_course_entity();
     $sessionEntity = api_get_session_entity();
 
-    /* @var GradebookCategory $gbCat */
-    $gbCat = $gbRepo->findOneBy(['course' => $courseEntity, 'session' => $sessionEntity]);
+    // Resolve GradebookCategory using lp_item.ref when item_type = final_item.
+    // We store the gradebook category id in c_lp_item.ref (string).
+    $categoryIdFromRef = 0;
 
-    if (!$gbCat) {
-        $gbCat = $gbRepo->findOneBy(['course' => $courseEntity, 'session' => null]);
+    if (!empty($finalItem) && method_exists($finalItem, 'getRef')) {
+        try {
+            $refRaw = trim((string) $finalItem->getRef());
+            if ($refRaw !== '' && $refRaw !== '0') {
+                $categoryIdFromRef = (int) $refRaw;
+            }
+        } catch (\Throwable $e) {
+            error_log('[LP_FINAL] Unable to read lp_item.ref for final_item: '.$e->getMessage());
+        }
+    }
+
+    /** @var GradebookCategory|null $gbCat */
+    $gbCat = null;
+
+    // 1) First, try the explicit category id stored in c_lp_item.ref.
+    if ($categoryIdFromRef > 0) {
+        $gbCat = $gbRepo->find($categoryIdFromRef);
+
+        // Safety check: ensure the referenced category belongs to the same course/session context.
+        if ($gbCat && $courseEntity) {
+            $catCourse  = $gbCat->getCourse();
+            $catSession = $gbCat->getSession();
+
+            // If course does not match, discard this category and let the fallback logic handle it.
+            if (!$catCourse || $catCourse->getId() !== $courseEntity->getId()) {
+                $gbCat = null;
+            } elseif ($sessionEntity) {
+                // If we are in a session context, ensure the category session matches.
+                if ($catSession && $catSession->getId() !== $sessionEntity->getId()) {
+                    $gbCat = null;
+                }
+            }
+        }
+    }
+
+    // 2) Fallback: keep legacy behaviour (root course/session category).
+    if (!$gbCat && $courseEntity) {
+        if ($sessionEntity) {
+            $gbCat = $gbRepo->findOneBy([
+                'course'  => $courseEntity,
+                'session' => $sessionEntity,
+            ]);
+        }
+
+        if (!$gbCat) {
+            $gbCat = $gbRepo->findOneBy([
+                'course'  => $courseEntity,
+                'session' => null,
+            ]);
+        }
     }
 
     if ($gbCat && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-        $cert = safeGenerateCertificateForCategory($gbCat, $userId);
-        $downloadBlock = buildCertificateBlock($cert);
+        // Use legacy Category business object to generate certificate + skills
+        // for this specific gradebook category.
+        // NOTE: Category::generateUserCertificate() is expected to know how to
+        // work with the Doctrine GradebookCategory entity.
+        $certificate = Category::generateUserCertificate($gbCat, $userId);
+        if (!empty($certificate)) {
+            // Build the HTML panel to replace ((certificate)).
+            $downloadBlock = Category::getDownloadCertificateBlock($certificate);
+        }
+
+        // Skills: Category::generateUserCertificate() already assigns skills
+        // to the user for this course/session/category when enabled.
+        // Here we just render the user's skills panel.
         $badgeBlock = generateBadgePanel($userId, $courseId, $sessionId);
     }
 
+    // Replace ((certificate)) and ((skill)) tokens in the final-item document.
     $finalHtml = renderFinalItemDocument($id, $downloadBlock, $badgeBlock);
 }
 
@@ -140,7 +203,7 @@ function safeGenerateCertificateForCategory(GradebookCategory $category, int $us
     $sessId   = $session ? $session->getId() : 0;
     $catId    = (int) $category->getId();
 
-    // Build certificate content & score
+    // Build certificate content & score.
     $gb    = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
     $html  = (is_array($gb) && isset($gb['content'])) ? $gb['content'] : '';
     $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
@@ -149,23 +212,23 @@ function safeGenerateCertificateForCategory(GradebookCategory $category, int $us
 
     $htmlUrl = '';
     $pdfUrl  = '';
+    $cert    = null;
 
     try {
-        // Store/refresh as Resource (controlled access; not shown in "My personal files")
+        // Store/refresh as Resource (controlled access; not shown in "My personal files").
         $cert = $certRepo->upsertCertificateResource($catId, $userId, $score, $html);
 
         // (Optional) keep metadata (created_at/score). Filename is not required anymore.
         $certRepo->registerUserInfoAboutCertificate($catId, $userId, $score);
 
-        // Build URLs from the Resource layer
-        // View URL (first resource file assigned to the node – here the HTML we just uploaded)
+        // Build URLs from the Resource layer.
         $htmlUrl = $certRepo->getResourceFileUrl($cert);
     } catch (\Throwable $e) {
         error_log('[LP_FINAL] register cert error: '.$e->getMessage());
     }
 
     return [
-        'path_certificate' => (string) ($cert->getPathCertificate() ?? ''),
+        'path_certificate' => $cert ? (string) ($cert->getPathCertificate() ?? '') : '',
         'html_url'         => $htmlUrl,
         'pdf_url'          => $pdfUrl,
     ];
@@ -218,6 +281,7 @@ function generateBadgePanel(int $userId, int $courseId, int $sessionId = 0): str
         if (!$skill) {
             continue;
         }
+
         $items .= "
             <div class='row'>
                 <div class='col-md-2 col-xs-4'>
@@ -264,14 +328,25 @@ function renderFinalItemDocument(int $lpItemOrDocId, string $certificateBlock, s
     $lpItemRepo = Container::getLpItemRepository();
 
     $document = null;
-    try { $document = $docRepo->find($lpItemOrDocId); } catch (\Throwable $e) {}
+
+    // First, try to use the id directly as a document iid.
+    try {
+        $document = $docRepo->find($lpItemOrDocId);
+    } catch (\Throwable $e) {
+        // Silence here, we will try the LP item fallback below.
+    }
+
+    // If not a document iid, try resolving from the LP item path.
     if (!$document) {
         try {
             $lpItem = $lpItemRepo->find($lpItemOrDocId);
             if ($lpItem) {
+                // In our case, lp_item.path stores the document iid as string.
                 $document = $docRepo->find((int) $lpItem->getPath());
             }
-        } catch (\Throwable $e) {}
+        } catch (\Throwable $e) {
+            // As a last resort, fail quietly and return empty content.
+        }
     }
 
     if (!$document) {
@@ -288,8 +363,12 @@ function renderFinalItemDocument(int $lpItemOrDocId, string $certificateBlock, s
     $hasCert  = str_contains($content, '((certificate))');
     $hasSkill = str_contains($content, '((skill))');
 
-    if ($hasCert)  { $content = str_replace('((certificate))', $certificateBlock, $content); }
-    if ($hasSkill) { $content = str_replace('((skill))', $badgeBlock, $content); }
+    if ($hasCert) {
+        $content = str_replace('((certificate))', $certificateBlock, $content);
+    }
+    if ($hasSkill) {
+        $content = str_replace('((skill))', $badgeBlock, $content);
+    }
 
     return $content;
 }

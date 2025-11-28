@@ -8079,6 +8079,11 @@ document.addEventListener("DOMContentLoaded", function () {
         $finalItem = $this->getFinalItem();
         $title = '';
 
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $resourceId = (int) $this->lp_id;
+        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
+
         if ($finalItem) {
             $title = $finalItem->get_title();
             $buttonText = get_lang('Save');
@@ -8111,6 +8116,14 @@ document.addEventListener("DOMContentLoaded", function () {
             )
         );
 
+        // Advanced settings: only gradebook category/evaluation selector
+        if (api_is_allowed_to_edit(null, true)) {
+            $form->addElement('advanced_settings', 'advanced_params', get_lang('Advanced settings'));
+            $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+            GradebookUtils::load_gradebook_select_in_tool($form);
+            $form->addElement('html', '</div>');
+        }
+
         $renderer = $form->defaultRenderer();
         $renderer->setElementTemplate('&nbsp;{label}{element}', 'content_lp_certificate');
 
@@ -8124,9 +8137,30 @@ document.addEventListener("DOMContentLoaded", function () {
         $form->addHidden('action', 'add_final_item');
         $form->addHidden('path', Session::read('pathItem'));
         $form->addHidden('previous', $this->get_last());
-        $form->setDefaults(
-            ['title' => $title, 'content_lp_certificate' => $content]
-        );
+
+        // Default values
+        $defaults = [
+            'title' => $title,
+            'content_lp_certificate' => $content,
+        ];
+
+        // Preselect the gradebook category from c_lp_item.ref (only for final_item)
+        if (api_is_allowed_to_edit(null, true)) {
+            $sql = "SELECT ref
+                FROM $tableLpItem
+                WHERE lp_id = ".(int) $resourceId."
+                  AND item_type = '".Database::escape_string(TOOL_LP_FINAL_ITEM)."'
+                LIMIT 1";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) {
+                $row = Database::fetch_array($result);
+                if (!empty($row['ref'])) {
+                    $defaults['category_id'] = (int) $row['ref'];
+                }
+            }
+        }
+
+        $form->setDefaults($defaults);
 
         if ($form->validate()) {
             $values = $form->exportValues();
@@ -8159,6 +8193,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             } else {
                 $this->edit_document();
+            }
+
+            // Store the gradebook category id in c_lp_item.ref ONLY for final_item
+            if (api_is_allowed_to_edit(null, true)) {
+                $categoryId = isset($values['category_id']) ? (int) $values['category_id'] : 0;
+                $refValue = $categoryId > 0 ? (string) $categoryId : '';
+
+                Database::update(
+                    $tableLpItem,
+                    ['ref' => $refValue],
+                    ['lp_id = ? AND item_type = ?' => [$resourceId, TOOL_LP_FINAL_ITEM]]
+                );
             }
         }
 

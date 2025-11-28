@@ -2030,8 +2030,12 @@ HOTSPOT;
             $lp_id,
             $lp_item_id
         );
-        if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
-            $return_value = $_SESSION['expired_time'][$time_control_key];
+	if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
+            if ($_SESSION['expired_time'][$time_control_key] instanceof DateTimeInterface) {
+                $return_value = $_SESSION['expired_time'][$time_control_key]->format('Y-m-d H:i:s');
+            } else {
+                $return_value = $_SESSION['expired_time'][$time_control_key];
+            }
         }
 
         return $return_value;
@@ -5602,12 +5606,12 @@ EOT;
             return '';
         }
 
+        $assetRepo = Container::getAssetRepository();
         $html = '';
 
-        $assetRepo = Container::getAssetRepository();
-
+        // Keep only the latest audio feedback to avoid duplicated players
         foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
-            $html .= Display::tag(
+            $html = Display::tag(
                 'audio',
                 '',
                 [

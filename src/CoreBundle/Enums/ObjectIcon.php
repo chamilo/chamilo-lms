@@ -156,4 +156,7 @@ enum ObjectIcon: string
     case CATALOGUE = 'bookmark-multiple-outline';
 
     case EVENT_REMINDER = 'alarm';
+    // Question icon
+    case QUESTION = 'comment-question-outline';
+
 }

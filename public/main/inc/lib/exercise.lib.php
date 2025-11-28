@@ -5606,12 +5606,12 @@ EOT;
             return '';
         }
 
+        $assetRepo = Container::getAssetRepository();
         $html = '';
 
-        $assetRepo = Container::getAssetRepository();
-
+        // Keep only the latest audio feedback to avoid duplicated players
         foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
-            $html .= Display::tag(
+            $html = Display::tag(
                 'audio',
                 '',
                 [

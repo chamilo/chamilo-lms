@@ -86,8 +86,8 @@ $sessionMultiSelect = $form->addElement(
 
 $sessionMultiSelect->setLabel([
     get_lang('SessionList'),
-    get_lang('UserNotSubscribed'),
-    get_lang('Subscribed'),
+    get_lang('SearchSession'),
+    get_lang('MySessions'),
 ]);
 
 $form->addDatePicker('date_begin', get_lang('DateStart'), ['id' => 'date-begin']);

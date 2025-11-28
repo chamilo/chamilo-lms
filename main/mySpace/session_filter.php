@@ -48,7 +48,7 @@ if (api_is_drh()) {
     $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
 }
 
-// Select sessions.
+// Select sessions the user can see.
 $sql = "SELECT s.id, name FROM $tblSession s
         $innerJoinSessionRelUser
         $whereCondictionDRH
@@ -69,24 +69,27 @@ if (api_is_multiple_url_enabled()) {
 }
 $result = Database::query($sql);
 $Sessions = Database::store_result($result);
-$options = [];
-$options['0'] = '';
-foreach ($Sessions as $enreg) {
-    $options[$enreg['id']] = $enreg['name'];
+
+// Build choices array for the advanced multi-select.
+$sessionChoices = [];
+foreach ($Sessions as $row) {
+    $sessionChoices[$row['id']] = $row['name'];
 }
 
-// Multi-select to allow selecting several sessions at once.
-$form->addElement(
-    'select',
+
+$sessionMultiSelect = $form->addElement(
+    'advmultiselect',
     'session_id',
-    get_lang('SessionList'),
-    $options,
-    [
-        'id' => 'session-id',
-        'multiple' => 'multiple',
-        'size' => 10,
-    ]
+    null,
+    $sessionChoices
 );
+
+$sessionMultiSelect->setLabel([
+    get_lang('SessionList'),
+    get_lang('UserNotSubscribed'),
+    get_lang('Subscribed'),
+]);
+
 $form->addDatePicker('date_begin', get_lang('DateStart'), ['id' => 'date-begin']);
 $form->addDatePicker('date_end', get_lang('DateEnd'), ['id' => 'date-end']);
 

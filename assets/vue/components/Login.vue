@@ -100,8 +100,12 @@ const isInIframe = window.self !== window.top
 if (isInIframe) {
   try {
     const parentUrl = window.top.location.href
-    window.top.location.href = "/login?redirect=" + encodeURIComponent(parentUrl)
+    const parent = new URL(parentUrl)
+    // Only keep path + query + hash so redirect stays internal
+    const redirectPath = parent.pathname + parent.search + parent.hash
+    window.top.location.href = "/login?redirect=" + encodeURIComponent(redirectPath)
   } catch (e) {
+    // Cross-origin or other error: just go to login without redirect
     window.top.location.href = "/login"
   }
 }

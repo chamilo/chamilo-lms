@@ -19,6 +19,8 @@ use ZipArchive;
 
 class DownloadSelectedDocumentsAction
 {
+    public const CONTENT_TYPE = 'application/zip';
+
     private KernelInterface $kernel;
     private ResourceNodeRepository $resourceNodeRepository;
 
@@ -59,19 +61,22 @@ class DownloadSelectedDocumentsAction
             throw new Exception('ZIP file is empty or unreadable.');
         }
 
-        $response = new StreamedResponse(function () use ($zipFilePath): void {
-            $handle = fopen($zipFilePath, 'rb');
-            if ($handle) {
-                while (!feof($handle)) {
-                    echo fread($handle, 8192);
-                    ob_flush();
-                    flush();
+        $response = new StreamedResponse(
+            function () use ($zipFilePath): void {
+                $handle = fopen($zipFilePath, 'rb');
+                if ($handle) {
+                    while (!feof($handle)) {
+                        echo fread($handle, 8192);
+                        ob_flush();
+                        flush();
+                    }
+                    fclose($handle);
                 }
-                fclose($handle);
-            }
-        });
+            },
+            Response::HTTP_CREATED
+        );
 
-        $response->headers->set('Content-Type', 'application/zip');
+        $response->headers->set('Content-Type', self::CONTENT_TYPE);
         $response->headers->set('Content-Disposition', 'inline; filename="selected_documents.zip"');
         $response->headers->set('Content-Length', (string) $fileSize);
 

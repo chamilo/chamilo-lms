@@ -19,6 +19,7 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Response;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
@@ -178,8 +179,21 @@ use Symfony\Component\Validator\Constraints as Assert;
                         ],
                     ]),
                 ),
+                responses: [
+                    201 => new Response(
+                        content: new ArrayObject([
+                            DownloadSelectedDocumentsAction::CONTENT_TYPE => [
+                                'schema' => [
+                                    'type' => 'string',
+                                    'format' => 'binary',
+                                ],
+                            ],
+                        ]),
+                    ),
+                ]
             ),
             security: "is_granted('ROLE_USER')",
+            outputFormats: ['zip' => 'application/zip'],
         ),
         new GetCollection(
             openapi: new Operation(

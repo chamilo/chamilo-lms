@@ -5,6 +5,7 @@
 /**
  * This script takes a user extra field variabler and looks for users duplicated
  * based on this extra field values and unify them on the most recent account
+ * or the first teacher account if one has a teacher status/role
  */
 exit;
 $now = date('Y-m-d H:i:s');
@@ -28,6 +29,12 @@ if (!empty($filteredUrls)) {
         echo $u . ' ';
     }
     echo PHP_EOL;
+}
+
+// Filter user status to only search for user with those status
+// $filteredUserStatusList = "1,5";
+if (!empty($filteredUserStatusList)) {
+    echo "Filtered user status list is defined: " . $filteredUserStatusList . PHP_EOL;
 }
 
 // set the extra field variable to use
@@ -63,12 +70,18 @@ foreach ($accessURLs as $accessURL) {
                 echo "Value $value is in the filtered list. Proceeding..." . PHP_EOL;
             }
             echo 'Analysing duplicates of ' . $value . ' ...' . PHP_EOL;
-            $users = MySpace::duGetUsersByFieldValue($fieldId, $urlId, $value);
+            $users = MySpace::duGetUsersByFieldValue($fieldId, $urlId, $value, $filteredUserStatusList);
             $userIdToUnifyOn = 0;
             $mostRecentRegistrationDate = 0;
             foreach ($users as $u) {
                 $uid = (int)$u['user_id'];
                 $userInfo = api_get_user_info($uid);
+                // unify on the teacher account if exist
+                if ($userInfo['status'] == 1) {
+                    $userIdToUnifyOn = $uid;
+                    break;
+                }
+                // unify on the most recent account if none is teacher
                 if ($userInfo['registration_date'] > $mostRecentRegistrationDate) {
                     $mostRecentRegistrationDate = $userInfo['registration_date'];
                     $userIdToUnifyOn = $uid;

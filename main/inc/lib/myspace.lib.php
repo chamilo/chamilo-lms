@@ -4583,18 +4583,22 @@ class MySpace
     }
 
     /** Users having exactly a value for the given extra-field (filtered by portal). */
-    public static function duGetUsersByFieldValue(int $fieldId, int $urlId, string $value): array
+    public static function duGetUsersByFieldValue(int $fieldId, int $urlId, string $value, string $userStatusList = ''): array
     {
         $tblVals = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tblUser = Database::get_main_table(TABLE_MAIN_USER);
         $tblRel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $valueSql = "'".Database::escape_string($value)."'";
-
+        $filterUserStatus = "";
+        if ($userStatusList != '') {
+            $filterUserStatus = "AND u.status in (".$userStatusList.")";
+        }
         $sql = "SELECT DISTINCT u.id AS user_id, u.username, u.firstname, u.lastname, u.email, u.registration_date
         FROM $tblUser u
         JOIN $tblRel  r ON r.user_id = u.id AND r.access_url_id = $urlId
         JOIN $tblVals v ON v.item_id = u.id AND v.field_id = $fieldId
         WHERE v.value = $valueSql
+        $filterUserStatus
         ORDER BY u.id ASC";
         $res = Database::query($sql);
 

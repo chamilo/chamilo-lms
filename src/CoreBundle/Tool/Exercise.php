@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Tool;
 
+use Chamilo\CoreBundle\Entity\AttemptFeedback;
+use Chamilo\CoreBundle\Entity\AttemptFile;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -45,6 +47,8 @@ class Exercise extends AbstractTool implements ToolInterface
             'questions' => CQuizQuestion::class,
             'question_categories' => CQuizQuestionCategory::class,
             'exercise_categories' => CQuizCategory::class,
+            'attempt_file'        => AttemptFile::class,
+            'attempt_feedback'    => AttemptFeedback::class,
         ];
     }
 }

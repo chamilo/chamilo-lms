@@ -688,21 +688,24 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response = new StreamedResponse(
             function () use ($resourceNodeRepo, $resourceFile, $start, $length): void {
-                $this->streamFileContent($resourceNodeRepo, $resourceFile, $start, $length);
+                $stream = $resourceNodeRepo->getResourceNodeFileStream(
+                    $resourceFile->getResourceNode(),
+                    $resourceFile
+                );
+
+                $this->echoBuffer($stream, $start, $length);
             }
         );
 
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-        $response->headers->set('Content-Length', (string) $length);
-        $response->headers->set('Accept-Ranges', 'bytes');
-        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
-        $response->setStatusCode(
-            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
+        $this->setHeadersToStreamedResponse(
+            $response,
+            $forceDownload,
+            $fileName,
+            $mimeType ?: 'application/octet-stream',
+            $length,
+            $start,
+            $end,
+            $fileSize
         );
 
         return $response;
@@ -820,46 +823,5 @@ class ResourceController extends AbstractResourceController implements CourseCon
             .substr($baseDoc, $insertionPos);
 
         return $normalized;
-    }
-
-
-    private function getRange(Request $request, int $fileSize): array
-    {
-        $range = $request->headers->get('Range');
-
-        if ($range) {
-            [, $range] = explode('=', $range, 2);
-            [$start, $end] = explode('-', $range);
-
-            $start = (int) $start;
-            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
-
-            $length = $end - $start + 1;
-        } else {
-            $start = 0;
-            $end = $fileSize - 1;
-            $length = $fileSize;
-        }
-
-        return [$start, $end, $length];
-    }
-
-    private function streamFileContent(ResourceNodeRepository $resourceNodeRepo, ResourceFile $resourceFile, int $start, int $length): void
-    {
-        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceFile->getResourceNode(), $resourceFile);
-
-        fseek($stream, $start);
-
-        $bytesSent = 0;
-
-        while ($bytesSent < $length && !feof($stream)) {
-            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
-
-            echo $buffer;
-
-            $bytesSent += \strlen($buffer);
-        }
-
-        fclose($stream);
     }
 }

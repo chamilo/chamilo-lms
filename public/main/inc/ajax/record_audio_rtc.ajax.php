@@ -44,9 +44,18 @@ switch ($type) {
         break;
 
     case Asset::EXERCISE_FEEDBACK:
+        /** @var TrackEExercise|null $exeAttempt */
+        $exeAttempt = Container::getTrackEExerciseRepository()->find($trackExerciseId);
+
+        if (null === $exeAttempt) {
+            exit;
+        }
+
+        // Make feedback asset unique per attempt + question (not only per question)
+        $assetTitle = sprintf('feedback_%d_%d', $questionId, $trackExerciseId);
         $asset = (new Asset())
             ->setCategory(Asset::EXERCISE_FEEDBACK)
-            ->setTitle("feedback_$questionId")
+            ->setTitle($assetTitle)
         ;
 
         $asset = $assetRepo->createFromRequest($asset, $_FILES['audio_blob']);
@@ -54,8 +63,6 @@ switch ($type) {
         $attemptFeedback = (new AttemptFeedback())
             ->setAsset($asset);
 
-        /** @var TrackEExercise $exeAttempt */
-        $exeAttempt = Container::getTrackEExerciseRepository()->find($trackExerciseId);
         $attempt = $exeAttempt->getAttemptByQuestionId($questionId);
 
         if (null === $attempt) {

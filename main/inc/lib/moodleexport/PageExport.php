@@ -111,12 +111,17 @@ class PageExport extends ActivityExport
         $pageResources = $this->course->resources[RESOURCE_DOCUMENT] ?? [];
         foreach ($pageResources as $page) {
             if ($page->source_id == $pageId) {
+                $name = $page->title ?? '';
+                if ($sectionId > 0) {
+                    $name = $this->lpItemTitle($sectionId, RESOURCE_DOCUMENT, $page->source_id, $name);
+                }
+
                 return [
                     'id' => $page->source_id,
                     'moduleid' => $page->source_id,
                     'modulename' => 'page',
                     'contextid' => $contextid,
-                    'name' => $page->title,
+                    'name' => $name,
                     'intro' => $page->comment ?? '',
                     'content' => $this->normalizeContent($this->getPageContent($page)),
                     'sectionid' => $sectionId,

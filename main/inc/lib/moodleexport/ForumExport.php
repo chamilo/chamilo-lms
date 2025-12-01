@@ -45,7 +45,7 @@ class ForumExport extends ActivityExport
      */
     public function getData(int $forumId, int $sectionId): ?array
     {
-        $forum = $this->course->resources['forum'][$forumId]->obj;
+        $forum = $this->course->resources[RESOURCE_FORUM][$forumId]->obj;
 
         $adminData = MoodleExport::getAdminUserData();
         $adminId = $adminData['id'];
@@ -78,14 +78,17 @@ class ForumExport extends ActivityExport
             }
         }
 
-        $fileIds = [];
+        $name = $forum->forum_title ?? '';
+        if ($sectionId > 0) {
+            $name = $this->lpItemTitle($sectionId, RESOURCE_FORUM, $forumId, $name);
+        }
 
         return [
             'id' => $forumId,
             'moduleid' => $forumId,
             'modulename' => 'forum',
             'contextid' => $this->course->info['real_id'],
-            'name' => $forum->forum_title,
+            'name' => $name,
             'description' => $forum->forum_comment,
             'timecreated' => time(),
             'timemodified' => time(),
@@ -94,7 +97,7 @@ class ForumExport extends ActivityExport
             'userid' => $adminId,
             'threads' => $threads,
             'users' => [$adminId],
-            'files' => $fileIds,
+            'files' => [],
         ];
     }
 

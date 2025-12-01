@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -144,8 +145,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function view(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
     ): Response {
         $id = $request->get('id');
         $resourceFileId = $request->get('resourceFileId');
@@ -161,26 +161,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
         }
 
-        if (!$resourceFile) {
-            $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-            $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-            $resourceFiles = $resourceNode->getResourceFiles();
-
-            if ($accessUrlSpecificFiles) {
-                foreach ($resourceFiles as $file) {
-                    if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                        $resourceFile = $file;
-
-                        break;
-                    }
-                }
-            }
-
-            if (!$resourceFile) {
-                $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
-            }
-        }
+        $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         if (!$resourceFile) {
             throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
@@ -254,8 +235,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function download(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
     ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -272,23 +252,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-        $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-        $resourceFiles = $resourceNode->getResourceFiles();
-        $resourceFile = null;
-
-        if ($accessUrlSpecificFiles) {
-            foreach ($resourceFiles as $file) {
-                if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                    $resourceFile = $file;
-
-                    break;
-                }
-            }
-        }
-
-        $resourceFile ??= $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+        $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceFile) {

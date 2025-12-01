@@ -5593,7 +5593,7 @@ EOT;
      */
     public static function getOralFeedbackAudio(int $attemptId, int $questionId): string
     {
-        /** @var TrackEExercise $tExercise */
+        /** @var TrackEExercise|null $tExercise */
         $tExercise = Container::getTrackEExerciseRepository()->find($attemptId);
 
         if (null === $tExercise) {
@@ -5606,23 +5606,45 @@ EOT;
             return '';
         }
 
-        $assetRepo = Container::getAssetRepository();
-        $html = '';
+        $feedbacks = $qAttempt->getAttemptFeedbacks();
 
-        // Keep only the latest audio feedback to avoid duplicated players
-        foreach ($qAttempt->getAttemptFeedbacks() as $attemptFeedback) {
-            $html = Display::tag(
-                'audio',
-                '',
-                [
-                    'src' => $assetRepo->getAssetUrl($attemptFeedback->getAsset()),
-                    'controls' => '',
-                ]
-
-            );
+        if ($feedbacks->isEmpty()) {
+            return '';
         }
 
-        return $html;
+        $latestFeedback = null;
+
+        foreach ($feedbacks as $feedback) {
+            // Skip feedbacks without asset, just in case
+            if (null === $feedback->getAsset()) {
+                continue;
+            }
+
+            if (null === $latestFeedback) {
+                $latestFeedback = $feedback;
+                continue;
+            }
+
+            // Choose the feedback with the latest createdAt
+            if ($feedback->getCreatedAt() > $latestFeedback->getCreatedAt()) {
+                $latestFeedback = $feedback;
+            }
+        }
+
+        if (null === $latestFeedback) {
+            return '';
+        }
+
+        $assetRepo = Container::getAssetRepository();
+
+        return Display::tag(
+            'audio',
+            '',
+            [
+                'src' => $assetRepo->getAssetUrl($latestFeedback->getAsset()),
+                'controls' => '',
+            ]
+        );
     }
 
     public static function getUploadAnswerFiles(int $trackExerciseId, int $questionId, bool $returnUrls = false)

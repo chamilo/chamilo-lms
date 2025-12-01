@@ -15902,7 +15902,7 @@ msgid "Maximum time a script can take to execute. If using more than that, the s
 msgstr "Temps maximum que peut durer l'exécution d'un script. S'il utilise plus que ça, le script est abandonné pour éviter de ralentir d'autres utilisateurs."
 
 msgid "This extension must be loaded."
-msgstr "L'extension doit être chargée"
+msgstr "Cette extension doit être chargée."
 
 msgid "MySQL protocol"
 msgstr "Protocole MySQL"
@@ -20329,7 +20329,7 @@ msgid "Actions to be fired when a user registers to the platform"
 msgstr "Actions à lancer lorsque un utilisateur s'inscrit sur la plateforme"
 
 msgid "This extension should be loaded."
-msgstr "Cette extension devrait être installée"
+msgstr "Cette extension peut être chargée."
 
 msgid "Disabled"
 msgstr "Désactivé"

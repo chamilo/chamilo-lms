@@ -20329,7 +20329,7 @@ msgid "Actions to be fired when a user registers to the platform"
 msgstr "Actions à lancer lorsque un utilisateur s'inscrit sur la plateforme"
 
 msgid "This extension should be loaded."
-msgstr "Cette extension peut être chargée."
+msgstr "Cette extension est suggérée."
 
 msgid "Disabled"
 msgstr "Désactivé"

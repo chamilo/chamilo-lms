@@ -718,6 +718,7 @@ class Diagnoser
             'OPcache' => ['link' => 'https://php.net/opcache', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'openssl' => ['link' => 'https://php.net/openssl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
             'xsl' => ['link' => 'https://php.net/xsl', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
+            'xapian' => ['link' => 'https://xapian.org/docs/bindings/php/', 'expected' => 2, 'comment' => get_lang('This extension should be loaded.')],
         ];
 
         foreach ($extensions as $extension => $data) {

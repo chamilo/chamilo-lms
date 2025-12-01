@@ -31210,3 +31210,21 @@ msgstr "Admin Restart Courses"
 
 msgid "Admin Dashboard"
 msgstr "Admin Dashboard"
+
+msgid "Threads"
+msgstr "Threads"
+
+msgid "Invalid thread"
+msgstr "Invalid thread"
+
+msgid "View full thread"
+msgstr "View full thread"
+
+msgid "No post yet"
+msgstr "No post yet"
+
+msgid "Discussion thread"
+msgstr "Discussion thread"
+
+msgid "Access to this course"
+msgstr "Access to this course"

@@ -52,13 +52,13 @@ function normalizeRedirectUrl(rawRedirect) {
   try {
     const currentOrigin = window.location.origin
 
-    // root-relative path ("/resources/pages/edit?id=...")
+    // Root-relative path ("/resources/pages/edit?id=...")
     if (rawRedirect.startsWith("/")) {
       const url = new URL(rawRedirect, currentOrigin)
       return url.pathname + url.search + url.hash
     }
 
-    // absolute URL - validate protocol first
+    // Absolute URL - validate protocol first
     if (!isValidHttpUrl(rawRedirect)) {
       return null
     }
@@ -102,10 +102,11 @@ export function useLogin() {
         totp,
       }
 
-      // Add returnUrl if exists in query param
-      const returnUrl = route.query.redirect?.toString() || null
-      if (returnUrl) {
-        payload.returnUrl = returnUrl
+      // Add returnUrl if exists in query param, but sanitize it first
+      const rawReturnUrl = route.query.redirect?.toString() || null
+      const safeReturnUrl = rawReturnUrl ? normalizeRedirectUrl(rawReturnUrl) : null
+      if (safeReturnUrl) {
+        payload.returnUrl = safeReturnUrl
       }
 
       const responseData =
@@ -122,7 +123,8 @@ export function useLogin() {
       // If backend forces password rotation, still apply locale before redirect
       if (responseData.rotate_password && responseData.redirect) {
         applyUserLocale(responseData)
-        window.location.href = responseData.redirect
+        const safeRedirect = normalizeRedirectUrl(responseData.redirect.toString())
+        window.location.href = safeRedirect || "/"
         return { success: true, rotate: true }
       }
 
@@ -135,8 +137,10 @@ export function useLogin() {
       // Terms and conditions redirect (apply locale before navigating)
       if (responseData.load_terms && responseData.redirect) {
         applyUserLocale(responseData)
-        window.location.href = responseData.redirect
-        return { success: true, redirect: responseData.redirect }
+        const safeRedirect = normalizeRedirectUrl(responseData.redirect.toString())
+        const target = safeRedirect || "/"
+        window.location.href = target
+        return { success: true, redirect: target }
       }
 
       // External redirect param (apply locale before navigating)
@@ -147,7 +151,6 @@ export function useLogin() {
         const safeRedirect = normalizeRedirectUrl(rawRedirect)
 
         if (safeRedirect) {
-          // Keep query params (e.g. "?id=/api/pages/6") intact on same origin
           // Full reload here is intentional so the full app shell is rebuilt.
           window.location.href = safeRedirect
           return { success: true }
@@ -157,7 +160,8 @@ export function useLogin() {
       // Fallback backend redirect (apply locale before navigating)
       if (responseData.redirect) {
         applyUserLocale(responseData)
-        window.location.href = responseData.redirect
+        const safeRedirect = normalizeRedirectUrl(responseData.redirect.toString())
+        window.location.href = safeRedirect || "/"
         return { success: true }
       }
 

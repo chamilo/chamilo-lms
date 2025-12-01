@@ -461,7 +461,7 @@ class CourseController extends ToolBaseController
         $payload = [
             'enabled' => true,
             'displayMode' => (int) $displayMode,
-            'title' => $translator->trans('Course thematic advance'),
+            'title' => $translator->trans('Thematic advance'),
             'score' => $thematicScore,
             'scoreRaw' => $thematicScoreRaw,
             'user' => $userPayload,

@@ -31145,3 +31145,21 @@ msgstr ""
 
 msgid "New messages"
 msgstr ""
+
+msgid "Threads"
+msgstr ""
+
+msgid "Invalid thread"
+msgstr ""
+
+msgid "View full thread"
+msgstr ""
+
+msgid "No post yet"
+msgstr ""
+
+msgid "Discussion thread"
+msgstr ""
+
+msgid "Access to this course"
+msgstr ""

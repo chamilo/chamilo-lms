@@ -52,9 +52,15 @@ final class ExceptionListener
         ) {
             // If no token (not logged in), redirect to login with "redirect" back param
             if (null === $this->tokenStorage->getToken()) {
+                // Use only a relative path (path + query) for the redirect parameter
+                $redirectPath = $request->getRequestUri();
+                if (!\is_string($redirectPath) || '' === $redirectPath) {
+                    $redirectPath = '/';
+                }
+
                 $loginUrl = $this->router->generate(
                     'login',
-                    ['redirect' => $request->getSchemeAndHttpHost().$request->getRequestUri()],
+                    ['redirect' => $redirectPath],
                     UrlGeneratorInterface::ABSOLUTE_URL
                 );
                 $event->setResponse(new RedirectResponse($loginUrl));

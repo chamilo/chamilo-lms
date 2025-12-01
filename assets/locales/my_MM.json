@@ -642,6 +642,7 @@
     "Unmark favorite": "\u1021\u1014\u103e\u1005\u103a\u101e\u1000\u103a\u1006\u102f\u1036\u1038\u1021\u1016\u103c\u1005\u103a \u1021\u1019\u103e\u1010\u103a\u1016\u103b\u1000\u103a\u1015\u102b",
     "Mark favorite": "\u1021\u1014\u103e\u1005\u103a\u101e\u1000\u103a\u1006\u102f\u1036\u1038\u1021\u1016\u103c\u1005\u103a \u1021\u1019\u103e\u1010\u103a\u1021\u101e\u102c\u1038\u1015\u103c\u102f\u1015\u102b",
     "Register student": "\u1000\u103b\u1031\u102c\u1004\u103a\u1038\u101e\u102c\u1038\u1000\u102d\u102f \u1019\u103e\u1010\u103a\u1015\u102f\u1036\u1010\u1004\u103a\u1015\u102b",
+    "Register Student": "Register Student",
     "Duration": "\u1000\u103c\u102c\u1001\u103b\u102d\u1014\u103a",
     "Dependencies": "\u1019\u103e\u102e\u1001\u102d\u102f\u1019\u103e\u102f\u1019\u103b\u102c\u1038",
     "Price": "\u1008\u1031\u1038\u1014\u103e\u102f\u1014\u103a\u1038",
@@ -1188,5 +1189,14 @@
     "Delivered": "Delivered",
     "Sending": "Sending",
     "Are you sure you want to clear this conversation?": "Are you sure you want to clear this conversation?",
+    "You are registered on %s": "\u101e\u1004\u103a\u101e\u100a\u103a {0} \u1010\u103d\u1004\u103a \u1019\u103e\u1010\u103a\u1015\u102f\u1036\u1010\u1004\u103a\u1011\u102c\u1038\u1015\u103c\u102e\u1038\u1016\u103c\u1005\u103a\u101e\u100a\u103a",
+    "Hello %s,<br><br>You are registered on %s.<br>You can access your account from <a href=\"%s\">here</a>.<br><br>Your login credentials are:<br>Username: <strong>%s</strong><br>Password: <strong>%s</strong><br><br>Best regards,<br>%s": "\u1019\u1004\u103a\u1039\u1002\u101c\u102c\u1015\u102b {0}\u104a<br><br>\u101e\u1004\u103a\u101e\u100a\u103a {1} \u1010\u103d\u1004\u103a \u1019\u103e\u1010\u103a\u1015\u102f\u1036\u1010\u1004\u103a\u1011\u102c\u1038\u1015\u103c\u102e\u1038\u1016\u103c\u1005\u103a\u101e\u100a\u103a\u104b<br>\u101e\u1004\u1037\u103a\u1021\u1000\u1031\u102c\u1004\u1037\u103a\u1000\u102d\u102f <a href=\"{2}\">\u1024\u1014\u1031\u101b\u102c</a> \u1019\u103e \u101d\u1004\u103a\u101b\u1031\u102c\u1000\u103a\u1014\u102d\u102f\u1004\u103a\u101e\u100a\u103a\u104b<br><br>\u101e\u1004\u1037\u103a\u101d\u1004\u103a\u101b\u1031\u102c\u1000\u103a\u1019\u103e\u102f\u1021\u1011\u1031\u102c\u1000\u103a\u1021\u1011\u102c\u1038\u1019\u103b\u102c\u1038\u1019\u103e\u102c-<br>\u1021\u101e\u102f\u1036\u1038\u1015\u103c\u102f\u101e\u1030\u1021\u1019\u100a\u103a- <strong>{3}</strong><br>\u1005\u1000\u102c\u1038\u101d\u103e\u1000\u103a- <strong>{4}</strong><br><br>\u1021\u1000\u1031\u102c\u1004\u103a\u1038\u1006\u102f\u1036\u1038 \u1014\u103e\u102f\u1010\u103a\u1006\u1000\u103a\u1005\u1000\u102c\u1038\u1016\u103c\u1004\u1037\u103a\u104a<br>{5}",
+    "You have been enrolled in a new course": "\u101e\u1004\u103a\u101e\u100a\u103a \u101e\u1004\u103a\u1010\u1014\u103a\u1038\u101e\u1005\u103a\u1010\u1005\u103a\u1001\u102f\u1010\u103d\u1004\u103a \u1005\u102c\u101b\u1004\u103a\u1038\u101e\u103d\u1004\u103a\u1038\u1001\u1036\u101b\u1015\u103c\u102e\u1038\u1016\u103c\u1005\u103a\u101e\u100a\u103a",
+    "Hello %s,<br><br>You have been enrolled in a new session: <strong>%s</strong>.<br>You can access your courses from <a href=\"%s\">here</a>.<br><br>Your current active sessions are:<br><ul>%s</ul><br>Best regards,<br>Chamilo": "Hello {0},<br><br>You have been enrolled in a new session: <strong>{1}</strong>.<br>You can access your courses from <a href=\"{2}\">here</a>.<br><br>Your current active sessions are:<br><ul>{3}</ul><br>Best regards,<br>Chamilo",
+    "Admin Favorites Courses": "Admin Favorites Courses",
+    "Admin Completed Courses": "Admin Completed Courses",
+    "Admin Incomplete Courses": "Admin Incomplete Courses",
+    "Admin Restart Courses": "Admin Restart Courses",
+    "Admin Dashboard": "Admin Dashboard",
     "New messages": "New messages"
 }

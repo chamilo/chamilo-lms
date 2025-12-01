@@ -14,6 +14,10 @@ class SkillRelUserModel extends Model
         'acquired_skill_at',
         'course_id',
         'session_id',
+        'acquired_level',
+        'validation_status',
+        'argumentation',
+        'argumentation_author_id',
     ];
 
     public function __construct()
@@ -58,27 +62,27 @@ class SkillRelUserModel extends Model
             return [];
         }
 
+        $userId = (int) $userId;
         $courseId = (int) $courseId;
-        $sessionId = $sessionId ? (int) $sessionId : null;
-        $whereConditions = [
-            'user_id = ? ' => (int) $userId,
-        ];
+        $sessionId = (int) $sessionId;
+
+        $sql = "SELECT skill_id FROM {$this->table} WHERE user_id = $userId";
 
         if ($courseId > 0) {
-            $whereConditions['AND course_id = ? '] = $courseId;
-            $whereConditions['AND session_id = ?'] = $sessionId;
+            $sql .= " AND course_id = $courseId";
+
+            if ($sessionId > 0) {
+                // Skill linked to a specific session
+                $sql .= " AND session_id = $sessionId";
+            } else {
+                // Course-level skill, no session → match NULL
+                $sql .= " AND session_id IS NULL";
+            }
         }
 
-        $result = Database::select(
-            'skill_id',
-            $this->table,
-            [
-                'where' => $whereConditions,
-            ],
-            'all'
-        );
+        $result = Database::query($sql);
 
-        return $result;
+        return Database::store_result($result, 'ASSOC');
     }
 
     /**

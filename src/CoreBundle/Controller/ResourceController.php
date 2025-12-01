@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -144,8 +145,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function view(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
     ): Response {
         $id = $request->get('id');
         $resourceFileId = $request->get('resourceFileId');
@@ -161,26 +161,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceFile = $this->resourceFileRepository->find($resourceFileId);
         }
 
-        if (!$resourceFile) {
-            $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-            $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-            $resourceFiles = $resourceNode->getResourceFiles();
-
-            if ($accessUrlSpecificFiles) {
-                foreach ($resourceFiles as $file) {
-                    if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                        $resourceFile = $file;
-
-                        break;
-                    }
-                }
-            }
-
-            if (!$resourceFile) {
-                $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
-            }
-        }
+        $resourceFile ??= $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         if (!$resourceFile) {
             throw new FileNotFoundException($this->trans('Resource file not found for the given resource node'));
@@ -254,8 +235,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function download(
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
-        SettingsManager $settingsManager,
-        AccessUrlHelper $accessUrlHelper
+        ResourceFileHelper $resourceFileHelper,
     ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -272,23 +252,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->trans('Unauthorised access to resource')
         );
 
-        $accessUrlSpecificFiles = $settingsManager->getSetting('document.access_url_specific_files') && $accessUrlHelper->isMultiple();
-        $currentUrl = $accessUrlHelper->getCurrent()?->getUrl();
-
-        $resourceFiles = $resourceNode->getResourceFiles();
-        $resourceFile = null;
-
-        if ($accessUrlSpecificFiles) {
-            foreach ($resourceFiles as $file) {
-                if ($file->getAccessUrl() && $file->getAccessUrl()->getUrl() === $currentUrl) {
-                    $resourceFile = $file;
-
-                    break;
-                }
-            }
-        }
-
-        $resourceFile ??= $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+        $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($resourceNode);
 
         // If resource node has a file just download it. Don't download the children.
         if ($resourceFile) {
@@ -688,21 +652,24 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $response = new StreamedResponse(
             function () use ($resourceNodeRepo, $resourceFile, $start, $length): void {
-                $this->streamFileContent($resourceNodeRepo, $resourceFile, $start, $length);
+                $stream = $resourceNodeRepo->getResourceNodeFileStream(
+                    $resourceFile->getResourceNode(),
+                    $resourceFile
+                );
+
+                $this->echoBuffer($stream, $start, $length);
             }
         );
 
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-        $response->headers->set('Content-Length', (string) $length);
-        $response->headers->set('Accept-Ranges', 'bytes');
-        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
-        $response->setStatusCode(
-            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
+        $this->setHeadersToStreamedResponse(
+            $response,
+            $forceDownload,
+            $fileName,
+            $mimeType ?: 'application/octet-stream',
+            $length,
+            $start,
+            $end,
+            $fileSize
         );
 
         return $response;
@@ -820,46 +787,5 @@ class ResourceController extends AbstractResourceController implements CourseCon
             .substr($baseDoc, $insertionPos);
 
         return $normalized;
-    }
-
-
-    private function getRange(Request $request, int $fileSize): array
-    {
-        $range = $request->headers->get('Range');
-
-        if ($range) {
-            [, $range] = explode('=', $range, 2);
-            [$start, $end] = explode('-', $range);
-
-            $start = (int) $start;
-            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
-
-            $length = $end - $start + 1;
-        } else {
-            $start = 0;
-            $end = $fileSize - 1;
-            $length = $fileSize;
-        }
-
-        return [$start, $end, $length];
-    }
-
-    private function streamFileContent(ResourceNodeRepository $resourceNodeRepo, ResourceFile $resourceFile, int $start, int $length): void
-    {
-        $stream = $resourceNodeRepo->getResourceNodeFileStream($resourceFile->getResourceNode(), $resourceFile);
-
-        fseek($stream, $start);
-
-        $bytesSent = 0;
-
-        while ($bytesSent < $length && !feof($stream)) {
-            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
-
-            echo $buffer;
-
-            $bytesSent += \strlen($buffer);
-        }
-
-        fclose($stream);
     }
 }

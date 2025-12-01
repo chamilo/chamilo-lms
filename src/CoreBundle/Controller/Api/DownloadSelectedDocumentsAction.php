@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
 /* For licensing terms, see /license.txt */
+
+declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CourseBundle\Entity\CDocument;
-use Doctrine\ORM\EntityManagerInterface;
+use Chamilo\CoreBundle\Traits\ControllerTrait;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,16 +19,20 @@ use ZipArchive;
 
 class DownloadSelectedDocumentsAction
 {
-    private KernelInterface $kernel;
-    private ResourceNodeRepository $resourceNodeRepository;
+    use ControllerTrait;
 
-    public function __construct(KernelInterface $kernel, ResourceNodeRepository $resourceNodeRepository)
-    {
-        $this->kernel = $kernel;
-        $this->resourceNodeRepository = $resourceNodeRepository;
-    }
+    public const CONTENT_TYPE = 'application/zip';
 
-    public function __invoke(Request $request, EntityManagerInterface $em): Response
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        private readonly ResourceNodeRepository $resourceNodeRepository,
+        private readonly CDocumentRepository $documentRepo,
+    ) { }
+
+    /**
+     * @throws Exception
+     */
+    public function __invoke(Request $request): Response
     {
         ini_set('max_execution_time', '300');
         ini_set('memory_limit', '512M');
@@ -40,7 +44,7 @@ class DownloadSelectedDocumentsAction
             return new Response('No items selected.', Response::HTTP_BAD_REQUEST);
         }
 
-        $documents = $em->getRepository(CDocument::class)->findBy(['iid' => $documentIds]);
+        $documents = $this->documentRepo->findBy(['iid' => $documentIds]);
 
         if (empty($documents)) {
             return new Response('No documents found.', Response::HTTP_NOT_FOUND);
@@ -59,21 +63,27 @@ class DownloadSelectedDocumentsAction
             throw new Exception('ZIP file is empty or unreadable.');
         }
 
-        $response = new StreamedResponse(function () use ($zipFilePath): void {
-            $handle = fopen($zipFilePath, 'rb');
-            if ($handle) {
-                while (!feof($handle)) {
-                    echo fread($handle, 8192);
-                    ob_flush();
-                    flush();
-                }
-                fclose($handle);
-            }
-        });
+        [$start, $end, $length] = $this->getRange($request, $fileSize);
 
-        $response->headers->set('Content-Type', 'application/zip');
-        $response->headers->set('Content-Disposition', 'inline; filename="selected_documents.zip"');
-        $response->headers->set('Content-Length', (string) $fileSize);
+        $response = new StreamedResponse(
+            function () use ($start, $length, $zipFilePath): void {
+                $handle = fopen($zipFilePath, 'rb');
+
+                $this->echoBuffer($handle, $start, $length);
+            }
+        );
+
+        $this->setHeadersToStreamedResponse(
+            $response,
+            false,
+            'selected_documents.zip',
+            self::CONTENT_TYPE,
+            $length,
+            $start,
+            $end,
+            $fileSize,
+            Response::HTTP_CREATED
+        );
 
         return $response;
     }

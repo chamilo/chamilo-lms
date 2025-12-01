@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: chamilo\n"
-"PO-Revision-Date: 2025-11-28 10:22+0000\n"
+"PO-Revision-Date: 2025-12-01 12:28+0000\n"
 "Language: sw_KE\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30520,13 +30520,13 @@ msgid "ex. root"
 msgstr "mf. root"
 
 msgid "CREATE TABLE works"
-msgstr "CREATE TABLE works"
+msgstr "CREATE TABLE kazi"
 
 msgid "ALTER TABLE works"
-msgstr "ALTER TABLE works"
+msgstr "ALTER TABLE kazi"
 
 msgid "DROP COLUMN works"
-msgstr "DROP COLUMN works"
+msgstr "DROP COLUMN kazi"
 
 msgid "Theme selected as current"
 msgstr "Mandhari yamechaguliwa kama ya sasa"
@@ -31196,4 +31196,22 @@ msgstr "Anza upya Kozi za Msimamizi"
 
 msgid "Admin Dashboard"
 msgstr "Dashibodi ya Msimamizi"
+
+msgid "Threads"
+msgstr "Mifuatano"
+
+msgid "Invalid thread"
+msgstr "Mifuatano batili"
+
+msgid "View full thread"
+msgstr "Tazama mifuatano kamili"
+
+msgid "No post yet"
+msgstr "Hakuna chapisho bado"
+
+msgid "Discussion thread"
+msgstr "Mifuatano wa majadiliano"
+
+msgid "Access to this course"
+msgstr "Fikiozi la kozi hii"
 

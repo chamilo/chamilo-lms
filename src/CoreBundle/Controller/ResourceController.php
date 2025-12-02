@@ -12,7 +12,6 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -20,7 +19,6 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Repository\ResourceWithLinkInterface;
 use Chamilo\CoreBundle\Repository\TrackEDownloadsRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CoreBundle\Traits\CourseControllerTrait;
@@ -49,6 +47,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
+
+use const PHP_EOL;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>.
@@ -661,15 +661,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        $this->setHeadersToStreamedResponse(
-            $response,
-            $forceDownload,
-            $fileName,
-            $mimeType ?: 'application/octet-stream',
-            $length,
-            $start,
-            $end,
-            $fileSize
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            $fileName
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+        $response->headers->set('Content-Length', (string) $length);
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+        $response->setStatusCode(
+            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
         );
 
         return $response;
@@ -713,7 +716,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $content.$jsConfig;
     }
 
-
     /**
      * Normalize generated HTML documents coming from templates/editors.
      *
@@ -730,9 +732,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $upper = strtoupper($content);
 
         $firstHeadStart = stripos($upper, '<HEAD');
-        $firstHeadEnd   = stripos($upper, '</HEAD>');
-        $doctypePos     = stripos($upper, '<!DOCTYPE');
-        $htmlPos        = stripos($upper, '<HTML');
+        $firstHeadEnd = stripos($upper, '</HEAD>');
+        $doctypePos = stripos($upper, '<!DOCTYPE');
+        $htmlPos = stripos($upper, '<HTML');
 
         // If we do not have the pattern <head>...</head> before <!DOCTYPE html>, do nothing.
         if (false === $firstHeadStart || false === $firstHeadEnd || false === $doctypePos) {
@@ -745,8 +747,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         // Extract the first <head>...</head> block (including tags).
-        $headBlockLength = $firstHeadEnd + strlen('</head>') - $firstHeadStart;
-        $headBlock       = substr($content, $firstHeadStart, $headBlockLength);
+        $headBlockLength = $firstHeadEnd + \strlen('</head>') - $firstHeadStart;
+        $headBlock = substr($content, $firstHeadStart, $headBlockLength);
 
         // Remove that first <head> block from the beginning part.
         // Everything from <!DOCTYPE ...> will be treated as the "real" document.
@@ -781,11 +783,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $insertionPos = $secondHeadTagEnd + 1;
 
-        $normalized =
-            substr($baseDoc, 0, $insertionPos)
+        return substr($baseDoc, 0, $insertionPos)
             .PHP_EOL.$innerHead.PHP_EOL
             .substr($baseDoc, $insertionPos);
-
-        return $normalized;
     }
 }

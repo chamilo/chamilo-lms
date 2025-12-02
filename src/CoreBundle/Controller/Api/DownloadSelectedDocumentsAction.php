@@ -13,9 +13,11 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
-use ZipArchive;
+use ZipStream\Option\Archive;
+use ZipStream\ZipStream;
 
 class DownloadSelectedDocumentsAction
 {
@@ -27,7 +29,7 @@ class DownloadSelectedDocumentsAction
         private readonly KernelInterface $kernel,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepo,
-    ) { }
+    ) {}
 
     /**
      * @throws Exception
@@ -50,108 +52,67 @@ class DownloadSelectedDocumentsAction
             return new Response('No documents found.', Response::HTTP_NOT_FOUND);
         }
 
-        $zipFilePath = $this->createZipFile($documents);
-
-        if (!$zipFilePath || !file_exists($zipFilePath)) {
-            return new Response('ZIP file not found or could not be created.', Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        $fileSize = filesize($zipFilePath);
-        if (false === $fileSize || 0 === $fileSize) {
-            error_log('ZIP file is empty or unreadable.');
-
-            throw new Exception('ZIP file is empty or unreadable.');
-        }
-
-        [$start, $end, $length] = $this->getRange($request, $fileSize);
+        $zipName = 'selected_documents.zip';
 
         $response = new StreamedResponse(
-            function () use ($start, $length, $zipFilePath): void {
-                $handle = fopen($zipFilePath, 'rb');
+            function () use ($documents, $zipName): void {
+                // Creates a ZIP file containing the specified documents.
+                $options = new Archive();
+                $options->setSendHttpHeaders(false);
+                $options->setContentType(self::CONTENT_TYPE);
 
-                $this->echoBuffer($handle, $start, $length);
-            }
-        );
+                $zip = new ZipStream($zipName, $options);
 
-        $this->setHeadersToStreamedResponse(
-            $response,
-            false,
-            'selected_documents.zip',
-            self::CONTENT_TYPE,
-            $length,
-            $start,
-            $end,
-            $fileSize,
+                foreach ($documents as $document) {
+                    $node = $document->getResourceNode();
+
+                    if (!$node) {
+                        error_log('ResourceNode not found for document ID: '.$document->getIid());
+
+                        continue;
+                    }
+
+                    $this->addNodeToZip($zip, $node);
+                }
+
+                $zip->finish();
+            },
             Response::HTTP_CREATED
         );
+
+        // Convert the file name to ASCII using iconv
+        $zipName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $zipName);
+
+        $disposition = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $zipName
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', self::CONTENT_TYPE);
 
         return $response;
     }
 
     /**
-     * Creates a ZIP file containing the specified documents.
-     *
-     * @return string the path to the created ZIP file
-     *
-     * @throws Exception if the ZIP file cannot be created or closed
-     */
-    private function createZipFile(array $documents): string
-    {
-        $cacheDir = $this->kernel->getCacheDir();
-        $zipFilePath = $cacheDir.'/selected_documents_'.uniqid().'.zip';
-
-        $zip = new ZipArchive();
-        $result = $zip->open($zipFilePath, ZipArchive::CREATE);
-
-        if (true !== $result) {
-            throw new Exception('Unable to create ZIP file');
-        }
-
-        $projectDir = $this->kernel->getProjectDir();
-        $baseUploadDir = $projectDir.'/var/upload/resource';
-
-        foreach ($documents as $document) {
-            $resourceNode = $document->getResourceNode();
-            if (!$resourceNode) {
-                error_log('ResourceNode not found for document ID: '.$document->getId());
-
-                continue;
-            }
-
-            $this->addNodeToZip($zip, $resourceNode, $baseUploadDir);
-        }
-
-        if (!$zip->close()) {
-            error_log('Failed to close ZIP file.');
-
-            throw new Exception('Failed to close ZIP archive');
-        }
-
-        return $zipFilePath;
-    }
-
-    /**
      * Adds a resource node and its files or children to the ZIP archive.
      */
-    private function addNodeToZip(ZipArchive $zip, ResourceNode $node, string $baseUploadDir, string $currentPath = ''): void
+    private function addNodeToZip(ZipStream $zip, ResourceNode $node, string $currentPath = ''): void
     {
         if ($node->getChildren()->count() > 0) {
             $relativePath = $currentPath.$node->getTitle().'/';
-            $zip->addEmptyDir($relativePath);
+
+            $zip->addFile($relativePath, '');
 
             foreach ($node->getChildren() as $childNode) {
-                $this->addNodeToZip($zip, $childNode, $baseUploadDir, $relativePath);
+                $this->addNodeToZip($zip, $childNode, $relativePath);
             }
         } elseif ($node->hasResourceFile()) {
             foreach ($node->getResourceFiles() as $resourceFile) {
-                $filePath = $baseUploadDir.$this->resourceNodeRepository->getFilename($resourceFile);
                 $fileName = $currentPath.$resourceFile->getOriginalName();
+                $stream = $this->documentRepo->getResourceNodeFileStream($node);
 
-                if (file_exists($filePath)) {
-                    $zip->addFile($filePath, $fileName);
-                } else {
-                    error_log('File not found: '.$filePath);
-                }
+                $zip->addFileFromStream($fileName, $stream);
             }
         } else {
             error_log('Node has no children or files: '.$node->getTitle());

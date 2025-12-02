@@ -164,7 +164,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: DownloadSelectedDocumentsAction::class,
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
+                description: 'Streams a ZIP archive generated on-the-fly. The ZIP file includes folders and files selected.',
                 requestBody: new RequestBody(
+                    description: 'List of document IDs to include in the ZIP file',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -175,17 +177,37 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'items' => ['type' => 'integer'],
                                     ],
                                 ],
+                                'required' => ['ids'],
                             ],
                         ],
                     ]),
+                    required: true,
                 ),
                 responses: [
                     201 => new Response(
+                        description: 'The ZIP file is being streamed to the client',
                         content: new ArrayObject([
                             DownloadSelectedDocumentsAction::CONTENT_TYPE => [
                                 'schema' => [
                                     'type' => 'string',
                                     'format' => 'binary',
+                                    'description' => 'Streamed ZIP file',
+                                ],
+                            ],
+                        ]),
+                        headers: new ArrayObject([
+                            'Content-Type' => [
+                                'description' => 'MIME type identifying the streamed file',
+                                'schema' => [
+                                    'type' => 'string',
+                                    'example' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
+                                ],
+                            ],
+                            'Content-Disposition' => [
+                                'description' => 'Indicates that the response is meant to be downloaded as a file',
+                                'schema' => [
+                                    'type' => 'string',
+                                    'example' => 'attachment; filename="selected_documents.zip"',
                                 ],
                             ],
                         ]),
@@ -193,7 +215,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ]
             ),
             security: "is_granted('ROLE_USER')",
-            outputFormats: ['zip' => 'application/zip'],
+            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
         ),
         new GetCollection(
             openapi: new Operation(

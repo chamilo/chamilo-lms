@@ -66,7 +66,6 @@
       >
         <strong>{{ $t("Duration") }}:</strong> {{ durationInHours }}
       </div>
-
       <div
         v-if="localCourse.dependencies?.length"
         class="text-sm text-gray-700"
@@ -89,15 +88,24 @@
         <strong>{{ $t("Teachers") }}:</strong>
         {{ localCourse.teachers.map((t) => t.user.fullName).join(", ") }}
       </div>
-      <div class="mt-2 flex items-center">
+      <div class="my-1 flex items-baseline gap-2">
+      <span
+       v-if="displayRatingAvg !== null"
+      class="text-sm font-normal leading-none"
+      aria-hidden="true"
+      >
+    {{ formattedRatingAvg }}
+     </span>
+
+
         <Rating
           v-if="props.currentUserId"
           :key="`rating-${localCourse.id}-${ratingResetKey}`"
           :modelValue="displayRatingAvg"
           :stars="5"
-          :cancel="true"
-          class="mt-2"
+          :cancel="false"
           @update:modelValue="onUserRate"
+          class="text-sm self-baseline inline-flex leading-none"
         />
       </div>
       <div
@@ -234,6 +242,13 @@ const localCourse = ref(JSON.parse(JSON.stringify(props.course || {})))
 const localVote = ref(props.course?.userVote?.vote || 0)
 // ensure numeric placeholders
 localCourse.value.ratingAvg = Number(localCourse.value.ratingAvg ?? 0)
+// initialize rating count from props if available
+localCourse.value.ratingCount = Number(
+  localCourse.value.ratingCount ??
+  props.course?.count ??
+  props.course?.ratingCount ??
+  0
+)
 
 // --- fetch rating ---
 // adjust fetchRating to tolerate multiple formats returned by the API
@@ -249,6 +264,8 @@ const fetchRating = async () => {
     const data = await res.json()
     // robust fallback: average, avg, ratingAvg, etc.
     localCourse.value.ratingAvg = Number(data.average ?? data.avg ?? data.ratingAvg ?? 0)
+    // get count if provided by API
+    localCourse.value.ratingCount = Number(data.count ?? data.countVotes ?? localCourse.value.ratingCount ?? 0)
   } catch (e) {
     console.error('fetchRating error', e)
   }
@@ -266,12 +283,45 @@ watch(
     if (newVote === oldVote) return
 
 
-    const prevVote = props.course?.userVote?.vote ?? oldVote ?? 0
+    // fallback sur la valeur locale stockée puis sur props (toujours numérique).
+    const prevVote = Number(
+      oldVote ?? localCourse.value.userVote?.vote ?? props.course?.userVote?.vote ?? 0
+    )
 
 
     if ((localCourse.value.popularity === undefined) && props.course?.popularity !== undefined) {
       localCourse.value.popularity = props.course.popularity
     }
+
+    // Local rating/count adjustment to show immediate feedback
+    const oldAvg = Number(localCourse.value.ratingAvg ?? 0)
+    let oldCount = Number(localCourse.value.ratingCount ?? 0)
+    let newCount = oldCount
+    let newAvg = oldAvg
+
+
+    if (prevVote === 0 && newVote > 0) {
+      // new vote added
+      newCount = oldCount + 1
+      newAvg = newCount > 0 ? ((oldAvg * oldCount + newVote) / newCount) : newVote
+    } else if (prevVote > 0 && newVote === 0) {
+      // vote removed
+      newCount = Math.max(oldCount - 1, 0)
+      if (newCount === 0) {
+        newAvg = 0
+      } else {
+        newAvg = ((oldAvg * oldCount - prevVote) / newCount)
+      }
+    } else if (prevVote > 0 && newVote > 0) {
+      // vote changed
+      newCount = oldCount
+      newAvg = newCount > 0 ? ((oldAvg * oldCount - prevVote + newVote) / newCount) : newVote
+    }
+
+
+    // round like backend (2 decimals)
+    localCourse.value.ratingAvg = Number((isFinite(newAvg) ? newAvg : 0).toFixed(2))
+    localCourse.value.ratingCount = Math.max(0, Math.round(newCount))
 
 
     if (prevVote === 0 && newVote > 0) {
@@ -280,12 +330,9 @@ watch(
       localCourse.value.popularity = Math.max((localCourse.value.popularity || 1) - 1, 0)
     }
 
-
-    localCourse.value.userVote = { vote: newVote }
-
-
+    localCourse.value.userVote = { vote: Number(newVote || 0) }
     // Emit to the parent to persist (the parent must call the API)
-    emit("rate", { value: newVote, course: props.course })
+    emit("rate", { value: Number(newVote || 0), course: props.course })
   },
   { immediate: false },
 )
@@ -316,8 +363,6 @@ const fetchVisits = async () => {
 
 onMounted(fetchVisits)
 
-
-
 const allowDescription = computed(
   () => platformConfigStore.getSetting("catalog.show_courses_descriptions_in_catalog") !== "false",
 )
@@ -341,11 +386,18 @@ const displayRatingAvg = computed(() => {
   )
 })
 
+// formatted string for the numeric average
+const formattedRatingAvg = computed(() => {
+  const v = Number(displayRatingAvg.value ?? 0)
+  if (!isFinite(v)) return "0.0"
+  return v.toFixed(1)
+})
+
 // computed used by the Rating component: shows the user's vote if available, otherwise the average
 const onUserRate = (val) => {
-  // updates localVote -> watcher handles popularity + emit("rate")
-  localVote.value = Number(val || 0)
-  // force the remount of the Rating component to return to displaying the average
+  // local update of the vote — do not overwrite the value if `val` is null/undefined
+  localVote.value = Number(val ?? localVote.value)
+  // keeping the existing reset (optional)
   setTimeout(() => {
     ratingResetKey.value++
   }, 0)

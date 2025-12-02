@@ -706,16 +706,12 @@ class Container
     public static function getPortfolioRepository(): PortfolioRepository
     {
         /** @var PortfolioRepository $repo */
-        $repo = self::$container->get(PortfolioRepository::class);
-
-        return $repo;
+        return self::$container->get(PortfolioRepository::class);
     }
 
     public static function getPortfolioCategoryHelper(): PortfolioCategoryHelper
     {
         /** @var PortfolioCategoryHelper $helper */
-        $helper = self::$container->get(PortfolioCategoryHelper::class);
-
-        return $helper;
+        return self::$container->get(PortfolioCategoryHelper::class);
     }
 }

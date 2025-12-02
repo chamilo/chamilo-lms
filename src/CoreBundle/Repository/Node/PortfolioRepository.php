@@ -13,12 +13,14 @@ use Chamilo\CoreBundle\Entity\Portfolio;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use DateTime;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 class PortfolioRepository extends ResourceRepository
 {
-    public function __construct(ManagerRegistry $registry) {
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, Portfolio::class);
     }
 
@@ -51,7 +53,7 @@ class PortfolioRepository extends ResourceRepository
         $this->addCreatorQueryBuilder($creator, $qb);
 
         return $qb
-            ->andWhere($qb->expr()->eq('resource.isTemplate',true))
+            ->andWhere($qb->expr()->eq('resource.isTemplate', true))
             ->getQuery()
             ->getResult()
         ;
@@ -64,7 +66,7 @@ class PortfolioRepository extends ResourceRepository
         ?Session $session = null,
         bool $showBaseContentInSession = false,
         bool $listByUser = false,
-        ?\DateTime $date = null,
+        ?DateTime $date = null,
         array $tags = [],
         ?string $searchText = null,
         array $searchCategories = [],
@@ -97,7 +99,8 @@ class PortfolioRepository extends ResourceRepository
                 ->innerJoin(ExtraField::class, 'ef', Join::WITH, 'ef.id = efrt.fieldId')
                 ->andWhere('ef.extraFieldType = :efType')
                 ->andWhere('ef.variable = :variable')
-                ->andWhere('efrt.tagId IN (:tags)');
+                ->andWhere('efrt.tagId IN (:tags)')
+            ;
 
             $queryBuilder->setParameter('efType', ExtraField::PORTFOLIO_TYPE);
             $queryBuilder->setParameter('variable', 'tags');
@@ -128,7 +131,8 @@ class PortfolioRepository extends ResourceRepository
         if ($listByUser) {
             $queryBuilder
                 ->andWhere('resource.user = :user')
-                ->setParameter('user', $owner);
+                ->setParameter('user', $owner)
+            ;
         }
 
         if ($advancedSharingEnabled) {

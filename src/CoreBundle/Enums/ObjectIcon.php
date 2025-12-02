@@ -158,5 +158,4 @@ enum ObjectIcon: string
     case EVENT_REMINDER = 'alarm';
     // Question icon
     case QUESTION = 'comment-question-outline';
-
 }

@@ -15,7 +15,7 @@ class ResourceFileHelper
     public function __construct(
         private readonly SettingsManager $settingsManager,
         private readonly AccessUrlHelper $accessUrlHelper,
-    ){}
+    ) {}
 
     public function resolveResourceFileByAccessUrl(ResourceNode $resourceNode): ?ResourceFile
     {

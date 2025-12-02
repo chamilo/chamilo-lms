@@ -114,9 +114,9 @@ class AdminController extends BaseController
                         // Avoid duplicates for the same course.
                         if (!isset($coursesForThisFile[$courseId])) {
                             $coursesForThisFile[$courseId] = [
-                                'id'             => $courseId,
-                                'code'           => $course->getCode(),
-                                'title'          => $course->getTitle(),
+                                'id' => $courseId,
+                                'code' => $course->getCode(),
+                                'title' => $course->getTitle(),
                                 'resourceNodeId' => $courseResourceNodeId,
                             ];
                         }
@@ -144,22 +144,22 @@ class AdminController extends BaseController
             $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
 
             $courseOptions[] = [
-                'id'             => $course->getId(),
-                'code'           => $course->getCode(),
-                'title'          => $course->getTitle(),
+                'id' => $course->getId(),
+                'code' => $course->getCode(),
+                'title' => $course->getTitle(),
                 'resourceNodeId' => $courseResourceNodeId,
             ];
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [
-            'files'         => $files,
-            'fileUrls'      => $fileUrls,
-            'filePaths'     => $filePaths,
-            'totalPages'    => $totalPages,
-            'currentPage'   => $page,
-            'search'        => $search,
-            'orphanFlags'   => $orphanFlags,
-            'linksCount'    => $linksCount,
+            'files' => $files,
+            'fileUrls' => $fileUrls,
+            'filePaths' => $filePaths,
+            'totalPages' => $totalPages,
+            'currentPage' => $page,
+            'search' => $search,
+            'orphanFlags' => $orphanFlags,
+            'linksCount' => $linksCount,
             'coursesByFile' => $coursesByFile,
             'courseOptions' => $courseOptions,
         ]);
@@ -315,7 +315,7 @@ class AdminController extends BaseController
                     'File "%s" has been attached to %d course(s): %s.',
                     (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
                     \count($attachedTitles),
-                    \implode(', ', $attachedTitles)
+                    implode(', ', $attachedTitles)
                 )
             );
         }
@@ -325,7 +325,7 @@ class AdminController extends BaseController
                 'warning',
                 \sprintf(
                     'Some courses were skipped: %s.',
-                    \implode(', ', $skippedTitles)
+                    implode(', ', $skippedTitles)
                 )
             );
         }
@@ -399,7 +399,7 @@ class AdminController extends BaseController
 
             $this->addFlash(
                 'success',
-                sprintf(
+                \sprintf(
                     'File has been detached from %d course link(s).',
                     $removed
                 )

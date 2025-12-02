@@ -29,7 +29,7 @@ class DownloadSelectedDocumentsAction
         private readonly KernelInterface $kernel,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepo,
-    ) { }
+    ) {}
 
     /**
      * @throws Exception

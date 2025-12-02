@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -29,6 +30,7 @@ class DownloadSelectedDocumentsAction
         private readonly KernelInterface $kernel,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepo,
+        private readonly ResourceFileHelper $resourceFileHelper,
     ) {}
 
     /**
@@ -107,15 +109,17 @@ class DownloadSelectedDocumentsAction
             foreach ($node->getChildren() as $childNode) {
                 $this->addNodeToZip($zip, $childNode, $relativePath);
             }
-        } elseif ($node->hasResourceFile()) {
-            foreach ($node->getResourceFiles() as $resourceFile) {
-                $fileName = $currentPath.$resourceFile->getOriginalName();
-                $stream = $this->documentRepo->getResourceNodeFileStream($node);
 
-                $zip->addFileFromStream($fileName, $stream);
-            }
-        } else {
-            error_log('Node has no children or files: '.$node->getTitle());
+            return;
+        }
+
+        $resourceFile = $this->resourceFileHelper->resolveResourceFileByAccessUrl($node);
+
+        if ($resourceFile) {
+            $fileName = $currentPath.$resourceFile->getOriginalName();
+            $stream = $this->resourceNodeRepository->getResourceNodeFileStream($node, $resourceFile);
+
+            $zip->addFileFromStream($fileName, $stream);
         }
     }
 }

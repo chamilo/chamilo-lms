@@ -514,7 +514,7 @@ $extra = $extraFieldUser->addElements(
 
 $jqueryExtra .= $extra['jquery_ready_content'];
 
-$userForm->addHtml('<p class="text-info">'.get_lang('You will find in the <a style="color:blue" href=\"/faq">FAQ</a> the recommended environment to work on the platform.').'</p>');
+$userForm->addHtml('<p class="text-info">'.get_lang('You will find in the <a style="color:blue" href="/faq">FAQ</a> the recommended environment to work on the platform.').'</p>');
 
 $userForm->addButtonSave(get_lang('Save'), 'submit_partial[collapseEight]');
 
@@ -1169,8 +1169,6 @@ $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     ).'</a>'.'\';
     }
 }';
-
-$htmlHeadXtra[] = api_get_jqgrid_js();
 
 $griJs = Display::grid_js(
     'sessions',

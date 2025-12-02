@@ -27,7 +27,6 @@ $defaults = [];
 $defaults['start_date'] = isset($_GET['start_date']) ? Security::remove_XSS($_GET['start_date']) : '';
 $defaults['course_id'] = $courseId;
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = '<script>
 $(function() {
     $("#exercise_course_id").on("change", function(e) {

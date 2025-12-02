@@ -36,19 +36,15 @@
       <div class="flex flex-col gap-2">
         <label>{{ t("Score") }}</label>
 
-        <template v-if="!forceStudentView">
-          <input
-            type="number"
-            v-model.number="qualification"
-            class="input border p-2 rounded"
-            min="0"
-            :max="maxQualification"
-            step="0.1"
-          />
-          <template v-if="maxQualification">
-            <span class="text-xs text-gray-600"> {{ t("Max score") }}: {{ maxQualification }} </span>
-          </template>
-        </template>
+        <BaseInputNumber
+          v-if="!forceStudentView"
+          id="qualification"
+          :label="t('Score')"
+          v-model.number="qualification"
+          :min="0"
+          :max="maxQualification"
+          :help-text="maxQualification ? t('Max score') + maxQualification : null"
+        />
 
         <template v-else>
           <span class="border p-2 rounded bg-gray-100 text-sm">
@@ -138,6 +134,7 @@ import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useRoute } from "vue-router"
 import { useSecurityStore } from "../../store/securityStore"
+import BaseInputNumber from "../basecomponents/BaseInputNumber.vue"
 
 const props = defineProps({
   modelValue: Boolean,

@@ -6,6 +6,7 @@
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -139,13 +140,14 @@ if ('multiple' == $add_type) {
         get_lang('Multiple registration').'</a>';
 }
 
-$url_list = UrlManager::get_url_data();
+$urlList = Container::getAccessUrlRepository()->findAll();
 $url_selected = '';
-foreach ($url_list as $url_obj) {
-    if ((int) $url_obj[0] === $access_url_id) {
-        $url_selected = $url_obj[1];
-        break;
-    }
+
+foreach ($urlList as $url) {
+  if ($url->getId() == $access_url_id) {
+    $url_selected = $url->getUrl();
+    break;
+  }
 }
 ?>
     <div class="flex space-x-2 border-gray-300 pb-2 mb-4">
@@ -172,10 +174,10 @@ foreach ($url_list as $url_obj) {
             <label for="access_url_id" class="block text-sm font-bold text-gray-800 mb-1"><?php echo get_lang('Select URL'); ?></label>
             <select name="access_url_id" id="access_url_id" onchange="send()" class="w-full p-2 border border-gray-300 rounded-md">
                 <option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
-                <?php foreach ($url_list as $url_obj): ?>
-                    <?php if ($url_obj['active'] == 1): ?>
-                        <option value="<?php echo $url_obj[0]; ?>" <?php if ($url_obj[0] == $access_url_id) echo 'selected'; ?>>
-                            <?php echo $url_obj[1]; ?>
+                <?php foreach ($urlList as $url): ?>
+                    <?php if (1 == $url->getActive()): ?>
+                        <option value="<?php echo $url->getId(); ?>" <?php if ($url->getId() == $access_url_id) echo 'selected'; ?>>
+                            <?php echo $url->getUrl(); ?>
                         </option>
                     <?php endif; ?>
                 <?php endforeach; ?>

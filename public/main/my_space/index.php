@@ -12,7 +12,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
 //$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 $this_section = SECTION_TRACKING;
 

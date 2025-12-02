@@ -19,11 +19,22 @@
           v-else-if="!hasOnlyOneItem && !enrolledStore.isInitialized"
           class="flex mx-7 my-1.5 py-2 ml-8 gap-4"
         >
-          <BaseIcon class="text-sm" icon="courses" size="small" />
-          <div v-if="sidebarIsOpen" class="font-bold text-sm self-center">
+          <BaseIcon
+            class="text-sm"
+            icon="courses"
+            size="small"
+          />
+          <div
+            v-if="sidebarIsOpen"
+            class="font-bold text-sm self-center"
+          >
             {{ t("Course") }}
           </div>
-          <BaseIcon class="text-sm animate-spin" icon="sync" size="small" />
+          <BaseIcon
+            class="text-sm animate-spin"
+            icon="sync"
+            size="small"
+          />
         </div>
 
         <BaseSidebarPanelMenu v-model="menuItemsAfterMyCourse" />
@@ -79,7 +90,11 @@ const enrolledStore = useEnrolledStore()
 const { menuItemsBeforeMyCourse, menuItemMyCourse, menuItemsAfterMyCourse, hasOnlyOneItem, initialize } =
   useSidebarMenu()
 
-const sidebarIsOpen = ref(window.localStorage.getItem("sidebarIsOpen") === "true")
+const stored = window.localStorage.getItem("sidebarIsOpen")
+const sidebarIsOpen = ref(stored === null ? true : stored === "true")
+if (stored === null) {
+  window.localStorage.setItem("sidebarIsOpen", "true")
+}
 const expandingDueToPanelClick = ref(false)
 
 const currentYear = new Date().getFullYear()

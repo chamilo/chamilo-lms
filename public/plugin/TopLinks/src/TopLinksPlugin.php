@@ -112,11 +112,6 @@ class TopLinksPlugin extends Plugin
         $this->deleteCourseTools();
     }
 
-    public function get_name()
-    {
-        return 'TopLinks';
-    }
-
     private function deleteCourseTools()
     {
         Database::getManager()

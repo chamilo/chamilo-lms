@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div>
     <p>{{ 'DearUser'|get_lang }}</p>
     <p>{{ 'PurchaseDetailsIntro'|get_plugin_lang('BuyCoursesPlugin') }}</p>
@@ -25,12 +26,14 @@
         <tbody>
         {% for account in transfer_accounts %}
             <tr>
-                <td>{{ account.title }}</td>
+                <td>{{ account.name }}</td>
                 <td>{{ account.account }}</td>
                 <td>{{ account.swift }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <p>{{ info_email_extra }}</p>
     <p>{{ 'PurchaseDetailsEnd'|get_plugin_lang('BuyCoursesPlugin') }}</p>
 </div>
+{% endautoescape %}

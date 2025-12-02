@@ -2659,7 +2659,7 @@ class MySpace
     public static function make_username($firstname, $lastname, $username, $language = null, $encoding = null)
     {
         // if username exist
-        if (!UserManager::is_username_available($username) || empty($username)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($username) || empty($username)) {
             $i = 0;
             while (1) {
                 if (0 == $i) {
@@ -2671,7 +2671,7 @@ class MySpace
                     $firstname,
                     $lastname
                 );
-                if (UserManager::is_username_available($desired_username.$sufix)) {
+                if (Container::getUserRepository()->isUsernameAvailable($desired_username.$sufix)) {
                     break;
                 } else {
                     $i++;
@@ -2779,7 +2779,7 @@ class MySpace
                 $user['UserName'] = $pre_username;
                 $user['create'] = '1';
             } else {
-                if (UserManager::is_username_available($user['UserName'])) {
+                if (Container::getUserRepository()->isUsernameAvailable($user['UserName'])) {
                     $desired_username = self::make_username($user['FirstName'], $user['LastName'], $user['UserName']);
                     $user['UserName'] = $desired_username['username'].$desired_username['sufix'];
                     $user['create'] = '1';

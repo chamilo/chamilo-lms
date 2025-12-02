@@ -8,11 +8,14 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Component\Composer\ScriptHandler;
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\QueryCacheHelper;
 use Chamilo\CoreBundle\Helpers\TempUploadHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -64,20 +67,31 @@ class AdminController extends BaseController
 
         $files = $resourceFileRepository->searchFiles($search, $offset, self::ITEMS_PER_PAGE);
         $totalItems = $resourceFileRepository->countFiles($search);
-        $totalPages = $totalItems > 0 ? ceil($totalItems / self::ITEMS_PER_PAGE) : 1;
+        $totalPages = $totalItems > 0 ? (int) ceil($totalItems / self::ITEMS_PER_PAGE) : 1;
 
         $fileUrls = [];
         $filePaths = [];
+        $orphanFlags = [];
+        $linksCount = [];
+
         foreach ($files as $file) {
             $resourceNode = $file->getResourceNode();
+            $count = 0;
+
             if ($resourceNode) {
                 $fileUrls[$file->getId()] = $this->resourceNodeRepository->getResourceFileUrl($resourceNode);
-                $creator = $resourceNode->getCreator();
+
+                // Count how many ResourceLinks still point to this node
+                $links = $resourceNode->getResourceLinks();
+                $count = $links ? $links->count() : 0;
             } else {
                 $fileUrls[$file->getId()] = null;
-                $creator = null;
             }
+
             $filePaths[$file->getId()] = '/upload/resource'.$this->resourceNodeRepository->getFilename($file);
+
+            $linksCount[$file->getId()] = $count;
+            $orphanFlags[$file->getId()] = 0 === $count;
         }
 
         return $this->render('@ChamiloCore/Admin/files_info.html.twig', [
@@ -86,6 +100,191 @@ class AdminController extends BaseController
             'filePaths' => $filePaths,
             'totalPages' => $totalPages,
             'currentPage' => $page,
+            'search' => $search,
+            'orphanFlags' => $orphanFlags,
+            'linksCount' => $linksCount,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/files_info/attach', name: 'admin_files_info_attach', methods: ['POST'])]
+    public function attachOrphanFileToCourse(
+        Request $request,
+        ResourceFileRepository $resourceFileRepository,
+        CourseRepository $courseRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $token = (string) $request->request->get('_token', '');
+        if (!$this->isCsrfTokenValid('attach_orphan_file', $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $fileId = $request->request->getInt('resource_file_id', 0);
+        $courseCode = trim((string) $request->request->get('course_code', ''));
+
+        $page = $request->request->getInt('page', 1);
+        $search = (string) $request->request->get('search', '');
+
+        if ($fileId <= 0) {
+            $this->addFlash('error', 'Missing resource file identifier.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        if ('' === $courseCode) {
+            $this->addFlash('error', 'Please provide a course code.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        /** @var ResourceFile|null $resourceFile */
+        $resourceFile = $resourceFileRepository->find($fileId);
+        if (!$resourceFile) {
+            $this->addFlash('error', 'Resource file not found.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        $resourceNode = $resourceFile->getResourceNode();
+        $linksCount = $resourceNode ? $resourceNode->getResourceLinks()->count() : 0;
+        if ($linksCount > 0) {
+            // Safety check: this file is not orphan anymore.
+            $this->addFlash('warning', 'This file is no longer orphan and cannot be attached.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        /** @var Course|null $course */
+        $course = $courseRepository->findOneBy(['code' => $courseCode]);
+        if (!$course) {
+            $this->addFlash('error', \sprintf('Course with code "%s" was not found.', $courseCode));
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        if (!$resourceNode) {
+            $this->addFlash('error', 'This resource file has no resource node and cannot be attached.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        // re-parent the ResourceNode to the course documents root
+        if (method_exists($course, 'getResourceNode')) {
+            $courseRootNode = $course->getResourceNode();
+
+            if ($courseRootNode) {
+                $resourceNode->setParent($courseRootNode);
+            }
+        }
+
+        // Create a new ResourceLink so that the file appears in the course context
+        $link = new ResourceLink();
+        $link->setResourceNode($resourceNode);
+        $link->setCourse($course);
+        $link->setSession(null);
+        $em->persist($link);
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            \sprintf(
+                'File "%s" has been attached to course "%s" (hidden in the documents root).',
+                (string) ($resourceFile->getOriginalName() ?? $resourceFile->getTitle() ?? $resourceFile->getId()),
+                (string) $course->getTitle()
+            )
+        );
+
+        return $this->redirectToRoute('admin_files_info', [
+            'page' => $page,
+            'search' => $search,
+        ]);
+    }
+
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/files_info/delete', name: 'admin_files_info_delete', methods: ['POST'])]
+    public function deleteOrphanFile(
+        Request $request,
+        ResourceFileRepository $resourceFileRepository,
+        EntityManagerInterface $em
+    ): Response {
+        $token = (string) $request->request->get('_token', '');
+        if (!$this->isCsrfTokenValid('delete_orphan_file', $token)) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $fileId = $request->request->getInt('resource_file_id', 0);
+        $page = $request->request->getInt('page', 1);
+        $search = (string) $request->request->get('search', '');
+
+        if ($fileId <= 0) {
+            $this->addFlash('error', 'Missing resource file identifier.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        $resourceFile = $resourceFileRepository->find($fileId);
+        if (!$resourceFile) {
+            $this->addFlash('error', 'Resource file not found.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        $resourceNode = $resourceFile->getResourceNode();
+        $linksCount = $resourceNode ? $resourceNode->getResourceLinks()->count() : 0;
+        if ($linksCount > 0) {
+            $this->addFlash('warning', 'This file is still used by at least one course/session and cannot be deleted.');
+
+            return $this->redirectToRoute('admin_files_info', [
+                'page' => $page,
+                'search' => $search,
+            ]);
+        }
+
+        // Compute physical path in var/upload/resource (adapt if you use another directory).
+        $relativePath = $this->resourceNodeRepository->getFilename($resourceFile);
+        $storageRoot = $this->getParameter('kernel.project_dir').'/var/upload/resource';
+        $absolutePath = $storageRoot.$relativePath;
+
+        if (is_file($absolutePath) && is_writable($absolutePath)) {
+            @unlink($absolutePath);
+        }
+
+        // Optionally remove the resource node as well if it is really orphan.
+        if ($resourceNode) {
+            $em->remove($resourceNode);
+        }
+
+        $em->remove($resourceFile);
+        $em->flush();
+
+        $this->addFlash('success', 'Orphan file and its physical content have been deleted definitively.');
+
+        return $this->redirectToRoute('admin_files_info', [
+            'page' => $page,
             'search' => $search,
         ]);
     }

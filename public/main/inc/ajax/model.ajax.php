@@ -1039,7 +1039,7 @@ $columns = [];
 
 switch ($action) {
     case 'get_exercise_categories':
-        $columns = ['name', 'actions'];
+        $columns = ['title', 'actions'];
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
         $items = $qb->getQuery()->getResult();
         /** @var CQuizCategory $item */
@@ -1047,7 +1047,7 @@ switch ($action) {
         foreach ($items as $item) {
             $result[] = [
                 'id' => $item->getId(),
-                'name' => $item->getTitle(),
+                'title' => $item->getTitle(),
             ];
         }
         break;
@@ -1115,8 +1115,8 @@ switch ($action) {
         }
         break;
     case 'get_group_reporting':
-        $columns = ['name', 'time', 'progress', 'score', 'works', 'messages', 'actions'];
-        $sidx = in_array($sidx, $columns) ? $sidx : 'name';
+        $columns = ['title', 'time', 'progress', 'score', 'works', 'messages', 'actions'];
+        $sidx = in_array($sidx, $columns) ? $sidx : 'title';
 
         $result = Tracking::get_group_reporting(
             $course_id,
@@ -1310,7 +1310,7 @@ switch ($action) {
             $userGroup = new UserGroupModel();
             foreach ($result as &$item) {
                 $userGroups = $userGroup->get_groups_by_user($item['user_id']);
-                $item['group'] = implode(", ", array_column($userGroups, 'name'));
+                $item['group'] = implode(", ", array_column($userGroups, 'title'));
                 unset($item['user_id']);
             }
         }
@@ -1912,7 +1912,7 @@ switch ($action) {
                 );
 
                 $item = [
-                    'name' => Display::url(
+                    'title' => Display::url(
                         $session['title'],
                         api_get_path(WEB_CODE_PATH).'my_space/course.php?sid='.$session['id']
                     ),
@@ -2232,9 +2232,9 @@ switch ($action) {
         );
         break;
     case 'get_gradebooks':
-        $columns = ['name', 'certificates', 'skills', 'actions', 'has_certificates'];
+        $columns = ['title', 'certificates', 'skills', 'actions', 'has_certificates'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
         $result = Database::select(
             '*',
@@ -2251,12 +2251,12 @@ switch ($action) {
             $courseInfo = api_get_course_info_by_id($courseId);
 
             //Fixes bug when gradebook doesn't have names
-            if (empty($item['name'])) {
-                $item['name'] = $courseInfo['code'];
+            if (empty($item['title'])) {
+                $item['title'] = $courseInfo['code'];
             }
 
-            $item['name'] = Display::url(
-                $item['name'],
+            $item['title'] = Display::url(
+                $item['title'],
                 api_get_path(WEB_CODE_PATH).'gradebook/index.php?sid=0&cid='.$courseInfo['real_id']
             );
 
@@ -2283,7 +2283,7 @@ switch ($action) {
             if (!empty($skills)) {
                 $item['skills'] = '';
                 foreach ($skills as $skill) {
-                    $item['skills'] .= Display::span($skill['name'], ['class' => 'label_tag skill']);
+                    $item['skills'] .= Display::span($skill['title'], ['class' => 'label_tag skill']);
                 }
             }
             $new_result[] = $item;
@@ -2291,9 +2291,9 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_careers':
-        $columns = ['name', 'description', 'actions'];
+        $columns = ['title', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
         $result = Database::select(
             '*',
@@ -2303,20 +2303,20 @@ switch ($action) {
         $new_result = [];
         foreach ($result as $item) {
             if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+                $item['title'] = '<font style="color:#AAA">'.$item['title'].'</font>';
             }
             $new_result[] = $item;
         }
         $result = $new_result;
         break;
     case 'get_promotions':
-        $columns = ['name', 'career', 'description', 'actions'];
+        $columns = ['title', 'career', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
 
         $result = Database::select(
-            'p.id,p.name, p.description, c.title as career, p.status',
+            'p.id,p.title, p.description, c.title as career, p.status',
             "$obj->table p LEFT JOIN ".Database::get_main_table(TABLE_CAREER)." c  ON c.id = p.career_id ",
             ['order' => "$sidx $sord", 'LIMIT' => "$start , $limit"]
         );
@@ -2324,7 +2324,7 @@ switch ($action) {
         $new_result = [];
         foreach ($result as $item) {
             if (!$item['status']) {
-                $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
+                $item['title'] = '<font style="color:#AAA">'.$item['title'].'</font>';
             }
             $new_result[] = $item;
         }
@@ -2357,9 +2357,9 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_grade_models':
-        $columns = ['name', 'description', 'actions'];
+        $columns = ['title', 'description', 'actions'];
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
         $result = Database::select(
             '*',
@@ -2451,8 +2451,8 @@ switch ($action) {
                     $column_names[] = get_lang('Username');
                     break;
                 case 3:
-                    $columns[] = 'name';
-                    $column_names[] = get_lang('Name');
+                    $columns[] = 'title';
+                    $column_names[] = get_lang('Title');
                     break;
                 case $cntExer:
                     $columns[] = 'finalScore';
@@ -2506,7 +2506,7 @@ switch ($action) {
         $i = 0;
         foreach ($users as $user) {
             $sessionInfo = SessionManager::fetch($listUserSess[$user['user_id']]['id_session']);
-            $result[$i]['session'] = $sessionInfo['name'];
+            $result[$i]['session'] = $sessionInfo['title'];
             $result[$i]['username'] = $user['username'];
             $result[$i]['name'] = $user['lastname']." ".$user['firstname'];
             $j = 1;
@@ -2622,7 +2622,7 @@ switch ($action) {
         }
 
         if (!in_array($sidx, $columns)) {
-            $sidx = 'name';
+            $sidx = 'title';
         }
         // Multidimensional sort
         $result = msort($result, $sidx, $sord);

@@ -3,68 +3,85 @@
 
 {% block content %}
     {% autoescape false %}
-    {% if origin == 'learnpath' %}
-        <div style="height:15px">&nbsp;</div>
-    {% endif %}
 
-    {{ move_form }}
+        <style>
+            .forum-card[data-indent] { margin-left: calc(var(--indent) * 20px); }
+            .forum-card.is-reply { border-left: 1px solid #e4e9ed; padding-left: 12px; }
+            .forum-body, .forum-attachments a { word-break: break-word; overflow-wrap: anywhere; }
+            .forum-attachments { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+            .forum-attachments br { display: none; }
+        </style>
 
-    {% if forum_actions %}
-        {{ forum_actions }}
-    {% endif %}
+        {% if origin == 'learnpath' %}
+            <div style="height:15px">&nbsp;</div>
+        {% endif %}
 
-    {% for post in posts %}
-        {% set post_data %}
-            <div class="flex flex-row">
-                <div class="w-1/5 post-col1">
-                    {% set image %}
-                        <img src="{{ post.author | illustration }}?w=80&h=80&fit=crop" />
-                    {% endset %}
-                    {{ display.avatar(image, 80) }}
-                    {{ post.author }}
+        {{ move_form }}
 
-                    {{ post.post_date_to_display }}
+        {% if forum_actions %}
+            {{ forum_actions }}
+        {% endif %}
 
-                    <div class='flex flex-row border border-gray-25'>
-                        {{ post.tool_icons }}
-                    </div>
+        {% for post in posts %}
+            {% set indent = post.indent_cnt|default(0) %}
+            {% set is_reply = indent > 0 %}
 
+            {# Prefer backend flag when available; fallback to loop.first #}
+            {% set is_op = post.post_is_first_in_thread|default(loop.first) %}
+
+            <article
+                    class="forum-card rounded-xl border border-gray-25 bg-white shadow-sm p-4 md:p-5 mb-4 {{ is_reply ? 'is-reply' : '' }}"
+                    style="--indent: {{ indent }};"
+                    data-indent="{{ indent }}"
+            >
+                <div class="flex items-start gap-4 lg:gap-6">
+                    <aside class="shrink-0" style="width:200px">
+                        <img src="{{ post.author | illustration }}?w=80&h=80&fit=crop"
+                             alt="Avatar" class="w-12 h-12 rounded-full object-cover" />
+                        <div class="mt-2 text-caption text-gray-50">
+                            {{ post.post_date_to_display }}
+                        </div>
+
+                        {% if post.tool_icons %}
+                            <div class="mt-3 flex flex-wrap items-center gap-1">
+                                {{ post.tool_icons }}
+                            </div>
+                        {% endif %}
+                    </aside>
+
+                    <main class="flex-1 min-w-0">
+                        {% set highlight = post.current ? 'ring-2 ring-danger/50 rounded-lg p-2' : '' %}
+                        <header class="flex items-start gap-3 {{ highlight }}">
+                            <div class="min-w-0">
+                                <h3 class="text-lg font-bold text-gray-90 leading-6 break-words">
+                                    {{ post.post_title }}
+                                </h3>
+                                {% if post.is_a_revision %}
+                                    <div class="mt-1 inline-flex items-center rounded-full border border-warning/30 bg-warning/10 px-2 py-0.5 text-tiny text-warning">
+                                        {{ 'ProposedRevision' | get_lang }} {{ post.flag_revision }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </header>
+
+                        <div class="forum-body prose prose-sm max-w-none mt-3">
+                            {{ post.post_data }}
+                        </div>
+
+                        {% if post.post_attachments %}
+                            <div class="forum-attachments mt-3 text-body-2">
+                                {{ post.post_attachments }}
+                            </div>
+                        {% endif %}
+                    </main>
+
+                    <nav class="forum-rail shrink-0 sticky top-20 self-start flex flex-col items-end gap-2"
+                         data-op="{{ is_op ? '1' : '0' }}">
+                        {{ post.post_buttons }}
+                    </nav>
                 </div>
-                {% set highlight = '' %}
-                {% if post.current %}
-                    {% set highlight = 'alert alert-danger' %}
-                {% endif %}
+            </article>
+        {% endfor %}
 
-                {% set highlight_revision = '' %}
-                {% if post.is_a_revision %}
-                    {% set highlight_revision = 'forum_revision' %}
-                {% endif %}
-
-                <div class="w-4/5 {{ highlight }} ">
-                    {{ post.post_title }}
-
-                    {% if post.is_a_revision %}
-                       {{ 'ProposedRevision' | get_lang  }} {{ post.flag_revision }}
-                    {% endif %}
-
-                    <div class="{{ highlight_revision }} ">
-                        {{ post.post_data }}
-                    </div>
-
-                    {{ post.post_attachments }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-8 text-right">
-                    {{ post.post_buttons }}
-                </div>
-            </div>
-        {% endset %}
-
-        <div class="col-md-offset-{{ post.indent_cnt }} forum-post">
-            {{ display.panel('', post_data ) }}
-        </div>
-    {% endfor %}
     {% endautoescape %}
 {% endblock %}

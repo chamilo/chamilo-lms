@@ -524,11 +524,113 @@ class Chat extends Model
         $sql = "UPDATE {$this->table}
             SET recd = 2
             WHERE from_user = {$fromUserId}
-              AND to_user = {$toUserId}
-              AND id <= {$lastSeenMessageId}
+              AND to_user   = {$toUserId}
+              AND id       <= {$lastSeenMessageId}
               AND recd < 2";
-        $res = Database::query($sql);
 
-        return Database::affected_rows($res);
+        $res = Database::query($sql);
+        return $res ? Database::affected_rows($res) : 0;
+    }
+
+    public function heartbeatMin(int $userId, int $sinceId = 0): array
+    {
+        $uid = (int) $userId;
+        $sinceId = max(0, (int) $sinceId);
+
+        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
+        $sql = "
+        SELECT
+            MAX(id) AS last_id,
+            SUM(CASE WHEN recd < 2 THEN 1 ELSE 0 END) AS unread
+        FROM {$tbl}
+        WHERE to_user = {$uid} AND id > {$sinceId}
+    ";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res) ?: ['last_id' => 0, 'unread' => 0];
+
+        $lastId = (int) ($row['last_id'] ?? 0);
+        $unread = (int) ($row['unread'] ?? 0);
+
+        return [
+            'has_new'  => $lastId > $sinceId,
+            'last_id'  => $lastId,
+            'unread'   => $unread,
+            'since_id' => $sinceId,
+        ];
+    }
+
+    /**
+     * Ultra-tiny per-peer heartbeat: returns only latest id for (peer -> me).
+     * O(1) using composite index (to_user, from_user, id).
+     */
+    public function heartbeatTiny(int $userId, int $peerId, int $sinceId = 0): array
+    {
+        $uid  = (int) $userId;
+        $pid  = (int) $peerId;
+        $tbl  = Database::get_main_table(TABLE_MAIN_CHAT);
+
+        $sql = "SELECT id
+            FROM {$tbl}
+            WHERE to_user = {$uid} AND from_user = {$pid}
+            ORDER BY id DESC
+            LIMIT 1";
+        $res = Database::query($sql);
+        $row = Database::fetch_assoc($res) ?: ['id' => 0];
+        $last = (int) ($row['id'] ?? 0);
+
+        return [
+            'has_new'  => $last > max(0, (int) $sinceId),
+            'last_id'  => $last,
+            'peer_id'  => $pid,
+            'since_id' => (int) $sinceId,
+        ];
+    }
+
+    /**
+     * Get ONLY new incoming messages (peer -> me) with id > $sinceId.
+     * Keeps payload tiny. We do *not* fetch my own messages here.
+     */
+    public function getIncomingSince(int $peerId, int $meId, int $sinceId = 0): array
+    {
+        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
+        $pid = (int) $peerId;
+        $uid = (int) $meId;
+        $sid = max(0, (int) $sinceId);
+
+        $sql = "SELECT id, from_user, to_user, message, sent, recd
+            FROM {$tbl}
+            WHERE from_user = {$pid}
+              AND to_user   = {$uid}
+              AND id       > {$sid}
+            ORDER BY id ASC
+            LIMIT 200";
+        $res = Database::query($sql);
+        $rows = Database::store_result($res);
+
+        if (empty($rows)) return [];
+
+        $fromUserInfo = api_get_user_info($pid, true);
+        $toUserInfo   = api_get_user_info($uid, true);
+
+        $items = [];
+        foreach ($rows as $chat) {
+            $items[] = [
+                'id'             => (int) $chat['id'],
+                'message'        => Security::remove_XSS($chat['message']),
+                'date'           => api_strtotime($chat['sent'], 'UTC'),
+                'recd'           => (int) $chat['recd'],
+                'from_user_info' => $fromUserInfo,
+                'to_user_info'   => $toUserInfo,
+            ];
+        }
+
+        // Mark as delivered
+        $ids = array_column($rows, 'id');
+        if (!empty($ids)) {
+            $idsCsv = implode(',', array_map('intval', $ids));
+            Database::query("UPDATE {$tbl} SET recd = GREATEST(recd,1) WHERE id IN ({$idsCsv})");
+        }
+
+        return $items;
     }
 }

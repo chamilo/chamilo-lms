@@ -3,6 +3,16 @@
 {% set lp_view = true %}
 
 {% block content %}
+    {# Build iframe src including learning path context so the ResourceNodeVoter can detect LP access #}
+    {% set iframe_src_with_lp = iframe_src %}
+    {% if lp_id is defined and lp_current_item_id is defined %}
+        {% if '?' in iframe_src_with_lp %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '&origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+        {% else %}
+            {% set iframe_src_with_lp = iframe_src_with_lp ~ '?origin=learnpath&lp_id=' ~ lp_id ~ '&lp_item_id=' ~ lp_current_item_id %}
+        {% endif %}
+    {% endif %}
+
     {% autoescape false %}
         <div id="learning_path_main"
              class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
@@ -184,7 +194,7 @@
                                                 allowfullscreen="true" webkitallowfullscreen="true"
                                                 mozallowfullscreen="true"></iframe>
                                     {% else %}
-                                        <iframe id="content_id" name="content_name" src="{{ iframe_src }}"
+                                        <iframe id="content_id" name="content_name" src="{{ iframe_src_with_lp }}"
                                                 style="width:100%; height:100%" border="0" frameborder="0"
                                                 allowfullscreen="true" webkitallowfullscreen="true"
                                                 mozallowfullscreen="true"></iframe>
@@ -213,7 +223,7 @@
                   "style",
                   "width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;"
                 )*/
-                $("#wrapper-iframe").before('<a class="btn-open-pdf" target="_blank" href="{{ iframe_src }}" >Open PDF on Safari</a>')
+                $("#wrapper-iframe").before('<a class="btn-open-pdf" target="_blank" href="{{ iframe_src_with_lp }}" >Open PDF on Safari</a>')
 
                 // Fix another issue whereby buttons do not react to click below
                 // second screen in learning paths on Apple devices
@@ -291,61 +301,61 @@
             //loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
-            {% if glossary_extra_tools in glossary_tool_available_list %}
-              // Loads the glossary library.
-              (function() {
-                  {% if show_glossary_in_documents == 'ismanual' %}
-                $.frameReady(
-                  function() {
-                    //  $("<div>I am a div courses</div>").prependTo("body");
+              {% if glossary_extra_tools in glossary_tool_available_list %}
+            // Loads the glossary library.
+            (function() {
+                {% if show_glossary_in_documents == 'ismanual' %}
+              $.frameReady(
+                function() {
+                  //  $("<div>I am a div courses</div>").prependTo("body");
+                },
+                "#content_id",
+                [
+                  {
+                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
+                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
+                      { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
+                          {{ fix_link }}
+                    ]
                   },
-                  "#content_id",
-                  [
-                    {
-                      type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                        { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                        { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
-                            {{ fix_link }}
-                      ]
-                    },
-                    { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                  ]
-                )
-                  {% elseif show_glossary_in_documents == 'isautomatic' %}
-                $.frameReady(
-                  function() {
-                    //  $("<div>I am a div courses</div>").prependTo("body");
+                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
+                ]
+              )
+                {% elseif show_glossary_in_documents == 'isautomatic' %}
+              $.frameReady(
+                function() {
+                  //  $("<div>I am a div courses</div>").prependTo("body");
+                },
+                "#content_id",
+                [
+                  {
+                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
+                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
+                      { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
+                          {{ fix_link }}
+                    ]
                   },
-                  "#content_id",
-                  [
-                    {
-                      type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                        { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                        { type: "script", id: "_fr2", src: "{{ url('index') }}main/inc/lib/javascript/jquery.highlight.js" },
-                            {{ fix_link }}
-                      ]
-                    },
-                    { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                  ]
-                )
-                  {% elseif fix_link != '' %}
-                $.frameReady(
-                  function() {
-                    //  $("<div>I am a div courses</div>").prependTo("body");
+                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
+                ]
+              )
+                {% elseif fix_link != '' %}
+              $.frameReady(
+                function() {
+                  //  $("<div>I am a div courses</div>").prependTo("body");
+                },
+                "#content_id",
+                [
+                  {
+                    type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
+                      { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
+                          {{ fix_link }}
+                    ]
                   },
-                  "#content_id",
-                  [
-                    {
-                      type: "script", id: "_fr1", src: "{{ jquery_web_path }}", deps: [
-                        { type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}" },
-                            {{ fix_link }}
-                      ]
-                    },
-                    { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
-                  ]
-                )
-                  {% endif %}
-              })()
+                  { type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}" }
+                ]
+              )
+                {% endif %}
+            })()
               {% endif %}
               {% if disable_js_in_lp_view == 0 %}
             $(function() {

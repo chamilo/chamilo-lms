@@ -240,6 +240,8 @@ function get_course_data(
             ),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
+
+        // Single course delete: ask if exclusive documents should also be removed.
         $actions[] = Display::url(
             Display::getMdiIcon(
                 ActionIcon::DELETE,
@@ -251,12 +253,12 @@ function get_course_data(
             $path.'admin/course_list.php?'
             .http_build_query([
                 'delete_course' => $course['col0'],
+                // Default: keep documents; JS will toggle this param to 1 if admin agrees.
+                'delete_docs' => 0,
                 'sec_token' => Security::getTokenFromSession(),
             ]),
             [
-                'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), \ENT_QUOTES))
-                    ."')) return false;",
+                'onclick' => 'return confirmDeleteCourseWithDocs(this);',
             ]
         );
 
@@ -361,25 +363,25 @@ if (isset($_POST['action']) && Security::check_token('get')) {
     if ('delete_courses' == $_POST['action']) {
         if (!empty($_POST['course'])) {
             $course_codes = $_POST['course'];
+            $deleteDocs = isset($_POST['delete_docs']) && (int) $_POST['delete_docs'] === 1;
+
             if (count($course_codes) > 0) {
                 foreach ($course_codes as $course_code) {
-                    CourseManager::delete_course($course_code);
+                    CourseManager::delete_course($course_code, $deleteDocs);
                 }
             }
 
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-        api_location(api_get_self());
     }
 }
 
 if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
     $courseId = (int) $_GET['toggle_catalogue'];
-    $accessUrlId = api_get_current_access_url_id();
     $em = Database::getManager();
     $repo = $em->getRepository(CatalogueCourseRelAccessUrlRelUsergroup::class);
     $course = api_get_course_entity($courseId);
-    $accessUrl = $em->getRepository(AccessUrl::class)->find($accessUrlId);
+    $accessUrl = Container::getAccessUrlUtil()->getCurrent();
 
     if ($course && $accessUrl) {
         $record = $repo->findOneBy([
@@ -403,8 +405,6 @@ if (isset($_GET['toggle_catalogue']) && Security::check_token('get')) {
 
         $em->flush();
     }
-
-    api_location(api_get_self());
 }
 $content = '';
 $message = '';
@@ -463,13 +463,14 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $content .= $form->returnForm();
 } else {
     $tool_name = get_lang('Course list');
+
+    // Single course deletion (from action icon)
     if (isset($_GET['delete_course']) && Security::check_token('get')) {
-        $result = CourseManager::delete_course($_GET['delete_course']);
+        $deleteDocs = isset($_GET['delete_docs']) && (int) $_GET['delete_docs'] === 1;
+        $result = CourseManager::delete_course($_GET['delete_course'], $deleteDocs);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
-
-        api_location(api_get_self());
     }
 
     if (isset($_GET['new_course_id'])) {
@@ -579,6 +580,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     </script>';
 
     $actions = Display::toolbarAction('toolbar', [$actions1, $actions3.$actions4.$actions2]);
+
     // Create a sortable table with the course data
     $table = new SortableTable(
         'courses',
@@ -590,10 +592,12 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
         'course-list'
     );
 
-    $parameters = [];
-    $parameters['sec_token'] = Security::get_token();
+    $parameters = [
+        'sec_token' => Security::get_token(),
+    ];
+
     if (isset($_GET['keyword'])) {
-        $parameters = ['keyword' => Security::remove_XSS($_GET['keyword'])];
+        $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
     } elseif (isset($_GET['keyword_code'])) {
         $parameters['keyword_code'] = Security::remove_XSS($_GET['keyword_code']);
         $parameters['keyword_title'] = Security::remove_XSS($_GET['keyword_title']);
@@ -630,6 +634,114 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $tab = CourseManager::getCourseListTabs('simple');
 
     $content .= $tab.$table->return_table();
+
+    // JS helper to ask for exclusive document deletion both for single and bulk delete.
+    $deleteDocsMessage = addslashes(
+        get_lang(
+            'When deleting a course or multiple selected courses, any documents that are only used in those course(s) (if any) will normally be kept as orphan files and will remain visible in the "File information" tool (platform admin only). Click "OK" if you also want to permanently delete those orphan files from disk; click "Cancel" to keep them as orphan files.'
+        )
+    );
+
+    // Fallback confirmation text; SortableTable uses data-confirm on the link.
+    $baseConfirmMessage = addslashes(get_lang('Please confirm your choice'));
+
+    $content .= '<script>
+(function () {
+    var docsMsg = "'.$deleteDocsMessage.'";
+    var defaultConfirmMsg = "'.$baseConfirmMessage.'";
+
+    // Single-course delete (trash icon per row)
+    window.confirmDeleteCourseWithDocs = function (link) {
+        var baseMsg = link.getAttribute("data-confirm") || defaultConfirmMsg;
+
+        // Confirm course deletion.
+        if (!window.confirm(baseMsg)) {
+            return false;
+        }
+
+        // Ask about orphan documents on disk.
+        if (window.confirm(docsMsg)) {
+            if (link.href.indexOf("delete_docs=0") !== -1) {
+                link.href = link.href.replace("delete_docs=0", "delete_docs=1");
+            } else if (link.href.indexOf("delete_docs=") === -1) {
+                var sep = link.href.indexOf("?") === -1 ? "?" : "&";
+                link.href = link.href + sep + "delete_docs=1";
+            }
+        }
+
+        return true;
+    };
+
+    // Bulk delete (SortableTable dropdown)
+    function wrapActionClick() {
+        // Ensure we only wrap once and only if action_click exists.
+        if (!window.action_click || window.action_click.__wrappedForCourseList) {
+            return;
+        }
+
+        var originalActionClick = window.action_click;
+        var docsMsgLocal = docsMsg;
+
+        window.action_click = function (el, formId) {
+            var action = el.getAttribute("data-action");
+            var confirmMsg = el.getAttribute("data-confirm") || defaultConfirmMsg;
+
+            // Intercept only the bulk delete of this page.
+            if (formId === "form_courses_id" && action === "delete_courses") {
+                var form = document.getElementById(formId);
+                if (!form) {
+                    return false;
+                }
+
+                // 1) Confirm deletion of selected courses.
+                if (confirmMsg && !window.confirm(confirmMsg)) {
+                    return false;
+                }
+
+                // 2) Ask if orphan documents should also be deleted from disk.
+                var deleteDocs = window.confirm(docsMsgLocal);
+
+                // Ensure "action" hidden field exists and is set.
+                var actionInput = form.querySelector(\'input[name="action"]\');
+                if (!actionInput) {
+                    actionInput = document.createElement("input");
+                    actionInput.type = "hidden";
+                    actionInput.name = "action";
+                    form.appendChild(actionInput);
+                }
+                actionInput.value = action;
+
+                // If user accepted the docs deletion, set the delete_docs flag.
+                if (deleteDocs) {
+                    var deleteDocsInput = form.querySelector(\'input[name="delete_docs"]\');
+                    if (!deleteDocsInput) {
+                        deleteDocsInput = document.createElement("input");
+                        deleteDocsInput.type = "hidden";
+                        deleteDocsInput.name = "delete_docs";
+                        form.appendChild(deleteDocsInput);
+                    }
+                    deleteDocsInput.value = "1";
+                }
+
+                form.submit();
+                return false;
+            }
+
+            // Fallback: keep original behavior for any other action/form.
+            return originalActionClick(el, formId);
+        };
+
+        window.action_click.__wrappedForCourseList = true;
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", wrapActionClick);
+    } else {
+        wrapActionClick();
+    }
+})();
+</script>';
+
 }
 
 $tpl = new Template($tool_name);

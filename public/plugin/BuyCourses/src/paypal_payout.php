@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
- * List page for Paypal Payout for the Buy Courses plugin.
+ * List page for PayPal Payout for the Buy Courses plugin.
  */
 /**
  * Initialization.
@@ -11,7 +13,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../resources/css/style.css" type="text/css">';
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 api_protect_admin_script(true);
 
@@ -20,7 +22,7 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 
-if ("true" !== $paypalEnable && "true" !== $commissionsEnable) {
+if ('true' !== $paypalEnable && 'true' !== $commissionsEnable) {
     api_not_allowed(true);
 }
 

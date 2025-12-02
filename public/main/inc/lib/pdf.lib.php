@@ -68,7 +68,7 @@ class PDF
         $this->params['pdf_date_only'] = $params['pdf_date'] ?? api_format_date($localTime, DATE_FORMAT_LONG);
 
         $params = [
-            'tempDir' => Container::getParameter('kernel.cache_dir').'/mpdf',
+            'tempDir' => Container::getCacheDir(),
             'mode' => 'utf-8',
             'format' => $pageFormat,
             'orientation' => $orientation,

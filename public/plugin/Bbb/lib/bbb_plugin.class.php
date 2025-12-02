@@ -433,11 +433,6 @@ class BbbPlugin extends Plugin
         return true;
     }
 
-    public function get_name(): string
-    {
-        return 'Bbb';
-    }
-
     /* ----------------------------
      * Webhooks helpers & health
      * ---------------------------- */

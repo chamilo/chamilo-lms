@@ -80,6 +80,7 @@ export function useIndexBlocks() {
   const blockChamilo = ref(null)
   const blockSecurity = ref(null)
   const blockPlugins = ref(null)
+  const blockHealthCheck = ref(null)
 
   async function loadBlocks() {
     const blocks = await adminService.findBlocks()
@@ -95,6 +96,7 @@ export function useIndexBlocks() {
     blockChamilo.value = blocks.chamilo || null
     blockSecurity.value = blocks.security || null
     blockPlugins.value = blocks.plugins || null
+    blockHealthCheck.value = blocks.health_check || null
   }
 
   return {
@@ -116,5 +118,6 @@ export function useIndexBlocks() {
     blockSupportStatusEl,
     loadSupport,
     blockPlugins,
+    blockHealthCheck,
   }
 }

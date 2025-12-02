@@ -6,13 +6,12 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFeedback;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../global.inc.php';
 
 api_block_anonymous_users();
 
-$httpRequest = Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $type = $httpRequest->get('type');
 $trackExerciseId = (int) $httpRequest->get('t_exercise');

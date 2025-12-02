@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,27 +17,33 @@ class SurveyQuestion extends Resource
      * Survey ID.
      */
     public $survey_id;
+
     /**
      * Question and question comment.
      */
     public $survey_question;
     public $survey_question_comment;
+
     /**
      * Question type.
      */
     public $survey_question_type;
+
     /**
      * Display ?
      */
     public $display;
+
     /**
      * Sorting order.
      */
     public $sort;
+
     /**
      * Shared question ID.
      */
     public $shared_question_id;
+
     /**
      * Maximum value for the vote.
      */
@@ -88,7 +96,6 @@ class SurveyQuestion extends Resource
         $this->max_value = $max_value;
         $this->answers = [];
         $this->is_required = $is_required;
-
     }
 
     /**
@@ -97,7 +104,7 @@ class SurveyQuestion extends Resource
      * @param string $option_text
      * @param int    $sort
      */
-    public function add_answer($option_text, $sort)
+    public function add_answer($option_text, $sort): void
     {
         $answer = [];
         $answer['option_text'] = $option_text;
@@ -108,7 +115,7 @@ class SurveyQuestion extends Resource
     /**
      * Show this question.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->survey_question;

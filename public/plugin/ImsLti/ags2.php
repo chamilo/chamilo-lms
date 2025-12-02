@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
-$request = Request::createFromGlobals();
+$request = Container::getRequest();
 
 $response = new JsonResponse(
     null,

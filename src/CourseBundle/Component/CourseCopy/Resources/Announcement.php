@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,18 +17,22 @@ class Announcement extends Resource
      * The title of the announcement.
      */
     public $title;
+
     /**
      * The content of the announcement.
      */
     public $content;
+
     /**
      * The date on which this announcement was made.
      */
     public $date;
+
     /**
      * The display order of this announcement.
      */
     public $display_order;
+
     /**
      * Has the e-mail been sent?
      */
@@ -48,6 +54,11 @@ class Announcement extends Resource
      * @param string $content
      * @param string $date
      * @param int    $display_order
+     * @param mixed  $email_sent
+     * @param mixed  $path
+     * @param mixed  $filename
+     * @param mixed  $size
+     * @param mixed  $comment
      */
     public function __construct(
         $id,
@@ -77,7 +88,7 @@ class Announcement extends Resource
     /**
      * Show this announcement.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->date.': '.$this->title;

@@ -5,9 +5,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
-//Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 $check = Security::check_token('request');
 $token = Security::get_token();

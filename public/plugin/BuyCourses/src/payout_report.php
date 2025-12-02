@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 /* For license terms, see /license.txt */
 /**
  * List of pending payments of the Buy Courses plugin.
  */
-//Initialization
+// Initialization
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" href="../resources/css/style.css" type="text/css">';
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 $htmlHeadXtra[] =
     '<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>';
 
@@ -21,7 +23,7 @@ $commissionsEnable = $plugin->get('commissions_enable');
 $payoutStatuses = $plugin->getPayoutStatuses();
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_COMPLETED;
 
-if ("true" !== $commissionsEnable) {
+if ('true' !== $commissionsEnable) {
     api_not_allowed(true);
 }
 
@@ -46,10 +48,12 @@ switch ($selectedStatus) {
         $payouts = $plugin->getPayouts($selectedStatus);
 
         break;
+
     case '1':
         $payouts = $plugin->getPayouts($selectedStatus);
 
         break;
+
     case '0':
     default:
         $payouts = $plugin->getPayouts();

@@ -9,7 +9,7 @@ use Chamilo\LtiBundle\Entity\ExternalTool;
 use Chamilo\LtiBundle\Entity\LineItem;
 use Chamilo\LtiBundle\Entity\Platform;
 use Chamilo\LtiBundle\Entity\Token;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 use Doctrine\ORM\Tools\SchemaTool;
 use Firebase\JWT\JWK;
 
@@ -53,14 +53,6 @@ class ImsLtiPlugin extends Plugin
         static $result = null;
 
         return $result ?: $result = new self();
-    }
-
-    /**
-     * Get the plugin directory name.
-     */
-    public function get_name(): string
-    {
-        return 'ImsLti';
     }
 
     /**

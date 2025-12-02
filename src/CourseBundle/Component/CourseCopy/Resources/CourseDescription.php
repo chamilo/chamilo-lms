@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -45,7 +47,7 @@ class CourseDescription extends Resource
     /**
      * Show this Event.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->title;

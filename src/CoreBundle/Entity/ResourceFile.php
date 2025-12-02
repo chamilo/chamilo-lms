@@ -13,7 +13,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\AddVariantResourceFileAction;
 use Chamilo\CoreBundle\Controller\CreateResourceFileAction;
 use Chamilo\CoreBundle\Repository\ResourceFileRepository;
@@ -31,19 +34,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 //
 // *     attributes={"security"="is_granted('ROLE_ADMIN')"},
-/**
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ApiResource(
     types: ['http://schema.org/MediaObject'],
     operations: [
         new Get(),
         new Post(
             controller: CreateResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Create a new resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Create a new resource file',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -55,9 +56,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             validationContext: [
                 'groups' => ['Default', 'media_object_create', 'document:write'],
@@ -67,10 +68,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Post(
             uriTemplate: '/resource_files/add_variant',
             controller: AddVariantResourceFileAction::class,
-            openapiContext: [
-                'summary' => 'Add a variant to an existing resource file',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Add a variant to an existing resource file',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -88,9 +89,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: 'is_granted(\'ROLE_USER\')',
             deserialize: false,
             name: 'add_variant'
@@ -138,24 +139,14 @@ class ResourceFile implements Stringable
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
 
-    /**
-     * @Vich\UploadableField(
-     *     mapping="resources",
-     *     fileNameProperty="title",
-     *     size="size",
-     *     mimeType="mimeType",
-     *     originalName="originalName",
-     *     dimensions="dimensions"
-     * )
-     */
-    //    #[Vich\UploadableField(
-    //        mapping: 'resources',
-    //        fileNameProperty: 'title',
-    //        size: 'size',
-    //        mimeType: 'mimeType',
-    //        originalName: 'originalName',
-    //        dimensions: 'dimensions'
-    //    )]
+    #[Vich\UploadableField(
+        mapping: 'resources',
+        fileNameProperty: 'title',
+        size: 'size',
+        mimeType: 'mimeType',
+        originalName: 'originalName',
+        dimensions: 'dimensions'
+    )]
     protected ?File $file = null;
     #[ORM\Column(name: 'crop', type: 'string', length: 255, nullable: true)]
     protected ?string $crop = null;
@@ -293,7 +284,7 @@ class ResourceFile implements Stringable
 
         return $this;
     }
-    public function getOriginalName(): string
+    public function getOriginalName(): ?string
     {
         return $this->originalName;
     }

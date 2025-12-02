@@ -1,95 +1,42 @@
 <?php
-
-/* For licensing terms, see /license.txt */
+declare(strict_types=1);
 
 namespace Chamilo\PluginBundle\Zoom\API;
 
-use Exception;
 use Firebase\JWT\JWT;
 
-/**
- * Class JWTClient.
- *
- * @see https://marketplace.zoom.us/docs/guides/auth/jwt
- */
-class JWTClient extends Client
+final class JWTClient
 {
-    public $token;
+    /** @var string */
+    private string $apiKey;
+    /** @var string */
+    private string $apiSecret;
 
     /**
-     * JWTClient constructor.
-     * Requires JWT app credentials.
-     *
-     * @param string $apiKey    JWT API Key
-     * @param string $apiSecret JWT API Secret
+     * Do NOT sign in the constructor. Just store normalized strings.
      */
-    public function __construct($apiKey, $apiSecret)
+    public function __construct(string $apiKey, string $apiSecret)
     {
-        $this->token = JWT::encode(
-            [
-                'iss' => $apiKey,
-                'exp' => (time() + 60) * 1000, // will expire in one minute
-            ],
-            $apiSecret,
-            'HS256'
-        );
-        self::register($this);
+        // Normalize to strings; trim to avoid accidental spaces.
+        $this->apiKey    = trim((string) $apiKey);
+        $this->apiSecret = trim((string) $apiSecret);
     }
 
     /**
-     * {@inheritdoc}
+     * Build a short-lived JWT token. HMAC key MUST be a string.
+     * Throws InvalidArgumentException when config is missing.
      */
-    public function send($httpMethod, $relativePath, $parameters = [], $requestBody = null)
+    public function makeToken(): string
     {
-        $options = [
-            CURLOPT_CUSTOMREQUEST => $httpMethod,
-            CURLOPT_ENCODING => '',
-            CURLOPT_HTTPHEADER => [
-                'authorization: Bearer '.$this->token,
-                'content-type: application/json',
-            ],
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30,
+        if ($this->apiKey === '' || $this->apiSecret === '') {
+            throw new \InvalidArgumentException('Zoom JWT: missing API Key/Secret');
+        }
+
+        $payload = [
+            'iss' => $this->apiKey,
+            'exp' => time() + 55, // short-lived token
         ];
-        if (!is_null($requestBody)) {
-            $jsonRequestBody = json_encode($requestBody);
-            if (false === $jsonRequestBody) {
-                throw new Exception('Could not generate JSON request body');
-            }
-            $options[CURLOPT_POSTFIELDS] = $jsonRequestBody;
-        }
 
-        $url = "https://api.zoom.us/v2/$relativePath";
-        if (!empty($parameters)) {
-            $url .= '?'.http_build_query($parameters);
-        }
-        $curl = curl_init($url);
-        if (false === $curl) {
-            throw new Exception("curl_init returned false");
-        }
-        curl_setopt_array($curl, $options);
-        $responseBody = curl_exec($curl);
-        $responseCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-        $curlError = curl_error($curl);
-        curl_close($curl);
-
-        if ($curlError) {
-            throw new Exception("cURL Error: $curlError");
-        }
-
-        if (false === $responseBody || !is_string($responseBody)) {
-            throw new Exception('cURL Error');
-        }
-
-        if (empty($responseCode)
-            || $responseCode < 200
-            || $responseCode >= 300
-        ) {
-            throw new Exception($responseBody, $responseCode);
-        }
-
-        return $responseBody;
+        return JWT::encode($payload, $this->apiSecret, 'HS256');
     }
 }

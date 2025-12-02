@@ -52,6 +52,20 @@ export default {
   },
 
   /**
+   * Loads thematic progress information for course home.
+   * @param {number} courseId
+   * @param {number=} sessionId
+   * @returns {Promise<Object>}
+   */
+  loadThematicProgress: async (courseId, sessionId = 0) => {
+    const { data } = await api.get(`/course/${courseId}/thematic_progress.json`, {
+      params: { sid: sessionId },
+    })
+
+    return data
+  },
+
+  /**
    * @param {Object} tool
    * @param {number} newIndex
    * @param {number} courseId

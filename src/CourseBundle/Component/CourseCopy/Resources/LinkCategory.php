@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,10 +17,12 @@ class LinkCategory extends Resource
      * The title.
      */
     public $title;
+
     /**
      * The description.
      */
     public $description;
+
     /**
      * The display order.
      */
@@ -30,6 +34,7 @@ class LinkCategory extends Resource
      * @param int    $id
      * @param string $title
      * @param string $description
+     * @param mixed  $display_order
      */
     public function __construct($id, $title, $description, $display_order)
     {
@@ -42,7 +47,7 @@ class LinkCategory extends Resource
     /**
      * Show this LinkCategory.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->title.' '.$this->description.'<br />';

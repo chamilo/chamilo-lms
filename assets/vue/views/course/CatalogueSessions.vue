@@ -22,8 +22,8 @@
           @click="clearFilter()"
         />
         <span
-          class="p-input-icon-left"
           v-if="activeSearchFields.length"
+          class="p-input-icon-left"
         >
           <i class="pi pi-search" />
           <InputText

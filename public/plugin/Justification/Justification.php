@@ -97,9 +97,4 @@ class Justification extends Plugin
         $sql = 'DROP TABLE IF EXISTS justification_document_rel_users';
         Database::query($sql);
     }
-
-    public function get_name()
-    {
-        return 'Justification';
-    }
 }

@@ -11,11 +11,12 @@ use Chamilo\CoreBundle\Traits\UserTrait;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Stringable;
 
 #[ORM\Table(name: 'gradebook_certificate')]
 #[ORM\Index(columns: ['user_id'], name: 'idx_gradebook_certificate_user_id')]
 #[ORM\Entity(repositoryClass: GradebookCertificateRepository::class)]
-class GradebookCertificate
+class GradebookCertificate extends AbstractResource implements ResourceInterface, Stringable
 {
     use UserTrait;
 
@@ -48,6 +49,58 @@ class GradebookCertificate
     #[ORM\Column(name: 'publish', type: 'boolean', options: ['default' => false])]
     protected bool $publish = false;
 
+    public function __toString(): string
+    {
+        $user = isset($this->user) ? $this->user->getUsername() : 'user';
+        $when = isset($this->createdAt) ? $this->createdAt->format('Y-m-d H:i') : 'pending';
+
+        return "Certificate for {$user} ({$when})";
+    }
+
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getResourceName(): string
+    {
+        return (string) $this;
+    }
+
+    public function setResourceName(string $name)
+    {
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setCategory(?GradebookCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCategory(): ?GradebookCategory
+    {
+        return $this->category;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     public function setScoreCertificate(float $scoreCertificate): self
     {
         $this->scoreCertificate = $scoreCertificate;
@@ -55,12 +108,7 @@ class GradebookCertificate
         return $this;
     }
 
-    /**
-     * Get scoreCertificate.
-     *
-     * @return float
-     */
-    public function getScoreCertificate()
+    public function getScoreCertificate(): float
     {
         return $this->scoreCertificate;
     }
@@ -72,75 +120,31 @@ class GradebookCertificate
         return $this;
     }
 
-    /**
-     * Get createdAt.
-     *
-     * @return DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setPathCertificate(string $pathCertificate): self
+    public function setPathCertificate(?string $pathCertificate): self
     {
         $this->pathCertificate = $pathCertificate;
 
         return $this;
     }
 
-    /**
-     * Get pathCertificate.
-     *
-     * @return string
-     */
-    public function getPathCertificate()
+    public function getPathCertificate(): ?string
     {
         return $this->pathCertificate;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getDownloadedAt(): DateTime
+    public function getDownloadedAt(): ?DateTime
     {
         return $this->downloadedAt;
     }
 
-    public function setDownloadedAt(DateTime $downloadedAt): self
+    public function setDownloadedAt(?DateTime $downloadedAt): self
     {
         $this->downloadedAt = $downloadedAt;
-
-        return $this;
-    }
-
-    public function getCategory(): ?GradebookCategory
-    {
-        return $this->category;
-    }
-
-    public function setCategory(GradebookCategory $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function setUser(User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }

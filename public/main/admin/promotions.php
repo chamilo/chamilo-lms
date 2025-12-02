@@ -11,9 +11,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-//Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('Careers and promotions')];
@@ -68,8 +65,8 @@ $columns = [
 ];
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '180',
         'align' => 'left',
     ],
@@ -175,7 +172,7 @@ switch ($action) {
                 $res = $promotion->update($values);
                 $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
-                    echo Display::return_message(get_lang('Promotion updated successfully').': '.$values['name'], 'confirm');
+                    echo Display::return_message(get_lang('Promotion updated successfully').': '.$values['title'], 'confirm');
                 }
             }
             $promotion->display();

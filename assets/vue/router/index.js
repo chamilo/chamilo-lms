@@ -16,6 +16,7 @@ import publicPageRoutes from "./publicPage"
 import socialNetworkRoutes from "./social"
 import fileManagerRoutes from "./filemanager"
 import skillRoutes from "./skill"
+import accessUrlRoutes from "./accessurl"
 
 //import courseCategoryRoutes from './coursecategory';
 import documents from "./documents"
@@ -259,16 +260,14 @@ const router = createRouter({
     publicPageRoutes,
     skillRoutes,
     sessionAdminRoutes,
+    accessUrlRoutes,
   ],
 })
 
 router.beforeEach(async (to, from, next) => {
+  document.body.classList.add("cursor-wait")
+
   const securityStore = useSecurityStore()
-
-  if (!securityStore.isAuthenticated) {
-    sessionStorage.clear()
-  }
-
   const preservedParams = ["origin", "isStudentView"]
   const mergedQuery = { ...to.query }
 
@@ -303,23 +302,57 @@ router.beforeEach(async (to, from, next) => {
     }
   }
 
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!securityStore.isLoading) {
-      await securityStore.checkSession()
+  // Determine what the route requires
+  const needsAuth = to.matched.some((record) => record.meta?.requiresAuth === true)
+  const wantsAdmin = to.matched.some((record) => record.meta?.requiresAdmin === true)
+  const wantsSessionAdmin = to.matched.some(
+    (record) => record.meta?.requiresSessionAdmin === true,
+  )
+
+  const mustBeLogged = needsAuth || wantsAdmin || wantsSessionAdmin
+
+  if (mustBeLogged && !securityStore.isLoading) {
+    await securityStore.checkSession()
+  }
+
+  // If user must be logged but is not, send to login
+  if (mustBeLogged && !securityStore.isAuthenticated) {
+    sessionStorage.clear()
+    next({
+      path: "/login",
+      query: { redirect: to.fullPath },
+    })
+    return
+  }
+
+  // Role-based access control: admin / session-admin
+  if (wantsAdmin || wantsSessionAdmin) {
+    let allowed = true
+
+    if (wantsAdmin && wantsSessionAdmin) {
+      // Route can be accessed by platform admins OR session admins
+      allowed = !!securityStore.isAdmin || !!securityStore.isSessionAdmin
+    } else if (wantsAdmin) {
+      // Only platform admins
+      allowed = !!securityStore.isAdmin
+    } else if (wantsSessionAdmin) {
+      // Only session admins
+      allowed = !!securityStore.isSessionAdmin
     }
 
-    if (securityStore.isAuthenticated) {
-      next()
-    } else {
-      sessionStorage.clear()
-      next({
-        path: "/login",
-        query: { redirect: to.fullPath },
-      })
+    if (!allowed) {
+      // Authenticated but not enough privileges
+      next({ name: "Home", replace: true })
+      return
     }
-  } else {
-    next()
   }
+
+  // Public route or user is allowed
+  next()
+})
+
+router.afterEach(() => {
+  document.body.classList.remove("cursor-wait")
 })
 
 router.beforeResolve(async (to) => {

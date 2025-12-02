@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\StateIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,7 +23,7 @@ class ZombieReport implements Countable
     public function __construct($additional_parameters = [], Request $request = null)
     {
         $this->additional_parameters = $additional_parameters;
-        $this->request = $request ?? Request::createFromGlobals();
+        $this->request = $request ?? Container::getRequest();
     }
 
     /**

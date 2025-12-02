@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
 
 /**
- * Class Resource
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
@@ -42,7 +43,7 @@ class Resource
      */
     public $item_properties;
 
-    public $obj = null;
+    public $obj;
 
     /**
      * Create a new Resource.
@@ -61,8 +62,11 @@ class Resource
 
     /**
      * Add linked resource.
+     *
+     * @param mixed $type
+     * @param mixed $id
      */
-    public function add_linked_resource($type, $id)
+    public function add_linked_resource($type, $id): void
     {
         $this->linked_resources[$type][] = $id;
     }
@@ -77,15 +81,17 @@ class Resource
 
     /**
      * Checks if this resource links to a given resource.
+     *
+     * @param mixed $resource
      */
     public function links_to(&$resource)
     {
         self::setClassType($resource);
         $type = $resource->get_type();
-        if (isset($this->linked_resources[$type]) &&
-            is_array($this->linked_resources[$type])
+        if (isset($this->linked_resources[$type])
+            && \is_array($this->linked_resources[$type])
         ) {
-            return in_array(
+            return \in_array(
                 $resource->get_id(),
                 $this->linked_resources[$type]
             );
@@ -133,22 +139,30 @@ class Resource
         switch ($this->get_type()) {
             case RESOURCE_DOCUMENT:
                 return TOOL_DOCUMENT;
+
             case RESOURCE_LINK:
                 return TOOL_LINK;
+
             case RESOURCE_EVENT:
                 return TOOL_CALENDAR_EVENT;
+
             case RESOURCE_COURSEDESCRIPTION:
                 return TOOL_COURSE_DESCRIPTION;
+
             case RESOURCE_LEARNPATH:
                 return TOOL_LEARNPATH;
+
             case RESOURCE_ANNOUNCEMENT:
                 return TOOL_ANNOUNCEMENT;
+
             case RESOURCE_FORUMCATEGORY:
                 // Ivan, 29-AUG-2009: A constant like TOOL_FORUM_CATEGORY is missing in main_api.lib.php.
                 // Such a constant has been defined in the forum tool for local needs.
                 return 'forum_category';
+
             case RESOURCE_FORUM:
                 return TOOL_FORUM;
+
             case RESOURCE_FORUMTOPIC:
                 if ($for_item_property_table) {
                     // Ivan, 29-AUG-2009: A hardcoded value that the "Forums" tool stores in the item property table.
@@ -156,36 +170,46 @@ class Resource
                 }
 
                 return TOOL_THREAD;
+
             case RESOURCE_FORUMPOST:
                 return TOOL_POST;
+
             case RESOURCE_QUIZ:
                 return TOOL_QUIZ;
+
             case RESOURCE_TEST_CATEGORY:
                 return TOOL_TEST_CATEGORY;
-                //case RESOURCE_QUIZQUESTION: //no corresponding global constant
+
+                // case RESOURCE_QUIZQUESTION: //no corresponding global constant
                 //	return TOOL_QUIZ_QUESTION;
-                //case RESOURCE_TOOL_INTRO:
+                // case RESOURCE_TOOL_INTRO:
                 //	return TOOL_INTRO;
-                //case RESOURCE_LINKCATEGORY:
+                // case RESOURCE_LINKCATEGORY:
                 //	return TOOL_LINK_CATEGORY;
-                //case RESOURCE_SCORM:
+                // case RESOURCE_SCORM:
                 //	return TOOL_SCORM_DOCUMENT;
             case RESOURCE_SURVEY:
                 return TOOL_SURVEY;
-                //case RESOURCE_SURVEYQUESTION:
+
+                // case RESOURCE_SURVEYQUESTION:
                 //	return TOOL_SURVEY_QUESTION;
-                //case RESOURCE_SURVEYINVITATION:
+                // case RESOURCE_SURVEYINVITATION:
                 //	return TOOL_SURVEY_INVITATION;
             case RESOURCE_GLOSSARY:
                 return TOOL_GLOSSARY;
+
             case RESOURCE_WIKI:
                 return TOOL_WIKI;
+
             case RESOURCE_THEMATIC:
                 return TOOL_COURSE_PROGRESS;
+
             case RESOURCE_ATTENDANCE:
                 return TOOL_ATTENDANCE;
+
             case RESOURCE_WORK:
                 return TOOL_STUDENTPUBLICATION;
+
             default:
                 return null;
         }
@@ -196,7 +220,7 @@ class Resource
      *
      * @param int $id the id of this resource in the destination course
      */
-    public function set_new_id($id)
+    public function set_new_id($id): void
     {
         $this->destination_id = $id;
     }
@@ -214,9 +238,9 @@ class Resource
     /**
      * Show this resource.
      */
-    public function show()
+    public function show(): void
     {
-        //echo 'RESOURCE: '.$this->get_id().' '.$type[$this->get_type()].' ';
+        // echo 'RESOURCE: '.$this->get_id().' '.$type[$this->get_type()].' ';
     }
 
     /**
@@ -227,7 +251,8 @@ class Resource
      */
     public static function setClassType($resource)
     {
-        $class = get_class($resource);
+        $class = $resource::class;
+
         switch ($class) {
             case 'Event':
                 /** @var CalendarEvent $resource */
@@ -246,6 +271,7 @@ class Resource
                 $resource = $newResource;
 
                 break;
+
             case 'CourseDescription':
                 if (!method_exists($resource, 'show')) {
                     $resource = (array) $resource;

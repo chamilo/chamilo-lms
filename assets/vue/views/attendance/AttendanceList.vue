@@ -1,9 +1,18 @@
 <template>
+  <SectionHeader :title="t('Attendance')">
+    <template #end>
+      <StudentViewButton
+        v-if="securityStore.isAuthenticated"
+        @change="onStudentViewChange"
+      />
+    </template>
+  </SectionHeader>
+
   <div>
     <BaseToolbar>
       <template #start>
         <BaseButton
-          v-if="!isStudent"
+          v-if="!readonly"
           icon="file-add"
           size="normal"
           type="black"
@@ -16,6 +25,7 @@
       :attendances="attendances"
       :loading="isLoading"
       :total-records="totalAttendances"
+      :readonly="securityStore.isStudent || platformConfigStore.isStudentViewActive"
       @edit="redirectToEditAttendance"
       @view="toggleResourceLinkVisibility"
       @delete="confirmDeleteAttendance"
@@ -31,22 +41,28 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue"
+import { ref, onMounted, computed, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import AttendanceTable from "../../components/attendance/AttendanceTable.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 import { useI18n } from "vue-i18n"
 import { useCidReq } from "../../composables/cidReq"
 import { useSecurityStore } from "../../store/securityStore"
+import { usePlatformConfig } from "../../store/platformConfig"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const securityStore = useSecurityStore()
-const isStudent = computed(() => securityStore.isStudent)
+const platformConfigStore = usePlatformConfig()
+
+const readonly = computed(() => securityStore.isStudent || platformConfigStore.isStudentViewActive)
+
 const attendances = ref([])
 const isDeleteDialogVisible = ref(false)
 const attendanceToDelete = ref({ id: null, title: "" })
@@ -56,10 +72,7 @@ const { sid, cid, gid } = useCidReq()
 const parentResourceNodeId = ref(Number(route.params.node))
 
 const redirectToCreateAttendance = () => {
-  router.push({
-    name: "CreateAttendance",
-    query: { cid, sid, gid },
-  })
+  router.push({ name: "CreateAttendance", query: { cid, sid, gid } })
 }
 
 const redirectToEditAttendance = (attendance) => {
@@ -120,11 +133,8 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       resourceNode: item.resourceNode,
     }))
 
-    if (isStudent.value) {
-      attendanceList = attendanceList.filter((item) => {
-        const visibility = item.resourceLinkListFromEntity?.[0]?.visibility || 0
-        return visibility === 2
-      })
+    if (readonly.value) {
+      attendanceList = attendanceList.filter((i) => (i.resourceLinkListFromEntity?.[0]?.visibility || 0) === 2)
     }
 
     attendances.value = attendanceList
@@ -141,6 +151,17 @@ function getNodeId(resourceNode) {
   const parts = resourceNode["@id"].split("/")
   return parseInt(parts[parts.length - 1])
 }
+
+function onStudentViewChange() {
+  fetchAttendances()
+}
+
+watch(
+  () => platformConfigStore.isStudentViewActive,
+  () => {
+    fetchAttendances()
+  },
+)
 
 onMounted(fetchAttendances)
 </script>

@@ -174,7 +174,7 @@ if ($debug) {
 }
 
 $__returnTo = $_GET['returnTo'] ?? '';
-$__listUrlForSpa = $listUrl; // el de resources/lp/...
+$__listUrlForSpa = $listUrl;
 $goList = static function () use ($__listUrlForSpa, $__returnTo) {
     header('Location: '.$__listUrlForSpa);
     exit;
@@ -589,7 +589,10 @@ switch ($action) {
             $goList();
         } else {
             Session::write('refresh', 1);
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id).'&'.api_get_cidreq();
+            $url = api_get_self()
+                .'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)
+                .'&'.api_get_cidreq()
+                .'&isStudentView=false';
             header('Location: '.$url);
             exit;
         }

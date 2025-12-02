@@ -140,25 +140,32 @@ function safeGenerateCertificateForCategory(GradebookCategory $category, int $us
     $sessId   = $session ? $session->getId() : 0;
     $catId    = (int) $category->getId();
 
-    $gb   = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
-    $html = (is_array($gb) && isset($gb['content'])) ? $gb['content'] : '';
+    // Build certificate content & score
+    $gb    = GradebookUtils::get_user_certificate_content($userId, $courseId, $sessId);
+    $html  = (is_array($gb) && isset($gb['content'])) ? $gb['content'] : '';
     $score = isset($gb['score']) ? (float) $gb['score'] : 100.0;
-    $fileName = ltrim(hash('sha256', $userId.$catId).'.html', '/');
 
     $certRepo = Container::getGradeBookCertificateRepository();
-    $pf = $certRepo->generateCertificatePersonalFile($userId, $fileName, $html);
+
+    $htmlUrl = '';
+    $pdfUrl  = '';
+
     try {
-        $certRepo->registerUserInfoAboutCertificate($catId, $userId, $score, $fileName);
+        // Store/refresh as Resource (controlled access; not shown in "My personal files")
+        $cert = $certRepo->upsertCertificateResource($catId, $userId, $score, $html);
+
+        // (Optional) keep metadata (created_at/score). Filename is not required anymore.
+        $certRepo->registerUserInfoAboutCertificate($catId, $userId, $score);
+
+        // Build URLs from the Resource layer
+        // View URL (first resource file assigned to the node – here the HTML we just uploaded)
+        $htmlUrl = $certRepo->getResourceFileUrl($cert);
     } catch (\Throwable $e) {
         error_log('[LP_FINAL] register cert error: '.$e->getMessage());
     }
 
-    $hash    = pathinfo($fileName, PATHINFO_FILENAME);
-    $htmlUrl = api_get_path(WEB_PATH).'certificates/'.$hash.'.html';
-    $pdfUrl  = api_get_path(WEB_PATH).'certificates/'.$hash.'.pdf';
-
     return [
-        'path_certificate' => $fileName,
+        'path_certificate' => (string) ($cert->getPathCertificate() ?? ''),
         'html_url'         => $htmlUrl,
         'pdf_url'          => $pdfUrl,
     ];

@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- ********************************************************************************************** -->
+<!--                                                                                                -->
+<!-- Author:         Colin Smythe, IMS Global (UK)                                                  -->
+<!-- Date:           2013-03-31                                                                     -->
+<!-- Version:        Final 1.3                                                                      -->
+<!-- Status:         Final Release                                                                  -->
+<!--                                                                                                -->
+<!-- Description:    The vocabulary for the permitted resource types in the CCv1.3.                 -->
+<!--                                                                                                -->
+<!-- History:        Version 1.1: The first release in which the vocabularies were defined as an e- -->
+<!--                 xternal VDEX instance. A new resource type to identify Basic LTI v1.0 resourc- -->
+<!--                 es has been added in this version. Version 1.2: Just date and version numberi- -->
+<!--                 ng changes. Version 1.3: Addition of the new resource types APIPv1.0, IWBv1.0  -->
+<!--                 and EPUBv3.0. Support for  extension resource types.                           -->
+<!--                                                                                                -->
+<!-- Licenses:       IPR, License and Distribution Notices                                          -->
+<!--                                                                                                -->
+<!--                 This machine readable vocabulary is derived from the IMS Global specification  -->
+<!--                 IMS Global Common Cartridge (Content Packaging) Version 1.3 found at http://w- -->
+<!--                 ww.imsglobal.org/cc and the original IMS Global schema binding or code base h- -->
+<!--                 ttp://www.imsglobal.org/cc.                                                    -->
+<!--                                                                                                -->
+<!--                 Recipients of this document are requested to submit, with their comments, not- -->
+<!--                 ification of any relevant patent claims or other intellectual property rights  -->
+<!--                 of which they may be aware that might be infringed by the schema binding cont- -->
+<!--                 ained in this document.                                                        -->
+<!--                                                                                                -->
+<!--                 IMS Global takes no position regarding the validity or scope of any intellect- -->
+<!--                 ual property or other rights that might be claimed to pertain to the implemen- -->
+<!--                 tation or use of the technology described in this document or the extent to w- -->
+<!--                 hich any license under such rights might or might not be available; neither d- -->
+<!--                 oes it represent that it has made any effort to identify any such rights. Inf- -->
+<!--                 ormation on IMS Global procedures with respect to rights in IMS Global specif- -->
+<!--                 ications can be found at the IMS Global Intellectual Property Rights web page: -->
+<!--                 http://www.imsglobal.org/ipr/imsipr_policyFinal.pdf.                           -->
+<!--                                                                                                -->
+<!--                 Copyright © IMS Global Learning Consortium 1999-2013. All Rights Reserved.     -->
+<!--                                                                                                -->
+<!--                 License Notice for Users                                                       -->
+<!--                                                                                                -->
+<!--                 Users of products or services that include this document are hereby granted a  -->
+<!--                 worldwide, royalty-free, non-exclusive license to use this document.           -->
+<!--                                                                                                -->
+<!--                 Distribution Notice for Developers                                             -->
+<!--                                                                                                -->
+<!--                 Developers of products or services that are not original incorporators of this -->
+<!--                 document and have not changed this document, that is, are distributing a soft- -->
+<!--                 ware product that incorporates this document as is from a third-party source   -->
+<!--                 other than IMS Global, are hereby granted permission to copy, display and dis- -->
+<!--                 tribute the contents of this document in any medium for any purpose without f- -->
+<!--                 ee or royalty provided that you include this IPR, License and Distribution no- -->
+<!--                 tice in its entirety on ALL copies, or portions thereof.                       -->
+<!--                                                                                                -->
+<!--                 Developers of products or services that are original incorporators of this do- -->
+<!--                 cument and wish to provide distribution of this document as is or with modifi- -->
+<!--                 cations and developers of products and services that are not original incorpo- -->
+<!--                 rators of this document and have changed this document, are required to regis- -->
+<!--                 ter with the IMS Global community on the IMS Global website as described in t- -->
+<!--                 he following two paragraphs:                                                   -->
+<!--                                                                                                -->
+<!--                 *  If you wish to distribute this document as is, with no modifications, you   -->
+<!--                 are hereby granted permission to copy, display and distribute the contents of  -->
+<!--                 this document in any medium for any purpose without fee or royalty provided t- -->
+<!--                 hat you include this IPR, License and Distribution notice in its entirety on   -->
+<!--                 ALL copies, or portions thereof, that you make and you complete a valid licen- -->
+<!--                 se registration with IMS Global and receive an email from a valid license reg- -->
+<!--                 istration with IMS and receive an email from IMS Global granting the license.  -->
+<!--                 To register, follow the instructions on the IMS Global website: http://www.im- -->
+<!--                 sglobal.org/specificationdownload.cfm. Once registered you are granted permis- -->
+<!--                 sion to transfer unlimited distribution rights of this document for the purpo- -->
+<!--                 ses of third-party or other distribution of your product or service that inco- -->
+<!--                 rporates this document as long as this IPR, License and Distribution notice r- -->
+<!--                 emains in place in its entirety;                                               -->
+<!--                                                                                                -->
+<!--                 *  If you wish to create and distribute a derived work from this document, you -->
+<!--                 are hereby granted permission to copy, display and distribute the contents of  -->
+<!--                 the derived work in any medium for any purpose without fee or royalty provided -->
+<!--                 that you include this IPR, License and Distribution notice in its entirety on  -->
+<!--                 ALL copies, or portions thereof, that you make and you complete a valid profi- -->
+<!--                 le registration with IMS and receive an email from IMS Global granting the li- -->
+<!--                 cense. To register, follow the instructions on the IMS Global website: http:/- -->
+<!--                 /www.imsglobal.org/profile/. Once registered you are granted permission to tr- -->
+<!--                 ansfer unlimited distribution rights of the derived work for the purposes of   -->
+<!--                 third-party or other distribution of your product or service that incorporates -->
+<!--                 the derived work as long as this IPR, License and Distribution notice remains  -->
+<!--                 in place in its entirety.                                                      -->
+<!--                                                                                                -->
+<!--                 The limited permissions granted above are perpetual and will not be revoked by -->
+<!--                 IMS Global or its successors or assigns.                                       -->
+<!--                                                                                                -->
+<!--                 THIS SPECIFICATION IS BEING OFFERED WITHOUT ANY WARRANTY WHATSOEVER, AND IN P- -->
+<!--                 ARTICULAR, ANY WARRANTY OF NONINFRINGEMENT IS EXPRESSLY DISCLAIMED. ANY USE OF -->
+<!--                 THIS SPECIFICATION SHALL BE MADE ENTIRELY AT THE IMPLEMENTERS OWN RISK, AND N- -->
+<!--                 EITHER THE CONSORTIUM, NOR ANY OF ITS MEMBERS OR SUBMITTERS, SHALL HAVE ANY L- -->
+<!--                 IABILITY WHATSOEVER TO ANY IMPLEMENTER OR THIRD PARTY FOR ANY DAMAGES OF ANY   -->
+<!--                 NATURE WHATSOEVER, DIRECTLY OR INDIRECTLY, ARISING FROM THE USE OF THIS SPECI- -->
+<!--                 FICATION.                                                                      -->
+<!--                                                                                                -->
+<!-- Source XSLT File Information                                                                   -->
+<!-- ============================                                                                   -->
+<!-- XSL Generator:  Specificationv1p0_GenerationToolv1.xsl                                         -->
+<!-- XSLT Processor: Saxon-HE-9.4.0.4                                                               -->
+<!-- Release:        1.0                                                                            -->
+<!-- Date:           31st March, 2013                                                               -->
+<!-- Autogen Eng:    Colin Smythe (IMS Global, UK)                                                  -->
+<!-- Autogen Date:   2013-04-26                                                                     -->
+<!--                                                                                                -->
+<!-- Webster Auto-generation Toolkit                                                                -->
+<!-- ===============================                                                                -->
+<!-- This VDEX was auto-generated using the IMS Global Binding Auto-generation Toolkit (I-BAT). Wh- -->
+<!-- ile every attempt has been made to ensure that this tool auto-generates the VDEXs correctly,   -->
+<!-- users should be aware that this is an experimental tool. Permission is given to make use of t- -->
+<!-- his tool. IMS Global makes no claim on the materials created by third party users of this too- -->
+<!-- l. Details on how to use this auto-generation toolkit are available at the IMS Global web-sit- -->
+<!-- e: www.imsglobal.org.'                                                                         -->
+<!--                                                                                                -->
+<!-- Tool Copyright: 2005-2013 (c) IMS Global Learning Consortium Inc.  All Rights Reserved.        -->
+<!--                                                                                                -->
+<!-- $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ -->
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <title>IMS Global CPv1.2 CCv1.3 Profile ResourceType Vocabulary</title>
+        <meta name="language" content="en-US" />
+        <meta name="author" content="Colin Smythe, IMS Global (UK)" />
+        <meta name="date" content="2013-03-31" />
+        <meta name="status" content="Final Release" />
+        <meta name="version" content="Final 1.3" />
+        <meta name="publisher" content="IMS Global Learning Consortium Inc." />
+        <meta name="keywords" content="Common Cartridge, Resource Types" />
+        <meta name="description" content="The vocabulary for the permitted resource types in the CCv1.3." />
+        <meta name="history" content="Version 1.1: The first release in which the vocabularies were defined as an external VDEX instance.
+A new resource type to identify Basic LTI v1.0 resources has been added in this version.
+Version 1.2: Just date and version numbering changes.
+Version 1.3: Addition of the new resource types APIPv1.0, IWBv1.0 and EPUBv3.0. Support for 
+extension resource types." />
+        <meta name="copyright" content="2013 (c) IMS Global Learning Consortium Inc." />
+        <link rel="icon" href="http://www.imsglobal.org/favicon.ico" type="image/x-icon" />
+    </head>
+    <body>
+        <a href="http://www.imsglobal.org"><img src="http://www.imsglobal.org/images/header1.png" alt="IMS Global Logo" border="0" /></a>
+        <h1>IMS Global CPv1.2 CCv1.3 Profile ResourceType Vocabulary</h1>
+        <h2>Vocabulary Details</h2>
+        <p>This document provides a human readable description of the vocabulary terms defined in the IMS Global Vocabulary Definition and Exchange (VDEX) file "ccresourcetypevocabularyv1p3.xml". The details of the vocabulary are:</p>
+        <table>
+            <tbody>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Vocabulary Identifier:</td>
+                    <td>http://www.imsglobal.org/xsd/cc/ccv1p3/ccresourcetypevocabularyv1p3</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Vocabulary Type:</td>
+                    <td>flatTokenTerms</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Registered Status:</td>
+                    <td>true</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Vocabulary Language:</td>
+                    <td>en-US</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Author:</td>
+                    <td>Colin Smythe, IMS Global (UK)</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Issue Date:</td>
+                    <td>2013-03-31</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Version:</td>
+                    <td>Final 1.3</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Status:</td>
+                    <td>Final Release</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Base Specification:</td>
+                    <td>Common Cartridge (Content Packaging) Version 1.3</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Keywords:</td>
+                    <td>Common Cartridge, Resource Types</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Publisher:</td>
+                    <td>IMS Global Learning Consortium Inc.</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Copyright:</td>
+                    <td>2013 (c) IMS Global Learning Consortium Inc.</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">Description:</td>
+                    <td>The vocabulary for the permitted resource types in the CCv1.3.</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">History:</td>
+                    <td>Version 1.1: The first release in which the vocabularies were defined as an external VDEX instance.
+A new resource type to identify Basic LTI v1.0 resources has been added in this version.
+Version 1.2: Just date and version numbering changes.
+Version 1.3: Addition of the new resource types APIPv1.0, IWBv1.0 and EPUBv3.0. Support for 
+extension resource types.</td>
+                </tr>
+                <tr>
+                    <td width="20%" bgcolor="#99ffff">License:</td>
+                    <td>Users of products or services that include this document are hereby granted a worldwide, royalty-free, non-exclusive license to use this document.</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2>Vocabulary Terms</h2>
+        <p>The set of terms for the vocabulary are described in the table below.</p>
+        <table width="100%" title="IMS Global CPv1.2 CCv1.3 Profile ResourceType Vocabulary" summary="The set of vocabulary terms.">
+            <thead>
+                <tr>
+                    <th width="25%" bgcolor="#ffd700">Identifier</th>
+                    <th width="25%" bgcolor="#ffd700">Caption</th>
+                    <th width="10%" bgcolor="#ffd700">Status</th>
+                    <th width="40%" bgcolor="#ffd700">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td bgcolor="#dcdcdc">assignment_xmlv1p0</td>
+                    <td bgcolor="#dcdcdc">Assignment</td>
+                    <td bgcolor="#dcdcdc">Provisional</td>
+                    <td bgcolor="#dcdcdc">This is used when a resource is an Assignment. 
+The schema and schema version elements in the resource 
+metadata will provide further validation information.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">associatedcontent/imscc_xmlv1p3/learning-application-resource</td>
+                    <td bgcolor="#dcdcdc">Associated Content Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of Associated Content. Typically used 
+assets such as images, video, voice files, etc.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">idpfepub_epubv3p0</td>
+                    <td bgcolor="#dcdcdc">IDPF EPUB v3.0 Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of EPUBv3.0 This allows an
+EPUB file to be a resource in the cartridge.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsapip_zipv1p0</td>
+                    <td bgcolor="#dcdcdc">Accessible Portable Item Protocol (APIP) v1.0 Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of APIPv1.0 This allows an
+APIP zip file to be a resource in the cartridge.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsbasiclti_xmlv1p3</td>
+                    <td bgcolor="#dcdcdc">Basic LTI v1.0 Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of Basic LTI. This allows LTI 
+links to be embedded in a cartridge.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsdt_xmlv1p3</td>
+                    <td bgcolor="#dcdcdc">Discussion Topic Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of Discussion Topic. This enables the 
+package to include discussion topics.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsiwb_iwbv1p0</td>
+                    <td bgcolor="#dcdcdc">Interactive White Board (IWB) v1.0 Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of IWBv1.0 This allows an IWBv1.0
+zip file to be a resource in the cartridge.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsqti_xmlv1p2/imscc_xmlv1p3/assessment</td>
+                    <td bgcolor="#dcdcdc">QTI Assessment Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of QTI Assessment. This must be 
+used for tests and quizzes based upon QTIv1.2.1.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imsqti_xmlv1p2/imscc_xmlv1p3/question-bank</td>
+                    <td bgcolor="#dcdcdc">QTI Question Bank Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of QTI Question Bank. This must be 
+used for Question Banks and these must be based upon QTIv1.2.1.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">imswl_xmlv1p3</td>
+                    <td bgcolor="#dcdcdc">Web Links Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of Web Links. This enables the 
+package to include external web links.</td>
+                </tr>
+                <tr>
+                    <td bgcolor="#dcdcdc">webcontent</td>
+                    <td bgcolor="#dcdcdc">Web Content Resource</td>
+                    <td bgcolor="#dcdcdc">Core</td>
+                    <td bgcolor="#dcdcdc">This is the resource type of Web Content. Typically used 
+for HTML and PDF files.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>In the above Table, the possible values and interpretation for the status field are:</p>
+        <ul type="disc">
+            <li>"Final" - an IMS Global term that has been approved by the corresponding IMS APMG;</li>
+            <li>"Draft" - an IMS Global term that has not yet been approved by the corresponding IMS APMG;</li>
+            <li>"Core" - an IMS Global term that has been approved by the corresponding IMS APMG (used to differentiate from vocabs containing extension terms);</li>
+            <li>"Provisional" - an extension term that has not yet been approved by the corresponding IMS APMG but which is available on a provisional basis;</li>
+            <li>"Approved" - an extension term that has been approved by the corresponding IMS APMG.</li>
+        </ul>
+        <p />
+        <hr />
+    </body>
+</html>

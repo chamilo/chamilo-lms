@@ -35,7 +35,7 @@ class ResourceNodeListener
      * When updating a Resource.
      * $resourceNode->getContent() was set in the BaseResourceFileAction (when calling the api).
      */
-    public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event)
+    public function preUpdate(ResourceNode $resourceNode, PreUpdateEventArgs $event): void
     {
         if ($resourceNode->hasEditableTextContent()) {
             $resourceFile = $resourceNode->getResourceFiles()->first();
@@ -48,8 +48,6 @@ class ResourceNodeListener
                 }
             }
         }
-
-        return true;
     }
 
     /*public function postUpdate(ResourceNode $resourceNode, LifecycleEventArgs $event): void

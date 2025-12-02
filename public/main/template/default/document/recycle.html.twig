@@ -1,5 +1,4 @@
 {% macro bytesToSize(bytes) %}
-    {% apply spaceless %}
     {% set kilobyte = 1024 %}
     {% set megabyte = kilobyte * 1024 %}
     {% set gigabyte = megabyte * 1024 %}
@@ -16,7 +15,6 @@
     {% else %}
         {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
     {% endif %}
-    {% endapply %}
 {% endmacro %}
 
 {% if files %}
@@ -32,7 +30,7 @@
                 {{ file.path }}
             </td>
             <td>
-                {{ _self.bytesToSize(file.size) }}
+                {{- _self.bytesToSize(file.size) -}}
             </td>
 
             <td>

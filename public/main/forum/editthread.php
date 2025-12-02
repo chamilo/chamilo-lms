@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
-
 
 /**
  * Edit a Forum Thread.
@@ -84,6 +85,7 @@ $origin = api_get_origin();
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
 
 $repo = Container::getForumRepository();
+
 /** @var CForum $forum */
 $forum = $repo->find($forumId);
 if (empty($forum)) {
@@ -92,7 +94,7 @@ if (empty($forum)) {
 
 $courseEntity = api_get_course_entity();
 $sessionEntity = api_get_session_entity();
-//$forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
+// $forumIsVisible = $forum->isVisible($courseEntity, $sessionEntity);
 
 $category = $forum->getForumCategory();
 $categoryIsVisible = $category->isVisible($courseEntity) && !api_get_session_id();
@@ -108,7 +110,7 @@ $threadId = isset($_GET['thread']) ? (int) ($_GET['thread']) : 0;
 $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 
-$gradebookId = (int) (api_is_in_gradebook());
+$gradebookId = (int) api_is_in_gradebook();
 
 /* Is the user allowed here? */
 
@@ -120,15 +122,15 @@ if (!api_is_allowed_to_edit(false, true) && false === $categoryIsVisible) {
 }
 
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    (($categoryIsVisible && 0 != $category->getLocked()) || 0 != $forum->getLocked())
+if (!api_is_allowed_to_edit(false, true)
+    && (($categoryIsVisible && 0 != $category->getLocked()) || 0 != $forum->getLocked())
 ) {
     api_not_allowed();
 }
 
 // 3. new threads are not allowed and the user is not a course manager
-if (!api_is_allowed_to_edit(false, true) &&
-    1 != $forum->getAllowNewThreads()
+if (!api_is_allowed_to_edit(false, true)
+    && 1 != $forum->getAllowNewThreads()
 ) {
     api_not_allowed();
 }
@@ -189,7 +191,7 @@ if (!empty($groupId)) {
 $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /* Header */
-$htmlHeadXtra[] = <<<JS
+$htmlHeadXtra[] = <<<'JS'
     <script>
     $(function() {
         $('[name="thread_qualify_gradebook"]:checkbox').change(function () {
@@ -240,7 +242,7 @@ $form->addElement('html', '<div id="advanced_params_options" style="display:none
 if ((api_is_course_admin() || api_is_session_general_coach() || api_is_course_tutor()) && $threadId) {
     // Thread qualify
     if (Gradebook::is_active()) {
-        //Loading gradebook select
+        // Loading gradebook select
         GradebookUtils::load_gradebook_select_in_tool($form);
         $form->addElement(
             'checkbox',
@@ -298,8 +300,8 @@ $defaults['thread_peer_qualify'] = 0;
 if (!empty($threadData)) {
     $defaults['thread_qualify_gradebook'] = $gradeThisThread;
     $defaults['thread_title'] = prepare4display($threadData['threadTitle']);
-    $defaults['thread_sticky'] = (string) ((int) ($threadData['threadSticky']));
-    $defaults['thread_peer_qualify'] = (int) ($threadData['threadPeerQualify']);
+    $defaults['thread_sticky'] = (string) ((int) $threadData['threadSticky']);
+    $defaults['thread_peer_qualify'] = (int) $threadData['threadPeerQualify'];
     $defaults['numeric_calification'] = $threadData['threadQualifyMax'];
     $defaults['calification_notebook_title'] = $threadData['threadTitleQualify'];
     $defaults['weight_calification'] = $threadData['threadWeight'];
@@ -318,6 +320,7 @@ if ($form->validate()) {
         updateThread($values);
         SkillModel::saveSkills($form, ITEM_TYPE_FORUM_THREAD, $threadId);
         header('Location: '.$redirectUrl);
+
         exit;
     }
 }

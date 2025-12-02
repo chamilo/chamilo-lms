@@ -2,15 +2,15 @@ import { defineStore } from "pinia"
 import { isEmpty } from "lodash"
 import { computed, ref } from "vue"
 import securityService from "../services/securityService"
+import { usePlatformConfig } from "./platformConfig"
 
 export const useSecurityStore = defineStore("security", () => {
   const user = ref(null)
   const isLoading = ref(true)
   const isAuthenticated = computed(() => !isEmpty(user.value))
 
-  /**
-   * @param {Object} newUserInfo
-   */
+  const platformConfigStore = usePlatformConfig()
+
   function setUser(newUserInfo) {
     user.value = newUserInfo
   }
@@ -45,7 +45,9 @@ export const useSecurityStore = defineStore("security", () => {
 
   const isTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_TEACHER"))
 
-  const isCurrentTeacher = computed(() => isAdmin.value || hasRole.value("ROLE_CURRENT_COURSE_TEACHER"))
+  const isCurrentTeacher = computed(
+    () => (isAdmin.value || hasRole.value("ROLE_CURRENT_COURSE_TEACHER")) && !platformConfigStore.isStudentViewActive,
+  )
 
   const isCourseAdmin = computed(
     () =>
@@ -66,7 +68,7 @@ export const useSecurityStore = defineStore("security", () => {
         user.value = null
       }
     } catch (error) {
-      console.error("Error checking session:", error)
+      console.error("[SecurityStore] Failed to check session", error)
       user.value = null
     } finally {
       isLoading.value = false

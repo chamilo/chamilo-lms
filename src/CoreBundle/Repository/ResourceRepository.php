@@ -305,8 +305,38 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function addCourseSessionGroupQueryBuilder(Course $course, ?Session $session = null, ?CGroup $group = null, ?QueryBuilder $qb = null): QueryBuilder
+    public function addSessionNullQueryBuilder(QueryBuilder $qb): QueryBuilder
     {
+        return $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('links.session'),
+                $qb->expr()->eq('links.session', 0)
+            )
+        );
+    }
+
+    public function addSessionAndBaseContentQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session OR links.session IS NULL')
+            ->setParameter('session', $session)
+        ;
+    }
+
+    public function addSessionOnlyQueryBuilder(Session $session, QueryBuilder $qb): QueryBuilder
+    {
+        return $qb
+            ->andWhere('links.session = :session')
+            ->setParameter('session', $session)
+        ;
+    }
+
+    public function addCourseSessionGroupQueryBuilder(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?QueryBuilder $qb = null
+    ): QueryBuilder {
         $reflectionClass = $this->getClassMetadata()->getReflectionClass();
 
         // Check if this resource type requires to load the base course resources when using a session
@@ -316,23 +346,18 @@ abstract class ResourceRepository extends ServiceEntityRepository
             true
         );
 
-        $this->addCourseQueryBuilder($course, $qb);
+        if ($course) {
+            $this->addCourseQueryBuilder($course, $qb);
+        }
 
         if (null === $session) {
-            $qb->andWhere(
-                $qb->expr()->orX(
-                    $qb->expr()->isNull('links.session'),
-                    $qb->expr()->eq('links.session', 0)
-                )
-            );
+            $this->addSessionNullQueryBuilder($qb);
         } elseif ($loadBaseSessionContent) {
             // Load course base content.
-            $qb->andWhere('links.session = :session OR links.session IS NULL');
-            $qb->setParameter('session', $session);
+            $this->addSessionAndBaseContentQueryBuilder($session, $qb);
         } else {
             // Load only session resources.
-            $qb->andWhere('links.session = :session');
-            $qb->setParameter('session', $session);
+            $this->addSessionOnlyQueryBuilder($session, $qb);
         }
 
         if (null === $group) {
@@ -381,11 +406,34 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
-    public function getResourcesByCourse(Course $course, ?Session $session = null, ?CGroup $group = null, ?ResourceNode $parentNode = null, bool $displayOnlyPublished = true, bool $displayOrder = false): QueryBuilder
-    {
+    public function getResourcesByCourse(
+        ?Course $course = null,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
         $qb = $this->getResources($parentNode);
         $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
         $this->addCourseSessionGroupQueryBuilder($course, $session, $group, $qb);
+
+        if ($displayOrder) {
+            $qb->orderBy('links.displayOrder', 'ASC');
+        }
+
+        return $qb;
+    }
+
+    public function getResourcesBySession(
+        ?Session $session = null,
+        ?ResourceNode $parentNode = null,
+        bool $displayOnlyPublished = true,
+        bool $displayOrder = false
+    ): QueryBuilder {
+        $qb = $this->getResources($parentNode);
+        $this->addVisibilityQueryBuilder($qb, true, $displayOnlyPublished);
+        $this->addCourseSessionGroupQueryBuilder(null, $session, null, $qb);
 
         if ($displayOrder) {
             $qb->orderBy('links.displayOrder', 'ASC');

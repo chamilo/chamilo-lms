@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\PluginBundle\XApi\Importer\PackageImporter;
 use Chamilo\PluginBundle\XApi\Parser\PackageParser;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_protect_teacher_script();
 
-$httpRequest = Request::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $course = api_get_course_entity();
 $session = api_get_session_entity();

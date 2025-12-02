@@ -533,6 +533,10 @@ class GradebookUtils
     {
         global $table_evaluated;
 
+        if (!isset($table_evaluated[$type][0])) {
+            throw new \InvalidArgumentException('Unknown evaluated type: '.$type);
+        }
+
         return Database::get_course_table($table_evaluated[$type][0]);
     }
 
@@ -674,18 +678,24 @@ class GradebookUtils
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT DISTINCT u.id as user_id, u.lastname, u.firstname, u.username, gc.created_at
-                FROM '.$table_user.' u
-                INNER JOIN '.$table_certificate.' gc
-                ON u.id = gc.user_id ';
+
+        $sql = 'SELECT DISTINCT u.id AS user_id, u.lastname, u.firstname, u.username, gc.created_at
+            FROM '.$table_user.' u
+            INNER JOIN '.$table_certificate.' gc ON u.id = gc.user_id';
+
+        $where = [];
+
         if (!is_null($cat_id) && $cat_id > 0) {
-            $sql .= ' WHERE cat_id='.intval($cat_id);
+            $where[] = 'gc.cat_id = '.(int) $cat_id;
         }
         if (!empty($userList)) {
-            $userList = array_map('intval', $userList);
-            $userListCondition = implode("','", $userList);
-            $sql .= " AND u.id IN ('$userListCondition')";
+            $ids = array_map('intval', $userList);
+            $where[] = 'u.id IN ('.implode(',', $ids).')';
         }
+        if ($where) {
+            $sql .= ' WHERE '.implode(' AND ', $where);
+        }
+
         $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
         $rs = Database::query($sql);
 
@@ -1210,39 +1220,31 @@ class GradebookUtils
      */
     public static function find_students($mask = '')
     {
-        // students shouldn't be here // don't search if mask empty
-        if (!api_is_allowed_to_edit() || empty($mask)) {
+        if (!api_is_allowed_to_edit() || $mask === '') {
             return null;
         }
+
         $mask = Database::escape_string($mask);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_cru = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT user.id as user_id, user.lastname, user.firstname, user.email, user.official_code
-                FROM '.$tbl_user.' user';
-        if (!api_is_platform_admin()) {
-            $sql .= ', '.$tbl_cru.' cru';
-        }
+        $tbl_cru  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql .= ' WHERE user.status = '.STUDENT;
-        $sql .= ' AND (user.lastname LIKE '."'%".$mask."%'";
-        $sql .= ' OR user.firstname LIKE '."'%".$mask."%')";
+        $sql = 'SELECT DISTINCT user.id AS user_id, user.lastname, user.firstname, user.email, user.official_code
+            FROM '.$tbl_user.' user';
 
         if (!api_is_platform_admin()) {
-            $sql .= ' AND user.id = cru.user_id AND
-                      cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' AND
-                      cru.c_id in (
-                            SELECT c_id FROM '.$tbl_cru.'
-                            WHERE
-                                user_id = '.api_get_user_id().' AND
-                                status = '.COURSEMANAGER.'
-                        )
-                    ';
+            $sql .= ' INNER JOIN '.$tbl_cru.' cru ON (cru.user_id = user.id)
+                  AND cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'
+                  AND cru.c_id IN (
+                        SELECT c_id FROM '.$tbl_cru.'
+                         WHERE user_id = '.api_get_user_id().' AND status = '.COURSEMANAGER.'
+                  )';
         }
 
-        $sql .= ' ORDER BY lastname, firstname';
-        if (api_is_western_name_order()) {
-            $sql .= ' ORDER BY firstname, lastname';
-        }
+        $sql .= ' WHERE user.status = '.STUDENT.'
+              AND (user.lastname LIKE \'%'.$mask.'%\' OR user.firstname LIKE \'%'.$mask.'%\')';
+
+        $orderBy = api_is_western_name_order() ? 'firstname, lastname' : 'lastname, firstname';
+        $sql .= ' ORDER BY '.$orderBy;
 
         $result = Database::query($sql);
 
@@ -1281,14 +1283,13 @@ class GradebookUtils
             $row_attendance = Database::fetch_array($rs_attendance);
             $sql = 'UPDATE '.$tbl_attendance.' SET
                     attendance_weight ='.api_float_val($weight).'
-                    WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
+                    WHERE id = '.intval($row_attendance['ref_id']);
             Database::query($sql);
         }
         // Update weight into forum thread
         $sql = 'UPDATE '.$tbl_forum_thread.' SET
                 thread_weight = '.api_float_val($weight).'
                 WHERE
-                    c_id = '.$course_id.' AND
                     iid = (
                         SELECT ref_id FROM '.$table_link.'
                         WHERE id='.$linkId.' AND type='.LINK_FORUM_THREAD.'
@@ -1300,15 +1301,14 @@ class GradebookUtils
             ->createQuery('
                 UPDATE ChamiloCourseBundle:CStudentPublication w
                 SET w.weight = :final_weight
-                WHERE w.cId = :course
-                    AND w.iid = (
+                WHERE
+                    w.iid = (
                         SELECT l.refId FROM ChamiloCoreBundle:GradebookLink l
                         WHERE l.id = :link AND l.type = :type
                     )
             ')
             ->execute([
                 'final_weight' => $weight,
-                'course' => $course_id,
                 'link' => $linkId,
                 'type' => LINK_STUDENTPUBLICATION,
             ]);

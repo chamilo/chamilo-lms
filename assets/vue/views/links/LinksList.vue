@@ -1,6 +1,14 @@
 <template>
   <div>
-    <BaseToolbar v-if="securityStore.isAuthenticated && isAllowedToEdit">
+    <SectionHeader :title="t('Links')">
+      <template #end>
+        <StudentViewButton
+          v-if="securityStore.isAuthenticated"
+          @change="refreshForViewToggle"
+        />
+      </template>
+    </SectionHeader>
+    <BaseToolbar v-if="securityStore.isAuthenticated && canEditLinks">
       <BaseButton
         :label="t('Add a link')"
         icon="link-add"
@@ -29,12 +37,13 @@
     </LinkCategoryCard>
 
     <div v-if="!isLoading && !linksWithoutCategory.length && !categories.length">
-      <!-- Render the image and create button -->
+      <!-- Empty state; hide CTA when student view is ON -->
       <EmptyState
         :summary="t('Add your first link to this course')"
         icon="link"
       >
         <BaseButton
+          v-if="canEditLinks"
           :label="t('Add a link')"
           class="mt-4"
           icon="link-add"
@@ -48,7 +57,7 @@
       v-if="!isLoading"
       class="flex flex-col gap-4"
     >
-      <!-- Render the list of links without a category -->
+      <!-- Links without a category -->
       <LinkCategoryCard
         v-if="linksWithoutCategory.length > 0"
         :showHeader="false"
@@ -66,6 +75,7 @@
             <LinkItem
               :isLinkValid="linkValidationResults[link.iid]"
               :link="link"
+              :can-edit="canEditLinks"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -77,7 +87,7 @@
         </ul>
       </LinkCategoryCard>
 
-      <!-- Render the list of categorized links -->
+      <!-- Categorized links -->
       <LinkCategoryCard
         v-for="category in categories"
         :key="category.info.id"
@@ -94,7 +104,7 @@
               <h5>{{ category.info.title }}</h5>
             </div>
             <div
-              v-if="securityStore.isAuthenticated && isCurrentTeacher"
+              v-if="securityStore.isAuthenticated && canEditLinks"
               class="flex gap-2"
             >
               <BaseButton
@@ -131,6 +141,7 @@
             <LinkItem
               :isLinkValid="linkValidationResults[link.iid]"
               :link="link"
+              :can-edit="canEditLinks"
               @check="checkLink(link.iid, link.url)"
               @delete="confirmDeleteLink(link)"
               @edit="editLink"
@@ -169,7 +180,7 @@
 import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -183,19 +194,20 @@ import { isVisible, toggleVisibilityProperty, visibilityFromBoolean } from "../.
 import { useSecurityStore } from "../../store/securityStore"
 import { useCidReq } from "../../composables/cidReq"
 import { checkIsAllowedToEdit } from "../../composables/userPermissions"
+import { usePlatformConfig } from "../../store/platformConfig"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import StudentViewButton from "../../components/StudentViewButton.vue"
 
 const route = useRoute()
 const router = useRouter()
 const securityStore = useSecurityStore()
+const platform = usePlatformConfig()
 const { cid, sid, gid } = useCidReq()
-const isAllowedToEdit = ref(false)
 
 const { t } = useI18n()
-
 const notifications = useNotification()
 
-const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
-
+// Keep these refs reactive for UI
 const linksWithoutCategory = ref([])
 const categories = ref([])
 
@@ -205,9 +217,7 @@ const selectedCategory = ref(null)
 const isDeleteLinkDialogVisible = ref(false)
 const linkToDelete = ref(null)
 const linkToDeleteString = computed(() => {
-  if (linkToDelete.value === null) {
-    return ""
-  }
+  if (linkToDelete.value === null) return ""
   return linkToDelete.value.title
 })
 
@@ -219,14 +229,45 @@ const isLoading = ref(true)
 const linkValidationResults = ref({})
 const isToggling = ref({})
 
+const isAllowedToEdit = ref(securityStore.isAdmin || securityStore.isCurrentTeacher)
+const canEditLinks = computed(() => {
+  if (platform.isStudentViewActive) return false
+  return Boolean(isAllowedToEdit.value || securityStore.isAdmin || securityStore.isCurrentTeacher)
+})
+
 onMounted(async () => {
-  isAllowedToEdit.value = await checkIsAllowedToEdit(true, true, true)
+  await reconcileEditGate()
   linksWithoutCategory.value = []
   categories.value = []
   await fetchLinks()
+
+  console.debug("[LinkList] gating", {
+    isStudentViewActive: platform.isStudentViewActive,
+    isAllowedToEdit: isAllowedToEdit.value,
+    isAdmin: securityStore.isAdmin,
+    isCurrentTeacher: securityStore.isCurrentTeacher,
+    canEditLinks: canEditLinks.value,
+  })
 })
 
+async function reconcileEditGate() {
+  try {
+    const allowed = await checkIsAllowedToEdit(true, true, true)
+    isAllowedToEdit.value = Boolean(allowed || securityStore.isAdmin || securityStore.isCurrentTeacher)
+  } catch {
+    isAllowedToEdit.value = Boolean(securityStore.isAdmin || securityStore.isCurrentTeacher)
+  }
+}
+
+async function refreshForViewToggle() {
+  await reconcileEditGate()
+  await fetchLinks()
+}
+
+watch(() => platform.isStudentViewActive, refreshForViewToggle)
+
 function editLink(link) {
+  if (!canEditLinks.value) return
   selectedLink.value = { ...link }
   router.push({
     name: "UpdateLink",
@@ -236,11 +277,13 @@ function editLink(link) {
 }
 
 function confirmDeleteLink(link) {
+  if (!canEditLinks.value) return
   linkToDelete.value = link
   isDeleteLinkDialogVisible.value = true
 }
 
 async function deleteLink() {
+  if (!canEditLinks.value) return
   try {
     await linkService.deleteLink(linkToDelete.value.id)
     linkToDelete.value = null
@@ -267,6 +310,7 @@ async function checkLink(id, url) {
 }
 
 async function toggleVisibility(link) {
+  if (!canEditLinks.value) return
   if (isToggling.value[link.iid]) return
   isToggling.value = { ...isToggling.value, [link.iid]: true }
 
@@ -275,9 +319,7 @@ async function toggleVisibility(link) {
     const updatedLink = await linkService.toggleLinkVisibility(link.iid, newVisible, cid, sid)
     const newFlagValue = visibilityFromBoolean(updatedLink.linkVisible)
 
-    linksWithoutCategory.value
-      .filter((l) => l.iid === link.iid)
-      .forEach((l) => (l.linkVisible = newFlagValue))
+    linksWithoutCategory.value.filter((l) => l.iid === link.iid).forEach((l) => (l.linkVisible = newFlagValue))
 
     categories.value
       .flatMap((c) => c.links || [])
@@ -293,10 +335,9 @@ async function toggleVisibility(link) {
 }
 
 async function moveUp(id, position) {
+  if (!canEditLinks.value) return // hard guard
   let newPosition = parseInt(position) - 1
-  if (newPosition < 0) {
-    newPosition = 0
-  }
+  if (newPosition < 0) newPosition = 0
   try {
     await linkService.moveLink(id, newPosition)
     notifications.showSuccessNotification(t("Link moved up"))
@@ -307,6 +348,7 @@ async function moveUp(id, position) {
 }
 
 async function moveDown(id, position) {
+  if (!canEditLinks.value) return // hard guard
   const newPosition = parseInt(position) + 1
   try {
     await linkService.moveLink(id, newPosition)
@@ -318,6 +360,7 @@ async function moveDown(id, position) {
 }
 
 function redirectToCreateLink() {
+  if (!canEditLinks.value) return // hard guard
   router.push({
     name: "CreateLink",
     query: route.query,
@@ -325,6 +368,7 @@ function redirectToCreateLink() {
 }
 
 function redirectToCreateLinkCategory() {
+  if (!canEditLinks.value) return // hard guard
   router.push({
     name: "CreateLinkCategory",
     query: route.query,
@@ -332,6 +376,7 @@ function redirectToCreateLinkCategory() {
 }
 
 function editCategory(category) {
+  if (!canEditLinks.value) return // hard guard
   selectedCategory.value = { ...category }
   router.push({
     name: "UpdateLinkCategory",
@@ -341,11 +386,13 @@ function editCategory(category) {
 }
 
 function confirmDeleteCategory(category) {
+  if (!canEditLinks.value) return // hard guard
   categoryToDelete.value = category
   isDeleteCategoryDialogVisible.value = true
 }
 
 async function deleteCategory() {
+  if (!canEditLinks.value) return // hard guard
   try {
     await linkService.deleteCategory(categoryToDelete.value.info.id)
     categoryToDelete.value = null
@@ -354,11 +401,12 @@ async function deleteCategory() {
     await fetchLinks()
   } catch (error) {
     console.error("Error deleting category:", error)
-    notifications.showErrorNotification(t("Could not delete category"))
+    notifications.showErrorNotification(t("Could not change visibility of category"))
   }
 }
 
 async function toggleCategoryVisibility(category) {
+  if (!canEditLinks.value) return // hard guard
   const visibility = toggleVisibilityProperty(category.info.visible)
   try {
     const updatedLinkCategory = await linkService.toggleCategoryVisibility(

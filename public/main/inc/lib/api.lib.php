@@ -761,7 +761,7 @@ function api_get_path($path = '', $configuration = [])
         SYS_CODE_PATH => $root_sys.'public/main/',
         SYS_CSS_PATH => $root_sys.'public/build/css/',
         SYS_PLUGIN_PATH => $root_sys.'public/plugin/',
-        SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
+        SYS_ARCHIVE_PATH => Container::$container ? Container::getCacheDir() : $root_sys.'var/cache/',
         SYS_TEST_PATH => $root_sys.'tests/',
         SYS_TEMPLATE_PATH => $root_sys.'public/main/template/',
         SYS_PUBLIC_PATH => $root_sys.'public/',
@@ -1541,7 +1541,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])->getAuthSourcesAuthentications();
+        $result_array['auth_sources'] = api_get_user_entity($result_array['id'])
+            ->getAuthSourcesAuthentications(
+                Container::getAccessUrlUtil()->getCurrent()
+            )
+        ;
         $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
@@ -1665,7 +1669,9 @@ function api_get_user_info_from_entity(
     $result['address'] = $user->getAddress();
     $result['official_code'] = $user->getOfficialCode();
     $result['active'] = $user->isActive();
-    $result['auth_sources'] = $user->getAuthSourcesAuthentications();
+    $result['auth_sources'] = $user->getAuthSourcesAuthentications(
+        Container::getAccessUrlUtil()->getCurrent()
+    );
     $result['language'] = $user->getLocale();
     $result['creator_id'] = $user->getCreatorId();
     $result['created_at'] = $user->getCreatedAt()->format('Y-m-d H:i:s');
@@ -2712,54 +2718,96 @@ function api_get_session_condition(
  */
 function api_get_setting($variable, $isArray = false, $key = null)
 {
+    // Settings retrieval is centralized in SettingsManager.
     $settingsManager = Container::getSettingsManager();
     if (empty($settingsManager)) {
         return '';
     }
+
     $variable = trim($variable);
-    // Normalize setting name: keep full name for lookup, extract short name for switch matching
-    $full   = $variable;
-    $short  = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
+
+    // Keep full name for lookup; extract short name for switch matching.
+    $full  = $variable;
+    $short = str_contains($variable, '.') ? substr($variable, strrpos($variable, '.') + 1) : $variable;
 
     switch ($short) {
-        case 'server_type':
+        case 'server_type': {
+            // Typed value; default to 'prod' if empty.
             $settingValue = $settingsManager->getSetting($full, true);
             return $settingValue ?: 'prod';
+        }
+
         case 'openid_authentication':
         case 'service_ppt2lp':
-        case 'formLogin_hide_unhide_label':
+        case 'formLogin_hide_unhide_label': {
+            // These behave as disabled.
             return false;
-        case 'tool_visible_by_default_at_creation':
+        }
+
+        case 'tool_visible_by_default_at_creation': {
+            // Original semantics: return an array map of "<tool>" => "true"
             $values = $settingsManager->getSetting($full);
             $newResult = [];
-            foreach ($values as $parameter) {
-                $newResult[$parameter] = 'true';
+            if (is_array($values)) {
+                foreach ($values as $parameter) {
+                    $newResult[$parameter] = 'true';
+                }
             }
-
             return $newResult;
+        }
 
-        default:
+        default: {
+            // Get typed value when possible
             $settingValue = $settingsManager->getSetting($full, true);
-            if (is_string($settingValue) && $isArray && $settingValue !== '') {
-                // Check if the value is a valid JSON string
-                $decodedValue = json_decode($settingValue, true);
 
-                // If it's a valid JSON string and the result is an array, return it
-                if (is_array($decodedValue)) {
-                    return $decodedValue;
+            // If caller expects an array, try to coerce common encodings.
+            if ($isArray) {
+                // Already an array? Return it (optionally narrowed by key).
+                if (is_array($settingValue)) {
+                    return ($key !== null && array_key_exists($key, $settingValue))
+                        ? $settingValue[$key]
+                        : $settingValue;
                 }
-                $value = eval('return ' . rtrim($settingValue, ';') . ';');
-                if (is_array($value)) {
-                    return $value;
+
+                if (is_string($settingValue) && $settingValue !== '') {
+                    // JSON
+                    $decoded = json_decode($settingValue, true);
+                    if (is_array($decoded)) {
+                        return ($key !== null && array_key_exists($key, $decoded)) ? $decoded[$key] : $decoded;
+                    }
+
+                    // PHP serialize()
+                    $unser = @unserialize($settingValue, ['allowed_classes' => false]);
+                    if (is_array($unser)) {
+                        return ($key !== null && array_key_exists($key, $unser)) ? $unser[$key] : $unser;
+                    }
+
+                    // CSV (simple comma-separated list)
+                    if (strpos($settingValue, ',') !== false) {
+                        $parts = array_values(array_filter(array_map('trim', explode(',', $settingValue)), 'strlen'));
+                        // For CSV, $key act as numeric index if provided
+                        return ($key !== null && array_key_exists($key, $parts)) ? $parts[$key] : $parts;
+                    }
+
+                    // strings starting with "array(" (old PHP config style)
+                    $trim = ltrim($settingValue);
+                    if (str_starts_with($trim, 'array(')) {
+                        $legacy = @eval('return ' . $trim . ';');
+                        if (is_array($legacy)) {
+                            return ($key !== null && array_key_exists($key, $legacy)) ? $legacy[$key] : $legacy;
+                        }
+                    }
                 }
             }
 
-            // If the value is not a JSON array or wasn't returned previously, continue with the normal flow
-            if ($key !== null && isset($settingValue[$variable][$key])) {
-                return $settingValue[$variable][$key];
+            // If not forcing array: allow key access when the typed value is an array
+            if ($key !== null && is_array($settingValue) && array_key_exists($key, $settingValue)) {
+                return $settingValue[$key];
             }
 
+            // Return the typed (or raw) value as provided by SettingsManager
             return $settingValue;
+        }
     }
 }
 
@@ -2783,7 +2831,7 @@ function api_get_setting_in_list($variable, $option)
  */
 function api_get_plugin_setting($plugin, $variable)
 {
-    $helper = \Chamilo\CoreBundle\Framework\Container::getPluginHelper();
+    $helper = Container::getPluginHelper();
 
     // Preserve legacy expectation for tool_enable as string 'true'/'false'
     if ($variable === 'tool_enable') {
@@ -5260,6 +5308,43 @@ function api_get_access_url_from_user($user_id)
 }
 
 /**
+ * Checks whether the current admin user in in all access urls.
+ *
+ * @return bool
+ */
+function api_is_admin_in_all_active_urls()
+{
+    if (api_is_platform_admin()) {
+        $urls = api_get_active_urls();
+        $user_url_list = api_get_access_url_from_user(api_get_user_id());
+        foreach ($urls as $url) {
+            if (!in_array($url['id'], $user_url_list)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+/**
+ * Gets all the access urls in the database.
+ *
+ * @return array
+ */
+function api_get_active_urls()
+{
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    $sql = "SELECT * FROM $table WHERE active = 1";
+    $result = Database::query($sql);
+    // Fetch all rows as associative arrays
+    $urls = [];
+    while ($row = Database::fetch_assoc($result)) {
+        $urls[] = $row;
+    }
+    return $urls;
+}
+
+/**
  * Checks whether the curent user is in a group or not.
  *
  * @param string        The group id - optional (takes it from session if not given)
@@ -5688,14 +5773,6 @@ function api_get_jquery_ui_js_web_path()
 function api_get_jquery_ui_css_web_path()
 {
     return api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css';
-}
-
-function api_get_jqgrid_js()
-{
-    return '<link
-        href="'.api_get_path(WEB_PUBLIC_PATH).'build/legacy_free-jqgrid.css" rel="stylesheet" media="screen" type="text/css" />'
-        .PHP_EOL
-        .api_get_build_js('legacy_free-jqgrid.js');
 }
 
 /**
@@ -7063,6 +7140,7 @@ function api_mail_html(
     $additionalParameters = [],
     string $sendErrorTo = null
 ) {
+    /* @var MailHelper $mailHelper */
     $mailHelper = Container::$container->get(MailHelper::class);
 
     return $mailHelper->send(

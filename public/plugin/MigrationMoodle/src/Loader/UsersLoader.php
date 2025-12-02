@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\User;
 
 /**
  * Class UsersLoader.

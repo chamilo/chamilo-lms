@@ -1,5 +1,8 @@
 <template>
-  <BaseCard plain>
+  <BaseCard
+    plain
+    class="mb-2 last:mb-0"
+  >
     <template #header>
       <div class="-mb-2 flex items-center justify-between gap-2 bg-gray-15 px-4 py-2">
         <h6 v-text="announcement.title" />

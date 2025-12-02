@@ -133,7 +133,7 @@ if ($is_allowedToEdit && !empty($action)) {
             }
 
             Display::addFlash(Display::return_message(
-                sprintf(get_lang('%d items deleted (%d skipped)'), $deleted, $skipped),
+                sprintf(get_lang('%s items deleted (%d skipped)'), $deleted, $skipped),
                 $deleted ? 'confirmation' : 'warning'
             ));
             header('Location: '.$currentUrl); exit;

@@ -29082,7 +29082,7 @@ msgstr ""
 msgid "You are adding calendar events for attendance"
 msgstr ""
 
-msgid "Add attendance calendar"
+msgid "Add attendance date"
 msgstr ""
 
 msgid "Back to attendance sheet"
@@ -30700,4 +30700,448 @@ msgid "Popular courses"
 msgstr ""
 
 msgid "Already logged in"
+msgstr ""
+
+msgid "GDPR compliance"
+msgstr ""
+
+msgid "Azure UID (internal ID)"
+msgstr ""
+
+msgid "Azure ID (mailNickname)"
+msgstr ""
+
+msgid "Organisation e-mail"
+msgstr ""
+
+msgid "UID"
+msgstr ""
+
+msgid "Office phone extension"
+msgstr ""
+
+msgid "Office address"
+msgstr ""
+
+msgid "Number of days for completion"
+msgstr ""
+
+msgid "Event notifications"
+msgstr ""
+
+msgid "Skip automatic validation"
+msgstr ""
+
+msgid "Use alternate tracking system"
+msgstr ""
+
+msgid "My terms"
+msgstr ""
+
+msgid "Moodle password"
+msgstr ""
+
+msgid "Long term authentication request token used"
+msgstr ""
+
+msgid "Is from new login"
+msgstr ""
+
+msgid "End pause date"
+msgstr ""
+
+msgid "Downloaded at"
+msgstr ""
+
+msgid "Disable import calendar"
+msgstr ""
+
+msgid "Disable all emails"
+msgstr ""
+
+msgid "Differentiation"
+msgstr ""
+
+msgid "Credentials type"
+msgstr ""
+
+msgid "Collapsed"
+msgstr ""
+
+msgid "Career diagram"
+msgstr ""
+
+msgid "Career URLs"
+msgstr ""
+
+msgid "Career ID"
+msgstr ""
+
+msgid "CAS user"
+msgstr ""
+
+msgid "Buyer's address"
+msgstr ""
+
+msgid "Buyer's VAT/Tax ID"
+msgstr ""
+
+msgid "Buyer's company"
+msgstr ""
+
+msgid "Block Category"
+msgstr ""
+
+msgid "Authentication method"
+msgstr ""
+
+msgid "Authentication date"
+msgstr ""
+
+msgid "Ask for new password"
+msgstr ""
+
+msgid "Ask for revision"
+msgstr ""
+
+msgid "Advanced courses list"
+msgstr ""
+
+msgid "User address"
+msgstr ""
+
+msgid "Considered working time"
+msgstr ""
+
+msgid "Send to coaches"
+msgstr ""
+
+msgid "In multiple languages"
+msgstr ""
+
+msgid "Show in catalogue"
+msgstr ""
+
+msgid "Is mandatory"
+msgstr ""
+
+msgid "Lock course in session"
+msgstr ""
+
+msgid "Send to users in session"
+msgstr ""
+
+msgid "Date to send notification"
+msgstr ""
+
+msgid "Send notification at a specific date"
+msgstr ""
+
+msgid "Notify of group messages by email"
+msgstr ""
+
+msgid "Notify of messages by email"
+msgstr ""
+
+msgid "Notify of invitations by email"
+msgstr ""
+
+msgid "Account locked until"
+msgstr ""
+
+msgid "Google Calendar URL"
+msgstr ""
+
+msgid "User chat status"
+msgstr ""
+
+msgid "Update script type"
+msgstr ""
+
+msgid "My test conditions"
+msgstr ""
+
+msgid "GDPR"
+msgstr ""
+
+msgid "2FA activated successfully."
+msgstr ""
+
+msgid "Duplicate submission ignored"
+msgstr ""
+
+msgid "Show free users (not enrolled)"
+msgstr ""
+
+msgid "At least one URL has no admin assigned"
+msgstr ""
+
+msgid "All URLs have at least one admin assigned"
+msgstr ""
+
+msgid "E-mail settings need to be configured"
+msgstr ""
+
+msgid "E-mail settings are OK"
+msgstr ""
+
+msgid "General course resources"
+msgstr ""
+
+msgid "Error closing zip file"
+msgstr ""
+
+msgid "Error adding file to zip"
+msgstr ""
+
+msgid "Error creating zip file"
+msgstr ""
+
+msgid "Error creating %s"
+msgstr ""
+
+msgid "Access teacher page"
+msgstr ""
+
+msgid "To begin, edit this page and remove this text"
+msgstr ""
+
+msgid "The new page has been created."
+msgstr ""
+
+msgid "The page already exists."
+msgstr ""
+
+msgid "You are not viewing the most recent version"
+msgstr ""
+
+msgid "Are you sure you want to unsubscribe this user?"
+msgstr ""
+
+msgid "The test contains page-break questions, which will only take effect if the test is set to 'All questions on one page'."
+msgstr ""
+
+msgid "%s items deleted (%d skipped)"
+msgstr "%s items deleted (%d skipped)"
+
+msgid "Selecting an option will add it to the Responses table below."
+msgstr ""
+
+msgid "PDF path unavailable"
+msgstr ""
+
+msgid "Global weighting mode"
+msgstr ""
+
+msgid "Per-answer weighting mode"
+msgstr ""
+
+msgid "External career ID"
+msgstr ""
+
+msgid "External calendar event ID"
+msgstr ""
+
+msgid "Export failed: %s"
+msgstr ""
+
+msgid "Export all test results"
+msgstr ""
+
+msgid "Error loading tests"
+msgstr ""
+
+msgid "No test found"
+msgstr ""
+
+msgid "Error loading courses"
+msgstr ""
+
+msgid "First select a session"
+msgstr ""
+
+msgid "Error loading sessions"
+msgstr ""
+
+msgid "Survey not found"
+msgstr ""
+
+msgid "There is a new comment in the post <i>%s</i>. To view it <a href='%s'>go here</a>."
+msgstr ""
+
+msgid "View in alphabetical order"
+msgstr ""
+
+msgid "View in chronological order"
+msgstr ""
+
+msgid "Qualify"
+msgstr ""
+
+msgid "Comment from %s"
+msgstr ""
+
+msgid "Remove as template"
+msgstr ""
+
+msgid "Translate category"
+msgstr ""
+
+msgid "No notes yet"
+msgstr ""
+
+msgid "Create your first note to get started."
+msgstr ""
+
+msgid "F d, Y"
+msgstr ""
+
+msgid "Could not load support info at this time."
+msgstr ""
+
+msgid "Could not load latest news at this time."
+msgstr ""
+
+msgid "Internal error."
+msgstr ""
+
+msgid "Message update"
+msgstr ""
+
+msgid "Open file"
+msgstr ""
+
+msgid "Item details"
+msgstr ""
+
+msgid "Uploading... please keep this tab open."
+msgstr ""
+
+msgid "Recipients"
+msgstr ""
+
+msgid "Enter a value here"
+msgstr ""
+
+msgid "Write a title..."
+msgstr ""
+
+msgid "Use the editor toolbar to format your content."
+msgstr ""
+
+msgid "Drag & drop files here or click to select"
+msgstr ""
+
+msgid "Edit post"
+msgstr ""
+
+msgid "New post"
+msgstr ""
+
+msgid "Failed to create the post. Please try again."
+msgstr ""
+
+msgid "Press Ctrl+Enter to send"
+msgstr ""
+
+msgid "Add comment"
+msgstr ""
+
+msgid "Write your comment here..."
+msgstr ""
+
+msgid "%d selected"
+msgstr ""
+
+msgid "Search by title or path..."
+msgstr ""
+
+msgid "Manage backups, restore, copy, recycle and delete course data."
+msgstr ""
+
+msgid "%d comment(s)"
+msgstr ""
+
+msgid "Error updating third party. Please verify the data."
+msgstr ""
+
+msgid "Please choose a .imscc or .zip file."
+msgstr ""
+
+msgid "Select items"
+msgstr ""
+
+msgid "Import options"
+msgstr ""
+
+msgid "Selected items"
+msgstr ""
+
+msgid "Scope"
+msgstr ""
+
+msgid "Select source"
+msgstr ""
+
+msgid "No date"
+msgstr ""
+
+msgid "Download as ZIP"
+msgstr ""
+
+msgid "Delete this folder? All files inside will be permanently deleted."
+msgstr ""
+
+msgid "Template type"
+msgstr ""
+
+msgid "Edit task"
+msgstr ""
+
+msgid "Pending validation"
+msgstr ""
+
+msgid "New project"
+msgstr ""
+
+msgid "Assign task"
+msgstr ""
+
+msgid "Select a task"
+msgstr ""
+
+msgid "Select a user"
+msgstr ""
+
+msgid "Target date"
+msgstr ""
+
+msgid "Could not load exportable items."
+msgstr ""
+
+msgid "You can close this message to continue."
+msgstr ""
+
+msgid "Select a contact"
+msgstr ""
+
+msgid "No messages yet"
+msgstr ""
+
+msgid "Pick someone in the left box to start chatting"
+msgstr ""
+
+msgid "Enter to send · Shift+Enter for newline"
+msgstr ""
+
+msgid "Delivered"
+msgstr ""
+
+msgid "Sending"
+msgstr ""
+
+msgid "Are you sure you want to clear this conversation?"
+msgstr ""
+
+msgid "New messages"
 msgstr ""

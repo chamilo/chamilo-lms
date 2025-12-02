@@ -236,7 +236,7 @@ class AccountController extends BaseController
                             $user->setPlainPassword($newPassword);
                             $user->setPasswordUpdatedAt(new DateTimeImmutable());
                             $userRepository->updateUser($user);
-                            $this->addFlash('success', $this->translator->trans('Password updated successfully.'));
+                            $this->addFlash('success', $this->translator->trans('Password updated successfully'));
 
                             // Re-login if the user was not logged in (edge case when rotating from link)
                             if (!$this->getUser()) {

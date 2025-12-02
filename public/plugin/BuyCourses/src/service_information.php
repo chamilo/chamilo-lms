@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 /**
@@ -11,10 +13,10 @@ $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 
-$serviceId = isset($_GET['service_id']) ? intval($_GET['service_id']) : false;
+$serviceId = isset($_GET['service_id']) ? (int) ($_GET['service_id']) : false;
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
-        WEB_PLUGIN_PATH
-    ).'BuyCourses/resources/css/style.css"/>';
+    WEB_PLUGIN_PATH
+).'BuyCourses/resources/css/style.css"/>';
 $plugin = BuyCoursesPlugin::create();
 
 $includeServices = 'true' === $plugin->get('include_services');

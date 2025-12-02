@@ -2072,7 +2072,7 @@ msgid "Tests"
 msgstr "Ejercicios"
 
 msgid "Courses"
-msgstr "Lecciones"
+msgstr "Cursos"
 
 msgid "Copy course"
 msgstr "Copiar el curso"
@@ -29541,3 +29541,6 @@ msgstr ""
 
 msgid "If you want to copy a course from one session to another course in another session, you must first select a course in the courses list from the original session. You can then choose to copy contents from the course description, documents, glossary, links, tests and learning path tools directly or by selecting the course components."
 msgstr "Si desea copiar un curso de una sesión a otro curso de otra sesión, primero debe seleccionar un curso de la lista cursos de origen de la sesión. Puedes copiar contenidos de las herramientas descripción del curso, documentos, glosario, enlaces, ejercicios y lecciones, de forma directa o seleccionando los componentes del curso"
+
+msgid "Show free users (not enrolled)"
+msgstr "Mostrar usuarios libres (no registrados)"

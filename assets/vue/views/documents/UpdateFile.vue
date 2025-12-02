@@ -4,7 +4,6 @@
     <Toolbar
       :handle-back="handleBack"
       :handle-reset="resetForm"
-      :handle-submit="onSendFormData"
     />
     <div class="documents-layout">
       <div class="template-list-container">
@@ -18,6 +17,7 @@
           ref="updateForm"
           :errors="violations"
           :values="item"
+          @submit="onSendFormData"
         >
           <EditLinks
             v-model="item"

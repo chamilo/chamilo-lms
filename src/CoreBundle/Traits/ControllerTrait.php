@@ -181,30 +181,4 @@ trait ControllerTrait
 
         fclose($stream);
     }
-
-    protected function setHeadersToStreamedResponse(
-        Response $response,
-        bool $forceDownload,
-        string $filename,
-        string $contentType,
-        int $length,
-        int $start,
-        int $end,
-        int $fileSize,
-        int $finalStatus = Response::HTTP_OK
-    ): void {
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            $filename
-        );
-
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $contentType);
-        $response->headers->set('Content-Length', (string) $length);
-        $response->headers->set('Accept-Ranges', 'bytes');
-        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
-        $response->setStatusCode(
-            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : $finalStatus
-        );
-    }
 }

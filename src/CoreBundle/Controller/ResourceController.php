@@ -661,15 +661,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        $this->setHeadersToStreamedResponse(
-            $response,
-            $forceDownload,
-            $fileName,
-            $mimeType ?: 'application/octet-stream',
-            $length,
-            $start,
-            $end,
-            $fileSize
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            $fileName
+        );
+
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+        $response->headers->set('Content-Length', (string) $length);
+        $response->headers->set('Accept-Ranges', 'bytes');
+        $response->headers->set('Content-Range', "bytes $start-$end/$fileSize");
+        $response->setStatusCode(
+            $start > 0 || $end < $fileSize - 1 ? Response::HTTP_PARTIAL_CONTENT : Response::HTTP_OK
         );
 
         return $response;

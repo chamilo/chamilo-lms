@@ -532,7 +532,8 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
-// Session admin allowed to edit all courses content
+// Session admin allowed to edit all courses content 
+// including all exercises attemps results edition, calculation and deletion
 //$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
 /*

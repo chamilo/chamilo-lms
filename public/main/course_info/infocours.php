@@ -318,23 +318,23 @@ $aiOptions = [
 $visibilityOptions = [
     [
         'value' => COURSE_VISIBILITY_OPEN_WORLD,
-        'label' => get_lang('Public - access authorized for whole world'),
+        'label' => get_lang('Public - access allowed for the whole world'),
     ],
     [
         'value' => COURSE_VISIBILITY_OPEN_PLATFORM,
-        'label' => get_lang('Open - access allowed for registered users on the platform'),
+        'label' => get_lang('Open - access allowed for users registered on the platform'),
     ],
     [
         'value' => COURSE_VISIBILITY_REGISTERED,
-        'label' => get_lang('Private (available only to course members)'),
+        'label' => get_lang('Private - access granted by privileged users'),
     ],
     [
         'value' => COURSE_VISIBILITY_CLOSED,
-        'label' => get_lang('Closed - no access to this course'),
+        'label' => get_lang('Closed - the course is only accessible to the teachers'),
     ],
     [
         'value' => COURSE_VISIBILITY_HIDDEN,
-        'label' => get_lang('Invisible - Completely invisible and inaccessible for all users except administrators'),
+        'label' => get_lang('Hidden - Completely hidden to all users except the administrators'),
     ],
 ];
 

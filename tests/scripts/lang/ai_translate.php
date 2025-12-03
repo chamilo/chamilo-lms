@@ -45,24 +45,35 @@ $basePoFile = $translationsDir . "messages.{$sourceLanguageCode}.po";
 $logFile = __DIR__ . "/grok_translate.log";
 
 // Batch size for API calls
-$batchSize = 50;
+$batchSize = 100;
+$batchSizeInTestMode = 20;
 
 // ===================== HELPER FUNCTIONS =====================
 
 /**
  * Simple stderr output.
  */
-function eprintln(string $msg): void {
+function eprintln(string $msg, bool $timestam = false): void {
+    if ($timestam) {
+        $msg = '[' . date('H:i:s') . '] ' . $msg;
+    }
     fwrite(STDERR, $msg . PHP_EOL);
 }
 
 /**
- * Get human-readable language name from code (best-effort).
+ * Get a human-readable language name from code (best-effort).
  */
 function getLanguageName(string $code): string {
     static $map = [
         'fr'    => 'French',
+        'bg'    => 'Bulgarian',
+        'bn_BD' => 'Bengali (Bangladesh)',
+        'bo_CN' => 'Tibetan (China)',
+        'bs_BA' => 'Bosnian (Bosnia and Herzegovina)',
+        'cs_CZ' => 'Czech (Czech Republic)',
+        'eo'    => 'Esperanto',
         'es'    => 'Spanish',
+        'es_MX'    => 'Spanish (Mexico)',
         'de'    => 'German',
         'it'    => 'Italian',
         'nl'    => 'Dutch',
@@ -483,7 +494,7 @@ EOT;
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 60,
+        CURLOPT_TIMEOUT        => 600,
     ]);
 
     $responseBody = curl_exec($ch);
@@ -642,10 +653,10 @@ if ($apiKey === '' || $apiKey === 'YOUR_GROK_API_KEY_HERE') {
 }
 
 // Parse base messages.en.po
-eprintln("Loading base file: {$basePoFile}");
+eprintln("Loading base file: {$basePoFile}", true);
 $baseEntries = parseBasePoFile($basePoFile);
 $totalTerms = count($baseEntries);
-eprintln("Base entries loaded: {$totalTerms} (including header and plurals).");
+eprintln("Base entries loaded: {$totalTerms} (including header and plurals).", true);
 
 foreach ($langCodes as $lang) {
     $lang = trim($lang);
@@ -657,7 +668,7 @@ foreach ($langCodes as $lang) {
 
     $targetFile = $translationsDir . "messages.{$lang}.po";
     eprintln("------------------------------------------------------------");
-    eprintln("Processing language: {$lang} ({$targetLangName})");
+    eprintln("Processing language: {$lang} ({$targetLangName})", true);
     eprintln("Target file: {$targetFile}");
 
     if (is_file($targetFile)) {
@@ -682,7 +693,7 @@ foreach ($langCodes as $lang) {
     $keepRawSingular = [];    // msgid => true for entries that we don't modify at all
     $processedCount = 0;
     $apiBatchCount = 0;
-    $maxBatches = $testMode ? 1 : PHP_INT_MAX;
+    $maxBatches = $testMode ? $batchSizeInTestMode : PHP_INT_MAX;
 
     $pendingBatch = [];
     $pendingMap = []; // id => ['msgid'=>..., 'action'=>...]
@@ -696,7 +707,7 @@ foreach ($langCodes as $lang) {
             // Header and plural entries are not sent to API
             $processedCount++;
             if ($processedCount % 50 === 0) {
-                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).");
+                eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).", true);
             }
             continue;
         }
@@ -738,7 +749,7 @@ foreach ($langCodes as $lang) {
             if (count($pendingBatch) >= $batchSize) {
                 $apiBatchCount++;
                 eprintln("[{$lang}] Sending batch {$apiBatchCount} to Grok API ("
-                    . count($pendingBatch) . " terms).");
+                    . count($pendingBatch) . " terms).", true);
 
                 try {
                     $translations = callGrokTranslateBatch(
@@ -749,9 +760,9 @@ foreach ($langCodes as $lang) {
                         $pendingBatch
                     );
                     eprintln("[{$lang}] Grok API batch {$apiBatchCount} completed, "
-                        . count($translations) . " translations received.");
+                        . count($translations) . " translations received.", true);
                 } catch (Throwable $ex) {
-                    eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage());
+                    eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage(), true);
                     exit(1);
                 }
 
@@ -772,14 +783,15 @@ foreach ($langCodes as $lang) {
 
                     $targetTranslations[$msgidBatch] = $translated;
                     logAction($logFile, $lang, $msgidBatch, $actionBatch);
+                    sleep(1);
                 }
 
                 $pendingBatch = [];
                 $pendingMap = [];
 
                 if ($testMode && $apiBatchCount >= $maxBatches) {
-                    eprintln("[{$lang}] Test mode: only one batch has been sent to Grok. "
-                        . "Remaining untranslated entries will be left as-is.");
+                    eprintln("[{$lang}] Test mode: only $batchSizeInTestMode batches have been sent to Grok. "
+                        . "Remaining untranslated entries will be left as-is.", true);
                 }
             }
         } elseif ($needsTranslation && $apiBatchCount >= $maxBatches) {
@@ -791,7 +803,7 @@ foreach ($langCodes as $lang) {
 
         $processedCount++;
         if ($processedCount % 50 === 0) {
-            eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).");
+            eprintln("[{$lang}] Progress: {$processedCount} / {$totalTerms} entries processed (header/plurals included).", true);
         }
     }
 
@@ -799,7 +811,7 @@ foreach ($langCodes as $lang) {
     if (!empty($pendingBatch) && $apiBatchCount < $maxBatches) {
         $apiBatchCount++;
         eprintln("[{$lang}] Sending final batch {$apiBatchCount} to Grok API ("
-            . count($pendingBatch) . " terms).");
+            . count($pendingBatch) . " terms).", true);
 
         try {
             $translations = callGrokTranslateBatch(
@@ -810,9 +822,9 @@ foreach ($langCodes as $lang) {
                 $pendingBatch
             );
             eprintln("[{$lang}] Grok API final batch {$apiBatchCount} completed, "
-                . count($translations) . " translations received.");
+                . count($translations) . " translations received.", true);
         } catch (Throwable $ex) {
-            eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage());
+            eprintln("[{$lang}] ERROR while calling Grok API: " . $ex->getMessage(), true);
             exit(1);
         }
 
@@ -838,14 +850,14 @@ foreach ($langCodes as $lang) {
     $newContent = buildTargetPoContent($baseEntries, $targetParsed, $targetTranslations, $keepRawSingular);
 
     if (file_put_contents($targetFile, $newContent) === false) {
-        eprintln("[{$lang}] ERROR: Unable to write updated translation file: {$targetFile}");
+        eprintln("[{$lang}] ERROR: Unable to write updated translation file: {$targetFile}", true);
         exit(1);
     }
 
-    eprintln("[{$lang}] Updated translation file written: {$targetFile}");
+    eprintln("[{$lang}] Updated translation file written: {$targetFile}", true);
     if ($testMode) {
-        eprintln("[{$lang}] NOTE: Test mode was enabled; only one API batch of up to {$batchSize} terms was translated.");
+        eprintln("[{$lang}] NOTE: Test mode was enabled; only {$batchSizeInTestMode} API batch of up to {$batchSize} terms was translated.");
     }
 }
 
-eprintln("All requested languages processed.");
+eprintln("All requested languages processed.", true);

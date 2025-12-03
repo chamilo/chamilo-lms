@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\MaterializedPathRepository;
@@ -77,27 +78,27 @@ class ResourceNodeRepository extends MaterializedPathRepository
 
             return '';
         } catch (Throwable $throwable) {
-            throw new FileNotFoundException($resourceNode->getTitle());
+            throw new FileNotFoundException(null, 0, $throwable, $resourceNode->getTitle());
         }
     }
 
     /**
-     * @return false|resource
+     * Get the file stream of a resource node's file.
+     *
+     * The value for $resourceFile must be set calling ResourceFileHelper::resolveResourceFileByAccessUrl()
+     *
+     * @see ResourceFileHelper::resolveResourceFileByAccessUrl()
+     *
+     * @return resource|null
      */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode, ?ResourceFile $resourceFile = null)
+    public function getResourceNodeFileStream(ResourceNode $resourceNode, ResourceFile $resourceFile)
     {
         try {
-            $resourceFile ??= $resourceNode->getResourceFiles()->first();
+            $fileName = $this->getFilename($resourceFile);
 
-            if ($resourceFile) {
-                $fileName = $this->getFilename($resourceFile);
-
-                return $this->getFileSystem()->readStream($fileName);
-            }
-
-            return false;
+            return $this->getFileSystem()->readStream($fileName);
         } catch (Throwable $exception) {
-            throw new FileNotFoundException($resourceNode->getTitle());
+            throw new FileNotFoundException(null, 0, $exception, $resourceNode->getTitle());
         }
     }
 
@@ -138,7 +139,7 @@ class ResourceNodeRepository extends MaterializedPathRepository
 
             return '';
         } catch (Throwable $exception) {
-            throw new FileNotFoundException($resourceNode->getTitle());
+            throw new FileNotFoundException(null, 0, $exception, $resourceNode->getTitle());
         }
     }
 

@@ -7616,26 +7616,37 @@ document.addEventListener("DOMContentLoaded", function () {
     public static function deleteCategory(int $id): bool
     {
         $repo = Container::getLpCategoryRepository();
-        /** @var CLpCategory $category */
+        /** @var CLpCategory|null $category */
         $category = $repo->find($id);
-        if ($category) {
-            $em = Database::getManager();
-            $lps = $category->getLps();
 
-            foreach ($lps as $lp) {
-                $lp->setCategory(null);
-                $em->persist($lp);
-            }
-
-            $course = api_get_course_entity();
-            $session = api_get_session_entity();
-
-            $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
-
-            return true;
+        if (null === $category) {
+            return false;
         }
 
-        return false;
+        $em  = Database::getManager();
+        $lps = $category->getLps();
+
+        // Detach all learning paths from this category
+        foreach ($lps as $lp) {
+            $lp->setCategory(null);
+            $em->persist($lp);
+        }
+
+        // Remove the resource link of this category in the current context
+        $course  = api_get_course_entity();
+        $session = api_get_session_entity();
+
+        $em->getRepository(ResourceLink::class)->removeByResourceInContext(
+            $category,
+            $course,
+            $session
+        );
+
+        // Remove the category itself
+        $em->remove($category);
+        $em->flush();
+
+        return true;
     }
 
     /**

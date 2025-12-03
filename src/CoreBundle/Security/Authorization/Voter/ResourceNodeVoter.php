@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -53,6 +54,7 @@ class ResourceNodeVoter extends Voter
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
         private EntityManagerInterface $entityManager,
+        private PageHelper $pageHelper,
         private readonly ResourceAclHelper $resourceAclHelper,
     ) {}
 
@@ -116,6 +118,11 @@ class ResourceNodeVoter extends Voter
         }
 
         if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
+            return true;
+        }
+
+        // Special case: allow file assets that are embedded inside a visible system announcement.
+        if (self::VIEW === $attribute && $this->isAnnouncementFileVisibleForCurrentRequest($resourceNode, $token)) {
             return true;
         }
 
@@ -448,6 +455,47 @@ class ResourceNodeVoter extends Voter
         }
 
         return $this->resourceAclHelper->isAllowed($attribute, $link, $rights, $allowAnonsToView);
+    }
+
+    /**
+     * Checks if the current request is viewing a document file that is embedded
+     * inside a visible system announcement, delegating the heavy logic to PageHelper.
+     */
+    private function isAnnouncementFileVisibleForCurrentRequest(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $type = $resourceNode->getResourceType()?->getTitle();
+        if ('files' !== $type) {
+            return false;
+        }
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
+
+        $pathInfo = (string) $request->getPathInfo();
+        if ('' === $pathInfo) {
+            return false;
+        }
+
+        // Extract file identifier from /r/document/files/{identifier}/view.
+        $segments = explode('/', trim($pathInfo, '/'));
+        $identifier = null;
+        if (\count($segments) >= 4) {
+            // ... /r/document/files/{identifier}/view
+            $identifier = $segments[\count($segments) - 2] ?? null;
+        }
+
+        $userFromToken = $token->getUser();
+        $user = $userFromToken instanceof UserInterface ? $userFromToken : null;
+        $locale = $request->getLocale();
+
+        return $this->pageHelper->isFilePathExposedByVisibleAnnouncement(
+            $pathInfo,
+            \is_string($identifier) ? $identifier : null,
+            $user,
+            $locale
+        );
     }
 
     private function isBlogResource(ResourceNode $node): bool

@@ -156,20 +156,27 @@ class CourseController extends ToolBaseController
         EntityManagerInterface $em,
         AssetRepository $assetRepository
     ): Response {
-        $requestData = json_decode($request->getContent(), true);
-        // Sort behaviour
-        if (!empty($requestData) && isset($requestData['toolItem'])) {
-            $index = $requestData['index'];
-            $toolItem = $requestData['toolItem'];
-            $toolId = (int) $toolItem['iid'];
+        // Handle drag & drop sort for course tools
+        if ($request->isMethod('POST')) {
+            $requestData = json_decode($request->getContent() ?: '', true) ?? [];
 
-            /** @var CTool $cTool */
-            $cTool = $em->find(CTool::class, $toolId);
+            if (isset($requestData['toolId'], $requestData['index'])) {
+                $course = $this->getCourse();
+                if (null === $course) {
+                    return $this->json(
+                        ['success' => false, 'message' => 'Course not found.'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
 
-            if ($cTool) {
-                $cTool->setPosition($index + 1);
-                $em->persist($cTool);
-                $em->flush();
+                $sessionId = $this->getSessionId();
+                $toolId = (int) $requestData['toolId'];
+                $newIndex = (int) $requestData['index'];
+
+                $result = $this->reorderCourseTools($em, $course, $sessionId, $toolId, $newIndex);
+                $statusCode = $result['success'] ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST;
+
+                return $this->json($result, $statusCode);
             }
         }
 
@@ -1316,5 +1323,104 @@ class CourseController extends ToolBaseController
         ;
 
         return $enrollmentCount > 0;
+    }
+
+    /**
+     * Reorders all course tools for a given course / session after drag & drop.
+     *
+     * @return array<string, mixed>
+     */
+    private function reorderCourseTools(
+        EntityManagerInterface $em,
+        Course $course,
+        int $sessionId,
+        int $toolId,
+        int $newIndex
+    ): array {
+        if ($toolId <= 0) {
+            return [
+                'success' => false,
+                'message' => 'Invalid tool id.',
+            ];
+        }
+
+        /** @var CToolRepository $toolRepo */
+        $toolRepo = $em->getRepository(CTool::class);
+
+        // Load all tools for this course + (optional) session ordered by current position
+        $qb = $toolRepo->createQueryBuilder('t')
+            ->andWhere('t.course = :course')
+            ->setParameter('course', $course)
+            ->orderBy('t.position', 'ASC')
+            ->addOrderBy('t.iid', 'ASC');
+
+        if ($sessionId > 0) {
+            $qb
+                ->andWhere('IDENTITY(t.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId);
+        } else {
+            $qb->andWhere('t.session IS NULL');
+        }
+
+        /** @var CTool[] $tools */
+        $tools = $qb->getQuery()->getResult();
+
+        if (0 === \count($tools)) {
+            return [
+                'success' => false,
+                'message' => 'No tools found for course / session.',
+            ];
+        }
+
+        // Build an array of IDs to manipulate positions easily
+        $ids = array_map(static fn (CTool $tool): int => $tool->getIid() ?? 0, $tools);
+
+        $currentIndex = array_search($toolId, $ids, true);
+        if (false === $currentIndex) {
+            return [
+                'success' => false,
+                'message' => 'Tool not found in current course / session.',
+            ];
+        }
+
+        // Clamp the new index into a valid range
+        $newIndex = max(0, min($newIndex, \count($tools) - 1));
+
+        if ($newIndex === $currentIndex) {
+            return [
+                'success' => true,
+                'unchanged' => true,
+                'from' => $currentIndex,
+                'to' => $newIndex,
+                'total' => \count($tools),
+            ];
+        }
+
+        // Move the ID in the array (remove at old index, insert at new index)
+        $idToMove = $ids[$currentIndex];
+        array_splice($ids, $currentIndex, 1);
+        array_splice($ids, $newIndex, 0, [$idToMove]);
+
+        // Rewrite all positions in DB using a simple DQL UPDATE per tool
+        // Positions will be 0-based: 0,1,2,...
+        foreach ($ids as $pos => $id) {
+            $em->createQueryBuilder()
+                ->update(CTool::class, 't')
+                ->set('t.position', ':pos')
+                ->where('t.iid = :iid')
+                ->setParameter('pos', $pos)
+                ->setParameter('iid', $id)
+                ->getQuery()
+                ->execute();
+        }
+
+        return [
+            'success' => true,
+            'from' => $currentIndex,
+            'to' => $newIndex,
+            'total' => \count($tools),
+            'courseId' => $course->getId(),
+            'sessionId' => $sessionId,
+        ];
     }
 }

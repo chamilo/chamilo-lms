@@ -73,10 +73,12 @@ export default {
    * @returns {Promise<Object>}
    */
   updateToolOrder: async (tool, newIndex, courseId, sessionId = 0) => {
-    const { data } = await api.post(`/course/${courseId}/home.json?sid=${sessionId}`, {
+    const payload = {
+      toolId: tool.iid,
       index: newIndex,
-      toolItem: tool,
-    })
+    }
+
+    const { data } = await api.post(`/course/${courseId}/home.json?sid=${sessionId}`, payload)
 
     return data
   },

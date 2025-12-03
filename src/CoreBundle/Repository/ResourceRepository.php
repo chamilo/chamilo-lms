@@ -583,14 +583,6 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $this->resourceNodeRepository->getResourceNodeFileContent($resourceNode);
     }
 
-    /**
-     * @return false|resource
-     */
-    public function getResourceNodeFileStream(ResourceNode $resourceNode)
-    {
-        return $this->resourceNodeRepository->getResourceNodeFileStream($resourceNode);
-    }
-
     public function getResourceFileDownloadUrl(AbstractResource $resource, array $extraParams = [], ?int $referenceType = null): string
     {
         $extraParams['mode'] = 'download';

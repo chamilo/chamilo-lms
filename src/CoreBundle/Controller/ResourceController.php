@@ -186,7 +186,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
         }
 
-        return $this->processFile($request, $resourceNode, 'show', $filter, $allUserInfo, $resourceFile);
+        return $this->processFile($request, $resourceNode, $resourceFile, 'show', $filter, $allUserInfo);
     }
 
     /**
@@ -236,6 +236,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         Request $request,
         TrackEDownloadsRepository $trackEDownloadsRepository,
         ResourceFileHelper $resourceFileHelper,
+        ResourceNodeRepository $resourceNodeRepository,
     ): Response {
         $id = $request->get('id');
         $resourceNode = $this->getResourceNodeRepository()->findOneBy(['uuid' => $id]);
@@ -265,7 +266,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             // Redirect to download single file.
-            return $this->processFile($request, $resourceNode, 'download', '', null, $resourceFile);
+            return $this->processFile($request, $resourceNode, $resourceFile, 'download', '', null);
         }
 
         $zipName = $resourceNode->getSlug().'.zip';
@@ -298,7 +299,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         }
 
         $response = new StreamedResponse(
-            function () use ($zipName, $children, $repo): void {
+            function () use ($zipName, $children, $resourceFileHelper, $resourceNodeRepository): void {
                 // Define suitable options for ZipStream Archive.
                 $options = new Archive();
                 $options->setContentType('application/octet-stream');
@@ -307,11 +308,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 /** @var ResourceNode $node */
                 foreach ($children as $node) {
-                    $resourceFiles = $node->getResourceFiles();
-                    $resourceFile = $resourceFiles->filter(fn ($file) => null === $file->getAccessUrl())->first();
+                    $resourceFile = $resourceFileHelper->resolveResourceFileByAccessUrl($node);
 
                     if ($resourceFile) {
-                        $stream = $repo->getResourceNodeFileStream($node);
+                        $stream = $resourceNodeRepository->getResourceNodeFileStream($node, $resourceFile);
                         $fileName = $resourceFile->getOriginalName();
                         $zip->addFileFromStream($fileName, $stream);
                     }
@@ -537,19 +537,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $this->json(['success' => true]);
     }
 
-    private function processFile(Request $request, ResourceNode $resourceNode, string $mode = 'show', string $filter = '', ?array $allUserInfo = null, ?ResourceFile $resourceFile = null): mixed
+    private function processFile(Request $request, ResourceNode $resourceNode, ResourceFile $resourceFile, string $mode = 'show', string $filter = '', ?array $allUserInfo = null): mixed
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
             $this->trans('Unauthorised view access to resource')
         );
-
-        $resourceFile ??= $resourceNode->getResourceFiles()->first();
-
-        if (!$resourceFile) {
-            throw $this->createNotFoundException($this->trans('File not found for resource'));
-        }
 
         $fileName = $resourceFile->getOriginalName();
         $fileSize = $resourceFile->getSize();

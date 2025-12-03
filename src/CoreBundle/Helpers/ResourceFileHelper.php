@@ -19,7 +19,11 @@ class ResourceFileHelper
 
     public function resolveResourceFileByAccessUrl(ResourceNode $resourceNode): ?ResourceFile
     {
-        $accessUrlSpecificFiles = 'true' === $this->settingsManager->getSetting('document.access_url_specific_files')
+        if (!$resourceNode->hasResourceFile()) {
+            return null;
+        }
+
+        $accessUrlSpecificFiles = 'true' === $this->settingsManager->getSetting('document.access_url_specific_files', true)
             && $this->accessUrlHelper->isMultiple();
 
         $resourceFile = null;

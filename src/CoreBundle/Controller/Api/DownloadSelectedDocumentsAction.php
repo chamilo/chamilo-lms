@@ -77,6 +77,10 @@ class DownloadSelectedDocumentsAction
                     $this->addNodeToZip($zip, $node);
                 }
 
+                if (0 === count($zip->files)) {
+                    $zip->addFile('.empty', '');
+                }
+
                 $zip->finish();
             },
             Response::HTTP_CREATED

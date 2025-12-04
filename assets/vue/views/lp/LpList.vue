@@ -150,13 +150,13 @@
           </template>
         </Draggable>
       </div>
-
       <LpCategorySection
-        v-for="[cat, list] in categorizedGroups"
+        v-for="[cat, list, isSession] in categorizedGroups"
         :key="cat.iid || cat.title"
         :title="cat.title"
         :category="cat"
         :list="list"
+        :isSessionCategory="isSession"
         :canEdit="canEdit"
         :ringDash="ringDash"
         :ringValue="ringValue"
@@ -176,6 +176,7 @@
         @export-pdf="onExportPdf"
         @reorder="(ids) => onReorderCategory(cat, ids)"
       />
+
     </template>
   </div>
   <ExportPdfDialog
@@ -390,15 +391,84 @@ const load = async () => {
 }
 onMounted(load)
 
-const categorizedGroups = computed(() => {
-  const rows = []
-  for (const cat of categories.value) {
-    const list = catLists.value[cat.iid] ?? []
-    if (canEdit.value || list.length) {
-      rows.push([cat, list])
-    }
+// build the candidate fields object
+function inspectCategorySessionCandidates(cat) {
+  const c = {
+    sid: cat?.sid, session: cat?.session, sessionId: cat?.sessionId,
+    courseSessionId: cat?.courseSessionId, course_session: cat?.course_session,
+    session_iid: cat?.session_iid,
   }
-  return rows
+  if (Array.isArray(cat?.resourceLinkListFromEntity)) {
+    cat.resourceLinkListFromEntity.forEach((l, i) => {
+      c[`resourceLink_${i}_session`] = l?.session
+      c[`resourceLink_${i}_courseSessionId`] = l?.courseSessionId ?? l?.course_session
+    })
+  }
+  return c
+}
+
+function extractNumbersFromValue(v) {
+  if (v == null) return []
+  if (typeof v === "number") return Number.isFinite(v) ? [v] : []
+  if (typeof v === "string") {
+    const m = v.match(/-?\d+/g)
+    return m ? m.map(Number).filter(Number.isFinite) : []
+  }
+  if (Array.isArray(v)) return v.flatMap(extractNumbersFromValue)
+  if (typeof v === "object") return Object.values(v).flatMap(extractNumbersFromValue)
+  return []
+}
+
+function getCategorySessionId(cat) {
+  if (!cat || typeof cat !== "object") return { catSid: 0, hasSessionField: false, candidates: {} }
+  const candidates = inspectCategorySessionCandidates(cat)
+  for (const val of Object.values(candidates)) {
+    if (val == null || String(val).trim() === "") continue
+    const nums = extractNumbersFromValue(val)
+    const found = nums.find(n => n !== 0)
+    if (found !== undefined) return { catSid: Number(found), hasSessionField: true, candidates }
+  }
+  const hasSessionField = Object.values(candidates).some(v => v != null && String(v).trim() !== "")
+  return { catSid: 0, hasSessionField, candidates }
+}
+
+const filteredCategories = computed(() => {
+  if (!Array.isArray(categories.value)) return []
+  const s = Number(sid.value) || 0
+  const lpCatIdsInItems = new Set((items.value ?? []).map(lp => lp?.category?.iid).filter(id => id != null))
+
+  const matchesSessionValue = (candidates, sNum) => {
+    if (!candidates || typeof candidates !== "object") return false
+    return Object.values(candidates).some(v => {
+      if (v == null || String(v).trim() === "") return false
+      if (Number(String(v)) === sNum) return true
+      if (extractNumbersFromValue(v).some(n => n === sNum)) return true
+      if (String(v).trim() === String(sNum)) return true
+      return false
+    })
+  }
+
+  return categories.value.filter(cat => {
+    const { catSid, hasSessionField, candidates } = getCategorySessionId(cat)
+    if (s > 0) {
+      if (catSid === s) return true
+      if (hasSessionField && matchesSessionValue(candidates, s)) return true
+      if (!hasSessionField && catSid === 0) return true
+      if (lpCatIdsInItems.has(cat.iid)) return true
+      return false
+    }
+    return !hasSessionField && catSid === 0
+  })
+})
+
+const categorizedGroups = computed(() => {
+  const cats = filteredCategories.value ?? []
+  return cats.map(cat => {
+    const list = (catLists.value[cat.iid] ?? []).slice()
+    const { catSid, hasSessionField } = getCategorySessionId(cat)
+    const isSessionCategory = !!(hasSessionField && catSid !== 0)
+    return [cat, list, isSessionCategory]
+  }).filter(([_, list]) => (list && list.length) || canEdit.value)
 })
 
 function rebuildListsFromItems() {

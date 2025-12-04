@@ -1050,7 +1050,7 @@ class Answer
             }
 
             // Fix correct answers
-            if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
+            if (in_array($newQuestion->type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE, MATCHING_COMBINATION, MATCHING_DRAGGABLE_COMBINATION])) {
                 $onlyAnswersFlip = array_flip($onlyAnswers);
                 foreach ($correctAnswers as $answer_id => $correct_answer) {
                     $params = [];

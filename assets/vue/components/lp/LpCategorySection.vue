@@ -127,8 +127,8 @@ function onChangeCat() {
         <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Learning paths') }}</div>
 
         <BaseDropdownMenu v-if="canEdit"
-                          :dropdown-id="`category-${category.iid}`"
-                          class="relative z-30"
+         :dropdown-id="`category-${category.iid}`"
+          class="relative z-30"
         >
           <template #button>
             <span
@@ -198,17 +198,17 @@ function onChangeCat() {
             :canExportPdf="canExportPdf"
             :canAutoLaunch="canAutoLaunch"
             :buildDates="buildDates"
-            @toggle-auto-launch="$emit('toggle-auto-launch', element)"
-            @open="$emit('open', element)"
-            @edit="$emit('edit', element)"
-            @report="$emit('report', element)"
-            @settings="$emit('settings', element)"
-            @build="$emit('build', element)"
-            @toggle-visible="$emit('toggle-visible', element)"
-            @toggle-publish="$emit('toggle-publish', element)"
-            @delete="$emit('delete', element)"
-            @export-scorm="$emit('export-scorm', element)"
-            @export-pdf="$emit('export-pdf', element)"
+          @toggle-auto-launch="$emit('toggle-auto-launch', element)"
+          @open="$emit('open', element)"
+          @edit="$emit('edit', element)"
+          @report="$emit('report', element)"
+          @settings="$emit('settings', element)"
+          @build="$emit('build', element)"
+          @toggle-visible="$emit('toggle-visible', element)"
+          @toggle-publish="$emit('toggle-publish', element)"
+          @delete="$emit('delete', element)"
+          @export-scorm="$emit('export-scorm', element)"
+          @export-pdf="$emit('export-pdf', element)"
           />
         </template>
       </Draggable>

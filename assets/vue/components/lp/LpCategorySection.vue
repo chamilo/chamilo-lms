@@ -20,6 +20,7 @@ const props = defineProps({
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: false },
+  isSessionCategory: { type: Boolean, default: false },
 })
 const emit = defineEmits([
   "open","edit","report","settings","build",
@@ -111,15 +112,23 @@ function onChangeCat() {
           <span class="inline-block w-8 h-8" aria-hidden></span>
         </template>
 
-        <h2 class="text-body-1 font-semibold text-gray-90">{{ displayTitle }}</h2>
+        <h2 class="text-body-1 font-semibold text-gray-90">
+          <span>{{ displayTitle }}</span>
+          <!-- Display the star if it's a session category; remove the check on category.type -->
+          <span
+            v-if="isSessionCategory"
+            class="ml-2 text-warning"
+            title="Category created for a session"
+          >★</span>
+        </h2>
       </div>
 
       <div class="flex items-center gap-2">
         <div class="text-tiny text-gray-50">{{ localList.length }} {{ t('Learning paths') }}</div>
 
         <BaseDropdownMenu v-if="canEdit"
-          :dropdown-id="`category-${category.iid}`"
-          class="relative z-30"
+                          :dropdown-id="`category-${category.iid}`"
+                          class="relative z-30"
         >
           <template #button>
             <span
@@ -189,17 +198,17 @@ function onChangeCat() {
             :canExportPdf="canExportPdf"
             :canAutoLaunch="canAutoLaunch"
             :buildDates="buildDates"
-          @toggle-auto-launch="$emit('toggle-auto-launch', element)"
-          @open="$emit('open', element)"
-          @edit="$emit('edit', element)"
-          @report="$emit('report', element)"
-          @settings="$emit('settings', element)"
-          @build="$emit('build', element)"
-          @toggle-visible="$emit('toggle-visible', element)"
-          @toggle-publish="$emit('toggle-publish', element)"
-          @delete="$emit('delete', element)"
-          @export-scorm="$emit('export-scorm', element)"
-          @export-pdf="$emit('export-pdf', element)"
+            @toggle-auto-launch="$emit('toggle-auto-launch', element)"
+            @open="$emit('open', element)"
+            @edit="$emit('edit', element)"
+            @report="$emit('report', element)"
+            @settings="$emit('settings', element)"
+            @build="$emit('build', element)"
+            @toggle-visible="$emit('toggle-visible', element)"
+            @toggle-publish="$emit('toggle-publish', element)"
+            @delete="$emit('delete', element)"
+            @export-scorm="$emit('export-scorm', element)"
+            @export-pdf="$emit('export-pdf', element)"
           />
         </template>
       </Draggable>

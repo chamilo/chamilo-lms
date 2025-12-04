@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\PageHelper;
+use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -51,7 +53,9 @@ class ResourceNodeVoter extends Voter
         private Security $security,
         private RequestStack $requestStack,
         private SettingsManager $settingsManager,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private PageHelper $pageHelper,
+        private readonly ResourceAclHelper $resourceAclHelper,
     ) {}
 
     public static function getReaderMask(): int
@@ -114,6 +118,11 @@ class ResourceNodeVoter extends Voter
         }
 
         if (self::VIEW === $attribute && $this->isBlogResource($resourceNode)) {
+            return true;
+        }
+
+        // Special case: allow file assets that are embedded inside a visible system announcement.
+        if (self::VIEW === $attribute && $this->isAnnouncementFileVisibleForCurrentRequest($resourceNode, $token)) {
             return true;
         }
 
@@ -445,75 +454,48 @@ class ResourceNodeVoter extends Voter
             $rights[] = $resourceRight;
         }
 
-        // Asked mask
-        $mask = new MaskBuilder();
-        $mask->add($attribute);
+        return $this->resourceAclHelper->isAllowed($attribute, $link, $rights, $allowAnonsToView);
+    }
 
-        $askedMask = (string) $mask->get();
-
-        // Creating roles
-        // @todo move this in a service
-        $anon = new GenericRole('IS_AUTHENTICATED_ANONYMOUSLY');
-        $userRole = new GenericRole('ROLE_USER');
-        $student = new GenericRole('ROLE_STUDENT');
-        $teacher = new GenericRole('ROLE_TEACHER');
-        $studentBoss = new GenericRole('ROLE_STUDENT_BOSS');
-
-        $currentStudent = new GenericRole(self::ROLE_CURRENT_COURSE_STUDENT);
-        $currentTeacher = new GenericRole(self::ROLE_CURRENT_COURSE_TEACHER);
-
-        $currentStudentGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_STUDENT);
-        $currentTeacherGroup = new GenericRole(self::ROLE_CURRENT_COURSE_GROUP_TEACHER);
-
-        $currentStudentSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_STUDENT);
-        $currentTeacherSession = new GenericRole(self::ROLE_CURRENT_COURSE_SESSION_TEACHER);
-
-        // Setting Simple ACL.
-        $acl = (new Acl())
-            ->addRole($anon)
-            ->addRole($userRole)
-            ->addRole($student)
-            ->addRole($teacher)
-            ->addRole($studentBoss)
-
-            ->addRole($currentStudent)
-            ->addRole($currentTeacher, self::ROLE_CURRENT_COURSE_STUDENT)
-
-            ->addRole($currentStudentSession)
-            ->addRole($currentTeacherSession, self::ROLE_CURRENT_COURSE_SESSION_STUDENT)
-
-            ->addRole($currentStudentGroup)
-            ->addRole($currentTeacherGroup, self::ROLE_CURRENT_COURSE_GROUP_STUDENT)
-        ;
-
-        // Add a security resource.
-        $linkId = (string) $link->getId();
-        $acl->addResource(new GenericResource($linkId));
-
-        // Check all the right this link has.
-        // Set rights from the ResourceRight.
-        foreach ($rights as $right) {
-            $acl->allow($right->getRole(), null, (string) $right->getMask());
+    /**
+     * Checks if the current request is viewing a document file that is embedded
+     * inside a visible system announcement, delegating the heavy logic to PageHelper.
+     */
+    private function isAnnouncementFileVisibleForCurrentRequest(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $type = $resourceNode->getResourceType()?->getTitle();
+        if ('files' !== $type) {
+            return false;
         }
 
-        // Anons can see.
-        if ($allowAnonsToView) {
-            $acl->allow($anon, null, (string) self::getReaderMask());
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
         }
 
-        if ($token instanceof NullToken) {
-            return $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $linkId, $askedMask);
+        $pathInfo = (string) $request->getPathInfo();
+        if ('' === $pathInfo) {
+            return false;
         }
 
-        $roles = $user instanceof UserInterface ? $user->getRoles() : [];
-
-        foreach ($roles as $role) {
-            if ($acl->isAllowed($role, $linkId, $askedMask)) {
-                return true;
-            }
+        // Extract file identifier from /r/document/files/{identifier}/view.
+        $segments = explode('/', trim($pathInfo, '/'));
+        $identifier = null;
+        if (\count($segments) >= 4) {
+            // ... /r/document/files/{identifier}/view
+            $identifier = $segments[\count($segments) - 2] ?? null;
         }
 
-        return false;
+        $userFromToken = $token->getUser();
+        $user = $userFromToken instanceof UserInterface ? $userFromToken : null;
+        $locale = $request->getLocale();
+
+        return $this->pageHelper->isFilePathExposedByVisibleAnnouncement(
+            $pathInfo,
+            \is_string($identifier) ? $identifier : null,
+            $user,
+            $locale
+        );
     }
 
     private function isBlogResource(ResourceNode $node): bool

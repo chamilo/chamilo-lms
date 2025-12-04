@@ -40,7 +40,7 @@
       <li>xml</li>
       <li>zip</li>
       <li>zlib</li>
-      <li>ldap (optional, but mandatory in dev env)</li>
+      <li>ldap</li>
       <li>redis (optional)</li>
       <li>xapian (optional)</li>
   </ul>
@@ -106,7 +106,7 @@
 <pre>
 sudo -s
 apt update && apt -y upgrade
-apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,mbstring,mysql,opcache,soap,xml,zip,redis}
+apt -y install apache2 libapache2-mod-php8.3 mariadb-client mariadb-server redis-server php8.3-{bcmath,curl,exif,gd,iconv,intl,ldap,mbstring,mysql,opcache,soap,xml,zip,redis}
 a2enmod rewrite
 cd /var/www/
 mkdir chamilo
@@ -263,7 +263,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         <a href="https://www.wampserver.com/">Download</a> and install WampServer (accept default options if in doubt).<br>
         Restart WampServer to make these changes effective.<br>
         Open http://localhost/ in your browser. If the WampServer welcome screen with server configuration info appears, it means WampServer is working.<br>
-        Click on the WampServer icon in your status bar and go to PHP -&gt; Extensions. Make sure all the following extensions are enabled: php_curl, php_gd, php_intl, php_mbstring, php_mysqli, php_soap, php_xml, php_zip<br>
+        Click on the WampServer icon in your status bar and go to PHP -&gt; Extensions. Make sure all the following extensions are enabled: php_curl, php_gd, php_intl, php_ldap, php_mbstring, php_mysqli, php_soap, php_xml, php_zip<br>
         Edit C:\wamp64\bin\php\php8.3\php.ini, locate ";extension=sodium" and remove the ";" from the beginning of the line.<br>
         Also, update the "memory_limit" setting from "128M" to "2048M" and a few other settings as shown below.<br>
 <pre>

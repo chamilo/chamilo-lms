@@ -25,6 +25,9 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
+/**
+ * @extends ResourceRepository<CDocument>
+ */
 final class CDocumentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)

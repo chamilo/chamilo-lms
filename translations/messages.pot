@@ -31163,3 +31163,30 @@ msgstr ""
 
 msgid "Access to this course"
 msgstr ""
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr ""
+
+msgid "Private - access granted by privileged users"
+msgstr ""
+
+msgid "No detailed feedback is available for this question."
+msgstr ""
+
+msgid "Please select an answer before checking the result."
+msgstr ""
+
+msgid "Allow PDF export for this item"
+msgstr ""
+
+msgid "Hide free users (not enrolled)"
+msgstr ""
+
+msgid "Question statistics"
+msgstr ""
+
+msgid "Generating file. Do not close this tab..."
+msgstr ""
+
+msgid "There are no questions for this survey"
+msgstr ""

@@ -23835,7 +23835,7 @@ msgid "Learning path by author"
 msgstr "Lección por autor"
 
 msgid "Import assignments from base course"
-msgstr "Importar los tareas del curso base"
+msgstr "Importar las tareas del curso base"
 
 msgid "Redirect to the platform home page"
 msgstr "Redirigir a la página de inicio de la plataforma"

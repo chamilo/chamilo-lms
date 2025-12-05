@@ -31228,3 +31228,33 @@ msgstr "Discussion thread"
 
 msgid "Access to this course"
 msgstr "Access to this course"
+
+msgid "This plugin has no configurable settings. Activation is managed from the plugins list."
+msgstr "This plugin has no configurable settings. Activation is managed from the plugins list."
+
+msgid "Private - access granted by privileged users"
+msgstr "Private - access granted by privileged users"
+
+msgid "No detailed feedback is available for this question."
+msgstr "No detailed feedback is available for this question."
+
+msgid "Please select an answer before checking the result."
+msgstr "Please select an answer before checking the result."
+
+msgid "Allow PDF export for this item"
+msgstr "Allow PDF export for this item"
+
+msgid "Hide free users (not enrolled)"
+msgstr "Hide free users (not enrolled)"
+
+msgid "Question statistics"
+msgstr "Question statistics"
+
+msgid "Generating file. Do not close this tab..."
+msgstr "Generating file. Do not close this tab..."
+
+msgid "Assign auth source to users"
+msgstr "Assign auth source to users"
+
+msgid "There are no questions for this survey"
+msgstr "There are no questions for this survey"

@@ -14,11 +14,10 @@ java -jar /my-dir/selenium-server-standalone-3.1.0.jar
 
 - Download the Chrome driver, unzip and copy into /usr/bin
 
-Check the latest version at [https://googlechromelabs.github.io/chrome-for-testing/](https://googlechromelabs.github.io/chrome-for-testing/),
-then adapt the following command to the latest version. Use a version that matches your version of the Chrome browser.
+Check the latest `chromedriver` version at [https://googlechromelabs.github.io/chrome-for-testing/](https://googlechromelabs.github.io/chrome-for-testing/) that matches your configuration (linux64 for Ubuntu), then adapt the following command to the latest version. Use a version that matches your version of the Chrome browser.
 
 ```
-cd /tmp && wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
+cd /tmp && wget https://storage.googleapis.com/chrome-for-testing-public/143.0.7499.40/linux64/chromedriver-linux64.zip && unzip chromedriver_linux64.zip && sudo mv chromedriver /usr/local/bin
 ```
 
 ### Chamilo configuration

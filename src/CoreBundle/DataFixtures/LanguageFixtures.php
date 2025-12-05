@@ -552,6 +552,14 @@ class LanguageFixtures extends Fixture
                 'format' => 'title first_name last_name',
                 'sort_by' => 'first_name',
             ],
+            [
+                'original_name' => 'ພາສາລາວ',
+                'english_name' => 'lao',
+                'isocode' => 'lo',
+                'available' => 0,
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
+            ],
         ];
     }
 }

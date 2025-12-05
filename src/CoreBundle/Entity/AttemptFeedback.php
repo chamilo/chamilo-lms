@@ -31,9 +31,8 @@ class AttemptFeedback
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected User $user;
 
-    #[ORM\ManyToOne(targetEntity: Asset::class, cascade: ['remove'])]
-    #[ORM\JoinColumn(name: 'asset_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    protected ?Asset $asset = null;
+    #[ORM\ManyToOne(targetEntity: ResourceNode::class)]
+    protected ?ResourceNode $resourceNode = null;
 
     #[ORM\Column(name: 'comment', type: 'text', nullable: false)]
     protected string $comment;
@@ -73,14 +72,22 @@ class AttemptFeedback
         return $this;
     }
 
-    public function getAsset(): ?Asset
+    public function getResourceNode(): ?ResourceNode
     {
-        return $this->asset;
+        return $this->resourceNode;
     }
 
-    public function setAsset(?Asset $asset): self
+    public function setResourceNode(?ResourceNode $resourceNode): self
     {
-        $this->asset = $asset;
+        $this->resourceNode = $resourceNode;
+
+        return $this;
+    }
+
+    public function clearResourceNode(): self
+    {
+        // Detach the resource node reference when feedback file is removed.
+        $this->resourceNode = null;
 
         return $this;
     }

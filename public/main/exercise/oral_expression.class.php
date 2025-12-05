@@ -4,8 +4,10 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\AttemptFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -17,6 +19,9 @@ use Symfony\Component\Uid\Uuid;
  */
 class OralExpression extends Question
 {
+    public const RECORDING_TYPE_ATTEMPT  = 1;
+    public const RECORDING_TYPE_FEEDBACK = 2;
+
     public $typePicture = 'audio_question.png';
     public $explanationLangVar = 'Oral expression';
     public $available_extensions = ['wav', 'ogg'];
@@ -80,7 +85,8 @@ class OralExpression extends Question
             false
         );
 
-        $recordAudioView->assign('type', Asset::EXERCISE_ATTEMPT);
+        // Student recording
+        $recordAudioView->assign('type', self::RECORDING_TYPE_ATTEMPT);
         $recordAudioView->assign('t_exercise_id', $trackExerciseId);
         $recordAudioView->assign('question_id', $this->id);
 
@@ -89,30 +95,37 @@ class OralExpression extends Question
         return $recordAudioView->fetch($template);
     }
 
-    public static function saveAssetInQuestionAttempt($attemptId)
+    public static function saveAssetInQuestionAttempt($attemptId): void
     {
         $em = Container::getEntityManager();
 
+        /** @var TrackEAttempt|null $attempt */
         $attempt = $em->find(TrackEAttempt::class, $attemptId);
 
-        $variable = 'oral_expression_asset_'.$attempt->getQuestionId();
-
-        $asset = null;
-        $assetId = ChamiloSession::read($variable);
-        if (!empty($assetId)) {
-            $asset = Container::getAssetRepository()->find(Uuid::fromRfc4122($assetId));
-        }
-
-        if (null === $asset) {
+        if (null === $attempt) {
             return;
         }
 
+        $variable = 'oral_expression_asset_'.$attempt->getQuestionId();
+        $resourceNodeId = ChamiloSession::read($variable);
         ChamiloSession::erase($variable);
 
-        $attemptFile = (new AttemptFile())
-            ->setAsset($asset)
-        ;
+        if (empty($resourceNodeId)) {
+            return;
+        }
 
+        /** @var ResourceNodeRepository $resourceNodeRepo */
+        $resourceNodeRepo = Container::getResourceNodeRepository();
+
+        /** @var ResourceNode|null $node */
+        $node = $resourceNodeRepo->find($resourceNodeId);
+
+        if (null === $node) {
+            return;
+        }
+
+        $attemptFile = new AttemptFile();
+        $attemptFile->setResourceNode($node);
         $attempt->addAttemptFile($attemptFile);
 
         $em->persist($attemptFile);

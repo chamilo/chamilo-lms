@@ -2,9 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AttemptFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Framework\Container;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * Question with file upload, where the file is the answer.
@@ -63,9 +63,9 @@ class UploadAnswer extends Question
     }
 
     /**
-     * Attach uploaded Asset(s) to the question attempt as AttemptFile.
+     * Attach uploaded ResourceNode(s) to the question attempt as AttemptFile.
      */
-    public static function saveAssetInQuestionAttempt(int $attemptId, array $postedAssetIds = []): void
+    public static function saveAssetInQuestionAttempt(int $attemptId, array $postedNodeIds = []): void
     {
         $em = Container::getEntityManager();
 
@@ -78,30 +78,36 @@ class UploadAnswer extends Question
         $questionId = (int) $attempt->getQuestionId();
         $sessionKey = 'upload_answer_assets_'.$questionId;
 
-        $assetIds = array_values(array_filter(array_map('strval', $postedAssetIds)));
-        if (empty($assetIds)) {
+        $nodeIds = array_values(array_filter(array_map('intval', $postedNodeIds)));
+
+        if (empty($nodeIds)) {
             $sessionVal = ChamiloSession::read($sessionKey);
-            $assetIds = is_array($sessionVal) ? $sessionVal : (empty($sessionVal) ? [] : [$sessionVal]);
+            $nodeIds = is_array($sessionVal) ? $sessionVal : (empty($sessionVal) ? [] : [(int) $sessionVal]);
         }
-        if (empty($assetIds)) {
+
+        if (empty($nodeIds)) {
             return;
         }
 
         ChamiloSession::erase($sessionKey);
-        $repo = Container::getAssetRepository();
 
-        foreach ($assetIds as $id) {
-            try {
-                $asset = $repo->find(Uuid::fromRfc4122($id));
-            } catch (\Throwable $e) {
-                continue;
-            }
-            if (!$asset) {
+        $resourceNodeRepo = Container::getResourceNodeRepository();
+
+        foreach ($nodeIds as $id) {
+            if (!$id) {
                 continue;
             }
 
-            $attemptFile = (new AttemptFile())->setAsset($asset);
+            /** @var ResourceNode|null $node */
+            $node = $resourceNodeRepo->find($id);
+            if (null === $node) {
+                continue;
+            }
+
+            $attemptFile = new AttemptFile();
+            $attemptFile->setResourceNode($node);
             $attempt->addAttemptFile($attemptFile);
+
             $em->persist($attemptFile);
         }
 

@@ -2,13 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\ResourceFile;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Event\ExerciseQuestionAnsweredEvent;
 use ChamiloSession as Session;
+use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 require_once __DIR__.'/../global.inc.php';
 $current_course_tool = TOOL_QUIZ;
@@ -1073,6 +1077,7 @@ switch ($action) {
             exit;
         }
 
+        // Chunk upload "send" phase
         if (isset($_REQUEST['chunkAction']) && 'send' === $_REQUEST['chunkAction']) {
             if (!empty($_FILES)) {
                 $tempDirectory = api_get_path(SYS_ARCHIVE_PATH);
@@ -1085,7 +1090,11 @@ switch ($action) {
                 }
                 foreach ($fileList as $file) {
                     $tmpFile = disable_dangerous_file(api_replace_dangerous_char($file['name']));
-                    file_put_contents($tempDirectory.$tmpFile, fopen($file['tmp_name'], 'r'), FILE_APPEND);
+                    file_put_contents(
+                        $tempDirectory.$tmpFile,
+                        fopen($file['tmp_name'], 'r'),
+                        FILE_APPEND
+                    );
                 }
             }
             echo json_encode(['files' => $_FILES, 'errorStatus' => 0]);
@@ -1102,36 +1111,74 @@ switch ($action) {
             }
 
             $resultList = [];
-            $assetRepo = Container::getAssetRepository();
+
             $em = Container::getEntityManager();
+
+            /** @var ObjectRepository<ResourceType> $resourceTypeRepo */
+            $resourceTypeRepo = $em->getRepository(ResourceType::class);
+
+            /** @var ResourceType|null $resourceType */
+            $resourceType = $resourceTypeRepo->findOneBy(['title' => 'attempt_file']);
+            if (null === $resourceType) {
+                echo json_encode(['files' => [], 'error' => 'Missing ResourceType \"attempt_file\"']);
+                exit;
+            }
+
+            $resourceNodeRepo = Container::getResourceNodeRepository();
             $basePath = rtrim(api_get_path(WEB_PATH), '/');
 
             foreach ($fileList as $file) {
-                $originalName = api_replace_dangerous_char(disable_dangerous_file($file['name'] ?? 'file.bin'));
+                $originalName = api_replace_dangerous_char(
+                    disable_dangerous_file($file['name'] ?? 'file.bin')
+                );
                 $tmpPath = $file['tmp_name'];
+
                 if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
                     $tmpPath = api_get_path(SYS_ARCHIVE_PATH).($file['name'] ?? $originalName);
                 }
 
-                $asset = (new Asset())
-                    ->setCategory(Asset::EXERCISE_ATTEMPT)
-                    ->setTitle($originalName);
+                $uploadedFile = new UploadedFile(
+                    $tmpPath,
+                    $originalName,
+                    $file['type'] ?? 'application/octet-stream',
+                    $file['error'] ?? UPLOAD_ERR_OK,
+                    true
+                );
 
-                $assetRepo->createFromRequest($asset, ['tmp_name' => $tmpPath]);
+                $node = new ResourceNode();
+                $node->setTitle($originalName);
+                $node->setResourceType($resourceType);
+                $em->persist($node);
+
+                $resourceFile = new ResourceFile();
+                $resourceFile->setResourceNode($node);
+                $resourceFile->setFile($uploadedFile);
+                $em->persist($resourceFile);
+
+                $em->flush();
 
                 if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
                     @unlink($tmpPath);
                 }
 
-                $key = 'upload_answer_assets_'.$questionId;
+                $key     = 'upload_answer_assets_'.$questionId;
                 $current = (array) ChamiloSession::read($key);
-                $current[] = (string) $asset->getId();
+                $current[] = (int) $node->getId();
                 ChamiloSession::write($key, array_values(array_unique($current)));
+
+                $relativeUrl = '';
+                try {
+                    $relativeUrl = $resourceNodeRepo->getResourceFileUrl($node);
+                } catch (\Throwable $e) {
+                    $relativeUrl = '';
+                }
+
+                $url = $relativeUrl ? $basePath.$relativeUrl : '';
 
                 $resultList[] = [
                     'name'     => api_htmlentities($originalName),
-                    'asset_id' => (string) $asset->getId(),
-                    'url'      => $basePath.$assetRepo->getAssetUrl($asset),
+                    'asset_id' => (string) $node->getId(),
+                    'url'      => $url,
                     'size'     => isset($file['size']) ? format_file_size((int) $file['size']) : '',
                     'type'     => api_htmlentities($file['type'] ?? ''),
                     'result'   => Display::return_icon('accept.png', get_lang('Uploaded')),

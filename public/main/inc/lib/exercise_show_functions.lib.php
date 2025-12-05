@@ -106,10 +106,19 @@ class ExerciseShowFunctions
     }
 
     /**
-     * Shows the answer to an upload question.
+     * Display the uploaded files for an exercise question, using Tailwind-based markup.
      *
-     * @param float|null $questionScore   Only used to check if > 0
-     * @param int        $resultsDisabled Unused
+     * This method now relies on getUploadAnswerFiles() which already resolves
+     * ResourceNode → ResourceFile → public URL.
+     *
+     * @param string $feedbackType
+     * @param string $answer
+     * @param int    $exeId
+     * @param int    $questionId
+     * @param mixed  $questionScore
+     * @param int    $resultsDisabled
+     *
+     * @return void
      */
     public static function displayUploadAnswer(
         string $feedbackType,
@@ -119,23 +128,8 @@ class ExerciseShowFunctions
                $questionScore = null,
                $resultsDisabled = 0
     ) {
-        $urls = [];
-
-        $trackExercise = Container::getTrackEExerciseRepository()->find($exeId);
-        if (null !== $trackExercise) {
-            $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
-            if (null !== $questionAttempt) {
-                $assetRepo = Container::getAssetRepository();
-                $basePath  = rtrim(api_get_path(WEB_PATH), '/');
-
-                foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
-                    $asset = $attemptFile->getAsset();
-                    if (null !== $asset) {
-                        $urls[] = $basePath.$assetRepo->getAssetUrl($asset);
-                    }
-                }
-            }
-        }
+        // URLs resolved from ResourceNode (resource-based storage)
+        $urls = ExerciseLib::getUploadAnswerFiles($exeId, $questionId, true);
 
         if (!empty($urls)) {
             echo '<tr><td>';
@@ -147,7 +141,7 @@ class ExerciseShowFunctions
                 $safeName = api_htmlentities($name);
                 $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
-                // Simple inline icon per file type (SVGs kept tiny)
+                // Simple inline icon per file type (SVG kept small and neutral)
                 switch ($ext) {
                     case 'pdf':
                         $icon = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h8l6-6V4a2 2 0 00-2-2H4z"/><path d="M12 14v4l4-4h-4z"/></svg>';
@@ -184,10 +178,11 @@ class ExerciseShowFunctions
             echo '</td></tr>';
         }
 
+        // Feedback / correction status (unchanged logic)
         if (EXERCISE_FEEDBACK_TYPE_EXAM != $feedbackType) {
             $comments = Event::get_comments($exeId, $questionId);
             if ($questionScore > 0 || !empty($comments)) {
-                // Handled elsewhere
+                // Correction is handled elsewhere.
             } else {
                 echo '<tr>';
                 echo Display::tag('td', ExerciseLib::getNotCorrectedYetText());
@@ -230,12 +225,17 @@ class ExerciseShowFunctions
     }
 
     /**
-     * @param $feedback_type
-     * @param $answer
-     * @param $trackExerciseId
-     * @param $questionId
-     * @param int $resultsDisabled
-     * @param int $questionScore
+     * Display oral expression answer: student audio, text answer, and correction status.
+     *
+     * @param string $feedback_type
+     * @param string $answer
+     * @param int    $trackExerciseId
+     * @param int    $questionId
+     * @param int    $resultsDisabled
+     * @param float  $questionScore
+     * @param bool   $showAlertIfNotCorrected
+     *
+     * @return void
      */
     public static function display_oral_expression_answer(
         $feedback_type,
@@ -246,43 +246,49 @@ class ExerciseShowFunctions
         $questionScore = 0,
         $showAlertIfNotCorrected = false
     ) {
-        /** @var TrackEExercise $trackExercise */
+        /** @var TrackEExercise|null $trackExercise */
         $trackExercise = Container::getTrackEExerciseRepository()->find($trackExerciseId);
 
-        if (null === $trackExerciseId) {
+        if (null === $trackExercise) {
             return;
         }
 
-        $questionAttempt = $trackExercise->getAttemptByQuestionId($questionId);
+        // Student recorded answer(s)
+        // getOralFileAudio() ya NO debe incluir los ResourceNode usados en AttemptFeedback.
+        $studentAudioHtml = ExerciseLib::getOralFileAudio($trackExerciseId, $questionId);
 
-        if (null === $questionAttempt) {
-            return;
+        if (!empty($studentAudioHtml)) {
+            echo $studentAudioHtml;
         }
 
-        $assetRepo = Container::getAssetRepository();
-
-        foreach ($questionAttempt->getAttemptFiles() as $attemptFile) {
-            echo Display::tag(
-                'audio',
-                '',
-                [
-                    'src' => $assetRepo->getAssetUrl($attemptFile->getAsset()),
-                    'controls' => '',
-                ]
-            );
-        }
-
+        // Optional text answer written by the student
         if (!empty($answer)) {
             echo Display::tag('p', Security::remove_XSS($answer));
         }
 
+        // Teacher correction: comments and audio feedback
         $comment = Event::get_comments($trackExerciseId, $questionId);
         $teacherAudio = ExerciseLib::getOralFeedbackAudio(
-                        $trackExerciseId,
-                        $questionId
-                    );
+            $trackExerciseId,
+            $questionId
+        );
 
-        if ($showAlertIfNotCorrected && !$questionScore && EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type && empty($comment) && empty($teacherAudio)) {
+        if (!empty($teacherAudio)) {
+            echo $teacherAudio;
+        }
+
+        if (!empty($comment)) {
+            echo Display::tag('p', Security::remove_XSS($comment));
+        }
+
+        // Optional "not corrected yet" warning
+        if (
+            $showAlertIfNotCorrected &&
+            !$questionScore &&
+            EXERCISE_FEEDBACK_TYPE_EXAM != $feedback_type &&
+            empty($comment) &&
+            empty($teacherAudio)
+        ) {
             echo Display::tag('p', ExerciseLib::getNotCorrectedYetText());
         }
     }

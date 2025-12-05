@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
@@ -163,6 +164,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/documents/download-selected',
             outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
             controller: DownloadSelectedDocumentsAction::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course grou identifier',
+                ),
+            ],
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
                 description: 'Streams a ZIP archive generated on-the-fly. The ZIP file includes folders and files selected.',

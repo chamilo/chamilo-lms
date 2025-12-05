@@ -14,7 +14,7 @@ java -jar /my-dir/selenium-server-standalone-3.1.0.jar
 
 - Download the Chrome driver, unzip and copy into /usr/bin
 
-Check the latest version at https://sites.google.com/a/chromium.org/chromedriver/downloads,
+Check the latest version at [https://googlechromelabs.github.io/chrome-for-testing/](https://googlechromelabs.github.io/chrome-for-testing/),
 then adapt the following command to the latest version. Use a version that matches your version of the Chrome browser.
 
 ```

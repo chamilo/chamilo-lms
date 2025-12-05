@@ -146,7 +146,7 @@
     >
       <template #body="slotProps">
         {{
-          slotProps.data.resourceNode.firstResourceFile
+          slotProps.data.resourceNode && slotProps.data.resourceNode.firstResourceFile
             ? prettyBytes(slotProps.data.resourceNode.firstResourceFile.size)
             : ""
         }}
@@ -654,7 +654,14 @@ const showBackButtonIfNotRootFolder = computed(() => {
 })
 
 function goToAddVariation(item) {
-  const resourceFileId = item.resourceNode.firstResourceFile.id
+  const firstFile = item.resourceNode?.firstResourceFile
+  if (!firstFile) {
+    console.warn("Missing firstResourceFile for document", item.iid)
+    return
+  }
+
+  const resourceFileId = firstFile.id
+
   router.push({
     name: "DocumentsAddVariation",
     params: { resourceFileId, node: route.params.node },

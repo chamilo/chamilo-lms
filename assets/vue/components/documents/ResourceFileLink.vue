@@ -25,10 +25,14 @@ export default {
   },
   computed: {
     getDataType() {
-      if (this.resource.resourceNode.firstResourceFile.image) {
+      const node = this.resource && this.resource.resourceNode
+      const file = node && node.firstResourceFile
+
+      if (file && file.image) {
         return "image"
       }
-      if (this.resource.resourceNode.firstResourceFile.video) {
+
+      if (file && file.video) {
         return "video"
       }
 

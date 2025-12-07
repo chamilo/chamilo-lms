@@ -21,6 +21,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 
 class LoginTokenAuthenticator extends AbstractAuthenticator
 {
+    public const SOURCE = 'login_token_check';
+
     public function __construct(
         protected readonly UserRepository $userRepository,
         protected readonly RouterInterface $router,
@@ -54,12 +56,15 @@ class LoginTokenAuthenticator extends AbstractAuthenticator
             throw new AuthenticationException('Invalid JWT token: '.$e->getMessage());
         }
 
-        return new SelfValidatingPassport(
+        $passport = new SelfValidatingPassport(
             new UserBadge(
                 $username,
                 fn (string $username) => $this->userRepository->findOneBy(['username' => $username])
             )
         );
+        $passport->setAttribute('source', self::SOURCE);
+
+        return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

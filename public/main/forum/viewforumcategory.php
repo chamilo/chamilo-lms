@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -10,13 +12,14 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 
-// Recover Thread ID, will be used to generate delete attachment URL to do ajax
-$threadId = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
-$forumId = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
+// Recover Thread/Forum/Category IDs (used for AJAX and filtering)
+$threadId        = isset($_REQUEST['thread']) ? (int) ($_REQUEST['thread']) : 0;
+$forumId         = isset($_REQUEST['forum']) ? (int) ($_REQUEST['forum']) : 0;
 $forumCategoryId = isset($_REQUEST['forumcategory']) ? (int) ($_REQUEST['forumcategory']) : 0;
 
 $ajaxUrl = api_get_path(WEB_AJAX_PATH).'forum.ajax.php?'.api_get_cidreq();
-// The next javascript script is to delete file by ajax
+
+// Delete attachment by AJAX (legacy UI behavior kept)
 $htmlHeadXtra[] = '<script>
 $(function () {
     $(document).on("click", ".deleteLink", function(e) {
@@ -48,9 +51,10 @@ api_protect_course_script(true);
 
 $current_course_tool = TOOL_FORUM;
 
-// The section (tabs).
+// Tabs section
 $this_section = SECTION_COURSES;
 
+// Default page title (will be overridden below with category name if available)
 $nameTools = get_lang('Forums');
 $courseEntity = api_get_course_entity();
 $sessionId = api_get_session_id();
@@ -70,7 +74,6 @@ if (api_is_in_gradebook()) {
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
-
 
 // Tool introduction
 $form_count = 0;
@@ -92,22 +95,45 @@ Event::registerLog($logInfo);
     sure that we already incorporate the latest changes
 */
 
-// Step 1: We store all the forum categories in an array $forum_categories.
+// Store all forum categories (entities)
 $forumCategories = get_forum_categories();
 
-// Step 2: We find all the forums (only the visible ones if it is a student).
-// display group forum in general forum tool depending to configuration option
-$setting = api_get_setting('display_groups_forum_in_general_tool');
-$allCourseForums = get_forums();
-$user_id = api_get_user_id();
+// BREADCRUMBS BLOCK
+$forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
+
+// Root crumb → Forums index
+$interbreadcrumb[] = [
+    'url'  => $forumUrl.'index.php?'.api_get_cidreq(),
+    'name' => get_lang('Forums'),
+];
+
+// Resolve current category title (used as last crumb / $nameTools)
+$currentCategoryTitle = null;
+if (!empty($forumCategoryId) && is_array($forumCategories)) {
+    foreach ($forumCategories as $fc) {
+        // Entities expose iid as internal identifier
+        if (method_exists($fc, 'getIid') && $fc->getIid() === $forumCategoryId) {
+            $currentCategoryTitle = Security::remove_XSS($fc->getTitle());
+            break;
+        }
+    }
+}
+
+// Override $nameTools to show the category as the final breadcrumb text.
+// If not found, fallback to "Forums".
+$nameTools = $currentCategoryTitle ?: get_lang('Forums');
+
+// Get forums (only visible for students, legacy helper kept)
+$setting          = api_get_setting('display_groups_forum_in_general_tool'); // not used here but parity kept
+$allCourseForums  = get_forums();
+$user_id          = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
 
 // The groups of the user.
 $groups_of_user = GroupManager::get_group_ids($courseId, $user_id);
 
-// All groups in the course (and sorting them as the
-// id of the group = the key of the array).
+// All groups in the course (index by iid)
 if (!api_is_anonymous()) {
     $all_groups = GroupManager::get_group_list();
     if (is_array($all_groups)) {
@@ -117,26 +143,40 @@ if (!api_is_anonymous()) {
     }
 }
 
-/* ACTION LINKS */
+/* ACTION LINKS (left toolbar) */
 $actionLeft = null;
-//if is called from learning path
+
+// If called from LP, show back link
 if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     $url = '../lp/lp_controller.php?'.api_get_cidreq()
         ."&gradebook=&action=add_item&type=step&lp_id='.$lp_id.'#resource_tab-5";
     $actionLeft .= Display::url(
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', '', ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')),
+        Display::getMdiIcon(
+            ActionIcon::BACK,
+            'ch-tool-icon',
+            '',
+            ICON_SIZE_MEDIUM,
+            get_lang('Back to').' '.get_lang('Learning paths')
+        ),
         $url
     );
 }
 
 if (api_is_allowed_to_edit(false, true)) {
-
+    // Back to forum index (kept)
     $url = 'index.php?'.api_get_cidreq();
     $actionLeft .= Display::url(
-        Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', '', ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Learning paths')),
+        Display::getMdiIcon(
+            ActionIcon::BACK,
+            'ch-tool-icon',
+            '',
+            ICON_SIZE_MEDIUM,
+            get_lang('Back to').' '.get_lang('Learning paths')
+        ),
         $url
     );
 
+    // Add forum (only if there are categories)
     if (is_array($forumCategories) && !empty($forumCategories)) {
         $actionLeft .= Display::url(
             Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forum')),
@@ -144,12 +184,14 @@ if (api_is_allowed_to_edit(false, true)) {
         );
     }
 
+    // Add forum category
     $actionLeft .= Display::url(
         Display::getMdiIcon(ActionIcon::CREATE_FOLDER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a forumCategory')),
         api_get_self().'?'.api_get_cidreq().'&action=add_category&lp_id='.$lp_id
     );
 }
 
+// Search link only if there are forums
 if (!empty($allCourseForums)) {
     $actionLeft .= search_link();
 }
@@ -159,21 +201,20 @@ $actions = Display::toolbarAction('toolbar-forum', [$actionLeft]);
 // Create a search-bo
 
 /* Display Forum Categories and the Forums in it */
-// Step 3: We display the forum_categories first.
+// Display the selected category (or all, if no filter)
 $listForumCategory = [];
 $forumCategoryInfo = [];
 if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $categoryId = $forumCategory->getIid();
 
-        if (!empty($forumCategoryId)) {
-            if ($categoryId !== $forumCategoryId) {
-                continue;
-            }
+        // If a category filter is present, only render that category
+        if (!empty($forumCategoryId) && $categoryId !== $forumCategoryId) {
+            continue;
         }
         $categorySessionId = 0;
-        $forumCategoryInfo['id'] = $categoryId;
-        $forumCategoryInfo['title'] = $forumCategory->getTitle();
+        $forumCategoryInfo['id']           = $categoryId;
+        $forumCategoryInfo['title']        = $forumCategory->getTitle();
         $forumCategoryInfo['icon_session'] = '';
 
         // Validation when belongs to a session
@@ -184,174 +225,158 @@ if (is_array($forumCategories)) {
         }
 
         $tools = null;
-        $forumCategoryInfo['url'] = 'index.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
+
+        $forumCategoryInfo['url'] = 'viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.$categoryId;
+
         $visibility = $forumCategory->isVisible($courseEntity);
 
         if (!empty($categoryId)) {
-            if (api_is_allowed_to_edit(false, true) &&
-                !(0 == $categorySessionId && 0 != $sessionId)
-            ) {
+            if (api_is_allowed_to_edit(false, true) && !(0 == $categorySessionId && 0 != $sessionId)) {
+                // Edit
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=edit_category&content=forumcategory&id='.$categoryId
                     .'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
                     .'</a>';
 
+                // Delete (with confirm)
                 $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                     .'&action=delete_category&content=forumcategory&id='.$categoryId
                     ."\" onclick=\"javascript:if(!confirm('"
-                    .addslashes(api_htmlentities(
-                        get_lang('Delete forum category ?'),
-                        ENT_QUOTES
-                    ))
+                    .addslashes(api_htmlentities(get_lang('Delete forum category ?'), \ENT_QUOTES))
                     ."')) return false;\">"
                     .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
                     .'</a>';
-                $tools .= returnVisibleInvisibleIcon(
-                    'forumcategory',
-                    $categoryId,
-                    $visibility
-                );
-                $tools .= returnLockUnlockIcon(
-                    'forumcategory',
-                    $categoryId,
-                    $forumCategory->getLocked()
-                );
-                $tools .= returnUpDownIcon(
-                    'forumcategory',
-                    $categoryId,
-                    $forumCategories
-                );
+
+                // Visibility toggle
+                $tools .= returnVisibleInvisibleIcon('forumcategory', $categoryId, $visibility);
+
+                // Lock/Unlock
+                $tools .= returnLockUnlockIcon('forumcategory', $categoryId, $forumCategory->getLocked());
+
+                // Up/Down ordering
+                $tools .= returnUpDownIcon('forumcategory', $categoryId, $forumCategories);
             }
         }
 
-        $forumCategoryInfo['tools'] = $tools;
+        $forumCategoryInfo['tools']  = $tools;
         $forumCategoryInfo['forums'] = [];
-        // The forums in this category.
-        $forumInfo = [];
+
+        // Forums inside this category
         $forumsInCategory = get_forums_in_category($categoryId, $courseId);
 
         if (!empty($forumsInCategory)) {
             $forumsDetailsList = [];
-            // We display all the forums in this category.
+
             foreach ($forumsInCategory as $forum) {
                 $forumId = $forum->getIid();
 
-                // Note: This can be speed up if we transform the $allCourseForums
-                // to an array that uses the forum_category as the key.
-                if (true) {
-                    //if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
-                    $show_forum = false;
-                    // SHOULD WE SHOW THIS PARTICULAR FORUM
-                    // you are teacher => show forum
-                    if (api_is_allowed_to_edit(false, true)) {
+                // Visibility rules: teachers see all; students see based on group membership
+                $show_forum = false;
+                if (api_is_allowed_to_edit(false, true)) {
+                    $show_forum = true;
+                } else {
+                    if ('0' == $forum->getForumOfGroup()) {
                         $show_forum = true;
                     } else {
-                        // you are not a teacher
-                        // it is not a group forum => show forum
-                        // (invisible forums are already left out see get_forums function)
-                        if ('0' == $forum->getForumOfGroup()) {
-                            $show_forum = true;
-                        } else {
-                            $show_forum = GroupManager::userHasAccess(
-                                $user_id,
-                                api_get_group_entity($forum->getForumOfGroup()),
-                                GroupManager::GROUP_TOOL_FORUM
-                            );
-                        }
-                    }
-
-                    if ($show_forum) {
-                        $form_count++;
-                        $forumInfo['id'] = $forumId;
-                        $forumInfo['forum_of_group'] = $forum->getForumOfGroup();
-                        $forumInfo['title'] = $forum->getTitle();
-                        $forumInfo['forum_image'] = null;
-                        $forumInfo['icon_session'] = '';
-                        if ('0' != $forum->getForumOfGroup()) {
-                            $forumOfGroup = $forum->getForumOfGroup();
-                            $my_all_groups_forum_name = $all_groups[$forumOfGroup]['name'] ?? null;
-                            $my_all_groups_forum_id = $all_groups[$forumOfGroup]['id'] ?? null;
-                            $group_title = api_substr($my_all_groups_forum_name, 0, 30);
-                            $forumInfo['forum_group_title'] = $group_title;
-                        }
-
-                        $groupId = $forum->getForumOfGroup();
-                        $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity);
-
-                        $linkForum = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq()
-                            .'&gid='.$groupId.'&forum='.$forumId;
-                        $forumInfo['url'] = $linkForum;
-
-                        if (!empty($forum->getStartTime()) && !empty($forum->getEndTime())) {
-                            $res = api_is_date_in_date_range($forum->getStartTime(), $forum->getEndTime());
-                            if (!$res) {
-                                $linkForum = $forum->getTitle();
-                            }
-                        }
-
-                        $forumInfo['description'] = Security::remove_XSS($forum->getForumComment());
-                        if ($forum->isModerated() && api_is_allowed_to_edit(false, true)) {
-                            $waitingCount = getCountPostsWithStatus(
-                                CForumPost::STATUS_WAITING_MODERATION,
-                                $forum
-                            );
-                            if (!empty($waitingCount)) {
-                                $forumInfo['moderation'] = $waitingCount;
-                            }
-                        }
-
-                        $toolActions = null;
-                        $forumInfo['alert'] = null;
-                        $poster_id = null;
-                        $forumInfo['last_poster_id'] = $poster_id;
-                        if (api_is_allowed_to_edit(false, true)) {
-                            $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=edit_forum&content=forum&id='.$forumId.'">'
-                                .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
-                                .'</a>';
-                            $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
-                                .'&action=delete_forum&content=forum&id='.$forumId
-                                ."\" onclick=\"javascript:if(!confirm('".addslashes(
-                                    api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
-                                )
-                                ."')) return false;\">"
-                                .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
-                                .'</a>';
-
-                            $toolActions .= returnVisibleInvisibleIcon(
-                                'forum',
-                                $forumId,
-                                $forumVisibility
-                            );
-
-                            $toolActions .= returnLockUnlockIcon(
-                                'forum',
-                                $forumId,
-                                $forum->getLocked()
-                            );
-
-                            $toolActions .= returnUpDownIcon(
-                                'forum',
-                                $forumId,
-                                $forumsInCategory
-                            );
-                        }
-                        $forumInfo['tools'] = $toolActions;
-                        $forumsDetailsList[] = $forumInfo;
+                        $show_forum = GroupManager::userHasAccess(
+                            $user_id,
+                            api_get_group_entity($forum->getForumOfGroup()),
+                            GroupManager::GROUP_TOOL_FORUM
+                        );
                     }
                 }
+
+                if (!$show_forum) {
+                    continue;
+                }
+
+                $form_count++;
+                $forumInfo                       = [];
+                $forumInfo['id']                 = $forumId;
+                $forumInfo['forum_of_group']     = $forum->getForumOfGroup();
+                $forumInfo['title']              = $forum->getTitle();
+                $forumInfo['forum_image']        = null;
+                $forumInfo['icon_session']       = '';
+
+                // Group label
+                if ('0' != $forum->getForumOfGroup()) {
+                    $forumOfGroup  = $forum->getForumOfGroup();
+                    $groupName     = $all_groups[$forumOfGroup]['name'] ?? null;
+                    $group_title   = api_substr($groupName, 0, 30);
+                    $forumInfo['forum_group_title'] = $group_title;
+                }
+
+                $groupId = $forum->getForumOfGroup();
+                $forumInfo['visibility'] = $forumVisibility = $forum->isVisible($courseEntity);
+
+                // Link to the forum
+                $linkForum = api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq()
+                    .'&gid='.$groupId.'&forum='.$forumId;
+                $forumInfo['url'] = $linkForum;
+
+                // Time window visibility: if outside window, show plain title (no link)
+                if (!empty($forum->getStartTime()) && !empty($forum->getEndTime())) {
+                    $res = api_is_date_in_date_range($forum->getStartTime(), $forum->getEndTime());
+                    if (!$res) {
+                        $linkForum = $forum->getTitle();
+                    }
+                }
+
+                $forumInfo['description'] = Security::remove_XSS($forum->getForumComment());
+
+                // Moderation badge for teachers
+                if ($forum->isModerated() && api_is_allowed_to_edit(false, true)) {
+                    $waitingCount = getCountPostsWithStatus(CForumPost::STATUS_WAITING_MODERATION, $forum);
+                    if (!empty($waitingCount)) {
+                        $forumInfo['moderation'] = $waitingCount;
+                    }
+                }
+
+                // Teacher tool icons for this forum
+                $toolActions                   = null;
+                $forumInfo['alert']            = null;
+                $poster_id                     = null;
+                $forumInfo['last_poster_id']   = $poster_id;
+
+                if (api_is_allowed_to_edit(false, true)) {
+                    // Edit forum
+                    $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
+                        .'&action=edit_forum&content=forum&id='.$forumId.'">'
+                        .Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit'))
+                        .'</a>';
+
+                    // Delete forum
+                    $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
+                        .'&action=delete_forum&content=forum&id='.$forumId
+                        ."\" onclick=\"javascript:if(!confirm('".addslashes(
+                            api_htmlentities(get_lang('Delete forum ?'), \ENT_QUOTES)
+                        )."')) return false;\">"
+                        .Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'))
+                        .'</a>';
+
+                    // Visibility toggle
+                    $toolActions .= returnVisibleInvisibleIcon('forum', $forumId, $forumVisibility);
+
+                    // Lock/Unlock
+                    $toolActions .= returnLockUnlockIcon('forum', $forumId, $forum->getLocked());
+
+                    // Up/Down ordering inside the category
+                    $toolActions .= returnUpDownIcon('forum', $forumId, $forumsInCategory);
+                }
+
+                $forumInfo['tools'] = $toolActions;
+                $forumsDetailsList[] = $forumInfo;
             }
             $forumCategoryInfo['forums'] = $forumsDetailsList;
         }
 
-        // It set the languages by category
+        // Category extra fields (kept)
         $extraFieldValue = new ExtraFieldValue('forum_category');
         $forumCategoryInfo['extra_fields'] = $extraFieldValue->getAllValuesByItem($categoryId);
-        // Don't show empty categories (for students)
-        if (!api_is_allowed_to_edit()) {
-            if (empty($forumCategoryInfo['forums'])) {
-                continue;
-            }
+
+        // Hide empty categories for students
+        if (!api_is_allowed_to_edit() && empty($forumCategoryInfo['forums'])) {
+            continue;
         }
         $listForumCategory[] = $forumCategoryInfo;
     }

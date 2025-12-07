@@ -212,9 +212,43 @@ const calendarLocale = allLocales.find(
     calLocale.code === appLocale.value.replace("_", "-") || calLocale.code === useParentLocale(appLocale.value),
 )
 
+const HEX6 = /^#([0-9a-f]{6})$/i
+const HEX3 = /^#([0-9a-f]{3})$/i
+function normalizeHex(c) {
+  if (!c) return null
+  const s = String(c).trim()
+  if (HEX6.test(s)) return s.toUpperCase()
+  const m3 = s.match(HEX3)
+  if (m3) {
+    const [r, g, b] = m3[1].toUpperCase().split("")
+    return `#${r}${r}${g}${g}${b}${b}`
+  }
+  const mRgb = s.match(/rgba?\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i)
+  if (mRgb) {
+    const r = Math.min(255, +mRgb[1])
+    const g = Math.min(255, +mRgb[2])
+    const b = Math.min(255, +mRgb[3])
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`.toUpperCase()
+  }
+  const names = {
+    YELLOW: "#FFFF00",
+    BLUE: "#0000FF",
+    RED: "#FF0000",
+    GREEN: "#008000",
+    STEELBLUE: "#4682B4",
+    "STEEL BLUE": "#4682B4",
+  }
+  return names[s.toUpperCase()] || null
+}
+
+function defaultColorByContext(ctx) {
+  return ctx === "global" ? "#FF0000" : ctx === "course" ? "#458B00" : ctx === "session" ? "#00496D" : "#4682B4"
+}
+
 const showAddEventDialog = () => {
   item.value = {}
   item.value["parentResourceNode"] = securityStore.user.resourceNode["id"]
+  item.value["color"] = defaultColorByContext(currentContext.value)
 
   dialog.value = true
 }
@@ -257,6 +291,8 @@ const calendarOptions = ref({
     item.value["endDate"] = event.end ? new Date(event.end) : null
     item.value["parentResourceNodeId"] = event.extendedProps?.resourceNode?.creator?.id
 
+    const rawColor = event.extendedProps?.color ?? event.backgroundColor ?? event.borderColor ?? event.color ?? null
+    item.value["color"] = normalizeHex(rawColor) || defaultColorByContext(currentContext.value)
     if (
       !(route.query.sid === "0" && item.value.type === "session") &&
       !(route.query.sid !== "0" && item.value.type === "course") &&
@@ -303,6 +339,7 @@ const calendarOptions = ref({
     item.value["allDay"] = info.allDay
     item.value["startDate"] = startDate
     item.value["endDate"] = endDate
+    item.value["color"] = defaultColorByContext(currentContext.value)
 
     dialog.value = true
   },
@@ -453,6 +490,10 @@ async function onCreateEventForm() {
 
     if (isGlobal.value) {
       itemModel.isGlobal = true
+    }
+
+    if (!itemModel.color) {
+      itemModel.color = defaultColorByContext(currentContext.value)
     }
 
     if (itemModel["@id"]) {

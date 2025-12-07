@@ -84,7 +84,7 @@ class StudentFollowUpPlugin extends Plugin
      */
     public function getEntityPath()
     {
-        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
+        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->get_name();
     }
 
     /**
@@ -251,10 +251,5 @@ class StudentFollowUpPlugin extends Plugin
 
         Database::query("DELETE FROM sfu_post WHERE user_id = $userId");
         Database::query("DELETE FROM sfu_post WHERE insert_user_id = $userId");
-    }
-
-    public function get_name()
-    {
-        return 'StudentFollowUp';
     }
 }

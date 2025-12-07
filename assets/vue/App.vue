@@ -13,14 +13,20 @@
     >
       <div class="flex items-center gap-4 rounded-2xl p-6 bg-warning text-white/80 shadow">
         <i class="mdi mdi-alert-outline text-4xl text-white"></i>
-        <p class="font-extrabold text-xl text-white" v-text="forbiddenMsg" />
+        <p
+          class="font-extrabold text-xl text-white"
+          v-text="forbiddenMsg"
+        />
       </div>
     </div>
 
     <!-- Page content; optionally dim/disable when forbidden -->
     <div :class="{ 'opacity-50 pointer-events-none': !!forbiddenMsg }">
       <slot />
-      <div id="legacy_content" ref="legacyContainer" />
+      <div
+        id="legacy_content"
+        ref="legacyContainer"
+      />
       <ConfirmDialog />
       <AccessUrlChooser v-if="!showAccessUrlChosserLayout" />
       <DockedChat v-if="showGlobalChat" />
@@ -55,7 +61,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUpdated, provide, ref, watch, watchEffect, defineAsyncComponent } from "vue"
+import { computed, defineAsyncComponent, onMounted, onUpdated, provide, ref, watch, watchEffect } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { DefaultApolloClient } from "@vue/apollo-composable"
 import axios from "axios"
@@ -135,7 +141,12 @@ const layout = computed(() => {
 })
 
 const legacyContainer = ref(null)
-watch(() => route.name, () => { if (legacyContainer.value) legacyContainer.value.innerHTML = "" })
+watch(
+  () => route.name,
+  () => {
+    if (legacyContainer.value) legacyContainer.value.innerHTML = ""
+  },
+)
 watchEffect(() => {
   if (!legacyContainer.value) return
   const content = document.querySelector("#sectionMainContent")
@@ -183,21 +194,28 @@ axios.interceptors.response.use(
     if (s === 401) notification.showWarningNotification(error.response?.data?.error || "Unauthorized")
     else if (s === 500) notification.showWarningNotification(error.response?.data?.detail || "Server error")
     return Promise.reject(error)
-  }
+  },
 )
 
 platformConfigurationStore.initialize()
 
 // i18n sync
-watch(() => route.params, () => {
-  const { appLocale } = useLocale()
-  if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
-}, { immediate: true })
+watch(
+  () => route.params,
+  () => {
+    const { appLocale } = useLocale()
+    if (appLocale?.value && locale.value !== appLocale.value) setLocale(appLocale.value)
+  },
+  { immediate: true },
+)
 
-watch(() => securityStore.user?.language, (lang) => {
-  if (lang && locale.value !== lang) setLocale(lang)
-}, { immediate: true })
-
+watch(
+  () => securityStore.user?.language,
+  (lang) => {
+    if (lang && locale.value !== lang) setLocale(lang)
+  },
+  { immediate: true },
+)
 
 onMounted(async () => {
   const { loader } = useMediaElementLoader()
@@ -220,26 +238,22 @@ onMounted(async () => {
 const DockedChat = defineAsyncComponent(() => import("./components/chat/DockedChat.vue"))
 const allowGlobalChat = computed(() => {
   if (platformConfigurationStore.isLoading) {
-    console.log("[CHAT] waiting settings... isLoading=true")
     return false
   }
   const val = platformConfigurationStore.getSetting?.("chat.allow_global_chat")
-  console.log("[CHAT] getSetting('chat.allow_global_chat') ->", val)
   return String(val) === "true"
 })
 
 const showGlobalChat = computed(() => {
-  const visible = securityStore.isAuthenticated && allowGlobalChat.value
-  console.log("[CHAT] showGlobalChat=", visible, "| isAuthenticated=", securityStore.isAuthenticated, "| allowGlobalChat=", allowGlobalChat.value)
-  return visible
+  return securityStore.isAuthenticated && allowGlobalChat.value
 })
 
 watch(forbiddenMsg, (msg) => {
   if (msg) {
-    const legacy = document.getElementById('legacy_content')
-    if (legacy) legacy.innerHTML = ''
-    const section = document.getElementById('sectionMainContent')
-    if (section) section.innerHTML = ''
+    const legacy = document.getElementById("legacy_content")
+    if (legacy) legacy.innerHTML = ""
+    const section = document.getElementById("sectionMainContent")
+    if (section) section.innerHTML = ""
   }
 })
 </script>

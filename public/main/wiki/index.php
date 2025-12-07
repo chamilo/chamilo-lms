@@ -50,7 +50,7 @@ if ($groupId) {
     ];
     $interbreadcrumb[] = [
         'url'  => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.Security::remove_XSS($groupProperties['name']),
+        'name' => get_lang('Group area').' '.Security::remove_XSS($groupProperties['name']),
     ];
 }
 
@@ -74,7 +74,7 @@ if (!empty($view)) {
 $wiki->blockConcurrentEditions(api_get_user_id(), $action);
 
 // Header
-$tool_name = get_lang('ToolWiki');
+$tool_name = get_lang('Wiki');
 Display::display_header($tool_name, 'Wiki');
 
 // “Not last version” hint

@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
+
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Print invoice of the Buy Courses plugin.
@@ -27,15 +31,27 @@ $extraUserInfoData = UserManager::get_extra_user_data($infoSale['user_id']);
 $infoInvoice = $plugin->getDataInvoice($saleId, $isService);
 
 $taxAppliesTo = $globalParameters['tax_applies_to'];
-$taxEnable = 'true' === $plugin->get('tax_enable') &&
-    (BuyCoursesPlugin::TAX_APPLIES_TO_ALL == $taxAppliesTo ||
-    (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && !$isService) ||
-    (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && $isService));
+$taxEnable = 'true' === $plugin->get('tax_enable')
+    && (BuyCoursesPlugin::TAX_APPLIES_TO_ALL == $taxAppliesTo
+    || (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE == $taxAppliesTo && !$isService)
+    || (BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION == $taxAppliesTo && $isService));
 
 $htmlText = '<html>';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="plugin.css">';
 $htmlText .= '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CSS_PATH).'base.css">';
 $htmlText .= '<body>';
+
+$organization = ChamiloApi::getPlatformLogo('', [], true);
+// Use custom logo image.
+$pdfLogo = api_get_setting('pdf_logo_header');
+if ('true' === $pdfLogo) {
+    $visualTheme = api_get_visual_theme();
+    $img = api_get_path(SYS_CSS_PATH).'themes/'.$visualTheme.'/images/pdf_logo_header.png';
+    if (file_exists($img)) {
+        $organization = "<img src='$img'>";
+    }
+}
+$htmlText .= $organization;
 
 // Seller and customer info
 $htmlText .= '<table width="100%">';
@@ -82,7 +98,7 @@ $row = [
     $infoSale['product_name'],
 ];
 
-//var_dump($infoSale);exit;
+// var_dump($infoSale);exit;
 $isoCode = $plugin->getCurrency($infoSale['currency_id'])['iso_code'];
 
 if ($taxEnable) {
@@ -120,7 +136,7 @@ if ($taxEnable) {
 }
 $data[] = $row;
 $attr = [];
-$attr['class'] = 'table data_table';
+$attr['class'] = 'table table-hover table-striped data_table';
 $attr['width'] = '100%';
 $htmlText .= Display::table($header, $data, $attr);
 $htmlText .= '</body></html>';
@@ -135,5 +151,6 @@ $params = [
     'orientation' => 'P',
 ];
 $pdf = new PDF($params['format'], $params['orientation'], $params);
-@$pdf->content_to_pdf($htmlText, null, $fileName, null, 'D', false, null, false, false, false);
+@$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
+
 exit;

@@ -1,7 +1,10 @@
 #lp_sidebar {
-  font-size: 14px
+  font-size: 0.875rem;
 }
 
+/* -------------------------------------------------------------------------
+ * LP tree (left side)
+ * ---------------------------------------------------------------------- */
 #lp_item_list {
   margin: 0;
   padding: 0;
@@ -31,20 +34,22 @@
 
 #lp_item_list .ui-state-highlight {
   height: 25px;
-  background: #EEEEEE;
+  background: #eeeeee;
   border-radius: 5px;
-  border: 1px dashed #B0B0B0
+  border: 1px dashed #b0b0b0;
 }
 
 .lp_resource {
-  font-size: 14px
+  font-size: 14px;
 }
-
 
 .list-group-item-empty {
   height: 50px;
 }
 
+/* -------------------------------------------------------------------------
+ * Collapsible panels
+ * ---------------------------------------------------------------------- */
 .display-panel-collapse {
   display: block;
 
@@ -64,49 +69,88 @@
   }
 }
 
+/* -------------------------------------------------------------------------
+ * Right side: resource tabs (icons row + content)
+ * ---------------------------------------------------------------------- */
 #resource_tab {
-  margin: 0px 15px;
+  margin: 0 15px;
 }
 
+/* Bar that contains the icons */
 #resource_tab .nav-tabs {
-  .nav-link.active {
-    background-color: #007bff;
-    border-color: #007bff;
-    border-radius: 0.25rem;
-    color: #FFF;
-  }
-
-  .nav-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 0.5rem;
-    transition: background-color 0.3s, transform 0.3s;
-  }
-
-  .nav-link i {
-    font-size: 64px;
-    color: #495057;
-    transition: color 0.3s;
-    height: auto !important;
-    padding: 2px;
-  }
-
-  .nav-link:hover {
-    background-color: #e9ecef;
-    transform: scale(1.05);
-    color: inherit;
-  }
-
-  .nav-link i:hover {
-    color: #495057 !important;
-  }
-
-  .nav-link.active i {
-    color: #ffffff;
-  }
+  background-color: rgb(var(--color-primary-base) / 0.06);
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e4e9ed;
+  display: flex;
+  align-items: center;
 }
 
+/* Individual tab (icon + label) */
+#resource_tab .nav-tabs .nav-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.75rem;
+  padding: 0.35rem 0.5rem;
+  border: none;
+  background: transparent;
+  border-radius: 0.5rem;
+  color: rgb(var(--color-primary-base));
+  transition:
+          background-color 0.2s ease,
+          transform 0.2s ease,
+          color 0.2s ease,
+          box-shadow 0.2s ease;
+}
+
+/* Icons inside each tab */
+#resource_tab .nav-tabs .nav-link i {
+  font-size: 64px;
+  color: inherit;
+  transition: inherit;
+  height: auto !important;
+  padding: 4px;
+}
+
+/* Hover state for a tab */
+#resource_tab .nav-tabs .nav-link:hover {
+  background-color: rgb(var(--color-primary-base) / 0.10);
+  color: rgb(var(--color-primary-base));
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+/* Active tab: solid primary background */
+#resource_tab .nav-tabs .nav-link.active {
+  background-color: rgb(var(--color-primary-base));
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.18);
+}
+
+/* Icons follow the active text color */
+#resource_tab .nav-tabs .nav-link.active i {
+  color: white;
+}
+
+/* Make resource content look like a card attached to the bar */
+#resource_tab .tab_wrapper {
+  background-color: #ffffff;
+  border-radius: 0 0 0.75rem 0.75rem;
+  border: 1px solid #e4e9ed;
+  border-top: none;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* Extra spacing for the inner tab contents (documents/videos/…) */
+#resource_tab .tab-panel {
+  margin-top: 0.5rem;
+}
+
+/* -------------------------------------------------------------------------
+ * Drag handle icon
+ * ---------------------------------------------------------------------- */
 .mdi-cursor-move {
   cursor: move !important;
   font-size: 16px;
@@ -114,15 +158,18 @@
   height: 16px;
 }
 
+/* -------------------------------------------------------------------------
+ * LP items list (left column visual tweaks)
+ * ---------------------------------------------------------------------- */
 #lp_item_list {
   font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
 
   .list-group-item {
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     margin-bottom: 5px;
     padding: 10px;
-    background-color: white;
+    background-color: #ffffff;
   }
 
   .ch-tool-icon {
@@ -144,41 +191,43 @@
   }
 }
 
+/* -------------------------------------------------------------------------
+ * Documents hierarchy list (left pane)
+ * ---------------------------------------------------------------------- */
 #doc_list {
   .list-group-item {
     padding-left: 10px;
     display: block;
+    border: 1px solid #eee;
   }
 
   .nested-1 {
     padding-left: 20px;
   }
-
   .nested-2 {
     padding-left: 25px;
   }
-
   .nested-3 {
     padding-left: 30px;
     border: none;
   }
-
   .nested-4 {
     padding-left: 35px;
     border: none;
   }
-
   .nested-5 {
     padding-left: 40px;
     border: none;
   }
-
   .nested-6 {
     padding-left: 45px;
     border: none;
   }
 }
 
+/* -------------------------------------------------------------------------
+ * Dropzone (upload box)
+ * ---------------------------------------------------------------------- */
 #dropzone {
   position: relative;
   overflow: hidden;
@@ -187,32 +236,42 @@
   text-align: center;
   color: #333;
   font-weight: bold;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
   border-radius: 10px;
   width: auto;
   margin-left: auto;
   margin-right: auto;
   height: auto;
   line-height: 50px;
-  background-color: #D4E6F0;
+  background-color: rgb(var(--color-primary-base) / 0.06);
   border: 2px dashed #bbbbbb;
   font-size: 120%;
   margin-bottom: 0;
 }
 
 #dropzone.hover {
-  background: lawngreen;
+  background: rgb(var(--color-primary-base) / 0.18);
 }
 
-#upload_form .fa-plus-square-o, #upload_form .fa-minus-square-o {
+#upload_form .fa-plus-square-o,
+#upload_form .fa-minus-square-o {
   cursor: pointer;
 }
 
-#upload, .description-upload {
+#upload,
+.description-upload {
   padding-top: 15px;
 }
 
 .description-upload {
   margin-bottom: 15px;
+}
+.lp-doc-template-panel {
+  min-width: 260px;
+}
+#lp-doc-template-list {
+  max-height: none;
+  overflow-y: visible;
+}
+.dropdown-menu {
+  z-index: 1000;
 }

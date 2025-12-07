@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -87,6 +89,7 @@ $(function () {
 
 $forumId = isset($_GET['forum']) ? (int) ($_GET['forum']) : 0;
 $repo = Container::getForumRepository();
+
 /** @var CForum $forumEntity */
 $forumEntity = $repo->find($forumId);
 
@@ -106,7 +109,7 @@ if (api_is_in_gradebook()) {
 $groupId = api_get_group_id();
 
 if ('group' === $origin) {
-    $group_properties = GroupManager:: get_group_properties($groupId);
+    $group_properties = GroupManager::get_group_properties($groupId);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
@@ -163,5 +166,5 @@ forum_search();
 
 // Footer
 if ('learnpath' !== $origin) {
-    Display :: display_footer();
+    Display::display_footer();
 }

@@ -18,9 +18,6 @@ api_protect_admin_script($allowCareer);
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-//Adds the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
@@ -117,13 +114,13 @@ if (!empty($careers)) {
                 }
                 $promotion_array[$promotion_item['id']] = [
                     'id' => $promotion_item['id'],
-                    'name' => $promotion_item['title'],
+                    'title' => $promotion_item['title'],
                     'sessions' => $session_list,
                 ];
             }
         }
         $career_array[$career_item['id']] = [
-            'name' => $career_item['title'],
+            'title' => $career_item['title'],
             'promotions' => $promotion_array,
         ];
         $careerList = [

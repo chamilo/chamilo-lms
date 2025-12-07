@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -15,18 +17,22 @@ class CalendarEvent extends Resource
      * The title.
      */
     public $title;
+
     /**
      * The content.
      */
     public $content;
+
     /**
      * The start date.
      */
     public $start_date;
+
     /**
      * The end date.
      */
     public $end_date;
+
     /**
      * The attachment path.
      */
@@ -36,6 +42,7 @@ class CalendarEvent extends Resource
      * The attachment filename.
      */
     public $attachment_filename;
+
     /**
      * The attachment size.
      */
@@ -49,9 +56,16 @@ class CalendarEvent extends Resource
     /**
      * Create a new Event.
      *
-     * @param int    $id
-     * @param string $title
-     * @param string $content
+     * @param int        $id
+     * @param string     $title
+     * @param string     $content
+     * @param mixed      $start_date
+     * @param mixed      $end_date
+     * @param null|mixed $attachment_path
+     * @param null|mixed $attachment_filename
+     * @param null|mixed $attachment_size
+     * @param null|mixed $attachment_comment
+     * @param mixed      $all_day
      */
     public function __construct(
         $id,
@@ -81,7 +95,7 @@ class CalendarEvent extends Resource
     /**
      * Show this Event.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->title.' ('.$this->start_date.' -> '.$this->end_date.')';

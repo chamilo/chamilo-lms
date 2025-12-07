@@ -2,7 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
-exit;
+//exit;
 
 /**
  * Script to scan Chamilo LMS master branch for translatable terms and compare with messages.pot

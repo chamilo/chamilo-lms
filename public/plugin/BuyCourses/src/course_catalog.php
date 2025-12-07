@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For license terms, see /license.txt */
 
 /**
@@ -56,8 +58,7 @@ $courseList = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $min
 $totalItems = $plugin->getCatalogCourseList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?';
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+$pagination = Display::getPagination(api_get_self().'?', $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {
@@ -72,11 +73,11 @@ if (api_is_platform_admin()) {
 } else {
     $interbreadcrumb[] = [
         'url' => 'course_panel.php',
-        'name' => get_lang('Dashboard'),
+        'name' => get_lang('TabsDashboard'),
     ];
 }
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'buycourses/resources/css/style.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/resources/css/style.css');
 
 $templateName = $plugin->get_lang('CourseListOnSale');
 $tpl = new Template($templateName);

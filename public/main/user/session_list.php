@@ -15,8 +15,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_teacher_script(true);
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $tool_name = get_lang('Session list');
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 

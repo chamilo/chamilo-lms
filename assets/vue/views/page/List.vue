@@ -8,7 +8,6 @@
     :total-items="totalItems"
     :values="items"
     data-key="@id"
-    filter-as-menu
     lazy
     @page="onPage"
     @sort="sortingChanged"

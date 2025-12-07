@@ -14,6 +14,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Filter\SidFilter;
@@ -28,22 +30,22 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'Attendances',
+    shortName: 'Attendance',
     operations: [
         new Put(
             uriTemplate: '/attendances/{iid}/toggle_visibility',
-            openapiContext: [
-                'summary' => 'Toggle visibility of the attendance\'s associated ResourceLink',
-            ],
+            openapi: new Operation(
+                summary: 'Toggle visibility of the attendance\'s associated ResourceLink'
+            ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'toggle_visibility',
             processor: CAttendanceStateProcessor::class
         ),
         new Put(
             uriTemplate: '/attendances/{iid}/soft_delete',
-            openapiContext: [
-                'summary' => 'Soft delete the attendance',
-            ],
+            openapi: new Operation(
+                summary: 'Soft delete the attendance'
+            ),
             security: "is_granted('EDIT', object.resourceNode)",
             name: 'soft_delete',
             processor: CAttendanceStateProcessor::class
@@ -51,23 +53,25 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('ROLE_TEACHER')"),
         new Post(
             uriTemplate: '/attendances/{iid}/calendars',
-            openapiContext: ['summary' => 'Add a calendar to an attendance.'],
+            openapi: new Operation(
+                summary: 'Add a calendar to an attendance.'
+            ),
             denormalizationContext: ['groups' => ['attendance:write']],
             name: 'calendar_add',
             processor: CAttendanceStateProcessor::class
         ),
         new GetCollection(
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer'],
-                    ],
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Resource node Parent',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ],
+            ),
         ),
         new Get(security: "is_granted('ROLE_USER')"),
         new Post(

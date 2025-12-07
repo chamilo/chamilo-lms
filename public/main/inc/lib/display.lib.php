@@ -997,36 +997,31 @@ class Display
             return '';
         }
 
+        // ---------------------------------------------------------------------
+        // Build tab headers
+        // ---------------------------------------------------------------------
         $lis = '';
         $i = 1;
         foreach ($headers as $item) {
-            $active = '';
-            if (1 == $i) {
-                $active = ' active';
-            }
-
-            if (!empty($selected)) {
-                $active = '';
-                if ($selected == $i) {
-                    $active = ' active';
-                }
-            }
+            $isActive = (empty($selected) && 1 === $i) || (!empty($selected) && (int) $selected === $i);
+            $activeClass = $isActive ? ' active' : '';
+            $ariaSelected = $isActive ? 'true' : 'false';
 
             $item = self::tag(
                 'a',
                 $item,
                 [
-                    //'href' => '#'.$id.'-'.$i,
                     'href' => 'javascript:void(0)',
-                    'class' => 'nav-item nav-link '.$active,
-                    '@click' => "openTab =  $i",
+                    'class' => 'nav-item nav-link text-primary'.$activeClass,
+                    '@click' => "openTab = $i",
                     'id' => $id.$i.'-tab',
                     'data-toggle' => 'tab',
                     'role' => 'tab',
                     'aria-controls' => $id.'-'.$i,
-                    'aria-selected' => $selected,
+                    'aria-selected' => $ariaSelected,
                 ]
             );
+
             $lis .= $item;
             $i++;
         }
@@ -1036,24 +1031,21 @@ class Display
             $lis,
             [
                 'id' => 'nav_'.$id,
-                'class' => 'nav nav-tabs',
+                'class' => 'nav nav-tabs bg-white px-3 pt-3 border-bottom-0',
                 'role' => 'tablist',
             ]
         );
 
+        // ---------------------------------------------------------------------
+        // Build tab contents
+        // ---------------------------------------------------------------------
         $i = 1;
         $divs = '';
         foreach ($items as $content) {
-            $active = '';
-            if (1 == $i) {
-                $active = ' show active';
-            }
-
-            if (!empty($selected)) {
-                $active = '';
-                if ($selected == $i) {
-                    $active = ' show active';
-                }
+            $isActive = (empty($selected) && 1 === $i) || (!empty($selected) && (int) $selected === $i);
+            $panelClass = 'tab-panel';
+            if ($isActive) {
+                $panelClass .= ' is-active';
             }
 
             $divs .= self::tag(
@@ -1062,25 +1054,37 @@ class Display
                 [
                     'id' => $id.'-'.$i,
                     'x-show' => "openTab === $i",
-                    //'class' => 'tab-pane fade '.$active,
-                    //'role' => 'tabpanel',
-                    //'aria-labelledby' => $id.$i.'-tab',
+                    'class' => $panelClass,
                 ]
             );
             $i++;
         }
 
-        $attributes['id'] = ''.$id;
+        // Wrapper for contents: white background, gray border, padding
+        $contentWrapper = self::tag(
+            'div',
+            $divs,
+            [
+                'class' => 'tab-content bg-white border border-gray-25 rounded-bottom px-3 py-3 mt-2',
+            ]
+        );
+
+        // ---------------------------------------------------------------------
+        // Outer wrapper
+        // ---------------------------------------------------------------------
+        $attributes['id'] = (string) $id;
         if (empty($attributes['class'])) {
             $attributes['class'] = '';
         }
-        $attributes['class'] .= ' tab_wrapper ';
-        $attributes['x-data'] = ' { openTab: 1 } ';
+        // Shadow, rounded corners, small top margin
+        $attributes['class'] .= ' tab_wrapper shadow-sm rounded mt-3';
+
+        $initialTab = !empty($selected) ? (int) $selected : 1;
+        $attributes['x-data'] = '{ openTab: '.$initialTab.' }';
 
         return self::tag(
             'div',
-            $ul.
-            $divs,
+            $ul.$contentWrapper,
             $attributes
         );
     }

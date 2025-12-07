@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -36,17 +37,20 @@ use Chamilo\CourseBundle\Entity\CBlog;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CLink;
 use Chamilo\CourseBundle\Entity\CShortcut;
+use Chamilo\CourseBundle\Entity\CThematicAdvance;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Entity\CToolIntro;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\CourseBundle\Repository\CShortcutRepository;
+use Chamilo\CourseBundle\Repository\CThematicRepository;
 use Chamilo\CourseBundle\Repository\CToolRepository;
 use Chamilo\CourseBundle\Settings\SettingsCourseManager;
 use Chamilo\CourseBundle\Settings\SettingsFormFactory;
 use CourseManager;
 use Database;
+use DateTimeInterface;
 use Display;
 use Doctrine\ORM\EntityManagerInterface;
 use Event;
@@ -54,6 +58,7 @@ use Exception;
 use Exercise;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
+use IntlDateFormatter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -151,20 +156,27 @@ class CourseController extends ToolBaseController
         EntityManagerInterface $em,
         AssetRepository $assetRepository
     ): Response {
-        $requestData = json_decode($request->getContent(), true);
-        // Sort behaviour
-        if (!empty($requestData) && isset($requestData['toolItem'])) {
-            $index = $requestData['index'];
-            $toolItem = $requestData['toolItem'];
-            $toolId = (int) $toolItem['iid'];
+        // Handle drag & drop sort for course tools
+        if ($request->isMethod('POST')) {
+            $requestData = json_decode($request->getContent() ?: '', true) ?? [];
 
-            /** @var CTool $cTool */
-            $cTool = $em->find(CTool::class, $toolId);
+            if (isset($requestData['toolId'], $requestData['index'])) {
+                $course = $this->getCourse();
+                if (null === $course) {
+                    return $this->json(
+                        ['success' => false, 'message' => 'Course not found.'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
 
-            if ($cTool) {
-                $cTool->setPosition($index + 1);
-                $em->persist($cTool);
-                $em->flush();
+                $sessionId = $this->getSessionId();
+                $toolId = (int) $requestData['toolId'];
+                $newIndex = (int) $requestData['index'];
+
+                $result = $this->reorderCourseTools($em, $course, $sessionId, $toolId, $newIndex);
+                $statusCode = $result['success'] ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST;
+
+                return $this->json($result, $statusCode);
             }
         }
 
@@ -316,6 +328,161 @@ class CourseController extends ToolBaseController
             ]
         );
     }
+
+    #[Route('/{cid}/thematic_progress.json', name: 'chamilo_core_course_thematic_progress_json', methods: ['GET'])]
+    public function thematicProgressJson(
+        Request $request,
+        CThematicRepository $thematicRepository,
+        UserHelper $userHelper,
+        CidReqHelper $cidReqHelper,
+        TranslatorInterface $translator,
+        SettingsCourseManager $courseSettingsManager
+    ): JsonResponse {
+        $course = $this->getCourse();
+        if (null === $course) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if (0 === $this->getSessionId()) {
+            $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+        }
+
+        $courseSettingsManager->setCourse($course);
+        $displayMode = (string) $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse');
+
+        if ('' === $displayMode || '0' === $displayMode || '4' === $displayMode) {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        $sessionEntity = $cidReqHelper->getSessionEntity();
+        $currentUser = $userHelper->getCurrent();
+
+        $advance1 = null;
+        $advance2 = null;
+        $subtitle1 = '';
+        $subtitle2 = '';
+
+        if ('1' === $displayMode) {
+            // Last completed topic only
+            $advance1 = $thematicRepository->findLastDoneAdvanceForCourse($course, $sessionEntity);
+            if (null !== $advance1) {
+                $subtitle1 = $translator->trans('Current topic');
+            }
+        } elseif ('2' === $displayMode) {
+            // Two next not done topics
+            $nextList = $thematicRepository->findNextNotDoneAdvancesForCourse($course, $sessionEntity, 2);
+
+            if (isset($nextList[0]) && $nextList[0] instanceof CThematicAdvance) {
+                $advance1 = $nextList[0];
+                $subtitle1 = $translator->trans('Next topic');
+            }
+
+            if (isset($nextList[1]) && $nextList[1] instanceof CThematicAdvance) {
+                $advance2 = $nextList[1];
+                $subtitle2 = $translator->trans('Next topic');
+            }
+        } elseif ('3' === $displayMode) {
+            // Current (last done) + next not done
+            $advance1 = $thematicRepository->findLastDoneAdvanceForCourse($course, $sessionEntity);
+            $nextList = $thematicRepository->findNextNotDoneAdvancesForCourse($course, $sessionEntity, 1);
+
+            if (null !== $advance1) {
+                $subtitle1 = $translator->trans('Current topic');
+            }
+
+            if (isset($nextList[0]) && $nextList[0] instanceof CThematicAdvance) {
+                $advance2 = $nextList[0];
+                $subtitle2 = $translator->trans('Next topic');
+            }
+        } else {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        if (null === $advance1 && null === $advance2) {
+            return new JsonResponse(['enabled' => false]);
+        }
+
+        $locale = $request->getLocale();
+        $timezoneId = null;
+
+        if ($currentUser && method_exists($currentUser, 'getTimezone') && $currentUser->getTimezone()) {
+            $timezoneId = $currentUser->getTimezone();
+        }
+
+        if (empty($timezoneId)) {
+            $timezoneId = date_default_timezone_get();
+        }
+
+        $dateFormatter = new IntlDateFormatter(
+            $locale,
+            IntlDateFormatter::MEDIUM,
+            IntlDateFormatter::SHORT,
+            $timezoneId
+        );
+
+        $buildItem = function (CThematicAdvance $advance, string $type, string $label) use ($dateFormatter): array {
+            $thematic = $advance->getThematic();
+
+            $startDate = $advance->getStartDate();
+            $formattedDate = $startDate instanceof DateTimeInterface
+                ? (string) $dateFormatter->format($startDate)
+                : '';
+
+            return [
+                'type' => $type,
+                'label' => $label,
+                'title' => strip_tags($thematic->getTitle() ?? ''),
+                'startDate' => $formattedDate,
+                'content' => strip_tags($advance->getContent() ?? ''),
+                'duration' => (float) $advance->getDuration(),
+            ];
+        };
+
+        $items = [];
+
+        if (null !== $advance1) {
+            $firstType = ('1' === $displayMode || '3' === $displayMode) ? 'current' : 'next';
+            $items[] = $buildItem($advance1, $firstType, $subtitle1);
+        }
+
+        if (null !== $advance2) {
+            $items[] = $buildItem($advance2, 'next', $subtitle2);
+        }
+
+        $userPayload = null;
+        if ($currentUser) {
+            $name = method_exists($currentUser, 'getCompleteName')
+                ? $currentUser->getCompleteName()
+                : trim(\sprintf('%s %s', $currentUser->getFirstname(), $currentUser->getLastname()));
+
+            $userPayload = [
+                'name' => $name,
+                'avatar' => null,
+            ];
+        }
+
+        $thematicUrl = '/main/course_progress/index.php?cid='.$course->getId().'&sid='.$this->getSessionId().'&action=thematic_details';
+        $thematicScoreRaw = $thematicRepository->calculateTotalAverageForCourse($course, $sessionEntity);
+        $thematicScore = $thematicScoreRaw.'%';
+
+        $payload = [
+            'enabled' => true,
+            'displayMode' => (int) $displayMode,
+            'title' => $translator->trans('Thematic advance'),
+            'score' => $thematicScore,
+            'scoreRaw' => $thematicScoreRaw,
+            'user' => $userPayload,
+            'items' => $items,
+            'detailUrl' => $thematicUrl,
+            'labels' => [
+                'duration' => $translator->trans('Duration in hours'),
+                'seeDetail' => $translator->trans('See detail'),
+            ],
+        ];
+
+        return new JsonResponse($payload);
+    }
+
     #[Route('/{courseId}/next-course', name: 'chamilo_course_next_course')]
     public function getNextCourse(
         int $courseId,
@@ -1156,5 +1323,104 @@ class CourseController extends ToolBaseController
         ;
 
         return $enrollmentCount > 0;
+    }
+
+    /**
+     * Reorders all course tools for a given course / session after drag & drop.
+     *
+     * @return array<string, mixed>
+     */
+    private function reorderCourseTools(
+        EntityManagerInterface $em,
+        Course $course,
+        int $sessionId,
+        int $toolId,
+        int $newIndex
+    ): array {
+        if ($toolId <= 0) {
+            return [
+                'success' => false,
+                'message' => 'Invalid tool id.',
+            ];
+        }
+
+        /** @var CToolRepository $toolRepo */
+        $toolRepo = $em->getRepository(CTool::class);
+
+        // Load all tools for this course + (optional) session ordered by current position
+        $qb = $toolRepo->createQueryBuilder('t')
+            ->andWhere('t.course = :course')
+            ->setParameter('course', $course)
+            ->orderBy('t.position', 'ASC')
+            ->addOrderBy('t.iid', 'ASC');
+
+        if ($sessionId > 0) {
+            $qb
+                ->andWhere('IDENTITY(t.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId);
+        } else {
+            $qb->andWhere('t.session IS NULL');
+        }
+
+        /** @var CTool[] $tools */
+        $tools = $qb->getQuery()->getResult();
+
+        if (0 === \count($tools)) {
+            return [
+                'success' => false,
+                'message' => 'No tools found for course / session.',
+            ];
+        }
+
+        // Build an array of IDs to manipulate positions easily
+        $ids = array_map(static fn (CTool $tool): int => $tool->getIid() ?? 0, $tools);
+
+        $currentIndex = array_search($toolId, $ids, true);
+        if (false === $currentIndex) {
+            return [
+                'success' => false,
+                'message' => 'Tool not found in current course / session.',
+            ];
+        }
+
+        // Clamp the new index into a valid range
+        $newIndex = max(0, min($newIndex, \count($tools) - 1));
+
+        if ($newIndex === $currentIndex) {
+            return [
+                'success' => true,
+                'unchanged' => true,
+                'from' => $currentIndex,
+                'to' => $newIndex,
+                'total' => \count($tools),
+            ];
+        }
+
+        // Move the ID in the array (remove at old index, insert at new index)
+        $idToMove = $ids[$currentIndex];
+        array_splice($ids, $currentIndex, 1);
+        array_splice($ids, $newIndex, 0, [$idToMove]);
+
+        // Rewrite all positions in DB using a simple DQL UPDATE per tool
+        // Positions will be 0-based: 0,1,2,...
+        foreach ($ids as $pos => $id) {
+            $em->createQueryBuilder()
+                ->update(CTool::class, 't')
+                ->set('t.position', ':pos')
+                ->where('t.iid = :iid')
+                ->setParameter('pos', $pos)
+                ->setParameter('iid', $id)
+                ->getQuery()
+                ->execute();
+        }
+
+        return [
+            'success' => true,
+            'from' => $currentIndex,
+            'to' => $newIndex,
+            'total' => \count($tools),
+            'courseId' => $course->getId(),
+            'sessionId' => $sessionId,
+        ];
     }
 }

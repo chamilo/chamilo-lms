@@ -77,9 +77,14 @@ readonly class AuthenticationConfigHelper
             $authentications[] = UserAuthSource::LDAP;
         }
 
+        $oauthProviders = array_map(
+            static fn (string $provider) => 'generic' === $provider ? UserAuthSource::OAUTH2 : $provider,
+            array_keys($this->getEnabledOAuthProviders($url))
+        );
+
         return array_merge(
             $authentications,
-            array_keys($this->getEnabledOAuthProviders($url))
+            $oauthProviders
         );
     }
 

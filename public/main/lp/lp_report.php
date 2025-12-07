@@ -52,6 +52,13 @@ if (empty($lp)) {
 }
 
 $urlBase = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=report&lp_id='.$lpId;
+$statsUrl = api_get_path(WEB_CODE_PATH)
+    .'my_space/lp_tracking.php?'
+    .api_get_cidreq()
+    .'&action=stats'
+    .'&origin=tracking_course'
+    .'&lp_id='.$lpId;
+$ajaxUrl  = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?lp_id='.$lpId.'&'.api_get_cidreq();
 $url = $urlBase.'&group_filter='.$groupFilter;
 $allowUserGroups = ('true' === api_get_setting('lp.allow_lp_subscription_to_usergroups'));
 
@@ -92,11 +99,11 @@ if ('1' === $lp->getSubscribeUsers()) {
     }
 
     if (!empty($subscribedUsersInLp)) {
-        foreach ($subscribedUsersInLp as $users) {
-            /** @var CLpRelUser $users */
-            $user = $users->getUser();
-            if ($user) {
-                $users[]['user_id'] = $user->getId();
+        foreach ($subscribedUsersInLp as $rel) {
+            /** @var CLpRelUser $rel */
+            $u = $rel->getUser();
+            if ($u) {
+                $users[] = ['user_id' => $u->getId()];
             }
         }
     }
@@ -347,11 +354,15 @@ if (!empty($users)) {
             $trackingUrl
         ).'&nbsp;';
 
+        $statsHref = api_get_path(WEB_CODE_PATH).'my_space/lp_tracking.php?'
+            .api_get_cidreq()
+            .'&action=stats&extend_all=0&origin=tracking_course&allow_extend=0&lp_id='.$lpId;
+
         $actions .= Display::url(
-            Display::getMdiIcon('fast-forward-outline', 'ch-tool-icon', null, 32, get_lang('Details')),
-            'javascript:void(0);',
-            ['data-id' => $userId, 'class' => 'details']
-        ).'&nbsp;';
+                Display::getMdiIcon('fast-forward-outline','ch-tool-icon',null,32,get_lang('Details')),
+                $statsHref,
+                ['data-id' => $userId,'class' => 'details']
+            ).'&nbsp;';
 
         $actions .= Display::url(
             Display::getMdiIcon('broom', 'ch-tool-icon', null, 32, get_lang('Reset')),
@@ -428,6 +439,7 @@ $template->assign('group_class_label', $label);
 $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
+$template->assign('course_id', $courseId);
 $template->assign('lp_id', $lpId);
 $template->assign('show_email', 'true' === $showEmail);
 $template->assign('table', $table->return_table());
@@ -435,6 +447,8 @@ $template->assign('export', (int) $export);
 $template->assign('group_form', $groupFilterForm);
 $template->assign('url', $url);
 $template->assign('url_base', $urlBase);
+$template->assign('stats_url', $statsUrl);
+$template->assign('ajax_url',  $ajaxUrl);
 $template->assign('header', $entity->getTitle());
 $template->assign('actions', Display::toolbarAction('lp_actions', [$actions]));
 $result = $template->fetch('@ChamiloCore/LearnPath/report.html.twig');

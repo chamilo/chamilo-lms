@@ -68,7 +68,7 @@ class Promotion extends Model
                     case 'id':
                     case 'updated_at':
                         break;
-                    case 'name':
+                    case 'title':
                         $val .= ' '.get_lang('Copy');
                         $new[$key] = $val;
                         break;
@@ -215,7 +215,7 @@ class Promotion extends Model
 
         $form->addHeader($header);
         $form->addHidden('id', $id);
-        $form->addText('name', get_lang('Name'), true, ['size' => '70', 'id' => 'name']);
+        $form->addText('title', get_lang('Title'), true, ['size' => '70', 'id' => 'title']);
         $form->addHtmlEditor(
             'description',
             get_lang('Description'),
@@ -231,7 +231,7 @@ class Promotion extends Model
         $careers = $career->get_all();
         $career_list = [];
         foreach ($careers as $item) {
-            $career_list[$item['id']] = $item['name'];
+            $career_list[$item['id']] = $item['title'];
         }
         $form->addSelect(
             'career_id',
@@ -262,7 +262,7 @@ class Promotion extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('Required field'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -280,7 +280,7 @@ class Promotion extends Model
         $em = Database::getManager();
         $repo = $em->getRepository(\Chamilo\CoreBundle\Entity\Career::class);
         $promotion
-            ->setTitle($params['name'])
+            ->setTitle($params['title'])
             ->setStatus($params['status'])
             ->setDescription($params['description'])
             ->setCareer($repo->find($params['career_id']))

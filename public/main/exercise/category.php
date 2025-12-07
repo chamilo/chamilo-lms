@@ -31,20 +31,17 @@ $obj = new ExerciseCategoryManager();
 $check = Security::check_token('request');
 $token = Security::get_token();
 
-//Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('Name'),
+    get_lang('Title'),
     get_lang('Actions'),
 ];
 
 // Column config
 $column_model = [
     [
-        'name' => 'name',
-        'index' => 'name',
+        'name' => 'title',
+        'index' => 'title',
         'width' => '340px',
         'align' => 'left',
     ],

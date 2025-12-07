@@ -65,14 +65,6 @@ class LearningCalendarPlugin extends Plugin
     }
 
     /**
-     * Get the plugin directory name.
-     */
-    public function get_name()
-    {
-        return 'LearningCalendar';
-    }
-
-    /**
      * Install the plugin. Setup the database.
      */
     public function install()

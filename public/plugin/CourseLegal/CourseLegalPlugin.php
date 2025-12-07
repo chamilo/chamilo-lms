@@ -278,7 +278,7 @@ class CourseLegalPlugin extends Plugin
                     $message,
                     null,
                     null,
-                    null,
+                    [],
                     $dataFile
                 );
                 //MessageManager::send_message_simple($student['user_id'], $subject, $message);
@@ -548,10 +548,5 @@ class CourseLegalPlugin extends Plugin
 
         // Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
-    }
-
-    public function get_name()
-    {
-        return 'CourseLegal';
     }
 }

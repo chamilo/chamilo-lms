@@ -48,6 +48,17 @@ api_platform:
         Doctrine\ORM\OptimisticLockException: 409
         Doctrine\DBAL\Exception\UniqueConstraintViolationException: 409
 
+    use_symfony_listeners: true
+
+    serializer:
+        hydra_prefix: true
+
+    keep_legacy_inflector: false
+
+    graphql:
+        graphql_playground:
+            enabled: false
+
 #    mercure:
 #        hub_url: '%env(MERCURE_SUBSCRIBE_URL)%'
 

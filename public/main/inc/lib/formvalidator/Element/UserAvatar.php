@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Class UserAvatar
@@ -45,7 +46,7 @@ class UserAvatar extends HTML_QuickForm_input
     public function setValue($value)
     {
         $this->user = !is_a($value, 'Chamilo\CoreBundle\Entity\User')
-            ? UserManager::getRepository()->find($value)
+            ? Container::getUserRepository()->find($value)
             : $value;
 
         parent::setValue($this->user->getId());

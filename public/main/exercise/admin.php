@@ -62,25 +62,28 @@ if (!$is_allowedToEdit) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+if (0 === $exerciseId && isset($_POST['exerciseId'])) {
+    $exerciseId = (int) $_POST['exerciseId'];
+}
 $newQuestion = $_GET['newQuestion'] ?? 0;
-$modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
-$editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
+$modifyAnswers = $_GET['modifyAnswers'] ?? 0;
+$editQuestion = $_GET['editQuestion'] ?? 0;
 $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
-$modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
-$deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
-$cloneQuestion = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+$modifyQuestion = $_GET['modifyQuestion'] ?? 0;
+$deleteQuestion = $_GET['deleteQuestion'] ?? 0;
+$cloneQuestion = $_REQUEST['clone_question'] ?? 0;
 if (empty($questionId)) {
     $questionId = Session::read('questionId');
 }
 if (empty($modifyExercise)) {
-    $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
+    $modifyExercise = $_GET['modifyExercise'] ?? null;
 }
 
-$fromExercise = isset($fromExercise) ? $fromExercise : null;
-$cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
-$cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
-$modifyIn = isset($modifyIn) ? $modifyIn : null;
-$cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
+$fromExercise = $fromExercise ?? null;
+$cancelExercise = $cancelExercise ?? null;
+$cancelAnswers = $cancelAnswers ?? null;
+$modifyIn = $modifyIn ?? null;
+$cancelQuestion = $cancelQuestion ?? null;
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems
     when changing the exercise settings, number of questions, etc */
@@ -349,7 +352,7 @@ if ($inATest) {
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL)
-                .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
+            .get_lang('This question is used in another exercises. If you continue its edition, the changes will affect all exercises that contain this question.'),
             'warning',
             false
         );
@@ -361,49 +364,117 @@ if ($inATest) {
         $originalSelectionType = $objExercise->questionSelectionType;
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
 
-        $outMaxScore = 0;
-        $outMaxScore = array_reduce(
-            $objExercise->selectQuestionList(true, true),
-            function ($acc, $questionId) {
-                $objQuestionTmp = Question::read($questionId);
+        // Get the full list of question IDs (as configured in this exercise).
+        /** @var int[] $allIds */
+        $allIds = (array) $objExercise->selectQuestionList(true, true);
 
-                return $acc + $objQuestionTmp->selectWeighting();
-            },
-            0
-        );
+        // Load questions and build a children map to detect "media" containers reliably.
+        $questionsById = [];
+        $childrenByParent = []; // parentId => [childId, ...]
+        foreach ($allIds as $qid) {
+            $q = Question::read($qid);
+            if (!$q) {
+                continue;
+            }
+            $questionsById[$qid] = $q;
 
+            // some DBs might store parent_id as string/null
+            $pid = (int) ($q->parent_id ?? 0);
+            if ($pid > 0) {
+                if (!isset($childrenByParent[$pid])) {
+                    $childrenByParent[$pid] = [];
+                }
+                $childrenByParent[$pid][] = $qid;
+            }
+        }
+
+        // is this question a media/container?
+        $isMediaContainer = static function ($q, $qid, $childrenByParent) {
+            // Case 1: explicit MEDIA_QUESTION type (when constant exists)
+            $isMediaType = (defined('MEDIA_QUESTION') && (int) $q->selectType() === MEDIA_QUESTION);
+
+            // Case 2: it is a parent of other questions within this exercise
+            $isParent = isset($childrenByParent[$qid]) && !empty($childrenByParent[$qid]);
+
+            // Case 3: some forks expose a method isMedia()
+            $hasMethod = method_exists($q, 'isMedia') && $q->isMedia();
+
+            return $isMediaType || $isParent || $hasMethod;
+        };
+
+        // Build the effective set of answerable questions (exclude media containers).
+        $effectiveQuestions = []; // id => Question
+        foreach ($questionsById as $qid => $q) {
+            if ($isMediaContainer($q, $qid, $childrenByParent)) {
+                continue; // skip media/parent containers
+            }
+            $effectiveQuestions[$qid] = $q;
+        }
+
+        // Compute counts and totals using only effective questions.
+        $effectiveNbrQuestions = count($effectiveQuestions);
+        $effectiveTotalScore = 0.0;
+        foreach ($effectiveQuestions as $q) {
+            $effectiveTotalScore += (float) $q->selectWeighting();
+        }
+
+        // Restore original selection type.
         $objExercise->questionSelectionType = $originalSelectionType;
+
+        // First line: "X questions, total score Y." (media excluded)
         $alert .= sprintf(
             get_lang('%d questions, for a total score (all questions) of %s.'),
-            $nbrQuestions,
-            $outMaxScore
+            $effectiveNbrQuestions,
+            $effectiveTotalScore
         );
-    }
-    if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
-        $alert .= sprintf(
-            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
-            $objExercise->random,
-            $maxScoreAllQuestions
-        );
-    }
-    if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
-        $alert .= sprintf(
-            '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
-            $objExercise->random,
-            $maxScoreAllQuestions
-        );
-    }
-    if (false === $showPagination) {
+
+        // If random selection is enabled, display the limit and an informative max total
+        if ($objExercise->random > 0) {
+            $limit = min((int) $objExercise->random, $effectiveNbrQuestions);
+
+            // Gather weights and take top-N.
+            $weights = [];
+            foreach ($effectiveQuestions as $id => $q) {
+                $weights[$id] = (float) $q->selectWeighting();
+            }
+            arsort($weights, SORT_NUMERIC); // highest first
+
+            $maxScoreSelected = 0.0;
+            $i = 0;
+            foreach ($weights as $w) {
+                $maxScoreSelected += $w;
+                if (++$i >= $limit) { break; }
+            }
+
+            $alert .= '<br />'.sprintf(
+                    get_lang('Only %s questions will be picked randomly following the quiz configuration.'),
+                    $limit
+                );
+            $alert .= sprintf(
+                '<br>'.get_lang('Only %d questions will be selected based on the test configuration, for a total score of %s.'),
+                $limit,
+                $maxScoreSelected
+            );
+        }
+
+        // Category-based ordered selection: use effective counts/totals as well.
         if ($objExercise->questionSelectionType >= EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED) {
             $alert .= sprintf(
                 '<br>'.get_lang(
                     'Only %d questions will be selected based on the test configuration, for a total score of %s.'
                 ),
-                count($questionList),
-                $maxScoreAllQuestions
+                $effectiveNbrQuestions,
+                $effectiveTotalScore
             );
+        }
+    } else {
+        // Pagination enabled or hotspot edit: keep a minimal, safe notice for random selection.
+        if ($objExercise->random > 0) {
+            $limit = min((int) $objExercise->random, (int) $nbrQuestions);
+            $alert .= '<br />'.sprintf(
+                    get_lang('Only %s questions will be picked randomly following the quiz configuration.'),
+                    $limit
+                );
         }
     }
     if (!empty($alert)) {

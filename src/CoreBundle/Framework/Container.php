@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\ContainerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\PortfolioCategoryHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\AccessUrlRelPluginRepository;
 use Chamilo\CoreBundle\Repository\AssetRepository;
@@ -29,6 +30,7 @@ use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\MessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\PersonalFileRepository;
+use Chamilo\CoreBundle\Repository\Node\PortfolioRepository;
 use Chamilo\CoreBundle\Repository\Node\SocialPostAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\TicketMessageAttachmentRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
@@ -699,5 +701,17 @@ class Container
     {
         /** @var EventDispatcherInterface $dispatcher */
         return self::$container->get('event_dispatcher');
+    }
+
+    public static function getPortfolioRepository(): PortfolioRepository
+    {
+        /** @var PortfolioRepository $repo */
+        return self::$container->get(PortfolioRepository::class);
+    }
+
+    public static function getPortfolioCategoryHelper(): PortfolioCategoryHelper
+    {
+        /** @var PortfolioCategoryHelper $helper */
+        return self::$container->get(PortfolioCategoryHelper::class);
     }
 }

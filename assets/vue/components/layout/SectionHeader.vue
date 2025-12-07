@@ -32,10 +32,9 @@ const { course } = storeToRefs(cidReqStore)
       {{ title }}
     </component>
 
-    <div class="section-header__actions">
-      <StudentViewButton v-if="course" />
-
+    <div class="section-header__actions flex items-center gap-2">
       <slot />
+      <StudentViewButton v-if="course" />
     </div>
   </div>
 </template>

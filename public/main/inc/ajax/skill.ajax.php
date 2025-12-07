@@ -44,11 +44,11 @@ switch ($action) {
         ]];
 
         if (isset($_REQUEST['q']) && !empty($_REQUEST['q'])) {
-            $skills = $skill->find('all', ['where' => ['name LIKE %?% ' => $_REQUEST['q']]]);
+            $skills = $skill->find('all', ['where' => ['title LIKE %?% ' => $_REQUEST['q']]]);
             foreach ($skills as $skill) {
                 $returnSkills['items'][] = [
                     'id' => $skill['id'],
-                    'text' => $skill['name'],
+                    'text' => $skill['title'],
                 ];
             }
         }
@@ -357,13 +357,13 @@ switch ($action) {
             $skills = $skill->find(
                 'all',
                 [
-                    'where' => ['name LIKE %?% ' => $_REQUEST['q']],
+                    'where' => ['title LIKE %?% ' => $_REQUEST['q']],
                 ]
             );
             foreach ($skills as $skill) {
                 $returnSkills[] = [
                     'id' => $skill['id'],
-                    'text' => $skill['name'],
+                    'text' => $skill['title'],
                 ];
             }
         }

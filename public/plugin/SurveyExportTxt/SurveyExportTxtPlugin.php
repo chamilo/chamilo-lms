@@ -72,11 +72,6 @@ class SurveyExportTxtPlugin extends Plugin
         );
     }
 
-    public function get_name()
-    {
-        return 'SurveyExportTxt';
-    }
-
     /**
      * Create tools for all courses.
      */

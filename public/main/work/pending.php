@@ -18,7 +18,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit() || api_is_coach();
 $group_id = api_get_group_id();
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $userId = api_get_user_id();
 
 /*$interbreadcrumb[] = [

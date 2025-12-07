@@ -289,9 +289,4 @@ class EmbedRegistryPlugin extends Plugin
             ->setParameters(['category' => 'plugin', 'link' => 'EmbedRegistry/start.php%'])
             ->execute();
     }
-
-    public function get_name()
-    {
-        return 'EmbedRegistry';
-    }
 }

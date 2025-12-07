@@ -1559,7 +1559,6 @@ class SkillModel extends Model
             return true;
         }
 
-        $userRepo = UserManager::getRepository();
         $fromUserStatus = $fromUser->getStatus();
 
         switch ($fromUserStatus) {
@@ -1570,7 +1569,7 @@ class SkillModel extends Model
                     }
                 }
 
-                $sessionAdmins = $userRepo->getSessionAdmins($toUser);
+                $sessionAdmins = Container::getUserRepository()->getSessionAdmins($toUser);
 
                 foreach ($sessionAdmins as $sessionAdmin) {
                     if ($sessionAdmin->getId() !== $fromUser->getId()) {

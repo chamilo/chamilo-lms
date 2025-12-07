@@ -4,14 +4,13 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-$httpRequest = HttpRequest::createFromGlobals();
+$httpRequest = Container::getRequest();
 
 $courseInfo = api_get_course_info();
 $user_id = api_get_user_id();
@@ -28,7 +27,6 @@ $repo = Container::getStudentPublicationRepository();
 $studentPublication = empty($work_id) ? null : $repo->find($work_id);
 
 $curdirpath = '';
-$htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
 $tool_name = get_lang('Assignments');
 

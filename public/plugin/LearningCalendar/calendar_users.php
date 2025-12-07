@@ -60,9 +60,6 @@ $urlStats = api_get_path(WEB_CODE_PATH);
 $action_links = '';
 $deleteUrl = '';
 
-// Add the JS needed to use the jqgrid
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 Display::display_header();
 
 ?>

@@ -342,14 +342,6 @@ class LtiProviderPlugin extends Plugin
     }
 
     /**
-     * Get the plugin directory name.
-     */
-    public function get_name(): string
-    {
-        return 'LtiProvider';
-    }
-
-    /**
      * Install the plugin. Set the database up.
      *
      * @throws \Doctrine\ORM\Tools\ToolsException

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
@@ -29,7 +31,7 @@ class LearnPathCategory extends Resource
     /**
      * Show this resource.
      */
-    public function show()
+    public function show(): void
     {
         parent::show();
         echo $this->object->getTitle();

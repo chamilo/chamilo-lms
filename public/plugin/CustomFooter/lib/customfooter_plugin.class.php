@@ -24,11 +24,6 @@ class CustomFooterPlugin extends Plugin
         return $result ?: $result = new self();
     }
 
-    public function get_name()
-    {
-        return 'CustomFooter';
-    }
-
     public function pix_url($pixname, $size = 16)
     {
         global $_configuration;

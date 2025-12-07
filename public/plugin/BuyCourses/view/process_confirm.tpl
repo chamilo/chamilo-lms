@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <a class="ajax" data-title="{{ course.title }}"
-                               href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">
+                               href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">
                                 <img alt="{{ course.title }}" class="img-responsive" style="width: 100%;"
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
@@ -19,7 +19,7 @@
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <h3>
                                 <a class="ajax" data-title="{{ course.title }}"
-                                   href="{{ url('web_ajax') ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode }}">{{ course.title }}</a>
+                                   href="{{ _p.web_ajax ~ 'course_home.ajax.php?' ~ {'a': 'show_course_information', 'code': course.code}|url_encode() }}">{{ course.title }}</a>
                             </h3>
                             <ul class="list-unstyled">
                                 {% for teacher in course.teachers %}
@@ -70,16 +70,16 @@
                 {% elseif buying_service %}
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
-                            <a href='{{ url('index') }}service/{{ service.id }}'>
-                                <img alt="{{ service.title }}" class="img-responsive"
-                                     src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon() }}">
+                            <a href='{{ url('index') ~ 'service/' ~ service.id }}'>
+                                <img alt="{{ service.name }}" class="img-responsive"
+                                     src="{{ service.image ? url('index') ~ 'plugin/BuyCourses/uploads/services/images/' ~ service.image : 'session_default.png'|icon }}">
                             </a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-xs-12">
                             <h3>
-                                <a href='{{ url('index') }}service/{{ service.id }}'>{{ service.title }}</a>
+                                <a href='{{ url('index') ~ 'service/' ~ service.id }}'>{{ service.name }}</a>
                             </h3>
                             <ul class="list-unstyled">
                                 {% if service.applies_to == 0 %}
@@ -166,7 +166,7 @@
                     <tbody>
                     {% for account in transfer_accounts %}
                         <tr>
-                            <td>{{ account.title }}</td>
+                            <td>{{ account.name }}</td>
                             <td class="text-center">{{ account.account }}</td>
                             <td class="text-center">{{ account.swift }}</td>
                         </tr>
@@ -198,7 +198,7 @@
             });
         {% endif %}
 
-        {% if is_culqi_payment %}
+        {% if is_culqi_payment|default(false)  %}
             var price = {{ price }} * 100;
 
             Culqi.codigoComercio = '{{ culqi_params.commerce_code }}';

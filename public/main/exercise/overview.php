@@ -69,7 +69,7 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
 $htmlHeadXtra[] = api_get_build_js('legacy_exercise.js');
 if ($time_control) {
     // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time->format('Y-m-d H:i:s'), 'UTC') - time();
+    $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
     /*$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
@@ -145,7 +145,7 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 );
 
 if ($time_control && !empty($exercise_stat_info['exe_id']) && !empty($clock_expired_time)) {
-    $time_left_check = api_strtotime($clock_expired_time->format('Y-m-d H:i:s'), 'UTC') - time();
+    $time_left_check = api_strtotime($clock_expired_time, 'UTC') - time();
     if ($time_left_check <= 0) {
         $result_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?'
             . api_get_cidreq()

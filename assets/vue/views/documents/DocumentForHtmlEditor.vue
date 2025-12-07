@@ -27,7 +27,6 @@
     :total-items="totalItems"
     :values="items"
     data-key="iid"
-    filter-as-menu
     lazy
     @page="onPage"
     @sort="sortingChanged"

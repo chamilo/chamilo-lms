@@ -12,8 +12,6 @@ if ('false' === api_get_setting('work.allow_my_student_publication_page')) {
 
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = api_get_jqgrid_js();
-
 $tpl = new Template(get_lang('Assignments'));
 
 $tpl->assign('intro_title', get_lang('All Assignments'));

@@ -327,12 +327,12 @@ function isVisibleForStudent(lp) {
 const withCidSid = (url) => {
   if (!url) return url
   try {
-    const isAbs = url.startsWith('http://') || url.startsWith('https://')
-    const abs = isAbs ? url : (window.location.origin + url)
+    const isAbs = url.startsWith("http://") || url.startsWith("https://")
+    const abs = isAbs ? url : window.location.origin + url
     const u = new URL(abs)
-    if (cid.value) u.searchParams.set('cid', String(cid.value))
-    if (sid.value) u.searchParams.set('sid', String(sid.value))
-    return isAbs ? u.toString() : (u.pathname + u.search)
+    if (cid.value) u.searchParams.set("cid", String(cid.value))
+    if (sid.value) u.searchParams.set("sid", String(sid.value))
+    return isAbs ? u.toString() : u.pathname + u.search
   } catch {
     return url
   }

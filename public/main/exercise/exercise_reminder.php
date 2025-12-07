@@ -50,7 +50,7 @@ if (0 != $objExercise->expired_time && !empty($clock_expired_time)) {
 
 if ($time_control) {
     // Get time left for expiring time
-    $time_left = api_strtotime($clock_expired_time->format('Y-m-d H:i:s'), 'UTC') - time();
+    $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 

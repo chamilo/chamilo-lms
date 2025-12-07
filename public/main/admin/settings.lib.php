@@ -154,19 +154,22 @@ function handlePlugins()
 
     foreach ($allPlugins as $pluginName) {
         $pluginInfoFile = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
-
         if (!file_exists($pluginInfoFile)) {
             continue;
         }
 
         $plugin_info = [];
-
-        require $pluginInfoFile;
+        try {
+            require $pluginInfoFile;
+        } catch (\Throwable $e) {
+            error_log('[plugins] failed to read '.$pluginName.' metadata: '.$e->getMessage());
+            $plugin_info = ['title' => $pluginName, 'version' => 'n/a'];
+        }
 
         $plugin = $pluginRepo->findOneByTitle($pluginName);
         $pluginConfiguration = $plugin?->getConfigurationsByAccessUrl(Container::getAccessUrlUtil()->getCurrent());
         $isInstalled = $plugin && $plugin->isInstalled();
-        $isEnabled = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
+        $isEnabled   = $plugin && $pluginConfiguration && $pluginConfiguration->isActive();
 
         // Status badge
         $statusBadge = $isInstalled
@@ -179,16 +182,13 @@ function handlePlugins()
         echo '<td class="p-3 font-medium">'.htmlspecialchars($plugin_info['title'] ?? $pluginName, ENT_QUOTES).'</td>';
         echo '<td class="p-3">'.htmlspecialchars($plugin_info['version'] ?? '0.0.0', ENT_QUOTES).'</td>';
         echo '<td class="p-3">'.$statusBadge.'</td>';
-        echo '<td class="p-3 text-center">';
-
-        echo '<div class="flex justify-center gap-2">';
+        echo '<td class="p-3 text-center"><div class="flex justify-center gap-2">';
 
         if ($isInstalled) {
             $toggleAction = $isEnabled ? 'disable' : 'enable';
-            $toggleText = $isEnabled ? get_lang('Disable') : get_lang('Enable');
-            $toggleColor = $isEnabled ? 'btn--plain' : 'btn--warning';
-
-            $toggleIcon = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
+            $toggleText   = $isEnabled ? get_lang('Disable') : get_lang('Enable');
+            $toggleColor  = $isEnabled ? 'btn--plain' : 'btn--warning';
+            $toggleIcon   = $isEnabled ? 'mdi mdi-toggle-switch-off-outline' : 'mdi mdi-toggle-switch-outline';
 
             echo '<button class="plugin-action btn btn--sm '.$toggleColor.'"
                     data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="'.$toggleAction.'">
@@ -200,13 +200,15 @@ function handlePlugins()
                     <i class="mdi mdi-trash-can-outline"></i> '.get_lang('Uninstall').'
                   </button>';
 
-            $configureUrl = '/main/admin/configure_plugin.php?'.http_build_query(['plugin' => $pluginName]);
-
-            echo Display::url(
-                get_lang('Configure'),
-                $configureUrl,
-                ['class' => 'btn btn--info btn--sm']
-            );
+            // Show "Configure" only if the plugin is ENABLED and actually has editable settings.
+            if ($isEnabled && plugin_has_editable_settings($pluginName)) {
+                $configureUrl = '/main/admin/configure_plugin.php?'.http_build_query(['plugin' => $pluginName]);
+                echo Display::url(
+                    get_lang('Configure'),
+                    $configureUrl,
+                    ['class' => 'btn btn--info btn--sm']
+                );
+            }
         } else {
             echo '<button class="plugin-action btn btn--sm btn--success"
                     data-plugin="'.htmlspecialchars($pluginName, ENT_QUOTES).'" data-action="install">
@@ -214,9 +216,7 @@ function handlePlugins()
                   </button>';
         }
 
-        echo '</div>';
-        echo '</td>';
-        echo '</tr>';
+        echo '</div></td></tr>';
     }
 
     echo '</tbody></table>';
@@ -240,7 +240,6 @@ function handlePlugins()
     }).appendTo("body");
     setTimeout(function(){ $toast.fadeOut(300, function(){ $(this).remove(); }); }, 3500);
   }
-
   function actionLabel(a) {
     switch(a){
       case "install": return "'.get_lang('Installing').'";
@@ -250,10 +249,7 @@ function handlePlugins()
       default: return "'.get_lang('Processing').'";
     }
   }
-
-  function showPageLoader(show){
-    $("#page-loader").toggleClass("hidden", !show);
-  }
+  function showPageLoader(show){ $("#page-loader").toggleClass("hidden", !show); }
 
   $(document).ready(function () {
     $(".plugin-action").on("click", function () {
@@ -274,9 +270,7 @@ function handlePlugins()
         data: { a: action, plugin: pluginName },
         dataType: "json",
         timeout: 120000,
-        beforeSend: function(){
-          showToast(actionLabel(action) + "…", "warning");
-        },
+        beforeSend: function(){ showToast(actionLabel(action) + "…", "warning"); },
         success: function(data){
           if (data && data.success) {
             showToast("'.get_lang('Done').': " + action.toUpperCase(), "success");
@@ -306,6 +300,54 @@ function handlePlugins()
   });
 })(jQuery);
 </script>';
+}
+
+/**
+ * Determine if a plugin exposes editable settings (excluding legacy enable/active toggles).
+ * Used to decide whether the "Configure" button should be shown.
+ */
+function plugin_has_editable_settings(string $pluginName): bool
+{
+    static $cache = [];
+    if (array_key_exists($pluginName, $cache)) {
+        return $cache[$pluginName];
+    }
+
+    $has = false;
+
+    try {
+        $app  = new AppPlugin();
+        $info = $app->getPluginInfo($pluginName, true) ?? [];
+
+        // Collect fields from Plugin object or from 'settings' array
+        if (!empty($info['obj']) && $info['obj'] instanceof Plugin) {
+            $fields = (array) $info['obj']->getFieldNames();
+        } elseif (!empty($info['settings']) && is_array($info['settings'])) {
+            $fields = array_keys($info['settings']);
+        } else {
+            $fields = [];
+        }
+
+        // Strip legacy toggles; these do not qualify as "configurable settings".
+        // Keep this list broad to cover plugins that added their own toggle names.
+        $legacyToggles = [
+            'tool_enable',
+            'enable_onlyoffice_plugin',
+            'enabled',
+            'enable',
+            'active',
+            'is_active',
+        ];
+        $fields = array_values(array_diff($fields, $legacyToggles));
+
+        // Final decision: at least one real field
+        $has = count($fields) > 0;
+    } catch (\Throwable $e) {
+        // Fail closed: if metadata lookup fails, do not show Configure
+        $has = false;
+    }
+
+    return $cache[$pluginName] = $has;
 }
 
 /**

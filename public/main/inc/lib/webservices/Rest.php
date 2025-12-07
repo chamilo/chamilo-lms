@@ -1317,7 +1317,7 @@ class Rest extends WebService
         }
 
         // First check wether the login already exists.
-        if (!UserManager::is_username_available($loginName)) {
+        if (!Container::getUserRepository()->isUsernameAvailable($loginName)) {
             throw new Exception(get_lang('This login is not available'));
         }
 
@@ -1967,7 +1967,7 @@ class Rest extends WebService
         }
 
         // save modifications
-        UserManager::getRepository()->updateUser($user, true);
+        Container::getUserRepository()->updateUser($user, true);
 
         // tell the world we just updated this user
         $eventDispatcher->dispatch(

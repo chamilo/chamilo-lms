@@ -16,7 +16,13 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\QueryParameter;
+use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Response;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
+use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
@@ -41,7 +47,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    shortName: 'Documents',
+    shortName: 'Document',
     operations: [
         new Put(
             controller: UpdateDocumentFileAction::class,
@@ -54,28 +60,28 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Put(
             uriTemplate: '/documents/{iid}/toggle_visibility',
             controller: UpdateVisibilityDocument::class,
-            openapiContext: [
-                'summary' => 'Change document visibility (visible/invisible to learners).',
-            ],
+            openapi: new Operation(
+                summary: 'Change document visibility (visible/invisible to learners)'
+            ),
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: false
         ),
         new Put(
             uriTemplate: '/documents/{iid}/move',
             controller: UpdateDocumentFileAction::class,
-            openapiContext: [
-                'summary' => 'Move document.',
-            ],
+            openapi: new Operation(
+                summary: 'Move document'
+            ),
             security: "is_granted('EDIT', object.resourceNode)",
             deserialize: true
         ),
         new Post(
             uriTemplate: '/documents/{iid}/replace',
             controller: ReplaceDocumentFileAction::class,
-            openapiContext: [
-                'summary' => 'Replace a document file, maintaining the same IDs.',
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                summary: 'Replace a document file, maintaining the same IDs.',
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -87,9 +93,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
@@ -98,9 +104,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/documents/{iid}/lp-usage',
             controller: DocumentLearningPathUsageAction::class,
-            openapiContext: [
-                'summary' => 'Get a list of learning paths where a document is used.',
-            ],
+            openapi: new Operation(
+                summary: 'Get a list of learning paths where a document is used'
+            ),
             security: "is_granted('ROLE_USER')",
             read: false,
             name: 'api_documents_lp_usage'
@@ -108,9 +114,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('DELETE', object.resourceNode)"),
         new Post(
             controller: CreateDocumentFileAction::class,
-            openapiContext: [
-                'requestBody' => [
-                    'content' => [
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new ArrayObject([
                         'multipart/form-data' => [
                             'schema' => [
                                 'type' => 'object',
@@ -147,9 +153,9 @@ use Symfony\Component\Validator\Constraints as Assert;
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                ),
+            ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER') or is_granted('ROLE_TEACHER')",
             validationContext: ['groups' => ['Default', 'media_object_create', 'document:write']],
             deserialize: false
@@ -157,10 +163,26 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/documents/download-selected',
             controller: DownloadSelectedDocumentsAction::class,
-            openapiContext: [
-                'summary' => 'Download selected documents as a ZIP file.',
-                'requestBody' => [
-                    'content' => [
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+                'gid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course grou identifier',
+                ),
+            ],
+            openapi: new Operation(
+                summary: 'Download selected documents as a ZIP file.',
+                description: 'Streams a ZIP archive generated on-the-fly. The ZIP file includes folders and files selected.',
+                requestBody: new RequestBody(
+                    description: 'List of document IDs to include in the ZIP file',
+                    content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
                                 'type' => 'object',
@@ -170,25 +192,58 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'items' => ['type' => 'integer'],
                                     ],
                                 ],
+                                'required' => ['ids'],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]),
+                    required: true,
+                ),
+                responses: [
+                    201 => new Response(
+                        description: 'The ZIP file is being streamed to the client',
+                        content: new ArrayObject([
+                            DownloadSelectedDocumentsAction::CONTENT_TYPE => [
+                                'schema' => [
+                                    'type' => 'string',
+                                    'format' => 'binary',
+                                    'description' => 'Streamed ZIP file',
+                                ],
+                            ],
+                        ]),
+                        headers: new ArrayObject([
+                            'Content-Type' => [
+                                'description' => 'MIME type identifying the streamed file',
+                                'schema' => [
+                                    'type' => 'string',
+                                    'example' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
+                                ],
+                            ],
+                            'Content-Disposition' => [
+                                'description' => 'Indicates that the response is meant to be downloaded as a file',
+                                'schema' => [
+                                    'type' => 'string',
+                                    'example' => 'attachment; filename="selected_documents.zip"',
+                                ],
+                            ],
+                        ]),
+                    ),
+                ]
+            ),
             security: "is_granted('ROLE_USER')",
+            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
         ),
         new GetCollection(
-            openapiContext: [
-                'parameters' => [
-                    [
-                        'name' => 'resourceNode.parent',
-                        'in' => 'query',
-                        'required' => true,
-                        'description' => 'Resource node Parent',
-                        'schema' => ['type' => 'integer'],
-                    ],
+            openapi: new Operation(
+                parameters: [
+                    new Parameter(
+                        name: 'resourceNode.parent',
+                        in: 'query',
+                        description: 'Resource node Parent',
+                        required: true,
+                        schema: ['type' => 'integer'],
+                    ),
                 ],
-            ]
+            )
         ),
     ],
     normalizationContext: [

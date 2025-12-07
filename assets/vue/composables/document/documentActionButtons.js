@@ -1,53 +1,36 @@
-import { computed, ref } from "vue"
+import { computed } from "vue"
 import { useRoute } from "vue-router"
+import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
-import { checkIsAllowedToEdit } from "../userPermissions"
 
 export function useDocumentActionButtons() {
   const route = useRoute()
-
+  const securityStore = useSecurityStore()
   const platformConfigStore = usePlatformConfig()
 
-  const isCertificateMode = computed(() => {
-    return route.query.filetype === "certificate"
-  })
+  const inStudentView = computed(() => platformConfigStore.isStudentViewActive)
+  const isTeacherUI = computed(
+    () =>
+      (securityStore.isCurrentTeacher || securityStore.isCourseAdmin || securityStore.isAdmin) && !inStudentView.value,
+  )
 
-  const showNewDocumentButton = ref(false)
-  const showUploadButton = ref(false)
-  const showNewFolderButton = ref(false)
-  const showNewDrawingButton = ref(false)
-  const showRecordAudioButton = ref(false)
-  const showNewCloudFileButton = ref(false)
-  const showSlideshowButton = ref(false)
-  const showUsageButton = ref(false)
-  const showDownloadAllButton = ref(false)
+  const isCertificateMode = computed(() => route.query.filetype === "certificate")
 
-  const showNewCertificateButton = ref(false)
-  const showUploadCertificateButton = ref(false)
+  const showNewDocumentButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
+  const showUploadButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
+  const showNewFolderButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
+  const showNewDrawingButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
+  const showRecordAudioButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
+  const showNewCloudFileButton = computed(() => isTeacherUI.value && !isCertificateMode.value)
 
-  checkIsAllowedToEdit(false, true).then((isAllowedToEdit) => {
-    if (isAllowedToEdit) {
-      if (!isCertificateMode.value) {
-        showNewDocumentButton.value = true
-        showRecordAudioButton.value = true
-        showUploadButton.value = true
-        showNewFolderButton.value = true
-        showNewCloudFileButton.value = true // enable_add_file_link ?
-        showSlideshowButton.value = true // disable_slideshow_documents ?
-        showUsageButton.value = true
-      } else {
-        showNewCertificateButton.value = true
-        showUploadCertificateButton.value = true
-      }
-    }
+  const showSlideshowButton = computed(() => true)
 
-    if (
-      !isCertificateMode.value &&
-      ("true" === platformConfigStore.getSetting("document.students_download_folders") || isAllowedToEdit.value)
-    ) {
-      showDownloadAllButton.value = true
-    }
-  })
+  const showUsageButton = computed(() => isTeacherUI.value)
+
+  const showDownloadAllButton = computed(() => securityStore.isAuthenticated)
+
+  const showNewCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)
+  const showUploadCertificateButton = computed(() => isTeacherUI.value && isCertificateMode.value)
 
   return {
     showNewDocumentButton,

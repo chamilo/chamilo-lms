@@ -17,7 +17,7 @@
 
     <template #header>
       <BaseIcon icon="calendar-plus" />
-      {{ t("Add attendance calendar") }}
+      {{ t("Add attendance date") }}
     </template>
 
     <AttendanceCalendarForm @back-pressed="goBack" />

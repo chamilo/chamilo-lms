@@ -46,7 +46,9 @@ class Export
         }
 
         $enclosure = $enclosure !== '' ? $enclosure : '"';
-        $filePath  = api_get_path(SYS_ARCHIVE_PATH) . uniqid() . '.csv';
+        $filePath  = api_get_path(SYS_ARCHIVE_PATH);
+        $filePath .= $writeOnly ? $filename : uniqid('');
+        $filePath .= '.csv';
 
         // define a single-character escape
         $escapeChar = '\\';
@@ -74,7 +76,9 @@ class Export
      */
     public static function arrayToCsvSimple(array $data, string $filename = 'export', bool $writeOnly = false, array $header = [])
     {
-        $file = api_get_path(SYS_ARCHIVE_PATH) . uniqid('') . '.csv';
+        $file = api_get_path(SYS_ARCHIVE_PATH);
+        $file .= $writeOnly ? $filename : uniqid('');
+        $file .= '.csv';
 
         $handle = fopen($file, 'w');
 
@@ -104,7 +108,7 @@ class Export
     /**
      * Export tabular data to XLS-file.
      */
-    public static function arrayToXls(array $data, string $filename = 'export')
+    public static function arrayToXls(array $data, string $filename = 'export', bool $writeOnly = false)
     {
         if (empty($data)) {
             return false;
@@ -122,12 +126,19 @@ class Export
             $rowNumber++;
         }
 
-        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
+        $filePath = api_get_path(SYS_ARCHIVE_PATH);
+        $filePath .= $writeOnly ? $filename : uniqid('');
+        $filePath .= '.xlsx';
+
         $writer = new Xlsx($spreadsheet);
         $writer->save($filePath);
 
-        DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
-        exit;
+        if (!$writeOnly) {
+            DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
+            exit;
+        }
+
+        return $filePath;
     }
 
     /**

@@ -436,15 +436,36 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         This might require (depending on your setup) to install the VC++ libraries in version 14, which come from VStudio v16 (between others). If you don't have them yet on the Windows Server, you can download them from here depending on your architecture: <a href="https://aka.ms/vs/16/release/VC_redist.x64.exe">x64</a> or <a href="https://aka.ms/vs/16/release/VC_redist.x86.exe">x86</a>.<br>
         Add PHP to the PATH environment variable (e.g. C:\php): Settings &gt; System &gt; About &gt; Advanced system settings &gt; Environment variables, then select "Path", click "Modify", click "New" and introduce "C:\PHP", then validate twice.<br>
         In the IIS manager window, when the server is selected and you click on the Mappings manager, click on the "Add module mapping..." in the right panel and make sure request path "*.php" is mapped to the FastCgiModule. If not, add it.<br>
-        Find the C:\php\php.ini file (or any other place you might have given the PHP installer script to register to) and set (or wait for the install wizard to tell you) the settings suggested by Chamilo's install wizard. Between others, make sure the opcache section has <em>opcache.enable=1</em> *and* <em>opcache.memory_consumption=256</em> or any higher value so that OpCache can be used. Otherwise it is present but not used. Save the file.<br>
+        Find the C:\php\php.ini file (or any other place you might have given the PHP installer script to register to).<br>
+        Enable the following PHP extensions (look for ";extension=" and remove the ";" from the beginning of the line):<br>
+        <ul>
+            <li>curl</li>
+            <li>exif</li>
+            <li>fileinfo</li>
+            <li>gd</li>
+            <li>intl</li>
+            <li>json</li>
+            <li>mbstring</li>
+            <li>opcache</li>
+            <li>openssl</li>
+            <li>pdo_mysql</li>
+            <li>opcache</li>
+            <li>sodium</li>
+            <li>zip</li>
+            <li>ldap</li>
+            <li>redis (optional)</li>
+        </ul>
+        Make sure the <em>[opcache]</em> section has <em>opcache.enable=1</em> *and* <em>opcache.memory_consumption=256</em> or any higher value so that OpCache can be used. Otherwise it is present but not used. Save the file.<br>
+        Set (or wait for the install wizard to tell you) the settings suggested by Chamilo's install wizard.<br>
 
         <h4>6.4.4. Chamilo</h4>
-<a id="windows-install-iis-chamilo" class="anchor"></a>
+        <a id="windows-install-iis-chamilo" class="anchor"></a>
         Once you have installed IIS, the URL Rewrite module and PHP, you can download Chamilo from the official downloads page (https://github.com/chamilo/chamilo-lms/releases).<br>
         Unzip the package in the "wwwroot" folder of your IIS installation (e.g. C:\inetpub\wwwroot).<br>
         Chamilo 2+ need you to configure the web server so the root path is the "public/" folder of Chamilo.<br>
         Create an empty ".env" file at the root of the chamilo folder (e.g. C:\inetpub\wwwroot\chamilo\.env).<br>
         Change permissions so the web server user is able to write to var/, config/ and .env during the installation. These permissions can be removed later on, to the exception of var/ which has to remain writable by the webserver. These permissions need to be set in a way that the owner of the IIS service (possibly "System" or "IIS_IUSRS") can read and write to those files and folders, otherwise the installation script (which needs to write some files) will not be able to proceed.<br>
+        This is a specific change for IIS: edit the config\packages\monolog.yaml file and change all <em>path: php://stderr</em> for <em>path: "%kernel.logs_dir%/%kernel.environment%.log"</em> . This is due to an issue with file management for PHP on Windows with Symfony. Please note that until we find a portable solution, this will need to be modified again after each Chamilo update.<br>
         After this, load the URL in your browser, as you have defined it in the ISS site configuration.<br>
         The Chamilo installation wizard should appear.<br>
         Follow the instructions to complete the installation.<br>

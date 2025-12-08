@@ -37,7 +37,7 @@ define('ALL_DATE_FILTER', 3);
 
 $certificateList = [];
 $urlParam = '';
-$form = new FormValidator('search_user', 'GET', api_get_self());
+$form = new FormValidator('search_user', 'POST', api_get_self());
 $innerJoinSessionRelUser = '';
 $whereCondictionDRH = '';
 $whereCondictionMultiUrl = '';
@@ -123,7 +123,7 @@ if ($form->validate()) {
 } elseif (isset($_GET['export'])) {
     // Case 2: CSV export icon was clicked.
     // Use raw GET parameters as the form values so filters are preserved.
-    $values = $_GET;
+    $values = $_POST;
     $exportToCsv = true;
 }
 

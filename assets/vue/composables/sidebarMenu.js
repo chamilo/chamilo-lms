@@ -16,6 +16,8 @@ export function useSidebarMenu() {
 
   const allowSocialTool = computed(() => platformConfigStore.getSetting("social.allow_social_tool") !== "false")
 
+  const allowSearchFeature = computed(() => platformConfigStore.getSetting("search.search_enabled") === "true")
+
   const showTabs = computed(() => {
     const defaultTabs = platformConfigStore.getSetting("display.show_tabs") || []
     const tabsPerRoleJson = platformConfigStore.getSetting("display.show_tabs_per_role") || ""
@@ -158,6 +160,15 @@ export function useSidebarMenu() {
       }),
     )
 
+    // Global search (Xapian)
+    if (allowSearchFeature.value) {
+      items.push({
+        icon: "mdi mdi-magnify",
+        label: t("Search"),
+        url: "/search/xapian/ui",
+      })
+    }
+
     if (showTabs.value.indexOf("reporting") > -1) {
       const subItems = []
 
@@ -259,9 +270,7 @@ export function useSidebarMenu() {
 
     {
       const roles = securityStore.user?.roles || []
-      const isQuestionManager =
-        securityStore.isAdmin ||
-        roles.includes("ROLE_QUESTION_MANAGER")
+      const isQuestionManager = securityStore.isAdmin || roles.includes("ROLE_QUESTION_MANAGER")
 
       if (isQuestionManager) {
         const questionAdminItems = [

@@ -161,6 +161,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
+            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
             controller: DownloadSelectedDocumentsAction::class,
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
@@ -215,7 +216,6 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ]
             ),
             security: "is_granted('ROLE_USER')",
-            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
         ),
         new GetCollection(
             openapi: new Operation(

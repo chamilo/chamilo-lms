@@ -2358,25 +2358,6 @@ class Exercise
             if ('true' === api_get_setting('search_enabled')) {
                 $form->addCheckBox('index_document', '', get_lang('Index document text?'));
                 $form->addSelectLanguage('language', get_lang('Document language for indexation'));
-                $specific_fields = get_specific_field_list();
-
-                foreach ($specific_fields as $specific_field) {
-                    $form->addElement('text', $specific_field['code'], $specific_field['name']);
-                    $filter = [
-                        'c_id' => api_get_course_int_id(),
-                        'field_id' => $specific_field['id'],
-                        'ref_id' => $this->getId(),
-                        'tool_id' => "'".TOOL_QUIZ."'",
-                    ];
-                    $values = get_specific_field_values_list($filter, ['value']);
-                    if (!empty($values)) {
-                        $arr_str_values = [];
-                        foreach ($values as $value) {
-                            $arr_str_values[] = $value['value'];
-                        }
-                        $defaults[$specific_field['code']] = implode(', ', $arr_str_values);
-                    }
-                }
             }
 
             $skillList = SkillModel::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
@@ -2736,175 +2717,20 @@ class Exercise
 
     public function search_engine_save()
     {
-        if (1 != $_POST['index_document']) {
-            return;
-        }
-        $course_id = api_get_course_id();
-        $specific_fields = get_specific_field_list();
-        $ic_slide = new IndexableChunk();
-
-        $all_specific_terms = '';
-        foreach ($specific_fields as $specific_field) {
-            if (isset($_REQUEST[$specific_field['code']])) {
-                $sterms = trim($_REQUEST[$specific_field['code']]);
-                if (!empty($sterms)) {
-                    $all_specific_terms .= ' '.$sterms;
-                    $sterms = explode(',', $sterms);
-                    foreach ($sterms as $sterm) {
-                        $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                        add_specific_field_value($specific_field['id'], $course_id, TOOL_QUIZ, $this->getId(), $sterm);
-                    }
-                }
-            }
-        }
-
-        // build the chunk to index
-        $ic_slide->addValue('title', $this->exercise);
-        $ic_slide->addCourseId($course_id);
-        $ic_slide->addToolId(TOOL_QUIZ);
-        $xapian_data = [
-            SE_COURSE_ID => $course_id,
-            SE_TOOL_ID => TOOL_QUIZ,
-            SE_DATA => ['type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int) $this->getId()],
-            SE_USER => (int) api_get_user_id(),
-        ];
-        $ic_slide->xapian_data = serialize($xapian_data);
-        $exercise_description = $all_specific_terms.' '.$this->description;
-        $ic_slide->addValue('content', $exercise_description);
-
-        $di = new ChamiloIndexer();
-        isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-        $di->connectDb(null, null, $lang);
-        $di->addChunk($ic_slide);
-
-        //index and return search engine document id
-        $did = $di->index();
-        if ($did) {
-            // save it to db
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
-			    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId(), $did);
-            Database::query($sql);
-        }
+        // Legacy search engine (v1) is disabled in C2.
+        return;
     }
 
     public function search_engine_edit()
     {
-        // update search enchine and its values table if enabled
-        if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
-            $course_id = api_get_course_id();
-
-            // actually, it consists on delete terms from db,
-            // insert new ones, create a new search engine document, and remove the old one
-            // get search_did
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId());
-            $res = Database::query($sql);
-
-            if (Database::num_rows($res) > 0) {
-                $se_ref = Database::fetch_array($res);
-                $specific_fields = get_specific_field_list();
-                $ic_slide = new IndexableChunk();
-
-                $all_specific_terms = '';
-                foreach ($specific_fields as $specific_field) {
-                    delete_all_specific_field_value($course_id, $specific_field['id'], TOOL_QUIZ, $this->getId());
-                    if (isset($_REQUEST[$specific_field['code']])) {
-                        $sterms = trim($_REQUEST[$specific_field['code']]);
-                        $all_specific_terms .= ' '.$sterms;
-                        $sterms = explode(',', $sterms);
-                        foreach ($sterms as $sterm) {
-                            $ic_slide->addTerm(trim($sterm), $specific_field['code']);
-                            add_specific_field_value(
-                                $specific_field['id'],
-                                $course_id,
-                                TOOL_QUIZ,
-                                $this->getId(),
-                                $sterm
-                            );
-                        }
-                    }
-                }
-
-                // build the chunk to index
-                $ic_slide->addValue('title', $this->exercise);
-                $ic_slide->addCourseId($course_id);
-                $ic_slide->addToolId(TOOL_QUIZ);
-                $xapian_data = [
-                    SE_COURSE_ID => $course_id,
-                    SE_TOOL_ID => TOOL_QUIZ,
-                    SE_DATA => ['type' => SE_DOCTYPE_EXERCISE_EXERCISE, 'exercise_id' => (int) $this->getId()],
-                    SE_USER => (int) api_get_user_id(),
-                ];
-                $ic_slide->xapian_data = serialize($xapian_data);
-                $exercise_description = $all_specific_terms.' '.$this->description;
-                $ic_slide->addValue('content', $exercise_description);
-
-                $di = new ChamiloIndexer();
-                isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
-                $di->connectDb(null, null, $lang);
-                $di->remove_document($se_ref['search_did']);
-                $di->addChunk($ic_slide);
-
-                //index and return search engine document id
-                $did = $di->index();
-                if ($did) {
-                    // save it to db
-                    $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
-                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId());
-                    Database::query($sql);
-                    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
-                        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId(), $did);
-                    Database::query($sql);
-                }
-            } else {
-                $this->search_engine_save();
-            }
-        }
+        // Legacy search engine (v1) is disabled in C2.
+        return;
     }
 
     public function search_engine_delete()
     {
-        // remove from search engine if enabled
-        if ('true' == api_get_setting('search_enabled') && extension_loaded('xapian')) {
-            $course_id = api_get_course_id();
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId());
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $row = Database::fetch_array($res);
-                $di = new ChamiloIndexer();
-                $di->remove_document($row['search_did']);
-                unset($di);
-                $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-                foreach ($this->questionList as $question_i) {
-                    $sql = 'SELECT type FROM %s WHERE id=%s';
-                    $sql = sprintf($sql, $tbl_quiz_question, $question_i);
-                    $qres = Database::query($sql);
-                    if (Database::num_rows($qres) > 0) {
-                        $qrow = Database::fetch_array($qres);
-                        $objQuestion = Question::getInstance($qrow['type']);
-                        $objQuestion = Question::read((int) $question_i);
-                        $objQuestion->search_engine_edit($this->getId(), false, true);
-                        unset($objQuestion);
-                    }
-                }
-            }
-            $sql = 'DELETE FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->getId());
-            Database::query($sql);
-
-            // remove terms from db
-            delete_all_values_for_item($course_id, TOOL_QUIZ, $this->getId());
-        }
+        // Legacy search engine (v1) is disabled in C2.
+        return;
     }
 
     public function selectExpiredTime()

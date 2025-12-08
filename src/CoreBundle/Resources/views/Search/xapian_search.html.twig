@@ -1,0 +1,227 @@
+{% extends "@ChamiloCore/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    <div class="search-page">
+        <h1>{{ 'Content search'|trans }}</h1>
+
+        {# Search form #}
+        <form
+                method="get"
+                action="{{ path('chamilo_core.search_xapian_ui') }}"
+                class="flex justify-end mb-5"
+        >
+            <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    placeholder="{{ 'Enter a keyword...'|trans }}"
+                    class="form-control max-w-xs mr-2"
+            >
+            <button type="submit" class="btn btn--primary">
+                {{ 'Search'|trans }}
+            </button>
+        </form>
+
+        {# Info / empty state #}
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>{{ 'Search error'|trans }}:</strong> {{ error }}
+            </div>
+        {% elseif query is empty %}
+            <p class="text-muted">
+                {{ 'Enter a keyword to search indexed documents.'|trans }}
+            </p>
+        {% elseif total == 0 %}
+            <p class="text-muted">
+                {{ 'No results found for'|trans }} "<strong>{{ query }}</strong>".
+            </p>
+        {% endif %}
+
+        {# Results #}
+        {% if total > 0 %}
+            <p class="mb-3">
+                {{ 'Showing'|trans }}
+                {{ results|length }}
+                {{ 'of approximately'|trans }}
+                {{ total }}
+                {{ 'result(s) for'|trans }}
+                "<strong>{{ query }}</strong>".
+            </p>
+
+            <div class="table-responsive">
+                <table class="data_table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'Title'|trans }}</th>
+                        <th>{{ 'Description'|trans }}</th>
+                        <th>{{ 'Snippet'|trans }}</th>
+                        <th>{{ 'Tool'|trans }}</th>
+                        <th>{{ 'File type'|trans }}</th>
+                        <th>{{ 'Course id'|trans }}</th>
+                        <th>{{ 'Session id'|trans }}</th>
+                        <th>{{ 'Path'|trans }}</th>
+                        <th>{{ 'Score'|trans }}</th>
+                        <th class="text-center">{{ 'Actions'|trans }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for result in results %}
+                        {% set data = result.data ?? {} %}
+
+                        {# Basic fields #}
+                        {% set title = data.title is defined and data.title is not empty
+                            ? data.title
+                            : 'Untitled content'|trans %}
+
+                        {# Clean description and content #}
+                        {% set rawDescription = data.description is defined and data.description
+                            ? data.description
+                            : '' %}
+                        {% set descriptionText = rawDescription|striptags|replace({'&nbsp;': ' '}) %}
+
+                        {% set rawContent = data.content is defined ? data.content : '' %}
+                        {% set snippet = rawContent|striptags|replace({'&nbsp;': ' '}) %}
+                        {% if snippet|length > 180 %}
+                            {% set snippet = snippet|slice(0, 180) ~ '…' %}
+                        {% endif %}
+
+                        {% set kind       = data.kind|default('document') %}
+                        {% set tool       = data.tool|default(kind) %}
+                        {% set filetype   = data.filetype|default('unknown') %}
+                        {% set courseId   = data.course_id|default('') %}
+                        {% set sessionId  = data.session_id|default('') %}
+                        {% set fullPath   = data.full_path|default('') %}
+                        {% set quizId     = data.quiz_id|default('') %}
+                        {% set questionId = data.question_id|default('') %}
+                        {% set lpId       = data.lp_id|default('') %}
+
+                        {% set isQuizResult        = (kind == 'quiz') or (tool == 'quiz') %}
+                        {% set isQuestionResult    = (kind == 'question') or (tool == 'quiz_question') %}
+                        {% set isCourseDescResult  = (kind == 'course_description') or (tool == 'course_description') %}
+                        {% set isLpResult          = (kind == 'learnpath') or (tool == 'learnpath') %}
+
+                        {# Tool label #}
+                        {% set toolLabel = '-' %}
+                        {% if isCourseDescResult %}
+                            {% set toolLabel = 'Course description'|trans %}
+                        {% elseif isLpResult %}
+                            {% set toolLabel = 'Learning paths'|trans %}
+                        {% elseif isQuestionResult %}
+                            {% set toolLabel = 'Questions'|trans %}
+                        {% elseif isQuizResult %}
+                            {% set toolLabel = 'Exercises'|trans %}
+                        {% elseif kind == 'document' or tool == 'document' %}
+                            {% set toolLabel = 'Documents'|trans %}
+                        {% elseif tool is not empty %}
+                            {% set toolLabel = tool|capitalize %}
+                        {% endif %}
+
+                        {# Action URL #}
+                        {% set courseRootNodeId = data.course_root_node_id|default(null) %}
+                        {% set openUrl     = null %}
+                        {% set actionLabel = 'Open documents'|trans %}
+                        {% set actionIcon  = 'mdi-folder-open' %}
+
+                        {# Course descriptions -> description page #}
+                        {% if isCourseDescResult %}
+                            {% if courseId is not empty %}
+                                {% set openUrl =
+                                    app.request.basePath ~
+                                    '/main/course_description/index.php?cid=' ~ courseId ~
+                                    '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~
+                                    '&gid=0&gradebook=0&origin='
+                                %}
+                                {% set actionLabel = 'Open descriptions'|trans %}
+                                {% set actionIcon  = 'mdi-text-box-outline' %}
+                            {% endif %}
+
+                            {# Learning paths (lecciones) -> lp_controller.php #}
+                        {% elseif isLpResult %}
+                            {% if courseId is not empty and lpId is not empty %}
+                                {% set openUrl =
+                                    app.request.basePath ~
+                                    '/main/lp/lp_controller.php?cid=' ~ courseId ~
+                                    '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~
+                                    '&gid=0&gradebook=0&origin=&action=view&lp_id=' ~ lpId
+                                %}
+                                {% set actionLabel = 'Open learning path'|trans %}
+                                {% set actionIcon  = 'mdi-book-open-page-variant' %}
+                            {% endif %}
+
+                            {# Question -> open related quiz #}
+                        {% elseif isQuestionResult %}
+                            {% if courseId is not empty and quizId is not empty %}
+                                {% set openUrl =
+                                    app.request.basePath ~
+                                    '/main/exercise/overview.php?cid=' ~ courseId ~
+                                    '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~
+                                    '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId
+                                %}
+                                {% set actionLabel = 'Open test'|trans %}
+                                {% set actionIcon  = 'mdi-help-circle-outline' %}
+                            {% endif %}
+
+                            {# Quiz -> open overview #}
+                        {% elseif isQuizResult %}
+                            {% if courseId is not empty and quizId is not empty %}
+                                {% set openUrl =
+                                    app.request.basePath ~
+                                    '/main/exercise/overview.php?cid=' ~ courseId ~
+                                    '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~
+                                    '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId
+                                %}
+                                {% set actionLabel = 'Open test'|trans %}
+                                {% set actionIcon  = 'mdi-play-circle' %}
+                            {% endif %}
+
+                            {# Documents / others #}
+                        {% else %}
+                            {% if courseRootNodeId is not empty and courseId is not empty %}
+                                {% set openUrl =
+                                    app.request.basePath ~
+                                    '/resources/document/' ~ courseRootNodeId ~
+                                    '/?cid=' ~ courseId ~
+                                    '&gid=0'
+                                %}
+                                {% set actionIcon = 'mdi-folder-open' %}
+                            {% endif %}
+                        {% endif %}
+
+                        <tr>
+                            <td>{{ title }}</td>
+                            <td>{{ descriptionText }}</td>
+                            <td>{{ snippet }}</td>
+                            <td>{{ toolLabel }}</td>
+                            <td>{{ filetype }}</td>
+                            <td>{{ courseId ?: '-' }}</td>
+                            <td>{{ sessionId ?: '-' }}</td>
+                            <td>
+                                {% if fullPath %}
+                                    <code>{{ fullPath }}</code>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ result.score }}%</td>
+                            <td class="text-center">
+                                {% if openUrl %}
+                                    <a
+                                            href="{{ openUrl }}"
+                                            target="_blank"
+                                            class="btn btn--secondary btn-sm"
+                                    >
+                                        <span class="mdi {{ actionIcon }}" aria-hidden="true"></span>
+                                        {{ actionLabel }}
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

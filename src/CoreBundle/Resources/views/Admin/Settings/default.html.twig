@@ -23,6 +23,7 @@
                     <div class="col-md-12">
                         <div class="box box-primary">
                             <div class="box-body">
+                                {# Special notice for AI helpers namespace #}
                                 {% if namespace == 'ai_helpers' %}
                                     <div class="mb-6 p-5 rounded-lg border border-gray-50 shadow-sm bg-white hover:shadow transition">
                                         <div class="flex justify-between items-start mb-3 border-l-4 border-primary pl-4">
@@ -50,6 +51,7 @@
                                         </div>
                                     </div>
                                 {% endif %}
+
                                 {{ form_errors(form) }}
                                 <form
                                         class="form-horizontal"
@@ -83,10 +85,9 @@
                                                             </a>
                                                         {% endif %}
 
-
                                                         {% set serverType = platform.server_type ?? (settings.platform.server_type ?? null) %}
                                                         {% if serverType == 'test' %}
-                                                        <span
+                                                            <span
                                                                     class="ml-3 text-gray-60 text-lg flex items-center cursor-default debug-setting-icon"
                                                                     title="{{ namespace ~ '.' ~ fieldName }}"
                                                                     role="img"
@@ -94,12 +95,13 @@
                                                                     data-field-id="{{ field.vars.id }}"
                                                                     data-namespace="{{ namespace }}"
                                                                     data-field-name="{{ fieldName }}"
-        {% if template_map[fieldName] is defined %} data-template-id="{{ template_map[fieldName] }}" {% endif %}
-    >
-        <i class="mdi mdi-alphabetical course-tool__icon bg-primary-bgdisabled text-base" aria-hidden="true"></i>
-    </span>
+                                                                {% if template_map[fieldName] is defined %}
+                                                                    data-template-id="{{ template_map[fieldName] }}"
+                                                                {% endif %}
+                                                            >
+                                                                <i class="mdi mdi-alphabetical course-tool__icon bg-primary-bgdisabled text-base" aria-hidden="true"></i>
+                                                            </span>
                                                         {% endif %}
-
                                                     </div>
                                                 </div>
 
@@ -137,6 +139,103 @@
 
                                     {{ update() }}
                                 </form>
+
+                                {# Extra diagnostics for search namespace (Xapian + converters), displayed AFTER all options #}
+                                {% if namespace == 'search'
+                                    and search_diagnostics is defined
+                                    and search_diagnostics is not null
+                                    and search_diagnostics.enabled %}
+                                    <div class="mt-8">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <h3 class="text-gray-90 text-body-1 font-semibold">
+                                                {{ 'Search engine environment'|trans }}
+                                            </h3>
+
+                                            <button
+                                                    type="button"
+                                                    id="openXapianHelp"
+                                                    class="inline-flex items-center gap-1 text-info hover:text-info-dark text-body-2"
+                                            >
+                                                <i class="mdi mdi-information-outline text-lg"></i>
+                                                <span>{{ 'How to install Xapian bindings'|trans }}</span>
+                                            </button>
+                                        </div>
+
+                                        <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden">
+                                            <thead class="bg-gray-10">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left">{{ 'Setting'|trans }}</th>
+                                                <th class="px-3 py-2 text-left">{{ 'Status'|trans }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for row in search_diagnostics.status_rows %}
+                                                <tr class="border-t border-gray-15">
+                                                    <td class="px-3 py-2">{{ row.label|raw }}</td>
+                                                    <td class="px-3 py-2">
+                                                        {% if row.ok %}
+                                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-success-10 text-success">
+                                                                <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                                                {{ 'OK'|trans }}
+                                                            </span>
+                                                        {% else %}
+                                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-danger-10 text-danger">
+                                                                <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                                                {{ 'Missing'|trans }}
+                                                            </span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {% if search_diagnostics.tools_warning %}
+                                        <p class="text-body-2 text-gray-60 mt-4 mb-4">
+                                            {{ search_diagnostics.tools_warning|raw }}
+                                        </p>
+                                    {% endif %}
+
+                                    {% if search_diagnostics.tools is not empty %}
+                                        <div class="mb-2">
+                                            <h3 class="text-gray-90 text-body-1 font-semibold mb-3 mt-4">
+                                                {{ 'Programs needed to convert files'|trans }}
+                                            </h3>
+
+                                            <table class="min-w-full text-sm border border-gray-25 rounded overflow-hidden">
+                                                <thead class="bg-gray-10">
+                                                <tr>
+                                                    <th class="px-3 py-2 text-left">{{ 'Software program'|trans }}</th>
+                                                    <th class="px-3 py-2 text-left">{{ 'Path'|trans }}</th>
+                                                    <th class="px-3 py-2 text-left">{{ 'Status'|trans }}</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for tool in search_diagnostics.tools %}
+                                                    <tr class="border-t border-gray-15">
+                                                        <td class="px-3 py-2">{{ tool.name }}</td>
+                                                        <td class="px-3 py-2">{{ tool.path }}</td>
+                                                        <td class="px-3 py-2">
+                                                            {% if tool.ok %}
+                                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-success-10 text-success">
+                                                                    <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                                                    {{ 'Installed'|trans }}
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-danger-10 text-danger">
+                                                                    <i class="mdi mdi-alert-circle-outline mr-1"></i>
+                                                                    {{ 'Not installed'|trans }}
+                                                                </span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -146,7 +245,7 @@
         </div>
     </div>
 
-    {# MODAL overlay #}
+    {# MODAL overlay for JSON templates #}
     <div id="jsonTemplateOverlay"
          class="fixed inset-0 bg-gray-90/50 hidden z-40"></div>
 
@@ -169,8 +268,65 @@
         </div>
     </div>
 
+    {# MODAL overlay for Xapian installation help #}
+    <div id="xapianHelpOverlay"
+         class="fixed inset-0 bg-gray-90/50 hidden z-40"></div>
+
+    <div id="xapianHelpModal"
+         class="fixed inset-0 hidden z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg border border-gray-50 shadow-2xl max-w-3xl w-full mx-4">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-gray-25">
+                <h2 class="text-lg font-bold text-gray-90">
+                    {{ 'Installing Xapian bindings'|trans }}
+                </h2>
+                <button id="closeXapianHelpModal" class="text-gray-50 hover:text-gray-90 text-2xl leading-none">
+                    &times;
+                </button>
+            </div>
+            <div class="p-6 space-y-4 text-body-2 text-gray-90">
+                <p>
+                    {{ 'The following snippet shows an example installation of the Xapian PHP bindings on Ubuntu 25.04 with PHP 8.3. Adapt paths and versions to your own environment.'|trans }}
+                </p>
+                <p>
+                    {{ 'Make sure you only have the PHP version you really use (for example 8.3) and avoid mixing several versions with different extension directories.'|trans }}
+                </p>
+
+                <pre class="bg-gray-15 p-4 rounded text-sm text-gray-90 overflow-auto max-h-[50vh] whitespace-pre-wrap">
+sudo apt install php8.3-dev libxapian-dev
+
+# Download a matching xapian-bindings tarball (version must match libxapian-dev)
+wget https://oligarchy.co.uk/xapian/1.4.25/xapian-bindings-1.4.25.tar.xz
+tar xf xapian-bindings-1.4.25.tar.xz
+cd xapian-bindings-1.4.25
+
+./configure
+make
+sudo make install
+
+# Enable the extension for CLI
+sudo sh -c 'echo "extension=xapian.so" > /etc/php/8.3/mods-available/xapian.ini'
+cd /etc/php/8.3/cli/conf.d/
+sudo ln -s /etc/php/8.3/mods-available/xapian.ini 26-xapian.ini
+php -m | grep xapian   # you should see "xapian"
+
+# Enable the extension for Apache
+cd /etc/php/8.3/apache2/conf.d/
+sudo ln -s /etc/php/8.3/mods-available/xapian.ini 26-xapian.ini
+
+# Restart Apache so the module is loaded
+sudo systemctl restart apache2
+                </pre>
+
+                <p class="text-gray-60">
+                    {{ 'Once the extension is correctly loaded for both CLI and the web server, the search diagnostics above should report that the Xapian module is installed.'|trans }}
+                </p>
+            </div>
+        </div>
+    </div>
+
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        // JSON template modal
         document.querySelectorAll('.show-template').forEach(link => {
           link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -202,9 +358,33 @@
           document.getElementById('jsonTemplateOverlay').classList.add('hidden');
           document.getElementById('jsonTemplateModal').classList.add('hidden');
         });
+
+        // Xapian help modal
+        const openXapianHelp = document.getElementById('openXapianHelp');
+        const xapianHelpOverlay = document.getElementById('xapianHelpOverlay');
+        const xapianHelpModal = document.getElementById('xapianHelpModal');
+        const closeXapianHelpModal = document.getElementById('closeXapianHelpModal');
+
+        if (openXapianHelp && xapianHelpOverlay && xapianHelpModal && closeXapianHelpModal) {
+          openXapianHelp.addEventListener('click', () => {
+            xapianHelpOverlay.classList.remove('hidden');
+            xapianHelpModal.classList.remove('hidden');
+          });
+
+          closeXapianHelpModal.addEventListener('click', () => {
+            xapianHelpOverlay.classList.add('hidden');
+            xapianHelpModal.classList.add('hidden');
+          });
+
+          xapianHelpOverlay.addEventListener('click', () => {
+            xapianHelpOverlay.classList.add('hidden');
+            xapianHelpModal.classList.add('hidden');
+          });
+        }
       });
     </script>
 {% endblock %}
+
 {% block javascripts %}
     {% set ns = app.request.get('namespace')|default('') %}
     {% set sectionLabel =

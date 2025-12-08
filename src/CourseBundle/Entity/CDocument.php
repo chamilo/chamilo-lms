@@ -161,6 +161,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/documents/download-selected',
+            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
             controller: DownloadSelectedDocumentsAction::class,
             parameters: [
                 'cid' => new QueryParameter(

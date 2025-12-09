@@ -5843,7 +5843,7 @@ msgid "Import learners of all steps"
 msgstr "Importer les apprenants de toutes les étapes"
 
 msgid "Import LDAP users into the platform"
-msgstr "Importer des utilisateurs"
+msgstr "Importer des utilisateurs par LDAP"
 
 msgid "No user in this session"
 msgstr "Pas d'utilisateur dans cette session de formation"

@@ -363,12 +363,10 @@ const load = async () => {
     }
     rawCanEdit.value = !!allowed
 
-    const cats = await lpService.getLpCategories({
-      "resourceNode.parent": node,
+    categories.value = await lpService.getLpCategories({
+      cid: course.value?.id,
       sid: session.value?.id || undefined,
-      pagination: false,
     })
-    categories.value = cats["hydra:member"] ?? cats ?? []
 
     const res = await lpService.getLearningPaths({
       "resourceNode.parent": node,

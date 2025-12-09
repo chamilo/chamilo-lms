@@ -1,5 +1,6 @@
 import { ENTRYPOINT } from "../config/entrypoint"
 import axios from "axios"
+import baseService from "./baseService"
 
 /** Lists learning paths filtered by course/session/title. */
 const getLearningPaths = async (params) => {
@@ -94,12 +95,17 @@ const goLegacyAction = (lpId, action, opts = {}) => {
       : ""
 }
 
-/** Lists LP categories for a course (empty included). */
-const getLpCategories = async (params) => {
+/**
+ * Lists LP categories for a course (empty included).
+ *
+ * @param {Object} searchParams
+ * @returns {Promise<Object[]>}
+ */
+const getLpCategories = async (searchParams) => {
   // API Platform resource for CLpCategory (GET collection)
-  const response = await axios.get(`${ENTRYPOINT}learning_path_categories/`, { params })
+  const { items } = await baseService.getCollection("/api/learning_path_categories/", searchParams)
 
-  return response.data
+  return items
 }
 
 export default {

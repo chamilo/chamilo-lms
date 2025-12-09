@@ -10,6 +10,7 @@ use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -18,6 +19,7 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class SidFilter extends AbstractFilter
@@ -66,7 +68,11 @@ class SidFilter extends AbstractFilter
         }
 
         $alias = $queryBuilder->getRootAliases()[0];
-        $session = $this->getSession();
+        $session = $this->entityManager->find(Session::class, $value);
+
+        if ($value && !$session) {
+            throw new NotFoundHttpException('Session not found');
+        }
 
         $reflection = new ReflectionClass($resourceClass);
         $loadBaseSessionContent = \in_array(

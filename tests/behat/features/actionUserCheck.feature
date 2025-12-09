@@ -3,7 +3,6 @@ Feature: User check after installation
   Scenario: Check admin information
     Given I am a platform administrator
     And I am on "/main/admin/user_list.php?keyword=admin"
-    # admin@example.com was set during installation in actionInstall.feature
     And wait for the page to be loaded
     Then I should see "admin"
     Then I follow "John"

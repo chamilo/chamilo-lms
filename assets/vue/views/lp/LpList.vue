@@ -182,8 +182,8 @@
     v-if="showExportDialog && exportTarget"
     :show="showExportDialog"
     :lp-id="exportTarget.iid"
-    :cid="cid"
-    :sid="sid"
+    :cid="course?.id"
+    :sid="session?.id"
     @close="onCloseExportDialog"
   />
 </template>
@@ -204,11 +204,12 @@ import { useI18n } from "vue-i18n"
 import BaseDropdownMenu from "../../components/basecomponents/BaseDropdownMenu.vue"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import ExportPdfDialog from "../../components/lp/ExportPdfDialog.vue"
+import { storeToRefs } from "pinia"
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const cidReq = useCidReqStore()
+const cidReqStore = useCidReqStore()
 const platformConfig = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
@@ -221,8 +222,7 @@ const rawCanEdit = ref(false)
 const isStudentView = computed(() => route.query?.isStudentView === "true")
 const canEdit = computed(() => rawCanEdit.value && !isStudentView.value)
 
-const cid = computed(() => Number(route.query?.cid ?? 0))
-const sid = computed(() => Number(route.query?.sid ?? 0) || 0)
+const { course, session } = storeToRefs(cidReqStore)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
@@ -260,8 +260,8 @@ const onToggleAutoLaunch = (lp) => {
   if (!canAutoLaunch.value || !lp?.iid) return
   const next = Number(lp.autolaunch) === 1 ? 0 : 1
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "auto_launch", {
-    cid: cid.value,
-    sid: sid.value,
+    cid: course.value?.id,
+    sid: session.value?.id,
     params: { status: next },
   })
 }
@@ -306,9 +306,11 @@ async function loadVisibilityFor(lpIds) {
   const params = new URLSearchParams({
     a: "lp_visibility_map",
     lp_ids: lpIds.join(","),
-    cid: String(cid.value || 0),
+    cid: course.value?.id,
   })
-  if (sid.value) params.append("sid", String(sid.value))
+  if (session.value) {
+    params.append("sid", session.value?.id)
+  }
 
   const res = await fetch(`/main/inc/ajax/lp.ajax.php?${params.toString()}`, {
     headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -329,8 +331,12 @@ const withCidSid = (url) => {
     const isAbs = url.startsWith("http://") || url.startsWith("https://")
     const abs = isAbs ? url : window.location.origin + url
     const u = new URL(abs)
-    if (cid.value) u.searchParams.set("cid", String(cid.value))
-    if (sid.value) u.searchParams.set("sid", String(sid.value))
+    if (course.value) {
+      u.searchParams.set("cid", course.value?.id)
+    }
+    if (session.value) {
+      u.searchParams.set("sid", session.value?.id)
+    }
     return isAbs ? u.toString() : u.pathname + u.search
   } catch {
     return url
@@ -342,13 +348,9 @@ const load = async () => {
   error.value = null
   try {
     const node = Number(route.params.node)
-    const course = Number(route.query?.cid ?? 0)
-    const sess = Number(route.query?.sid ?? 0) || 0
-
-    await cidReq.setCourseAndSessionById(course, sess)
 
     try {
-      await courseSettingsStore.loadCourseSettings(course, sess)
+      await courseSettingsStore.loadCourseSettings(course.value?.id, session.value?.id)
     } catch (err) {
       console.error("[LPList] loadCourseSettings FAILED:", err)
     }
@@ -362,14 +364,14 @@ const load = async () => {
 
     const cats = await lpService.getLpCategories({
       "resourceNode.parent": node,
-      sid: sess || undefined,
+      sid: session.value?.id || undefined,
       pagination: false,
     })
     categories.value = cats["hydra:member"] ?? cats ?? []
 
     const res = await lpService.getLearningPaths({
       "resourceNode.parent": node,
-      sid: sess || undefined,
+      sid: session.value?.id || undefined,
       pagination: false,
     })
     const raw = res["hydra:member"] ?? res ?? []
@@ -441,16 +443,23 @@ function applyOrderWithinContext(predicate, orderedIds) {
 }
 
 async function sendReorder(orderedIds, { categoryId } = {}) {
-  const courseId = Number(cid.value)
-  const sessionId = Number(sid.value) || null
-
   if (lpService?.reorder) {
-    await lpService.reorder({ courseId, sessionId, categoryId: categoryId ?? null, ids: orderedIds })
+    await lpService.reorder({
+      courseId: course.value?.id,
+      sessionId: session.value?.id,
+      categoryId: categoryId ?? null,
+      ids: orderedIds,
+    })
   } else {
     const resp = await fetch("/api/learning_paths/reorder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId, sid: sessionId, categoryId: categoryId ?? null, order: orderedIds }),
+      body: JSON.stringify({
+        courseId: course.value?.id,
+        sid: session.value?.id,
+        categoryId: categoryId ?? null,
+        order: orderedIds,
+      }),
     })
     if (!resp.ok) {
       const txt = await resp.text().catch(() => "")
@@ -505,8 +514,8 @@ const onStudentViewChange = async (val) => {
 
 const openLegacy = (lp) => {
   window.location.href = lpService.buildLegacyViewUrl(lp.iid, {
-    cid: Number(route.query?.cid ?? 0),
-    sid: Number(route.query?.sid ?? 0) || 0,
+    cid: course.value?.id || 0,
+    sid: session.value?.id || 0,
     isStudentView: isStudentView.value ? "true" : "false",
   })
 }
@@ -520,8 +529,8 @@ const handleTopMenu = (action, ev) => {
   ev?.stopImmediatePropagation?.()
   if (!canEdit.value) return
 
-  const courseId = Number(route.query?.cid ?? 0) || undefined
-  const sidQ = Number(route.query?.sid ?? 0) || 0
+  const courseId = course.value?.id || undefined
+  const sidQ = session.value?.id || 0
   const node = Number(route.params?.node ?? 0) || undefined
   const gid = Number(route.query?.gid ?? 0)
   const gradebook = Number(route.query?.gradebook ?? 0)
@@ -544,28 +553,31 @@ const handleTopMenu = (action, ev) => {
 }
 
 const onReport = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "report", { cid: cid.value, sid: sid.value }))
+  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "report", {
+    cid: course.value?.id,
+    sid: session.value,
+  }))
 const onSettings = (lp) =>
-  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { cid: cid.value, sid: sid.value }))
+  (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "edit", { cid: course.value?.id, sid: session.value }))
 const onBuild = (lp) =>
   (window.location.href = lpService.buildLegacyActionUrl(lp.iid, "add_item", {
-    cid: cid.value,
-    sid: sid.value,
+    cid: course.value?.id,
+    sid: session.value?.id,
     params: { type: "step", isStudentView: "false" },
   }))
 const onToggleVisible = (lp) => {
   const newStatus = typeof lp.visible !== "undefined" ? (lp.visible ? 0 : 1) : 1
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_visible", {
-    cid: cid.value,
-    sid: sid.value,
+    cid: course.value?.id,
+    sid: session.value?.id,
     params: { new_status: newStatus },
   })
 }
 const onTogglePublish = (lp) => {
   const newStatus = lp.published === "v" ? "i" : "v"
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_publish", {
-    cid: cid.value,
-    sid: sid.value,
+    cid: course.value?.id,
+    sid: session.value?.id,
     params: { new_status: newStatus },
   })
 }
@@ -573,7 +585,10 @@ const onDelete = (lp) => {
   const label = (lp.title || "").trim() || t("Learning path")
   const msg = `${t("Are you sure to delete")} ${label}?`
   if (confirm(msg)) {
-    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", { cid: cid.value, sid: sid.value })
+    window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", {
+      cid: course.value?.id,
+      sid: session.value,
+    })
   }
 }
 
@@ -598,8 +613,10 @@ async function onEndUncat() {
 
 const onExportScorm = (lp) => {
   if (!canExportScorm.value) return
-  const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: cid.value })
-  if (sid.value) params.append("sid", sid.value)
+  const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: course.value?.id })
+  if (session.value) {
+    params.append("sid", session.value)
+  }
 
   window.location.href = `/main/lp/lp_controller.php?${params.toString()}`
 }

@@ -2507,6 +2507,9 @@ INSERT INTO `extra_field` (`extra_field_type`, `field_type`, `variable`, `displa
 // Then add the "@" symbol to CAttendanceResultComment class in the ORM\Entity() line.
 //$_configuration['attendance_allow_comments'] = false;
 
+// Add the official code of students in the attendance table, pdf and xls export
+//$_configuration['attendance_add_official_code'] = false;
+
 // Enable categories in Wiki tool.
 // 1. Run the following DB changes:
 /*

@@ -9,18 +9,17 @@ namespace Chamilo\CoreBundle\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
+use Chamilo\CoreBundle\Entity\Course;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class CidFilter extends AbstractFilter
 {
-    use CourseFromRequestTrait;
-
     public function __construct(
         protected RequestStack $requestStack,
         protected EntityManagerInterface $entityManager,
@@ -57,7 +56,11 @@ class CidFilter extends AbstractFilter
             return;
         }
 
-        $course = $this->getCourse();
+        $course = $this->entityManager->find(Course::class, $value);
+
+        if (!$course) {
+            throw new NotFoundHttpException('Course not found');
+        }
 
         $queryBuilder
             ->andWhere(

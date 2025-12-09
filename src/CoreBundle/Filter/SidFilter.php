@@ -9,26 +9,28 @@ namespace Chamilo\CoreBundle\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
+use Chamilo\CoreBundle\DataProvider\Extension\CourseLinkExtensionTrait;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Traits\CourseFromRequestTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 class SidFilter extends AbstractFilter
 {
-    use CourseFromRequestTrait;
+    use CourseLinkExtensionTrait;
 
     public function __construct(
         protected RequestStack $requestStack,
         protected EntityManagerInterface $entityManager,
+        protected Security $security,
         ManagerRegistry $managerRegistry,
         ?LoggerInterface $logger = null,
         ?array $properties = null,
@@ -67,7 +69,6 @@ class SidFilter extends AbstractFilter
             return;
         }
 
-        $alias = $queryBuilder->getRootAliases()[0];
         $session = $this->entityManager->find(Session::class, $value);
 
         if ($value && !$session) {
@@ -81,33 +82,25 @@ class SidFilter extends AbstractFilter
             true
         );
 
-        $joins = $queryBuilder->getDQLPart('join');
-
-        if (empty($joins[$alias]) || !array_filter($joins[$alias], fn ($j) => 'resourceNode' === $j->getAlias())) {
-            $queryBuilder->leftJoin($alias.'.resourceNode', 'resourceNode');
-        }
-
-        if (empty($joins['resourceNode']) || !array_filter($joins['resourceNode'], fn ($j) => 'resourceLink' === $j->getAlias())) {
-            $queryBuilder->leftJoin('resourceNode.resourceLinks', 'resourceLink');
-        }
+        $this->addCourseLinkWithVisibilityConditions($queryBuilder, false);
 
         if (null === $session) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
-                    'resourceLink.session IS NULL',
-                    'resourceLink.session = 0'
+                    'resource_links.session IS NULL',
+                    'resource_links.session = 0'
                 )
             );
         } elseif ($loadBaseSessionContent) {
             $queryBuilder->andWhere(
                 $queryBuilder->expr()->orX(
-                    'resourceLink.session = :session',
-                    'resourceLink.session IS NULL'
+                    'resource_links.session = :session',
+                    'resource_links.session IS NULL'
                 )
             )->setParameter('session', $session->getId());
         } else {
             $queryBuilder
-                ->andWhere('resourceLink.session = :session')
+                ->andWhere('resource_links.session = :session')
                 ->setParameter('session', $session->getId())
             ;
         }

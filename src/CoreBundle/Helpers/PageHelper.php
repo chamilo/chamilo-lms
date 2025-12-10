@@ -167,10 +167,10 @@ class PageHelper
      * to decide if a file coming from personal files can be considered "public" because it is
      * embedded inside a system announcement that is visible to the current user.
      *
-     * @param string               $pathInfo   Full request path (e.g. /r/document/files/{uuid}/view)
-     * @param string|null          $identifier File identifier extracted from the URL (usually a UUID)
-     * @param UserInterface|null   $user       Current user, or null to behave as anonymous
-     * @param string               $locale     Current locale used to fetch announcements
+     * @param string             $pathInfo   Full request path (e.g. /r/document/files/{uuid}/view)
+     * @param string|null        $identifier File identifier extracted from the URL (usually a UUID)
+     * @param UserInterface|null $user       Current user, or null to behave as anonymous
+     * @param string             $locale     Current locale used to fetch announcements
      */
     public function isFilePathExposedByVisibleAnnouncement(
         string $pathInfo,

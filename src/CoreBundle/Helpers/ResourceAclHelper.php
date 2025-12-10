@@ -8,8 +8,6 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceRight;
-use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceFileVoter;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
@@ -23,7 +21,7 @@ readonly class ResourceAclHelper
 {
     public function __construct(
         private Security $security,
-    ) { }
+    ) {}
 
     /**
      * @param iterable<int, ResourceRight> $rights

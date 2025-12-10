@@ -6,7 +6,6 @@ namespace Chamilo\CoreBundle\DataProvider\Extension;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * You should inject Symfony\Bundle\SecurityBundle\Security in the constructor.

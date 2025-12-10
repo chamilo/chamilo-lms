@@ -111,7 +111,7 @@ class DownloadSelectedDocumentsAction
                     $this->addNodeToZip($zip, $node);
                 }
 
-                if (0 === count($zip->files)) {
+                if (0 === \count($zip->files)) {
                     $zip->addFile('.empty', '');
                 }
 

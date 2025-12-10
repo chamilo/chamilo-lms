@@ -20,6 +20,7 @@ const props = defineProps({
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: false },
+  isSessionCategory: { type: Boolean, default: false },
 })
 const emit = defineEmits([
   "open",
@@ -174,7 +175,15 @@ const toggleOpen = () => {
           ></span>
         </template>
 
-        <h2 class="text-body-1 font-semibold text-gray-90">{{ displayTitle }}</h2>
+        <h2 class="text-body-1 font-semibold text-gray-90">
+          <span>{{ displayTitle }}</span>
+          <!-- Display the star if it's a session category; remove the check on category.type -->
+          <span
+            v-if="isSessionCategory"
+            class="ml-2 text-warning"
+            title="Category created for a session"
+          >★</span>
+        </h2>
       </div>
 
       <div class="flex items-center gap-2">

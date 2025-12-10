@@ -18,7 +18,6 @@ use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
-use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Traits\NonResourceRepository;
 use Chamilo\CoreBundle\Traits\Repository\RepositoryQueryBuilderTrait;
@@ -41,6 +40,7 @@ use const PATHINFO_EXTENSION;
  * Extends Resource EntityRepository.
  *
  * @template T of object
+ *
  * @template-extends ServiceEntityRepositoryProxy<T>
  */
 abstract class ResourceRepository extends ServiceEntityRepository

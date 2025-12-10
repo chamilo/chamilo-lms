@@ -532,7 +532,7 @@ ALTER TABLE c_lp_item CHANGE title title LONGTEXT NOT NULL;
 //$_configuration['session_list_show_count_users'] = false;
 // Session admin access to all course content
 //$_configuration['session_admins_access_all_content'] = false;
-// Session admin allowed to edit all courses content 
+// Session admin allowed to edit all courses content
 // including all exercises attemps results edition, calculation and deletion
 //$_configuration['session_admins_edit_courses_content'] = false;
 // Adds roles to the system announcements (requires DB change BT#12476)
@@ -1446,6 +1446,9 @@ $_configuration['profile_fields_visibility'] = [
 
 // Disallow the login-as feature to HRM users
 //$_configuration['disallow_hrm_login_as'] = false;
+
+// Disallow the login-as feature to session admin users
+//$_configuration['disallow_session_admin_login_as'] = false;
 
 // Allow gradebook stats
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block

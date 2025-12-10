@@ -159,8 +159,8 @@
         :canExportPdf="canExportPdf"
         :canExportScorm="canExportScorm"
         :category="cat"
-        :list="list"
         :isSessionCategory="isSession"
+        :list="list"
         :ringDash="ringDash"
         :ringValue="ringValue"
         :title="cat.title"
@@ -176,7 +176,6 @@
         @toggle-publish="onTogglePublish"
         @export-pdf="onExportPdf"
       />
-
     </template>
   </div>
   <ExportPdfDialog
@@ -424,8 +423,11 @@ onMounted(load)
 // build the candidate fields object
 function inspectCategorySessionCandidates(cat) {
   const c = {
-    sid: cat?.sid, session: cat?.session, sessionId: cat?.sessionId,
-    courseSessionId: cat?.courseSessionId, course_session: cat?.course_session,
+    sid: cat?.sid,
+    session: cat?.session,
+    sessionId: cat?.sessionId,
+    courseSessionId: cat?.courseSessionId,
+    course_session: cat?.course_session,
     session_iid: cat?.session_iid,
   }
   if (Array.isArray(cat?.resourceLinkListFromEntity)) {
@@ -455,37 +457,35 @@ function getCategorySessionId(cat) {
   for (const val of Object.values(candidates)) {
     if (val == null || String(val).trim() === "") continue
     const nums = extractNumbersFromValue(val)
-    const found = nums.find(n => n !== 0)
+    const found = nums.find((n) => n !== 0)
     if (found !== undefined) return { catSid: Number(found), hasSessionField: true, candidates }
   }
-  const hasSessionField = Object.values(candidates).some(v => v != null && String(v).trim() !== "")
+  const hasSessionField = Object.values(candidates).some((v) => v != null && String(v).trim() !== "")
   return { catSid: 0, hasSessionField, candidates }
 }
 
 const filteredCategories = computed(() => {
   if (!Array.isArray(categories.value)) return []
   const s = Number(sid.value) || 0
-  const lpCatIdsInItems = new Set((items.value ?? []).map(lp => lp?.category?.iid).filter(id => id != null))
+  const lpCatIdsInItems = new Set((items.value ?? []).map((lp) => lp?.category?.iid).filter((id) => id != null))
 
   const matchesSessionValue = (candidates, sNum) => {
     if (!candidates || typeof candidates !== "object") return false
-    return Object.values(candidates).some(v => {
+    return Object.values(candidates).some((v) => {
       if (v == null || String(v).trim() === "") return false
       if (Number(String(v)) === sNum) return true
-      if (extractNumbersFromValue(v).some(n => n === sNum)) return true
-      if (String(v).trim() === String(sNum)) return true
-      return false
+      if (extractNumbersFromValue(v).some((n) => n === sNum)) return true
+      return String(v).trim() === String(sNum)
     })
   }
 
-  return categories.value.filter(cat => {
+  return categories.value.filter((cat) => {
     const { catSid, hasSessionField, candidates } = getCategorySessionId(cat)
     if (s > 0) {
       if (catSid === s) return true
       if (hasSessionField && matchesSessionValue(candidates, s)) return true
       if (!hasSessionField && catSid === 0) return true
-      if (lpCatIdsInItems.has(cat.iid)) return true
-      return false
+      return lpCatIdsInItems.has(cat.iid)
     }
     return !hasSessionField && catSid === 0
   })
@@ -493,12 +493,14 @@ const filteredCategories = computed(() => {
 
 const categorizedGroups = computed(() => {
   const cats = filteredCategories.value ?? []
-  return cats.map(cat => {
-    const list = (catLists.value[cat.iid] ?? []).slice()
-    const { catSid, hasSessionField } = getCategorySessionId(cat)
-    const isSessionCategory = !!(hasSessionField && catSid !== 0)
-    return [cat, list, isSessionCategory]
-  }).filter(([_, list]) => (list && list.length) || canEdit.value)
+  return cats
+    .map((cat) => {
+      const list = (catLists.value[cat.iid] ?? []).slice()
+      const { catSid, hasSessionField } = getCategorySessionId(cat)
+      const isSessionCategory = !!(hasSessionField && catSid !== 0)
+      return [cat, list, isSessionCategory]
+    })
+    .filter(([_, list]) => (list && list.length) || canEdit.value)
 })
 
 function rebuildListsFromItems() {

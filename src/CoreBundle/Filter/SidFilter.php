@@ -44,7 +44,7 @@ class SidFilter extends AbstractFilter
         return [
             'sid' => [
                 'property' => null,
-                'type' => 'string',
+                'type' => 'int',
                 'required' => false,
                 'description' => 'Session identifier',
             ],

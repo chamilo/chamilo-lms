@@ -8,20 +8,28 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
+/**
+ * You should inject Symfony\Bundle\SecurityBundle\Security in the constructor.
+ */
 trait CourseLinkExtensionTrait
 {
-    public function __construct(
-        private readonly Security $security
-    ) {}
-
     protected function addCourseLinkWithVisibilityConditions(QueryBuilder $queryBuilder, bool $checkVisibility): void
     {
         $rootAlias = $queryBuilder->getRootAliases()[0];
 
-        $queryBuilder
-            ->innerJoin("$rootAlias.resourceNode", 'node')
-            ->innerJoin('node.resourceLinks', 'resource_links')
-        ;
+        $joins = $queryBuilder->getDQLPart('join');
+
+        if (empty($joins[$rootAlias])
+            || !array_filter($joins[$rootAlias], fn ($j) => 'node' === $j->getAlias())
+        ) {
+            $queryBuilder->innerJoin("$rootAlias.resourceNode", 'node');
+        }
+
+        if (empty($joins[$rootAlias])
+            || !array_filter($joins[$rootAlias], fn ($j) => 'resource_links' === $j->getAlias())
+        ) {
+            $queryBuilder->innerJoin('node.resourceLinks', 'resource_links');
+        }
 
         if ($checkVisibility) {
             $this->addVisibilityCondition($queryBuilder);

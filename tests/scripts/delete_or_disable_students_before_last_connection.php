@@ -29,6 +29,11 @@ $action = $argv[1];
 $date = $argv[2];
 $force = '--force' === ($argv[3] ?? '');
 
+// URL white list. It will only take users that have access to those URLs
+//$urlWhiteList = "1,2";
+// URL black list. It will not take users that have access to those URLs
+//$urlBlackList = "1,2";
+
 if (!in_array($action, ['disable', 'delete'])) {
     die('Action not allowed'.PHP_EOL);
 }
@@ -38,11 +43,20 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 $date = api_get_utc_datetime($date);
 
 $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+$tblUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$whereURLWhiteList = "";
+$whereURLBlackList = "";
+if (isset($urlWhiteList)){
+    $whereURLWhiteList = " AND user_id IN (SELECT user_id from $tblUrlRelUser where access_url_id in ($urlWhiteList)) ";
+}
+if (isset($urlBlackList)){
+    $whereURLBlackList = " AND user_id NOT IN (SELECT user_id from $tblUrlRelUser where access_url_id in ($urlBlackList)) ";
+}
 
 $result = Database::query(
     sprintf(
         "SELECT id, username FROM $tblUser
-            WHERE last_login <= '%s' AND active = %d AND status = %d
+            WHERE last_login <= '%s' AND active = %d AND status = %d $whereURLWhiteList $whereURLBlackList
            ORDER BY last_login",
         $date,
         1,

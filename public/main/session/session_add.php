@@ -328,6 +328,9 @@ if ($form->validate()) {
     $lastRepetition = isset($params['last_repetition']) ? true : false;
     $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
     $validityInDays = $params['validity_in_days'] ?? null;
+    if (is_null($coachUsername)) {
+        $coachUsername = [];
+    }
 
     $return = SessionManager::create_session(
         $title,

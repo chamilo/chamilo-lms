@@ -8413,7 +8413,6 @@ class SessionManager
             }
         }
 
-        $form->addRule('coach_username', get_lang('Required field'), 'required');
         $form->addHtml('<div id="ajax_list_coachs"></div>');
 
         $form->addButtonAdvancedSettings('advanced_params');

@@ -1450,6 +1450,9 @@ $_configuration['profile_fields_visibility'] = [
 // Disallow the login-as feature to session admin users
 //$_configuration['disallow_session_admin_login_as'] = false;
 
+// Disallow user edition to session admin users
+//$_configuration['disallow_session_admin_edit_users'] = false;
+
 // Allow gradebook stats
 // Requires to edit the GradebookLink.php And GradebookEvaluation.php files adding the "@" in the ORM phpdoc block
 /* ALTER TABLE gradebook_link ADD score_weight DOUBLE PRECISION DEFAULT NULL, ADD average_score DOUBLE PRECISION DEFAULT NULL, ADD best_score DOUBLE PRECISION DEFAULT NULL, ADD user_score_list LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)' ;

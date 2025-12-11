@@ -643,8 +643,12 @@ function modify_filter($user_id, $url_params, $row)
 
     if (api_is_platform_admin(true)) {
         $editProfileUrl = Display::getProfileEditionLink($user_id, true);
-        if (!$user_is_anonymous &&
-            api_global_admin_can_edit_admin($user_id, null, true)
+        if (!$user_is_anonymous
+            && api_global_admin_can_edit_admin(
+                $user_id,
+                null,
+                true !== api_get_configuration_value('disallow_session_admin_edit_users')
+            )
         ) {
             $result .= '<a href="'.$editProfileUrl.'">'.
                 Display::return_icon(

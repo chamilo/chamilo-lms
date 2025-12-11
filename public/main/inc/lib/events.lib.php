@@ -230,7 +230,7 @@ class Event
 
         return Container::getTrackEDownloadsRepository()
             ->saveDownload($user, $course->getFirstResourceLink(), $documentUrl)
-        ;
+            ;
     }
 
     /**
@@ -1157,13 +1157,7 @@ class Event
     }
 
     /**
-     * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
-     *
-     * @param int $exercise_id
-     * @param int $courseId
-     * @param ?int $session_id
-     * @param ?bool $load_question_list
-     * @param ?int $user_id
+     * Get all attempts for one exercise in one course / session.
      *
      * @return array with the results
      * @throws \Doctrine\DBAL\Exception
@@ -1175,34 +1169,40 @@ class Event
         ?int $session_id = 0,
         ?bool $load_question_list = true,
         ?int $user_id = null
-    ): array
-    {
+    ): array {
         $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $user_condition = null;
+        $user_condition = '';
         if (!empty($user_id)) {
+            $user_id = (int) $user_id;
             $user_condition = "AND exe_user_id = $user_id ";
         }
+
         $sessionCondition = api_get_session_condition($session_id);
+
         $sql = "SELECT * FROM $TABLETRACK_EXERCISES
-                WHERE
-                    status = ''  AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                    $user_condition
-                    $sessionCondition
-                ORDER BY exe_id";
+            WHERE
+                status = ''  AND
+                c_id = $courseId AND
+                exe_exo_id = $exercise_id AND
+                orig_lp_id = 0 AND
+                orig_lp_item_id = 0
+                $user_condition
+                $sessionCondition
+            ORDER BY exe_id";
+
         $res = Database::query($sql);
         $list = [];
+
         while ($row = Database::fetch_assoc($res)) {
             $list[$row['exe_id']] = $row;
+
             if ($load_question_list) {
-                $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT
-                        WHERE exe_id = {$row['exe_id']}";
-                $res_question = Database::query($sql);
+                $sqlQuestion = "SELECT * FROM $TBL_TRACK_ATTEMPT
+                            WHERE exe_id = {$row['exe_id']}";
+                $res_question = Database::query($sqlQuestion);
+
                 while ($row_q = Database::fetch_assoc($res_question)) {
                     $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
                 }

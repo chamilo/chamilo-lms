@@ -5,19 +5,18 @@
  * Homepage for the MySpace directory.
  */
 
-// resetting the course id
+// Resetting the course id.
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-//$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 $this_section = SECTION_TRACKING;
 
 ob_start();
 $nameTools = get_lang('Reporting');
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
 $user_id = api_get_user_id();
@@ -43,107 +42,23 @@ if ($is_session_admin) {
     exit;
 }
 
-// Get views
+// ---------------------------------------------------------------------
+// View selector (admin / teacher / coach / drh)
+// ---------------------------------------------------------------------
 $views = ['admin', 'teacher', 'coach', 'drh'];
 $view = 'teacher';
-if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
+if (isset($_GET['view']) && in_array($_GET['view'], $views, true)) {
     $view = $_GET['view'];
 }
 
-$menu_items = [];
-$pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
-$calendarMenuAdded = false;
-
-if ($is_platform_admin) {
-    if ('admin' === $view) {
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Trainer View')),
-            api_get_self().'?view=teacher'
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('star-outline', 'ch-tool-icon', null, 32, get_lang('Admin view')),
-            api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
-            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Current courses report')),
-            api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
-        );
-    } else {
-        $menu_items[] = Display::url(
-            Display::getMdiIcon(
-                'human-male-board',
-                'ch-tool-icon-disabled',
-                null,
-                32,
-                get_lang('Trainer View')
-            ),
-            ''
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('star-outline', 'ch-tool-icon', null, 32, get_lang('Admin view')),
-            //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
-            api_get_path(WEB_CODE_PATH).'my_space/admin_view.php'
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, 32, get_lang('Exam tracking')),
-            api_get_path(WEB_CODE_PATH).'tracking/exams.php'
-        );
-        $menu_items[] = Display::url(
-            Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Current courses report')),
-            api_get_path(WEB_CODE_PATH).'my_space/current_courses.php'
-        );
-        /*
-        $menu_items[] = Display::url(
-            Display::return_icon('dashboard.png', get_lang('Dashboard'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'Dashboard/index.php'
-        );
-        */
-        if ($pluginCalendar) {
-            $lpCalendar = LearningCalendarPlugin::create();
-            $menu_items[] = Display::url(
-                Display::getMdiIcon('calendar-text', 'ch-tool-icon', null, 32, $lpCalendar->get_lang('Learning calendar')),
-                api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
-            );
-            $calendarMenuAdded = true;
-        }
-    }
-}
-
-if ($is_drh) {
-    $view = 'drh';
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('account', 'ch-tool-icon-disabled', null, 32, get_lang('Learners')),
-        '#'
-    );
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('human-male-board', 'ch-tool-icon', null, 32, get_lang('Teachers')),
-        'teachers.php'
-    );
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Courses')),
-        'course.php'
-    );
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, 32, get_lang('Course sessions')),
-        'session.php'
-    );
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('chart-box', 'ch-tool-icon', null, 32, get_lang('Corporate report')),
-        'company_reports.php'
-    );
-    $menu_items[] = Display::url(
-        Display::getMdiIcon('chart-box-outline', 'ch-tool-icon', null, 32, get_lang('Corporate report, short version')),
-        'company_reports_resumed.php'
-    );
-}
-
+// ---------------------------------------------------------------------
+// Build toolbar actions (left and right) for MySpace homepage
+// ---------------------------------------------------------------------
 $actionsRight = '';
 $actionsLeft = '';
-if ('useroverview' === $display || 'sessionoverview' === $display || 'courseoverview' === $display) {
+
+if (in_array($display, ['useroverview', 'sessionoverview', 'courseoverview'], true)) {
+    // CSV export icon for overview pages.
     $actionsRight .= Display::url(
         Display::getMdiIcon(
             'file-delimited-outline',
@@ -156,6 +71,7 @@ if ('useroverview' === $display || 'sessionoverview' === $display || 'courseover
     );
 }
 
+// Print icon (always available).
 $actionsRight .= Display::url(
     Display::getMdiIcon(
         'printer',
@@ -171,9 +87,12 @@ $actionsRight .= Display::url(
 if (!empty($session_id) &&
     !in_array(
         $display,
-        ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview']
+        ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'],
+        true
     )
 ) {
+    // Session context: show back button and "import users" action,
+    // keeping previous behavior.
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
             'arrow-left-bold-box',
@@ -184,23 +103,22 @@ if (!empty($session_id) &&
         ),
         'index.php'
     );
+
     if (!api_is_platform_admin()) {
-        if ('true' === api_get_setting('add_users_by_coach')) {
-            if ($is_coach) {
-                $actionsLeft .= Display::url(
-                    Display::getMdiIcon(
-                        'archive-arrow-up',
-                        'ch-tool-icon',
-                        null,
-                        32,
-                        get_lang('Import list of users')
-                    ),
-                    'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
-                );
-            }
+        if ('true' === api_get_setting('add_users_by_coach') && $is_coach) {
+            $actionsLeft .= Display::url(
+                Display::getMdiIcon(
+                    'archive-arrow-up',
+                    'ch-tool-icon',
+                    null,
+                    32,
+                    get_lang('Import list of users')
+                ),
+                'user_import.php?id_session='.$session_id.'&action=export&amp;type=xml'
+            );
         }
     } else {
-        Display::url(
+        $actionsLeft .= Display::url(
             Display::getMdiIcon(
                 'archive-arrow-up',
                 'ch-tool-icon',
@@ -212,6 +130,11 @@ if (!empty($session_id) &&
         );
     }
 } else {
+    // No session context or a "global" display:
+    // 1) Show main MySpace navigation.
+    $actionsLeft .= Display::mySpaceMenu('overview');
+
+    // 2) Extra actions: "View my progress", calendar plugin, certificates.
     $actionsLeft .= Display::url(
         Display::getMdiIcon(
             'chart-box',
@@ -223,14 +146,23 @@ if (!empty($session_id) &&
         api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
     );
 
-    if ($pluginCalendar && api_is_teacher() && false === $calendarMenuAdded) {
-        $lpCalendar = LearningCalendarPlugin::create();
+    // Optional Learning Calendar plugin entry (teachers only).
+    $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
+    if ($pluginCalendar && api_is_teacher()) {
+        $lpCalendar = \LearningCalendarPlugin::create();
         $actionsLeft .= Display::url(
-            Display::getMdiIcon('calendar-text', 'ch-tool-icon', null, 32, $lpCalendar->get_lang('Learning calendar')),
+            Display::getMdiIcon(
+                'calendar-text',
+                'ch-tool-icon',
+                null,
+                32,
+                $lpCalendar->get_lang('Learning calendar')
+            ),
             api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php'
         );
     }
 
+    // Global certificates report (platform admin or student boss).
     if (api_is_platform_admin(true) || api_is_student_boss()) {
         $actionsLeft .= Display::url(
             Display::getMdiIcon(
@@ -245,21 +177,9 @@ if (!empty($session_id) &&
     }
 }
 
-// Actions menu
-$nb_menu_items = count($menu_items);
-if (empty($session_id) ||
-    in_array(
-        $display,
-        ['accessoverview', 'lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview']
-    )
-) {
-    if ($nb_menu_items > 1) {
-        foreach ($menu_items as $key => $item) {
-            $actionsLeft .= $item;
-        }
-    }
-}
-
+// ---------------------------------------------------------------------
+// Global stats for MySpace dashboard
+// ---------------------------------------------------------------------
 $userId = api_get_user_id();
 $stats = Tracking::getStats($userId, true);
 
@@ -279,7 +199,7 @@ if (!empty($sessions)) {
     }
 }
 
-// Sessions for the user
+// Sessions for the user.
 $countSessions = count($sessions);
 $total_time_spent = 0;
 $total_courses = 0;
@@ -317,25 +237,25 @@ $posts = null;
 
 if (false === $skipData) {
     if (!empty($students)) {
-        // Students
+        // Students.
         $studentIds = array_values($students);
-        $progress = 0; //Tracking::get_avg_student_progress($studentIds);
-        // @todo fix stats
-        //$countAssignments = Tracking::count_student_assignments($studentIds);
-        $countAssignments = 0;
-        // average progress
-        $avgTotalProgress = $progress / $numberStudents;
-        // average assignments
-        $numberAssignments = $countAssignments / $numberStudents;
-        $avg_courses_per_student = $countCourses / $numberStudents;
+        $progress = 0; // @todo: fix stats (Tracking::get_avg_student_progress($studentIds)).
+        $countAssignments = 0; // @todo: restore assignments count when stats are fixed.
+
+        // Average progress.
+        if ($numberStudents > 0) {
+            $avgTotalProgress = $progress / $numberStudents;
+            $numberAssignments = $countAssignments / $numberStudents;
+            $avg_courses_per_student = $countCourses / $numberStudents;
+        }
+
         $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
-        //$posts = Tracking::count_student_messages($studentIds);
-        $posts = 0;
+        $posts = 0; // @todo: restore forum posts stats.
         $averageScore = Tracking::getAverageStudentScore($studentIds);
     }
 
     if ($export_csv) {
-        //csv part
+        // CSV export.
         $csv_content[] = [get_lang('Learners')];
         $csv_content[] = [get_lang('Inactive learners'), $nb_inactive_students];
         $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
@@ -382,6 +302,7 @@ if (false === $skipData) {
             $sessionIdList,
             $studentIds
         );
+
         $report['AverageCoursePerStudent'] = is_null($avg_courses_per_student)
             ? ''
             : round($avg_courses_per_student, 3);
@@ -395,6 +316,7 @@ if (false === $skipData) {
         $report['AvgCourseScore'] = is_null($averageScore) ? '0' : round($averageScore, 2).'%';
         $report['AveragePostsInForum'] = is_null($posts) ? '0' : round($posts, 2);
         $report['AverageAssignments'] = is_null($numberAssignments) ? '' : round($numberAssignments, 2);
+
         $view->assign('report', $report);
     }
 }
@@ -409,9 +331,9 @@ $content = $view->fetch($template);
 $view->assign('content', $content);
 $view->display_one_col_template();
 
-// Send the csv file if asked
+// Send the CSV file if requested.
 if ($export_csv) {
     ob_end_clean();
-    Export:: arrayToCsv($csv_content, 'reporting_index');
+    Export::arrayToCsv($csv_content, 'reporting_index');
     exit;
 }

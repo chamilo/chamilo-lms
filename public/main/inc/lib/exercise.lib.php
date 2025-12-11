@@ -100,7 +100,7 @@ class ExerciseLib
         $s = '';
         if (HOT_SPOT != $answerType &&
             HOT_SPOT_DELINEATION != $answerType &&
-             HOT_SPOT_COMBINATION != $answerType &&
+            HOT_SPOT_COMBINATION != $answerType &&
             ANNOTATION != $answerType
         ) {
             // Question is not a hotspot
@@ -358,9 +358,9 @@ class ExerciseLib
                     if ($debug_mark_answer) {
                         $s .= '<p><strong>'
                             .(
-                                MULTIPLE_ANSWER_DROPDOWN == $answerType
-                                    ? '<span class="pull-right">'.get_lang('Score').'</span>'
-                                    : ''
+                            MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                ? '<span class="pull-right">'.get_lang('Score').'</span>'
+                                : ''
                             )
                             .get_lang('Correct answer').'</strong></p>';
                     }
@@ -1501,9 +1501,9 @@ HTML;
                         if ($debug_mark_answer && $answerCorrect) {
                             $s .= '<p>'
                                 .(
-                                    MULTIPLE_ANSWER_DROPDOWN == $answerType
-                                        ? '<span class="pull-right">'.$objAnswerTmp->weighting[$answerId].'</span>'
-                                        : ''
+                                MULTIPLE_ANSWER_DROPDOWN == $answerType
+                                    ? '<span class="pull-right">'.$objAnswerTmp->weighting[$answerId].'</span>'
+                                    : ''
                                 )
                                 .Display::returnFontAwesomeIcon('check-square-o', '', true);
                             $s .= Security::remove_XSS($objAnswerTmp->answer[$answerId]).'</p>';
@@ -1811,7 +1811,7 @@ HOTSPOT;
             unset($objAnswerTmp, $objQuestionTmp);
         }
 
-            return $nbrAnswers;
+        return $nbrAnswers;
     }
 
     /**
@@ -2030,7 +2030,7 @@ HOTSPOT;
             $lp_id,
             $lp_item_id
         );
-	if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
+        if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
             if ($_SESSION['expired_time'][$time_control_key] instanceof DateTimeInterface) {
                 $return_value = $_SESSION['expired_time'][$time_control_key]->format('Y-m-d H:i:s');
             } else {
@@ -3193,9 +3193,9 @@ HOTSPOT;
      */
     public static function addScoreModelInput(
         FormValidator $form,
-        $name,
-        $weight,
-        $selected
+                      $name,
+                      $weight,
+                      $selected
     ) {
         $model = self::getCourseScoreModel();
         if (empty($model)) {
@@ -3428,97 +3428,106 @@ EOT;
     }
 
     /**
-     * Gets the position of the score based in a given score (result/weight)
-     * and the exe_id based in the user list
-     * (NO Exercises in LPs ).
+     * Get the exercise result ranking for a given user score.
      *
-     * @param float  $my_score      user score to be compared *attention*
-     *                              $my_score = score/weight and not just the score
-     * @param int    $my_exe_id     exe id of the exercise
-     *                              (this is necessary because if 2 students have the same score the one
-     *                              with the minor exe_id will have a best position, just to be fair and FIFO)
-     * @param int    $exercise_id
-     * @param string $course_code
-     * @param int    $session_id
-     * @param array  $user_list
-     * @param bool   $return_string
+     * @param float|null $my_score    Normalized score (0..1) of the current user
+     * @param int        $my_exe_id   Execution ID of the current user attempt
+     * @param int        $exercise_id Exercise identifier
+     * @param string|int $course_code Course code or course ID (for BC we keep the param name)
+     * @param int        $session_id  Session identifier
+     * @param array      $user_list   List of users in the ranking
+     * @param bool       $return_string If true, returns "position/count" string, otherwise array
      *
-     * @return int the position of the user between his friends in a course
-     *             (or course within a session)
+     * @return string|array
      */
     public static function get_exercise_result_ranking(
         $my_score,
         $my_exe_id,
         $exercise_id,
-        $course_code,
+        $courseId,
         $session_id = 0,
         $user_list = [],
         $return_string = true
     ) {
-        //No score given we return
+        // No score given, return placeholder
         if (is_null($my_score)) {
             return '-';
         }
+
+        // No user list, nothing to compare with
         if (empty($user_list)) {
             return '-';
         }
 
+        $courseId = (int) $courseId;
+        $exercise_id = (int) $exercise_id;
+        $session_id = (int) $session_id;
+
         $best_attempts = [];
+
+        // Get best attempt for each user
         foreach ($user_list as $user_data) {
-            $user_id = $user_data['user_id'];
+            if (is_array($user_data) && isset($user_data['user_id'])) {
+                $user_id = (int) $user_data['user_id'];
+            } else {
+                // Backwards-compatibility: if item is a plain user_id
+                $user_id = (int) $user_data;
+            }
+
             $best_attempts[$user_id] = self::get_best_attempt_by_user(
                 $user_id,
                 $exercise_id,
-                $course_code,
+                $courseId,
                 $session_id
             );
         }
 
         if (empty($best_attempts)) {
             return 1;
-        } else {
-            $position = 1;
-            $my_ranking = [];
-            foreach ($best_attempts as $user_id => $result) {
-                if (!empty($result['max_score']) && 0 != intval($result['max_score'])) {
-                    $my_ranking[$user_id] = $result['score'] / $result['max_score'];
-                } else {
-                    $my_ranking[$user_id] = 0;
-                }
+        }
+
+        $my_ranking = [];
+        foreach ($best_attempts as $user_id => $result) {
+            if (!empty($result['max_score']) && 0 != (float) $result['max_score']) {
+                $my_ranking[$user_id] = $result['score'] / $result['max_score'];
+            } else {
+                $my_ranking[$user_id] = 0;
             }
-            //if (!empty($my_ranking)) {
-            asort($my_ranking);
-            $position = count($my_ranking);
-            if (!empty($my_ranking)) {
-                foreach ($my_ranking as $user_id => $ranking) {
-                    if ($my_score >= $ranking) {
-                        if ($my_score == $ranking && isset($best_attempts[$user_id]['exe_id'])) {
-                            $exe_id = $best_attempts[$user_id]['exe_id'];
-                            if ($my_exe_id < $exe_id) {
-                                $position--;
-                            }
-                        } else {
+        }
+
+        // Sort ascending by score
+        asort($my_ranking);
+
+        $position = count($my_ranking);
+        if (!empty($my_ranking)) {
+            foreach ($my_ranking as $user_id => $ranking) {
+                if ($my_score >= $ranking) {
+                    if ($my_score == $ranking && isset($best_attempts[$user_id]['exe_id'])) {
+                        $exe_id = $best_attempts[$user_id]['exe_id'];
+                        if ($my_exe_id < $exe_id) {
                             $position--;
                         }
+                    } else {
+                        $position--;
                     }
                 }
             }
-            //}
-            $return_value = [
-                'position' => $position,
-                'count' => count($my_ranking),
-            ];
-
-            if ($return_string) {
-                if (!empty($position) && !empty($my_ranking)) {
-                    $return_value = $position.'/'.count($my_ranking);
-                } else {
-                    $return_value = '-';
-                }
-            }
-
-            return $return_value;
         }
+
+        $return_value = [
+            'position' => $position,
+            'count' => count($my_ranking),
+        ];
+
+        if ($return_string) {
+            if (!empty($position) && !empty($my_ranking)) {
+                $return_value = $position.'/'.count($my_ranking);
+            } else {
+                $return_value = '-';
+            }
+        }
+
+        return $return_value;
     }
 
     /**
@@ -3637,14 +3646,17 @@ EOT;
     }
 
     /**
-     * Get the best score in a exercise (NO Exercises in LPs ).
+     * Returns the best attempt data for a given user and exercise.
      *
-     * @param int $user_id
-     * @param int $exercise_id
-     * @param int $courseId
-     * @param int $session_id
+     * This method accepts either a course ID (int) or a course code (string)
+     * and always converts it to the internal course ID (c_id) used in tracking tables.
      *
-     * @return array
+     * @param int        $user_id
+     * @param int        $exercise_id
+     * @param int|string $courseId   Course ID (c_id) or course code
+     * @param int        $session_id
+     *
+     * @return array Best attempt row from track_e_exercises (or empty array if none)
      */
     public static function get_best_attempt_by_user(
         $user_id,
@@ -3652,6 +3664,13 @@ EOT;
         $courseId,
         $session_id
     ) {
+        // Make sure courseId is an integer course real_id
+        $courseId = (int) $courseId;
+        $exercise_id = (int) $exercise_id;
+        $session_id = (int) $session_id;
+        $user_id = (int) $user_id;
+
+        // Load all attempts for this user / exercise / course / session
         $user_results = Event::get_all_exercise_results(
             $exercise_id,
             $courseId,
@@ -3659,13 +3678,16 @@ EOT;
             false,
             $user_id
         );
+
         $best_score_data = [];
         $best_score = 0;
+
         if (!empty($user_results)) {
             foreach ($user_results as $result) {
                 if (!empty($result['max_score']) && 0 != (float) $result['max_score']) {
                     $score = $result['score'] / $result['max_score'];
                     if ($score >= $best_score) {
+                        // Keep the best attempt (highest ratio score/max_score)
                         $best_score = $score;
                         $best_score_data = $result;
                     }
@@ -4703,9 +4725,9 @@ EOT;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
         if (true === $save_user_result && in_array(
-            $objExercise->getFeedbackType(),
-            [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
-        )) {
+                $objExercise->getFeedbackType(),
+                [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
+            )) {
             $loadChoiceFromSession = true;
             $fromDatabase = false;
             $exerciseResult = Session::read('exerciseResult');
@@ -5384,10 +5406,10 @@ EOT;
      */
     public static function getTotalScoreRibbon(
         Exercise $objExercise,
-        $score,
-        $weight,
-        $checkPassPercentage = false,
-        $countPendingQuestions = 0
+                 $score,
+                 $weight,
+                 $checkPassPercentage = false,
+                 $countPendingQuestions = 0
     ) {
         $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
         if (1 === $hide) {

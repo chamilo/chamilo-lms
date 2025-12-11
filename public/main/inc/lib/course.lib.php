@@ -576,15 +576,15 @@ class CourseManager
         $visibility = (int) $course->getVisibility();
 
         if (in_array($visibility, [
-                Course::CLOSED,
-                //Course::REGISTERED,
-                Course::HIDDEN,
+            Course::CLOSED,
+            //Course::REGISTERED,
+            Course::HIDDEN,
         ])) {
             Display::addFlash(
                 Display::return_message(
                     get_lang('Subscribing not allowed'),
                     'warning'
-        )
+                )
             );
 
             return false;
@@ -1947,7 +1947,7 @@ class CourseManager
 
         // We get the coach for the given course in a given session.
         $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-               " WHERE session_id = $session_id AND c_id = $courseId AND status = ".SessionEntity::COURSE_COACH;
+            " WHERE session_id = $session_id AND c_id = $courseId AND status = ".SessionEntity::COURSE_COACH;
         $rs = Database::query($sql);
         while ($user = Database::fetch_array($rs)) {
             $userInfo = api_get_user_info($user['user_id']);
@@ -2209,7 +2209,8 @@ class CourseManager
         $course_code,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
-        $orderList = false
+        $orderList = false,
+        bool $showIcon = true
     ) {
         $teacher_list = self::get_teacher_list_from_course_code($course_code);
         $html = '';
@@ -2239,8 +2240,16 @@ class CourseManager
                     $html .= '<ul class="user-teacher">';
                     foreach ($list as $teacher) {
                         $html .= '<li>';
-                        $html .= Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_TINY);
-                        $html .= ' '.$teacher;
+                        if ($showIcon) {
+                            // Icon only when requested
+                            $html .= Display::getMdiIcon(
+                                    ObjectIcon::TEACHER,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_TINY
+                                ).' ';
+                        }
+                        $html .= $teacher;
                         $html .= '</li>';
                     }
                     $html .= '</ul>';
@@ -2317,7 +2326,8 @@ class CourseManager
         $courseId = 0,
         $separator = self::USER_SEPARATOR,
         $add_link_to_profile = false,
-        $orderList = false
+        $orderList = false,
+        bool $showIcon = true
     ) {
         $coachList = self::get_coachs_from_course($session_id, $courseId);
         $course_coachs = [];
@@ -2344,16 +2354,17 @@ class CourseManager
             if (true === $orderList) {
                 $html .= '<ul class="user-coachs">';
                 foreach ($course_coachs as $coachs) {
-                    $html .= Display::tag(
-                        'li',
-                        Display::getMdiIcon(
+                    $icon = $showIcon
+                        ? Display::getMdiIcon(
                             ObjectIcon::TEACHER,
                             'ch-tool-icon',
                             null,
                             ICON_SIZE_TINY,
                             get_lang('Coach')
-                        ).' '.$coachs
-                    );
+                        ).' '
+                        : '';
+
+                    $html .= Display::tag('li', $icon.$coachs);
                 }
                 $html .= '</ul>';
             } else {
@@ -3396,10 +3407,10 @@ class CourseManager
                 if (api_is_allowed_to_edit() && $action_show) {
                     //delete
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(
-                        get_lang('Please confirm your choice'),
-                                ENT_QUOTES,
-                        $charset
-                    )).'\')) return false;">';
+                            get_lang('Please confirm your choice'),
+                            ENT_QUOTES,
+                            $charset
+                        )).'\')) return false;">';
                     $data .= Display::getMdiIcon(
                         ActionIcon::DELETE,
                         'ch-tool-icon',
@@ -3766,13 +3777,13 @@ class CourseManager
                     $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course['real_id'];
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
-                           .Display::getMdiIcon('folder-open-outline').'</a>';
+                            .Display::getMdiIcon('folder-open-outline').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 } else {
                     if (Course::CLOSED != $course_info['visibility'] && $load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
-                           .Display::getMdiIcon('folder-open-outline').'</a>';
+                            .Display::getMdiIcon('folder-open-outline').'</a>';
                         $params['document'] .= Display::div('', ['id' => 'document_result_'.$courseId.'_0', 'class' => 'document_preview_container']);
                     }
                 }
@@ -3948,7 +3959,7 @@ class CourseManager
                 $params['edit_actions'] .= api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cid='.$course_info['real_id'];
                 if ($load_dirs) {
                     $params['document'] = '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview btn btn--plain btn-sm" href="javascript:void(0);">'
-                               .Display::getMdiIcon('folder-open-outline').'</a>';
+                        .Display::getMdiIcon('folder-open-outline').'</a>';
                     $params['document'] .= Display::div(
                         '',
                         [
@@ -4216,12 +4227,12 @@ class CourseManager
                 }
                 if ($hasRequirements) {
                     $params['requirements'] = CoursesAndSessionsCatalog::getRequirements(
-                    $course_info['real_id'],
-                    SequenceResource::COURSE_TYPE,
-                    false,
+                        $course_info['real_id'],
+                        SequenceResource::COURSE_TYPE,
+                        false,
                         false,
                         $session_id
-                );
+                    );
                 }
             }
         }
@@ -4299,7 +4310,7 @@ class CourseManager
                 '0000-00-00 00:00:00' === $sessionInfo['access_start_date'] ||
                 empty($sessionInfo['access_start_date']) ||
                 '0000-00-00' === $sessionInfo['access_start_date']
-                ) {
+            ) {
                 $sessionInfo['dates'] = '';
                 if ('true' === api_get_setting('show_session_coach')) {
                     $sessionInfo['coach'] = get_lang('General coach').': '.$sessionCoachName;
@@ -4322,13 +4333,13 @@ class CourseManager
             $user_course_category = $course_info['user_course_cat'];
         }
         $output = [
-                $user_course_category,
-                $html,
-                $course_info['id_session'],
-                $sessionInfo,
-                'active' => $active,
-                'session_category_id' => $session_category_id,
-            ];
+            $user_course_category,
+            $html,
+            $course_info['id_session'],
+            $sessionInfo,
+            'active' => $active,
+            'session_category_id' => $session_category_id,
+        ];
 
         if (SkillModel::isAllowed($user_id, false)) {
             $em = Database::getManager();
@@ -4935,7 +4946,7 @@ class CourseManager
                     get_lang('Subscribe').' '.
                     Display::getMdiIcon('login'),
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].
-                     '/index.php?action=subscribe&sec_token='.$stok,
+                    '/index.php?action=subscribe&sec_token='.$stok,
                     [
                         'class' => 'btn btn--success btn-sm',
                         'title' => get_lang('Subscribe'),
@@ -6319,10 +6330,10 @@ class CourseManager
             $course_title = Display::url($course_info['title'], $course_title_url);
         } else {
             $course_title = $course_info['title'].' '.Display::tag(
-                'span',
-                get_lang('(the course is currently closed)'),
-                ['class' => 'item_closed']
-            );
+                    'span',
+                    get_lang('(the course is currently closed)'),
+                    ['class' => 'item_closed']
+                );
         }
 
         // Start displaying the course block itself
@@ -6651,12 +6662,12 @@ class CourseManager
     {
         if (UrlManager::getCountAccessUrlFromCourse($courseId) > 1) {
             return '&nbsp;'.Display::getMdiIcon(
-                'link',
-                null,
-                null,
-                null,
-                get_lang('This course is used in at least one other portal')
-            );
+                    'link',
+                    null,
+                    null,
+                    null,
+                    get_lang('This course is used in at least one other portal')
+                );
         }
 
         return '';

@@ -21,13 +21,8 @@ use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use ChamiloSession;
 use Doctrine\ORM\EntityManagerInterface;
-use Laminas\Permissions\Acl\Acl;
-use Laminas\Permissions\Acl\Resource\GenericResource;
-use Laminas\Permissions\Acl\Role\GenericRole;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Core\Authentication\Token\NullToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -60,21 +55,12 @@ class ResourceNodeVoter extends Voter
 
     public static function getReaderMask(): int
     {
-        $builder = (new MaskBuilder())
-            ->add(self::VIEW)
-        ;
-
-        return $builder->get();
+        return ResourceAclHelper::getPermissionMask([self::VIEW]);
     }
 
     public static function getEditorMask(): int
     {
-        $builder = (new MaskBuilder())
-            ->add(self::VIEW)
-            ->add(self::EDIT)
-        ;
-
-        return $builder->get();
+        return ResourceAclHelper::getPermissionMask([self::VIEW, self::EDIT]);
     }
 
     protected function supports(string $attribute, $subject): bool
@@ -357,7 +343,6 @@ class ResourceNodeVoter extends Voter
 
         // Getting rights from the link
         $rightsFromResourceLink = $link->getResourceRights();
-        $allowAnonsToView = false;
 
         $rights = [];
         if ($rightsFromResourceLink->count() > 0) {
@@ -400,7 +385,6 @@ class ResourceNodeVoter extends Voter
             if (ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
                 && $link->getCourse()->isPublic()
             ) {
-                $allowAnonsToView = true;
                 $resourceRight = (new ResourceRight())
                     ->setMask($readerMask)
                     ->setRole('IS_AUTHENTICATED_ANONYMOUSLY')
@@ -454,7 +438,7 @@ class ResourceNodeVoter extends Voter
             $rights[] = $resourceRight;
         }
 
-        return $this->resourceAclHelper->isAllowed($attribute, $link, $rights, $allowAnonsToView);
+        return $this->resourceAclHelper->isAllowed($attribute, $link, $rights);
     }
 
     /**

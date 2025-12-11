@@ -15,6 +15,8 @@ Feature: Install portal
       | dbUsernameForm | root |
       | dbPassForm | root |
       | dbNameForm | master |
+    Then I press "Check database connection"
+    Then wait the page to be loaded when ready
     Then I press "step4"
     Then I should see "Step 5 - Configuration settings"
     Then I fill in the following:

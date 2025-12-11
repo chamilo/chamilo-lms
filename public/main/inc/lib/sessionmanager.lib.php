@@ -3276,7 +3276,7 @@ class SessionManager
         $sday_end
     ) {
         $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $name = html_filter(trim($sname));
+        $name = Security::remove_XSS(trim($sname));
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
         $day_start = intval($sday_start);

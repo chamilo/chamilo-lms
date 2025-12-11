@@ -8340,7 +8340,7 @@ class Exercise
             }
 
             echo '<div class="row"><div class="pull-right">'.$paginationCounter.'</div></div>';
-            echo Display::div($exercise_actions, ['class' => 'form-actions']);
+            echo Display::div($exercise_actions, ['class' => 'exercise_actions']);
             echo '</div>';
         }
     }

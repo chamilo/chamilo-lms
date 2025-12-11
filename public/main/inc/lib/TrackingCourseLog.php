@@ -3,296 +3,247 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Enums\ToolIcon;
 use ChamiloSession as Session;
 
 class TrackingCourseLog
 {
     /**
-     * Counts the item resources and returns the result as a mixed type.
+     * Counts course resources using resource_link / resource_node.
      */
     public static function countItemResources(): mixed
     {
         $sessionId = api_get_session_id();
-        $courseId = api_get_course_int_id();
+        $courseId  = api_get_course_int_id();
 
-        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tableUser         = Database::get_main_table(TABLE_MAIN_USER);
+        $tableSession      = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tableResourceLink = Database::get_main_table('resource_link');
+        $tableResourceNode = Database::get_main_table('resource_node');
+        $tableResourceType = Database::get_main_table('resource_type');
 
-        $sql = "SELECT count(tool) AS total_number_of_items
-                FROM $tableItemProperty track_resource, $tableUser user
-                WHERE
-                    track_resource.c_id = $courseId AND
-                    track_resource.insert_user_id = user.user_id AND
-                    session_id ".(empty($sessionId) ? ' IS NULL ' : " = $sessionId ");
+        // Resource types we want to see in this report.
+        $allowedTypes = [
+            'files',
+            'lps',
+            'exercises',
+            'glossaries',
+            'links',
+            'course_descriptions',
+            'announcements',
+            'thematics',
+            'thematic_advance',
+            'thematic_plan',
+        ];
+        $typesList = "'" . implode("','", $allowedTypes) . "'";
 
-        if (isset($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (
-                        user.username LIKE '%".$keyword."%' OR
-                        lastedit_type LIKE '%".$keyword."%' OR
-                        tool LIKE '%".$keyword."%'
-                    )";
+        $sql = "SELECT COUNT(*) AS total_number_of_items
+            FROM $tableResourceLink rl
+            INNER JOIN $tableResourceNode rn ON rn.id = rl.resource_node_id
+            INNER JOIN $tableResourceType rt ON rt.id = rn.resource_type_id
+            LEFT JOIN $tableUser u ON u.id = rn.creator_id
+            LEFT JOIN $tableSession s ON s.id = rl.session_id
+            WHERE rl.c_id = $courseId";
+
+        if (empty($sessionId)) {
+            $sql .= ' AND rl.session_id IS NULL';
+        } else {
+            $sessionId = (int) $sessionId;
+            $sql .= " AND rl.session_id = $sessionId";
         }
 
-        $sql .= " AND tool IN (
-                    'document',
-                    'learnpath',
-                    'quiz',
-                    'glossary',
-                    'link',
-                    'course_description',
-                    'announcement',
-                    'thematic',
-                    'thematic_advance',
-                    'thematic_plan'
-                )";
+        $sql .= " AND rt.title IN ($typesList)";
+
+        if (!empty($_GET['keyword'])) {
+            $keyword = Database::escape_string(trim((string) $_GET['keyword']));
+            $sql .= " AND (
+            u.username LIKE '%$keyword%' OR
+            rn.title   LIKE '%$keyword%' OR
+            rt.title   LIKE '%$keyword%'
+        )";
+        }
+
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->total_number_of_items;
+        return $obj ? (int) $obj->total_number_of_items : 0;
     }
 
     /**
-     * Retrieves item resources data with pagination and sorting options.
+     * Retrieves resource log data using resource_link/resource_node.
      */
     public static function getItemResourcesData($from, $numberOfItems, $column, $direction): array
     {
         $sessionId = api_get_session_id();
-        $courseId = api_get_course_int_id();
+        $courseId  = api_get_course_int_id();
 
-        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tableSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $column = (int) $column;
-        $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
+        $tableUser         = Database::get_main_table(TABLE_MAIN_USER);
+        $tableSession      = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tableSessionUser  = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tableResourceLink = Database::get_main_table('resource_link');
+        $tableResourceNode = Database::get_main_table('resource_node');
+        $tableResourceType = Database::get_main_table('resource_type');
+
+        $column    = (int) $column;
+        $direction = strtolower(trim((string) $direction));
+        $direction = in_array($direction, ['asc', 'desc'], true) ? $direction : 'asc';
+
+        // Resource types we want to see in this report.
+        $allowedTypes = [
+            'files',
+            'lps',
+            'exercises',
+            'glossaries',
+            'links',
+            'course_descriptions',
+            'announcements',
+            'thematics',
+            'thematic_advance',
+            'thematic_plan',
+        ];
+        $typesList = "'" . implode("','", $allowedTypes) . "'";
 
         $sql = "SELECT
-                    tool as col0,
-                    lastedit_type as col1,
-                    ref as ref,
-                    user.username as col3,
-                    insert_date as col6,
-                    visibility as col7,
-                    user.user_id as user_id
-                FROM $tableItemProperty track_resource, $tableUser user
-                WHERE
-                  track_resource.c_id = $courseId AND
-                  track_resource.insert_user_id = user.user_id AND
-                  session_id ".(empty($sessionId) ? ' IS NULL ' : " = $sessionId ");
+                rl.id            AS ref,
+                rl.created_at    AS col6,
+                rl.visibility    AS col7,
+                rn.title         AS document_title,
+                rt.title         AS resource_type_title,
+                creator.id       AS user_id,
+                creator.username AS col3,
+                s.title           AS session_name,
+                coach.username   AS coach_username
+            FROM $tableResourceLink rl
+            INNER JOIN $tableResourceNode rn ON rn.id = rl.resource_node_id
+            INNER JOIN $tableResourceType rt ON rt.id = rn.resource_type_id
+            LEFT JOIN $tableUser creator ON creator.id = rn.creator_id
+            LEFT JOIN $tableSession s ON s.id = rl.session_id
+            LEFT JOIN $tableSessionUser su ON su.session_id = rl.session_id
+            LEFT JOIN $tableUser coach ON coach.id = su.user_id
+            WHERE rl.c_id = $courseId";
 
-        if (isset($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (
-                        user.username LIKE '%".$keyword."%' OR
-                        lastedit_type LIKE '%".$keyword."%' OR
-                        tool LIKE '%".$keyword."%'
-                     ) ";
-        }
-
-        $sql .= " AND tool IN (
-                    'document',
-                    'learnpath',
-                    'quiz',
-                    'glossary',
-                    'link',
-                    'course_description',
-                    'announcement',
-                    'thematic',
-                    'thematic_advance',
-                    'thematic_plan'
-                )";
-
-        if (0 == $column) {
-            $column = '0';
-        }
-        if ('' != $column && '' != $direction) {
-            if (2 != $column && 4 != $column) {
-                $sql .= " ORDER BY col$column $direction";
-            }
+        if (empty($sessionId)) {
+            $sql .= ' AND rl.session_id IS NULL';
         } else {
-            $sql .= " ORDER BY col6 DESC ";
+            $sessionId = (int) $sessionId;
+            $sql .= " AND rl.session_id = $sessionId";
         }
 
-        $from = intval($from);
+        $sql .= " AND rt.title IN ($typesList)";
+
+        if (!empty($_GET['keyword'])) {
+            $keyword = Database::escape_string(trim((string) $_GET['keyword']));
+            $sql .= " AND (
+                creator.username LIKE '%$keyword%' OR
+                rn.title         LIKE '%$keyword%' OR
+                rt.title         LIKE '%$keyword%'
+            )";
+        }
+
+        // Decide ORDER BY based on requested column.
+        switch ($column) {
+            case 0: // Tool
+                $orderBy = 'rt.title';
+                break;
+            case 2: // Session
+                $orderBy = 's.title';
+                break;
+            case 3: // Username
+                $orderBy = 'creator.username';
+                break;
+            case 5: // Document
+                $orderBy = 'rn.title';
+                break;
+            case 6: // Date
+            default:
+                $orderBy = 'rl.created_at';
+                break;
+        }
+
+        $sql .= " ORDER BY $orderBy $direction";
+
+        $from = (int) $from;
         if ($from) {
-            $numberOfItems = intval($numberOfItems);
-            $sql .= " LIMIT $from, $numberOfItems ";
+            $numberOfItems = (int) $numberOfItems;
+            $sql .= " LIMIT $from, $numberOfItems";
         }
 
-        $res = Database::query($sql);
+        $res       = Database::query($sql);
         $resources = [];
-        $thematicTools = ['thematic', 'thematic_advance', 'thematic_plan'];
+
         while ($row = Database::fetch_array($res)) {
-            $ref = $row['ref'];
-            $tableName = self::getToolNameTable($row['col0']);
-            $tableTool = Database::get_course_table($tableName['table_name']);
+            $legacyTool = self::mapResourceTypeTitleToLegacyTool((string) $row['resource_type_title']);
 
-            $id = $tableName['id_tool'];
-            $recorset = false;
-
-            if (in_array($row['col0'], ['thematic_plan', 'thematic_advance'])) {
-                $tblThematic = Database::get_course_table(TABLE_THEMATIC);
-                $sql = "SELECT thematic_id FROM $tableTool
-                        WHERE c_id = $courseId AND id = $ref";
-                $rsThematic = Database::query($sql);
-                if (Database::num_rows($rsThematic)) {
-                    $rowThematic = Database::fetch_array($rsThematic);
-                    $thematicId = $rowThematic['thematic_id'];
-
-                    $sql = "SELECT session.id, session.name, user.username
-                            FROM $tblThematic t, $tableSession session, $tableUser user
-                            WHERE
-                              t.c_id = $courseId AND
-                              t.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              t.id = $thematicId";
-                    $recorset = Database::query($sql);
-                }
-            } else {
-                $sql = "SELECT session.id, session.name, user.username
-                          FROM $tableTool tool, $tableSession session, $tableUser user
-                          WHERE
-                              tool.c_id = $courseId AND
-                              tool.session_id = session.id AND
-                              session.id_coach = user.user_id AND
-                              tool.$id = $ref";
-                $recorset = Database::query($sql);
+            if (null === $legacyTool) {
+                // Ignore resource types that do not map to a legacy tool.
+                continue;
             }
 
-            if (!empty($recorset)) {
-                $obj = Database::fetch_object($recorset);
+            // Build a clean row so SortableTable only sees columns 0..6.
+            $displayRow = [];
 
-                $nameSession = '';
-                $coachName = '';
-                if (!empty($obj)) {
-                    $nameSession = $obj->name;
-                    $coachName = $obj->username;
+            // Internal legacy columns used by CSV/XLS export.
+            $displayRow['ref']                 = (int) $row['ref'];
+            $displayRow['col6']                = $row['col6']; // created_at
+            $displayRow['col7']                = (int) $row['col7']; // visibility
+            $displayRow['user_id']             = isset($row['user_id']) ? (int) $row['user_id'] : 0;
+            $displayRow['col3']                = $row['col3']; // username
+            $displayRow['document_title']      = $row['document_title'] ?? '';
+            $displayRow['resource_type_title'] = $row['resource_type_title'];
+            $displayRow['session_name']        = $row['session_name'] ?? '';
+            $displayRow['coach_username']      = $row['coach_username'] ?? '';
+            $displayRow['col0']                = $legacyTool;
+            $displayRow['col1']                = 'Created';
+
+            // Column 0: Tool.
+            $displayRow[0] = get_lang('Tool'.api_ucfirst($legacyTool));
+
+            // Column 1: Event type.
+            $displayRow[1] = get_lang($displayRow['col1']);
+
+            // Column 2: Session + coach.
+            $sessionText = '';
+            if (!empty($displayRow['session_name'])) {
+                $sessionText = $displayRow['session_name'];
+                if (!empty($displayRow['coach_username'])) {
+                    $sessionText .= '<br />'.get_lang('Coach').': '.$displayRow['coach_username'];
                 }
-
-                $urlTool = api_get_path(WEB_CODE_PATH).$tableName['link_tool'];
-
-                if ($row['col6'] != 2) {
-                    if (in_array($row['col0'], $thematicTools)) {
-                        $expThematicTool = explode('_', $row['col0']);
-                        $thematicTooltitle = '';
-                        if (is_array($expThematicTool)) {
-                            foreach ($expThematicTool as $exp) {
-                                $thematicTooltitle .= api_ucfirst($exp);
-                            }
-                        } else {
-                            $thematicTooltitle = api_ucfirst($row['col0']);
-                        }
-
-                        $row[0] = '<a href="'.$urlTool.'?'.api_get_cidreq().'&action=thematic_details">'.get_lang(
-                                $thematicTooltitle
-                            ).'</a>';
-                    } else {
-                        $row[0] = '<a href="'.$urlTool.'?'.api_get_cidreq().'">'.get_lang(
-                                'Tool'.api_ucfirst($row['col0'])
-                            ).'</a>';
-                    }
-                } else {
-                    $row[0] = api_ucfirst($row['col0']);
-                }
-                $row[1] = get_lang($row[1]);
-                $row[6] = api_convert_and_format_date($row['col6'], null, date_default_timezone_get());
-                $row[5] = '';
-                //@todo Improve this code please
-                switch ($tableName['table_name']) {
-                    case 'document':
-                        $sql = "SELECT tool.title as title FROM $tableTool tool
-                                WHERE c_id = $courseId AND id = $ref";
-                        $rsDocument = Database::query($sql);
-                        $objDocument = Database::fetch_object($rsDocument);
-                        if ($objDocument) {
-                            $row[5] = $objDocument->title;
-                        }
-                        break;
-                    case 'quiz':
-                    case 'course_description':
-                    case 'announcement':
-                        $sql = "SELECT title FROM $tableTool
-                                WHERE c_id = $courseId AND id = $ref";
-                        $rsDocument = Database::query($sql);
-                        $objDocument = Database::fetch_object($rsDocument);
-                        if ($objDocument) {
-                            $row[5] = $objDocument->title;
-                        }
-                        break;
-                    case 'glossary':
-                        $sql = "SELECT name FROM $tableTool
-                                WHERE c_id = $courseId AND glossary_id = $ref";
-                        $rsDocument = Database::query($sql);
-                        $objDocument = Database::fetch_object($rsDocument);
-                        if ($objDocument) {
-                            $row[5] = $objDocument->name;
-                        }
-                        break;
-                    case 'lp':
-                        $sql = "SELECT name
-                                FROM $tableTool WHERE c_id = $courseId AND id = $ref";
-                        $rsDocument = Database::query($sql);
-                        $objDocument = Database::fetch_object($rsDocument);
-                        $row[5] = $objDocument->name;
-                        break;
-                    case 'thematic_plan':
-                    case 'thematic':
-                        $rs = Database::query("SELECT title FROM $tableTool WHERE c_id = $courseId AND id = $ref");
-                        if (Database::num_rows($rs) > 0) {
-                            $obj = Database::fetch_object($rs);
-                            if ($obj) {
-                                $row[5] = $obj->title;
-                            }
-                        }
-                        break;
-                    case 'thematic_advance':
-                        $rs = Database::query("SELECT content FROM $tableTool WHERE c_id = $courseId AND id = $ref");
-                        if (Database::num_rows($rs) > 0) {
-                            $obj = Database::fetch_object($rs);
-                            if ($obj) {
-                                $row[5] = $obj->content;
-                            }
-                        }
-                        break;
-                    case 'thematic_plan':
-                        $rs = Database::query("SELECT title FROM $tableTool WHERE c_id = $courseId AND id = $ref");
-                        if (Database::num_rows($rs) > 0) {
-                            $obj = Database::fetch_object($rs);
-                            if ($obj) {
-                                $row[5] = $obj->title;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                $row2 = $nameSession;
-                if (!empty($coachName)) {
-                    $row2 .= '<br />'.get_lang('Coach').': '.$coachName;
-                }
-                $row[2] = $row2;
-                if (!empty($row['col3'])) {
-                    $userInfo = api_get_user_info($row['user_id']);
-                    $row['col3'] = Display::url(
-                        $row['col3'],
-                        $userInfo['profile_url']
-                    );
-                    $row[3] = $row['col3'];
-
-                    $ip = Tracking::get_ip_from_user_event(
-                        $row['user_id'],
-                        $row['col6'],
-                        true
-                    );
-                    if (empty($ip)) {
-                        $ip = get_lang('Unknown');
-                    }
-                    $row[4] = $ip;
-                }
-
-                $resources[] = $row;
             }
+            $displayRow[2] = $sessionText;
+
+            // Column 3: Username (linked to profile).
+            $displayRow[3] = '';
+            if (!empty($displayRow['col3']) && !empty($displayRow['user_id'])) {
+                $userInfo          = api_get_user_info($displayRow['user_id']);
+                $displayRow['col3'] = Display::url($displayRow['col3'], $userInfo['profile_url']);
+                $displayRow[3]      = $displayRow['col3'];
+            }
+
+            // Column 4: IP address.
+            $ip = '';
+            if (!empty($displayRow['user_id']) && !empty($displayRow['col6'])) {
+                $ip = Tracking::get_ip_from_user_event(
+                    (int) $displayRow['user_id'],
+                    $displayRow['col6'],
+                    true
+                );
+            }
+            if (empty($ip)) {
+                $ip = get_lang('Unknown');
+            }
+            $displayRow[4] = $ip;
+
+            // Column 5: Document title.
+            $displayRow[5] = $displayRow['document_title'];
+
+            // Column 6: Date.
+            $displayRow[6] = api_convert_and_format_date(
+                $displayRow['col6'],
+                null,
+                date_default_timezone_get()
+            );
+
+            $resources[] = $displayRow;
         }
 
         return $resources;
@@ -533,6 +484,20 @@ class TrackingCourseLog
 
     /**
      * Get data for users list in sortable with pagination.
+     *
+     * @param int         $from
+     * @param int         $numberOfItems
+     * @param int         $column
+     * @param string      $direction
+     * @param array       $conditions
+     * @param bool        $exerciseToCheckConfig
+     * @param bool        $displaySessionInfo
+     * @param string|null $courseCode
+     * @param int|null    $sessionId
+     * @param bool        $exportCsv
+     * @param array       $userIds
+     *
+     * @return array
      */
     public static function getUserData(
         $from,
@@ -548,56 +513,87 @@ class TrackingCourseLog
         array $userIds = []
     ) {
         $includeInvitedUsers = $conditions['include_invited_users'] ?? false;
-        $getCount = $conditions['get_count'] ?? false;
+        $getCount            = $conditions['get_count'] ?? false;
 
-        $csvContent = [];
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $accessUrlId = api_get_current_access_url_id();
+        $csvContent     = [];
+        $tblUser        = Database::get_main_table(TABLE_MAIN_USER);
+        $tblUrlRelUser  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $accessUrlId    = api_get_current_access_url_id();
 
-        if (!empty($userIds) && is_array($userIds)) {
-            $userIds = array_map('intval', $userIds);
-            $conditionUser = " WHERE user.id IN (".implode(',', $userIds).") ";
+        // ---------------------------------------------------------------------
+        // Resolve course / session context if not explicitly provided
+        // ---------------------------------------------------------------------
+        if ($sessionId === null) {
+            $sessionId = (int) api_get_session_id();
+        }
+
+        if (empty($courseCode)) {
+            $courseInfo = api_get_course_info(); // current course
         } else {
-            $conditionUser = " WHERE user.id = " . (int) $userIds;
+            $courseInfo = api_get_course_info($courseCode);
         }
 
+        if (empty($courseInfo)) {
+            // Failsafe: no course context, nothing to show
+            return [];
+        }
+
+        $courseId   = (int) $courseInfo['real_id'];
+        $courseCode = $courseInfo['code'] ?? $courseCode;
+
+        // ---------------------------------------------------------------------
+        // Build user filter (single user vs list of users)
+        // ---------------------------------------------------------------------
+        if (!empty($userIds) && is_array($userIds)) {
+            $userIds      = array_map('intval', $userIds);
+            $conditionUser = ' WHERE user.id IN ('.implode(',', $userIds).') ';
+        } else {
+            $conditionUser = ' WHERE user.id = '.(int) $userIds.' ';
+        }
+
+        // Simple keyword filter
         if (!empty($_GET['user_keyword'])) {
-            $keyword = trim(Database::escape_string($_GET['user_keyword']));
+            $keyword       = trim(Database::escape_string($_GET['user_keyword']));
             $conditionUser .= " AND (
-            user.firstname LIKE '%".$keyword."%' OR
-            user.lastname LIKE '%".$keyword."%'  OR
-            user.username LIKE '%".$keyword."%'  OR
-            user.email LIKE '%".$keyword."%'
-         ) ";
+                user.firstname LIKE '%".$keyword."%' OR
+                user.lastname  LIKE '%".$keyword."%'  OR
+                user.username  LIKE '%".$keyword."%'  OR
+                user.email     LIKE '%".$keyword."%'
+            ) ";
         }
 
-        $urlTable = '';
+        // Multiple URL restriction
+        $urlTable     = '';
         $urlCondition = '';
         if (api_is_multiple_url_enabled()) {
-            $urlTable = " INNER JOIN $tblUrlRelUser as url_users ON (user.id = url_users.user_id)";
+            $urlTable     = " INNER JOIN $tblUrlRelUser AS url_users ON (user.id = url_users.user_id)";
             $urlCondition = " AND access_url_id = '$accessUrlId'";
         }
 
+        // Exclude invited users if needed
         $invitedUsersCondition = '';
         if (!$includeInvitedUsers) {
-            $invitedUsersCondition = " AND user.status != ".INVITEE;
+            $invitedUsersCondition = ' AND user.status != '.INVITEE;
         }
 
+        // ---------------------------------------------------------------------
+        // Base SELECT
+        // ---------------------------------------------------------------------
         $select = '
-            SELECT user.id as user_id,
-                user.official_code  as col0,
-                user.lastname       as col1,
-                user.firstname      as col2,
-                user.username       as col3,
-                user.email          as col4';
+            SELECT user.id          AS user_id,
+                   user.official_code AS col0,
+                   user.lastname      AS col1,
+                   user.firstname     AS col2,
+                   user.username      AS col3,
+                   user.email         AS col4';
 
         if ($getCount) {
-            $select = ' SELECT COUNT(distinct(user.id)) as count ';
+            $select = 'SELECT COUNT(DISTINCT(user.id)) AS count';
         }
 
+        // Extra joins / where from conditions (classes, extra fields, etc.)
         $sqlInjectJoins = '';
-        $where = 'AND 1 = 1 ';
+        $where          = 'AND 1 = 1 ';
         $sqlInjectWhere = '';
         if (!empty($conditions)) {
             if (isset($conditions['inject_joins'])) {
@@ -609,7 +605,8 @@ class TrackingCourseLog
             if (isset($conditions['inject_where'])) {
                 $sqlInjectWhere = $conditions['inject_where'];
             }
-            $injectExtraFields = !empty($conditions['inject_extra_fields']) ? $conditions['inject_extra_fields'] : 1;
+
+            $injectExtraFields = $conditions['inject_extra_fields'] ?? 1;
             $injectExtraFields = rtrim($injectExtraFields, ', ');
             if (false === $getCount) {
                 $select .= " , $injectExtraFields";
@@ -617,7 +614,7 @@ class TrackingCourseLog
         }
 
         $sql = "$select
-            FROM $tblUser as user
+            FROM $tblUser AS user
             $urlTable
             $sqlInjectJoins
             $conditionUser
@@ -625,29 +622,33 @@ class TrackingCourseLog
             $invitedUsersCondition
             $where
             $sqlInjectWhere
-            ";
+        ";
 
-        if (!in_array($direction, ['ASC', 'DESC'])) {
+        // ---------------------------------------------------------------------
+        // Sorting / limits
+        // ---------------------------------------------------------------------
+        $direction = strtoupper($direction);
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
             $direction = 'ASC';
         }
 
-        $column = $column <= 2 ? (int) $column : 0;
-        $from = (int) $from;
+        $column        = (int) $column;
+        $from          = (int) $from;
         $numberOfItems = (int) $numberOfItems;
 
         if ($getCount) {
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
-            return $row['count'];
+            return (int) $row['count'];
         }
 
         $sortByFirstName = api_sort_by_first_name();
-
         if ($sortByFirstName) {
-            if ($column == 1) {
+            // Invert columns 1/2 if we sort by firstname
+            if (1 === $column) {
                 $column = 2;
-            } elseif ($column == 2) {
+            } elseif (2 === $column) {
                 $column = 1;
             }
         }
@@ -655,53 +656,81 @@ class TrackingCourseLog
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from, $numberOfItems";
 
-        $res = Database::query($sql);
+        $res   = Database::query($sql);
         $users = [];
 
-        $courseInfo = api_get_course_info($courseCode);
-        $courseId = $courseInfo['real_id'];
-
-        $totalSurveys = 0;
+        // ---------------------------------------------------------------------
+        // Course data required for progress / scores
+        // ---------------------------------------------------------------------
+        $totalSurveys  = 0;
         $totalExercises = ExerciseLib::get_all_exercises(
             $courseInfo,
             $sessionId
         );
 
+        // Preload survey info only when we are outside a session
+        $surveyUserList = [];
         if (empty($sessionId)) {
-            $surveyUserList = [];
-            $surveyList = SurveyManager::get_surveys($courseCode);
-            if ($surveyList) {
+            $courseCodeForSurvey = $courseCode;
+            $surveyList          = [];
+
+            if (!empty($courseCodeForSurvey)) {
+                $surveyList = SurveyManager::get_surveys($courseCodeForSurvey);
+            }
+
+            if (!empty($surveyList)) {
                 $totalSurveys = count($surveyList);
+
                 foreach ($surveyList as $survey) {
+                    if (!is_array($survey)) {
+                        continue;
+                    }
+
+                    // Support both "survey_id" and "id"
+                    $surveyId = $survey['survey_id'] ?? ($survey['id'] ?? null);
+                    $surveyId = (int) $surveyId;
+
+                    if ($surveyId <= 0) {
+                        continue;
+                    }
+
                     $userList = SurveyManager::get_people_who_filled_survey(
-                        $survey['survey_id'],
+                        $surveyId,
                         false,
                         $courseId
                     );
 
-                    foreach ($userList as $user_id) {
-                        isset($surveyUserList[$user_id]) ? $surveyUserList[$user_id]++ : $surveyUserList[$user_id] = 1;
+                    foreach ($userList as $userId) {
+                        if (isset($surveyUserList[$userId])) {
+                            $surveyUserList[$userId]++;
+                        } else {
+                            $surveyUserList[$userId] = 1;
+                        }
                     }
                 }
             }
         }
 
-        $urlBase = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true&cid='.$courseId.
-            '&course='.$courseCode.'&origin=tracking_course&sid='.$sessionId;
+        $urlBase = api_get_path(WEB_CODE_PATH).'my_space/myStudents.php?details=true'
+            .'&cid='.$courseId
+            .'&course='.$courseCode
+            .'&origin=tracking_course'
+            .'&sid='.$sessionId;
 
         Session::write('user_id_list', []);
         $userIdList = [];
 
+        // Exercises to show as extra columns (best attempt)
+        $exerciseResultsToCheck = [];
         if ($exerciseToCheckConfig) {
             $addExerciseOption = api_get_setting('exercise.add_exercise_best_attempt_in_report', true);
-            $exerciseResultsToCheck = [];
-            if (!empty($addExerciseOption) && isset($addExerciseOption['courses']) &&
-                isset($addExerciseOption['courses'][$courseCode])
+            if (!empty($addExerciseOption)
+                && isset($addExerciseOption['courses'], $addExerciseOption['courses'][$courseCode])
             ) {
                 foreach ($addExerciseOption['courses'][$courseCode] as $exerciseId) {
                     $exercise = new Exercise();
                     $exercise->read($exerciseId);
-                    if ($exercise->iid) {
+                    if (!empty($exercise->iid)) {
                         $exerciseResultsToCheck[] = $exercise;
                     }
                 }
@@ -710,16 +739,24 @@ class TrackingCourseLog
 
         $lpShowMaxProgress = 'true' === api_get_setting('lp.lp_show_max_progress_instead_of_average');
         if ('true' === api_get_setting('lp.lp_show_max_progress_or_average_enable_course_level_redefinition')) {
-            $lpShowProgressCourseSetting = api_get_course_setting('lp_show_max_or_average_progress', $courseInfo, true);
-            if (in_array($lpShowProgressCourseSetting, ['max', 'average'])) {
+            $lpShowProgressCourseSetting = api_get_course_setting(
+                'lp_show_max_or_average_progress',
+                $courseInfo,
+                true
+            );
+            if (in_array($lpShowProgressCourseSetting, ['max', 'average'], true)) {
                 $lpShowMaxProgress = ('max' === $lpShowProgressCourseSetting);
             }
         }
 
+        // ---------------------------------------------------------------------
+        // Main per-user loop
+        // ---------------------------------------------------------------------
         while ($user = Database::fetch_array($res, 'ASSOC')) {
-            $userIdList[] = $user['user_id'];
+            $userIdList[]          = $user['user_id'];
             $user['official_code'] = $user['col0'];
-            $user['username'] = $user['col3'];
+            $user['username']      = $user['col3'];
+
             $user['time'] = api_time_to_hms(
                 Tracking::get_time_spent_on_the_course(
                     $user['user_id'],
@@ -763,7 +800,6 @@ class TrackingCourseLog
                 $courseId,
                 $sessionId
             );
-
             $user['exercise_progress'] = $totalUserExercise;
 
             $totalUserExercise = Tracking::get_exercise_student_average_best_attempt(
@@ -772,21 +808,17 @@ class TrackingCourseLog
                 $courseId,
                 $sessionId
             );
-
             $user['exercise_average_best_attempt'] = $totalUserExercise;
 
-            if (is_numeric($avgStudentScore)) {
-                $user['student_score'] = $avgStudentScore.'%';
-            } else {
-                $user['student_score'] = $avgStudentScore;
-            }
+            $user['student_score'] = is_numeric($avgStudentScore)
+                ? $avgStudentScore.'%'
+                : $avgStudentScore;
 
-            if (is_numeric($averageBestScore)) {
-                $user['student_score_best'] = $averageBestScore.'%';
-            } else {
-                $user['student_score_best'] = $averageBestScore;
-            }
+            $user['student_score_best'] = is_numeric($averageBestScore)
+                ? $averageBestScore.'%'
+                : $averageBestScore;
 
+            // Extra specific exercises as columns
             $exerciseResults = [];
             if (!empty($exerciseResultsToCheck)) {
                 foreach ($exerciseResultsToCheck as $exercise) {
@@ -822,7 +854,6 @@ class TrackingCourseLog
                 !$exportCsv
             );
 
-
             $user['count_assignments'] = Tracking::countStudentPublications(
                 $courseId,
                 $sessionId
@@ -832,7 +863,6 @@ class TrackingCourseLog
                 $courseId,
                 $sessionId
             );
-
 
             $user['lp_finalization_date'] = Tracking::getCourseLpFinalizationDate(
                 $user['user_id'],
@@ -849,62 +879,60 @@ class TrackingCourseLog
             );
 
             if ($exportCsv) {
-                if (!empty($user['first_connection'])) {
-                    $user['first_connection'] = api_get_local_time($user['first_connection']);
-                } else {
-                    $user['first_connection'] = '-';
-                }
-                if (!empty($user['last_connection'])) {
-                    $user['last_connection'] = api_get_local_time($user['last_connection']);
-                } else {
-                    $user['last_connection'] = '-';
-                }
-                if (!empty($user['lp_finalization_date'])) {
-                    $user['lp_finalization_date'] = api_get_local_time($user['lp_finalization_date']);
-                } else {
-                    $user['lp_finalization_date'] = '-';
-                }
-                if (!empty($user['quiz_finalization_date'])) {
-                    $user['quiz_finalization_date'] = api_get_local_time($user['quiz_finalization_date']);
-                } else {
-                    $user['quiz_finalization_date'] = '-';
-                }
+                $user['first_connection']       = !empty($user['first_connection'])
+                    ? api_get_local_time($user['first_connection'])
+                    : '-';
+                $user['last_connection']        = !empty($user['last_connection'])
+                    ? api_get_local_time($user['last_connection'])
+                    : '-';
+                $user['lp_finalization_date']   = !empty($user['lp_finalization_date'])
+                    ? api_get_local_time($user['lp_finalization_date'])
+                    : '-';
+                $user['quiz_finalization_date'] = !empty($user['quiz_finalization_date'])
+                    ? api_get_local_time($user['quiz_finalization_date'])
+                    : '-';
             }
 
             if (empty($sessionId)) {
-                $user['survey'] = ($surveyUserList[$user['user_id']] ?? 0).' / '.$totalSurveys;
+                $filled = $surveyUserList[$user['user_id']] ?? 0;
+                $user['survey'] = $totalSurveys > 0
+                    ? $filled.' / '.$totalSurveys
+                    : '0 / 0';
             }
 
-            $url = $urlBase.'&student='.$user['user_id'];
-
+            $url        = $urlBase.'&student='.$user['user_id'];
             $user['link'] = '<a href="'.$url.'">
-                        '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
-                         </a>';
+                    '.Display::return_icon('2rightarrow.png', get_lang('Details')).'
+                 </a>';
 
-            // store columns in array $users
+            // -------------------------------------------------------------
+            // Build final row
+            // -------------------------------------------------------------
             $userRow = [];
             if ($displaySessionInfo && !empty($sessionId)) {
-                $sessionInfo = api_get_session_info($sessionId);
-                $userRow['session_name'] = $sessionInfo['name'];
-                $userRow['session_startdate'] = $sessionInfo['access_start_date'];
-                $userRow['session_enddate'] = $sessionInfo['access_end_date'];
-                $userRow['course_name'] = $courseInfo['name'];
+                $sessionInfo                   = api_get_session_info($sessionId);
+                $userRow['session_name']       = $sessionInfo['name'];
+                $userRow['session_startdate']  = $sessionInfo['access_start_date'];
+                $userRow['session_enddate']    = $sessionInfo['access_end_date'];
+                $userRow['course_name']        = $courseInfo['name'];
             }
+
             $userRow['official_code'] = $user['official_code'];
             if ($sortByFirstName) {
                 $userRow['firstname'] = $user['col2'];
-                $userRow['lastname'] = $user['col1'];
+                $userRow['lastname']  = $user['col1'];
             } else {
-                $userRow['lastname'] = $user['col1'];
+                $userRow['lastname']  = $user['col1'];
                 $userRow['firstname'] = $user['col2'];
             }
-            $userRow['username'] = $user['username'];
-            $userRow['time'] = $user['time'];
-            $userRow['average_progress'] = $user['average_progress'];
-            $userRow['exercise_progress'] = $user['exercise_progress'];
-            $userRow['exercise_average_best_attempt'] = $user['exercise_average_best_attempt'];
-            $userRow['student_score'] = $user['student_score'];
-            $userRow['student_score_best'] = $user['student_score_best'];
+            $userRow['username']                     = $user['username'];
+            $userRow['time']                         = $user['time'];
+            $userRow['average_progress']             = $user['average_progress'];
+            $userRow['exercise_progress']            = $user['exercise_progress'];
+            $userRow['exercise_average_best_attempt']= $user['exercise_average_best_attempt'];
+            $userRow['student_score']                = $user['student_score'];
+            $userRow['student_score_best']           = $user['student_score_best'];
+
             if (!empty($exerciseResults)) {
                 foreach ($exerciseResults as $exerciseId => $bestResult) {
                     $userRow[$exerciseId] = $bestResult;
@@ -912,7 +940,7 @@ class TrackingCourseLog
             }
 
             $userRow['count_assignments'] = $user['count_assignments'];
-            $userRow['count_messages'] = $user['count_messages'];
+            $userRow['count_messages']    = $user['count_messages'];
 
             $userGroupManager = new UserGroupModel();
             if ($exportCsv) {
@@ -930,24 +958,23 @@ class TrackingCourseLog
             if (empty($sessionId)) {
                 $userRow['survey'] = $user['survey'];
             } else {
-                $userSession = SessionManager::getUserSession($user['user_id'], $sessionId);
+                $userSession              = SessionManager::getUserSession($user['user_id'], $sessionId);
                 $userRow['registered_at'] = '';
                 if ($userSession) {
                     $userRow['registered_at'] = api_get_local_time($userSession['registered_at']);
                 }
             }
 
-            $userRow['first_connection'] = $user['first_connection'];
-            $userRow['last_connection'] = $user['last_connection'];
+            $userRow['first_connection']      = $user['first_connection'];
+            $userRow['last_connection']       = $user['last_connection'];
+            $userRow['lp_finalization_date']  = $user['lp_finalization_date'];
+            $userRow['quiz_finalization_date']= $user['quiz_finalization_date'];
 
-            $userRow['lp_finalization_date'] = $user['lp_finalization_date'];
-            $userRow['quiz_finalization_date'] = $user['quiz_finalization_date'];
-
-            // we need to display an additional profile field
+            // Extra profile fields selected by the teacher
             if (isset($_GET['additional_profile_field'])) {
-                $data = Session::read('additional_user_profile_info');
-
+                $data          = Session::read('additional_user_profile_info');
                 $extraFieldInfo = Session::read('extra_field_info');
+
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
                     if (isset($data[$fieldId]) && isset($data[$fieldId][$user['user_id']])) {
                         if (is_array($data[$fieldId][$user['user_id']])) {
@@ -964,9 +991,9 @@ class TrackingCourseLog
                 }
             }
 
-            $data = Session::read('default_additional_user_profile_info');
+            $data                  = Session::read('default_additional_user_profile_info');
             $defaultExtraFieldInfo = Session::read('default_extra_field_info');
-            if (isset($defaultExtraFieldInfo) && isset($data)) {
+            if (!empty($defaultExtraFieldInfo) && !empty($data)) {
                 foreach ($data as $key => $val) {
                     if (isset($val[$user['user_id']])) {
                         if (is_array($val[$user['user_id']])) {
@@ -993,6 +1020,7 @@ class TrackingCourseLog
                 unset($userRow['link']);
                 $csvContent[] = $userRow;
             }
+
             $users[] = array_values($userRow);
         }
 
@@ -1144,131 +1172,119 @@ class TrackingCourseLog
     /**
      * Determines the remaining actions for a session and returns a string with the results.
      */
-    public static function actionsLeft($current, $sessionId = 0): string
-    {
-        $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
-            'courseLog.php?'.api_get_cidreq(true, false)
-        );
+    public static function actionsLeft(
+        string $current,
+        int $sessionId = 0,
+        bool $showExtended = false
+    ): string {
+        // Keep all course/session params consistent across tabs
+        $cidReq      = api_get_cidreq(true, false);
+        $cidQuery    = $cidReq ? ('?'.$cidReq) : '';
+        $webCodePath = api_get_path(WEB_CODE_PATH);
 
-        $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
-            'course_log_groups.php?'.api_get_cidreq()
-        );
+        $items = [
+            'users' => [
+                'icon'  => ToolIcon::MEMBER,
+                'label' => get_lang('Report on learners'),
+                'url'   => 'courseLog.php'.$cidQuery,
+            ],
+            'groups' => [
+                'icon'  => ToolIcon::GROUP,
+                'label' => get_lang('Group reporting'),
+                'url'   => 'course_log_groups.php'.$cidQuery,
+            ],
+            'resources' => [
+                'icon'  => ToolIcon::DOCUMENT,
+                'label' => get_lang('Report on resources'),
+                'url'   => 'course_log_resources.php'.$cidQuery,
+            ],
+            'courses' => [
+                'icon'  => ToolIcon::COURSE,
+                'label' => get_lang('Course report'),
+                'url'   => 'course_log_tools.php'.$cidQuery,
+            ],
+            'exams' => [
+                'icon'  => ToolIcon::QUIZ,
+                'label' => get_lang('Exam tracking'),
+                'url'   => $webCodePath.'tracking/exams.php'.$cidQuery,
+            ],
+            'logs' => [
+                'icon'  => ToolIcon::SECURITY,
+                'label' => get_lang('Audit report'),
+                'url'   => $webCodePath.'tracking/course_log_events.php'.$cidQuery,
+            ],
+            'lp' => [
+                'icon'  => ToolIcon::LP,
+                'label' => get_lang('Learning paths generic stats'),
+                'url'   => $webCodePath.'tracking/lp_report.php'.$cidQuery,
+            ],
+        ];
 
-        $resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
-            'course_log_resources.php?'.api_get_cidreq(true, false)
-        );
-
-        $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
-            'course_log_tools.php?'.api_get_cidreq(true, false)
-        );
-
-        $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
-        );
-
-        $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
-        );
-
-        $lpLink = Display::url(
-            Display::return_icon('scorms.png', get_lang('Learning paths generic stats'), [], ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'tracking/lp_report.php?'.api_get_cidreq()
-        );
-
-        $attendanceLink = '';
         if (!empty($sessionId)) {
-            $attendanceLink = Display::url(
-                Display::return_icon('attendance_list.png', get_lang('Logins'), [], ICON_SIZE_MEDIUM),
-                api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq().'&action=calendar_logins'
+            $items['attendance'] = [
+                'icon'  => ToolIcon::ATTENDANCE,
+                'label' => get_lang('Logins'),
+                'url'   => $webCodePath.'attendance/index.php'.$cidQuery.'&action=calendar_logins',
+            ];
+        }
+
+        // ---------------------------------------------------------------------
+        // Hide tabs that require a single course context when there is no course
+        // or when we are in "global" reporting mode (showExtended = true).
+        // This avoids linking to courseLog.php which will block with api_not_allowed().
+        // ---------------------------------------------------------------------
+        $hasCourse = null !== api_get_course_entity();
+        $isGlobalContext = $showExtended || !$hasCourse;
+
+        if ($isGlobalContext) {
+            unset($items['users'], $items['lp']);
+        }
+
+        $links = [];
+
+        foreach ($items as $key => $config) {
+            $isCurrent = ($key === $current);
+
+            // Icon inside the pill
+            $iconHtml = Display::getMdiIcon(
+                $config['icon'],
+                'ch-tool-icon course-log-tab-icon',
+                null,
+                ICON_SIZE_SMALL,
+                $config['label']
+            );
+
+            // Base classes for tab look & feel
+            $tabClass = 'course-log-tab inline-flex items-center gap-2 px-3 py-1 rounded-full transition ';
+
+            if ($isCurrent) {
+                // Active pill
+                $tabClass .= 'admin-report-card-active text-gray-90 shadow-sm';
+            } else {
+                // Inactive pill
+                $tabClass .= 'text-gray-60 hover:bg-gray-15 hover:text-gray-90';
+            }
+
+            $attrs = [
+                'class' => $tabClass,
+                'title' => $config['label'],
+            ];
+
+            $href = $isCurrent ? '#' : $config['url'];
+
+            $links[] = Display::url(
+                $iconHtml.'<span>'.Security::remove_XSS($config['label']).'</span>',
+                $href,
+                $attrs
             );
         }
 
-        switch ($current) {
-            case 'users':
-                $usersLink = Display::url(
-                    Display::return_icon(
-                        'user_na.png',
-                        get_lang('Report on learners'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
-                    '#'
-                );
-                break;
-            case 'groups':
-                $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
-                    '#'
-                );
-                break;
-            case 'courses':
-                $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
-                    '#'
-                );
-                break;
-            case 'resources':
-                $resourcesLink = Display::url(
-                    Display::return_icon(
-                        'tools_na.png',
-                        get_lang('Report on resource'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
-                    '#'
-                );
-                break;
-            case 'exams':
-                $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
-                    '#'
-                );
-                break;
-            case 'logs':
-                $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
-                    '#'
-                );
-                break;
-            case 'attendance':
-                if (!empty($sessionId)) {
-                    $attendanceLink = Display::url(
-                        Display::return_icon('attendance_list.png', get_lang('Logins'), [], ICON_SIZE_MEDIUM),
-                        '#'
-                    );
-                }
-                break;
-            case 'lp':
-                $lpLink = Display::url(
-                    Display::return_icon(
-                        'scorms_na.png',
-                        get_lang('Learning paths generic stats'),
-                        [],
-                        ICON_SIZE_MEDIUM
-                    ),
-                    '#'
-                );
-                break;
-        }
-
-        $items = [
-            $usersLink,
-            $groupsLink,
-            $courseLink,
-            $resourcesLink,
-            $examLink,
-            $eventsLink,
-            $lpLink,
-            $attendanceLink,
-        ];
-
-        return implode('', $items).'&nbsp;';
+        // Horizontal pill container (tabs)
+        return
+            '<nav class="course-log-nav inline-flex flex-wrap items-center gap-1 '.
+            'rounded-full bg-gray-10 border border-gray-25 px-1 py-1 text-body-2">'.
+            implode('', $links).
+            '</nav>';
     }
 
     public static function calcBestScoreAverageNotInLP(
@@ -1314,5 +1330,28 @@ class TrackingCourseLog
         }
 
         return $rounded;
+    }
+
+    /**
+     * Map resource_type.title to legacy "tool" identifier used in old tracking code.
+     */
+    private static function mapResourceTypeTitleToLegacyTool(string $title): ?string
+    {
+        static $map = [
+            'files'               => 'document',
+            'lps'                 => 'learnpath',
+            'exercises'           => 'quiz',
+            'glossaries'          => 'glossary',
+            'links'               => 'link',
+            'course_descriptions' => 'course_description',
+            'announcements'       => 'announcement',
+            'thematics'           => 'thematic',
+            'thematic_advance'    => 'thematic_advance',
+            'thematic_plan'       => 'thematic_plan',
+        ];
+
+        $title = trim($title);
+
+        return $map[$title] ?? null;
     }
 }

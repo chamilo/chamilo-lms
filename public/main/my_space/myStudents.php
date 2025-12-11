@@ -79,7 +79,7 @@ if (false === $allowedToTrackUser && null !== $course) {
                 $course->getId()
             );
 
-            if (1 == $userCourseStatus) {
+            if (1 === $userCourseStatus) {
                 $allowedToTrackUser = true;
             }
         }
@@ -247,7 +247,6 @@ switch ($action) {
 
         header('Location: '.$currentUrl);
         exit;
-        break;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $sessionInfo = api_get_session_info($sessionToExport);
@@ -372,9 +371,9 @@ switch ($action) {
                             <a href="'.api_get_course_url($courseId, $sId).'">'.
                         $course->getTitle().'</a>
                         </td>
-                        <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>
-                        <td >'.$score.'</td>';
+                        <td>'.$time_spent_on_course.'</td>
+                        <td>'.$progress.'</td>
+                        <td>'.$score.'</td>';
                     $courseTable .= '</tr>';
                 }
             }
@@ -444,7 +443,6 @@ switch ($action) {
             error_log($e);
         }
         exit;
-        break;
     case 'export_one_session_row':
         $sessionToExport = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $exportList = Session::read('export_course_list');
@@ -490,7 +488,6 @@ switch ($action) {
         }
 
         api_location($currentUrl);
-
         break;
     case 'send_message':
         if ($allowMessages) {
@@ -572,19 +569,6 @@ switch ($action) {
         $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
         if ($isBoss || api_is_platform_admin()) {
             LegalManager::sendLegal($studentId, api_get_user_id());
-            /*
-                $currentUserInfo = api_get_user_info();
-                $subject = get_lang('Legal conditions');
-                $linkLegal = api_get_path(WEB_PATH)."courses/FORUMDAIDE/index.php";
-                $content = sprintf(
-                    get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
-                    $user_info['complete_name'],
-                    "<a href=\"".$linkLegal."\">".$linkLegal."</a>",
-                    $currentUserInfo['complete_name']
-                );
-                MessageManager::send_message_simple($student_id, $subject, $content);
-                Display::addFlash(Display::return_message(get_lang('Sent')));
-            */
         }
         break;
     case 'delete_legal':
@@ -623,6 +607,113 @@ switch ($action) {
             Security::clear_token();
         }
         break;
+    case 'all_attendance':
+        /* Display all attendances */
+        $startDate = new DateTime();
+        $startDate = $startDate->modify('-1 week');
+        if (isset($_GET['startDate'])) {
+            $startDate = new DateTime($_GET['startDate']);
+        }
+        $startDate = $startDate->setTime(0, 0, 0);
+
+        $endDate = new DateTime();
+        if (isset($_GET['endDate'])) {
+            $endDate = new DateTime($_GET['endDate']);
+        }
+        $endDate = $endDate->setTime(23, 59, 0);
+
+        if ($startDate > $endDate) {
+            $dataTemp = $startDate;
+            $startDate = $endDate;
+            $endDate = $dataTemp;
+        }
+        $startDateText = api_get_local_time($startDate);
+        $endDateText = api_get_local_time($endDate);
+
+        $defaults['startDate'] = $startDateText;
+        $defaults['endDate'] = $endDateText;
+        $form = new FormValidator(
+            'all_attendance_list',
+            'GET',
+            'myStudents.php?action=all_attendance&student='.$studentId.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&'.api_get_cidreq()
+        );
+        $form->addElement('html', '<input type="hidden" name="student" value="'.$studentId.'" >');
+        $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');
+
+        $form->addDateTimePicker(
+            'startDate',
+            [
+                get_lang('Start date'),
+            ],
+            [
+                'form_name' => 'attendance_calendar_edit',
+            ],
+            5
+        );
+        $form->addDateTimePicker(
+            'endDate',
+            [
+                get_lang('End date'),
+            ],
+            [
+                'form_name' => 'attendance_calendar_edit',
+            ],
+            5
+        );
+
+        $form->addButtonSave(get_lang('Submit'));
+        $form->setDefaults($defaults);
+
+        Display::display_header($nameTools);
+        $form->display();
+
+        $attendance = new Attendance();
+        $data = $attendance->getCoursesWithAttendance($studentId, $startDate, $endDate);
+
+        $title = sprintf(get_lang('Attendance from %s to %s'), $startDateText, $endDateText);
+        echo '<h3>'.$title.'</h3>';
+        echo '<div class="">
+        <table class="table table-striped table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>'.get_lang('Date').'</th>
+                    <th>'.get_lang('Course').'</th>
+                    <th>'.get_lang('Present').'</th>
+                </tr>
+            </thead>
+        <tbody>';
+
+        foreach ($data as $attendanceData => $attendanceSheet) {
+            $totalAttendance = count($attendanceSheet);
+            for ($i = 0; $i < $totalAttendance; $i++) {
+                $attendanceWork = $attendanceSheet[$i];
+                $courseInfoItem = api_get_course_info_by_id($attendanceWork['courseId']);
+                $date = api_get_local_time($attendanceWork[1]);
+                $sId = $attendanceWork['session'];
+                $printSession = '';
+                if (0 != $sId) {
+                    $printSession = '('.
+                        $attendanceWork['sessionName'].')';
+                }
+                echo '
+                <tr>
+                    <td>'.$date.'</td>
+                    <td>'
+                    .'<a
+                        title="'.get_lang('Go to attendances').'"
+                        href="'.api_get_path(WEB_CODE_PATH).
+                    'attendance/index.php?cid='.$attendanceWork['courseId'].'&sid='.$sId.'&student_id='.$studentId.'">'
+                    .$attendanceWork['courseTitle'].' '.$printSession.'
+                        </a>
+                    </td>
+                    <td>'.$attendanceWork['presence'].'</td>
+                </tr>';
+            }
+        }
+        echo '</tbody>
+        </table></div>';
+        Display::display_footer();
+        exit();
     default:
         break;
 }
@@ -638,7 +729,7 @@ $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_i
 $courses_in_session_by_coach = [];
 $sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
 
-// RRHH or session admin
+// DRH or session admin
 if (api_is_session_admin() || api_is_drh()) {
     $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
     if (!empty($courses)) {
@@ -707,8 +798,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(api_get_user_id(),
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
-        if (api_drh_can_access_all_session_content()) {
-        } else {
+        if (!api_drh_can_access_all_session_content()) {
             if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
                     !UserManager::is_user_followed_by_drh($studentId, api_get_user_id())
@@ -728,7 +818,99 @@ if ($pluginCalendar) {
 }
 
 Display::display_header($nameTools);
+
+// Local layout styles for learner detail page
+echo '<style>
+/* Main container */
+.learner-page-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem 2.5rem;
+}
+
+/* Toolbar wrapper */
+.learner-toolbar-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+/* Generic card for sections */
+.learner-card {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb; /* gray-200 */
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    padding: 1rem 1rem;
+}
+
+/* Vertical spacing between sections */
+.learner-section-spacing {
+    margin-top: 1.75rem;
+}
+
+/* Titles inside cards: slightly smaller and consistent */
+.learner-card h1,
+.learner-card h2,
+.learner-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Section header for blocks like sessions, classes, etc. */
+.learner-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Subtexts under titles */
+.learner-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+/* Card for tables */
+.learner-table-card {
+    margin-top: 0.75rem;
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    padding: 0.75rem 1rem 1.25rem;
+}
+
+/* Wrapper to allow horizontal scroll on small screens */
+.learner-table-wrapper {
+    overflow-x: auto;
+}
+
+/* Remove bottom margin for inner tables */
+.learner-table-card .table {
+    margin-bottom: 0;
+}
+
+/* Extra spacing above messages and tracking sections */
+.learner-messages-header {
+    margin-top: 2rem;
+}
+
+/* Slightly tighten default h3 spacing in this page */
+.learner-page-container h3 {
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+</style>';
+
 $token = Security::get_token();
+
+// Start main page container
+echo '<div class="learner-page-container">';
 
 // Actions bar
 $actions = '<a href="javascript: window.history.go(-1);">'
@@ -805,7 +987,10 @@ if ($isAllow) {
     );
 }
 
+// Toolbar inside its own wrapper for spacing
+echo '<div class="learner-toolbar-wrapper">';
 echo Display::toolbarAction('my_students', [$actions]);
+echo '</div>';
 
 // is the user online ?
 $online = get_lang('No');
@@ -914,7 +1099,6 @@ $userGroups = $userGroupManager->getNameListByUser(
     Usergroup::NORMAL_CLASS
 );
 
-//$userInfo['complete_name_link'] = $userInfo['complete_name_with_message_link'];
 $userInfoExtra = [];
 $userInfoExtra['groups'] = $userGroupManager;
 $userInfoExtra['online'] = $online;
@@ -979,7 +1163,6 @@ if ('true' === $details) {
 $icon = '';
 $timeLegalAccept = '';
 $btn = '';
-//$userInfoExtra['legal'] = [];
 if ('true' === api_get_setting('allow_terms_conditions')) {
     $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $studentId);
     if ($isBoss || api_is_platform_admin()) {
@@ -1017,126 +1200,15 @@ if ('true' === api_get_setting('allow_terms_conditions')) {
     ];
 }
 $iconCertificate = ' '.Display::url(
-    get_lang('Generate'),
-    api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
-    ['class' => 'btn btn--primary btn-xs']
-);
+        get_lang('Generate'),
+        api_get_self().'?action=generate_certificate&student='.$studentId.'&cid='.$courseId.'&course='.$courseCode,
+        ['class' => 'btn btn--primary btn-xs']
+    );
 $userInfoExtra['certificate'] = [
     'label' => get_lang('Certificate'),
     'content' => $iconCertificate,
 ];
 
-if (isset($_GET['action']) && 'all_attendance' === $_GET['action']) {
-    /* Display all attendances */
-    $startDate = new DateTime();
-    $startDate = $startDate->modify('-1 week');
-    if (isset($_GET['startDate'])) {
-        $startDate = new DateTime($_GET['startDate']);
-    }
-    $startDate = $startDate->setTime(0, 0, 0);
-
-    $endDate = new DateTime();
-    if (isset($_GET['endDate'])) {
-        $endDate = new DateTime($_GET['endDate']);
-    }
-    $endDate = $endDate->setTime(23, 59, 0);
-
-    // $startDate = new DateTime(api_get_local_time($startDate));
-    // $endDate = new DateTime(api_get_local_time($endDate));
-    if ($startDate > $endDate) {
-        $dataTemp = $startDate;
-        $startDate = $endDate;
-        $endDate = $dataTemp;
-    }
-    $startDateText = api_get_local_time($startDate);
-    $endDateText = api_get_local_time($endDate);
-    /** Start date and end date*/
-    $defaults['startDate'] = $startDateText;
-    $defaults['endDate'] = $endDateText;
-    $form = new FormValidator(
-        'all_attendance_list',
-        'GET',
-        'myStudents.php?action=all_attendance&student='.$studentId.'&startDate='.$defaults['startDate'].'&endDate='.$defaults['endDate'].'&'.api_get_cidreq()
-    );
-    $form->addElement('html', '<input type="hidden" name="student" value="'.$studentId.'" >');
-    $form->addElement('html', '<input type="hidden" name="action" value="all_attendance" >');
-
-    $form->addDateTimePicker(
-        'startDate',
-        [
-            get_lang('Start date'),
-        ],
-        [
-            'form_name' => 'attendance_calendar_edit',
-        ],
-        5
-    );
-    $form->addDateTimePicker(
-        'endDate',
-        [
-            get_lang('End date'),
-        ],
-        [
-            'form_name' => 'attendance_calendar_edit',
-        ],
-        5
-    );
-
-    $form->addButtonSave(get_lang('Submit'));
-    $form->setDefaults($defaults);
-    $form->display();
-    /** Display dates */
-    $attendance = new Attendance();
-    $data = $attendance->getCoursesWithAttendance($studentId, $startDate, $endDate);
-
-    // 'attendance from %s to %s'
-    $title = sprintf(get_lang('Attendance from %s to %s'), $startDateText, $endDateText);
-    echo '
-    <h3>'.$title.'</h3>
-    <div class="">
-    <table class="table table-striped table-hover table-responsive">
-        <thead>
-            <tr>
-                <th>'.get_lang('Date').'</th>
-                <th>'.get_lang('Course').'</th>
-                <th>'.get_lang('Present').'</th>
-            </tr>
-        </thead>
-    <tbody>';
-
-    foreach ($data as $attendanceData => $attendanceSheet) {
-        // $attendanceData  can be in_category or not_category for courses
-        $totalAttendance = count($attendanceSheet);
-        for ($i = 0; $i < $totalAttendance; $i++) {
-            $attendanceWork = $attendanceSheet[$i];
-            $courseInfoItem = api_get_course_info_by_id($attendanceWork['courseId']);
-            $date = api_get_local_time($attendanceWork[1]);
-            $sId = $attendanceWork['session'];
-            $printSession = '';
-            if (0 != $sId) {
-                // get session name
-                $printSession = "(".$attendanceWork['sessionName'].")";
-            }
-            echo '
-            <tr>
-                <td>'.$date.'</td>
-                <td>'
-                    .'<a
-                    title="'.get_lang('Go to attendances').'"
-                    href="'.api_get_path(WEB_CODE_PATH).
-                    'attendance/index.php?cid='.$attendanceWork['courseId'].'&sid='.$sId.'&student_id='.$studentId.'">'
-                    .$attendanceWork['courseTitle']." $printSession ".'
-                    </a>
-                </td>
-                <td>'.$attendanceWork['presence'].'</td>
-            </tr>';
-        }
-    }
-    echo '</tbody>
-    </table></div>';
-    Display::display_footer();
-    exit();
-}
 $details = true;
 $tpl = new Template(
     '',
@@ -1191,7 +1263,13 @@ $tpl->assign('details', $details);
 $templateName = $tpl->get_template('my_space/user_details.tpl');
 $content = $tpl->fetch($templateName);
 
+// Wrap user header/content into a card to avoid huge white space and give structure
+echo '<section class="learner-card" id="infosStudent">';
 echo $content;
+echo '</section>';
+
+// ----- Skills + classes card -----
+echo '<section class="learner-card learner-section-spacing">';
 
 $allowAll = ('true' === api_get_setting('skill.allow_teacher_access_student_skills'));
 if ($allowAll) {
@@ -1210,15 +1288,16 @@ if ($allowAll) {
         $sessionId
     );
 }
-echo '<div class="row">
-        <div class="col-sm-5">';
+
+// User classes table with nicer spacing
 if (!empty($userGroups)) {
+    echo '<div class="learner-section-spacing">';
+    echo '<h3 class="learner-section-title">'.get_lang('Classes').'</h3>';
+    echo '<div class="learner-table-card"><div class="learner-table-wrapper">';
     echo '<table class="table table-striped table-hover">
            <thead>
             <tr>
-            <th>';
-    echo get_lang('Classes');
-    echo '</th>
+                <th>'.get_lang('Classes').'</th>
             </tr>
             </thead>
             <tbody>';
@@ -1226,9 +1305,12 @@ if (!empty($userGroups)) {
         echo '<tr><td>'.$class.'</td></tr>';
     }
     echo '</tbody></table>';
+    echo '</div></div>';
 }
-echo '</div></div>';
 
+echo '</section>';
+
+// ----- Courses / sessions or LP/tests depending on $details -----
 $exportCourseList = [];
 $lpIdList = [];
 if (empty($details)) {
@@ -1269,9 +1351,10 @@ if (empty($details)) {
                 .' '.$session_name.($date_session ? ' ('.$date_session.')' : '');
         }
 
-        // Courses
-        echo '<h3>'.$title.'</h3>';
-        echo '<div class="table-responsive">';
+        echo '<section class="learner-section-spacing">';
+        echo '<h3 class="learner-section-title">'.$title.'</h3>';
+
+        echo '<div class="learner-table-card"><div class="learner-table-wrapper">';
         echo '<table class="table table-striped table-hover courses-tracking">';
         echo '<thead>';
         echo '<tr>
@@ -1436,11 +1519,11 @@ if (empty($details)) {
                         $course->getTitle().'
                         </a>
                     </td>
-                    <td >'.$time_spent_on_course.'</td>
-                    <td >'.$progress.'</td>
-                    <td >'.$score.'</td>
-                    <td >'.$attendances_faults_avg.'</td>
-                    <td >'.$scoretotal_display.'</td>';
+                    <td>'.$time_spent_on_course.'</td>
+                    <td>'.$progress.'</td>
+                    <td>'.$score.'</td>
+                    <td>'.$attendances_faults_avg.'</td>
+                    <td>'.$scoretotal_display.'</td>';
 
                     if (!empty($coachId)) {
                         echo '<td><a href="'.api_get_self().'?student='.$studentId
@@ -1448,7 +1531,7 @@ if (empty($details)) {
                             .'&sid='.$sId.'#infosStudent">'
                             .Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a></td>';
                     } else {
-                        echo '<td width="10"><a href="'.api_get_self().'?student='.$studentId
+                        echo '<td><a href="'.api_get_self().'?student='.$studentId
                             .'&details=true&cid='.$courseId.'&origin='.$origin.'&sid='.$sId.'#infosStudent">'
                             .Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details')).'</a></td>';
                     }
@@ -1536,16 +1619,21 @@ if (empty($details)) {
                     )
                 );
             }
+            echo '</tbody></table></div>'; // table wrapper + card
+            Session::write('export_course_list', $exportCourseList);
+
             echo Display::toolbarAction('sessions', [$sessionAction]);
         } else {
             echo "<tr><td colspan='5'>".get_lang('This course could not be found')."</td></tr>";
+            echo '</tbody></table></div>';
         }
-        Session::write('export_course_list', $exportCourseList);
-        echo '</tbody>';
-        echo '</table>';
-        echo '</div>';
+
+        echo '</section>';
     }
 } else {
+    // Details == true: LP, quizzes, tasks, etc. in one big card with internal tables.
+    echo '<section class="learner-section-spacing"><div class="learner-card">';
+
     $columnHeaders = [
         'lp' => get_lang('Learning paths'),
         'time' => get_lang('Time').
@@ -1667,7 +1755,7 @@ if (empty($details)) {
                 echo Display::page_subheader2($item->getTitle());
             }
 
-            echo '<div class="table-responsive">';
+            echo '<div class="learner-table-card learner-section-spacing"><div class="learner-table-wrapper">';
             echo '<table class="table table-striped table-hover"><thead><tr>';
             echo $headers;
             echo '<th>'.get_lang('Details').'</th>';
@@ -1696,7 +1784,6 @@ if (empty($details)) {
                     $any_result = true;
                 }
 
-                // Get time in lp
                 if (!empty($timeCourse)) {
                     $lpTime = isset($timeCourse[TOOL_LEARNPATH]) ? $timeCourse[TOOL_LEARNPATH] : 0;
                     $total_time = isset($lpTime[$lp_id]) ? (int) $lpTime[$lp_id] : 0;
@@ -1765,11 +1852,7 @@ if (empty($details)) {
                     $bestScore = $bestScore.'%';
                 }
 
-                if (0 == $i % 2) {
-                    $css_class = 'row_even';
-                } else {
-                    $css_class = 'row_odd';
-                }
+                $css_class = (0 == $i % 2) ? 'row_even' : 'row_odd';
                 $i++;
                 if (isset($score_latest) && !is_null($score_latest)) {
                     if (is_numeric($score_latest)) {
@@ -1809,8 +1892,6 @@ if (empty($details)) {
                 }
 
                 if (in_array('last_connection', $columnHeadersKeys)) {
-                    // Do not change with api_convert_and_format_date, because this value came from the lp_item_view table
-                    // which implies several other changes not a priority right now
                     $contentToExport[] = $start_time;
                     echo Display::tag('td', $start_time);
                 }
@@ -1867,12 +1948,12 @@ if (empty($details)) {
                 }
                 echo '</tr>';
             }
-            echo '</tbody></table></div>';
+            echo '</tbody></table></div></div>'; // close table wrapper & card
         }
     }
 
     if (INVITEE != $user->getStatus()) {
-        echo '<div class="table-responsive">
+        echo '<div class="learner-table-card learner-section-spacing"><div class="learner-table-wrapper">
         <table class="table table-striped table-hover">
         <thead>
         <tr>';
@@ -1994,10 +2075,7 @@ if (empty($details)) {
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('No learning path');
 
-                $css_class = 'row_even';
-                if ($i % 2) {
-                    $css_class = 'row_odd';
-                }
+                $css_class = ($i % 2) ? 'row_odd' : 'row_even';
                 $exerciseTitle = Exercise::get_formated_title_variable($exercise->getTitle());
                 echo '<tr class="'.$css_class.'"><td>'.$exerciseTitle.'</td>';
                 echo '<td>';
@@ -2090,7 +2168,7 @@ if (empty($details)) {
         } else {
             echo '<tr><td colspan="6">'.get_lang('There is no test for the moment').'</td></tr>';
         }
-        echo '</tbody></table></div>';
+        echo '</tbody></table></div></div>'; // end tests card
     }
 
     // @when using sessions we do not show the survey list
@@ -2138,19 +2216,20 @@ if (empty($details)) {
     }
 
     echo '
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>'.get_lang('Tasks').'</th>
-                        <th class="text-center">'.get_lang('Document ID').'</th>
-                        <th class="text-center">'.get_lang('Note').'</th>
-                        <th class="text-center">'.get_lang('Handed out').'</th>
-                        <th class="text-center">'.get_lang('Deadline').'</th>
-                        <th class="text-center">'.get_lang('Assignment work time').'</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div class="learner-table-card learner-section-spacing">
+            <div class="learner-table-wrapper">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>'.get_lang('Tasks').'</th>
+                            <th class="text-center">'.get_lang('Document ID').'</th>
+                            <th class="text-center">'.get_lang('Note').'</th>
+                            <th class="text-center">'.get_lang('Handed out').'</th>
+                            <th class="text-center">'.get_lang('Deadline').'</th>
+                            <th class="text-center">'.get_lang('Assignment work time').'</th>
+                        </tr>
+                    </thead>
+                    <tbody>
     ';
 
     $repo = Container::getStudentPublicationRepository();
@@ -2218,7 +2297,7 @@ if (empty($details)) {
     echo '</tbody>
             </table>
         </div>
-    ';
+    </div>'; // end tasks card
 
     $csv_content[] = [];
     $csv_content[] = [
@@ -2249,10 +2328,13 @@ if (empty($details)) {
         get_lang('Latest chat connection'),
         $chat_last_connection,
     ];
+
+    echo '</div></section>'; // close main LP/tests/tasks card
 }
 
+// ----- Messages section -----
 if ($allowMessages) {
-    // Messages
+    echo '<section class="learner-card learner-section-spacing">';
     echo Display::page_subheader2(get_lang('Messages'));
     echo MessageManager::getMessagesAboutUserToString($user, $currentUrl);
     echo Display::url(
@@ -2276,11 +2358,14 @@ if ($allowMessages) {
     $form->addHidden('sec_token', $token);
     $form->addHtml('</div>');
     $form->display();
+    echo '</section>';
 }
 
+// ----- Message tracking -----
 $allow = ('true' === api_get_setting('message.allow_user_message_tracking'));
 if ($allow && (api_is_drh() || api_is_platform_admin())) {
     $users = MessageManager::getUsersThatHadConversationWithUser($studentId);
+    echo '<section class="learner-card learner-section-spacing">';
     echo Display::page_subheader2(get_lang('Message tracking'));
     $table = new HTML_Table(['class' => 'table']);
     $column = 0;
@@ -2305,11 +2390,18 @@ if ($allow && (api_is_drh() || api_is_platform_admin())) {
         $row++;
     }
     $table->display();
+    echo '</section>';
 }
 
+// ----- Calendar plugin panel -----
 if ($pluginCalendar) {
+    echo '<section class="learner-card learner-section-spacing">';
     echo $plugin->getUserStatsPanel($studentId, $courses_in_session);
+    echo '</section>';
 }
+
+// Close main page container
+echo '</div>';
 
 if ($export) {
     ob_end_clean();

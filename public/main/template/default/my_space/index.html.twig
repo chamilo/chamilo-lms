@@ -1,205 +1,285 @@
 {% import '@ChamiloCore/Macros/box.html.twig' as macro %}
 {% autoescape false %}
-<div class="search-student">
-    {{ form }}
-</div>
 
-<div class="page-header">
-    <h4 class="text-4xl">
-        {{ 'Overview' | trans  }}
-    </h4>
-</div>
+    <div class="card mt-4">
+        <div class="p-4 lg:p-6 space-y-6">
+            {% if reportsMenuHtml is defined and reportsMenuHtml %}
+                <section aria-label="Available reports" class="mb-4">
+                    {{ reportsMenuHtml|raw }}
+                </section>
+            {% endif %}
 
-<div class="grid grid-cols-4 gap-8 view-global-followed mt-4">
-    <div class="content">
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-                {{ 'ToolIcon::GROUP'|mdi_icon(64) }}&nbsp;{{ students }}
-        </div>
-        <div class="card-title text-center p-2 text-xl">
-            <a href="/main/my_space/student.php">
-                {{ 'Followed students' | trans }}
-            </a>
-        </div>
-    </div>
-    <div class="content">
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'ObjectIcon::HRM_USER'|mdi_icon(64) }}&nbsp;{{ studentbosses }}
-        </div>
-        <div class="card-title text-center p-2 text-xl">
-            <a href="/main/my_space/users.php?status={{ studentboss }}">
-                {{ 'Followed student bosses' | trans }}
-            </a>
-        </div>
-    </div>
-    <div class="content">
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'ObjectIcon::TEACHER'|mdi_icon(64) }}&nbsp;{{ numberTeachers }}
-        </div>
-        <div class="card-title text-center p-2 text-xl">
-            <a href="/main/my_space/teachers.php">
-                {{ 'Followed teachers' | trans }}
-            </a>
-        </div>
-    </div>
-    <div class="content">
-        <div class="pt-2 flex justify-center rounded-md h-16 text-4xl border-0 hover:shadow-lg hover:border-0 hover:shadow-black">
-            {{ 'ObjectIcon::USER'|mdi_icon(64) }}&nbsp;{{ humanresources }}
-        </div>
-        <div class="card-title text-center p-2 text-xl">
-            <a href="/main/my_space/users.php?status={{ drh }}">
-                {{ 'Followed HR directors' | trans }}
-            </a>
-        </div>
-    </div>
-</div>
-<div class="grid grid-cols-4 gap-8 my-8 view-global">
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black content-center">
-        <div class="easy-donut align-content-center border-box">
-            <div id="easypiechart-blue" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ total_user }}">
-                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ total_user }}</span>
-            </div>
-            <div class="">
-                <a class="hover:cursor-pointer underline" href="/main/my_space/users.php">
-                   {{ 'ObjectIcon::USER'|mdi_icon(16) }} {{ 'Followed users' | trans }}
-                </a>
-                {% if app.user.status == 1 %}
-                    <a
-                            href="/main/admin/dashboard_add_users_to_user.php?user={{ app.user.id }}"
-                            class="hover:cursor-pointer"
-                    >
-                        {{ 'ActionIcon::ADD'|mdi_icon(16) }}
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="easy-donut">
-            <div id="easypiechart-orange" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.courses }}">
-                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.courses }}</span>
-            </div>
-            <div class="easypiechart-link">
-                <a class="hover:cursor-pointer underline"
-                   href="/main/my_space/course.php"
-                >
-                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Assigned courses' | trans }}
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div  class="easy-donut">
-            <div id="easypiechart-teal" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.assigned_courses }}">
-                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.assigned_courses }}</span>
-            </div>
-            <div class="easypiechart-link">
-                <a class="hover:cursor-pointer underline" href="/main/my_space/course.php?follow">
-                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }} {{ 'Followed courses' | trans }}
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="py-4 flex justify-center border-0 rounded-md shadow hover:shadow-lg shadow-black ">
-        <div class="easy-donut">
-            <div id="easypiechart-red" class="easypiechart block text-center relative" style="width:120px; height:120px;margin: 20px auto 10px auto;" data-percent="{{ stats.session_list |length  }}">
-                <span class="percent text-4xl absolute text-2xl block" style="left:-5px; top:38px; width:120px;">{{ stats.session_list |length }}</span>
-            </div>
-            <div class="easypiechart-link">
-                <a class="hover:cursor-pointer underline"
-                   href="/main/my_space/session.php"
-                >
-                    {{ 'ObjectIcon::SESSION'|mdi_icon(16) }} {{ 'Followed sessions' | trans }}
-                </a>
-                {% if app.user.status == 1 %}
-                    <a
-                            href="/main/admin/dashboard_add_sessions_to_user.php?user={{ app.user.id }}"
-                            class="hover:cursor-pointer">
-                        {{ 'ActionIcon::ADD'|mdi_icon(16) }}
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="my-8 page-header">
-    <h3>
-        {{ title }}
-    </h3>
-</div>
-<div class="grid grid-cols-4 gap-8 report-section">
-    <div class="h-24 grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AverageCoursePerStudent }}
-        </div>
-        <div class="text-center p-2">{{ 'Average number of courses to which my learners are subscribed' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.InactivesStudents }}
-        </div>
-        <div class="text-center p-2">{{ 'Learners not connected for a week or more' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AverageTimeSpentOnThePlatform }}
-        </div>
-        <div class="text-center p-2">{{ 'Time spent on portal' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AverageProgressInLearnpath }}
-        </div>
-        <div class="text-center p-2">{{ 'Progress in courses' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AvgCourseScore }}
-        </div>
-        <div class="text-center p-2">{{ 'Average score in learning paths' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AveragePostsInForum }}
-        </div>
-        <div class="text-center p-2"> {{ 'Posts in forum' | trans }}</div>
-    </div>
-    <div class="grid grid-cols-1 py-4 flex justify-center item-report">
-        <div class="item-report-number flex justify-center p-2 text-4xl border-0 rounded-md shadow hover:shadow-lg shadow-black">
-            {{ report.AverageAssignments }}
-        </div>
-        <div class="text-center p-2"> {{ 'Average assignments per learner' | trans }}</div>
-    </div>
-</div>
+            <section class="search-student bg-white rounded-2xl shadow-sm border border-gray-20 p-4">
+                {{ form }}
+            </section>
 
-<script>
-    $(function() {
-        $('#easypiechart-teal').easyPieChart({
-            scaleColor: false,
-            barColor: '#1ebfae',
-            lineWidth:12,
-            trackColor: '#f2f2f2'
+            <header class="page-header flex items-center justify-between">
+                <h4 class="text-2xl font-semibold text-gray-900">
+                    {{ 'Overview' | trans }}
+                </h4>
+            </header>
+
+            <section class="view-global-followed mt-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+                <div class="content bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center gap-3 text-primary">
+                        {{ 'ToolIcon::GROUP'|mdi_icon(48) }}
+                        <span class="text-3xl font-semibold text-gray-900">{{ students }}</span>
+                    </div>
+                    <div class="card-title mt-2 text-sm text-gray-500">
+                        <a href="/main/my_space/student.php" class="font-medium text-gray-900 hover:text-primary underline">
+                            {{ 'Followed students' | trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center gap-3 text-primary">
+                        {{ 'ObjectIcon::HRM_USER'|mdi_icon(48) }}
+                        <span class="text-3xl font-semibold text-gray-900">{{ studentbosses }}</span>
+                    </div>
+                    <div class="card-title mt-2 text-sm text-gray-500">
+                        <a href="/main/my_space/users.php?status={{ studentboss }}" class="font-medium text-gray-900 hover:text-primary underline">
+                            {{ 'Followed student bosses' | trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center gap-3 text-primary">
+                        {{ 'ObjectIcon::TEACHER'|mdi_icon(48) }}
+                        <span class="text-3xl font-semibold text-gray-900">{{ numberTeachers }}</span>
+                    </div>
+                    <div class="card-title mt-2 text-sm text-gray-500">
+                        <a href="/main/my_space/teachers.php" class="font-medium text-gray-900 hover:text-primary underline">
+                            {{ 'Followed teachers' | trans }}
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-center gap-3 text-primary">
+                        {{ 'ObjectIcon::USER'|mdi_icon(48) }}
+                        <span class="text-3xl font-semibold text-gray-900">{{ humanresources }}</span>
+                    </div>
+                    <div class="card-title mt-2 text-sm text-gray-500">
+                        <a href="/main/my_space/users.php?status={{ drh }}" class="font-medium text-gray-900 hover:text-primary underline">
+                            {{ 'Followed HR directors' | trans }}
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="view-global grid gap-4 sm:grid-cols-2 lg:grid-cols-4 my-4">
+
+                <div class="py-4 flex justify-center">
+                    <div class="easy-donut bg-white rounded-2xl shadow-sm border border-gray-20 px-6 py-4 flex flex-col items-center w-full">
+                        <div
+                                id="easypiechart-blue"
+                                class="easypiechart relative w-[120px] h-[120px]"
+                                data-percent="{{ total_user }}"
+                        >
+                        <span class="percent absolute inset-0 flex items-center justify-center text-3xl font-semibold text-gray-900">
+                            {{ total_user }}
+                        </span>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-900 flex items-center gap-2">
+                            <a class="hover:underline inline-flex items-center gap-1" href="/main/my_space/users.php">
+                                {{ 'ObjectIcon::USER'|mdi_icon(16) }}
+                                <span>{{ 'Followed users' | trans }}</span>
+                            </a>
+                            {% if app.user.status == 1 %}
+                                <a
+                                        href="/main/admin/dashboard_add_users_to_user.php?user={{ app.user.id }}"
+                                        class="inline-flex items-center"
+                                >
+                                    {{ 'ActionIcon::ADD'|mdi_icon(16) }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-4 flex justify-center">
+                    <div class="easy-donut bg-white rounded-2xl shadow-sm border border-gray-20 px-6 py-4 flex flex-col items-center w-full">
+                        <div
+                                id="easypiechart-orange"
+                                class="easypiechart relative w-[120px] h-[120px]"
+                                data-percent="{{ stats.courses }}"
+                        >
+                        <span class="percent absolute inset-0 flex items-center justify-center text-3xl font-semibold text-gray-900">
+                            {{ stats.courses }}
+                        </span>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-900">
+                            <a
+                                    class="hover:underline inline-flex items-center gap-1"
+                                    href="/main/my_space/course.php"
+                            >
+                                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }}
+                                <span>{{ 'Assigned courses' | trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-4 flex justify-center">
+                    <div class="easy-donut bg-white rounded-2xl shadow-sm border border-gray-20 px-6 py-4 flex flex-col items-center w-full">
+                        <div
+                                id="easypiechart-teal"
+                                class="easypiechart relative w-[120px] h-[120px]"
+                                data-percent="{{ stats.assigned_courses }}"
+                        >
+                        <span class="percent absolute inset-0 flex items-center justify-center text-3xl font-semibold text-gray-900">
+                            {{ stats.assigned_courses }}
+                        </span>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-900">
+                            <a class="hover:underline inline-flex items-center gap-1" href="/main/my_space/course.php?follow">
+                                {{ 'ObjectIcon::COURSE'|mdi_icon(16) }}
+                                <span>{{ 'Followed courses' | trans }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="py-4 flex justify-center">
+                    <div class="easy-donut bg-white rounded-2xl shadow-sm border border-gray-20 px-6 py-4 flex flex-col items-center w-full">
+                        <div
+                                id="easypiechart-red"
+                                class="easypiechart relative w-[120px] h-[120px]"
+                                data-percent="{{ stats.session_list | length }}"
+                        >
+                        <span class="percent absolute inset-0 flex items-center justify-center text-3xl font-semibold text-gray-900">
+                            {{ stats.session_list | length }}
+                        </span>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-900 flex items-center gap-2">
+                            <a
+                                    class="hover:underline inline-flex items-center gap-1"
+                                    href="/main/my_space/session.php"
+                            >
+                                {{ 'ObjectIcon::SESSION'|mdi_icon(16) }}
+                                <span>{{ 'Followed sessions' | trans }}</span>
+                            </a>
+                            {% if app.user.status == 1 %}
+                                <a
+                                        href="/main/admin/dashboard_add_sessions_to_user.php?user={{ app.user.id }}"
+                                        class="inline-flex items-center"
+                                >
+                                    {{ 'ActionIcon::ADD'|mdi_icon(16) }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="my-6 page-header">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    {{ title }}
+                </h3>
+            </section>
+
+            <section class="report-section grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AverageCoursePerStudent }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Average number of courses to which my learners are subscribed' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.InactivesStudents }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Learners not connected for a week or more' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AverageTimeSpentOnThePlatform }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Time spent on portal' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AverageProgressInLearnpath }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Progress in courses' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AvgCourseScore }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Average score in learning paths' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AveragePostsInForum }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Posts in forum' | trans }}
+                    </div>
+                </div>
+
+                <div class="item-report bg-white rounded-2xl shadow-sm border border-gray-20 p-4 flex flex-col gap-2">
+                    <div class="item-report-number text-3xl font-semibold text-gray-900 text-center">
+                        {{ report.AverageAssignments }}
+                    </div>
+                    <div class="text-center text-sm text-gray-500">
+                        {{ 'Average assignments per learner' | trans }}
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+
+    <script>
+      $(function() {
+        $("#easypiechart-teal").easyPieChart({
+          scaleColor: false,
+          barColor: "#1ebfae",
+          lineWidth: 12,
+          trackColor: "#f2f2f2"
         });
 
-        $('#easypiechart-orange').easyPieChart({
-            scaleColor: false,
-            barColor: '#ffb53e',
-            lineWidth:12,
-            trackColor: '#f2f2f2'
+        $("#easypiechart-orange").easyPieChart({
+          scaleColor: false,
+          barColor: "#ffb53e",
+          lineWidth: 12,
+          trackColor: "#f2f2f2"
         });
 
-        $('#easypiechart-red').easyPieChart({
-            scaleColor: false,
-            barColor: '#f9243f',
-            lineWidth:12,
-            trackColor: '#f2f2f2'
+        $("#easypiechart-red").easyPieChart({
+          scaleColor: false,
+          barColor: "#f9243f",
+          lineWidth: 12,
+          trackColor: "#f2f2f2"
         });
 
-        $('#easypiechart-blue').easyPieChart({
-            scaleColor: false,
-            barColor: '#30a5ff',
-            lineWidth:12,
-            trackColor: '#f2f2f2'
+        $("#easypiechart-blue").easyPieChart({
+          scaleColor: false,
+          barColor: "#30a5ff",
+          lineWidth: 12,
+          trackColor: "#f2f2f2"
         });
-    });
-</script>
+      });
+    </script>
+
 {% endautoescape %}

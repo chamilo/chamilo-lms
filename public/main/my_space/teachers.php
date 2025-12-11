@@ -310,31 +310,31 @@ $params = [
 $table->set_additional_parameters($params);
 
 if ($is_western_name_order) {
-    $table->set_header(0, get_lang('FirstName'), false);
-    $table->set_header(1, get_lang('LastName'), false);
+    $table->set_header(0, get_lang('First name'), false);
+    $table->set_header(1, get_lang('Last name'), false);
 } else {
-    $table->set_header(0, get_lang('LastName'), false);
-    $table->set_header(1, get_lang('FirstName'), false);
+    $table->set_header(0, get_lang('Last name'), false);
+    $table->set_header(1, get_lang('First name'), false);
 }
 
-$table->set_header(2, get_lang('FirstLogin'), false);
-$table->set_header(3, get_lang('LastConnexion'), false);
+$table->set_header(2, get_lang('First login'), false);
+$table->set_header(3, get_lang('Last connexion'), false);
 $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
         $csv_header[] = [
-            get_lang('FirstName'),
-            get_lang('LastName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('First name'),
+            get_lang('Last name'),
+            get_lang('First login'),
+            get_lang('Last connexion'),
         ];
     } else {
         $csv_header[] = [
-            get_lang('LastName'),
-            get_lang('FirstName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('Last name'),
+            get_lang('First name'),
+            get_lang('First login'),
+            get_lang('Last connexion'),
         ];
     }
 }
@@ -389,9 +389,9 @@ echo            Display::page_subheader($nameTools);
 
 if (isset($active)) {
     if ($active) {
-        $activeLabel = get_lang('ActiveUsers');
+        $activeLabel = get_lang('Active users');
     } else {
-        $activeLabel = get_lang('InactiveUsers');
+        $activeLabel = get_lang('Inactive users');
     }
 
     echo '  <div class="mt-1">';

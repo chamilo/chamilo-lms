@@ -1453,8 +1453,6 @@ class MySpace
 
         $table->additional_parameters = $params;
         $table->set_column_filter(0, ['MySpace', 'course_tracking_filter']);
-
-        // 👉 Nada de Template ni Twig aquí.
         echo '<div class="summary-legend">';
         echo $table->return_table();
         echo '</div>';
@@ -1524,7 +1522,6 @@ class MySpace
      */
     public static function course_tracking_filter($courseCode, $urlParams, $row)
     {
-        // 1) Obtener la entidad de curso a partir del code que pasa la tabla
         $course = api_get_course_entity($courseCode);
 
         if (null === $course) {
@@ -1553,13 +1550,11 @@ class MySpace
             $user   = $courseRelUser->getUser();
             $userId = (int) $user->getId();
 
-            // 1) Tiempo en el curso
             $timeSpent += Tracking::get_time_spent_on_the_course(
                 $userId,
                 $courseId
             );
 
-            // 2) Progreso promedio
             $progressTmp = Tracking::get_avg_student_progress(
                 $userId,
                 $course,
@@ -1573,7 +1568,6 @@ class MySpace
                 $progressCount += $progressTmp[1];
             }
 
-            // 3) Nota promedio
             $scoreTmp = Tracking::get_avg_student_score(
                 $userId,
                 $course,
@@ -1587,7 +1581,6 @@ class MySpace
                 $scoreCount += $scoreTmp[1];
             }
 
-            // 4) Último acceso
             $lastLoginTmp = Tracking::get_last_connection_date_on_the_course(
                 $userId,
                 ['real_id' => $courseId],
@@ -1603,19 +1596,12 @@ class MySpace
                 }
             }
 
-            // 5) Resultados de ejercicios
             $exerciseResults = self::exercises_results($userId, $courseCode);
 
             $totalScoreObtained     += $exerciseResults['score_obtained'] ?? 0;
             $totalScorePossible     += $exerciseResults['score_possible'] ?? 0;
             $totalQuestionsAnswered += $exerciseResults['questions_answered'] ?? 0;
-
-            // 6) Si luego quieres contar mensajes / assignments, descomentas y adaptas:
-            // $messagesCount    += Container::getForumPostRepository()->countByUserAndCourse($user, $course);
-            // $assignmentsCount += Container::getStudentPublicationRepository()->countByUserAndCourse($user, $course);
         }
-
-        // --- Agregados finales ---
 
         $avgProgress = $progressCount > 0
             ? round($progressSum / $progressCount, 2)

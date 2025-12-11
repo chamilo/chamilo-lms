@@ -64,24 +64,41 @@ if (isset($_REQUEST['Registerister'])) {
         if (COURSEMANAGER === $type) {
             if (!empty($sessionId)) {
                 $message = $userInfo['complete_name_with_username'].' '.get_lang('has been registered to your course');
-                SessionManager::set_coach_to_course_session(
+                $ok = SessionManager::set_coach_to_course_session(
                     $_REQUEST['user_id'],
                     $sessionId,
                     $courseInfo['real_id']
                 );
-                Display::addFlash(Display::return_message($message));
+                Display::addFlash(
+                    Display::return_message($ok ? $message : get_lang('Unexpected error while subscribing the user'), $ok ? 'normal' : 'warning')
+                );
             } else {
-                CourseManager::subscribeUser(
+                $res = CourseManager::subscribeUser(
                     $_REQUEST['user_id'],
                     $courseInfo['real_id'],
-                    COURSEMANAGER
+                    COURSEMANAGER,
+                    0,
+                    0,
+                    true,
+                    ['result' => true, 'flash' => false, 'emails' => true] // UI handles flash here
                 );
+                if (is_array($res) && isset($res['message'])) {
+                    Display::addFlash(Display::return_message($res['message'], !empty($res['ok']) ? 'normal' : 'warning'));
+                }
             }
         } else {
-            CourseManager::subscribeUser(
+            $res = CourseManager::subscribeUser(
                 $_REQUEST['user_id'],
-                $courseInfo['real_id']
+                $courseInfo['real_id'],
+                STUDENT,
+                0,
+                0,
+                true,
+                ['result' => true, 'flash' => false, 'emails' => true]
             );
+            if (is_array($res) && isset($res['message'])) {
+                Display::addFlash(Display::return_message($res['message'], !empty($res['ok']) ? 'normal' : 'warning'));
+            }
         }
     }
     header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
@@ -93,6 +110,8 @@ if (isset($_POST['action'])) {
         case 'subscribe':
             if (is_array($_POST['user'])) {
                 $isSuscribe = [];
+                $errorMessages = [];
+
                 foreach ($_POST['user'] as $index => $user_id) {
                     $userInfo = api_get_user_info($user_id);
                     if ($userInfo) {
@@ -106,12 +125,45 @@ if (isset($_POST['action'])) {
                                 );
                                 if ($result) {
                                     $isSuscribe[] = $message;
+                                } else {
+                                    $errorMessages[] = $userInfo['complete_name_with_username'].': '.get_lang('Unexpected error while subscribing the user');
                                 }
                             } else {
-                                CourseManager::subscribeUser($user_id, $courseInfo['real_id'], COURSEMANAGER);
+                                // NEW: use structured result when available
+                                $res = CourseManager::subscribeUser(
+                                    $user_id,
+                                    $courseInfo['real_id'],
+                                    COURSEMANAGER,
+                                    0,
+                                    0,
+                                    true,
+                                    ['result' => true, 'flash' => false, 'emails' => true]
+                                );
+                                if (is_array($res)) {
+                                    if (!empty($res['ok'])) {
+                                        $isSuscribe[] = $res['message'];
+                                    } else {
+                                        $errorMessages[] = $res['message'] ?? get_lang('Unexpected error while subscribing the user');
+                                    }
+                                }
                             }
                         } else {
-                            CourseManager::subscribeUser($user_id, $courseInfo['real_id']);
+                            $res = CourseManager::subscribeUser(
+                                $user_id,
+                                $courseInfo['real_id'],
+                                STUDENT,
+                                0,
+                                0,
+                                true,
+                                ['result' => true, 'flash' => false, 'emails' => true]
+                            );
+                            if (is_array($res)) {
+                                if (!empty($res['ok'])) {
+                                    $isSuscribe[] = $res['message'];
+                                } else {
+                                    $errorMessages[] = $res['message'] ?? get_lang('Unexpected error while subscribing the user');
+                                }
+                            }
                         }
                     }
                 }
@@ -121,11 +173,15 @@ if (isset($_POST['action'])) {
                         Display::addFlash(Display::return_message($info));
                     }
                 }
+                if (!empty($errorMessages)) {
+                    $errHtml = implode('<br>', array_map('Security::remove_XSS', $errorMessages));
+                    Display::addFlash(Display::return_message($errHtml, 'warning'));
+                }
             }
 
             header('Location:'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'&type='.$type);
             exit;
-        break;
+            break;
     }
 }
 
@@ -172,6 +228,15 @@ if (!empty($_POST['keyword'])) {
 }
 
 Display::display_header($tool_name, 'User');
+
+// Global limit banner (teachers included) so teachers see it before trying
+$__globalLimit = (int) api_get_setting('platform.hosting_limit_users_per_course'); // 0 => disabled
+if ($__globalLimit > 0) {
+    echo Display::return_message(
+        sprintf(get_lang('A global limit of %d users applies to this course (teachers included).'), $__globalLimit),
+        'warning'
+    );
+}
 
 // Build search-form
 switch ($type) {
@@ -494,9 +559,12 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     ON
                         u.id = cu.user_id AND
                         c_id = $courseId AND
-                        session_id = $sessionId
-                    INNER JOIN $tbl_url_rel_user as url_rel_user
-                    ON (url_rel_user.user_id = u.id) ";
+                        session_id = $sessionId ";
+
+            if (api_is_multiple_url_enabled()) {
+                $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user
+                          ON (url_rel_user.user_id = u.id) ";
+            }
 
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) &&
@@ -519,7 +587,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
                             $teacherRoleFilter AND
                             (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
-            $sql .= " AND access_url_id = $url_access_id";
+            if (api_is_multiple_url_enabled()) {
+                $sql .= " AND access_url_id = $url_access_id";
+            }
         } else {
             // adding a teacher NOT through a session
             $sql = "SELECT $select_fields

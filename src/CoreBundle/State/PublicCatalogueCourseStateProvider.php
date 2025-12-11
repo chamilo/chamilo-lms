@@ -37,6 +37,7 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
         $user = $this->tokenStorage->getToken()?->getUser();
         $isAuthenticated = \is_object($user);
 
+        // Check if the public catalogue is visible for anonymous users
         if (!$isAuthenticated) {
             $showCatalogue = 'false' !== $this->settingsManager->getSetting('catalog.course_catalog_published', true);
             if (!$showCatalogue) {
@@ -60,6 +61,8 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
 
         /** @var AccessUrl $accessUrl */
         $accessUrl = $this->accessUrlRepository->findOneBy(['url' => $host]) ?? $this->accessUrlRepository->find(1);
+
+        // Retrieve all courses visible under this URL
         $courses = $this->courseRepository->createQueryBuilder('c')
             ->innerJoin('c.urls', 'url_rel')
             ->andWhere('url_rel.url = :accessUrl')
@@ -71,20 +74,17 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
             ->getResult()
         ;
 
-        if (!$onlyShowMatching && !$onlyShowCoursesWithCategory) {
-            if ($isAuthenticated) {
-                foreach ($courses as $course) {
-                    if ($course instanceof Course) {
-                        $course->subscribed = $course->hasSubscriptionByUser($user);
-                    }
-                }
+        // Global hosting limit (includes all users, not only students)
+        $maxUsersPerCourse = (int) $this->settingsManager->getSetting('platform.hosting_limit_users_per_course', true);
+
+        $filteredCourses = [];
+
+        foreach ($courses as $course) {
+            if (!$course instanceof Course) {
+                continue;
             }
 
-            return $courses;
-        }
-
-        $filtered = [];
-        foreach ($courses as $course) {
+            // Apply "show_in_catalogue" and category filters
             $passesExtraField = true;
             $passesCategory = true;
 
@@ -101,15 +101,26 @@ readonly class PublicCatalogueCourseStateProvider implements ProviderInterface
                 $passesCategory = $course->getCategories()->count() > 0;
             }
 
-            if ($passesExtraField && $passesCategory) {
-                if ($isAuthenticated && $course instanceof Course) {
-                    $course->subscribed = $course->hasSubscriptionByUser($user);
-                }
-
-                $filtered[] = $course;
+            if (!$passesExtraField || !$passesCategory) {
+                continue;
             }
+
+            // Compute user subscription info
+            if ($isAuthenticated) {
+                $course->subscribed = $course->hasSubscriptionByUser($user);
+            }
+
+            // Count ALL users in the course (students + teachers + tutors + HR)
+            $nbUsers = $course->getUsers()->count();
+
+            // Expose computed fields for API serialization
+            $course->nb_students = $nbUsers;
+            $course->max_students = $maxUsersPerCourse;
+            $course->is_full = $maxUsersPerCourse > 0 && $nbUsers >= $maxUsersPerCourse;
+
+            $filteredCourses[] = $course;
         }
 
-        return $filtered;
+        return $filteredCourses;
     }
 }

@@ -119,6 +119,19 @@
         {{ course.extra_fields?.[field.variable] ?? "-" }}
       </div>
 
+      <div
+        v-if="course.max_students > 0"
+        class="text-sm text-gray-600"
+      >
+        <strong>{{ $t("Students") }}:</strong>
+        {{ course.nb_students }} / {{ course.max_students }}
+        <span
+          v-if="course.is_full"
+          class="text-red-600 font-semibold"
+          >({{ $t("Full") }})</span
+        >
+      </div>
+
       <div class="mt-auto pt-2">
         <router-link
           v-if="course.subscribed"
@@ -245,12 +258,26 @@ const emitRating = (event) => {
 const subscribing = ref(false)
 const subscribeToCourse = async () => {
   if (!props.currentUserId) {
-    showErrorNotification("You must be logged in to subscribe to a course.")
+    showErrorNotification($t("You must be logged in to subscribe to a course."))
     return
   }
 
   try {
     subscribing.value = true
+
+    const maxUsers = props.course.max_students ?? 0
+    const nbUsers = props.course.nb_students ?? 0
+
+    // Global limit validation (includes teachers and students)
+    if (maxUsers > 0 && nbUsers >= maxUsers) {
+      showErrorNotification(
+        $t("This course has reached the maximum number of users ({nb}/{max}).", {
+          nb: nbUsers,
+          max: maxUsers,
+        })
+      )
+      return
+    }
 
     const useAutoSession =
       platformConfigStore.getSetting("catalog.course_subscription_in_user_s_session") === "true"
@@ -278,7 +305,7 @@ const subscribeToCourse = async () => {
       })
     }
 
-    showSuccessNotification("You have successfully subscribed to this course.")
+    showSuccessNotification($t("You have successfully subscribed to this course."))
 
     await router.push({
       name: "CourseHome",
@@ -289,7 +316,7 @@ const subscribeToCourse = async () => {
     })
   } catch (e) {
     console.error("Subscription error:", e)
-    showErrorNotification("Failed to subscribe to the course.")
+    showErrorNotification($t("Failed to subscribe to the course."))
   } finally {
     subscribing.value = false
   }

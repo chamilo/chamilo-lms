@@ -1831,12 +1831,6 @@ class SessionManager
             );
 
             return false;
-        } elseif (empty($coachesId)) {
-            Display::addFlash(
-                Display::return_message(get_lang('You must select a coach'), 'warning')
-            );
-
-            return false;
         } elseif (!empty($startDate) &&
             !api_is_valid_date($startDate, 'Y-m-d H:i') &&
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')

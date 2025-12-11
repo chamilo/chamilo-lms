@@ -224,7 +224,7 @@ class SecurityController extends AbstractController
     /**
      * @see LdapAuthenticator
      */
-    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'])]
+    #[Route('/login/ldap/check', name: 'login_ldap_check', methods: ['POST'], format: 'json')]
     public function ldapLoginCheck(AuthenticationConfigHelper $authConfigHelper): Response
     {
         $ldapConfig = $authConfigHelper->getLdapConfig();

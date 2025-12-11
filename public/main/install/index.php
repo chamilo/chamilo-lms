@@ -70,6 +70,58 @@ session_start();
 Container::$session = new HttpSession();
 
 require_once 'install.lib.php';
+
+$envFile = api_get_path(SYMFONY_SYS_PATH).'.env';
+$versionInfo = require __DIR__.'/version.php';
+$installerVersion = $versionInfo['new_version'] ?? null;
+
+if (file_exists($envFile)) {
+    $dotenv = new Dotenv();
+    try {
+        // Load .env without crashing if incomplete
+        $dotenv->loadEnv($envFile);
+    } catch (\Throwable $e) {
+        // Ignore and let the wizard continue
+    }
+
+    $appInstalled = (($_ENV['APP_INSTALLED'] ?? getenv('APP_INSTALLED') ?? '') === '1');
+
+    if ($appInstalled) {
+        // Try to read DB version; fail soft if DB is unreachable
+        $dbVersion = null;
+        try {
+            $dbHost = $_ENV['DATABASE_HOST'] ?? 'localhost';
+            $dbUser = $_ENV['DATABASE_USER'] ?? '';
+            $dbPass = $_ENV['DATABASE_PASSWORD'] ?? '';
+            $dbName = $_ENV['DATABASE_NAME'] ?? '';
+            $dbPort = (int) ($_ENV['DATABASE_PORT'] ?? 3306);
+
+            connectToDatabase($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
+            $dbVersion = get_config_param_from_db('chamilo_database_version');
+        } catch (\Throwable $e) {
+            // Leave $dbVersion as null
+        }
+
+        // If DB version is >= installer version, block the wizard
+        if ($installerVersion && $dbVersion && version_compare($dbVersion, $installerVersion, '>=')) {
+            header('HTTP/1.1 409 Conflict');
+            echo '<!doctype html><meta charset="utf-8"><title>Chamilo already installed</title>';
+            echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
+            echo '<h1>Chamilo is already installed</h1>';
+            echo '<p>Database version: <strong>'.htmlspecialchars($dbVersion).'</strong>. '
+                .'Installer version: <strong>'.htmlspecialchars($installerVersion).'</strong>.</p>';
+            echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';
+            echo '<p>If you need a fresh install, set <code>APP_INSTALLED=0</code> or remove <code>.env</code> first.</p>';
+            echo '</div>';
+            exit;
+        }
+
+        // If DB version < installer version, let the wizard run (upgrade path)
+        // If we could not read DB version (null), also allow the wizard (conservative).
+    }
+    // If APP_INSTALLED != 1, allow a fresh install
+}
+
 $httpRequest = Request::createFromGlobals();
 $installationLanguage = 'en_US';
 

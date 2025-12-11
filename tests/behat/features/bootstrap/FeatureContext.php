@@ -147,6 +147,7 @@ class FeatureContext extends MinkContext
         } else {
             $this->assertSession()->elementNotExists('css', '.alert-danger');
         }
+        $this->assertSession()->elementNotExists('css', '.p-message-error');
     }
 
     /**

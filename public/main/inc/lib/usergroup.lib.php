@@ -894,8 +894,10 @@ class UserGroupModel extends Model
             $relationConditionArray = [];
             foreach ($roles as $relation) {
                 $relation = (int) $relation;
-                if (empty($relation)) {
-                    $relationConditionArray[] = " (relation_type = 0 OR relation_type IS NULL OR relation_type = '') ";
+
+                if (0 === $relation) {
+                    $relationConditionArray[] =
+                        ' (relation_type = '.GROUP_USER_PERMISSION_READER.' OR relation_type = 2 OR relation_type IS NULL OR relation_type = \'\') ';
                 } else {
                     $relationConditionArray[] = " relation_type = $relation ";
                 }
@@ -928,20 +930,33 @@ class UserGroupModel extends Model
     }
 
     /**
-     * Gets a list of user ids by user group.
+     * Gets a list of user ids by user group and relation type.
      *
      * @param int $id       user group id
-     * @param int $relation
+     * @param int $relation relation type
      *
      * @return array with a list of user ids
      */
     public function getUsersByUsergroupAndRelation($id, $relation = 0)
     {
         $relation = (int) $relation;
-        if (empty($relation)) {
-            $conditions = ['where' => ['usergroup_id = ? AND (relation_type = 0 OR relation_type IS NULL OR relation_type = "") ' => [$id]]];
+
+        if (0 === $relation) {
+            // Default reader role: include canonical (0) + legacy (2) + null / empty
+            $conditions = [
+                'where' => [
+                    'usergroup_id = ? AND (relation_type = ? OR relation_type = 2 OR relation_type IS NULL OR relation_type = \'\') ' => [
+                        $id,
+                        GROUP_USER_PERMISSION_READER,
+                    ],
+                ],
+            ];
         } else {
-            $conditions = ['where' => ['usergroup_id = ? AND relation_type = ?' => [$id, $relation]]];
+            $conditions = [
+                'where' => [
+                    'usergroup_id = ? AND relation_type = ?' => [$id, $relation],
+                ],
+            ];
         }
 
         $results = Database::select(
@@ -1224,15 +1239,28 @@ class UserGroupModel extends Model
         $delete_users_not_present_in_list = true,
         $relationType = 0
     ) {
-        $current_list = $this->get_users_by_usergroup($usergroup_id);
-        $course_list = $this->get_courses_by_usergroup($usergroup_id);
-        $session_list = $this->get_sessions_by_usergroup($usergroup_id);
-        $session_list = array_filter($session_list);
+        // Normalize relation type
         $relationType = (int) $relationType;
 
-        $delete_items = [];
-        $new_items = [];
+        // Detect group type to keep legacy behaviour for classic classes
+        $groupInfo = $this->get($usergroup_id);
+        $isSocialGroup = isset($groupInfo['group_type']) && (int) $groupInfo['group_type'] === Usergroup::SOCIAL_CLASS;
+        $isClassGroup  = isset($groupInfo['group_type']) && (int) $groupInfo['group_type'] === Usergroup::NORMAL_CLASS;
 
+        if ($isSocialGroup) {
+            $current_list = $this->getUsersByUsergroupAndRelation($usergroup_id, $relationType);
+        } else {
+            $current_list = $this->get_users_by_usergroup($usergroup_id);
+        }
+
+        $course_list  = $this->get_courses_by_usergroup($usergroup_id);
+        $session_list = $this->get_sessions_by_usergroup($usergroup_id);
+        $session_list = array_filter($session_list);
+
+        $delete_items = [];
+        $new_items    = [];
+
+        // Compute new users to add
         if (!empty($list)) {
             foreach ($list as $user_id) {
                 if (!in_array($user_id, $current_list)) {
@@ -1241,6 +1269,7 @@ class UserGroupModel extends Model
             }
         }
 
+        // Compute users to delete (present before, not present now)
         if (!empty($current_list)) {
             foreach ($current_list as $user_id) {
                 if (!in_array($user_id, $list)) {
@@ -1252,38 +1281,58 @@ class UserGroupModel extends Model
         // Deleting items
         if (!empty($delete_items) && $delete_users_not_present_in_list) {
             foreach ($delete_items as $user_id) {
-                // Removing courses
+                // Remove course subscriptions
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         $course_info = api_get_course_info_by_id($course_id);
                         CourseManager::unsubscribe_user($user_id, $course_info['code']);
                     }
                 }
-                // Removing sessions
+
+                // Remove session subscriptions
                 if (!empty($session_list)) {
                     foreach ($session_list as $session_id) {
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
 
-                if (empty($relationType)) {
-                    Database::delete(
-                        $this->usergroup_rel_user_table,
-                        [
-                            'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type IS NULL OR relation_type = "")' => [
-                                $usergroup_id,
-                                $user_id,
-                            ],
-                        ]
-                    );
+                // Remove from usergroup_rel_user:
+                // - Social groups: delete exactly this role (even if it is 0 = reader).
+                // - Normal classes: keep legacy default behaviour.
+                if ($isSocialGroup) {
+                    // Strict per-role deletion, with reader-role legacy tolerance
+                    if ($relationType === 0) {
+                        // Default reader role: treat legacy 2 as equivalent
+                        Database::delete(
+                            $this->usergroup_rel_user_table,
+                            [
+                                'usergroup_id = ? AND user_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
+                                    $usergroup_id,
+                                    $user_id,
+                                ],
+                            ]
+                        );
+                    } else {
+                        // Other roles: delete only this specific role
+                        Database::delete(
+                            $this->usergroup_rel_user_table,
+                            [
+                                'usergroup_id = ? AND user_id = ? AND relation_type = ?' => [
+                                    $usergroup_id,
+                                    $user_id,
+                                    $relationType,
+                                ],
+                            ]
+                        );
+                    }
                 } else {
+                    // Legacy: default/empty relation_type
                     Database::delete(
                         $this->usergroup_rel_user_table,
                         [
-                            'usergroup_id = ? AND user_id = ? AND relation_type = ?' => [
+                            'usergroup_id = ? AND (relation_type = "0" OR relation_type = "2" OR relation_type IS NULL OR relation_type = "")' => [
                                 $usergroup_id,
                                 $user_id,
-                                $relationType,
                             ],
                         ]
                     );
@@ -1293,7 +1342,7 @@ class UserGroupModel extends Model
 
         // Adding new relationships
         if (!empty($new_items)) {
-            // Adding sessions
+            // Add sessions
             if (!empty($session_list)) {
                 foreach ($session_list as $session_id) {
                     SessionManager::subscribeUsersToSession($session_id, $new_items, null, false);
@@ -1301,17 +1350,20 @@ class UserGroupModel extends Model
             }
 
             foreach ($new_items as $user_id) {
-                // Adding courses.
+                // Add courses
                 if (!empty($course_list)) {
                     foreach ($course_list as $course_id) {
                         CourseManager::subscribeUser($user_id, $course_id);
                     }
                 }
+
+                // Persist relation in usergroup_rel_user
                 $params = [
-                    'user_id' => $user_id,
+                    'user_id'      => $user_id,
                     'usergroup_id' => $usergroup_id,
-                    'relation_type' => $relationType,
+                    'relation_type'=> $relationType,
                 ];
+
                 Database::insert($this->usergroup_rel_user_table, $params);
             }
         }
@@ -2057,8 +2109,8 @@ class UserGroupModel extends Model
      * @param int $user_id
      * @param int $group_id
      *
-     * @return int 0 if there are not relationship otherwise returns the user group
-     * */
+     * @return int 0 if there is no relationship; otherwise the normalized role
+     */
     public function get_user_group_role($user_id, $group_id)
     {
         $table_group_rel_user = $this->usergroup_rel_user_table;
@@ -2071,11 +2123,18 @@ class UserGroupModel extends Model
                     FROM $table_group_rel_user
                     WHERE
                         usergroup_id = $group_id AND
-                        user_id = $user_id ";
+                        user_id = $user_id";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_assoc($result);
-                $return_value = $row['relation_type'];
+                $relationType = (int) $row['relation_type'];
+
+                // Normalize legacy reader (2) to the canonical reader role
+                if (2 === $relationType) {
+                    $relationType = GROUP_USER_PERMISSION_READER;
+                }
+
+                $return_value = $relationType;
             }
         }
 
@@ -2201,21 +2260,50 @@ class UserGroupModel extends Model
      */
     public function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
-        $table_url_rel_group = $this->usergroup_rel_user_table;
-        if (!empty($user_id) && !empty($group_id)) {
-            $role = $this->get_user_group_role($user_id, $group_id);
+        $table_rel = $this->usergroup_rel_user_table;
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+        $relation_type = (int) $relation_type;
 
-            if (0 == $role) {
-                $sql = "INSERT INTO $table_url_rel_group
-           				SET
-           				    user_id = ".intval($user_id).",
-           				    usergroup_id = ".intval($group_id).",
-           				    relation_type = ".intval($relation_type);
-                Database::query($sql);
-            } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION == $role) {
-                //if somebody already invited me I can be added
-                self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
+        if (empty($user_id) || empty($group_id)) {
+            return false;
+        }
+
+        // Normalize relation type for classes vs social groups
+        $groupInfo = $this->get($group_id); // returns ['group_type' => ...] among others
+        if (!empty($groupInfo) && isset($groupInfo['group_type'])) {
+            if ((int) $groupInfo['group_type'] === self::NORMAL_CLASS) {
+                // For class memberships, we want relation_type = 0 as the canonical "reader"
+                if ($relation_type === GROUP_USER_PERMISSION_READER) {
+                    $relation_type = 0;
+                }
             }
+        }
+
+        // Current role (raw value from usergroup_rel_user)
+        $role = $this->get_user_group_role($user_id, $group_id);
+
+        if (0 === $role) {
+            // No relationship yet → insert normalized relation_type
+            $sql = "INSERT INTO $table_rel
+                SET
+                    user_id = $user_id,
+                    usergroup_id = $group_id,
+                    relation_type = $relation_type";
+            Database::query($sql);
+        } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION === $role) {
+            // If somebody already invited the user, upgrade to final role
+            self::update_user_role(
+                $user_id,
+                $group_id,
+                $relation_type ?: GROUP_USER_PERMISSION_READER
+            );
+        } elseif (
+            // Backward-compatibility: old "reader = 2" for classes → normalize to 0
+            GROUP_USER_PERMISSION_READER === $role
+            && $relation_type === 0
+        ) {
+            self::update_user_role($user_id, $group_id, 0);
         }
 
         return true;

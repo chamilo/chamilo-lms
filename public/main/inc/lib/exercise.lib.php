@@ -6633,7 +6633,7 @@ EOT;
             return false;
         }
         if (!$quiz) {
-            Display::addFlash(Display::return_message(get_lang('Test not found'), 'warning', false));
+            Display::addFlash(Display::return_message(get_lang('Test not found or not visible'), 'warning', false));
             return false;
         }
         if ($sessionId > 0) {

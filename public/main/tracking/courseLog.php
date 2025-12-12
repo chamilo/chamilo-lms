@@ -1762,8 +1762,8 @@ $groupPanelTitle = Display::getMdiIcon(
         'ch-tool-icon',
         null,
         ICON_SIZE_TINY,
-        get_lang('Group statistics')
-    ).' '.get_lang('Group statistics');
+        get_lang('Group reporting')
+    ).' '.get_lang('Group reporting');
 
 echo Display::panel($groupTable->toHtml(), $groupPanelTitle);
 

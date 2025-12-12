@@ -448,7 +448,7 @@ if (!empty($exportAllLink)) {
             'ch-tool-icon',
             null,
             32,
-            get_lang('Export all certificates')
+            get_lang('Export all certificates to PDF')
         ),
         $exportAllLink
     );

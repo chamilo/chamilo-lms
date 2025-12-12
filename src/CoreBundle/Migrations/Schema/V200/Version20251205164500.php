@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
 
 final class Version20251205164500 extends AbstractMigrationChamilo
 {
@@ -58,7 +59,7 @@ final class Version20251205164500 extends AbstractMigrationChamilo
                 'ALTER TABLE search_engine_ref DROP FOREIGN KEY FK_473F037891D79BD3'
             );
             $this->write('Dropped foreign key FK_473F037891D79BD3 from search_engine_ref.');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->write('Foreign key FK_473F037891D79BD3 not found on search_engine_ref, skipping FK drop.');
         }
 
@@ -92,7 +93,7 @@ final class Version20251205164500 extends AbstractMigrationChamilo
             $this->connection->executeStatement(
                 'CREATE INDEX IDX_473F037891D79BD3 ON search_engine_ref (c_id)'
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->write('Could not recreate index IDX_473F037891D79BD3 on search_engine_ref: '.$e->getMessage());
         }
 
@@ -102,7 +103,7 @@ final class Version20251205164500 extends AbstractMigrationChamilo
                      ADD CONSTRAINT FK_473F037891D79BD3
                      FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE SET NULL'
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->write('Could not recreate foreign key FK_473F037891D79BD3 on search_engine_ref: '.$e->getMessage());
         }
 

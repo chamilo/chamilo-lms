@@ -27,6 +27,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const DIRECTORY_SEPARATOR;
+
 #[Route('/admin')]
 class SettingsController extends BaseController
 {
@@ -381,37 +383,38 @@ class SettingsController extends BaseController
         // Base status rows (Xapian extension + directory checks + custom fields)
         $indexDir = $this->searchIndexPathResolver->getIndexDir();
 
-        $xapianLoaded   = \extension_loaded('xapian');
-        $dirExists      = \is_dir($indexDir);
-        $dirWritable    = \is_writable($indexDir);
-        $fieldsCount    = $this->entityManager
+        $xapianLoaded = \extension_loaded('xapian');
+        $dirExists = is_dir($indexDir);
+        $dirWritable = is_writable($indexDir);
+        $fieldsCount = $this->entityManager
             ->getRepository(SearchEngineField::class)
-            ->count([]);
+            ->count([])
+        ;
 
         $statusRows = [
             [
                 'label' => $this->translator->trans('Xapian module installed'),
-                'ok'    => $xapianLoaded,
+                'ok' => $xapianLoaded,
             ],
             [
                 'label' => $this->translator->trans('The directory exists').' - '.$indexDir,
-                'ok'    => $dirExists,
+                'ok' => $dirExists,
             ],
             [
                 'label' => $this->translator->trans('Is writable').' - '.$indexDir,
-                'ok'    => $dirWritable,
+                'ok' => $dirWritable,
             ],
             [
                 'label' => $this->translator->trans('Available custom search fields'),
-                'ok'    => $fieldsCount > 0,
+                'ok' => $fieldsCount > 0,
             ],
         ];
 
         // External converters (ps2pdf, pdftotext, ...)
-        $tools        = [];
+        $tools = [];
         $toolsWarning = null;
 
-        $isWindows = \DIRECTORY_SEPARATOR === '\\';
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
 
         if ($isWindows) {
             $toolsWarning = $this->translator->trans(
@@ -421,30 +424,30 @@ class SettingsController extends BaseController
             $programs = ['ps2pdf', 'pdftotext', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv'];
 
             foreach ($programs as $program) {
-                $output    = [];
+                $output = [];
                 $returnVar = null;
 
                 // Same behaviour as "which $program" in Chamilo 1
-                @\exec('which '.\escapeshellarg($program), $output, $returnVar);
-                $path      = $output[0] ?? '';
-                $installed = $path !== '';
+                @exec('which '.escapeshellarg($program), $output, $returnVar);
+                $path = $output[0] ?? '';
+                $installed = '' !== $path;
 
                 $tools[] = [
                     'name' => $program,
                     'path' => $path,
-                    'ok'   => $installed,
+                    'ok' => $installed,
                 ];
             }
         }
 
         return [
             // Whether full-text search is enabled at all
-            'enabled'        => ($searchEnabled === 'true'),
+            'enabled' => ('true' === $searchEnabled),
             // Xapian + directory + custom fields
-            'status_rows'    => $statusRows,
+            'status_rows' => $statusRows,
             // External converters
-            'tools'          => $tools,
-            'tools_warning'  => $toolsWarning,
+            'tools' => $tools,
+            'tools_warning' => $toolsWarning,
         ];
     }
 }

@@ -6,7 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Search\Xapian;
 
+use Exception;
 use RuntimeException;
+use Xapian;
+use XapianDocument;
+use XapianStem;
+use XapianTermGenerator;
+use XapianWritableDatabase;
 
 /**
  * Base Xapian indexer for Chamilo 2.
@@ -16,16 +22,15 @@ use RuntimeException;
  */
 abstract class XapianIndexer
 {
-    /** @var \XapianTermGenerator|null */
-    protected ?\XapianTermGenerator $indexer = null;
+    protected ?XapianTermGenerator $indexer = null;
 
-    /** @var \XapianStem|null */
-    protected ?\XapianStem $stemmer = null;
+    protected ?XapianStem $stemmer = null;
 
-    /** @var \XapianWritableDatabase|null */
-    protected ?\XapianWritableDatabase $db = null;
+    protected ?XapianWritableDatabase $db = null;
 
-    /** @var array<int,object> */
+    /**
+     * @var array<int,object>
+     */
     protected array $chunks = [];
 
     public function __construct(
@@ -47,73 +52,69 @@ abstract class XapianIndexer
     final public function getSupportedLanguages(): array
     {
         return [
-            'none'   => 'none',
-            'da'     => 'danish',
-            'nl'     => 'dutch',
-            'en'     => 'english',
+            'none' => 'none',
+            'da' => 'danish',
+            'nl' => 'dutch',
+            'en' => 'english',
             'lovins' => 'english_lovins',
             'porter' => 'english_porter',
-            'fi'     => 'finnish',
-            'fr'     => 'french',
-            'de'     => 'german',
-            'it'     => 'italian',
-            'no'     => 'norwegian',
-            'pt'     => 'portuguese',
-            'ru'     => 'russian',
-            'es'     => 'spanish',
-            'sv'     => 'swedish',
+            'fi' => 'finnish',
+            'fr' => 'french',
+            'de' => 'german',
+            'it' => 'italian',
+            'no' => 'norwegian',
+            'pt' => 'portuguese',
+            'ru' => 'russian',
+            'es' => 'spanish',
+            'sv' => 'swedish',
         ];
     }
 
     /**
      * Connect to the Xapian writable database, creating it when needed.
      *
-     * @throws RuntimeException When the DB cannot be created or opened.
+     * @throws RuntimeException when the DB cannot be created or opened
      */
-    public function connectDb(?string $path = null, ?int $dbMode = null, string $lang = 'english'): \XapianWritableDatabase
+    public function connectDb(?string $path = null, ?int $dbMode = null, string $lang = 'english'): XapianWritableDatabase
     {
         require_once 'xapian.php';
 
-        if ($this->db instanceof \XapianWritableDatabase) {
+        if ($this->db instanceof XapianWritableDatabase) {
             return $this->db;
         }
 
-        if ($dbMode === null) {
-            $dbMode = \Xapian::DB_CREATE_OR_OPEN;
+        if (null === $dbMode) {
+            $dbMode = Xapian::DB_CREATE_OR_OPEN;
         }
 
-        if ($path === null) {
+        if (null === $path) {
             $path = $this->indexPathResolver->getIndexDir();
         }
 
         $this->indexPathResolver->ensureIndexDirectoryExists();
 
         try {
-            $this->db = new \XapianWritableDatabase($path, $dbMode);
-            $this->indexer = new \XapianTermGenerator();
+            $this->db = new XapianWritableDatabase($path, $dbMode);
+            $this->indexer = new XapianTermGenerator();
 
             $supported = $this->getSupportedLanguages();
             if (!\in_array($lang, $supported, true)) {
                 $lang = 'english';
             }
 
-            $this->stemmer = new \XapianStem($lang);
+            $this->stemmer = new XapianStem($lang);
             $this->indexer->set_stemmer($this->stemmer);
 
             return $this->db;
-        } catch (\Exception $e) {
-            throw new RuntimeException(
-                \sprintf('Unable to create or open Xapian index at "%s": %s', $path, $e->getMessage()),
-                0,
-                $e
-            );
+        } catch (Exception $e) {
+            throw new RuntimeException(\sprintf('Unable to create or open Xapian index at "%s": %s', $path, $e->getMessage()), 0, $e);
         }
     }
 
     /**
      * Simple getter for the writable database.
      */
-    public function getDb(): ?\XapianWritableDatabase
+    public function getDb(): ?XapianWritableDatabase
     {
         return $this->db;
     }
@@ -143,12 +144,12 @@ abstract class XapianIndexer
 
         try {
             foreach ($this->chunks as $chunk) {
-                $doc = new \XapianDocument();
+                $doc = new XapianDocument();
                 $this->indexer?->set_document($doc);
 
                 if (!empty($chunk->terms)) {
                     foreach ($chunk->terms as $term) {
-                        $doc->add_term($term['flag'] . $term['name'], 1);
+                        $doc->add_term($term['flag'].$term['name'], 1);
                     }
                 }
 
@@ -165,12 +166,8 @@ abstract class XapianIndexer
 
                 return $did ?? null;
             }
-        } catch (\Exception $e) {
-            throw new RuntimeException(
-                sprintf('Failed to index chunk in Xapian: %s', $e->getMessage()),
-                0,
-                $e
-            );
+        } catch (Exception $e) {
+            throw new RuntimeException(\sprintf('Failed to index chunk in Xapian: %s', $e->getMessage()), 0, $e);
         }
 
         return null;
@@ -179,15 +176,15 @@ abstract class XapianIndexer
     /**
      * Fetch a document by its Xapian docid.
      */
-    public function getDocument(int $did): ?\XapianDocument
+    public function getDocument(int $did): ?XapianDocument
     {
-        if ($this->db === null) {
+        if (null === $this->db) {
             $this->connectDb();
         }
 
         try {
             return $this->db?->get_document($did) ?: null;
-        } catch (\Exception) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -202,14 +199,14 @@ abstract class XapianIndexer
     public function updateTerms(int $did, array $terms, string $prefix): bool
     {
         $doc = $this->getDocument($did);
-        if ($doc === null) {
+        if (null === $doc) {
             return false;
         }
 
         $doc->clear_terms();
 
         foreach ($terms as $term) {
-            $doc->add_term($prefix . $term, 1);
+            $doc->add_term($prefix.$term, 1);
         }
 
         $this->db?->replace_document($did, $doc);
@@ -223,7 +220,7 @@ abstract class XapianIndexer
      */
     public function removeDocument(int $did): void
     {
-        if ($this->db === null) {
+        if (null === $this->db) {
             $this->connectDb();
         }
 
@@ -232,7 +229,7 @@ abstract class XapianIndexer
         }
 
         $doc = $this->getDocument($did);
-        if ($doc === null) {
+        if (null === $doc) {
             return;
         }
 
@@ -243,9 +240,9 @@ abstract class XapianIndexer
     /**
      * Replace a document in the index.
      */
-    public function replaceDocument(\XapianDocument $doc, int $did): void
+    public function replaceDocument(XapianDocument $doc, int $did): void
     {
-        if ($this->db === null) {
+        if (null === $this->db) {
             $this->connectDb();
         }
 

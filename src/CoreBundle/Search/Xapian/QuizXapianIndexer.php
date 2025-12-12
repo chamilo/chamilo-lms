@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SearchEngineRef;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 /**
  * Handles Xapian indexing for quizzes (exercises).
@@ -22,8 +23,7 @@ final class QuizXapianIndexer
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
-    ) {
-    }
+    ) {}
 
     /**
      * Index or reindex a quiz.
@@ -34,57 +34,60 @@ final class QuizXapianIndexer
     {
         $resourceNode = $quiz->getResourceNode();
 
-        error_log('[Xapian] indexQuiz: start for quiz id='.(string) $quiz->getIid()
+        error_log(
+            '[Xapian] indexQuiz: start for quiz id='.(string) $quiz->getIid()
             .', resource_node_id='.($resourceNode ? $resourceNode->getId() : 'null')
         );
 
         // Check global setting
         $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-        if ($enabled !== 'true') {
+        if ('true' !== $enabled) {
             error_log('[Xapian] indexQuiz: search is disabled, skipping');
+
             return null;
         }
 
         if (!$resourceNode instanceof ResourceNode) {
             error_log('[Xapian] indexQuiz: missing ResourceNode, skipping');
+
             return null;
         }
 
         // Resolve course and session from resource links
         [$courseId, $sessionId] = $this->resolveCourseAndSession($resourceNode);
 
-        $title       = (string) $quiz->getTitle();
+        $title = (string) $quiz->getTitle();
         $description = (string) ($quiz->getDescription() ?? '');
 
         // For now: description only. If later you implement "specific fields"
         // for quizzes in C2, you can concatenate them here like in v1.
-        $content = \trim($description);
+        $content = trim($description);
 
         // Data that will appear in search results under "data"
         $fields = [
-            'kind'             => 'quiz',
-            'tool'             => 'quiz',
-            'title'            => $title,
-            'description'      => $description,
-            'content'          => $content,
+            'kind' => 'quiz',
+            'tool' => 'quiz',
+            'title' => $title,
+            'description' => $description,
+            'content' => $content,
             'resource_node_id' => (string) $resourceNode->getId(),
-            'quiz_id'          => (string) $quiz->getIid(),
-            'course_id'        => $courseId !== null ? (string) $courseId : '',
-            'session_id'       => $sessionId !== null ? (string) $sessionId : '',
+            'quiz_id' => (string) $quiz->getIid(),
+            'course_id' => null !== $courseId ? (string) $courseId : '',
+            'session_id' => null !== $sessionId ? (string) $sessionId : '',
             // Legacy-like metadata, if you want them later:
-            'xapian_data'      => json_encode([
-                'type'        => 'exercise',
+            'xapian_data' => json_encode([
+                'type' => 'exercise',
                 'exercise_id' => (int) $quiz->getIid(),
-                'course_id'   => $courseId,
+                'course_id' => $courseId,
             ]),
         ];
 
         // Terms: allow filtering by kind, course, session
         $terms = ['Tquiz'];
-        if ($courseId !== null) {
+        if (null !== $courseId) {
             $terms[] = 'C'.$courseId;
         }
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $terms[] = 'S'.$sessionId;
         }
 
@@ -92,16 +95,18 @@ final class QuizXapianIndexer
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if ($existingDocId !== null) {
+        if (null !== $existingDocId) {
             try {
                 $this->xapianIndexService->deleteDocument($existingDocId);
                 error_log('[Xapian] indexQuiz: deleted previous docId='.(string) $existingDocId);
-            } catch (\Throwable $e) {
-                error_log('[Xapian] indexQuiz: failed to delete previous docId='
+            } catch (Throwable $e) {
+                error_log(
+                    '[Xapian] indexQuiz: failed to delete previous docId='
                     .(string) $existingDocId.' error='.$e->getMessage()
                 );
             }
@@ -110,8 +115,9 @@ final class QuizXapianIndexer
         // Index in Xapian
         try {
             $docId = $this->xapianIndexService->indexDocument($fields, $terms);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Xapian] indexQuiz: indexDocument() failed: '.$e->getMessage());
+
             return null;
         }
 
@@ -127,7 +133,8 @@ final class QuizXapianIndexer
 
         $this->em->flush();
 
-        error_log('[Xapian] indexQuiz: completed with docId='.(string) $docId
+        error_log(
+            '[Xapian] indexQuiz: completed with docId='.(string) $docId
             .', search_engine_ref_id='.$existingRef->getId()
         );
 
@@ -147,7 +154,8 @@ final class QuizXapianIndexer
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         if (!$ref) {
             return;
@@ -155,7 +163,7 @@ final class QuizXapianIndexer
 
         try {
             $this->xapianIndexService->deleteDocument($ref->getSearchDid());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Xapian] deleteQuizIndex: deleteDocument failed: '.$e->getMessage());
         }
 
@@ -170,7 +178,7 @@ final class QuizXapianIndexer
      */
     private function resolveCourseAndSession(ResourceNode $resourceNode): array
     {
-        $courseId  = null;
+        $courseId = null;
         $sessionId = null;
 
         foreach ($resourceNode->getResourceLinks() as $link) {
@@ -178,15 +186,15 @@ final class QuizXapianIndexer
                 continue;
             }
 
-            if ($courseId === null && $link->getCourse()) {
+            if (null === $courseId && $link->getCourse()) {
                 $courseId = $link->getCourse()->getId();
             }
 
-            if ($sessionId === null && $link->getSession()) {
+            if (null === $sessionId && $link->getSession()) {
                 $sessionId = $link->getSession()->getId();
             }
 
-            if ($courseId !== null && $sessionId !== null) {
+            if (null !== $courseId && null !== $sessionId) {
                 break;
             }
         }

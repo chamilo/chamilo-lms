@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Chamilo\CoreBundle\Repository\AssetRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -43,6 +44,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
         /** @var ResourceType|null $attemptFileType */
         $attemptFileType = $resourceTypeRepo->findOneBy(['title' => 'attempt_file']);
+
         /** @var ResourceType|null $attemptFeedbackType */
         $attemptFeedbackType = $resourceTypeRepo->findOneBy(['title' => 'attempt_feedback']);
 
@@ -103,7 +105,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
             if (0 === $processed % 200) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][attempt_file] Progress: processed=%d, migrated=%d, cleanedOnly=%d (last rowId=%s)',
                         $processed,
                         $migrated,
@@ -128,7 +130,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                     );
 
                     error_log(
-                        sprintf(
+                        \sprintf(
                             '[MIGRATION][attempt_file] Cleared asset_id for attempt_file.id=%s (attemptId=%s assetId=%s) because Asset is missing.',
                             $rowIdForLog,
                             $attemptIdForLog,
@@ -167,7 +169,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                 }
             } catch (Throwable $e) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][attempt_file] Error for attempt_file.id=%s (attemptId=%s): %s',
                         $rowIdForLog,
                         $attemptIdForLog,
@@ -187,7 +189,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
         }
 
         error_log(
-            sprintf(
+            \sprintf(
                 '[MIGRATION][attempt_file] Finished. Processed=%d, Migrated=%d, CleanedOnly=%d',
                 $processed,
                 $migrated,
@@ -229,7 +231,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
             if (0 === $processed % 200) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][attempt_feedback] Progress: processed=%d, migrated=%d, cleanedOnly=%d (last rowId=%s)',
                         $processed,
                         $migrated,
@@ -254,7 +256,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                     );
 
                     error_log(
-                        sprintf(
+                        \sprintf(
                             '[MIGRATION][attempt_feedback] Cleared asset_id for attempt_feedback.id=%s (attemptId=%s assetId=%s) because Asset is missing.',
                             $rowIdForLog,
                             $attemptIdForLog,
@@ -291,7 +293,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                 }
             } catch (Throwable $e) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][attempt_feedback] Error for attempt_feedback.id=%s (attemptId=%s): %s',
                         $rowIdForLog,
                         $attemptIdForLog,
@@ -310,7 +312,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
         }
 
         error_log(
-            sprintf(
+            \sprintf(
                 '[MIGRATION][attempt_feedback] Finished. Processed=%d, Migrated=%d, CleanedOnly=%d',
                 $processed,
                 $migrated,
@@ -326,7 +328,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
      *  - Update resource_node_id AND clear asset_id in the corresponding table.
      *  - If the Asset has no more references, delete it (DB + filesystem).
      *
-     * @return bool true if the migration succeeded, false if it was skipped.
+     * @return bool true if the migration succeeded, false if it was skipped
      */
     private function migrateSingleAssetToResourceNode(
         AssetRepository $assetRepo,
@@ -340,7 +342,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
         if (self::DRY_RUN) {
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][DRY_RUN][%s] Would create ResourceNode/ResourceFile for table=%s rowId=%s (Asset id=%s)',
                     $context,
                     $tableName,
@@ -357,7 +359,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
         if (null === $uploadedFile) {
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][%s] Skipping rowId=%s because UploadedFile could not be created (Asset id=%s).',
                     $context,
                     $rowIdForLog,
@@ -373,7 +375,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             $this->ensureEntityManagerIsOpen();
 
             $node = new ResourceNode();
-            $node->setTitle($asset->getTitle() ?: 'attempt_' . $context);
+            $node->setTitle($asset->getTitle() ?: 'attempt_'.$context);
             $node->setResourceType($resourceType);
             $this->entityManager->persist($node);
 
@@ -405,7 +407,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             $this->cleanupAssetIfUnused($assetRepo, $asset);
 
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][%s] Migrated rowId=%s to ResourceNode id=%d and cleared asset reference (Asset id=%s)',
                     $context,
                     $rowIdForLog,
@@ -417,7 +419,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             return true;
         } catch (Throwable $e) {
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][%s] Failed to migrate rowId=%s (Asset id=%s): %s',
                     $context,
                     $rowIdForLog,
@@ -459,7 +461,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
         $this->cleanupAssetIfUnused($assetRepo, $asset);
 
         error_log(
-            sprintf(
+            \sprintf(
                 '[MIGRATION][%s] Cleared asset_id for %s.id=%s (Asset id=%s, maybe deleted if unused).',
                 $context,
                 $tableName,
@@ -493,7 +495,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
         $assetRepo->delete($asset);
 
         error_log(
-            sprintf(
+            \sprintf(
                 '[MIGRATION][asset] Deleted Asset id=%s because it has no remaining references.',
                 $this->formatIdForLog($assetId)
             )
@@ -525,7 +527,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  SET resource_node_id = NULL
                  WHERE resource_node_id IN (?)',
                 [$nodeIds],
-                [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+                [Connection::PARAM_INT_ARRAY]
             );
 
             // Delete orphan ResourceNode entries that do not have any ResourceFile
@@ -536,11 +538,11 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  WHERE rn.id IN (?)
                    AND rf.id IS NULL',
                 [$nodeIds],
-                [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+                [Connection::PARAM_INT_ARRAY]
             );
 
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][cleanup] Cleaned orphan attempt_file nodes without ResourceFile. Count=%d',
                     \count($nodeIds)
                 )
@@ -564,7 +566,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  SET resource_node_id = NULL
                  WHERE resource_node_id IN (?)',
                 [$fbNodeIds],
-                [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+                [Connection::PARAM_INT_ARRAY]
             );
 
             $this->connection->executeStatement(
@@ -574,11 +576,11 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                  WHERE rn.id IN (?)
                    AND rf.id IS NULL',
                 [$fbNodeIds],
-                [\Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+                [Connection::PARAM_INT_ARRAY]
             );
 
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][cleanup] Cleaned orphan attempt_feedback nodes without ResourceFile. Count=%d',
                     \count($fbNodeIds)
                 )
@@ -607,7 +609,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
 
             if (!$fs->fileExists($filePath)) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][%s] File does not exist in filesystem for Asset id=%s, path=%s',
                         $context,
                         (string) $asset->getId(),
@@ -621,7 +623,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             $stream = $fs->readStream($filePath);
             if (false === $stream) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][%s] Could not open read stream for Asset id=%s, path=%s',
                         $context,
                         (string) $asset->getId(),
@@ -635,7 +637,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             $tmpPath = tempnam(sys_get_temp_dir(), 'asset_migrate_');
             if (false === $tmpPath) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][%s] Failed to create temporary file for Asset id=%s',
                         $context,
                         (string) $asset->getId()
@@ -650,7 +652,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             $tmpHandle = fopen($tmpPath, 'wb');
             if (false === $tmpHandle) {
                 error_log(
-                    sprintf(
+                    \sprintf(
                         '[MIGRATION][%s] Failed to open temporary file for writing: %s (Asset id=%s)',
                         $context,
                         $tmpPath,
@@ -679,7 +681,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
             return new UploadedFile($tmpPath, $originalName, $mimeType, null, true);
         } catch (Throwable $e) {
             error_log(
-                sprintf(
+                \sprintf(
                     '[MIGRATION][%s] Exception while creating UploadedFile for Asset id=%s, path=%s: %s',
                     $context,
                     (string) $asset->getId(),
@@ -688,7 +690,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
                 )
             );
 
-            if (is_resource($stream)) {
+            if (\is_resource($stream)) {
                 fclose($stream);
             }
 
@@ -727,9 +729,7 @@ final class Version20251130111400 extends AbstractMigrationChamilo
     private function getAssetRepository(): AssetRepository
     {
         /** @var AssetRepository $assetRepo */
-        $assetRepo = $this->container->get(AssetRepository::class);
-
-        return $assetRepo;
+        return $this->container->get(AssetRepository::class);
     }
 
     /**

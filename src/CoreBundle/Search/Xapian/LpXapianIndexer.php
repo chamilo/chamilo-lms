@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SearchEngineRef;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 /**
  * Handles Xapian indexing for learning paths (CLp).
@@ -22,8 +23,7 @@ final class LpXapianIndexer
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
-    ) {
-    }
+    ) {}
 
     /**
      * Index or reindex a learning path.
@@ -34,7 +34,7 @@ final class LpXapianIndexer
     {
         // Global feature toggle (same style as QuestionXapianIndexer)
         $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-        if ($enabled !== 'true') {
+        if ('true' !== $enabled) {
             return null;
         }
 
@@ -47,40 +47,40 @@ final class LpXapianIndexer
         // Resolve course and session from resource links
         [$courseId, $sessionId] = $this->resolveCourseAndSession($resourceNode);
 
-        $title       = (string) $lp->getTitle();
+        $title = (string) $lp->getTitle();
         $description = (string) ($lp->getDescription() ?? '');
-        $content     = \trim($title.' '.$description);
+        $content = trim($title.' '.$description);
 
         // Keep field names consistent across indexers
         $fields = [
-            'kind'             => 'learnpath',
-            'tool'             => 'learnpath',
-            'title'            => $title,
-            'description'      => $description,
-            'content'          => $content,
-            'filetype'         => 'learnpath',
+            'kind' => 'learnpath',
+            'tool' => 'learnpath',
+            'title' => $title,
+            'description' => $description,
+            'content' => $content,
+            'filetype' => 'learnpath',
             'resource_node_id' => (string) $resourceNode->getId(),
-            'lp_id'            => $lp->getIid() !== null ? (string) $lp->getIid() : '',
-            'course_id'        => $courseId !== null ? (string) $courseId : '',
-            'session_id'       => $sessionId !== null ? (string) $sessionId : '',
-            'full_path'        => (string) $lp->getPath(),
-            'xapian_data'      => json_encode([
-                'type'       => 'learnpath',
-                'lp_id'      => $lp->getIid(),
-                'course_id'  => $courseId,
+            'lp_id' => null !== $lp->getIid() ? (string) $lp->getIid() : '',
+            'course_id' => null !== $courseId ? (string) $courseId : '',
+            'session_id' => null !== $sessionId ? (string) $sessionId : '',
+            'full_path' => (string) $lp->getPath(),
+            'xapian_data' => json_encode([
+                'type' => 'learnpath',
+                'lp_id' => $lp->getIid(),
+                'course_id' => $courseId,
                 'session_id' => $sessionId,
             ]),
         ];
 
         // Terms for filtering
         $terms = ['Tlearnpath', 'Tlp'];
-        if ($courseId !== null) {
+        if (null !== $courseId) {
             $terms[] = 'C'.$courseId;
         }
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $terms[] = 'S'.$sessionId;
         }
-        if ($lp->getIid() !== null) {
+        if (null !== $lp->getIid()) {
             $terms[] = 'L'.$lp->getIid();
         }
 
@@ -88,21 +88,22 @@ final class LpXapianIndexer
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if ($existingDocId !== null) {
+        if (null !== $existingDocId) {
             try {
                 $this->xapianIndexService->deleteDocument($existingDocId);
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Best-effort delete: ignore errors
             }
         }
 
         try {
             $docId = $this->xapianIndexService->indexDocument($fields, $terms);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -133,7 +134,8 @@ final class LpXapianIndexer
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         if (!$ref) {
             return;
@@ -141,7 +143,7 @@ final class LpXapianIndexer
 
         try {
             $this->xapianIndexService->deleteDocument($ref->getSearchDid());
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // Best-effort delete
         }
 
@@ -156,7 +158,7 @@ final class LpXapianIndexer
      */
     private function resolveCourseAndSession(ResourceNode $resourceNode): array
     {
-        $courseId  = null;
+        $courseId = null;
         $sessionId = null;
 
         foreach ($resourceNode->getResourceLinks() as $link) {
@@ -164,15 +166,15 @@ final class LpXapianIndexer
                 continue;
             }
 
-            if ($courseId === null && $link->getCourse()) {
+            if (null === $courseId && $link->getCourse()) {
                 $courseId = $link->getCourse()->getId();
             }
 
-            if ($sessionId === null && $link->getSession()) {
+            if (null === $sessionId && $link->getSession()) {
                 $sessionId = $link->getSession()->getId();
             }
 
-            if ($courseId !== null && $sessionId !== null) {
+            if (null !== $courseId && null !== $sessionId) {
                 break;
             }
         }

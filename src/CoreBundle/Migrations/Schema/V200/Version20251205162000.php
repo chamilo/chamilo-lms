@@ -32,6 +32,7 @@ class Version20251205162000 extends AbstractMigrationChamilo
             foreach ($settings as $setting) {
                 if (($setting['variable'] ?? null) === $targetVariable) {
                     $foundTemplate = $setting;
+
                     break 2;
                 }
             }
@@ -39,6 +40,7 @@ class Version20251205162000 extends AbstractMigrationChamilo
 
         if (!$foundTemplate) {
             $this->write("No template found in SettingsValueTemplateFixtures for variable '{$targetVariable}'. Skipping.");
+
             return;
         }
 
@@ -109,6 +111,7 @@ class Version20251205162000 extends AbstractMigrationChamilo
 
         if (!$templateId) {
             $this->write("No template found to revert for variable '{$targetVariable}'.");
+
             return;
         }
 

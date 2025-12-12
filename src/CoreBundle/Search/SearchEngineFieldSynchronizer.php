@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\SearchEngineField;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
+use const JSON_ERROR_NONE;
+
 final class SearchEngineFieldSynchronizer
 {
     public function __construct(
@@ -60,7 +62,8 @@ final class SearchEngineFieldSynchronizer
             } else {
                 $field = (new SearchEngineField())
                     ->setCode($code)
-                    ->setTitle($title);
+                    ->setTitle($title)
+                ;
 
                 $this->entityManager->persist($field);
                 $created++;
@@ -104,13 +107,13 @@ final class SearchEngineFieldSynchronizer
             throw new ValidatorException('Invalid JSON for search engine fields.');
         }
 
-        if (!is_array($decoded)) {
+        if (!\is_array($decoded)) {
             throw new ValidatorException('Search engine fields JSON must be an object or an array.');
         }
 
         // Canonical wrapper: {"fields":[...], ...}
         if (isset($decoded['fields'])) {
-            if (!is_array($decoded['fields'])) {
+            if (!\is_array($decoded['fields'])) {
                 throw new ValidatorException('"fields" must be an array.');
             }
 
@@ -128,17 +131,19 @@ final class SearchEngineFieldSynchronizer
         $map = [];
 
         foreach ($decoded as $key => $value) {
-            if (is_string($value)) {
+            if (\is_string($value)) {
                 $code = $this->normalizeCode((string) $key);
                 $title = $this->normalizeTitle($value);
                 $map[$code] = $title;
+
                 continue;
             }
 
-            if (is_array($value) && isset($value['prefix'], $value['title'])) {
+            if (\is_array($value) && isset($value['prefix'], $value['title'])) {
                 $code = $this->normalizeCode((string) $value['prefix']);
                 $title = $this->normalizeTitle($value['title']);
                 $map[$code] = $title;
+
                 continue;
             }
 
@@ -150,6 +155,7 @@ final class SearchEngineFieldSynchronizer
 
     /**
      * @param array<int, mixed> $rows
+     *
      * @return array<string,string>
      */
     private function parseListOfFields(array $rows): array
@@ -157,7 +163,7 @@ final class SearchEngineFieldSynchronizer
         $map = [];
 
         foreach ($rows as $row) {
-            if (!is_array($row)) {
+            if (!\is_array($row)) {
                 throw new ValidatorException('Each field entry must be an object with "code" and "title".');
             }
 

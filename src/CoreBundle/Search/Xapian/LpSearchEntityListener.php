@@ -15,14 +15,13 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  * Doctrine entity listener for CLp to trigger Xapian indexing.
  */
 #[AsEntityListener(event: Events::postPersist, entity: CLp::class)]
-#[AsEntityListener(event: Events::postUpdate,  entity: CLp::class)]
-#[AsEntityListener(event: Events::postRemove,  entity: CLp::class)]
+#[AsEntityListener(event: Events::postUpdate, entity: CLp::class)]
+#[AsEntityListener(event: Events::postRemove, entity: CLp::class)]
 final class LpSearchEntityListener
 {
     public function __construct(
         private readonly LpXapianIndexer $indexer,
-    ) {
-    }
+    ) {}
 
     public function postPersist(CLp $lp, LifecycleEventArgs $args): void
     {

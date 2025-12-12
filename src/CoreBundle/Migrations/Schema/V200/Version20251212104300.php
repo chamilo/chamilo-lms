@@ -29,7 +29,7 @@ final class Version20251212104300 extends AbstractMigrationChamilo
 
         if ($hasCid) {
             // Preferred: "created in course" is stored on resource_node.cid
-            $sqlNode = <<<SQL
+            $sqlNode = <<<'SQL'
 UPDATE resource_node rn
 INNER JOIN course c ON c.id = rn.cid
 INNER JOIN language l ON l.isocode = c.course_language
@@ -43,7 +43,7 @@ SQL;
         } else {
             // Fallback: infer a course from existing links (best-effort).
             // We pick MIN(c_id) per resource_node_id to have a deterministic choice.
-            $sqlNode = <<<SQL
+            $sqlNode = <<<'SQL'
 UPDATE resource_node rn
 INNER JOIN (
     SELECT rl.resource_node_id, MIN(rl.c_id) AS c_id
@@ -62,7 +62,7 @@ SQL;
         }
 
         // Copy node language to files when file language is not set yet.
-        $sqlFile = <<<SQL
+        $sqlFile = <<<'SQL'
 UPDATE resource_file rf
 INNER JOIN resource_node rn ON rn.id = rf.resource_node_id
 SET rf.language_id = rn.language_id

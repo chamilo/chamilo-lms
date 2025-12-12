@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
+use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -22,7 +23,6 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 
 use const ARRAY_FILTER_USE_KEY;
 
@@ -409,7 +409,7 @@ class SettingsManager implements SettingsManagerInterface
             return;
         }
 
-        if (!array_key_exists('search_prefilter_prefix', $parameters)) {
+        if (!\array_key_exists('search_prefilter_prefix', $parameters)) {
             return;
         }
 

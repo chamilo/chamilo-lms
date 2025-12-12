@@ -47,8 +47,8 @@ class Exercise extends AbstractTool implements ToolInterface
             'questions' => CQuizQuestion::class,
             'question_categories' => CQuizQuestionCategory::class,
             'exercise_categories' => CQuizCategory::class,
-            'attempt_file'        => AttemptFile::class,
-            'attempt_feedback'    => AttemptFeedback::class,
+            'attempt_file' => AttemptFile::class,
+            'attempt_feedback' => AttemptFeedback::class,
         ];
     }
 }

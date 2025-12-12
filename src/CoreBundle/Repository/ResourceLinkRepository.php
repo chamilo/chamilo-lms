@@ -190,13 +190,15 @@ class ResourceLinkRepository extends SortableRepository
             ->andWhere('rl.resourceNode = :parentNode')
             ->setParameter('parentNode', $parentNode)
             ->andWhere('rl.deletedAt IS NULL')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         // Match course context
         if (null !== $course) {
             $qb
                 ->andWhere('rl.course = :course')
-                ->setParameter('course', $course);
+                ->setParameter('course', $course)
+            ;
         } else {
             $qb->andWhere('rl.course IS NULL');
         }
@@ -205,7 +207,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $session) {
             $qb
                 ->andWhere('rl.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
@@ -214,7 +217,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $group) {
             $qb
                 ->andWhere('rl.group = :group')
-                ->setParameter('group', $group);
+                ->setParameter('group', $group)
+            ;
         } else {
             $qb->andWhere('rl.group IS NULL');
         }
@@ -222,7 +226,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $usergroup) {
             $qb
                 ->andWhere('rl.userGroup = :usergroup')
-                ->setParameter('usergroup', $usergroup);
+                ->setParameter('usergroup', $usergroup)
+            ;
         } else {
             $qb->andWhere('rl.userGroup IS NULL');
         }
@@ -231,7 +236,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $user) {
             $qb
                 ->andWhere('rl.user = :user')
-                ->setParameter('user', $user);
+                ->setParameter('user', $user)
+            ;
         } else {
             $qb->andWhere('rl.user IS NULL');
         }
@@ -262,13 +268,15 @@ class ResourceLinkRepository extends SortableRepository
             ->andWhere('rl.resourceNode = :resourceNode')
             ->setParameter('resourceNode', $resourceNode)
             ->andWhere('rl.deletedAt IS NULL')
-            ->setMaxResults(1);
+            ->setMaxResults(1)
+        ;
 
         // Match course context
         if (null !== $course) {
             $qb
                 ->andWhere('rl.course = :course')
-                ->setParameter('course', $course);
+                ->setParameter('course', $course)
+            ;
         } else {
             $qb->andWhere('rl.course IS NULL');
         }
@@ -277,7 +285,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $session) {
             $qb
                 ->andWhere('rl.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             $qb->andWhere('rl.session IS NULL');
         }
@@ -286,7 +295,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $group) {
             $qb
                 ->andWhere('rl.group = :group')
-                ->setParameter('group', $group);
+                ->setParameter('group', $group)
+            ;
         } else {
             $qb->andWhere('rl.group IS NULL');
         }
@@ -294,7 +304,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $usergroup) {
             $qb
                 ->andWhere('rl.userGroup = :usergroup')
-                ->setParameter('usergroup', $usergroup);
+                ->setParameter('usergroup', $usergroup)
+            ;
         } else {
             $qb->andWhere('rl.userGroup IS NULL');
         }
@@ -303,7 +314,8 @@ class ResourceLinkRepository extends SortableRepository
         if (null !== $user) {
             $qb
                 ->andWhere('rl.user = :user')
-                ->setParameter('user', $user);
+                ->setParameter('user', $user)
+            ;
         } else {
             $qb->andWhere('rl.user IS NULL');
         }

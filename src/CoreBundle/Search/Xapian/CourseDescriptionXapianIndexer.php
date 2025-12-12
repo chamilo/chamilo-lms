@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\SearchEngineRef;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 /**
  * Handles Xapian indexing for course descriptions.
@@ -22,8 +23,7 @@ final class CourseDescriptionXapianIndexer
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
-    ) {
-    }
+    ) {}
 
     /**
      * Index or reindex a course description.
@@ -34,7 +34,7 @@ final class CourseDescriptionXapianIndexer
     {
         // Global feature toggle
         $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
-        if ($enabled !== 'true') {
+        if ('true' !== $enabled) {
             return null;
         }
 
@@ -51,53 +51,54 @@ final class CourseDescriptionXapianIndexer
         // Resolve course & session
         [$courseId, $sessionId] = $this->resolveCourseAndSession($resourceNode);
 
-        $title   = (string) ($description->getTitle() ?? '');
-        $body    = (string) ($description->getContent() ?? '');
+        $title = (string) ($description->getTitle() ?? '');
+        $body = (string) ($description->getContent() ?? '');
         $content = trim($title.' '.$body);
 
         $fields = [
-            'kind'             => 'course_description',
-            'tool'             => 'course_description',
-            'title'            => $title,
-            'description'      => $title,
-            'content'          => $content,
+            'kind' => 'course_description',
+            'tool' => 'course_description',
+            'title' => $title,
+            'description' => $title,
+            'content' => $content,
             'resource_node_id' => (string) $resourceNode->getId(),
-            'course_id'        => $courseId !== null ? (string) $courseId : '',
-            'session_id'       => $sessionId !== null ? (string) $sessionId : '',
-            'xapian_data'      => json_encode([
-                'type'           => 'course_description',
+            'course_id' => null !== $courseId ? (string) $courseId : '',
+            'session_id' => null !== $sessionId ? (string) $sessionId : '',
+            'xapian_data' => json_encode([
+                'type' => 'course_description',
                 'description_id' => (int) $description->getIid(),
-                'course_id'      => $courseId,
-                'session_id'     => $sessionId,
+                'course_id' => $courseId,
+                'session_id' => $sessionId,
             ]),
         ];
 
         $terms = ['Tcourse_description'];
-        if ($courseId !== null) {
+        if (null !== $courseId) {
             $terms[] = 'C'.$courseId;
         }
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $terms[] = 'S'.$sessionId;
         }
 
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         $existingDocId = $existingRef?->getSearchDid();
 
-        if ($existingDocId !== null) {
+        if (null !== $existingDocId) {
             try {
                 $this->xapianIndexService->deleteDocument($existingDocId);
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Best-effort delete
             }
         }
 
         try {
             $docId = $this->xapianIndexService->indexDocument($fields, $terms);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return null;
         }
 
@@ -125,7 +126,8 @@ final class CourseDescriptionXapianIndexer
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         if (!$ref) {
             return;
@@ -133,7 +135,7 @@ final class CourseDescriptionXapianIndexer
 
         try {
             $this->xapianIndexService->deleteDocument($ref->getSearchDid());
-        } catch (\Throwable) {
+        } catch (Throwable) {
             // Best-effort delete
         }
 
@@ -146,7 +148,7 @@ final class CourseDescriptionXapianIndexer
      */
     private function resolveCourseAndSession(ResourceNode $resourceNode): array
     {
-        $courseId  = null;
+        $courseId = null;
         $sessionId = null;
 
         foreach ($resourceNode->getResourceLinks() as $link) {
@@ -154,15 +156,15 @@ final class CourseDescriptionXapianIndexer
                 continue;
             }
 
-            if ($courseId === null && $link->getCourse()) {
+            if (null === $courseId && $link->getCourse()) {
                 $courseId = $link->getCourse()->getId();
             }
 
-            if ($sessionId === null && $link->getSession()) {
+            if (null === $sessionId && $link->getSession()) {
                 $sessionId = $link->getSession()->getId();
             }
 
-            if ($courseId !== null && $sessionId !== null) {
+            if (null !== $courseId && null !== $sessionId) {
                 break;
             }
         }

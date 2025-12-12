@@ -15,14 +15,13 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  * Doctrine entity listener for CQuizQuestion to trigger Xapian indexing.
  */
 #[AsEntityListener(event: Events::postPersist, entity: CQuizQuestion::class)]
-#[AsEntityListener(event: Events::postUpdate,  entity: CQuizQuestion::class)]
-#[AsEntityListener(event: Events::postRemove,  entity: CQuizQuestion::class)]
+#[AsEntityListener(event: Events::postUpdate, entity: CQuizQuestion::class)]
+#[AsEntityListener(event: Events::postRemove, entity: CQuizQuestion::class)]
 final class QuizQuestionSearchEntityListener
 {
     public function __construct(
         private readonly QuestionXapianIndexer $indexer,
-    ) {
-    }
+    ) {}
 
     public function postPersist(CQuizQuestion $question, LifecycleEventArgs $args): void
     {

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use Throwable;
 
 final class Version20251202103000 extends AbstractMigrationChamilo
 {
@@ -45,8 +46,8 @@ final class Version20251202103000 extends AbstractMigrationChamilo
         $offenders = $this->findUtf8mb3IncompatibleColumns($tables);
 
         if (!empty($offenders)) {
-            $message = "Cannot downgrade to utf8mb3. Found 4-byte Unicode characters in:\n- " .
-                implode("\n- ", $offenders) .
+            $message = "Cannot downgrade to utf8mb3. Found 4-byte Unicode characters in:\n- ".
+                implode("\n- ", $offenders).
                 "\n\nRemove those characters first or restore a pre-migration backup.";
 
             if (method_exists($this, 'throwIrreversibleMigrationException')) {
@@ -65,7 +66,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
     {
         $db = $this->connection->fetchOne('SELECT DATABASE()');
 
-        $in = implode(',', array_fill(0, count($tables), '?'));
+        $in = implode(',', array_fill(0, \count($tables), '?'));
 
         $cols = $this->connection->fetchAllAssociative(
             "SELECT TABLE_NAME, COLUMN_NAME
@@ -89,7 +90,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
                 $hit = $this->connection->fetchOne(
                     "SELECT 1 FROM `$t` WHERE `$c` REGEXP '[\\x{10000}-\\x{10FFFF}]' LIMIT 1"
                 );
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Fallback: any UTF-8 4-byte sequence starts with lead bytes F0-F4.
                 $hit = $this->connection->fetchOne(
                     "SELECT 1 FROM `$t` WHERE HEX(`$c`) REGEXP 'F[0-4]' LIMIT 1"
@@ -297,7 +298,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
         }
 
         // CONVERT changes all textual columns (CHAR/VARCHAR/TEXT/ENUM/SET) and the table default collation.
-        $this->addSql(sprintf(
+        $this->addSql(\sprintf(
             'ALTER TABLE `%s` CONVERT TO CHARACTER SET %s COLLATE %s',
             $table,
             $charset,
@@ -309,7 +310,7 @@ final class Version20251202103000 extends AbstractMigrationChamilo
     {
         try {
             return $this->connection->createSchemaManager()->tablesExist([$table]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Keep the migration resilient if schema introspection fails.
             return false;
         }

@@ -35,7 +35,7 @@ final class Version20251201173000 extends AbstractMigrationChamilo
          * This keeps the same visible hierarchy as resource_node for all existing links,
          * and will later allow the tree to diverge per context when moving shared documents.
          */
-        $sql = <<<SQL
+        $sql = <<<'SQL'
 UPDATE resource_link rl
 INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
 LEFT JOIN resource_link parent_rl

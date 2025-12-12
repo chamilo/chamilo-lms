@@ -45,7 +45,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             ->getRepository(CDocument::class)
             ->createQueryBuilder('d')
             ->innerJoin('d.resourceNode', 'rn')
-            ->addSelect('rn');
+            ->addSelect('rn')
+        ;
 
         // Filetype filtering: filetype[]=file&filetype[]=folder&filetype[]=video OR filetype=folder
         $filetypes = $request->query->all('filetype');
@@ -64,7 +65,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
 
             $qb
                 ->andWhere($qb->expr()->in('d.filetype', ':filetypes'))
-                ->setParameter('filetypes', $filetypes);
+                ->setParameter('filetypes', $filetypes)
+            ;
         }
 
         // Context (course / session / group)
@@ -90,19 +92,22 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             if ($cid > 0) {
                 $qb
                     ->andWhere('rl.course = :cid')
-                    ->setParameter('cid', $cid);
+                    ->setParameter('cid', $cid)
+                ;
             }
 
             if ($sid > 0) {
                 $qb
                     ->andWhere('rl.session = :sid')
-                    ->setParameter('sid', $sid);
+                    ->setParameter('sid', $sid)
+                ;
             }
 
             if ($gid > 0) {
                 $qb
                     ->andWhere('rl.group = :gid')
-                    ->setParameter('gid', $gid);
+                    ->setParameter('gid', $gid)
+                ;
             }
 
             if ($loadNode) {
@@ -110,7 +115,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                 if ($parentNodeId > 0) {
                     $resourceNode = $this->entityManager
                         ->getRepository(ResourceNode::class)
-                        ->find($parentNodeId);
+                        ->find($parentNodeId)
+                    ;
 
                     if (null === $resourceNode) {
                         // Folder node not found -> nothing to list
@@ -150,7 +156,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                         // Children inside this folder in this context
                         $qb
                             ->andWhere('rl.parent = :parentLink')
-                            ->setParameter('parentLink', $parentLink);
+                            ->setParameter('parentLink', $parentLink)
+                        ;
                     }
                 } else {
                     // No parentNodeId -> root of the context (course root)
@@ -166,7 +173,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
             if ($parentNodeId > 0) {
                 $qb
                     ->andWhere('rn.parent = :parentId')
-                    ->setParameter('parentId', $parentNodeId);
+                    ->setParameter('parentId', $parentNodeId)
+                ;
             }
         }
 
@@ -183,7 +191,8 @@ final class DocumentCollectionStateProvider implements ProviderInterface
         if ($itemsPerPage > 0) {
             $qb
                 ->setFirstResult(($page - 1) * $itemsPerPage)
-                ->setMaxResults($itemsPerPage);
+                ->setMaxResults($itemsPerPage)
+            ;
         }
 
         return $qb->getQuery()->getResult();

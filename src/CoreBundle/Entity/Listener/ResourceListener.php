@@ -38,6 +38,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Throwable;
 
 use const JSON_THROW_ON_ERROR;
 use const PATHINFO_EXTENSION;
@@ -298,7 +299,7 @@ class ResourceListener
 
             try {
                 $docId = $this->documentXapianIndexer->indexDocument($resource);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 error_log(
                     '[Xapian] postPersist: indexing failed: '.
                     $e->getMessage().
@@ -323,12 +324,13 @@ class ResourceListener
         if ($resource instanceof CDocument) {
             if (!$this->shouldIndexDocumentFromRequest()) {
                 error_log('[Xapian] postUpdate: indexing disabled by indexDocumentContent flag');
+
                 return;
             }
 
             try {
                 $docId = $this->documentXapianIndexer->indexDocument($resource);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 error_log(
                     '[Xapian] postUpdate: indexing failed: '.
                     $e->getMessage().
@@ -442,7 +444,7 @@ class ResourceListener
         if ($resourceNode) {
             try {
                 $this->documentXapianIndexer->deleteForResourceNodeId((int) $resourceNode->getId());
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 error_log(
                     '[Xapian] preRemove: deleteForResourceNodeId() failed: '.
                     $e->getMessage().' in '.$e->getFile().':'.$e->getLine()
@@ -485,7 +487,7 @@ class ResourceListener
             return $raw;
         }
 
-        if (\is_numeric($raw)) {
+        if (is_numeric($raw)) {
             return ((int) $raw) !== 0;
         }
 

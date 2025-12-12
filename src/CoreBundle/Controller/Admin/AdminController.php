@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -263,6 +264,7 @@ class AdminController extends BaseController
 
         // Try to reuse an existing visible document for this node.
         $documentRepo = Container::getDocumentRepository();
+
         /** @var CDocument|null $sharedDocument */
         $sharedDocument = $resourceNode
             ? $documentRepo->findOneBy(['resourceNode' => $resourceNode])
@@ -735,7 +737,7 @@ class AdminController extends BaseController
     ): CDocument {
         $userEntity = $this->userHelper->getCurrent();
         if (null === $userEntity) {
-            throw new \RuntimeException('Current user is required to create or reuse a document.');
+            throw new RuntimeException('Current user is required to create or reuse a document.');
         }
 
         // Current node (may be null for truly orphan files).
@@ -744,7 +746,7 @@ class AdminController extends BaseController
         if (null === $resourceNode) {
             $courseRootNode = $course->getResourceNode();
             if (null === $courseRootNode) {
-                throw new \RuntimeException('Course root node is required to attach a resource node.');
+                throw new RuntimeException('Course root node is required to attach a resource node.');
             }
 
             // Create the node that will be shared by all courses.

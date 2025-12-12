@@ -15,14 +15,13 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
  * Doctrine entity listener for CCourseDescription to trigger Xapian indexing.
  */
 #[AsEntityListener(event: Events::postPersist, entity: CCourseDescription::class)]
-#[AsEntityListener(event: Events::postUpdate,  entity: CCourseDescription::class)]
-#[AsEntityListener(event: Events::postRemove,  entity: CCourseDescription::class)]
+#[AsEntityListener(event: Events::postUpdate, entity: CCourseDescription::class)]
+#[AsEntityListener(event: Events::postRemove, entity: CCourseDescription::class)]
 final class CourseDescriptionSearchEntityListener
 {
     public function __construct(
         private readonly CourseDescriptionXapianIndexer $indexer,
-    ) {
-    }
+    ) {}
 
     public function postPersist(CCourseDescription $description, LifecycleEventArgs $args): void
     {

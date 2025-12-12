@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\SearchEngineRef;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 /**
  * Handles Xapian indexing for CDocument entities.
@@ -20,8 +21,7 @@ final class DocumentXapianIndexer
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
         private readonly SettingsManager $settingsManager,
-    ) {
-    }
+    ) {}
 
     /**
      * Index a CDocument into Xapian.
@@ -32,7 +32,8 @@ final class DocumentXapianIndexer
     {
         $resourceNode = $document->getResourceNode();
 
-        error_log('[Xapian] indexDocument: start for iid='.(string) $document->getIid()
+        error_log(
+            '[Xapian] indexDocument: start for iid='.(string) $document->getIid()
             .', resource_node_id='.($resourceNode ? $resourceNode->getId() : 'null')
             .', filetype='.$document->getFiletype()
         );
@@ -41,7 +42,7 @@ final class DocumentXapianIndexer
         $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
         error_log('[Xapian] indexDocument: search.search_enabled='.var_export($enabled, true));
 
-        if ($enabled !== 'true') {
+        if ('true' !== $enabled) {
             error_log('[Xapian] indexDocument: search is disabled, skipping indexing');
 
             return null;
@@ -54,8 +55,9 @@ final class DocumentXapianIndexer
         }
 
         // Do not index folders
-        if ($document->getFiletype() === 'folder') {
-            error_log('[Xapian] indexDocument: skipping folder document, resource_node_id='
+        if ('folder' === $document->getFiletype()) {
+            error_log(
+                '[Xapian] indexDocument: skipping folder document, resource_node_id='
                 .$resourceNode->getId()
             );
 
@@ -65,35 +67,36 @@ final class DocumentXapianIndexer
         // 2) Resolve course, session and course root node ids
         [$courseId, $sessionId, $courseRootNodeId] = $this->resolveCourseSessionAndRootNode($resourceNode);
 
-        error_log('[Xapian] indexDocument: courseId='.var_export($courseId, true)
+        error_log(
+            '[Xapian] indexDocument: courseId='.var_export($courseId, true)
             .', sessionId='.var_export($sessionId, true)
             .', courseRootNodeId='.var_export($courseRootNodeId, true)
         );
 
         // 3) Get textual content if any
         $content = (string) ($resourceNode->getContent() ?? '');
-        error_log('[Xapian] indexDocument: content_length='.strlen($content));
+        error_log('[Xapian] indexDocument: content_length='.\strlen($content));
 
         // 4) Build fields payload
         $fields = [
-            'title'              => (string) $document->getTitle(),
-            'description'        => (string) ($document->getComment() ?? ''),
-            'content'            => $content,
-            'filetype'           => (string) $document->getFiletype(),
-            'resource_node_id'   => (string) $resourceNode->getId(),
-            'course_id'          => $courseId !== null ? (string) $courseId : '',
-            'session_id'         => $sessionId !== null ? (string) $sessionId : '',
-            'course_root_node_id'=> $courseRootNodeId !== null ? (string) $courseRootNodeId : '',
-            'full_path'          => $document->getFullPath(),
+            'title' => (string) $document->getTitle(),
+            'description' => (string) ($document->getComment() ?? ''),
+            'content' => $content,
+            'filetype' => (string) $document->getFiletype(),
+            'resource_node_id' => (string) $resourceNode->getId(),
+            'course_id' => null !== $courseId ? (string) $courseId : '',
+            'session_id' => null !== $sessionId ? (string) $sessionId : '',
+            'course_root_node_id' => null !== $courseRootNodeId ? (string) $courseRootNodeId : '',
+            'full_path' => $document->getFullPath(),
         ];
 
         // 5) Base terms
         $terms = ['Tdocument'];
 
-        if ($courseId !== null) {
+        if (null !== $courseId) {
             $terms[] = 'C'.$courseId;
         }
-        if ($sessionId !== null) {
+        if (null !== $sessionId) {
             $terms[] = 'S'.$sessionId;
         }
 
@@ -106,23 +109,27 @@ final class DocumentXapianIndexer
         /** @var SearchEngineRef|null $existingRef */
         $existingRef = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()])
+        ;
 
         $existingDocId = $existingRef?->getSearchDid();
-        error_log('[Xapian] indexDocument: existing SearchEngineRef id='
+        error_log(
+            '[Xapian] indexDocument: existing SearchEngineRef id='
             .($existingRef?->getId() ?? 'null')
             .', existing_did='.var_export($existingDocId, true)
         );
 
         // 7.1) If we already had a doc in Xapian, try to delete it first
-        if ($existingDocId !== null) {
+        if (null !== $existingDocId) {
             try {
                 $this->xapianIndexService->deleteDocument($existingDocId);
-                error_log('[Xapian] indexDocument: previous docId deleted='
+                error_log(
+                    '[Xapian] indexDocument: previous docId deleted='
                     .var_export($existingDocId, true)
                 );
-            } catch (\Throwable $e) {
-                error_log('[Xapian] indexDocument: failed to delete previous docId='
+            } catch (Throwable $e) {
+                error_log(
+                    '[Xapian] indexDocument: failed to delete previous docId='
                     .var_export($existingDocId, true)
                     .' error='.$e->getMessage()
                 );
@@ -135,13 +142,14 @@ final class DocumentXapianIndexer
                 $fields,
                 $terms
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             error_log('[Xapian] indexDocument: indexDocument() failed: '.$e->getMessage());
 
             return null;
         }
 
-        error_log('[Xapian] indexDocument: XapianIndexService->indexDocument returned docId='
+        error_log(
+            '[Xapian] indexDocument: XapianIndexService->indexDocument returned docId='
             .var_export($docId, true)
         );
 
@@ -154,7 +162,8 @@ final class DocumentXapianIndexer
             $existingRef->setResourceNodeId((int) $resourceNode->getId());
             $existingRef->setSearchDid($docId);
             $this->em->persist($existingRef);
-            error_log('[Xapian] indexDocument: creating new SearchEngineRef for resource_node_id='
+            error_log(
+                '[Xapian] indexDocument: creating new SearchEngineRef for resource_node_id='
                 .$resourceNode->getId()
             );
         }
@@ -176,7 +185,8 @@ final class DocumentXapianIndexer
         /** @var SearchEngineRef|null $ref */
         $ref = $this->em
             ->getRepository(SearchEngineRef::class)
-            ->findOneBy(['resourceNodeId' => $resourceNodeId]);
+            ->findOneBy(['resourceNodeId' => $resourceNodeId])
+        ;
 
         if (!$ref instanceof SearchEngineRef) {
             error_log('[Xapian] deleteForResourceNodeId: no SearchEngineRef found, nothing to delete');
@@ -185,18 +195,21 @@ final class DocumentXapianIndexer
         }
 
         $docId = $ref->getSearchDid();
-        error_log('[Xapian] deleteForResourceNodeId: found SearchEngineRef id='.$ref->getId()
+        error_log(
+            '[Xapian] deleteForResourceNodeId: found SearchEngineRef id='.$ref->getId()
             .', search_did='.var_export($docId, true)
         );
 
-        if ($docId !== null) {
+        if (null !== $docId) {
             try {
                 $this->xapianIndexService->deleteDocument($docId);
-                error_log('[Xapian] deleteForResourceNodeId: deleteDocument called for did='
+                error_log(
+                    '[Xapian] deleteForResourceNodeId: deleteDocument called for did='
                     .var_export($docId, true)
                 );
-            } catch (\Throwable $e) {
-                error_log('[Xapian] deleteForResourceNodeId: deleteDocument failed for did='
+            } catch (Throwable $e) {
+                error_log(
+                    '[Xapian] deleteForResourceNodeId: deleteDocument failed for did='
                     .var_export($docId, true)
                     .' error='.$e->getMessage()
                 );
@@ -206,7 +219,8 @@ final class DocumentXapianIndexer
         $this->em->remove($ref);
         $this->em->flush();
 
-        error_log('[Xapian] deleteForResourceNodeId: SearchEngineRef removed for resource_node_id='
+        error_log(
+            '[Xapian] deleteForResourceNodeId: SearchEngineRef removed for resource_node_id='
             .$resourceNodeId
         );
     }
@@ -227,7 +241,7 @@ final class DocumentXapianIndexer
                 continue;
             }
 
-            if ($courseId === null && $link->getCourse()) {
+            if (null === $courseId && $link->getCourse()) {
                 $course = $link->getCourse();
                 $courseId = $course->getId();
 
@@ -237,11 +251,11 @@ final class DocumentXapianIndexer
                 }
             }
 
-            if ($sessionId === null && $link->getSession()) {
+            if (null === $sessionId && $link->getSession()) {
                 $sessionId = $link->getSession()->getId();
             }
 
-            if ($courseId !== null && $sessionId !== null && $courseRootNodeId !== null) {
+            if (null !== $courseId && null !== $sessionId && null !== $courseRootNodeId) {
                 break;
             }
         }
@@ -269,7 +283,7 @@ final class DocumentXapianIndexer
         CDocument $document
     ): void {
         $raw = (string) $this->settingsManager->getSetting('search.search_prefilter_prefix', true);
-        if ($raw === '') {
+        if ('' === $raw) {
             return;
         }
 
@@ -284,20 +298,20 @@ final class DocumentXapianIndexer
             }
 
             $prefix = (string) ($item['prefix'] ?? '');
-            if ($prefix === '') {
+            if ('' === $prefix) {
                 $prefix = strtoupper((string) $key);
             }
 
             switch ($key) {
                 case 'course':
-                    if ($courseId !== null) {
+                    if (null !== $courseId) {
                         $terms[] = $prefix.(string) $courseId;
                     }
 
                     break;
 
                 case 'session':
-                    if ($sessionId !== null) {
+                    if (null !== $sessionId) {
                         $terms[] = $prefix.(string) $sessionId;
                     }
 

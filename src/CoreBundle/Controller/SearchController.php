@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 final class SearchController extends AbstractController
 {
@@ -23,8 +24,7 @@ final class SearchController extends AbstractController
         private readonly XapianSearchService $xapianSearchService,
         private readonly XapianIndexService $xapianIndexService,
         private readonly EntityManagerInterface $em,
-    ) {
-    }
+    ) {}
 
     /**
      * Minimal Xapian search endpoint returning JSON.
@@ -38,12 +38,12 @@ final class SearchController extends AbstractController
     )]
     public function xapianSearchAction(Request $request): JsonResponse
     {
-        $q = \trim((string) $request->query->get('q', ''));
+        $q = trim((string) $request->query->get('q', ''));
 
-        if ($q === '') {
+        if ('' === $q) {
             return $this->json([
-                'query'   => '',
-                'total'   => 0,
+                'query' => '',
+                'total' => 0,
                 'results' => [],
             ]);
         }
@@ -56,11 +56,11 @@ final class SearchController extends AbstractController
             );
 
             return $this->json([
-                'query'   => $q,
-                'total'   => $result['count'],
+                'query' => $q,
+                'total' => $result['count'],
                 'results' => $result['results'],
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
                 'query' => $q,
                 'error' => $e->getMessage(),
@@ -80,13 +80,13 @@ final class SearchController extends AbstractController
     )]
     public function xapianSearchPageAction(Request $request): Response
     {
-        $q = \trim((string) $request->query->get('q', ''));
+        $q = trim((string) $request->query->get('q', ''));
 
         $total = 0;
         $results = [];
         $error = null;
 
-        if ($q !== '') {
+        if ('' !== $q) {
             try {
                 $searchResult = $this->xapianSearchService->search(
                     queryString: $q,
@@ -94,21 +94,21 @@ final class SearchController extends AbstractController
                     length: 20
                 );
 
-                $total   = $searchResult['count']   ?? 0;
+                $total = $searchResult['count'] ?? 0;
                 $results = $searchResult['results'] ?? [];
 
                 $results = $this->hydrateResultsWithCourseRootNode($results);
                 $results = $this->hydrateQuestionResultsWithQuizIds($results);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $error = $e->getMessage();
             }
         }
 
         return $this->render('@ChamiloCore/Search/xapian_search.html.twig', [
-            'query'   => $q,
-            'total'   => $total,
+            'query' => $q,
+            'total' => $total,
             'results' => $results,
-            'error'   => $error,
+            'error' => $error,
         ]);
     }
 
@@ -129,12 +129,12 @@ final class SearchController extends AbstractController
 
             return $this->json([
                 'indexed' => true,
-                'doc_id'  => $docId,
+                'doc_id' => $docId,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $this->json([
                 'indexed' => false,
-                'error'   => $e->getMessage(),
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
@@ -161,15 +161,17 @@ final class SearchController extends AbstractController
             // If the field already exists (coming from the indexer), keep it.
             if (!empty($data['course_root_node_id'])) {
                 $result['data'] = $data;
+
                 continue;
             }
 
-            $courseId = isset($data['course_id']) && $data['course_id'] !== ''
+            $courseId = isset($data['course_id']) && '' !== $data['course_id']
                 ? (int) $data['course_id']
                 : null;
 
             if (!$courseId) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -177,6 +179,7 @@ final class SearchController extends AbstractController
             $course = $this->em->find(Course::class, $courseId);
             if (!$course || !$course->getResourceNode()) {
                 $result['data'] = $data;
+
                 continue;
             }
 
@@ -239,7 +242,8 @@ final class SearchController extends AbstractController
             /** @var CQuizRelQuestion|null $rel */
             $rel = $this->em
                 ->getRepository(CQuizRelQuestion::class)
-                ->findOneBy(['question' => $questionId]);
+                ->findOneBy(['question' => $questionId])
+            ;
 
             if (!$rel) {
                 $result['data'] = $data;

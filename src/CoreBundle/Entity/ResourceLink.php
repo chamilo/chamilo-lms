@@ -62,7 +62,7 @@ class ResourceLink implements Stringable
     /**
      * @var Collection<int, self>
      *
-     * Children links in the document hierarchy by context.
+     * Children links in the document hierarchy by context
      */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $children;

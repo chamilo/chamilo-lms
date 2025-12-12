@@ -11,8 +11,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -27,7 +27,7 @@ final class MoveDocumentAction
     public function __invoke(CDocument $document, Request $request): CDocument
     {
         $payload = json_decode((string) $request->getContent(), true);
-        if (!is_array($payload)) {
+        if (!\is_array($payload)) {
             throw new BadRequestHttpException('Invalid JSON body.');
         }
 
@@ -109,11 +109,11 @@ final class MoveDocumentAction
 
     private function normalizeNodeId(mixed $value): ?int
     {
-        if (is_int($value)) {
+        if (\is_int($value)) {
             return $value;
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             if (ctype_digit($value)) {
                 return (int) $value;
             }

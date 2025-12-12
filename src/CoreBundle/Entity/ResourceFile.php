@@ -138,6 +138,7 @@ class ResourceFile implements Stringable
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read', 'personal_file:read'])]
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
+
     /**
      * Optional language for the file variant.
      * This is used for indexing and future-proof resource variations.
@@ -199,6 +200,7 @@ class ResourceFile implements Stringable
     {
         return $this->getOriginalName();
     }
+
     /**
      * Get the file language (can be null if unknown/multilingual).
      */
@@ -206,6 +208,7 @@ class ResourceFile implements Stringable
     {
         return $this->language;
     }
+
     /**
      * Set the file language (nullable by design).
      */

@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -681,7 +682,8 @@ final class CDocumentRepository extends ResourceRepository
         if (null !== $session) {
             $qb
                 ->andWhere('rl.session = :session')
-                ->setParameter('session', $session);
+                ->setParameter('session', $session)
+            ;
         } else {
             // In C2 many "global course documents" have session = NULL
             $qb->andWhere('rl.session IS NULL');
@@ -691,7 +693,8 @@ final class CDocumentRepository extends ResourceRepository
         if (null !== $group) {
             $qb
                 ->andWhere('rl.group = :group')
-                ->setParameter('group', $group);
+                ->setParameter('group', $group)
+            ;
         } else {
             $qb->andWhere('rl.group IS NULL');
         }
@@ -702,12 +705,14 @@ final class CDocumentRepository extends ResourceRepository
                 // Only non-published folders (hidden/pending/etc.)
                 $qb
                     ->andWhere('rl.visibility <> :published')
-                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED)
+                ;
             } else {
                 // Only visible folders
                 $qb
                     ->andWhere('rl.visibility = :published')
-                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED)
+                ;
             }
         }
         // If $canSeeInvisible = true, do not filter by visibility (see everything).
@@ -733,7 +738,7 @@ final class CDocumentRepository extends ResourceRepository
             }
 
             $links = $node->getResourceLinks();
-            if (!$links instanceof \Doctrine\Common\Collections\Collection) {
+            if (!$links instanceof Collection) {
                 continue;
             }
 
@@ -794,6 +799,7 @@ final class CDocumentRepository extends ResourceRepository
                 }
 
                 $matchingLink = $candidate;
+
                 break;
             }
 

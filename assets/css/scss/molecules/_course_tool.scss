@@ -7,7 +7,11 @@
   @apply flex flex-col flex-none gap-4 relative w-[120px];
 
   &__link {
-    @apply border border-solid border-gray-30 rounded-lg flex place-items-center justify-center shadow-lg w-[7.5rem] h-[7.5rem];
+    @apply border border-solid border-gray-30 rounded-lg flex place-items-center justify-center shadow-lg w-[7.5rem] h-[7.5rem] relative;
+  }
+
+  &__shadow {
+    @apply absolute w-16 h-16 text-support-1;
   }
 
   &__icon {

@@ -5,8 +5,17 @@ import sessionService from "../services/sessionService"
 import { useCourseSettings } from "./courseSettingStore"
 
 export const useCidReqStore = defineStore("cidReq", () => {
+  /**
+   * @type {Ref<{id: number, "@id": string} | null>}
+   */
   const course = ref(null)
+  /**
+   * @type {Ref<{id: number, "@id": string} | null>}
+   */
   const session = ref(null)
+  /**
+   * @type {Ref<{id: number, "@id": string} | null>}
+   */
   const group = ref(null)
   const isCourseLoaded = ref(true)
 

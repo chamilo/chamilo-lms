@@ -10,9 +10,12 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../inc/global.inc.php';
+
 $current_course_tool = TOOL_TRACKING;
 
 $course = api_get_course_entity();
+$hasCourseEntity = $course instanceof Course;
+
 $groupId = api_get_group_id();
 $session_id = api_get_session_id();
 $session = api_get_session_entity($session_id);
@@ -26,14 +29,20 @@ if ('myspace' === $from) {
     $this_section = 'session_my_space';
 }
 
-// Access restrictions.
+// -----------------------------------------------------------------------------
+// Access restrictions
+// -----------------------------------------------------------------------------
 $is_allowedToTrack = Tracking::isAllowToTrack($session_id);
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
+
     exit;
 }
 
+// -----------------------------------------------------------------------------
+// Feature flags (can be adjusted based on context/group)
+// -----------------------------------------------------------------------------
 $showChatReporting = true;
 $showTrackingReporting = true;
 $documentReporting = true;
@@ -52,23 +61,29 @@ if (!empty($groupId)) {
 
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
-// Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && 'csv' == $_GET['export'] ? true : false;
+// -----------------------------------------------------------------------------
+// Export handling (CSV)
+// -----------------------------------------------------------------------------
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 
 if ($export_csv) {
     if (!empty($session_id)) {
         Session::write('id_session', $session_id);
     }
+
     ob_start();
 }
+
 $csv_content = [];
 
-// Breadcrumbs.
+// -----------------------------------------------------------------------------
+// Breadcrumbs
+// -----------------------------------------------------------------------------
 if (isset($_GET['origin']) && 'resume_session' === $_GET['origin']) {
     $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('Administration')];
     $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('Session list')];
     $interbreadcrumb[] = [
-        'url' => '../session/resume_session.php?id_session='.api_get_session_id(),
+        'url'  => '../session/resume_session.php?id_session='.api_get_session_id(),
         'name' => get_lang('Session overview'),
     ];
 }
@@ -76,10 +91,17 @@ if (isset($_GET['origin']) && 'resume_session' === $_GET['origin']) {
 $view = $_REQUEST['view'] ?? '';
 $nameTools = get_lang('Reporting');
 
-// Display the header.
+// -----------------------------------------------------------------------------
+// Header + main tracking navigation
+// -----------------------------------------------------------------------------
 Display::display_header($nameTools, 'Tracking');
 
-// getting all the students of the course
+// Primary tracking menu (icons row: learners, groups, courses, exams, etc.).
+$primaryMenu = Display::mySpaceMenu('courses');
+
+// -----------------------------------------------------------------------------
+// Students list for current course/session
+// -----------------------------------------------------------------------------
 if (empty($session_id)) {
     // Registered students in a course outside session.
     $a_students = CourseManager::get_student_list_from_course_code(
@@ -99,36 +121,89 @@ if (empty($session_id)) {
         api_get_session_id()
     );
 }
-$nbStudents = count($a_students);
-$student_ids = array_keys($a_students);
+
+$nbStudents   = count($a_students);
+$student_ids  = array_keys($a_students);
 $studentCount = count($student_ids);
 
+// -----------------------------------------------------------------------------
+// Secondary toolbar: tabs (courses/resources/exams/...) + actions
+// -----------------------------------------------------------------------------
 $left = TrackingCourseLog::actionsLeft('courses', api_get_session_id(), false);
 
-$right = '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
-    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')).'</a>';
+$right = Display::url(
+    Display::getMdiIcon(
+        ActionIcon::PRINT,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Print')
+    ),
+    'javascript: void(0);',
+    ['onclick' => 'javascript: window.print();']
+);
 
-$right .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a>';
-$right .= '</span>';
+$right .= Display::url(
+    Display::getMdiIcon(
+        ActionIcon::EXPORT_CSV,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('CSV export')
+    ),
+    api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv'
+);
 
-echo Display::toolbarAction('tools', [$left, $right]);
+$toolbar = Display::toolbarAction('tools', [$left, $right]);
+
+// -----------------------------------------------------------------------------
+// Main layout wrapper (aligned with exams.php/resources.php)
+// -----------------------------------------------------------------------------
+echo '<div class="w-full px-4 md:px-8 pb-8 space-y-4">';
+
+// Row 1: primary My Space menu.
+echo '  <div class="flex flex-wrap gap-2">';
+echo        $primaryMenu;
+echo '  </div>';
+
+// Row 2: toolbar with local tabs and actions.
+echo '  <div class="flex flex-wrap gap-2">';
+echo        $toolbar;
+echo '  </div>';
 
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
-if ($lpReporting) {
-    $list = new LearnpathList(null, ['real_id' => $course->getId(), 'code' => $course->getCode()], $session_id);
+/**
+ * Learning paths reporting.
+ * Skip when there is no course entity (global tracking view).
+ */
+if ($lpReporting && null !== $course) {
+    $list = new LearnpathList(
+        null,
+        [
+            'real_id' => $course->getId(),
+            'code'    => $course->getCode(),
+        ],
+        $session_id
+    );
+
     $flat_list = $list->get_flat_list();
 
     if (count($flat_list) > 0) {
         // learning path tracking
         echo '<div class="report_section">';
         echo Display::page_subheader(
-            Display::getMdiIcon(ObjectIcon::COURSE_PROGRESS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Progress in courses')
+            Display::getMdiIcon(
+                ObjectIcon::COURSE_PROGRESS,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Progress in courses')
             ).' '.get_lang('Progress in courses')
         );
         echo '<table class="data_table">';
+
         if ($export_csv) {
             $temp = [get_lang('Progress in courses'), ''];
             $csv_content[] = ['', ''];
@@ -138,7 +213,6 @@ if ($lpReporting) {
         foreach ($flat_list as $lp_id => $lp) {
             $lp_avg_progress = 0;
             foreach ($a_students as $student_id => $student) {
-                // get the progress in learning pathes
                 $lp_avg_progress += Tracking::get_avg_student_progress(
                     $student_id,
                     $course,
@@ -152,18 +226,20 @@ if ($lpReporting) {
                 $lp_avg_progress = $lp_avg_progress / $studentCount;
             }
 
-            // Separated presentation logic.
             if (is_null($lp_avg_progress)) {
                 $lp_avg_progress = '0%';
             } else {
                 $lp_avg_progress = round($lp_avg_progress, 1).'%';
             }
+
             echo '<tr><td>'.$lp['lp_name'].'</td><td align="right">'.$lp_avg_progress.'</td></tr>';
+
             if ($export_csv) {
                 $temp = [$lp['lp_name'], $lp_avg_progress];
                 $csv_content[] = $temp;
             }
         }
+
         echo '</table></div>';
     } else {
         if ($export_csv) {
@@ -173,11 +249,18 @@ if ($lpReporting) {
     }
 }
 
-if ($exerciseReporting) {
-    // Exercises tracking.
+// -----------------------------------------------------------------------------
+// Exercises reporting (requires a valid course entity)
+// -----------------------------------------------------------------------------
+if ($exerciseReporting && $hasCourseEntity) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Tests score')
+        Display::getMdiIcon(
+            ToolIcon::QUIZ,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_MEDIUM,
+            get_lang('Tests score')
         ).' '.get_lang('Tests score')
     );
     echo '<table class="data_table">';
@@ -190,20 +273,17 @@ if ($exerciseReporting) {
 
     $course_path_params = '&cid='.$course_id.'&sid='.$session_id;
 
-    /*$course_id = api_get_course_int_id();
-    $sql = "SELECT iid, title FROM $TABLEQUIZ
-            WHERE c_id = $course_id AND active <> -1 AND session_id = $session_id";
-    $rs = Database::query($sql);*/
+    $currentSession = api_get_session_entity($session_id);
+    $qb = Container::getQuizRepository()->findAllByCourse($course, $currentSession, null, 2, false);
 
-    $session = api_get_session_entity($session_id);
-    $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2, false);
     /** @var CQuiz[] $exercises */
     $exercises = $qb->getQuery()->getResult();
 
     if (!empty($exercises)) {
         foreach ($exercises as $exercise) {
-            $exerciseId = $exercise->getIid();
+            $exerciseId     = $exercise->getIid();
             $quiz_avg_score = 0;
+
             if ($studentCount > 0) {
                 foreach ($student_ids as $student_id) {
                     $avg_student_score = Tracking::get_avg_student_exercise_score(
@@ -215,9 +295,11 @@ if ($exerciseReporting) {
                     $quiz_avg_score += $avg_student_score;
                 }
             }
-            $studentCount = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
+
+            $studentCount   = (0 == $studentCount || is_null($studentCount) || '' == $studentCount) ? 1 : $studentCount;
             $quiz_avg_score = round(($quiz_avg_score / $studentCount), 2).'%';
-            $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exerciseId.$course_path_params;
+            $url            = api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='
+                .$exerciseId.$course_path_params;
 
             echo '<tr><td>';
             echo Display::url(
@@ -225,6 +307,7 @@ if ($exerciseReporting) {
                 $url
             );
             echo '</td><td align="right">'.$quiz_avg_score.'</td></tr>';
+
             if ($export_csv) {
                 $temp = [$exercise->getTitle(), $quiz_avg_score];
                 $csv_content[] = $temp;
@@ -232,15 +315,20 @@ if ($exerciseReporting) {
         }
     } else {
         echo '<tr><td>'.get_lang('No tests').'</td></tr>';
+
         if ($export_csv) {
             $temp = [get_lang('No tests'), ''];
             $csv_content[] = $temp;
         }
     }
+
     echo '</table></div>';
     echo '<div class="clear"></div>';
 }
 
+// -----------------------------------------------------------------------------
+// Forum reporting
+// -----------------------------------------------------------------------------
 $filterByUsers = [];
 if (!empty($groupId)) {
     $filterByUsers = $student_ids;
@@ -271,10 +359,15 @@ if ($export_csv) {
     $csv_content[] = [get_lang('Posts number'), $count_number_of_posts_by_course];
 }
 
-// Forums tracking.
 echo '<div class="report_section">';
 echo Display::page_subheader(
-    Display::getMdiIcon(ToolIcon::QUIZ, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Forum')).' '.
+    Display::getMdiIcon(
+        ToolIcon::QUIZ,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_SMALL,
+        get_lang('Forum')
+    ).' '.
     get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
     get_lang('See detail').'</a>'
 );
@@ -285,11 +378,19 @@ echo '<tr><td>'.get_lang('Posts number').'</td><td align="right">'.$count_number
 echo '</table></div>';
 echo '<div class="clear"></div>';
 
-// Chat tracking.
+// -----------------------------------------------------------------------------
+// Chat reporting
+// -----------------------------------------------------------------------------
 if ($showChatReporting) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::getMdiIcon(ToolIcon::CHAT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Chat')).' '.get_lang('Chat')
+        Display::getMdiIcon(
+            ToolIcon::CHAT,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Chat')
+        ).' '.get_lang('Chat')
     );
 
     echo '<table class="data_table">';
@@ -319,11 +420,18 @@ if ($showChatReporting) {
     echo '<div class="clear"></div>';
 }
 
-// Tools tracking.
+// -----------------------------------------------------------------------------
+// Tools usage reporting
+// -----------------------------------------------------------------------------
 if ($showTrackingReporting) {
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Tools most used')
+        Display::getMdiIcon(
+            ToolIcon::TRACKING,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Tools most used')
         ).' '.get_lang('Tools most used')
     );
     echo '<table class="table table-hover table-striped data_table">';
@@ -358,19 +466,29 @@ if ($showTrackingReporting) {
     echo '<div class="clear"></div>';
 }
 
-if ($documentReporting) {
+// -----------------------------------------------------------------------------
+// Documents reporting (requires course entity for resource node link)
+// -----------------------------------------------------------------------------
+if ($documentReporting && $hasCourseEntity) {
     // Documents tracking.
     if (!isset($_GET['num']) || empty($_GET['num'])) {
-        $num = 3;
-        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=1#documents_tracking">'.get_lang('See detail').'</a>';
+        $num  = 3;
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq()
+            .'&num=1#documents_tracking">'.get_lang('See detail').'</a>';
     } else {
-        $num = 1000;
-        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=0#documents_tracking">'.get_lang('View minus').'</a>';
+        $num  = 1000;
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq()
+            .'&num=0#documents_tracking">'.get_lang('View minus').'</a>';
     }
 
     echo '<a name="documents_tracking" id="a"></a><div class="report_section">';
     echo Display::page_subheader(
-        Display::getMdiIcon(ToolIcon::DOCUMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Documents most downloaded')
+        Display::getMdiIcon(
+            ToolIcon::DOCUMENT,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Documents most downloaded')
         ).'&nbsp;'.get_lang('Documents most downloaded').$link
     );
 
@@ -388,12 +506,13 @@ if ($documentReporting) {
     }
 
     if (!empty($documents_most_downloaded)) {
+        $course_path_params = '&cid='.$course_id.'&sid='.$session_id;
+        $courseNodeId       = $course->getResourceNode()->getId();
+
         foreach ($documents_most_downloaded as $row) {
-            ///* @var CDocument $document */
-            //$document = Container::getDocumentRepository()->findOneBy(['resourceNode' => $row['nid']]);
-            // Only show path to documents tool for now.
-            //$viewLink = api_get_path(WEB_PATH).'resources/document/'.$course->getResourceNode()->getId().'/show?'.$course_path_params.'&id=/api/documents/'.$document->getIid();
-            $viewLink = api_get_path(WEB_PATH).'resources/document/'.$course->getResourceNode()->getId().'/show?'.$course_path_params;
+            // Only show the path to the documents tool for now.
+            $viewLink = api_get_path(WEB_PATH).'resources/document/'.$courseNodeId.'/show?'.$course_path_params;
+
             echo '<tr>
                     <td>';
             echo Display::url(
@@ -403,6 +522,7 @@ if ($documentReporting) {
             echo '</td>
                     <td align="right">'.sprintf(get_lang('%d clicks'), $row['count_down']).'</td>
                   </tr>';
+
             if ($export_csv) {
                 $temp = [
                     $row['npath'],
@@ -413,6 +533,7 @@ if ($documentReporting) {
         }
     } else {
         echo '<tr><td>'.get_lang('No document downloaded').'</td></tr>';
+
         if ($export_csv) {
             $temp = [get_lang('No document downloaded'), ''];
             $csv_content[] = $temp;
@@ -422,14 +543,22 @@ if ($documentReporting) {
     echo '<div class="clear"></div>';
 }
 
+// -----------------------------------------------------------------------------
+// Links reporting
+// -----------------------------------------------------------------------------
 if ($linkReporting) {
-    // links tracking
     echo '<div class="report_section">';
     echo Display::page_subheader(
-        Display::getMdiIcon(ToolIcon::LINK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Links most visited')
+        Display::getMdiIcon(
+            ToolIcon::LINK,
+            'ch-tool-icon',
+            null,
+            ICON_SIZE_SMALL,
+            get_lang('Links most visited')
         ).'&nbsp;'.get_lang('Links most visited')
     );
     echo '<table class="table table-hover table-striped data_table">';
+
     $links_most_visited = Tracking::get_links_most_visited_by_course(
         $course_code,
         $session_id
@@ -449,6 +578,7 @@ if ($linkReporting) {
                 $row['url']
             );
             echo '</td><td align="right">'.sprintf(get_lang('%d clicks'), $row['count_visits']).'</td></tr>';
+
             if ($export_csv) {
                 $temp = [
                     $row['title'],
@@ -459,20 +589,30 @@ if ($linkReporting) {
         }
     } else {
         echo '<tr><td>'.get_lang('No link visited').'</td></tr>';
+
         if ($export_csv) {
             $temp = [get_lang('No link visited'), ''];
             $csv_content[] = $temp;
         }
     }
+
     echo '</table></div>';
     echo '<div class="clear"></div>';
 }
 
-// send the csv file if asked
+// -----------------------------------------------------------------------------
+// CSV output (if requested)
+// -----------------------------------------------------------------------------
 if ($export_csv) {
     ob_end_clean();
-    Export:: arrayToCsv($csv_content, 'reporting_course_tools');
+    Export::arrayToCsv($csv_content, 'reporting_course_tools');
+
+    echo '</div>'; // Close main layout wrapper before exit.
+
     exit;
 }
+
+// Close main layout wrapper.
+echo '</div>';
 
 Display::display_footer();

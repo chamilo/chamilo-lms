@@ -30,6 +30,7 @@ $msgids = parsePotFile($potPath);
 $missing = [];
 
 $dirsToScan = ['assets', 'public', 'src', 'tests'];
+$dirsToAvoid = ['public/plugin'];
 
 $termIndex = 1;
 
@@ -56,6 +57,11 @@ foreach ($dirsToScan as $dir) {
 
         $relPath = str_replace($root . '/', '', $path);
         $isVue = str_contains($relPath, 'assets/vue/');
+        foreach ($dirsToAvoid as $dirToAvoid) {
+            if (str_contains($relPath, $dirToAvoid)) {
+                continue 2;
+            }
+        }
 
         $lines = file($path);
         foreach ($lines as $num => $line) {

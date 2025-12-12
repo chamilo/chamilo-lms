@@ -171,7 +171,7 @@ if (api_get_multiple_access_url()) {
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
     );
     $actions .= Display::url(
-        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign auth sources to users')),
+        Display::getMdiIcon('clipboard-account', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Assign authentication sources to users')),
         "/access-url/auth-sources"
     );
 }

@@ -61,7 +61,7 @@
             </div>
 
             <div v-else class="mt-3 text-sm text-gray-500">
-              {{ t("No files selected yet.") }}
+              {{ t("No file selected.") }}
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@
           <div class="p-4">
             <BaseInputText
               id="dbx-desc"
-              :label="t('Description (optional)')"
+              :label="t('Description')"
               v-model="description"
               :form-submitted="submitted"
               :is-invalid="false"
@@ -79,7 +79,7 @@
 
             <label class="inline-flex items-center gap-3 mt-3">
               <input id="overwrite" type="checkbox" v-model="overwrite" />
-              <span class="text-sm">{{ t("Overwrite previous versions with same name?") }}</span>
+              <span class="text-sm">{{ t("Overwrite previous versions of same document?") }}</span>
             </label>
           </div>
         </div>
@@ -108,7 +108,7 @@
               {{ t('Tip: choose “— Just upload —” to store without sending to anyone.') }}
             </small>
             <div v-if="submitted && !hasSelectedRecipient" class="text-sm text-red-600 mt-1">
-              {{ t('Please select at least one recipient (“— Just upload —” or a user).') }}
+              {{ t('Please select at least one recipient (“— Just upload —” or any user)') }}
             </div>
 
             <div class="flex justify-end gap-2 mt-6">

@@ -25,6 +25,9 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
+/**
+ * @extends ResourceRepository<CDocument>
+ */
 final class CDocumentRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -644,5 +647,240 @@ final class CDocumentRepository extends ResourceRepository
     {
         /** @var EntityManagerInterface $em */
         return $this->getEntityManager();
+    }
+
+    /**
+     * Returns the document folders for a given course/session/group context,
+     * as [ document_iid => "Full/Path/To/Folder" ].
+     *
+     * This implementation uses ResourceLink as the main source,
+     * assuming ResourceLink has a parent (context-aware hierarchy).
+     */
+    public function getAllFoldersForContext(
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        bool $canSeeInvisible = false,
+        bool $getInvisibleList = false
+    ): array {
+        $em = $this->getEntityManager();
+
+        $qb = $em->createQueryBuilder()
+            ->select('d')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'rn')
+            ->innerJoin('rn.resourceLinks', 'rl')
+            ->where('rl.course = :course')
+            ->andWhere('d.filetype = :folderType')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->setParameter('course', $course)
+            ->setParameter('folderType', 'folder')
+        ;
+
+        // Session filter
+        if (null !== $session) {
+            $qb
+                ->andWhere('rl.session = :session')
+                ->setParameter('session', $session);
+        } else {
+            // In C2 many "global course documents" have session = NULL
+            $qb->andWhere('rl.session IS NULL');
+        }
+
+        // Group filter
+        if (null !== $group) {
+            $qb
+                ->andWhere('rl.group = :group')
+                ->setParameter('group', $group);
+        } else {
+            $qb->andWhere('rl.group IS NULL');
+        }
+
+        // Visibility
+        if (!$canSeeInvisible) {
+            if ($getInvisibleList) {
+                // Only non-published folders (hidden/pending/etc.)
+                $qb
+                    ->andWhere('rl.visibility <> :published')
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
+            } else {
+                // Only visible folders
+                $qb
+                    ->andWhere('rl.visibility = :published')
+                    ->setParameter('published', ResourceLink::VISIBILITY_PUBLISHED);
+            }
+        }
+        // If $canSeeInvisible = true, do not filter by visibility (see everything).
+
+        /** @var CDocument[] $documents */
+        $documents = $qb->getQuery()->getResult();
+
+        if (empty($documents)) {
+            return [];
+        }
+
+        // 1) Index by ResourceLink id to be able to rebuild the path using the parent link
+        $linksById = [];
+
+        foreach ($documents as $doc) {
+            if (!$doc instanceof CDocument) {
+                continue;
+            }
+
+            $node = $doc->getResourceNode();
+            if (!$node instanceof ResourceNode) {
+                continue;
+            }
+
+            $links = $node->getResourceLinks();
+            if (!$links instanceof \Doctrine\Common\Collections\Collection) {
+                continue;
+            }
+
+            $matchingLink = null;
+
+            foreach ($links as $candidate) {
+                if (!$candidate instanceof ResourceLink) {
+                    continue;
+                }
+
+                // Deleted links must be ignored
+                if (null !== $candidate->getDeletedAt()) {
+                    continue;
+                }
+
+                // Match same course
+                if ($candidate->getCourse()?->getId() !== $course->getId()) {
+                    continue;
+                }
+
+                // Match same session context
+                if (null !== $session) {
+                    if ($candidate->getSession()?->getId() !== $session->getId()) {
+                        continue;
+                    }
+                } else {
+                    if (null !== $candidate->getSession()) {
+                        continue;
+                    }
+                }
+
+                // Match same group context
+                if (null !== $group) {
+                    if ($candidate->getGroup()?->getIid() !== $group->getIid()) {
+                        continue;
+                    }
+                } else {
+                    if (null !== $candidate->getGroup()) {
+                        continue;
+                    }
+                }
+
+                // Visibility filter (when not allowed to see invisible items)
+                if (!$canSeeInvisible) {
+                    $visibility = $candidate->getVisibility();
+
+                    if ($getInvisibleList) {
+                        // We only want non-published items
+                        if (ResourceLink::VISIBILITY_PUBLISHED === $visibility) {
+                            continue;
+                        }
+                    } else {
+                        // We only want published items
+                        if (ResourceLink::VISIBILITY_PUBLISHED !== $visibility) {
+                            continue;
+                        }
+                    }
+                }
+
+                $matchingLink = $candidate;
+                break;
+            }
+
+            if (!$matchingLink instanceof ResourceLink) {
+                // No valid link for this context, skip
+                continue;
+            }
+
+            $linksById[$matchingLink->getId()] = [
+                'doc' => $doc,
+                'link' => $matchingLink,
+                'node' => $node,
+                'parent_id' => $matchingLink->getParent()?->getId(),
+                'title' => $node->getTitle(),
+            ];
+        }
+
+        if (empty($linksById)) {
+            return [];
+        }
+
+        // 2) Build full folder paths per context (using ResourceLink.parent)
+        $pathCache = [];
+        $folders = [];
+
+        foreach ($linksById as $id => $data) {
+            $path = $this->buildFolderPathForLink($id, $linksById, $pathCache);
+
+            if ('' === $path) {
+                continue;
+            }
+
+            /** @var CDocument $doc */
+            $doc = $data['doc'];
+
+            // Keep the key as CDocument iid (as before)
+            $folders[$doc->getIid()] = $path;
+        }
+
+        if (empty($folders)) {
+            return [];
+        }
+
+        // Natural sort so that paths appear in a human-friendly order
+        natsort($folders);
+
+        // If the caller explicitly requested the invisible list, the filtering was done above
+        return $folders;
+    }
+
+    /**
+     * Rebuild the "Parent folder/Child folder/..." path for a folder ResourceLink,
+     * walking up the parent chain until a link without parent is found.
+     *
+     * Uses a small cache to avoid recalculating the same paths many times.
+     *
+     * @param array<int, array<string,mixed>> $linksById
+     * @param array<int, string>              $pathCache
+     */
+    private function buildFolderPathForLink(
+        int $id,
+        array $linksById,
+        array &$pathCache
+    ): string {
+        if (isset($pathCache[$id])) {
+            return $pathCache[$id];
+        }
+
+        if (!isset($linksById[$id])) {
+            return $pathCache[$id] = '';
+        }
+
+        $current = $linksById[$id];
+        $segments = [$current['title']];
+
+        $parentId = $current['parent_id'] ?? null;
+        $guard = 0;
+
+        while (null !== $parentId && isset($linksById[$parentId]) && $guard < 50) {
+            $parent = $linksById[$parentId];
+            array_unshift($segments, $parent['title']);
+            $parentId = $parent['parent_id'] ?? null;
+            $guard++;
+        }
+
+        $path = implode('/', $segments);
+
+        return $pathCache[$id] = $path;
     }
 }

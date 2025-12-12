@@ -7,11 +7,18 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceFileVoter;
+use Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Exception;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -31,6 +38,8 @@ class DownloadSelectedDocumentsAction
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly CDocumentRepository $documentRepo,
         private readonly ResourceFileHelper $resourceFileHelper,
+        private readonly Security $security,
+        private readonly CidReqHelper $cidReqHelper,
     ) {}
 
     /**
@@ -48,7 +57,32 @@ class DownloadSelectedDocumentsAction
             return new Response('No items selected.', Response::HTTP_BAD_REQUEST);
         }
 
-        $documents = $this->documentRepo->findBy(['iid' => $documentIds]);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $documents = $this->documentRepo->findBy(['iid' => $documentIds]);
+        } else {
+            $course = $this->cidReqHelper->getCourseEntity();
+            $session = $this->cidReqHelper->getSessionEntity();
+            $group = $this->cidReqHelper->getGroupEntity();
+
+            if (!$course || !$this->security->isGranted(CourseVoter::VIEW, $course)) {
+                throw new NotAllowedException("You're not allowed in this course");
+            }
+
+            if ($session && !$this->security->isGranted(SessionVoter::VIEW, $session)) {
+                throw new NotAllowedException("You're not allowed in this session");
+            }
+
+            if ($group && !$this->security->isGranted(GroupVoter::VIEW, $group)) {
+                throw new NotAllowedException("You're not allowed in this group");
+            }
+
+            $qb = $this->documentRepo->getResourcesByCourse($course, $session, $group);
+            $qb->andWhere(
+                $qb->expr()->in('resource.iid', $documentIds)
+            );
+
+            $documents = $qb->getQuery()->getResult();
+        }
 
         if (empty($documents)) {
             return new Response('No documents found.', Response::HTTP_NOT_FOUND);
@@ -77,7 +111,7 @@ class DownloadSelectedDocumentsAction
                     $this->addNodeToZip($zip, $node);
                 }
 
-                if (0 === count($zip->files)) {
+                if (0 === \count($zip->files)) {
                     $zip->addFile('.empty', '');
                 }
 
@@ -120,6 +154,10 @@ class DownloadSelectedDocumentsAction
         $resourceFile = $this->resourceFileHelper->resolveResourceFileByAccessUrl($node);
 
         if ($resourceFile) {
+            if (!$this->security->isGranted(ResourceFileVoter::DOWNLOAD, $resourceFile)) {
+                return;
+            }
+
             $fileName = $currentPath.$resourceFile->getOriginalName();
             $stream = $this->resourceNodeRepository->getResourceNodeFileStream($node, $resourceFile);
 

@@ -19,14 +19,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CCourseDescriptionRepository::class)]
 class CCourseDescription extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable
 {
-    public const TYPE_DESCRIPTION = 1;
-    public const TYPE_OBJECTIVES = 2;
-    public const TYPE_TOPICS = 3;
-    public const TYPE_METHODOLOGY = 4;
+    public const TYPE_DESCRIPTION     = 1;
+    public const TYPE_OBJECTIVES      = 2;
+    public const TYPE_TOPICS          = 3;
+    public const TYPE_METHODOLOGY     = 4;
     public const TYPE_COURSE_MATERIAL = 5;
-    public const TYPE_RESOURCES = 6;
-    public const TYPE_ASSESSMENT = 7;
-    public const TYPE_CUSTOM = 8;
+    public const TYPE_RESOURCES       = 6;
+    public const TYPE_ASSESSMENT      = 7;
+    public const TYPE_CUSTOM          = 8;
 
     #[ORM\Column(name: 'iid', type: 'integer')]
     #[ORM\Id]
@@ -47,10 +47,15 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     #[ORM\Column(name: 'progress', type: 'integer', nullable: false)]
     protected int $progress;
 
+    /**
+     * Runtime flag to skip search indexing (not persisted).
+     */
+    private bool $skipSearchIndex = false;
+
     public function __construct()
     {
-        $this->content = '';
-        $this->progress = 0;
+        $this->content         = '';
+        $this->progress        = 0;
         $this->descriptionType = 1;
     }
 
@@ -81,9 +86,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     }
 
     /**
-     * Get title.
-     *
-     * @return string
+     * @return string|null
      */
     public function getTitle()
     {
@@ -98,9 +101,7 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     }
 
     /**
-     * Get content.
-     *
-     * @return string
+     * @return string|null
      */
     public function getContent()
     {
@@ -115,8 +116,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     }
 
     /**
-     * Get descriptionType.
-     *
      * @return int
      */
     public function getDescriptionType()
@@ -132,8 +131,6 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
     }
 
     /**
-     * Get progress.
-     *
      * @return int
      */
     public function getProgress()
@@ -153,11 +150,29 @@ class CCourseDescription extends AbstractResource implements ResourceInterface, 
 
     public function getResourceName(): string
     {
-        return $this->getTitle();
+        return (string) $this->getTitle();
     }
 
     public function setResourceName(string $name): self
     {
         return $this->setTitle($name);
+    }
+
+    /**
+     * Mark this entity to skip search indexing in the current request.
+     */
+    public function setSkipSearchIndex(bool $skip): self
+    {
+        $this->skipSearchIndex = $skip;
+
+        return $this;
+    }
+
+    /**
+     * Should search indexing be skipped for this entity in this request?
+     */
+    public function shouldSkipSearchIndex(): bool
+    {
+        return $this->skipSearchIndex;
     }
 }

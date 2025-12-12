@@ -170,13 +170,11 @@ class CourseDescription
     }
 
     /**
-     * Insert a description to the course_description table,
-     * first you must set description_type, title, content, progress and
-     * session_id properties with the object CourseDescription.
+     * Insert a description to the course_description table.
      *
-     * @return int affected rows
+     * @return bool
      */
-    public function insert()
+    public function insert(bool $enableSearch = true)
     {
         if (empty($this->course_id)) {
             $course_id = api_get_course_int_id();
@@ -192,7 +190,12 @@ class CourseDescription
             ->setDescriptionType((int) $this->description_type)
         ;
 
-        $course = api_get_course_entity($course_id);
+        // If global search is enabled, map checkbox to the runtime flag.
+        if ('true' === api_get_setting('search.search_enabled')) {
+            $courseDescription->setSkipSearchIndex(!$enableSearch);
+        }
+
+        $course  = api_get_course_entity($course_id);
         $session = api_get_session_entity($this->session_id);
         $courseDescription->setParent($course);
         $courseDescription->addCourseLink($course, $session);

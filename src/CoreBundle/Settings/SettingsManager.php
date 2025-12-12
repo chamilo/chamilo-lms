@@ -22,6 +22,7 @@ use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Exception\ValidatorException;
+use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 
 use const ARRAY_FILTER_USE_KEY;
 
@@ -61,6 +62,7 @@ class SettingsManager implements SettingsManagerInterface
         EventDispatcherInterface $eventDispatcher,
         RequestStack $request,
         protected readonly SettingsManagerHelper $settingsManagerHelper,
+        private readonly SearchEngineFieldSynchronizer $searchEngineFieldSynchronizer,
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
@@ -334,6 +336,8 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
+
         $this->manager->flush();
     }
 
@@ -391,7 +395,28 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
+
         $this->manager->flush();
+    }
+
+    /**
+     * Sync JSON-defined search fields into search_engine_field table.
+     */
+    private function applySearchEngineFieldsSyncIfNeeded(string $category, array $parameters): void
+    {
+        if ('search' !== $category) {
+            return;
+        }
+
+        if (!array_key_exists('search_prefilter_prefix', $parameters)) {
+            return;
+        }
+
+        $json = (string) $parameters['search_prefilter_prefix'];
+
+        // Non-destructive by default (no deletes)
+        $this->searchEngineFieldSynchronizer->syncFromJson($json, true);
     }
 
     /**

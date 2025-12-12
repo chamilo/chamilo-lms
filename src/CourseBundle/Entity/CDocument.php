@@ -20,7 +20,6 @@ use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use ApiPlatform\OpenApi\Model\RequestBody;
-use ApiPlatform\OpenApi\Model\Response;
 use ApiPlatform\Serializer\Filter\PropertyFilter;
 use ArrayObject;
 use Chamilo\CoreBundle\Controller\Api\CreateDocumentFileAction;
@@ -28,6 +27,7 @@ use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -37,6 +37,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Filter\CidFilter;
 use Chamilo\CoreBundle\Filter\SidFilter;
+use Chamilo\CoreBundle\State\DocumentCollectionStateProvider;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -68,12 +69,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             uriTemplate: '/documents/{iid}/move',
-            controller: UpdateDocumentFileAction::class,
-            openapi: new Operation(
-                summary: 'Move document'
-            ),
+            controller: MoveDocumentAction::class,
+            openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
             security: "is_granted('EDIT', object.resourceNode)",
-            deserialize: true
+            deserialize: false
         ),
         new Post(
             uriTemplate: '/documents/{iid}/replace',
@@ -179,9 +178,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
             openapi: new Operation(
                 summary: 'Download selected documents as a ZIP file.',
-                description: 'Streams a ZIP archive generated on-the-fly. The ZIP file includes folders and files selected.',
                 requestBody: new RequestBody(
-                    description: 'List of document IDs to include in the ZIP file',
                     content: new ArrayObject([
                         'application/json' => [
                             'schema' => [
@@ -192,45 +189,12 @@ use Symfony\Component\Validator\Constraints as Assert;
                                         'items' => ['type' => 'integer'],
                                     ],
                                 ],
-                                'required' => ['ids'],
                             ],
                         ],
                     ]),
-                    required: true,
                 ),
-                responses: [
-                    201 => new Response(
-                        description: 'The ZIP file is being streamed to the client',
-                        content: new ArrayObject([
-                            DownloadSelectedDocumentsAction::CONTENT_TYPE => [
-                                'schema' => [
-                                    'type' => 'string',
-                                    'format' => 'binary',
-                                    'description' => 'Streamed ZIP file',
-                                ],
-                            ],
-                        ]),
-                        headers: new ArrayObject([
-                            'Content-Type' => [
-                                'description' => 'MIME type identifying the streamed file',
-                                'schema' => [
-                                    'type' => 'string',
-                                    'example' => DownloadSelectedDocumentsAction::CONTENT_TYPE,
-                                ],
-                            ],
-                            'Content-Disposition' => [
-                                'description' => 'Indicates that the response is meant to be downloaded as a file',
-                                'schema' => [
-                                    'type' => 'string',
-                                    'example' => 'attachment; filename="selected_documents.zip"',
-                                ],
-                            ],
-                        ]),
-                    ),
-                ]
             ),
             security: "is_granted('ROLE_USER')",
-            outputFormats: ['zip' => DownloadSelectedDocumentsAction::CONTENT_TYPE],
         ),
         new GetCollection(
             openapi: new Operation(
@@ -243,7 +207,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         schema: ['type' => 'integer'],
                     ),
                 ],
-            )
+            ),
+            provider: DocumentCollectionStateProvider::class
         ),
     ],
     normalizationContext: [
@@ -258,7 +223,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CDocumentRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class])]
 #[ApiFilter(filterClass: PropertyFilter::class)]
-#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'resourceNode.parent' => 'exact', 'filetype' => 'exact'])]
+#[ApiFilter(filterClass: SearchFilter::class, properties: ['title' => 'partial', 'filetype' => 'exact'])]
 #[ApiFilter(
     filterClass: OrderFilter::class,
     properties: [

@@ -338,6 +338,10 @@
         var detachFileIdInput = document.getElementById('detach-resource-file-id');
         var detachCourseIdInput = document.getElementById('detach-course-id');
 
+        // Select + search input used in the attach form
+        var courseSearchInput = document.getElementById('course-search-input');
+        var courseSelect = document.getElementById('course-code-input');
+
         // Base URL for the course Documents tool (e.g. /resources/document/)
         var documentsBaseUrl = "{{ app.request.basePath|e('js') }}/resources/document/";
 
@@ -375,6 +379,46 @@
             encodeURIComponent(courseId) +
             "&gid=0"
           );
+        }
+
+        /**
+         * Hide already attached courses from the multi-select for the current file.
+         */
+        function refreshCourseSelectOptions(courses) {
+          if (!courseSelect) {
+            return;
+          }
+
+          // Reset all options to a clean state
+          Array.prototype.forEach.call(courseSelect.options, function(option) {
+            option.disabled = false;
+            option.hidden = false;
+            option.style.display = '';
+            option.dataset.attached = '0';
+          });
+
+          if (!courses || !courses.length) {
+            return;
+          }
+
+          var attachedCodes = courses
+            .map(function(c) {
+              return (c.code || '').toString();
+            })
+            .filter(function(code) {
+              return code !== '';
+            });
+
+          Array.prototype.forEach.call(courseSelect.options, function(option) {
+            var code = option.value;
+            if (attachedCodes.indexOf(code) !== -1) {
+              // Mark and hide options that correspond to already attached courses
+              option.dataset.attached = '1';
+              option.disabled = true;
+              option.hidden = true;
+              option.style.display = 'none';
+            }
+          });
         }
 
         /**
@@ -488,6 +532,12 @@
               courseTagsContainer.textContent = courseLabel || "N/A";
             }
 
+            // Reset search input and hide already attached courses in the multi-select
+            if (courseSearchInput) {
+              courseSearchInput.value = '';
+            }
+            refreshCourseSelectOptions(coursesData);
+
             if (orphanActions) {
               orphanActions.style.display = 'block';
             }
@@ -513,7 +563,6 @@
             if (orphanActions) {
               orphanActions.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-            var courseSelect = document.getElementById('course-code-input');
             if (courseSelect) {
               courseSelect.focus();
             }
@@ -547,14 +596,18 @@
         }
 
         // Filter options inside the multi-select when typing
-        var courseSearchInput = document.getElementById('course-search-input');
-        var courseSelect = document.getElementById('course-code-input');
-
         if (courseSearchInput && courseSelect) {
           courseSearchInput.addEventListener('input', function() {
             var filter = courseSearchInput.value.toLowerCase();
 
             Array.prototype.forEach.call(courseSelect.options, function(option) {
+              var isAttached = option.dataset.attached === '1';
+              if (isAttached) {
+                // Always keep already attached courses hidden
+                option.style.display = 'none';
+                return;
+              }
+
               var text = option.textContent.toLowerCase();
               var match = text.indexOf(filter) !== -1;
               option.style.display = match ? '' : 'none';

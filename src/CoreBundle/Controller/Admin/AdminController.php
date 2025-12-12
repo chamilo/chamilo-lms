@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\ResourceType;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -235,34 +236,37 @@ class AdminController extends BaseController
             ]);
         }
 
+        // Existing node for this file (can be null in some legacy cases).
         $resourceNode = $resourceFile->getResourceNode();
-        if (!$resourceNode) {
-            $this->addFlash('error', 'This resource file has no resource node and cannot be attached.');
-
-            return $this->redirectToRoute('admin_files_info', [
-                'page' => $page,
-                'search' => $search,
-            ]);
-        }
 
         // Hidden field in the template: always "1" now.
         $createDocuments = (bool) $request->request->get('create_documents', false);
 
         // Map existing links by course id to avoid duplicates.
         $existingByCourseId = [];
-        $links = $resourceNode->getResourceLinks();
-        if ($links) {
-            foreach ($links as $existingLink) {
-                $course = $existingLink->getCourse();
-                if ($course) {
-                    $existingByCourseId[$course->getId()] = true;
+        if ($resourceNode) {
+            $links = $resourceNode->getResourceLinks();
+            if ($links) {
+                foreach ($links as $existingLink) {
+                    $course = $existingLink->getCourse();
+                    if ($course) {
+                        $existingByCourseId[$course->getId()] = true;
+                    }
                 }
             }
         }
 
-        $wasOrphan = 0 === \count($existingByCourseId);
+        // "Orphan" means: no links yet or no node at all.
+        $wasOrphan = (null === $resourceNode) || (0 === \count($existingByCourseId));
         $attachedTitles = [];
         $skippedTitles = [];
+
+        // Try to reuse an existing visible document for this node.
+        $documentRepo = Container::getDocumentRepository();
+        /** @var CDocument|null $sharedDocument */
+        $sharedDocument = $resourceNode
+            ? $documentRepo->findOneBy(['resourceNode' => $resourceNode])
+            : null;
 
         foreach ($courseCodes as $code) {
             /** @var Course|null $course */
@@ -281,8 +285,9 @@ class AdminController extends BaseController
                 continue;
             }
 
-            // If it was orphan, re-parent the node once to the first target course root.
-            if ($wasOrphan && method_exists($course, 'getResourceNode')) {
+            // If there is already a node but it was truly orphan (no links),
+            // re-parent the node once to the first target course root.
+            if ($wasOrphan && $resourceNode && method_exists($course, 'getResourceNode')) {
                 $courseRootNode = $course->getResourceNode();
                 if ($courseRootNode) {
                     $resourceNode->setParent($courseRootNode);
@@ -290,22 +295,35 @@ class AdminController extends BaseController
                 $wasOrphan = false;
             }
 
-            // Create the ResourceLink for this course.
-            $link = new ResourceLink();
-            $link->setResourceNode($resourceNode);
-            $link->setCourse($course);
-            $link->setSession(null);
-
-            $em->persist($link);
+            // Mark this course as now attached to avoid duplicates in this loop.
             $existingByCourseId[$courseId] = true;
             $attachedTitles[] = (string) $course->getTitle();
 
-            // Also create a visible document entry for this course (Documents tool).
             if ($createDocuments) {
-                $this->createVisibleDocumentFromResourceFile($resourceFile, $course, $em);
+                // Ensure we have a shared document for this file.
+                if (null === $sharedDocument) {
+                    // This will create the ResourceNode if needed and the CDocument.
+                    $sharedDocument = $this->createVisibleDocumentFromResourceFile($resourceFile, $course, $em);
+
+                    // Refresh local node reference in case it was created inside the helper.
+                    $resourceNode = $resourceFile->getResourceNode();
+                }
+
+                // IMPORTANT: some legacy documents might not have a parent set.
+                // We must set a parent (owning course) before calling addCourseLink,
+                // or AbstractResource::addCourseLink() will throw.
+                if (null === $sharedDocument->getParent()) {
+                    $sharedDocument->setParent($course);
+                }
+
+                // For every course, share the same document via ResourceLinks.
+                $session = $this->cidReqHelper->getDoctrineSessionEntity();
+                $group = null;
+                $sharedDocument->addCourseLink($course, $session, $group);
             }
         }
 
+        // Single flush for all changes (links + optional new CDocument).
         $em->flush();
 
         if (!empty($attachedTitles)) {
@@ -714,63 +732,83 @@ class AdminController extends BaseController
         ResourceFile $resourceFile,
         Course $course,
         EntityManagerInterface $em
-    ): void {
+    ): CDocument {
         $userEntity = $this->userHelper->getCurrent();
         if (null === $userEntity) {
-            return;
+            throw new \RuntimeException('Current user is required to create or reuse a document.');
         }
 
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = null;
+        // Current node (may be null for truly orphan files).
+        $resourceNode = $resourceFile->getResourceNode();
+
+        if (null === $resourceNode) {
+            $courseRootNode = $course->getResourceNode();
+            if (null === $courseRootNode) {
+                throw new \RuntimeException('Course root node is required to attach a resource node.');
+            }
+
+            // Create the node that will be shared by all courses.
+            $resourceNode = new ResourceNode();
+            $resourceNode
+                ->setCreator($userEntity)
+                ->setTitle(
+                    $resourceFile->getOriginalName()
+                    ?? $resourceFile->getTitle()
+                    ?? (string) $resourceFile->getId()
+                )
+                ->setParent($courseRootNode)
+                ->setResourceType(
+                    $this->resourceNodeRepository->getResourceTypeForClass(CDocument::class)
+                )
+            ;
+
+            // Link file <-> node so getFirstResourceFile() returns this file.
+            $resourceNode->addResourceFile($resourceFile);
+            $resourceFile->setResourceNode($resourceNode);
+
+            $em->persist($resourceNode);
+            $em->persist($resourceFile);
+        }
 
         $documentRepo = Container::getDocumentRepository();
 
-        $parentResource = $course;
-        $parentNode = $parentResource->getResourceNode();
+        /** @var CDocument|null $document */
+        $document = $documentRepo->findOneBy([
+            'resourceNode' => $resourceNode,
+        ]);
 
-        $title = $resourceFile->getOriginalName()
-            ?? $resourceFile->getTitle()
-            ?? (string) $resourceFile->getId();
+        if (null === $document) {
+            $title = $resourceFile->getOriginalName()
+                ?? $resourceFile->getTitle()
+                ?? (string) $resourceFile->getId();
 
-        $existingDocument = $documentRepo->findCourseResourceByTitle(
-            $title,
-            $parentNode,
-            $course,
-            $session,
-            $group
-        );
+            $document = (new CDocument())
+                ->setFiletype('file')
+                ->setTitle($title)
+                ->setComment(null)
+                ->setReadonly(false)
+                ->setTemplate(false)
+                ->setCreator($userEntity)
+                // First course becomes the logical owner. The node is shared.
+                ->setParent($course)
+                ->setResourceNode($resourceNode)
+            ;
 
-        if (null !== $existingDocument) {
-            // Document already exists for this title in this course context.
-            return;
+            $em->persist($document);
         }
 
-        $document = (new CDocument())
-            ->setFiletype('file')
-            ->setTitle($title)
-            ->setComment(null)
-            ->setReadonly(false)
-            ->setCreator($userEntity)
-            ->setParent($parentResource)
-            ->addCourseLink($course, $session, $group)
-        ;
-
-        $em->persist($document);
-        $em->flush();
-
-        // Physical file path in var/upload/resource (hashed filename)
-        $relativePath = $this->resourceNodeRepository->getFilename($resourceFile);
-        $storageRoot = $this->getParameter('kernel.project_dir').'/var/upload/resource';
-        $absolutePath = $storageRoot.$relativePath;
-
-        if (!is_file($absolutePath)) {
-            // If the physical file is missing, we cannot create the document content.
-            return;
+        // IMPORTANT: Always ensure the file is linked to the document's node,
+        // even if it already had a resource node.
+        $documentNode = $document->getResourceNode();
+        if (null !== $documentNode && $resourceFile->getResourceNode() !== $documentNode) {
+            // Move the file to the shared document node used by the document.
+            $documentNode->addResourceFile($resourceFile);
+            $resourceFile->setResourceNode($documentNode);
+            $em->persist($resourceFile);
         }
 
-        // This will copy the file into the course documents structure,
-        // using $title as the base name (Document repository handles dedup and hashing).
-        $documentRepo->addFileFromPath($document, $title, $absolutePath);
+        // Do NOT create course links or flush here: this is handled by the caller.
+        return $document;
     }
 
     /**

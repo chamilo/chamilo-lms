@@ -108,6 +108,15 @@ class ResourceNode implements Stringable
     protected ?ResourceFormat $resourceFormat = null;
 
     /**
+     * Optional language for the node.
+     * This is used for indexing and future-proof resource variations.
+     */
+    #[Groups(['resource_node:read', 'document:read', 'personal_file:read'])]
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Language $language = null;
+
+    /**
      * @var Collection<int, ResourceLink>
      */
     #[Groups(['ctool:read', 'c_tool_intro:read'])]
@@ -247,6 +256,24 @@ class ResourceNode implements Stringable
     }
 
     /**
+     * Get the node language (can be null if unknown/multilingual).
+     */
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set the node language (nullable by design).
+     */
+    public function setLanguage(?Language $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
      * Returns the children resource instances.
      *
      * @return Collection<int, ResourceNode>
@@ -351,15 +378,6 @@ class ResourceNode implements Stringable
      */
     public function convertPathForDisplay(string $path): string
     {
-        /*$pathForDisplay = preg_replace(
-              '/-\d+'.self::PATH_SEPARATOR.'/',
-              ' / ',
-              $path
-          );
-          if ($pathForDisplay !== null && strlen($pathForDisplay) > 0) {
-              $pathForDisplay = substr_replace($pathForDisplay, '', -3);
-          }
-          */
         $pathForDisplay = preg_replace('/-\d+\\'.self::PATH_SEPARATOR.'/', '/', $path);
         if (null !== $pathForDisplay && '' !== $pathForDisplay) {
             $pathForDisplay = substr_replace($pathForDisplay, '', -1);

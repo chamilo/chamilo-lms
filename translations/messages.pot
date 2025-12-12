@@ -31298,3 +31298,84 @@ msgstr ""
 
 msgid "No members found."
 msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Ready to import"
+msgstr ""
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr ""
+
+msgid "Select resources to import"
+msgstr ""
+
+msgid "No resources available in this backup."
+msgstr ""
+
+msgid "Import selection"
+msgstr ""
+
+msgid "Import completed"
+msgstr ""
+
+msgid "Could not load options."
+msgstr ""
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Please choose a backup from the server"
+msgstr ""
+
+msgid "Error selecting source."
+msgstr ""
+
+msgid "Recycling options"
+msgstr ""
+
+msgid "Type the course code to confirm"
+msgstr ""
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr ""
+
+msgid "Select resources to recycle"
+msgstr ""
+
+msgid "No resources available in this course."
+msgstr ""
+
+msgid "Recycle selected"
+msgstr ""
+
+msgid "Error loading resources."
+msgstr ""
+
+msgid "Clear search"
+msgstr ""

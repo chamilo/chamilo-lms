@@ -6,9 +6,9 @@
       <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <!-- Export -->
         <div class="rounded-lg border border-gray-100 p-4">
-          <h4 class="mb-2 text-sm font-semibold text-gray-800">{{ t("Export to CC 1.3") }}</h4>
+          <h4 class="mb-2 text-sm font-semibold text-gray-800">{{ t("Export Common Cartridge v1.3") }}</h4>
           <p class="mb-3 text-sm text-gray-600">
-            {{ t("Generate a Common Cartridge package for this course.") }}
+            {{ t("Export your course content in the IMS Common Cartridge 1.3 format, to share it on other platforms.") }}
           </p>
 
           <div class="mb-3">
@@ -25,7 +25,7 @@
                 :class="segClass('full')"
                 @click="scope = 'full'"
               >
-                {{ t("Full course") }}
+                {{ t("Full copy") }}
               </button>
               <button
                 type="button"
@@ -73,7 +73,7 @@
               v-if="loadingResources"
               class="p-3 text-xs text-gray-500"
             >
-              {{ t("Loading resources…") }}
+              {{ t("Loading resources...") }}
             </div>
 
             <div
@@ -246,9 +246,9 @@
 
         <!-- Import -->
         <div class="rounded-lg border border-gray-100 p-4">
-          <h4 class="mb-2 text-sm font-semibold text-gray-800">{{ t("Import from CC 1.3") }}</h4>
+          <h4 class="mb-2 text-sm font-semibold text-gray-800">{{ t("Import Common Cartridge v1.3") }}</h4>
           <p class="mb-3 text-sm text-gray-600">
-            {{ t("Upload a Common Cartridge 1.3 (.imscc or .zip) to import resources.") }}
+            {{ t("Import a course in IMS Common Cartridge 1.3 format, from another platform compatible with this format. The version is important.") }}
           </p>
           <input
             type="file"
@@ -457,7 +457,7 @@ async function doExport() {
       const total =
         Object.values(resSel).reduce((acc, obj) => acc + Object.keys(obj || {}).length, 0)
       if (total === 0) {
-        throw new Error(t("Please select at least one exportable resource (documents, web links, or discussions)."))
+        throw new Error(t("Please select at least one exportable resource (document, web link, discussion,...)."))
       }
       payload.resources = resSel
     }
@@ -466,7 +466,7 @@ async function doExport() {
     if (res.downloadUrl) window.location.href = res.downloadUrl
     notice.value = res.message || t("Export finished.")
   } catch (e) {
-    error.value = e?.response?.data?.error || e.message || t("Failed to export.")
+    error.value = e?.response?.data?.error || e.message || t("Export failed.")
   } finally {
     loadingExport.value = false
   }
@@ -482,7 +482,7 @@ async function doImport() {
     const res = await svc.cc13Import(node.value, file.value)
     notice.value = res.message || t("Import finished")
   } catch (e) {
-    error.value = e?.response?.data?.error || e.message || t("Failed to import.")
+    error.value = e?.response?.data?.error || e.message || t("Import failed.")
   } finally {
     loadingImport.value = false
   }

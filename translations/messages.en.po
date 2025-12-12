@@ -31366,3 +31366,84 @@ msgstr "Exit tablet mode"
 
 msgid "No members found."
 msgstr "No members found."
+
+msgid "Health check"
+msgstr "Health check"
+
+msgid "Export to CC 1.3"
+msgstr "Export to CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Loading resources..."
+
+msgid "Failed to load resources."
+msgstr "Failed to load resources."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Please select at least one exportable resource (document, web link, discussion,...)."
+
+msgid "Export finished."
+msgstr "Export finished."
+
+msgid "Export failed."
+msgstr "Export failed."
+
+msgid "Import failed."
+msgstr "Import failed."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Local file (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Ready to import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "We will restore the backup into this course. You can go back to change options."
+
+msgid "Select resources to import"
+msgstr "Select resources to import"
+
+msgid "No resources available in this backup."
+msgstr "No resources available in this backup."
+
+msgid "Import selection"
+msgstr "Import selection"
+
+msgid "Import completed"
+msgstr "Import completed"
+
+msgid "Could not load options."
+msgstr "Could not load options."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Please choose a backup from the server"
+
+msgid "Error selecting source."
+msgstr "Error selecting source."
+
+msgid "Recycling options"
+msgstr "Recycling options"
+
+msgid "Type the course code to confirm"
+msgstr "Type the course code to confirm"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "This will remove or reset selected resources. This action cannot be undone."
+
+msgid "Select resources to recycle"
+msgstr "Select resources to recycle"
+
+msgid "No resources available in this course."
+msgstr "No resources available in this course."
+
+msgid "Recycle selected"
+msgstr "Recycle selected"
+
+msgid "Error loading resources."
+msgstr "Error loading resources."
+
+msgid "Clear search"
+msgstr "Clear search"

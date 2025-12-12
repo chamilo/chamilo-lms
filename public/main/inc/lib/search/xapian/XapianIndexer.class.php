@@ -50,28 +50,36 @@ abstract class XapianIndexer
      *
      * @return array Array of languages codes -> Xapian languages
      */
-    final public function xapian_languages()
+    final public function xapian_languages(): array
     {
-        /* http://xapian.org/docs/apidoc/html/classXapian_1_1Stem.html */
+        // See http://xapian.org/docs/apidoc/html/classXapian_1_1Stem.html for available languages.
+        // The match with Chamilo's language table is made on the english_name field, not the ISO code.
         return [
             'none' => 'none', // do not stem terms
+            'ar' => 'arabic',
+            'ca' => 'catalan',
             'da' => 'danish',
-            'nl' => 'dutch',
-            /* Martin Porter's 2002 revision of his stemmer */
+            'de' => 'german',
             'en' => 'english',
-            /* Lovin's stemmer */
-            'lovins' => 'english_lovins',
-            /* Porter's stemmer as described in his 1980 paper */
-            'porter' => 'english_porter',
+            'es' => 'spanish',
+            'eu' => 'basque',
             'fi' => 'finnish',
             'fr' => 'french',
-            'de' => 'german',
+            'ga' => 'irish',
+            'hu' => 'hungarian',
+            'hy' => 'armenian',
+            'id' => 'indonesian',
             'it' => 'italian',
+            'lt' => 'lithuanian',
+            'ne' => 'nepali',
+            'nl' => 'dutch',
             'no' => 'norwegian',
             'pt' => 'portuguese',
+            'ro' => 'romanian',
             'ru' => 'russian',
-            'es' => 'spanish',
             'sv' => 'swedish',
+            'ta' => 'tamil',
+            'tr' => 'turkish',
         ];
     }
 

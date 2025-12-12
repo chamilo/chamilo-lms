@@ -4993,7 +4993,8 @@ class Exercise
 
                             if ($show_result) {
                                 if (false === $this->showExpectedChoice() &&
-                                    false === $showTotalScoreAndUserChoicesInLastAttempt
+                                    false === $showTotalScoreAndUserChoicesInLastAttempt &&
+                                    $this->results_disabled != RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK
                                 ) {
                                     $user_answer = '';
                                 }

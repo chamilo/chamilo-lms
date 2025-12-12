@@ -1,22 +1,25 @@
 default:
-    extensions:
-        Behat\MinkExtension:
-            base_url: http://localhost
-            show_cmd: 'open %s'
-            selenium2:
-                wd_host: "http://127.0.0.1:4444/wd/hub"
-                browser: chrome
-                capabilities:
-                    extra_capabilities:
-                        chromeOptions:
-                            args:
-                                - "--ignore-certificate-errors"
-                            w3c: false
-            default_session: selenium2
-            javascript_session: selenium2
-            files_path: "%paths.base%/../../"
-    suites:
-        default:
-            paths: ["%paths.base%/features"]
-    formatters:
-        pretty: true
+  extensions:
+    Behat\MinkExtension:
+      base_url: http://localhost
+      default_session: selenium2
+      javascript_session: selenium2
+      selenium2:
+        wd_host: "http://127.0.0.1:4444"
+        browser: chrome
+        capabilities:
+          browserName: chrome
+          extra_capabilities:
+            "goog:chromeOptions":
+              args:
+                - "--headless=new"
+                - "--no-sandbox"
+                - "--disable-dev-shm-usage"
+                - "--disable-gpu"
+                - "--window-size=1920,1080"
+      files_path: "%paths.base%/../../"
+  suites:
+    default:
+      paths: ["%paths.base%/features"]
+  formatters:
+    pretty: true

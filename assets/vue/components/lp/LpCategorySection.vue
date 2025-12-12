@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, onMounted } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import Draggable from "vuedraggable"
 import LpCardItem from "./LpCardItem.vue"
@@ -20,6 +20,7 @@ const props = defineProps({
   ringDash: { type: Function, required: true },
   ringValue: { type: Function, required: true },
   buildDates: { type: Function, required: false },
+  isSessionCategory: { type: Boolean, default: false },
 })
 const emit = defineEmits([
   "open",
@@ -117,22 +118,22 @@ const toggleOpen = () => {
   <section class="relative ml-2 rounded-2xl shadow-lg">
     <header class="relative bg-support-6 rounded-t-2xl flex items-center justify-between pl-0 pr-4 py-3">
       <span
-        class="pointer-events-none absolute inset-y-0 -left-1.5 w-1.5 bg-support-5 rounded-l-2xl"
         aria-hidden
+        class="pointer-events-none absolute inset-y-0 -left-1.5 w-1.5 bg-support-5 rounded-l-2xl"
       />
       <div class="flex items-center gap-3">
         <template v-if="canEdit">
           <button
-            class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
-            :title="t('Drag to reorder')"
             :aria-label="t('Drag to reorder')"
+            :title="t('Drag to reorder')"
+            class="w-8 h-8 grid place-content-center rounded-lg text-gray-50 hover:bg-gray-15 hover:text-gray-90"
           >
             <svg
-              width="14"
+              aria-hidden
+              fill="currentColor"
               height="14"
               viewBox="0 0 14 14"
-              fill="currentColor"
-              aria-hidden
+              width="14"
             >
               <circle
                 cx="4"
@@ -169,12 +170,21 @@ const toggleOpen = () => {
         </template>
         <template v-else>
           <span
-            class="inline-block w-8 h-8"
             aria-hidden
+            class="inline-block w-8 h-8"
           ></span>
         </template>
 
-        <h2 class="text-body-1 font-semibold text-gray-90">{{ displayTitle }}</h2>
+        <h2 class="text-body-1 font-semibold text-gray-90">
+          <span>{{ displayTitle }}</span>
+          <!-- Display the star if it's a session category; remove the check on category.type -->
+          <span
+            v-if="isSessionCategory"
+            class="ml-2 text-warning"
+            title="Category created for a session"
+            >★</span
+          >
+        </h2>
       </div>
 
       <div class="flex items-center gap-2">
@@ -187,13 +197,13 @@ const toggleOpen = () => {
         >
           <template #button>
             <span
-              class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
-              :title="t('Options')"
               :aria-label="t('Options')"
+              :title="t('Options')"
+              class="list-none w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 cursor-pointer"
             >
               <i
-                class="mdi mdi-dots-vertical text-lg"
                 aria-hidden
+                class="mdi mdi-dots-vertical text-lg"
               ></i>
             </span>
           </template>
@@ -239,26 +249,26 @@ const toggleOpen = () => {
 
         <button
           v-if="localList.length"
-          :aria-expanded="isOpen ? 'true' : 'false'"
           :aria-controls="panelId"
-          class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 transition"
+          :aria-expanded="isOpen ? 'true' : 'false'"
           :title="t('Expand') / t('Collapse')"
+          class="w-8 h-8 grid place-content-center rounded-lg border border-gray-25 hover:bg-gray-15 transition"
           @click="toggleOpen"
         >
           <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            class="transition-transform duration-200"
             :class="isOpen ? 'rotate-180' : ''"
+            class="transition-transform duration-200"
+            fill="none"
+            height="18"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            width="18"
           >
             <path
               d="M6 9l6 6 6-6"
-              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
+              stroke-width="2"
             />
           </svg>
         </button>
@@ -272,41 +282,41 @@ const toggleOpen = () => {
     >
       <Draggable
         v-model="localList"
-        item-key="iid"
-        :disabled="!canEdit"
-        handle=".drag-handle2"
         :animation="180"
-        tag="div"
-        class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 mt-5"
-        ghost-class="ghosting"
-        chosen-class="chosen"
-        drag-class="dragging"
-        :prevent-on-filter="true"
-        :force-fallback="true"
-        :fallback-on-body="true"
+        :disabled="!canEdit"
         :empty-insert-threshold="10"
-        @start="dragging = true"
+        :fallback-on-body="true"
+        :force-fallback="true"
+        :prevent-on-filter="true"
+        chosen-class="chosen"
+        class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3 mt-5"
+        drag-class="dragging"
+        ghost-class="ghosting"
+        handle=".drag-handle"
+        item-key="iid"
+        tag="div"
         @end="onEndCat"
+        @start="dragging = true"
       >
         <template #item="{ element }">
           <LpCardItem
-            :lp="element"
+            :buildDates="buildDates"
+            :canAutoLaunch="canAutoLaunch"
             :canEdit="canEdit"
+            :canExportPdf="canExportPdf"
+            :canExportScorm="canExportScorm"
+            :lp="element"
             :ringDash="ringDash"
             :ringValue="ringValue"
-            :canExportScorm="canExportScorm"
-            :canExportPdf="canExportPdf"
-            :canAutoLaunch="canAutoLaunch"
-            :buildDates="buildDates"
-            @toggle-auto-launch="$emit('toggle-auto-launch', element)"
-            @open="$emit('open', element)"
+            @build="$emit('build', element)"
+            @delete="$emit('delete', element)"
             @edit="$emit('edit', element)"
+            @open="$emit('open', element)"
             @report="$emit('report', element)"
             @settings="$emit('settings', element)"
-            @build="$emit('build', element)"
+            @toggle-auto-launch="$emit('toggle-auto-launch', element)"
             @toggle-visible="$emit('toggle-visible', element)"
             @toggle-publish="$emit('toggle-publish', element)"
-            @delete="$emit('delete', element)"
             @export-scorm="$emit('export-scorm', element)"
             @export-pdf="$emit('export-pdf', element)"
           />

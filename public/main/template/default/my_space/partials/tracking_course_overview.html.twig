@@ -1,116 +1,164 @@
-{% import '@ChamiloCore/Macros/box.html.twig' as display %}
+{# my_space/partials/tracking_course_overview.html.twig #}
 
-{% set content %}
-    <div class="summary-course" id="summary-{{ course.id }}">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="course">
-                    <h4 class="title">{{ course.title }}</h4>
-                    <div class="image">
-                        <img class="media-object" src="{{ course | illustration }}" alt="{{ course.title }}">
+{% set avgProgress = data.avg_progress ?? 0 %}
+{% set avgScore = data.avg_score == '-' ? 0 : (data.avg_score ?? 0) %}
+
+{% autoescape false %}
+    <div class="summary-course mb-4" id="summary-{{ course.id }}">
+        <article class="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 md:p-6">
+            <div class="grid gap-6 md:grid-cols-12 md:items-start">
+                {# Course basic information #}
+                <div class="md:col-span-3 flex flex-col items-start gap-3">
+                    <div class="w-full overflow-hidden rounded-xl border border-gray-100 bg-gray-20">
+                        <img
+                                class="h-32 w-full object-cover"
+                                src="{{ course | illustration }}"
+                                alt="{{ course.title }}"
+                        >
                     </div>
-                    <div class="info">
+
+                    <div class="space-y-1">
+                        <h4 class="text-base font-semibold text-gray-900">
+                            {{ course.title }}
+                        </h4>
+
                         {% if course.code %}
-                            <p><strong>{{ 'Wanted course code'|get_lang }}</strong><br>{{ course.code }}</p>
+                            <p class="text-xs text-gray-500">
+                            <span class="font-medium text-gray-700">
+                                {{ 'Wanted course code'|get_lang }}:
+                            </span>
+                                <span class="ml-1">{{ course.code }}</span>
+                            </p>
                         {% endif %}
 
                         {% if course.categories %}
                             {% for category in course.categories %}
-                                <p><strong>{{ 'Category'|get_lang }}</strong><br>{{ category.title }}</p>
+                                <p class="text-xs text-gray-500">
+                                <span class="font-medium text-gray-700">
+                                    {{ 'Category'|get_lang }}:
+                                </span>
+                                    <span class="ml-1">{{ category.title }}</span>
+                                </p>
                             {% endfor %}
                         {% endif %}
                     </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="state">
-                    <div class="stat-text">
-                        {{ 'alarm' | mdi_icon }}
-                        {{ data.time_spent }}
-                    </div>
-                    <div class="stat-heading">
-                        {{ 'Time spent in the course'|get_lang }}
-                    </div>
-                </div>
-                <div class="state">
-                    <div class="stat-text">
-                        {{ data.total_score }}
-                    </div>
-                    <div class="stat-heading">
-                        {{ 'Total score obtained for tests'|get_lang }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="list-donut">
-                    <div class="easy-donut">
-                        <div class="easypiechart-blue easypiechart"
-                             title="{{ 'Progress'|get_lang }}"
-                             data-percent="{{ data.avg_progress }}">
-                            <span class="percent">{{ data.avg_progress }}%</span>
-                        </div>
-                        <div class="easypiechart-legend">
-                            {{ 'Progress'|get_lang }}
-                        </div>
-                    </div>
-                    <div class="easy-donut">
-                        <div class="easypiechart-red easypiechart"
-                             title="{{ 'Progress'|get_lang }}"  data-percent="{{ data.avg_score }}">
-                            <span class="percent">{{ data.avg_score }}%</span>
-                        </div>
-                        <div class="easypiechart-legend">
-                            {{ 'Average score in learning paths'|get_lang }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <dl class="dl-horizontal list-info">
-                    <dt>
-                        <span title="{{ 'Total number of messages'|get_lang }}">{{ 'Total number of messages'|get_lang }}</span>
-                    </dt>
-                    <dd>
-                        <span class="text-color">
-                            {{ 'comment' | mdi_icon }}
-                        </span>
-                        <span class="text-color">{{ data.number_message }}</span>
-                    </dd>
-                    <dt>
-                        <span title="{{ 'Total number of assignments'|get_lang }}">
-                            {{ 'Total number of assignments'|get_lang }}</span>
-                    </dt>
-                    <dd>
-                        <span class="text-color">
-                             {{ 'ActionIcon::EDIT' | mdi_icon }}
-                        </span>
-                        <span class="text-color">{{ data.number_assignments }}</span>
-                    </dd>
-                    <dt>
-                        <span title="{{ 'Number of tests answered'|get_lang }}">
-                            {{ 'Number of tests answered'|get_lang }}</span>
-                    </dt>
-                    <dd>
-                        <span class="text-color">
-                            {{ 'file' | mdi_icon }}
-                        </span>
-                        <span class="text-color">{{ data.questions_answered }}</span>
-                    </dd>
-                    <dt>
-                        <span title="{{ 'Latest login'|get_lang }}">
-                            {{ 'Latest login'|get_lang }}</span>
-                    </dt>
-                    <dd>
-                        <span class="text-color">
-                            {{ 'alarm' | mdi_icon }}
-                        </span>
-                        <span class="text-color">{{ data.last_login }}</span>
-                    </dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-{% endset %}
 
-{% autoescape false %}
-{{ display.panel('',content ,'') }}
+                {# Main stats #}
+                <div class="md:col-span-5 flex flex-col gap-4">
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-xl border border-gray-100 bg-gray-20 px-3 py-2.5">
+                            <p class="text-[11px] font-medium uppercase tracking-wide text-gray-500">
+                                {{ 'Time spent in the course'|get_lang }}
+                            </p>
+                            <p class="mt-1 flex items-center gap-2 text-sm font-semibold text-gray-900">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-sky-50">
+                                <i class="mdi mdi-alarm ch-tool-icon text-sky-500 text-base" aria-hidden="true"></i>
+                            </span>
+                                <span>{{ data.time_spent }}</span>
+                            </p>
+                        </div>
+
+                        <div class="rounded-xl border border-gray-100 bg-gray-20 px-3 py-2.5">
+                            <p class="text-[11px] font-medium uppercase tracking-wide text-gray-500">
+                                {{ 'Total score obtained for tests'|get_lang }}
+                            </p>
+                            <p class="mt-1 text-lg font-semibold text-gray-900">
+                                {{ data.total_score }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                    class="js-course-progress relative h-24 w-24"
+                                    data-percent="{{ avgProgress }}"
+                                    title="{{ 'Progress'|get_lang }}"
+                            >
+                                <div class="flex h-full w-full items-center justify-center rounded-full border border-sky-200 bg-sky-50">
+                                <span class="text-lg font-semibold text-sky-600">
+                                    {{ avgProgress }}%
+                                </span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-center text-gray-500">
+                                {{ 'Progress'|get_lang }}
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col items-center gap-2">
+                            <div
+                                    class="js-course-score relative h-24 w-24"
+                                    data-percent="{{ avgScore }}"
+                                    title="{{ 'Average score in learning paths'|get_lang }}"
+                            >
+                                <div class="flex h-full w-full items-center justify-center rounded-full border border-indigo-200 bg-indigo-50">
+                                <span class="text-lg font-semibold text-indigo-600">
+                                    {{ data.avg_score == '-' ? '-' : data.avg_score ~ '%' }}
+                                </span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-center text-gray-500">
+                                {{ 'Average score in learning paths'|get_lang }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {# Detailed information list #}
+                <div class="md:col-span-4">
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex items-center justify-between gap-3">
+                            <dt class="flex-1 text-gray-500">
+                                {{ 'Total number of messages'|get_lang }}
+                            </dt>
+                            <dd class="flex items-center gap-2 font-medium text-gray-900">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50">
+                                <i class="mdi mdi-comment-text-outline ch-tool-icon text-slate-500 text-base" aria-hidden="true"></i>
+                            </span>
+                                <span>{{ data.number_message }}</span>
+                            </dd>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-3">
+                            <dt class="flex-1 text-gray-500">
+                                {{ 'Total number of assignments'|get_lang }}
+                            </dt>
+                            <dd class="flex items-center gap-2 font-medium text-gray-900">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50">
+                                <i class="mdi mdi-pencil-outline ch-tool-icon text-slate-500 text-base" aria-hidden="true"></i>
+                            </span>
+                                <span>{{ data.number_assignments }}</span>
+                            </dd>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-3">
+                            <dt class="flex-1 text-gray-500">
+                                {{ 'Number of tests answered'|get_lang }}
+                            </dt>
+                            <dd class="flex items-center gap-2 font-medium text-gray-900">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50">
+                                <i class="mdi mdi-file-document-outline ch-tool-icon text-slate-500 text-base" aria-hidden="true"></i>
+                            </span>
+                                <span>{{ data.questions_answered }}</span>
+                            </dd>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-3">
+                            <dt class="flex-1 text-gray-500">
+                                {{ 'Latest login'|get_lang }}
+                            </dt>
+                            <dd class="flex items-center gap-2 font-medium text-gray-900">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-50">
+                                <i class="mdi mdi-calendar-clock ch-tool-icon text-slate-500 text-base" aria-hidden="true"></i>
+                            </span>
+                                <span>{{ data.last_login }}</span>
+                            </dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </article>
+    </div>
 {% endautoescape %}

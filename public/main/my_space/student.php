@@ -26,7 +26,7 @@ if (!$allowToTrack) {
 
 $nameTools = get_lang('Learners');
 
-$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'] ? true : false;
+$export_csv = isset($_GET['export']) && 'csv' === $_GET['export'];
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? (int) $_GET['active'] : 1;
 $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
@@ -47,9 +47,15 @@ if (isset($_GET['user_id']) && '' != $_GET['user_id'] && !isset($_GET['type'])) 
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' === $_GET['type']) {
-    $interbreadcrumb[] = ['url' => 'coaches.php', 'name' => get_lang('Coaches')];
+    $interbreadcrumb[] = [
+        'url' => 'coaches.php',
+        'name' => get_lang('Coaches'),
+    ];
 }
 
+/**
+ * Get total number of users for the current filters.
+ */
 function get_count_users()
 {
     $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : null;
@@ -71,6 +77,9 @@ function get_count_users()
     );
 }
 
+/**
+ * Get paginated list of users for the current filters.
+ */
 function get_users($from, $limit, $column, $direction)
 {
     global $export_csv;
@@ -85,11 +94,14 @@ function get_users($from, $limit, $column, $direction)
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
+
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
     $column = 'u.user_id';
     $drhLoaded = false;
+    $students = [];
 
+    // DRH can optionally load all users from all sessions depending on settings.
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -138,12 +150,16 @@ function get_users($from, $limit, $column, $direction)
         $student_id = $student_data['user_id'];
         $student_data = api_get_user_info($student_id);
 
+        $courses = [];
         if (isset($_GET['id_session'])) {
-            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
+            $courses = Tracking::get_course_list_in_session_from_student($student_id, $sessionId);
         }
 
-        $avg_time_spent = $avg_student_score = $avg_student_progress = 0;
+        $avg_time_spent = 0;
+        $avg_student_score = 0;
+        $avg_student_progress = 0;
         $nb_courses_student = 0;
+
         if (!empty($courses)) {
             foreach ($courses as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
@@ -155,10 +171,12 @@ function get_users($from, $limit, $column, $direction)
                         $courseId,
                         $_GET['id_session']
                     );
+
                     $my_average = Tracking::get_avg_student_score($student_id, $course_code);
                     if (is_numeric($my_average)) {
                         $avg_student_score += $my_average;
                     }
+
                     $avg_student_progress += Tracking::get_avg_student_progress($student_id, $course_code);
                     $nb_courses_student++;
                 }
@@ -166,9 +184,9 @@ function get_users($from, $limit, $column, $direction)
         }
 
         if ($nb_courses_student > 0) {
-            $avg_time_spent = $avg_time_spent / $nb_courses_student;
-            $avg_student_score = $avg_student_score / $nb_courses_student;
-            $avg_student_progress = $avg_student_progress / $nb_courses_student;
+            $avg_time_spent /= $nb_courses_student;
+            $avg_student_score /= $nb_courses_student;
+            $avg_student_progress /= $nb_courses_student;
         } else {
             $avg_time_spent = null;
             $avg_student_score = null;
@@ -203,7 +221,13 @@ function get_users($from, $limit, $column, $direction)
         $row[] = $string_date;
 
         $detailsLink = Display::url(
-            Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Details').' '.$student_data['username']),
+            Display::getMdiIcon(
+                ActionIcon::VIEW_DETAILS,
+                'ch-tool-icon',
+                null,
+                ICON_SIZE_SMALL,
+                get_lang('Details').' '.$student_data['username']
+            ),
             $urlDetails,
             ['id' => 'details_'.$student_data['username']]
         );
@@ -211,9 +235,15 @@ function get_users($from, $limit, $column, $direction)
         $lostPasswordLink = '';
         if (api_is_drh() || api_is_platform_admin()) {
             $lostPasswordLink = '&nbsp;'.Display::url(
-                Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')),
+                    Display::getMdiIcon(
+                        ActionIcon::EDIT,
+                        'ch-tool-icon',
+                        null,
+                        ICON_SIZE_SMALL,
+                        get_lang('Edit')
+                    ),
                     $webCodePath.'my_space/user_edit.php?user_id='.$student_id
-            );
+                );
         }
 
         $row[] = $lostPasswordLink.$detailsLink;
@@ -230,73 +260,98 @@ if ($export_csv) {
 }
 
 $sort_by_first_name = api_sort_by_first_name();
+
+// ---------------------------------------------------------------------
+// Build toolbar actions (left and right) for the student list page
+// ---------------------------------------------------------------------
 $actionsLeft = '';
 
-if (api_is_drh()) {
-    $menu_items = [
-        Display::url(
-            Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
-            $webCodePath.'auth/my_progress.php'
-        ),
-        Display::url(
-            Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
-            '#'
-        ),
-        Display::url(
-            Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Teachers')),
-            'teachers.php'
-        ),
-        Display::url(
-            Display::getMdiIcon(ObjectIcon::COURSE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Courses')),
-            'course.php'
-        ),
-        Display::url(
-            Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
-            'session.php'
-        ),
-        Display::url(
-            Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),
-            $webCodePath.'social/my_skills_report.php'
-        ),
-    ];
+// 1) Main MySpace navigation with "Learners" as the current section.
+$actionsLeft .= Display::mySpaceMenu('students');
 
-    $actionsLeft .= implode('', $menu_items);
-} elseif (api_is_student_boss()) {
+// 2) Extra actions: "View my progress" (for tracking roles).
+$actionsLeft .= Display::url(
+    Display::getMdiIcon(
+        'chart-box',
+        'ch-tool-icon',
+        null,
+        32,
+        get_lang('View my progress')
+    ),
+    $webCodePath.'auth/my_progress.php'
+);
+
+// 3) Extra actions for DRH and student bosses: skills report.
+if (api_is_drh() || api_is_student_boss()) {
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
-        $webCodePath.'auth/my_progress.php'
-    );
-    $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
-        '#'
-    );
-    $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),
+        Display::getMdiIcon(
+            'badge-account-horizontal',
+            'ch-tool-icon',
+            null,
+            32,
+            get_lang('Skills')
+        ),
         $webCodePath.'social/my_skills_report.php'
     );
+}
+
+// 4) Extra actions only for student bosses: corporate report, schedule, certificates.
+if (api_is_student_boss()) {
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Corporate report')),
+        Display::getMdiIcon(
+            'chart-box',
+            'ch-tool-icon',
+            null,
+            32,
+            get_lang('Corporate report')
+        ),
         $webCodePath.'my_space/company_reports.php'
     );
 
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::AGENDA, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('My students schedule')),
+        Display::getMdiIcon(
+            'calendar-clock',
+            'ch-tool-icon',
+            null,
+            32,
+            get_lang('My students schedule')
+        ),
         $webCodePath.'my_space/calendar_plan.php'
     );
 
     $actionsLeft .= Display::url(
-        Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
+        Display::getMdiIcon(
+            'certificate',
+            'ch-tool-icon',
+            null,
+            32,
+            get_lang('See list of learner certificates')
+        ),
         $webCodePath.'gradebook/certificate_report.php'
     );
 }
 
+// Right side: print + CSV export.
 $actionsRight = Display::url(
-    Display::getMdiIcon(ActionIcon::PRINT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Print')),
+    Display::getMdiIcon(
+        ActionIcon::PRINT,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('Print')
+    ),
     'javascript: void(0);',
     ['onclick' => 'javascript: window.print();']
 );
+
 $actionsRight .= Display::url(
-    Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')),
+    Display::getMdiIcon(
+        ActionIcon::EXPORT_CSV,
+        'ch-tool-icon',
+        null,
+        ICON_SIZE_MEDIUM,
+        get_lang('CSV export')
+    ),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
@@ -362,29 +417,57 @@ $form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
 
 if ($export_csv) {
-    // send the csv file if asked
+    // Send the CSV file if requested.
     $content = $table->get_table_data();
     foreach ($content as &$row) {
         unset($row[4]);
     }
+
     $csv_content = array_merge($csv_header, $content);
     ob_end_clean();
     Export::arrayToCsv($csv_content, 'reporting_student_list');
     exit;
 } else {
     Display::display_header($nameTools);
-    echo $toolbar;
-    echo Display::page_subheader($nameTools);
+
+    echo '<div class="w-full px-4 md:px-8 pb-8 space-y-6">';
+
+    echo '      <div class="flex flex-wrap gap-2">';
+    echo            $toolbar;
+    echo '      </div>';
+
+    // Header + toolbar stacked, icons aligned to the left
+    echo '  <div class="flex flex-col gap-3 md:gap-4">';
+    echo '      <div class="space-y-1">';
+    echo            Display::page_subheader($nameTools);
+
     if (isset($active)) {
         if ($active) {
             $activeLabel = get_lang('Users with an active account');
         } else {
             $activeLabel = get_lang('Users who\'s account has been disabled');
         }
-        echo Display::page_subheader2($activeLabel);
+        echo '  <div class="mt-1">';
+        echo        Display::page_subheader2($activeLabel);
+        echo '  </div>';
     }
-    $form->display();
-    $table->display();
-}
 
-Display::display_footer();
+    echo '      </div>';
+    echo '  </div>';
+
+    echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+    echo '      <div class="p-4 md:p-5">';
+    $form->display();
+    echo '      </div>';
+    echo '  </section>';
+
+    echo '  <section class="reporting-students-card bg-white rounded-xl shadow-sm w-full">';
+    echo '      <div class="overflow-x-auto">';
+    $table->display();
+    echo '      </div>';
+    echo '  </section>';
+
+    echo '</div>';
+
+    Display::display_footer();
+}

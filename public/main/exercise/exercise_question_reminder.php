@@ -211,7 +211,7 @@ if (key($categoryList) === $categoryId) {
 }
 
 echo Display::div('', ['class' => 'clear']);
-echo Display::div($exerciseActions, ['class' => 'form-actions']);
+echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
 
 if (!$hideHeaderAndFooter) {
     // We are not in learnpath tool or embeddable quiz

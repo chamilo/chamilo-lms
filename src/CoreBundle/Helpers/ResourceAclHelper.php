@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Laminas\Permissions\Acl\Acl;
 use Laminas\Permissions\Acl\Resource\GenericResource;
@@ -20,14 +21,15 @@ readonly class ResourceAclHelper
 {
     public function __construct(
         private Security $security,
-    ) { }
+    ) {}
 
-    public function isAllowed(
-        string $attribute,
+    /**
+     * @param iterable<int, ResourceRight> $rights
+     */
+    private function init(
         ResourceLink $resourceLink,
         iterable $rights,
-        bool $allowAnonsToView,
-    ): bool {
+    ): Acl {
         // Creating roles
         $anon = new GenericRole('IS_AUTHENTICATED_ANONYMOUSLY');
         $userRole = new GenericRole('ROLE_USER');
@@ -71,16 +73,20 @@ readonly class ResourceAclHelper
             $acl->allow($right->getRole(), null, (string) $right->getMask());
         }
 
-        // Anons can see.
-        if ($allowAnonsToView) {
-            $acl->allow($anon, null, (string) ResourceNodeVoter::getReaderMask());
-        }
+        return $acl;
+    }
 
-        // Asked mask
-        $mask = new MaskBuilder();
-        $mask->add($attribute);
+    /**
+     * @param iterable<int, ResourceRight> $rights
+     */
+    public function isAllowed(
+        string $attribute,
+        ResourceLink $resourceLink,
+        iterable $rights,
+    ): bool {
+        $acl = $this->init($resourceLink, $rights);
 
-        $askedMask = (string) $mask->get();
+        $askedMask = (string) self::getPermissionMask([$attribute]);
 
         if ($this->security->getToken() instanceof NullToken) {
             return (bool) $acl->isAllowed('IS_AUTHENTICATED_ANONYMOUSLY', $resourceLink->getId(), $askedMask);
@@ -97,5 +103,16 @@ readonly class ResourceAclHelper
         }
 
         return false;
+    }
+
+    public static function getPermissionMask(array $attributes): int
+    {
+        $builder = new MaskBuilder();
+
+        foreach ($attributes as $attribute) {
+            $builder->add($attribute);
+        }
+
+        return $builder->get();
     }
 }

@@ -96,7 +96,7 @@
     <h3>2.6. Sessions and Redis</h3>
     <a id="web-install-sessions" class="anchor"></a>
       In this beta version, there are known issues with sessions not getting updated fast enough, which can be solved (temporarily) by using a Redis server. Check the command line instructions for more about this. This is a temporary situation that we expect to fix before the stable release.
-   
+
     <h3>2.7. Clean up</h3>h3>
     <a id="web-cleanup" class="anchor"></a>
     As recommended by the installer's last page, make sure you change permissions on the config/ dir and the .env file, and you delete the public/main/install/ folder.
@@ -104,7 +104,7 @@
         sudo chown -R root: config/ .env
         sudo rm -r public/main/install/
     </pre>
-    
+
   <h2>3. Command line installation</h2>
   <a id="cli-install" class="anchor"></a>
 
@@ -263,8 +263,8 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     Follow the wizard to complete the upgrade.<br>
     Please be aware that upgrading your system might take hours or even days, depending on the size and complexity of your database. Refer to the Chamilo forum or to official providers for help.
 
-  <h2>6. Installing on Windows</h2>
-  <a id="windows-install" class="anchor"></a>
+  <h2>6. Installing on Windows with WAMP</h2>
+  <a id="windows-install-wamp" class="anchor"></a>
     <h3>6.1. Introduction</h3>
     Although Chamilo does work on Windows, it is not officially supported due to the fact that
     we have limited testing capabilities for this operating system. The following instructions have been
@@ -272,10 +272,10 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     We do not recommend using Windows for production environments.
 
     <h3>6.2. Installation for validation or production</h3>
-    <a id="windows-install-env" class="anchor"></a>
+    <a id="windows-install-wamp-env" class="anchor"></a>
 
       <h4>6.2.1. WampServer</h4>
-      <a id="windows-install-wamp" class="anchor"></a>
+      <a id="windows-install-wamp-wamp" class="anchor"></a>
         <a href="https://www.wampserver.com/">Download</a> and install WampServer (accept default options if in doubt).<br>
         Restart WampServer to make these changes effective.<br>
         Open http://localhost/ in your browser. If the WampServer welcome screen with server configuration info appears, it means WampServer is working.<br>
@@ -303,7 +303,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         We do not take responsibility about software from other sources. Do your own research.<br><br>
 
       <h4>6.2.2. Database</h4>
-      <a id="windows-install-db" class="anchor"></a>
+      <a id="windows-install-wamp-db" class="anchor"></a>
         Click on the WampServer icon in the status bar (bottom right) and select PhpMyAdmin.<br>
         Choose the MariaDB service and connect to the root user. Enter the root password you set during WampServer installation (probably still empty).<br></br>
         In the "Databases" tab, prepare a new database with the name "chamilo2".<br></br>
@@ -314,7 +314,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         Click "Create".<br><br>
 
       <h4>6.2.3. Chamilo</h4>
-      <a id="windows-install-files" class="anchor"></a>
+      <a id="windows-install-wamp-files" class="anchor"></a>
         Download the latest install-ready package available for version 2
         from <a href="https://github.com/chamilo/chamilo-lms/releases">https://github.com/chamilo/chamilo-lms/releases</a>.<br>
         Unzip the package in C:\wamp64\www\chamilo2.<br>
@@ -322,7 +322,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         If this is not a stable version package, edit the ".env.dist" file and set APP_ENV to "prod".<br><br>
 
       <h4>6.2.4. Apache</h4>
-      <a id="windows-install-apache" class="anchor"></a>
+      <a id="windows-install-wamp-apache" class="anchor"></a>
         Open the Apache configuration file at C:\wamp64\bin\apache\apache2.4.*\conf\extra\httpd-vhosts.conf.<br>
         Modify the contents of the file to something like this:<br>
 <pre>
@@ -338,7 +338,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 </pre>
 
       <h4>6.2.5. Installation wizard</h4>
-      <a id="windows-install-wizard" class="anchor"></a>
+      <a id="windows-install-wamp-wizard" class="anchor"></a>
         Open your browser on <a href="http://chamilo.local/">http://chamilo2.local</a>. The installation wizard should appear.<br>
         Follow the instructions to complete the installation.<br>
 
@@ -348,17 +348,17 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
 
 
     <h3>6.3. Installation for developers</h3>
-    <a id="windows-install-dev" class="anchor"></a>
+    <a id="windows-install-wamp-dev" class="anchor"></a>
       If you want to *develop* Chamilo, you will need still need to install
       WampServer as detailed above, but you will also need a few additional
       components to be able to prepare the package from Git.<br><br>
 
       <h4>6.3.1. WampServer</h4>
-      <a id="windows-install-dev-wamp" class="anchor"></a>
+      <a id="windows-install-wamp-dev-wamp" class="anchor"></a>
         See above.<br><br>
 
       <h4>6.3.2. Composer</h4>
-      <a id="windows-install-dev-composer" class="anchor"></a>
+      <a id="windows-install-wamp-dev-composer" class="anchor"></a>
         <a href="https://getcomposer.org/download/">Download</a> and install
         Composer (accept default options if in doubt).<br>
         If the installation is correct, you should be able to run
@@ -366,7 +366,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         version of Composer appear (probably 2.x).<br><br>
 
       <h4>6.3.3. Node.js</h4>
-      <a id="windows-install-dev-nodejs" class="anchor"></a>
+      <a id="windows-install-wamp-dev-nodejs" class="anchor"></a>
         To install Node.js, you can use the official installer from
         <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a>
         using the .msi package.<br>
@@ -380,11 +380,11 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         run "corepack prepare yarn@stable --activate".<br><br>
 
       <h4>6.3.4. Database</h4>
-      <a id="windows-install-dev-db" class="anchor"></a>
+      <a id="windows-install-wamp-dev-db" class="anchor"></a>
         See above.<br><br>
 
       <h4>6.3.5. Chamilo</h4>
-      <a id="windows-install-dev-chamilo" class="anchor"></a>
+      <a id="windows-install-wamp-dev-chamilo" class="anchor"></a>
         In a PowerShell or CMD:<br>
 <pre>
     cd C:\wamp64\www
@@ -399,23 +399,85 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
         (C:\wamp64\www\chamilo2\.env).<br><br>
 
       <h4>6.3.6. Apache</h4>
-      <a id="windows-install-dev-apache" class="anchor"></a>
+      <a id="windows-install-wamp-dev-apache" class="anchor"></a>
         See above.<br><br>
 
       <h4>6.3.7. Installation wizard</h4>
-      <a id="windows-install-dev-wizard" class="anchor"></a>
+      <a id="windows-install-wamp-dev-wizard" class="anchor"></a>
         Open your browser on <a href="http://chamilo.local/">http://chamilo2.local</a>. The installation wizard should appear.<br>
         Follow the instructions to complete the installation.<br>
 
         Note that it is difficult to change URLs later, so if you plan to publish this service online, make sure you have properly configured your domain name first.
 
-    <h3>6.4. Redis</h3>
+    <h3>6.4. Windows install with IIS</h3>
+    <a id="windows-install-iis" class="anchor"></a>
+        For performance reasons, you might want to install Chamilo on Windows using IIS as a web server.<br><br>
+        The procedure described below is experimental, so if you believe you can improve this, please open an issue on Github for us with the proposed changes.<br><br>
+
+        <h4>6.4.1. MariaDB</h4>
+<a id="windows-install-iis-db" class="anchor"></a>
+        First install MariaDB from the official website (https://mariadb.org/download/) and follow the default installation options (Next, Next, Install).<br><br>
+        Make sure you have a database Windows client at hand as we will have (preferrably) to define permissions for a Chamilo-specific user.<br><br>
+        Once installed, open the database client and create a user through the interface or issuing the following query (adapted to your needs):<br>
+<pre>mariadb> GRANT ALL PRIVILEGES ON chamilo.* TO chamilo@localhost IDENTIFIED BY 'some-password';</pre>
+        Exit the SQL client.<br><br>
+
+        <h4>6.4.2. IIS and URL Rewrite</h4>
+<a id="windows-install-iis-rewrite" class="anchor"></a>
+        If you are working on a Windows server, you should have IIS installed already. If not, you can download it from the official website (https://www.iis.net/downloads).<br><br>
+        With IIS, you will need the URL Rewrite module. You can download it from the official website (https://www.iis.net/downloads/microsoft/url-rewrite).<br><br>
+        Once installed, you will need to restart IIS, close the network manager window if open, and possibly reboot the whole Windows machine for it to appear in the Site management (not the server management section).<br>
+
+        <h4>6.4.3. IIS, CGI and PHP</h4>
+<a id="windows-install-iis-php" class="anchor"></a>
+        Once you have installed IIS and the URL Rewrite module, you will need to configure the CGI and PHP settings.<br><br>
+        CGI is an IIS module to enable (it's already present but needs activating) in the server manager. Open the server manager, click Manage &gt; Add roles and features &gt; pass screens until "Server roles". Select "CGI" under "Web Server (IIS) &gt; Web Server &gt; Application Development, then confirm the installation.<br><br>
+        Download PHP 8.3 for Windows from the official website (https://windows.php.net/download#php-8.3) (simple Zip version).<br><br>
+        This might require (depending on your setup) to install the VC++ libraries in version 14, which come from VStudio v16 (between others). If you don't have them yet on the Windows Server, you can download them from here depending on your architecture: <a href="https://aka.ms/vs/16/release/VC_redist.x64.exe">x64</a> or <a href="https://aka.ms/vs/16/release/VC_redist.x86.exe">x86</a>.<br><br>
+        Add PHP to the PATH environment variable (e.g. C:\php): Settings &gt; System &gt; About &gt; Advanced system settings &gt; Environment variables, then select "Path", click "Modify", click "New" and introduce "C:\PHP", then validate twice.<br><br>
+        In the IIS manager window, when the server is selected and you click on the Mappings manager, click on the "Add module mapping..." in the right panel and make sure request path "*.php" is mapped to the FastCgiModule. If not, add it.<br><br>
+        Find the C:\php\php.ini file (or any other place you might have given the PHP installer script to register to).<br><br>
+        Enable the following PHP extensions (look for ";extension=" and remove the ";" from the beginning of the line):<br>
+        <ul>
+            <li>curl</li>
+            <li>exif</li>
+            <li>fileinfo</li>
+            <li>gd</li>
+            <li>intl</li>
+            <li>json</li>
+            <li>mbstring</li>
+            <li>opcache</li>
+            <li>openssl</li>
+            <li>pdo_mysql</li>
+            <li>opcache</li>
+            <li>sodium</li>
+            <li>zip</li>
+            <li>ldap</li>
+            <li>redis (optional)</li>
+        </ul>
+        Make sure the <em>[opcache]</em> section has <em>opcache.enable=1</em> *and* <em>opcache.memory_consumption=256</em> or any higher value so that OpCache can be used. Otherwise it is present but not used. Save the file.<br><br>
+        Set (or wait for the install wizard to tell you) the settings suggested by Chamilo's install wizard.<br>
+
+        <h4>6.4.4. Chamilo</h4>
+        <a id="windows-install-iis-chamilo" class="anchor"></a>
+        Once you have installed IIS, the URL Rewrite module and PHP, you can download Chamilo from the official downloads page (https://github.com/chamilo/chamilo-lms/releases).<br><br>
+        Unzip the package in the "wwwroot" folder of your IIS installation (e.g. C:\inetpub\wwwroot).<br><br>
+        Chamilo 2+ need you to configure the web server so the root path is the "public/" folder of Chamilo.<br><br>
+        Create an empty ".env" file at the root of the chamilo folder (e.g. C:\inetpub\wwwroot\chamilo\.env).<br><br>
+        Change permissions so the web server user is able to write to var/, config/ and .env during the installation. These permissions can be removed later on, to the exception of var/ which has to remain writable by the webserver. These permissions need to be set in a way that the owner of the IIS service (possibly "System" or "IIS_IUSRS") can read and write to those files and folders, otherwise the installation script (which needs to write some files) will not be able to proceed.<br><br>
+        This is a specific change for IIS: edit the config\packages\monolog.yaml file and change all <em>path: php://stderr</em> for <em>path: "%kernel.logs_dir%/%kernel.environment%.log"</em> . This is due to an issue with file management for PHP on Windows with Symfony. Please note that until we find a portable solution, this will need to be modified again after each Chamilo update.<br><br>
+        After this, load the URL in your browser, as you have defined it in the ISS site configuration.<br><br>
+        The Chamilo installation wizard should appear.<br><br>
+        Follow the instructions to complete the installation.<br>
+
+
+    <h3>6.5. Redis</h3>
     <a id="windows-install-redis" class="anchor"></a>
       For better performance in the highly dynamic interfaces of Chamilo, you might
       want to install the PHP Redis extension from the official PHP website, for example (adapt PHP and Redis version numbers)
       https://downloads.php.net/~windows/pecl/releases/redis/6.*.*/php_redis-6.*.*-8.3-ts-vs16-x64.zip
 
-      This is not necessary to install Chamilo (so you can do it afterwards).
+      This is not necessary to install Chamilo (so you can do it afterwards or never at all if you don't experience session issues).
 
       Download, unzip and place the .dll file into C:\wamp64\bin\php\php8.3.*\ext\
       then add "extension=php_redis.dll" at the end of C:\wamp64\bin\php\php8.3.*\php.ini

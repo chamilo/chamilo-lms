@@ -1352,12 +1352,14 @@ class CourseController extends ToolBaseController
             ->andWhere('t.course = :course')
             ->setParameter('course', $course)
             ->orderBy('t.position', 'ASC')
-            ->addOrderBy('t.iid', 'ASC');
+            ->addOrderBy('t.iid', 'ASC')
+        ;
 
         if ($sessionId > 0) {
             $qb
                 ->andWhere('IDENTITY(t.session) = :sessionId')
-                ->setParameter('sessionId', $sessionId);
+                ->setParameter('sessionId', $sessionId)
+            ;
         } else {
             $qb->andWhere('t.session IS NULL');
         }
@@ -1411,7 +1413,8 @@ class CourseController extends ToolBaseController
                 ->setParameter('pos', $pos)
                 ->setParameter('iid', $id)
                 ->getQuery()
-                ->execute();
+                ->execute()
+            ;
         }
 
         return [

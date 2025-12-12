@@ -1,94 +1,164 @@
 {% autoescape false %}
-<script>
-$(function () {
-    $('select#session').on('change', function () {
-        var sessionId = parseInt(this.value, 10),
-                $selectCourse = $('select#course');
+    <script>
+      $(function () {
+        // When session changes, reload course list via AJAX
+        $('select#session').on('change', function () {
+          var sessionId = parseInt(this.value, 10),
+            $selectCourse = $('select#course');
 
-        $selectCourse.empty();
+          $selectCourse.empty();
 
-        $.get('{{ _p.web_main }}inc/ajax/course.ajax.php', {
+          $.get('{{ _p.web_main }}inc/ajax/course.ajax.php', {
             a: 'display_sessions_courses',
             session: sessionId
-        }, function (courseList) {
+          }, function (courseList) {
             $('<option>', {
-                value: 0,
-                text: "{{ 'Select' | get_lang }}"
+              value: 0,
+              text: "{{ 'Select' | get_lang }}"
             }).appendTo($selectCourse);
 
             if (courseList.length > 0) {
-                $.each(courseList, function (index, course) {
-                    $('<option>', {
-                        value: course.id,
-                        text: course.title
-                    }).appendTo($selectCourse);
-                });
+              $.each(courseList, function (index, course) {
+                $('<option>', {
+                  value: course.id,
+                  text: course.title
+                }).appendTo($selectCourse);
+              });
             }
-        }, 'json');
-    });
-});
-</script>
+          }, 'json');
+        });
+      });
+    </script>
 
-{{ search_by_session_form }}
+    {# ---------------------------------------------------------- #}
+    {# Filters area (session/course + optional learner filter)    #}
+    {# If there is no search_form, make the main filter full width #}
+    {# ---------------------------------------------------------- #}
+    {% set hasSearchForm = search_form ? true : false %}
 
-<hr>
+    <div class="row mb-4">
+        <div class="{% if hasSearchForm %}col-lg-8{% else %}col-lg-12{% endif %} mb-4 p-2">
+            <div class="card h-100 p-2">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        {{ 'Filter by session and course' | get_lang }}
+                    </h5>
+                    <p class="text-muted small mb-3">
+                        {{ 'Choose a session, course and optional date to list the generated certificates.' | get_lang }}
+                    </p>
+                    {{ search_by_session_form }}
+                </div>
+            </div>
+        </div>
 
-{{ search_form }}
+        {% if hasSearchForm %}
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            {{ 'Filter by learner' | get_lang }}
+                        </h5>
+                        <p class="text-muted small mb-3">
+                            {{ 'Find certificates for a specific learner across sessions and courses.' | get_lang }}
+                        </p>
+                        {{ search_form }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 
-{% if not certificate_students is empty %}
-    <h2 class="page-header">{{ 'List of learner certificates' | get_lang }}</h2>
-    {% if not export_all_link is null %}
-        <div class="actions">
-            <a href="{{ export_all_link }}" class="btn btn--info">
-                <em class="fa fa-check"></em> {{ 'Export all certificates to PDF' | get_lang }}
-            </a>
+    {# ---------------------------------------------------------- #}
+    {# Results table                                              #}
+    {# ---------------------------------------------------------- #}
+    {% if not certificate_students is empty %}
+
+        {# Compute total number of certificates across all learners #}
+        {% set totalCertificates = 0 %}
+        {% for student in certificate_students %}
+            {% set totalCertificates = totalCertificates + (student.certificates|length) %}
+        {% endfor %}
+
+        <div class="card">
+            <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div>
+                    <h5 class="card-title mb-0">
+                        {{ 'List of learner certificates' | get_lang }}
+                    </h5>
+                    <p class="text-muted small mb-0">
+                        {{ 'Certificates found' | get_lang }}:
+                        <strong>{{ totalCertificates }}</strong>
+                    </p>
+                </div>
+
+                {% if not export_all_link is null %}
+                    <a href="{{ export_all_link }}" class="btn btn-primary btn-sm">
+                        <em class="fa fa-download me-1"></em>
+                        {{ 'Export all certificates to PDF' | get_lang }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-sm mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">{{ 'Learner' | get_lang }}</th>
+                            <th scope="col">{{ 'Session' | get_lang }}</th>
+                            <th scope="col">{{ 'Course' | get_lang }}</th>
+                            <th scope="col">{{ 'Date' | get_lang }}</th>
+                            <th scope="col" class="text-center">{{ 'Certificate' | get_lang }}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {# One row per certificate for better readability #}
+                        {% for student in certificate_students %}
+                            {% for certificate in student.certificates %}
+                                <tr class="align-middle">
+                                    <td>
+                                        <strong>{{ student.fullName }}</strong>
+                                    </td>
+                                    <td>{{ student.sessionName }}</td>
+                                    <td>{{ student.courseName }}</td>
+                                    <td>
+                                    <span class="badge bg-light text-muted">
+                                        {{ certificate.createdAt }}
+                                    </span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% set hash = '' %}
+                                        {% if certificate.path_certificate is defined and certificate.path_certificate %}
+                                            {% set hash = certificate.path_certificate|split('.')|first %}
+                                        {% endif %}
+
+                                        {% if hash %}
+                                            <a href="{{ url('index') }}certificates/{{ hash }}.html"
+                                               class="btn btn-outline-primary btn-sm"
+                                               target="_blank">
+                                                <em class="fa fa-file-pdf-o me-1"></em>
+                                                {{ 'Open certificate' | get_lang }}
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted small">
+                                            {{ 'Certificate file not available' | get_lang }}
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="alert alert-info mt-4" role="alert">
+            <em class="fa fa-info-circle me-1"></em>
+            {{ 'No results found' | get_lang }}
         </div>
     {% endif %}
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>{{ 'Learner' | get_lang }}</th>
-                <th>{{ 'Sesion' | get_lang }}</th>
-                <th>{{ 'Course' | get_lang }}</th>
-                <th>{{ 'Date' | get_lang }}</th>
-                <th>{{ 'Certificate' | get_lang }}</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>{{ 'Learner' | get_lang }}</th>
-                <th>{{ 'Sesion' | get_lang }}</th>
-                <th>{{ 'Course' | get_lang }}</th>
-                <th>{{ 'Date' | get_lang }}</th>
-                <th>{{ 'Certificate' | get_lang }}</th>
-            </tr>
-        </tfoot>
-        <tbody>
-        {% for student in certificate_students %}
-            <tr>
-                <td>{{ student.fullName }}</td>
-                <td>{{ student.sessionName }}</td>
-                <td>{{ student.courseName }}</td>
-                <td>
-                    {% for certificate in student.certificates %}
-                        <p>{{ certificate.createdAt }}</p>
-                    {% endfor %}
-                </td>
-                <td>
-                    {% for certificate in student.certificates %}
-                        {% set hash = certificate.path_certificate|split('.')|first %}
-                        <a href="{{ url('index') }}certificates/{{ hash }}.html" class="btn btn--plain">
-                            <em class="fa fa-floppy-o"></em> {{ 'Certificate' | get_lang }}
-                        </a>
-                    {% endfor %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p class="alert alert-info">{{ 'No results found' | get_lang }}</p>
-{% endif %}
 
 {% endautoescape %}

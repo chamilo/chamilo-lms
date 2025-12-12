@@ -171,6 +171,7 @@ class CidReqListener
                     throw new AccessDeniedException($this->translator->trans("You're not allowed in this group"));
                 }
 
+                $sessionHandler->set('group', $group);
                 $sessionHandler->set('gid', $groupId);
                 // @todo check if course has group
                 /*if ($course->hasGroup($group)) {

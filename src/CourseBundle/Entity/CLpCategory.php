@@ -12,11 +12,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model\Operation;
-use ApiPlatform\OpenApi\Model\Parameter;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceShowCourseResourcesInSessionInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CLpCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -32,22 +33,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         new GetCollection(
             openapi: new Operation(
                 summary: 'List LP categories by course (resourceNode.parent) or sid',
-                parameters: [
-                    new Parameter(
-                        name: 'resourceNode.parent',
-                        in: 'query',
-                        description: 'Parent ResourceNode (course node id)',
-                        required: true,
-                        schema: ['type' => 'integer'],
-                    ),
-                    new Parameter(
-                        name: 'sid',
-                        in: 'query',
-                        description: 'Session id (SidFilter)',
-                        required: false,
-                        schema: ['type' => 'integer'],
-                    ),
-                ],
             ),
         ),
         new Get(security: "is_granted('ROLE_USER')"),
@@ -62,6 +47,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'resourceNode.parent' => 'exact',
     'title' => 'partial',
 ])]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 #[ORM\Table(name: 'c_lp_category')]
 #[ORM\Entity(repositoryClass: CLpCategoryRepository::class)]
 class CLpCategory extends AbstractResource implements ResourceInterface, ResourceShowCourseResourcesInSessionInterface, Stringable

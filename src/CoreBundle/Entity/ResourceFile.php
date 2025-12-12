@@ -138,7 +138,14 @@ class ResourceFile implements Stringable
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read', 'personal_file:read'])]
     #[ORM\Column(type: 'integer')]
     protected ?int $size = 0;
-
+    /**
+     * Optional language for the file variant.
+     * This is used for indexing and future-proof resource variations.
+     */
+    #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'personal_file:read'])]
+    #[ORM\ManyToOne(targetEntity: Language::class)]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Language $language = null;
     #[Vich\UploadableField(
         mapping: 'resources',
         fileNameProperty: 'title',
@@ -191,6 +198,22 @@ class ResourceFile implements Stringable
     public function __toString(): string
     {
         return $this->getOriginalName();
+    }
+    /**
+     * Get the file language (can be null if unknown/multilingual).
+     */
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
+    }
+    /**
+     * Set the file language (nullable by design).
+     */
+    public function setLanguage(?Language $language): self
+    {
+        $this->language = $language;
+
+        return $this;
     }
     public function isText(): bool
     {
@@ -251,29 +274,11 @@ class ResourceFile implements Stringable
         return $this;
     }
 
-    /*public function isEnabled(): bool
-     * {
-     * return $this->enabled;
-     * }
-     * public function setEnabled(bool $enabled): self
-     * {
-     * $this->enabled = $enabled;
-     * return $this;
-     * }*/
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /*public function getDescription(): string
-     * {
-     * return $this->description;
-     * }
-     * public function setDescription(string $description): self
-     * {
-     * $this->description = $description;
-     * return $this;
-     * }*/
     public function getMimeType(): ?string
     {
         return $this->mimeType;
@@ -308,7 +313,6 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            // $data = explode(',', $data);
             return (int) $data[0];
         }
 
@@ -318,7 +322,6 @@ class ResourceFile implements Stringable
     {
         $data = $this->getDimensions();
         if ([] !== $data) {
-            // $data = explode(',', $data);
             return (int) $data[1];
         }
 

@@ -13,7 +13,9 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
+use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -34,6 +36,17 @@ class BaseResourceFileAction
     public static function setLinks(AbstractResource $resource, EntityManagerInterface $em): void
     {
         $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            // Nothing to do if there is no resource node.
+            return;
+        }
+
+        /** @var ResourceNode|null $parentNode */
+        $parentNode = $resourceNode->getParent();
+
+        /** @var ResourceLinkRepository $resourceLinkRepo */
+        $resourceLinkRepo = $em->getRepository(ResourceLink::class);
+
         $links = $resource->getResourceLinkArray();
         if ($links) {
             $groupRepo = $em->getRepository(CGroup::class);
@@ -44,13 +57,19 @@ class BaseResourceFileAction
             foreach ($links as $link) {
                 $resourceLink = new ResourceLink();
                 $linkSet = false;
+
+                $course = null;
+                $session = null;
+                $group = null;
+                $user = null;
+
                 if (isset($link['cid']) && !empty($link['cid'])) {
                     $course = $courseRepo->find($link['cid']);
                     if (null !== $course) {
                         $linkSet = true;
                         $resourceLink->setCourse($course);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Course #%s does not exists', $link['cid']));
+                        throw new InvalidArgumentException(\sprintf('Course #%s does not exist', $link['cid']));
                     }
                 }
 
@@ -60,7 +79,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setSession($session);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Session #%s does not exists', $link['sid']));
+                        throw new InvalidArgumentException(\sprintf('Session #%s does not exist', $link['sid']));
                     }
                 }
 
@@ -70,7 +89,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setGroup($group);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('Group #%s does not exists', $link['gid']));
+                        throw new InvalidArgumentException(\sprintf('Group #%s does not exist', $link['gid']));
                     }
                 }
 
@@ -80,7 +99,7 @@ class BaseResourceFileAction
                         $linkSet = true;
                         $resourceLink->setUser($user);
                     } else {
-                        throw new InvalidArgumentException(\sprintf('User #%s does not exists', $link['uid']));
+                        throw new InvalidArgumentException(\sprintf('User #%s does not exist', $link['uid']));
                     }
                 }
 
@@ -91,10 +110,28 @@ class BaseResourceFileAction
                 }
 
                 if ($linkSet) {
+                    // Attach the node to the link.
+                    $resourceLink->setResourceNode($resourceNode);
+
+                    // If the resource has a parent node, try to resolve the parent link
+                    // in the same context so we can maintain a context-aware hierarchy.
+                    if ($parentNode instanceof ResourceNode) {
+                        $parentLink = $resourceLinkRepo->findParentLinkForContext(
+                            $parentNode,
+                            $course,
+                            $session,
+                            $group,
+                            null,
+                            $user
+                        );
+
+                        if (null !== $parentLink) {
+                            $resourceLink->setParent($parentLink);
+                        }
+                    }
+
                     $em->persist($resourceLink);
                     $resourceNode->addResourceLink($resourceLink);
-                    // $em->persist($resourceNode);
-                    // $em->persist($resource->getResourceNode());
                 }
             }
         }
@@ -102,30 +139,8 @@ class BaseResourceFileAction
         // Use by Chamilo not api platform.
         $links = $resource->getResourceLinkEntityList();
         if ($links) {
-            // error_log('$resource->getResourceLinkEntityList()');
             foreach ($links as $link) {
-                /*$rights = [];
-                 * switch ($link->getVisibility()) {
-                 * case ResourceLink::VISIBILITY_PENDING:
-                 * case ResourceLink::VISIBILITY_DRAFT:
-                 * $editorMask = ResourceNodeVoter::getEditorMask();
-                 * $resourceRight = new ResourceRight();
-                 * $resourceRight
-                 * ->setMask($editorMask)
-                 * ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                 * ;
-                 * $rights[] = $resourceRight;
-                 * break;
-                 * }
-                 * if (!empty($rights)) {
-                 * foreach ($rights as $right) {
-                 * $link->addResourceRight($right);
-                 * }
-                 * }*/
-                // error_log('link adding to node: '.$resource->getResourceNode()->getId());
-                // error_log('link with user : '.$link->getUser()->getUsername());
                 $resource->getResourceNode()->addResourceLink($link);
-
                 $em->persist($link);
             }
         }
@@ -455,22 +470,35 @@ class BaseResourceFileAction
     {
         $contentData = $request->getContent();
         $resourceLinkList = [];
+        $parentResourceNodeId = 0;
+        $title = null;
+        $content = null;
+
         if (!empty($contentData)) {
             $contentData = json_decode($contentData, true);
-            if (isset($contentData['parentResourceNodeId']) && 1 === \count($contentData)) {
+
+            if (isset($contentData['parentResourceNodeId'])) {
                 $parentResourceNodeId = (int) $contentData['parentResourceNodeId'];
             }
-            $title = $contentData['title'] ?? '';
-            $content = $contentData['contentFile'] ?? '';
+
+            $title = $contentData['title'] ?? null;
+            $content = $contentData['contentFile'] ?? null;
             $resourceLinkList = $contentData['resourceLinkListFromEntity'] ?? [];
         } else {
             $title = $request->get('title');
             $content = $request->request->get('contentFile');
         }
 
-        $repo->setResourceName($resource, $title);
+        // Only update the name when a title is explicitly provided.
+        if (null !== $title) {
+            $repo->setResourceName($resource, $title);
+        }
 
         $resourceNode = $resource->getResourceNode();
+        if (null === $resourceNode) {
+            return $resource;
+        }
+
         $hasFile = $resourceNode->hasResourceFile();
 
         if ($hasFile && !empty($content)) {
@@ -489,7 +517,9 @@ class BaseResourceFileAction
                 $linkId = $linkArray['id'] ?? 0;
                 if (!empty($linkId)) {
                     /** @var ResourceLink $link */
-                    $link = $resourceNode->getResourceLinks()->filter(fn ($link) => $link->getId() === $linkId)->first();
+                    $link = $resourceNode->getResourceLinks()->filter(
+                        static fn ($link) => $link->getId() === $linkId
+                    )->first();
 
                     if (null !== $link) {
                         $link->setVisibility((int) $linkArray['visibility']);
@@ -505,15 +535,84 @@ class BaseResourceFileAction
         }
 
         $isRecursive = !$hasFile;
-        // If it's a folder then change the visibility to the children (That have the same link).
+        // If it's a folder then change the visibility to the children (that have the same link).
         if ($isRecursive && null !== $link) {
             $repo->copyVisibilityToChildren($resource->getResourceNode(), $link);
         }
 
-        if (!empty($parentResourceNodeId)) {
+        // If a new parent node was provided, update the ResourceNode parent
+        // and the ResourceLink parent in the current context.
+        if ($parentResourceNodeId > 0) {
             $parentResourceNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
+
             if ($parentResourceNode) {
                 $resourceNode->setParent($parentResourceNode);
+            }
+
+            // Only documents use the hierarchical link structure in this way.
+            if ($resource instanceof CDocument) {
+                /** @var ResourceLinkRepository $linkRepo */
+                $linkRepo = $em->getRepository(ResourceLink::class);
+
+                // Resolve context from query parameters (course/session/group/user).
+                $course = null;
+                $session = null;
+                $group = null;
+                $usergroup = null;
+                $user = null;
+
+                $courseId = $request->query->getInt('cid', 0);
+                $sessionId = $request->query->getInt('sid', 0);
+                $groupId = $request->query->getInt('gid', 0);
+                $userId = $request->query->getInt('uid', 0);
+                $usergroupId = $request->query->getInt('ugid', 0);
+
+                if ($courseId > 0) {
+                    $course = $em->getRepository(Course::class)->find($courseId);
+                }
+
+                if ($sessionId > 0) {
+                    $session = $em->getRepository(Session::class)->find($sessionId);
+                }
+
+                if ($groupId > 0) {
+                    $group = $em->getRepository(CGroup::class)->find($groupId);
+                }
+
+                if ($userId > 0) {
+                    $user = $em->getRepository(User::class)->find($userId);
+                }
+
+                if ($usergroupId > 0) {
+                    $usergroup = $em->getRepository(Usergroup::class)->find($usergroupId);
+                }
+
+                $parentLink = null;
+                if ($parentResourceNode) {
+                    $parentLink = $linkRepo->findParentLinkForContext(
+                        $parentResourceNode,
+                        $course,
+                        $session,
+                        $group,
+                        $usergroup,
+                        $user
+                    );
+                }
+
+                $currentLink = $linkRepo->findLinkForResourceInContext(
+                    $resource,
+                    $course,
+                    $session,
+                    $group,
+                    $usergroup,
+                    $user
+                );
+
+                if (null !== $currentLink) {
+                    // When parentLink is null, the document becomes a root-level item in this context.
+                    $currentLink->setParent($parentLink);
+                    $em->persist($currentLink);
+                }
             }
         }
 

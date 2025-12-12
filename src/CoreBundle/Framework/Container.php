@@ -718,7 +718,6 @@ class Container
 
     public static function getSearchIndexPathResolver(): SearchIndexPathResolver
     {
-        /** @var SearchIndexPathResolver $resolver */
-        return self::get(SearchIndexPathResolver::class);
+        return self::$container->get(SearchIndexPathResolver::class);
     }
 }

@@ -1,0 +1,234 @@
+<?php
+
+declare(strict_types=1);
+
+/* For licensing terms, see /license.txt */
+
+namespace Chamilo\CoreBundle\Search\Xapian;
+
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\SearchEngineRef;
+use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Doctrine\ORM\EntityManagerInterface;
+
+/**
+ * Handles Xapian indexing for quiz questions.
+ *
+ * Only the question itself (title/description) is indexed, not answers.
+ */
+final class QuestionXapianIndexer
+{
+    public function __construct(
+        private readonly XapianIndexService $xapianIndexService,
+        private readonly EntityManagerInterface $em,
+        private readonly SettingsManager $settingsManager,
+    ) {
+    }
+
+    /**
+     * Index or reindex a quiz question.
+     *
+     * @return int|null Xapian document id or null when indexing is skipped
+     */
+    public function indexQuestion(CQuizQuestion $question): ?int
+    {
+        $resourceNode = $question->getResourceNode();
+
+        // Global feature toggle
+        $enabled = (string) $this->settingsManager->getSetting('search.search_enabled', true);
+        if ($enabled !== 'true') {
+            return null;
+        }
+
+        if (!$resourceNode instanceof ResourceNode) {
+            // Question without a resource node cannot be indexed
+            return null;
+        }
+
+        // Quiz context for the question (first quiz + all quizzes)
+        [$primaryQuizId, $allQuizIds] = $this->getQuizContext($question);
+
+        // Resolve course and session from the question resource node
+        [$courseId, $sessionId] = $this->resolveCourseAndSession($resourceNode);
+
+        $title       = (string) $question->getQuestion();
+        $description = (string) ($question->getDescription() ?? '');
+
+        // Index only the question itself (title + description), not the answers
+        $content = trim($title.' '.$description);
+
+        // IMPORTANT: keep field names consistent with the quiz indexer:
+        // - kind
+        // - tool
+        // - quiz_id  (here we store the primary quiz of the question)
+        $fields = [
+            'kind'             => 'question',
+            'tool'             => 'quiz_question',
+            'title'            => $title,
+            'description'      => $description,
+            'content'          => $content,
+            'resource_node_id' => (string) $resourceNode->getId(),
+            'question_id'      => (string) $question->getIid(),
+            // This is what Twig will use to build the link for questions
+            'quiz_id'          => $primaryQuizId !== null ? (string) $primaryQuizId : '',
+            'course_id'        => $courseId !== null ? (string) $courseId : '',
+            'session_id'       => $sessionId !== null ? (string) $sessionId : '',
+            'xapian_data'      => json_encode([
+                'type'            => 'exercise_question',
+                'question_id'     => (int) $question->getIid(),
+                'quiz_ids'        => $allQuizIds,
+                'primary_quiz_id' => $primaryQuizId,
+                'course_id'       => $courseId,
+                'session_id'      => $sessionId,
+            ]),
+        ];
+
+        // Terms for filtering
+        $terms = ['Tquiz_question', 'Tquestion'];
+        if ($courseId !== null) {
+            $terms[] = 'C'.$courseId;
+        }
+        if ($sessionId !== null) {
+            $terms[] = 'S'.$sessionId;
+        }
+        if ($primaryQuizId !== null) {
+            $terms[] = 'Q'.$primaryQuizId;
+        }
+
+        // Look for an existing SearchEngineRef for this resource node
+        /** @var SearchEngineRef|null $existingRef */
+        $existingRef = $this->em
+            ->getRepository(SearchEngineRef::class)
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+
+        $existingDocId = $existingRef?->getSearchDid();
+
+        if ($existingDocId !== null) {
+            try {
+                $this->xapianIndexService->deleteDocument($existingDocId);
+            } catch (\Throwable) {
+                // Best-effort delete: ignore errors here
+            }
+        }
+
+        try {
+            $docId = $this->xapianIndexService->indexDocument($fields, $terms);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        if ($existingRef instanceof SearchEngineRef) {
+            $existingRef->setSearchDid($docId);
+        } else {
+            $existingRef = new SearchEngineRef();
+            $existingRef->setResourceNodeId((int) $resourceNode->getId());
+            $existingRef->setSearchDid($docId);
+            $this->em->persist($existingRef);
+        }
+
+        $this->em->flush();
+
+        return $docId;
+    }
+
+    /**
+     * Delete question index (called on entity removal).
+     */
+    public function deleteQuestionIndex(CQuizQuestion $question): void
+    {
+        $resourceNode = $question->getResourceNode();
+        if (!$resourceNode instanceof ResourceNode) {
+            return;
+        }
+
+        /** @var SearchEngineRef|null $ref */
+        $ref = $this->em
+            ->getRepository(SearchEngineRef::class)
+            ->findOneBy(['resourceNodeId' => $resourceNode->getId()]);
+
+        if (!$ref) {
+            return;
+        }
+
+        try {
+            $this->xapianIndexService->deleteDocument($ref->getSearchDid());
+        } catch (\Throwable) {
+            // Best-effort delete
+        }
+
+        $this->em->remove($ref);
+        $this->em->flush();
+    }
+
+    /**
+     * Resolve course and session ids from resource links.
+     *
+     * @return array{0:int|null,1:int|null}
+     */
+    private function resolveCourseAndSession(ResourceNode $resourceNode): array
+    {
+        $courseId  = null;
+        $sessionId = null;
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            if (!$link instanceof ResourceLink) {
+                continue;
+            }
+
+            if ($courseId === null && $link->getCourse()) {
+                $courseId = $link->getCourse()->getId();
+            }
+
+            if ($sessionId === null && $link->getSession()) {
+                $sessionId = $link->getSession()->getId();
+            }
+
+            if ($courseId !== null && $sessionId !== null) {
+                break;
+            }
+        }
+
+        return [$courseId, $sessionId];
+    }
+
+    /**
+     * Returns the "primary" quiz id for the question and the list of all quiz ids.
+     *
+     * @return array{0:int|null,1:array<int,int>}
+     */
+    private function getQuizContext(CQuizQuestion $question): array
+    {
+        $primaryQuizId = null;
+        $quizIds = [];
+
+        foreach ($question->getRelQuizzes() as $rel) {
+            if (!$rel instanceof CQuizRelQuestion) {
+                continue;
+            }
+
+            $quiz = $rel->getQuiz();
+            if (!$quiz instanceof CQuiz) {
+                continue;
+            }
+
+            $quizId = $quiz->getIid();
+            if ($quizId === null) {
+                continue;
+            }
+
+            if ($primaryQuizId === null) {
+                $primaryQuizId = $quizId;
+            }
+
+            if (!in_array($quizId, $quizIds, true)) {
+                $quizIds[] = $quizId;
+            }
+        }
+
+        return [$primaryQuizId, $quizIds];
+    }
+}

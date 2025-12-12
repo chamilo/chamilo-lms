@@ -15,18 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class SearchEngineRef
 {
-    #[ORM\ManyToOne(targetEntity: Course::class, inversedBy: 'searchEngineRefs')]
-    #[ORM\JoinColumn(name: 'c_id', referencedColumnName: 'id')]
-    protected ?Course $course = null;
-
-    #[ORM\Column(name: 'tool_id', type: 'string', length: 100, nullable: false)]
-    protected string $toolId;
-
-    #[ORM\Column(name: 'ref_id_high_level', type: 'integer', nullable: false)]
-    protected int $refIdHighLevel;
-
-    #[ORM\Column(name: 'ref_id_second_level', type: 'integer', nullable: true)]
-    protected ?int $refIdSecondLevel = null;
+    #[ORM\Column(name: 'resource_node_id', type: 'integer', nullable: true)]
+    protected ?int $resourceNodeId = null;
 
     #[ORM\Column(name: 'search_did', type: 'integer', nullable: false)]
     protected int $searchDid;
@@ -36,123 +26,32 @@ class SearchEngineRef
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    /**
-     * Set course.
-     *
-     * @return SearchEngineRef
-     */
-    public function setCourse(Course $course)
+    public function getId(): ?int
     {
-        $this->course = $course;
+        return $this->id;
+    }
+
+    public function getResourceNodeId(): ?int
+    {
+        return $this->resourceNodeId;
+    }
+
+    public function setResourceNodeId(?int $resourceNodeId): self
+    {
+        $this->resourceNodeId = $resourceNodeId;
 
         return $this;
     }
 
-    /**
-     * Get course.
-     *
-     * @return Course
-     */
-    public function getCourse()
-    {
-        return $this->course;
-    }
-
-    /**
-     * Set toolId.
-     *
-     * @return SearchEngineRef
-     */
-    public function setToolId(string $toolId)
-    {
-        $this->toolId = $toolId;
-
-        return $this;
-    }
-
-    /**
-     * Get toolId.
-     *
-     * @return string
-     */
-    public function getToolId()
-    {
-        return $this->toolId;
-    }
-
-    /**
-     * Set refIdHighLevel.
-     *
-     * @return SearchEngineRef
-     */
-    public function setRefIdHighLevel(int $refIdHighLevel)
-    {
-        $this->refIdHighLevel = $refIdHighLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get refIdHighLevel.
-     *
-     * @return int
-     */
-    public function getRefIdHighLevel()
-    {
-        return $this->refIdHighLevel;
-    }
-
-    /**
-     * Set refIdSecondLevel.
-     *
-     * @return SearchEngineRef
-     */
-    public function setRefIdSecondLevel(int $refIdSecondLevel)
-    {
-        $this->refIdSecondLevel = $refIdSecondLevel;
-
-        return $this;
-    }
-
-    /**
-     * Get refIdSecondLevel.
-     *
-     * @return int
-     */
-    public function getRefIdSecondLevel()
-    {
-        return $this->refIdSecondLevel;
-    }
-
-    /**
-     * Set searchDid.
-     *
-     * @return SearchEngineRef
-     */
-    public function setSearchDid(int $searchDid)
-    {
-        $this->searchDid = $searchDid;
-
-        return $this;
-    }
-
-    /**
-     * Get searchDid.
-     *
-     * @return int
-     */
-    public function getSearchDid()
+    public function getSearchDid(): int
     {
         return $this->searchDid;
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function setSearchDid(int $searchDid): self
     {
-        return $this->id;
+        $this->searchDid = $searchDid;
+
+        return $this;
     }
 }

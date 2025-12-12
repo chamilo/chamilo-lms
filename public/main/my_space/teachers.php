@@ -317,8 +317,8 @@ if ($is_western_name_order) {
     $table->set_header(1, get_lang('First name'), false);
 }
 
-$table->set_header(2, get_lang('First login'), false);
-$table->set_header(3, get_lang('Last connexion'), false);
+$table->set_header(2, get_lang('First login in platform'), false);
+$table->set_header(3, get_lang('Last connection'), false);
 $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
@@ -326,15 +326,15 @@ if ($export_csv) {
         $csv_header[] = [
             get_lang('First name'),
             get_lang('Last name'),
-            get_lang('First login'),
-            get_lang('Last connexion'),
+            get_lang('First login in platform'),
+            get_lang('Last connection'),
         ];
     } else {
         $csv_header[] = [
             get_lang('Last name'),
             get_lang('First name'),
-            get_lang('First login'),
-            get_lang('Last connexion'),
+            get_lang('First login in platform'),
+            get_lang('Last connection'),
         ];
     }
 }

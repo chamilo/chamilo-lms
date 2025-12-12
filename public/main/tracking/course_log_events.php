@@ -83,7 +83,7 @@ $(function() {
 // -----------------------------------------------------------------------------
 // Page rendering
 // -----------------------------------------------------------------------------
-$pageTitle = get_lang('Course log events');
+$pageTitle = get_lang('Course events log');
 
 // Use "Tracking" context so breadcrumbs/icons match other tracking pages.
 Display::display_header($pageTitle, 'Tracking');

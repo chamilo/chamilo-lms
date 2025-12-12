@@ -27,7 +27,7 @@ if (!$isAllowedToTrack) {
     exit;
 }
 
-$nameTools = get_lang('Group statistics');
+$nameTools = get_lang('Group reporting');
 
 // jqGrid will use this URL to do the selects.
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_group_reporting&course_id='.
@@ -167,8 +167,8 @@ $panelTitle = Display::getMdiIcon(
         'ch-tool-icon',
         null,
         ICON_SIZE_SMALL,
-        get_lang('Group statistics')
-    ).' '.get_lang('Group statistics');
+        get_lang('Group reporting')
+    ).' '.get_lang('Group reporting');
 
 // Main layout wrapper.
 echo '<div class="w-full px-4 md:px-8 pb-8 space-y-4">';

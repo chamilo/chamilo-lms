@@ -93,7 +93,7 @@ if (!empty($return)) {
                         <?php echo $tool_name; ?>
                     </h1>
                     <p class="mt-1 text-caption text-gray-50">
-                        <?php echo get_lang('Create a logical group of sessions to keep your training catalog organized.'); ?>
+                        <?php echo get_lang('Create a logical group of sessions to keep your training catalogue organized.'); ?>
                     </p>
                 </div>
 

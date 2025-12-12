@@ -236,7 +236,7 @@ if ('add_user' !== $action) {
 
     echo '  <section class="bg-white rounded-xl shadow-sm border border-gray-200 w-full">';
     echo '      <div class="p-4 md:p-5 overflow-x-auto">';
-    echo '          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3">'.get_lang('Boss tracking').'</h2>';
+    echo '          <h2 class="text-base md:text-lg font-semibold text-gray-800 mb-3">'.get_lang('Tracking for superior').'</h2>';
     echo            $tableContent;
     echo '      </div>';
     echo '  </section>';

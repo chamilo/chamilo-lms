@@ -296,7 +296,7 @@ if (!empty($content)) {
     echo '      </div>';
 } elseif (isset($_GET['a']) && 'users_active' === $_GET['a']) {
     echo '      <p class="text-sm text-gray-500">'.
-        get_lang('No sessions found for the selected period.').
+        get_lang('No session matched.').
         '</p>';
 }
 

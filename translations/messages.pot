@@ -31190,3 +31190,192 @@ msgstr ""
 
 msgid "There are no questions for this survey"
 msgstr ""
+
+msgid "Certificates report"
+msgstr ""
+
+msgid "Course picture"
+msgstr ""
+
+msgid "Current picture"
+msgstr ""
+
+msgid "Course events log"
+msgstr ""
+
+msgid "Update the category information and its optional time limit."
+msgstr ""
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr ""
+
+msgid "Generating file, do not close this tab"
+msgstr ""
+
+msgid "Assign authentication sources to users"
+msgstr ""
+
+msgid "Average completion rate"
+msgstr ""
+
+msgid "Average access rate"
+msgstr ""
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr ""
+
+msgid "Follow up"
+msgstr ""
+
+msgid "Tracking for superior"
+msgstr ""
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr ""
+
+msgid "Head manager report"
+msgstr ""
+
+msgid "Reset or update user password"
+msgstr ""
+
+msgid "Active users"
+msgstr ""
+
+msgid "Inactive users"
+msgstr ""
+
+msgid "Report on resources"
+msgstr ""
+
+msgid "Global view"
+msgstr ""
+
+msgid "Available reports"
+msgstr ""
+
+msgid "Current report"
+msgstr ""
+
+msgid "Back to user assignment page"
+msgstr ""
+
+msgid "Authentication sources assigned successfully"
+msgstr ""
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr ""
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr ""
+
+msgid "Sharing"
+msgstr ""
+
+msgid "Selected files"
+msgstr ""
+
+msgid "Hide password"
+msgstr ""
+
+msgid "Show password"
+msgstr ""
+
+msgid "Upload SVG logo for e-mails"
+msgstr ""
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr ""
+
+msgid "Clear filters"
+msgstr ""
+
+msgid "Attendances (tablet)"
+msgstr ""
+
+msgid "Exit tablet mode"
+msgstr ""
+
+msgid "No members found."
+msgstr ""
+
+msgid "Health check"
+msgstr ""
+
+msgid "Export to CC 1.3"
+msgstr ""
+
+msgid "Loading resources..."
+msgstr ""
+
+msgid "Failed to load resources."
+msgstr ""
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr ""
+
+msgid "Export finished."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Ready to import"
+msgstr ""
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr ""
+
+msgid "Select resources to import"
+msgstr ""
+
+msgid "No resources available in this backup."
+msgstr ""
+
+msgid "Import selection"
+msgstr ""
+
+msgid "Import completed"
+msgstr ""
+
+msgid "Could not load options."
+msgstr ""
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr ""
+
+msgid "Please choose a backup from the server"
+msgstr ""
+
+msgid "Error selecting source."
+msgstr ""
+
+msgid "Recycling options"
+msgstr ""
+
+msgid "Type the course code to confirm"
+msgstr ""
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr ""
+
+msgid "Select resources to recycle"
+msgstr ""
+
+msgid "No resources available in this course."
+msgstr ""
+
+msgid "Recycle selected"
+msgstr ""
+
+msgid "Error loading resources."
+msgstr ""
+
+msgid "Clear search"
+msgstr ""

@@ -79,14 +79,14 @@
               value="server"
               v-model="backupType"
             />
-            <span class="text-sm text-gray-90">{{ t("Server file") }}</span>
+            <span class="text-sm text-gray-90">{{ t("server file") }}</span>
           </label>
           <select
             v-if="backupType === 'server'"
             v-model="serverFilename"
             class="w-full rounded border border-gray-25 p-2 text-sm"
           >
-            <option value="">{{ t("Select a backup") }}</option>
+            <option value="">{{ t("Select a backup file") }}</option>
             <option
               v-for="b in backups"
               :key="b.file"
@@ -122,7 +122,7 @@
 
           <div class="mt-4">
             <p class="mb-2 text-sm font-medium text-gray-90">
-              {{ t("When a file with the same name exists") }}
+              {{ t("What should be done with imported files with the same file name as existing files?") }}
             </p>
             <div class="space-y-2">
               <label class="flex items-center gap-2">
@@ -197,7 +197,7 @@
           @click="doRestore"
           :disabled="loading"
         >
-          <i class="mdi mdi-database-import-outline"></i> {{ t("Start import") }}
+          <i class="mdi mdi-database-import-outline"></i> {{ t("Import backup") }}
         </button>
       </div>
     </section>
@@ -234,7 +234,7 @@
           @click="doRestore"
           :disabled="loading"
         >
-          <i class="mdi mdi-database-import-outline"></i> {{ t("Import selected") }}
+          <i class="mdi mdi-database-import-outline"></i> {{ t("Import selection") }}
         </button>
       </div>
     </section>
@@ -358,10 +358,10 @@ async function nextFromStep1() {
     // Standard archive flows (local/server): .zip/.mbz/.tgz/.gz
     let res
     if (backupType.value === "local") {
-      if (!localFile.value) throw new Error(t("Please select a backup file (.zip, .mbz, .tgz, .gz)."))
+      if (!localFile.value) throw new Error(t("Please select a backup file (.zip, .mbz, .tgz, .gz)"))
       res = await svc.uploadFile(node.value, localFile.value)
     } else {
-      if (!serverFilename.value) throw new Error(t("Please choose a server backup."))
+      if (!serverFilename.value) throw new Error(t("Please choose a backup from the server"))
       res = await svc.chooseServerFile(node.value, serverFilename.value)
     }
     backupId.value = res.backupId
@@ -398,7 +398,7 @@ async function doRestore() {
     step.value = 4
     if (res.redirectUrl) pushWithQuery(res.redirectUrl)
   } catch (e) {
-    error.value = e?.response?.data?.error || t("Failed to import backup.")
+    error.value = e?.response?.data?.error || t("Import failed.")
   } finally {
     loading.value = false
   }

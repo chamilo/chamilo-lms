@@ -31258,3 +31258,192 @@ msgstr "Assign auth source to users"
 
 msgid "There are no questions for this survey"
 msgstr "There are no questions for this survey"
+
+msgid "Certificates report"
+msgstr "Certificates report"
+
+msgid "Course picture"
+msgstr "Course picture"
+
+msgid "Current picture"
+msgstr "Current picture"
+
+msgid "Course events log"
+msgstr "Course events log"
+
+msgid "Update the category information and its optional time limit."
+msgstr "Update the category information and its optional time limit."
+
+msgid "Create a logical group of sessions to keep your training catalogue organized."
+msgstr "Create a logical group of sessions to keep your training catalogue organized."
+
+msgid "Generating file, do not close this tab"
+msgstr "Generating file, do not close this tab"
+
+msgid "Assign authentication sources to users"
+msgstr "Assign authentication sources to users"
+
+msgid "Average completion rate"
+msgstr "Average completion rate"
+
+msgid "Average access rate"
+msgstr "Average access rate"
+
+msgid "This table summarizes learner progress and activity per learning path in your current courses."
+msgstr "This table summarizes learner progress and activity per learning path in your current courses."
+
+msgid "Follow up"
+msgstr "Follow up"
+
+msgid "Tracking for superior"
+msgstr "Tracking for superior"
+
+msgid "This report shows the weekly distribution of sessions per general coach in the selected date range."
+msgstr "This report shows the weekly distribution of sessions per general coach in the selected date range."
+
+msgid "Head manager report"
+msgstr "Head manager report"
+
+msgid "Reset or update user password"
+msgstr "Reset or update user password"
+
+msgid "Active users"
+msgstr "Active users"
+
+msgid "Inactive users"
+msgstr "Inactive users"
+
+msgid "Report on resources"
+msgstr "Report on resources"
+
+msgid "Global view"
+msgstr "Global view"
+
+msgid "Available reports"
+msgstr "Available reports"
+
+msgid "Current report"
+msgstr "Current report"
+
+msgid "Back to user assignment page"
+msgstr "Back to user assignment page"
+
+msgid "Authentication sources assigned successfully"
+msgstr "Authentication sources assigned successfully"
+
+msgid "Tip: choose “— Just upload —” to store without sending to anyone."
+msgstr "Tip: choose “— Just upload —” to store without sending to anyone."
+
+msgid "Please select at least one recipient (“— Just upload —” or any user)"
+msgstr "Please select at least one recipient (“— Just upload —” or any user)"
+
+msgid "Sharing"
+msgstr "Sharing"
+
+msgid "Selected files"
+msgstr "Selected files"
+
+msgid "Hide password"
+msgstr "Hide password"
+
+msgid "Show password"
+msgstr "Show password"
+
+msgid "Upload SVG logo for e-mails"
+msgstr "Upload SVG logo for e-mails"
+
+msgid "You must move or remove all learning paths from this category before deleting it."
+msgstr "You must move or remove all learning paths from this category before deleting it."
+
+msgid "Clear filters"
+msgstr "Clear filters"
+
+msgid "Attendances (tablet)"
+msgstr "Attendances (tablet)"
+
+msgid "Exit tablet mode"
+msgstr "Exit tablet mode"
+
+msgid "No members found."
+msgstr "No members found."
+
+msgid "Health check"
+msgstr "Health check"
+
+msgid "Export to CC 1.3"
+msgstr "Export to CC 1.3"
+
+msgid "Loading resources..."
+msgstr "Loading resources..."
+
+msgid "Failed to load resources."
+msgstr "Failed to load resources."
+
+msgid "Please select at least one exportable resource (document, web link, discussion,...)."
+msgstr "Please select at least one exportable resource (document, web link, discussion,...)."
+
+msgid "Export finished."
+msgstr "Export finished."
+
+msgid "Export failed."
+msgstr "Export failed."
+
+msgid "Import failed."
+msgstr "Import failed."
+
+msgid "Local file (.zip, .mbz, .tgz, .gz)"
+msgstr "Local file (.zip, .mbz, .tgz, .gz)"
+
+msgid "Ready to import"
+msgstr "Ready to import"
+
+msgid "We will restore the backup into this course. You can go back to change options."
+msgstr "We will restore the backup into this course. You can go back to change options."
+
+msgid "Select resources to import"
+msgstr "Select resources to import"
+
+msgid "No resources available in this backup."
+msgstr "No resources available in this backup."
+
+msgid "Import selection"
+msgstr "Import selection"
+
+msgid "Import completed"
+msgstr "Import completed"
+
+msgid "Could not load options."
+msgstr "Could not load options."
+
+msgid "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+msgstr "Please select a backup file (.zip, .mbz, .tgz, .gz)"
+
+msgid "Please choose a backup from the server"
+msgstr "Please choose a backup from the server"
+
+msgid "Error selecting source."
+msgstr "Error selecting source."
+
+msgid "Recycling options"
+msgstr "Recycling options"
+
+msgid "Type the course code to confirm"
+msgstr "Type the course code to confirm"
+
+msgid "This will remove or reset selected resources. This action cannot be undone."
+msgstr "This will remove or reset selected resources. This action cannot be undone."
+
+msgid "Select resources to recycle"
+msgstr "Select resources to recycle"
+
+msgid "No resources available in this course."
+msgstr "No resources available in this course."
+
+msgid "Recycle selected"
+msgstr "Recycle selected"
+
+msgid "Error loading resources."
+msgstr "Error loading resources."
+
+msgid "Clear search"
+msgstr "Clear search"

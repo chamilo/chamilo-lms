@@ -253,35 +253,32 @@ class ExerciseShowFunctions
             return;
         }
 
-        // Student recorded answer(s)
-        // getOralFileAudio() ya NO debe incluir los ResourceNode usados en AttemptFeedback.
+        // Student recorded answer(s).
+        // getOralFileAudio() must NOT include ResourceNodes used by AttemptFeedback.
         $studentAudioHtml = ExerciseLib::getOralFileAudio($trackExerciseId, $questionId);
 
         if (!empty($studentAudioHtml)) {
             echo $studentAudioHtml;
         }
 
-        // Optional text answer written by the student
+        // Optional text answer written by the student.
         if (!empty($answer)) {
             echo Display::tag('p', Security::remove_XSS($answer));
         }
 
-        // Teacher correction: comments and audio feedback
+        // Teacher correction must NOT be rendered here.
+        // It is rendered in the feedback section (FCK) inside exercise_show.php.
+        // We only compute these values to decide whether to show the "Not corrected yet" warning.
         $comment = Event::get_comments($trackExerciseId, $questionId);
+
+        // Use wrap=false for consistency with the feedback area.
         $teacherAudio = ExerciseLib::getOralFeedbackAudio(
             $trackExerciseId,
-            $questionId
+            $questionId,
+            false
         );
 
-        if (!empty($teacherAudio)) {
-            echo $teacherAudio;
-        }
-
-        if (!empty($comment)) {
-            echo Display::tag('p', Security::remove_XSS($comment));
-        }
-
-        // Optional "not corrected yet" warning
+        // Optional "not corrected yet" warning.
         if (
             $showAlertIfNotCorrected &&
             !$questionScore &&

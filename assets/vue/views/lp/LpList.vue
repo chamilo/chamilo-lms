@@ -9,17 +9,17 @@
         />
         <BaseDropdownMenu
           v-if="canEdit"
-          class="relative flex items-center gap-2"
           :dropdown-id="'top-menu'"
+          class="relative flex items-center gap-2"
         >
           <template #button>
             <button
-              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
               :aria-label="t('More actions')"
+              class="w-9 h-9 rounded-xl border border-gray-25 grid place-content-center hover:bg-gray-15"
             >
               <i
+                aria-hidden="true"
                 class="mdi mdi-dots-vertical text-lg"
-                aria-hidden
               ></i>
             </button>
           </template>
@@ -84,10 +84,10 @@
     >
       <div class="w-24 h-24 rounded-full bg-support-1 flex items-center justify-center mb-4 text-support-3">
         <svg
-          width="36"
+          fill="none"
           height="36"
           viewBox="0 0 24 24"
-          fill="none"
+          width="36"
         >
           <path
             d="M4 17l6-6 4 4 6-6"
@@ -113,77 +113,77 @@
       <div v-if="uncatList.length">
         <Draggable
           v-model="uncatList"
-          item-key="iid"
-          :disabled="!canEdit"
-          handle=".drag-handle"
           :animation="180"
-          tag="div"
-          class="space-y-3"
-          ghost-class="ghosting"
+          :disabled="!canEdit"
           chosen-class="chosen"
+          class="space-y-3"
           drag-class="dragging"
-          @start="draggingUncat = true"
+          ghost-class="ghosting"
+          handle=".drag-handle"
+          item-key="iid"
+          tag="div"
           @end="onEndUncat"
+          @start="draggingUncat = true"
         >
-          <template #item="{ element }">
-            <LpRowItem
-              :lp="element"
-              :canEdit="canEdit"
-              :buildDates="buildDates"
-              :ringDash="ringDash"
-              :ringValue="ringValue"
-              :canExportScorm="canExportScorm"
-              :canExportPdf="canExportPdf"
-              :canAutoLaunch="canAutoLaunch"
-              @toggle-auto-launch="onToggleAutoLaunch"
-              @open="openLegacy"
-              @edit="goEdit"
-              @report="onReport"
-              @settings="onSettings"
-              @build="onBuild"
-              @toggle-visible="onToggleVisible"
-              @toggle-publish="onTogglePublish"
-              @delete="onDelete"
-              @export-scorm="onExportScorm"
-              @export-pdf="onExportPdf"
-            />
-          </template>
+          <LpRowItem
+            v-for="(element, elIdx) in uncatList"
+            :key="elIdx"
+            :buildDates="buildDates"
+            :canAutoLaunch="canAutoLaunch"
+            :canEdit="canEdit"
+            :canExportPdf="canExportPdf"
+            :canExportScorm="canExportScorm"
+            :lp="element"
+            :ringDash="ringDash"
+            :ringValue="ringValue"
+            @build="onBuild"
+            @delete="onDelete"
+            @edit="goEdit"
+            @open="openLegacy"
+            @report="onReport"
+            @settings="onSettings"
+            @toggle-auto-launch="onToggleAutoLaunch"
+            @toggle-visible="onToggleVisible"
+            @toggle-publish="onTogglePublish"
+            @export-scorm="onExportScorm"
+            @export-pdf="onExportPdf"
+          />
         </Draggable>
       </div>
       <LpCategorySection
         v-for="[cat, list, isSession] in categorizedGroups"
         :key="cat.iid || cat.title"
-        :title="cat.title"
-        :category="cat"
-        :list="list"
-        :isSessionCategory="isSession"
+        :buildDates="buildDates"
+        :canAutoLaunch="canAutoLaunch"
         :canEdit="canEdit"
+        :canExportPdf="canExportPdf"
+        :canExportScorm="canExportScorm"
+        :category="cat"
+        :isSessionCategory="isSession"
+        :list="list"
         :ringDash="ringDash"
         :ringValue="ringValue"
-        :canExportScorm="canExportScorm"
-        :canExportPdf="canExportPdf"
-        :canAutoLaunch="canAutoLaunch"
-        :buildDates="buildDates"
-        @toggle-auto-launch="onToggleAutoLaunch"
-        @open="openLegacy"
+        :title="cat.title"
+        @build="onBuild"
+        @delete="onDelete"
         @edit="goEdit"
+        @open="openLegacy"
+        @reorder="(ids) => onReorderCategory(cat, ids)"
         @report="onReport"
         @settings="onSettings"
-        @build="onBuild"
+        @toggle-auto-launch="onToggleAutoLaunch"
         @toggle-visible="onToggleVisible"
         @toggle-publish="onTogglePublish"
-        @delete="onDelete"
         @export-pdf="onExportPdf"
-        @reorder="(ids) => onReorderCategory(cat, ids)"
       />
 
     </template>
   </div>
   <ExportPdfDialog
     v-if="showExportDialog && exportTarget"
-    :show="showExportDialog"
-    :lp-id="exportTarget.iid"
     :cid="course?.id"
+    :lp-id="exportTarget.iid"
+    :show="showExportDialog"
     :sid="session?.id"
     @close="onCloseExportDialog"
   />
@@ -227,10 +227,12 @@ const { course, session } = storeToRefs(cidReqStore)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platformConfig.getSetting("ai_helpers.enable_ai_helpers"))
+
   return v === "true"
 })
 const lpGeneratorEnabled = computed(() => {
   const v = String(courseSettingsStore?.getSetting?.("learning_path_generator"))
+
   return v === "true"
 })
 const canUseAi = computed(() => {
@@ -258,8 +260,12 @@ const enableLpAutoLaunch = computed(() => {
 const canAutoLaunch = computed(() => canEdit.value && enableLpAutoLaunch.value)
 // Toggle Auto-launch (rocket)
 const onToggleAutoLaunch = (lp) => {
-  if (!canAutoLaunch.value || !lp?.iid) return
+  if (!canAutoLaunch.value || !lp?.iid) {
+    return
+  }
+
   const next = Number(lp.autolaunch) === 1 ? 0 : 1
+
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "auto_launch", {
     cid: course.value?.id,
     sid: session.value?.id,
@@ -279,13 +285,19 @@ onMounted(() => {
 
 const hasImageRF = (lp) => {
   const rfs = lp.resourceNode?.resourceFiles ?? lp.resourceFiles ?? []
-  if (Array.isArray(rfs) && rfs.length) return rfs.some((f) => f?.image === true)
-  if (lp.firstResourceFile?.image) return true
-  return false
+
+  if (Array.isArray(rfs) && rfs.length) {
+    return rfs.some((f) => f?.image === true)
+  }
+
+  return !!lp.firstResourceFile?.image
 }
 
 const onExportPdf = (lp) => {
-  if (!canExportPdf.value) return
+  if (!canExportPdf.value) {
+    return
+  }
+
   exportTarget.value = lp
   showExportDialog.value = true
 }
@@ -297,10 +309,13 @@ const onCloseExportDialog = () => {
 async function loadVisibilityFor(lpIds) {
   if (canEdit.value) {
     visibilityMap.value = {}
+
     return
   }
+
   if (!Array.isArray(lpIds) || lpIds.length === 0) {
     visibilityMap.value = {}
+
     return
   }
 
@@ -309,6 +324,7 @@ async function loadVisibilityFor(lpIds) {
     lp_ids: lpIds.join(","),
     cid: course.value?.id,
   })
+
   if (session.value) {
     params.append("sid", session.value?.id)
   }
@@ -317,27 +333,37 @@ async function loadVisibilityFor(lpIds) {
     headers: { "X-Requested-With": "XMLHttpRequest" },
     credentials: "same-origin",
   })
+
   const data = await res.json().catch(() => ({}))
   visibilityMap.value = data.map || {}
 }
 
 function isVisibleForStudent(lp) {
-  if (canEdit.value) return true
+  if (canEdit.value) {
+    return true
+  }
+
   return !!visibilityMap.value[lp.iid]
 }
 
 const withCidSid = (url) => {
-  if (!url) return url
+  if (!url) {
+    return url
+  }
+
   try {
     const isAbs = url.startsWith("http://") || url.startsWith("https://")
     const abs = isAbs ? url : window.location.origin + url
     const u = new URL(abs)
+
     if (course.value) {
       u.searchParams.set("cid", course.value?.id)
     }
+
     if (session.value) {
       u.searchParams.set("sid", session.value?.id)
     }
+
     return isAbs ? u.toString() : u.pathname + u.search
   } catch {
     return url
@@ -347,6 +373,7 @@ const withCidSid = (url) => {
 const load = async () => {
   loading.value = true
   error.value = null
+
   try {
     const node = Number(route.params.node)
 
@@ -358,21 +385,24 @@ const load = async () => {
 
     let allowed = await checkIsAllowedToEdit(true, true, true, false)
     const roles = securityStore.user?.roles ?? []
+
     if (!allowed && Array.isArray(roles) && (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_GLOBAL_ADMIN"))) {
       allowed = true
     }
+
     rawCanEdit.value = !!allowed
 
     categories.value = await lpService.getLpCategories({
       cid: course.value?.id,
-      sid: session.value?.id || undefined,
+      sid: session.value?.id ?? 0,
     })
 
     const res = await lpService.getLearningPaths({
       "resourceNode.parent": node,
-      sid: session.value?.id || undefined,
+      sid: session.value?.id ?? 0,
       pagination: false,
     })
+
     const raw = res["hydra:member"] ?? res ?? []
     items.value = raw.map((lp) => ({
       ...lp,
@@ -391,108 +421,67 @@ const load = async () => {
 }
 onMounted(load)
 
-// build the candidate fields object
-function inspectCategorySessionCandidates(cat) {
-  const c = {
-    sid: cat?.sid, session: cat?.session, sessionId: cat?.sessionId,
-    courseSessionId: cat?.courseSessionId, course_session: cat?.course_session,
-    session_iid: cat?.session_iid,
+/**
+ * @param {Object} cat
+ * @returns {boolean}
+ */
+function hasSession(cat) {
+  if (!cat?.resourceLinkListFromEntity) {
+    return false
   }
-  if (Array.isArray(cat?.resourceLinkListFromEntity)) {
-    cat.resourceLinkListFromEntity.forEach((l, i) => {
-      c[`resourceLink_${i}_session`] = l?.session
-      c[`resourceLink_${i}_courseSessionId`] = l?.courseSessionId ?? l?.course_session
-    })
-  }
-  return c
+
+  return (
+    cat.resourceLinkListFromEntity.findIndex(
+      (resourceLink) => resourceLink.session && resourceLink.session["@id"] === session.value?.["@id"],
+    ) >= 0
+  )
 }
-
-function extractNumbersFromValue(v) {
-  if (v == null) return []
-  if (typeof v === "number") return Number.isFinite(v) ? [v] : []
-  if (typeof v === "string") {
-    const m = v.match(/-?\d+/g)
-    return m ? m.map(Number).filter(Number.isFinite) : []
-  }
-  if (Array.isArray(v)) return v.flatMap(extractNumbersFromValue)
-  if (typeof v === "object") return Object.values(v).flatMap(extractNumbersFromValue)
-  return []
-}
-
-function getCategorySessionId(cat) {
-  if (!cat || typeof cat !== "object") return { catSid: 0, hasSessionField: false, candidates: {} }
-  const candidates = inspectCategorySessionCandidates(cat)
-  for (const val of Object.values(candidates)) {
-    if (val == null || String(val).trim() === "") continue
-    const nums = extractNumbersFromValue(val)
-    const found = nums.find(n => n !== 0)
-    if (found !== undefined) return { catSid: Number(found), hasSessionField: true, candidates }
-  }
-  const hasSessionField = Object.values(candidates).some(v => v != null && String(v).trim() !== "")
-  return { catSid: 0, hasSessionField, candidates }
-}
-
-const filteredCategories = computed(() => {
-  if (!Array.isArray(categories.value)) return []
-  const s = Number(sid.value) || 0
-  const lpCatIdsInItems = new Set((items.value ?? []).map(lp => lp?.category?.iid).filter(id => id != null))
-
-  const matchesSessionValue = (candidates, sNum) => {
-    if (!candidates || typeof candidates !== "object") return false
-    return Object.values(candidates).some(v => {
-      if (v == null || String(v).trim() === "") return false
-      if (Number(String(v)) === sNum) return true
-      if (extractNumbersFromValue(v).some(n => n === sNum)) return true
-      if (String(v).trim() === String(sNum)) return true
-      return false
-    })
-  }
-
-  return categories.value.filter(cat => {
-    const { catSid, hasSessionField, candidates } = getCategorySessionId(cat)
-    if (s > 0) {
-      if (catSid === s) return true
-      if (hasSessionField && matchesSessionValue(candidates, s)) return true
-      if (!hasSessionField && catSid === 0) return true
-      if (lpCatIdsInItems.has(cat.iid)) return true
-      return false
-    }
-    return !hasSessionField && catSid === 0
-  })
-})
 
 const categorizedGroups = computed(() => {
-  const cats = filteredCategories.value ?? []
-  return cats.map(cat => {
-    const list = (catLists.value[cat.iid] ?? []).slice()
-    const { catSid, hasSessionField } = getCategorySessionId(cat)
-    const isSessionCategory = !!(hasSessionField && catSid !== 0)
-    return [cat, list, isSessionCategory]
-  }).filter(([_, list]) => (list && list.length) || canEdit.value)
+  const rows = []
+
+  for (const cat of categories.value) {
+    const list = catLists.value[cat.iid] ?? []
+    const isSessionCategory = hasSession(cat)
+
+    if (canEdit.value || list.length) {
+      rows.push([cat, list, isSessionCategory])
+    }
+  }
+
+  return rows
 })
 
 function rebuildListsFromItems() {
   const source = canEdit.value ? items.value : items.value.filter(isVisibleForStudent)
-
   const uncat = []
   const byCat = {}
+
   for (const lp of source) {
     const catId = lp.category?.iid
+
     if (!catId) {
       uncat.push(lp)
     } else {
-      if (!byCat[catId]) byCat[catId] = []
+      if (!byCat[catId]) {
+        byCat[catId] = []
+      }
       byCat[catId].push(lp)
     }
   }
+
   uncatList.value = uncat
   catLists.value = byCat
 }
 
 const hasAnyVisible = computed(() => {
-  if (canEdit.value) return items.value.length > 0
+  if (canEdit.value) {
+    return items.value.length > 0
+  }
+
   const anyUncat = uncatList.value.length > 0
   const anyCat = Object.values(catLists.value).some((arr) => Array.isArray(arr) && arr.length > 0)
+
   return anyUncat || anyCat
 })
 
@@ -502,9 +491,11 @@ function applyOrderWithinContext(predicate, orderedIds) {
   items.value = items.value.slice().sort((a, b) => {
     const aIn = !!predicate(a)
     const bIn = !!predicate(b)
+
     if (aIn && bIn) {
       return (rank.get(a.iid) ?? 0) - (rank.get(b.iid) ?? 0)
     }
+
     return originalIndex.get(a.iid) - originalIndex.get(b.iid)
   })
   rebuildListsFromItems()
@@ -529,8 +520,10 @@ async function sendReorder(orderedIds, { categoryId } = {}) {
         order: orderedIds,
       }),
     })
+
     if (!resp.ok) {
       const txt = await resp.text().catch(() => "")
+
       throw new Error(`Reorder failed: ${resp.status} ${txt}`)
     }
   }
@@ -538,7 +531,9 @@ async function sendReorder(orderedIds, { categoryId } = {}) {
 
 async function onReorderCategory(cat, ids) {
   await nextTick()
+
   applyOrderWithinContext((lp) => lp.category && lp.category.iid === cat.iid, ids)
+
   try {
     await sendReorder(ids, { categoryId: cat.iid })
   } catch (e) {
@@ -552,8 +547,15 @@ const fmt = new Intl.DateTimeFormat(undefined, { year: "numeric", month: "2-digi
 const buildDates = (lp) => {
   const s = lp.publishedOn ? fmt.format(new Date(lp.publishedOn)) : ""
   const e = lp.expiredOn ? fmt.format(new Date(lp.expiredOn)) : ""
-  if (!s && !e) return t("No date")
-  if (s && e) return `${s} - ${e}`
+
+  if (!s && !e) {
+    return t("No date")
+  }
+
+  if (s && e) {
+    return `${s} - ${e}`
+  }
+
   return s || e
 }
 
@@ -561,6 +563,7 @@ const circumference = 2 * Math.PI * 16
 const ringDash = (val) => {
   const n = Math.min(100, Math.max(0, Number(val || 0)))
   const d = (n / 100) * circumference
+
   return `${d} ${circumference}`
 }
 const ringValue = (val) => Math.round(Math.min(100, Math.max(0, Number(val || 0))))
@@ -574,7 +577,9 @@ const onStudentViewChange = async (val) => {
     })
   } else {
     const q = new URLSearchParams(window.location.search)
+
     q.delete("isStudentView")
+
     const newUrl = window.location.pathname + (q.toString() ? "?" + q.toString() : "") + window.location.hash
     window.location.replace(newUrl)
   }
@@ -595,7 +600,10 @@ const handleTopMenu = (action, ev) => {
   ev?.preventDefault?.()
   ev?.stopPropagation?.()
   ev?.stopImmediatePropagation?.()
-  if (!canEdit.value) return
+
+  if (!canEdit.value) {
+    return
+  }
 
   const courseId = course.value?.id || undefined
   const sidQ = session.value?.id || 0
@@ -617,7 +625,9 @@ const handleTopMenu = (action, ev) => {
               ? lpService.buildLegacyActionUrl("ai_helper", { cid: courseId, sid: sidQ, node, gid, gradebook, origin })
               : null
 
-  if (url) window.location.assign(url)
+  if (url) {
+    window.location.assign(url)
+  }
 }
 
 const onReport = (lp) =>
@@ -635,6 +645,7 @@ const onBuild = (lp) =>
   }))
 const onToggleVisible = (lp) => {
   const newStatus = typeof lp.visible !== "undefined" ? (lp.visible ? 0 : 1) : 1
+
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_visible", {
     cid: course.value?.id,
     sid: session.value?.id,
@@ -643,6 +654,7 @@ const onToggleVisible = (lp) => {
 }
 const onTogglePublish = (lp) => {
   const newStatus = lp.published === "v" ? "i" : "v"
+
   window.location.href = lpService.buildLegacyActionUrl(lp.iid, "toggle_publish", {
     cid: course.value?.id,
     sid: session.value?.id,
@@ -652,6 +664,7 @@ const onTogglePublish = (lp) => {
 const onDelete = (lp) => {
   const label = (lp.title || "").trim() || t("Learning path")
   const msg = `${t("Are you sure to delete")} ${label}?`
+
   if (confirm(msg)) {
     window.location.href = lpService.buildLegacyActionUrl(lp.iid, "delete", {
       cid: course.value?.id,
@@ -664,10 +677,13 @@ async function onEndUncat() {
   await nextTick()
   if (!canEdit.value) {
     draggingUncat.value = false
+
     return
   }
+
   const ids = uncatList.value.map((it) => it.iid)
   applyOrderWithinContext((lp) => !lp.category || !lp.category.iid, ids)
+
   try {
     await sendReorder(ids, { categoryId: null })
   } catch (e) {
@@ -680,8 +696,12 @@ async function onEndUncat() {
 }
 
 const onExportScorm = (lp) => {
-  if (!canExportScorm.value) return
+  if (!canExportScorm.value) {
+    return
+  }
+
   const params = new URLSearchParams({ action: "export", lp_id: lp.iid, cid: course.value?.id })
+
   if (session.value) {
     params.append("sid", session.value)
   }

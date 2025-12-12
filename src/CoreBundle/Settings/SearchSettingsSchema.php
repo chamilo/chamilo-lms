@@ -16,15 +16,13 @@ class SearchSettingsSchema extends AbstractSettingsSchema
 {
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
-        $builder
-            ->setDefaults(
-                [
-                    'search_enabled' => 'false',
-                    'search_prefilter_prefix' => '',
-                    'search_show_unlinked_results' => 'true',
-                ]
-            )
-        ;
+        $builder->setDefaults(
+            [
+                'search_enabled' => 'false',
+                'search_prefilter_prefix' => '',
+                'search_show_unlinked_results' => 'true',
+            ]
+        );
 
         $allowedTypes = [
             'search_prefilter_prefix' => ['string'],
@@ -43,10 +41,10 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                 [
                     'required' => false,
                     'attr' => [
-                        'rows' => 6,
+                        'rows' => 10,
                         'class' => 'font-monospace',
                     ],
-                    'help' => 'JSON configuration for search prefilter fields.',
+                    'help' => 'Define the fields or attributes you want to record about each indexed resource. If you want to add or remove fields in the future, make sure you change the fields one at a time, save the change and then do another change. If you want to modify field variables, is is best to do it directly in the database, in the search_engine_field table, as JSON-based changes can cause consistency issue an erase data you have in store for your resources.',
                 ]
             )
             ->add(
@@ -58,8 +56,7 @@ class SearchSettingsSchema extends AbstractSettingsSchema
                         'Search hides unlinked results' => 'false',
                     ],
                 ]
-            )
-        ;
+            );
 
         $this->updateFormFieldsFromSettingsInfo($builder);
     }

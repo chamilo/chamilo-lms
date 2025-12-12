@@ -85,9 +85,22 @@ $createResourceNodeFromUploadedFile = static function (
 
     $em->persist($node);
 
+    // Force a distinct "original_name" for attempt vs feedback.
+    // WebRTC uploads often reuse the same client filename for both recordings, which makes
+    // attempt and feedback indistinguishable in DB. We build a stable filename from $title.
+    $ext = (string) pathinfo((string) $originalName, PATHINFO_EXTENSION);
+    $ext = $ext !== '' ? strtolower($ext) : 'webm';
+
+    $safeBaseName = $title !== '' ? $title : (string) pathinfo((string) $originalName, PATHINFO_FILENAME);
+    $safeBaseName = api_replace_dangerous_char($safeBaseName);
+    $safeBaseName = disable_dangerous_file($safeBaseName);
+
+    $forcedOriginalName = $safeBaseName.'.'.$ext;
+
+    // "true" => test mode, do not enforce HTTP upload checks (consistent with current behavior).
     $uploadedFile = new UploadedFile(
         $tmpName,
-        $originalName,
+        $forcedOriginalName,
         $mimeType,
         $errorCode,
         true

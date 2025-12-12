@@ -27,6 +27,7 @@ use Chamilo\CoreBundle\Controller\Api\DocumentLearningPathUsageAction;
 use Chamilo\CoreBundle\Controller\Api\DownloadSelectedDocumentsAction;
 use Chamilo\CoreBundle\Controller\Api\ReplaceDocumentFileAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateDocumentFileAction;
+use Chamilo\CoreBundle\Controller\Api\MoveDocumentAction;
 use Chamilo\CoreBundle\Controller\Api\UpdateVisibilityDocument;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
@@ -68,12 +69,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             uriTemplate: '/documents/{iid}/move',
-            controller: UpdateDocumentFileAction::class,
-            openapi: new Operation(
-                summary: 'Move document'
-            ),
+            controller: MoveDocumentAction::class,
+            openapi: new Operation(summary: 'Move document (context-aware using ResourceLink.parent)'),
             security: "is_granted('EDIT', object.resourceNode)",
-            deserialize: true
+            deserialize: false
         ),
         new Post(
             uriTemplate: '/documents/{iid}/replace',

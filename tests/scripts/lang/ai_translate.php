@@ -495,7 +495,7 @@ EOT;
             'Authorization: Bearer ' . $apiKey,
         ],
         CURLOPT_POSTFIELDS     => $payloadJson,
-        CURLOPT_TIMEOUT        => 600,
+        CURLOPT_TIMEOUT        => 60,
     ]);
 
     $responseBody = curl_exec($ch);

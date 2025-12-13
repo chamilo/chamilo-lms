@@ -687,11 +687,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Hide logout button',
                     'comment' => 'Hide the logout button. This is usually only interesting when using an external login/logout method, for example when using Single Sign On of some sort.',
                 ],
-                [
-                    'name' => 'icons_mode_svg',
-                    'title' => 'SVG icons mode',
-                    'comment' => 'By enabling this option, all icons that have an SVG version will prefer the SVG format to PNG. This will give a much better icons quality but some icons might still have some rendering size issue, and some browsers might not support it.',
-                ],
             ],
             'language' => [
                 [

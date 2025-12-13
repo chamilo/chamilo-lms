@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
+use Chamilo\CoreBundle\Search\SearchEngineFieldSynchronizer;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use InvalidArgumentException;
@@ -61,6 +62,7 @@ class SettingsManager implements SettingsManagerInterface
         EventDispatcherInterface $eventDispatcher,
         RequestStack $request,
         protected readonly SettingsManagerHelper $settingsManagerHelper,
+        private readonly SearchEngineFieldSynchronizer $searchEngineFieldSynchronizer,
     ) {
         $this->schemaRegistry = $schemaRegistry;
         $this->manager = $manager;
@@ -334,6 +336,8 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
+
         $this->manager->flush();
     }
 
@@ -390,7 +394,28 @@ class SettingsManager implements SettingsManagerInterface
             }
         }
 
+        $this->applySearchEngineFieldsSyncIfNeeded($simpleCategoryName, $parameters);
+
         $this->manager->flush();
+    }
+
+    /**
+     * Sync JSON-defined search fields into search_engine_field table.
+     */
+    private function applySearchEngineFieldsSyncIfNeeded(string $category, array $parameters): void
+    {
+        if ('search' !== $category) {
+            return;
+        }
+
+        if (!\array_key_exists('search_prefilter_prefix', $parameters)) {
+            return;
+        }
+
+        $json = (string) $parameters['search_prefilter_prefix'];
+
+        // Non-destructive by default (no deletes)
+        $this->searchEngineFieldSynchronizer->syncFromJson($json, true);
     }
 
     /**
@@ -1087,7 +1112,6 @@ class SettingsManager implements SettingsManagerInterface
             'exercise_max_score' => 'exercise',
             'exercise_min_score' => 'exercise',
             'pdf_logo_header' => 'platform',
-            'show_glossary_in_documents' => 'document',
             'show_glossary_in_extra_tools' => 'glossary',
             'survey_email_sender_noreply' => 'survey',
             'allow_coach_feedback_exercises' => 'exercise',

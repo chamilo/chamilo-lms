@@ -5274,7 +5274,7 @@ function api_get_current_access_url_id(): int
 
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet
-    // (by default it is http://localhost/). Thus the more sensible thing we can
+    // (by default, it is http://localhost/). Thus, the more sensible thing we can
     // do is return 1 (the main URL) as the user cannot hack this value anyway
     return 1;
 }
@@ -5287,10 +5287,10 @@ function api_get_current_access_url_id(): int
  * @param int $user_id
  *
  * @return array
+ * @throws Exception
  */
-function api_get_access_url_from_user($user_id)
+function api_get_access_url_from_user(int $user_id): array
 {
-    $user_id = (int) $user_id;
     $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT access_url_id
@@ -5308,11 +5308,12 @@ function api_get_access_url_from_user($user_id)
 }
 
 /**
- * Checks whether the current admin user in in all access urls.
+ * Checks whether the current admin user in all access urls.
  *
  * @return bool
+ * @throws Exception
  */
-function api_is_admin_in_all_active_urls()
+function api_is_admin_in_all_active_urls(): bool
 {
     if (api_is_platform_admin()) {
         $urls = api_get_active_urls();
@@ -5322,16 +5323,20 @@ function api_is_admin_in_all_active_urls()
                 return false;
             }
         }
+
         return true;
     }
+
+    return false;
 }
 
 /**
  * Gets all the access urls in the database.
  *
  * @return array
+ * @throws Exception
  */
-function api_get_active_urls()
+function api_get_active_urls(): array
 {
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $sql = "SELECT * FROM $table WHERE active = 1";
@@ -5345,16 +5350,16 @@ function api_get_active_urls()
 }
 
 /**
- * Checks whether the curent user is in a group or not.
+ * Checks whether the current user is in a group or not.
  *
- * @param string        The group id - optional (takes it from session if not given)
- * @param string        The course code - optional (no additional check by course if course code is not given)
+ * @param ?int $groupIdParam       The group id - optional (takes it from session if not given)
+ * @param ?string $courseCodeParam       The course code - optional (no additional check by course if course code is not given)
  *
  * @return bool
  *
  * @author Ivan Tcholakov
  */
-function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
+function api_is_in_group(?int $groupIdParam = null, ?string $courseCodeParam = null): bool
 {
     if (!empty($courseCodeParam)) {
         $courseCode = api_get_course_id();
@@ -5369,7 +5374,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
 
     $groupId = api_get_group_id();
 
-    if (isset($groupId) && '' != $groupId) {
+    if ('' != $groupId) {
         if (!empty($groupIdParam)) {
             return $groupIdParam == $groupId;
         } else {
@@ -5386,7 +5391,7 @@ function api_is_in_group($groupIdParam = null, $courseCodeParam = null)
  * @param string $original_key_secret - secret key from (webservice) client
  * @param string $security_key        - security key from Chamilo
  *
- * @return bool - true if secret key is valid, false otherwise
+ * @return bool - true if the secret key is valid, false otherwise
  */
 function api_is_valid_secret_key($original_key_secret, $security_key)
 {
@@ -7537,4 +7542,39 @@ function api_email_reached_registration_limit(string $email): bool
 
     return $count >= $limit;
 }
+
+/**
+ * Build the HTML snippet required to bootstrap the automatic glossary tooltips.
+ */
+function api_get_glossary_auto_snippet(?int $courseId, ?int $sessionId, ?int $resourceNodeParentId = null): string
+{
+    if (null === $resourceNodeParentId && $courseId) {
+        try {
+            $courseEntity = Container::getCourseRepository()->find($courseId);
+
+            if ($courseEntity && $courseEntity->getResourceNode()) {
+                $resourceNodeParentId = (int) $courseEntity->getResourceNode()->getId();
+            }
+        } catch (\Throwable $exception) {
+            error_log('[Glossary] Failed to resolve resourceNodeParentId from course: '.$exception->getMessage());
+        }
+    }
+
+    $course  = $courseId ?: 'null';
+    $session = $sessionId ?: 'null';
+    $parent  = $resourceNodeParentId ?: 'null';
+
+    return '
+        <script>
+          window.chamiloGlossaryConfig = {
+            courseId: ' . $course . ',
+            sessionId: ' . $session . ',
+            resourceNodeParentId: ' . $parent . ',
+            termsEndpoint: "/api/glossaries"
+          };
+        </script>
+        ' . api_get_build_js("glossary_auto.js") . '
+    ';
+}
+
 

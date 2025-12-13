@@ -135,4 +135,48 @@ trait ControllerTrait
     {
         return $this->container->get(SettingsFormFactory::class);
     }
+
+    /**
+     * @return array<int, int>
+     */
+    protected function getRange(Request $request, int $fileSize): array
+    {
+        $range = $request->headers->get('Range');
+
+        if ($range) {
+            [, $range] = explode('=', $range, 2);
+            [$start, $end] = explode('-', $range);
+
+            $start = (int) $start;
+            $end = ('' === $end) ? $fileSize - 1 : (int) $end;
+
+            $length = $end - $start + 1;
+        } else {
+            $start = 0;
+            $end = $fileSize - 1;
+            $length = $fileSize;
+        }
+
+        return [$start, $end, $length];
+    }
+
+    /**
+     * @param resource $stream
+     */
+    protected function echoBuffer($stream, int $start, int $length): void
+    {
+        fseek($stream, $start);
+
+        $bytesSent = 0;
+
+        while ($bytesSent < $length && !feof($stream)) {
+            $buffer = fread($stream, min(1024 * 8, $length - $bytesSent));
+
+            echo $buffer;
+
+            $bytesSent += \strlen($buffer);
+        }
+
+        fclose($stream);
+    }
 }

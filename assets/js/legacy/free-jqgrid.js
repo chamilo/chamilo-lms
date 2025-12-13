@@ -1,7 +1,7 @@
 import 'free-jqgrid';
 import 'free-jqgrid/css/ui.jqgrid.bootstrap4.css';
 
-let locale = document.querySelector('html').lang;
+let locale = document.documentElement.dataset.lang.split("-")[0]
 
 const langs = [
   'ar', 'bg', 'bs', 'ca', 'cn', 'cs', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'gl', 'he', 'hr', 'hu', 'id',

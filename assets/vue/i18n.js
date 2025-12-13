@@ -60,7 +60,7 @@ const messages = loadLocaleMessages()
 
 // Prefer previously chosen locale, otherwise <html lang>, otherwise "en"
 const stored = typeof localStorage !== "undefined" ? localStorage.getItem("app_locale") : null
-const initialHtmlLocale = stored || document.documentElement?.lang || "en"
+const initialHtmlLocale = stored || document.documentElement.dataset?.lang || "en"
 const initial = resolveBestLocale(initialHtmlLocale, messages)
 
 // NOTE: do NOT create runtime aliases; use the resolved bundle directly
@@ -81,7 +81,7 @@ export function setLocale(code) {
   i18n.global.locale.value = target.resolved // switch to an existing bundle
 
   if (typeof document !== "undefined") {
-    document.documentElement.lang = target.resolved
+    document.documentElement.dataset.lang = target.resolved
   }
   if (typeof localStorage !== "undefined") {
     localStorage.setItem("app_locale", target.resolved)

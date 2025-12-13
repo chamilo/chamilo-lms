@@ -15,7 +15,7 @@ class PortfolioNotifier
         $session = $item->getSession();
 
         $messageSubject = sprintf(
-            get_lang('PortfolioAlertNewCommentSubject'),
+            get_lang('[Portfolio] New comment in post %s'),
             $item->getTitle(true)
         );
         $userIdListToSend = [];

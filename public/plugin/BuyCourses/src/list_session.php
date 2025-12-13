@@ -5,6 +5,8 @@ declare(strict_types=1);
 /*
  * Configuration script for the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 $cidReset = true;
@@ -12,6 +14,8 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
+
 $includeSession = 'true' === $plugin->get('include_sessions');
 
 if (!$includeSession) {
@@ -30,7 +34,7 @@ Display::addFlash(
 );
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$currentPage = $httpRequest->query->getInt('page', 1);
 $first = $pageSize * ($currentPage - 1);
 
 // breadcrumbs

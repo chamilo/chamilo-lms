@@ -1,4 +1,5 @@
-# features/courseTools.feature
+# features/courseTools.feature#
+# This test leaves course cid=1 titled "TEMP" available for other tests
 @common @tools
 Feature: Course tools basic testing
   In order to use a course
@@ -15,15 +16,6 @@ Feature: Course tools basic testing
   Scenario: See the course creation link on the admin page
     Given I am on "/main/admin/index.php"
     Then I should see "Add course"
-
-  Scenario: Create a private course before testing
-    Given I am on "/main/admin/course_add.php"
-    Then I should not see "not authorized"
-    When I fill in "title" with "TEMP_PRIVATE"
-    Then I check the "Private access (access authorized to group members only)" radio button
-    And I press "submit"
-    Then wait for the page to be loaded
-    Then I should see "added"
 
   Scenario: Create a course before testing
     Given I am on "/main/admin/course_add.php"
@@ -165,5 +157,11 @@ Feature: Course tools basic testing
 #    And I press "submit"
 #    Then I should not see "The course password is incorrect"
 
-
-
+  Scenario: Create a private course before testing
+    Given I am on "/main/admin/course_add.php"
+    Then I should not see "not authorized"
+    When I fill in "title" with "TEMP_PRIVATE"
+    Then I check the "Private access (access authorized to group members only)" radio button
+    And I press "submit"
+    Then wait for the page to be loaded
+    Then I should see "added"

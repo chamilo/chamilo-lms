@@ -767,11 +767,6 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'The ability to define the permissions settings to assign to every newly-created file lets you improve security against attacks by hackers uploading dangerous content to your portal. The default setting (0550) should be enough to give your server a reasonable protection level. The given format uses the UNIX terminology of Owner-Group-Others with Read-Write-Execute permissions. If you use Oogie, take care that the user who launch LibreOffice can write files in the course folder.',
                 ],
                 [
-                    'name' => 'show_glossary_in_documents',
-                    'title' => 'Show glossary terms in documents',
-                    'comment' => 'From here you can configure how to add links to the glossary terms from the documents',
-                ],
-                [
                     'name' => 'upload_extensions_blacklist',
                     'title' => 'Blacklist - setting',
                     'comment' => "The blacklist is used to filter the files extensions by removing (or renaming) any file which extension figures in the blacklist below. The extensions should figure without the leading dot (.) and separated by semi-column (;) like the following:  exe;com;bat;scr;php. Files without extension are accepted. Letter casing (uppercase/lowercase) doesn't matter.",

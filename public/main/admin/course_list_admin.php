@@ -39,7 +39,7 @@ function get_number_of_courses()
  *
  * @throws Exception
  *
- * @return array
+ * @return array|int
  */
 function get_course_data($from, $number_of_items, $column, $direction, $dataFunctions = [], $getCount = false)
 {
@@ -87,7 +87,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     $sql .= ' WHERE 1=1 ';
     if (isset($_GET['keyword'])) {
-        $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
+        $keyword = Database::escape_string('%'.trim($_GET['keyword']).'%');
         $sql .= " AND  (
             title LIKE '".$keyword."' OR
             code LIKE '".$keyword."' OR
@@ -95,13 +95,13 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         )
         ";
     } elseif (isset($_GET['keyword_code'])) {
-        $keyword_code = Database::escape_string("%".$_GET['keyword_code']."%");
-        $keyword_title = Database::escape_string("%".$_GET['keyword_title']."%");
+        $keyword_code = Database::escape_string('%'.$_GET['keyword_code'].'%');
+        $keyword_title = Database::escape_string('%'.$_GET['keyword_title'].'%');
         $keyword_category = isset($_GET['keyword_category'])
-            ? Database::escape_string("%".$_GET['keyword_category']."%")
+            ? Database::escape_string('%'.$_GET['keyword_category'].'%')
             : null;
-        $keyword_language = Database::escape_string("%".$_GET['keyword_language']."%");
-        $keyword_visibility = Database::escape_string("%".$_GET['keyword_visibility']."%");
+        $keyword_language = Database::escape_string('%'.$_GET['keyword_language'].'%');
+        $keyword_visibility = Database::escape_string('%'.$_GET['keyword_visibility'].'%');
         $keyword_subscribe = Database::escape_string($_GET['keyword_subscribe']);
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 
@@ -120,7 +120,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
 
     // Adding the filter to see the user's only of the current access_url.
     if (api_is_multiple_url_enabled()) {
-        $sql .= " AND url_rel_course.access_url_id = ".api_get_current_access_url_id();
+        $sql .= ' AND url_rel_course.access_url_id = '.api_get_current_access_url_id();
     }
 
     if ($addTeacherColumn) {
@@ -138,7 +138,7 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
         }
 
         if (false === $getCount) {
-            $sql .= " GROUP BY course.id ";
+            $sql .= ' GROUP BY course.id ';
         }
     }
 
@@ -193,15 +193,20 @@ function get_course_data($from, $number_of_items, $column, $direction, $dataFunc
             Display::getMdiIcon('backup', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Create a backup')),
             $path.'course_copy/create_backup.php?'.api_get_cidreq_params($courseId)
         );
+
+        // Build delete URL with delete_docs=0 by default so JS can flip it when needed.
+        $deleteUrl = $path.'admin/course_list_admin.php?'.http_build_query([
+                'delete_course' => $courseCode,
+                'delete_docs' => 0,
+                'sec_token' => Security::getTokenFromSession(),
+            ]);
+
         $actions[] = Display::url(
             Display::getMdiIcon('delete', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
-            $path.'admin/course_list_admin.php?'.http_build_query([
-                'delete_course' => $courseCode,
-                'sec_token' => Security::getTokenFromSession(),
-            ]),
+            $deleteUrl,
             [
-                'onclick' => "javascript: if (!confirm('"
-                    .addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."')) return false;",
+                // JS helper will show both confirms (course + docs).
+                'onclick' => 'return confirmDeleteCourseWithDocs(this);',
             ]
         );
 
@@ -252,19 +257,14 @@ function get_course_visibility_icon($visibility)
     switch ($visibility) {
         case 0:
             return Display::getMdiIcon(StateIcon::CLOSED_VISIBILITY, 'ch-tool-icon', $style, ICON_SIZE_SMALL, get_lang('Closed - the course is only accessible to the teachers'));
-            break;
         case 1:
             return Display::getMdiIcon(StateIcon::PRIVATE_VISIBILITY, 'ch-tool-icon', $style, ICON_SIZE_SMALL, get_lang('Private access (access authorized to group members only)'));
-            break;
         case 2:
             return Display::getMdiIcon(StateIcon::OPEN_VISIBILITY, 'ch-tool-icon', $style, ICON_SIZE_SMALL, get_lang('Open - access allowed for users registered on the platform'));
-            break;
         case 3:
             return Display::getMdiIcon(StateIcon::PUBLIC_VISIBILITY, 'ch-tool-icon', $style, ICON_SIZE_SMALL, get_lang('Public - access allowed for the whole world'));
-            break;
         case 4:
             return Display::getMdiIcon(StateIcon::HIDDEN_VISIBILITY, 'ch-tool-icon', $style, ICON_SIZE_SMALL, get_lang('Hidden - Completely hidden to all users except the administrators'));
-            break;
         default:
             return '';
     }
@@ -276,9 +276,14 @@ if (isset($_POST['action']) && Security::check_token('get')) {
         case 'delete_courses':
             if (!empty($_POST['course'])) {
                 $course_codes = $_POST['course'];
+
+                // Read delete_docs flag from bulk form (0 by default).
+                $deleteDocsFlag = isset($_POST['delete_docs']) && '1' === (string) $_POST['delete_docs'];
+
                 if (count($course_codes) > 0) {
                     foreach ($course_codes as $course_code) {
-                        CourseManager::delete_course($course_code);
+                        // Second parameter controls whether orphan-only documents are also deleted from disk.
+                        CourseManager::delete_course($course_code, $deleteDocsFlag);
                     }
                 }
 
@@ -363,7 +368,10 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     ];
     $tool_name = get_lang('Course list');
     if (isset($_GET['delete_course']) && Security::check_token('get')) {
-        $result = CourseManager::delete_course($_GET['delete_course']);
+        // Read delete_docs flag from single delete link (defaults to 0 when absent).
+        $deleteDocsFlag = isset($_GET['delete_docs']) && '1' === (string) $_GET['delete_docs'];
+
+        $result = CourseManager::delete_course($_GET['delete_course'], $deleteDocsFlag);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
@@ -446,7 +454,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
 
     if (isset($_GET['course_teachers'])) {
         $parsed = array_map('intval', $_GET['course_teachers']);
-        $parameters["course_teachers"] = '';
+        $parameters['course_teachers'] = '';
         foreach ($parsed as $key => $teacherId) {
             $parameters["course_teachers[$key]"] = $teacherId;
         }
@@ -458,9 +466,6 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $table->set_header($column++, get_lang('Title'), true, null, ['class' => 'title']);
     $table->set_header($column++, get_lang('Creation date'), true, 'width="70px"');
     $table->set_header($column++, get_lang('Latest access in course'), false, 'width="70px"');
-    //$table->set_header($column++, get_lang('Category'));
-    //$table->set_header($column++, get_lang('Registr. allowed'), true, 'width="60px"');
-    //$table->set_header($column++, get_lang('Unreg. allowed'), false, 'width="50px"');
     if ($addTeacherColumn) {
         $table->set_header($column++, get_lang('Teachers'), true);
     }
@@ -479,6 +484,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     $content .= $tab.$table->return_table();
 }
 
+// Small JS helper for teacher filter.
 $htmlHeadXtra[] = '
 <script>
 $(function() {
@@ -489,6 +495,114 @@ $(function() {
     });
 });
 </script>';
+
+$deleteDocsMessage = addslashes(
+    get_lang(
+        'When deleting a course or multiple selected courses, any documents that are only used in those course(s) (if any) will normally be kept as orphan files and will remain visible in the "File information" tool (platform admin only). Click "OK" if you also want to permanently delete those orphan files from disk; click "Cancel" to keep them as orphan files.'
+    )
+);
+
+$htmlHeadXtra[] = '
+<script>
+(function () {
+    var docsMsg = "'.$deleteDocsMessage.'";
+    var defaultConfirmMsg = "'.addslashes(get_lang('Please confirm your choice')).'";
+
+    // ---------------------------------------------------------------------
+    // Single-course delete (trash icon per row)
+    // ---------------------------------------------------------------------
+    window.confirmDeleteCourseWithDocs = function (link) {
+        var baseMsg = link.getAttribute("data-confirm") || defaultConfirmMsg;
+
+        // 1) Confirm course deletion.
+        if (!window.confirm(baseMsg)) {
+            return false;
+        }
+
+        // 2) Ask about orphan documents on disk.
+        if (window.confirm(docsMsg)) {
+            if (link.href.indexOf("delete_docs=0") !== -1) {
+                link.href = link.href.replace("delete_docs=0", "delete_docs=1");
+            } else if (link.href.indexOf("delete_docs=") === -1) {
+                var sep = link.href.indexOf("?") === -1 ? "?" : "&";
+                link.href = link.href + sep + "delete_docs=1";
+            }
+        }
+
+        return true;
+    };
+
+    // ---------------------------------------------------------------------
+    // Bulk delete (SortableTable dropdown "Supprimer ce(s) cours")
+    // ---------------------------------------------------------------------
+    function wrapActionClick() {
+        if (!window.action_click || window.action_click.__wrappedForCourseAdmin) {
+            return;
+        }
+
+        var originalActionClick = window.action_click;
+        var docsMsgLocal = docsMsg;
+
+        window.action_click = function (el, formId) {
+            var action = el.getAttribute("data-action");
+            var confirmMsg = el.getAttribute("data-confirm") || defaultConfirmMsg;
+
+            // Intercept only the admin course list bulk delete.
+            if (formId === "form_course_list_admin_id" && action === "delete_courses") {
+                var form = document.getElementById(formId);
+                if (!form) {
+                    return false;
+                }
+
+                // 1) Confirm course(s) deletion.
+                if (confirmMsg && !window.confirm(confirmMsg)) {
+                    return false;
+                }
+
+                // 2) Ask if orphan documents should also be deleted from disk.
+                var deleteDocs = window.confirm(docsMsgLocal);
+
+                // Ensure "action" hidden field exists and is set.
+                var actionInput = form.querySelector(\'input[name="action"]\');
+                if (!actionInput) {
+                    actionInput = document.createElement("input");
+                    actionInput.type = "hidden";
+                    actionInput.name = "action";
+                    form.appendChild(actionInput);
+                }
+                actionInput.value = action;
+
+                // If user accepted the docs deletion, set the delete_docs flag.
+                if (deleteDocs) {
+                    var deleteDocsInput = form.querySelector(\'input[name="delete_docs"]\');
+                    if (!deleteDocsInput) {
+                        deleteDocsInput = document.createElement("input");
+                        deleteDocsInput.type = "hidden";
+                        deleteDocsInput.name = "delete_docs";
+                        form.appendChild(deleteDocsInput);
+                    }
+                    deleteDocsInput.value = "1";
+                }
+
+                form.submit();
+                return false;
+            }
+
+            // Fallback to original behavior for all other cases.
+            return originalActionClick(el, formId);
+        };
+
+        window.action_click.__wrappedForCourseAdmin = true;
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", wrapActionClick);
+    } else {
+        wrapActionClick();
+    }
+})();
+</script>';
+
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);

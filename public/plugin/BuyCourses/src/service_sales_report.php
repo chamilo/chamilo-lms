@@ -6,6 +6,10 @@ declare(strict_types=1);
 /**
  * List of pending payments of the Buy Courses plugin.
  */
+
+use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+
 $cidReset = true;
 
 require_once '../config.php';
@@ -13,6 +17,7 @@ require_once '../config.php';
 api_protect_admin_script();
 
 $plugin = BuyCoursesPlugin::create();
+$httpRequest = Container::getRequest();
 
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
@@ -20,12 +25,12 @@ $includeServices = $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
-$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$selectedStatus = $httpRequest->query->getInt('status', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
-    $selectedStatus = $form->getSubmitValue('status');
-    if (false === $selectedStatus) {
+    $selectedStatus = (int) $form->getSubmitValue('status');
+    if (!$selectedStatus) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }
 }
@@ -37,6 +42,9 @@ $form->addButtonSearch(get_lang('Search'), 'search');
 $servicesSales = $plugin->getServiceSales(0, $selectedStatus);
 
 foreach ($servicesSales as &$sale) {
+    $sale['total_discount'] = 0;
+    $sale['coupon_code'] = '';
+
     if (isset($sale['discount_amount']) && 0 != $sale['discount_amount']) {
         $sale['total_discount'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['discount_amount'], $sale['iso_code']);
         $sale['coupon_code'] = $plugin->getServiceSaleCouponCode($sale['id']);
@@ -54,7 +62,7 @@ $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $toolbar = Display::url(
-    Display::returnFontAwesomeIcon('file-excel-o').
+    Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET).
     get_lang('GenerateReport'),
     api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/export_report.php',
     ['class' => 'btn btn-primary']

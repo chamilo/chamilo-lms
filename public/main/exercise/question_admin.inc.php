@@ -64,6 +64,9 @@ if (is_object($objQuestion)) {
     if (isset($_POST['submitQuestion']) && $form->validate()) {
         $objQuestion->processCreation($form, $objExercise);
         $objQuestion->processAnswersCreation($form, $objExercise);
+        if (method_exists($objQuestion, 'saveAdaptiveScenario')) {
+            $objQuestion->saveAdaptiveScenario($form, $objExercise);
+        }
 
         if (in_array($objQuestion->type, [MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_DROPDOWN_COMBINATION])) {
             $params = [

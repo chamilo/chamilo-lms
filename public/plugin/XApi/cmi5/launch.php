@@ -5,6 +5,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\XApiCmi5Item;
+use Chamilo\CoreBundle\Framework\Container;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Xabbuh\XApi\Model\Account;
 use Xabbuh\XApi\Model\Activity;
@@ -28,7 +29,7 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 api_protect_course_script(true);
 api_block_anonymous_users();
 
-$request = HttpRequest::createFromGlobals();
+$request = Container::getRequest();
 
 $em = Database::getManager();
 

@@ -1,0 +1,572 @@
+// reporting.scss
+// Styles for tracking / reporting pages (courseLog, resources, events, groups, my_space course)
+
+// Shared color tokens
+$reporting-border: #e5e7eb;
+$reporting-bg-light: #f9fafb;
+$reporting-bg-card: #ffffff;
+$reporting-text-muted: #4b5563;
+
+// -------------------------------------
+// 1) Generic cards & containers
+// -------------------------------------
+
+.reporting-students-card {
+  border: 1px solid $reporting-border;
+  border-radius: 0.75rem;
+  background-color: $reporting-bg-card;
+
+  .panel,
+  fieldset {
+    border-color: $reporting-border;
+  }
+}
+
+// Toolbar containers (course_log, events, groups)
+#course_log,
+.course-log-events-toolbar,
+#group-reporting-toolbar {
+  margin-top: 8px;
+  margin-bottom: 8px;
+
+  .btn,
+  .form-control,
+  select {
+    font-size: 13px;
+  }
+}
+
+// -------------------------------------
+// 2) Top icon navigation (TrackingCourseLog::actionsLeft)
+// -------------------------------------
+
+.course-log-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.course-log-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+
+  &.course-log-nav-link--active,
+  &--active {
+    background-color: #111827;
+    color: #ffffff;
+
+    .course-log-nav-icon {
+      color: #ffffff;
+    }
+  }
+}
+
+.course-log-nav-icon {
+  // Extra hook for icon color; combine with ch-tool-icon
+  font-size: 18px;
+}
+
+// -------------------------------------
+// 3) jqGrid wrapper full-width
+//    Used in course_log_events.php (tracking-grid-full)
+// -------------------------------------
+
+.tracking-grid-full {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 25px;
+  padding: 0 16px;
+  box-sizing: border-box;
+
+  .ui-jqgrid,
+  .ui-jqgrid-view,
+  .ui-jqgrid-hdiv,
+  .ui-jqgrid-bdiv,
+  table {
+    width: 100% !important;
+  }
+
+  .ui-jqgrid-htable th {
+    padding: 6px 8px;
+    font-size: 13px;
+    background: $reporting-bg-light;
+    border-bottom: 1px solid $reporting-border;
+    white-space: nowrap;
+  }
+
+  .ui-jqgrid-btable td {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
+
+  .ui-jqgrid-pager {
+    padding: 4px 8px;
+  }
+
+  .ui-pg-input,
+  .ui-pg-selbox {
+    height: 26px;
+    line-height: 26px;
+  }
+}
+
+// -------------------------------------
+// 4) Course log events page
+//    (course_log_events.php)
+// -------------------------------------
+
+.course-log-page-title {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px 16px 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.course-log-events-toolbar {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .actions {
+    margin: 0;
+
+    form span {
+      margin-right: 4px;
+    }
+  }
+}
+
+// -------------------------------------
+// 5) Group reporting page
+//    (course_log_groups.php)
+// -------------------------------------
+
+#group-reporting-toolbar,
+#group-reporting-wrapper {
+  max-width: 100%;
+  margin: 12px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+#group-reporting-wrapper .card {
+  border-radius: 8px;
+  border-color: $reporting-border;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#group-reporting-wrapper .card > .flex.justify-between {
+  padding: 8px 12px;
+}
+
+#group-reporting-wrapper .card > .flex.justify-between > .relative.flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#group-reporting-wrapper table {
+  width: 100%;
+}
+
+#gbox_group_users,
+#gview_group_users,
+#gview_group_users .ui-jqgrid-view,
+#gview_group_users .ui-jqgrid-hdiv,
+#gview_group_users .ui-jqgrid-bdiv,
+#group_users,
+#gbox_group_users .ui-jqgrid-htable,
+#gbox_group_users .ui-jqgrid-btable {
+  width: 100% !important;
+}
+
+#gbox_group_users .ui-jqgrid-htable th {
+  padding: 6px 8px;
+  font-size: 13px;
+  background: $reporting-bg-light;
+  border-bottom: 1px solid $reporting-border;
+}
+
+#gbox_group_users .ui-jqgrid-bdiv {
+  min-height: 280px;
+}
+
+#gbox_group_users .ui-jqgrid-btable td {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+#gbox_group_users .ui-jqgrid-pager {
+  padding: 4px 8px;
+}
+
+// -------------------------------------
+// 6) Advanced search + reporting table
+//    (courseLog.php)
+// -------------------------------------
+
+#advanced_search_options {
+  background: $reporting-bg-light;
+  border: 1px solid $reporting-border;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 12px 0 16px;
+
+  .form-horizontal {
+    margin-bottom: 0;
+  }
+
+  .form-group {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 6px 12px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .control-label,
+  label.control-label {
+    font-weight: 600;
+    margin: 0;
+    font-size: 13px;
+    color: #374151;
+    padding-top: 4px;
+  }
+
+  .form-control,
+  select,
+  .select2-container {
+    width: 100% !important;
+    max-width: 100%;
+    font-size: 13px;
+    padding: 4px 6px;
+    height: auto;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 4px 10px;
+  }
+
+  .has-long-list > div:last-child,
+  .has-long-list .col-sm-9 {
+    max-height: 260px;
+    overflow: auto;
+    border: 1px solid $reporting-border;
+    border-radius: 6px;
+    padding: 6px 8px;
+    background: #ffffff;
+  }
+
+  .has-long-list .radio,
+  .has-long-list .checkbox {
+    margin: 0 0 4px 0;
+  }
+
+  @media (min-width: 992px) {
+    .has-long-list > div:last-child,
+    .has-long-list .col-sm-9 {
+      column-count: 2;
+      column-gap: 16px;
+    }
+
+    .has-long-list .radio,
+    .has-long-list .checkbox {
+      break-inside: avoid;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .form-group {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Extra fields grid layout inside advanced search
+#advanced_search_options #extra_fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px 18px;
+  align-items: flex-start;
+  margin-top: 6px;
+
+  > span {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #374151;
+    margin-bottom: 2px;
+  }
+
+  input[type="text"],
+  select,
+  .flatpickr-wrapper,
+  .p-inputtext,
+  .p-select {
+    width: 100%;
+  }
+
+  .field-radiobutton {
+    width: 50%;
+    float: left;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+
+    label {
+      margin: 0;
+    }
+  }
+}
+
+#reporting_table {
+  margin-top: 8px;
+
+  .data_table {
+    border: 1px solid $reporting-border;
+    border-radius: 6px;
+    overflow: hidden;
+
+    th,
+    td {
+      padding: 4px 6px;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: $reporting-bg-light;
+      border-bottom: 1px solid $reporting-border;
+    }
+
+    tr:nth-child(even) td {
+      background: #fdfdfd;
+    }
+  }
+}
+
+#unhideButtons {
+  margin: 12px 0 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+// Trainer / coaches lists
+.user-teacher,
+.user-coachs {
+  list-style: none;
+  padding-left: 0;
+  margin: 4px 0 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    padding: 2px 0;
+  }
+}
+
+// Meta cards at the top of courseLog
+.course-log-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px 0 8px;
+}
+
+.course-log-meta__column {
+  flex: 1 1 280px;
+  min-width: 260px;
+}
+
+.course-log-card {
+  border: 1px solid $reporting-border;
+  border-radius: 10px;
+  background: $reporting-bg-card;
+  padding: 12px 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  &__icon {
+    font-size: 18px;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 14px;
+    color: #111827;
+  }
+
+  &__subsection-title {
+    font-weight: 600;
+    font-size: 13px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    color: $reporting-text-muted;
+  }
+
+  &__body {
+    font-size: 13px;
+  }
+}
+
+/* Card used for each boss column */
+.boss_column {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafb;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  min-width: 230px;
+  max-width: 260px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.boss_column h5 {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.boss_column table {
+  font-size: 0.8rem;
+}
+
+.boss_column .add_user {
+  margin-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 0.5rem;
+}
+
+.row .col-md-1 {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.flex-nowrap {
+  -webkit-flex-wrap: nowrap !important;
+  -ms-flex-wrap: nowrap !important;
+  flex-wrap: nowrap !important;
+}
+
+.flex-row {
+  display: flex;
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: row !important;
+  -ms-flex-direction: row !important;
+  flex-direction: row !important;
+}
+
+.reporting-admin-card {
+  border-color: #e5e7eb !important;
+  border-width: 1px !important;
+}
+
+.reporting-admin-card .panel,
+.reporting-admin-card fieldset {
+  border-color: #e5e7eb !important;
+}
+
+.admin-report-card-active {
+  border-color: #0284c7 !important;
+  background-color: #e0f2fe !important;
+}
+
+.reporting-admin-card {
+  border-color: #e5e7eb !important;
+  border-width: 1px !important;
+}
+
+.reporting-admin-card .panel,
+.reporting-admin-card fieldset {
+  border-color: #e5e7eb !important;
+}
+.course-log-session-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.course-log-session-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 13px;
+}
+
+table.session-metrics-header {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.session-metrics-header th {
+  padding: 4px 6px;
+  border-bottom: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+}
+
+table.session-metrics-header th:first-child {
+  text-align: left;
+}
+
+table.session-metrics-header th span {
+  display: block;
+  transform: none !important;
+  writing-mode: horizontal-tb !important;
+}
+

@@ -105,6 +105,48 @@
   }
 }
 
+form#question-survey {
+  display: block !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+form#question-survey .survey_question {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box;
+  margin-bottom: 1rem !important;
+  clear: both;
+}
+
+/* Question label / question text */
+form#question-survey .survey_question .question-text,
+form#question-survey .survey_question > label,
+form#question-survey .survey_question .control-label {
+  display: block;
+  margin-bottom: .4rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Options container: horizontal alignment + enf of line if necessary */
+form#question-survey .survey_question .options {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  margin-top: .25rem;
+}
+
+/* Radios inline vs vertical */
+form#question-survey .survey_question .radio-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-right: .6rem;
+}
+
 .survey_question .field {
   @apply flex flex-col gap-3 w-full;
 }

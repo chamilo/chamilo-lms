@@ -7,9 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Admin;
 
 use Chamilo\CoreBundle\Controller\BaseController;
+use Chamilo\CoreBundle\Entity\SearchEngineField;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Collator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +27,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const DIRECTORY_SEPARATOR;
+
 #[Route('/admin')]
 class SettingsController extends BaseController
 {
@@ -31,7 +36,8 @@ class SettingsController extends BaseController
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly SearchIndexPathResolver $searchIndexPathResolver
     ) {}
 
     #[Route('/settings', name: 'admin_settings')]
@@ -248,6 +254,8 @@ class SettingsController extends BaseController
         $schemaAlias = $manager->convertNameSpaceToService($namespace);
 
         $keyword = (string) $request->query->get('keyword', '');
+        // Extra diagnostics used only for the "search" namespace
+        $searchDiagnostics = null;
 
         // Validate schema BEFORE load/create to avoid NonExistingServiceException
         $schemas = $manager->getSchemas();
@@ -268,6 +276,11 @@ class SettingsController extends BaseController
         );
 
         $form->setData($settings);
+
+        // Build extra diagnostics for Xapian and converters when editing "search" settings
+        if ('search' === $namespace) {
+            $searchDiagnostics = $this->buildSearchDiagnostics($manager);
+        }
 
         $isPartial =
             $request->isMethod('PATCH')
@@ -355,6 +368,7 @@ class SettingsController extends BaseController
             'changeable_map' => $changeableMap,
             'current_url_id' => $currentUrlId,
             'can_toggle_multiurl_setting' => $canToggleMultiUrlSetting,
+            'search_diagnostics' => $searchDiagnostics,
         ]);
     }
 
@@ -468,5 +482,89 @@ class SettingsController extends BaseController
         }
 
         return [$namespaces, $labelMap];
+    }
+
+    /**
+     * Build environment diagnostics for the "search" settings page.
+     *
+     * This replicates the legacy Chamilo 1 behaviour:
+     * - Check Xapian PHP extension
+     * - Check the index directory and permissions
+     * - Check custom search fields
+     * - Check external converters (pdftotext, ps2pdf, ...)
+     */
+    private function buildSearchDiagnostics(SettingsManager $manager): array
+    {
+        $searchEnabled = (string) $manager->getSetting('search.search_enabled');
+
+        // Base status rows (Xapian extension + directory checks + custom fields)
+        $indexDir = $this->searchIndexPathResolver->getIndexDir();
+
+        $xapianLoaded = \extension_loaded('xapian');
+        $dirExists = is_dir($indexDir);
+        $dirWritable = is_writable($indexDir);
+        $fieldsCount = $this->entityManager
+            ->getRepository(SearchEngineField::class)
+            ->count([])
+        ;
+
+        $statusRows = [
+            [
+                'label' => $this->translator->trans('Xapian module installed'),
+                'ok' => $xapianLoaded,
+            ],
+            [
+                'label' => $this->translator->trans('The directory exists').' - '.$indexDir,
+                'ok' => $dirExists,
+            ],
+            [
+                'label' => $this->translator->trans('Is writable').' - '.$indexDir,
+                'ok' => $dirWritable,
+            ],
+            [
+                'label' => $this->translator->trans('Available custom search fields'),
+                'ok' => $fieldsCount > 0,
+            ],
+        ];
+
+        // External converters (ps2pdf, pdftotext, ...)
+        $tools = [];
+        $toolsWarning = null;
+
+        $isWindows = DIRECTORY_SEPARATOR === '\\';
+
+        if ($isWindows) {
+            $toolsWarning = $this->translator->trans(
+                'You are using Chamilo on a Windows platform. Document conversion helpers are not available for full-text indexing.'
+            );
+        } else {
+            $programs = ['ps2pdf', 'pdftotext', 'catdoc', 'html2text', 'unrtf', 'catppt', 'xls2csv'];
+
+            foreach ($programs as $program) {
+                $output = [];
+                $returnVar = null;
+
+                // Same behaviour as "which $program" in Chamilo 1
+                @exec('which '.escapeshellarg($program), $output, $returnVar);
+                $path = $output[0] ?? '';
+                $installed = '' !== $path;
+
+                $tools[] = [
+                    'name' => $program,
+                    'path' => $path,
+                    'ok' => $installed,
+                ];
+            }
+        }
+
+        return [
+            // Whether full-text search is enabled at all
+            'enabled' => ('true' === $searchEnabled),
+            // Xapian + directory + custom fields
+            'status_rows' => $statusRows,
+            // External converters
+            'tools' => $tools,
+            'tools_warning' => $toolsWarning,
+        ];
     }
 }

@@ -256,7 +256,16 @@
                       :class="{ 'bg-gray-200 cursor-not-allowed': isColumnLocked(date.id) }"
                     >
                       <div class="flex flex-col items-center">
-                        <span class="font-bold">{{ date.label }}</span>
+                        <span class="font-bold">
+                          {{ date.label }}
+                        </span>
+                        <span
+                          v-if="date.duration !== undefined && date.duration !== null"
+                          class="text-xs text-gray-600 mt-1"
+                        >
+                          {{ date.duration }} {{ t("min") }}
+                        </span>
+
                         <div
                           class="flex gap-2 mt-1"
                           v-if="isTeacherUI"
@@ -614,6 +623,7 @@ const filteredAttendanceSheets = computed(() => {
 })
 
 const isSaving = ref(false)
+const attendanceData = ref({})
 const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
@@ -649,6 +659,9 @@ const saveAttendanceSheet = async () => {
       groupId: gid ? parseInt(gid) : null,
       attendanceData: preparedData,
     })
+
+    // Refresh "Not attended" column after saving
+    await fetchAttendanceSheetUsers(route.params.id)
     alert(t("Attendance saved successfully"))
   } catch (error) {
     console.error("Error saving attendance data:", error)
@@ -662,7 +675,6 @@ const showCommentDialog = ref(false)
 const showSignatureDialog = ref(false)
 const currentComment = ref("")
 const signaturePad = ref(null)
-const attendanceData = ref({})
 
 const fetchAttendanceSheetUsers = async (attendanceId) => {
   isLoading.value = true
@@ -991,6 +1003,7 @@ const viewForTablet = (dateId) => {
       gid,
       readonly: route.query.readonly ?? "0",
       locked: isLockedForDate ? "1" : "0",
+      gradingMode: allowMultilevelGrading.value ? "multi" : "binary",
     },
   })
 }

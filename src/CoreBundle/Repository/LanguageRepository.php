@@ -14,6 +14,9 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+/**
+ * @extends ServiceEntityRepository<Language>
+ */
 class LanguageRepository extends ServiceEntityRepository
 {
     public function __construct(

@@ -3,17 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Optimization guide for Chamilo 2</title>
-    <link rel="stylesheet" href="../build/legacy_app.css" />
-    <link rel="stylesheet" href="../build/app.css" />
-    <link rel="stylesheet" href="../build/vue.css" />
-    <style>
-        body {width:90%; margin-left: 5%; margin-right: 5%;}
-        h1 {font-size: xxx-large; margin-top: 1em; margin-bottom: 1em;}
-        h2 {margin-top: 1em;}
-        p {margin-bottom: 0.5em; margin-top: 0.5em;}
-        ul {list-style-type: circle; margin-left: 1em;}
-        table {margin: 1em;}
-    </style>
+    <link rel="stylesheet" href="documentation.css" />
 </head>
 <body>
   <h1>Optimization guide for Chamilo 2</h1>
@@ -25,5 +15,22 @@ Although we strive to make Chamilo as lightweight and fast as possible
 This page will contain optimization hints in the future. At this time,
   Chamilo 2 is very young and there are no optimization hints yet.
   </p>
+  <h2>Avoid dev mode</h2>
+  The .env file contains an environment variable called APP_ENV, which is set to "prod" by default
+  on packaged Chamilo systems. This setting can be changed to "dev" to enable development mode.
+  Doing so can have disastrous performance implications, though. If observing performance issues, check the APP_ENV variable in .env as a first step.
+
+  <h2>Sessions</h2>
+  Chamilo 2 uses sessions to store user data between requests. Sessions are stored on disk by default.<br>
+  In comparison with Chamilo 1, Chamilo 2 uses many micro-service-type calls to retrieve data from the system and repaint parts of the pages as the underlying data changes.<br>
+  This has the damaging effect of requiring much more accesses to the session files, which can slow down the system significantly or generate losses of session (the system acting as if you are not logged in).<br>
+  To remove this impact, make sure you use a system to store sessions that will have a very small footprint and be able to manage session accesses very quickly (Redis, Memcached, etc.). This is described in the installation guide.
+
+  <h2>Database</h2>
+  Chamilo 2 uses a database to store most of its data (except for files). This means the database is very commonly used and can be a bottleneck in some cases.<br>
+  To reduce the impact of the database, make sure you check from time to time if operations are taking too long to complete or if your database is overloaded.<br>
+  If so, you would benefit from having someone knowledgeable look into the database and optimize it.<br>
+  We will publish suggested optimizations in this guide as we discover them, but we strive to provide the best database structure by default for new systems.
+
 </body>
 </html>

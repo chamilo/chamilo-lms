@@ -219,8 +219,11 @@ async function recycleCourse(node = resolveNodeFromPath(), payload) {
   const resp = await http.post(base.recycleCourse(node), payload, { params: withCourseParams() })
   return resp.data
 }
-async function deleteCourse(node = resolveNodeFromPath(), confirmText) {
-  const resp = await http.post(base.deleteCourse(node), { confirm: confirmText }, { params: withCourseParams() })
+async function deleteCourse(node = resolveNodeFromPath(), payloadOrConfirm) {
+  const payload = typeof payloadOrConfirm === "string" ? { confirm: payloadOrConfirm } : payloadOrConfirm || {}
+
+  const resp = await http.post(base.deleteCourse(node), payload, { params: withCourseParams() })
+
   return resp.data
 }
 

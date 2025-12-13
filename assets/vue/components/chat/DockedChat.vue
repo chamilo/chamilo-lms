@@ -85,9 +85,15 @@
               <div class="chd-peer">
                 <template v-if="activePeer">
                   <img
-                    :src="activePeer.image || ''"
+                    v-if="activePeerAvatar"
+                    :src="activePeerAvatar"
                     class="chd-avatar"
                     alt=""
+                  />
+                  <i
+                    v-else
+                    class="mdi mdi-account chd-avatar chd-avatar--fallback"
+                    aria-hidden="true"
                   />
                   <div class="chd-peer__meta">
                     <strong class="chd-truncate">{{ activePeer.name }}</strong>
@@ -129,8 +135,9 @@
                         v-if="isMine(msg)"
                         class="chd-bubble__ack"
                         :title="ackTitle(msg)"
-                        >{{ ackGlyph(msg) }}</span
                       >
+                        {{ ackGlyph(msg) }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -565,24 +572,10 @@ function collectVisibleContactIds() {
   return Array.from(ids)
 }
 async function refreshPresence() {
-  const ids = collectVisibleContactIds()
-  if (!ids.length) return
-  try {
-    const r = await fetch(API.presence, {
-      method: "POST",
-      credentials: "same-origin",
-      headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
-      body: new URLSearchParams({ ids: JSON.stringify(ids) }),
-    })
-    if (!r.ok) return
-    const data = await r.json()
-    const map = data?.presence || {}
-    if (activePeer.value?.id && map[activePeer.value.id] !== undefined) {
-      activePeer.value.online = !!map[activePeer.value.id]
-    }
-    paintPresenceOnContacts(map)
-  } catch {}
+  // Presence is now piggy-backed on heartbeat responses (see heartbeatMinTick).
 }
+
+/** Paint presence icons on contact list */
 function paintPresenceOnContacts(map) {
   const root = document.querySelector(".chd .chd-contacts .chd-contacts-html")
   if (!root) return
@@ -625,8 +618,8 @@ async function startSession() {
       if (arr.length) lastSeenMsgIdByPeer.set(pid, arr[arr.length - 1].id)
     })
   }
-  await loadContacts()
 }
+
 async function loadContacts() {
   loadingContacts.value = true
   try {
@@ -712,7 +705,7 @@ async function openConversation(peer) {
     maybeMarkAsReadOnView()
   })
 
-  // Kick fast phase when opening a conversation
+  // Kick fast phase when opening a conversation: reset backoff
   lastIdByPeer.set(activePeer.value.id, lastKnownIdForPeer(activePeer.value.id))
   maybeResetScheduler()
 }
@@ -886,11 +879,12 @@ function createBackoffScheduler({ onTick, onReset, getOverrideDelayMs } = {}) {
     { ms: 10000, durationMs: 120000 },
     { ms: 30000, repeats: Infinity },
   ]
-  let timer = null,
-    aborted = false,
-    idx = 0,
-    ticks = 0,
-    started = 0
+  let timer = null
+  let aborted = false
+  let idx = 0
+  let ticks = 0
+  let started = 0
+
   function phaseMs() {
     const p = phases[idx] || phases[phases.length - 1]
     const base = p.ms
@@ -958,16 +952,26 @@ function computeGlobalLastId() {
   return maxId
 }
 function shouldPoll() {
-  // Only poll when online. Dock openness handled by override below.
+  // Only poll when the user is marked as online.
   return userStatus.value === 1
 }
 
-/** Gate resets so we don't restart fast phase when dock is closed */
+/** Gate resets so we don't restart fast phase when it does not make sense */
+let lastSchedulerResetAt = 0
+
 function maybeResetScheduler() {
-  // Force fast phase only when it makes sense (dock open & focused).
-  if (open.value && document.hasFocus()) {
-    scheduler.reset()
+  if (!open.value || !document.hasFocus()) {
+    return
   }
+
+  const now = Date.now()
+  // Avoid resetting the backoff too often
+  if (now - lastSchedulerResetAt < 5000) {
+    return
+  }
+
+  lastSchedulerResetAt = now
+  scheduler.reset()
 }
 
 function syncUnreadFromServer(payload) {
@@ -982,73 +986,102 @@ function syncUnreadFromServer(payload) {
 async function heartbeatMinTick() {
   if (!shouldPoll()) return
 
+  const presenceIds = collectVisibleContactIds()
+  const presenceParam = presenceIds.length > 0 ? { presence_ids: JSON.stringify(presenceIds) } : {}
+
   // Ultra-light path when a conversation is active
   const pid = activePeer.value?.id
   if (pid) {
     try {
       const since = lastKnownIdForPeer(pid)
-      const r = await getJSON(API.heartbeat, { mode: "tiny", peer_id: pid, since_id: since })
+      const params = {
+        mode: "tiny",
+        peer_id: pid,
+        since_id: since,
+        ...presenceParam,
+      }
+
+      const r = await getJSON(API.heartbeat, params)
+
       const latest = Number(r?.last_id || 0)
       if (latest > since) {
         await fetchNewForActivePeer(pid)
         lastIdByPeer.set(pid, latest)
         noChangeTicks = 0
-        // Only reset to fast phase if dock is open
-        if (open.value) scheduler.reset()
-        return
+      } else {
+        noChangeTicks++
       }
+
+      // update presence from heartbeat payload
+      if (r?.presence) {
+        paintPresenceOnContacts(r.presence)
+        if (activePeer.value?.id && r.presence[activePeer.value.id] !== undefined) {
+          activePeer.value.online = !!r.presence[activePeer.value.id]
+        }
+      }
+
       const now = Date.now()
       if (now - lastPresenceAt > 5000) {
         lastPresenceAt = now
-        refreshPresence()
       }
     } catch {}
     return
   }
 
-  // No active peer: ultra-light global (for FAB)
+  // No active peer: ultra-light global (for FAB + unread)
   try {
     const since = lastHeartbeatId.value || computeGlobalLastId()
-    const r = await getJSON(API.heartbeat, { mode: "min", since_id: since })
+    const params = {
+      mode: "min",
+      since_id: since,
+      ...presenceParam,
+    }
+
+    const r = await getJSON(API.heartbeat, params)
+
     syncUnreadFromServer(r)
+
+    if (r?.presence) {
+      paintPresenceOnContacts(r.presence)
+    }
+
     const srvLast = Number(r?.last_id ?? 0)
     const hasNew = !!r?.has_new || srvLast > since
+
     if (typeof r?.unread === "number") {
       fabUnread.value = r.unread
     }
+
     if (hasNew) {
       lastHeartbeatId.value = Math.max(srvLast || 0, computeGlobalLastId(), since)
       noChangeTicks = 0
-      if (open.value) scheduler.reset() // don't bounce to 1s if dock is closed
     } else {
       noChangeTicks++
-      // once every 5 idle ticks, do a heavier refresh to reconcile (rare)
-      if (noChangeTicks % 5 === 0) {
-        try {
-          await heartbeat()
-          lastHeartbeatId.value = computeGlobalLastId()
-        } catch {}
-      }
     }
   } catch {}
 }
 
-// Keep instant responsiveness only when user is focused AND dock open+active
+// Shared backoff scheduler for both dock states (open/closed).
 const scheduler = createBackoffScheduler({
   onTick: heartbeatMinTick,
   onReset: () => {},
   getOverrideDelayMs: (baseMs) => {
-    // Force slow passive mode when the dock is closed
-    if (!open.value) return 30000
-    // Fast lane when dock is open, a peer is selected, and the tab is focused
-    if (open.value && activePeer.value && document.hasFocus()) return 1000
+    // When the dock is closed we still use the same scheduler,
+    // but we clamp to a slower range to avoid aggressive polling.
+    if (!open.value) {
+      // Between 10s and 30s when closed.
+      return Math.min(Math.max(baseMs, 10000), 30000)
+    }
+    // When the dock is open we respect the configured phases:
+    // 1s (x5) -> 5s (30s) -> 10s (120s) -> 30s.
     return baseMs
   },
 })
 
-/** Start/stop heartbeat */
+/** Start/stop heartbeat (single scheduler) */
 function startHeartbeat() {
-  stopHeartbeat()
+  // Always restart the backoff sequence when requested.
+  scheduler.stop()
   scheduler.start()
 }
 function stopHeartbeat() {
@@ -1066,8 +1099,11 @@ async function toggleStatus() {
   const newStatus = userStatus.value === 1 ? 0 : 1
   await post(API.status, { status: newStatus })
   userStatus.value = newStatus
-  if (newStatus === 1) startHeartbeat()
-  else stopHeartbeat()
+  if (newStatus === 1) {
+    startHeartbeat()
+  } else {
+    stopHeartbeat()
+  }
 }
 async function send() {
   if (!activePeer.value || !draft.value) return
@@ -1105,7 +1141,7 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 0, date: nowSec })
       removePending(pid, tempId)
-      maybeResetScheduler()
+      //maybeResetScheduler()
       return
     }
   } catch {
@@ -1115,7 +1151,7 @@ async function send() {
   }
 }
 function onComposerKeydown() {
-  maybeResetScheduler()
+  //maybeResetScheduler()
 }
 function newline() {
   /* Shift+Enter */
@@ -1181,23 +1217,29 @@ document.addEventListener("visibilitychange", () => {
     maybeStartBlink()
   } else {
     maybeStopBlink()
-    maybeResetScheduler()
+    //maybeResetScheduler()
     maybeMarkAsReadOnView()
   }
 })
 window.addEventListener("focus", () => {
   maybeStopBlink()
-  maybeResetScheduler()
+  //maybeResetScheduler()
   maybeMarkAsReadOnView()
 })
-window.addEventListener("online", () => maybeResetScheduler())
+window.addEventListener("online", () => {
+  // Network came back: if user is online, restart scheduler and backoff.
+  if (userStatus.value === 1) {
+    startHeartbeat()
+    //maybeResetScheduler()
+  }
+})
 window.addEventListener("offline", () => scheduler.stop())
 
 /** Legacy compatibility layer */
 function registerLegacyChatGlobals() {
   const handler = (id, name) => {
     try {
-      // Only open the dock if it's closed; don't re-trigger init paths
+      // Only open the dock if it's closed; do not re-trigger init paths
       if (!open.value) toggleDock(true)
       openConversation({ id: Number(id), name: name || "User" })
     } catch (e) {}
@@ -1206,11 +1248,6 @@ function registerLegacyChatGlobals() {
   if (!("chatWith" in window)) window.chatWith = handler
   if (!("openChat" in window)) window.openChat = handler
   if (!("startChat" in window)) window.startChat = handler
-}
-
-function startPassiveHeartbeat() {
-  stopPassiveHeartbeat()
-  hbTimer = setInterval(passiveTick, 10000)
 }
 async function passiveTick() {
   try {
@@ -1271,21 +1308,17 @@ function stopPassiveHeartbeat() {
 
 /** Lifecycle */
 async function toggleDock(v) {
-  // Guard: do nothing if state isn't changing (prevents unwanted re-inits)
   if (v === open.value) return
 
   const wasOpen = open.value
   open.value = v
 
   if (v) {
-    // CLOSED -> OPEN
-    stopPassiveHeartbeat() // avoid double polling
-
+    // OPEN: use the same scheduler, but reset the backoff so we go through
+    // 1s→5s→10s→30s again when the user explicitly opens the dock.
     if (!openedOnce.value) {
-      // Heavy init only once per page life-cycle
       await startSession()
 
-      // Go online only when user explicitly opens the dock
       if (userStatus.value !== 1) {
         try {
           await goOnline()
@@ -1293,30 +1326,47 @@ async function toggleDock(v) {
         userStatus.value = 1
       }
 
-      await loadContacts()
+      // First open: ask heartbeat for contacts + presence in one go
+      const presenceIds = collectVisibleContactIds()
+      const params = {
+        mode: "min",
+        since_id: lastHeartbeatId.value || 0,
+        include_contacts: 1,
+      }
+      if (presenceIds.length > 0) {
+        params.presence_ids = JSON.stringify(presenceIds)
+      }
+
+      const r = await getJSON(API.heartbeat, params)
+
+      if (typeof r?.contacts_html === "string") {
+        contactsHtml.value = r.contacts_html
+        requestAnimationFrame(() => repaintAllContactBadges())
+      }
+
+      if (r?.presence) {
+        paintPresenceOnContacts(r.presence)
+      }
+
+      // Sync unread from server if available
+      syncUnreadFromServer(r)
+
       openedOnce.value = true
     } else {
-      // Light refresh on subsequent opens
       await loadContacts()
-      refreshPresence()
     }
 
-    // After contacts HTML is in place, recompute unread and repaint dots
     recomputeUnreadFromLocal()
 
-    // Contacts refresher
     clearInterval(contactsTimer)
     contactsTimer = setInterval(loadContacts, 15000)
 
-    // Start active scheduler + give it a fast nudge
+    // Restart backoff phases when the dock is opened.
     startHeartbeat()
-    maybeResetScheduler()
-    // Optional: do a quick tiny heartbeat to catch up instantly
     try {
       await heartbeatMinTick()
     } catch {}
 
-    // Selection policy when just opened from closed
     if (!wasOpen) {
       if (AUTO_OPEN_LAST_PEER) {
         const last = Number(localStorage.getItem(LAST_PEER_KEY) || 0)
@@ -1324,22 +1374,16 @@ async function toggleDock(v) {
           openConversation({ id: last, name: "User" })
         }
       } else {
-        activePeer.value = null // keep right panel empty until user picks a contact
+        activePeer.value = null
       }
     }
   } else {
-    // OPEN -> CLOSED
+    // CLOSE
     activePeer.value = null
-
-    // Stop active timers
     clearInterval(contactsTimer)
     contactsTimer = null
-    stopHeartbeat()
-
-    // Passive polling so FAB can still reflect unread state
-    startPassiveHeartbeat()
-
-    // Immediately reflect current unread count on the FAB dot
+    // Do not stop scheduler here: keep the same backoff-driven heartbeat
+    // running in "closed" mode (slower intervals via getOverrideDelayMs).
     recomputeUnreadFromLocal()
   }
 }
@@ -1352,14 +1396,19 @@ function byChronoId(a, b) {
   const bid = Number(b?.id) || 0
   const aneg = aid < 0
   const bneg = bid < 0
-  if (aneg !== bneg) return aneg ? 1 : -1 // temporary goes last on same timestamp
+  if (aneg !== bneg) return aneg ? 1 : -1
   return aid - bid
 }
 
 onMounted(async () => {
   registerLegacyChatGlobals()
   await startSession()
-  startPassiveHeartbeat()
+
+  // If user already online at mount time, start scheduler immediately.
+  if (userStatus.value === 1) {
+    startHeartbeat()
+  }
+
   try {
     await heartbeatMinTick()
   } catch {}
@@ -1396,15 +1445,12 @@ html[dir="rtl"] .chd .chd-fab.has-unread::after {
   left: 6px;
   right: auto;
 }
-
-/* Ensure contact row can host a right-anchored dot */
 .chd .chd-contacts .chd-contact-row {
   position: relative;
   padding-right: 18px;
   overflow: visible;
   z-index: 0;
 }
-
 .chd .chd-contacts .chd-contact-dot {
   position: absolute;
   top: 50%;
@@ -1420,5 +1466,10 @@ html[dir="rtl"] .chd .chd-fab.has-unread::after {
 html[dir="rtl"] .chd .chd-contacts .chd-contact-dot {
   left: 8px;
   right: auto;
+}
+.chd-avatar--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

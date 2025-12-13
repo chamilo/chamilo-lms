@@ -183,7 +183,13 @@ switch ($action) {
 }
 
 Display::display_header();
-
+if (!empty($_SESSION['usergroup_flash_message'])) {
+    echo Display::return_message(
+        $_SESSION['usergroup_flash_message'],
+        $_SESSION['usergroup_flash_type']
+    );
+    unset($_SESSION['usergroup_flash_message'], $_SESSION['usergroup_flash_type']);
+}
 ?>
     <script>
         $(function() {
